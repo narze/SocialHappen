@@ -1,0 +1,248 @@
+* {margin: 0; padding: 0;}
+img {border: 0;}
+li {list-style: none;}
+body {
+	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #333;
+	line-height: 140%;
+}
+
+a { color: #515151; text-decoration: none;}
+a:hover {text-decoration: underline;}
+
+.wrapper-admin {width: 760px;}
+.header { width: 720px; padding: 6px 20px; background: #2e2e2e; margin-bottom: 40px;}
+.header:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+.header h1 {float: left;}
+.header ul { float: right; height: 1%;}
+.header ul:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+
+.header ul li {float: left; margin-left: 8px;}
+.header ul li a {
+	display: block;
+	height: 28px;
+	line-height: 28px;
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+	color: #bce376;
+	padding: 0 10px;
+	
+	background: #3b3b3b;
+}
+.header ul li:first-child a {
+	background: #96c068;
+	font-weight: bold;
+	color: #fff;
+}
+
+.wrapper-detail {width: 758px; border: 1px solid #dcdee0; background: #ececec;}
+.wrapper-detail>.title { width: 100%; background: url(../images/bg/bg_x.gif) bottom repeat-x; padding-bottom: 2px;}
+.wrapper-detail>.title:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+.wrapper-detail>.title h2 {float: left; margin-left: 20px; padding: 10px 0;}
+.wrapper-detail>.title ul {float: right; height: 1%;}
+.wrapper-detail>.title ul:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+.wrapper-detail>.title ul li {float: left; background: url(../images/bg/bg_y.gif) left repeat-y; padding: 0 15px;}
+.wrapper-detail>.title ul li a {
+	display: block;
+	height: 35px;
+	line-height: 35px;
+	color: #b8b6b8;
+	font-size: 12px;
+}
+.wrapper-detail>.title ul li a.config {
+	padding-left: 24px;
+	background: url(../images/bg/bg_config.png) no-repeat 0 9px;
+}
+.wrapper-detail>.title ul li a.config:hover, .wrapper-detail>.title ul li.active a.config { background-position: 0 -23px; color: #333; text-decoration: none;}
+.wrapper-detail>.title ul li a.name {
+	padding-right: 16px;
+	background: url(../images/bg/bg_down.png) no-repeat 100% 9px;
+}
+.wrapper-detail>.title ul li a.name:hover, .wrapper-detail>.title ul li.active a.name { background-position: 100% -23px; color: #333; text-decoration: none;}
+
+div.detail {width: 720px; margin: 35px auto 20px;}
+
+div.table-detail table { width: 100%; background: #fff;}
+div.table-detail table tr th {
+	height: 35px;
+	background: url(../images/bg/bg_green.gif) repeat-x;
+	color: #5d7346;
+	text-align: left;
+	padding: 0 10px;
+	border-left: 1px solid #bce376;
+	border-right: 1px solid #91b46a;
+}
+div.table-detail table tr th.set-border1 {border-left: none;}
+div.table-detail table tr th.set-border2 {border-right: none;}
+div.table-detail table tr td {padding: 20px 10px;}
+div.table-detail table tr.set-bg td {background: #f6f6f6;}
+div.table-detail table tr:hover td { background: #e9f2de;}
+div.table-detail table tr:hover td div.personal p.edit {display: block;}
+div.table-detail table td div.personal { padding-left: 35px; position: relative;}
+div.table-detail table td div.personal img {position: absolute; left: 0; top: 0; width:30px;}
+div.table-detail table td div.personal p b {color: #8dc63f;}
+div.table-detail table td div.personal p.mail { padding-left: 20px; background: url(../images/bg/bg_mail.gif) no-repeat 0 2px;}
+div.table-detail table td div.personal p.edit {
+	position: absolute;
+	left: 53px;
+	bottom: -15px;
+	font-weight: bold;
+	color: #375a00; 
+	display: none;
+	font-style: italic;
+}
+
+div.paging {text-align: right; padding: 20px 0 0;}
+div.paging a.normal {
+	padding: 2px 5px;
+	border: 1px solid #cfcfcf;
+	color: #333;
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+	margin-left: 3px;
+	background: #ebebeb;
+}
+div.paging a.normal:hover, div.paging a.active{
+	text-decoration: none;
+	color: #fff;
+	background: #292929 url(../images/bg/bg_black.gif) top repeat-x;
+}
+div.paging b.normal {
+	padding: 2px 5px 2px 0;
+	border: 1px solid #cfcfcf;
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+	margin-left: 4px;
+	overflow: hidden;
+	height: 1%;
+	background: #dcdcdc;
+}
+div.paging a.inactive { color: #b8b6b8; cursor: default;}
+div.paging a.inactive:hover { color: #b8b6b8; border: 1px solid #cfcfcf; background: none;}
+div.paging b.normal a { padding-left: 7px; background: url(../images/bg/bg_paging.png) no-repeat; margin-left: 5px;}
+div.paging b.normal span {display: none;}
+div.paging b.normal a.back-more { background-position: 0 2px;}
+div.paging b.normal a.back-more:hover {background-position: 0 -13px;}
+div.paging b.normal a.next-more { background-position: 0 -28px;}
+div.paging b.normal a.next-more:hover {background-position: 0 -43px;}
+div.paging b.normal a.back {background-position: 0 -58px;}
+div.paging b.normal a.back:hover {background-position: 0 -73px;}
+div.paging b.normal a.next { background-position: 0 -88px;}
+div.paging b.normal a.next:hover {background-position: 0 -103px;}
+div.paging b.inactive a {opacity: 0.6; border: none; cursor: default;}
+div.paging b.inactive a.back-more:hover {background-position: 0 2px;}
+div.paging b.inactive a.next-more:hover {background-position: 0 -28px;}
+div.paging b.inactive a.back:hover {background-position: 0 -58px;}
+div.paging b.inactive a.next:hover {background-position: 0 -88px;}
+
+*.bt-default {
+	font-size: 11px;
+	font-weight: bold;
+	color: #fff;
+	padding: 5px 17px;
+	border: 1px solid #91b46a;
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+	cursor: pointer;
+	background: url(../images/bg/bg_green.gif) repeat-x;
+	margin-right: 5px;
+}
+*.bt-default-inactive {
+	font-size: 11px;
+	font-weight: bold;
+	color: #fff;
+	padding: 5px 17px;
+	border: 1px solid #b8b6b8;
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+	background: #a7a9ac url(../images/bg/bg_gray.gif) repeat-x;
+	cursor: pointer;
+}
+
+div.popup-profile {padding: 30px 20px 30px 130px; position: relative;}
+div.popup-profile p.image {
+	position: absolute;
+	left: 23px;
+	top: 30px;
+}
+div.popup-profile p.image span {display: block; padding: 7px 0 0; text-align: center;}
+div.popup-profile p.image span a {text-decoration: underline; color: #333;}
+div.popup-profile p.image span a:hover {text-decoration: none;}
+div.popup-profile div.profile-detail h2 { font-size: 16px; padding-bottom: 10px; background: url(../images/bg/bg_x.gif) bottom repeat-x; margin-bottom: 12px;}
+div.popup-profile div.profile-detail ul {padding: 0 0 9px; font-size: 12px;  background: url(../images/bg/bg_x.gif) bottom repeat-x; margin-bottom: 12px;}
+div.popup-profile div.profile-detail ul li {padding: 0 0 5px 115px; min-height: 15px; position: relative;}
+div.popup-profile div.profile-detail ul li b {position: absolute; left: 0; top: 0;}
+div.popup-profile div.profile-detail p {padding-bottom: 12px; font-size: 12px;}
+div.popup-profile div.profile-detail p textarea {display: block; width: 100%; margin-top: 5px;}
+
+div.config {background: #fff;}
+div.config h2 {
+	height: 35px;
+	line-height: 35px;
+	font-size: 11px;
+	color: #5d7346;
+	padding: 0 12px;
+	background: url(../images/bg/bg_green.gif) repeat-x;
+	margin-bottom: 15px;
+}
+div.config ul {padding: 0 30px 15px; font-size: 12px;}
+div.config ul.date li {
+	padding: 0 0 15px 185px;
+	position: relative;
+	min-height: 15px;
+}
+div.config ul.date li b {position: absolute; left: 0; top: 3px;}
+div.config ul.date li input[type="text"] {width: 290px; background: #fff; padding: 3px 5px; border: 1px solid #d5d4d5;}
+div.config ul.date li img {vertical-align: middle;}
+div.config>p {padding: 0 30px 15px;}
+
+div.config ul.share-information li {padding-bottom: 20px;}
+div.config ul.share-information li p { padding-bottom: 5px;}
+div.config ul.share-information li p.form {padding-left: 27px;}
+div.config ul.share-information li p.form .bt-default {margin: 0 7px;}
+div.config ul.share-information li textarea {width: 455px; height: 60px; border: 1px solid #b8b6b8;}
+div.config ul.share-information li input[type="text"],
+div.config ul.share-information li input[type="password"] 
+{width: 445px;  padding: 3px 5px; border: 1px solid #b8b6b8;}
+div.config ul.share-information li p {position: relative;}
+div.config ul.share-information li p span { position: absolute; left: 487px; top: 0; font-size: 11px;}
+div.config ul.share-information li p span.clear {padding-left: 50px; position: static;}
+div.config ul.share-information li p span.clear .bt-default-inactive,
+div.config ul.share-information li p span.clear .bt-default {
+	padding: 5px 7px;
+	margin: 0 0 0 5px;
+}
+div.config ul.share-information li.button { text-align: right;}
+div.config ul.share-information li.button  .bt-default-inactive,
+div.config ul.share-information li.button  .bt-default {
+	font-size: 13px;
+	margin-right: 5px;
+}
+div.config ul.share-information li.button a { color: #375a00; font-size: 11px; padding: 0 2px; font-style: italic; font-weight: bold;}
+div.config ul.share-information li p.one {background: url(../images/bg/bg_num1.gif) no-repeat;}
+div.config ul.share-information li p.two {background: url(../images/bg/bg_num2.gif) no-repeat;}
+div.config ul.share-information li p.three {background: url(../images/bg/bg_num3.gif) no-repeat;}
+div.config ul.share-information li p.four {background: url(../images/bg/bg_num4.gif) no-repeat;}
+div.config ul.share-information li p.five {background: url(../images/bg/bg_num5.gif) no-repeat;}
