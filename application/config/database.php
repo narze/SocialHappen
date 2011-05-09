@@ -38,7 +38,7 @@
 | the active record class
 */
 
-$active_group = 'test';
+$active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
