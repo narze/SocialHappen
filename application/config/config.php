@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://beta.figabyte.com/figtest/socialhappen/';
+$config['base_url']	= 'http://socialhappen.dyndns.org/socialhappen/';
 
 /*
 |--------------------------------------------------------------------------
