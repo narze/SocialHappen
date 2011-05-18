@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Api extends CI_Controller {
+class Company_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
