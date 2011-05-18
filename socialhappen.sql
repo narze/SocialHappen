@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.10deb1
+-- version 3.3.9
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 12, 2011 at 06:33 PM
--- Server version: 5.1.54
--- PHP Version: 5.3.5-1ubuntu7.2
+-- Generation Time: May 18, 2011 at 07:11 AM
+-- Server version: 5.5.8
+-- PHP Version: 5.3.5
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -28,6 +28,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 CREATE TABLE IF NOT EXISTS `sh_app` (
   `app_id` int(10) NOT NULL AUTO_INCREMENT,
   `app_name` varchar(20) NOT NULL,
+  `app_type_id` int(1) NOT NULL DEFAULT '0',
   `app_maintainance` tinyint(1) NOT NULL DEFAULT '0',
   `app_show_in_list` tinyint(1) NOT NULL DEFAULT '1',
   `app_path` mediumtext NOT NULL,
@@ -43,6 +44,18 @@ CREATE TABLE IF NOT EXISTS `sh_app` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sh_app_campaigns`
+--
+
+CREATE TABLE IF NOT EXISTS `sh_app_campaigns` (
+  `app_install_id` bigint(20) NOT NULL,
+  `campaign_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`app_install_id`,`campaign_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sh_app_statistic`
 --
 
@@ -53,6 +66,50 @@ CREATE TABLE IF NOT EXISTS `sh_app_statistic` (
   `active_user` bigint(20) NOT NULL,
   PRIMARY KEY (`app_install_id`,`job_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sh_app_type`
+--
+
+CREATE TABLE IF NOT EXISTS `sh_app_type` (
+  `app_type` int(2) NOT NULL,
+  `app_type_name` varchar(50) NOT NULL,
+  `app_type_description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`app_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sh_campaign`
+--
+
+CREATE TABLE IF NOT EXISTS `sh_campaign` (
+  `campaign_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `app_install_id` bigint(20) NOT NULL,
+  `campaign_name` varchar(255) NOT NULL,
+  `campaign_detail` text NOT NULL,
+  `campaign_status_id` int(11) NOT NULL,
+  `campaign_active_member` int(11) NOT NULL,
+  `campaign_all_member` int(11) NOT NULL,
+  `campaign_start_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `campaign_end_timestamp` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`campaign_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sh_campaign_status`
+--
+
+CREATE TABLE IF NOT EXISTS `sh_campaign_status` (
+  `campaign_status_id` int(11) NOT NULL,
+  `campaign_status_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`campaign_status_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -161,6 +218,24 @@ CREATE TABLE IF NOT EXISTS `sh_install_app` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sh_page`
+--
+
+CREATE TABLE IF NOT EXISTS `sh_page` (
+  `page_id` bigint(20) NOT NULL,
+  `facebook_page_id` bigint(20) NOT NULL,
+  `company_id` bigint(20) NOT NULL,
+  `page_name` varchar(255) NOT NULL,
+  `page_detail` text NOT NULL,
+  `page_all_member` int(11) NOT NULL,
+  `page_new_member` int(11) NOT NULL,
+  PRIMARY KEY (`page_id`),
+  UNIQUE KEY `facebook_page_id` (`facebook_page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sh_page_apps`
 --
 
@@ -199,6 +274,18 @@ CREATE TABLE IF NOT EXISTS `sh_user_apps` (
   `user_apps_last_seen` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`user_facebook_id`,`app_install_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sh_user_campaigns`
+--
+
+CREATE TABLE IF NOT EXISTS `sh_user_campaigns` (
+  `user_id` bigint(20) NOT NULL,
+  `campaign_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`user_id`,`campaign_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
