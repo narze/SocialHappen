@@ -1,16 +1,19 @@
 <?php
 class Company_apps_model extends CI_Model {
-	var $app_install_id = '';
-	var $company_id = '';
-	var $app_id = '';
-	var $app_install_available = '';
-	var $app_install_date;
-	var $facebook_page_id = '';
-	var $app_install_secret_key = '';
 	
 	function __construct()
 	{
 		parent::__construct();
+	}
+	
+	/*
+	 * Get company apps
+	 * @param int company_id
+	 * @author Manassarn Manoonchai
+	 */
+	function get_company_apps($company_id = null){
+		if(!$company_id) return array();
+		return $this->db->get_where('company_apps',array('company_id'=>$company_id))->result();
 	}
 	
 	function add($data = array()) {
@@ -65,3 +68,5 @@ class Company_apps_model extends CI_Model {
 		}
 	}
 }
+/* End of file company_apps_model.php */
+/* Location: ./application/models/company_apps_model.php */
