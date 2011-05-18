@@ -11,8 +11,10 @@ class Api extends CI_Controller {
 	}
 
 	function index(){
-		//$this->company_page_list_test();
+		$this->company_page_list_test();
 		$this->company_app_list_test();
+		$this->page_app_list_test();
+		$this->app_list_test();
 		
 	}
 	
