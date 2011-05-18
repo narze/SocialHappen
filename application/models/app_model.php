@@ -14,6 +14,16 @@ class App_model extends CI_Model {
 	function __construct() {
 		parent::__construct();
 	}
+	
+	/**
+	 * Get apps
+	 * @author Manassarn M.
+	 */
+	function get_apps(){
+		$this->db->join('app_type', 'app.app_type_id = app_type.app_type_id');
+		return $this->db->get('app')->result();
+		
+	}
 
 	function add($data = array()) {
 		foreach($data as $var => $key) {

@@ -8,6 +8,16 @@ class Page_apps_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	/**
+	 * Get page apps
+	 * @param $page_id
+	 * @author Manassarn Manoonchai
+	 */
+	function get_page_apps($page_id = NULL){
+		if(!$page_id) return array();
+		return $this->db->get_where('page_apps', array('page_id' => $page_id))->result();
+	}
+	
 	function add($data = array()) {
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;

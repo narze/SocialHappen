@@ -42,6 +42,8 @@ $route['default_controller'] = "landing";
 $route['404_override'] = '';
 $route['api/company_page_list/(:num)'] = "company/company_page_list/$1";
 $route['api/company_app_list/(:num)'] = "company/company_app_list/$1";
+$route['api/page_app_list/(:num)'] = "company/page_app_list/$1";
+$route['api/app_list/(:num)'] = "company/app_list/$1";
 
 
 /* End of file routes.php */

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 18, 2011 at 07:11 AM
+-- Generation Time: May 18, 2011 at 12:34 PM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -31,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `sh_app` (
   `app_type_id` int(1) NOT NULL DEFAULT '0',
   `app_maintainance` tinyint(1) NOT NULL DEFAULT '0',
   `app_show_in_list` tinyint(1) NOT NULL DEFAULT '1',
-  `app_path` mediumtext NOT NULL,
   `app_description` text NOT NULL,
   `app_secret_key` mediumtext NOT NULL,
   `app_url` mediumtext NOT NULL,
@@ -74,10 +73,10 @@ CREATE TABLE IF NOT EXISTS `sh_app_statistic` (
 --
 
 CREATE TABLE IF NOT EXISTS `sh_app_type` (
-  `app_type` int(2) NOT NULL,
+  `app_type_id` int(2) NOT NULL,
   `app_type_name` varchar(50) NOT NULL,
   `app_type_description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`app_type`)
+  PRIMARY KEY (`app_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -143,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `sh_company_apps` (
   `app_id` bigint(20) NOT NULL,
   `app_install_available` tinyint(1) NOT NULL,
   `app_install_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `facebook_page_id` bigint(20) DEFAULT NULL,
+  `page_id` bigint(20) DEFAULT NULL,
   `app_install_secret_key` mediumtext NOT NULL,
   PRIMARY KEY (`app_install_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
@@ -240,10 +239,10 @@ CREATE TABLE IF NOT EXISTS `sh_page` (
 --
 
 CREATE TABLE IF NOT EXISTS `sh_page_apps` (
-  `facebook_page_id` bigint(20) NOT NULL,
+  `page_id` bigint(20) NOT NULL,
   `app_install_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`facebook_page_id`,`app_install_id`),
-  KEY `facebook_page_id` (`facebook_page_id`),
+  PRIMARY KEY (`page_id`,`app_install_id`),
+  KEY `facebook_page_id` (`page_id`),
   KEY `app_install_id` (`app_install_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
