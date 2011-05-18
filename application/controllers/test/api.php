@@ -19,11 +19,11 @@ class Api extends CI_Controller {
 	}
 	
 	/**
-	 * Tests company_page_list().
+	 * Tests json_company_page_list().
 	 * @author Manassarn M.
 	 */
 	function company_page_list_test(){
-		$content = file_get_contents(base_url().'api/company_page_list/1');
+		$content = file_get_contents(base_url().'company/json_company_page_list/1');
 		$array = json_decode($content);
 		$this->unit->run($array, 'is_array', 'Company page list returns json correctly');
 		$this->unit->run($array[0], 'is_object', 'First row');
@@ -37,11 +37,11 @@ class Api extends CI_Controller {
 	}
 	
 	/**
-	 * Tests company_app_list().
+	 * Tests json_company_app_list().
 	 * @author Manassarn M.
 	 */
 	function company_app_list_test(){
-		$content = file_get_contents(base_url().'api/company_app_list/1');
+		$content = file_get_contents(base_url().'company/json_company_app_list/1');
 		$array = json_decode($content);
 		$this->unit->run($array, 'is_array', 'Company app list returns json correctly');
 		$this->unit->run($array[0], 'is_object', 'First row');
@@ -55,11 +55,11 @@ class Api extends CI_Controller {
 	}
 
 	/**
-	 * Tests page_app_list().
+	 * Tests json_page_app_list().
 	 * @author Manassarn M.
 	 */
 	function page_app_list_test(){
-		$content = file_get_contents(base_url().'api/page_app_list/1');
+		$content = file_get_contents(base_url().'company/json_page_app_list/1');
 		$array = json_decode($content);
 		$this->unit->run($array, 'is_array', 'Page app list returns json correctly');
 		$this->unit->run($array[0], 'is_object', 'First row');
@@ -68,11 +68,11 @@ class Api extends CI_Controller {
 	}
 	
 	/**
-	 * Tests app_list().
+	 * Tests json_app_list().
 	 * @author Manassarn M.
 	 */
 	function app_list_test(){
-		$content = file_get_contents(base_url().'api/app_list/1');
+		$content = file_get_contents(base_url().'company/json_app_list/1');
 		$array = json_decode($content);
 		$this->unit->run($array, 'is_array', 'App list returns json correctly');
 		$this->unit->run($array[0]->app_id,'is_string','app_id');
