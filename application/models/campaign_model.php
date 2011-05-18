@@ -1,9 +1,12 @@
 <?php
+
 /**
  * Campaign_model
- * @category Model
+ * 
  * @author Prachya P.
+ * 
  */
+
 class Campaign_model extends CI_Model {
 	var $campaign_id = '';
 
@@ -20,7 +23,8 @@ class Campaign_model extends CI_Model {
 	}
 
 	function get($where = array(), $limit =0, $offset =0) {
-		// join campaign_status table
+				
+		// join campaign_status table 		
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id');
 		
 		$query = $this -> db -> get_where('campaign', $where, $limit, $offset);
