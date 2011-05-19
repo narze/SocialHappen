@@ -19,7 +19,7 @@ class App_model_test extends CI_Controller {
 	}
 	
 	/** 
-	 * Tests get apps
+	 * Tests get apps : joined with app_type
 	 * @author Manassarn M.
 	 */
 	function get_apps_test(){
@@ -38,6 +38,8 @@ class App_model_test extends CI_Controller {
 		$this->unit->run($result[0]->app_install_url,'is_string','app_install_url');
 		$this->unit->run($result[0]->app_config_url,'is_string','app_config_url');
 		$this->unit->run($result[0]->app_support_page_tab,'is_string','app_support_page_tab');
+		$this->unit->run($result[0]->app_image,'is_string','app_image');
+		$this->unit->run(count((array)$result[0]) == 14, 'is_true', 'number of column');
 	}
 }
 /* End of file app_model_test.php */
