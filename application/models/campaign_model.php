@@ -13,6 +13,17 @@ class Campaign_model extends CI_Model {
 		parent::__construct();
 	}
 
+	/**
+	 * Get campaigns
+	 * @author Manassarn M.
+	 */
+	function get_campaigns($page_id = NULL){
+		if(!$page_id) return array();
+		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id','left');
+		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this -> db -> get_where('campaign', array('page_id' => $page_id))->result();
+	}
+	
 	function add($data = array()) {
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;
