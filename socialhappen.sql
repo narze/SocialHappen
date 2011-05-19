@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 19, 2011 at 07:03 AM
+-- Generation Time: May 19, 2011 at 08:46 AM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -174,6 +174,7 @@ INSERT INTO `sh_campaign_status` (`campaign_status_id`, `campaign_status_name`) 
 DROP TABLE IF EXISTS `sh_company`;
 CREATE TABLE IF NOT EXISTS `sh_company` (
   `company_id` int(10) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(10) NOT NULL,
   `company_name` varchar(255) NOT NULL,
   `company_address` text NOT NULL,
   `company_email` varchar(150) NOT NULL,
@@ -181,7 +182,6 @@ CREATE TABLE IF NOT EXISTS `sh_company` (
   `company_register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `company_username` varchar(255) NOT NULL,
   `company_password` varchar(255) NOT NULL,
-  `company_facebook_id` varchar(255) NOT NULL,
   `company_image` varchar(255) NOT NULL,
   PRIMARY KEY (`company_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
@@ -190,8 +190,8 @@ CREATE TABLE IF NOT EXISTS `sh_company` (
 -- Dumping data for table `sh_company`
 --
 
-INSERT INTO `sh_company` (`company_id`, `company_name`, `company_address`, `company_email`, `company_telephone`, `company_register_date`, `company_username`, `company_password`, `company_facebook_id`, `company_image`) VALUES
-(1, 'Company test 1', '', 'test1@figabyte.com', '022485555', '2011-05-09 17:52:17', '', '', '', '');
+INSERT INTO `sh_company` (`company_id`, `user_id`, `company_name`, `company_address`, `company_email`, `company_telephone`, `company_register_date`, `company_username`, `company_password`, `company_image`) VALUES
+(1, 0, 'Company test 1', '', 'test1@figabyte.com', '022485555', '2011-05-09 17:52:17', '', '', '');
 
 -- --------------------------------------------------------
 
