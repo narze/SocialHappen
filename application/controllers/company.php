@@ -38,8 +38,8 @@ class Company extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_page_app_list($page_id = null){
-		$this->load->model('page_apps_model','page_apps');
-		$apps = $this->page_apps->get_page_apps($page_id);
+		$this->load->model('company_apps_model','company_apps');
+		$apps = $this->company_apps->get_page_apps($page_id);
 		echo json_encode($apps);
 	}
 	
