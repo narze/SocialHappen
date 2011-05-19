@@ -20,6 +20,26 @@ class Page_test extends CI_Controller {
 	}
 	
 	/**
+	 * Tests json_get_page_details()
+	 * @author Manassarn M.
+	 */
+	function json_get_profile_test(){
+		$content = file_get_contents(base_url().'page/json_get_profile/1');
+		$array = json_decode($content);
+		$this->unit->run($array, 'is_array', 'Page profile returns json correctly');
+		$this->unit->run($array[0], 'is_object', 'First row');
+		$this->unit->run($array[0]->page_id,'is_string','page_id');
+		$this->unit->run($array[0]->facebook_page_id,'is_string','facebook_page_id');
+		$this->unit->run($array[0]->company_id,'is_string','company_id');
+		$this->unit->run($array[0]->page_name,'is_string','page_name');
+		$this->unit->run($array[0]->page_detail,'is_string','page_detail');
+		$this->unit->run($array[0]->page_all_member,'is_string','page_all_member');
+		$this->unit->run($array[0]->page_new_member,'is_string','page_new_member');
+		$this->unit->run($array[0]->page_image,'is_string','page_image');
+		$this->unit->run(count((array)$array[0]) == 8, 'is_true', 'number of column');
+	}
+	
+	/**
 	 * Tests json_get_installed_app_list()
 	 * @author Manassarn M.
 	 */

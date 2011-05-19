@@ -10,6 +10,17 @@ class Page extends CI_Controller {
 		
 	}
 	
+	/**
+	 * JSON : get page profile
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function json_get_profile($page_id = NULL){
+		$this->load->model('page_model','pages');
+		$profile = $this->pages->get_profile($page_id);
+		echo json_encode($profile);
+	}
+	
 	/** 
 	 * JSON : get installed app list
 	 * @param $page_id

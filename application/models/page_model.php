@@ -6,6 +6,16 @@ class Page_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	/**
+	 * Get page profile
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function get_profile($page_id = NULL){
+		if(!$page_id) return array();
+		return $this->db->get_where('page', array('page_id' => $page_id))->result();
+	}
+	
 	/** 
 	 * Get pages by company
 	 * @param $company_id
