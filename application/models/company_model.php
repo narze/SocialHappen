@@ -53,4 +53,8 @@ class Company_model extends CI_Model {
 	function get_company_list($limit =20, $offset =0) {
 		return $this -> _get( array(), $limit, $offset);
 	}
+	
+	function get_company_list_by_user_id($user_id){
+		return $this->db->get_where('company',array('user_id'=>$user_id));
+	}
 }
