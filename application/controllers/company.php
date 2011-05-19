@@ -22,6 +22,18 @@ class Company extends CI_Controller {
 		echo json_encode($companies);
 	}
 	
+	/** 
+	 * JSON : get company's available apps
+	 * @param $company_id
+	 * @author Prachya P.
+	 * 
+	 */
+	function json_get_company_apps($company_id = NULL){
+		$this->load->model('company_apps_model','company_apps');
+		$apps = $this->company_apps->get_company_apps($company_id);
+		echo json_encode($apps);
+	}
+	
 	/**
 	 * JSON : List company pages
 	 * @param $company_id
