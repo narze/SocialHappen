@@ -8,27 +8,28 @@ class Company_apps_model_test extends CI_Controller {
 		$this->load->model('company_apps_model','company_apps');
 	}
 
+	function __destruct(){
+		echo $this->unit->report();
+	}
+	
 	function index(){
 		$this->get_company_apps_test();
 		
 		
 	}
 	
-	/*
+	/**
 	 * Tests get apps from company_id
-	 * @author Manassarn Manoonchai
+	 * @author Manassarn M.
 	 */
 	function get_company_apps_test(){
 		$result = $this->company_apps->get_company_apps(1);
 		$this->unit->run($result, 'is_array', 'Get company apps');
-		$this->unit->run($result[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($result[0]->company_id,'is_string','company_id');
 		$this->unit->run($result[0]->app_id,'is_string','app_id');
-		$this->unit->run($result[0]->app_install_available,'is_string','app_install_available');
-		$this->unit->run($result[0]->app_install_date,'is_string','app_install_date');
-		$this->unit->run($result[0]->page_id,'is_string','page_id');
-		$this->unit->run($result[0]->app_install_secret_key,'is_string','app_install_secret_key');
-		echo $this->unit->report();
+		$this->unit->run($result[0]->available_date,'is_string','available_date');
+		$this->unit->run(count((array)$result[0]) == 3, 'is_true', 'number of column');
+		
 	}
 
 }
