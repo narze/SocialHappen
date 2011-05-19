@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 19, 2011 at 09:19 AM
+-- Generation Time: May 19, 2011 at 11:05 AM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -72,6 +72,28 @@ CREATE TABLE IF NOT EXISTS `sh_app_campaigns` (
 INSERT INTO `sh_app_campaigns` (`app_install_id`, `campaign_id`) VALUES
 (1, 1),
 (2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sh_app_install_status`
+--
+
+DROP TABLE IF EXISTS `sh_app_install_status`;
+CREATE TABLE IF NOT EXISTS `sh_app_install_status` (
+  `app_install_staus_id` tinyint(1) NOT NULL AUTO_INCREMENT,
+  `app_install_status_name` varchar(50) NOT NULL,
+  `app_install_status_description` varchar(255) NOT NULL,
+  PRIMARY KEY (`app_install_staus_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `sh_app_install_status`
+--
+
+INSERT INTO `sh_app_install_status` (`app_install_staus_id`, `app_install_status_name`, `app_install_status_description`) VALUES
+(1, 'active', 'Active'),
+(2, 'inactive', 'Inactive');
 
 -- --------------------------------------------------------
 
@@ -174,7 +196,7 @@ INSERT INTO `sh_campaign_status` (`campaign_status_id`, `campaign_status_name`) 
 DROP TABLE IF EXISTS `sh_company`;
 CREATE TABLE IF NOT EXISTS `sh_company` (
   `company_id` int(10) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(10) NOT NULL,
+  `creator_user_id` bigint(10) NOT NULL,
   `company_name` varchar(255) NOT NULL,
   `company_address` text NOT NULL,
   `company_email` varchar(150) NOT NULL,
@@ -190,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `sh_company` (
 -- Dumping data for table `sh_company`
 --
 
-INSERT INTO `sh_company` (`company_id`, `user_id`, `company_name`, `company_address`, `company_email`, `company_telephone`, `company_register_date`, `company_username`, `company_password`, `company_image`) VALUES
+INSERT INTO `sh_company` (`company_id`, `creator_user_id`, `company_name`, `company_address`, `company_email`, `company_telephone`, `company_register_date`, `company_username`, `company_password`, `company_image`) VALUES
 (1, 0, 'Company test 1', '', 'test1@figabyte.com', '022485555', '2011-05-09 17:52:17', '', '', '');
 
 -- --------------------------------------------------------
@@ -201,25 +223,18 @@ INSERT INTO `sh_company` (`company_id`, `user_id`, `company_name`, `company_addr
 
 DROP TABLE IF EXISTS `sh_company_apps`;
 CREATE TABLE IF NOT EXISTS `sh_company_apps` (
-  `app_install_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `company_id` bigint(20) NOT NULL,
   `app_id` bigint(20) NOT NULL,
-  `app_install_status` tinyint(1) NOT NULL,
-  `app_install_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `page_id` bigint(20) DEFAULT NULL,
-  `app_install_secret_key` mediumtext NOT NULL,
-  PRIMARY KEY (`app_install_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+  `available_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `sh_company_apps`
 --
 
-INSERT INTO `sh_company_apps` (`app_install_id`, `company_id`, `app_id`, `app_install_status`, `app_install_date`, `page_id`, `app_install_secret_key`) VALUES
-(1, 1, 1, 1, '2011-05-18 18:37:01', 0, '457f81902f7b768c398543e473c47465'),
-(2, 1, 2, 1, '2011-05-18 18:37:01', 0, 'b4504b54bb0c27a22fedba10cca4eb55'),
-(3, 1, 3, 1, '2011-05-18 18:37:34', 0, '1dd5a598414f201bc521348927c265c3'),
-(4, 1, 4, 1, '2011-05-18 18:37:34', 0, '19323810aedbbc8384b383fa21904626');
+INSERT INTO `sh_company_apps` (`company_id`, `app_id`, `available_date`) VALUES
+(1, 1, '2011-05-19 16:01:20'),
+(1, 2, '2011-05-19 16:01:20');
 
 -- --------------------------------------------------------
 
@@ -297,6 +312,34 @@ CREATE TABLE IF NOT EXISTS `sh_cron_job` (
 -- Dumping data for table `sh_cron_job`
 --
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sh_installed_apps`
+--
+
+DROP TABLE IF EXISTS `sh_installed_apps`;
+CREATE TABLE IF NOT EXISTS `sh_installed_apps` (
+  `app_install_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `company_id` bigint(20) NOT NULL,
+  `app_id` bigint(20) NOT NULL,
+  `app_install_status` tinyint(1) NOT NULL,
+  `app_install_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `page_id` bigint(20) DEFAULT NULL,
+  `app_install_secret_key` mediumtext NOT NULL,
+  PRIMARY KEY (`app_install_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `sh_installed_apps`
+--
+
+INSERT INTO `sh_installed_apps` (`app_install_id`, `company_id`, `app_id`, `app_install_status`, `app_install_date`, `page_id`, `app_install_secret_key`) VALUES
+(1, 1, 1, 1, '2011-05-18 18:37:01', 1, '457f81902f7b768c398543e473c47465'),
+(2, 1, 2, 1, '2011-05-18 18:37:01', 2, 'b4504b54bb0c27a22fedba10cca4eb55'),
+(3, 1, 3, 1, '2011-05-18 18:37:34', 0, '1dd5a598414f201bc521348927c265c3'),
+(4, 1, 4, 1, '2011-05-18 18:37:34', 0, '19323810aedbbc8384b383fa21904626');
 
 -- --------------------------------------------------------
 
