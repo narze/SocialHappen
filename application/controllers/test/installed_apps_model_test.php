@@ -13,7 +13,7 @@ class Installed_apps_model_test extends CI_Controller {
 	}
 
 	function index(){
-		
+		$this->get_installed_apps_test();
 	}
 	
 	/**
