@@ -99,5 +99,5 @@ class Company_test extends CI_Controller {
 	}
 }
 
-/* End of file api.php */
-/* Location: ./application/controllers/test/api.php */
+/* End of file company_test.php */
+/* Location: ./application/controllers/test/company_test.php */
