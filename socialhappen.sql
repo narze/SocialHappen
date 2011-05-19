@@ -3,17 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 19, 2011 at 11:05 AM
+-- Generation Time: May 19, 2011 at 01:00 PM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `socialhappen`
@@ -51,27 +45,6 @@ INSERT INTO `sh_app` (`app_id`, `app_name`, `app_type_id`, `app_maintainance`, `
 (2, 'Facebook Register', 2, 0, 1, 'Campaign register using Facebook id', '22222222222222222222222222222222', 'http://socialhappen.dyndns.org/fbreg?app_install_id={app_install_id}', 'http://socialhappen.dyndns.org/fbreg/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 'http://socialhappen.dyndns.org/fbreg/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}', 0, ''),
 (3, 'Share to get it', 3, 0, 1, 'Share links by twitter / facebook to get file url', '33333333333333333333333333333333', 'http://socialhappen.dyndns.org/sharetogetit?app_install_id={app_install_id}', 'http://socialhappen.dyndns.org/sharetogetit/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 'http://socialhappen.dyndns.org/sharetogetit/sh/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}', 0, ''),
 (4, 'Facebook CMS', 1, 0, 1, 'Content Management System on Facebook', '44444444444444444444444444444444', 'http://socialhappen.dyndns.org/fbcms/blog/{app_install_id}/', 'http://socialhappen.dyndns.org/fbcms/platform/install/{company_id}/{user_facebook_id}/', 'http://socialhappen.dyndns.org/fbcms/platform/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}/', 1, '');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sh_app_campaigns`
---
-
-DROP TABLE IF EXISTS `sh_app_campaigns`;
-CREATE TABLE IF NOT EXISTS `sh_app_campaigns` (
-  `app_install_id` bigint(20) NOT NULL,
-  `campaign_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`app_install_id`,`campaign_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `sh_app_campaigns`
---
-
-INSERT INTO `sh_app_campaigns` (`app_install_id`, `campaign_id`) VALUES
-(1, 1),
-(2, 2);
 
 -- --------------------------------------------------------
 
