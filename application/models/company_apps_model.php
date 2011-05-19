@@ -7,11 +7,11 @@ class Company_apps_model extends CI_Model {
 	}
 	
 	/*
-	 * Get company apps
+	 * Get company's available apps
 	 * @param int company_id
-	 * @author Manassarn Manoonchai
+	 * @author Prachya P.
 	 */
-	function get_company_apps($company_id = null){
+	function get_company_apps($company_id = NULL){
 		if(!$company_id) return array();
 		return $this->db->get_where('company_apps',array('company_id'=>$company_id))->result();
 	}
@@ -34,8 +34,8 @@ class Company_apps_model extends CI_Model {
 		$this -> db -> update('company_apps', $data, $where);
 	}
 
-	function delete($id) {
-		$this -> db -> delete('company_apps', array('app_install_id' => $id));
+	function delete($company_id,$app_id) {
+		$this -> db -> delete('company_apps', array('company_id' => $company_id,'$app_id' => $app_id));
 	}
 
 	function count_all($where = array()) {
@@ -43,30 +43,6 @@ class Company_apps_model extends CI_Model {
 		return $this -> db -> count_all_results('company_apps');
 	}
 
-	function get_company_apps_list($limit =20, $offset =0) {
-		return $this -> _get( array(), $limit, $offset);
-	}
-	
-	function get_app_by_company($company_id,$limit = 20, $offset =0){
-		return $this -> _get( array('company_id'=>$company_id), $limit, $offset);
-	}
-	
-	function deactivate_app($app_install_id){
-		$this->update(array('app_install_available'=> FALSE), array('app_install_id' => $app_install_id));
-	}
-	
-	function activate_app($app_install_id){
-		$this->update(array('app_install_available'=> TRUE), array('app_install_id' => $app_install_id));
-	}
-
-	function get_app_install_by_app_install_id($app_install_id){
-		$app = $this -> _get( array('app_install_id'=>$app_install_id), 1, 0);
-		if($app != NULL){
-			return $app[0];
-		} else{
-			return NULL;
-		}
-	}
 }
 /* End of file company_apps_model.php */
 /* Location: ./application/models/company_apps_model.php */
