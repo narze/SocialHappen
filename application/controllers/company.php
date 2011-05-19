@@ -16,7 +16,7 @@ class Company extends CI_Controller {
 	 * @author Prachya P.
 	 * 
 	 */
-	function json_get_user_company($user_id = null){
+	function json_get_user_company($user_id = NULL){
 		$this->load->model('company_model','company');
 		$companies = $this->company->get_company_list_by_user_id($user_id);
 		echo json_encode($companies);
@@ -27,7 +27,7 @@ class Company extends CI_Controller {
 	 * @param $company_id
 	 * @author Manassarn M.
 	 */
-	function json_company_page_list($company_id = null){
+	function json_company_page_list($company_id = NULL){
 		$this->load->model('page_model','page');
 		$pages = $this->page->get_company_pages($company_id);
 		echo json_encode($pages);
@@ -38,7 +38,7 @@ class Company extends CI_Controller {
 	 * @param $company_id
 	 * @author Manassarn M.
 	 */
-	function json_company_app_list($company_id = null){
+	function json_company_app_list($company_id = NULL){
 		$this->load->model('company_apps_model','company_apps');
 		$apps = $this->company_apps->get_company_apps($company_id);
 		echo json_encode($apps);
@@ -49,9 +49,9 @@ class Company extends CI_Controller {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_page_app_list($page_id = null){
-		$this->load->model('company_apps_model','company_apps');
-		$apps = $this->company_apps->get_page_apps($page_id);
+	function json_page_app_list($page_id = NULL){
+		$this->load->model('page_apps_model','page_apps');
+		$apps = $this->page_apps->get_page_apps($page_id);
 		echo json_encode($apps);
 	}
 	
