@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 19, 2011 at 08:46 AM
+-- Generation Time: May 19, 2011 at 09:19 AM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS `sh_company_apps` (
   `app_install_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `company_id` bigint(20) NOT NULL,
   `app_id` bigint(20) NOT NULL,
-  `app_install_available` tinyint(1) NOT NULL,
+  `app_install_status` tinyint(1) NOT NULL,
   `app_install_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `page_id` bigint(20) DEFAULT NULL,
   `app_install_secret_key` mediumtext NOT NULL,
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `sh_company_apps` (
 -- Dumping data for table `sh_company_apps`
 --
 
-INSERT INTO `sh_company_apps` (`app_install_id`, `company_id`, `app_id`, `app_install_available`, `app_install_date`, `page_id`, `app_install_secret_key`) VALUES
+INSERT INTO `sh_company_apps` (`app_install_id`, `company_id`, `app_id`, `app_install_status`, `app_install_date`, `page_id`, `app_install_secret_key`) VALUES
 (1, 1, 1, 1, '2011-05-18 18:37:01', 0, '457f81902f7b768c398543e473c47465'),
 (2, 1, 2, 1, '2011-05-18 18:37:01', 0, 'b4504b54bb0c27a22fedba10cca4eb55'),
 (3, 1, 3, 1, '2011-05-18 18:37:34', 0, '1dd5a598414f201bc521348927c265c3'),
@@ -301,26 +301,6 @@ CREATE TABLE IF NOT EXISTS `sh_cron_job` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sh_install_app`
---
-
-DROP TABLE IF EXISTS `sh_install_app`;
-CREATE TABLE IF NOT EXISTS `sh_install_app` (
-  `app_id` bigint(20) NOT NULL,
-  `company_id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  `install_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`app_id`,`company_id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `sh_install_app`
---
-
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `sh_page`
 --
 
@@ -344,29 +324,6 @@ CREATE TABLE IF NOT EXISTS `sh_page` (
 
 INSERT INTO `sh_page` (`page_id`, `facebook_page_id`, `company_id`, `page_name`, `page_detail`, `page_all_member`, `page_new_member`, `page_image`) VALUES
 (1234, 4321, 1, 'Test name', 'detail', 22, 222, '');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sh_page_apps`
---
-
-DROP TABLE IF EXISTS `sh_page_apps`;
-CREATE TABLE IF NOT EXISTS `sh_page_apps` (
-  `page_id` bigint(20) NOT NULL,
-  `app_install_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`page_id`,`app_install_id`),
-  KEY `facebook_page_id` (`page_id`),
-  KEY `app_install_id` (`app_install_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `sh_page_apps`
---
-
-INSERT INTO `sh_page_apps` (`page_id`, `app_install_id`) VALUES
-(1, 1),
-(2, 2);
 
 -- --------------------------------------------------------
 
