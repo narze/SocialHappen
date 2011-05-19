@@ -47,7 +47,8 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->company_id,'is_string','company_id');
 		$this->unit->run($array[0]->app_id,'is_string','app_id');
-		$this->unit->run(count((array)$array[0]) == 2, 'is_true', 'number of column');
+		$this->unit->run($array[0]->available_date,'is_string','available_date');
+		$this->unit->run(count((array)$array[0]) == 3, 'is_true', 'number of column');
 	}
 
 	/**
