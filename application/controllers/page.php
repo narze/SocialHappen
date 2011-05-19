@@ -32,6 +32,16 @@ class Page extends CI_Controller {
 		echo json_encode($campaigns);
 	}
 	
+	/**
+	 * JSON : get member list
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function json_get_member_list($page_id = NULL){
+		$this->load->model('user_model','users');
+		$members = $this->users->get_page_members($page_id);
+		echo json_encode($members);
+	}
 }
 
 
