@@ -15,12 +15,11 @@ class Page_model_test extends CI_Controller {
 	function index(){
 		$this->get_company_pages_test();
 		
-		
 	}
 	
-	/* 
+	/** 
 	 * Tests get pages from company_id
-	 * @author Manassarn Manoonchai
+	 * @author Manassarn M.
 	 */
 	function get_company_pages_test(){
 		$result = $this->page->get_company_pages(1);

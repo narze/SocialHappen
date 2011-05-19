@@ -6,7 +6,7 @@ class Page_model extends CI_Model {
 		parent::__construct();
 	}
 	
-	/* 
+	/** 
 	 * Get pages by company
 	 * @param $company_id
 	 * @author Manassarn M.
@@ -15,7 +15,6 @@ class Page_model extends CI_Model {
 		if(!$company_id) return array();
 		return $this->db->get_where('page', array('company_id' => $company_id))->result();
 	}
-	
 }
 /* End of file page_model.php */
 /* Location: ./application/models/page_model.php */
