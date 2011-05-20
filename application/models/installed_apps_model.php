@@ -18,13 +18,23 @@ class Installed_apps_model extends CI_Model {
 
 	/*
 	 * Get company's installed apps
-	 * @param int company_id
+	 * @param $company_id
 	 * @author Manassarn Manoonchai
 	 * @author Prachya P.
 	 */
 	function get_company_installed_apps($company_id = NULL){
 		if(!$company_id) return array();
 		return $this->db->get_where('installed_apps',array('company_id'=>$company_id))->result();
+	}
+	
+	/**
+	 * Get installed app profile
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function get_app_profile_by_id($app_install_id = NULL){
+		if(!$app_install_id) return array();
+		return $this->db->get_where('installed_apps',array('app_install_id'=>$app_install_id))->result();
 	}
 	
 	function add($data = array()) {
