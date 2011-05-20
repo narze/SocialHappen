@@ -22,6 +22,18 @@ class User_model extends CI_Model {
 		return $this->db->get_where('user',array('page_id'=>$page_id))->result();
 	}
 	
+	/**
+	 * Get user profile by id
+	 * @param $user_id
+	 * @author Manassarn M.
+	 */
+	function get_user_profile_by_id($user_id = NULL){
+		if (!$user_id)
+			return array();
+		return $this->db->get_where('user',array('user_id'=>$user_id))->result();
+	}
+	
+	
 	function add($data = array()) {		
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;
