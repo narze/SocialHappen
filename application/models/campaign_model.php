@@ -2,7 +2,7 @@
 
 /**
  * Campaign_model
- * 
+ *
  * @author Prachya P.
  */
 
@@ -18,25 +18,40 @@ class Campaign_model extends CI_Model {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_campaigns($page_id = NULL){
-		if(!$page_id) return array();
-		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id','left');
-		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
-		return $this -> db -> get_where('campaign', array('page_id' => $page_id))->result();
+	function get_campaigns($page_id =NULL) {
+		if(!$page_id)
+			return array();
+		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
+		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this -> db -> get_where('campaign', array('page_id' => $page_id)) -> result();
 	}
-	
+
 	/**
 	 * Get campaigns by app_install_id
 	 * @param $app_install_id
 	 * @author Manassarn M.
 	 */
-	function get_campaigns_by_app_install_id($app_install_id = NULL){
-		if(!$app_install_id) return array();
-		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id','left');
-		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
-		return $this -> db -> get_where('campaign', array('campaign.app_install_id' => $app_install_id))->result();
+	function get_campaigns_by_app_install_id($app_install_id =NULL) {
+		if(!$app_install_id)
+			return array();
+		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
+		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this -> db -> get_where('campaign', array('campaign.app_install_id' => $app_install_id)) -> result();
 	}
-	
+
+	/**
+	 * Get campaigns by campaign_id
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function get_campaign_profile_by_id($campaign_id =NULL) {
+		if(!$campaign_id)
+			return array();
+		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
+		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> result();
+	}
+
 	function add($data = array()) {
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;
@@ -46,10 +61,10 @@ class Campaign_model extends CI_Model {
 	}
 
 	function get($where = array(), $limit =0, $offset =0) {
-				
-		// join campaign_status table 		
+
+		// join campaign_status table
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id');
-		
+
 		$query = $this -> db -> get_where('campaign', $where, $limit, $offset);
 		return $query -> result();
 	}
