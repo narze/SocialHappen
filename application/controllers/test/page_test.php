@@ -114,5 +114,5 @@ class Page_test extends CI_Controller {
 	}
 }
 
-/* End of file api.php */
-/* Location: ./application/controllers/test/api.php */
+/* End of file page_test.php */
+/* Location: ./application/controllers/test/page_test.php */
