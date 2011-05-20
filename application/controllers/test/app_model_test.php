@@ -27,7 +27,7 @@ class App_model_test extends CI_Controller {
 	 */
 	function get_apps_test(){
 		$result = $this->apps->get_apps();
-		$this->unit->run($result, 'is_array', 'Get apps');
+		$this->unit->run($result, 'is_array', 'get_apps');
 		$this->unit->run($result[0]->app_id,'is_string','app_id');
 		$this->unit->run($result[0]->app_name,'is_string','app_name');
 		$this->unit->run($result[0]->app_type_id,'is_string','app_type_id');

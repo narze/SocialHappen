@@ -11,11 +11,11 @@ class User_apps_model extends CI_Model {
 	}
 	
 	/**
-	 * Get users from app_install_id
+	 * Get users by app_install_id
 	 * @param $app_install_id
 	 * @author Manassarn M.
 	 */
-	function get_members_from_app_install_id($app_install_id = NULL){
+	function get_users_by_app_install_id($app_install_id = NULL){
 		if(!$app_install_id) return array();
 		$this->db->join('user','user.user_id=user_apps.user_id');
 		return $this->db->get_where('user_apps',array('app_install_id'=>$app_install_id))->result();

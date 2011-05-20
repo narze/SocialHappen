@@ -15,7 +15,7 @@ class User_model extends CI_Model {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_page_members($page_id = NULL){
+	function get_page_users($page_id = NULL){
 		if(!$page_id) return array();
 		$this->db->join('user_apps','user_apps.user_id=user.user_id');
 		$this->db->join('installed_apps','installed_apps.app_install_id=user_apps.app_install_id');

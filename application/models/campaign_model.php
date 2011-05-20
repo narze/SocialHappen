@@ -18,7 +18,7 @@ class Campaign_model extends CI_Model {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_campaigns($page_id =NULL) {
+	function get_campaigns_by_page_id($page_id =NULL) {
 		if(!$page_id)
 			return array();
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');

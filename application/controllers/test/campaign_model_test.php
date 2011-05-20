@@ -22,12 +22,12 @@ class Campaign_model_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests get campaigns from page_id
+	 * Tests get campaigns by page_id
 	 * @author Manassarn M.
 	 */
-	function get_campaigns_test(){
-		$result = $this->campaigns->get_campaigns(1);
-		$this->unit->run($result, 'is_array', 'get_campaigns()');
+	function get_campaigns_by_page_id_test(){
+		$result = $this->campaigns->get_campaigns_by_page_id(1);
+		$this->unit->run($result, 'is_array', 'get_campaigns_by_page_id');
 		$this->unit->run($result[0]->campaign_id,'is_string','campaign_id');
 		$this->unit->run($result[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($result[0]->campaign_name,'is_string','campaign_name');

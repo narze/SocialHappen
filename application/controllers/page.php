@@ -17,7 +17,7 @@ class Page extends CI_Controller {
 	 */
 	function json_get_profile($page_id = NULL){
 		$this->load->model('page_model','pages');
-		$profile = $this->pages->get_profile($page_id);
+		$profile = $this->pages->get_page_profile_by_id($page_id);
 		echo json_encode($profile);
 	}
 	
@@ -39,7 +39,7 @@ class Page extends CI_Controller {
 	 */
 	function json_get_campaign_list($page_id = NULL){
 		$this->load->model('campaign_model','campaigns');
-		$campaigns = $this->campaigns->get_campaigns($page_id);
+		$campaigns = $this->campaigns->get_campaigns_by_page_id($page_id);
 		echo json_encode($campaigns);
 	}
 	
@@ -50,7 +50,7 @@ class Page extends CI_Controller {
 	 */
 	function json_get_member_list($page_id = NULL){
 		$this->load->model('user_model','users');
-		$members = $this->users->get_page_members($page_id);
+		$members = $this->users->get_page_users($page_id);
 		echo json_encode($members);
 	}
 }

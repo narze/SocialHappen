@@ -24,9 +24,9 @@ class Campaign_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function get_campaign_profile_test(){
-		$content = file_get_contents(base_url().'campaign/json_get_campaign_profile_by_id/1');
+		$content = file_get_contents(base_url().'campaign/json_get_profile/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_campaign_profile_by_id');
+		$this->unit->run($array, 'is_array', 'json_get_profile');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->campaign_id,'is_string','campaign_id');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');

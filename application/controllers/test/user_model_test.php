@@ -22,12 +22,12 @@ class User_model_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests get page members from page_id
+	 * Tests get page users from page_id
 	 * @author Manassarn M.
 	 */
-	function get_page_members_test(){
-		$result = $this->users->get_page_members(1);
-		$this->unit->run($result, 'is_array', 'Get page members');
+	function get_page_users_test(){
+		$result = $this->users->get_page_users(1);
+		$this->unit->run($result, 'is_array', 'Get page get_page_users');
 		$this->unit->run($result[0]->user_id,'is_string','user_id');
 		$this->unit->run($result[0]->user_facebook_id,'is_string','user_facebook_id');
 		$this->unit->run($result[0]->user_register_date,'is_string','user_register_date');

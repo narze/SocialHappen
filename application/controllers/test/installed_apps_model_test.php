@@ -27,7 +27,7 @@ class Installed_apps_model_test extends CI_Controller {
 	 */
 	function get_installed_apps_test(){
 		$result = $this->installed_apps->get_installed_apps(1);
-		$this->unit->run($result, 'is_array', 'Get installed apps');
+		$this->unit->run($result, 'is_array', 'get_installed_apps');
 		$this->unit->run($result[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($result[0]->company_id,'is_string','company_id');
 		$this->unit->run($result[0]->app_id,'is_string','app_id');
@@ -44,7 +44,7 @@ class Installed_apps_model_test extends CI_Controller {
 	 */
 	function get_app_profile_by_id_test(){
 		$result = $this->installed_apps->get_app_profile_by_id(1);
-		$this->unit->run($result, 'is_array', 'Get installed apps');
+		$this->unit->run($result, 'is_array', 'get_app_profile_by_id');
 		$this->unit->run($result[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($result[0]->company_id,'is_string','company_id');
 		$this->unit->run($result[0]->app_id,'is_string','app_id');

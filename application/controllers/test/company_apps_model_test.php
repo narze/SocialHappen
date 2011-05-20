@@ -22,12 +22,12 @@ class Company_apps_model_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests get apps from company_id
+	 * Tests get company apps from company_id
 	 * @author Manassarn M.
 	 */
 	function get_company_apps_test(){
 		$result = $this->company_apps->get_company_apps(1);
-		$this->unit->run($result, 'is_array', 'Get company apps');
+		$this->unit->run($result, 'is_array', 'get_company_appss');
 		$this->unit->run($result[0]->company_id,'is_string','company_id');
 		$this->unit->run($result[0]->app_id,'is_string','app_id');
 		$this->unit->run($result[0]->available_date,'is_string','available_date');

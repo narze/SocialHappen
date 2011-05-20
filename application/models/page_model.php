@@ -7,11 +7,11 @@ class Page_model extends CI_Model {
 	}
 	
 	/**
-	 * Get page profile
+	 * Get page profile by page id
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_profile($page_id = NULL){
+	function get_page_profile_by_id($page_id = NULL){
 		if(!$page_id) return array();
 		return $this->db->get_where('page', array('page_id' => $page_id))->result();
 	}

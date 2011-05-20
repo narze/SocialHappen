@@ -20,13 +20,13 @@ class Page_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests json_get_page_details()
+	 * Tests json_get_profile()
 	 * @author Manassarn M.
 	 */
 	function json_get_profile_test(){
 		$content = file_get_contents(base_url().'page/json_get_profile/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'Page profile returns json correctly');
+		$this->unit->run($array, 'is_array', 'json_get_profile');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->page_id,'is_string','page_id');
 		$this->unit->run($array[0]->facebook_page_id,'is_string','facebook_page_id');
@@ -46,7 +46,7 @@ class Page_test extends CI_Controller {
 	function json_get_installed_app_list_test(){
 		$content = file_get_contents(base_url().'page/json_get_installed_app_list/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'Installed app list returns json correctly');
+		$this->unit->run($array, 'is_array', 'json_get_installed_app_list');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($array[0]->company_id,'is_string','company_id');
@@ -65,7 +65,7 @@ class Page_test extends CI_Controller {
 	function json_get_campaign_list_test(){
 		$content = file_get_contents(base_url().'page/json_get_campaign_list/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'Campaign list returns json correctly');
+		$this->unit->run($array, 'is_array', 'json_get_campaign_list');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->campaign_id,'is_string','campaign_id');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');
@@ -94,7 +94,7 @@ class Page_test extends CI_Controller {
 	function json_get_member_list_test(){
 		$content = file_get_contents(base_url().'page/json_get_member_list/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'Member list returns json correctly');
+		$this->unit->run($array, 'is_array', 'json_get_member_list');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->user_id,'is_string','user_id');
 		$this->unit->run($array[0]->user_facebook_id,'is_string','user_facebook_id');

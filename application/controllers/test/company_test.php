@@ -26,7 +26,7 @@ class Company_test extends CI_Controller {
 	function company_page_list_test(){
 		$content = file_get_contents(base_url().'company/json_company_page_list/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'Company page list returns json correctly');
+		$this->unit->run($array, 'is_array', 'json_company_page_list');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->page_id,'is_string','page_id');
 		$this->unit->run($array[0]->facebook_page_id,'is_string','facebook_page_id');
@@ -46,7 +46,7 @@ class Company_test extends CI_Controller {
 	function company_app_list_test(){
 		$content = file_get_contents(base_url().'company/json_company_app_list/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'Company app list returns json correctly');
+		$this->unit->run($array, 'is_array', 'json_company_app_list');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->company_id,'is_string','company_id');
 		$this->unit->run($array[0]->app_id,'is_string','app_id');
@@ -61,7 +61,7 @@ class Company_test extends CI_Controller {
 	function app_list_test(){
 		$content = file_get_contents(base_url().'company/json_app_list/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'App list returns json correctly');
+		$this->unit->run($array, 'is_array', 'json_app_list');
 		$this->unit->run($array[0]->app_id,'is_string','app_id');
 		$this->unit->run($array[0]->app_name,'is_string','app_name');
 		$this->unit->run($array[0]->app_type_id,'is_string','app_type_id');
