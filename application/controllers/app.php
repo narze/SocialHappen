@@ -32,6 +32,17 @@ class App extends CI_Controller {
 		$campaigns = $this->campaigns->get_campaigns_by_app_install_id($app_install_id);
 		echo json_encode($campaigns);
 	}
+	
+	/**
+	 * JSON : get member list by app_install_id
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function json_get_member_list($app_install_id = NULL){
+		$this->load->model('user_apps_model','user_apps');
+		$members = $this->user_apps->get_app_members($app_install_id);
+		echo json_encode($members);
+	}
 }
 
 
