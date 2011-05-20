@@ -22,7 +22,16 @@ class App extends CI_Controller {
 		echo json_encode($profile);
 	}
 	
-
+	/**
+	 * JSON : get campaign list by app_install_id
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function json_get_campaign_list_by_app_install_id($app_install_id = NULL){
+		$this->load->model('campaign_model','campaigns');
+		$campaigns = $this->campaigns->get_campaigns_by_app_install_id($app_install_id);
+		echo json_encode($campaigns);
+	}
 }
 
 
