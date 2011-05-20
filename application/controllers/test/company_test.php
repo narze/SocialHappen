@@ -11,10 +11,12 @@ class Company_test extends CI_Controller {
 	}
 
 	function index(){
-		$this->company_page_list_test();
-		$this->company_app_list_test();
-		$this->app_list_test();
-		
+		$class_methods = get_class_methods($this);
+		foreach ($class_methods as $method) {
+    		if(preg_match("/(_test)$/",$method)){
+    			$this->$method();
+    		}
+		}
 	}
 	
 	/**

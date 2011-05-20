@@ -13,9 +13,12 @@ class App_model_test extends CI_Controller {
 	}
 
 	function index(){
-		$this->get_apps_test();
-		
-		
+		$class_methods = get_class_methods($this);
+		foreach ($class_methods as $method) {
+    		if(preg_match("/(_test)$/",$method)){
+    			$this->$method();
+    		}
+		}
 	}
 	
 	/** 
