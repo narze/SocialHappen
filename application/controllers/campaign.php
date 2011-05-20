@@ -21,6 +21,16 @@ class Campaign extends CI_Controller {
 		echo json_encode($profile);
 	}
 	
+	/**
+	 * JSON : get member list by campaign_id
+	 * @param $campaign_id
+	 * @author Manassarn M.
+	 */
+	function json_get_member_list_by_campaign_id($campaign_id = NULL){
+		$this->load->model('user_campaigns_model','user_campaigns');
+		$profile = $this->user_campaigns->get_users_by_campaign_id($campaign_id);
+		echo json_encode($profile);
+	}
 }
 
 

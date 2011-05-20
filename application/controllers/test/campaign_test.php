@@ -26,7 +26,7 @@ class Campaign_test extends CI_Controller {
 	function get_campaign_profile_test(){
 		$content = file_get_contents(base_url().'campaign/json_get_campaign_profile_by_id/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'Campaign profile returns json correctly');
+		$this->unit->run($array, 'is_array', 'json_get_campaign_profile_by_id');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->campaign_id,'is_string','campaign_id');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');
@@ -46,6 +46,23 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($array[0]->page_id,'is_string','page_id');
 		$this->unit->run($array[0]->app_install_secret_key,'is_string','app_install_secret_key');
 		$this->unit->run(count((array)$array[0]) == 16, 'is_true', 'number of column');
+	}
+
+	/**
+	 * Test get member list by campaign_id
+	 * @author Manassarn M.
+	 */
+	function get_member_list_by_campaign_id(){
+		$content = file_get_contents(base_url().'campaign/json_get_member_list_by_campaign_id/1');
+		$array = json_decode($content);
+		$this->unit->run($array, 'is_array', 'json_get_member_list_by_campaign_id');
+		$this->unit->run($array[0], 'is_object', 'First row');
+		$this->unit->run($array[0]->user_id,'is_string','user_id');
+		$this->unit->run($array[0]->campaign_id,'is_string','user_facebook_id');
+		$this->unit->run($array[0]->user_register_date,'is_string','user_register_date');
+		$this->unit->run($array[0]->user_last_seen,'is_string','user_last_seen');
+		$this->unit->run($array[0]->user_register_date,'is_string','app_install_id');
+		$this->unit->run(count((array)$array[0]) == 5, 'is_true', 'number of column');
 	}
 }
 
