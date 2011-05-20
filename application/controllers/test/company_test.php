@@ -33,7 +33,8 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array[0]->page_detail,'is_string','page_detail');
 		$this->unit->run($array[0]->page_all_member,'is_string','page_all_member');
 		$this->unit->run($array[0]->page_new_member,'is_string','page_new_member');
-		$this->unit->run(count((array)$array[0]) == 7, 'is_true', 'number of column');
+		$this->unit->run($array[0]->page_image,'is_string','page_image');
+		$this->unit->run(count((array)$array[0]) == 8, 'is_true', 'number of column');
 	}
 	
 	/**
