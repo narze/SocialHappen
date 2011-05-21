@@ -2,6 +2,7 @@
 
 /**
  * @class Company
+ * @category controller
  */
 class Company extends CI_Controller {
 
