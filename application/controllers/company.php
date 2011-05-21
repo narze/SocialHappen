@@ -6,8 +6,9 @@ class Company extends CI_Controller {
 		parent::__construct();
 	}
 
-	function index(){
-		
+	function index($company_id){
+		$data['company_id'] = $company_id;
+		$this->load->view('company_view',$data);
 	}
 	
 	/** 
@@ -20,18 +21,6 @@ class Company extends CI_Controller {
 		$this->load->model('company_model','company');
 		$companies = $this->company->get_company_list_by_user_id($user_id);
 		echo json_encode($companies);
-	}
-	
-	/** 
-	 * JSON : get company's available apps
-	 * @param $company_id
-	 * @author Prachya P.
-	 * 
-	 */
-	function json_get_company_apps($company_id = NULL){
-		$this->load->model('company_apps_model','company_apps');
-		$apps = $this->company_apps->get_company_apps($company_id);
-		echo json_encode($apps);
 	}
 	
 	/**
