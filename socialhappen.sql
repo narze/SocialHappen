@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 19, 2011 at 01:00 PM
+-- Generation Time: May 21, 2011 at 07:28 AM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `sh_campaign` (
 --
 
 INSERT INTO `sh_campaign` (`campaign_id`, `app_install_id`, `campaign_name`, `campaign_detail`, `campaign_status_id`, `campaign_active_member`, `campaign_all_member`, `campaign_start_timestamp`, `campaign_end_timestamp`) VALUES
-(1, 1, 'Campaign test 1', 'Campaign test detail 1', 0, 2, 10, '2011-05-18 18:05:10', '2012-05-18 00:00:00'),
+(1, 1, 'Campaign test 1', 'Campaign test detail 1', 1, 2, 10, '2011-05-19 18:29:43', '2012-05-18 00:00:00'),
 (2, 2, 'Campaign test 2', 'Campaign test detail 2', 1, 3, 5, '2011-05-18 18:05:46', '2011-06-18 00:00:00');
 
 -- --------------------------------------------------------
@@ -302,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `sh_installed_apps` (
   `page_id` bigint(20) DEFAULT NULL,
   `app_install_secret_key` mediumtext NOT NULL,
   PRIMARY KEY (`app_install_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `sh_installed_apps`
@@ -339,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `sh_page` (
 --
 
 INSERT INTO `sh_page` (`page_id`, `facebook_page_id`, `company_id`, `page_name`, `page_detail`, `page_all_member`, `page_new_member`, `page_image`) VALUES
-(1234, 4321, 1, 'Test name', 'detail', 22, 222, '');
+(1, 4321, 1, 'Test name', 'detail', 22, 222, '');
 
 -- --------------------------------------------------------
 
@@ -387,6 +387,9 @@ CREATE TABLE IF NOT EXISTS `sh_user_apps` (
 -- Dumping data for table `sh_user_apps`
 --
 
+INSERT INTO `sh_user_apps` (`user_id`, `app_install_id`, `user_apps_register_date`, `user_apps_last_seen`) VALUES
+(1, 1, '2011-05-19 19:12:20', '0000-00-00 00:00:00'),
+(2, 2, '2011-05-19 19:12:20', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
