@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * @class company
+ * @class Company
  */
 class Company extends CI_Controller {
 
