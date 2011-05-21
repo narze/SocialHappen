@@ -40,6 +40,7 @@
 
 $route['default_controller'] = "landing";
 $route['404_override'] = '';
+$route['(:any)/(:num)'] = "$1/index/$2";
 
 
 /* End of file routes.php */
