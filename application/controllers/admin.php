@@ -41,11 +41,12 @@ class Admin extends CI_Controller {
 		$this->load->model('Company_apps_model', 'Company_apps');
 		$this->load->model('Company_pages_model', 'Company_pages');
 		$this->load->model('User_companies_model','User_companies');
+		$this->load->model('User_model', 'Users');
 		
 		$user_facebook_id = $this->facebook->getUser();
 		$user_facebook_id = $user_facebook_id['id'];
 		
-		if(!$this->User_companies->is_user_company_admin($user_facebook_id, $company_id))
+		if(!$this->Users->is_company_admin_test($user_facebook_id, $company_id, TRUE))
 			show_error('No Permission');
 		
 		// get list of apps in current company
