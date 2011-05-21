@@ -1,5 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * @class Company
+ * @category Controller
+ */
 class Company extends CI_Controller {
 
 	function __construct(){
