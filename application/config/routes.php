@@ -40,6 +40,11 @@
 
 $route['default_controller'] = "landing";
 $route['404_override'] = '';
+$route['company/(:num)'] = "company/index/$1";
+$route['page/(:num)'] = "page/index/$1";
+$route['app/(:num)'] = "app/index/$1";
+$route['campaign/(:num)'] = "campaign/index/$1";
+$route['user/(:num)'] = "user/index/$1";
 
 
 /* End of file routes.php */
