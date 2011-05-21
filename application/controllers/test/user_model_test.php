@@ -60,6 +60,20 @@ class User_model_test extends CI_Controller {
 		$this->unit->run(count((array)$result[0]) == 4, 'is_true', 'number of column');
 	}
 
+	/**
+	 * Tests if user is company admin
+	 * @author Manassarn M.
+	 */
+	function is_company_admin_test(){
+		$result = $this->users->is_company_admin(1,1);
+		$this->unit->run($result, 'is_true', 'is_company_admin(1,1)');
+		$result = $this->users->is_company_admin(1,10);
+		$this->unit->run($result, 'is_false', 'is_company_admin(1,1)');
+		$result = $this->users->is_company_admin(713558190,1, TRUE);
+		$this->unit->run($result, 'is_true', 'is_company_admin(713558190,1,TRUE) : use user_facebook_id');
+		$result = $this->users->is_company_admin(10,1);
+		$this->unit->run($result, 'is_false', 'is_company_admin(10,1)');
+	}
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */
