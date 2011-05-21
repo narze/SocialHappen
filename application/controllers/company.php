@@ -1,5 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * @class Company
+ * @category Controller
+ */
 class Company extends CI_Controller {
 
 	function __construct(){
@@ -13,7 +17,7 @@ class Company extends CI_Controller {
 	/** 
 	 * JSON : get company list by user_id
 	 * @param $user_id
-	 * @author Prachya P.
+	 * @author Prachya1 P.
 	 * 
 	 */
 	function json_get_user_company($user_id = NULL){
