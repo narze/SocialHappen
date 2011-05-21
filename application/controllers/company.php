@@ -17,7 +17,7 @@ class Company extends CI_Controller {
 	/** 
 	 * JSON : get company list by user_id
 	 * @param $user_id
-	 * @author Prachya1 P.
+	 * @author Prachya P.
 	 * 
 	 */
 	function json_get_user_company($user_id = NULL){
