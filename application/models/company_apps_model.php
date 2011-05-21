@@ -7,7 +7,7 @@ class Company_apps_model extends CI_Model {
 	}
 	
 	/**
-	 * Get company's available apps
+	 * Get company apps
 	 * @param $company_id
 	 * @author Prachya P.
 	 * @author Wachiraph C.
