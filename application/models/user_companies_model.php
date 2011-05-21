@@ -1,6 +1,6 @@
 <?php
 class User_companies_model extends CI_Model {
-	var $user_facebook_id = '';
+	var $user_id = '';
 	var $company_id = '';
 	var $user_role = '';
 	
@@ -26,10 +26,14 @@ class User_companies_model extends CI_Model {
 	 */
 	function _get($where = array(), $limit =0, $offset =0) {
 		if (array_key_exists('user_facebook_id', $where)) {
-			$this->db->join('sh_user', 'user_facebook_id = sh_user.user_facebook_id ');
+			$this->db->join('user', 'user_facebook_id = user.user_facebook_id ');
+			
+			$where['user.user_facebook_id'] = $where['user_facebook_id'] ;
+			$where['user.user_id'] = 'sh_user_companies'.'user_id' ;
 			unset($where['user_facebook_id']);
 		}
 		$query = $this -> db -> get_where('user_companies', $where, $limit, $offset);
+		echo $str = $this->db->last_query(); 
 		return $query -> result();
 	}
 
