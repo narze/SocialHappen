@@ -6,14 +6,18 @@ class Company_apps_model extends CI_Model {
 		parent::__construct();
 	}
 	
-	/*
+	/**
 	 * Get company's available apps
-	 * @param int company_id
+	 * @param $company_id
 	 * @author Prachya P.
+	 * @author Wachiraph C.
 	 */
 	function get_company_apps($company_id = NULL){
 		if(!$company_id) return array();
-		return $this->db->get_where('company_apps',array('company_id'=>$company_id))->result();
+		
+		$this->db->join('sh_installed_apps','sh_company_apps.app_id = sh_installed_apps.app_id ');
+		
+		return $this->db->get_where('company_apps',array('sh_company_apps.company_id'=>$company_id))->result();
 	}
 	
 	function add($data = array()) {

@@ -18,7 +18,7 @@
 		echo "<li>" . anchor('admin/app/'.$company->company_id.'/'.$app->app_install_id, '<b>'.$app->app_name.'</b>', 'title="see detail"') . " " 
 		. anchor($app->translated_app_url, 'Go to app', 'title=Go to app') . " | "
 		. anchor($app->translated_app_config_url, 'Configure', 'title="configure this app\'s setting"');
-		if($app->app_install_available){
+		if($app->app_install_status){
 			echo " | " . anchor('admin/deactivate_app/'.$company_id.'/'.$app->app_install_id, 'Deactivate', 'title="deactivate this app"');
 		}else{
 			echo " | " . anchor('admin/activate_app/'.$company_id.'/'.$app->app_install_id, 'Activate', 'title="activate this app"');

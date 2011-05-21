@@ -16,8 +16,19 @@ class User_companies_model extends CI_Model {
 		$this -> db -> insert('user_companies', $this);
 		return $this->db->insert_id();
 	}
-
+	
+	/**
+	 * Get user/s information
+	 * @param array $company_id
+	 * @param $limit
+	 * @param $offset
+	 * @author Wachiraph C.
+	 */
 	function _get($where = array(), $limit =0, $offset =0) {
+		if (array_key_exists('user_facebook_id', $where)) {
+			$this->db->join('sh_user', 'user_facebook_id = sh_user.user_facebook_id ');
+			unset($where['user_facebook_id']);
+		}
 		$query = $this -> db -> get_where('user_companies', $where, $limit, $offset);
 		return $query -> result();
 	}

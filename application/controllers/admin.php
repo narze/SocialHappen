@@ -46,11 +46,11 @@ class Admin extends CI_Controller {
 		$user_facebook_id = $this->facebook->getUser();
 		$user_facebook_id = $user_facebook_id['id'];
 		
-		if(!$this->Users->is_company_admin_test($user_facebook_id, $company_id, TRUE))
+		if(!$this->Users->is_company_admin($user_facebook_id, $company_id, TRUE))
 			show_error('No Permission');
 		
 		// get list of apps in current company
-		$app_id_list = $this->Company_apps->get_app_by_company($company_id);
+		$app_id_list = $this->Company_apps->get_company_apps($company_id);
 		
 		// prepare app data
 		$app_list = array();
