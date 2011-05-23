@@ -13,6 +13,7 @@ class Company extends CI_Controller {
 	function index($company_id){
 		$data['company_id'] = $company_id;
 		$this->load->view('company_view',$data);
+		return $data;
 	}
 	
 	/** 

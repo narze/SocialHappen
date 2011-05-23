@@ -20,6 +20,21 @@ class Company_test extends CI_Controller {
 	}
 	
 	/**
+	 * Tests output data
+	 * @author Manassarn M.
+	 */
+	function index_test(){
+		ob_start();
+		require(__DIR__.'/../company.php');
+		$company = new Company();
+		$data = $company->index(1);
+		ob_end_clean();
+		$this->unit->run($data,'is_array','$data');
+		$this->unit->run($data['company_id'], 'is_int', '$company_id');
+		$this->unit->run(count($data) == 1, 'is_true', 'number of passed variables');
+	}
+	
+	/**
 	 * Tests json_company_page_list().
 	 * @author Manassarn M.
 	 */
