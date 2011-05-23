@@ -11,13 +11,12 @@ class Company_apps_model extends CI_Model {
 	 * @param $company_id
 	 * @author Prachya P.
 	 * @author Wachiraph C.
+	 * @author Manassarn M.
 	 */
 	function get_company_apps($company_id = NULL){
 		if(!$company_id) return array();
 		
-		$this->db->join('sh_installed_apps','sh_company_apps.app_id = sh_installed_apps.app_id ');
-		
-		return $this->db->get_where('company_apps',array('sh_company_apps.company_id'=>$company_id))->result();
+		return $this->db->get_where('company_apps',array('company_id'=>$company_id))->result();
 	}
 	
 	function add($data = array()) {

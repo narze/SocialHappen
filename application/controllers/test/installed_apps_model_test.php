@@ -38,7 +38,7 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run(count((array)$result[0]) == 7, 'is_true', 'number of column');
 	}
 	
-		/**
+	/**
 	 * Tests get_app_profile_by_id()
 	 * @author Manassarn M.
 	 */

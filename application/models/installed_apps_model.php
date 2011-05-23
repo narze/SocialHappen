@@ -17,12 +17,12 @@ class Installed_apps_model extends CI_Model {
 	}
 
 	/*
-	 * Get company's installed apps
+	 * Get installed company apps
 	 * @param $company_id
 	 * @author Manassarn Manoonchai
 	 * @author Prachya P.
 	 */
-	function get_company_installed_apps($company_id = NULL){
+	function get_installed_company_apps($company_id = NULL){
 		if(!$company_id) return array();
 		return $this->db->get_where('installed_apps',array('company_id'=>$company_id))->result();
 	}

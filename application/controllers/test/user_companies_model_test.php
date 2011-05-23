@@ -29,5 +29,5 @@ class User_companies_model_test extends CI_Controller {
 		$this->unit->run(TRUE,'is_false');
 	}
 }
-/* End of file page_model_test.php */
-/* Location: ./application/controllers/test/page_model_test.php */
+/* End of file user_company_model_test.php */
+/* Location: ./application/controllers/test/user_company_model_test.php */
