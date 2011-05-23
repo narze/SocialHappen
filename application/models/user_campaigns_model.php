@@ -14,11 +14,11 @@ class User_campaigns_model extends CI_Model {
 	}
 
 	/**
-	 * Get user campaigns by campaign_id
+	 * Get campaign users
 	 * @param $campaign_id
 	 * @author Manassarn M.
 	 */
-	function get_campaign_users_from_campaign_id($campaign_id =NULL) {
+	function get_campaign_users_by_campaign_id($campaign_id =NULL) {
 		if(!$campaign_id)
 			return array();
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');

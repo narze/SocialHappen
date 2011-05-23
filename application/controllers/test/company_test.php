@@ -35,13 +35,13 @@ class Company_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests json_company_page_list().
+	 * Tests json_get_pages().
 	 * @author Manassarn M.
 	 */
-	function company_page_list_test(){
-		$content = file_get_contents(base_url().'company/json_company_page_list/1');
+	function json_get_pages_test(){
+		$content = file_get_contents(base_url().'company/json_get_pages/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_company_page_list');
+		$this->unit->run($array, 'is_array', 'json_get_pages()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->page_id,'is_string','page_id');
 		$this->unit->run($array[0]->facebook_page_id,'is_string','facebook_page_id');
@@ -55,13 +55,13 @@ class Company_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests json_company_app_list().
+	 * Tests json_get_apps().
 	 * @author Manassarn M.
 	 */
-	function company_app_list_test(){
-		$content = file_get_contents(base_url().'company/json_company_app_list/1');
+	function json_get_apps_test(){
+		$content = file_get_contents(base_url().'company/json_get_apps/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_company_app_list');
+		$this->unit->run($array, 'is_array', 'json_get_apps()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->company_id,'is_string','company_id');
 		$this->unit->run($array[0]->app_id,'is_string','app_id');
@@ -70,38 +70,13 @@ class Company_test extends CI_Controller {
 	}
 
 	/**
-	 * Tests json_app_list().
+	 * Tests json_get_installed_apps()
 	 * @author Manassarn M.
 	 */
-	function app_list_test(){
-		$content = file_get_contents(base_url().'company/json_app_list/1');
+	function json_get_installed_apps_test(){
+		$content = file_get_contents(base_url().'company/json_get_installed_apps/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_app_list');
-		$this->unit->run($array[0]->app_id,'is_string','app_id');
-		$this->unit->run($array[0]->app_name,'is_string','app_name');
-		$this->unit->run($array[0]->app_type_id,'is_string','app_type_id');
-		$this->unit->run($array[0]->app_type_name,'is_string','app_type_name');
-		$this->unit->run($array[0]->app_type_description,'is_string','app_type_description');
-		$this->unit->run($array[0]->app_maintainance,'is_string','app_maintainance');
-		$this->unit->run($array[0]->app_show_in_list,'is_string','app_show_in_list');
-		$this->unit->run($array[0]->app_description,'is_string','app_description');
-		$this->unit->run($array[0]->app_secret_key,'is_string','app_secret_key');
-		$this->unit->run($array[0]->app_url,'is_string','app_url');
-		$this->unit->run($array[0]->app_install_url,'is_string','app_install_url');
-		$this->unit->run($array[0]->app_config_url,'is_string','app_config_url');
-		$this->unit->run($array[0]->app_support_page_tab,'is_string','app_support_page_tab');
-		$this->unit->run($array[0]->app_image,'is_string','app_image');
-		$this->unit->run(count((array)$array[0]) == 14, 'is_true', 'number of column');
-	}
-
-	/**
-	 * Tests json_installed_company_app_list()
-	 * @author Manassarn M.
-	 */
-	function installed_company_app_list_test(){
-		$content = file_get_contents(base_url().'company/json_installed_company_app_list/1');
-		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'installed_company_app_list');
+		$this->unit->run($array, 'is_array', 'json_get_installed_apps()');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($array[0]->company_id,'is_string','company_id');
 		$this->unit->run($array[0]->app_id,'is_string','app_id');

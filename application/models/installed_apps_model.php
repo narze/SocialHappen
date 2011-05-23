@@ -11,18 +11,18 @@ class Installed_apps_model extends CI_Model {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_installed_apps($page_id = NULL){
+	function get_installed_apps_by_page_id($page_id = NULL){
 		if(!$page_id) return array();
 		return $this->db->get_where('installed_apps', array('page_id' => $page_id))->result();
 	}
 
 	/*
-	 * Get installed company apps
+	 * Get installed apps
 	 * @param $company_id
 	 * @author Manassarn Manoonchai
 	 * @author Prachya P.
 	 */
-	function get_installed_company_apps($company_id = NULL){
+	function get_installed_apps_by_company_id($company_id = NULL){
 		if(!$company_id) return array();
 		return $this->db->get_where('installed_apps',array('company_id'=>$company_id))->result();
 	}
@@ -32,7 +32,7 @@ class Installed_apps_model extends CI_Model {
 	 * @param $app_install_id
 	 * @author Manassarn M.
 	 */
-	function get_app_profile_by_id($app_install_id = NULL){
+	function get_app_profile_by_app_install_id($app_install_id = NULL){
 		if(!$app_install_id) return array();
 		return $this->db->get_where('installed_apps',array('app_install_id'=>$app_install_id))->result();
 	}

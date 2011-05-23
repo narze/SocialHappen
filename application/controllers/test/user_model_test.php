@@ -22,12 +22,12 @@ class User_model_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests get page users from page_id
+	 * Tests get_page_users_by_page_id()
 	 * @author Manassarn M.
 	 */
-	function get_page_users_test(){
-		$result = $this->users->get_page_users(1);
-		$this->unit->run($result, 'is_array', 'Get page get_page_users');
+	function get_page_users_by_page_id_test(){
+		$result = $this->users->get_page_users_by_page_id(1);
+		$this->unit->run($result, 'is_array', 'get_page_users_by_page_id()');
 		$this->unit->run($result[0]->user_id,'is_string','user_id');
 		$this->unit->run($result[0]->user_facebook_id,'is_string','user_facebook_id');
 		$this->unit->run($result[0]->user_register_date,'is_string','user_register_date');
@@ -47,12 +47,12 @@ class User_model_test extends CI_Controller {
 	}
 
 	/**
-	 * Tests get user profile by id
+	 * Tests get_user_profile_by_user_id()
 	 * @author Manassarn M.
 	 */
-	function get_user_profile_by_id_test(){
-		$result = $this->users->get_user_profile_by_id(1);
-		$this->unit->run($result, 'is_array', 'Get page members');
+	function get_user_profile_by_user_id_test(){
+		$result = $this->users->get_user_profile_by_user_id(1);
+		$this->unit->run($result, 'is_array', 'get_user_profile_by_user_id()');
 		$this->unit->run($result[0]->user_id,'is_string','user_id');
 		$this->unit->run($result[0]->user_facebook_id,'is_string','user_facebook_id');
 		$this->unit->run($result[0]->user_register_date,'is_string','user_register_date');

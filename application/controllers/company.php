@@ -20,7 +20,7 @@ class Company extends CI_Controller {
 	 * JSON : get company list by user_id
 	 * @param $user_id
 	 * @author Prachya P.
-	 * 
+	 * @todo Rename
 	 */
 	function json_get_user_company($user_id = NULL){
 		$this->load->model('company_model','company');
@@ -29,56 +29,45 @@ class Company extends CI_Controller {
 	}
 	
 	/**
-	 * JSON : List company pages
+	 * JSON : Get company pages
 	 * @param $company_id
 	 * @author Manassarn M.
 	 */
-	function json_company_page_list($company_id = NULL){
+	function json_get_pages($company_id = NULL){
 		$this->load->model('page_model','page');
-		$pages = $this->page->get_company_pages($company_id);
+		$pages = $this->page->get_company_pages_by_company_id($company_id);
 		echo json_encode($pages);
 	}
 	
 	/** 
-	 * JSON : List company apps
+	 * JSON : Get company apps
 	 * @param $company_id
 	 * @author Manassarn M.
 	 */
-	function json_company_app_list($company_id = NULL){
+	function json_get_apps($company_id = NULL){
 		$this->load->model('company_apps_model','company_apps');
-		$apps = $this->company_apps->get_company_apps($company_id);
+		$apps = $this->company_apps->get_company_apps_by_company_id($company_id);
 		echo json_encode($apps);
 	}
-	
+
 	/**
-	 * JSON : List page apps
-	 * @param $page_id
+	 * JSON : Get all apps
 	 * @author Manassarn M.
 	 */
-	function json_page_app_list($page_id = NULL){
-		$this->load->model('page_apps_model','page_apps');
-		$apps = $this->page_apps->get_page_apps($page_id);
-		echo json_encode($apps);
-	}
-	
-	/**
-	 * JSON : List apps
-	 * @author Manassarn M.
-	 */
-	function json_app_list(){
+	function json_get_all_apps(){
 		$this->load->model('app_model','apps');
-		$apps = $this->apps->get_apps();
+		$apps = $this->apps->get_all_apps();
 		echo json_encode($apps);
 	}
 	
 	/**
-	 * JSON : List installed apps
+	 * JSON : Get installed apps
 	 * @param $company_id
 	 * @author Manassarn M.
 	 */
-	function json_installed_company_app_list($company_id = NULL){
+	function json_get_installed_apps($company_id = NULL){
 		$this->load->model('installed_apps_model','installed_apps');
-		$apps = $this->installed_apps->get_installed_company_apps($company_id);
+		$apps = $this->installed_apps->get_installed_apps_by_company_id($company_id);
 		echo json_encode($apps);
 	}
 }

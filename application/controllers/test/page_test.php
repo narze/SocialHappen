@@ -26,7 +26,7 @@ class Page_test extends CI_Controller {
 	function json_get_profile_test(){
 		$content = file_get_contents(base_url().'page/json_get_profile/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_profile');
+		$this->unit->run($array, 'is_array', 'json_get_profile()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->page_id,'is_string','page_id');
 		$this->unit->run($array[0]->facebook_page_id,'is_string','facebook_page_id');
@@ -40,13 +40,13 @@ class Page_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests json_get_installed_app_list()
+	 * Tests json_get_installed_apps()
 	 * @author Manassarn M.
 	 */
-	function json_get_installed_app_list_test(){
-		$content = file_get_contents(base_url().'page/json_get_installed_app_list/1');
+	function json_get_installed_apps_test(){
+		$content = file_get_contents(base_url().'page/json_get_installed_apps/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_installed_app_list');
+		$this->unit->run($array, 'is_array', 'json_get_installed_apps()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($array[0]->company_id,'is_string','company_id');
@@ -59,13 +59,13 @@ class Page_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests json_get_campaign_list()
+	 * Tests json_get_campaigns()
 	 * @author Manassarn M.
 	 */
-	function json_get_campaign_list_test(){
-		$content = file_get_contents(base_url().'page/json_get_campaign_list/1');
+	function json_get_campaigns_test(){
+		$content = file_get_contents(base_url().'page/json_get_campaigns/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_campaign_list');
+		$this->unit->run($array, 'is_array', 'json_get_campaigns()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->campaign_id,'is_string','campaign_id');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');
@@ -88,13 +88,13 @@ class Page_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests json_get_member_list()
+	 * Tests json_get_users()
 	 * @author Manassarn M.
 	 */
-	function json_get_member_list_test(){
-		$content = file_get_contents(base_url().'page/json_get_member_list/1');
+	function json_get_users_test(){
+		$content = file_get_contents(base_url().'page/json_get_users/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_member_list');
+		$this->unit->run($array, 'is_array', 'json_get_users()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->user_id,'is_string','user_id');
 		$this->unit->run($array[0]->user_facebook_id,'is_string','user_facebook_id');

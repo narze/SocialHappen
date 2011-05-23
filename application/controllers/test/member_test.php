@@ -26,7 +26,7 @@ class Member_test extends CI_Controller {
 	function json_get_profile_test(){
 		$content = file_get_contents(base_url().'member/json_get_profile/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_profile');
+		$this->unit->run($array, 'is_array', 'json_get_profile()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->user_id,'is_string','user_id');
 		$this->unit->run($array[0]->user_facebook_id,'is_string','user_facebook_id');

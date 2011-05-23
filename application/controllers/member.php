@@ -11,14 +11,14 @@ class Member extends CI_Controller {
 	}
 	
 	/** 
-	 * JSON : get user profile by user_id
+	 * JSON : Get user profile
 	 * @param $user_id
 	 * @author Prachya P.
 	 * 
 	 */
 	function json_get_profile($user_id = NULL){
 		$this->load->model('user_model','users');
-		$profile = $this->users->get_user_profile_by_id($user_id);
+		$profile = $this->users->get_user_profile_by_user_id($user_id);
 		echo json_encode($profile);
 	}
 }

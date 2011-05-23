@@ -14,11 +14,11 @@ class Campaign_model extends CI_Model {
 	}
 
 	/**
-	 * Get campaigns
+	 * Get page campaigns
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_campaigns_by_page_id($page_id =NULL) {
+	function get_page_campaigns_by_page_id($page_id =NULL) {
 		if(!$page_id)
 			return array();
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
@@ -27,11 +27,11 @@ class Campaign_model extends CI_Model {
 	}
 
 	/**
-	 * Get campaigns by app_install_id
+	 * Get app campaigns
 	 * @param $app_install_id
 	 * @author Manassarn M.
 	 */
-	function get_campaigns_by_app_install_id($app_install_id =NULL) {
+	function get_app_campaigns_by_app_install_id($app_install_id =NULL) {
 		if(!$app_install_id)
 			return array();
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
@@ -40,11 +40,11 @@ class Campaign_model extends CI_Model {
 	}
 
 	/**
-	 * Get campaigns by campaign_id
-	 * @param $app_install_id
+	 * Get campaign profile
+	 * @param $campaign_id
 	 * @author Manassarn M.
 	 */
-	function get_campaign_profile_by_id($campaign_id =NULL) {
+	function get_campaign_profile_by_campaign_id($campaign_id =NULL) {
 		if(!$campaign_id)
 			return array();
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');

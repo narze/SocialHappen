@@ -11,48 +11,60 @@ class Page extends CI_Controller {
 	}
 	
 	/**
-	 * JSON : get page profile
+	 * JSON : Get page profile
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
 	function json_get_profile($page_id = NULL){
 		$this->load->model('page_model','pages');
-		$profile = $this->pages->get_page_profile_by_id($page_id);
+		$profile = $this->pages->get_page_profile_by_page_id($page_id);
 		echo json_encode($profile);
 	}
 	
 	/** 
-	 * JSON : get installed app list
+	 * JSON : Get install apps
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_installed_app_list($page_id = NULL){
+	function json_get_installed_apps($page_id = NULL){
 		$this->load->model('installed_apps_model','installed_apps');
-		$apps = $this->installed_apps->get_installed_apps($page_id);
+		$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
 		echo json_encode($apps);
 	}
 	
 	/**
-	 * JSON : get campaign list
+	 * JSON : Get campaigns
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_campaign_list($page_id = NULL){
+	function json_get_campaigns($page_id = NULL){
 		$this->load->model('campaign_model','campaigns');
-		$campaigns = $this->campaigns->get_campaigns_by_page_id($page_id);
+		$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
 		echo json_encode($campaigns);
 	}
 	
 	/**
-	 * JSON : get member list
+	 * JSON : Get users
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_member_list($page_id = NULL){
+	function json_get_users($page_id = NULL){
 		$this->load->model('user_model','users');
-		$members = $this->users->get_page_users($page_id);
-		echo json_encode($members);
+		$users = $this->users->get_page_users_by_page_id($page_id);
+		echo json_encode($users);
 	}
+
+	/**
+	 * JSON : Get page apps
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function json_page_apps($page_id = NULL){
+		$this->load->model('page_apps_model','page_apps');
+		$apps = $this->page_apps->get_page_apps_by_page_id($page_id);
+		echo json_encode($apps);
+	}
+	
 }
 
 

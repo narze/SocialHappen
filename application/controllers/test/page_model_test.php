@@ -22,12 +22,12 @@ class Page_model_test extends CI_Controller {
 	}
 	
 	/**
-	 * Test get page profile from page_id
+	 * Tests get_page_profile_by_page_id()
 	 * @author Manassarn M.
 	 */
-	function get_page_profile_by_id_test(){
-		$result = $this->page->get_page_profile_by_id(1);
-		$this->unit->run($result, 'is_array', 'get_page_profile_by_id');
+	function get_page_profile_by_page_id_test(){
+		$result = $this->page->get_page_profile_by_page_id(1);
+		$this->unit->run($result, 'is_array', 'get_page_profile_by_page_id()');
 		$this->unit->run($result[0]->page_id,'is_string','page_id');
 		$this->unit->run($result[0]->facebook_page_id,'is_string','facebook_page_id');
 		$this->unit->run($result[0]->company_id,'is_string','company_id');
@@ -40,12 +40,12 @@ class Page_model_test extends CI_Controller {
 	}
 	
 	/** 
-	 * Tests get pages from company_id
+	 * Tests get_company_pages_by_company_id()
 	 * @author Manassarn M.
 	 */
-	function get_company_pages_test(){
-		$result = $this->page->get_company_pages(1);
-		$this->unit->run($result, 'is_array', 'get_company_pages');
+	function get_company_pages_by_company_id_test(){
+		$result = $this->page->get_company_pages_by_company_id(1);
+		$this->unit->run($result, 'is_array', 'get_company_pages_by_company_id()');
 		$this->unit->run($result[0]->page_id,'is_string','page_id');
 		$this->unit->run($result[0]->facebook_page_id,'is_string','facebook_page_id');
 		$this->unit->run($result[0]->company_id,'is_string','company_id');

@@ -16,10 +16,10 @@ class App_model extends CI_Model {
 	}
 	
 	/**
-	 * Get apps
+	 * Get all apps
 	 * @author Manassarn M.
 	 */
-	function get_apps(){
+	function get_all_apps(){
 		$this->db->join('app_type', 'app.app_type_id = app_type.app_type_id');
 		return $this->db->get('app')->result();
 	}

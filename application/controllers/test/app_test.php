@@ -20,13 +20,13 @@ class App_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests get app profile by app_install_id
+	 * Tests json_get_profile()
 	 * @author Manassarn M.
 	 */
-	function get_app_profile_test(){
+	function json_get_profile_test(){
 		$content = file_get_contents(base_url().'app/json_get_profile/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_profile');
+		$this->unit->run($array, 'is_array', 'json_get_app_profile()');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($array[0]->company_id,'is_string','company_id');
 		$this->unit->run($array[0]->app_id,'is_string','app_id');
@@ -38,13 +38,13 @@ class App_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests get campaign list by app_install_id
+	 * Tests json_get_campaigns()
 	 * @author Manassarn M.
 	 */
-	function get_campaign_list_by_app_install_id_test(){
-		$content = file_get_contents(base_url().'app/json_get_campaign_list/1');
+	function json_get_campaigns_test(){
+		$content = file_get_contents(base_url().'app/json_get_campaigns/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_campaign');
+		$this->unit->run($array, 'is_array', 'json_get_campaigns()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->campaign_id,'is_string','campaign_id');
 		$this->unit->run($array[0]->app_install_id,'is_string','app_install_id');
@@ -67,13 +67,13 @@ class App_test extends CI_Controller {
 	}
 
 	/**
-	 * Test get member list by app_install_id
+	 * Test json_get_users()
 	 * @author Manassarn M.
 	 */
-	function get_member_list_by_app_install_id_test(){
-		$content = file_get_contents(base_url().'app/json_get_member_list/1');
+	function json_get_users_test(){
+		$content = file_get_contents(base_url().'app/json_get_users/1');
 		$array = json_decode($content);
-		$this->unit->run($array, 'is_array', 'json_get_member_list');
+		$this->unit->run($array, 'is_array', 'json_get_users()');
 		$this->unit->run($array[0], 'is_object', 'First row');
 		$this->unit->run($array[0]->user_id,'is_string','user_id');
 		$this->unit->run($array[0]->user_facebook_id,'is_string','user_facebook_id');

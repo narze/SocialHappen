@@ -10,11 +10,11 @@ class User_model extends CI_Model {
 	}
 
 	/**
-	 * Get page members
+	 * Get page users
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_page_users($page_id =NULL) {
+	function get_page_users_by_page_id($page_id =NULL) {
 		if(!$page_id)
 			return array();
 		$this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
@@ -23,11 +23,11 @@ class User_model extends CI_Model {
 	}
 
 	/**
-	 * Get user profile by id
+	 * Get user profile
 	 * @param $user_id
 	 * @author Manassarn M.
 	 */
-	function get_user_profile_by_id($user_id =NULL) {
+	function get_user_profile_by_user_id($user_id =NULL) {
 		if(!$user_id)
 			return array();
 		return $this -> db -> get_where('user', array('user_id' => $user_id)) -> result();

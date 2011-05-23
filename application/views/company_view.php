@@ -6,8 +6,9 @@
 </head>
 <body>
 <div id="companyPages"><h1>Pages</h1></div>
-<div id="companyApps"><h1>Apps</h1></div>
-<div id="availableApps"><h1>Available Apps</h1></div>
+<div id="installedApps"><h1>Installed Apps</h1></div>
+<div id="pageApps"><h1>Page Apps : <span id="pageId">_</span></h1></div>
+<div id="companyApps"><h1>Company Apps</h1></div>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 	$(function(){
@@ -21,6 +22,15 @@
 			}
 		});
 		
+		$.getJSON("<?php echo base_url()."company/json_installed_company_apps_list/{$company_id}"; ?>",function(json){
+			for(i in json){
+				$("#companyApps").append(
+					"<div class='pages'>" + json[i].company_id + " | " + json[i].app_id + " | "
+					 + json[i].available_date + "</div>"
+				);
+			}
+		});
+		
 		$.getJSON("<?php echo base_url()."company/json_company_app_list/{$company_id}"; ?>",function(json){
 			for(i in json){
 				$("#companyApps").append(
@@ -29,7 +39,6 @@
 				);
 			}
 		});
-
 	});
 </script>
 </body>

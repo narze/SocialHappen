@@ -22,12 +22,12 @@ class App_model_test extends CI_Controller {
 	}
 	
 	/** 
-	 * Tests get apps : joined with app_type
+	 * Tests get_all_apps() : joined with app_type
 	 * @author Manassarn M.
 	 */
-	function get_apps_test(){
-		$result = $this->apps->get_apps();
-		$this->unit->run($result, 'is_array', 'get_apps');
+	function get_all_apps_test(){
+		$result = $this->apps->get_all_apps();
+		$this->unit->run($result, 'is_array', 'get_all_apps()');
 		$this->unit->run($result[0]->app_id,'is_string','app_id');
 		$this->unit->run($result[0]->app_name,'is_string','app_name');
 		$this->unit->run($result[0]->app_type_id,'is_string','app_type_id');
