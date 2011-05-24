@@ -6,8 +6,12 @@ class App extends CI_Controller {
 		parent::__construct();
 	}
 
-	function index(){
-		
+	function index($app_install_id = NULL){
+		if($app_install_id){
+			$data['app_install_id'] = $app_install_id;
+			$this->load->view('app_view',$data);	
+			return $data;
+		}
 	}
 	
 	/** 

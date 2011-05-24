@@ -20,6 +20,28 @@ class App_test extends CI_Controller {
 	}
 	
 	/**
+	 * Tests output data
+	 * @author Manassarn M.
+	 */
+	function index_test(){
+		ob_start();
+		require(__DIR__.'/../app.php');
+		$app = new App();
+		
+		$data = $app->index(1);
+		ob_end_clean();
+		$this->unit->run($data,'is_array','$data');
+		$this->unit->run($data['app_install_id'], 'is_int', '$app_install_id');
+		$this->unit->run(count($data) == 1, 'is_true', 'number of passed variables');
+		
+		$data = $app->index();
+		ob_end_clean();
+		$this->unit->run($data,'is_null','$data');
+		$this->unit->run($data['app_install_id'], 'is_null', '$app_install_id');
+		$this->unit->run(count($data) == 0, 'is_true', 'number of passed variables');
+	}
+	
+	/**
 	 * Tests json_get_profile()
 	 * @author Manassarn M.
 	 */
