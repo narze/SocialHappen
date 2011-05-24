@@ -10,10 +10,12 @@ class Company extends CI_Controller {
 		parent::__construct();
 	}
 
-	function index($company_id){
-		$data['company_id'] = $company_id;
-		$this->load->view('company_view',$data);
-		return $data;
+	function index($company_id = NULL){
+		if($company_id){
+			$data['company_id'] = $company_id;
+			$this->load->view('company_view',$data);
+			return $data;
+		}
 	}
 	
 	/** 

@@ -6,8 +6,12 @@ class Campaign extends CI_Controller {
 		parent::__construct();
 	}
 
-	function index(){
-		
+	function index($campaign_id = NULL){
+		if($campaign_id){
+			$data['campaign_id'] = $campaign_id;
+			$this->load->view('campaign_view', $data);
+			return $data;
+		}
 	}
 	
 	/** 

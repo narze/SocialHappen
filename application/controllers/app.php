@@ -6,8 +6,12 @@ class App extends CI_Controller {
 		parent::__construct();
 	}
 
-	function index(){
-		
+	function index($app_install_id = NULL){
+		if($app_install_id){
+			$data['app_install_id'] = $app_install_id;
+			$this->load->view('app_view',$data);	
+			return $data;
+		}
 	}
 	
 	/** 
@@ -39,8 +43,8 @@ class App extends CI_Controller {
 	 */
 	function json_get_users($app_install_id = NULL){
 		$this->load->model('user_apps_model','user_apps');
-		$members = $this->user_apps->get_app_users_by_app_install_id($app_install_id);
-		echo json_encode($members);
+		$users = $this->user_apps->get_app_users_by_app_install_id($app_install_id);
+		echo json_encode($users);
 	}
 }
 
