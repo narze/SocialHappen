@@ -25,6 +25,17 @@ class User_campaigns_model extends CI_Model {
 		return $this -> db -> get_where('user_campaigns', array('campaign_id' => $campaign_id)) -> result();
 	}
 
+	/**
+	 * Get user campaigns
+	 * @param $user_id
+	 * @author Manassarn M.
+	 */
+	function get_user_campaigns_by_user_id($user_id =NULL) {
+		if(!$user_id)
+			return array();
+		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
+		return $this -> db -> get_where('user_campaigns', array('user.user_id' => $user_id)) -> result();
+	}
 }
 
 /* End of file user_campaigns_model.php */
