@@ -53,18 +53,6 @@ class Page extends CI_Controller {
 		$users = $this->users->get_page_users_by_page_id($page_id);
 		echo json_encode($users);
 	}
-
-	/**
-	 * JSON : Get page apps
-	 * @param $page_id
-	 * @author Manassarn M.
-	 */
-	function json_page_apps($page_id = NULL){
-		$this->load->model('page_apps_model','page_apps');
-		$apps = $this->page_apps->get_page_apps_by_page_id($page_id);
-		echo json_encode($apps);
-	}
-	
 }
 
 
