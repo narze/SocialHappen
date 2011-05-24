@@ -6,8 +6,12 @@ class Page extends CI_Controller {
 		parent::__construct();
 	}
 
-	function index(){
-		
+	function index($page_id = NULL){
+		$data['page_id'] = $page_id;
+		if ($page_id) {
+			$this->load->view('page_view', $data);
+			return $data;
+		}
 	}
 	
 	/**

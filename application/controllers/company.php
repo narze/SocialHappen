@@ -10,7 +10,7 @@ class Company extends CI_Controller {
 		parent::__construct();
 	}
 
-	function index($company_id){
+	function index($company_id = NULL){
 		$data['company_id'] = $company_id;
 		$this->load->view('company_view',$data);
 		return $data;

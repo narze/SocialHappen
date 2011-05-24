@@ -20,6 +20,28 @@ class Page_test extends CI_Controller {
 	}
 	
 	/**
+	 * Tests output data
+	 * @author Manassarn M.
+	 */
+	function index_test(){
+		ob_start();
+		require(__DIR__.'/../page.php');
+		$page = new Page();
+		
+		$data = $page->index(1);
+		ob_end_clean();
+		$this->unit->run($data,'is_array','$data');
+		$this->unit->run($data['page_id'], 'is_int', '$page_id');
+		$this->unit->run(count($data) == 1, 'is_true', 'number of passed variables');
+		
+		$data = $page->index();
+		ob_end_clean();
+		$this->unit->run($data,'is_null','$data');
+		$this->unit->run($data['page_id'], 'is_null', '$page_id');
+		$this->unit->run(count($data) == 0, 'is_true', 'number of passed variables');
+	}
+	
+	/**
 	 * Tests json_get_profile()
 	 * @author Manassarn M.
 	 */
