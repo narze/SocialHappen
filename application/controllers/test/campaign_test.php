@@ -34,7 +34,7 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($data['campaign_id'], 'is_int', '$campaign_id');
 		$this->unit->run(count($data) == 1, 'is_true', 'number of passed variables');
 		
-		$data = $campaign_id->index();
+		$data = $campaign->index();
 		ob_end_clean();
 		$this->unit->run($data,'is_null','$data');
 		$this->unit->run($data['campaign_id'], 'is_null', '$campaign_id');
