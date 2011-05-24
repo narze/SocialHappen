@@ -35,7 +35,18 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]->app_install_date,'is_string','app_install_date');
 		$this->unit->run($result[0]->page_id,'is_string','page_id');
 		$this->unit->run($result[0]->app_install_secret_key,'is_string','app_install_secret_key');
-		$this->unit->run(count((array)$result[0]) == 7, 'is_true', 'number of column');
+		$this->unit->run($result[0]->app_name,'is_string','app_name');
+		$this->unit->run($result[0]->app_type_id,'is_string','app_type_id');
+		$this->unit->run($result[0]->app_maintainance,'is_string','app_maintainance');
+		$this->unit->run($result[0]->app_show_in_list,'is_string','app_show_in_list');
+		$this->unit->run($result[0]->app_description,'is_string','app_description');
+		$this->unit->run($result[0]->app_secret_key,'is_string','app_secret_key');
+		$this->unit->run($result[0]->app_url,'is_string','app_url');
+		$this->unit->run($result[0]->app_install_url,'is_string','app_install_url');
+		$this->unit->run($result[0]->app_config_url,'is_string','app_config_url');
+		$this->unit->run($result[0]->app_support_page_tab,'is_string','app_support_page_tab');
+		$this->unit->run($result[0]->app_image,'is_string','app_image');
+		$this->unit->run(count((array)$result[0]) == 18, 'is_true', 'number of column');
 	}
 	
 	/**

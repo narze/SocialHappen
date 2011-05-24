@@ -66,7 +66,18 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array[0]->company_id,'is_string','company_id');
 		$this->unit->run($array[0]->app_id,'is_string','app_id');
 		$this->unit->run($array[0]->available_date,'is_string','available_date');
-		$this->unit->run(count((array)$array[0]) == 3, 'is_true', 'number of column');
+		$this->unit->run($array[0]->app_name,'is_string','app_name');
+		$this->unit->run($array[0]->app_type_id,'is_string','app_type_id');
+		$this->unit->run($array[0]->app_maintainance,'is_string','app_maintainance');
+		$this->unit->run($array[0]->app_show_in_list,'is_string','app_show_in_list');
+		$this->unit->run($array[0]->app_description,'is_string','app_description');
+		$this->unit->run($array[0]->app_secret_key,'is_string','app_secret_key');
+		$this->unit->run($array[0]->app_url,'is_string','app_url');
+		$this->unit->run($array[0]->app_install_url,'is_string','app_install_url');
+		$this->unit->run($array[0]->app_config_url,'is_string','app_config_url');
+		$this->unit->run($array[0]->app_support_page_tab,'is_string','app_support_page_tab');
+		$this->unit->run($array[0]->app_image,'is_string','app_image');
+		$this->unit->run(count((array)$array[0]) == 14, 'is_true', 'number of column');
 	}
 
 	/**
@@ -84,7 +95,39 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array[0]->app_install_date,'is_string','app_install_date');
 		$this->unit->run($array[0]->page_id,'is_string','page_id');
 		$this->unit->run($array[0]->app_install_secret_key,'is_string','app_install_secret_key');
-		$this->unit->run(count((array)$array[0]) == 7, 'is_true', 'number of column');
+		$this->unit->run($array[0]->app_name,'is_string','app_name');
+		$this->unit->run($array[0]->app_type_id,'is_string','app_type_id');
+		$this->unit->run($array[0]->app_maintainance,'is_string','app_maintainance');
+		$this->unit->run($array[0]->app_show_in_list,'is_string','app_show_in_list');
+		$this->unit->run($array[0]->app_description,'is_string','app_description');
+		$this->unit->run($array[0]->app_secret_key,'is_string','app_secret_key');
+		$this->unit->run($array[0]->app_url,'is_string','app_url');
+		$this->unit->run($array[0]->app_install_url,'is_string','app_install_url');
+		$this->unit->run($array[0]->app_config_url,'is_string','app_config_url');
+		$this->unit->run($array[0]->app_support_page_tab,'is_string','app_support_page_tab');
+		$this->unit->run($array[0]->app_image,'is_string','app_image');
+		$this->unit->run(count((array)$array[0]) == 18, 'is_true', 'number of column');
+	}
+	
+	/**
+	 * Test json_get_profile()
+	 * @author Manassarn M.
+	 */
+	function json_get_profile_test(){
+		$content = file_get_contents(base_url().'company/json_get_profile/1');
+		$array = json_decode($content);
+		$this->unit->run($array, 'is_array', 'json_get_profile()');
+		$this->unit->run($array[0]->company_id,'is_string','company_id');
+		$this->unit->run($array[0]->creator_user_id,'is_string','creator_user_id');
+		$this->unit->run($array[0]->company_name,'is_string','company_name');
+		$this->unit->run($array[0]->company_address,'is_string','company_address');
+		$this->unit->run($array[0]->company_email,'is_string','company_email');
+		$this->unit->run($array[0]->company_telephone,'is_string','company_telephone');
+		$this->unit->run($array[0]->company_register_date,'is_string','company_register_date');
+		$this->unit->run($array[0]->company_username,'is_string','company_username');
+		$this->unit->run($array[0]->company_password,'is_string','company_password');
+		$this->unit->run($array[0]->company_image,'is_string','company_image');
+		$this->unit->run(count((array)$array[0]) == 10, 'is_true', 'number of column');
 	}
 }
 

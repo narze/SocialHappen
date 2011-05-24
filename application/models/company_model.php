@@ -15,6 +15,16 @@ class Company_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	/**
+	 * Get profile
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function get_company_profile_by_company_id($company_id = NULL){
+		if(!$company_id) return array();
+		return $this->db->get_where('company',array('company_id'=>$company_id))->result();
+	}
+	
 	function add($data = array()) {
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;
