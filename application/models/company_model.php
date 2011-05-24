@@ -25,6 +25,26 @@ class Company_model extends CI_Model {
 		return $this->db->get_where('company',array('company_id'=>$company_id))->result();
 	}
 	
+	/**
+	 * Adds company
+	 * @param array $data
+	 * @author Manassarn M.
+	 */
+	function add_company($data = array()){
+		$this -> db -> insert('company', $data);
+		return $this->db->insert_id();
+	}
+	
+	/**
+	 * Removes company
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function remove_company($company_id = NULL){
+		$this->db->delete('company', array('company_id' => $company_id));
+		return $this->db->affected_rows();
+	}
+	
 	function add($data = array()) {
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;

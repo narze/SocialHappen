@@ -40,6 +40,32 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result[0]->company_image,'is_string','company_image');
 		$this->unit->run(count((array)$result[0]) == 10, 'is_true', 'number of column');
 	}
+
+	/**
+	 * Test add_company() and remove_company()
+	 * @author Manassarn M.
+	 */
+	function add_company_and_remove_company_test(){
+		$company = array(
+							'creator_user_id' => '1',
+							'company_name' => 'test',
+							'company_address' => 'test',
+							'company_email' => 'test@test.com',
+							'company_telephone' => '021234567',
+							'company_register_date' => '2011-05-09 17:52:17',
+							'company_username' => 'test',
+							'company_password' => 'test',
+							'company_image' => 'test.jpg'
+						);
+		$company_id = $this->companies->add_company($company);
+		$this->unit->run($company_id, 'is_int','add_company()');
+		
+		$removed = $this->companies->remove_company($company_id);
+		$this->unit->run($removed == 1, 'is_true','remove_company()');
+		
+		$removed_again = $this->companies->remove_company($company_id);
+		$this->unit->run($removed_again == 0, 'is_true','remove_company()');
+	}
 }
 /* End of file company_model_test.php */
 /* Location: ./application/controllers/test/company_model_test_model_test.php */
