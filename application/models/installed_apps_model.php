@@ -24,6 +24,7 @@ class Installed_apps_model extends CI_Model {
 	 */
 	function get_installed_apps_by_company_id($company_id = NULL){
 		if(!$company_id) return array();
+		$this->db->join('app','installed_apps.app_id=app.app_id');
 		return $this->db->get_where('installed_apps',array('company_id'=>$company_id))->result();
 	}
 	
