@@ -23,6 +23,26 @@ class App_model extends CI_Model {
 		$this->db->join('app_type', 'app.app_type_id = app_type.app_type_id');
 		return $this->db->get('app')->result();
 	}
+	
+	/**
+	 * Adds app
+	 * @param array $data
+	 * @author Manassarn M.
+	 */
+	function add_app($data = array()){
+		$this -> db -> insert('app', $data);
+		return $this->db->insert_id();
+	}
+	
+	/**
+	 * Removes app
+	 * @param $app_id
+	 * @author Manassarn M.
+	 */
+	function remove_app($app_id = NULL){
+		$this->db->delete('app', array('app_id' => $app_id));
+		return $this->db->affected_rows();
+	}
 
 	function add($data = array()) {
 		foreach($data as $var => $key) {

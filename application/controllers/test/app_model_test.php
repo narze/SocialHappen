@@ -44,6 +44,34 @@ class App_model_test extends CI_Controller {
 		$this->unit->run($result[0]->app_image,'is_string','app_image');
 		$this->unit->run(count((array)$result[0]) == 14, 'is_true', 'number of column');
 	}
+
+	/**
+	 * Test add_app() and remove_app()
+	 * @author Manassarn M.
+	 */
+	function add_app_and_remove_app_test(){
+		$app = array(
+							'app_name' => 'test',
+							'app_type_id' => '1',
+							'app_maintainance' => '0',
+							'app_show_in_list' => '1',
+							'app_description' => 'test',
+							'app_secret_key' => 'test',
+							'app_url' => 'test',
+							'app_install_url' => 'test',
+							'app_config_url' => 'test',
+							'app_support_page_tab' => '1',
+							'app_image' => 'test.jpg'
+						);
+		$app_id = $this->apps->add_app($app);
+		$this->unit->run($app_id, 'is_int','add_app()');
+		
+		$removed = $this->apps->remove_app($app_id);
+		$this->unit->run($removed == 1, 'is_true','remove_app()');
+		
+		$removed_again = $this->apps->remove_app($app_id);
+		$this->unit->run($removed_again == 0, 'is_true','remove_app()');
+	}
 }
 /* End of file app_model_test.php */
 /* Location: ./application/controllers/test/app_model_test.php */
