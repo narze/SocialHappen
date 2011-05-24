@@ -28,6 +28,26 @@ class User_companies_model_test extends CI_Controller {
 	function get_page_profile_by_id_test(){
 		$this->unit->run(TRUE,'is_false');
 	}
+	
+	/**
+	 * Test add_user_company() and remove_user_company()
+	 * @author Manassarn M.
+	 */
+	function add_user_company_and_remove_user_company_test(){
+		$user_company = array(
+							'user_id' => '1',
+							'company_id' => '1',
+							'user_role' => '0'
+						);
+		$user_company_id = $this->user_companies->add_user_company($user_company);
+		$this->unit->run($user_company_id, 'is_int','add_user_company()');
+		
+		$removed = $this->user_companies->remove_user_company($user_company_id);
+		$this->unit->run($removed == 1, 'is_true','remove_user_company()');
+		
+		$removed_again = $this->user_companies->remove_user_company($user_company_id);
+		$this->unit->run($removed_again == 0, 'is_true','remove_user_company()');
+	}
 }
 /* End of file user_company_model_test.php */
 /* Location: ./application/controllers/test/user_company_model_test.php */

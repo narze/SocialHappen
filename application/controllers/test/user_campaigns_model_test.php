@@ -51,6 +51,24 @@ class User_campaigns_model_test extends CI_Controller {
 		$this->unit->run(count((array)$result[0]) == 5, 'is_true', 'number of column');
 	}
 	
+	/**
+	 * Test add_user_campaign() and remove_user_campaign()
+	 * @author Manassarn M.
+	 */
+	function add_user_campaign_and_remove_user_campaign_test(){
+		$user_campaign = array(
+							'user_id' => '1',
+							'campaign_id' => '1'
+						);
+		$user_campaign_id = $this->user_campaigns->add_user_campaign($user_campaign);
+		$this->unit->run($user_campaign_id, 'is_int','add_user_campaign()');
+		
+		$removed = $this->user_campaigns->remove_user_campaign($user_campaign_id);
+		$this->unit->run($removed == 1, 'is_true','remove_user_campaign()');
+		
+		$removed_again = $this->user_campaigns->remove_user_campaign($user_campaign_id);
+		$this->unit->run($removed_again == 0, 'is_true','remove_user_campaign()');
+	}
 }
 /* End of file user_campaigns_model_test.php */
 /* Location: ./application/controllers/test/user_campaigns_model_test.php */

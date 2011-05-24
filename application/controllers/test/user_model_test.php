@@ -74,6 +74,26 @@ class User_model_test extends CI_Controller {
 		$result = $this->users->is_company_admin(10,1);
 		$this->unit->run($result, 'is_false', 'is_company_admin(10,1)');
 	}
+	
+	/**
+	 * Test add_user() and remove_user()
+	 * @author Manassarn M.
+	 */
+	function add_user_and_remove_user_test(){
+		$user = array(
+							'facebook_id' => '1',
+							'user_register_date' => NULL,
+							'user_last_seen' => '0'
+						);
+		$user_id = $this->users->add_user($user);
+		$this->unit->run($user_id, 'is_int','add_user()');
+		
+		$removed = $this->users->remove_user($user_id);
+		$this->unit->run($removed == 1, 'is_true','remove_user()');
+		
+		$removed_again = $this->users->remove_user($user_id);
+		$this->unit->run($removed_again == 0, 'is_true','remove_user()');
+	}
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */

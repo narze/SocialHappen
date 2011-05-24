@@ -55,6 +55,26 @@ class User_apps_model_test extends CI_Controller {
 		$this->unit->run(count((array)$result[0]) == 7, 'is_true', 'number of column');
 	}
 	
+	/**
+	 * Test add_user_apps() and remove_user_apps()
+	 * @author Manassarn M.
+	 */
+	function add_user_apps_and_remove_user_apps_test(){
+		$user_apps = array(
+							'user_id' => '1',
+							'app_install_id' => '1',
+							'user_apps_register_date' => NULL,
+							'user_apps_last_seen' => NULL
+						);
+		$user_apps_id = $this->user_apps->add_user_apps($user_apps);
+		$this->unit->run($user_apps_id, 'is_int','add_user_apps()');
+		
+		$removed = $this->user_apps->remove_user_apps($user_apps_id);
+		$this->unit->run($removed == 1, 'is_true','remove_user_apps()');
+		
+		$removed_again = $this->user_apps->remove_user_apps($user_apps_id);
+		$this->unit->run($removed_again == 0, 'is_true','remove_user_apps()');
+	}
 }
 /* End of file user_apps_model_test.php */
 /* Location: ./application/controllers/test/user_apps_model_test.php */

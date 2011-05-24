@@ -65,6 +65,29 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]->app_install_secret_key,'is_string','app_install_secret_key');
 		$this->unit->run(count((array)$result[0]) == 7, 'is_true', 'number of column');
 	}
+	
+	/**
+	 * Test add_installed_app() and remove_installed_app()
+	 * @author Manassarn M.
+	 */
+	function add_installed_app_and_remove_installed_app_test(){
+		$installed_app = array(
+							'company_id' => '1',
+							'app_id' => '1',
+							'app_install_status' => '1',
+							'app_install_date' => '1',
+							'page_id' => '1',
+							'app_install_secret_key' => 'test'
+						);
+		$installed_app_id = $this->installed_apps->add_installed_app($installed_app);
+		$this->unit->run($installed_app_id, 'is_int','add_installed_app()');
+		
+		$removed = $this->installed_apps->remove_installed_app($installed_app_id);
+		$this->unit->run($removed == 1, 'is_true','remove_installed_app()');
+		
+		$removed_again = $this->installed_apps->remove_installed_app($installed_app_id);
+		$this->unit->run($removed_again == 0, 'is_true','remove_installed_app()');
+	}
 }
 /* End of file installed_apps_model_test.php */
 /* Location: ./application/controllers/test/installed_apps_model_test.php */

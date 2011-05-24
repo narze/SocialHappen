@@ -75,6 +75,30 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run(count((array)$result[0]) == 16, 'is_true', 'number of column');	
 	}
 
+	/**
+	 * Test add_campaign() and remove_campaign()
+	 * @author Manassarn M.
+	 */
+	function add_campaign_and_remove_campaign_test(){
+		$campaign = array(
+							'app_install_id' => 'test',
+							'campaign_name' => 'test',
+							'campaign_detail' => 'test',
+							'campaign_status_id' => '1',
+							'campaign_active_member' => '0',
+							'campaign_all_member' => '1',
+							'campaign_start_timestamp' => NULL,
+							'campaign_end_timestamp' => NULL
+						);
+		$campaign_id = $this->campaigns->add_campaign($campaign);
+		$this->unit->run($campaign_id, 'is_int','add_campaign()');
+		
+		$removed = $this->campaigns->remove_campaign($campaign_id);
+		$this->unit->run($removed == 1, 'is_true','remove_campaign()');
+		
+		$removed_again = $this->campaigns->remove_campaign($campaign_id);
+		$this->unit->run($removed_again == 0, 'is_true','remove_campaign()');
+	}
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */
