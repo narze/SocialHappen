@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Page</title>
+	<title>App</title>
 </head>
 <body>
-<div id="appProfile"><h1>Page Profile</h1></div>
+<div id="appProfile"><h1>App Profile</h1></div>
 <div id="appCampaigns"><h1>App Campaigns</h1></div>
 <div id="appUsers"><h1>App user activities</h1></div>
 

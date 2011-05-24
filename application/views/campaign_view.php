@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Page</title>
+	<title>Campaign</title>
 </head>
 <body>
 <div id="campaignProfile"><h1>Campaign Profile</h1></div>
