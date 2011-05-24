@@ -15,7 +15,7 @@ class Company_apps_model extends CI_Model {
 	 */
 	function get_company_apps_by_company_id($company_id = NULL){
 		if(!$company_id) return array();
-		
+		$this->db->join('app','company_apps.app_id=app.app_id');
 		return $this->db->get_where('company_apps',array('company_id'=>$company_id))->result();
 	}
 	
