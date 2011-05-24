@@ -71,6 +71,17 @@ class Company extends CI_Controller {
 		$apps = $this->installed_apps->get_installed_apps_by_company_id($company_id);
 		echo json_encode($apps);
 	}
+	
+	/**
+	 * JSON : Get profile
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function json_get_profile($company_id = NULL){
+		$this->load->model('company_model','companies');
+		$profile = $this->companies->get_company_profile_by_company_id($company_id);
+		echo json_encode($profile);
+	}
 }
 
 
