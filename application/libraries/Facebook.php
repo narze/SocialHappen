@@ -138,4 +138,16 @@ class Facebook{
 			$this->_ci->curl->create($url);
 			return json_decode($this->_ci->curl->execute());
 		}
+
+		/** 
+		 * JSON : Get facebook pages owned by the current user
+		 * @author Prachya P.
+		 */
+		function get_user_pages(){
+			$cookie = $this->get_facebook_cookie();
+            $pages = json_decode(file_get_contents(
+                            'https://graph.facebook.com/me/accounts?access_token=' .
+                            $cookie['access_token']), true);
+            return $pages;
+		}
 }

@@ -4,6 +4,7 @@ class User extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		$this->load->library('facebook');
 	}
 
 	function index($user_id = NULL){
@@ -48,6 +49,13 @@ class User extends CI_Controller {
 		$this->load->model('user_campaigns_model','users_campaigns');
 		$campaigns = $this->users_campaigns->get_user_campaigns_by_user_id($user_id);
 		echo json_encode($campaigns);
+	}
+	
+	/**
+	 * JSON : Get facebook pages owned by the current user
+	 */
+	function json_get_facebook_pages_owned_by_user(){
+		echo json_encode($this->facebook->get_user_pages());
 	}
 }
 
