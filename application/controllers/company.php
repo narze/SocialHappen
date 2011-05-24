@@ -22,9 +22,8 @@ class Company extends CI_Controller {
 	 * JSON : get company list by user_id
 	 * @param $user_id
 	 * @author Prachya P.
-	 * @todo Rename
 	 */
-	function json_get_user_company($user_id = NULL){
+	function json_get_user_companies($user_id = NULL){
 		$this->load->model('company_model','company');
 		$companies = $this->company->get_company_list_by_user_id($user_id);
 		echo json_encode($companies);
