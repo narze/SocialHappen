@@ -31,7 +31,7 @@
 		
 		$.getJSON("<?php echo base_url()."user/json_get_apps/{$user_id}"; ?>",function(json){
 			for(i in json){
-				$("#userProfile").append(
+				$("#userActivitiesApp").append(
 					makeList(json[i])
 				);
 			}
@@ -39,7 +39,7 @@
 		
 		$.getJSON("<?php echo base_url()."user/json_get_campaigns/{$user_id}"; ?>",function(json){
 			for(i in json){
-				$("#userProfile").append(
+				$("#userActivitiesCampaign").append(
 					makeList(json[i])
 				);
 			}

@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Company_model extends CI_Model {
 	var $company_id;
 	var $company_name = '';
@@ -84,7 +84,13 @@ class Company_model extends CI_Model {
 		return $this -> _get( array(), $limit, $offset);
 	}
 	
-	function get_company_list_by_user_id($user_id){
-		return $this->db->get_where('company',array('user_id'=>$user_id));
+	
+	/**
+	 * get company list
+	 * @param $user_id
+	 * @author Teesit M. 
+	 */
+	function get_company_list_by_user_id($user_id) {
+		return $this->db->get_where('company',array('creator_user_id'=>$user_id));
 	}
 }
