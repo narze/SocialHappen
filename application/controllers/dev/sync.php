@@ -9,10 +9,16 @@ class Sync extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->dbforge();
+		$this->output->enable_profiler(TRUE);
 	}
 
 	function index(){
 
+	}
+	
+	function db_reset(){
+		$this->drop_tables();
+		$this->create_tables();
 	}
 	
 	function generate_field_code(){
@@ -31,7 +37,7 @@ class Sync extends CI_Controller {
 		$tables = $this->db->list_tables();
 		foreach ($tables as $table){
 			$table = str_replace($this->db->dbprefix,'',$table);
-		    echo $this->dbforge->drop_table($table);
+		    $this->dbforge->drop_table($table);
 		}
 	}
 	
@@ -40,25 +46,24 @@ class Sync extends CI_Controller {
 	}
 	
 	function create_tables(){
-		$this->output->enable_profiler(TRUE); 
 		function field_option($type, $constraint, $default, $null, $auto_increment, $unsigned){
 			$options = array();
-			if($type){
+			if(isset($type)){
 				$options['type'] = $type;
 			}
-			if($constraint){
+			if(isset($constraint)){
 				$options['constraint'] = $constraint;
 			}
-			if($default){
+			if(isset($default)){
 				$options['default'] = $default;
 			}
-			if($null){
+			if(isset($null)){
 				$options['null'] = $null;
 			}
-			if($auto_increment){
+			if(isset($auto_increment)){
 				$options['auto_increment'] = $auto_increment;
 			}
-			if($unsigned){
+			if(isset($unsigned)){
 				$options['unsigned'] = $unsigned;
 			}
 			return $options;
@@ -66,7 +71,7 @@ class Sync extends CI_Controller {
 		
 		$constraint = NULL;
 		$default = NULL;
-		$null = NULL;
+		$null = FALSE;
 		$autoinc = NULL;
 		$unsigned = NULL;
 		
@@ -74,15 +79,15 @@ class Sync extends CI_Controller {
 							'app' => array(
 							    'app_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
 							    'app_name' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
-							    'app_type_id' => field_option('INT', 1, 0, $null, $autoinc, TRUE),
-							    'app_maintainance' => field_option('INT', 1, 0, $null, $autoinc, $unsigned),
-							    'app_show_in_list' => field_option('INT', 1, 1, $null, $autoinc, $unsigned),
-							    'app_description' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
-							    'app_secret_key' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
-							    'app_url' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
-							    'app_install_url' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
-							    'app_config_url' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
-							    'app_support_page_tab' => field_option('INT', 1, $default, 0, $autoinc, $unsigned),
+							    'app_type_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
+							    'app_maintainance' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
+							    'app_show_in_list' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
+							    'app_description' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_install_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_config_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_support_page_tab' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
 							    'app_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'app_install_status' => array(
@@ -105,22 +110,22 @@ class Sync extends CI_Controller {
 							    'campaign_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
 							    'app_install_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'campaign_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'campaign_detail' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
+							    'campaign_detail' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'campaign_status_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
 							    'campaign_active_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_start_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-							    'campaign_end_timestamp' => field_option('TIMESTAMP', $constraint, 0 , $null, $autoinc, $unsigned),
+							    'campaign_end_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
 							),
 							'campaign_status' => array(
-							    'campaign_status_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
+							    'campaign_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
 							    'campaign_status_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'company' => array(
 							    'company_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
 							    'creator_user_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'company_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'company_address' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
+							    'company_address' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'company_email' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'company_telephone' => field_option('VARCHAR', 20, $default, $null, $autoinc, $unsigned),
 							    'company_register_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
@@ -140,12 +145,12 @@ class Sync extends CI_Controller {
 							/*'config_item' => array(
 							    'app_install_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'config_key' => field_option('VARCHAR', 64, $default, $null, $autoinc, $unsigned),
-							    'config_value' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
+							    'config_value' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'config_item_template' => array(
 							    'app_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'config_key' => field_option('64', $constraint, $default, $null, $autoinc, $unsigned),
-							    'config_value' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
+							    'config_value' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'cron_job' => array(
 							    'job_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
@@ -155,20 +160,20 @@ class Sync extends CI_Controller {
 							    'job_status' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),*/
 							'installed_apps' => array(
-							    'app_install_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'app_install_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
 							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'app_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'app_install_status' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
 							    'app_install_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'page_id' => field_option('INT', 20, $default, TRUE, $autoinc, TRUE),
-							    'app_install_secret_key' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_install_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'page' => array(
 							    'page_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
 							    'facebook_page_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'page_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'page_detail' => field_option('BLOB', $constraint, $default, $null, $autoinc, $unsigned),
+							    'page_detail' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'page_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_new_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
@@ -240,15 +245,16 @@ class Sync extends CI_Controller {
 		foreach ($tables as $table){
 			$table = str_replace($this->db->dbprefix,'',$table);
 			$this->dbforge->add_field($fields[$table]);
-			if(count($keys[$table]) == 1){
-				$keys[$table][] = TRUE;
-			}
-			if(count($keys[$table]) > 0){
-				print_r($keys[$table]);
-				call_user_func_array(array($this->dbforge, 'add_key'), $keys[$table]);
+			foreach ($keys[$table] as $primary_key){
+				$this->dbforge->add_key($primary_key, TRUE);
 			}
 			$this->dbforge->create_table($table, TRUE);
 		}
+		$this->special_cases_after_create();
+	}
+
+	function special_cases_after_create(){
+		$this->db->query("CREATE UNIQUE INDEX user_facebook_id ON ".$this->db->dbprefix('user')." (user_facebook_id)");
 	}
 	
 	function input_test_data(){
