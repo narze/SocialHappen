@@ -3,3 +3,4 @@ application/config/facebook.php
 application/config/database.php
 .settings
 .gitignore
+.project
