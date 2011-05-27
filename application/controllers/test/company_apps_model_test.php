@@ -50,18 +50,20 @@ class Company_apps_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function add_company_app_and_remove_company_app_test(){
+		$company_id = $app_id = 50;
 		$company_app = array(
-							'company_id' => '1',
-							'app_id' => '1',
+							'company_id' => $company_id,
+							'app_id' => $app_id,
 							'available_date' => '0'
 						);
-		$company_app_id = $this->company_apps->add_company_app($company_app);
-		$this->unit->run($company_app_id, 'is_int','add_company_app()');
 		
-		$removed = $this->company_apps->remove_company_app($company_app_id);
+		$add_result = $this->company_apps->add_company_app($company_app);
+		$this->unit->run($add_result, 'is_true','add_company_app()');
+		
+		$removed = $this->company_apps->remove_company_app($company_id, $app_id);
 		$this->unit->run($removed == 1, 'is_true','remove_company_app()');
 		
-		$removed_again = $this->company_apps->remove_company_app($company_app_id);
+		$removed_again = $this->company_apps->remove_company_app($company_id, $app_id);
 		$this->unit->run($removed_again == 0, 'is_true','remove_company_app()');
 	}
 }

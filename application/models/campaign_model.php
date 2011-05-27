@@ -51,6 +51,26 @@ class Campaign_model extends CI_Model {
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
 		return $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> result();
 	}
+	
+	/**
+	 * Adds campaign
+	 * @param array $data
+	 * @author Manassarn M.
+	 */
+	function add_campaign($data = array()){
+		$this -> db -> insert('campaign', $data);
+		return $this->db->insert_id();
+	}
+	
+	/**
+	 * Removes campaign
+	 * @param $campaign_id
+	 * @author Manassarn M.
+	 */
+	function remove_campaign($campaign_id = NULL){
+		$this->db->delete('campaign', array('campaign_id' => $campaign_id));
+		return $this->db->affected_rows();
+	}
 
 	function add($data = array()) {
 		foreach($data as $var => $key) {

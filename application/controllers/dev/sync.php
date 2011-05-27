@@ -587,7 +587,7 @@ class Sync extends CI_Controller {
 								)
 							);
 		$this->db->insert_batch('user_companies', $user_companies);
-		echo "Test data addded";
+		echo "Test data added<br />";
 	}
 }
 /* End of file sync.php */
