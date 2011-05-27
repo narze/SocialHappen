@@ -18,6 +18,28 @@ class User_companies_model extends CI_Model {
 	}
 	
 	/**
+	 * Adds user company
+	 * @param array $data
+	 * @return TRUE if inserted successfully
+	 * @author Manassarn M.
+	 */
+	function add_user_company($data = array()){
+		return $this -> db -> insert('user_companies', $data);
+	}
+	
+	/**
+	 * Removes user_company
+	 * @param $user_id
+	 * @param $company_id
+	 * @return Number of affected rows
+	 * @author Manassarn M.
+	 */
+	function remove_user_company($user_id = NULL, $company_id = NULL){
+		$this->db->delete('user_companies', array('user_id' => $user_id, 'company_id' => $company_id));
+		return $this->db->affected_rows();
+	}
+	
+	/**
 	 * Get user/s information
 	 * @param array $company_id
 	 * @param $limit

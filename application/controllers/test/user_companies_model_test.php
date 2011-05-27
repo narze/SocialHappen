@@ -34,18 +34,19 @@ class User_companies_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function add_user_company_and_remove_user_company_test(){
+		$user_id = $company_id = 50;
 		$user_company = array(
-							'user_id' => '1',
-							'company_id' => '1',
+							'user_id' => $user_id,
+							'company_id' => $company_id,
 							'user_role' => '0'
 						);
-		$user_company_id = $this->user_companies->add_user_company($user_company);
-		$this->unit->run($user_company_id, 'is_int','add_user_company()');
+		$add_result = $this->user_companies->add_user_company($user_company);
+		$this->unit->run($add_result,'is_true','add_user_company()');
 		
-		$removed = $this->user_companies->remove_user_company($user_company_id);
+		$removed = $this->user_companies->remove_user_company($user_id, $company_id);
 		$this->unit->run($removed == 1, 'is_true','remove_user_company()');
 		
-		$removed_again = $this->user_companies->remove_user_company($user_company_id);
+		$removed_again = $this->user_companies->remove_user_company($user_id, $company_id);
 		$this->unit->run($removed_again == 0, 'is_true','remove_user_company()');
 	}
 }

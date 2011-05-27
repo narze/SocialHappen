@@ -56,17 +56,18 @@ class User_campaigns_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function add_user_campaign_and_remove_user_campaign_test(){
+		$user_id = $campaign_id = 50;
 		$user_campaign = array(
-							'user_id' => '1',
-							'campaign_id' => '1'
+							'user_id' => $user_id,
+							'campaign_id' => $campaign_id
 						);
-		$user_campaign_id = $this->user_campaigns->add_user_campaign($user_campaign);
-		$this->unit->run($user_campaign_id, 'is_int','add_user_campaign()');
+		$add_result = $this->user_campaigns->add_user_campaign($user_campaign);
+		$this->unit->run($add_result, 'is_true','add_user_campaign()');
 		
-		$removed = $this->user_campaigns->remove_user_campaign($user_campaign_id);
+		$removed = $this->user_campaigns->remove_user_campaign($user_id, $campaign_id);
 		$this->unit->run($removed == 1, 'is_true','remove_user_campaign()');
 		
-		$removed_again = $this->user_campaigns->remove_user_campaign($user_campaign_id);
+		$removed_again = $this->user_campaigns->remove_user_campaign($user_id, $campaign_id);
 		$this->unit->run($removed_again == 0, 'is_true','remove_user_campaign()');
 	}
 }

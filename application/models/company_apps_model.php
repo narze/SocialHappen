@@ -22,7 +22,7 @@ class Company_apps_model extends CI_Model {
 	/**
 	 * Adds company app
 	 * @param array $data
-	 * @return TRUE if inserted successfully, otherwise FALSE
+	 * @return TRUE if inserted successfully
 	 * @author Manassarn M.
 	 */
 	function add_company_app($data = array()){

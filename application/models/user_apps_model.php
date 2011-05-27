@@ -13,10 +13,10 @@ class User_apps_model extends CI_Model {
 	/**
 	 * Get app users
 	 * @param $app_install_id
+	 * @return array
 	 * @author Manassarn M.
 	 */
 	function get_app_users_by_app_install_id($app_install_id = NULL){
-		if(!$app_install_id) return array();
 		$this->db->join('user','user.user_id=user_apps.user_id');
 		return $this->db->get_where('user_apps',array('app_install_id'=>$app_install_id))->result();
 	}
@@ -24,12 +24,34 @@ class User_apps_model extends CI_Model {
 	/**
 	 * Get user apps
 	 * @param $user_id
+	 * @return array
 	 * @author Manassarn M.
 	 */
 	function get_user_apps_by_user_id($user_id = NULL){
-		if(!$user_id) return array();
 		$this->db->join('user','user.user_id=user_apps.user_id');
 		return $this->db->get_where('user_apps',array('user.user_id'=>$user_id))->result();
+	}
+	
+	/**
+	 * Adds user_app
+	 * @param array $data
+	 * @return TRUE if inserted successfully
+	 * @author Manassarn M.
+	 */
+	function add_user_app($data = array()){
+		return $this -> db -> insert('user_apps', $data);
+	}
+	
+	/**
+	 * Removes user_app
+	 * @param $user_id
+	 * @param $app_install_id
+	 * @return Number of affected rows
+	 * @author Manassarn M.
+	 */
+	function remove_user_app($user_id = NULL, $app_install_id = NULL){
+		$this->db->delete('user_apps', array('user_id' => $user_id, 'app_install_id' => $app_install_id));
+		return $this->db->affected_rows();
 	}
 	
 	function add($data = array()) {		

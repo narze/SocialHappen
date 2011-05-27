@@ -69,7 +69,7 @@ class Page_model_test extends CI_Controller {
 							'page_detail' => 'test',
 							'page_all_member' => 'test',
 							'page_new_member' => 'test',
-							'pabe_image' => 'test'
+							'page_image' => 'test'
 						);
 		$page_id = $this->pages->add_page($page);
 		$this->unit->run($page_id, 'is_int','add_page()');

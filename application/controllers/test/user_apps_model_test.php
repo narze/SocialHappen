@@ -60,19 +60,20 @@ class User_apps_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function add_user_apps_and_remove_user_apps_test(){
-		$user_apps = array(
-							'user_id' => '1',
-							'app_install_id' => '1',
+		$user_id = $app_install_id = 50;
+		$user_app = array(
+							'user_id' => $user_id,
+							'app_install_id' => $app_install_id,
 							'user_apps_register_date' => NULL,
 							'user_apps_last_seen' => NULL
 						);
-		$user_apps_id = $this->user_apps->add_user_apps($user_apps);
-		$this->unit->run($user_apps_id, 'is_int','add_user_apps()');
+		$add_result = $this->user_apps->add_user_app($user_app);
+		$this->unit->run($add_result, 'is_true','add_user_apps()');
 		
-		$removed = $this->user_apps->remove_user_apps($user_apps_id);
+		$removed = $this->user_apps->remove_user_app($user_id, $app_install_id);
 		$this->unit->run($removed == 1, 'is_true','remove_user_apps()');
 		
-		$removed_again = $this->user_apps->remove_user_apps($user_apps_id);
+		$removed_again = $this->user_apps->remove_user_app($user_id, $app_install_id);
 		$this->unit->run($removed_again == 0, 'is_true','remove_user_apps()');
 	}
 }
