@@ -81,10 +81,10 @@ class User_model_test extends CI_Controller {
 	 */
 	function add_user_and_remove_user_test(){
 		$user = array(
-							'facebook_id' => '1',
-							'user_register_date' => NULL,
-							'user_last_seen' => '0'
-						);
+						'user_facebook_id' => '1',
+						'user_register_date' => NULL,
+						'user_last_seen' => '0'
+					);
 		$user_id = $this->users->add_user($user);
 		$this->unit->run($user_id, 'is_int','add_user()');
 		

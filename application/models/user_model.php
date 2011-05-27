@@ -52,6 +52,28 @@ class User_model extends CI_Model {
 		return $this -> db -> count_all_results('user') == 1;
 	}
 
+	/**
+	 * Adds user
+	 * @param array $data
+	 * @return $user_id
+	 * @author Manassarn M.
+	 */
+	function add_user($data = array()){
+		$this -> db -> insert('user', $data);
+		return $this->db->insert_id();
+	}
+	
+	/**
+	 * Removes user
+	 * @param $user_id
+	 * @return Number of affected rows
+	 * @author Manassarn M.
+	 */
+	function remove_user($user_id = NULL){
+		$this->db->delete('user', array('user_id' => $user_id));
+		return $this->db->affected_rows();
+	}
+
 	function add($data = array()) {
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;
