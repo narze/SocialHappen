@@ -11,9 +11,16 @@ class Audit_model extends CI_Model {
 	var $object = '';
 	var $objecti = '';
 	var $type = '';
+	var $DEFAULT_LIMIT;
 	
+	/**
+	 * constructor
+	 */
 	function __construct() {
 		parent::__construct();
+		
+		// initialize value
+		$this->DEFAULT_LIMIT = 50;
 		
 		// connect to database
 		$this->connection = new Mongo('localhost:27017');
@@ -35,8 +42,18 @@ class Audit_model extends CI_Model {
 		
 	}
 	
-	function list_recent_audit($limit = 100){
+	function list_recent_audit($limit = NULL){
+		if(empty($limit)){
+			$limit = $this->DEFAULT_LIMIT;
+		}
 		return $this->audits->find()->limit($limit);
+	}
+	
+	/**
+	 * create index for collection
+	 */
+	function create_index(){
+		$this->audits->ensureIndex(array('timestamp' => -1, 'action' => 1));
 	}
 	
 }
