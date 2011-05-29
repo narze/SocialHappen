@@ -102,7 +102,12 @@ class Stat_page_model extends CI_Model {
 				$criteria['date'] = $param['date'];
 			}
 			
-			return $this->pages->find().skip($skip).limit($limit);
+			$res = $this->pages->find().skip($skip).limit($limit);
+			$result = array();
+			foreach ($res as $entry) {
+				$result[] = $entry;
+			}
+			return $result;
 		}else{
 			return FALSE;
 		}

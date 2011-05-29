@@ -91,7 +91,12 @@ class Audit_action_model extends CI_Model {
 	 * @return audit action list
 	 */
 	function get_action_list(){
-		return $this->actions->find();
+		$res = $this->actions->find();
+		$result = array();
+		foreach ($res as $entry) {
+			$result[] = $entry;
+		}
+		return $result;
 	}
 	
 	/**
@@ -102,7 +107,12 @@ class Audit_action_model extends CI_Model {
 	 */
 	function get_action_by_app_id($app_id){
 		if(isset($app_id)){
-			return $this->actions->find(array('app_id' => $app_id));
+			$res = $this->actions->find(array('app_id' => $app_id));
+			$result = array();
+			foreach ($res as $entry) {
+				$result[] = $entry;
+			}
+			return $result;
 		}else{
 			return FALSE;
 		}
@@ -114,7 +124,13 @@ class Audit_action_model extends CI_Model {
 	 * @return audit action list
 	 */
 	function get_platform_action(){
-		return $this->get_action_by_app_id(0);
+		$res = $this->get_action_by_app_id(0);
+		
+		$result = array();
+		foreach ($res as $entry) {
+			$result[] = $entry;
+		}
+		return $result;
 	}
 }
 

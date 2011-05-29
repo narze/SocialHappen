@@ -5,6 +5,13 @@
  */
 class Audit_model extends CI_Model {
 	var $_id = '';
+	// optional date
+	var $app_id = '';
+	var $app_install_id = '';
+	var $campaign_id = '';
+	var $page_id = '';
+	var $company_id = '';
+	// basic data
 	var $timestamp = '';
 	var $subject = '';
 	var $action = '';
@@ -20,10 +27,10 @@ class Audit_model extends CI_Model {
 		parent::__construct();
 		
 		// initialize value
-		$this->DEFAULT_LIMIT = 50;
+		$this->DEFAULT_LIMIT = 0;
 		
 		// connect to database
-		$this->connection = new Mongo('localhost:27017');
+		$this->connection = new Mongo();
 		
 		// select audit database
 		$this->db = $this->connection->audit;
@@ -32,30 +39,68 @@ class Audit_model extends CI_Model {
 		$this->audits = $this->db->audits;
 	}
 	
+	/**
+	 * create index for collection
+	 */
+	function create_index(){
+		$this->audits->ensureIndex(array('timestamp' => -1,
+										 'action' => 1,
+										 'app_id' => 1,
+										 'app_install_id' => 1,
+										 'campaign_id' => 1,
+										 'page_id' => 1,
+										 'company_id' => 1));
+	}
+	
+	/**
+	 * add new audit entry to database
+	 * 
+	 * @param data array of attribute to be added
+	 */
 	function add_audit($data = array()){
 		$data['timestamp'] = time();
 		// add new 
 		$this->audits->insert($data);
 	}
 	
-	function list_audit($limit, $offset){
+	/**
+	 * list audit data by input criteria to query
+	 * 
+	 * @param criteria array of attribute to query
+	 * @param limit int number of results
+	 * @param offset int offset number
+	 * 
+	 * @return result
+	 */
+	function list_audit($criteria = array(), $limit = NULL, $offset = 0){
+		if(empty($limit)){
+			$limit = $this->DEFAULT_LIMIT;
+		}
+		$res = $this->audits->find($criteria)->skip($offset)->limit($limit);
 		
+		$result = array();
+		foreach ($res as $audit) {
+			$result[] = $audit;
+		}
+		return $result;
 	}
 	
+	/**
+	 * list recent audit entry
+	 * @param limit number of entries to get
+	 */
 	function list_recent_audit($limit = NULL){
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
-		return $this->audits->find()->limit($limit);
+		$res = $this->audits->find()->limit($limit);
+		
+		$result = array();
+		foreach ($res as $audit) {
+			$result[] = $audit;
+		}
+		return $result;
 	}
-	
-	/**
-	 * create index for collection
-	 */
-	function create_index(){
-		$this->audits->ensureIndex(array('timestamp' => -1, 'action' => 1));
-	}
-	
 }
 
 /* End of file audit_model.php */

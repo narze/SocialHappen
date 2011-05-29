@@ -14,6 +14,29 @@ class Audit extends CI_Controller {
 	 * index method
 	 */
 	function index(){
+		echo 'hello';
+		/*
+		for($i = 0; $i < 100; $i++){
+			$audit = array('subject' => '' . ($i % 4),
+						'action' => '' . ($i % 5),
+						'object' => '' . ($i*$i % 5),
+						'app_id' => '' . ($i*$i % 5));
+			$this->Audit->add_audit($audit);
+		}
+		*/
+		
+		
+		$res = $this->Audit->list_audit(array('app_id' => 0),30,1);
+		
+		echo '<pre>';
+		print_r(count($res));
+		echo '</pre>';
+		
+		foreach ($res as $audit) {
+			echo '<pre>';
+			print_r($audit);
+			echo '</pre>';
+		}
 		
 	}
 	
