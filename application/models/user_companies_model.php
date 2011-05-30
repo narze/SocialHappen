@@ -55,6 +55,17 @@ class User_companies_model extends CI_Model {
 		echo $str = $this->db->last_query(); 
 		return $query -> result();
 	}
+	
+	/**
+	 * Get user companies
+	 * @param $user_id
+	 * @return array
+	 * @author Manassarn M.
+	 */
+	function get_user_companies_by_user_id($user_id = NULL){
+		$this->db->join('company','user_companies.company_id=company.company_id');
+		return $this->db->get_where('user_companies', array('user_id' => $user_id))->result();
+	}
 
 	function update_role($user_id, $company_id, $new_role) {
 		$this -> db -> update('user_companies', $new_role, array('company_id'=>$company_id, 'user_facebook_id'=>$user_facebook_id));

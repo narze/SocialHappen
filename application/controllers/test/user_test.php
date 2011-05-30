@@ -108,6 +108,30 @@ class User_test extends CI_Controller {
 		$this->unit->run($content->status == 'OK','is_true', 'status');
 		$this->unit->run(count((array)$content) == 2,'is_true','return count');
 	}
+	
+	/**
+	 * Tests json_get_companies()
+	 * @author Manassarn M.
+	 */
+	function json_get_companies_test(){
+		$content = file_get_contents(base_url().'user/json_get_companies/1');
+		$array = json_decode($content);
+		$this->unit->run($array, 'is_array', 'json_get_companies()');
+		$this->unit->run($array[0], 'is_object', 'First row');
+		$this->unit->run($array[0]->user_id,'is_string','user_id');
+		$this->unit->run($array[0]->company_id,'is_string','company_id');
+		$this->unit->run($array[0]->user_role,'is_string','user_role');
+		$this->unit->run($array[0]->creator_user_id,'is_string','creator_user_id');
+		$this->unit->run($array[0]->company_name,'is_string','company_name');
+		$this->unit->run($array[0]->company_address,'is_string','company_address');
+		$this->unit->run($array[0]->company_email,'is_string','company_email');
+		$this->unit->run($array[0]->company_telephone,'is_string','company_telephone');
+		$this->unit->run($array[0]->company_register_date,'is_string','company_register_date');
+		$this->unit->run($array[0]->company_username,'is_string','company_username');
+		$this->unit->run($array[0]->company_password,'is_string','company_password');
+		$this->unit->run($array[0]->company_image,'is_string','company_image');
+		$this->unit->run(count((array)$array[0]) == 12, 'is_true', 'number of column');
+	}
 }
 
 /* End of file user_test.php */

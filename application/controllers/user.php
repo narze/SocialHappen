@@ -74,6 +74,17 @@ class User extends CI_Controller {
 		}
 		echo json_encode($result);
 	}
+	
+	/**
+	 * JSON : Get user companies
+	 * @param $user_id
+	 * @author Manassarn M.
+	 */
+	function json_get_companies($user_id = NULL){
+		$this->load->model('user_companies_model','user_companies');
+		$companies = $this->user_companies->get_user_companies_by_user_id($user_id);
+		echo json_encode($companies);
+	}
 }
 
 
