@@ -14,7 +14,7 @@ class Audit_model extends CI_Model {
 	// basic data
 	var $timestamp = '';
 	var $subject = '';
-	var $action = '';
+	var $action_id = '';
 	var $object = '';
 	var $objecti = '';
 	var $type = '';

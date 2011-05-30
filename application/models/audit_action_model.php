@@ -6,7 +6,7 @@
 class Audit_action_model extends CI_Model {
 	var $_id = '';
 	var $app_id = '';
-	var $action = '';
+	var $action_id = '';
 	var $description = '';
 	var $stat = '';
 	
@@ -27,7 +27,7 @@ class Audit_action_model extends CI_Model {
 	 * 
 	 */
 	function create_index(){
-		$this->actions->ensureIndex(array('app_id' => 1, 'action' => 1));
+		$this->actions->ensureIndex(array('app_id' => 1, 'action_id' => 1));
 	}
 	
 	/**
@@ -36,10 +36,10 @@ class Audit_action_model extends CI_Model {
 	 */
 	function add_action($data = array()){
 		// add new
-		$check_args = isset($data['app_id']) && isset($data['action']) && isset($data['description']) && isset($data['stat']);
+		$check_args = isset($data['app_id']) && isset($data['action_id']) && isset($data['description']) && isset($data['stat']);
 		if($check_args){
 			$data_to_add = array('app_id' => $data['app_id'],
-								'action' => $data['action'],
+								'action_id' => $data['action_id'],
 								'description' => $data['description'],
 								'stat' => $data['stat']);
 			$this->actions->insert($data_to_add);
@@ -52,16 +52,16 @@ class Audit_action_model extends CI_Model {
 	/**
 	 * edit audit action
 	 * @param app_id
-	 * @param action
+	 * @param action_id
 	 * @param data 
 	 */
-	function edit_action($app_id, $action, $data){
-		$check_args = isset($app_id) && isset($action) && isset($data);
+	function edit_action($app_id = NULL, $action_id = NULL, $data = NULL){
+		$check_args = isset($app_id) && isset($action_id) && isset($data);
 		if($check_args){
 			$criteria = array('app_id' => $app_id,
-							'action' => $action,
+							'action_id' => $action_id,
 							'$atomic' => TRUE);
-			$this->actions->update($criteria, $data);
+			$this->actions->update($criteria, array('$set' => $data));
 			return TRUE;
 		}else{
 			return FALSE;
@@ -71,13 +71,18 @@ class Audit_action_model extends CI_Model {
 	/**
 	 * delete audit action
 	 * @param app_id
-	 * @param action
+	 * @param action_id - optional
 	 */
-	function delete_action($app_id, $action){
-		$check_args = isset($app_id) && isset($action);
+	function delete_action($app_id = NULL, $action_id = NULL){
+		$check_args = isset($app_id);
 		if($check_args){
-			$criteria = array('app_id' => $app_id,
-							  'action' => $action);
+			if(isset($action_id)){
+				$criteria = array('app_id' => $app_id,
+							  'action_id' => $action_id);
+			}else{
+				$criteria = array('app_id' => $app_id);
+			}
+			
 			$this->actions->remove($criteria, array('$atomic' => TRUE));
 			return TRUE;
 		}else{
@@ -105,7 +110,7 @@ class Audit_action_model extends CI_Model {
 	 * 
 	 * @return audit action list
 	 */
-	function get_action_by_app_id($app_id){
+	function get_action_by_app_id($app_id = NULL){
 		if(isset($app_id)){
 			$res = $this->actions->find(array('app_id' => $app_id));
 			$result = array();

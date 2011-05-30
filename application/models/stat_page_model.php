@@ -5,7 +5,7 @@
  */
 class Stat_page_model extends CI_Model {
 	var $_id = '';
-	var $action = '';
+	var $action_id = '';
 	var $page_id = '';
 	var $date = '';
 	var $count = '';
@@ -30,7 +30,7 @@ class Stat_page_model extends CI_Model {
 	 * create index for collection
 	 */
 	 function create_index(){
-	 	$this->pages->ensureIndex(array('page_id' => 1, 'action' => 1, 'date' => -1));
+	 	$this->pages->ensureIndex(array('page_id' => 1, 'action_id' => 1, 'date' => -1));
 	 }
 	 
 	 /**
@@ -45,7 +45,7 @@ class Stat_page_model extends CI_Model {
 	 function add_stat_page($action = NULL, $page_id = NULL, $date = NULL){
 	 	$check_args = isset($action) && isset($page_id) && isset($date);
 	 	if($check_args){
-			$data_to_add = array('action' => $action,
+			$data_to_add = array('action_id' => $action,
 								'page_id' => $page_id,
 								'date' => $date,
 								'count' => 1);
@@ -65,10 +65,10 @@ class Stat_page_model extends CI_Model {
 	  * 
 	  * @return result boolean
 	  */
-	 function increment_stat_page($action = NULL, $page_id = NULL, $date = NULL){
-	 	$check_args = isset($action) && isset($page_id) && isset($date);
+	 function increment_stat_page($action_id = NULL, $page_id = NULL, $date = NULL){
+	 	$check_args = isset($action_id) && isset($page_id) && isset($date);
 	 	if($check_args){
-			$criteria = array('action' => $action,
+			$criteria = array('action_id' => $action,
 								'page_id' => $page_id,
 								'date' => $date);
 			$this->pages->update($criteria, array('$inc' => array('count' => 1)), TRUE);
@@ -84,8 +84,8 @@ class Stat_page_model extends CI_Model {
 	  * 
 	  * @return result in array
 	  */
-	 function get_stat_page($param = NULL, $skip = 0, $limit = 50){
-	 	$check_args = isset($param) && (isset($param['page_id']) || isset($param['action']) || isset($param['date']));
+	 function get_stat_page($param = NULL, $skip = 0, $limit = 0){
+	 	$check_args = isset($param) && (isset($param['page_id']) || isset($param['action_id']) || isset($param['date']));
 	 	if($check_args){
 	 		
 	 		$criteria = array();
@@ -94,8 +94,8 @@ class Stat_page_model extends CI_Model {
 				$criteria['page_id'] = $param['page_id'];
 			}
 			
-			if(isset($param['action'])){
-				$criteria['action'] = $param['action'];
+			if(isset($param['action_id'])){
+				$criteria['action_id'] = $param['action_id'];
 			}
 			
 			if(isset($param['date'])){
