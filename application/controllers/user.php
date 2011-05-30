@@ -53,6 +53,7 @@ class User extends CI_Controller {
 	
 	/**
 	 * JSON : Get facebook pages owned by the current user
+	 * @author Prachya P.
 	 */
 	function json_get_facebook_pages_owned_by_user(){
 		echo json_encode($this->facebook->get_user_pages());
