@@ -57,6 +57,22 @@ class User extends CI_Controller {
 	function json_get_facebook_pages_owned_by_user(){
 		echo json_encode($this->facebook->get_user_pages());
 	}
+	
+	/**
+	 * JSON : Add user
+	 * @author Manassarn M.
+	 */
+	function json_add(){
+		$this->load->model('user_model','users');
+		$post_data = array('user_facebook_id' => $this->input->post('user_facebook_id'));
+		if($user_id = $this->users->add_user($post_data)){
+			$result->status = 'OK';
+			$result->user_id = $user_id;
+		} else {
+			$result->status = 'ERROR';
+		}
+		echo json_encode($result);
+	}
 }
 
 

@@ -92,6 +92,22 @@ class User_test extends CI_Controller {
 		$this->unit->run($array[0]->user_last_seen,'is_string','user_last_seen');
 		$this->unit->run(count((array)$array[0]) == 5, 'is_true', 'number of column');
 	}
+
+	/**
+	 * Tests json_add()
+	 * @author Manassarn M.
+	 */
+	function json_add_test(){
+		$user = array(
+						'user_facebook_id' => rand(1, 10000000),
+						);
+		$content = $this->curl->simple_post(base_url().'user/json_add', $user);
+		$content = json_decode($content);
+		$this->unit->run($content, 'is_object', 'json_add()');
+		$this->unit->run($content->user_id,'is_int','user_id');
+		$this->unit->run($content->status == 'OK','is_true', 'status');
+		$this->unit->run(count((array)$content) == 2,'is_true','return count');
+	}
 }
 
 /* End of file user_test.php */

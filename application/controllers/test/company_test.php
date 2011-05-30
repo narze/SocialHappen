@@ -129,6 +129,29 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array[0]->company_image,'is_string','company_image');
 		$this->unit->run(count((array)$array[0]) == 10, 'is_true', 'number of column');
 	}
+
+	/**
+	 * Tests json_add()
+	 * @author Manassarn M.
+	 */
+	function json_add_test(){
+		$company = array(
+						'creator_user_id' => 1,
+						'company_name' => 'test',
+						'company_address' => 'test',
+						'conpany_email' => 'test@test.com',
+						'company_telephone' => '6543211',
+						'conpany_username' => 'test',
+						'company_password' => 'test',
+						'company_image' => 'test'
+						);
+		$content = $this->curl->simple_post(base_url().'company/json_add', $company);
+		$content = json_decode($content);
+		$this->unit->run($content, 'is_object', 'json_add()');
+		$this->unit->run($content->company_id,'is_int','company_id');
+		$this->unit->run($content->status == 'OK','is_true', 'status');
+		$this->unit->run(count((array)$content) == 2,'is_true','return count');
+	}
 }
 
 /* End of file company_test.php */

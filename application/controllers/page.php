@@ -57,6 +57,30 @@ class Page extends CI_Controller {
 		$users = $this->users->get_page_users_by_page_id($page_id);
 		echo json_encode($users);
 	}
+
+	/**
+	 * JSON : Add page
+	 * @author Manassarn M.
+	 */
+	function json_add(){
+		$this->load->model('page_model','pages');
+		$post_data = array(
+							'facebook_page_id' => $this->input->post('facebook_page_id'),
+							'company_id' => $this->input->post('company_id'),
+							'page_name' => $this->input->post('page_name'),
+							'page_detail' => $this->input->post('page_detail'),
+							'page_all_member' => $this->input->post('page_all_member'),
+							'page_new_member' => $this->input->post('page_new_member'),
+							'page_image' => $this->input->post('page_image')
+						);
+		if($page_id = $this->pages->add_page($post_data)){
+			$result->status = 'OK';
+			$result->page_id = $page_id;
+		} else {
+			$result->status = 'ERROR';
+		}
+		echo json_encode($result);
+	}
 }
 
 

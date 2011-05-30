@@ -134,6 +134,28 @@ class Page_test extends CI_Controller {
 
 		$this->unit->run(count((array)$array[0]) == 13, 'is_true', 'number of column');
 	}
+
+	/**
+	 * Tests json_add()
+	 * @author Manassarn M.
+	 */
+	function json_add_test(){
+		$page = array(
+						'facebook_page_id' => rand(1, 10000000),
+						'company_id' => rand(1, 10000000),
+						'page_name' => 'page_name',
+						'page_detail' => 'page_detail',
+						'page_all_member' => rand(1, 10000000),
+						'page_new_member' => rand(1, 10000000),
+						'page_image' => 'page_image',
+						);
+		$content = $this->curl->simple_post(base_url().'page/json_add', $page);
+		$content = json_decode($content);
+		$this->unit->run($content, 'is_object', 'json_add()');
+		$this->unit->run($content->page_id,'is_int','page_id');
+		$this->unit->run($content->status == 'OK','is_true', 'status');
+		$this->unit->run(count((array)$content) == 2,'is_true','return count');
+	}
 }
 
 /* End of file page_test.php */

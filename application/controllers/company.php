@@ -82,6 +82,32 @@ class Company extends CI_Controller {
 		$profile = $this->companies->get_company_profile_by_company_id($company_id);
 		echo json_encode($profile);
 	}
+	
+	/**
+	 * JSON : Add company
+	 * @author Manassarn M.
+	 */
+	function json_add(){
+		$this->load->model('company_model','companies');
+		$post_data = array(
+							'creator_user_id' => $this->input->post('creator_user_id'),
+							'company_name' => $this->input->post('company_name'),
+							'company_address' => $this->input->post('company_address'),
+							'company_email' => $this->input->post('company_email'),
+							'company_telephone' => $this->input->post('company_telephone'),
+							'company_register_date' => $this->input->post('company_register_date'),
+							'company_username' => $this->input->post('company_username'),
+							'company_password' => $this->input->post('company_password'),
+							'company_image' => $this->input->post('company_image'),
+							);
+		if($company_id = $this->companies->add_company($post_data)){
+			$result->status = 'OK';
+			$result->company_id = $company_id;
+		} else {
+			$result->status = 'ERROR';
+		}
+		echo json_encode($result);
+	}
 }
 
 
