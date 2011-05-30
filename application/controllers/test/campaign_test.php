@@ -86,6 +86,27 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($array[0]->user_register_date,'is_string','app_install_id');
 		$this->unit->run(count((array)$array[0]) == 5, 'is_true', 'number of column');
 	}
+	
+	/**
+	 * Tests json_add()
+	 * @author Manassarn M.
+	 */
+	function json_add_test(){
+		$campaign = array(
+						'app_install_id' => 1,
+						'campaign_name' => 'test',
+						'campaign_detail' => 'test',
+						'campaign_status_id' => 1,
+						'campaign_active_member' => 1,
+						'campaign_all_member' => 1
+					);
+		$content = $this->curl->simple_post(base_url().'campaign/json_add', $campaign);
+		$content = json_decode($content);
+		$this->unit->run($content, 'is_object', 'json_add()');
+		$this->unit->run($content->campaign_id,'is_int','campaign_id');
+		$this->unit->run($content->status == 'OK','is_true', 'status');
+		$this->unit->run(count((array)$content) == 2,'is_true','return count');
+	}
 }
 
 /* End of file campaign_test.php */
