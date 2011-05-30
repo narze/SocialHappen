@@ -46,6 +46,28 @@ class App extends CI_Controller {
 		$users = $this->user_apps->get_app_users_by_app_install_id($app_install_id);
 		echo json_encode($users);
 	}
+	
+	/**
+	 * JSON : Add app
+	 * @author Manassarn M.
+	 */
+	function json_add(){
+		$this->load->model('installed_apps_model','installed_apps');
+		$post_data = array(
+							'company_id' =>  $this->input->post('company_id'),
+							'app_id' =>  $this->input->post('app_id'),
+							'app_install_status' =>  $this->input->post('app_install_status'),
+							'page_id' =>  $this->input->post('page_id'),
+							'app_install_secret_key' =>  $this->input->post('app_install_secret_key')
+						);
+		if($app_install_id = $this->installed_apps->add_installed_app($post_data)){
+			$result->status = 'OK';
+			$result->app_install_id = $app_install_id;
+		} else {
+			$result->status = 'ERROR';
+		}
+		echo json_encode($result);
+	}
 }
 
 

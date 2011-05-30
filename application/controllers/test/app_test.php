@@ -106,6 +106,26 @@ class App_test extends CI_Controller {
 		$this->unit->run($array[0]->user_apps_last_seen,'is_string','user_apps_last_seen');
 		$this->unit->run(count((array)$array[0]) == 7, 'is_true', 'number of column');
 	}
+	
+	/**
+	 * Tests json_add()
+	 * @author Manassarn M.
+	 */
+	function json_add_test(){
+		$user = array(
+						'company_id' => 1,
+						'app_id' => 1,
+						'app_install_status' => 1,
+						'page_id' => 1,
+						'app_install_secret_key' => rand(1,10000000)
+					);
+		$content = $this->curl->simple_post(base_url().'app/json_add', $user);
+		$content = json_decode($content);
+		$this->unit->run($content, 'is_object', 'json_add()');
+		$this->unit->run($content->app_install_id,'is_int','app_install_id');
+		$this->unit->run($content->status == 'OK','is_true', 'status');
+		$this->unit->run(count((array)$content) == 2,'is_true','return count');
+	}
 }
 
 /* End of file app_test.php */
