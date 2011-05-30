@@ -20,6 +20,18 @@ class Company_apps_model extends CI_Model {
 	}
 	
 	/**
+	 * Get app_install
+	 * @param $app_install_id
+	 * $return array
+	 * @author Wachiraph.C
+	 */
+	function get_app_install_by_app_install_id($app_install_id = NULL){
+		$this->db->join('installed_apps','company_apps.app_id=installed_apps.app_id');
+		return $this->db->get_where('company_apps',array('app_install_id'=>$app_install_id))->result();
+	
+	}
+	
+	/**
 	 * Adds company app
 	 * @param array $data
 	 * @return TRUE if inserted successfully

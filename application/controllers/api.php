@@ -20,13 +20,13 @@ class Api extends CI_Controller {
 		}
 		
 		// check pending install app
-		$this->load->model('Install_app_model', 'Install_app');
-		if(!$this->Install_app->check_install_app($app_id, $company_id, $user_facebook_id)){
+		$this->load->model('Installed_apps_model', 'Installed_apps');
+		if(!$this->Installed_apps->check_install_app($app_id, $company_id, $user_facebook_id)){
 			echo json_encode(array( 'error' => '50',
 									'message' => 'permission error please install app from platform\'s install page'));
 			return;
 		}else{
-			$this->Install_app->delete($app_id, $company_id, $user_facebook_id);
+			$this->Installed_apps->delete($app_id, $company_id, $user_facebook_id);
 		}
 		
 		// authenticate app with $app_id and $app_secret_key
@@ -201,6 +201,27 @@ class Api extends CI_Controller {
 		$response = array(	'status' => 'OK',
 							'message' => 'logged');
 		
+		echo json_encode($response);
+	}
+							
+	function request_user_id($user_facebook_id = NULL){
+		if(!isset($user_facebook_id)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
+			return;
+		}
+		
+		$this->load->model('User_model', 'User');
+				
+		
+		$user_id = $this->User->get_user_id($user_facebook_id);
+		
+		if(isset($user_id)){
+			$user_id = $user_id[0];
+			$response = array(	'status' => 'OK',
+							'user_id' => $user_id->user_id);
+		}
+
 		echo json_encode($response);
 	}
 							
