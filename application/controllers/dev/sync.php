@@ -133,6 +133,7 @@ class Sync extends CI_Controller {
 							    'company_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
 							    'creator_user_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'company_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'company_detail' => field_option('VARCHAR', 255, $default, TRUE, $autoinc, $unsigned),
 							    'company_address' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'company_email' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'company_telephone' => field_option('VARCHAR', 20, $default, $null, $autoinc, $unsigned),
@@ -171,7 +172,7 @@ class Sync extends CI_Controller {
 							    'app_install_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
 							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'app_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
-							    'app_install_status' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
+							    'app_install_status' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
 							    'app_install_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'page_id' => field_option('INT', 20, $default, TRUE, $autoinc, TRUE),
 							    'app_install_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
@@ -188,6 +189,10 @@ class Sync extends CI_Controller {
 							),
 							'user' => array(
 							    'user_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
+							    'user_first_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'user_last_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'user_email' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'user_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'user_facebook_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'user_register_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'user_last_seen' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
@@ -398,6 +403,7 @@ class Sync extends CI_Controller {
 							    'company_id' => 1, 
 							    'creator_user_id' => 0, 
 							    'company_name' => 'Company test 1', 
+							    'company_detail' => 'detail test',
 							    'company_address' => '', 
 							    'company_email' => 'test1@figabyte.com', 
 							    'company_telephone' => '022485555', 
@@ -488,30 +494,50 @@ class Sync extends CI_Controller {
 		$user = array(
 					array(
 					    'user_id' => 1, 
+					    'user_first_name' => 'test',
+					    'user_last_name' => 'test',
+					    'user_email' => 'tes@test.com',
+					    'user_image' => 'dsadsadsadasdsa',					    
 					    'user_facebook_id' => 713558190, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
 						),
 					array(
 					    'user_id' => 2, 
+					    'user_first_name' => 'test',
+					    'user_last_name' => 'test',
+					    'user_email' => 'tes@test.com',
+					    'user_image' => 'dsadsadsadasdsa',
 					    'user_facebook_id' => 637741627, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
 					),
 					array(
 					    'user_id' => 3, 
+					    'user_first_name' => 'test',
+					    'user_last_name' => 'test',
+					    'user_email' => 'tes@test.com',
+					    'user_image' => 'dsadsadsadasdsa',
 					    'user_facebook_id' => 631885465, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
 					),
 					array(
 					    'user_id' => 4, 
+					    'user_first_name' => 'test',
+					    'user_last_name' => 'test',
+					    'user_email' => 'tes@test.com',
+					    'user_image' => 'dsadsadsadasdsa',
 					    'user_facebook_id' => 755758746, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
 					),
 					array(
 					    'user_id' => 5, 
+					    'user_first_name' => 'test',
+					    'user_last_name' => 'test',
+					    'user_email' => 'tes@test.com',
+					    'user_image' => 'dsadsadsadasdsa',
 					    'user_facebook_id' => 508840994, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
