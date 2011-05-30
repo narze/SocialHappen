@@ -48,6 +48,17 @@ class App extends CI_Controller {
 	}
 	
 	/**
+	 * JSON : Get pages
+	 * @param : $app_install_id
+	 * @author Manassarn M.
+	 */
+	function json_get_pages($app_install_id = NULL){
+		$this->load->model('page_model','pages');
+		$pages = $this->pages->get_pages_by_app_install_id($app_install_id);
+		echo json_encode($pages);
+	}
+	
+	/**
 	 * JSON : Add app
 	 * @author Manassarn M.
 	 */
