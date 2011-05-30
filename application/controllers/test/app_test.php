@@ -112,14 +112,14 @@ class App_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_add_test(){
-		$user = array(
+		$app = array(
 						'company_id' => 1,
 						'app_id' => 1,
 						'app_install_status' => 1,
 						'page_id' => 1,
 						'app_install_secret_key' => rand(1,10000000)
 					);
-		$content = $this->curl->simple_post(base_url().'app/json_add', $user);
+		$content = $this->curl->simple_post(base_url().'app/json_add', $app);
 		$content = json_decode($content);
 		$this->unit->run($content, 'is_object', 'json_add()');
 		$this->unit->run($content->app_install_id,'is_int','app_install_id');
