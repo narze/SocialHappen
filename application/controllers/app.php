@@ -54,7 +54,7 @@ class App extends CI_Controller {
 	 */
 	function json_get_pages($app_install_id = NULL){
 		$this->load->model('page_model','pages');
-		$pages = $this->pages->get_pages_by_app_install_id($app_install_id);
+		$pages = $this->pages->get_app_pages_by_app_install_id($app_install_id);
 		echo json_encode($pages);
 	}
 	

@@ -49,12 +49,12 @@ class Page_model extends CI_Model {
 	}
 	
 	/**
-	 * Get pages
+	 * Get app pages
 	 * @param $app_install_id
 	 * $return array
 	 * @author Manassarn M.
 	 */
-	function get_pages_by_app_install_id($app_install_id = NULL){
+	function get_app_pages_by_app_install_id($app_install_id = NULL){
 		$result = $this->db->get_where('installed_apps',array('app_install_id' => $app_install_id))->result();
 		$app_id = $result[0]->app_id;
 		$company_id = $result[0]->company_id;

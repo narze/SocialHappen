@@ -82,12 +82,12 @@ class Page_model_test extends CI_Controller {
 	}
 
 	/**
-	 * Test get_pages_by_app_install_id()
+	 * Test get_app_pages_by_app_install_id()
 	 * @author Manassarn M.
 	 */
-	function get_pages_by_app_install_id_test(){
-		$result = $this->pages->get_pages_by_app_install_id(1,1);
-		$this->unit->run($result, 'is_array', 'get_pages_by_app_install_id()');
+	function get_app_pages_by_app_install_id_test(){
+		$result = $this->pages->get_app_pages_by_app_install_id(1,1);
+		$this->unit->run($result, 'is_array', 'get_app_pages_by_app_install_id()');
 		$this->unit->run($result[0]->app_install_id,'is_string','app_install_id');
 		$this->unit->run($result[0]->company_id,'is_string','company_id');
 		$this->unit->run($result[0]->app_id,'is_string','app_id');
