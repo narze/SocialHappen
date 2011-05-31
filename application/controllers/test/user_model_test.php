@@ -29,6 +29,10 @@ class User_model_test extends CI_Controller {
 		$result = $this->users->get_page_users_by_page_id(1);
 		$this->unit->run($result, 'is_array', 'get_page_users_by_page_id()');
 		$this->unit->run($result[0]->user_id,'is_string','user_id');
+		$this->unit->run($result[0]->user_first_name,'is_string','user_first_name');
+		$this->unit->run($result[0]->user_last_name,'is_string','user_last_name');
+		$this->unit->run($result[0]->user_email,'is_string','user_email');
+		$this->unit->run($result[0]->user_image,'is_string','user_image');
 		$this->unit->run($result[0]->user_facebook_id,'is_string','user_facebook_id');
 		$this->unit->run($result[0]->user_register_date,'is_string','user_register_date');
 		$this->unit->run($result[0]->user_last_seen,'is_string','user_last_seen');
@@ -42,7 +46,7 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result[0]->page_id,'is_string','page_id');
 		$this->unit->run($result[0]->app_install_secret_key,'is_string','app_install_secret_key');
 
-		$this->unit->run(count((array)$result[0]) == 13, 'is_true', 'number of column');
+		$this->unit->run(count((array)$result[0]) == 17, 'is_true', 'number of column');
 		
 	}
 
@@ -54,10 +58,14 @@ class User_model_test extends CI_Controller {
 		$result = $this->users->get_user_profile_by_user_id(1);
 		$this->unit->run($result, 'is_array', 'get_user_profile_by_user_id()');
 		$this->unit->run($result[0]->user_id,'is_string','user_id');
+		$this->unit->run($result[0]->user_first_name,'is_string','user_first_name');
+		$this->unit->run($result[0]->user_last_name,'is_string','user_last_name');
+		$this->unit->run($result[0]->user_email,'is_string','user_email');
+		$this->unit->run($result[0]->user_image,'is_string','user_image');
 		$this->unit->run($result[0]->user_facebook_id,'is_string','user_facebook_id');
 		$this->unit->run($result[0]->user_register_date,'is_string','user_register_date');
 		$this->unit->run($result[0]->user_last_seen,'is_string','user_last_seen');
-		$this->unit->run(count((array)$result[0]) == 4, 'is_true', 'number of column');
+		$this->unit->run(count((array)$result[0]) == 8, 'is_true', 'number of column');
 	}
 
 	/**
@@ -93,6 +101,24 @@ class User_model_test extends CI_Controller {
 		
 		$removed_again = $this->users->remove_user($user_id);
 		$this->unit->run($removed_again == 0, 'is_true','remove_user()');
+	}
+	
+	/**
+	 * Test get_user_profile_by_user_facebook_id()
+	 * @author Manassarn M.
+	 */
+	function get_user_profile_by_user_facebook_id_test(){
+		$result = $this->users->get_user_profile_by_user_facebook_id(713558190);
+		$this->unit->run($result, 'is_array', 'get_user_profile_by_user_facebook_id()');
+		$this->unit->run($result[0]->user_id,'is_string','user_id');
+		$this->unit->run($result[0]->user_first_name,'is_string','user_first_name');
+		$this->unit->run($result[0]->user_last_name,'is_string','user_last_name');
+		$this->unit->run($result[0]->user_email,'is_string','user_email');
+		$this->unit->run($result[0]->user_image,'is_string','user_image');
+		$this->unit->run($result[0]->user_facebook_id,'is_string','user_facebook_id');
+		$this->unit->run($result[0]->user_register_date,'is_string','user_register_date');
+		$this->unit->run($result[0]->user_last_seen,'is_string','user_last_seen');
+		$this->unit->run(count((array)$result[0]) == 8, 'is_true', 'number of column');
 	}
 }
 /* End of file campaign_model_test.php */

@@ -45,12 +45,13 @@ class Signup extends CI_Controller {
 		else // passed validation proceed to post success logic
 		{
 		 	// build array for the model
-			
+			$facebook_user = $this->facebook->getUser();
 			$user = array(
 					       	'user_first_name' => set_value('first_name'),
 					       	'user_last_name' => set_value('last_name'),
 					       	'user_email' => set_value('email'),
-					       	'user_image' => set_value('user_image')
+					       	'user_image' => set_value('user_image'),
+					       	'user_facebook_id' => $facebook_user['id']
 						);
 			
 			$company = array(
