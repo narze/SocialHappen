@@ -65,8 +65,9 @@ class User extends CI_Controller {
 	 */
 	function json_add(){
 		$this->load->model('user_model','users');
-		$post_data = array('user_facebook_id' => $this->input->post('user_facebook_id'));
+		$post_data = array('user_first_name' => $this->input->post('user_first_name'));
 		if($user_id = $this->users->add_user($post_data)){
+			var_dump ($user_id);
 			$result->status = 'OK';
 			$result->user_id = $user_id;
 		} else {

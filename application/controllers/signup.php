@@ -14,10 +14,20 @@ class Signup extends CI_Controller {
 	}
 
 	/**
-	 * Register form
+	 * Signup page
 	 * @author Manassarn M.
 	 */
 	function index(){
+		$this->load->view('signup_view');
+		
+	}
+
+	/**
+	 * Signup form
+	 * @author Manassarn M.
+	 */
+	function form()
+	{
 		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');			
@@ -30,7 +40,7 @@ class Signup extends CI_Controller {
 	
 		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 		{
-			$this->load->view('signup_view');
+			$this->load->view('signup_form');
 		}
 		else // passed validation proceed to post success logic
 		{
@@ -49,26 +59,22 @@ class Signup extends CI_Controller {
 					       	'company_image' => set_value('company_image')
 						);
 					
-			// run insert model to write data to db
-			
-			if ($user_id = $this->users->add_user($user) && $company_id = $this->companies->add_company($company)) // the information has therefore been successfully saved in the db
+			$user_add_result = json_decode($this->curl->simple_post(base_url().'user/json_add', $user));
+			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company));
+		
+			if ($user_add_result->status == 'OK' && $company_add_result->status == 'OK') // the information has therefore been successfully saved in the db
 			{
-				redirect('signup/success');   // or whatever logic needs to occur
+				echo "User id = {$user_add_result->user_id}<br />";
+				echo "Company id = {$company_add_result->company_id}";   // or whatever logic needs to occur
 			}
 			else
 			{
-			echo 'An error occurred saving your information. Please try again later';
+				echo '$user_add_result->status = '.$user_add_result->status;
+				echo '$company_add_result->status = '.$company_add_result->status;
 			// Or whatever error handling is necessary
 			}
 		}
-		$data = array();
-		
-	}
 
-		function success()
-	{
-			echo 'this form has been successfully submitted with all validation being passed. All messages or logic here. Please note
-			sessions have not been used and would need to be added in to suit your app';
 	}
 	
 	
