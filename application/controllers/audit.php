@@ -9,6 +9,7 @@ class Audit extends CI_Controller {
 		parent::__construct();
 		$this->load->model('Audit_model', 'Audit');
 		$this->load->model('Audit_action_model', 'Audit_action');
+		$this->load->model('Stat_page_model', 'Stat_page');
 	}
 	
 	/**
@@ -55,9 +56,9 @@ class Audit extends CI_Controller {
 		}
 		
 		*/
-		$this->Audit_action->delete_action(2);
-		
-		$res = $this->Audit_action->get_action_by_app_id(2);
+		//$this->Audit_action->delete_action(2);
+		/*
+		$res = $this->Audit_action->get_action_list();
 		echo '<pre>';
 		print_r(count($res));
 		echo '</pre>';
@@ -67,7 +68,7 @@ class Audit extends CI_Controller {
 			print_r($audit);
 			echo '</pre>';
 		}
-		
+		*/
 		/*
 		$res = $this->Audit_action->edit_action(2, 3, array('description' => 'test', 'stat' => true));
 		if($res){
@@ -76,6 +77,25 @@ class Audit extends CI_Controller {
 			echo 'fail';
 		}
 		*/
+		//$this->Stat_page->create_index();
+		/*
+		for($i = 0 ;$i < 20; $i++){
+			$this->Stat_page->add_stat_page(10 + ($i%2), 20 + ($i % 3), 20110530 + ($i % 4));
+		}
+		*/
+		/*
+		$res = $this->Stat_page->get_stat_page(array('date' => 20110532));
+		echo '<pre>';
+		print_r(count($res));
+		echo '</pre>';
+		
+		foreach ($res as $stat){
+			echo '<pre>';
+			print_r($stat);
+			echo '</pre>';
+		}
+		 */
+		$this->Stat_page->increment_stat_page(21, 20, 20110532);
 	}
 	
 	/**

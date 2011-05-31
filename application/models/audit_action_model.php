@@ -36,7 +36,8 @@ class Audit_action_model extends CI_Model {
 	 */
 	function add_action($data = array()){
 		// add new
-		$check_args = isset($data['app_id']) && isset($data['action_id']) && isset($data['description']) && isset($data['stat']);
+		$check_args = isset($data['app_id']) && isset($data['action_id']) 
+		&& isset($data['description']) && isset($data['stat']);
 		if($check_args){
 			$data_to_add = array('app_id' => $data['app_id'],
 								'action_id' => $data['action_id'],

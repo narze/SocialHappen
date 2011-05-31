@@ -1,12 +1,12 @@
 <?php
 /**
- * stat page model class for stat page object
+ * stat campaign model class for stat campaign object
  * @author Metwara Narksook
  */
-class Stat_page_model extends CI_Model {
+class Stat_campaign_model extends CI_Model {
 	var $_id = '';
 	
-	var $page_id = '';
+	var $campaign_id = '';
 	var $action_id = '';
 	var $date = '';
 	var $count = '';
@@ -23,36 +23,36 @@ class Stat_page_model extends CI_Model {
 		// select stat database
 		$this->db = $this->connection->stat;
 		
-		// select pages collection
-		$this->pages = $this->db->pages;
+		// select campaigns collection
+		$this->campaigns = $this->db->campaigns;
 	}
 		
 	/**
 	 * create index for collection
 	 */
 	function create_index(){
-		$this->pages->ensureIndex(array('page_id' => 1,
+		$this->campaigns->ensureIndex(array('campaign_id' => 1,
 										'action_id' => 1, 
 										'date' => -1));
 	}
 		 
 	/**
-	 * add new stat page entry
+	 * add new stat campaign entry
 	 * 
-	 * @param page_id int page_id
+	 * @param campaign_id int campaign_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
 	 */
-	function add_stat_page($page_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($page_id) && isset($date);
+	function add_stat_campaign($campaign_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($action_id) && isset($campaign_id) && isset($date);
 		if($check_args){
-			$data_to_add = array('page_id' => $page_id,
-								'action_id' => $action_id,
-								'date' => $date,
-								'count' => 1);
-			$this->pages->insert($data_to_add);
+			$data_to_add = array('campaign_id' => $campaign_id,
+							'action_id' => $action_id,
+							'date' => $date,
+							'count' => 1);
+			$this->campaigns->insert($data_to_add);
 			return TRUE;
 		}else{
 			return FALSE;
@@ -60,22 +60,22 @@ class Stat_page_model extends CI_Model {
 	}
 	
 	/**
-	 * increment stat of page
+	 * increment stat of campaign
 	 * if increment non-exist stat, it'll create new stat entry
 	 * 
-	 * @param page_id int page_id
+	 * @param campaign_id int campaign_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
 	 */
-	function increment_stat_page($page_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($page_id) && isset($date);
+	function increment_stat_campaign($campaign_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($action_id) && isset($campaign_id) && isset($date);
 	 	if($check_args){
-			$criteria = array('page_id' => $page_id,
+			$criteria = array('campaign_id' => $campaign_id,
 							  'action_id' => $action_id,
 							  'date' => $date);
-			$this->pages->update($criteria, array(
+			$this->campaigns->update($criteria, array(
 												'$inc' => array('count' => 1)
 											), TRUE);
 			return TRUE;
@@ -85,20 +85,20 @@ class Stat_page_model extends CI_Model {
 	}
 	
 	/**
-	 * get stat page in specific date
-	 * @param param criteria may contains ['page_id', 'action_id', 'date']
+	 * get stat campaign in specific date
+	 * @param param criteria may contains ['campaign_id', 'action_id', 'date']
 	 * 
 	 * @return result in array
 	 */
-	function get_stat_page($param = NULL, $skip = 0, $limit = 0){
-		$check_args = isset($param) && (isset($param['page_id'])
+	function get_stat_campaign($param = NULL, $skip = 0, $limit = 0){
+		$check_args = isset($param) && (isset($param['campaign_id'])
 						 || isset($param['action_id']) || isset($param['date']));
 		if($check_args){
 			
 			$criteria = array();
 		
-			if(isset($param['page_id'])){
-				$criteria['page_id'] = $param['page_id'];
+			if(isset($param['campaign_id'])){
+				$criteria['campaign_id'] = $param['campaign_id'];
 			}
 			
 			if(isset($param['action_id'])){
@@ -109,7 +109,7 @@ class Stat_page_model extends CI_Model {
 				$criteria['date'] = $param['date'];
 			}
 			
-			$res = $this->pages->find($criteria)->skip($skip)->limit($limit);
+			$res = $this->campaigns->find($criteria)->skip($skip)->limit($limit);
 			$result = array();
 			foreach ($res as $entry) {
 				$result[] = $entry;
@@ -121,17 +121,17 @@ class Stat_page_model extends CI_Model {
 	 }
 	 
 	 /**
-	  * delete stat page entry
+	  * delete stat campaign entry
 	  * 
 	  * @param _id MongoDB ID
 	  */
-	 function delete_stat_page($_id){
+	 function delete_stat_campaign($_id){
 	 	if(empty($_id)){
 	 		show_error("Invalid or missing args", 500);
 	 	}else{
 	 		try
 		 	{
-				$this->pages->remove(array("_id" => new MongoId($_id)), 
+				$this->campaigns->remove(array("_id" => new MongoId($_id)), 
 									array("safe" => true));
 		 		return(TRUE);
 		 	}
@@ -143,5 +143,5 @@ class Stat_page_model extends CI_Model {
 	 }
 }
 
-/* End of file stat_page_model.php */
-/* Location: ./application/models/stat_page_model.php */
+/* End of file stat_campaign_model.php */
+/* Location: ./application/models/stat_campaign_model.php */
