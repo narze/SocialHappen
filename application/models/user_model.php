@@ -26,7 +26,8 @@ class User_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_user_profile_by_user_id($user_id =NULL) {
-		return $this -> db -> get_where('user', array('user_id' => $user_id)) -> result();
+		$profiles = $this -> db -> get_where('user', array('user_id' => $user_id)) -> result();
+		return $profiles[0];
 	}
 
 	/**
@@ -85,7 +86,8 @@ class User_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_user_profile_by_user_facebook_id($user_facebook_id =NULL) {
-		return $this -> db -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result();
+		$profiles = $this -> db -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result();
+		return $profiles[0];
 	}
 
 	function add($data = array()) {

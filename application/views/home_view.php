@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Home</title>
-</head>
-<body> 
+<?php $this->load->view('header'); ?>
 <h1>Home</h1>
 <? if($authenticate){ ?>
 	<p>
@@ -22,7 +16,7 @@
 		function fblogin() {
             FB.login(function(response) {
                 if (response.session) {
-                    window.location = '<? echo site_url('connect/collect_data').'/'; ?>';
+                    window.location = '<? echo site_url('home').'/'; ?>';
                 } else {
                     
                 }
@@ -33,5 +27,4 @@
 	<button type="button" onclick="fblogin();">Facebook Login</button>
 	</p>
 <?}?>
-</body>
-</html>
+<?php $this->load->view('footer');
