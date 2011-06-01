@@ -110,6 +110,31 @@
 			});
 		}
 		$(function() {
+			//get company detail
+			$.getJSON("<?php echo base_url()."company/json_get_profile/{$company_id}"; ?>",function(json){
+				var company_detail=json[0];
+				//company name
+				$("#company-detail").append(
+					"<li>" + company_detail.company_name +"</li>"
+				);
+				//company address
+				$("#company-detail").append(
+					"<li>Company Address:" + company_detail.company_address +"</li>"
+				);
+				//company telephone
+				$("#company-detail").append(
+					"<li>Telephone:" + company_detail.company_telephone +"</li>"
+				);
+				//company email
+				$("#company-detail").append(
+					"<li>Email:" + company_detail.company_email +"</li>"
+				);
+				//company image
+				$("#company-detail").append(
+					"<li>Image:" + company_detail.company_image +"</li>"
+				);
+			});
+			
 			//get installed apps
 			$.getJSON("<?php echo base_url()."company/json_get_installed_apps/{$company_id}"; ?>",function(json){
 				for(i in json){
@@ -122,7 +147,11 @@
 					}
 				}).sortable({
 					revert: true
-				});
+				});				
+				//amount of installed app
+				$("#company-detail").append(
+					"<li>Installed app:" + json.length +"</li>"
+				);
 			});
 
 			//get installed pages
@@ -137,7 +166,11 @@
 					}
 				}).sortable({
 					revert: true
-				});
+				});		
+				//amount of installed page
+				$("#company-detail").append(
+					"<li>Installed page:" + json.length +"</li>"
+				);
 			});
 			$("#company-installed-page-list li").live("mouseover", function() {
 				$(this).find(".view_app_link").show();
@@ -230,6 +263,8 @@ body{
 	display: none;
 }
 </style>
+<div id="company-detail">
+</div>
 <div id="main-div" style="height:500px;">
 	<div id="left-panel">
 		<div id="left-panel-tabs">
