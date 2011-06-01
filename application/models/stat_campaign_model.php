@@ -32,8 +32,8 @@ class Stat_campaign_model extends CI_Model {
 	 */
 	function create_index(){
 		$this->campaigns->ensureIndex(array('campaign_id' => 1,
-										'action_id' => 1, 
-										'date' => -1));
+										    'action_id' => 1, 
+										    'date' => -1));
 	}
 		 
 	/**

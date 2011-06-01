@@ -4,7 +4,7 @@
  * @author Metwara Narksook
  */
 class Audit_model extends CI_Model {
-	var $_id = '';
+
 	// optional date
 	var $app_id = '';
 	var $app_install_id = '';
@@ -17,7 +17,8 @@ class Audit_model extends CI_Model {
 	var $action_id = '';
 	var $object = '';
 	var $objecti = '';
-	var $type = '';
+	
+	
 	var $DEFAULT_LIMIT;
 	
 	/**
@@ -61,6 +62,7 @@ class Audit_model extends CI_Model {
 		$data['timestamp'] = time();
 		// add new 
 		$this->audits->insert($data);
+		return TRUE;
 	}
 	
 	/**

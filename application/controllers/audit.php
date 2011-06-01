@@ -10,6 +10,9 @@ class Audit extends CI_Controller {
 		$this->load->model('Audit_model', 'Audit');
 		$this->load->model('Audit_action_model', 'Audit_action');
 		$this->load->model('Stat_page_model', 'Stat_page');
+		$this->load->model('Stat_app_model', 'Stat_app');
+		$this->load->model('Stat_campaign_model', 'Stat_campaign');
+		$this->load->library('audit_lib');
 	}
 	
 	/**
@@ -77,7 +80,7 @@ class Audit extends CI_Controller {
 			echo 'fail';
 		}
 		*/
-		//$this->Stat_page->create_index();
+		//$this->Stat_campaign->create_index();
 		/*
 		for($i = 0 ;$i < 20; $i++){
 			$this->Stat_page->add_stat_page(10 + ($i%2), 20 + ($i % 3), 20110530 + ($i % 4));
@@ -95,7 +98,14 @@ class Audit extends CI_Controller {
 			echo '</pre>';
 		}
 		 */
-		$this->Stat_page->increment_stat_page(21, 20, 20110532);
+		//$this->Stat_page->increment_stat_page(21, 20, 20110532);
+		
+		//$this->audit_lib->add_audit_action(5, 5, TRUE, 'test');
+		//$res = $this->audit_lib->get_audit_action(0, 1);
+		//print_r($res['stat']);
+		
+		$res = $this->audit_lib->_date();
+		print_r($res);
 	}
 	
 	/**

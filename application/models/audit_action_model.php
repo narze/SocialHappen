@@ -32,6 +32,7 @@ class Audit_action_model extends CI_Model {
 	
 	/**
 	 * add new audit action
+	 * 
 	 * @param audit action object in array format
 	 */
 	function add_action($data = array()){
@@ -52,6 +53,7 @@ class Audit_action_model extends CI_Model {
 	
 	/**
 	 * edit audit action
+	 * 
 	 * @param app_id
 	 * @param action_id
 	 * @param data 
@@ -71,6 +73,7 @@ class Audit_action_model extends CI_Model {
 	
 	/**
 	 * delete audit action
+	 * 
 	 * @param app_id
 	 * @param action_id - optional
 	 */
@@ -107,13 +110,20 @@ class Audit_action_model extends CI_Model {
 	
 	/**
 	 * get audit action for app_id
-	 * @param app_id
+	 * 
+	 * @param app_id int app_id
+	 * @param action_id int action_id [optional]
 	 * 
 	 * @return audit action list
 	 */
-	function get_action_by_app_id($app_id = NULL){
+	function get_action($app_id = NULL, $action_id = NULL){
 		if(isset($app_id)){
-			$res = $this->actions->find(array('app_id' => $app_id));
+			if(isset($action_id)){
+				$criteria = array('app_id' => $app_id);
+			}else{
+				$criteria = array('app_id' => $app_id, 'action_id' => $action_id);
+			}
+			$res = $this->actions->find($criteria);
 			$result = array();
 			foreach ($res as $entry) {
 				$result[] = $entry;
