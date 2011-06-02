@@ -10,6 +10,7 @@ class Sync extends CI_Controller {
 		parent::__construct();
 		$this->load->dbforge();
 		$this->output->enable_profiler(TRUE);
+		$config['sess_use_database']	= FALSE;
 	}
 
 	function index(){
@@ -211,6 +212,13 @@ class Sync extends CI_Controller {
 							    'user_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
 							    'user_role' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
+							),
+							'sessions' =>array(
+								'session_id' => field_option('VARCHAR', 40, '0', $null, $autoinc, $unsigned),
+								'ip_address' => field_option('VARCHAR', 16, '0', $null, $autoinc, $unsigned),
+								'user_agent' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
+								'last_activity' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
+								'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							)
 						);
 		$keys = array(
@@ -231,7 +239,8 @@ class Sync extends CI_Controller {
 						'user' => array('user_id'),
 						'user_apps' => array('user_id', 'app_install_id'),
 						'user_campaigns' => array('user_id', 'campaign_id'),
-						'user_companies' => array('user_id', 'company_id')
+						'user_companies' => array('user_id', 'company_id'),
+						'sessions' => array('session_id')
 					);
 		$tables = array(
 							'app',
@@ -251,7 +260,8 @@ class Sync extends CI_Controller {
 							'user',
 							'user_apps',
 							'user_campaigns',
-							'user_companies'
+							'user_companies',
+							'sessions'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		

@@ -41,7 +41,6 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function login(){
-		$this->socialhappen->logout();
 		$this->socialhappen->login('home');
 	}
 	
