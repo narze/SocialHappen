@@ -36,8 +36,10 @@ class Audit_lib
 	 * @param stat boolean want to keep in stat or not
 	 * @param description string description of action
 	 */
-	function add_audit_action($app_id = NULL, $action_id = NULL, $stat = NULL, $description = NULL){
-		$check_args = isset($app_id) && isset($action_id) && isset($stat) && isset($description);
+	function add_audit_action($app_id = NULL, $action_id = NULL, $stat_app = NULL, 
+							$stat_page = NULL, $stat_campaign = NULL, $description = NULL){
+		$check_args = isset($app_id) && isset($action_id) && isset($stat_app) && 
+						isset($stat_page) && isset($stat_campaign) && isset($description);
 		if(!$check_args){
 			show_error("Invalid or missing args", 500);
 		}
@@ -45,7 +47,9 @@ class Audit_lib
 		
 		$data = array('app_id' => $app_id,
 						'action_id' => $action_id,
-						'stat' => $stat,
+						'stat_app' => $stat_app,
+						'stat_page' => $stat_page,
+						'stat_campaign' => $stat_campaign,
 						'description' => $description);
 		$result = $this->CI->audit_action->add_action($data);
 		if(!$result){
@@ -60,16 +64,33 @@ class Audit_lib
 	 * @param app_id int id of app
 	 * @param action_id int action number
 	 * 
-	 * @param data array contain stat or description
+	 * @param data array contain ['stat_app', 'stat_page', 'stat_campaign', 'description']
 	 */
 	function edit_audit_action($app_id = NULL, $action_id = NULL, $data = NULL){
-		$check_args = isset($app_id) && isset($action_id) && (isset($action['stat']) || isset($action['description']));
+		$check_args = isset($app_id) && isset($action_id) && 
+						(isset($data['stat_app']) || isset($data['stat_page']) || 
+						isset($data['stat_campaign']) || isset($data['description']));
 		if(!$check_args){
 			show_error("Invalid or missing args", 500);
 		}
 		
 		$this->CI->load->model('audit_action_model','audit_action');
-		$result = $this->CI->audit_action->edit_action($app_id, $action_id, $data);
+		
+		$data_to_add = array();
+		if(isset($data['stat_app'])){
+			$data_to_add['stat_app'] = $data['stat_app'];
+		}
+		if(isset($data['stat_page'])){
+			$data_to_add['stat_page'] = $data['stat_page'];
+		}
+		if(isset($data['stat_campaign'])){
+			$data_to_add['stat_campaign'] = $data['stat_campaign'];
+		}
+		if(isset($data['description'])){
+			$data_to_add['description'] = $data['description'];
+		}
+		
+		$result = $this->CI->audit_action->edit_action($app_id, $action_id, $data_to_add);
 		if(!$result){
 			show_error("edit audit action fail", 500);
 		}
@@ -158,9 +179,11 @@ class Audit_lib
 		if(!$check_args){
 			show_error("Invalid or missing args", 500);
 		}
+		
+		// check valid action_id
 		$this->CI->load->model('audit_action_model','audit_action');
-		$result = $this->CI->audit_action->get_action($app_id, $action_id);
-		if(count($result) == 0){
+		$result_audit_action = $this->CI->audit_action->get_action($app_id, $action_id);
+		if(count($result_audit_action) == 0){
 			return FALSE;
 		}else{
 			$audit_action = $result[0];
@@ -188,14 +211,57 @@ class Audit_lib
 		}
 		// @TODO: select stat to add
 		$this->CI->load->model('audit_model','audit');
-		$result = $this->CI->audit->add_audit($data_to_add);
-		if($result){
-			$this->CI->load->model('Stat_app_model','Stat_app');
-			$result_stat = $this->CI->Stat_app_model->add_stat_app($app_id, $action_id, $this->_date());
-			return $result_stat;
+		$result_add_audit = $this->CI->audit->add_audit($data_to_add);
+		if($result_add_audit){
+			if(isset($data_to_add['app_install_id']) && isset($audit_action['stat_app']) && $audit_action['stat_app']){
+				$this->CI->load->model('Stat_app_model','Stat_app');
+				$result_stat = $this->CI->Stat_app_model->increment_stat_page($data_to_add['app_install_id'], $action_id, $this->_date());
+			}
+			if(isset($data_to_add['page_id']) && isset($audit_action['stat_page']) && $audit_action['stat_app']){
+				$this->CI->load->model('Stat_page_model','Stat_page');
+				$result_stat = $this->CI->Stat_page_model->increment_stat_page($data_to_add['page_id'], $action_id, $this->_date());
+			}
+			if(isset($data_to_add['campaign_id']) && isset($audit_action['stat_campaign']) && $audit_action['stat_campaign']){
+				$this->CI->load->model('Stat_campaign_model','Stat_campaign');
+				$result_stat = $this->CI->Stat_campaign_model->increment_stat_page($data_to_add['campaign_id'], $action_id, $this->_date());
+			}
+			
 		}
+		
+		return $result_add_audit;
 	}
 	
+	/**
+	 * list audit data by input criteria to query
+	 * 
+	 * @param criteria array of attribute to query
+	 * @param limit int number of results [optional - default 100]
+	 * @param offset int offset number [optional - default 0]
+	 * 
+	 * @return result
+	 */
+	function list_audit($criteria = array(), $limit = 100, $offset = 0){
+		$this->CI->load->model('audit_model','audit');
+		$result = $this->CI->audit->list_audit($criteria, $limit, $offset);
+		return $result;
+	}
+	
+	/**
+	 * list recent audit entry
+	 * @param limit number of entries to get [optional - default 100]
+	 * 
+	 * @return array of audit object item
+	 */
+	function list_recent_audit($limit = 100){
+		$this->CI->load->model('audit_model','audit');
+		$result = $this->CI->audit->list_recent_audit($limit);
+		return $result;
+	}
+
+	/**
+	 * generate date format in yearmonthdate for stat ex. 20110531
+	 * @return int
+	 */
 	function _date(){
 		date_default_timezone_set('Asia/Bangkok');
 		return Date('Ymd');

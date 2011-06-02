@@ -78,7 +78,7 @@ class Audit_model extends CI_Model {
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
-		$res = $this->audits->find($criteria)->skip($offset)->limit($limit);
+		$res = $this->audits->find($criteria)->sort(array('timestamp' => -1))->skip($offset)->limit($limit);
 		
 		$result = array();
 		foreach ($res as $audit) {
@@ -95,7 +95,7 @@ class Audit_model extends CI_Model {
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
-		$res = $this->audits->find()->limit($limit);
+		$res = $this->audits->find()->sort(array('timestamp' => -1))->limit($limit);
 		
 		$result = array();
 		foreach ($res as $audit) {

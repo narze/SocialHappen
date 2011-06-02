@@ -8,7 +8,9 @@ class Audit_action_model extends CI_Model {
 	var $app_id = '';
 	var $action_id = '';
 	var $description = '';
-	var $stat = '';
+	var $stat_app = '';
+	var $stat_page = '';
+	var $stat_campaign = '';
 	
 	function __construct() {
 		parent::__construct();
@@ -42,8 +44,17 @@ class Audit_action_model extends CI_Model {
 		if($check_args){
 			$data_to_add = array('app_id' => $data['app_id'],
 								'action_id' => $data['action_id'],
-								'description' => $data['description'],
-								'stat' => $data['stat']);
+								'description' => $data['description']);
+			if(isset($data['stat_app'])){
+				$data_to_add['stat_app'] = $data['stat_app'];
+			}
+			if(isset($data['stat_page'])){
+				$data_to_add['stat_page'] = $data['stat_page'];
+			}
+			if(isset($data['stat_campaign'])){
+				$data_to_add['stat_campaign'] = $data['stat_campaign'];
+			}
+
 			$this->actions->insert($data_to_add);
 			return TRUE;
 		}else{

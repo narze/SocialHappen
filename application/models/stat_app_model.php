@@ -4,9 +4,8 @@
  * @author Metwara Narksook
  */
 class Stat_app_model extends CI_Model {
-	var $_id = '';
-	
-	var $app_id = '';
+
+	var $app_install_id = '';
 	var $action_id = '';
 	var $date = '';
 	var $count = '';
@@ -31,7 +30,7 @@ class Stat_app_model extends CI_Model {
 	 * create index for collection
 	 */
 	function create_index(){
-		$this->apps->ensureIndex(array('app_id' => 1,
+		$this->apps->ensureIndex(array('app_install_id' => 1,
 										'action_id' => 1, 
 										'date' => -1));
 	}
@@ -39,16 +38,16 @@ class Stat_app_model extends CI_Model {
 	/**
 	 * add new stat app entry
 	 * 
-	 * @param app_id int app_id
+	 * @param app_install_id int app_install_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
 	 */
-	function add_stat_app($app_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($app_id) && isset($date);
+	function add_stat_app($app_install_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($action_id) && isset($app_install_id) && isset($date);
 		if($check_args){
-			$data_to_add = array('app_id' => $app_id,
+			$data_to_add = array('app_install_id' => $app_install_id,
 							'action_id' => $action_id,
 							'date' => $date,
 							'count' => 1);
@@ -63,16 +62,16 @@ class Stat_app_model extends CI_Model {
 	 * increment stat of app
 	 * if increment non-exist stat, it'll create new stat entry
 	 * 
-	 * @param app_id int app_id
+	 * @param app_install_id int app_install_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
 	 */
-	function increment_stat_app($app_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($app_id) && isset($date);
+	function increment_stat_app($app_install_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($action_id) && isset($app_install_id) && isset($date);
 	 	if($check_args){
-			$criteria = array('app_id' => $app_id,
+			$criteria = array('app_install_id' => $app_install_id,
 							  'action_id' => $action_id,
 							  'date' => $date);
 			$this->apps->update($criteria, array(
@@ -86,19 +85,19 @@ class Stat_app_model extends CI_Model {
 	
 	/**
 	 * get stat app in specific date
-	 * @param param criteria may contains ['app_id', 'action_id', 'date']
+	 * @param param criteria may contains ['app_install_id', 'action_id', 'date']
 	 * 
 	 * @return result in array
 	 */
 	function get_stat_app($param = NULL, $skip = 0, $limit = 0){
-		$check_args = isset($param) && (isset($param['app_id'])
+		$check_args = isset($param) && (isset($param['app_install_id'])
 						 || isset($param['action_id']) || isset($param['date']));
 		if($check_args){
 			
 			$criteria = array();
 		
-			if(isset($param['app_id'])){
-				$criteria['app_id'] = $param['app_id'];
+			if(isset($param['app_install_id'])){
+				$criteria['app_install_id'] = $param['app_install_id'];
 			}
 			
 			if(isset($param['action_id'])){
