@@ -38,6 +38,16 @@ class User_model extends CI_Model {
 	function get_user_id($user_facebook_id =NULL) {
 		return $this -> db ->select('user_id') -> get_where('user', array('user_facebook_id' => $user_facebook_id))-> result();
 	}
+	
+	/**
+	 * Get user id
+	 * @param $user_facebook_id
+	 * @author Manassarn M.
+	 */
+	function get_user_id_by_user_facebook_id($user_facebook_id =NULL){
+		$user = $this -> db -> select('user_id') -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result();
+		return $user[0]->user_id;
+	}
 
 	/**
 	 * Check if user is company admin
