@@ -22,13 +22,35 @@ class Company_apps_model extends CI_Model {
 	/**
 	 * Get app_install
 	 * @param $app_install_id
-	 * $return array
+	 * @return array
 	 * @author Wachiraph.C
 	 */
 	function get_app_install_by_app_install_id($app_install_id = NULL){
 		$this->db->join('installed_apps','company_apps.app_id=installed_apps.app_id');
 		return $this->db->get_where('company_apps',array('app_install_id'=>$app_install_id))->result();
 	
+	}
+	
+	/**
+	 * Get not installed app by company_id (optional)page_id
+	 * @param $company_id,$page_id
+	 * @return array
+	 * @author Prachya P.
+	 */
+	function get_company_not_installed_apps($company_id = NULL,$page_id = NULL){
+		$installed_app_id=array();
+		if($page_id!=NULL)
+			$result = $this->db->get_where('installed_apps',array('company_id' => $company_id,'page_id' => $page_id))->result();
+		else
+			$result = $this->db->get_where('installed_apps',array('company_id' => $company_id))->result();
+		foreach($result as $app){
+			$installed_app_id[]=$app->app_id;
+		}
+		$this->db->join('app','company_apps.app_id=app.app_id');
+		$this->db->where('company_id',$company_id);
+		if(sizeof($installed_app_id)>0)
+			$this->db->where_not_in('company_apps.app_id', $installed_app_id);
+		return $this->db->get('company_apps')->result();	
 	}
 	
 	/**

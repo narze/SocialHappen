@@ -12,8 +12,12 @@ class Company extends CI_Controller {
 
 	function index($company_id = NULL){
 		if($company_id){
-			$data['company_id'] = $company_id;
-			$this->load->view('company_view',$data);
+			$data = array(
+				'company_id' => $company_id,
+	            'dragdrop_script' => $this->load->view('company_dashboard_script', 
+	            					array('company_id'=>$company_id), true)
+            );
+			$this->parser->parse('company_view', $data);
 			return $data;
 		}
 	}
@@ -71,6 +75,18 @@ class Company extends CI_Controller {
 		$apps = $this->installed_apps->get_installed_apps_by_company_id($company_id);
 		echo json_encode($apps);
 	}
+	
+	/**
+	 * JSON : Get not installed apps
+	 * @param $company_id
+	 * @author Prachya P.
+	 */
+	function json_get_not_installed_apps($company_id = NULL,$page_id = NULL){
+		$this->load->model('company_apps_model','company_apps');
+		$apps = $this->company_apps->get_company_not_installed_apps($company_id,$page_id);
+		echo json_encode($apps);
+	}
+	
 	
 	/**
 	 * JSON : Get profile
