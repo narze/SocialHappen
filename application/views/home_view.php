@@ -11,7 +11,7 @@
                 if (response.session) {
                     window.location = '<? echo site_url('home').'/'; ?>';
                 } else {
-                    fblogin();
+                    
                 }
             }, {perms:'<? echo $facebook_default_scope ; ?>'});
         }

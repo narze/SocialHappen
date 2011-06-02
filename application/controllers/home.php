@@ -6,14 +6,6 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 	}
-	
-	function test(){
-		echo 'sessid '.$this->session->userdata('session_id');
-		echo '<br />userid '.$this->session->userdata('user_id');
-		echo '<br />user_facebook_id '.$this->session->userdata('user_facebook_id');
-		echo '<br />logged_in '.$this->session->userdata('logged_in');
-		//$this->socialhappen->logout();
-	}
 
 	/**
 	 * Home page
