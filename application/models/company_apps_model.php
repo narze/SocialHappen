@@ -22,7 +22,7 @@ class Company_apps_model extends CI_Model {
 	/**
 	 * Get app_install
 	 * @param $app_install_id
-	 * $return array
+	 * @return array
 	 * @author Wachiraph.C
 	 */
 	function get_app_install_by_app_install_id($app_install_id = NULL){
@@ -34,7 +34,7 @@ class Company_apps_model extends CI_Model {
 	/**
 	 * Get not installed app by company_id (optional)page_id
 	 * @param $company_id,$page_id
-	 * $return array
+	 * @return array
 	 * @author Prachya P.
 	 */
 	function get_company_not_installed_apps($company_id = NULL,$page_id = NULL){
