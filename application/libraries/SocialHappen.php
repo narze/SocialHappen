@@ -16,13 +16,17 @@ class SocialHappen{
     }
 	
 	/**
-	 * Check if logged in, if not, redirect to specified url
+	 * Check if logged in (both facebook and SocialHappen) if not, redirect to specified url
 	 * @param $redirect_url
 	 * @author Manassarn M. 
 	 */
 	function check_logged_in($redirect_url = NULL){
 		if(!$this->CI->session->userdata('logged_in') == TRUE){
 			redirect($redirect_url);
+		} else if (!$this->CI->facebook->get_facebook_cookie()){
+			redirect($redirect_url);
+		} else {
+			return TRUE;
 		}
 	}
     
@@ -34,6 +38,19 @@ class SocialHappen{
 	function get_user(){
 		if($this->CI->session->userdata('logged_in') == TRUE){
 			return $this->CI->users->get_user_profile_by_user_id($this->CI->session->userdata('user_id'));
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Get user id from session
+	 * @return $user_id
+	 * @author Manassarn M.
+	 */
+	function get_user_id(){
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			return $this->CI->session->userdata('user_id');
 		} else {
 			return FALSE;
 		}
@@ -56,7 +73,9 @@ class SocialHappen{
 							);
 			$this->CI->session->set_userdata($userdata);
 		}
-		redirect($redirect_url);
+		if($redirect_url){
+			redirect($redirect_url);
+		}
 	}
 	
 	/**
@@ -66,6 +85,8 @@ class SocialHappen{
 	 */
 	function logout($redirect_url = NULL){
 	    $this->CI->session->sess_destroy();
-		redirect($redirect_url);
+		if($redirect_url){
+			redirect($redirect_url);
+		}
 	}
 }

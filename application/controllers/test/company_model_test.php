@@ -31,6 +31,7 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result[0]->company_id,'is_string','company_id');
 		$this->unit->run($result[0]->creator_user_id,'is_string','creator_user_id');
 		$this->unit->run($result[0]->company_name,'is_string','company_name');
+		$this->unit->run($result[0]->company_detail,'is_string','company_detail');
 		$this->unit->run($result[0]->company_address,'is_string','company_address');
 		$this->unit->run($result[0]->company_email,'is_string','company_email');
 		$this->unit->run($result[0]->company_telephone,'is_string','company_telephone');
@@ -38,7 +39,7 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result[0]->company_username,'is_string','company_username');
 		$this->unit->run($result[0]->company_password,'is_string','company_password');
 		$this->unit->run($result[0]->company_image,'is_string','company_image');
-		$this->unit->run(count((array)$result[0]) == 10, 'is_true', 'number of column');
+		$this->unit->run(count((array)$result[0]) == 11, 'is_true', 'number of column');
 	}
 
 	/**
@@ -49,6 +50,7 @@ class Company_model_test extends CI_Controller {
 		$company = array(
 							'creator_user_id' => '1',
 							'company_name' => 'test',
+							'company_detail' => 'test',
 							'company_address' => 'test',
 							'company_email' => 'test@test.com',
 							'company_telephone' => '021234567',

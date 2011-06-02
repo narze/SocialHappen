@@ -54,6 +54,7 @@ class User_model extends CI_Model {
 	 * @param $user_id
 	 * @param $use_user_facebook_id
 	 * @author Manassarn M.
+	 * @todo Fix conditions
 	 */
 	function is_company_admin($user_id =NULL, $company_id, $use_user_facebook_id =FALSE) {
 		if(!$user_id){

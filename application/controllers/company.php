@@ -92,20 +92,20 @@ class Company extends CI_Controller {
 		$post_data = array(
 							'creator_user_id' => $this->input->post('creator_user_id'),
 							'company_name' => $this->input->post('company_name'),
+							'company_detail' => $this->input->post('company_detail'),
 							'company_address' => $this->input->post('company_address'),
 							'company_email' => $this->input->post('company_email'),
 							'company_telephone' => $this->input->post('company_telephone'),
 							'company_register_date' => $this->input->post('company_register_date'),
 							'company_username' => $this->input->post('company_username'),
 							'company_password' => $this->input->post('company_password'),
-							'company_image' => $this->input->post('company_image'),
+							'company_image' => $this->input->post('company_image')
 							);
+		$result->status = 'ERROR';
 		if($company_id = $this->companies->add_company($post_data)){
 			$result->status = 'OK';
 			$result->company_id = $company_id;
-		} else {
-			$result->status = 'ERROR';
-		}
+		} 
 		echo json_encode($result);
 	}
 }

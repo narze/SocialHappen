@@ -4,9 +4,15 @@ class Home extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->library('facebook');
 		$this->load->library('form_validation');
-		//$this->facebook->authentication($this->uri->uri_string());
+	}
+	
+	function test(){
+		echo 'sessid '.$this->session->userdata('session_id');
+		echo '<br />userid '.$this->session->userdata('user_id');
+		echo '<br />user_facebook_id '.$this->session->userdata('user_facebook_id');
+		echo '<br />logged_in '.$this->session->userdata('logged_in');
+		//$this->socialhappen->logout();
 	}
 
 	/**
@@ -14,27 +20,37 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function index(){
-		$data['authenticate'] = $this->facebook->is_authentication();
-		if($data['authenticate']){
-			$facebook_user = $this->facebook->getUser();
-			$this->load->model('user_model','users');
-			if($profile = $this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
-				$this->load->model('user_companies_model','user_companies');
-				echo $profile->user_id;
-				if($companies = $this->user_companies->get_user_companies_by_user_id($profile->user_id)){
-					var_dump($companies);
-				} else {
-					redirect('home/create_company');
-				}
-			} else {
-				redirect('signup');
-			}
-		}else{		
+		if(!$this->facebook->is_authentication()){
 			$data['facebook_app_id'] = $this->config->item('facebook_app_id');
 			$data['facebook_default_scope'] = $this->config->item('facebook_default_scope');
-		}
-		
-		$this->load->view('home_view',$data);
+			$this->load->view('home_view',$data);
+		} else if(!$profile = $this->socialhappen->get_user()){
+			$this->load->view('login_view');
+		} else {
+			$this->load->model('user_companies_model','user_companies');
+			if($companies = $this->user_companies->get_user_companies_by_user_id($profile->user_id)){
+				redirect('home/select_company');
+			} else {
+				redirect('home/splash');
+			}
+		}	
+	}
+	
+	/**
+	 * Login and redirect to home page
+	 * @author Manassarn M.
+	 */
+	function login(){
+		$this->socialhappen->logout();
+		$this->socialhappen->login('home');
+	}
+	
+	/**
+	 * Logout and redirect to home page
+	 * @author Manassarn M.
+	 */
+	function logout(){
+		$this->socialhappen->logout('home');
 	}
 	
 	/**
@@ -42,14 +58,17 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function create_company(){
+		$this->socialhappen->check_logged_in('home');
 		$this->load->view('create_company_view');
 	}
 
 	/**
 	 * Create company form
 	 * @author Manassarn M.
+	 * @todo views for created/error
 	 */
-	function create_company_form(){		
+	function create_company_form(){
+		$this->socialhappen->check_logged_in('home');
 		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');			
 		$this->form_validation->set_rules('company_image', 'Company image', 'trim|xss_clean|max_length[255]');
@@ -66,13 +85,25 @@ class Home extends CI_Controller {
 			$company = array(
 					       	'company_name' => set_value('company_name'),
 					       	'company_detail' => set_value('company_detail'),
-					       	'company_image' => set_value('company_image')
+					       	'company_image' => set_value('company_image'),
+					       	'creator_user_id' => $this->socialhappen->get_user_id()
 						);
 			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company));
-		
+			
 			if ($company_add_result->status == 'OK') // the information has therefore been successfully saved in the db
 			{
-				echo "Company id = {$company_add_result->company_id}";   // or whatever logic needs to occur
+				$this->load->model('user_companies_model','user_companies');
+				$user_company = array(
+						'user_id' => $this->socialhappen->get_user_id(),
+						'company_id' => $company_add_result->company_id,
+						'user_role' => 0
+					);
+				if($this->user_companies->add_user_company($user_company)){
+					echo "Company created<br />";   // or whatever logic needs to occur
+					echo anchor("company/{$company_add_result->company_id}", 'Go to company');
+				} else {
+				echo "ERROR : cannot add user company";
+				}
 			}
 			else
 			{
@@ -80,6 +111,27 @@ class Home extends CI_Controller {
 			// Or whatever error handling is necessary
 			}
 		}
+	}
+
+	/**
+	 * Splash page
+	 * @author Manassarn M.
+	 */
+	function splash(){
+		$this->socialhappen->check_logged_in('home');
+		$this->load->view('splash_view');
+	}
+	
+	/**
+	 * Select company page
+	 * @author Manassarn M.
+	 */
+	function select_company(){
+		$this->socialhappen->check_logged_in('home');
+		$user = $this->socialhappen->get_user();
+		$this->load->model('user_companies_model','user_companies');
+		$data['user_companies'] = $this->user_companies->get_user_companies_by_user_id($user->user_id);
+		$this->load->view('select_company_view', $data);
 	}
 }  
 

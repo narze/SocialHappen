@@ -136,22 +136,46 @@ class Company_test extends CI_Controller {
 	 */
 	function json_add_test(){
 		$company = array(
-						'creator_user_id' => 1,
-						'company_name' => 'test',
-						'company_address' => 'test',
-						'conpany_email' => 'test@test.com',
-						'company_telephone' => '6543211',
-						'conpany_username' => 'test',
-						'company_password' => 'test',
-						'company_image' => 'test'
+							'creator_user_id' => 1,
+							'company_name' => 'test',
+							'company_detail' => 'test',
+							'company_address' => 'test',
+							'company_email' => 'test@test.com',
+							'company_telephone' => '6543211',
+							'company_username' => 'test',
+							'company_password' => 'test',
+							'company_image' => 'test'
 						);
-		$content = $this->curl->simple_post(base_url().'company/json_add', $company);
-		$content = json_decode($content);
+		$content = $this->curl->simple_post('company/json_add', $company, array(CURLOPT_RETURNTRANSFER => 1));
+		var_dump($content);
+		$content = json_decode($content);var_dump($content);
 		$this->unit->run($content, 'is_object', 'json_add()');
 		$this->unit->run($content->company_id,'is_int','company_id');
 		$this->unit->run($content->status == 'OK','is_true', 'status');
 		$this->unit->run(count((array)$content) == 2,'is_true','return count');
 	}
+
+function json_add_test_test(){
+	$company = array(
+							'creator_user_id' => 1,
+							'company_name' => 'test',
+							'company_detail' => 'test',
+							'company_address' => 'test',
+							'company_email' => 'test@test.com',
+							'company_telephone' => '6543211',
+							'company_username' => 'test',
+							'company_password' => 'test',
+							'company_image' => 'test'
+						);
+	 $ch = curl_init(base_url()."company/json_add");
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $company);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);       
+        curl_close($ch);
+        echo $output;
+}
 }
 
 /* End of file company_test.php */

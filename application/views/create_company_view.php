@@ -11,7 +11,7 @@
 			$('#create-company-form').load('<?php echo base_url().'home/create_company_form'; ?>');
 
 			$('form').live('submit',function(){
-				formData = $(this).serializeArray();					
+				formData = $(this).serializeArray();
 				$.post('<?php echo base_url().'home/create_company_form'; ?>',formData,function(returnData){
 					$('#create-company-form').html(returnData);
 				});

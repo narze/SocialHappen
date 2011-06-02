@@ -62,7 +62,7 @@ class Signup extends CI_Controller {
 					
 			$user_add_result = json_decode($this->curl->simple_post(base_url().'user/json_add', $user));
 			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company));
-		
+		var_dump ($company_add_result);
 			if ($user_add_result->status == 'OK' && $company_add_result->status == 'OK') // the information has therefore been successfully saved in the db
 			{
 				echo "User id = {$user_add_result->user_id}<br />";

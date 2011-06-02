@@ -1,12 +1,5 @@
 <?php $this->load->view('header'); ?>
 <h1>Home</h1>
-<? if($authenticate){ ?>
-	<p>
-	You have already logged in.<br />
-	<?=anchor('/admin', 'Admin Dashboard', 'title="go to Admin Dashboard"');?>
-	</p>
-	<p><?=anchor('sh_sitemap','Sitemap');?></p>
-<?}else{?>
 	<p>
 	<div id="fb-root"></div>
 	<script src="http://connect.facebook.net/en_US/all.js" type="text/javascript"></script>
@@ -18,7 +11,7 @@
                 if (response.session) {
                     window.location = '<? echo site_url('home').'/'; ?>';
                 } else {
-                    
+                    fblogin();
                 }
             }, {perms:'<? echo $facebook_default_scope ; ?>'});
         }
@@ -26,5 +19,4 @@
 	</script>
 	<button type="button" onclick="fblogin();">Facebook Login</button>
 	</p>
-<?}?>
 <?php $this->load->view('footer');
