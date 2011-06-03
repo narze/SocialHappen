@@ -2,8 +2,6 @@
 
 /**
  * Campaign_model
- *
- * @author Prachya P.
  */
 
 class Campaign_model extends CI_Model {

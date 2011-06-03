@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Campaign_model
- *
- * @author Prachya P.
- */
-
 class User_campaigns_model extends CI_Model {
 	var $campaign_id = '';
 
