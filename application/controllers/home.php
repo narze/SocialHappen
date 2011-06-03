@@ -123,7 +123,7 @@ class Home extends CI_Controller {
 		$this->load->model('user_companies_model','user_companies');
 		$data['user_companies'] = $this->user_companies->get_user_companies_by_user_id($user->user_id);
 		$data['user'] = $user;
-		$this->load->view('select_company_view', $data);
+		$this->parser->parse('select_company_view', $data);
 	}
 }  
 
