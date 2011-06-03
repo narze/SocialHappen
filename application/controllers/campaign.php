@@ -53,10 +53,10 @@ class Campaign extends CI_Controller {
 							'campaign_end_timestamp' => $this->input->post('campaign_end_timestamp')
 							);
 		if($campaign_id = $this->campaigns->add_campaign($post_data)){
-			$result->status = 'OK';
-			$result->campaign_id = $campaign_id;
+			$result['status'] = 'OK';
+			$result['campaign_id'] = $campaign_id;
 		} else {
-			$result->status = 'ERROR';
+			$result['status'] = 'ERROR';
 		}
 		echo json_encode($result);
 	}

@@ -117,10 +117,10 @@ class Company extends CI_Controller {
 							'company_password' => $this->input->post('company_password'),
 							'company_image' => $this->input->post('company_image')
 							);
-		$result->status = 'ERROR';
+		$result['status'] = 'ERROR';
 		if($company_id = $this->companies->add_company($post_data)){
-			$result->status = 'OK';
-			$result->company_id = $company_id;
+			$result['status'] = 'OK';
+			$result['company_id'] = $company_id;
 		} 
 		echo json_encode($result);
 	}

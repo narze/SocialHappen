@@ -72,10 +72,10 @@ class App extends CI_Controller {
 							'app_install_secret_key' =>  $this->input->post('app_install_secret_key')
 						);
 		if($app_install_id = $this->installed_apps->add_installed_app($post_data)){
-			$result->status = 'OK';
-			$result->app_install_id = $app_install_id;
+			$result['status'] = 'OK';
+			$result['app_install_id'] = $app_install_id;
 		} else {
-			$result->status = 'ERROR';
+			$result['status'] = 'ERROR';
 		}
 		echo json_encode($result);
 	}

@@ -74,10 +74,10 @@ class Page extends CI_Controller {
 							'page_image' => $this->input->post('page_image')
 						);
 		if($page_id = $this->pages->add_page($post_data)){
-			$result->status = 'OK';
-			$result->page_id = $page_id;
+			$result['status'] = 'OK';
+			$result['page_id'] = $page_id;
 		} else {
-			$result->status = 'ERROR';
+			$result['status'] = 'ERROR';
 		}
 		echo json_encode($result);
 	}

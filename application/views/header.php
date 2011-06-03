@@ -15,14 +15,14 @@
 		$('#goto').one('click',function(){
 			<?php foreach($user_companies as $company) : ?>
 			$.ajaxSetup({'async': false});
-			$.getJSON('<?php echo base_url().'company/json_get_profile/' . $company->company_id; ?>', function(data) {
+			$.getJSON('<?php echo base_url().'company/json_get_profile/' . $company['company_id']; ?>', function(data) {
 				$.each(data, function(i,item){
-					$('#goto-list').append('<div class="goto-list-company-<?php echo $company->company_id;?>">===Company : '+item.company_name+'</div>');
+					$('#goto-list').append('<div class="goto-list-company-<?php echo $company['company_id'];?>">===Company : '+item.company_name+'</div>');
 				});
 			});
-			$.getJSON('<?php echo base_url().'company/json_get_pages/' . $company->company_id; ?>', function(data) {
+			$.getJSON('<?php echo base_url().'company/json_get_pages/' . $company['company_id']; ?>', function(data) {
 				$.each(data, function(i,item){
-					$('.goto-list-company-<?php echo $company->company_id;?>').append('<div class="goto-list-company-page-'+item.page_id+'">======Page : '+item.page_name+'</div>');
+					$('.goto-list-company-<?php echo $company['company_id'];?>').append('<div class="goto-list-company-page-'+item.page_id+'">======Page : '+item.page_name+'</div>');
 				});
 			});
 			<?php endforeach; ?>

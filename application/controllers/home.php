@@ -20,7 +20,7 @@ class Home extends CI_Controller {
 			$this->load->view('login_view');
 		} else {
 			$this->load->model('user_companies_model','user_companies');
-			if($companies = $this->user_companies->get_user_companies_by_user_id($profile->user_id)){
+			if($companies = $this->user_companies->get_user_companies_by_user_id($profile['user_id'])){
 				redirect('home/select_company');
 			} else {
 				redirect('home/splash');
@@ -79,26 +79,26 @@ class Home extends CI_Controller {
 					       	'company_image' => set_value('company_image'),
 					       	'creator_user_id' => $this->socialhappen->get_user_id()
 						);
-			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company));
+			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company), TRUE);
 			
-			if ($company_add_result->status == 'OK') // the information has therefore been successfully saved in the db
+			if ($company_add_result['status'] == 'OK') // the information has therefore been successfully saved in the db
 			{
 				$this->load->model('user_companies_model','user_companies');
 				$user_company = array(
 						'user_id' => $this->socialhappen->get_user_id(),
-						'company_id' => $company_add_result->company_id,
+						'company_id' => $company_add_result['company_id'],
 						'user_role' => 0
 					);
 				if($this->user_companies->add_user_company($user_company)){
 					echo "Company created<br />";   // or whatever logic needs to occur
-					echo anchor("company/{$company_add_result->company_id}", 'Go to company');
+					echo anchor("company/{$company_add_result['company_id']}", 'Go to company');
 				} else {
 				echo "ERROR : cannot add user company";
 				}
 			}
 			else
 			{
-				echo '$company_add_result->status = '.$company_add_result->status;
+				echo '$company_add_result->status = '.$company_add_result['status'];
 			// Or whatever error handling is necessary
 			}
 		}
@@ -121,7 +121,7 @@ class Home extends CI_Controller {
 		$this->socialhappen->check_logged_in('home');
 		$user = $this->socialhappen->get_user();
 		$this->load->model('user_companies_model','user_companies');
-		$data['user_companies'] = $this->user_companies->get_user_companies_by_user_id($user->user_id);
+		$data['user_companies'] = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
 		$data['user'] = $user;
 		$this->parser->parse('select_company_view', $data);
 	}
