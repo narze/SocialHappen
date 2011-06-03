@@ -64,7 +64,7 @@ class User_companies_model extends CI_Model {
 	 */
 	function get_user_companies_by_user_id($user_id = NULL){
 		$this->db->join('company','user_companies.company_id=company.company_id');
-		return $this->db->get_where('user_companies', array('user_id' => $user_id))->result();
+		return $this->db->get_where('user_companies', array('user_id' => $user_id))->result_array();
 	}
 
 	function update_role($user_id, $company_id, $new_role) {

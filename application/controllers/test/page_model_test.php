@@ -14,6 +14,7 @@ class Page_model_test extends CI_Controller {
 
 	function index(){
 		$class_methods = get_class_methods($this);
+		echo 'Functions : '.(count(get_class_methods($this->pages))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -27,16 +28,16 @@ class Page_model_test extends CI_Controller {
 	 */
 	function get_page_profile_by_page_id_test(){
 		$result = $this->pages->get_page_profile_by_page_id(1);
-		$this->unit->run($result, 'is_array', 'get_page_profile_by_page_id()');
-		$this->unit->run($result[0]->page_id,'is_string','page_id');
-		$this->unit->run($result[0]->facebook_page_id,'is_string','facebook_page_id');
-		$this->unit->run($result[0]->company_id,'is_string','company_id');
-		$this->unit->run($result[0]->page_name,'is_string','page_name');
-		$this->unit->run($result[0]->page_detail,'is_string','page_detail');
-		$this->unit->run($result[0]->page_all_member,'is_string','page_all_member');
-		$this->unit->run($result[0]->page_new_member,'is_string','page_new_member');
-		$this->unit->run($result[0]->page_image,'is_string','page_image');
-		$this->unit->run(count((array)$result[0]) == 8, 'is_true', 'number of column');
+		$this->unit->run($result,'is_array', 'get_page_profile_by_page_id()');
+		$this->unit->run($result[0]['page_id'],'is_string','page_id');
+		$this->unit->run($result[0]['facebook_page_id'],'is_string','facebook_page_id');
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['page_name'],'is_string','page_name');
+		$this->unit->run($result[0]['page_detail'],'is_string','page_detail');
+		$this->unit->run($result[0]['page_all_member'],'is_string','page_all_member');
+		$this->unit->run($result[0]['page_new_member'],'is_string','page_new_member');
+		$this->unit->run($result[0]['page_image'],'is_string','page_image');
+		$this->unit->run(count($result[0]) == 8,'is_true', 'number of column');
 	}
 	
 	/** 
@@ -45,16 +46,16 @@ class Page_model_test extends CI_Controller {
 	 */
 	function get_company_pages_by_company_id_test(){
 		$result = $this->pages->get_company_pages_by_company_id(1);
-		$this->unit->run($result, 'is_array', 'get_company_pages_by_company_id()');
-		$this->unit->run($result[0]->page_id,'is_string','page_id');
-		$this->unit->run($result[0]->facebook_page_id,'is_string','facebook_page_id');
-		$this->unit->run($result[0]->company_id,'is_string','company_id');
-		$this->unit->run($result[0]->page_name,'is_string','page_name');
-		$this->unit->run($result[0]->page_detail,'is_string','page_detail');
-		$this->unit->run($result[0]->page_all_member,'is_string','page_all_member');
-		$this->unit->run($result[0]->page_new_member,'is_string','page_new_member');
-		$this->unit->run($result[0]->page_image,'is_string','page_image');
-		$this->unit->run(count((array)$result[0]) == 8, 'is_true', 'number of column');
+		$this->unit->run($result,'is_array', 'get_company_pages_by_company_id()');
+		$this->unit->run($result[0]['page_id'],'is_string','page_id');
+		$this->unit->run($result[0]['facebook_page_id'],'is_string','facebook_page_id');
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['page_name'],'is_string','page_name');
+		$this->unit->run($result[0]['page_detail'],'is_string','page_detail');
+		$this->unit->run($result[0]['page_all_member'],'is_string','page_all_member');
+		$this->unit->run($result[0]['page_new_member'],'is_string','page_new_member');
+		$this->unit->run($result[0]['page_image'],'is_string','page_image');
+		$this->unit->run(count($result[0]) == 8,'is_true', 'number of column');
 	}
 	
 	/**
@@ -72,13 +73,13 @@ class Page_model_test extends CI_Controller {
 							'page_image' => 'test'
 						);
 		$page_id = $this->pages->add_page($page);
-		$this->unit->run($page_id, 'is_int','add_page()');
+		$this->unit->run($page_id,'is_int','add_page()');
 		
 		$removed = $this->pages->remove_page($page_id);
-		$this->unit->run($removed == 1, 'is_true','remove_page()');
+		$this->unit->run($removed == 1,'is_true','remove_page()');
 		
 		$removed_again = $this->pages->remove_page($page_id);
-		$this->unit->run($removed_again == 0, 'is_true','remove_page()');
+		$this->unit->run($removed_again == 0,'is_true','remove_page()');
 	}
 
 	/**
@@ -87,21 +88,21 @@ class Page_model_test extends CI_Controller {
 	 */
 	function get_app_pages_by_app_install_id_test(){
 		$result = $this->pages->get_app_pages_by_app_install_id(1,1);
-		$this->unit->run($result, 'is_array', 'get_app_pages_by_app_install_id()');
-		$this->unit->run($result[0]->app_install_id,'is_string','app_install_id');
-		$this->unit->run($result[0]->company_id,'is_string','company_id');
-		$this->unit->run($result[0]->app_id,'is_string','app_id');
-		$this->unit->run($result[0]->app_install_status,'is_string','app_install_status');
-		$this->unit->run($result[0]->app_install_date,'is_string','app_install_date');
-		$this->unit->run($result[0]->page_id,'is_string','page_id');
-		$this->unit->run($result[0]->app_install_secret_key,'is_string','app_install_secret_key');
-		$this->unit->run($result[0]->facebook_page_id,'is_string','facebook_page_id');
-		$this->unit->run($result[0]->page_name,'is_string','page_name');
-		$this->unit->run($result[0]->page_detail,'is_string','page_detail');
-		$this->unit->run($result[0]->page_all_member,'is_string','page_all_member');
-		$this->unit->run($result[0]->page_new_member,'is_string','page_new_member');
-		$this->unit->run($result[0]->page_image,'is_string','page_image');
-		$this->unit->run(count((array)$result[0]) == 13, 'is_true', 'number of column');
+		$this->unit->run($result,'is_array', 'get_app_pages_by_app_install_id()');
+		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['app_id'],'is_string','app_id');
+		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
+		$this->unit->run($result[0]['page_id'],'is_string','page_id');
+		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
+		$this->unit->run($result[0]['facebook_page_id'],'is_string','facebook_page_id');
+		$this->unit->run($result[0]['page_name'],'is_string','page_name');
+		$this->unit->run($result[0]['page_detail'],'is_string','page_detail');
+		$this->unit->run($result[0]['page_all_member'],'is_string','page_all_member');
+		$this->unit->run($result[0]['page_new_member'],'is_string','page_new_member');
+		$this->unit->run($result[0]['page_image'],'is_string','page_image');
+		$this->unit->run(count($result[0]) == 13,'is_true', 'number of column');
 	}
 }
 /* End of file page_model_test.php */

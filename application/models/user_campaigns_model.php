@@ -21,7 +21,7 @@ class User_campaigns_model extends CI_Model {
 	 */
 	function get_campaign_users_by_campaign_id($campaign_id =NULL) {
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
-		return $this -> db -> get_where('user_campaigns', array('campaign_id' => $campaign_id)) -> result();
+		return $this -> db -> get_where('user_campaigns', array('campaign_id' => $campaign_id)) -> result_array();
 	}
 
 	/**
@@ -32,7 +32,7 @@ class User_campaigns_model extends CI_Model {
 	 */
 	function get_user_campaigns_by_user_id($user_id =NULL) {
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
-		return $this -> db -> get_where('user_campaigns', array('user.user_id' => $user_id)) -> result();
+		return $this -> db -> get_where('user_campaigns', array('user.user_id' => $user_id)) -> result_array();
 	}
 	
 	/**

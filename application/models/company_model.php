@@ -21,7 +21,7 @@ class Company_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_company_profile_by_company_id($company_id = NULL){
-		return $this->db->get_where('company',array('company_id'=>$company_id))->result();
+		return $this->db->get_where('company',array('company_id'=>$company_id))->result_array();
 	}
 	
 	/**
@@ -50,7 +50,7 @@ class Company_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_companies_by_user_id($user_id = NULL){
-		return $this->db->get_where('company',array('creator_user_id'=>$user_id))->result();
+		return $this->db->get_where('company',array('creator_user_id'=>$user_id))->result_array();
 	}
 	
 	function add($data = array()) {

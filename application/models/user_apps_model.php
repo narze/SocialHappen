@@ -18,7 +18,7 @@ class User_apps_model extends CI_Model {
 	 */
 	function get_app_users_by_app_install_id($app_install_id = NULL){
 		$this->db->join('user','user.user_id=user_apps.user_id');
-		return $this->db->get_where('user_apps',array('app_install_id'=>$app_install_id))->result();
+		return $this->db->get_where('user_apps',array('app_install_id'=>$app_install_id))->result_array();
 	}
 	
 	/**
@@ -29,7 +29,7 @@ class User_apps_model extends CI_Model {
 	 */
 	function get_user_apps_by_user_id($user_id = NULL){
 		$this->db->join('user','user.user_id=user_apps.user_id');
-		return $this->db->get_where('user_apps',array('user.user_id'=>$user_id))->result();
+		return $this->db->get_where('user_apps',array('user.user_id'=>$user_id))->result_array();
 	}
 	
 	/**
