@@ -13,10 +13,12 @@
                 echo 'Untitled Page';        
                 }
                 ?>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
 </title>
 </head>
 <body>
 	<div id="container">
-		<header>
+		<div id="header">
 			<?php $this->load->view('bar_view'); ?>
-		</header>
+		</div>
