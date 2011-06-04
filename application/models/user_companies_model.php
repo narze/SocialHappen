@@ -52,7 +52,6 @@ class User_companies_model extends CI_Model {
 			$where = array('user_facebook_id'=>$where['user_facebook_id']);
 		}
 		$query = $this -> db -> get_where('user_companies', $where, $limit, $offset);
-		echo $str = $this->db->last_query(); 
 		return $query -> result();
 	}
 	

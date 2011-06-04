@@ -54,10 +54,23 @@ class Campaign_model extends CI_Model {
 	 * Adds campaign
 	 * @param array $data
 	 * @author Manassarn M.
+	 * @author Wachiraph C.
 	 */
 	function add_campaign($data = array()){
-		$this -> db -> insert('campaign', $data);
-		return $this->db->insert_id();
+		if($this -> db -> insert('campaign', $data))
+			return $this->db->insert_id();
+		return 0;
+	}
+
+	/**
+	 * Update existed campaign by campaign id
+	 * @param $campaign_id
+	 * @param $data
+	 * @author Wachiraph C.
+	 */
+	function update_campaign_by_id($campaign_id = 0, $data = array()){
+		$this -> db -> update('campaign', $data, array('campaign_id' => $campaign_id));
+		return $this->db->affected_rows();
 	}
 	
 	/**

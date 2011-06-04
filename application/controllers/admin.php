@@ -50,7 +50,7 @@ class Admin extends CI_Controller {
 			show_error('No Permission');
 		
 		// get list of apps in current company
-		$app_id_list = $this->Company_apps->get_company_apps($company_id);
+		$app_id_list = $this->Company_apps->get_company_apps_by_company_id($company_id);
 		
 		// prepare app data
 		$app_list = array();

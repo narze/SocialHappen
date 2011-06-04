@@ -109,6 +109,12 @@ class User_model extends CI_Model {
 		return $this -> db -> insert_id();
 	}
 
+	/**
+	 * Try to insert new user by user's facebook id
+	 * @param $user_facebook_id
+	 * @return user_id on successful, False otherwise
+	 * @author Wachiraph C. - revise May 2011
+	 */
 	function add_by_facebook_id($user_facebook_id) {
 		$this -> db -> from('user');
 		$this -> db -> where('user_facebook_id', $user_facebook_id);
@@ -119,6 +125,12 @@ class User_model extends CI_Model {
 		return FALSE;
 	}
 
+	/**
+	 * Check if user is existed
+	 * @param $user_facebook_id
+	 * @return TRUE if user exists
+	 * @author Wachiraph C. - revise May 2011
+	 */
 	function check_exist($user_facebook_id) {
 		$this -> db -> from('user');
 		$this -> db -> where( array('user_facebook_id' => $user_facebook_id));
@@ -135,8 +147,13 @@ class User_model extends CI_Model {
 		$this -> db -> update('user', $data, $where);
 	}
 
-	function update_user_last_seen($user_facebook_id) {
-		$this -> update( array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_facebook_id' => $user_facebook_id));
+	/**
+	 * Update user last seen
+	 * @param $user_id
+	 * @author Wachiraph C. - revise May 2011
+	 */
+	function update_user_last_seen($user_id) {
+		$this -> update( array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
 	}
 
 	function delete($id) {
