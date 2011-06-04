@@ -129,7 +129,7 @@ class Api extends CI_Controller {
 		
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
-		$company_id = $this->Installed_apps->get_app_install_by_app_install_id($app_install_id);
+		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		
 		if(sizeof($company_id)==0){
 			echo json_encode(array( 'error' => '500',
@@ -449,7 +449,7 @@ class Api extends CI_Controller {
 		
 		// get company_id
 		$this->load->model('Installed_apps_model', 'Installed_apps');
-		$app = $this->Installed_apps->get_app_install_by_app_install_id($app_install_id);
+		$app = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		
 		if(sizeof($app)!=0){
 			$company_id = $app['company_id'];
@@ -648,7 +648,7 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
-		$company_id = $this->Installed_apps->get_app_install_by_app_install_id($app_install_id);
+		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if(sizeof($company_id)==0){
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid company_id'));
@@ -730,7 +730,7 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
-		$company_id = $this->Installed_apps->get_app_install_by_app_install_id($app_install_id);
+		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if(sizeof($company_id)==0){
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid company_id'));
