@@ -21,21 +21,6 @@ class Company_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests output data
-	 * @author Manassarn M.
-	 */
-	function index_test(){
-		ob_start();
-		require(__DIR__.'/../company.php');
-		$company = new Company();
-		$data = $company->index(1);
-		ob_end_clean();
-		$this->unit->run($data,'is_array','$data');
-		$this->unit->run($data['company_id'],'is_int', '$company_id');
-		$this->unit->run(count($data) == 1,'is_true', 'number of passed variables');
-	}
-	
-	/**
 	 * Tests json_get_pages().
 	 * @author Manassarn M.
 	 */
@@ -118,17 +103,18 @@ class Company_test extends CI_Controller {
 		$content = file_get_contents(base_url().'company/json_get_profile/1');
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_profile()');
-		$this->unit->run($array[0]['company_id'],'is_string','company_id');
-		$this->unit->run($array[0]['creator_user_id'],'is_string','creator_user_id');
-		$this->unit->run($array[0]['company_name'],'is_string','company_name');
-		$this->unit->run($array[0]['company_address'],'is_string','company_address');
-		$this->unit->run($array[0]['company_email'],'is_string','company_email');
-		$this->unit->run($array[0]['company_telephone'],'is_string','company_telephone');
-		$this->unit->run($array[0]['company_register_date'],'is_string','company_register_date');
-		$this->unit->run($array[0]['company_username'],'is_string','company_username');
-		$this->unit->run($array[0]['company_password'],'is_string','company_password');
-		$this->unit->run($array[0]['company_image'],'is_string','company_image');
-		$this->unit->run(count($array[0]) == 10,'is_true', 'number of column');
+		$this->unit->run($array['company_id'],'is_string','company_id');
+		$this->unit->run($array['creator_user_id'],'is_string','creator_user_id');
+		$this->unit->run($array['company_name'],'is_string','company_name');
+		$this->unit->run($array['company_detail'],'is_string','company_detail');
+		$this->unit->run($array['company_address'],'is_string','company_address');
+		$this->unit->run($array['company_email'],'is_string','company_email');
+		$this->unit->run($array['company_telephone'],'is_string','company_telephone');
+		$this->unit->run($array['company_register_date'],'is_string','company_register_date');
+		$this->unit->run($array['company_username'],'is_string','company_username');
+		$this->unit->run($array['company_password'],'is_string','company_password');
+		$this->unit->run($array['company_image'],'is_string','company_image');
+		$this->unit->run(count($array) == 11,'is_true', 'number of column');
 	}
 
 	/**

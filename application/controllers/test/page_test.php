@@ -28,16 +28,16 @@ class Page_test extends CI_Controller {
 		$content = file_get_contents(base_url().'page/json_get_profile/1');
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_profile()');
-		$this->unit->run($array[0],'is_array', 'First row');
-		$this->unit->run($array[0]['page_id'],'is_string','page_id');
-		$this->unit->run($array[0]['facebook_page_id'],'is_string','facebook_page_id');
-		$this->unit->run($array[0]['company_id'],'is_string','company_id');
-		$this->unit->run($array[0]['page_name'],'is_string','page_name');
-		$this->unit->run($array[0]['page_detail'],'is_string','page_detail');
-		$this->unit->run($array[0]['page_all_member'],'is_string','page_all_member');
-		$this->unit->run($array[0]['page_new_member'],'is_string','page_new_member');
-		$this->unit->run($array[0]['page_image'],'is_string','page_image');
-		$this->unit->run(count($array[0]) == 8,'is_true', 'number of column');
+		$this->unit->run($array,'is_array', 'First row');
+		$this->unit->run($array['page_id'],'is_string','page_id');
+		$this->unit->run($array['facebook_page_id'],'is_string','facebook_page_id');
+		$this->unit->run($array['company_id'],'is_string','company_id');
+		$this->unit->run($array['page_name'],'is_string','page_name');
+		$this->unit->run($array['page_detail'],'is_string','page_detail');
+		$this->unit->run($array['page_all_member'],'is_string','page_all_member');
+		$this->unit->run($array['page_new_member'],'is_string','page_new_member');
+		$this->unit->run($array['page_image'],'is_string','page_image');
+		$this->unit->run(count($array) == 8,'is_true', 'number of column');
 	}
 	
 	/**

@@ -29,18 +29,18 @@ class Company_model_test extends CI_Controller {
 	function get_company_profile_by_company_id_test(){
 		$result = $this->companies->get_company_profile_by_company_id(1);
 		$this->unit->run($result,'is_array', 'get_company_profile_by_company_id()');
-		$this->unit->run($result[0]['company_id'],'is_string','company_id');
-		$this->unit->run($result[0]['creator_user_id'],'is_string','creator_user_id');
-		$this->unit->run($result[0]['company_name'],'is_string','company_name');
-		$this->unit->run($result[0]['company_detail'],'is_string','company_detail');
-		$this->unit->run($result[0]['company_address'],'is_string','company_address');
-		$this->unit->run($result[0]['company_email'],'is_string','company_email');
-		$this->unit->run($result[0]['company_telephone'],'is_string','company_telephone');
-		$this->unit->run($result[0]['company_register_date'],'is_string','company_register_date');
-		$this->unit->run($result[0]['company_username'],'is_string','company_username');
-		$this->unit->run($result[0]['company_password'],'is_string','company_password');
-		$this->unit->run($result[0]['company_image'],'is_string','company_image');
-		$this->unit->run(count($result[0]) == 11,'is_true', 'number of column');
+		$this->unit->run($result['company_id'],'is_string','company_id');
+		$this->unit->run($result['creator_user_id'],'is_string','creator_user_id');
+		$this->unit->run($result['company_name'],'is_string','company_name');
+		$this->unit->run($result['company_detail'],'is_string','company_detail');
+		$this->unit->run($result['company_address'],'is_string','company_address');
+		$this->unit->run($result['company_email'],'is_string','company_email');
+		$this->unit->run($result['company_telephone'],'is_string','company_telephone');
+		$this->unit->run($result['company_register_date'],'is_string','company_register_date');
+		$this->unit->run($result['company_username'],'is_string','company_username');
+		$this->unit->run($result['company_password'],'is_string','company_password');
+		$this->unit->run($result['company_image'],'is_string','company_image');
+		$this->unit->run(count($result) == 11,'is_true', 'number of column');
 	}
 
 	/**

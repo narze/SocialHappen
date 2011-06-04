@@ -21,15 +21,7 @@ class User_companies_model_test extends CI_Controller {
     		}
 		}
 	}
-	
-	/**
-	 * TO-DO : do this
-	 * @author Manassarn M.
-	 */
-	function get_page_profile_by_id_test(){
-		$this->unit->run(TRUE,'is_false');
-	}
-	
+
 	/**
 	 * Test add_user_company() and remove_user_company()
 	 * @author Manassarn M.
