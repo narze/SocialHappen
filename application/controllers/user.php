@@ -8,9 +8,14 @@ class User extends CI_Controller {
 	}
 
 	function index($user_id = NULL){
+		$this->socialhappen->check_logged_in('home');
 		if($user_id){
-			$data['user_id'] = $user_id;
-			$this->load->view('user_view',$data);
+			$data = array(
+						'user_id' => $user_id,
+						'header' => $this->socialhappen->get_header(),
+						'footer' => $this->socialhappen->get_footer()
+					);
+			$this->parser->parse('user/user_view', $data);
 			return $data;
 		}
 	}
