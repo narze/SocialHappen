@@ -56,6 +56,57 @@ class SocialHappen{
 	}
 	
 	/**
+	 * Get user companies from database
+	 * @return $user_companies
+	 * @author Manassarn M.
+	 */
+	function get_user_companies(){
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			$this->CI->load->model('user_companies_model','user_companies');
+			return $this->CI->user_companies->get_user_companies_by_user_id($this->CI->session->userdata('user_id'));
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Get header view
+	 * @return $header
+	 * @author Manassarn M.
+	 */
+	function get_header(){
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			return $this->CI->load->view('header', array(
+											'title' => 'Page',
+											'script' => NULL,
+											'user' => $this->get_user(),
+											'user_companies' => $this->get_user_companies()
+										), TRUE);
+		} else {
+			return $this->CI->load->view('header', array(
+											'title' => 'Page',
+											'script' => NULL,
+											'user' => NULL,
+											'user_companies' => NULL
+										), TRUE);
+		}
+	}
+	
+	/**
+	 * Get footer view
+	 * @return $footer
+	 * @author Manassarn M.
+	 * @todo add more elements
+	 */
+	function get_footer(){
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			return $this->CI->load->view('footer', array() , TRUE);
+		} else {
+			return $this->CI->load->view('footer', array() , TRUE);
+		}
+	}
+	
+	/**
 	 * Login into SocialHappen
 	 * Stores user session with facebook id
 	 * @param $redirect_url
