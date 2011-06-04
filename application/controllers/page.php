@@ -1,15 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Page extends CI_Controller {
-
 	function __construct(){
 		parent::__construct();
 	}
 
 	function index($page_id = NULL){
+		$this->socialhappen->check_logged_in('home');
 		if ($page_id) {
-			$data['page_id'] = $page_id;
-			$this->load->view('page_view', $data);
+			$data = array(
+						'page_id' => $page_id,
+						'header' => $this->socialhappen->get_header(),
+						'footer' => $this->socialhappen->get_footer()
+					);
+			$this->parser->parse('page/page_view', $data);
 			return $data;
 		}
 	}

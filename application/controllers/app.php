@@ -7,9 +7,14 @@ class App extends CI_Controller {
 	}
 
 	function index($app_install_id = NULL){
+		$this->socialhappen->check_logged_in('home');
 		if($app_install_id){
-			$data['app_install_id'] = $app_install_id;
-			$this->load->view('app_view',$data);	
+			$data = array(
+						'app_install_id' => $app_install_id,
+						'header' => $this->socialhappen->get_header(),
+						'footer' => $this->socialhappen->get_footer()
+					);
+			$this->parser->parse('app/app_view', $data);
 			return $data;
 		}
 	}
