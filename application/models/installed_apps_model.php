@@ -6,6 +6,16 @@ class Installed_apps_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	/**
+	 * [Deprecated]
+	 * Check if app is prepared for installation
+	 * @param $app_id, $company_id, $user__id
+	 * @return boolean
+	 */
+	function check_install_app($app_id = NULL, $company_id = NULL, $user_id = NULL){
+		return true;
+	}
+	
 	/* 
 	 * Get installed apps
 	 * @param $page_id
@@ -58,6 +68,16 @@ class Installed_apps_model extends CI_Model {
 	function remove_installed_app($app_install_id = NULL){
 		$this->db->delete('installed_apps', array('app_install_id' => $app_install_id));
 		return $this->db->affected_rows();
+	}
+	
+	/**
+	 * Update page_id
+	 * @param $app_install_id, @page_id
+	 * @return TRUE if update is successful
+	 */
+	function update_page_id($app_install_id = NULL, $page_id = NULL){
+		$this->db->update('installed_apps', array('page_id'=>$page_id), array('app_install_id' =>$app_install_id));
+		return $this->db->affected_rows()==1;
 	}
 	
 	function add($data = array()) {
