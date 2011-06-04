@@ -14,6 +14,7 @@ class Company_apps_model_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
+		echo 'Functions : '.(count(get_class_methods($this->company_apps))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -27,22 +28,22 @@ class Company_apps_model_test extends CI_Controller {
 	 */
 	function get_company_apps_by_company_id_test(){
 		$result = $this->company_apps->get_company_apps_by_company_id(1);
-		$this->unit->run($result, 'is_array', 'get_company_apps_by_company_id()');
-		$this->unit->run($result[0]->company_id,'is_string','company_id');
-		$this->unit->run($result[0]->app_id,'is_string','app_id');
-		$this->unit->run($result[0]->available_date,'is_string','available_date');
-		$this->unit->run($result[0]->app_name,'is_string','app_name');
-		$this->unit->run($result[0]->app_type_id,'is_string','app_type_id');
-		$this->unit->run($result[0]->app_maintainance,'is_string','app_maintainance');
-		$this->unit->run($result[0]->app_show_in_list,'is_string','app_show_in_list');
-		$this->unit->run($result[0]->app_description,'is_string','app_description');
-		$this->unit->run($result[0]->app_secret_key,'is_string','app_secret_key');
-		$this->unit->run($result[0]->app_url,'is_string','app_url');
-		$this->unit->run($result[0]->app_install_url,'is_string','app_install_url');
-		$this->unit->run($result[0]->app_config_url,'is_string','app_config_url');
-		$this->unit->run($result[0]->app_support_page_tab,'is_string','app_support_page_tab');
-		$this->unit->run($result[0]->app_image,'is_string','app_image');
-		$this->unit->run(count((array)$result[0]) == 14, 'is_true', 'number of column');
+		$this->unit->run($result,'is_array', 'get_company_apps_by_company_id()');
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['app_id'],'is_string','app_id');
+		$this->unit->run($result[0]['available_date'],'is_string','available_date');
+		$this->unit->run($result[0]['app_name'],'is_string','app_name');
+		$this->unit->run($result[0]['app_type_id'],'is_string','app_type_id');
+		$this->unit->run($result[0]['app_maintainance'],'is_string','app_maintainance');
+		$this->unit->run($result[0]['app_show_in_list'],'is_string','app_show_in_list');
+		$this->unit->run($result[0]['app_description'],'is_string','app_description');
+		$this->unit->run($result[0]['app_secret_key'],'is_string','app_secret_key');
+		$this->unit->run($result[0]['app_url'],'is_string','app_url');
+		$this->unit->run($result[0]['app_install_url'],'is_string','app_install_url');
+		$this->unit->run($result[0]['app_config_url'],'is_string','app_config_url');
+		$this->unit->run($result[0]['app_support_page_tab'],'is_string','app_support_page_tab');
+		$this->unit->run($result[0]['app_image'],'is_string','app_image');
+		$this->unit->run(count($result[0]) == 14,'is_true', 'number of column');
 	}
 
 	/**
@@ -50,19 +51,21 @@ class Company_apps_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function add_company_app_and_remove_company_app_test(){
+		$company_id = $app_id = 50;
 		$company_app = array(
-							'company_id' => '1',
-							'app_id' => '1',
+							'company_id' => $company_id,
+							'app_id' => $app_id,
 							'available_date' => '0'
 						);
-		$company_app_id = $this->company_apps->add_company_app($company_app);
-		$this->unit->run($company_app_id, 'is_int','add_company_app()');
 		
-		$removed = $this->company_apps->remove_company_app($company_app_id);
-		$this->unit->run($removed == 1, 'is_true','remove_company_app()');
+		$add_result = $this->company_apps->add_company_app($company_app);
+		$this->unit->run($add_result,'is_true','add_company_app()');
 		
-		$removed_again = $this->company_apps->remove_company_app($company_app_id);
-		$this->unit->run($removed_again == 0, 'is_true','remove_company_app()');
+		$removed = $this->company_apps->remove_company_app($company_id, $app_id);
+		$this->unit->run($removed == 1,'is_true','remove_company_app()');
+		
+		$removed_again = $this->company_apps->remove_company_app($company_id, $app_id);
+		$this->unit->run($removed_again == 0,'is_true','remove_company_app()');
 	}
 }
 /* End of file company_apps_model_test.php */

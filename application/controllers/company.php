@@ -12,8 +12,12 @@ class Company extends CI_Controller {
 
 	function index($company_id = NULL){
 		if($company_id){
-			$data['company_id'] = $company_id;
-			$this->load->view('company_view',$data);
+			$data = array(
+				'company_id' => $company_id,
+	            'dragdrop_script' => $this->load->view('company_dashboard_script', 
+	            					array('company_id'=>$company_id), true)
+            );
+			$this->parser->parse('company_view', $data);
 			return $data;
 		}
 	}
@@ -73,6 +77,18 @@ class Company extends CI_Controller {
 	}
 	
 	/**
+	 * JSON : Get not installed apps
+	 * @param $company_id
+	 * @author Prachya P.
+	 */
+	function json_get_not_installed_apps($company_id = NULL,$page_id = NULL){
+		$this->load->model('company_apps_model','company_apps');
+		$apps = $this->company_apps->get_company_not_installed_apps($company_id,$page_id);
+		echo json_encode($apps);
+	}
+	
+	
+	/**
 	 * JSON : Get profile
 	 * @param $company_id
 	 * @author Manassarn M.
@@ -81,6 +97,32 @@ class Company extends CI_Controller {
 		$this->load->model('company_model','companies');
 		$profile = $this->companies->get_company_profile_by_company_id($company_id);
 		echo json_encode($profile);
+	}
+	
+	/**
+	 * JSON : Add company
+	 * @author Manassarn M.
+	 */
+	function json_add(){
+		$this->load->model('company_model','companies');
+		$post_data = array(
+							'creator_user_id' => $this->input->post('creator_user_id'),
+							'company_name' => $this->input->post('company_name'),
+							'company_detail' => $this->input->post('company_detail'),
+							'company_address' => $this->input->post('company_address'),
+							'company_email' => $this->input->post('company_email'),
+							'company_telephone' => $this->input->post('company_telephone'),
+							'company_register_date' => $this->input->post('company_register_date'),
+							'company_username' => $this->input->post('company_username'),
+							'company_password' => $this->input->post('company_password'),
+							'company_image' => $this->input->post('company_image')
+							);
+		$result['status'] = 'ERROR';
+		if($company_id = $this->companies->add_company($post_data)){
+			$result['status'] = 'OK';
+			$result['company_id'] = $company_id;
+		} 
+		echo json_encode($result);
 	}
 }
 

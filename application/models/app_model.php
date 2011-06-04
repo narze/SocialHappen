@@ -21,7 +21,7 @@ class App_model extends CI_Model {
 	 */
 	function get_all_apps(){
 		$this->db->join('app_type', 'app.app_type_id = app_type.app_type_id');
-		return $this->db->get('app')->result();
+		return $this->db->get('app')->result_array();
 	}
 	
 	/**
@@ -42,6 +42,16 @@ class App_model extends CI_Model {
 	function remove_app($app_id = NULL){
 		$this->db->delete('app', array('app_id' => $app_id));
 		return $this->db->affected_rows();
+	}
+	
+	/**
+	 * Get application profile
+	 * @param $app_id
+	 * @author Wachiraph C.
+	 */
+	function get_app_by_app_id($app_id = NULL){
+		$result = $this->db->get_where('app', array('app_id' => $app_id))->result_array();
+		return $result[0];				
 	}
 
 	function add($data = array()) {

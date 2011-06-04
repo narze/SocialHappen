@@ -2,8 +2,6 @@
 
 /**
  * Campaign_model
- *
- * @author Prachya P.
  */
 
 class Campaign_model extends CI_Model {
@@ -23,7 +21,7 @@ class Campaign_model extends CI_Model {
 			return array();
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
-		return $this -> db -> get_where('campaign', array('page_id' => $page_id)) -> result();
+		return $this -> db -> get_where('campaign', array('page_id' => $page_id)) -> result_array();
 	}
 
 	/**
@@ -36,7 +34,7 @@ class Campaign_model extends CI_Model {
 			return array();
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
-		return $this -> db -> get_where('campaign', array('campaign.app_install_id' => $app_install_id)) -> result();
+		return $this -> db -> get_where('campaign', array('campaign.app_install_id' => $app_install_id)) -> result_array();
 	}
 
 	/**
@@ -49,7 +47,41 @@ class Campaign_model extends CI_Model {
 			return array();
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
-		return $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> result();
+		$result = $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> result_array();
+		return $result[0];
+	}
+	
+	/**
+	 * Adds campaign
+	 * @param array $data
+	 * @author Manassarn M.
+	 * @author Wachiraph C.
+	 */
+	function add_campaign($data = array()){
+		if($this -> db -> insert('campaign', $data))
+			return $this->db->insert_id();
+		return 0;
+	}
+
+	/**
+	 * Update existed campaign by campaign id
+	 * @param $campaign_id
+	 * @param $data
+	 * @author Wachiraph C.
+	 */
+	function update_campaign_by_id($campaign_id = 0, $data = array()){
+		$this -> db -> update('campaign', $data, array('campaign_id' => $campaign_id));
+		return $this->db->affected_rows();
+	}
+	
+	/**
+	 * Removes campaign
+	 * @param $campaign_id
+	 * @author Manassarn M.
+	 */
+	function remove_campaign($campaign_id = NULL){
+		$this->db->delete('campaign', array('campaign_id' => $campaign_id));
+		return $this->db->affected_rows();
 	}
 
 	function add($data = array()) {

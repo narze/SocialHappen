@@ -14,6 +14,7 @@ class Company_model_test extends CI_Controller {
 
 	function index(){
 		$class_methods = get_class_methods($this);
+		echo 'Functions : '.(count(get_class_methods($this->companies))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -27,18 +28,19 @@ class Company_model_test extends CI_Controller {
 	 */
 	function get_company_profile_by_company_id_test(){
 		$result = $this->companies->get_company_profile_by_company_id(1);
-		$this->unit->run($result, 'is_array', 'get_company_profile_by_company_id()');
-		$this->unit->run($result[0]->company_id,'is_string','company_id');
-		$this->unit->run($result[0]->creator_user_id,'is_string','creator_user_id');
-		$this->unit->run($result[0]->company_name,'is_string','company_name');
-		$this->unit->run($result[0]->company_address,'is_string','company_address');
-		$this->unit->run($result[0]->company_email,'is_string','company_email');
-		$this->unit->run($result[0]->company_telephone,'is_string','company_telephone');
-		$this->unit->run($result[0]->company_register_date,'is_string','company_register_date');
-		$this->unit->run($result[0]->company_username,'is_string','company_username');
-		$this->unit->run($result[0]->company_password,'is_string','company_password');
-		$this->unit->run($result[0]->company_image,'is_string','company_image');
-		$this->unit->run(count((array)$result[0]) == 10, 'is_true', 'number of column');
+		$this->unit->run($result,'is_array', 'get_company_profile_by_company_id()');
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['creator_user_id'],'is_string','creator_user_id');
+		$this->unit->run($result[0]['company_name'],'is_string','company_name');
+		$this->unit->run($result[0]['company_detail'],'is_string','company_detail');
+		$this->unit->run($result[0]['company_address'],'is_string','company_address');
+		$this->unit->run($result[0]['company_email'],'is_string','company_email');
+		$this->unit->run($result[0]['company_telephone'],'is_string','company_telephone');
+		$this->unit->run($result[0]['company_register_date'],'is_string','company_register_date');
+		$this->unit->run($result[0]['company_username'],'is_string','company_username');
+		$this->unit->run($result[0]['company_password'],'is_string','company_password');
+		$this->unit->run($result[0]['company_image'],'is_string','company_image');
+		$this->unit->run(count($result[0]) == 11,'is_true', 'number of column');
 	}
 
 	/**
@@ -49,6 +51,7 @@ class Company_model_test extends CI_Controller {
 		$company = array(
 							'creator_user_id' => '1',
 							'company_name' => 'test',
+							'company_detail' => 'test',
 							'company_address' => 'test',
 							'company_email' => 'test@test.com',
 							'company_telephone' => '021234567',
@@ -58,13 +61,13 @@ class Company_model_test extends CI_Controller {
 							'company_image' => 'test.jpg'
 						);
 		$company_id = $this->companies->add_company($company);
-		$this->unit->run($company_id, 'is_int','add_company()');
+		$this->unit->run($company_id,'is_int','add_company()');
 		
 		$removed = $this->companies->remove_company($company_id);
-		$this->unit->run($removed == 1, 'is_true','remove_company()');
+		$this->unit->run($removed == 1,'is_true','remove_company()');
 		
 		$removed_again = $this->companies->remove_company($company_id);
-		$this->unit->run($removed_again == 0, 'is_true','remove_company()');
+		$this->unit->run($removed_again == 0,'is_true','remove_company()');
 	}
 }
 /* End of file company_model_test.php */

@@ -44,9 +44,12 @@ class Install extends CI_Controller {
 		$this->load->view('install_views/apps_view',$data); 
 	}
 	
+	/**
+	 * Install new app, initialization
+	 */
 	function install_new_app($company_id, $app_id){
 		$this->load->model('App_model', 'App');
-		$this->load->model('Install_app_model', 'Install_app');
+		$this->load->model('Installed_apps_model', 'Installed_apps');
 		$this->load->model('User_companies_model','User_companies');
 		
 		$facebook_user = $this->facebook->getUser();
@@ -60,7 +63,7 @@ class Install extends CI_Controller {
 		
 		$app->translated_app_install_url = $this->app_url->translate_install_url($app->app_install_url, $company_id, $user_facebook_id);
 		
-		$this->Install_app->add_new_request($app_id, $company_id, $user_facebook_id);
+		//$this->Installed_apps->add_new_request($app_id, $company_id, $user_facebook_id);
 		
 		redirect($app->translated_app_install_url);
 	}

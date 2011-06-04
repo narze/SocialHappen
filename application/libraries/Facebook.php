@@ -45,11 +45,11 @@ class Facebook{
         }
 
         function getUser(){
-                $cookie = $this->get_facebook_cookie();
-                $user = json_decode(file_get_contents(
-                                'https://graph.facebook.com/me?access_token=' .
-                                $cookie['access_token']), true);
-                return $user;
+               if($cookie = $this->get_facebook_cookie()){
+	                return json_decode(file_get_contents(
+	                                'https://graph.facebook.com/me?access_token=' .
+	                                $cookie['access_token']), true);
+			   }
         }
 
         function getFriendIds($include_self = TRUE){

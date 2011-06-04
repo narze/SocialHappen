@@ -5,7 +5,7 @@
 	<title>Company</title>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
-	<?php echo link_tag('css/smoothness/jquery-ui-1.8.9.custom.css'); ?>
+	<?php echo link_tag("css/smoothness/jquery-ui-1.8.9.custom.css"); ?>
 	<script>
 		$(function(){
 			function makeList(object){
@@ -63,103 +63,25 @@
 					}
 				})
 			});
-	
 		});
 	</script>
-	<script>
-		$(function() {
-			//get installed apps
-			$.getJSON("<?php echo base_url()."company/json_get_installed_apps/{$company_id}"; ?>",function(json){
-				for(i in json){
-					$("#company-installed-app-list").append(
-						"<li class='ui-state-default'>" + json[i].app_name +"</li>"
-					);
-				}
-				$( "#company-installed-app-list" ).droppable({
-					drop: function(e, ui) {
-					}
-				}).sortable({
-					revert: true
-				});
-			});
-			//get installed pages
-			$.getJSON("<?php echo base_url()."company/json_get_pages/{$company_id}"; ?>",function(json){
-				for(i in json){
-					$("#company-installed-page-list").append(
-						"<li class='ui-state-default'>" + json[i].page_name +"</li>"
-					);
-				}
-				$( "#company-installed-page-list" ).droppable({
-					drop: function(e, ui) {
-					}
-				}).sortable({
-					revert: true
-				});
-			});
-			//get company available apps
-			$.getJSON("<?php echo base_url()."company/json_get_apps/{$company_id}"; ?>",function(json){
-				for(i in json){
-					$("#company-available-app-list").append(
-						"<li class='draggable ui-state-highlight'>" + json[i].app_name +"</li>"
-					);
-				}
-				$("#company-available-app-list li.draggable").draggable({
-                    connectToSortable: "#company-installed-app-list",
-					helper: "clone",
-					revert: "invalid"
-                });
-			})
-			//get company available pages
-			$.getJSON("<?php echo base_url()."user/json_get_facebook_pages_owned_by_user"; ?>",function(json){
-				json=json.data;
-				for(i in json){
-					$("#company-available-page-list").append(
-						"<li class='draggable ui-state-highlight'>" + json[i].name +"</li>"
-					);
-				}
-				$("#company-available-page-list li.draggable").draggable({
-                    connectToSortable: "#company-installed-page-list",
-					helper: "clone",
-					revert: "invalid"
-                });
-			})
-			$( "ul, li" ).disableSelection();
-
-			$( "#right-panel-tabs" ).tabs({
-				select: function(event, ui) {
-					switch (ui.index) {
-						case 0:
-						// page tab selected
-						$("#company-available-app-list").hide();
-						$("#company-available-page-list").show();
-						$("#left-panel-tab-header").html('Available Pages');
-						break;
-						case 1:
-						// app tab selected
-						$("#company-available-page-list").hide();
-						$("#company-available-app-list").show();
-						$("#left-panel-tab-header").html('Available Apps');
-						break;
-					}
-				}
-			});
-			$( "#left-panel-tabs" ).tabs();
-		});
-	</script>
+	{dragdrop_script}
 </head>
 <body>
 <style>
-
-#company-installed-page-list li,#company-available-page-list li,
-#company-installed-app-list li,#company-available-app-list li{
+body{
+	font-size: 11px;
+}
+#company-installed-page-list li,#page-installed-app-list li,#company-available-page-list li,
+#company-installed-app-list li,#company-available-app-list li,#page-available-app-list li{
 	margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; text-align: center;
 }
-#company-installed-page-list li:hover,#company-available-page-list li:hover,
-#company-installed-app-list li:hover,#company-available-app-list li:hover{
+#company-installed-page-list li:hover,#page-installed-app-list li:hover,#company-available-page-list li:hover,
+#company-installed-app-list li:hover,#company-available-app-list li:hover,,#page-available-app-list li:hover{
 	cursor: move;
 }
-#company-installed-page-list,#company-available-page-list,
-#company-installed-app-list,#company-available-app-list{
+#company-installed-page-list,#page-installed-app-list,#company-available-page-list,
+#company-installed-app-list,#company-available-app-list,#page-available-app-list{
 	list-style-type: none; margin: 0; padding: 0; margin-bottom: 10px;
 	height: 400px;
 }
@@ -174,7 +96,17 @@
 .draggable{
 	z-index: 100;
 }
+.view_app_link{
+	display: none;
+}
+.loading{
+	display: none;
+}
 </style>
+<div id="company-detail">
+<li id="company-detail-installed-app"></li>
+<li id="company-detail-installed-page"></li>
+</div>
 <div id="main-div" style="height:500px;">
 	<div id="left-panel">
 		<div id="left-panel-tabs">
@@ -182,7 +114,9 @@
 				<li><a id="left-panel-tab-header" href="#left-panel-tab">Available Pages</a></li>
 			</ul>
 			<div id="left-panel-tab">
+				<div class="loading"><?php echo img("images/loading.gif");?></div>				
 				<ul id="company-available-page-list"></ul>
+				<ul id="page-available-app-list" style="display:none;"></ul>
 				<ul id="company-available-app-list" style="display:none;"></ul>
 			</div>
 		</div>
@@ -194,9 +128,12 @@
 				<li><a href="#company-app-tab">App</a></li>
 			</ul>
 			<div id="company-page-tab">
+				<div class="loading"><?php echo img("images/loading.gif");?></div>
 				<ul id="company-installed-page-list"></ul>
+				<ul id="page-installed-app-list" style="display:none;"></ul>
 			</div>
 			<div id="company-app-tab">
+				<div class="loading"><?php echo img("images/loading.gif");?></div>
 				<ul id="company-installed-app-list"></ul>
 			</div>
 		</div>

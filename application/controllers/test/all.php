@@ -16,8 +16,10 @@ class All extends CI_Controller {
 
 	function index() {
 		foreach(glob(__DIR__."/*_test.php") as $filename) {
-			echo '<h1>Class : '.basename($filename,"_test.php").'</h1>';
-			echo file_get_contents(base_url() . 'test/' . basename($filename, ".php"));
+			$url = base_url().'test/'.basename($filename,'.php');
+			$class_name = basename($filename,"_test.php");
+			echo '<h1>Class : <a href="'.$url.'">'.$class_name.'</a></h1>';
+			echo file_get_contents($url);
 		}
 	}
 

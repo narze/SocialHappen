@@ -53,9 +53,43 @@ class User extends CI_Controller {
 	
 	/**
 	 * JSON : Get facebook pages owned by the current user
+	 * @author Prachya P.
 	 */
 	function json_get_facebook_pages_owned_by_user(){
 		echo json_encode($this->facebook->get_user_pages());
+	}
+	
+	/**
+	 * JSON : Add user
+	 * @author Manassarn M.
+	 */
+	function json_add(){
+		$this->load->model('user_model','users');
+		$post_data = array(
+							'user_first_name' => $this->input->post('user_first_name'),
+							'user_last_name' => $this->input->post('user_last_name'),
+							'user_email' => $this->input->post('user_email'),
+							'user_image' => $this->input->post('user_image'),
+							'user_facebook_id' => $this->input->post('user_facebook_id')
+						);
+		if($user_id = $this->users->add_user($post_data)){
+			$result->status = 'OK';
+			$result->user_id = $user_id;
+		} else {
+			$result->status = 'ERROR';
+		}
+		echo json_encode($result);
+	}
+	
+	/**
+	 * JSON : Get user companies
+	 * @param $user_id
+	 * @author Manassarn M.
+	 */
+	function json_get_companies($user_id = NULL){
+		$this->load->model('user_companies_model','user_companies');
+		$companies = $this->user_companies->get_user_companies_by_user_id($user_id);
+		echo json_encode($companies);
 	}
 }
 
