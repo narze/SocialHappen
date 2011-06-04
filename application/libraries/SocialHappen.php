@@ -9,7 +9,6 @@
  */
 class SocialHappen{
 	private $CI;
-	
 	function __construct() {
         $this->CI =& get_instance();
 		$this->CI->load->model('user_model','users');
