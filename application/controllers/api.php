@@ -155,7 +155,6 @@ class Api extends CI_Controller {
 		$page = $this->Page->get_page_profile_by_page_id($page_id);
 		
 		if(sizeof($page)!=0){
-			$page = $page[0];
 			// add app to page = new page_apps
 			if($page['company_id']==$company_id){
 					
@@ -180,9 +179,8 @@ class Api extends CI_Controller {
 	function _authenticate_app($app_id, $app_secret_key){
 		// authenticate app with $app_id and $app_secret_key
 		$this->load->model('App_model', 'App');
-		$app = $this->App->get_app($app_id);
+		$app = $this->App->get_app_by_app_id($app_id);
 		if($app != NULL){
-			$app = $app[0];
 			return ($app['app_secret_key']== $app_secret_key);
 		}
 		return FALSE;
@@ -193,7 +191,6 @@ class Api extends CI_Controller {
 		$this->load->model('Installed_apps_model', 'Installed_apps');
 		$app = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if($app != NULL){
-			$app=$app[0];
 			return ($app['app_install_secret_key'] == $app_install_secret_key);
 		}
 		return FALSE;
@@ -202,7 +199,7 @@ class Api extends CI_Controller {
 	function _authenticate_user($company_id, $user_id){
 		// authenticate user with $company_id and $user_id
 		$this->load->model('User_companies_model', 'User_companies');
-		$company_admin_list_query = $this->User_companies->get_user_admin_companies_list_by_company($company_id, 1000, 0);
+		$company_admin_list_query = $this->User_companies->get_user_companies_by_company_id($company_id, 1000, 0);
 		$company_admin_list = array();
 		foreach ($company_admin_list_query as $admin) {
 			$company_admin_list[] = $admin['user_id'];
@@ -278,7 +275,6 @@ class Api extends CI_Controller {
 		$user_id = $this->User->get_user_id($user_facebook_id);
 		
 		if(isset($user_id)){
-			$user_id = $user_id[0];
 			$response = array(	'status' => 'OK',
 							'user_id' => $user_id['user_id']);
 		}
@@ -304,7 +300,6 @@ class Api extends CI_Controller {
 		$page_id = $this->Page->get_page_id($facebook_page_id);
 		
 		if(isset($page_id)){
-			$page_id = $page_id[0];
 			$response = array(	'status' => 'OK',
 							'page_id' => $page_id['page_id']);
 		}
@@ -411,7 +406,6 @@ class Api extends CI_Controller {
 			}
 		}else{
 			$user_id = $this->User->get_user_id($user_facebook_id);
-			$user_id = $user_id[0];
 			$user_id = $user_id['user_id'];
 		}
 		
@@ -566,12 +560,13 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
-		$company_id = $this->Installed_apps->get_app_install_by_app_install_id($app_install_id);
+		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if(sizeof($company_id)==0){
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid company_id'));
 			return;			
 		}
+		
 		$company_id = $company_id['company_id'];
 		
 		// authenticate user with $company_id and $user_facebook_id
@@ -585,8 +580,7 @@ class Api extends CI_Controller {
 		$campaign = $this->Campaign->get_campaign_profile_by_campaign_id($campaign_id);
 		
 		if(sizeof($campaign)>0){
-			$campaign = $campaign[0];
-			
+
 			if($campaign['app_install_id'] != $app_install_id){
 				echo json_encode(array( 'error' => '300',
 									'message' => 'you have no permission to access this campaign'));
@@ -596,14 +590,14 @@ class Api extends CI_Controller {
 				$response = array(
 								'status' => 'OK',
 								'campaign_id' => $campaign_id,
-								'campaign_name' => $campaign->campaign_name,
-								'campaign_detail' => $campaign->campaign_detail,
-								'campaign_status_id' => $campaign->campaign_status_id,
-								'campaign_status_name' => $campaign->campaign_status_name,
-								'campaign_active_member' => $campaign->campaign_active_member,
-								'campaign_all_member' => $campaign->campaign_all_member,
-								'campaign_start_timestamp' => $campaign->campaign_start_timestamp,
-								'campaign_end_timestamp' => $campaign->campaign_end_timestamp
+								'campaign_name' => $campaign['campaign_name'],
+								'campaign_detail' => $campaign['campaign_detail'],
+								'campaign_status_id' => $campaign['campaign_status_id'],
+								'campaign_status_name' => $campaign['campaign_status_name'],
+								'campaign_active_member' => $campaign['campaign_active_member'],
+								'campaign_all_member' => $campaign['campaign_all_member'],
+								'campaign_start_timestamp' => $campaign['campaign_start_timestamp'],
+								'campaign_end_timestamp' => $campaign['campaign_end_timestamp']
 							);
 				echo json_encode($response);
 			}
@@ -755,7 +749,6 @@ class Api extends CI_Controller {
 		$campaign = $this->Campaign->get_campaign_profile_by_campaign_id($campaign_id);
 		
 		if(sizeof($campaign)>0){
-			$campaign = $campaign[0];
 			
 			if($campaign['app_install_id'] != $app_install_id){
 				echo json_encode(array( 'error' => '300',

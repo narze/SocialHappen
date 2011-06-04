@@ -43,6 +43,16 @@ class App_model extends CI_Model {
 		$this->db->delete('app', array('app_id' => $app_id));
 		return $this->db->affected_rows();
 	}
+	
+	/**
+	 * Get application profile
+	 * @param $app_id
+	 * @author Wachiraph C.
+	 */
+	function get_app_by_app_id($app_id = NULL){
+		$result = $this->db->get_where('app', array('app_id' => $app_id))->result_array();
+		return $result[0];				
+	}
 
 	function add($data = array()) {
 		foreach($data as $var => $key) {

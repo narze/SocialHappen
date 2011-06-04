@@ -50,15 +50,14 @@ class App_test extends CI_Controller {
 		$content = file_get_contents(base_url().'app/json_get_profile/1');
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array, 'is_array', 'json_get_profile()');
-		$this->unit->run($array[0], 'is_array', 'First row');
-		$this->unit->run(count($array[0]) == 7, 'is_true', 'number of column');
-		$this->unit->run($array[0]['app_install_id'],'is_string','app_install_id');
-		$this->unit->run($array[0]['company_id'],'is_string','company_id');
-		$this->unit->run($array[0]['app_id'],'is_string','app_id');
-		$this->unit->run($array[0]['app_install_status'],'is_string','app_install_status');
-		$this->unit->run($array[0]['app_install_date'],'is_string','app_install_date');
-		$this->unit->run($array[0]['page_id'],'is_string','page_id');
-		$this->unit->run($array[0]['app_install_secret_key'],'is_string','app_install_secret_key');
+		$this->unit->run(count($array) == 7, 'is_true', 'number of column');
+		$this->unit->run($array['app_install_id'],'is_string','app_install_id');
+		$this->unit->run($array['company_id'],'is_string','company_id');
+		$this->unit->run($array['app_id'],'is_string','app_id');
+		$this->unit->run($array['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($array['app_install_date'],'is_string','app_install_date');
+		$this->unit->run($array['page_id'],'is_string','page_id');
+		$this->unit->run($array['app_install_secret_key'],'is_string','app_install_secret_key');
 		
 	}
 	

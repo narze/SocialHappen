@@ -36,7 +36,8 @@ class User_model extends CI_Model {
 	 * @author Wachiraph C.
 	 */
 	function get_user_id($user_facebook_id =NULL) {
-		return $this -> db ->select('user_id') -> get_where('user', array('user_facebook_id' => $user_facebook_id))-> result();
+		$result = $this -> db ->select('user_id') -> get_where('user', array('user_facebook_id' => $user_facebook_id))-> result_array();
+		return $result[0];
 	}
 	
 	/**

@@ -47,7 +47,8 @@ class Campaign_model extends CI_Model {
 			return array();
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
-		return $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> result_array();
+		$result = $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> result_array();
+		return $result[0];
 	}
 	
 	/**

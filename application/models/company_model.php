@@ -21,7 +21,8 @@ class Company_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_company_profile_by_company_id($company_id = NULL){
-		return $this->db->get_where('company',array('company_id'=>$company_id))->result_array();
+		$result = $this->db->get_where('company',array('company_id'=>$company_id))->result_array();
+		return $result[0];
 	}
 	
 	/**
@@ -94,6 +95,7 @@ class Company_model extends CI_Model {
 	
 	
 	/**
+	 * [Deprecated]
 	 * get company list
 	 * @param $user_id
 	 * @author Teesit M. 

@@ -66,6 +66,15 @@ class User_companies_model extends CI_Model {
 		return $this->db->get_where('user_companies', array('user_id' => $user_id))->result_array();
 	}
 
+	/**
+	 * Get admins by company id
+	 * @param $company_id
+	 * @author Wachiraph C.
+	 */
+	function get_user_companies_by_company_id($company_id = NULL) {
+		return $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
+	}
+	
 	function update_role($user_id, $company_id, $new_role) {
 		$this -> db -> update('user_companies', $new_role, array('company_id'=>$company_id, 'user_facebook_id'=>$user_facebook_id));
 	}
@@ -94,10 +103,6 @@ class User_companies_model extends CI_Model {
 	function get_user_companies_admin($company_id){
 		$admin =  $this -> _get( array('company_id'=>$company_id, 'user_role' => 0), 1, 0);
 		return $admin[0]->user_facebook_id;
-	}
-	
-	function get_user_admin_companies_list_by_company($company_id, $limit =20, $offset =0) {
-		return $this -> _get( array('company_id'=>$company_id), $limit, $offset);
 	}
 	
 	function get_company_list($limit =20, $offset =0) {
