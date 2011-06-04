@@ -286,7 +286,7 @@ class Api extends CI_Controller {
 	 * Request for platform page's id using facebook page's id
 	 * @author Wachiraph C.
 	 */
-	function request_page_id($facebook_page_id = NULL){
+	function request_page_id(){
 		
 		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
 		
@@ -299,7 +299,7 @@ class Api extends CI_Controller {
 		$this->load->model('Page_model', 'Page');
 		$page_id = $this->Page->get_page_id($facebook_page_id);
 		
-		if(isset($page_id)){
+		if(sizeof($page_id)>0){
 			$response = array(	'status' => 'OK',
 							'page_id' => $page_id['page_id']);
 		}
