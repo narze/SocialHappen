@@ -13,6 +13,8 @@ class Stat_page_model extends CI_Model {
 	
 	/**
 	 * constructor
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function __construct() {
 		parent::__construct();
@@ -29,6 +31,8 @@ class Stat_page_model extends CI_Model {
 		
 	/**
 	 * create index for collection
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function create_index(){
 		$this->pages->ensureIndex(array('page_id' => 1,
@@ -44,6 +48,8 @@ class Stat_page_model extends CI_Model {
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function add_stat_page($page_id = NULL, $action_id = NULL, $date = NULL){
 		$check_args = isset($action_id) && isset($page_id) && isset($date);
@@ -68,6 +74,8 @@ class Stat_page_model extends CI_Model {
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function increment_stat_page($page_id = NULL, $action_id = NULL, $date = NULL){
 		$check_args = isset($action_id) && isset($page_id) && isset($date);
@@ -86,9 +94,12 @@ class Stat_page_model extends CI_Model {
 	
 	/**
 	 * get stat page in specific date
+	 * 
 	 * @param param criteria may contains ['page_id', 'action_id', 'date']
 	 * 
 	 * @return result in array
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function get_stat_page($param = NULL, $skip = 0, $limit = 0){
 		$check_args = isset($param) && (isset($param['page_id'])
@@ -124,6 +135,10 @@ class Stat_page_model extends CI_Model {
 	  * delete stat page entry
 	  * 
 	  * @param _id MongoDB ID
+	  * 
+	  * @return result boolean
+	  * 
+	  * @author Metwara Narksook
 	  */
 	 function delete_stat_page($_id){
 	 	if(empty($_id)){

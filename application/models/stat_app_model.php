@@ -12,6 +12,8 @@ class Stat_app_model extends CI_Model {
 	
 	/**
 	 * constructor
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function __construct() {
 		parent::__construct();
@@ -28,6 +30,8 @@ class Stat_app_model extends CI_Model {
 		
 	/**
 	 * create index for collection
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function create_index(){
 		$this->apps->ensureIndex(array('app_install_id' => 1,
@@ -43,6 +47,8 @@ class Stat_app_model extends CI_Model {
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function add_stat_app($app_install_id = NULL, $action_id = NULL, $date = NULL){
 		$check_args = isset($action_id) && isset($app_install_id) && isset($date);
@@ -67,6 +73,8 @@ class Stat_app_model extends CI_Model {
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function increment_stat_app($app_install_id = NULL, $action_id = NULL, $date = NULL){
 		$check_args = isset($action_id) && isset($app_install_id) && isset($date);
@@ -88,6 +96,8 @@ class Stat_app_model extends CI_Model {
 	 * @param param criteria may contains ['app_install_id', 'action_id', 'date']
 	 * 
 	 * @return result in array
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function get_stat_app($param = NULL, $skip = 0, $limit = 0){
 		$check_args = isset($param) && (isset($param['app_install_id'])
@@ -123,6 +133,10 @@ class Stat_app_model extends CI_Model {
 	  * delete stat app entry
 	  * 
 	  * @param _id MongoDB ID
+	  * 
+	  * @return result boolean
+	  * 
+	  * @author Metwara Narksook
 	  */
 	 function delete_stat_app($_id){
 	 	if(empty($_id)){

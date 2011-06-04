@@ -13,6 +13,8 @@ class Stat_campaign_model extends CI_Model {
 	
 	/**
 	 * constructor
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function __construct() {
 		parent::__construct();
@@ -29,6 +31,8 @@ class Stat_campaign_model extends CI_Model {
 		
 	/**
 	 * create index for collection
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function create_index(){
 		$this->campaigns->ensureIndex(array('campaign_id' => 1,
@@ -44,6 +48,8 @@ class Stat_campaign_model extends CI_Model {
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function add_stat_campaign($campaign_id = NULL, $action_id = NULL, $date = NULL){
 		$check_args = isset($action_id) && isset($campaign_id) && isset($date);
@@ -68,6 +74,8 @@ class Stat_campaign_model extends CI_Model {
 	 * @param date int date informat ymd ex. 20110531
 	 * 
 	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function increment_stat_campaign($campaign_id = NULL, $action_id = NULL, $date = NULL){
 		$check_args = isset($action_id) && isset($campaign_id) && isset($date);
@@ -89,6 +97,8 @@ class Stat_campaign_model extends CI_Model {
 	 * @param param criteria may contains ['campaign_id', 'action_id', 'date']
 	 * 
 	 * @return result in array
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function get_stat_campaign($param = NULL, $skip = 0, $limit = 0){
 		$check_args = isset($param) && (isset($param['campaign_id'])
@@ -124,6 +134,10 @@ class Stat_campaign_model extends CI_Model {
 	  * delete stat campaign entry
 	  * 
 	  * @param _id MongoDB ID
+	  * 
+	  * @return result boolean
+	  * 
+	  * @author Metwara Narksook
 	  */
 	 function delete_stat_campaign($_id){
 	 	if(empty($_id)){

@@ -23,6 +23,8 @@ class Audit_model extends CI_Model {
 	
 	/**
 	 * constructor
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function __construct() {
 		parent::__construct();
@@ -42,6 +44,8 @@ class Audit_model extends CI_Model {
 	
 	/**
 	 * create index for collection
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function create_index(){
 		$this->audits->ensureIndex(array('timestamp' => -1,
@@ -57,6 +61,10 @@ class Audit_model extends CI_Model {
 	 * add new audit entry to database
 	 * 
 	 * @param data array of attribute to be added
+	 * 
+	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function add_audit($data = array()){
 		$data['timestamp'] = time();
@@ -73,6 +81,8 @@ class Audit_model extends CI_Model {
 	 * @param offset int offset number
 	 * 
 	 * @return result
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function list_audit($criteria = array(), $limit = NULL, $offset = 0){
 		if(empty($limit)){
@@ -89,7 +99,12 @@ class Audit_model extends CI_Model {
 	
 	/**
 	 * list recent audit entry
+	 * 
 	 * @param limit number of entries to get
+	 * 
+	 * @return result array of audit
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function list_recent_audit($limit = NULL){
 		if(empty($limit)){

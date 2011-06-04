@@ -4,7 +4,7 @@
  * @author Metwara Narksook
  */
 class Audit_action_model extends CI_Model {
-	var $_id = '';
+
 	var $app_id = '';
 	var $action_id = '';
 	var $description = '';
@@ -12,6 +12,11 @@ class Audit_action_model extends CI_Model {
 	var $stat_page = '';
 	var $stat_campaign = '';
 	
+	/**
+	 * constructor
+	 * 
+	 * @author Metwara Narksook
+	 */
 	function __construct() {
 		parent::__construct();
 		
@@ -24,9 +29,11 @@ class Audit_action_model extends CI_Model {
 		// select actions collection
 		$this->actions = $this->db->actions;
 	}
+	
 	/**
 	 * create index for collection
 	 * 
+	 * @author Metwara Narksook
 	 */
 	function create_index(){
 		$this->actions->ensureIndex(array('app_id' => 1, 'action_id' => 1));
@@ -36,6 +43,10 @@ class Audit_action_model extends CI_Model {
 	 * add new audit action
 	 * 
 	 * @param audit action object in array format
+	 * 
+	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function add_action($data = array()){
 		// add new
@@ -68,6 +79,10 @@ class Audit_action_model extends CI_Model {
 	 * @param app_id
 	 * @param action_id
 	 * @param data 
+	 * 
+	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function edit_action($app_id = NULL, $action_id = NULL, $data = NULL){
 		$check_args = isset($app_id) && isset($action_id) && isset($data);
@@ -87,6 +102,10 @@ class Audit_action_model extends CI_Model {
 	 * 
 	 * @param app_id
 	 * @param action_id - optional
+	 * 
+	 * @return result oolean
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function delete_action($app_id = NULL, $action_id = NULL){
 		$check_args = isset($app_id);
@@ -109,6 +128,8 @@ class Audit_action_model extends CI_Model {
 	 * get all audit action
 	 * 
 	 * @return audit action list
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function get_action_list(){
 		$res = $this->actions->find();
@@ -126,6 +147,8 @@ class Audit_action_model extends CI_Model {
 	 * @param action_id int action_id [optional]
 	 * 
 	 * @return audit action list
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function get_action($app_id = NULL, $action_id = NULL){
 		if(isset($app_id)){
@@ -149,6 +172,8 @@ class Audit_action_model extends CI_Model {
 	 * get platform audit action
 	 * 
 	 * @return audit action list
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function get_platform_action(){
 		$res = $this->get_action_by_app_id(0);
