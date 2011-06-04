@@ -23,11 +23,11 @@
 		}
 	
 		$.getJSON("<?php echo base_url()."page/json_get_profile/{$page_id}"; ?>",function(json){
-			for(i in json){
+			
 				$("#pageProfile").append(
-					makeList(json[i])
+					makeList(json)
 				);
-			}
+			
 		});
 		
 		$.getJSON("<?php echo base_url()."page/json_get_installed_apps/{$page_id}"; ?>",function(json){

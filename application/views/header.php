@@ -16,9 +16,7 @@
 			<?php foreach($user_companies as $company) : ?>
 			$.ajaxSetup({'async': false});
 			$.getJSON('<?php echo base_url().'company/json_get_profile/' . $company['company_id']; ?>', function(data) {
-				$.each(data, function(i,item){
-					$('#goto-list').append('<div class="goto-list-company-<?php echo $company['company_id'];?>">===Company : '+item.company_name+'</div>');
-				});
+				$('#goto-list').append('<div class="goto-list-company-<?php echo $company['company_id'];?>">===Company : '+data.company_name+'</div>');
 			});
 			$.getJSON('<?php echo base_url().'company/json_get_pages/' . $company['company_id']; ?>', function(data) {
 				$.each(data, function(i,item){

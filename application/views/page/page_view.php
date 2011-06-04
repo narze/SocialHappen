@@ -1,0 +1,9 @@
+{header}
+{company_image_and_name}
+{breadcrumb}
+{page_profile}
+{page_apps}
+{page_campaigns}
+{page_users}
+{page_report}
+{footer}
