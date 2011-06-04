@@ -7,9 +7,14 @@ class Campaign extends CI_Controller {
 	}
 
 	function index($campaign_id = NULL){
+		$this->socialhappen->check_logged_in('home');
 		if($campaign_id){
-			$data['campaign_id'] = $campaign_id;
-			$this->load->view('campaign_view', $data);
+			$data = array(
+						'campaign_id' => $campaign_id,
+						'header' => $this->socialhappen->get_header(),
+						'footer' => $this->socialhappen->get_footer()
+					);
+			$this->parser->parse('campaign/campaign_view', $data);
 			return $data;
 		}
 	}
