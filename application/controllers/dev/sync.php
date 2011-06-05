@@ -5,12 +5,12 @@
  * @category Controller
  */
 class Sync extends CI_Controller {
-
+	
 	function __construct(){
+		$this->preload();
 		parent::__construct();
 		$this->load->dbforge();
 		$this->output->enable_profiler(TRUE);
-		$config['sess_use_database']	= FALSE;
 	}
 
 	function index(){
@@ -18,6 +18,36 @@ class Sync extends CI_Controller {
 		echo '<a href="'.base_url().'dev/sync/generate_field_code">Generate field PHP code</a><br />';
 		echo '<a href="'.base_url().'dev/sync/create_database">Create datebase "socialhappen"</a>';
 		
+	}
+	
+	/**
+	 * Create database and session table in pure PHP
+	 * @author Manassarn M.
+	 */
+	function preload(){
+		$host = 'localhost';
+		$username = 'root';
+		$password = '';
+		$con = mysql_connect($host,$username,$password);
+		if (!$con)
+		    {
+				die('Could not connect: ' . mysql_error());
+ 		    }
+		if (!mysql_query("CREATE DATABASE IF NOT EXISTS socialhappen",$con)){
+			echo "Error creating database: " . mysql_error();
+		}
+		
+		if (!mysql_query("CREATE TABLE IF NOT EXISTS socialhappen.sh_sessions (
+						session_id varchar(40) DEFAULT '0' NOT NULL,
+						ip_address varchar(16) DEFAULT '0' NOT NULL,
+						user_agent varchar(50) NOT NULL,
+						last_activity int(10) unsigned DEFAULT 0 NOT NULL,
+						session_data text default '' not null,
+						PRIMARY KEY (session_id)
+						); 
+					",$con)){
+			echo "Error creating table: " . mysql_error();
+		}
 	}
 	
 	function db_reset(){
