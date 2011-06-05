@@ -182,7 +182,7 @@ function show_available_app_in_page(page_id){
 $(function() {
 	//get company detail
 	$.getJSON("<?php echo base_url()."company/json_get_profile/{$company_id}"; ?>",function(json){
-		var company_detail=json[0];
+		var company_detail=json;
 		//company name
 		$("#company-detail").append(
 			"<li>" + company_detail.company_name +"</li>"
