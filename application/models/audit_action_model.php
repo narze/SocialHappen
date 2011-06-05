@@ -51,7 +51,7 @@ class Audit_action_model extends CI_Model {
 	function add_action($data = array()){
 		// add new
 		$check_args = isset($data['app_id']) && isset($data['action_id']) 
-		&& isset($data['description']) && isset($data['stat']);
+		&& isset($data['description']);
 		if($check_args){
 			$data_to_add = array('app_id' => $data['app_id'],
 								'action_id' => $data['action_id'],
@@ -101,7 +101,7 @@ class Audit_action_model extends CI_Model {
 	 * delete audit action
 	 * 
 	 * @param app_id
-	 * @param action_id - optional
+	 * @param action_id - [optional]
 	 * 
 	 * @return result oolean
 	 * 
@@ -112,7 +112,7 @@ class Audit_action_model extends CI_Model {
 		if($check_args){
 			if(isset($action_id)){
 				$criteria = array('app_id' => $app_id,
-							  'action_id' => $action_id);
+							  	  'action_id' => $action_id);
 			}else{
 				$criteria = array('app_id' => $app_id);
 			}
@@ -152,7 +152,7 @@ class Audit_action_model extends CI_Model {
 	 */
 	function get_action($app_id = NULL, $action_id = NULL){
 		if(isset($app_id)){
-			if(isset($action_id)){
+			if(empty($action_id)){
 				$criteria = array('app_id' => $app_id);
 			}else{
 				$criteria = array('app_id' => $app_id, 'action_id' => $action_id);
@@ -176,13 +176,23 @@ class Audit_action_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function get_platform_action(){
-		$res = $this->get_action_by_app_id(0);
+		$res = $this->get_action(0);
 		
 		$result = array();
 		foreach ($res as $entry) {
 			$result[] = $entry;
 		}
 		return $result;
+	}
+	
+	/**
+	 * drop entire collection
+	 * you will lost all audit action data
+	 * 
+	 * @author Metwara Narksook
+	 */
+	function drop_collection(){
+		$this->actions->drop();
 	}
 }
 

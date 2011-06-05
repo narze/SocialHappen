@@ -5,7 +5,7 @@
  */
 class Audit_model extends CI_Model {
 
-	// optional date
+	// optional data
 	var $app_id = '';
 	var $app_install_id = '';
 	var $campaign_id = '';
@@ -49,7 +49,7 @@ class Audit_model extends CI_Model {
 	 */
 	function create_index(){
 		$this->audits->ensureIndex(array('timestamp' => -1,
-										 'action' => 1,
+										 'action_id' => 1,
 										 'app_id' => 1,
 										 'app_install_id' => 1,
 										 'campaign_id' => 1,
@@ -67,10 +67,18 @@ class Audit_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function add_audit($data = array()){
-		$data['timestamp'] = time();
-		// add new 
-		$this->audits->insert($data);
-		return TRUE;
+		$check_args = isset($data['action_id']);
+		if($check_args){
+			date_default_timezone_set('Asia/Bangkok');
+			$data_to_add = array('timestamp' => time());
+			$data_to_add = array_merge($data_to_add, $data);
+			// add new 
+			$this->audits->insert($data_to_add);
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+		
 	}
 	
 	/**
@@ -88,7 +96,7 @@ class Audit_model extends CI_Model {
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
-		$res = $this->audits->find($criteria)->sort(array('timestamp' => -1))->skip($offset)->limit($limit);
+		$res = $this->audits->find($criteria)->sort(array('timestamp' => -1, '_id' => -1))->skip($offset)->limit($limit);
 		
 		$result = array();
 		foreach ($res as $audit) {
@@ -110,13 +118,23 @@ class Audit_model extends CI_Model {
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
-		$res = $this->audits->find()->sort(array('timestamp' => -1))->limit($limit);
+		$res = $this->audits->find()->sort(array('timestamp' => -1, '_id' => -1))->limit($limit);
 		
 		$result = array();
 		foreach ($res as $audit) {
 			$result[] = $audit;
 		}
 		return $result;
+	}
+	
+	/**
+	 * drop entire collection
+	 * you will lost all audit data
+	 * 
+	 * @author Metwara Narksook
+	 */
+	function drop_collection(){
+		$this->audits->drop();
 	}
 }
 

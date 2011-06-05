@@ -154,6 +154,16 @@ class Stat_app_model extends CI_Model {
 		 	}
 	 	}
 	 }
+	 
+	 /**
+	 * drop entire collection
+	 * you will lost all stat app data
+	 * 
+	 * @author Metwara Narksook
+	 */
+	function drop_collection(){
+		$this->apps->drop();
+	}
 }
 
 /* End of file stat_app_model.php */
