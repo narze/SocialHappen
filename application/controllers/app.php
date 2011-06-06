@@ -84,6 +84,28 @@ class App extends CI_Controller {
 		}
 		echo json_encode($result);
 	}
+	
+	/**
+	 * JSON : Get app install status by app_install_status_name
+	 * @param : $status_name
+	 * @author Prachya P.
+	 */
+	function json_get_app_install_status_by_status_name($status_name = NULL){
+		$this->load->model('app_model','app');
+		$app_install_status = $this->app->get_app_install_status_by_status_name($status_name);
+		echo json_encode($app_install_status);
+	}
+	
+	/**
+	 * JSON : Get all app install status
+	 * @author Prachya P.
+	 */
+	function json_get_all_app_install_status(){
+		$this->load->model('app_model','app');
+		$app_install_statuses = $this->app->get_all_app_install_status();
+		echo json_encode($app_install_statuses);
+	}
+	
 }
 
 

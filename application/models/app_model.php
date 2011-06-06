@@ -53,6 +53,25 @@ class App_model extends CI_Model {
 		$result = $this->db->get_where('app', array('app_id' => $app_id))->result_array();
 		return $result[0];				
 	}
+	
+	/**
+	 * Get app install status by app_install_status_name
+	 * @param : $status_name
+	 * @author Prachya P.
+	 */
+	function get_app_install_status_by_status_name($app_install_status_name = NULL){
+		$result = $this->db->get_where('app_install_status', array('name' => $app_install_status_name))->result_array();
+		return $result[0];				
+	}
+	
+	/**
+	 * Get all app install status
+	 * @author Prachya P.
+	 */
+	function get_all_app_install_status(){
+		$result = $this->db->get('app_install_status')->result_array();
+		return $result;				
+	}
 
 	function add($data = array()) {
 		foreach($data as $var => $key) {
