@@ -138,7 +138,8 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 				);
 			}
 			$( "#page-installed-app-list" ).droppable({
-				drop: function(e, ui) {if(!dropped){
+				drop: function(e, ui) {
+					if(!dropped){
 						dropped=true;
 						var app_id=$(ui.draggable).children('input.app_id').val();
 						var app_secret_key=$(ui.draggable).children('input.app_secret_key').val();
