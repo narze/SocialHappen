@@ -85,6 +85,26 @@ class Page extends CI_Controller {
 		}
 		echo json_encode($result);
 	}
+	
+	/**
+	 * JSON : Get facebook pages available to install
+	 * @author Prachya P.
+	 */
+	function json_get_not_installed_facebook_pages($company_id){
+		$this->load->model('page_model','page');
+		$pages = $this->page->get_company_pages_by_company_id($company_id);
+		$all_installed_fb_page_id=array();
+		foreach($pages as $page){
+			$all_installed_fb_page_id[]=$page['facebook_page_id'];
+		}
+		$facebook_pages=$this->facebook->get_user_pages();
+		$facebook_pages=$facebook_pages['data'];
+		$not_installed_facebook_pages=array();
+		foreach($facebook_pages as $facebook_page){
+			if(!in_array($facebook_page['id'],$all_installed_fb_page_id)) $not_installed_facebook_pages[]=$facebook_page;
+		}
+		echo json_encode($not_installed_facebook_pages);
+	}
 }
 
 
