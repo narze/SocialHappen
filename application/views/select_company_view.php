@@ -1,4 +1,4 @@
-<?php $this->load->view('header'); ?>
+<?php $this->load->view('common/header'); ?>
 <h1>Select company</h1>
 	<h3>Or <?php echo anchor('home/create_company','create new company'); ?></h3>
 	<ul>
@@ -6,4 +6,4 @@
 			<li><pre><?php var_dump($company); ?></pre></li>
 		<?php endforeach; ?>
 	</ul>
-<?php $this->load->view('footer');
+<?php $this->load->view('common/footer');

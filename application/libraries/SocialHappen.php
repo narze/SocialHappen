@@ -74,18 +74,18 @@ class SocialHappen{
 	 * @return $header
 	 * @author Manassarn M.
 	 */
-	function get_header(){
+	function get_header($data = array()){
 		if($this->CI->session->userdata('logged_in') == TRUE){
-			return $this->CI->load->view('header', array(
-											'title' => 'Page',
-											'script' => NULL,
+			return $this->CI->load->view('common/header', array(
+											'title' => issetor($data['title']),
+											'script' => issetor($data['script']),
 											'user' => $this->get_user(),
 											'user_companies' => $this->get_user_companies()
 										), TRUE);
 		} else {
-			return $this->CI->load->view('header', array(
-											'title' => 'Page',
-											'script' => NULL,
+			return $this->CI->load->view('common/header', array(
+											'title' => issetor($data['title']),
+											'script' => issetor($data['script']),
 											'user' => NULL,
 											'user_companies' => NULL
 										), TRUE);
@@ -98,11 +98,11 @@ class SocialHappen{
 	 * @author Manassarn M.
 	 * @todo add more elements
 	 */
-	function get_footer(){
+	function get_footer($data = array()){
 		if($this->CI->session->userdata('logged_in') == TRUE){
-			return $this->CI->load->view('footer', array() , TRUE);
+			return $this->CI->load->view('common/footer', array() , TRUE);
 		} else {
-			return $this->CI->load->view('footer', array() , TRUE);
+			return $this->CI->load->view('common/footer', array() , TRUE);
 		}
 	}
 	
