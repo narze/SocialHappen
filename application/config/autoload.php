@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database','app_url','curl','facebook','parser','
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url','html');
+$autoload['helper'] = array('url','html','socialhappen');
 
 
 /*
