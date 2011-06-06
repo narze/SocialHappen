@@ -21,8 +21,10 @@ class Installed_apps_model extends CI_Model {
 	 * @param $page_id
 	 * @return array
 	 * @author Manassarn M.
+	 * @author Prachya P.
 	 */
 	function get_installed_apps_by_page_id($page_id = NULL){
+		$this->db->join('app','installed_apps.app_id=app.app_id');
 		return $this->db->get_where('installed_apps', array('page_id' => $page_id))->result_array();
 	}
 

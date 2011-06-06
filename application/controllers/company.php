@@ -14,8 +14,7 @@ class Company extends CI_Controller {
 		if($company_id){
 			$data = array(
 				'company_id' => $company_id,
-	            'dragdrop_script' => $this->load->view('company_dashboard_script', 
-	            					array('company_id'=>$company_id), true)
+	            'dragdrop_script' => $this->load->view('company_dashboard_script', NULL, true)
             );
 			$this->parser->parse('company_view', $data);
 			return $data;

@@ -7,6 +7,10 @@
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
 	<?php echo link_tag("css/smoothness/jquery-ui-1.8.9.custom.css"); ?>
 	<script>
+		var base_url="<?php echo base_url();?>";
+		var company_id=<?php echo $company_id?>;
+	</script>
+	<script>
 		$(function(){
 			function makeList(object){
 				var list = '<ul>';
