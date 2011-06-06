@@ -13,9 +13,7 @@ class Session_model extends CI_Model {
 	 */
 	function get_session_id_by_user_id($user_id = NULL){
 		$result = $this->db->get_where('sessions', array('user_id'=>$user_id))->result_array();
-		if(!isset($result[0]['session_id'])) 
-			return array();
-		return $result[0]['session_id'];
+		return issetor($result[0]['session_id']);
 	}	
 	
 	/**
@@ -25,9 +23,7 @@ class Session_model extends CI_Model {
 	 */
 	function get_user_id_by_session_id($session_id = NULL){
 		$result = $this->db->get_where('sessions', array('session_id'=>$session_id))->result_array();
-		if(!isset($result[0]['user_id'])) 
-			return array();
-		return $result[0]['user_id'];
+		return issetor($result[0]['user_id']);
 	}
 }
 /* End of file session_model.php */
