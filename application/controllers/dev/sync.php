@@ -116,7 +116,7 @@ class Sync extends CI_Controller {
 		
 		$fields = array(
 							'app' => array(
-							    'app_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
+							    'app_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'app_name' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
 							    'app_type_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
 							    'app_maintainance' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
@@ -128,6 +128,7 @@ class Sync extends CI_Controller {
 							    'app_config_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_support_page_tab' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
 							    'app_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'facebook_app_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
 							),
 							'app_install_status' => array(
 							    'app_install_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
@@ -135,10 +136,10 @@ class Sync extends CI_Controller {
 							    'app_install_status_description' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							/*'app_statistic' => array(
-							    'app_install_id' => field_option('INT', 20, $default, $null, $autoinc, $unsigned),
+							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, $unsigned),
 							    'job_time' => field_option('TIMESTAMP', $constraint, 'CURRENT_TIMESTAMP', $null, $autoinc, $unsigned),
-							    'job_id' => field_option('INT', 20, $default, $null, $autoinc, $unsigned),
-							    'active_user' => field_option('INT', 20, $default, $null, $autoinc, $unsigned),
+							    'job_id' => field_option('BIGINT', 20, $default, $null, $autoinc, $unsigned),
+							    'active_user' => field_option('BIGINT', 20, $default, $null, $autoinc, $unsigned),
 							),*/
 							'app_type' => array(
 							    'app_type_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
@@ -146,8 +147,8 @@ class Sync extends CI_Controller {
 							    'app_type_description' => field_option('VARCHAR', 255, $default, TRUE, $autoinc, $unsigned),
 							),
 							'campaign' => array(
-							    'campaign_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
-							    'app_install_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'campaign_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
+							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'campaign_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'campaign_detail' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'campaign_status_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
@@ -161,8 +162,8 @@ class Sync extends CI_Controller {
 							    'campaign_status_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'company' => array(
-							    'company_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
-							    'creator_user_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'company_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
+							    'creator_user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'company_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'company_detail' => field_option('VARCHAR', 255, $default, TRUE, $autoinc, $unsigned),
 							    'company_address' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
@@ -174,44 +175,44 @@ class Sync extends CI_Controller {
 							    'company_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'company_apps' => array(
-							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
-							    'app_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'available_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							),
 							'company_pages' => array(
-							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
-							    'page_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							),
 							/*'config_item' => array(
-							    'app_install_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'config_key' => field_option('VARCHAR', 64, $default, $null, $autoinc, $unsigned),
 							    'config_value' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'config_item_template' => array(
-							    'app_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'config_key' => field_option('64', $constraint, $default, $null, $autoinc, $unsigned),
 							    'config_value' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'cron_job' => array(
-							    'job_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
+							    'job_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'job_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'job_start' => field_option('TIMESTAMP', $constraint, 'CURRENT_TIMESTAMP', $null, $autoinc, $unsigned),
 							    'job_finish' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
 							    'job_status' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),*/
 							'installed_apps' => array(
-							    'app_install_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
-							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
-							    'app_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'app_install_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
+							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'app_install_status' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
 							    'app_install_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-							    'page_id' => field_option('INT', 20, $default, TRUE, $autoinc, TRUE),
+							    'page_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
 							    'app_install_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'page' => array(
-							    'page_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
-							    'facebook_page_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
-							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'page_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
+							    'facebook_page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'page_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'page_detail' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'page_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
@@ -219,28 +220,28 @@ class Sync extends CI_Controller {
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'user' => array(
-							    'user_id' => field_option('INT', 20, $default, $null, TRUE, TRUE),
+							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'user_first_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'user_last_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'user_email' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'user_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'user_facebook_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'user_facebook_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'user_register_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'user_last_seen' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'user_apps' => array(
-							    'user_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
-							    'app_install_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'user_apps_register_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'user_apps_last_seen' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'user_campaigns' => array(
-							    'user_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
-							    'campaign_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'campaign_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							),
 							'user_companies' => array(
-							    'user_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
-							    'company_id' => field_option('INT', 20, $default, $null, $autoinc, TRUE),
+							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'user_role' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
 							),
 							'sessions' =>array(
@@ -325,7 +326,8 @@ class Sync extends CI_Controller {
 					    'app_install_url' => 'http://socialhappen.dyndns.org/feed/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}',
 					    'app_config_url' =>  'http://socialhappen.dyndns.org/feed/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' =>  1,
-					    'app_image' =>  ''
+					    'app_image' =>  '',
+						'facebook_app_api_key' => ''
 					),
 					array(
 					    'app_id' => 2, 
@@ -339,7 +341,8 @@ class Sync extends CI_Controller {
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbreg/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbreg/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
-					    'app_image' => ''
+					    'app_image' => '',
+						'facebook_app_api_key' => ''
 					),
 					array(
 					    'app_id' => 3, 
@@ -353,7 +356,8 @@ class Sync extends CI_Controller {
 					    'app_install_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
-					    'app_image' => ''
+					    'app_image' => '',
+						'facebook_app_api_key' => ''
 					),
 					array(
 					    'app_id' => 4, 
@@ -367,7 +371,23 @@ class Sync extends CI_Controller {
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbcms/platform/install/{company_id}/{user_facebook_id}/', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbcms/platform/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}/', 
 					    'app_support_page_tab' => 1, 
-					    'app_image' => ''
+					    'app_image' => '',
+						'facebook_app_api_key' => ''
+					),
+					array(
+					    'app_id' => 5, 
+					    'app_name' => 'SocialMart', 
+					    'app_type_id' => 1, 
+					    'app_maintainance' => 0, 
+					    'app_show_in_list' => 1, 
+					    'app_description' => 'SocialMart', 
+					    'app_secret_key' => 'fb9792b2ccb40d5482f5b7cae5e55521', 
+					    'app_url' => '', 
+					    'app_install_url' => '', 
+					    'app_config_url' => '',
+					    'app_support_page_tab' => 1, 
+					    'app_image' => '',
+						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
 					)
 				);
 		$this->db->insert_batch('app', $app);
@@ -377,6 +397,16 @@ class Sync extends CI_Controller {
 									    'app_install_status_id' => 1,
 									    'app_install_status_name' => 'active',
 									    'app_install_status_description' => 'Active'
+									),
+									array(
+									    'app_install_status_id' => 2,
+									    'app_install_status_name' => 'inactive',
+									    'app_install_status_description' => 'Inactive'
+									),
+									array(
+									    'app_install_status_id' => 3,
+									    'app_install_status_name' => 'not complete install',
+									    'app_install_status_description' => 'Installed but not complete'
 									)
 								);
 		$this->db->insert_batch('app_install_status', $app_install_status);
@@ -464,6 +494,21 @@ class Sync extends CI_Controller {
 							array(
 							    'company_id' => 1, 
 							    'app_id' => 2, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 3, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 4, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 5, 
 							    'available_date' => '2011-05-19 16:01:20'
 							)
 						);
