@@ -31,34 +31,57 @@ class Audit_lib
 	}
 	
 	/**
+	 * create index for all collection in database
+	 */
+	function create_index(){
+		$this->CI->load->model('audit_model', 'audit');
+		$this->CI->load->model('audit_action_model', 'audit_action');
+		$this->CI->load->model('stat_page_model', 'stat_page');
+		$this->CI->load->model('stat_app_model', 'stat_app');
+		$this->CI->load->model('stat_campaign_model', 'stat_campaign');
+		$this->CI->audit->create_index();
+		$this->CI->audit_action->create_index();
+		$this->CI->stat_page->create_index();
+		$this->CI->stat_app->create_index();
+		$this->CI->stat_campaign->create_index();
+	}
+	
+	/**
 	 * add new audit action
 	 * 
 	 * @param app_id int id of app
 	 * @param action_id int action number - unique
-	 * @param stat boolean want to keep in stat or not
 	 * @param description string description of action
+	 * @param stat_app boolean want to keep in stat app or not
+	 * @param stat_page boolean want to keep in stat page or not
+	 * @param stat_campaign boolean want to keep in stat campaign or not
+	 * 
+	 * @return result boolean
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function add_audit_action($app_id = NULL, $action_id = NULL, $stat_app = NULL, 
-							$stat_page = NULL, $stat_campaign = NULL, $description = NULL){
+	function add_audit_action($app_id = NULL, $action_id = NULL, $description = NULL, $stat_app = NULL, 
+							$stat_page = NULL, $stat_campaign = NULL){
 		$check_args = isset($app_id) && isset($action_id) && isset($stat_app) && 
 						isset($stat_page) && isset($stat_campaign) && isset($description);
 		if(!$check_args){
-			show_error("Invalid or missing args", 500);
+			//show_error("Invalid or missing args", 500);
+			return FALSE;
 		}
 		$this->CI->load->model('audit_action_model','audit_action');
 		
 		$data = array('app_id' => $app_id,
 						'action_id' => $action_id,
+						'description' => $description,
 						'stat_app' => $stat_app,
 						'stat_page' => $stat_page,
-						'stat_campaign' => $stat_campaign,
-						'description' => $description);
+						'stat_campaign' => $stat_campaign);
 		$result = $this->CI->audit_action->add_action($data);
+		/*
 		if(!$result){
 			show_error("add new audit action fail", 500);
 		}
+		*/
 		return $result;
 	}
 	
@@ -69,6 +92,8 @@ class Audit_lib
 	 * @param action_id int action number
 	 * @param data array contain ['stat_app', 'stat_page', 'stat_campaign', 'description']
 	 * 
+	 * @return result boolean
+	 * 
 	 * @author Metwara Narksook
 	 */
 	function edit_audit_action($app_id = NULL, $action_id = NULL, $data = NULL){
@@ -76,7 +101,8 @@ class Audit_lib
 						(isset($data['stat_app']) || isset($data['stat_page']) || 
 						isset($data['stat_campaign']) || isset($data['description']));
 		if(!$check_args){
-			show_error("Invalid or missing args", 500);
+			//show_error("Invalid or missing args", 500);
+			return FALSE;
 		}
 		
 		$this->CI->load->model('audit_action_model','audit_action');
@@ -96,9 +122,11 @@ class Audit_lib
 		}
 		
 		$result = $this->CI->audit_action->edit_action($app_id, $action_id, $data_to_add);
+		/*
 		if(!$result){
 			show_error("edit audit action fail", 500);
 		}
+		*/
 		return $result;
 	}
 	
@@ -115,7 +143,8 @@ class Audit_lib
 	function delete_audit_action($app_id = NULL, $action_id = NULL){
 		$check_args = isset($app_id);
 		if(!$check_args){
-			show_error("Invalid or missing args", 500);
+			//show_error("Invalid or missing args", 500);
+			return FALSE;
 		}
 		
 		$this->CI->load->model('audit_action_model','audit_action');
@@ -196,7 +225,8 @@ class Audit_lib
 	function add_audit($app_id = NULL, $subject = NULL, $action_id = NULL, $object = NULL, $objecti = NULL, $additional_data = array()){
 		$check_args = isset($app_id) && isset($action_id);
 		if(!$check_args){
-			show_error("Invalid or missing args", 500);
+			//show_error("Invalid or missing args", 500);
+			return FALSE;
 		}
 		
 		// check valid action_id
