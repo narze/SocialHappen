@@ -118,7 +118,7 @@ class Stat_app_model extends CI_Model {
 				$criteria['date'] = $param['date'];
 			}
 			
-			$res = $this->apps->find($criteria)->skip($skip)->limit($limit);
+			$res = $this->apps->find($criteria)->sort(array('date' => 1, '_id' => 1))->skip($skip)->limit($limit);
 			$result = array();
 			foreach ($res as $entry) {
 				$result[] = $entry;

@@ -137,7 +137,7 @@ class Audit_model_test extends CI_Controller {
 
 	
 	function end_test(){
-		//$this->audit->drop_collection();
+		$this->audit->drop_collection();
 	}
 }
 /* End of file audit_model_test.php */

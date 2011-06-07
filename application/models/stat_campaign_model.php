@@ -119,7 +119,7 @@ class Stat_campaign_model extends CI_Model {
 				$criteria['date'] = $param['date'];
 			}
 			
-			$res = $this->campaigns->find($criteria)->skip($skip)->limit($limit);
+			$res = $this->campaigns->find($criteria)->sort(array('date' => 1, '_id' => 1))->skip($skip)->limit($limit);
 			$result = array();
 			foreach ($res as $entry) {
 				$result[] = $entry;
@@ -155,6 +155,16 @@ class Stat_campaign_model extends CI_Model {
 		 	}
 	 	}
 	 }
+	 
+	 /**
+	 * drop entire collection
+	 * you will lost all stat campaign data
+	 * 
+	 * @author Metwara Narksook
+	 */
+	function drop_collection(){
+		$this->campaigns->drop();
+	}
 }
 
 /* End of file stat_campaign_model.php */
