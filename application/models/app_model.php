@@ -55,6 +55,16 @@ class App_model extends CI_Model {
 	}
 	
 	/**
+	 * Get application profile by fb_app_api_key
+	 * @param $fb_app_api_key
+	 * @author Prachya P.
+	 */
+	function get_app_by_api_key($fb_app_api_key = NULL){
+		$result = $this->db->get_where('app', array('facebook_app_api_key' => $fb_app_api_key))->result_array();
+		return $result[0];				
+	}
+	
+	/**
 	 * Get app install status by app_install_status_name
 	 * @param : $status_name
 	 * @author Prachya P.
