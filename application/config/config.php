@@ -355,6 +355,15 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+/*
+|--------------------------------------------------------------------------
+| Default SH Facebook app
+|--------------------------------------------------------------------------
+|
+| This application will be installed after installing page to company
+|
+*/
+$config['sh_default_fb_app_api_key'] = '20046401b3b5ae931f8d552f5aeae44f';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

@@ -1,6 +1,7 @@
 <script>
-var dropped=false;
+var sorted=false;
 var all_app_install_statuses=new Array();
+var dragging_object;
 //add app to facebook page
 function get_add_app_to_fb_page_link(facebook_app_api_key,facebook_page_id){
 	return "http://www.facebook.com/add.php?api_key="+facebook_app_api_key+"&pages=1"+"&page="+facebook_page_id;
@@ -34,11 +35,18 @@ function show_installed_app_in_company(){
 			}
 			$( "#company-installed-app-list" ).droppable({
 				drop: function(e, ui) {
-					if(!dropped){
-						dropped=true;
-						var app_id=$(ui.draggable).children('input.app_id').val();
-						var app_secret_key=$(ui.draggable).children('input.app_secret_key').val();
-						$(ui.draggable).removeClass('draggable');
+					sorted=false;
+					dragging_object=$(ui.draggable);
+				},
+				accept:"li.draggable"
+			}).sortable({
+				revert: true,
+				stop: function(e,ui){
+					if(!sorted){
+						sorted=true;
+						var app_id=dragging_object.children('input.app_id').val();
+						var app_secret_key=dragging_object.children('input.app_secret_key').val();
+						dragging_object.removeClass('draggable');
 						jQuery.ajax({
 							url: base_url + "app/json_add",
 							dataType: "json",
@@ -51,12 +59,6 @@ function show_installed_app_in_company(){
 							},
 						});
 					}
-				},
-				accept:"li.draggable"
-			}).sortable({
-				revert: true,
-				stop: function(e,ui){
-					dropped=false;
 				}
 			});				
 			//amount of installed app
@@ -84,32 +86,51 @@ function show_installed_page_in_company(){
 				);
 			}
 			$( "#company-installed-page-list" ).droppable({
-				drop: function(e, ui) {
-					if(!dropped){
-						dropped=true;
-						var fb_page_id=$(ui.draggable).children('input.facebook_page_id').val();
-						var page_name=$(ui.draggable).children('input.page_name').val();
-						$(ui.draggable).removeClass('draggable');
+				drop: function(e, ui) {					
+					sorted=false;
+					dragging_object=$(ui.draggable);
+				},
+				accept:"li.draggable"
+			}).sortable({
+				revert: true,
+				stop: function(e,ui){
+					if(!sorted){
+						sorted=true;
+						var facebook_page_id=dragging_object.children('input.facebook_page_id').val();
+						var page_name=dragging_object.children('input.page_name').val();
+						dragging_object.removeClass('draggable');
 						jQuery.ajax({
 							url: base_url + "page/json_add",
 							dataType: "json",
 							type: "POST",
-							data: ({company_id : company_id, facebook_page_id : fb_page_id, page_name : page_name, page_detail : "", page_all_member : 0, page_new_member : 0 , page_image : ""}),
+							data: ({company_id : company_id, facebook_page_id : facebook_page_id, page_name : page_name, page_detail : "", page_all_member : 0, page_new_member : 0 , page_image : ""}),
 							success: function(json) {
+								var page_id=json.page_id;
+								var app_api_key="<?php echo $this->config->item('sh_default_fb_app_api_key');?>";
 								if(json.status=="OK"){
-									alert("Go to Facebook to complete the action.");
+									$.getJSON("<?php echo base_url()."app/json_get_app_by_api_key/"; ?>"+app_api_key, function(app_info){
+										jQuery.ajax({
+											url: base_url + "app/json_add",
+											dataType: "json",
+											type: "POST",
+											data: ({company_id : company_id, app_id : app_info.app_id, app_install_status : all_app_install_statuses['not complete install'][0], page_id : page_id , app_install_secret_key : app_info.app_secret_key}),
+											success: function(json) {
+												if(json.status=="OK"){
+													alert("Go to Facebook to complete the action.");
+												//	alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
+													window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
+												}
+												else alert("ERROR");
+											},
+										});
+									});
+									
 								}
 								else alert("ERROR");
 								show_available_page_in_company();
 							},
 						});
 					}
-				},
-				accept:"li.draggable"
-			}).sortable({
-				revert: true,
-				stop: function(e,ui){
-					dropped=false;
 				}
 			});		
 			//amount of installed page
@@ -134,17 +155,24 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 		success: function(json) {
             for(i in json){
 				$("#page-installed-app-list").append(
-					"<li class='ui-state-default'>" + json[i].app_name + "</li>"
+					"<li class='ui-state-default'>" + json[i].app_name + "<br/><a href='"+get_add_app_to_fb_page_link(json[i].facebook_app_api_key,facebook_page_id)+"'>Go to FB</a></li>"
 				);
 			}
 			$( "#page-installed-app-list" ).droppable({
 				drop: function(e, ui) {
-					if(!dropped){
-						dropped=true;
-						var app_id=$(ui.draggable).children('input.app_id').val();
-						var app_secret_key=$(ui.draggable).children('input.app_secret_key').val();
-						var app_api_key=$(ui.draggable).children('input.app_api_key').val();
-						$(ui.draggable).removeClass('draggable');
+					sorted=false;
+					dragging_object=$(ui.draggable);
+				},
+				accept:"li.draggable"
+			}).sortable({
+				revert: true,
+				stop: function(e,ui){
+					if(!sorted){
+						sorted=true;
+						var app_id=dragging_object.children('input.app_id').val();
+						var app_secret_key=dragging_object.children('input.app_secret_key').val();
+						var app_api_key=dragging_object.children('input.app_api_key').val();
+						dragging_object.removeClass('draggable');
 						jQuery.ajax({
 							url: base_url + "app/json_add",
 							dataType: "json",
@@ -153,7 +181,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 							success: function(json) {
 								if(json.status=="OK"){
 									alert("Go to Facebook to complete the action.");
-									alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
+								//	alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
 									window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
 								}
 								else alert("ERROR");
@@ -161,12 +189,6 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 							},
 						});
 					}
-				},
-				accept:"li.draggable"
-			}).sortable({
-				revert: true,
-				stop: function(e,ui){
-					dropped=false;
 				}
 			});
 			$('#company-page-tab .loading').hide();
@@ -211,7 +233,7 @@ function show_available_page_in_company(){
 	    dataType: "json",
 	    beforeSend: function(){
 			$("#company-available-page-list").html("");
-	        $('#left-panel-tab .loading').show();
+	        $("#left-panel-tab .loading").show();
 	    },
 		success: function(json) {
 			for(i in json){
@@ -236,7 +258,7 @@ function show_available_app_in_page(page_id){
 	    dataType: "json",
 	    beforeSend: function(){
 			$("#page-available-app-list").html("");
-	        $('#left-panel-tab .loading').show();
+	        $("#left-panel-tab .loading").show();
 	    },
 		success: function(json) {
             for(i in json){
