@@ -184,7 +184,8 @@ class Audit_lib
 	function get_audit_action($app_id = NULL, $action_id = NULL){
 		$check_args = isset($app_id) && isset($action_id);
 		if(!$check_args){
-			show_error("Invalid or missing args", 500);
+			return FALSE;
+			//show_error("Invalid or missing args", 500);
 		}
 		$this->CI->load->model('audit_action_model','audit_action');
 		$result = $this->CI->audit_action->get_action($app_id, $action_id);
@@ -232,47 +233,52 @@ class Audit_lib
 		// check valid action_id
 		$this->CI->load->model('audit_action_model','audit_action');
 		$result_audit_action = $this->CI->audit_action->get_action($app_id, $action_id);
+		
 		if(count($result_audit_action) == 0){
 			return FALSE;
 		}else{
-			$audit_action = $result[0];
+			$audit_action = $result_audit_action[0];
 		}
 		$data_to_add = array();
 		
 		// basic data
-		$data_to_add['app_id '] = $app_id;
-		$data_to_add['subject '] = $subject;
-		$data_to_add['action_id '] = $action_id;
-		$data_to_add['objecti '] = $objecti;
+		$data_to_add['app_id'] = $app_id;
+		$data_to_add['subject'] = $subject;
+		$data_to_add['action_id'] = $action_id;
+		$data_to_add['object'] = $object;
+		$data_to_add['objecti'] = $objecti;
 		
 		// additional data
-		if($additional_data['app_install_id']){
+		if(isset($additional_data['app_install_id'])){
 			$data_to_add['app_install_id'] = $additional_data['app_install_id'];
 		}
-		if($additional_data['campaign_id']){
+		if(isset($additional_data['campaign_id'])){
 			$data_to_add['campaign_id'] = $additional_data['campaign_id'];
 		}
-		if($additional_data['company_id']){
-			$data_to_add['company_id '] = $additional_data['company_id '];
+		if(isset($additional_data['company_id'])){
+			$data_to_add['company_id '] = $additional_data['company_id'];
 		}
-		if($additional_data['page_id']){
+		if(isset($additional_data['page_id'])){
 			$data_to_add['page_id'] = $additional_data['page_id'];
 		}
-		// @TODO: select stat to add
+		
+		echo '<pre>' . print_r($data_to_add, TRUE) . '</pre>';
+		
+		// TODO: select stat to add
 		$this->CI->load->model('audit_model','audit');
 		$result_add_audit = $this->CI->audit->add_audit($data_to_add);
 		if($result_add_audit){
 			if(isset($data_to_add['app_install_id']) && isset($audit_action['stat_app']) && $audit_action['stat_app']){
-				$this->CI->load->model('Stat_app_model','Stat_app');
-				$result_stat = $this->CI->Stat_app_model->increment_stat_page($data_to_add['app_install_id'], $action_id, $this->_date());
+				$this->CI->load->model('stat_app_model','stat_app');
+				$result_stat = $this->CI->stat_app->increment_stat_app($data_to_add['app_install_id'], $action_id, $this->_date());
 			}
 			if(isset($data_to_add['page_id']) && isset($audit_action['stat_page']) && $audit_action['stat_page']){
-				$this->CI->load->model('Stat_page_model','Stat_page');
-				$result_stat = $this->CI->Stat_page_model->increment_stat_page($data_to_add['page_id'], $action_id, $this->_date());
+				$this->CI->load->model('stat_page_model','stat_page');
+				$result_stat = $this->CI->stat_page->increment_stat_page($data_to_add['page_id'], $action_id, $this->_date());
 			}
 			if(isset($data_to_add['campaign_id']) && isset($audit_action['stat_campaign']) && $audit_action['stat_campaign']){
-				$this->CI->load->model('Stat_campaign_model','Stat_campaign');
-				$result_stat = $this->CI->Stat_campaign_model->increment_stat_page($data_to_add['campaign_id'], $action_id, $this->_date());
+				$this->CI->load->model('stat_campaign_model','stat_campaign');
+				$result_stat = $this->CI->stat_campaign->increment_stat_campaign($data_to_add['campaign_id'], $action_id, $this->_date());
 			}
 			
 		}
