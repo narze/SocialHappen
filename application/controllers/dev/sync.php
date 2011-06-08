@@ -250,6 +250,7 @@ class Sync extends CI_Controller {
 								'user_agent' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
 								'last_activity' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+								'user_id' => field_option('INT', 20, $default, TRUE, $autoinc, TRUE),
 							)
 						);
 		$keys = array(
@@ -698,6 +699,18 @@ class Sync extends CI_Controller {
 								)
 							);
 		$this->db->insert_batch('user_companies', $user_companies);
+		
+		$sessions = array(
+						array(
+							'session_id' => 1111,
+							'ip_address' => 0,
+							'user_agent' => 0,
+							'last_activity' => 0,
+							'user_data' => 'a:3:{s:7:"user_id";s:1:"0";s:16:"user_facebook_id";s:9:"713558190";s:9:"logged_in";b:1;}',
+							'user_id' => 0
+							)
+						);
+		$this->db->insert_batch('sessions', $sessions);
 		echo "Test data added<br />";
 	}
 }
