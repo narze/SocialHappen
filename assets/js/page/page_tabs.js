@@ -1,5 +1,6 @@
 $(function(){	
 	function show_tab(name){
+		$('.wrapper-details').hide();
 		$('.tab-content ul li').removeClass('active');
 		$('.tab-content ul li.'+name).addClass('active');
 		
@@ -7,9 +8,10 @@ $(function(){
 		if(name == 'apps') style_name = 'main';
 		else if(name == 'campaigns') style_name = 'campaign';
 		else if(name == 'users') style_name = 'member';
-		else if(name == 'report') style_name = 'report';
+		else if(name == 'report') style_name = 'main'; //no report css yet
 		$('link.page').attr('disabled',true);
-		$('link.page#'+style_name).removeAttr('disabled',false);
+		$('link.page#'+style_name).removeAttr('disabled');
+		$('.wrapper-details.'+name).show();
 	}
 	
 	$('.tab-content ul li.apps a').click(function(){
