@@ -327,7 +327,7 @@ class Sync extends CI_Controller {
 					    'app_install_url' => 'http://socialhappen.dyndns.org/feed/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}',
 					    'app_config_url' =>  'http://socialhappen.dyndns.org/feed/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' =>  1,
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/assets/images/app_icon.png',
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
 						'facebook_app_api_key' => ''
 					),
 					array(
@@ -342,7 +342,7 @@ class Sync extends CI_Controller {
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbreg/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbreg/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app_icon.png',
+					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
 						'facebook_app_api_key' => ''
 					),
 					array(
@@ -357,7 +357,7 @@ class Sync extends CI_Controller {
 					    'app_install_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app_icon.png',
+					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
 						'facebook_app_api_key' => ''
 					),
 					array(
@@ -372,7 +372,7 @@ class Sync extends CI_Controller {
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbcms/platform/install/{company_id}/{user_facebook_id}/', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbcms/platform/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}/', 
 					    'app_support_page_tab' => 1, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app_icon.png',
+					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
 						'facebook_app_api_key' => ''
 					),
 					array(
@@ -387,7 +387,7 @@ class Sync extends CI_Controller {
 					    'app_install_url' => '', 
 					    'app_config_url' => '',
 					    'app_support_page_tab' => 1, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app_icon.png',
+					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
 						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
 					)
 				);
@@ -481,7 +481,7 @@ class Sync extends CI_Controller {
 							    'company_register_date' => '2011-05-09 17:52:17', 
 							    'company_username' => '', 
 							    'company_password' => '',
-							    'company_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb50-50.png'
+							    'company_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb50-50.jpg'
 							)
 						);
 		$this->db->insert_batch('company', $company);
@@ -583,7 +583,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.png',					    
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',					    
 					    'user_facebook_id' => 713558190, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -593,7 +593,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.png',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',
 					    'user_facebook_id' => 637741627, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -603,7 +603,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.png',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',
 					    'user_facebook_id' => 631885465, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -613,7 +613,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.png',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',
 					    'user_facebook_id' => 755758746, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -623,7 +623,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.png',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',
 					    'user_facebook_id' => 508840994, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
