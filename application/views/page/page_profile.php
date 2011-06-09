@@ -1,35 +1,21 @@
-<div id="page-profile">
-	<div id="page-image">
-		<img src="<?php echo issetor($page_profile['page_image']); ?>" />
-	</div>
-	<div id="goto-page-button">
-		<a href="#">--Go to page--</a>
-	</div>
-	<div id="add-app">
-		<a href="#">--Add app--</a>
-	</div>
-	<div id="page-name">
-		<?php echo issetor($page_profile['page_name']); ?>
-	</div>
-	<div id="page-detail">
-		<?php echo issetor($page_profile['page_detail']); ?>
-	</div>
-	<div id="page-info">
-		---Information---
-		<div id="page-new-user">
-			--new member--
-		</div>
-		<div id="page-all-user">
-			--all member--
-		</div>
-		<div id="page-likes">
-			--likes--
-		</div>
-		<div id="page-apps-amount">
-			--apps--
-		</div>
-		<div id="page-campaigns-amount">
-			--campaigns--
-		</div>
-	</div>
+<div class="box-information">
+        <div class="details">
+          <div class="pic">
+            <p><img src="<?php echo issetor($page_profile['page_image']); ?>" alt=""></p>
+            <p><a class="bt-go_page" href="#"><span>Goto Page</span></a></p>
+            <p><a class="bt-add_app" href="#"><span>Add App</span></a></p>
+          </div>
+          <h2><?php echo issetor($page_profile['page_name']); ?></h2>
+          <p><?php echo issetor($page_profile['page_detail']); ?></p>
+        </div>
+        <div class="information">
+          <h2>Information</h2>
+          <ul>
+            <li><span>New Member</span>12</li>
+            <li><span>All Member</span>1335</li>
+            <li><span>Like</span>232</li>
+            <li><span>Application</span>5</li>
+            <li><span>Campaign</span>12</li>
+          </ul>
+        </div>
 </div>
