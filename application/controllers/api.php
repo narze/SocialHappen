@@ -297,7 +297,7 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->model('Page_model', 'Page');
-		$page_id = $this->Page->get_page_id($facebook_page_id);
+		$page_id = $this->Page->get_page_id_by_facebook_page_id($facebook_page_id);
 		
 		if(sizeof($page_id)>0){
 			$response = array(	'status' => 'OK',
