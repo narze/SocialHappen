@@ -1,4 +1,4 @@
-<?php $this->load->view('header'); ?>
+{header}
 <h1>Home</h1>
 	<p>
 	<div id="fb-root"></div>
@@ -18,5 +18,5 @@
 				
 	</script>
 	<button type="button" onclick="fblogin();">Facebook Login</button>
-	</p>
-<?php $this->load->view('footer');
+</p>
+{footer}
