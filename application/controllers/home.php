@@ -13,11 +13,33 @@ class Home extends CI_Controller {
 	 */
 	function index(){
 		if(!$this->facebook->is_authentication()){
-			$data['facebook_app_id'] = $this->config->item('facebook_app_id');
-			$data['facebook_default_scope'] = $this->config->item('facebook_default_scope');
-			$this->load->view('home_view',$data);
+			$data = array(
+							'facebook_app_id' => $this->config->item('facebook_app_id'),
+							'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+							'header' => $this -> socialhappen -> get_header( 
+								array(
+									'title' => 'Home page',
+									'script' => array(
+										''
+									)
+								)
+							),
+							'footer' => $this -> socialhappen -> get_footer()
+						);
+			$this->parser->parse('home/home_view',$data);
 		} else if(!$profile = $this->socialhappen->get_user()){
-			$this->load->view('login_view');
+			$data = array(
+							'header' => $this -> socialhappen -> get_header( 
+								array(
+									'title' => 'Login page',
+									'script' => array(
+										''
+									)
+								)
+							),
+							'footer' => $this -> socialhappen -> get_footer()
+						);
+			$this->parser->parse('home/login_view',$data);
 		} else {
 			$this->load->model('user_companies_model','user_companies');
 			if($companies = $this->user_companies->get_user_companies_by_user_id($profile['user_id'])){
@@ -50,7 +72,7 @@ class Home extends CI_Controller {
 	 */
 	function create_company(){
 		$this->socialhappen->check_logged_in('home');
-		$this->load->view('create_company_view');
+		$this->load->view('home/create_company_view');
 	}
 
 	/**
@@ -68,7 +90,7 @@ class Home extends CI_Controller {
 	
 		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 		{
-			$this->load->view('create_company_form');
+			$this->load->view('home/create_company_form');
 		}
 		else // passed validation proceed to post success logic
 		{
@@ -110,7 +132,7 @@ class Home extends CI_Controller {
 	 */
 	function splash(){
 		$this->socialhappen->check_logged_in('home');
-		$this->load->view('splash_view');
+		$this->load->view('home/splash_view');
 	}
 	
 	/**
@@ -121,9 +143,20 @@ class Home extends CI_Controller {
 		$this->socialhappen->check_logged_in('home');
 		$user = $this->socialhappen->get_user();
 		$this->load->model('user_companies_model','user_companies');
-		$data['user_companies'] = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
-		$data['user'] = $user;
-		$this->parser->parse('select_company_view', $data);
+		$data = array(
+						'user_companies' => $this->user_companies->get_user_companies_by_user_id($user['user_id']),
+						'user' => $user,
+						'header' => $this -> socialhappen -> get_header( 
+							array(
+								'title' => 'Select company',
+								'script' => array(
+									''
+								)
+							)
+						),
+						'footer' => $this -> socialhappen -> get_footer()
+					);
+		$this->parser->parse('home/select_company_view', $data);
 	}
 }  
 

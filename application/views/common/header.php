@@ -10,42 +10,32 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
 
 <script type="text/javascript">
-	//var base_url = "<?php echo base_url();?>";
+	var base_url = "<?php echo base_url(); ?>";
+	var image_url = base_url + "/assets/images/";
+	var user_companies = <?php echo json_encode(issetor($user_companies)); ?>;
+	<?php if(isset($vars)) :
+	foreach($vars as $name => $value) :
+		echo "var {$name} = '{$value}';\n";
+	endforeach; 
+endif; ?>
 	//var assets_url = "<?php echo base_url().'assets/';?>";
-	$(function(){
-		//Go to button
-		$('#goto').one('click',function(){
-			<?php foreach(issetor($user_companies) as $company) : ?>
-			$.ajaxSetup({'async': false});
-			$.getJSON('<?php echo base_url().'company/json_get_profile/' . $company['company_id']; ?>', function(data) {
-				$('#goto-list').append('<div class="goto-list-company-<?php echo $company['company_id'];?>">===Company : '+data.company_name+'</div>');
-			});
-			$.getJSON('<?php echo base_url().'company/json_get_pages/' . $company['company_id']; ?>', function(data) {
-				$.each(data, function(i,item){
-					$('.goto-list-company-<?php echo $company['company_id'];?>').append('<div class="goto-list-company-page-'+item.page_id+'">======Page : '+item.page_name+'</div>');
-				});
-			});
-			<?php endforeach; ?>
-			$('#goto').bind('click',function(){
-				$('#goto-list').toggle();
-			});
-		});
-	
-		//User button
-		$('#user-list').hide();
-		$('#user').click(function(){
-			$('#user-list').toggle();
-		});
-	});
 </script>
 <?php if(isset($script)) :
 	foreach($script as $one) :
-		echo '<script type="text/javascript" src="'.base_url().'assets/js/'.$one.'.js"></script>'."\n";
+		if ($one) echo '<script type="text/javascript" src="'.base_url().'assets/js/'.$one.'.js"></script>'."\n";
 	endforeach; 
-endif; ?>
+endif;
+if(isset($style)) :
+	foreach($style as $one) :
+		if($one){
+			list($class, $id) = explode('/', $one, 2);
+			echo '<link class="'.$class.'" id="'.$id.'" rel="stylesheet" type="text/css"  href="'.base_url().'assets/css/'.$one.'.css" />'."\n";
+		}
+	endforeach; 
+endif; 
+?>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<?php $this->load->view('common/bar_view'); ?>
-		</div>
+	<div class="header">
+		<?php $this->load->view('common/bar_view'); ?>
+	</div>

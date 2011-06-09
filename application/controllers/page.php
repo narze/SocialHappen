@@ -19,8 +19,20 @@ class Page extends CI_Controller {
 				'header' => $this -> socialhappen -> get_header( 
 					array(
 						'title' => $page['page_name'],
+						'vars' => array('page_id'=>$page_id),
 						'script' => array(
-							'page/page_apps'
+							'common/bar',
+							'page/page_apps',
+							'page/page_campaigns',
+							'page/page_report',
+							'page/page_users',
+							'page/page_tabs'
+						),
+						'style' => array(
+							'common/main',
+							'page/main',
+							'page/campaign',
+							'page/member'
 						)
 					)
 				),
@@ -29,7 +41,7 @@ class Page extends CI_Controller {
 						'company' => $company
 					),
 				TRUE),
-				'breadcrumb' => $this -> load -> view('common/breadcrumb.php', 
+				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
 					array('breadcrumb' => 
 						array( 
 							array(
@@ -39,19 +51,22 @@ class Page extends CI_Controller {
 						)
 					,
 				TRUE),
-				'page_profile' => $this -> load -> view('page/page_profile.php', 
+				'page_profile' => $this -> load -> view('page/page_profile', 
 					array('page_profile' => $page),
 				TRUE),
-				'page_apps' => $this -> load -> view('page/page_apps.php', 
+				'page_tabs' => $this -> load -> view('page/page_tabs', 
 					array(),
 				TRUE), 
-				'page_campaigns' => $this -> load -> view('page/page_campaigns.php', 
+				'page_apps' => $this -> load -> view('page/page_apps', 
+					array(),
+				TRUE), 
+				'page_campaigns' => $this -> load -> view('page/page_campaigns', 
 					array(),
 				TRUE),
-				'page_users' => $this -> load -> view('page/page_users.php', 
+				'page_users' => $this -> load -> view('page/page_users', 
 					array(),
 				TRUE),
-				'page_report' => $this -> load -> view('page/page_report.php', 
+				'page_report' => $this -> load -> view('page/page_report', 
 					array(),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer());
