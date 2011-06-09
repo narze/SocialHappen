@@ -76,20 +76,11 @@ class SocialHappen{
 	 */
 	function get_header($data = array()){
 		if($this->CI->session->userdata('logged_in') == TRUE){
-			return $this->CI->load->view('common/header', array(
-											'title' => issetor($data['title']),
-											'script' => issetor($data['script']),
-											'user' => $this->get_user(),
-											'user_companies' => $this->get_user_companies()
-										), TRUE);
-		} else {
-			return $this->CI->load->view('common/header', array(
-											'title' => issetor($data['title']),
-											'script' => issetor($data['script']),
-											'user' => NULL,
-											'user_companies' => NULL
-										), TRUE);
+			$data['user'] = $this->get_user();
+			$data['user_companies'] = $this->get_user_companies();
 		}
+		$data['image_url'] = base_url().'assets/images/';
+		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	
 	/**
