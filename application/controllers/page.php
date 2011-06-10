@@ -90,9 +90,9 @@ class Page extends CI_Controller {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_installed_apps($page_id =NULL) {
+	function json_get_installed_apps($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this -> load -> model('installed_apps_model', 'installed_apps');
-		$apps = $this -> installed_apps -> get_installed_apps_by_page_id($page_id);
+		$apps = $this -> installed_apps -> get_installed_apps_by_page_id($page_id, $limit, $offset);
 		echo json_encode($apps);
 	}
 
@@ -101,9 +101,9 @@ class Page extends CI_Controller {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_campaigns($page_id =NULL) {
+	function json_get_campaigns($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this -> load -> model('campaign_model', 'campaigns');
-		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id($page_id);
+		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id($page_id, $limit, $offset);
 		echo json_encode($campaigns);
 	}
 
@@ -112,9 +112,9 @@ class Page extends CI_Controller {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_users($page_id =NULL) {
+	function json_get_users($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this -> load -> model('user_model', 'users');
-		$users = $this -> users -> get_page_users_by_page_id($page_id);
+		$users = $this -> users -> get_page_users_by_page_id($page_id, $limit, $offset);
 		echo json_encode($users);
 	}
 
@@ -138,9 +138,9 @@ class Page extends CI_Controller {
 	 * JSON : Get facebook pages available to install
 	 * @author Prachya P.
 	 */
-	function json_get_not_installed_facebook_pages($company_id){
+	function json_get_not_installed_facebook_pages($company_id, $limit = NULL, $offset = NULL){
 		$this->load->model('page_model','page');
-		$pages = $this->page->get_company_pages_by_company_id($company_id);
+		$pages = $this->page->get_company_pages_by_company_id($company_id, $limit, $offset);
 		$all_installed_fb_page_id=array();
 		foreach($pages as $page){
 			$all_installed_fb_page_id[]=$page['facebook_page_id'];

@@ -35,9 +35,9 @@ class App extends CI_Controller {
 	 * @param $app_install_id
 	 * @author Manassarn M.
 	 */
-	function json_get_campaigns($app_install_id = NULL){
+	function json_get_campaigns($app_install_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('campaign_model','campaigns');
-		$campaigns = $this->campaigns->get_app_campaigns_by_app_install_id($app_install_id);
+		$campaigns = $this->campaigns->get_app_campaigns_by_app_install_id($app_install_id, $limit, $offset);
 		echo json_encode($campaigns);
 	}
 	
@@ -46,9 +46,9 @@ class App extends CI_Controller {
 	 * @param $app_install_id
 	 * @author Manassarn M.
 	 */
-	function json_get_users($app_install_id = NULL){
+	function json_get_users($app_install_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('user_apps_model','user_apps');
-		$users = $this->user_apps->get_app_users_by_app_install_id($app_install_id);
+		$users = $this->user_apps->get_app_users_by_app_install_id($app_install_id, $limit, $offset);
 		echo json_encode($users);
 	}
 	
@@ -57,9 +57,9 @@ class App extends CI_Controller {
 	 * @param : $app_install_id
 	 * @author Manassarn M.
 	 */
-	function json_get_pages($app_install_id = NULL){
+	function json_get_pages($app_install_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('page_model','pages');
-		$pages = $this->pages->get_app_pages_by_app_install_id($app_install_id);
+		$pages = $this->pages->get_app_pages_by_app_install_id($app_install_id, $limit, $offset);
 		echo json_encode($pages);
 	}
 	

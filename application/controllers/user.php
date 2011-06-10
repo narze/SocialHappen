@@ -87,9 +87,9 @@ class User extends CI_Controller {
 	 * @author Prachya P.
 	 * @author Manassarn M.
 	 */
-	function json_get_apps($user_id = NULL){
+	function json_get_apps($user_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('user_apps_model','user_apps');
-		$apps = $this->user_apps->get_user_apps_by_user_id($user_id);
+		$apps = $this->user_apps->get_user_apps_by_user_id($user_id, $limit, $offset);
 		echo json_encode($apps);
 	}
 	
@@ -99,9 +99,9 @@ class User extends CI_Controller {
 	 * @author Prachya P.
 	 * @author Manassarn M.
 	 */
-	function json_get_campaigns($user_id = NULL){
+	function json_get_campaigns($user_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('user_campaigns_model','users_campaigns');
-		$campaigns = $this->users_campaigns->get_user_campaigns_by_user_id($user_id);
+		$campaigns = $this->users_campaigns->get_user_campaigns_by_user_id($user_id, $limit, $offset);
 		echo json_encode($campaigns);
 	}
 	
@@ -140,9 +140,9 @@ class User extends CI_Controller {
 	 * @param $user_id
 	 * @author Manassarn M.
 	 */
-	function json_get_companies($user_id = NULL){
+	function json_get_companies($user_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('user_companies_model','user_companies');
-		$companies = $this->user_companies->get_user_companies_by_user_id($user_id);
+		$companies = $this->user_companies->get_user_companies_by_user_id($user_id, $limit, $offset);
 		echo json_encode($companies);
 	}
 }
