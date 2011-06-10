@@ -40,6 +40,18 @@ class Installed_apps_model extends CI_Model {
 		return $this->db->get_where('installed_apps',array('company_id'=>$company_id))->result_array();
 	}
 	
+	/*
+	 * Get installed apps (not in page)
+	 * @param $company_id
+	 * @return array
+	 * @author Prachya P.
+	 */
+	function get_installed_apps_by_company_id_not_in_page($company_id = NULL){
+		$this->db->join('app','installed_apps.app_id=app.app_id');
+		return $this->db->get_where('installed_apps',array('company_id'=>$company_id,'page_id'=>0))->result_array();
+	}
+	
+	
 	/**
 	 * Get installed app profile
 	 * @param $app_install_id
@@ -108,6 +120,20 @@ class Installed_apps_model extends CI_Model {
 	function count_all($where = array()) {
 		$this -> db -> where($where);
 		return $this -> db -> count_all_results('installed_apps');
+	}
+	
+	/**
+	 * Count installed app by distinct field
+	 * @param $distinct,array $where
+	 * @return count
+	 * @author Prachya P.
+	 */
+	function count_all_distinct($distinct,$where = array()){
+		$this->db->select($distinct);
+		$this->db->distinct();
+		$this -> db -> where($where);
+		$query = $this->db->get('installed_apps');
+		return $query->num_rows();
 	}
 
 	function get_installed_apps_list($limit =20, $offset =0) {
