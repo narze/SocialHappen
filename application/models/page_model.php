@@ -75,6 +75,17 @@ class Page_model extends CI_Model {
 		$this->db->join('page','installed_apps.page_id=page.page_id');
 		return $this->db->get_where('installed_apps',array('app_id' => $app_id, 'page.company_id' => $company_id))->result_array();
 	}
+	
+	/**
+	 * Get count all apps
+	 * @param array $where
+	 * @return count
+	 * @author Prachya P.
+	 */
+	function count_all($where = array()) {
+		$this -> db -> where($where);
+		return $this -> db -> count_all_results('page');
+	}
 }
 /* End of file page_model.php */
 /* Location: ./application/models/page_model.php */
