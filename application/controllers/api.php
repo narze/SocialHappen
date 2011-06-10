@@ -70,35 +70,32 @@ class Api extends CI_Controller {
 		// return $app_install_id
 		$app_install_id = 0;
 		$this->load->model('Company_apps_model', 'Company_apps');
+		$company_apps = $this->Company_apps->get_company_apps_by_company_id($company_id);
 		
-		if(
-			$this->Company_apps->add_company_app(array(
-					'company_id' => $company_id,
-					'app_id' => $app_id
-					))
-		){
-			$this->load->model('Installed_apps_model', 'Installed_apps');
-			$app_install_id = $this->Installed_apps->add_installed_app(
-										array(
-											'company_id' => $company_id,
-											'app_id' => $app_id,
-											'app_install_status' => TRUE,
-											'app_install_secret_key' => $app_install_secret_key
-										));
-			
-			// response
-			$response = array(	'status' => 'OK',
-								'app_install_id' => $app_install_id,
-								'app_install_secret_key' => $app_install_secret_key);
-			echo json_encode($response);			
-		}else{
-			echo json_encode(array( 'error' => '500',
-									'message' => 'database error'));
-			return;
+		foreach($company_apps as $company_app){
+			if($company_app['app_id']==$app_id){
+				$this->load->model('Installed_apps_model', 'Installed_apps');
+				$app_install_id = $this->Installed_apps->add_installed_app(
+											array(
+												'company_id' => $company_id,
+												'app_id' => $app_id,
+												'app_install_status' => TRUE,
+												'app_install_secret_key' => $app_install_secret_key
+											));
+				
+				// response
+				$response = array(	'status' => 'OK',
+									'app_install_id' => $app_install_id,
+									'app_install_secret_key' => $app_install_secret_key);
+				echo json_encode($response);		
+				return;				
+			}
 			
 		}
-		
-		 
+		echo json_encode(array( 'error' => '300',
+										'message' => 'application is not available for company'));
+				return;
+				
 	}
 
 	/**
@@ -263,7 +260,7 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->model('Page_model', 'Page');
-		$page_id = $this->Page->get_page_id($facebook_page_id);
+		$page_id = $this->Page->get_page_id_by_facebook_page_id($facebook_page_id);
 		
 		if(sizeof($page_id)>0){
 			$response = array(	'status' => 'OK',
@@ -483,39 +480,46 @@ class Api extends CI_Controller {
 			
 			// update user last seen
 			$this->User_apps->update_user_last_seen($user_id, $app_install_id);
-			$this->User->update_user_last_seen($user_facebook_id);
+			$this->User->update_user_last_seen($user_id);
 			
 		}
-
+		
+		$this->load->library('fb_library/FB_library',
+							array(
+							  'appId'  => $this->config->item('facebook_app_id'),
+							  'secret' => $this->config->item('facebook_api_secret'),
+							  'cookie' => true,
+							),
+							'FB');
+							
+		$loginUrl = $this->FB->getLoginUrl(
+									array(
+										'redirect_uri' => 'http://socialhappen.dyndns.org/socialhappen/signup',	// permission successful target
+										'next'=>'http://socialhappen.dyndns.org/signup',
+										'req_perms'=>'offline_access,user_photos'
+									)
+								);
+		
 		$response = array(	'status' => 'OK',
-							'html' => '<input type="button" value="Connect to SH" onclick="window.open(\'http://www.socialhappen.com\')"/>'
+							'html' => '<input type="button" value="Connect to SH" onclick="window.open(\''.$loginUrl.'\')"/>'
 						);
 
 		echo json_encode($response);
 	}
-
+	
 	/**
-	 * Request for campaign information
+	 * Request for campaign list
 	 * @author Wachiraph C.
 	 */
-	function request_campaign_info(){
+	function request_campaign_list(){
 		$app_id = $this->input->get('app_id', TRUE);
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
-		$user_id = $this->input->get('user_id', TRUE);
-		$campaign_id = $this->input->get('campaign_id', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id) || !($campaign_id)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_id)'));
-			return;
-		}
-		
-		$this->load->model('Session_model','Session');
-		if(!$this->Session->get_session_id_by_user_id($user_id)){
-			echo json_encode(array( 'error' => '300',
-									'message' => 'user session error, please login through platform'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 			return;
 		}
 		
@@ -543,12 +547,79 @@ class Api extends CI_Controller {
 		
 		$company_id = $company_id['company_id'];
 		
-		// authenticate user with $company_id and $user_facebook_id
-		if(!($this->_authenticate_user($company_id, $user_id))){
-			echo json_encode(array( 'error' => '300',
-									'message' => 'you have no permission to install app on this company'));
+		$this->load->model('Campaign_model', 'Campaign');
+		$campaigns = $this->Campaign->get_app_campaigns_by_app_install_id($app_install_id);
+		
+		if(sizeof($campaigns)>0){
+
+			if($campaigns[0]['app_install_id'] != $app_install_id){
+				echo json_encode(array( 'error' => '300',
+									'message' => 'you have no permission to access this campaign'));
+				return;
+			}else{
+				
+				foreach($campaigns as $campaign){
+				$response[] = array(
+								'status' => 'OK',
+								'campaign_id' => $campaign['campaign_id'],
+								'campaign_name' => $campaign['campaign_name'],
+								'campaign_status_id' => $campaign['campaign_status_id'],
+								'campaign_status_name' => $campaign['campaign_status_name']
+							);
+				}
+				echo json_encode($response);
+				
+			}
+			
+		}else{
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid campaign id'));
+			return;		
+		}
+		
+		
+	}
+
+	/**
+	 * Request for campaign information
+	 * @author Wachiraph C.
+	 */
+	function request_campaign_info(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$campaign_id = $this->input->get('campaign_id', TRUE);
+		
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($campaign_id)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, campaign_id)'));
 			return;
 		}
+		
+		// authenticate app with $app_id and $app_secret_key
+		if(!($this->_authenticate_app($app_id, $app_secret_key))){
+			echo json_encode(array( 'error' => '200',
+									'message' => 'invalid app_secret_key'));
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid app_install_secret_key'));
+			return;
+		}
+		
+		$this->load->model('Installed_apps_model', 'Installed_apps');
+		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		if(sizeof($company_id)==0){
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid company_id'));
+			return;			
+		}
+		
+		$company_id = $company_id['company_id'];
 		
 		$this->load->model('Campaign_model', 'Campaign');
 		$campaign = $this->Campaign->get_campaign_profile_by_campaign_id($campaign_id);
@@ -644,7 +715,7 @@ class Api extends CI_Controller {
 			return;
 		}
 		
-		$thia->load->model('Campaign_model','Campaign');
+		$this->load->model('Campaign_model','Campaign');
 		$campaign_id = 0;
 				
 		if(!$campaign_status_id)
@@ -652,10 +723,11 @@ class Api extends CI_Controller {
 			
 		$campaign_id = $this->Campaign->add_campaign(
 									array(
+										'app_install_id' => $app_install_id,
 										'campaign_name' => $campaign_name,
 										'campaign_detail' => $campaign_detail,
 										'campaign_start_timestamp' => $campaign_start_timestamp,
-										'campaign_end_time_stamp' => $campaign_end_timestamp,
+										'campaign_end_timestamp' => $campaign_end_timestamp,
 										'campaign_status_id' => $campaign_status_id
 									));
 		
@@ -733,7 +805,7 @@ class Api extends CI_Controller {
 			return;
 		}
 				
-		$thia->load->model('Campaign_model','Campaign');
+		$this->load->model('Campaign_model','Campaign');
 		$campaign = $this->Campaign->get_campaign_profile_by_campaign_id($campaign_id);
 		
 		if(sizeof($campaign)>0){
@@ -760,7 +832,7 @@ class Api extends CI_Controller {
 												'campaign_name' => $campaign_name,
 												'campaign_detail' => $campaign_detail,
 												'campaign_start_timestamp' => $campaign_start_timestamp,
-												'campaign_end_time_stamp' => $campaign_end_timestamp,
+												'campaign_end_timestamp' => $campaign_end_timestamp,
 												'campaign_status_id' => $campaign_status_id
 											));
 				
