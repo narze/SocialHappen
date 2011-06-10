@@ -7,18 +7,6 @@ class Page extends CI_Controller {
 		parent::__construct();
 		$this->load->library('pagination');
 	}
-
-	function test(){
-
-$config['base_url'] = 'http://example.com/index.php/test/page/lol';
-$config['total_rows'] = '200';
-//$config['per_page'] = '20'; 
-
-$this->pagination->initialize($config); 
-
-echo $this->pagination->create_links();
-	}
-	
 	
 	function index($page_id =NULL) {
 		$this -> socialhappen -> check_logged_in('home');
