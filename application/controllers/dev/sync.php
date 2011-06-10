@@ -388,6 +388,21 @@ class Sync extends CI_Controller {
 					    'app_support_page_tab' => 1, 
 					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
 						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
+					),
+					array(
+					    'app_id' => 6, 
+					    'app_name' => 'MockApp', 
+					    'app_type_id' => 1, 
+					    'app_maintainance' => 0, 
+					    'app_show_in_list' => 1, 
+					    'app_description' => 'Mock Application', 
+					    'app_secret_key' => 'ab6548beccb40d5a82f5b7bae5e55521', 
+					    'app_url' => '', 
+					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}', 
+					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_support_page_tab' => 1, 
+					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app_icon.png',
+						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
 					)
 				);
 		$this->db->insert_batch('app', $app);
@@ -405,6 +420,11 @@ class Sync extends CI_Controller {
 									),
 									array(
 									    'app_install_status_id' => 3,
+									    'app_install_status_name' => 'not complete install',
+									    'app_install_status_description' => 'Installed but not complete'
+									),
+									array(
+									    'app_install_status_id' => 6,
 									    'app_install_status_name' => 'not complete install',
 									    'app_install_status_description' => 'Installed but not complete'
 									)
