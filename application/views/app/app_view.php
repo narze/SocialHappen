@@ -1,7 +1,13 @@
 {header}
 {company_image_and_name}
 {breadcrumb}
-{app_profile}
-{app_campaigns}
-{app_users}
+	<div class="wrapper-content">
+		<div>
+			{app_profile}
+			{app_tabs}
+			{app_campaigns}
+			{app_users}	
+		</div>
+	<div class="bottom"><!--bottom--></div>
+</div>
 {footer}

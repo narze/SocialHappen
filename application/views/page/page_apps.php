@@ -1,4 +1,5 @@
 <div class="wrapper-details apps">
+	<?php echo $pagination['app']; ?>
 	<h2 class="application"><span>Appication</span></h2>
 	<div class="option apps"><a class="bt-addnew_app" href="#"><span>Add new appication</span></a></div>
 	<div class="details apps">

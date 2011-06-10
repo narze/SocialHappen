@@ -67,9 +67,9 @@ class Company extends CI_Controller {
 	 * @param $user_id
 	 * @author Prachya P.
 	 */
-	function json_get_user_companies($user_id = NULL){
+	function json_get_user_companies($user_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('company_model','company');
-		$companies = $this->company->get_company_list_by_user_id($user_id);
+		$companies = $this->company->get_company_list_by_user_id($user_id, $limit, $offset);
 		echo json_encode($companies);
 	}
 	
@@ -78,9 +78,9 @@ class Company extends CI_Controller {
 	 * @param $company_id
 	 * @author Manassarn M.
 	 */
-	function json_get_pages($company_id = NULL){
+	function json_get_pages($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('page_model','page');
-		$pages = $this->page->get_company_pages_by_company_id($company_id);
+		$pages = $this->page->get_company_pages_by_company_id($company_id, $limit, $offset);
 		echo json_encode($pages);
 	}
 	
@@ -112,9 +112,9 @@ class Company extends CI_Controller {
 	 * @param $company_id
 	 * @author Manassarn M.
 	 */
-	function json_get_apps($company_id = NULL){
+	function json_get_apps($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('company_apps_model','company_apps');
-		$apps = $this->company_apps->get_company_apps_by_company_id($company_id);
+		$apps = $this->company_apps->get_company_apps_by_company_id($company_id, $limit, $offset);
 		echo json_encode($apps);
 	}
 
@@ -133,9 +133,9 @@ class Company extends CI_Controller {
 	 * @param $company_id
 	 * @author Manassarn M.
 	 */
-	function json_get_installed_apps($company_id = NULL){
+	function json_get_installed_apps($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('installed_apps_model','installed_apps');
-		$apps = $this->installed_apps->get_installed_apps_by_company_id($company_id);
+		$apps = $this->installed_apps->get_installed_apps_by_company_id($company_id, $limit, $offset);
 		echo json_encode($apps);
 	}
 	
@@ -155,9 +155,9 @@ class Company extends CI_Controller {
 	 * @param $company_id
 	 * @author Prachya P.
 	 */
-	function json_get_not_installed_apps($company_id = NULL,$page_id = NULL){
+	function json_get_not_installed_apps($company_id = NULL,$page_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('company_apps_model','company_apps');
-		$apps = $this->company_apps->get_company_not_installed_apps($company_id,$page_id);
+		$apps = $this->company_apps->get_company_not_installed_apps($company_id,$page_id, $limit, $offset);
 		echo json_encode($apps);
 	}
 	

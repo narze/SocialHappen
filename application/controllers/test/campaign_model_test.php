@@ -14,7 +14,6 @@ class Campaign_model_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->campaigns))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -34,6 +33,34 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_name'],'is_string','campaign_name');
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($result[0]['campaign_status_id'],'is_string','campaign_status_id');
+		$this->unit->run($result[0]['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
+		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
+		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
+		
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['app_id'],'is_string','app_id');
+		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
+		$this->unit->run($result[0]['page_id'],'is_string','page_id');
+		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
+		$this->unit->run(count($result[0]) == 16,'is_true', 'number of column');
+	}	
+	
+	/**
+	 * Tests get_page_campaigns_by_page_id_and_campaign_status_id()
+	 * @author Manassarn M.
+	 */
+	function get_page_campaigns_by_page_id_and_campaign_status_id_test(){
+		$result = $this->campaigns->get_page_campaigns_by_page_id_and_campaign_status_id(1,1);
+		$this->unit->run($result,'is_array', 'get_page_campaigns_by_page_id_and_campaign_status_id()');
+		$this->unit->run($result[0]['campaign_id'],'is_string','campaign_id');
+		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
+		$this->unit->run($result[0]['campaign_name'],'is_string','campaign_name');
+		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
+		$this->unit->run($result[0]['campaign_status_id'],'is_string','campaign_status_id');
+		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true','campaign_status_id');
 		$this->unit->run($result[0]['campaign_status_name'],'is_string','campaign_status_name');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
@@ -77,6 +104,62 @@ class Campaign_model_test extends CI_Controller {
 	}
 
 	/**
+	 * Tests get_campaigns_by_app_install_id()
+	 * @author Manassarn M.
+	 */
+	function get_campaigns_by_app_install_id_test(){
+		$result = $this->campaigns->get_campaigns_by_app_install_id(1);
+		$this->unit->run($result,'is_array', 'get_campaigns_by_app_install_id()');
+		$this->unit->run($result[0],'is_array', 'get_campaigns_by_app_install_id()');
+		$this->unit->run($result[0]['campaign_id'],'is_string','campaign_id');
+		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
+		$this->unit->run($result[0]['campaign_name'],'is_string','campaign_name');
+		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
+		$this->unit->run($result[0]['campaign_status_id'],'is_string','campaign_status_id');
+		$this->unit->run($result[0]['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
+		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
+		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
+		
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['app_id'],'is_string','app_id');
+		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
+		$this->unit->run($result[0]['page_id'],'is_string','page_id');
+		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
+		$this->unit->run(count($result[0]) == 16,'is_true', 'number of column');	
+	}
+
+	/**
+	 * Tests get_app_campaigns_by_app_install_id_and_campaign_status_id()
+	 * @author Manassarn M.
+	 */
+	function get_app_campaigns_by_app_install_id_and_campaign_status_id_test(){
+		$result = $this->campaigns->get_app_campaigns_by_app_install_id_and_campaign_status_id(1,1);
+		$this->unit->run($result,'is_array', 'get_app_campaigns_by_app_install_id_and_campaign_status_id()');
+		$this->unit->run($result[0]['campaign_id'],'is_string','campaign_id');
+		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
+		$this->unit->run($result[0]['campaign_name'],'is_string','campaign_name');
+		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
+		$this->unit->run($result[0]['campaign_status_id'],'is_string','campaign_status_id');
+		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true','campaign_status_id');
+		$this->unit->run($result[0]['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
+		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
+		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
+		
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['app_id'],'is_string','app_id');
+		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
+		$this->unit->run($result[0]['page_id'],'is_string','page_id');
+		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
+		$this->unit->run(count($result[0]) == 16,'is_true', 'number of column');
+	}
+	
+	/**
 	 * Test add_campaign() and remove_campaign()
 	 * @author Manassarn M.
 	 */
@@ -99,6 +182,24 @@ class Campaign_model_test extends CI_Controller {
 		
 		$removed_again = $this->campaigns->remove_campaign($campaign_id);
 		$this->unit->run($removed_again == 0,'is_true','remove_campaign()');
+	}
+	
+	/**
+	 * Test count_campaigns_by_page_id()
+	 * @author Manassarn M.
+	 */
+	function count_campaigns_by_page_id_test(){
+		$result = $this->campaigns->count_campaigns_by_page_id(1);
+		$this->unit->run($result,'is_string', 'count_campaigns_by_page_id()');
+	}
+	
+	/**
+	 * Test count_campaigns_by_app_install_id()
+	 * @author Manassarn M.
+	 */
+	function count_campaigns_by_app_install_id_test(){
+		$result = $this->campaigns->count_campaigns_by_app_install_id(1);
+		$this->unit->run($result,'is_string', 'count_campaigns_by_app_install_id()');
 	}
 }
 /* End of file campaign_model_test.php */

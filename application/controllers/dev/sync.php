@@ -178,10 +178,6 @@ class Sync extends CI_Controller {
 							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'available_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							),
-							'company_pages' => array(
-							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							),
 							/*'config_item' => array(
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'config_key' => field_option('VARCHAR', 64, $default, $null, $autoinc, $unsigned),
@@ -261,7 +257,6 @@ class Sync extends CI_Controller {
 						'campaign_status' => array('campaign_status_id'),
 						'company' => array('company_id'),
 						'company_apps' => array('company_id', 'app_id'),
-						'company_pages' => array('company_id', 'page_id'),
 						//'config_item' => array('app_install_id','config_key'),
 						//'config_item_template' => array('app_id','config_key'),
 						//'VARCHAR_job' => array('job_id'),
@@ -282,7 +277,6 @@ class Sync extends CI_Controller {
 							'campaign_status',
 							'company',
 							'company_apps',
-							'company_pages',
 							//'config_item',
 							//'config_item_template',
 							//'cron_job',
@@ -514,14 +508,6 @@ class Sync extends CI_Controller {
 						);
 		$this->db->insert_batch('company_apps', $company_apps);
 		
-		$company_pages = array(
-							array(
-							    'company_id' => 1,
-							    'page_id' => 1
-							)
-						);
-		$this->db->insert_batch('company_pages', $company_pages);
-						
 		$installed_apps = array(
 								array(
 								    'app_install_id' => 1, 

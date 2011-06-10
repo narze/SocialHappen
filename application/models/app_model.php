@@ -51,7 +51,7 @@ class App_model extends CI_Model {
 	 */
 	function get_app_by_app_id($app_id = NULL){
 		$result = $this->db->get_where('app', array('app_id' => $app_id))->result_array();
-		return $result[0];				
+		return issetor($result[0]);				
 	}
 	
 	/**
@@ -61,7 +61,7 @@ class App_model extends CI_Model {
 	 */
 	function get_app_by_api_key($fb_app_api_key = NULL){
 		$result = $this->db->get_where('app', array('facebook_app_api_key' => $fb_app_api_key))->result_array();
-		return $result[0];				
+		return issetor($result[0]);				
 	}
 	
 	/**
@@ -71,7 +71,7 @@ class App_model extends CI_Model {
 	 */
 	function get_app_install_status_by_status_name($app_install_status_name = NULL){
 		$result = $this->db->get_where('app_install_status', array('name' => $app_install_status_name))->result_array();
-		return $result[0];				
+		return issetor($result[0]);				
 	}
 	
 	/**

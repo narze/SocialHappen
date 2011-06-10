@@ -30,7 +30,7 @@ class App_model_test extends CI_Controller {
 		$result = $this->apps->get_all_apps();
 		$this->unit->run($result, 'is_array', 'get_all_apps()');
 		$this->unit->run($result[0], 'is_array', 'First row');
-		$this->unit->run(count($result[0]) == 14, 'is_true', 'Count items');
+		$this->unit->run(count($result[0]) == 15, 'is_true', 'Count items');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
 		$this->unit->run($result[0]['app_name'],'is_string','app_name');
 		$this->unit->run($result[0]['app_type_id'],'is_string','app_type_id');
@@ -45,6 +45,7 @@ class App_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($result[0]['app_support_page_tab'],'is_string','app_support_page_tab');
 		$this->unit->run($result[0]['app_image'],'is_string','app_image');
+		$this->unit->run($result[0]['facebook_app_api_key'],'is_string','facebook_app_api_key');
 	}
 
 	/**

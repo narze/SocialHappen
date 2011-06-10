@@ -12,7 +12,6 @@ class App_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -28,7 +27,7 @@ class App_test extends CI_Controller {
 		$content = file_get_contents(base_url().'app/json_get_profile/1');
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array, 'is_array', 'json_get_profile()');
-		$this->unit->run(count($array) == 7, 'is_true', 'number of column');
+		$this->unit->run(count($array) == 19,'is_true', 'number of column');
 		$this->unit->run($array['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($array['company_id'],'is_string','company_id');
 		$this->unit->run($array['app_id'],'is_string','app_id');
@@ -36,7 +35,18 @@ class App_test extends CI_Controller {
 		$this->unit->run($array['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($array['page_id'],'is_string','page_id');
 		$this->unit->run($array['app_install_secret_key'],'is_string','app_install_secret_key');
-		
+		$this->unit->run($array['app_name'],'is_string','app_name');
+		$this->unit->run($array['app_type_id'],'is_string','app_type_id');
+		$this->unit->run($array['app_maintainance'],'is_string','app_maintainance');
+		$this->unit->run($array['app_show_in_list'],'is_string','app_show_in_list');
+		$this->unit->run($array['app_description'],'is_string','app_description');
+		$this->unit->run($array['app_secret_key'],'is_string','app_secret_key');
+		$this->unit->run($array['app_url'],'is_string','app_url');
+		$this->unit->run($array['app_install_url'],'is_string','app_install_url');
+		$this->unit->run($array['app_config_url'],'is_string','app_config_url');
+		$this->unit->run($array['app_support_page_tab'],'is_string','app_support_page_tab');
+		$this->unit->run($array['app_image'],'is_string','app_image');
+		$this->unit->run($array['facebook_app_api_key'],'is_string','facebook_app_api_key');
 	}
 	
 	/**
@@ -66,6 +76,35 @@ class App_test extends CI_Controller {
 		$this->unit->run($array[0]['page_id'],'is_string','page_id');
 		$this->unit->run($array[0]['app_install_secret_key'],'is_string','app_install_secret_key');
 		$this->unit->run(count($array[0]) == 16, 'is_true', 'number of column');
+	}	
+	
+	/**
+	 * Tests json_get_campaigns_using_status()
+	 * @author Manassarn M.
+	 */
+	function json_get_campaigns_using_status_test(){
+		$content = file_get_contents(base_url().'app/json_get_campaigns_using_status/1/1');
+		$array = json_decode($content, TRUE);
+		$this->unit->run($array,'is_array', 'json_get_campaigns_using_status()');
+		$this->unit->run($array[0],'is_array', 'First row');
+		$this->unit->run($array[0]['campaign_id'],'is_string','campaign_id');
+		$this->unit->run($array[0]['app_install_id'],'is_string','app_install_id');
+		$this->unit->run($array[0]['campaign_name'],'is_string','campaign_name');
+		$this->unit->run($array[0]['campaign_detail'],'is_string','campaign_detail');
+		$this->unit->run($array[0]['campaign_status_id'],'is_string','campaign_status_id');
+		$this->unit->run($array[0]['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($array[0]['campaign_active_member'],'is_string','campaign_active_member');
+		$this->unit->run($array[0]['campaign_all_member'],'is_string','campaign_all_member');
+		$this->unit->run($array[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($array[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
+		
+		$this->unit->run($array[0]['company_id'],'is_string','company_id');
+		$this->unit->run($array[0]['app_id'],'is_string','app_id');
+		$this->unit->run($array[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($array[0]['app_install_date'],'is_string','app_install_date');
+		$this->unit->run($array[0]['page_id'],'is_string','page_id');
+		$this->unit->run($array[0]['app_install_secret_key'],'is_string','app_install_secret_key');
+		$this->unit->run(count($array[0]) == 16,'is_true', 'number of column');
 	}
 
 	/**
