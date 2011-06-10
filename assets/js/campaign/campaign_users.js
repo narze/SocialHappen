@@ -1,5 +1,5 @@
 $(function(){	
-	$.getJSON(base_url+'page/json_get_users/'+page_id,function(json){
+	$.getJSON(base_url+'campaign/json_get_users/'+campaign_id,function(json){
 		for(i in json){
 			var row = $('.wrapper-details.users .details table tr.hidden-template').clone()
 			.removeClass('hidden-template')

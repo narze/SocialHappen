@@ -9,7 +9,7 @@
 		{page_campaigns}
 		{page_users}
 		{page_report}
-	</div
+	</div>
 	<div class="bottom"><!--bottom--></div>
 </div>
 {footer}

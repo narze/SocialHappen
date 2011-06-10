@@ -44,9 +44,8 @@ class Page extends CI_Controller {
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
 					array('breadcrumb' => 
 						array( 
-							array(
-								"name" => $page['page_name'],
-								"url" => base_url() . "page/{$page['page_id']}")
+							$company['company_name'] => base_url() . "company/{$company['company_id']}",
+							$page['page_name'] => base_url() . "page/{$page['page_id']}"
 							)
 						)
 					,
