@@ -6,8 +6,8 @@
 
 		<?php
 		
-		foreach($breadcrumb as $each){
-			echo "<li><a href='{$each['url']}'>{$each['name']}</a></li>";
+		foreach($breadcrumb as $name => $url){
+			echo "<li><a href='{$url}'>{$name}</a></li>";
 		}
 		
 		?>

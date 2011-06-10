@@ -8,13 +8,62 @@ class Campaign extends CI_Controller {
 
 	function index($campaign_id = NULL){
 		$this->socialhappen->check_logged_in('home');
-		if($campaign_id){
+		if($campaign_id) {
+			$this -> load -> model('company_model', 'companies');
+			$company = $this -> companies -> get_company_profile_by_campaign_id($campaign_id);
+			$this->load->model('page_model','pages');
+			$page = $this->pages->get_page_profile_by_campaign_id($campaign_id);
+			$this -> load -> model('campaign_model', 'campaigns');
+			$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
 			$data = array(
-						'campaign_id' => $campaign_id,
-						'header' => $this->socialhappen->get_header(),
-						'footer' => $this->socialhappen->get_footer()
-					);
-			$this->parser->parse('campaign/campaign_view', $data);
+				'campaign_id' => $campaign_id,
+				'header' => $this -> socialhappen -> get_header( 
+					array(
+						'title' => $campaign['campaign_name'],
+						'vars' => array('campaign_id'=>$campaign_id),
+						'script' => array(
+							'common/bar',
+							'campaign/campaign_stat',
+							'campaign/campaign_users',
+							'campaign/campaign_tabs'
+						),
+						'style' => array(
+							'common/main',
+							'campaign/main',
+							'campaign/member',
+							'campaign/stat'
+						)
+					)
+				),
+				'company_image_and_name' => $this -> load -> view('company/company_image_and_name', 
+					array(
+						'company' => $company
+					),
+				TRUE),
+				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+					array('breadcrumb' => 
+						array(
+							$company['company_name'] => base_url() . "company/{$company['company_id']}",
+							$page['page_name'] => base_url() . "page/{$page['page_id']}",
+							$campaign['campaign_name'] => base_url() . "campaign/{$campaign['campaign_id']}"
+							)
+						)
+					,
+				TRUE),
+				'campaign_profile' => $this -> load -> view('campaign/campaign_profile', 
+					array('campaign_profile' => $campaign),
+				TRUE),
+				'campaign_tabs' => $this -> load -> view('campaign/campaign_tabs', 
+					array(),
+				TRUE), 
+				'campaign_stat' => $this -> load -> view('campaign/campaign_stat', 
+					array(),
+				TRUE),
+				'campaign_users' => $this -> load -> view('campaign/campaign_users', 
+					array(),
+				TRUE),
+				'footer' => $this -> socialhappen -> get_footer());
+			$this -> parser -> parse('campaign/campaign_view', $data);
 			return $data;
 		}
 	}

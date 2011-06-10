@@ -17,7 +17,6 @@ class Sync extends CI_Controller {
 		echo '<a href="'.base_url().'dev/sync/db_reset">RESET (drop -> create -> insert data)</a><br />';
 		echo '<a href="'.base_url().'dev/sync/generate_field_code">Generate field PHP code</a><br />';
 		echo '<a href="'.base_url().'dev/sync/create_database">Create datebase "socialhappen"</a>';
-		
 	}
 	
 	/**

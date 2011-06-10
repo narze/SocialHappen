@@ -39,6 +39,22 @@ class Company_model extends CI_Model {
 	}
 	
 	/**
+	 * Get profile
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function get_company_profile_by_campaign_id($campaign_id = NULL){
+	
+		$this->db->join('installed_apps','installed_apps.company_id=company.company_id');
+		$this->db->join('campaign','campaign.app_install_id=installed_apps.app_install_id');
+		$this->db->select(array('company.company_id','creator_user_id','company_name','company_detail','company_address'
+						,'company_email','company_telephone','company_register_date','company_username','company_password','company_image'));
+		$result = $this->db->get_where('company',array('campaign_id'=>$campaign_id))->result_array();
+		return issetor($result[0], NULL);
+	}
+	
+	
+	/**
 	 * Adds company
 	 * @param array $data
 	 * @author Manassarn M.
