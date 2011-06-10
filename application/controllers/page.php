@@ -5,10 +5,10 @@ if(!defined('BASEPATH'))
 class Page extends CI_Controller {
 	function __construct() {
 		parent::__construct();
+		$this->load->library('pagination');
 	}
 
 	function test(){
-		$this->load->library('pagination');
 
 $config['base_url'] = 'http://example.com/index.php/test/page/lol';
 $config['total_rows'] = '200';
@@ -27,6 +27,32 @@ echo $this->pagination->create_links();
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
 			$this -> load -> model('page_model', 'pages');
 			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+			
+			$this -> load ->model('installed_apps_model','installed_apps');
+			$this->pagination->initialize(
+				array(
+					'base_url' => base_url()."page/{$page_id}/apps",
+					'total_rows' => $app_count = $this->installed_apps->count_installed_apps_by_page_id($page_id)
+				)
+			);
+			$pagination['app'] = $this->pagination->create_links();
+			$this -> load ->model('campaign_model','campaigns');
+			$this->pagination->initialize(
+				array(
+					'base_url' => base_url()."page/{$page_id}/campaigns",
+					'total_rows' => $campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id)
+				)
+			);
+			$pagination['campaign'] = $this->pagination->create_links();
+			$this -> load ->model('user_model','users');
+			$this->pagination->initialize(
+				array(
+					'base_url' => base_url()."page/{$page_id}/users",
+					'total_rows' => $user_count = $this->users->count_users_by_page_id($page_id)
+				)
+			);
+			$pagination['user'] = $this->pagination->create_links();
+			
 			$data = array(
 				'page_id' => $page_id,
 				'header' => $this -> socialhappen -> get_header( 
@@ -67,16 +93,20 @@ echo $this->pagination->create_links();
 					array('page_profile' => $page),
 				TRUE),
 				'page_tabs' => $this -> load -> view('page/page_tabs', 
-					array(),
+					array(
+						'app_count' => $app_count,
+						'campaign_count' => $campaign_count,
+						'user_count' => $user_count
+						),
 				TRUE), 
 				'page_apps' => $this -> load -> view('page/page_apps', 
-					array(),
+					array('pagination' => $pagination),
 				TRUE), 
 				'page_campaigns' => $this -> load -> view('page/page_campaigns', 
-					array(),
+					array('pagination' => $pagination),
 				TRUE),
 				'page_users' => $this -> load -> view('page/page_users', 
-					array(),
+					array('pagination' => $pagination),
 				TRUE),
 				'page_report' => $this -> load -> view('page/page_report', 
 					array(),

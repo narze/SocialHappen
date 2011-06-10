@@ -140,6 +140,40 @@ class User_model extends CI_Model {
 		$count = $this -> db -> count_all_results();
 		return ($count != 0);
 	}
+	
+	/* 
+	 * Count users
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function count_users_by_page_id($page_id = NULL){
+		$this->db->where(array('page_id' => $page_id));
+		$this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
+		$this -> db -> join('installed_apps', 'installed_apps.app_install_id=user_apps.app_install_id');
+		return $this->db->count_all_results('user');
+	}
+
+	/* 
+	 * Count users
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function count_users_by_app_install_id($app_install_id = NULL){
+		$this->db->where(array('app_install_id' => $app_install_id));
+		$this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
+		return $this->db->count_all_results('user');
+	}
+
+	/* 
+	 * Count users
+	 * @param $campaign_id
+	 * @author Manassarn M.
+	 */
+	function count_users_by_campaign_id($campaign_id = NULL){
+		$this->db->where(array('campaign_id' => $campaign_id));
+		$this -> db -> join('user_campaigns', 'user_campaigns.user_id=user.user_id');
+		return $this->db->count_all_results('user');
+	}
 
 	function _get($where = array(), $limit =0, $offset =0) {
 		$query = $this -> db -> get_where('user', $where, $limit, $offset);

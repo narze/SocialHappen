@@ -120,6 +120,33 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_last_seen'],'is_string','user_last_seen');
 		$this->unit->run(count($result) == 8,'is_true', 'number of column');
 	}
+	
+	/**
+	 * Test count_users_by_page_id()
+	 * @author Manassarn M.
+	 */
+	function count_users_by_page_id_test(){
+		$result = $this->users->count_users_by_page_id(1);
+		$this->unit->run($result,'is_string', 'count_users_by_page_id()');
+	}
+	
+	/**
+	 * Test count_users_by_app_install_id()
+	 * @author Manassarn M.
+	 */
+	function count_users_by_app_install_id_test(){
+		$result = $this->users->count_users_by_app_install_id(1);
+		$this->unit->run($result,'is_string', 'count_users_by_app_install_id()');
+	}
+	
+	/**
+	 * Test count_users_by_campaign_id()
+	 * @author Manassarn M.
+	 */
+	function count_users_by_campaign_id_test(){
+		$result = $this->users->count_users_by_campaign_id(1);
+		$this->unit->run($result,'is_string', 'count_users_by_campaign_id()');
+	}
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */

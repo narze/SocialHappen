@@ -4,6 +4,7 @@ class Campaign extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		$this->load->library('pagination');
 	}
 
 	function index($campaign_id = NULL){
@@ -15,6 +16,16 @@ class Campaign extends CI_Controller {
 			$page = $this->pages->get_page_profile_by_campaign_id($campaign_id);
 			$this -> load -> model('campaign_model', 'campaigns');
 			$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
+			
+			$this -> load ->model('user_model','users');
+			$this->pagination->initialize(
+				array(
+					'base_url' => base_url()."campaign/{$campaign_id}/users",
+					'total_rows' => $user_count = $this->users->count_users_by_campaign_id($campaign_id)
+				)
+			);
+			$pagination['user'] = $this->pagination->create_links();
+			
 			$data = array(
 				'campaign_id' => $campaign_id,
 				'header' => $this -> socialhappen -> get_header( 
@@ -54,13 +65,15 @@ class Campaign extends CI_Controller {
 					array('campaign_profile' => $campaign),
 				TRUE),
 				'campaign_tabs' => $this -> load -> view('campaign/campaign_tabs', 
-					array(),
+					array(
+						'user_count' => $user_count
+						),
 				TRUE), 
 				'campaign_stat' => $this -> load -> view('campaign/campaign_stat', 
 					array(),
 				TRUE),
 				'campaign_users' => $this -> load -> view('campaign/campaign_users', 
-					array(),
+					array('pagination' => $pagination),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer());
 			$this -> parser -> parse('campaign/campaign_view', $data);

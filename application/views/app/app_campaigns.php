@@ -1,4 +1,5 @@
  <div class="wrapper-details campaigns">
+ <?php echo $pagination['campaign']; ?>
         <h2 class="application"><span>Campaign</span></h2>
         <div class="filter">
           <ul>

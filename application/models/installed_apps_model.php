@@ -86,6 +86,17 @@ class Installed_apps_model extends CI_Model {
 		return $this->db->affected_rows()==1;
 	}
 	
+	/* 
+	 * Count installed apps
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function count_installed_apps_by_page_id($page_id = NULL){
+		$this->db->where(array('page_id' => $page_id));
+		$this->db->join('app','installed_apps.app_id=app.app_id');
+		return $this->db->count_all_results('installed_apps');
+	}
+	
 	function add($data = array()) {
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;

@@ -27,7 +27,7 @@ class App_test extends CI_Controller {
 		$content = file_get_contents(base_url().'app/json_get_profile/1');
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array, 'is_array', 'json_get_profile()');
-		$this->unit->run(count($array) == 7, 'is_true', 'number of column');
+		$this->unit->run(count($array) == 19,'is_true', 'number of column');
 		$this->unit->run($array['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($array['company_id'],'is_string','company_id');
 		$this->unit->run($array['app_id'],'is_string','app_id');
@@ -35,6 +35,18 @@ class App_test extends CI_Controller {
 		$this->unit->run($array['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($array['page_id'],'is_string','page_id');
 		$this->unit->run($array['app_install_secret_key'],'is_string','app_install_secret_key');
+		$this->unit->run($array['app_name'],'is_string','app_name');
+		$this->unit->run($array['app_type_id'],'is_string','app_type_id');
+		$this->unit->run($array['app_maintainance'],'is_string','app_maintainance');
+		$this->unit->run($array['app_show_in_list'],'is_string','app_show_in_list');
+		$this->unit->run($array['app_description'],'is_string','app_description');
+		$this->unit->run($array['app_secret_key'],'is_string','app_secret_key');
+		$this->unit->run($array['app_url'],'is_string','app_url');
+		$this->unit->run($array['app_install_url'],'is_string','app_install_url');
+		$this->unit->run($array['app_config_url'],'is_string','app_config_url');
+		$this->unit->run($array['app_support_page_tab'],'is_string','app_support_page_tab');
+		$this->unit->run($array['app_image'],'is_string','app_image');
+		$this->unit->run($array['facebook_app_api_key'],'is_string','facebook_app_api_key');
 	}
 	
 	/**
