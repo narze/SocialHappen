@@ -14,7 +14,6 @@ class Installed_apps_model_test extends CI_Controller {
 
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->installed_apps))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -29,6 +28,7 @@ class Installed_apps_model_test extends CI_Controller {
 	function get_installed_apps_by_company_id_test(){
 		$result = $this->installed_apps->get_installed_apps_by_company_id(1);
 		$this->unit->run($result,'is_array', 'get_installed_apps_by_company_id()');
+		$this->unit->run(count($result[0]) == 19,'is_true', 'number of column');
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
@@ -47,7 +47,7 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($result[0]['app_support_page_tab'],'is_string','app_support_page_tab');
 		$this->unit->run($result[0]['app_image'],'is_string','app_image');
-		$this->unit->run(count($result[0]) == 18,'is_true', 'number of column');
+		$this->unit->run($result[0]['facebook_app_api_key'],'is_string','facebook_app_api_key');
 	}
 	
 	/**

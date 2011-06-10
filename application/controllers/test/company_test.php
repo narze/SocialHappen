@@ -12,7 +12,6 @@ class Company_test extends CI_Controller {
 
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -48,6 +47,7 @@ class Company_test extends CI_Controller {
 		$content = file_get_contents(base_url().'company/json_get_apps/1');
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_apps()');
+		$this->unit->run(count($array[0]) == 15,'is_true', 'number of column');
 		$this->unit->run($array[0],'is_array', 'First row');
 		$this->unit->run($array[0]['company_id'],'is_string','company_id');
 		$this->unit->run($array[0]['app_id'],'is_string','app_id');
@@ -63,7 +63,6 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array[0]['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($array[0]['app_support_page_tab'],'is_string','app_support_page_tab');
 		$this->unit->run($array[0]['app_image'],'is_string','app_image');
-		$this->unit->run(count($array[0]) == 14,'is_true', 'number of column');
 	}
 
 	/**
@@ -74,6 +73,7 @@ class Company_test extends CI_Controller {
 		$content = file_get_contents(base_url().'company/json_get_installed_apps/1');
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_installed_apps()');
+		$this->unit->run(count($array[0]) == 19,'is_true', 'number of column');
 		$this->unit->run($array[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($array[0]['company_id'],'is_string','company_id');
 		$this->unit->run($array[0]['app_id'],'is_string','app_id');
@@ -92,7 +92,7 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array[0]['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($array[0]['app_support_page_tab'],'is_string','app_support_page_tab');
 		$this->unit->run($array[0]['app_image'],'is_string','app_image');
-		$this->unit->run(count($array[0]) == 18,'is_true', 'number of column');
+		$this->unit->run($array[0]['facebook_app_api_key'],'is_string','facebook_app_api_key');
 	}
 	
 	/**

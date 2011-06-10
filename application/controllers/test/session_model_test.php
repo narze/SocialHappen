@@ -6,6 +6,7 @@ class Session_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('session_model','sessions');
+		echo "This model test should fail when test sessions expired</br>";
 	}
 
 	function __destruct(){
@@ -14,7 +15,6 @@ class Session_model_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->sessions))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();

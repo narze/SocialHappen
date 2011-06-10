@@ -12,7 +12,6 @@ class App_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -36,7 +35,6 @@ class App_test extends CI_Controller {
 		$this->unit->run($array['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($array['page_id'],'is_string','page_id');
 		$this->unit->run($array['app_install_secret_key'],'is_string','app_install_secret_key');
-		
 	}
 	
 	/**
