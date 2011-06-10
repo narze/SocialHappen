@@ -8,13 +8,64 @@ class App extends CI_Controller {
 
 	function index($app_install_id = NULL){
 		$this->socialhappen->check_logged_in('home');
-		if($app_install_id){
+		if($app_install_id) {
+			$this -> load -> model('company_model', 'companies');
+			$company = $this -> companies -> get_company_profile_by_app_install_id($app_install_id);
+			$this->load->model('page_model','pages');
+			$page = $this->pages->get_page_profile_by_app_install_id($app_install_id);
+			$this -> load -> model('campaign_model', 'campaigns');
+			$campaign = $this -> campaigns -> get_campaign_profile_by_app_install_id($app_install_id);
+			$this -> load -> model('installed_apps_model', 'installed_apps');
+			$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 			$data = array(
-						'app_install_id' => $app_install_id,
-						'header' => $this->socialhappen->get_header(),
-						'footer' => $this->socialhappen->get_footer()
-					);
-			$this->parser->parse('app/app_view', $data);
+				'app_install_id' => $app_install_id,
+				'header' => $this -> socialhappen -> get_header( 
+					array(
+						'title' => $app['app_name'],
+						'vars' => array('app_install_id'=>$app_install_id),
+						'script' => array(
+							'common/bar',
+							'app/app_stat',
+							'app/app_users',
+							'app/app_campaigns',
+							'app/app_tabs'
+						),
+						'style' => array(
+							'common/main',
+							'app/campaign',
+							'app/member'
+						)
+					)
+				),
+				'company_image_and_name' => $this -> load -> view('company/company_image_and_name', 
+					array(
+						'company' => $company
+					),
+				TRUE),
+				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+					array('breadcrumb' => 
+						array(
+							$company['company_name'] => base_url() . "company/{$company['company_id']}",
+							$page['page_name'] => base_url() . "page/{$page['page_id']}",
+							$app['app_name'] => base_url() . "app/{$app['app_install_id']}"
+							)
+						)
+					,
+				TRUE),
+				'app_profile' => $this -> load -> view('app/app_profile', 
+					array('app_profile' => $app),
+				TRUE),
+				'app_tabs' => $this -> load -> view('app/app_tabs', 
+					array(),
+				TRUE), 
+				'app_campaigns' => $this -> load -> view('app/app_campaigns', 
+					array(),
+				TRUE),
+				'app_users' => $this -> load -> view('app/app_users', 
+					array(),
+				TRUE),
+				'footer' => $this -> socialhappen -> get_footer());
+			$this -> parser -> parse('app/app_view', $data);
 			return $data;
 		}
 	}

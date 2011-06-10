@@ -31,6 +31,19 @@ class Page_model extends CI_Model {
 		return issetor($result[0]);
 	}
 	
+	/**
+	 * Get page profile
+	 * @param $app_install_id
+	 * @return array
+	 * @author Manassarn M.
+	 */
+	function get_page_profile_by_app_install_id($app_install_id = NULL){
+		$this->db->select(array('page.page_id','facebook_page_id','page.company_id','page_name','page_detail','page_all_member','page_new_member','page_image'));
+		$this->db->join('installed_apps','installed_apps.page_id=page.page_id');
+		$result = $this->db->get_where('page', array('app_install_id' => $app_install_id))->result_array();
+		return issetor($result[0]);
+	}
+	
 	/** 
 	 * Get company pages
 	 * @param $company_id

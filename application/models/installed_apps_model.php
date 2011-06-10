@@ -49,6 +49,7 @@ class Installed_apps_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_app_profile_by_app_install_id($app_install_id = NULL){
+		$this->db->join('app','installed_apps.app_id=app.app_id');
 		$result = $this->db->get_where('installed_apps',array('app_install_id'=>$app_install_id))->result_array();
 		return issetor($result[0]);
 	}

@@ -72,6 +72,18 @@ class Campaign_model extends CI_Model {
 		$result = $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> result_array();
 		return issetor($result[0]);
 	}
+
+	/**
+	 * Get campaign profile
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function get_campaign_profile_by_app_install_id($app_install_id =NULL) {
+		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
+		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		$result = $this -> db -> get_where('campaign', array('campaign.app_install_id' => $app_install_id)) -> result_array();
+		return issetor($result[0]);
+	}
 	
 	/**
 	 * Adds campaign
