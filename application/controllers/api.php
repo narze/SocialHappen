@@ -30,6 +30,13 @@ class Api extends CI_Controller {
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, company_id, user_id)'));
 			return;
 		}
+		
+		$this->load->model('Session_model','Session');
+		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			echo json_encode(array( 'error' => '300',
+									'message' => 'user session error, please login through platform'));
+			return;
+		}
 
 		//[Deprecated] check pending install app
 		/*
@@ -113,6 +120,16 @@ class Api extends CI_Controller {
 			return;
 		}
 		
+		// [undone] need user_id
+		/*
+		$this->load->model('Session_model','Session');
+		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			echo json_encode(array( 'error' => '300',
+									'message' => 'user session error, please login through platform'));
+			return;
+		}
+		*/
+		
 		// authenticate app with $app_id and $app_secret_key
 		if(!($this->_authenticate_app($app_id, $app_secret_key))){
 			echo json_encode(array( 'error' => '200',
@@ -126,7 +143,6 @@ class Api extends CI_Controller {
 									'message' => 'invalid app_install_secret_key'));
 			return;
 		}
-		
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
 		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
@@ -176,56 +192,6 @@ class Api extends CI_Controller {
 		
 	}
 
-	function _authenticate_app($app_id, $app_secret_key){
-		// authenticate app with $app_id and $app_secret_key
-		$this->load->model('App_model', 'App');
-		$app = $this->App->get_app_by_app_id($app_id);
-		if($app != NULL){
-			return ($app['app_secret_key']== $app_secret_key);
-		}
-		return FALSE;
-	}
-	
-	function _authenticate_app_install($app_install_id, $app_install_secret_key){
-		// authenticate app with $app_id and $app_secret_key
-		$this->load->model('Installed_apps_model', 'Installed_apps');
-		$app = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
-		if($app != NULL){
-			return ($app['app_install_secret_key'] == $app_install_secret_key);
-		}
-		return FALSE;
-	}
-	
-	function _authenticate_user($company_id, $user_id){
-		// authenticate user with $company_id and $user_id
-		$this->load->model('User_companies_model', 'User_companies');
-		$company_admin_list_query = $this->User_companies->get_user_companies_by_company_id($company_id, 1000, 0);
-		$company_admin_list = array();
-		foreach ($company_admin_list_query as $admin) {
-			$company_admin_list[] = $admin['user_id'];
-		}
-		return in_array($user_id, $company_admin_list);
-	}
-
-	function _generate_app_install_secret_key($company_id, $app_id){
-		return md5($this->_generate_random_string());
-	}
-	
-	/**
-	 * generate random string !
-	 */
-	function _generate_random_string() {
-	    $length = 10;
-	    $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-	    $string = '';    
-	
-	    for ($p = 0; $p < $length; $p++) {
-	        $string .= $characters[mt_rand(0, strlen($characters) - 1)];
-	    }
-
-    	return $string;
-	}
-	
 	/**
 	 * Deprecated
 	 */
@@ -297,7 +263,7 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->model('Page_model', 'Page');
-		$page_id = $this->Page->get_page_id_by_facebook_page_id($facebook_page_id);
+		$page_id = $this->Page->get_page_id($facebook_page_id);
 		
 		if(sizeof($page_id)>0){
 			$response = array(	'status' => 'OK',
@@ -405,8 +371,8 @@ class Api extends CI_Controller {
 				$response['User'] = 'added ';
 			}
 		}else{
-			$user_id = $this->User->get_user_id($user_facebook_id);
-			$user_id = $user_id['user_id'];
+			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+			//$user_id = $user_id['user_id'];
 		}
 		
 		// add new user apps
@@ -474,7 +440,7 @@ class Api extends CI_Controller {
 	 * Request for log and return platform's layout
 	 * @author Wachiraph C. - revise June 2011
 	 */	
-	function request_footer_navigation(){
+	function request_platform_navigation(){
 		
 		$app_id = $this->input->get('app_id', TRUE);
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
@@ -522,7 +488,8 @@ class Api extends CI_Controller {
 		}
 
 		$response = array(	'status' => 'OK',
-							'html' => '<a href="http://www.socialhappen.com" title="Social Happen">Social Happen</a>');
+							'html' => '<input type="button" value="Connect to SH" onclick="window.open(\'http://www.socialhappen.com\')"/>'
+						);
 
 		echo json_encode($response);
 	}
@@ -542,6 +509,13 @@ class Api extends CI_Controller {
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id) || !($campaign_id)){
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_id)'));
+			return;
+		}
+		
+		$this->load->model('Session_model','Session');
+		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			echo json_encode(array( 'error' => '300',
+									'message' => 'user session error, please login through platform'));
 			return;
 		}
 		
@@ -633,6 +607,13 @@ class Api extends CI_Controller {
 			return;
 		}
 		
+		$this->load->model('Session_model','Session');
+		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			echo json_encode(array( 'error' => '300',
+									'message' => 'user session error, please login through platform'));
+			return;
+		}
+		
 		// authenticate app with $app_id and $app_secret_key
 		if(!($this->_authenticate_app($app_id, $app_secret_key))){
 			echo json_encode(array( 'error' => '200',
@@ -712,6 +693,13 @@ class Api extends CI_Controller {
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id) || !($campaign_id)){
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_id'));
+			return;
+		}
+		
+		$this->load->model('Session_model','Session');
+		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			echo json_encode(array( 'error' => '300',
+									'message' => 'user session error, please login through platform'));
 			return;
 		}
 		
@@ -796,6 +784,81 @@ class Api extends CI_Controller {
 		}
 		
 	}
+	
+	/**
+	 * Request user session on platform using user_-id
+	 * @author Wachiraph C. 
+	 */
+	function request_user_session(){
+		$user_id = $this->input->get('user_id', TRUE);
+		
+		if(!($user_id)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: user_id'));
+			return;
+		}
+		
+		$this->load->model('Session_model','Session');
+		$session_id = $this->Session->get_session_id_by_user_id($user_id);
+		
+		if($session_id){
+			$response = array(	'status' => 'OK',
+							'session_id' => $session_id);
+		}
+
+		echo json_encode($response);
+	}
+	
+	function _authenticate_app($app_id, $app_secret_key){
+		// authenticate app with $app_id and $app_secret_key
+		$this->load->model('App_model', 'App');
+		$app = $this->App->get_app_by_app_id($app_id);
+		if($app != NULL){
+			return ($app['app_secret_key']== $app_secret_key);
+		}
+		return FALSE;
+	}
+	
+	function _authenticate_app_install($app_install_id, $app_install_secret_key){
+		// authenticate app with $app_id and $app_secret_key
+		$this->load->model('Installed_apps_model', 'Installed_apps');
+		$app = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		if($app != NULL){
+			return ($app['app_install_secret_key'] == $app_install_secret_key);
+		}
+		return FALSE;
+	}
+	
+	function _authenticate_user($company_id, $user_id){
+		// authenticate user with $company_id and $user_id
+		$this->load->model('User_companies_model', 'User_companies');
+		$company_admin_list_query = $this->User_companies->get_user_companies_by_company_id($company_id, 1000, 0);
+		$company_admin_list = array();
+		foreach ($company_admin_list_query as $admin) {
+			$company_admin_list[] = $admin['user_id'];
+		}
+		return in_array($user_id, $company_admin_list);
+	}
+
+	function _generate_app_install_secret_key($company_id, $app_id){
+		return md5($this->_generate_random_string());
+	}
+	
+	/**
+	 * generate random string !
+	 */
+	function _generate_random_string() {
+	    $length = 10;
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+	    $string = '';    
+	
+	    for ($p = 0; $p < $length; $p++) {
+	        $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+	    }
+
+    	return $string;
+	}
+	
 	
 }
 
