@@ -36,37 +36,38 @@ class stat_campaign_model_test extends CI_Controller {
 		$campaign_id = NULL;
 		$action_id = NULL;
 		$date = NULL;
-		$result = $this->stat_campaign->add_stat_campaign($campaign_id, $action_id, $date);
+		$app_id = 1;
+		$result = $this->stat_campaign->add_stat_campaign($app_id, $campaign_id, $action_id, $date);
 		$this->unit->run($result, 'is_false', 'add stat campaign fail - invalid args', '');
 		
 		$campaign_id = 1;
 		$action_id = 1;
 		$date = 20110510;
-		$result = $this->stat_campaign->add_stat_campaign($campaign_id, $action_id, $date);
+		$result = $this->stat_campaign->add_stat_campaign($app_id, $campaign_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat campaign success', '');
 		
 		$campaign_id = 2;
 		$action_id = 1;
 		$date = 20110510;
-		$result = $this->stat_campaign->add_stat_campaign($campaign_id, $action_id, $date);
+		$result = $this->stat_campaign->add_stat_campaign($app_id, $campaign_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat campaign success', '');
 		
 		$campaign_id = 3;
 		$action_id = 1;
 		$date = 2011006;
-		$result = $this->stat_campaign->add_stat_campaign($campaign_id, $action_id, $date);
+		$result = $this->stat_campaign->add_stat_campaign($app_id, $campaign_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat campaign success', '');
 		
 		$campaign_id = 3;
 		$action_id = 2;
 		$date = 20110507;
-		$result = $this->stat_campaign->add_stat_campaign($campaign_id, $action_id, $date);
+		$result = $this->stat_campaign->add_stat_campaign($app_id, $campaign_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat campaign success', '');
 		
 		$campaign_id = 3;
 		$action_id = 2;
 		$date = 20110510;
-		$result = $this->stat_campaign->add_stat_campaign($campaign_id, $action_id, $date);
+		$result = $this->stat_campaign->add_stat_campaign($app_id, $campaign_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat campaign success', '');
 	}
 
@@ -75,19 +76,20 @@ class stat_campaign_model_test extends CI_Controller {
 			$campaign_id = 3;
 			$action_id = 2;
 			$date = 20110507;
-			$result = $this->stat_campaign->increment_stat_campaign($campaign_id, $action_id, $date);
+			$app_id = 1;
+			$result = $this->stat_campaign->increment_stat_campaign($app_id, $campaign_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat campaign success', '');
 			
 			$campaign_id = 3;
 			$action_id = 2;
 			$date = 20110510;
-			$result = $this->stat_campaign->increment_stat_campaign($campaign_id, $action_id, $date);
+			$result = $this->stat_campaign->increment_stat_campaign($app_id, $campaign_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat campaign success', '');
 			
 			$campaign_id = 3;
 			$action_id = 2;
 			$date = 20110509;
-			$result = $this->stat_campaign->increment_stat_campaign($campaign_id, $action_id, $date);
+			$result = $this->stat_campaign->increment_stat_campaign($app_id, $campaign_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat campaign success', '');
 		}
 	}

@@ -262,7 +262,7 @@ class Audit_lib
 			$data_to_add['page_id'] = $additional_data['page_id'];
 		}
 		
-		echo '<pre>' . print_r($data_to_add, TRUE) . '</pre>';
+		//echo '<pre>' . print_r($data_to_add, TRUE) . '</pre>';
 		
 		// TODO: select stat to add
 		$this->CI->load->model('audit_model','audit');
@@ -270,15 +270,15 @@ class Audit_lib
 		if($result_add_audit){
 			if(isset($data_to_add['app_install_id']) && isset($audit_action['stat_app']) && $audit_action['stat_app']){
 				$this->CI->load->model('stat_app_model','stat_app');
-				$result_stat = $this->CI->stat_app->increment_stat_app($data_to_add['app_install_id'], $action_id, $this->_date());
+				$result_stat = $this->CI->stat_app->increment_stat_app($app_id, $data_to_add['app_install_id'], $action_id, $this->_date());
 			}
 			if(isset($data_to_add['page_id']) && isset($audit_action['stat_page']) && $audit_action['stat_page']){
 				$this->CI->load->model('stat_page_model','stat_page');
-				$result_stat = $this->CI->stat_page->increment_stat_page($data_to_add['page_id'], $action_id, $this->_date());
+				$result_stat = $this->CI->stat_page->increment_stat_page($app_id, $data_to_add['page_id'], $action_id, $this->_date());
 			}
 			if(isset($data_to_add['campaign_id']) && isset($audit_action['stat_campaign']) && $audit_action['stat_campaign']){
 				$this->CI->load->model('stat_campaign_model','stat_campaign');
-				$result_stat = $this->CI->stat_campaign->increment_stat_campaign($data_to_add['campaign_id'], $action_id, $this->_date());
+				$result_stat = $this->CI->stat_campaign->increment_stat_campaign($app_id, $data_to_add['campaign_id'], $action_id, $this->_date());
 			}
 			
 		}
@@ -334,6 +334,8 @@ class Audit_lib
 	 * you can input date range in $start_date and $end_date parameter,
 	 * or omit it, or input just start_date in case of retrieving stat of one date
 	 * 
+	 * ** app_install_id and action_id cannot empty both **
+	 * 
 	 * @param app_install_id [optional]
 	 * @param action_id [optional]
 	 * @param start_date - date in format yyyymmdd ex. 20100531 [optional]
@@ -344,11 +346,11 @@ class Audit_lib
 	 * @author Metwara Narksook
 	 */
 	function list_stat_app($app_install_id = NULL, $action_id = NULL, $start_date = NULL, $end_date = NULL){
-		$this->CI->load->model('Stat_app_model','Stat_app');
-		$check_args = isset($app_install_id) && isset($action_id);
+		$this->CI->load->model('stat_app_model','stat_app');
+		//$check_args = isset($app_install_id) || isset($action_id);
 		$criteria = array();
 		
-		if(isset($action_id)){
+		if(isset($app_install_id)){
 			$criteria['app_install_id'] = $app_install_id;
 		}
 		if(isset($action_id)){
@@ -368,7 +370,9 @@ class Audit_lib
 		}else if(empty($start_date) && isset($end_date)){
 			$criteria['date'] = $end_date;
 		}
-		$result_stat = $this->CI->Stat_app_model->get_stat_app($criteria, 0, 0);
+		//echo '<pre>' . print_r($criteria, TRUE) . '</pre>';
+		$result_stat = $this->CI->stat_app->get_stat_app($criteria, 0, 0);
+		return $result_stat;
 	}
 	
 	/**
@@ -381,8 +385,8 @@ class Audit_lib
 	 * @author Metwara Narksook
 	 */
 	function delete_stat_app($_id){
-		$this->CI->load->model('Stat_app_model','Stat_app');
-		$result_stat = $this->CI->Stat_app_model->delete_stat_app($_id);
+		$this->CI->load->model('stat_app_model','stat_app');
+		$result_stat = $this->CI->stat_app->delete_stat_app($_id);
 		return $result_stat;
 	}
 	
@@ -401,11 +405,11 @@ class Audit_lib
 	 * @author Metwara Narksook
 	 */
 	function list_stat_page($page_id = NULL, $action_id = NULL, $start_date = NULL, $end_date = NULL){
-		$this->CI->load->model('Stat_page_model','Stat_page');
-		$check_args = isset($page_id) && isset($action_id);
+		$this->CI->load->model('stat_page_model','stat_page');
+		//$check_args = isset($page_id) || isset($action_id);
 		$criteria = array();
 		
-		if(isset($action_id)){
+		if(isset($page_id)){
 			$criteria['page_id'] = $page_id;
 		}
 		if(isset($action_id)){
@@ -425,7 +429,8 @@ class Audit_lib
 		}else if(empty($start_date) && isset($end_date)){
 			$criteria['date'] = $end_date;
 		}
-		$result_stat = $this->CI->Stat_page_model->get_stat_page($criteria, 0, 0);
+		$result_stat = $this->CI->stat_page->get_stat_page($criteria, 0, 0);
+		return $result_stat;
 	}
 	
 	/**
@@ -438,8 +443,8 @@ class Audit_lib
 	 * @author Metwara Narksook
 	 */
 	function delete_stat_page($_id){
-		$this->CI->load->model('Stat_page_model','Stat_page');
-		$result_stat = $this->CI->Stat_page_model->delete_stat_page($_id);
+		$this->CI->load->model('stat_page_model','stat_page');
+		$result_stat = $this->CI->stat_page->delete_stat_page($_id);
 		return $result_stat;
 	}
 	
@@ -458,11 +463,11 @@ class Audit_lib
 	 * @author Metwara Narksook
 	 */
 	function list_stat_campaign($campaign_id = NULL, $action_id = NULL, $start_date = NULL, $end_date = NULL){
-		$this->CI->load->model('Stat_campaign_model','Stat_campaign');
-		$check_args = isset($campaign_id) && isset($action_id);
+		$this->CI->load->model('stat_campaign_model','stat_campaign');
+		//$check_args = isset($campaign_id) || isset($action_id);
 		$criteria = array();
 		
-		if(isset($action_id)){
+		if(isset($campaign_id)){
 			$criteria['campaign_id'] = $campaign_id;
 		}
 		if(isset($action_id)){
@@ -482,7 +487,8 @@ class Audit_lib
 		}else if(empty($start_date) && isset($end_date)){
 			$criteria['date'] = $end_date;
 		}
-		$result_stat = $this->CI->Stat_campaign_model->get_stat_campaign($criteria, 0, 0);
+		$result_stat = $this->CI->stat_campaign->get_stat_campaign($criteria, 0, 0);
+		return $result_stat;
 	}
 	
 	/**
@@ -495,8 +501,8 @@ class Audit_lib
 	 * @author Metwara Narksook
 	 */
 	function delete_stat_campaign($_id){
-		$this->CI->load->model('Stat_campaign_model','Stat_campaign');
-		$result_stat = $this->CI->Stat_campaign_model->delete_stat_campaign($_id);
+		$this->CI->load->model('stat_campaign_model','stat_campaign');
+		$result_stat = $this->CI->stat_campaign->delete_stat_campaign($_id);
 		return $result_stat;
 	}
 	

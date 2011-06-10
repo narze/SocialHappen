@@ -36,37 +36,38 @@ class stat_app_model_test extends CI_Controller {
 		$app_install_id = NULL;
 		$action_id = NULL;
 		$date = NULL;
-		$result = $this->stat_app->add_stat_app($app_install_id, $action_id, $date);
+		$app_id = 1;
+		$result = $this->stat_app->add_stat_app($app_id, $app_install_id, $action_id, $date);
 		$this->unit->run($result, 'is_false', 'add stat app fail - invalid args', '');
 		
 		$app_install_id = 1;
 		$action_id = 1;
 		$date = 20110510;
-		$result = $this->stat_app->add_stat_app($app_install_id, $action_id, $date);
+		$result = $this->stat_app->add_stat_app($app_id, $app_install_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat app success', '');
 		
 		$app_install_id = 2;
 		$action_id = 1;
 		$date = 20110510;
-		$result = $this->stat_app->add_stat_app($app_install_id, $action_id, $date);
+		$result = $this->stat_app->add_stat_app($app_id, $app_install_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat app success', '');
 		
 		$app_install_id = 3;
 		$action_id = 1;
 		$date = 2011006;
-		$result = $this->stat_app->add_stat_app($app_install_id, $action_id, $date);
+		$result = $this->stat_app->add_stat_app($app_id, $app_install_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat app success', '');
 		
 		$app_install_id = 3;
 		$action_id = 2;
 		$date = 20110507;
-		$result = $this->stat_app->add_stat_app($app_install_id, $action_id, $date);
+		$result = $this->stat_app->add_stat_app($app_id, $app_install_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat app success', '');
 		
 		$app_install_id = 3;
 		$action_id = 2;
 		$date = 20110510;
-		$result = $this->stat_app->add_stat_app($app_install_id, $action_id, $date);
+		$result = $this->stat_app->add_stat_app($app_id, $app_install_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat app success', '');
 	}
 
@@ -75,19 +76,20 @@ class stat_app_model_test extends CI_Controller {
 			$app_install_id = 3;
 			$action_id = 2;
 			$date = 20110507;
-			$result = $this->stat_app->increment_stat_app($app_install_id, $action_id, $date);
+			$app_id = 1;
+			$result = $this->stat_app->increment_stat_app($app_id, $app_install_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat app success', '');
 			
 			$app_install_id = 3;
 			$action_id = 2;
 			$date = 20110510;
-			$result = $this->stat_app->increment_stat_app($app_install_id, $action_id, $date);
+			$result = $this->stat_app->increment_stat_app($app_id, $app_install_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat app success', '');
 			
 			$app_install_id = 3;
 			$action_id = 2;
 			$date = 20110509;
-			$result = $this->stat_app->increment_stat_app($app_install_id, $action_id, $date);
+			$result = $this->stat_app->increment_stat_app($app_id, $app_install_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat app success', '');
 		}
 	}

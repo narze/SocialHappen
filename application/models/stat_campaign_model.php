@@ -4,8 +4,8 @@
  * @author Metwara Narksook
  */
 class Stat_campaign_model extends CI_Model {
-	var $_id = '';
-	
+
+	var $app_id = '';
 	var $campaign_id = '';
 	var $action_id = '';
 	var $date = '';
@@ -35,7 +35,8 @@ class Stat_campaign_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->campaigns->ensureIndex(array('campaign_id' => 1,
+		$this->campaigns->ensureIndex(array('app_id' => 1,
+											'campaign_id' => 1,
 										    'action_id' => 1, 
 										    'date' => -1));
 	}
@@ -43,6 +44,7 @@ class Stat_campaign_model extends CI_Model {
 	/**
 	 * add new stat campaign entry
 	 * 
+	 * @param app_id int
 	 * @param campaign_id int campaign_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
@@ -51,12 +53,13 @@ class Stat_campaign_model extends CI_Model {
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function add_stat_campaign($campaign_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($campaign_id) && isset($date);
+	function add_stat_campaign($app_id = NULL, $campaign_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($app_id) && isset($action_id) && isset($campaign_id) && isset($date);
 		if($check_args){
-			$data_to_add = array('campaign_id' => $campaign_id,
-							'action_id' => $action_id,
-							'date' => $date,
+			$data_to_add = array('app_id' => $app_id,
+							'campaign_id' => (int)$campaign_id,
+							'action_id' => (int)$action_id,
+							'date' => (int)$date,
 							'count' => 1);
 			$this->campaigns->insert($data_to_add);
 			return TRUE;
@@ -69,6 +72,7 @@ class Stat_campaign_model extends CI_Model {
 	 * increment stat of campaign
 	 * if increment non-exist stat, it'll create new stat entry
 	 * 
+	 * @param app_id int
 	 * @param campaign_id int campaign_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
@@ -77,12 +81,13 @@ class Stat_campaign_model extends CI_Model {
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function increment_stat_campaign($campaign_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($campaign_id) && isset($date);
+	function increment_stat_campaign($app_id = NULL, $campaign_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($app_id) && isset($action_id) && isset($campaign_id) && isset($date);
 	 	if($check_args){
-			$criteria = array('campaign_id' => $campaign_id,
-							  'action_id' => $action_id,
-							  'date' => $date);
+			$criteria = array('app_id' => $app_id,
+							  'campaign_id' => (int)$campaign_id,
+							  'action_id' => (int)$action_id,
+							  'date' => (int)$date);
 			$this->campaigns->update($criteria, array(
 												'$inc' => array('count' => 1)
 											), TRUE);

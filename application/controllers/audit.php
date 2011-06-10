@@ -118,7 +118,7 @@ class Audit extends CI_Controller {
 						'objecti' => '3',
 						'type' => '4');
 		$this->Audit->add_audit($audit);
-		echo 'added';
+		//echo 'added';
 	}
 	
 	/**

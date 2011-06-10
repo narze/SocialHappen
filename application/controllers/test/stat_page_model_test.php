@@ -36,37 +36,38 @@ class stat_page_model_test extends CI_Controller {
 		$page_id = NULL;
 		$action_id = NULL;
 		$date = NULL;
-		$result = $this->stat_page->add_stat_page($page_id, $action_id, $date);
+		$app_id = 1;
+		$result = $this->stat_page->add_stat_page($app_id, $page_id, $action_id, $date);
 		$this->unit->run($result, 'is_false', 'add stat page fail - invalid args', '');
 		
 		$page_id = 1;
 		$action_id = 1;
 		$date = 20110510;
-		$result = $this->stat_page->add_stat_page($page_id, $action_id, $date);
+		$result = $this->stat_page->add_stat_page($app_id, $page_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat page success', '');
 		
 		$page_id = 2;
 		$action_id = 1;
 		$date = 20110510;
-		$result = $this->stat_page->add_stat_page($page_id, $action_id, $date);
+		$result = $this->stat_page->add_stat_page($app_id, $page_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat page success', '');
 		
 		$page_id = 3;
 		$action_id = 1;
 		$date = 2011006;
-		$result = $this->stat_page->add_stat_page($page_id, $action_id, $date);
+		$result = $this->stat_page->add_stat_page($app_id, $page_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat page success', '');
 		
 		$page_id = 3;
 		$action_id = 2;
 		$date = 20110507;
-		$result = $this->stat_page->add_stat_page($page_id, $action_id, $date);
+		$result = $this->stat_page->add_stat_page($app_id, $page_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat page success', '');
 		
 		$page_id = 3;
 		$action_id = 2;
 		$date = 20110510;
-		$result = $this->stat_page->add_stat_page($page_id, $action_id, $date);
+		$result = $this->stat_page->add_stat_page($app_id, $page_id, $action_id, $date);
 		$this->unit->run($result, 'is_true', 'add stat page success', '');
 	}
 
@@ -75,19 +76,20 @@ class stat_page_model_test extends CI_Controller {
 			$page_id = 3;
 			$action_id = 2;
 			$date = 20110507;
-			$result = $this->stat_page->increment_stat_page($page_id, $action_id, $date);
+			$app_id = 1;
+			$result = $this->stat_page->increment_stat_page($app_id, $page_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat page success', '');
 			
 			$page_id = 3;
 			$action_id = 2;
 			$date = 20110510;
-			$result = $this->stat_page->increment_stat_page($page_id, $action_id, $date);
+			$result = $this->stat_page->increment_stat_page($app_id, $page_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat page success', '');
 			
 			$page_id = 3;
 			$action_id = 2;
 			$date = 20110509;
-			$result = $this->stat_page->increment_stat_page($page_id, $action_id, $date);
+			$result = $this->stat_page->increment_stat_page($app_id, $page_id, $action_id, $date);
 			$this->unit->run($result, 'is_true', 'add stat page success', '');
 		}
 	}

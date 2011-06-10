@@ -5,6 +5,7 @@
  */
 class Stat_app_model extends CI_Model {
 
+	var $app_id = '';
 	var $app_install_id = '';
 	var $action_id = '';
 	var $date = '';
@@ -34,7 +35,8 @@ class Stat_app_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->apps->ensureIndex(array('app_install_id' => 1,
+		$this->apps->ensureIndex(array('app_id' => 1,
+										'app_install_id' => 1,
 										'action_id' => 1, 
 										'date' => -1));
 	}
@@ -42,6 +44,7 @@ class Stat_app_model extends CI_Model {
 	/**
 	 * add new stat app entry
 	 * 
+	 * @param app_id int
 	 * @param app_install_id int app_install_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
@@ -50,12 +53,13 @@ class Stat_app_model extends CI_Model {
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function add_stat_app($app_install_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($app_install_id) && isset($date);
+	function add_stat_app($app_id = NULL, $app_install_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($app_id) && isset($action_id) && isset($app_install_id) && isset($date);
 		if($check_args){
-			$data_to_add = array('app_install_id' => $app_install_id,
+			$data_to_add = array('app_id' => $app_id,
+							'app_install_id' => $app_install_id,
 							'action_id' => $action_id,
-							'date' => $date,
+							'date' => (int)$date,
 							'count' => 1);
 			$this->apps->insert($data_to_add);
 			return TRUE;
@@ -68,6 +72,7 @@ class Stat_app_model extends CI_Model {
 	 * increment stat of app
 	 * if increment non-exist stat, it'll create new stat entry
 	 * 
+	 * @param app_id int
 	 * @param app_install_id int app_install_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
@@ -76,12 +81,13 @@ class Stat_app_model extends CI_Model {
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function increment_stat_app($app_install_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($app_install_id) && isset($date);
+	function increment_stat_app($app_id = NULL, $app_install_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($app_id) && isset($action_id) && isset($app_install_id) && isset($date);
 	 	if($check_args){
-			$criteria = array('app_install_id' => $app_install_id,
-							  'action_id' => $action_id,
-							  'date' => $date);
+			$criteria = array('app_id' => $app_id,
+							  'app_install_id' => (int)$app_install_id,
+							  'action_id' => (int)$action_id,
+							  'date' => (int)$date);
 			$this->apps->update($criteria, array(
 												'$inc' => array('count' => 1)
 											), TRUE);

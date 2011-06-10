@@ -4,8 +4,8 @@
  * @author Metwara Narksook
  */
 class Stat_page_model extends CI_Model {
-	var $_id = '';
 	
+	var $app_id = '';
 	var $page_id = '';
 	var $action_id = '';
 	var $date = '';
@@ -35,7 +35,8 @@ class Stat_page_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->pages->ensureIndex(array('page_id' => 1,
+		$this->pages->ensureIndex(array('app_id' => 1,
+										'page_id' => 1,
 										'action_id' => 1, 
 										'date' => -1));
 	}
@@ -43,6 +44,7 @@ class Stat_page_model extends CI_Model {
 	/**
 	 * add new stat page entry
 	 * 
+	 * @param app_id int
 	 * @param page_id int page_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
@@ -51,12 +53,13 @@ class Stat_page_model extends CI_Model {
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function add_stat_page($page_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($page_id) && isset($date);
+	function add_stat_page($app_id = NULL, $page_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($app_id) && isset($action_id) && isset($page_id) && isset($date);
 		if($check_args){
-			$data_to_add = array('page_id' => $page_id,
-								'action_id' => $action_id,
-								'date' => $date,
+			$data_to_add = array('app_id' => (int)$app_id,
+								'page_id' => (int)$page_id,
+								'action_id' => (int)$action_id,
+								'date' => (int)$date,
 								'count' => 1);
 			$this->pages->insert($data_to_add);
 			return TRUE;
@@ -69,6 +72,7 @@ class Stat_page_model extends CI_Model {
 	 * increment stat of page
 	 * if increment non-exist stat, it'll create new stat entry
 	 * 
+	 * @param app_id int
 	 * @param page_id int page_id
 	 * @param action_id int action number
 	 * @param date int date informat ymd ex. 20110531
@@ -77,12 +81,13 @@ class Stat_page_model extends CI_Model {
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function increment_stat_page($page_id = NULL, $action_id = NULL, $date = NULL){
-		$check_args = isset($action_id) && isset($page_id) && isset($date);
+	function increment_stat_page($app_id = NULL, $page_id = NULL, $action_id = NULL, $date = NULL){
+		$check_args = isset($app_id) && isset($action_id) && isset($page_id) && isset($date);
 	 	if($check_args){
-			$criteria = array('page_id' => $page_id,
-							  'action_id' => $action_id,
-							  'date' => $date);
+			$criteria = array('app_id' => (int)$app_id,
+							  'page_id' => (int)$page_id,
+							  'action_id' => (int)$action_id,
+							  'date' => (int)$date);
 			$this->pages->update($criteria, array(
 												'$inc' => array('count' => 1)
 											), TRUE);

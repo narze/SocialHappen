@@ -225,19 +225,272 @@ class audit_lib_test extends CI_Controller {
 		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
 		$this->unit->run($result, 'is_false', 'add audit - fail', '');
 		
-		$app_id = 0;
-		$subject = 'A';
-		$action_id = 2;
-		$object = 'B';
-		$objecti = 'C';
-		$additional_data = array('app_install_id' => 1,
-								 'campaign_id' => 2,
-								 'company_id' => 3,
-								 'page_id' => 4);
-		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
-		$this->unit->run($result, 'is_true', 'add audit - 0 - 2', '');
+		for ($i=0; $i < 5; $i++) { 
+			
+			$app_id = 0;
+			$action_id = 2;
+			$subject = 'A';
+			$object = 'B';
+			$objecti = 'C';
+			$additional_data = array('app_install_id' => 1,
+									 'campaign_id' => 2,
+									 'company_id' => 3,
+									 'page_id' => 4);
+			$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+			$this->unit->run($result, 'is_true', 'add audit - 0 - 2', '');
+		}
+
+		for ($i=0; $i < 3; $i++) { 
+			
+			$app_id = 0;
+			$action_id = 1;
+			$subject = 'A';
+			$object = 'B';
+			//$objecti = 'C';
+			$additional_data = array('app_install_id' => 1,
+									 'campaign_id' => 2,
+									 'company_id' => 3,
+									 'page_id' => 4);
+			$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+			$this->unit->run($result, 'is_true', 'add audit - 0 - 1', '');
+		}
+		
+		for ($i=0; $i < 3; $i++) { 
+			
+			$app_id = 2;
+			$action_id = 4;
+			$subject = 'A';
+			$object = 'B';
+			//$objecti = 'C';
+			$additional_data = array('app_install_id' => 1,
+									 'campaign_id' => 2,
+									 'company_id' => 3,
+									 'page_id' => 4);
+			$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+			$this->unit->run($result, 'is_true', 'add audit - 2 - 4', '');
+		}
+	}
+
+	function list_audit_test(){
+		$criteria = array();
+		$limit = 100;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit();
+		$this->unit->run(count($result), 11, 'list audit no criteria', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$criteria = array();
+		$limit = 2;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit($criteria, $limit, $offset);
+		$this->unit->run(count($result), 2, 'list audit no criteria, limit 2', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$criteria = array('subject' => 'A', 'app_id' => 0);
+		$limit = 0;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit($criteria, $limit, $offset);
+		$this->unit->run(count($result), 8, 'list audit criteria \'subject\' => \'A\' , \'app_id\' => 0', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$criteria = array('subject' => 'A', 'app_id' => 999);
+		$limit = 0;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit($criteria, $limit, $offset);
+		$this->unit->run(count($result), 0, 'list audit criteria \'subject\' => \'A\' , \'app_id\' => 999', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
 	}
 	
+	function list_recent_audit_test(){
+		$limit = 0;
+		$result = $this->audit_lib->list_recent_audit();
+		$this->unit->run(count($result), 11, 'list recent audit no criteria', 'count: ' . count($result) . '<pre>' /*. print_r($result, TRUE)*/ . '</pre>');
+		
+		$limit = 5;
+		$result = $this->audit_lib->list_recent_audit($limit);
+		$this->unit->run(count($result), 5, 'list recent audit no criteria', 'count: ' . count($result) . '<pre>' /*. print_r($result, TRUE)*/ . '</pre>');
+	}
+	
+	function _date(){
+		date_default_timezone_set('Asia/Bangkok');
+		return Date('Ymd');
+	}
+	
+	function list_stat_app_test(){
+		
+		$app_install_id = 1;
+		$action_id = NULL;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_app();
+		$this->unit->run($result, 'is_false', 'list stat app fail', '');
+		
+		$app_install_id = 1;
+		$action_id = NULL;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_app($app_install_id);
+		$this->unit->run(count($result), 3, 'list stat app $app_install_id = 1', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$app_install_id = NULL;
+		$action_id = 2;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_app($app_install_id, $action_id);
+		$this->unit->run(count($result), 1, 'list stat app $action_id = 2', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$app_install_id = 1;
+		$action_id = 2;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_app($app_install_id, $action_id);
+		$this->unit->run(count($result), 1, 'list stat app $app_install_id = 1 and $action_id = 2', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$app_install_id = 100;
+		$action_id = 2;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_app($app_install_id, $action_id);
+		$this->unit->run(count($result), 0, 'list stat app $app_install_id = 100 and $action_id = 2', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$today = (int)$this->_date();
+		$app_install_id = 1;
+		$action_id = NULL;
+		$start_date = $today;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_app($app_install_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 3, 'list stat app $app_install_id = 1 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$app_install_id = 1;
+		$action_id = NULL;
+		$start_date = $today +1;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_app($app_install_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 0, 'list stat app $app_install_id = 1 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$app_install_id = 1;
+		$action_id = NULL;
+		$start_date = $today -11;
+		$end_date = $today + 140;
+		$result = $this->audit_lib->list_stat_app($app_install_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 3, 'list stat app $app_install_id = 1 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+	}
+	
+	function list_stat_page_test(){
+		
+		$page_id = 1;
+		$action_id = NULL;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_page();
+		$this->unit->run($result, 'is_false', 'list stat page fail', '');
+		
+		$page_id = 4;
+		$action_id = NULL;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_page($page_id);
+		$this->unit->run(count($result), 1, 'list stat page $page_id = 4', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$page_id = NULL;
+		$action_id = 1;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_page($page_id, $action_id);
+		$this->unit->run(count($result), 1, 'list stat page $action_id = 1', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$page_id = 4;
+		$action_id = 1;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_page($page_id, $action_id);
+		$this->unit->run(count($result), 1, 'list stat page $page_id = 4 and $action_id = 1', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$page_id = 100;
+		$action_id = 2;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_page($page_id, $action_id);
+		$this->unit->run(count($result), 0, 'list stat page $page_id = 100 and $action_id = 2', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$today = (int)$this->_date();
+		$page_id = 4;
+		$action_id = NULL;
+		$start_date = $today;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_page($page_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 1, 'list stat page $page_id = 4 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$page_id = 4;
+		$action_id = NULL;
+		$start_date = $today +1;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_page($page_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 0, 'list stat page $page_id = 4 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$page_id = 4;
+		$action_id = NULL;
+		$start_date = $today -11;
+		$end_date = $today + 140;
+		$result = $this->audit_lib->list_stat_page($page_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 1, 'list stat page $page_id = 4 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+	}
+
+	function list_stat_campaign_test(){
+		
+		$campaign_id = 1;
+		$action_id = NULL;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_campaign();
+		$this->unit->run($result, 'is_false', 'list stat campaign fail', '');
+		
+		$campaign_id = 2;
+		$action_id = NULL;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_campaign($campaign_id);
+		$this->unit->run(count($result), 2, 'list stat campaign $campaign_id = 2', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$campaign_id = NULL;
+		$action_id = 4;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_campaign($campaign_id, $action_id);
+		$this->unit->run(count($result), 1, 'list stat campaign $action_id = 4', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$campaign_id = 2;
+		$action_id = 4;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_campaign($campaign_id, $action_id);
+		$this->unit->run(count($result), 1, 'list stat campaign $campaign_id = 2 and $action_id = 4', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$campaign_id = 100;
+		$action_id = 2;
+		$start_date = NULL;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_campaign($campaign_id, $action_id);
+		$this->unit->run(count($result), 0, 'list stat campaign $campaign_id = 100 and $action_id = 2', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$today = (int)$this->_date();
+		$campaign_id = 2;
+		$action_id = NULL;
+		$start_date = $today;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_campaign($campaign_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 2, 'list stat campaign $campaign_id = 2 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$campaign_id = 2;
+		$action_id = NULL;
+		$start_date = $today +1;
+		$end_date = NULL;
+		$result = $this->audit_lib->list_stat_campaign($campaign_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 0, 'list stat campaign $campaign_id = 2 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$campaign_id = 2;
+		$action_id = NULL;
+		$start_date = $today -11;
+		$end_date = $today + 140;
+		$result = $this->audit_lib->list_stat_campaign($campaign_id, $action_id, $start_date, $end_date);
+		$this->unit->run(count($result), 2, 'list stat campaign $campaign_id = 2 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+	}
 	
 	function end_test(){
 		/*
