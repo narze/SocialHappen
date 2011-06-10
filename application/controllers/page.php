@@ -106,6 +106,18 @@ class Page extends CI_Controller {
 		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id($page_id, $limit, $offset);
 		echo json_encode($campaigns);
 	}
+	
+	/**
+	 * JSON : Get campaigns
+	 * @param $page_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function json_get_campaigns_using_status($page_id =NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
+		$this -> load -> model('campaign_model', 'campaigns');
+		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id, $limit, $offset);
+		echo json_encode($campaigns);
+	}
 
 	/**
 	 * JSON : Get users

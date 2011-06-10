@@ -22,6 +22,19 @@ class Campaign_model extends CI_Model {
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
 		return $this -> db -> get_where('campaign', array('page_id' => $page_id)) -> result_array();
 	}
+	
+	/**
+	 * Get page campaigns
+	 * @param $page_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function get_page_campaigns_by_page_id_and_campaign_status_id($page_id = NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
+		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
+		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this -> db -> get_where('campaign', array('page_id' => $page_id, 'campaign.campaign_status_id' => $campaign_status_id)) -> result_array();
+	}
 
 	/**
 	 * Get app campaigns
@@ -33,6 +46,19 @@ class Campaign_model extends CI_Model {
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
 		return $this -> db -> get_where('campaign', array('campaign.app_install_id' => $app_install_id)) -> result_array();
+	}
+		
+	/**
+	 * Get app campaigns
+	 * @param $app_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function get_app_campaigns_by_app_install_id_and_campaign_status_id($app_install_id = NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
+		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
+		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this -> db -> get_where('campaign', array('campaign.app_install_id' => $app_install_id, 'campaign.campaign_status_id' => $campaign_status_id)) -> result_array();
 	}
 
 	/**
