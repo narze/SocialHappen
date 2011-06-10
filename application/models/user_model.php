@@ -26,7 +26,8 @@ class User_model extends CI_Model {
 	 * @param $user_id
 	 * @author Manassarn M.
 	 */
-	function get_user_profile_by_user_id($user_id =NULL
+	function get_user_profile_by_user_id($user_id =NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$profiles = $this -> db -> get_where('user', array('user_id' => $user_id)) -> result_array();
 		return issetor($profiles[0]);
 	}
