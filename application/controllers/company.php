@@ -12,10 +12,51 @@ class Company extends CI_Controller {
 
 	function index($company_id = NULL){
 		if($company_id){
+			$this -> load -> model('company_model', 'companies');
+			$company = $this -> companies -> get_company_profile_by_company_id($company_id);
 			$data = array(
 				'company_id' => $company_id,
-	            'dragdrop_script' => $this->load->view('company_dashboard_script', NULL, true)
-            );
+				'header' => $this -> socialhappen -> get_header( 
+					array(
+						'title' => $company['company_name'],
+						'vars' => array('company_id'=>$company_id
+										,'sh_default_fb_app_api_key'=>$this->config->item('sh_default_fb_app_api_key')),
+						'script' => array(
+							'common/bar',
+							'company/company_dashboard'
+						),
+						'style' => array(
+							'company/main',
+							'common/smoothness/jquery-ui-1.8.9.custom'
+						)
+					)
+				),
+				'company_image_and_name' => $this -> load -> view('company/company_image_and_name', 
+					array(
+						'company' => $company
+					),
+				TRUE),
+				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+					array('breadcrumb' => 
+						array( 
+							array(
+								"name" => $company['company_name'],
+								"url" => base_url() . "company/{$company['company_id']}")
+							)
+						)
+					,
+				TRUE),
+				'company_profile' => $this -> load -> view('company/company_profile', 
+					array('company_profile' => $company),
+				TRUE),
+				'company_dashboard_tabs' => $this -> load -> view('company/company_dashboard_tabs', 
+					array(),
+				TRUE),
+				'company_dashboard_right_panel' => $this -> load -> view('company/company_dashboard_right_panel', 
+					array(),
+				TRUE),
+				'footer' => $this -> socialhappen -> get_footer()
+			);
 			$this->parser->parse('company_view', $data);
 			return $data;
 		}
@@ -43,6 +84,29 @@ class Company extends CI_Controller {
 		echo json_encode($pages);
 	}
 	
+	/**
+	 * JSON : Get company pages
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function json_get_pages_count($company_id = NULL){
+		$this->load->model('page_model','page');
+		$count = $this->page->count_all(array("company_id" => $company_id));
+		$count=array('page_count' => $count);
+		echo json_encode($count);
+	}
+	
+	/**
+	 * JSON : Get company pages
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function json_get_installed_apps_count($company_id = NULL){
+		$this->load->model('installed_apps_model','installed_app');
+		$count = $this->installed_app->count_all_distinct("app_id",array("company_id" => $company_id));
+		$count=array('app_count' => $count);
+		echo json_encode($count);
+	}
 	/** 
 	 * JSON : Get company apps
 	 * @param $company_id
@@ -72,6 +136,17 @@ class Company extends CI_Controller {
 	function json_get_installed_apps($company_id = NULL){
 		$this->load->model('installed_apps_model','installed_apps');
 		$apps = $this->installed_apps->get_installed_apps_by_company_id($company_id);
+		echo json_encode($apps);
+	}
+	
+	/**
+	 * JSON : Get installed apps (not in page)
+	 * @param $company_id
+	 * @author Prachya P.
+	 */
+	function json_get_installed_apps_not_in_page($company_id = NULL){
+		$this->load->model('installed_apps_model','installed_apps');
+		$apps = $this->installed_apps->get_installed_apps_by_company_id_not_in_page($company_id);
 		echo json_encode($apps);
 	}
 	
