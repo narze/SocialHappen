@@ -37,7 +37,8 @@ class Page_model extends CI_Model {
 	 * @return array
 	 * @author Manassarn M.
 	 */
-	function get_company_pages_by_company_id($company_id = NULL){
+	function get_company_pages_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		return $this->db->get_where('page', array('company_id' => $company_id))->result_array();
 	}
 	
@@ -82,7 +83,8 @@ class Page_model extends CI_Model {
 	 * $return array
 	 * @author Manassarn M.
 	 */
-	function get_app_pages_by_app_install_id($app_install_id = NULL){
+	function get_app_pages_by_app_install_id($app_install_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$result = $this->db->get_where('installed_apps',array('app_install_id' => $app_install_id))->result_array();
 		$app_id = $result[0]['app_id'];
 		$company_id = $result[0]['company_id'];

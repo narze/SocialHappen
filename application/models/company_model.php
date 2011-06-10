@@ -44,7 +44,6 @@ class Company_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_company_profile_by_campaign_id($campaign_id = NULL){
-	
 		$this->db->join('installed_apps','installed_apps.company_id=company.company_id');
 		$this->db->join('campaign','campaign.app_install_id=installed_apps.app_install_id');
 		$this->db->select(array('company.company_id','creator_user_id','company_name','company_detail','company_address'

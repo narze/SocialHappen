@@ -14,7 +14,8 @@ class User_model extends CI_Model {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_page_users_by_page_id($page_id =NULL) {
+	function get_page_users_by_page_id($page_id =NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
 		$this -> db -> join('installed_apps', 'installed_apps.app_install_id=user_apps.app_install_id');
 		return $this -> db -> get_where('user', array('page_id' => $page_id)) -> result_array();
@@ -25,9 +26,9 @@ class User_model extends CI_Model {
 	 * @param $user_id
 	 * @author Manassarn M.
 	 */
-	function get_user_profile_by_user_id($user_id =NULL) {
+	function get_user_profile_by_user_id($user_id =NULL
 		$profiles = $this -> db -> get_where('user', array('user_id' => $user_id)) -> result_array();
-		return $profiles[0];
+		return issetor($profiles[0]);
 	}
 
 	/**
@@ -47,7 +48,7 @@ class User_model extends CI_Model {
 	 */
 	function get_user_id_by_user_facebook_id($user_facebook_id =NULL){
 		$user = $this -> db -> select('user_id') -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result_array();
-		return $user[0]['user_id'];
+		return issetor($user[0]['user_id']);
 	}
 
 	/**
@@ -99,7 +100,7 @@ class User_model extends CI_Model {
 	 */
 	function get_user_profile_by_user_facebook_id($user_facebook_id =NULL) {
 		$profiles = $this -> db -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result_array();
-		return $profiles[0];
+		return issetor($profiles[0]);
 	}
 
 	function add($data = array()) {
