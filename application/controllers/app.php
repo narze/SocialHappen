@@ -113,7 +113,7 @@ class App extends CI_Controller {
 	 */
 	function json_get_app_by_api_key($fb_app_api_key){
 		$this->load->model('app_model','app');
-		$app = $this->app->get_app_by_fb_app_api_key($fb_app_api_key);
+		$app = $this->app->get_app_by_api_key($fb_app_api_key);
 		echo json_encode($app);
 	}
 }
