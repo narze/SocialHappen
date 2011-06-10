@@ -197,23 +197,13 @@ div.wrapper-details:after{
 }
 div.wrapper-details>h2 {padding: 0 0 15px;}
 div.wrapper-details>h2 span {display: none;}
-div.wrapper-details>h2.campaign {
+div.wrapper-details>h2.application {
 	display: block;
 	width: 108px;
 	height: 19px;
-	background: url(../../images/bg/bg_main.png) 0 -180px no-repeat;
+	background: url(../../images/bg/bg_main.png) 0 -147px no-repeat;
 }
-div.wrapper-details>div.option { position: absolute; top: 35px; right: 0;}
-div.wrapper-details>div.option td{
-	width:70px;
-	text-align:center;
-	font:Helvetica, Arial, sans-serif;
-	font-weight:bold;
-	color:#4e4d4d;
-}
-div.wrapper-details>div.option td a{
-	color:#4e4d4d;
-}
+div.wrapper-details>div.option { position: absolute; top: 22px; right: 0;}
 div.wrapper-details>div.details {
 	border: 1px solid #dcdcdc;
 	background: #fff;
@@ -221,32 +211,33 @@ div.wrapper-details>div.details {
     -moz-border-radius: 10px;
     border-radius: 10px;
 }
-div.wrapper-details>div.details table{
-	width:900px;
+div.wrapper-details>div.details table td{
+	padding: 5px 5px;
 }
-div.wrapper-details>div.details td{
-	height:90px;
+div.wrapper-details>div.details table tr{
+	min-height:100px;
+}
+div.wrapper-details>div.details table td.app-list{
+	padding:5px 12px;
 }
 div.wrapper-details>div.details tr.next{
 	background:#f9f9f9;
-}
-div.wrapper-details>div.details p.thumb{
-	float:left;
-	padding:13px 18px 13px 18px;
 }
 div.wrapper-details>div.details h2{
 	font-size:14px;
 	font-weight:bold;
 	color:#63791c;
-	padding-top:22px;
-	width:300px;
 }
-div.wrapper-details>div.details td.app-list{
-	width:320px;
+div.wrapper-details>div.details p{
+	width:250px;
 }
-div.wrapper-details>div.details.camps td.status{
-	width:120px;
+div.wrapper-details>div.details td.status{
 	text-align:center;
+	width:80px;
+}
+div.wrapper-details>div.details td.status1{
+	text-align:center;
+	width:130px;
 }
 div.wrapper-details>div.details td.status span{
 	display:block;
@@ -254,9 +245,24 @@ div.wrapper-details>div.details td.status span{
 	color:#829449;
 	font-weight:bold;
 }
-div.wrapper-details>div.details td.status b{
+td.status b, td.status1 b{
 	display:block;
 	font-size:16px;
+}
+
+div[class$="list-style01"] {
+    padding: 0 0 0 80px;
+}
+div[class^="detail-list"] {
+    font-size: 12px;
+    margin: 5px 0;
+    position: relative;
+}
+div[class^="detail-list"] p.thumb {
+    left: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
 }
 
 /* --------------
@@ -283,13 +289,28 @@ Button
 	height: 32px;
 	background-position: 0 -85px;
 }
-*.bt-go.camps {
-	width: 50px;
-	height: 100px;
-	background-position: -150px -130px;
-	margin-left:20px;
+*.bt-edit {
+	width: 33px;
+	height: 33px;
+	background-position: 0 -130px;
 }
-
-
+*.bt-setting {
+	width: 33px;
+	height: 33px;
+	background-position: 0px -170px;
+}
+*.bt-delete {
+	width: 33px;
+	height: 33px;
+	background-position: 0px -210px;
+}
+*.bt-go {
+	width: 33px;
+	height: 33px;
+	background-position: 0px -250px;
+}
+*.bt-icon {
+	width: 45px;
+}
 
 
