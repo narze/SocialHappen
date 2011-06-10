@@ -44,8 +44,12 @@ $route['company/(:num)'] = "company/index/$1";
 $route['page/(:num)'] = "page/index/$1";
 $route['app/(:num)'] = "app/index/$1";
 $route['campaign/(:num)'] = "campaign/index/$1";
-$route['page/(:num)/user/(:num)'] = "user/index/$1/$2";
-$route['page/user/(:num)/(:num)'] = "user/index/$1/$2";
+$route['page/(:num)/user/(:num)'] = "user/user_in_page/$2/$1";
+$route['page/user/(:num)/(:num)'] = "user/user_in_page/$2/$1";
+$route['app/(:num)/user/(:num)'] = "user/user_in_app/$2/$1";
+$route['app/user/(:num)/(:num)'] = "user/user_in_app/$2/$1";
+$route['campaign/(:num)/user/(:num)'] = "user/user_in_campaign/$2/$1";
+$route['campaign/user/(:num)/(:num)'] = "user/user_in_campaign/$2/$1";
 
 
 /* End of file routes.php */

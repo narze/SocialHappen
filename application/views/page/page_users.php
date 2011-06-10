@@ -6,7 +6,7 @@
             <tr class="hidden-template">
               <td class="app-list">
                 <div class="detail-list-style01">
-                  <p class="thumb"><a href="#"><img src="images/app-icon.png" /></a></p>
+                  <p class="thumb"><a href="#"><img src="" /></a></p>
                   <h2></h2>
                   <p class="email"></p>
 				</div>

@@ -5,9 +5,9 @@ $(function(){
 			.removeClass('hidden-template')
 			.appendTo('.wrapper-details.users .details table');
 
-			var app_list = row.find('td.app-list div.detail-list-style01');
+			var app_list = row.find('td.app-list div');
 			app_list.find('p.thumb img').attr('src', json[i].user_image);
-			app_list.find('h2').append(json[i].user_first_name+' '+json[i].user_last_name);
+			app_list.find('h2,p.thumb').append('<a href="'+base_url+'page/'+page_id+'/user/'+json[i].user_id+'">'+json[i].user_first_name+' '+json[i].user_last_name+'</a>');
 			app_list.find('p.email').append(json[i].user_email);
 			
 			row.find('td.status.app-status span').append('installed');

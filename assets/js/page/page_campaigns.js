@@ -8,7 +8,7 @@ $(function(){
 			var campaign_list = row.find('td.app-list div');
 			//campaign_list.find('p.thumb img').attr('src', json[i].campaign_image);
 			campaign_list.find('p.thumb img').attr('src', image_url+'cam-icon.png');
-			campaign_list.find('h2').append(json[i].campaign_name);
+			campaign_list.find('h2').append('<a href="'+base_url+'campaign/'+json[i].campaign_id+'">'+json[i].campaign_name+'</a>');
 			campaign_list.find('p.description').append(json[i].campaign_description);
 			
 			row.find('td.status.campaign-status span').append('Active');
