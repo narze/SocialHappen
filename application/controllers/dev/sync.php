@@ -27,13 +27,17 @@ class Sync extends CI_Controller {
 		$host = 'localhost';
 		$username = 'root';
 		$password = '';
+		if(isset($_GET['u']) && isset($_GET['p'])){
+			$username = $_GET['u'];
+			$password = $_GET['p'];
+		}
 		$con = mysql_connect($host,$username,$password);
 		if (!$con)
 		    {
 				die('Could not connect: ' . mysql_error());
  		    }
 		if (!mysql_query("CREATE DATABASE IF NOT EXISTS socialhappen",$con)){
-			echo "Error creating database: " . mysql_error();
+			echo "Error creating database: " . mysql_error()."<h3>Try dev/sync?u=username&p=password</h3>";
 		}
 		
 		if (!mysql_query("CREATE TABLE IF NOT EXISTS socialhappen.sh_sessions (
