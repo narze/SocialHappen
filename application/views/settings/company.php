@@ -1,7 +1,5 @@
 <div class="form">
-	<?php if(isset($success)) echo 'Updated'; ?>
-		
-		<?php // Change the css classes to suit your needs    
+	<?php if(isset($success)) echo 'Updated';
 
 		$attributes = array('class' => 'company', 'id' => '');
 		echo form_open("settings/company/{$company['company_id']}", $attributes); ?>

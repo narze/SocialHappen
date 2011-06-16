@@ -37,6 +37,7 @@ class Settings extends CI_Controller {
 							'common/bar',
 							'settings/account',
 							'settings/company',
+							'settings/page',
 							'settings/sidebar',
 							'settings/main'
 						),
@@ -165,7 +166,40 @@ class Settings extends CI_Controller {
 	}
 	
 	function page($page_id = NULL){
-	
+		if($page_id) {
+			$this->load->model('page_model','pages');
+			$page = $this->pages->get_page_profile_by_page_id($page_id);
+			$this->form_validation->set_rules('page_name', 'Page name', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('page_detail', 'Page detail', 'trim|xss_clean');
+				
+			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+		
+			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+			{
+				$this->load->view('settings/page', array('page'=>$page));
+			}
+			else // passed validation proceed to post success logic
+			{
+				// build array for the model
+				
+				$page_update_data = array(
+								'page_name' => set_value('page_name'),
+								'page_detail' => set_value('page_detail')
+							);
+						
+				// run insert model to write data to db
+			
+				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data)) // the information has therefore been successfully saved in the db
+				{
+					$this->load->view('settings/page', array('page'=>$page, 'success'=>TRUE));
+				}
+				else
+				{
+				echo 'An error occurred saving your information. Please try again later';
+				// Or whatever error handling is necessary
+				}
+			}
+		}
 	}
 	
 	function package(){
