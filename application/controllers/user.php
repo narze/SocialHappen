@@ -9,7 +9,7 @@ class User extends CI_Controller {
 
 	function user_in_page($user_id = NULL, $page_id= NULL){
 		$this -> socialhappen -> check_logged_in('home');
-		if($page_id && $user_id) {
+		if($page_id && $user_id && $user_id == $this->socialhappen->get_user_id()) {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
 			$this -> load -> model('page_model', 'pages');
@@ -71,7 +71,7 @@ class User extends CI_Controller {
 	
 	function user_in_app($user_id = NULL, $app_install_id= NULL){
 		$this -> socialhappen -> check_logged_in('home');
-		if($app_install_id && $user_id) {
+		if($app_install_id && $user_id && $user_id == $this->socialhappen->get_user_id()) {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_app_install_id($app_install_id);
 			$this -> load -> model('installed_apps_model', 'installed_apps');
