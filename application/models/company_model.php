@@ -103,7 +103,6 @@ class Company_model extends CI_Model {
 		return $this->db->update('company', $data, array('company_id' => $company_id));
 	}
 	
-	
 	function add($data = array()) {
 		foreach($data as $var => $key) {
 			$this -> {$var} = $key;

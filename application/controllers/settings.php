@@ -37,6 +37,7 @@ class Settings extends CI_Controller {
 							'common/bar',
 							'settings/account',
 							'settings/company',
+							'settings/page',
 							'settings/sidebar',
 							'settings/main'
 						),
@@ -71,8 +72,7 @@ class Settings extends CI_Controller {
 				TRUE),
 				'main' => $this -> load -> view("settings/main", 
 					array(
-						//'setting_name' => $setting_name,
-						//$setting_names_and_ids[$setting_name] => $param_id
+						
 					),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer()
@@ -120,7 +120,15 @@ class Settings extends CI_Controller {
 	}
 	
 	function company_pages($user_id = NULL){
-	
+		if($user_id && $user_id == $this->socialhappen->get_user_id()){
+			$user_companies = $this->socialhappen->get_user_companies();
+			$this->load->model('page_model','pages');
+			$company_pages = array();
+			foreach ($user_companies as $user_company){
+				$company_pages[$user_company['company_id']] = $this->pages->get_company_pages_by_company_id($user_company['company_id']);
+			}
+			$this->load->view('settings/companies_and_pages',array('company_pages' => $company_pages, 'user_companies' => $user_companies));
+		}
 	}
 	
 	function company($company_id = NULL){
@@ -165,7 +173,40 @@ class Settings extends CI_Controller {
 	}
 	
 	function page($page_id = NULL){
-	
+		if($page_id) {
+			$this->load->model('page_model','pages');
+			$page = $this->pages->get_page_profile_by_page_id($page_id);
+			$this->form_validation->set_rules('page_name', 'Page name', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('page_detail', 'Page detail', 'trim|xss_clean');
+				
+			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+		
+			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+			{
+				$this->load->view('settings/page', array('page'=>$page));
+			}
+			else // passed validation proceed to post success logic
+			{
+				// build array for the model
+				
+				$page_update_data = array(
+								'page_name' => set_value('page_name'),
+								'page_detail' => set_value('page_detail')
+							);
+						
+				// run insert model to write data to db
+			
+				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data)) // the information has therefore been successfully saved in the db
+				{
+					$this->load->view('settings/page', array('page'=>$page, 'success'=>TRUE));
+				}
+				else
+				{
+				echo 'An error occurred saving your information. Please try again later';
+				// Or whatever error handling is necessary
+				}
+			}
+		}
 	}
 	
 	function package(){

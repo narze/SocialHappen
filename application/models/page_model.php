@@ -115,6 +115,15 @@ class Page_model extends CI_Model {
 		$this -> db -> where($where);
 		return $this -> db -> count_all_results('page');
 	}
+	
+	/**
+	 * Update page profile
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function update_page_profile_by_page_id($page_id = NULL, $data = array()){
+		return $this->db->update('page', $data, array('page_id' => $page_id));
+	}
 }
 /* End of file page_model.php */
 /* Location: ./application/models/page_model.php */
