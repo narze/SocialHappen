@@ -141,7 +141,7 @@ class User_model extends CI_Model {
 		return ($count != 0);
 	}
 	
-	/* 
+	/**
 	 * Count users
 	 * @param $page_id
 	 * @author Manassarn M.
@@ -153,7 +153,7 @@ class User_model extends CI_Model {
 		return $this->db->count_all_results('user');
 	}
 
-	/* 
+	/**
 	 * Count users
 	 * @param $app_install_id
 	 * @author Manassarn M.
@@ -164,7 +164,7 @@ class User_model extends CI_Model {
 		return $this->db->count_all_results('user');
 	}
 
-	/* 
+	/**
 	 * Count users
 	 * @param $campaign_id
 	 * @author Manassarn M.
@@ -174,7 +174,16 @@ class User_model extends CI_Model {
 		$this -> db -> join('user_campaigns', 'user_campaigns.user_id=user.user_id');
 		return $this->db->count_all_results('user');
 	}
-
+	
+	/**
+	 * Update user profile
+	 * @param $user_id
+	 * @author Manassarn M.
+	 */
+	function update_user_profile_by_user_id($user_id = NULL, $data = array()){
+		return $this->db->update('user', $data, array('user_id' => $user_id));
+	}
+	
 	function _get($where = array(), $limit =0, $offset =0) {
 		$query = $this -> db -> get_where('user', $where, $limit, $offset);
 		return $query -> result();

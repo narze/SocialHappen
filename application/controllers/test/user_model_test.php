@@ -147,6 +147,23 @@ class User_model_test extends CI_Controller {
 		$result = $this->users->count_users_by_campaign_id(1);
 		$this->unit->run($result,'is_string', 'count_users_by_campaign_id()');
 	}
+	
+	/**
+	 * Test update_user_profile_by_user_id()
+	 * @author Manassarn M.
+	 */
+	function update_user_profile_by_user_id_test(){
+		$new_first_name = rand(1,10000);
+		$data = array(
+			'user_first_name' => $new_first_name
+		);
+		$result = $this->users->update_user_profile_by_user_id(1,$data);
+		$this->unit->run($result === TRUE,'is_true', 'Updated user_first_name without error');
+		
+		$result = $this->users->get_user_profile_by_user_id(1);
+		$this->unit->run($result['user_first_name'] == $new_first_name,'is_true',"Updated user_first_name to {$new_first_name}");
+		
+	}
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */
