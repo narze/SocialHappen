@@ -72,8 +72,7 @@ class Settings extends CI_Controller {
 				TRUE),
 				'main' => $this -> load -> view("settings/main", 
 					array(
-						//'setting_name' => $setting_name,
-						//$setting_names_and_ids[$setting_name] => $param_id
+						
 					),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer()
@@ -121,7 +120,15 @@ class Settings extends CI_Controller {
 	}
 	
 	function company_pages($user_id = NULL){
-	
+		if($user_id && $user_id == $this->socialhappen->get_user_id()){
+			$user_companies = $this->socialhappen->get_user_companies();
+			$this->load->model('page_model','pages');
+			$company_pages = array();
+			foreach ($user_companies as $user_company){
+				$company_pages[$user_company['company_id']] = $this->pages->get_company_pages_by_company_id($user_company['company_id']);
+			}
+			$this->load->view('settings/companies_and_pages',array('company_pages' => $company_pages, 'user_companies' => $user_companies));
+		}
 	}
 	
 	function company($company_id = NULL){
