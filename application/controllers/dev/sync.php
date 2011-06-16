@@ -172,6 +172,7 @@ class Sync extends CI_Controller {
 							    'company_username' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'company_password' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'company_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'company_website' => field_option('VARCHAR', 255, $default, TRUE, $autoinc, $unsigned)
 							),
 							'company_apps' => array(
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
