@@ -137,6 +137,23 @@ class Company_model_test extends CI_Controller {
 
 		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
 	}
+	
+	/**
+	 * Test update_company_profile_by_company_id()
+	 * @author Manassarn M.
+	 */
+	function update_company_profile_by_company_id_test(){
+		$new_company_name = rand(1,10000);
+		$data = array(
+			'company_name' => $new_company_name
+		);
+		$result = $this->companies->update_company_profile_by_company_id(1,$data);
+		$this->unit->run($result === TRUE,'is_true', 'Updated new_company_name without error');
+		
+		$result = $this->companies->get_company_profile_by_company_id(1);
+		$this->unit->run($result['company_name'] == $new_company_name,'is_true',"Updated company_name to {$new_company_name}");
+		
+	}
 }
 /* End of file company_model_test.php */
 /* Location: ./application/controllers/test/company_model_test_model_test.php */

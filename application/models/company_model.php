@@ -94,6 +94,15 @@ class Company_model extends CI_Model {
 		return $this->db->get_where('company',array('creator_user_id'=>$user_id))->result_array();
 	}
 	
+	/**
+	 * Update company profile
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function update_company_profile_by_company_id($company_id = NULL, $data = array()){
+		return $this->db->update('company', $data, array('company_id' => $company_id));
+	}
+	
 	
 	function add($data = array()) {
 		foreach($data as $var => $key) {

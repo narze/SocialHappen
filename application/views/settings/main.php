@@ -1,2 +1,2 @@
-<div class="main" id="main">
+<div id="main">
 </div>

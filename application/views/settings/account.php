@@ -2,7 +2,7 @@
 	<?php if(isset($success)) echo 'Updated'; ?>
 		<div id="authorize-information"><h2>Authorize information</h2></div>
 <?php // Change the css classes to suit your needs    
-	$attributes = array('class' => '', 'id' => '');
+	$attributes = array('class' => 'account', 'id' => '');
 	echo form_open("settings/account/{$user['user_id']}", $attributes); ?>
 	<div id="account-information"><h2>Account information</h2>
 		
