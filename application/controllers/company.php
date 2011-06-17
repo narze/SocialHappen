@@ -11,6 +11,7 @@ class Company extends CI_Controller {
 	}
 
 	function index($company_id = NULL){
+		//$this -> socialhappen -> check_logged_in();
 		if($company_id){
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_company_id($company_id);

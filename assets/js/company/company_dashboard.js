@@ -1,8 +1,9 @@
 var sorted=true;
 var all_app_install_statuses=new Array();
 var dragging_object;
-var adding_page=false;
+var adding_firstpage=false;
 var adding_app=false;
+var available_pages=new Array();
 function select_page_tab(){
 	$('li.page_tab').addClass("active");
 	$('li.app_tab').removeClass("active");
@@ -25,7 +26,7 @@ function select_app_tab(){
 	$('li.app_tab').addClass("active");
 	$('li.page_tab').removeClass("active");
 	adding_app=true;
-	adding_page=false;
+	adding_firstpage=false;
 	$(".left-panel").html($(".dragging-event-left").html());
 	$(".right-panel").html($(".dragging-event-right-app-list").html());
 	show_installed_app_in_company();
@@ -34,28 +35,39 @@ function select_app_tab(){
 function create_new_page_button_click(){
 	$(".left-panel").html($(".dragging-event-left").html());
 	$(".right-panel").html($(".dragging-event-right-page-list").html());
-	adding_page=true;
+	adding_firstpage=true;
 	adding_app=false;
 }
 function add_page_button_click(){
-	$(".left-panel").html($(".dragging-event-left").html());
 	$(".right-panel").html($(".dragging-event-right-page-list").html());
-	adding_page=true;
+	adding_firstpage=false;
 	adding_app=false;
+}
+function add_app_button_click(){
+	$(".right-panel").html($(".dragging-event-right-app-list").html());
+	adding_app=true;
+	adding_firstpage=false;
 }
 //add app to facebook page
 function get_add_app_to_fb_page_link(facebook_app_api_key,facebook_page_id){
 	return "http://www.facebook.com/add.php?api_key="+facebook_app_api_key+"&pages=1"+"&page="+facebook_page_id;
 }
 //show apps in page
-function view_page_app(page_id,facebook_page_id){
-	$(".right-panel").html($(".dragging-event-right-app-list").html());
+function view_page_app(page_id,facebook_page_id,page_name){
 	show_installed_app_in_page(page_id,facebook_page_id);
+	$(".head-box-app-list b").html(page_name);
+	$(".right-panel").html($(".dragging-event-right-app-list").html());
 	show_available_app_in_page(page_id);
-	adding_page=false;
+	adding_firstpage=false;
 	adding_app=true;
 }
 
+function view_page_app_nochange_right(page_id,facebook_page_id,page_name){
+	show_installed_app_in_page(page_id,facebook_page_id);
+	$(".head-box-app-list b").html(page_name);
+	adding_firstpage=false;
+	adding_app=false;
+}
 //show installed apps in company
 function show_installed_app_in_company(){
 	jQuery.ajax({
@@ -68,9 +80,13 @@ function show_installed_app_in_company(){
 			var ul_element=$(".left-panel").find('.dragging-page').find('ul');
             for(i in json){
             	ul_element.append(
-					"<li><p><img src='"+base_url+"assets/images/thumb-app64-64.png' alt='' /></p><p>"
-					+json[i].app_name+"</p></li>"
-				);
+					'<li><p><img src="'+json[i].app_image+'" alt="" width="64" height="64" />'
+					+'<span class="button">'
+                    +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_id+'"><span>Update</span></a>'
+                    +'<a class="bt-setting_app" href="#"><span>Setting</span></a>'
+                    +'</span>'
+                    +'</p><p>'+json[i].app_name+'</p></li>'
+                );
 			}
 			ul_element.droppable({
 				drop: function(e, ui) {
@@ -115,40 +131,37 @@ function show_installed_page_in_company(){
 	    url: base_url + "company/json_get_pages/" + company_id,
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".left-panel").find('.dragging-page').html("<div class='loading'></div><ul></ul>");
+			$(".left-panel").find('.dragging-page div').html("<div class='loading'></div><ul></ul>");
 	    },
 		success: function(json) {
-			var ul_element=$(".left-panel").find('.dragging-page').find('ul');
-			for(i in json){
-				if(adding_page){
+			var ul_element=$(".left-panel").find('.dragging-page div').find('ul');
+			ul_element.append('<li class="add-page"></li>');
+            for(i in json){
+				if(adding_firstpage){
 					ul_element.append(
-						"<li><p><img src='"+base_url+"assets/images/thumb80-80.jpg' alt='' /></p><p>"
+						"<li><p><img src='"+json[i].page_image
+						+"' alt='' width='80' height='80' /></p><p>"
 						+json[i].page_name+"</p></li>"
 					);
 				}
 				else{
 					ul_element.append(
-						"<li><p><img src='"+base_url+"assets/images/thumb80-80.jpg' alt='' /></p><p>"
-						+"<a href='javascript:view_page_app("+json[i].page_id+","+json[i].facebook_page_id+")'>"+json[i].page_name+"</a></p>"
-						+"<a href='#' class='delete'><span>delete</span></a></li>"
+						'<li onclick="view_page_app('+json[i].page_id+','+json[i].facebook_page_id+',\''+json[i].page_name+'\')">'
+						+'<p><img src="'+json[i].page_image+'" alt="" width="80" height="80" />'
+						+'<span class="button">'
+	                    +'<a class="bt-manage_page" href="'+base_url+'page/'+json[i].page_id+'"><span>Manage</span></a>'
+	                    +'<a class="bt-setting_page" href="#"><span>Setting</span></a>'
+	                    +'</span>'
+	                    +'</p><p>'+json[i].page_name+'</p>'
+						+'</li>'
 					);
 				}
-			/*	$("#company-installed-page-list").append(
-					"<li class='ui-state-default'>" + json[i].page_name +"<div class='view_app_link'><a href='javascript:view_page_app("+json[i].page_id+","+json[i].facebook_page_id+")' style='text-decoration:underline;'>view app</a></div></li>"
-				);*/
 			}
-			if(adding_page){
-				ul_element.append('<li class="drop-here"></li>');
-			}
-			else{
-				ul_element.append('<li class="add-page"></li>');
-			}
+			if(json.length>0) view_page_app_nochange_right(json[0].page_id,json[0].facebook_page_id,json[0].page_name);
 			ul_element.find('li').not('.drop-here,.add-page').bind('mouseover',function(){
-					$(this).css("cursor","pointer");
-					$(this).addClass("dragging");
+				$(this).addClass("dragging");
 			}).bind('mouseout',function(){
-					$(this).css("cursor","default");
-					$(this).removeClass("dragging");
+				$(this).removeClass("dragging");
 			});
 	        
 			ul_element.droppable({
@@ -158,18 +171,21 @@ function show_installed_page_in_company(){
 				},
 				accept:"li.draggable"
 			}).sortable({
+				cancel: ".add-page",
+				placeholder: "ui-state-highlight",
 				revert: true,
 				stop: function(e,ui){
 					if(!sorted){
 						sorted=true;
 						var facebook_page_id=dragging_object.children('input.facebook_page_id').val();
-						var page_name=dragging_object.children('input.page_name').val();
+						var page_name=available_pages[''+facebook_page_id].name;
+						var page_image=available_pages[''+facebook_page_id].page_info.picture;
 						dragging_object.removeClass('draggable');
 						jQuery.ajax({
 							url: base_url + "page/json_add",
 							dataType: "json",
 							type: "POST",
-							data: ({company_id : company_id, facebook_page_id : facebook_page_id, page_name : page_name, page_detail : "", page_all_member : 0, page_new_member : 0 , page_image : ""}),
+							data: ({company_id : company_id, facebook_page_id : facebook_page_id, page_name : page_name, page_detail : "", page_all_member : 0, page_new_member : 0 , page_image : page_image}),
 							success: function(json) {
 								var page_id=json.page_id;
 								var app_api_key=sh_default_fb_app_api_key;
@@ -215,14 +231,19 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 	    url: base_url + "page/json_get_installed_apps/" + page_id,
 	    dataType: "json",
 	    beforeSend: function(){
-	    	$(".left-panel").find('.box-app-list').show();
-	    	$(".left-panel").find('.box-app-list').html("<div class='loading'></div><ul></ul>");
+	    	$(".left-panel").find('.dragging-app div').html("<div class='loading'></div><ul></ul>");
+	    	$(".head-box-app-list").hide();
 	    },
 		success: function(json) {
-			var ul_element=$(".left-panel").find('.box-app-list').find('ul');
+			var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
+			ul_element.append('<li class="add-app"></li>');
             for(i in json){
-				ul_element.append('<li><p><img src="'+base_url+'assets/images/thumb-app64-64.png" alt="" /></p>'
-                    +'<p>'+ json[i].app_name +'</p></li>');
+				ul_element.append('<li><p><img src="'+json[i].app_image+'" alt="" width="64" height="64" />'
+					+'<span class="button">'
+                    +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_id+'"><span>Update</span></a>'
+                    +'<a class="bt-setting_app" href="#"><span>Setting</span></a>'
+                    +'</span>'
+                    +'</p><p>'+ json[i].app_name +'</p></li>');
 				//"<li class='ui-state-default'>" + json[i].app_name + "<br/><a href='"+get_add_app_to_fb_page_link(json[i].facebook_app_api_key,facebook_page_id)+"'>Go to FB</a></li>"
 			}
 			ul_element.droppable({
@@ -232,6 +253,8 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 				},
 				accept:"li.draggable"
 			}).sortable({
+				cancel: '.add-app',
+				placeholder: "ui-state-highlight",
 				revert: true,
 				stop: function(e,ui){
 					if(!sorted){
@@ -262,6 +285,13 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 					}
 				}
 			});
+			$(".add-app").click(function(){
+				add_app_button_click();
+				//get company available pages
+				show_available_app_in_page(page_id);
+			});
+			$(".head-box-app-list strong").html(json.length+' Applications installed in');
+			$(".head-box-app-list").show();
 	        $(".left-panel").find('.loading').remove();
         },
 	});
@@ -279,7 +309,7 @@ function show_available_app_in_company(){
 			var ul_element=$(".right-panel").find('.box-app-list').find('ul');
             for(i in json){
             	ul_element.append(
-					'<li class="draggable"><p><img src="'+base_url+'assets/images/thumb-app64-64.png" alt="" /></p>'
+					'<li class="draggable"><p><img src="'+json[i].app_image+'" alt="" width="64" height="64" /></p>'
 					+'<p>'+ json[i].app_name +'</p>'		    
 					+"<input class='app_id' type='hidden' value='" + json[i].app_id + "'/>"
 					+"<input class='app_secret_key' type='hidden' value='" + json[i].app_secret_key + "'/><input class='app_api_key' type='hidden' value='" + json[i].facebook_app_api_key + "'/></li>"
@@ -305,23 +335,31 @@ function show_available_page_in_company(){
 	    },
 		success: function(json) {
 			var ul_element=$(".right-panel").find('.dragging-page').find('ul');
+			available_pages=new Array();
 			for(i in json){
+				available_pages[''+json[i].id]=json[i];
 				ul_element.append(
-					"<li class='draggable'><p><img src='"+base_url+"assets/images/thumb80-80.jpg' alt='' /></p><p>"
-					+json[i].name+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/><input class='page_name' type='hidden' value='" + json[i].name + "'/></li>"
+					"<li class='draggable'><p><img src='"
+					+(json[i].page_info.picture==null?'http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yA/r/gPCjrIGykBe.gif':json[i].page_info.picture)
+					+"' alt='' width='80' height='80' /></p><p>"+json[i].name
+					+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/></li>"
 				);
 			}
 			ul_element.find('li').bind('mouseover',function(){
-					$(this).css("cursor","pointer");
 					$(this).addClass("dragging");
 			}).bind('mouseout',function(){
-					$(this).css("cursor","default");
 					$(this).removeClass("dragging");
 			});
 			ul_element.find('li.draggable').draggable({
 	            connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
 				helper: "clone",
-				revert: "invalid"
+				revert: "invalid",
+				drag: function(){
+					$(".left-panel").find('.dragging-page div').addClass('in-action');
+				},
+				stop: function(){
+					$(".left-panel").find('.dragging-page div').removeClass('in-action');
+				}
 	        });
 	        $(".right-panel").find('.loading').remove();
         },
@@ -334,13 +372,13 @@ function show_available_app_in_page(page_id){
 	    url: base_url + "company/json_get_not_installed_apps/" + company_id + "/" + page_id,
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".right-panel").find('.box-app-list').html("<h2>Select Available Application</h2><div class='loading'></div><ul></ul>");
+			$(".right-panel").find('.dragging-app').html("<div class='loading'></div><ul></ul>");
 	   	},
 		success: function(json) {
-			var ul_element=$(".right-panel").find('.box-app-list').find('ul');
+			var ul_element=$(".right-panel").find('.dragging-app').find('ul');
             for(i in json){
 				ul_element.append(
-					'<li class="draggable"><p><img src="'+base_url+'assets/images/thumb-app64-64.png" alt="" /></p>'
+					'<li class="draggable"><p><img src="'+json[i].app_image+'" alt="" width="64" height="64" /></p>'
 					+'<p>'+ json[i].app_name +'</p>'		    
 					+"<input class='app_id' type='hidden' value='" + json[i].app_id + "'/>"
 					+"<input class='app_secret_key' type='hidden' value='" + json[i].app_secret_key + "'/><input class='app_api_key' type='hidden' value='" + json[i].facebook_app_api_key + "'/></li>"
@@ -349,23 +387,23 @@ function show_available_app_in_page(page_id){
 			ul_element.find('li.draggable').draggable({
 	            connectToSortable: $(".left-panel").find('.box-app-list').find('ul'),
 				helper: "clone",
-				revert: "invalid"
+				revert: "invalid",
+				drag: function(){
+					$(".left-panel").find('.dragging-app div').addClass('in-action');
+				},
+				stop: function(){
+					$(".left-panel").find('.dragging-app div').removeClass('in-action');
+				}
 	        });
 	        $(".right-panel").find('.loading').remove();
         },
 	});
 }
 $(function() {	
-	$(".add-page").live('mouseover',function(){
-		$(this).css("cursor","pointer");
-	}).live('mouseout',function(){
-		$(this).css("cursor","default");
-	}).live('click',function(){
+	$(".add-page").live('click',function(){
 		add_page_button_click();
 		//get company available pages
 		show_available_page_in_company();
-		//get installed pages
-		show_installed_page_in_company();
 	})
 	$(".bt-create_page").live('click',function(){
 		create_new_page_button_click();

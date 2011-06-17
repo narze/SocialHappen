@@ -188,11 +188,16 @@ class Page extends CI_Controller {
 		foreach($pages as $page){
 			$all_installed_fb_page_id[]=$page['facebook_page_id'];
 		}
-		$facebook_pages=$this->facebook->get_user_pages();
-		$facebook_pages=$facebook_pages['data'];
 		$not_installed_facebook_pages=array();
-		foreach($facebook_pages as $facebook_page){
-			if(!in_array($facebook_page['id'],$all_installed_fb_page_id)) $not_installed_facebook_pages[]=$facebook_page;
+		$facebook_pages=$this->facebook->get_user_pages();
+		if($facebook_pages!=NULL){
+			$facebook_pages=$facebook_pages['data'];
+			foreach($facebook_pages as $facebook_page){
+				if(!in_array($facebook_page['id'],$all_installed_fb_page_id)){
+					$facebook_page['page_info']=$this->facebook->get_page_info($facebook_page['id']);
+					$not_installed_facebook_pages[]=$facebook_page;
+				}
+			}
 		}
 		echo json_encode($not_installed_facebook_pages);
 	}
