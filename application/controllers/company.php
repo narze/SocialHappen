@@ -57,7 +57,7 @@ class Company extends CI_Controller {
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer()
 			);
-			$this->parser->parse('company_view', $data);
+			$this->parser->parse('company/company_view', $data);
 		}
 	}
 	

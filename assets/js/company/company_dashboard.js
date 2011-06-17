@@ -1,4 +1,4 @@
-var sorted=false;
+var sorted=true;
 var all_app_install_statuses=new Array();
 var dragging_object;
 var adding_page=false;
@@ -94,16 +94,16 @@ function show_installed_app_in_company(){
 							success: function(json) {
 								if(json.status=="OK") alert("DONE");
 								else alert("ERROR");
-								show_available_app_in_company();
+								show_available_app_in_company();		
+								//update company installed apps count
+								$.getJSON(base_url + "company/json_get_installed_apps_count/" + company_id, function(json){
+									$(".app-installed-count").html("Application (" + json.app_count + ")");
+								});
 							},
 						});
 					}
 				}
-			});				
-			//amount of installed app
-			$("#company-detail-installed-app").html(
-				"Installed app:" + json.length
-			);
+			});		
 	        $(".left-panel").find('.loading').remove();
         },
 	});
@@ -152,7 +152,7 @@ function show_installed_page_in_company(){
 			});
 	        
 			ul_element.droppable({
-				drop: function(e, ui) {					
+				drop: function(e, ui) {	
 					sorted=false;
 					dragging_object=$(ui.draggable);
 				},
@@ -194,15 +194,15 @@ function show_installed_page_in_company(){
 								}
 								else alert("ERROR");
 								show_available_page_in_company();
+								//update company pages count
+								$.getJSON(base_url + "company/json_get_pages_count/" + company_id, function(json){
+									$(".page-installed-count").html("Page (" + json.page_count + ")");
+								});
 							},
 						});
 					}
 				}
 			});		
-			//amount of installed page
-			$("#company-detail-installed-page").html(
-				"Installed page:" + json.length
-			);
 	        $(".left-panel").find('.loading').remove();
         },
 	});
@@ -253,6 +253,10 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 								}
 								else alert("ERROR");
 								show_available_app_in_page(page_id);
+								//update company installed apps count
+								$.getJSON(base_url + "company/json_get_installed_apps_count/" + company_id, function(json){
+									$(".app-installed-count").html("Application (" + json.app_count + ")");
+								});
 							},
 						});
 					}
@@ -383,7 +387,7 @@ $(function() {
 	});
 	
 	//get company detail
-	$.getJSON(base_url + "company/json_get_profile/" + company_id, function(json){
+/*	$.getJSON(base_url + "company/json_get_profile/" + company_id, function(json){
 		var company_detail=json;
 		//company name
 		$("#company-detail").append(
@@ -405,7 +409,7 @@ $(function() {
 		$("#company-detail").append(
 			"<li>Image:" + company_detail.company_image +"</li>"
 		);
-	});
+	});*/
 	
 	$( "ul, li" ).disableSelection();
 });
