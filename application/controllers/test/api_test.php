@@ -319,7 +319,7 @@ class Api_test extends CI_Controller {
 				
 		$content = $this->curl->simple_get(base_url().'api/request_update_campaign', $app);
 		$content = json_decode($content, TRUE);
-		print_r($content);
+		
 		$this->unit->run($content, 'is_array', 'request_update_campaign()');
 		$this->unit->run(@$content['campaign_id'],'is_string','campaign_id');
 	}
