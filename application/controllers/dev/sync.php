@@ -208,6 +208,7 @@ class Sync extends CI_Controller {
 							    'app_install_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'page_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
 							    'app_install_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
 							),
 							'page' => array(
 							    'page_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -218,6 +219,7 @@ class Sync extends CI_Controller {
 							    'page_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_new_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
