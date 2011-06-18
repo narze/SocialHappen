@@ -2,16 +2,12 @@
 
 class Audit extends CI_Controller {
 	
+	var $audit_lib = '';
 	/**
 	 * construct method
 	 */
 	function __construct(){
 		parent::__construct();
-		$this->load->model('Audit_model', 'Audit');
-		$this->load->model('Audit_action_model', 'Audit_action');
-		$this->load->model('Stat_page_model', 'Stat_page');
-		$this->load->model('Stat_app_model', 'Stat_app');
-		$this->load->model('Stat_campaign_model', 'Stat_campaign');
 		$this->load->library('audit_lib');
 	}
 	
@@ -19,94 +15,151 @@ class Audit extends CI_Controller {
 	 * index method
 	 */
 	function index(){
-		echo 'hello';
-		/*
-		for($i = 0; $i < 100; $i++){
-			$audit = array('subject' => '' . ($i % 4),
-						'action' => '' . ($i % 5),
-						'object' => '' . ($i*$i % 5),
-						'app_id' => '' . ($i*$i % 5));
-			$this->Audit->add_audit($audit);
-		}
-		*/
-		
-		/*
-		$res = $this->Audit->list_audit();
-		
-		echo '<pre>';
-		print_r(count($res));
-		echo '</pre>';
-		
-		foreach ($res as $audit) {
-			echo '<pre>';
-			print_r($audit);
-			echo '</pre>';
-		}
-		*/
-		/*
-		$this->Audit_action->create_index();
-		for($i = 0; $i < 100; $i++){
-			$audit = array('app_id' => ($i % 4),
-						'action_id' => ($i % 5),
-						'description' => '' . ($i*$i % 5),
-						'stat' => ($i*$i % 5) == 0);
-			$res = $this->Audit_action->add_action($audit);
-			if($res){
-				echo 'success<br/>';
-			}else{
-				echo 'fail<br/>';
-			}
-		}
-		
-		*/
-		//$this->Audit_action->delete_action(2);
-		/*
-		$res = $this->Audit_action->get_action_list();
-		echo '<pre>';
-		print_r(count($res));
-		echo '</pre>';
-		
-		foreach ($res as $audit) {
-			echo '<pre>';
-			print_r($audit);
-			echo '</pre>';
-		}
-		*/
-		/*
-		$res = $this->Audit_action->edit_action(2, 3, array('description' => 'test', 'stat' => true));
-		if($res){
-			echo 'success';
-		}else{
-			echo 'fail';
-		}
-		*/
-		//$this->Stat_campaign->create_index();
-		/*
-		for($i = 0 ;$i < 20; $i++){
-			$this->Stat_page->add_stat_page(10 + ($i%2), 20 + ($i % 3), 20110530 + ($i % 4));
-		}
-		*/
-		/*
-		$res = $this->Stat_page->get_stat_page(array('date' => 20110532));
-		echo '<pre>';
-		print_r(count($res));
-		echo '</pre>';
-		
-		foreach ($res as $stat){
-			echo '<pre>';
-			print_r($stat);
-			echo '</pre>';
-		}
-		 */
-		//$this->Stat_page->increment_stat_page(21, 20, 20110532);
-		
-		//$this->audit_lib->add_audit_action(5, 5, TRUE, 'test');
-		//$res = $this->audit_lib->get_audit_action(0, 1);
-		//print_r($res['stat']);
-		
-		$res = $this->audit_lib->_date();
-		print_r($res);
+		echo 'index created';
+		echo $this->audit_lib->create_index();
 	}
+	
+	function add_audit_action(){
+		$app_id = 0;
+		$action_id = 1;
+		$stat_app = TRUE;
+		$stat_page = FALSE;
+		$stat_campaign = FALSE;
+		$description = 'platform visit';
+		$result = $this->_add_audit_action($app_id, $action_id, $description, $stat_app, $stat_page, $stat_campaign);
+		
+		$app_id = 0;
+		$action_id = 2;
+		$stat_app = TRUE;
+		$stat_page = FALSE;
+		$stat_campaign = FALSE;
+		$description = 'platform register';
+		$result = $this->_add_audit_action($app_id, $action_id, $description, $stat_app, $stat_page, $stat_campaign);
+		
+		$app_id = 1;
+		$action_id = 1;
+		$stat_app = TRUE;
+		$stat_page = TRUE;
+		$stat_campaign = TRUE;
+		$description = 'app1 visit';
+		$result = $this->_add_audit_action($app_id, $action_id, $description, $stat_app, $stat_page, $stat_campaign);
+		
+		$app_id = 1;
+		$action_id = 2;
+		$stat_app = TRUE;
+		$stat_page = TRUE;
+		$stat_campaign = TRUE;
+		$description = 'app1 register';
+		$result = $this->_add_audit_action($app_id, $action_id, $description, $stat_app, $stat_page, $stat_campaign);
+	}
+
+	function _add_audit_action($app_id, $action_id, $description, $stat_app, $stat_page, $stat_campaign){
+		$result = $this->audit_lib->add_audit_action($app_id, $action_id, $description, $stat_app, $stat_page, $stat_campaign);
+		if($result){
+			echo 'audit action added';
+		}else{
+			echo 'audit action add fail';
+		}
+		echo '$app_id: ' . $app_id . '<br/>';
+		echo '$action_id: ' . $action_id . '<br/>';
+		echo '$stat_app: ' . $stat_app . '<br/>';
+		echo '$stat_page: ' . $stat_page . '<br/>';
+		echo '$stat_campaign: ' . $stat_campaign . '<br/>';
+		echo '$description: ' . $description . '<br/>';
+	}
+	
+	
+	/**
+	 * platform visit
+	 */
+	function addlog01(){
+		$app_id = 0;
+		$action_id = 1;
+		$subject = 'userX';
+		$object = 'object';
+		$objecti = 'objecti';
+		$additional_data = array('app_install_id' => 0);
+		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+		if($result) echo 'platform visit';
+	}
+
+	/**
+	 * platform register
+	 */
+	function addlog02(){
+		$app_id = 0;
+		$action_id = 2;
+		$subject = 'userX';
+		$object = 'object';
+		$objecti = 'objecti';
+		$additional_data = array('app_install_id' => 0);
+		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+		if($result) echo 'platform register';
+	}
+	
+	/**
+	 * app1 visit
+	 */
+	function addlog11(){
+		$app_id = 1;
+		$action_id = 1;
+		$subject = 'userX';
+		$object = 'object';
+		$objecti = 'objecti';
+		$additional_data = array('app_install_id' => rand(1, 20),
+								'campaign_id' => rand(1, 30),
+								'company_id' => rand(1, 20),
+								'page_id' => rand(1, 20));
+		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+		if($result) echo 'app1 visit';
+	}
+	
+	/**
+	 * app1 register
+	 */
+	function addlog12(){
+		$app_id = 1;
+		$action_id = 2;
+		$subject = 'userX';
+		$object = 'object';
+		$objecti = 'objecti';
+		$additional_data = array('app_install_id' => rand(1, 20),
+								'campaign_id' => rand(1, 30),
+								'company_id' => rand(1, 20),
+								'page_id' => rand(1, 20));
+		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+		if($result) echo 'app1 register';
+	}
+	
+	
+	function addlog(){
+		echo 'addlog';
+		$rand = rand(1, 4) . '';
+		//echo $rand;
+		switch ($rand) {
+		case '1':
+			$this->addlog01();
+		break;
+		
+		case '2':
+			$this->addlog02();
+		break;
+			
+		case '3':
+			$this->addlog11();
+		break;
+			
+		case '4':
+			$this->addlog12();
+		break;
+			
+		default:
+		
+		break;
+		}
+	}
+	
+	
 	
 	/**
 	 * add new audit entry
@@ -125,10 +178,10 @@ class Audit extends CI_Controller {
 	 * list recent audit
 	 */
 	function list_audit(){
-		$audit_list = $this->Audit->list_recent_audit();
+		$audit_list = $this->audit_lib->list_recent_audit();
 		foreach ($audit_list as $audit) {
-			echo $audit['subject'] . "<br/>";
-			//print_r($audit);
+			//echo $audit['subject'] . "<br/>";
+			echo '<pre>' . print_r($audit) . '</pre>';
 		}
 	}
 
