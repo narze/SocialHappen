@@ -117,7 +117,7 @@ class Campaign_model extends CI_Model {
 		return $this->db->affected_rows();
 	}
 	
-	/* 
+	/** 
 	 * Count campaigns
 	 * @param $page_id
 	 * @author Manassarn M.
@@ -129,7 +129,7 @@ class Campaign_model extends CI_Model {
 		return $this->db->count_all_results('campaign');
 	}
 
-	/* 
+	/** 
 	 * Count campaigns
 	 * @param $app_install_id
 	 * @author Manassarn M.
@@ -140,37 +140,6 @@ class Campaign_model extends CI_Model {
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
 		return $this->db->count_all_results('campaign');
 	}
-
-	function add($data = array()) {
-		foreach($data as $var => $key) {
-			$this -> {$var} = $key;
-		}
-		$this -> db -> insert('campaign', $this);
-		return $this -> db -> insert_id();
-	}
-
-	function get($where = array(), $limit =0, $offset =0) {
-
-		// join campaign_status table
-		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id');
-
-		$query = $this -> db -> get_where('campaign', $where, $limit, $offset);
-		return $query -> result();
-	}
-
-	function update($data = array(), $where = array()) {
-		$this -> db -> update('campaign', $data, $where);
-	}
-
-	function delete($id) {
-		$this -> db -> delete('campaign', array('campaign_id' => $id));
-	}
-
-	function count_all($where = array()) {
-		$this -> db -> where($where);
-		return $this -> db -> count_all_results('campaign');
-	}
-
 }
 
 /* End of file campaign_model.php */
