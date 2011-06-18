@@ -52,6 +52,7 @@ class Page_model extends CI_Model {
 	 */
 	function get_company_pages_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->db->limit($limit, $offset);
+		$this->db->order_by("order_in_dashboard");
 		return $this->db->get_where('page', array('company_id' => $company_id))->result_array();
 	}
 	

@@ -201,6 +201,21 @@ class App extends CI_Controller {
 		$app = $this->app->get_app_by_api_key($fb_app_api_key);
 		echo json_encode($app);
 	}
+	
+	/**
+	 * JSON : update app order in dashboard
+	 * @author Prachya P.
+	 */
+	function json_update_app_order_in_dashboard(){
+		$this->load->model('installed_apps_model','installed_app');
+		
+		$app_orders=$_POST['app_orders'];
+		$i=0;
+		foreach($app_orders as $app_install_id){
+			$this->installed_app->update(array('order_in_dashboard'=>$i),array("app_install_id"=>$app_install_id));
+			$i++;	
+		}
+	}
 }
 
 

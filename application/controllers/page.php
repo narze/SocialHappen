@@ -201,6 +201,20 @@ class Page extends CI_Controller {
 		}
 		echo json_encode($not_installed_facebook_pages);
 	}
+	
+	/**
+	 * JSON : update page order in dashboard
+	 * @author Prachya P.
+	 */
+	function json_update_page_order_in_dashboard($company_id){
+		$this->load->model('page_model','page');
+		$page_orders=$_POST['page_orders'];
+		$i=0;
+		foreach($page_orders as $page_id){
+			$this->page->update_page_profile_by_page_id($page_id,array('order_in_dashboard'=>$i));
+			$i++;	
+		}		
+	}
 }
 
 /* End of file page.php */

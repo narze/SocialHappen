@@ -126,10 +126,10 @@
 				</li>
 			</ul>
 		</div>
-        <p class="alert">Drag available Application to left panel to install application info Page</p>
+        <p class="alert">Drag available Application to left panel to install</p>
 	</div>
 </div>
-<div class="list-event-right" style="display:none;">
+<div class="list-activity-log" style="display:none;">
 	<div class="activity-logs">
 		<h2>Activity Logs</h2>
 		<ul>
