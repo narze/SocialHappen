@@ -17,13 +17,41 @@ class Page_model extends CI_Model {
 		return issetor($result[0]);
 	}
 	
+	/**
+	 * Get page profile
+	 * @param $campaign_id
+	 * @return array
+	 * @author Manassarn M.
+	 */
+	function get_page_profile_by_campaign_id($campaign_id = NULL){
+		$this->db->select(array('page.page_id','facebook_page_id','page.company_id','page_name','page_detail','page_all_member','page_new_member','page_image'));
+		$this->db->join('installed_apps','installed_apps.page_id=page.page_id');
+		$this->db->join('campaign','campaign.app_install_id=installed_apps.app_install_id');
+		$result = $this->db->get_where('page', array('campaign_id' => $campaign_id))->result_array();
+		return issetor($result[0]);
+	}
+	
+	/**
+	 * Get page profile
+	 * @param $app_install_id
+	 * @return array
+	 * @author Manassarn M.
+	 */
+	function get_page_profile_by_app_install_id($app_install_id = NULL){
+		$this->db->select(array('page.page_id','facebook_page_id','page.company_id','page_name','page_detail','page_all_member','page_new_member','page_image'));
+		$this->db->join('installed_apps','installed_apps.page_id=page.page_id');
+		$result = $this->db->get_where('page', array('app_install_id' => $app_install_id))->result_array();
+		return issetor($result[0]);
+	}
+	
 	/** 
 	 * Get company pages
 	 * @param $company_id
 	 * @return array
 	 * @author Manassarn M.
 	 */
-	function get_company_pages_by_company_id($company_id = NULL){
+	function get_company_pages_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		return $this->db->get_where('page', array('company_id' => $company_id))->result_array();
 	}
 	
@@ -68,7 +96,8 @@ class Page_model extends CI_Model {
 	 * $return array
 	 * @author Manassarn M.
 	 */
-	function get_app_pages_by_app_install_id($app_install_id = NULL){
+	function get_app_pages_by_app_install_id($app_install_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$result = $this->db->get_where('installed_apps',array('app_install_id' => $app_install_id))->result_array();
 		$app_id = $result[0]['app_id'];
 		$company_id = $result[0]['company_id'];
@@ -85,6 +114,15 @@ class Page_model extends CI_Model {
 	function count_all($where = array()) {
 		$this -> db -> where($where);
 		return $this -> db -> count_all_results('page');
+	}
+	
+	/**
+	 * Update page profile
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function update_page_profile_by_page_id($page_id = NULL, $data = array()){
+		return $this->db->update('page', $data, array('page_id' => $page_id));
 	}
 }
 /* End of file page_model.php */

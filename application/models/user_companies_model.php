@@ -61,7 +61,8 @@ class User_companies_model extends CI_Model {
 	 * @return array
 	 * @author Manassarn M.
 	 */
-	function get_user_companies_by_user_id($user_id = NULL){
+	function get_user_companies_by_user_id($user_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$this->db->join('company','user_companies.company_id=company.company_id');
 		return $this->db->get_where('user_companies', array('user_id' => $user_id))->result_array();
 	}
@@ -71,7 +72,8 @@ class User_companies_model extends CI_Model {
 	 * @param $company_id
 	 * @author Wachiraph C.
 	 */
-	function get_user_companies_by_company_id($company_id = NULL) {
+	function get_user_companies_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		return $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
 	}
 	

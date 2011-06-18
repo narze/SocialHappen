@@ -27,13 +27,17 @@ class Sync extends CI_Controller {
 		$host = 'localhost';
 		$username = 'root';
 		$password = '';
+		if(isset($_GET['u']) && isset($_GET['p'])){
+			$username = $_GET['u'];
+			$password = $_GET['p'];
+		}
 		$con = mysql_connect($host,$username,$password);
 		if (!$con)
 		    {
 				die('Could not connect: ' . mysql_error());
  		    }
 		if (!mysql_query("CREATE DATABASE IF NOT EXISTS socialhappen",$con)){
-			echo "Error creating database: " . mysql_error();
+			echo "Error creating database: " . mysql_error()."<h3>Try dev/sync?u=username&p=password</h3>";
 		}
 		
 		if (!mysql_query("CREATE TABLE IF NOT EXISTS socialhappen.sh_sessions (
@@ -172,15 +176,12 @@ class Sync extends CI_Controller {
 							    'company_username' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'company_password' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'company_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'company_website' => field_option('VARCHAR', 255, $default, TRUE, $autoinc, $unsigned)
 							),
 							'company_apps' => array(
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'available_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-							),
-							'company_pages' => array(
-							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							),
 							/*'config_item' => array(
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -261,7 +262,6 @@ class Sync extends CI_Controller {
 						'campaign_status' => array('campaign_status_id'),
 						'company' => array('company_id'),
 						'company_apps' => array('company_id', 'app_id'),
-						'company_pages' => array('company_id', 'page_id'),
 						//'config_item' => array('app_install_id','config_key'),
 						//'config_item_template' => array('app_id','config_key'),
 						//'VARCHAR_job' => array('job_id'),
@@ -282,7 +282,6 @@ class Sync extends CI_Controller {
 							'campaign_status',
 							'company',
 							'company_apps',
-							'company_pages',
 							//'config_item',
 							//'config_item_template',
 							//'cron_job',
@@ -534,14 +533,6 @@ class Sync extends CI_Controller {
 						);
 		$this->db->insert_batch('company_apps', $company_apps);
 		
-		$company_pages = array(
-							array(
-							    'company_id' => 1,
-							    'page_id' => 1
-							)
-						);
-		$this->db->insert_batch('company_pages', $company_pages);
-						
 		$installed_apps = array(
 								array(
 								    'app_install_id' => 1, 

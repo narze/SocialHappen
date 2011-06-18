@@ -140,23 +140,29 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function select_company(){
-		$this->socialhappen->check_logged_in('home');
+		
+		$this -> socialhappen -> check_logged_in('home');
 		$user = $this->socialhappen->get_user();
+		
 		$this->load->model('user_companies_model','user_companies');
+		$user_companies = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
 		$data = array(
-						'user_companies' => $this->user_companies->get_user_companies_by_user_id($user['user_id']),
-						'user' => $user,
-						'header' => $this -> socialhappen -> get_header( 
-							array(
-								'title' => 'Select company',
-								'script' => array(
-									''
-								)
-							)
-						),
-						'footer' => $this -> socialhappen -> get_footer()
-					);
+			'user_companies' => $user_companies,
+			'header' => $this -> socialhappen -> get_header( 
+				array(
+					'title' => 'Select company',
+					'vars' => array(),
+					'script' => array('common/bar'),
+					'style' => array(
+						'common/main',
+						'home/main'
+					)
+				)
+			),
+			'footer' => $this -> socialhappen -> get_footer());
 		$this->parser->parse('home/select_company_view', $data);
+		return $data;
+	
 	}
 }  
 

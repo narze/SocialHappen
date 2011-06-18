@@ -14,7 +14,6 @@ class Company_model_test extends CI_Controller {
 
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->companies))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -114,6 +113,46 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run(count($result) == 11,'is_true', 'number of column');
 
 		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
+	}
+	
+	/**
+	 * Tests get_company_profile_by_app_install_id()
+	 * @author Manassarn M.
+	 */
+	function get_company_profile_by_app_install_id_test(){
+		$result = $this->companies->get_company_profile_by_app_install_id(1);
+		$this->unit->run($result,'is_array', 'get_company_profile_by_app_install_id()');
+		$this->unit->run($result['company_id'],'is_string','company_id');
+		$this->unit->run($result['creator_user_id'],'is_string','creator_user_id');
+		$this->unit->run($result['company_name'],'is_string','company_name');
+		$this->unit->run($result['company_detail'],'is_string','company_detail');
+		$this->unit->run($result['company_address'],'is_string','company_address');
+		$this->unit->run($result['company_email'],'is_string','company_email');
+		$this->unit->run($result['company_telephone'],'is_string','company_telephone');
+		$this->unit->run($result['company_register_date'],'is_string','company_register_date');
+		$this->unit->run($result['company_username'],'is_string','company_username');
+		$this->unit->run($result['company_password'],'is_string','company_password');
+		$this->unit->run($result['company_image'],'is_string','company_image');
+		$this->unit->run(count($result) == 11,'is_true', 'number of column');
+
+		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
+	}
+	
+	/**
+	 * Test update_company_profile_by_company_id()
+	 * @author Manassarn M.
+	 */
+	function update_company_profile_by_company_id_test(){
+		$new_company_name = rand(1,10000);
+		$data = array(
+			'company_name' => $new_company_name
+		);
+		$result = $this->companies->update_company_profile_by_company_id(1,$data);
+		$this->unit->run($result === TRUE,'is_true', 'Updated new_company_name without error');
+		
+		$result = $this->companies->get_company_profile_by_company_id(1);
+		$this->unit->run($result['company_name'] == $new_company_name,'is_true',"Updated company_name to {$new_company_name}");
+		
 	}
 }
 /* End of file company_model_test.php */

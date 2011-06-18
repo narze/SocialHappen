@@ -1,4 +1,6 @@
 <div class="wrapper-details users">
+
+ <?php echo $pagination['user']; ?>
         <h2 class="application"><span>Member</span></h2>
         <div class="details">
           <table cellpadding="0" cellspacing="0">

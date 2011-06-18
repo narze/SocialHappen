@@ -145,9 +145,29 @@ class Facebook{
 		 */
 		function get_user_pages(){
 			$cookie = $this->get_facebook_cookie();
-            $pages = json_decode(file_get_contents(
+			
+			//include page from app
+            /*$pages = json_decode(file_get_contents(
                             'https://graph.facebook.com/me/accounts?access_token=' .
+                            $cookie['access_token']), true);*/
+                           
+            //not include page from app
+            $pages = json_decode(file_get_contents(
+                            'https://graph.facebook.com/me/accounts/page?access_token=' .
                             $cookie['access_token']), true);
             return $pages;
+		}
+		
+		/** 
+		 * JSON : Get facebook page info
+		 * @author Prachya P.
+		 * @param $fb_page_id
+		 */
+		function get_page_info($fb_page_id){
+			$cookie = $this->get_facebook_cookie();
+            $page_info = json_decode(file_get_contents(
+                            'https://graph.facebook.com/'.$fb_page_id.'/?access_token=' .
+                            $cookie['access_token']), true);
+            return $page_info;
 		}
 }

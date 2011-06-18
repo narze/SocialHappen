@@ -14,7 +14,8 @@ class Company_apps_model extends CI_Model {
 	 * @author Wachiraph C.
 	 * @author Manassarn M.
 	 */
-	function get_company_apps_by_company_id($company_id = NULL){
+	function get_company_apps_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$this->db->join('app','company_apps.app_id=app.app_id');
 		return $this->db->get_where('company_apps',array('company_id'=>$company_id))->result_array();
 	}
@@ -28,7 +29,7 @@ class Company_apps_model extends CI_Model {
 	function get_app_install_by_app_install_id($app_install_id = NULL){
 		$this->db->join('installed_apps','company_apps.app_id=installed_apps.app_id');
 		$result = $this->db->get_where('company_apps',array('app_install_id'=>$app_install_id))->result();
-		return $result[0];
+		return issetor($result[0]);
 	}
 	
 	/**
@@ -37,7 +38,8 @@ class Company_apps_model extends CI_Model {
 	 * @return array
 	 * @author Prachya P.
 	 */
-	function get_company_not_installed_apps($company_id = NULL,$page_id = NULL){
+	function get_company_not_installed_apps($company_id = NULL,$page_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$installed_app_id=array();
 		if($page_id!=NULL)
 			$result = $this->db->get_where('installed_apps',array('company_id' => $company_id,'page_id' => $page_id))->result_array();

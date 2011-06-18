@@ -5,8 +5,9 @@ if(!defined('BASEPATH'))
 class Page extends CI_Controller {
 	function __construct() {
 		parent::__construct();
+		$this->load->library('pagination');
 	}
-
+	
 	function index($page_id =NULL) {
 		$this -> socialhappen -> check_logged_in('home');
 		if($page_id) {
@@ -14,6 +15,32 @@ class Page extends CI_Controller {
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
 			$this -> load -> model('page_model', 'pages');
 			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+			
+			$this -> load ->model('installed_apps_model','installed_apps');
+			$this->pagination->initialize(
+				array(
+					'base_url' => base_url()."page/{$page_id}/apps",
+					'total_rows' => $app_count = $this->installed_apps->count_installed_apps_by_page_id($page_id)
+				)
+			);
+			$pagination['app'] = $this->pagination->create_links();
+			$this -> load ->model('campaign_model','campaigns');
+			$this->pagination->initialize(
+				array(
+					'base_url' => base_url()."page/{$page_id}/campaigns",
+					'total_rows' => $campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id)
+				)
+			);
+			$pagination['campaign'] = $this->pagination->create_links();
+			$this -> load ->model('user_model','users');
+			$this->pagination->initialize(
+				array(
+					'base_url' => base_url()."page/{$page_id}/users",
+					'total_rows' => $user_count = $this->users->count_users_by_page_id($page_id)
+				)
+			);
+			$pagination['user'] = $this->pagination->create_links();
+			
 			$data = array(
 				'page_id' => $page_id,
 				'header' => $this -> socialhappen -> get_header( 
@@ -54,16 +81,20 @@ class Page extends CI_Controller {
 					array('page_profile' => $page),
 				TRUE),
 				'page_tabs' => $this -> load -> view('page/page_tabs', 
-					array(),
+					array(
+						'app_count' => $app_count,
+						'campaign_count' => $campaign_count,
+						'user_count' => $user_count
+						),
 				TRUE), 
 				'page_apps' => $this -> load -> view('page/page_apps', 
-					array(),
+					array('pagination' => $pagination),
 				TRUE), 
 				'page_campaigns' => $this -> load -> view('page/page_campaigns', 
-					array(),
+					array('pagination' => $pagination),
 				TRUE),
 				'page_users' => $this -> load -> view('page/page_users', 
-					array(),
+					array('pagination' => $pagination),
 				TRUE),
 				'page_report' => $this -> load -> view('page/page_report', 
 					array(),
@@ -90,9 +121,9 @@ class Page extends CI_Controller {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_installed_apps($page_id =NULL) {
+	function json_get_installed_apps($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this -> load -> model('installed_apps_model', 'installed_apps');
-		$apps = $this -> installed_apps -> get_installed_apps_by_page_id($page_id);
+		$apps = $this -> installed_apps -> get_installed_apps_by_page_id($page_id, $limit, $offset);
 		echo json_encode($apps);
 	}
 
@@ -101,9 +132,21 @@ class Page extends CI_Controller {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_campaigns($page_id =NULL) {
+	function json_get_campaigns($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this -> load -> model('campaign_model', 'campaigns');
-		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id($page_id);
+		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id($page_id, $limit, $offset);
+		echo json_encode($campaigns);
+	}
+	
+	/**
+	 * JSON : Get campaigns
+	 * @param $page_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function json_get_campaigns_using_status($page_id =NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
+		$this -> load -> model('campaign_model', 'campaigns');
+		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id, $limit, $offset);
 		echo json_encode($campaigns);
 	}
 
@@ -112,9 +155,9 @@ class Page extends CI_Controller {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_users($page_id =NULL) {
+	function json_get_users($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this -> load -> model('user_model', 'users');
-		$users = $this -> users -> get_page_users_by_page_id($page_id);
+		$users = $this -> users -> get_page_users_by_page_id($page_id, $limit, $offset);
 		echo json_encode($users);
 	}
 
@@ -138,18 +181,23 @@ class Page extends CI_Controller {
 	 * JSON : Get facebook pages available to install
 	 * @author Prachya P.
 	 */
-	function json_get_not_installed_facebook_pages($company_id){
+	function json_get_not_installed_facebook_pages($company_id, $limit = NULL, $offset = NULL){
 		$this->load->model('page_model','page');
-		$pages = $this->page->get_company_pages_by_company_id($company_id);
+		$pages = $this->page->get_company_pages_by_company_id($company_id, $limit, $offset);
 		$all_installed_fb_page_id=array();
 		foreach($pages as $page){
 			$all_installed_fb_page_id[]=$page['facebook_page_id'];
 		}
-		$facebook_pages=$this->facebook->get_user_pages();
-		$facebook_pages=$facebook_pages['data'];
 		$not_installed_facebook_pages=array();
-		foreach($facebook_pages as $facebook_page){
-			if(!in_array($facebook_page['id'],$all_installed_fb_page_id)) $not_installed_facebook_pages[]=$facebook_page;
+		$facebook_pages=$this->facebook->get_user_pages();
+		if($facebook_pages!=NULL){
+			$facebook_pages=$facebook_pages['data'];
+			foreach($facebook_pages as $facebook_page){
+				if(!in_array($facebook_page['id'],$all_installed_fb_page_id)){
+					$facebook_page['page_info']=$this->facebook->get_page_info($facebook_page['id']);
+					$not_installed_facebook_pages[]=$facebook_page;
+				}
+			}
 		}
 		echo json_encode($not_installed_facebook_pages);
 	}

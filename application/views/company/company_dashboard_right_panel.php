@@ -82,31 +82,53 @@
 			<ul>
 			</ul>
 		</div>
+		<div class="strip">
+			<ul>
+				<li>
+					<a href="#"></a>
+				</li>
+				<li>
+					<a href="#" class="current"></a>
+				</li>
+				<li>
+					<a href="#"></a>
+				</li>
+				<li>
+					<a href="#"></a>
+				</li>
+			</ul>
+		</div>
 		<p class="alert">
-			Drag available page to right panel to install page into Company
+			Drag available page to left panel to install page into company
 		</p>
 	</div>
 </div>
 <div class="dragging-event-right-app-list" style="display:none;">
-	<div class="box-app-list">
+	<div>
 		<h2>Select Available Application</h2>
-		<ul>
-		  <li>
-		    <p><img src="images/thumb-app64-64.png" alt="" /></p>
-		    <p>Chrome</p>
-		  </li>
-		  <li>
-		    <p><img src="images/thumb-app64-64.png" alt="" /></p>
-		    <p>Chrome</p>
-		  </li>
-		  <li>
-		    <p><img src="images/thumb-app64-64.png" alt="" /></p>
-		    <p>Chrome</p>
-		  </li>
-		  <li class="add-app"></li>  
-		</ul>
+		<div class="dragging-app">
+			<ul>
+			</ul>
+		</div>
+		<div class="strip">
+			<ul>
+				<li>
+					<a href="#"></a>
+				</li>
+				<li>
+					<a href="#" class="current"></a>
+				</li>
+				<li>
+					<a href="#"></a>
+				</li>
+				<li>
+					<a href="#"></a>
+				</li>
+			</ul>
+		</div>
+        <p class="alert">Drag available Application to left panel to install application info Page</p>
 	</div>
-</div>      
+</div>
 <div class="list-event-right" style="display:none;">
 	<div class="activity-logs">
 		<h2>Activity Logs</h2>

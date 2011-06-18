@@ -20,25 +20,27 @@ class Api_test extends CI_Controller {
 	}
 	
 	/**
+	 * DEPRECATED : api does not have index()
 	 * Tests output data
 	 * @author Wachiraph C.
+	 * @author Manassarn M.
 	 */
 	function index_test(){
-		ob_start();
-		require(__DIR__.'/../api.php');
-		$app = new App();
+		// ob_start();
+		// require(__DIR__.'/../api.php');
+		// $api = new Api();
 		
-		$data = $app->index(1);
-		ob_end_clean();
-		$this->unit->run($data,'is_array','$data');
-		$this->unit->run($data['app_install_id'], 'is_int', '$app_install_id');
-		$this->unit->run(count($data) == 1, 'is_true', 'number of passed variables');
+		// $data = $app->index(1);
+		// ob_end_clean();
+		// $this->unit->run($data,'is_array','$data');
+		// $this->unit->run($data['app_install_id'], 'is_int', '$app_install_id');
+		// $this->unit->run(count($data) == 1, 'is_true', 'number of passed variables');
 		
-		$data = $app->index();
-		ob_end_clean();
-		$this->unit->run($data,'is_null','$data');
-		$this->unit->run($data['app_install_id'], 'is_null', '$app_install_id');
-		$this->unit->run(count($data) == 0, 'is_true', 'number of passed variables');
+		// $data = $app->index();
+		// ob_end_clean();
+		// $this->unit->run($data,'is_null','$data');
+		// $this->unit->run($data['app_install_id'], 'is_null', '$app_install_id');
+		// $this->unit->run(count($data) == 0, 'is_true', 'number of passed variables');
 	}
 	
 	/**
@@ -59,8 +61,49 @@ class Api_test extends CI_Controller {
 		$this->unit->run($array[0]->app_install_secret_key,'is_string','app_install_secret_key');
 		$this->unit->run(count((array)$array[0]) == 7, 'is_true', 'number of column');
 		*/
-
+		$this->unit->run(FALSE, 'is_true');
 	}
+	
+	function request_install_page_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_user_id_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_page_id_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_log_user_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_register_user_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_authenticate_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_footer_navigation_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_campaign_info_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_create_campaign_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
+	function request_update_campaign_test(){
+		$this->unit->run(FALSE, 'is_true');
+	}
+	
 	
 }
 

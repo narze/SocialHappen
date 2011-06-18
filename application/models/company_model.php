@@ -44,7 +44,6 @@ class Company_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_company_profile_by_campaign_id($campaign_id = NULL){
-	
 		$this->db->join('installed_apps','installed_apps.company_id=company.company_id');
 		$this->db->join('campaign','campaign.app_install_id=installed_apps.app_install_id');
 		$this->db->select(array('company.company_id','creator_user_id','company_name','company_detail','company_address'
@@ -52,7 +51,19 @@ class Company_model extends CI_Model {
 		$result = $this->db->get_where('company',array('campaign_id'=>$campaign_id))->result_array();
 		return issetor($result[0], NULL);
 	}
-	
+		
+	/**
+	 * Get profile
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function get_company_profile_by_app_install_id($app_install_id = NULL){
+		$this->db->join('installed_apps','installed_apps.company_id=company.company_id');
+		$this->db->select(array('company.company_id','creator_user_id','company_name','company_detail','company_address'
+						,'company_email','company_telephone','company_register_date','company_username','company_password','company_image'));
+		$result = $this->db->get_where('company',array('app_install_id'=>$app_install_id))->result_array();
+		return issetor($result[0], NULL);
+	}
 	
 	/**
 	 * Adds company
@@ -83,6 +94,14 @@ class Company_model extends CI_Model {
 		return $this->db->get_where('company',array('creator_user_id'=>$user_id))->result_array();
 	}
 	
+	/**
+	 * Update company profile
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function update_company_profile_by_company_id($company_id = NULL, $data = array()){
+		return $this->db->update('company', $data, array('company_id' => $company_id));
+	}
 	
 	function add($data = array()) {
 		foreach($data as $var => $key) {

@@ -70,7 +70,7 @@ class SocialHappen{
 	}
 	
 	/**
-	 * Get header view
+	 * Get header view, predefine $user and $user_companies in views
 	 * @return $header
 	 * @author Manassarn M.
 	 */

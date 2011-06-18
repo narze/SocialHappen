@@ -14,7 +14,6 @@ class User_model_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->users))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -120,6 +119,50 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result['user_last_seen'],'is_string','user_last_seen');
 		$this->unit->run(count($result) == 8,'is_true', 'number of column');
+	}
+	
+	/**
+	 * Test count_users_by_page_id()
+	 * @author Manassarn M.
+	 */
+	function count_users_by_page_id_test(){
+		$result = $this->users->count_users_by_page_id(1);
+		$this->unit->run($result,'is_string', 'count_users_by_page_id()');
+	}
+	
+	/**
+	 * Test count_users_by_app_install_id()
+	 * @author Manassarn M.
+	 */
+	function count_users_by_app_install_id_test(){
+		$result = $this->users->count_users_by_app_install_id(1);
+		$this->unit->run($result,'is_string', 'count_users_by_app_install_id()');
+	}
+	
+	/**
+	 * Test count_users_by_campaign_id()
+	 * @author Manassarn M.
+	 */
+	function count_users_by_campaign_id_test(){
+		$result = $this->users->count_users_by_campaign_id(1);
+		$this->unit->run($result,'is_string', 'count_users_by_campaign_id()');
+	}
+	
+	/**
+	 * Test update_user_profile_by_user_id()
+	 * @author Manassarn M.
+	 */
+	function update_user_profile_by_user_id_test(){
+		$new_first_name = rand(1,10000);
+		$data = array(
+			'user_first_name' => $new_first_name
+		);
+		$result = $this->users->update_user_profile_by_user_id(1,$data);
+		$this->unit->run($result === TRUE,'is_true', 'Updated user_first_name without error');
+		
+		$result = $this->users->get_user_profile_by_user_id(1);
+		$this->unit->run($result['user_first_name'] == $new_first_name,'is_true',"Updated user_first_name to {$new_first_name}");
+		
 	}
 }
 /* End of file campaign_model_test.php */
