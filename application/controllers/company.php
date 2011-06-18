@@ -21,7 +21,8 @@ class Company extends CI_Controller {
 					array(
 						'title' => $company['company_name'],
 						'vars' => array('company_id'=>$company_id
-										,'sh_default_fb_app_api_key'=>$this->config->item('sh_default_fb_app_api_key')),
+										,'sh_default_fb_app_api_key'=>$this->config->item('sh_default_fb_app_api_key')
+										,'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
 							'common/bar',
 							'company/company_dashboard'
@@ -107,6 +108,19 @@ class Company extends CI_Controller {
 		$count=array('app_count' => $count);
 		echo json_encode($count);
 	}
+	
+	/**
+	 * JSON : Get installed app count not in page
+	 * @param $company_id
+	 * @author Prachya P.
+	 */
+	function json_get_installed_apps_count_not_in_page($company_id = NULL){
+		$this->load->model('installed_apps_model','installed_app');
+		$count = $this->installed_app->count_all_distinct("app_id",array("company_id" => $company_id,"page_id" => 0));
+		$count=array('app_count' => $count);
+		echo json_encode($count);
+	}
+	
 	/** 
 	 * JSON : Get company apps
 	 * @param $company_id

@@ -206,7 +206,7 @@ class Sync extends CI_Controller {
 							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'app_install_status' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
 							    'app_install_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-							    'page_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
+							    'page_id' => field_option('BIGINT', 20, 0, TRUE, $autoinc, TRUE),
 							    'app_install_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
 							),
@@ -388,7 +388,7 @@ class Sync extends CI_Controller {
 					    'app_config_url' => '',
 					    'app_support_page_tab' => 1, 
 					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
+						'facebook_app_api_key' => ''
 					),
 					array(
 					    'app_id' => 6, 
@@ -399,10 +399,10 @@ class Sync extends CI_Controller {
 					    'app_description' => 'Mock Application', 
 					    'app_secret_key' => 'ab6548beccb40d5a82f5b7bae5e55521', 
 					    'app_url' => '', 
-					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}', 
+					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
 					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' => 1, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app_icon.png',
+					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
 						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
 					)
 				);
@@ -530,6 +530,11 @@ class Sync extends CI_Controller {
 							array(
 							    'company_id' => 1, 
 							    'app_id' => 5, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 6, 
 							    'available_date' => '2011-05-19 16:01:20'
 							)
 						);
