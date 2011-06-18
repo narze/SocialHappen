@@ -104,14 +104,6 @@ class User_model extends CI_Model {
 		return issetor($profiles[0]);
 	}
 
-	function add($data = array()) {
-		foreach($data as $var => $key) {
-			$this -> {$var} = $key;
-		}
-		$this -> db -> insert('user', $this);
-		return $this -> db -> insert_id();
-	}
-
 	/**
 	 * Try to insert new user by user's facebook id
 	 * @param $user_facebook_id
@@ -184,15 +176,6 @@ class User_model extends CI_Model {
 		return $this->db->update('user', $data, array('user_id' => $user_id));
 	}
 	
-	function _get($where = array(), $limit =0, $offset =0) {
-		$query = $this -> db -> get_where('user', $where, $limit, $offset);
-		return $query -> result();
-	}
-
-	function update($data = array(), $where = array()) {
-		$this -> db -> update('user', $data, $where);
-	}
-
 	/**
 	 * Update user last seen
 	 * @param $user_id
@@ -201,18 +184,4 @@ class User_model extends CI_Model {
 	function update_user_last_seen($user_id) {
 		$this -> update( array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
 	}
-
-	function delete($id) {
-		$this -> db -> delete('user', array('user_id' => $id));
-	}
-
-	function count_all($where = array()) {
-		$this -> db -> where($where);
-		return $this -> db -> count_all_results('user');
-	}
-
-	function get_user_list($limit =20, $offset =0) {
-		return $this -> _get( array(), $limit, $offset);
-	}
-
 }
