@@ -32,6 +32,7 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->model('Session_model','Session');
+		
 		if(!$this->Session->get_session_id_by_user_id($user_id)){
 			echo json_encode(array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
@@ -262,11 +263,12 @@ class Api extends CI_Controller {
 		$this->load->model('Page_model', 'Page');
 		$page_id = $this->Page->get_page_id_by_facebook_page_id($facebook_page_id);
 		
-		if(sizeof($page_id)>0){
+		$response = array();
+		if($page_id['page_id']!=null){
 			$response = array(	'status' => 'OK',
 							'page_id' => $page_id['page_id']);
 		}
-
+		
 		echo json_encode($response);
 	}
 					
@@ -315,7 +317,7 @@ class Api extends CI_Controller {
 		
 		// update user last seen
 		$this->User_apps->update_user_last_seen($user_id, $app_install_id);
-		$this->User->update_user_last_seen($user_facebook_id);
+		$this->User->update_user_last_seen($user_id);
 		
 		$response = array(	'status' => 'OK',
 						'message' => 'logged');
@@ -557,7 +559,6 @@ class Api extends CI_Controller {
 									'message' => 'you have no permission to access this campaign'));
 				return;
 			}else{
-				
 				foreach($campaigns as $campaign){
 				$response[] = array(
 								'status' => 'OK',
