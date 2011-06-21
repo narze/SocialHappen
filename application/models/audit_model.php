@@ -127,6 +127,58 @@ class Audit_model extends CI_Model {
 		return $result;
 	}
 	
+	function _get_start_day_time($timestamp = NULL){
+		date_default_timezone_set('Asia/Bangkok');
+		$start = mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp));
+		return $start;
+	}
+	
+	function _get_end_day_time($timestamp = NULL){
+		date_default_timezone_set('Asia/Bangkok');
+		$end = mktime(24, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp));
+		return $end;
+	}
+	
+	function count_distinct_audit($key = NULL, $criteria = NULL, $date = NULL){
+		$check_args = isset($key) && isset($criteria);
+		if(!$check_args){
+			return NULL;
+		}
+		$db_criteria = array();
+		if(isset($criteria['app_id'])){
+			$db_criteria['app_id'] = $criteria['app_id'];
+		}
+		if(isset($criteria['action_id'])){
+			$db_criteria['action_id'] = $criteria['action_id'];
+		}
+		if(isset($criteria['app_install_id'])){
+			$db_criteria['app_install_id'] = $criteria['app_install_id'];
+		}
+		if(isset($criteria['page_id'])){
+			$db_criteria['page_id'] = $criteria['page_id'];
+		}
+		if(isset($criteria['campaign_id'])){
+			$db_criteria['campaign_id'] = $criteria['campaign_id'];
+		}
+		
+		$start_time = $this->_get_start_day_time($date);
+		$end_time = $this->_get_end_day_time($date);
+		
+		$db_criteria['timestamp'] = array('$gte' => $start_time, '$lt' => $end_time);
+		//echo 'count_distinct_audit criteria<pre>';
+		//var_dump($db_criteria);
+		//echo '</pre>';
+		
+		
+		$cursor = $this->db->command(array('distinct' => 'audits', 'key' => $key, 'query' => $db_criteria));
+		$result = array();
+		foreach ($cursor as $audit) {
+			$result[] = $audit;
+		}
+		 
+		return count($result[0]);
+	}
+	
 	/**
 	 * drop entire collection
 	 * you will lost all audit data

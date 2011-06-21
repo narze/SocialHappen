@@ -19,6 +19,112 @@ class Audit extends CI_Controller {
 		echo $this->audit_lib->create_index();
 	}
 	
+	function today(){
+		date_default_timezone_set('Asia/Bangkok');
+		$start = time();
+		$end = time();
+		echo 'today : ' . $start . ' - ' . $end;
+		echo '</br>';
+		
+		$time = time();
+		$hours = date('G' ,$start);
+		$minutes = date('i' ,$start);
+		$seconds = date('s' ,$start);
+		echo 'ts: ' . $hours . ' ' . $minutes . ' ' . $seconds;
+		$start = time() - $hours * 3600 - $minutes * 60 - $seconds;
+		echo '</br>';
+		echo '1308589200 = ' . date(DATE_RFC822, 1308589200);
+		echo '</br>';
+		echo '1308675600 = ' . date(DATE_RFC822, 1308675600);
+		echo '</br>';
+		echo '1308591892 = ' . date(DATE_RFC822, 1308591892);
+		echo '</br>';
+		echo $start;
+		echo '</br>';
+		$time = time();
+		$start = mktime(0, 0, 0, date('n', $time), date('j', $time), date('Y', $time));
+		echo $start;
+		echo '</br>';
+		echo 'start: ' . $this->_get_start_day_time(1308553200);
+		echo '</br>';
+		echo 'end: ' . $this->_get_end_day_time(1308553200);
+		echo '</br>';
+		echo date(DATE_RFC822, $this->_get_start_day_time($time));
+		echo '</br>';
+		echo date(DATE_RFC822, $this->_get_end_day_time($time));
+		echo '</br>';
+		echo $this->audit_lib->convert_statdate_to_date(20100531);
+		echo '</br>';
+		echo date(DATE_RFC822, $this->audit_lib->convert_statdate_to_date(20100531));
+	}
+
+	function count_audit(){
+		$key = 'subject';
+		$app_id = 1;
+		$action_id = 1;
+		$criteria = array('app_install_id' => 16);
+		$date = 20110620;
+		echo '<pre>';
+		var_dump($this->audit_lib->count_audit($key, $app_id, $action_id, $criteria, $date));
+		echo '</pre>';
+	}
+	
+	function graph(){
+		/*
+		echo '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/excanvas.min.js"></script><![endif]-->
+			<script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jquery-1.5.1.min.js"></script>
+			<script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jquery.jqplot.min.js"></script>
+		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.highlighter.min.js"></script>
+		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.cursor.min.js"></script>
+		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.dateAxisRenderer.min.js"></script>
+		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
+		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
+			<link rel="stylesheet" type="text/css" href="'.base_url().'assets/js/stat/jquery.jqplot.min.css" />';
+		*/
+		echo '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/excanvas.min.js"></script><![endif]-->
+			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jquery-1.5.1.min.js"></script>
+			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jquery.jqplot.min.js"></script>
+			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.highlighter.min.js"></script>
+			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.cursor.min.js"></script>
+			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.dateAxisRenderer.min.js"></script>
+			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
+			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
+			<link rel="stylesheet" type="text/css" href="http://192.168.241.129/socialhappen/assets/js/stat/jquery.jqplot.min.css" />';
+		
+		$data = array(array('20080223' => 5,
+					'20080323' => 10,
+					'20080423' => 4,
+					'20080523' => 7),
+					array('20080223' => 8,
+					'20080323' => 5,
+					'20080423' => 9,
+					'20080523' => 12),
+					array('20080223' => 11,
+					'20080323' => 15,
+					'20080423' => 2,
+					'20080523' => 22,
+					'20080623' => 18));
+		$title = 'hello world';
+		$div = array('id' => 'chart1',
+					'width' => 500,
+					'height' => 400,
+					'class' => '',
+					'xlabel' => 'Dates',
+					'ylabel' => 'Active Users');
+		//echo json_encode($data);
+		echo $this->audit_lib->render_stat_graph($data, $title, $div);
+	}
+
+	function _get_start_day_time($timestamp){
+		$start = mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp));
+		return $start;
+	}
+	
+	function _get_end_day_time($timestamp){
+		$end = mktime(24, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp));
+		return $end;
+	}
+	
 	function add_audit_action(){
 		$app_id = 0;
 		$action_id = 1;
@@ -103,7 +209,7 @@ class Audit extends CI_Controller {
 	function addlog11(){
 		$app_id = 1;
 		$action_id = 1;
-		$subject = 'userX';
+		$subject = 'userU';
 		$object = 'object';
 		$objecti = 'objecti';
 		$additional_data = array('app_install_id' => rand(1, 20),

@@ -501,9 +501,151 @@ class Audit_lib
 	 * @author Metwara Narksook
 	 */
 	function delete_stat_campaign($_id){
+		if(empty($_id)){
+			return false;
+		}
 		$this->CI->load->model('stat_campaign_model','stat_campaign');
 		$result_stat = $this->CI->stat_campaign->delete_stat_campaign($_id);
 		return $result_stat;
+	}
+	
+	/**
+	 * count audit with distinct key for single day
+	 * 
+	 * @param key string to distinct (ex. subject)
+	 * @param app_id
+	 * @param action_id
+	 * @param criteria array of criteria may contain ['app_install_id', 'page_id', 'campaign_id']
+	 * @param date - date in format yyyymmdd ex. 20100531
+	 * 
+	 * @return int
+	 */
+	function count_audit($key = NULL, $app_id = NULL, $action_id = NULL, $criteria = NULL, $date = NULL){
+		$check_args = isset($key) && isset($app_id) && isset($action_id) && isset($criteria) && isset($date);
+		if(!$check_args){
+			return NULL;
+		}
+		$this->CI->load->model('audit_model', 'audit');
+		
+		$db_criteria = array();
+		
+		$db_criteria['app_id'] = $app_id;
+		$db_criteria['action_id'] = $action_id;
+		
+		if(isset($criteria['app_install_id'])){
+			$db_criteria['app_install_id'] = $criteria['app_install_id'];
+		}
+		if(isset($criteria['page_id'])){
+			$db_criteria['page_id'] = $criteria['page_id'];
+		}
+		if(isset($criteria['campaign_id'])){
+			$db_criteria['campaign_id'] = $criteria['campaign_id'];
+		}
+		
+		//echo 'count_audit <pre>';
+		//var_dump($db_criteria);
+		//echo '</pre>';
+		
+		return $this->CI->audit->count_distinct_audit($key, $db_criteria, $this->convert_statdate_to_date($date));
+	}
+	
+	/**
+	 * convert date in format yyyymmdd to timestamp like 1308589200 (from php time())
+	 * @param date - date in format yyyymmdd ex. 20100531
+	 */
+	function convert_statdate_to_date($date = NULL){
+		if(empty($date)){
+			return NULL;
+		}
+		$date = $date . '';
+		$y = substr($date, 0, 4);
+		$m = substr($date, 4, 2);
+		$d = substr($date, 6, 2);
+		date_default_timezone_set('Asia/Bangkok');
+		return mktime(0, 0, 0, $m, $d, $y);
+	}
+	
+	/**
+	 * render stat graph
+	 * 
+	 * @param data - array of array of stat date that has x and y
+	 * @param title - string name of graph (title)
+	 * @param div - array of div properties may contains ['id', 'width', 'height', 'class', 'xlabel', 'ylabel']
+	 * 
+	 * 
+	 * @return html of stat graph
+	 */
+	function render_stat_graph($data = NULL, $title = NULL, $div = NULL){
+		$check_args = isset($data) && isset($title) && isset($div) && isset($div['id']) && 
+						isset($div['height']) && isset($div['width']);
+		if(!$check_args){
+			return NULL;
+		}
+		$html = '<div id="'.$div['id'].'" style="height:'.$div['height'].'px;width:'.$div['width'].'px; class="'.$div['class'].'"></div>';
+		$html .= '<script language="javascript" type="text/javascript">';
+		$html .= "
+		
+$(document).ready(function(){";
+$line_string = array();
+foreach ($data as $line_key => $line_value) {
+	$html .= 'var line' . $line_key . ' = [';
+	$line_string[] = 'line' . $line_key;
+	
+	$point = array();
+	foreach($line_value as $point_key => $point_value){
+		$timestamp = $this->convert_statdate_to_date($point_key);
+		date_default_timezone_set('Asia/Bangkok');
+		$date = date('d', $timestamp) . '-' . date('M', $timestamp) . '-' . date('Y', $timestamp);
+		$point[] = '[\'' . $date . '\', '.$point_value.']';
+	}
+	$html .= implode(', ', $point);
+	$html .= "];\n";
+}
+/*
+  var line1=[['23-May-08', 578.55], ['20-Jun-08', 566.5], ['25-Jul-08', 480.88], ['22-Aug-08', 509.84],
+      ['26-Sep-08', 454.13], ['24-Oct-08', 379.75], ['21-Nov-08', 303], ['26-Dec-08', 308.56],
+      ['23-Jan-09', 299.14], ['20-Feb-09', 346.51], ['20-Mar-09', 325.99], ['24-Apr-09', 386.15]];
+ var line2=[['23-May-08', 78.55], ['20-Jun-08', 66.5], ['25-Jul-08', 80.88], ['22-Aug-08', 59.84],
+      ['26-Sep-08', 54.13], ['24-Oct-08', 79.75], ['21-Nov-08', 53], ['26-Dec-08', 38.56],
+      ['23-Jan-09', 99.14], ['20-Feb-09', 46.51], ['20-Mar-09', 25.99], ['24-Apr-09', 86.15]];
+*/	  
+	$xlabel = isset($div['xlabel']) ? $div['xlabel'] : '';
+	$ylabel = isset($div['ylabel']) ? $div['ylabel'] : '';
+		$html .= "
+  var plot1 = $.jqplot('".$div['id']."', [".implode(', ', $line_string)."], {
+      title:'".$title."',
+      
+      axes:{
+        xaxis:{
+          tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+          renderer:$.jqplot.DateAxisRenderer,
+          tickOptions:{
+            formatString:'%b %#d, %Y',
+            angle: -30
+          },
+          label:'" . $xlabel . "'
+        },
+        yaxis:{
+          tickOptions:{
+            formatString:'%d'
+            },
+		  min: 0,
+		  label:'" . $ylabel . "'
+        }
+      },
+      highlighter: {
+        show: true,
+        sizeAdjust: 7.5
+      },
+      cursor: {
+        show: false
+      }
+  });
+});
+		
+		";
+		$html .= '</script>';
+		return $html;
 	}
 	
 	/*
