@@ -83,6 +83,19 @@ class Api extends CI_Controller {
 												'app_install_status' => TRUE,
 												'app_install_secret_key' => $app_install_secret_key
 											));
+											
+				$this->load->library('audit_lib');
+				$this->audit_lib->add_audit(
+											$app_id,
+											$user_id,
+											1, //presently hard coded
+											'', 
+											'',
+											array(
+													'app_install_id'=> $app_install_id,
+													'company_id' => $company_id
+												)
+										);
 				
 				// response
 				$response = array(	'status' => 'OK',
@@ -174,6 +187,20 @@ class Api extends CI_Controller {
 					
 				$this->Installed_apps->update_page_id($app_install_id, $page_id);
 				
+				$this->load->library('audit_lib');
+				$this->audit_lib->add_audit(
+											$app_id,
+											'user_id',	// undone
+											2, //presently hard coded
+											'', 
+											'',
+											array(
+													'page_id'=> $page_id,
+													'app_install_id'=>$app_install_id,
+													'company_id' => $company_id
+												)
+										);
+										
 				$response = array(	'status' => 'OK',
 							'message' => 'page saved');
 			}else{
@@ -319,6 +346,17 @@ class Api extends CI_Controller {
 		$this->User_apps->update_user_last_seen($user_id, $app_install_id);
 		$this->User->update_user_last_seen($user_id);
 		
+		$this->audit_lib->add_audit(
+										$app_id,
+										$user_id,
+										103, //presently hard coded
+										'', 
+										'',
+										array(
+												'app_install_id'=> $app_install_id,
+												'company_id' => $company_id
+											)
+									);
 		$response = array(	'status' => 'OK',
 						'message' => 'logged');
 		
@@ -366,12 +404,36 @@ class Api extends CI_Controller {
 		if(!$this->User->check_exist($user_facebook_id)){
 			$user_id = $this->User->add_by_facebook_id($user_facebook_id);
 			if($user_id){
+				$this->load->library('audit_lib');
+				$this->audit_lib->add_audit(
+											$app_id,
+											$user_id,
+											102, //presently hard coded
+											'', 
+											'',
+											array(
+													'app_install_id'=> $app_install_id,
+													'page_id' => $page_id
+												)
+										);
 				$response['user_id'] = $user_id;
 				$response['User'] = 'added ';
 			}
 		}else{
 			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
-			//$user_id = $user_id['user_id'];
+			$this->load->library('audit_lib');
+			$this->audit_lib->add_audit(
+										$app_id,
+										$user_id,
+										103, //presently hard coded
+										'', 
+										'',
+										array(
+												'app_install_id'=> $app_install_id,
+												'company_id' => $company_id
+											)
+									);
+			
 		}
 		
 		// add new user apps
@@ -380,6 +442,7 @@ class Api extends CI_Controller {
 			$this->User_apps->add_new($user_id, $app_install_id);
 			$response['User_apps'] = 'added';
 		}
+		
 		
 		// update user last seen
 		$this->User_apps->update_user_last_seen($user_id, $app_install_id);

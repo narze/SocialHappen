@@ -149,6 +149,12 @@ class Sync extends CI_Controller {
 							    'app_type_name' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
 							    'app_type_description' => field_option('VARCHAR', 255, $default, TRUE, $autoinc, $unsigned),
 							),
+							'audit_action_type' => array(
+							    'audit_action_id' => field_option('INT', 5, $default, $null, $autoinc, TRUE),
+							    'audit_action_name' => field_option('VARCHAR', 100, $default, $null, $autoinc, $unsigned),
+							    'audit_action_active' => field_option('INT', 1, 1, $null, $autoinc, $unsigned),
+								'audic_action_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+							),
 							'campaign' => array(
 							    'campaign_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -260,6 +266,7 @@ class Sync extends CI_Controller {
 						'app_install_status' => array('app_install_status_id'),
 						//'app_statistic' => array('app_install_id','job_time'),
 						'app_type' => array('app_type_id'),
+						'audit_action_type' => array('audit_action_id'),
 						'campaign' => array('campaign_id'),
 						'campaign_status' => array('campaign_status_id'),
 						'company' => array('company_id'),
@@ -280,6 +287,7 @@ class Sync extends CI_Controller {
 							'app_install_status',
 							//'app_statistic',
 							'app_type',
+							'audit_action_type',
 							'campaign',
 							'campaign_status',
 							'company',
@@ -451,6 +459,46 @@ class Sync extends CI_Controller {
 					);
 		$this->db->insert_batch('app_type', $app_type);
 				
+		$audit_action_type = array(
+								array(
+									'audit_action_id' => 1,
+									'audit_action_name' =>  'install app',
+								),
+								array(
+									'audit_action_id' => 2,
+									'audit_action_name' =>  'install app to page',
+								),
+								array(
+									'audit_action_id' => 3,
+									'audit_action_name' =>  'remove app',
+								),
+								array(
+									'audit_action_id' => 4,
+									'audit_action_name' =>  'save config',
+								),
+								array(
+									'audit_action_id' => 101,
+									'audit_action_name' =>  'user register to platform',
+								),
+								array(
+									'audit_action_id' => 102,
+									'audit_action_name' =>  'user register to app',
+								),
+								array(
+									'audit_action_id' => 103,
+									'audit_action_name' =>  'user visit',
+								),
+								array(
+									'audit_action_id' => 104,
+									'audit_action_name' =>  'user action',
+								),
+								array(
+									'audit_action_id' => 105,
+									'audit_action_name' =>  'user join campaign',
+								)
+							);
+		$this->db->insert_batch('audit_action_type', $audit_action_type);
+		
 		$campaign = array(
 							array(
 							    'campaign_id' => 1,
