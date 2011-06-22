@@ -70,27 +70,16 @@ class Audit extends CI_Controller {
 	}
 	
 	function graph(){
-		/*
 		echo '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/excanvas.min.js"></script><![endif]-->
 			<script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jquery-1.5.1.min.js"></script>
 			<script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jquery.jqplot.min.js"></script>
-		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.highlighter.min.js"></script>
-		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.cursor.min.js"></script>
-		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.dateAxisRenderer.min.js"></script>
-		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
-		 * <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
-			<link rel="stylesheet" type="text/css" href="'.base_url().'assets/js/stat/jquery.jqplot.min.css" />';
-		*/
-		echo '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/excanvas.min.js"></script><![endif]-->
-			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jquery-1.5.1.min.js"></script>
-			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jquery.jqplot.min.js"></script>
-			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.highlighter.min.js"></script>
-			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.cursor.min.js"></script>
-			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.dateAxisRenderer.min.js"></script>
-			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
-			<script language="javascript" type="text/javascript" src="http://192.168.241.129/socialhappen/assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
-			<link rel="stylesheet" type="text/css" href="http://192.168.241.129/socialhappen/assets/js/stat/jquery.jqplot.min.css" />';
-		
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.highlighter.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.cursor.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.dateAxisRenderer.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.pointLabels.min.js"></script>
+		     <link rel="stylesheet" type="text/css" href="'.base_url().'assets/js/stat/jquery.jqplot.min.css" />';
 		$data = array(array('20080223' => 5,
 					'20080323' => 10,
 					'20080423' => 4,
@@ -104,15 +93,16 @@ class Audit extends CI_Controller {
 					'20080423' => 2,
 					'20080523' => 22,
 					'20080623' => 18));
+		$data_label = array('line1', 'line2', 'line3');
 		$title = 'hello world';
 		$div = array('id' => 'chart1',
-					'width' => 500,
-					'height' => 400,
+					'width' => 640,
+					'height' => 480,
 					'class' => '',
 					'xlabel' => 'Dates',
 					'ylabel' => 'Active Users');
 		//echo json_encode($data);
-		echo $this->audit_lib->render_stat_graph($data, $title, $div);
+		echo $this->audit_lib->render_stat_graph($data_label, $data, $title, $div);
 	}
 
 	function _get_start_day_time($timestamp){

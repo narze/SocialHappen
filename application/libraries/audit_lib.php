@@ -568,6 +568,7 @@ class Audit_lib
 	/**
 	 * render stat graph
 	 * 
+	 * @param data_label array of strings of labels of data line to be plotted
 	 * @param data - array of array of stat date that has x and y
 	 * @param title - string name of graph (title)
 	 * @param div - array of div properties may contains ['id', 'width', 'height', 'class', 'xlabel', 'ylabel']
@@ -575,7 +576,7 @@ class Audit_lib
 	 * 
 	 * @return html of stat graph
 	 */
-	function render_stat_graph($data = NULL, $title = NULL, $div = NULL){
+	function render_stat_graph($data_label = NULL, $data = NULL, $title = NULL, $div = NULL){
 		$check_args = isset($data) && isset($title) && isset($div) && isset($div['id']) && 
 						isset($div['height']) && isset($div['width']);
 		if(!$check_args){
@@ -608,13 +609,36 @@ foreach ($data as $line_key => $line_value) {
  var line2=[['23-May-08', 78.55], ['20-Jun-08', 66.5], ['25-Jul-08', 80.88], ['22-Aug-08', 59.84],
       ['26-Sep-08', 54.13], ['24-Oct-08', 79.75], ['21-Nov-08', 53], ['26-Dec-08', 38.56],
       ['23-Jan-09', 99.14], ['20-Feb-09', 46.51], ['20-Mar-09', 25.99], ['24-Apr-09', 86.15]];
-*/	  
+ * 
+ * {label: '1'},
+      {label: '2'},
+      {label: '3'}
+*/	
+	$data_label_string = array();
+	foreach($data_label as $label){
+		$data_label_string [] = '{label:"'.$label.'"}';
+	}
+	$data_label_string = implode(', ', $data_label_string);
+
 	$xlabel = isset($div['xlabel']) ? $div['xlabel'] : '';
 	$ylabel = isset($div['ylabel']) ? $div['ylabel'] : '';
 		$html .= "
   var plot1 = $.jqplot('".$div['id']."', [".implode(', ', $line_string)."], {
       title:'".$title."',
-      
+      legend: {
+        show: true,
+        location: 'ne'
+      },
+      seriesDefaults: {
+      	//show: true,
+      	shadow: true,
+        showMarker:true,
+        pointLabels: { show:true },
+        label: '555' 
+      },
+      series:[
+      ".$data_label_string."
+      ],
       axes:{
         xaxis:{
           tickRenderer: $.jqplot.CanvasAxisTickRenderer,
@@ -637,9 +661,12 @@ foreach ($data as $line_key => $line_value) {
         show: true,
         sizeAdjust: 7.5
       },
-      cursor: {
-        show: false
+	  cursor:{
+        show: true,
+        zoom:true, 
+        showTooltip:false
       }
+      
   });
 });
 		
