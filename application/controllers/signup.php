@@ -119,12 +119,16 @@ class Signup extends CI_Controller {
 			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company), TRUE);
 			if ($user_add_result['status'] == 'OK' && $company_add_result['status'] == 'OK') // the information has therefore been successfully saved in the db
 			{	
-				//////insert user_company!
-				echo "User id = {$user_add_result['user_id']}<br />";
-				echo "Company id = {$company_add_result['company_id']}";   // or whatever logic needs to occur
+				$this->load->model('user_companies_model','user_companies');
+				$this->user_companies->add_user_company(array(
+					'user_id' => $user_add_result['user_id'],
+					'company_id' => $company_add_result['company_id']
+				));
+				$this->socialhappen->login('home');
 			}
 			else
 			{
+				echo 'error occured, register again';
 				echo '$user_add_result["status"] = '.$user_add_result['status'];
 				echo '$company_add_result["status"] = '.$company_add_result['status'];
 			// Or whatever error handling is necessary
