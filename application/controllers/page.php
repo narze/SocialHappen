@@ -16,6 +16,8 @@ class Page extends CI_Controller {
 			$this -> load -> model('page_model', 'pages');
 			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
 			
+			$facebook_page_graph = json_decode(file_get_contents("http://graph.facebook.com/{$page['facebook_page_id']}"),TRUE);
+			
 			$this -> load ->model('installed_apps_model','installed_apps');
 			$this->pagination->initialize(
 				array(
@@ -46,7 +48,9 @@ class Page extends CI_Controller {
 				'header' => $this -> socialhappen -> get_header( 
 					array(
 						'title' => $page['page_name'],
-						'vars' => array('page_id'=>$page_id),
+						'vars' => array('page_id'=>$page_id,
+							'company_id' => $company['company_id']
+						),
 						'script' => array(
 							'common/bar',
 							'page/page_apps',
@@ -69,16 +73,24 @@ class Page extends CI_Controller {
 					),
 				TRUE),
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-					array('breadcrumb' => 
-						array( 
+					array(
+						'breadcrumb' => array( 
 							$company['company_name'] => base_url() . "company/{$company['company_id']}",
 							$page['page_name'] => base_url() . "page/{$page['page_id']}"
-							)
-						)
-					,
+							),
+						'settings_url' => base_url()."settings/{$company['company_id']}/page/{$page['page_id']}"
+					),
 				TRUE),
 				'page_profile' => $this -> load -> view('page/page_profile', 
-					array('page_profile' => $page),
+					array('page_profile' => $page,
+						'app_count' => $app_count,
+						'campaign_count' => $campaign_count,
+						'user_count' => $user_count,
+						'facebook' => array(
+							'link' => issetor($facebook_page_graph['link']),
+							'likes' =>  issetor($facebook_page_graph['likes'])
+						)
+					),
 				TRUE),
 				'page_tabs' => $this -> load -> view('page/page_tabs', 
 					array(
