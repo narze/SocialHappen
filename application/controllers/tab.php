@@ -64,8 +64,11 @@ class Tab extends CI_Controller {
 			$user = $this->users->get_user_profile_by_user_id();
 			$this->load->model('campaign_model','campaigns');
 			$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
+			$this->load->model('installed_apps_model','installed_apps');
+			$installed_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
 			$data = array('user'=>$user,
-							'campaigns' => $campaigns);
+							'campaigns' => $campaigns,
+							'installed_apps' => $installed_apps);
 			$this->load->view("tab/dashboard",$data);
 		}
 	}
