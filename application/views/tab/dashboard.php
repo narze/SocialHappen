@@ -4,6 +4,9 @@
 	<div id="name">
 	</div>
 	<div id="points">
+	<?php if($is_admin) :?>
+	<a href="#">Dashboard</a>
+	<?php endif; ?>
 	</div>
 	<div id="friends">
 	</div>
@@ -22,7 +25,11 @@
 				<div class="more"><a href="#">read more</a></div>
 			</div>
 			<div class="time">
-				<div class="join-button"><a href="#">Join</a></div>
+				<?php if($is_admin) :?>
+					Remaining time
+				<?php else :?>
+					<div class="join-button"><a href="#">Join</a></div>
+				<?php endif; ?>
 			</div>
 		</div>
 	<?php endforeach; 
