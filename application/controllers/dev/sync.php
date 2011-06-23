@@ -165,6 +165,7 @@ class Sync extends CI_Controller {
 							    'campaign_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_start_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'campaign_end_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
+								'campaign_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'campaign_status' => array(
 							    'campaign_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
@@ -509,7 +510,8 @@ class Sync extends CI_Controller {
 							    'campaign_active_member' => 2,
 							    'campaign_all_member' => 10, 
 							    'campaign_start_timestamp' => '2011-05-19 18:29:43',
-							    'campaign_end_timestamp' => '2012-05-18 00:00:00'
+							    'campaign_end_timestamp' => '2012-05-18 00:00:00',
+								'campaign_image' => 'http://www.learners.in.th/file/sckimberly/facebook-logo.png'
 							),
 							array(
 							    'campaign_id' => 2, 
@@ -520,7 +522,8 @@ class Sync extends CI_Controller {
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18 18:05:46', 
-							    'campaign_end_timestamp' => '2011-06-18 00:00:00'
+							    'campaign_end_timestamp' => '2011-06-18 00:00:00',
+								'campaign_image' => 'http://www.learners.in.th/file/sckimberly/facebook-logo.png'
 							)
 						);
 		$this->db->insert_batch('campaign', $campaign);
