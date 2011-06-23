@@ -170,4 +170,13 @@ class Facebook{
                             $cookie['access_token']), true);
             return $page_info;
 		}
+		
+		/**
+		 * Get facebook profile picture
+		 * @author Manassarn M.
+		 * @param $facebook_user_id
+		 */
+		function get_profile_picture($facebook_user_id){
+			return "https://graph.facebook.com/{$facebook_user_id}/picture";
+		}
 }

@@ -1,6 +1,6 @@
 <?php // Change the css classes to suit your needs    
 		$attributes = array('class' => '', 'id' => '');
-		echo form_open('signup/form', $attributes); ?>
+		echo form_open_multipart('signup/form', $attributes); ?>
 		<div id="user-information"><h2>User information</h2>
 			<p>
 			        <label for="first_name">First name <span class="required">*</span></label>
@@ -23,7 +23,8 @@
 			<p>
 			        <label for="user_image">User image</label>
 			        <?php echo form_error('user_image'); ?>
-			        <br /><input id="user_image" type="text" name="user_image" maxlength="255" value="<?php echo set_value('user_image'); ?>"  />
+			        <br /><input id="user_image" type="file" name="user_image" />
+					<img src="<?php echo $user_profile_picture;?>" />
 			</p>
 
 		</div>
@@ -43,7 +44,8 @@
 			<p>
 			        <label for="company_image">Company image</label>
 			        <?php echo form_error('company_image'); ?>
-			        <br /><input id="company_image" type="text" name="company_image" maxlength="255" value="<?php echo set_value('company_image'); ?>"  />
+			        <br /><input id="company_image" type="file" name="company_image" />
+					<img src="" />
 			</p>
 		</div>
 		

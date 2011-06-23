@@ -130,4 +130,25 @@ class SocialHappen{
 			redirect($redirect_url);
 		}
 	}
+	
+	/**
+	 * Resize image and save as separated files
+	 * @param $image_data (see http://codeigniter.com/user_guide/libraries/file_uploading.html)
+	 * @author Manassarn M.
+	 */
+	function resize_image($image_data = NULL, $square_dimensions = array()){
+		if($image_data && $square_dimensions) {
+			$this->CI->load->library('image_lib'); 
+			foreach($square_dimensions as $dimension){
+				$config['image_library'] = 'gd2';
+				$config['source_image']	= "uploads/images/{$image_data['file_name']}";
+				$config['new_image'] = "uploads/images/{$image_data['raw_name']}_{$dimension}{$image_data['file_ext']}";
+				$config['maintain_ratio'] = TRUE;
+				$config['width']	 = $dimension;
+				$config['height']	= $dimension;
+				$this->CI->image_lib->initialize($config); 
+				$this->CI->image_lib->resize();
+			}
+		}
+	}
 }
