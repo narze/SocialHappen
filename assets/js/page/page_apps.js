@@ -22,5 +22,28 @@ $(function(){
 	});
 	
 	//paging
+	
+	//fancybox for adding app to page
+	$('a.bt-addnew_app').attr('href',base_url+'/page/addapp_lightbox/'+page_id);
+	$('a.bt-addnew_app').fancybox({
+		transitionIn: 'elastic',
+		transitionOut: 'elastic',
+		padding: 0,
+		width: 908,
+		height: 355,
+    	autoDimensions: false,
+    	scrolling: 'no',
+    	onComplete: function(){		
+			select_app_tab();
+			//get all app install statuses
+			$.getJSON(base_url + "app/json_get_all_app_install_status", function(json){
+				for(i in json){
+					all_app_install_statuses[''+json[i].app_install_status_name] = new Array(json[i].app_install_status_id,json[i].app_install_status_description);
+				}
+			});
+			
+			$( "ul, li" ).disableSelection();
+    	}
+	})
 });
 

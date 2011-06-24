@@ -53,13 +53,18 @@ class Page extends CI_Controller {
 							'page/page_campaigns',
 							'page/page_report',
 							'page/page_users',
-							'page/page_tabs'
+							'page/page_tabs',
+							//for fancybox in application tab
+							'common/fancybox/jquery.mousewheel-3.0.4.pack',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'common/main',
 							'page/main',
 							'page/campaign',
-							'page/member'
+							'page/member',
+							//for fancybox in application tab
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),
@@ -214,6 +219,40 @@ class Page extends CI_Controller {
 			$this->page->update_page_profile_by_page_id($page_id,array('order_in_dashboard'=>$i));
 			$i++;	
 		}		
+	}
+	
+	/**
+	 * fancybox for adding app 
+	 * @author Prachya P.
+	 */
+	function addapp_lightbox($page_id){
+		$this -> socialhappen -> check_logged_in("home");
+		if($page_id){			
+			$this -> load -> model('company_model', 'companies');
+			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
+			$this -> load -> model('page_model', 'pages');
+			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+			$data = array(
+				'page_id' => $page_id,
+				'header' => $this -> socialhappen -> get_header_lightbox( 
+					array(
+						'vars' => array('company_id'=>$company['company_id'],
+							'page_id'=>$page_id,
+							'page_name'=>$page['page_name'],
+							'user_id'=>$this->session->userdata('user_id')),
+						'script' => array(
+							'page/addapp_lightbox'
+						),
+						'style' => array(
+							'company/main',
+							'common/smoothness/jquery-ui-1.8.9.custom'
+						)
+					)
+				),
+				'footer' => $this -> socialhappen -> get_footer_lightbox()
+			);
+			$this->parser->parse('page/addapp_lightbox_view', $data);
+		}
 	}
 }
 

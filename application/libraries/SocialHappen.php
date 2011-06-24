@@ -84,6 +84,20 @@ class SocialHappen{
 	}
 	
 	/**
+	 * Get header view, predefine $user and $user_companies in views
+	 * @return $header
+	 * @author Manassarn M., Prachya P.
+	 */
+	function get_header_lightbox($data = array()){
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			$data['user'] = $this->get_user();
+			$data['user_companies'] = $this->get_user_companies();
+		}
+		$data['image_url'] = base_url().'assets/images/';
+		return $this->CI->load->view('common/header_lightbox', $data, TRUE);
+	}
+	
+	/**
 	 * Get footer view
 	 * @return $footer
 	 * @author Manassarn M.
@@ -94,6 +108,20 @@ class SocialHappen{
 			return $this->CI->load->view('common/footer', array() , TRUE);
 		} else {
 			return $this->CI->load->view('common/footer', array() , TRUE);
+		}
+	}
+	
+	/**
+	 * Get footer view
+	 * @return $footer
+	 * @author Manassarn M.,Prachya P.
+	 * @todo add more elements
+	 */
+	function get_footer_lightbox($data = array()){
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			return $this->CI->load->view('common/footer_lightbox', array() , TRUE);
+		} else {
+			return $this->CI->load->view('common/footer_lightbox', array() , TRUE);
 		}
 	}
 	

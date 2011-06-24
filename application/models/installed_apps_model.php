@@ -123,6 +123,14 @@ class Installed_apps_model extends CI_Model {
 		$query = $this->db->get('installed_apps');
 		return $query->num_rows();
 	}
+	
+	/*
+	 * Update data
+	 * @author Prachya P.
+	 */
+	function update($data = array(), $where = array()) {
+		$this -> db -> update('installed_apps', $data, $where);
+	}
 }
 /* End of file installed_apps_model.php */
 /* Location: ./application/models/installed_apps_model.php */
