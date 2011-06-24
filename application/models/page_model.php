@@ -125,6 +125,17 @@ class Page_model extends CI_Model {
 	function update_page_profile_by_page_id($page_id = NULL, $data = array()){
 		return $this->db->update('page', $data, array('page_id' => $page_id));
 	}
+	
+	/**
+	 * Count pages
+	 * @param $app_id
+	 * @author Manassarn M.
+	 */
+	function count_pages_by_app_id($app_id = NULL){
+		$this->db->where(array('app_id'=>$app_id));
+		$this->db->join('installed_apps','page.page_id=installed_apps.page_id');
+		return $this->db->count_all_results('page');
+	}
 }
 /* End of file page_model.php */
 /* Location: ./application/models/page_model.php */

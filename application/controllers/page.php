@@ -5,43 +5,34 @@ if(!defined('BASEPATH'))
 class Page extends CI_Controller {
 	function __construct() {
 		parent::__construct();
-		$this->load->library('pagination');
 	}
 	
 	function index($page_id =NULL) {
 		$this -> socialhappen -> check_logged_in('home');
-		if($page_id) {
+		$this -> load -> model('page_model', 'pages');
+		$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+		if($page) {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
-			$this -> load -> model('page_model', 'pages');
-			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
 			
 			$facebook_page_graph = json_decode(file_get_contents("http://graph.facebook.com/{$page['facebook_page_id']}"),TRUE);
 			
 			$this -> load ->model('installed_apps_model','installed_apps');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."page/{$page_id}/apps",
-					'total_rows' => $app_count = $this->installed_apps->count_installed_apps_by_page_id($page_id)
-				)
-			);
-			$pagination['app'] = $this->pagination->create_links();
+			$app_count = $this->installed_apps->count_installed_apps_by_page_id($page_id);
+			
 			$this -> load ->model('campaign_model','campaigns');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."page/{$page_id}/campaigns",
-					'total_rows' => $campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id)
-				)
-			);
-			$pagination['campaign'] = $this->pagination->create_links();
+			$campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id);
 			$this -> load ->model('user_model','users');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."page/{$page_id}/users",
-					'total_rows' => $user_count = $this->users->count_users_by_page_id($page_id)
-				)
-			);
-			$pagination['user'] = $this->pagination->create_links();
+			$user_count = $this->users->count_users_by_page_id($page_id);
+			$this->config->load('pagination', TRUE);
+			$per_page = $this->config->item('per_page','pagination');
+			
+			// $key = 'subject';
+			// $app_id = ???;
+			// $action_id = ???;
+			// $criteria = array('page_id' => $page_id);
+			// $date = date("Ymd");
+			// $new_user_count = $this->audit_lib->count_audit($key, $app_id, $action_id, $criteria, $date));
 			
 			$data = array(
 				'page_id' => $page_id,
@@ -49,10 +40,15 @@ class Page extends CI_Controller {
 					array(
 						'title' => $page['page_name'],
 						'vars' => array('page_id'=>$page_id,
-							'company_id' => $company['company_id']
+							'company_id' => $company['company_id'],
+							'per_page' => $per_page,							
+							'app_count' => $app_count,
+							'campaign_count' => $campaign_count,
+							'user_count' => $user_count,
 						),
 						'script' => array(
 							'common/bar',
+							'common/jquery.pagination',
 							'page/page_apps',
 							'page/page_campaigns',
 							'page/page_report',
@@ -61,6 +57,7 @@ class Page extends CI_Controller {
 						),
 						'style' => array(
 							'common/main',
+							//'common/pagination',
 							'page/main',
 							'page/campaign',
 							'page/member'
@@ -86,6 +83,7 @@ class Page extends CI_Controller {
 						'app_count' => $app_count,
 						'campaign_count' => $campaign_count,
 						'user_count' => $user_count,
+						///'new_user_count' => $new_user_count,
 						'facebook' => array(
 							'link' => issetor($facebook_page_graph['link']),
 							'likes' =>  issetor($facebook_page_graph['likes'])
@@ -100,13 +98,13 @@ class Page extends CI_Controller {
 						),
 				TRUE), 
 				'page_apps' => $this -> load -> view('page/page_apps', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE), 
 				'page_campaigns' => $this -> load -> view('page/page_campaigns', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'page_users' => $this -> load -> view('page/page_users', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'page_report' => $this -> load -> view('page/page_report', 
 					array(),

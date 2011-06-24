@@ -6,16 +6,15 @@ $(function(){
 			.appendTo('.wrapper-details.campaigns .details.campaigns table');
 
 			var campaign_list = row.find('td.app-list div');
-			//campaign_list.find('p.thumb img').attr('src', json[i].campaign_image);
-			campaign_list.find('p.thumb img').attr('src', image_url+'cam-icon.png');
+			campaign_list.find('p.thumb img').attr('src', json[i].campaign_image);
 			campaign_list.find('h2').append('<a href="'+base_url+'campaign/'+json[i].campaign_id+'">'+json[i].campaign_name+'</a>');
 			campaign_list.find('p.description').append(json[i].campaign_description);
 			
-			row.find('td.status.campaign-status span').append('Active');
-			row.find('td.status.campaign-visitor b').append('111');
-			row.find('td.status.campaign-member b').append('222');
-			row.find('td.status.remaining-days b').append('2');
-			row.find('td.bt-icon a.bt-go.campaigns').attr('href', base_url+'path/to/go/'+ json[i].campaign_id);
+			row.find('td.status.campaign-status span').append(json[i].campaign_status_name);
+			row.find('td.status.campaign-visitor b').append(json[i].campaign_visitor);
+			row.find('td.status.campaign-member b').append(json[i].campaign_user);
+			row.find('td.status.remaining-days b').append(json[i].campaign_remaining_days);
+			row.find('td.bt-icon a.bt-go.campaigns').attr('href', base_url+'campaign/'+ json[i].campaign_id);
 		}
 		$('.wrapper-details.campaigns .details.campaigns table tr:even').addClass('next');
 	});

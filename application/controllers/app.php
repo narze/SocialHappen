@@ -9,15 +9,15 @@ class App extends CI_Controller {
 
 	function index($app_install_id = NULL){
 		$this->socialhappen->check_logged_in('home');
-		if($app_install_id) {
+		$this -> load -> model('installed_apps_model', 'installed_apps');
+		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		if($app) {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_app_install_id($app_install_id);
 			$this->load->model('page_model','pages');
 			$page = $this->pages->get_page_profile_by_app_install_id($app_install_id);
 			$this -> load -> model('campaign_model', 'campaigns');
 			$campaigns = $this -> campaigns -> get_campaigns_by_app_install_id($app_install_id);
-			$this -> load -> model('installed_apps_model', 'installed_apps');
-			$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 
 			$this->pagination->initialize(
 				array(
@@ -72,7 +72,8 @@ class App extends CI_Controller {
 					,
 				TRUE),
 				'app_profile' => $this -> load -> view('app/app_profile', 
-					array('app_profile' => $app),
+					array('app_profile' => $app,
+						'count_installed_on' => $this->pages->count_pages_by_app_id($app['app_id'])),
 				TRUE),
 				'app_tabs' => $this -> load -> view('app/app_tabs', 
 					array(

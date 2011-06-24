@@ -11,8 +11,8 @@
         <div class="information">
           <h2>Information</h2>
           <ul>
-            <li><span>New Member</span><?php echo $user_count;?></li>
-            <li><span>All Member</span>----</li>
+            <li><span>New Member today</span><?php echo issetor($new_user_count);?></li>
+            <li><span>All Member</span><?php echo $user_count;?></li>
             <li><span>Like</span><?php echo $facebook['likes'];?></li>
             <li><span>Application</span><?php echo $app_count;?></li>
             <li><span>Campaign</span><?php echo $campaign_count;?></li>
