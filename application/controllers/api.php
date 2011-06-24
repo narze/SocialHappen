@@ -123,23 +123,21 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$page_id = $this->input->get('page_id', TRUE);
+		$user_id = $this->input->get('user_id', TRUE);
 		
 		// check parameter
-		if(!($app_id) || !($app_install_id) || !($app_secret_key) || !($app_install_secret_key) || !($page_id) ){
+		if(!($app_id) || !($app_install_id) || !($app_secret_key) || !($app_install_secret_key) || !($page_id) || !($user_id) ){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id, user_id)'));
 			return;
 		}
 		
-		// [undone] need user_id
-		/*
 		$this->load->model('Session_model','Session');
 		if(!$this->Session->get_session_id_by_user_id($user_id)){
 			echo json_encode(array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
 			return;
 		}
-		*/
 		
 		// authenticate app with $app_id and $app_secret_key
 		if(!($this->_authenticate_app($app_id, $app_secret_key))){
@@ -190,7 +188,7 @@ class Api extends CI_Controller {
 				$this->load->library('audit_lib');
 				$this->audit_lib->add_audit(
 											$app_id,
-											'user_id',	// undone
+											$user_id,
 											2, //presently hard coded
 											'', 
 											'',
@@ -310,6 +308,7 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
+		$action = $this->input->get('action', TRUE);
 			
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id)){
 			echo json_encode(array( 'error' => '100',
@@ -340,16 +339,36 @@ class Api extends CI_Controller {
 			$this->User_apps->add_new($user_id, $app_install_id);
 		}
 		
-		//[Deprecated] wait for external log request
-		
 		// update user last seen
 		$this->User_apps->update_user_last_seen($user_id, $app_install_id);
 		$this->User->update_user_last_seen($user_id);
+				
+		if(!($action)){
+			$action = 103;
+		}else{
+			switch ($action) {
+				case 2:
+					$action = 104;
+					break;
+				case 3:
+					$action = 105:
+					break;
+				case 4:
+					$action = 4;
+				default:
+					$action = 103;
+					break;
+			}
+		}
+		
+		$this->load->model('Audit_action_type_model', 'Audit_action_type');
+		$audit_auction_type = $this->Audit_action_type->get_audit_action_by_type_id($action);
+		$action_text = $audit_auction_type['audit_action_name'];
 		
 		$this->audit_lib->add_audit(
 										$app_id,
 										$user_id,
-										103, //presently hard coded
+										$action,
 										'', 
 										'',
 										array(
@@ -358,10 +377,21 @@ class Api extends CI_Controller {
 											)
 									);
 		$response = array(	'status' => 'OK',
+						'action_text' => $action_text,
 						'message' => 'logged');
 		
 		echo json_encode($response);
 		 
+	}
+	
+	/**
+	* Admin change app's configuration for audit log
+	* Interface to  request_log_user() with 'save config' action
+	* @author Wachiraph C.
+	*/
+	function request_config_log(){
+		$_GET['action'] = 4;
+		$this->request_log_user();
 	}
 							
 	/**
