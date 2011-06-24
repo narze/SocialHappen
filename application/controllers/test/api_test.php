@@ -199,6 +199,27 @@ class Api_test extends CI_Controller {
 	}
 	
 	/**
+	 * Tests request_log_user()
+	 * @author Wachiraph C.
+	 */
+	function request_config_log_test(){
+		$app = array(
+						'app_id' => APP_ID,
+						'app_secret_key' => APP_SECRET_KEY,
+						'app_install_id' => $this->app_install_id,
+						'app_install_secret_key' => $this->app_install_secret_key,
+						'user_id' => USER_ID
+					);
+					
+		$content = $this->curl->simple_get(base_url().'api/request_config_log', $app);
+		
+		$content = json_decode($content, TRUE);
+		$this->unit->run($content, 'is_array', 'request_config_log()');
+		$this->unit->run(@$content['action_text']=='save config','is_true','action text');
+		$this->unit->run(@$content['status']=='OK','is_true','saving config logged');
+	}
+	
+	/**
 	 * Tests request_authenticate()
 	 * @author Wachiraph C.
 	 */
