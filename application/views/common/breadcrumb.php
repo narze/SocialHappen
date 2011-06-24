@@ -17,7 +17,7 @@
 
       <li class="group"><a href="#"><span>group</span></a></li>
 
-      <li class="setting"><a href="#"><span>setting</span></a></li>
+      <li class="setting"><a href="<?php echo issetor($settings_url,'#');?>"><span>setting</span></a></li>
 
     </ul>
 

@@ -68,4 +68,15 @@ class User_companies_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		return $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
 	}
+	
+	/**
+	 * Check if user is company admin
+	 * @param $user_id
+	 * @param $company_id
+	 */
+	function is_company_admin($user_id = NULL, $company_id = NULL){
+		$this->db->where(array('user_id' => $user_id, 'company_id' => $company_id));
+		echo $count = $this->db->count_all_results('user_companies');
+		return $count == 1;
+	}
 }

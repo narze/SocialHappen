@@ -4,46 +4,37 @@ class App extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->library('pagination');
 	}
 
 	function index($app_install_id = NULL){
 		$this->socialhappen->check_logged_in('home');
-		if($app_install_id) {
+		$this -> load -> model('installed_apps_model', 'installed_apps');
+		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		if($app) {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_app_install_id($app_install_id);
 			$this->load->model('page_model','pages');
 			$page = $this->pages->get_page_profile_by_app_install_id($app_install_id);
 			$this -> load -> model('campaign_model', 'campaigns');
 			$campaigns = $this -> campaigns -> get_campaigns_by_app_install_id($app_install_id);
-			$this -> load -> model('installed_apps_model', 'installed_apps');
-			$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."app/{$app_install_id}/campaigns",
-					'total_rows' => $campaign_count = $this->campaigns->count_campaigns_by_app_install_id($app_install_id)
-				)
-			);
-			$pagination['campaign'] = $this->pagination->create_links();
-			
-			$this -> load ->model('user_model','users');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."app/{$app_install_id}/users",
-					'total_rows' => $user_count = $this->users->count_users_by_app_install_id($app_install_id)
-				)
-			);
-			$pagination['user'] = $this->pagination->create_links();
-			
+			$campaign_count = $this->campaigns->count_campaigns_by_app_install_id($app_install_id);
+			$user_count = $this->users->count_users_by_app_install_id($app_install_id);
+			$this->config->load('pagination', TRUE);
+			$per_page = $this->config->item('per_page','pagination');
 			$data = array(
 				'app_install_id' => $app_install_id,
 				'header' => $this -> socialhappen -> get_header( 
 					array(
 						'title' => $app['app_name'],
-						'vars' => array('app_install_id'=>$app_install_id),
+						'vars' => array('app_install_id'=>$app_install_id,
+							'campaign_count' => $campaign_count,
+							'user_count' => $user_count,
+							'per_page' => $per_page
+						),
 						'script' => array(
 							'common/bar',
+							'common/jquery.pagination',
 							'app/app_stat',
 							'app/app_users',
 							'app/app_campaigns',
@@ -72,7 +63,8 @@ class App extends CI_Controller {
 					,
 				TRUE),
 				'app_profile' => $this -> load -> view('app/app_profile', 
-					array('app_profile' => $app),
+					array('app_profile' => $app,
+						'count_installed_on' => $this->pages->count_pages_by_app_id($app['app_id'])),
 				TRUE),
 				'app_tabs' => $this -> load -> view('app/app_tabs', 
 					array(
@@ -81,10 +73,10 @@ class App extends CI_Controller {
 						),
 				TRUE), 
 				'app_campaigns' => $this -> load -> view('app/app_campaigns', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'app_users' => $this -> load -> view('app/app_users', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer());
 			$this -> parser -> parse('app/app_view', $data);

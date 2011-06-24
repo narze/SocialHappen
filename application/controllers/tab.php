@@ -12,9 +12,11 @@ class Tab extends CI_Controller {
 		//Guest popup
 		} else {
 			$this->load->model('user_model','users');
-			$user = $this->users->get_user_profile_by_user_id();
-			// $this->load->model('company_model','companies');
-			// $company = $this->companies->get_company_profile_by_page_id($page_id);
+			$user = $this->users->get_user_profile_by_user_id($user_id);
+			$this->load->model('company_model','companies');
+			$company = $this->companies->get_company_profile_by_page_id($page_id);
+			$this->load->model('user_companies_model','user_companies');
+			$is_company_admin = $this->user_companies->is_company_admin($user['user_id'], $company['company_id']);
 			// $this->load->model('page_model','pages');
 			// $page = $this->pages->get_page_profile_by_page_id($page_id);
 			// if($page && $company && $user_id){
@@ -41,7 +43,8 @@ class Tab extends CI_Controller {
 					'bar' => $this->load->view('tab/bar',array(
 						'admin' => FALSE,
 						'page_id' => $page_id,
-						'user_id' => $user_id
+						'user_id' => $user_id,
+						'is_admin' => $is_company_admin
 						),
 					TRUE),
 					'main' => $this->load->view('tab/main',array(),
@@ -55,21 +58,31 @@ class Tab extends CI_Controller {
 	}
 	
 	function dashboard($page_id = NULL){
-		$this->load->library('socialhappen');
-		$user_id = $this->socialhappen->get_user_id();
-		if(!$user_id) {
-		//Guest popup
-		} else {
-			$this->load->model('user_model','users');
-			$user = $this->users->get_user_profile_by_user_id();
-			$this->load->model('campaign_model','campaigns');
-			$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
-			$this->load->model('installed_apps_model','installed_apps');
-			$installed_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
-			$data = array('user'=>$user,
-							'campaigns' => $campaigns,
-							'installed_apps' => $installed_apps);
-			$this->load->view("tab/dashboard",$data);
+		$this->load->model('page_model','pages');
+		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		if($page){
+			$this->load->library('socialhappen');
+			$user_id = $this->socialhappen->get_user_id();
+			if(!$user_id) {
+			//Guest popup
+			} else {
+				$this->load->model('user_model','users');
+				$user = $this->users->get_user_profile_by_user_id($user_id);
+				$this->load->model('company_model','companies');
+				$company = $this->companies->get_company_profile_by_page_id($page_id);
+				$this->load->model('user_companies_model','user_companies');
+				$is_company_admin = $this->user_companies->is_company_admin($user['user_id'], $company['company_id']);
+				$this->load->model('campaign_model','campaigns');
+				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
+				$this->load->model('installed_apps_model','installed_apps');
+				$installed_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+				$data = array('user'=>$user,
+								'campaigns' => $campaigns,
+								'installed_apps' => $installed_apps,
+								'is_admin' => $is_company_admin
+				);
+				$this->load->view("tab/dashboard",$data);
+			}
 		}
 	}
 	

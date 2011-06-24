@@ -155,6 +155,15 @@ class Page_model_test extends CI_Controller {
 		$result = $this->pages->get_page_profile_by_page_id(1);
 		$this->unit->run($result['page_name'] == $new_page_name,'is_true',"Updated page_name to {$new_page_name}");
 	}
+	
+	/**
+	 * Test count_pages_by_app_id()
+	 * @author Manassarn M.
+	 */
+	function count_pages_by_app_id_test(){
+		$result = $this->pages->count_pages_by_app_id(1);
+		$this->unit->run($result,'is_int', 'count_pages_by_app_id()');
+	}
 }
 /* End of file page_model_test.php */
 /* Location: ./application/controllers/test/page_model_test.php */

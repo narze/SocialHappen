@@ -190,7 +190,7 @@ class Campaign_model_test extends CI_Controller {
 	 */
 	function count_campaigns_by_page_id_test(){
 		$result = $this->campaigns->count_campaigns_by_page_id(1);
-		$this->unit->run($result,'is_string', 'count_campaigns_by_page_id()');
+		$this->unit->run($result,'is_int', 'count_campaigns_by_page_id()');
 	}
 	
 	/**
@@ -199,7 +199,7 @@ class Campaign_model_test extends CI_Controller {
 	 */
 	function count_campaigns_by_app_install_id_test(){
 		$result = $this->campaigns->count_campaigns_by_app_install_id(1);
-		$this->unit->run($result,'is_string', 'count_campaigns_by_app_install_id()');
+		$this->unit->run($result,'is_int', 'count_campaigns_by_app_install_id()');
 	}
 }
 /* End of file campaign_model_test.php */
