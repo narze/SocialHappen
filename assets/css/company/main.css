@@ -7,7 +7,12 @@ author: Oat (okaynaja)
 
 ###########################################
 */
-
+div.dragging-page ul li.ui-state-highlight{
+	height:128px;
+}
+div.dragging-app div ul li.ui-state-highlight{
+	height:110px;
+}
 div.test01>ul>li:last-child  {color: green;}
 div.test01>ul>li:first-child+li+li+li{font-weight: bold;}
 div.test01>ul>li>ul>li { color: #000; font-weight: bold;}

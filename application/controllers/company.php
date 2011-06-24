@@ -25,7 +25,8 @@ class Company extends CI_Controller {
 										,'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
 							'common/bar',
-							'company/company_dashboard'
+							'company/company_dashboard',
+							'company/easySlider1.7'
 						),
 						'style' => array(
 							'company/main',
