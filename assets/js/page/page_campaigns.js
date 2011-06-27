@@ -1,11 +1,16 @@
-$(function(){	
+$(function(){
+	var filtered = false;
+	var campaign_status_id = 0;
 	function get_page_campaigns(page_index, jq){
-		$.getJSON(base_url+"page/json_get_campaigns/"+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){
-			$('.wrapper-details.apps .details table tbody tr.hidden-template').siblings().addClass('old-result');
+		var url;
+		if(filtered) {url = base_url+"page/json_get_campaigns_using_status/"+page_id+'/'+campaign_status_id+'/'+per_page+'/'+(page_index * per_page);alert('filtered');}
+		else {url = base_url+"page/json_get_campaigns/"+page_id+'/'+per_page+'/'+(page_index * per_page);alert('not filtered');}
+		$.getJSON(url,function(json){
+			$('.wrapper-details.campaigns .details table tbody tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
-				$('.wrapper-details.campaigns .details').html(
-					'<p>No campaign yet</p> <p><a href="#">+ add new campaign</a> | <a href="#">help</a></p>'
-				);
+				// $('.wrapper-details.campaigns .details').html(
+					// '<p>No campaign yet</p> <p><a href="#">+ add new campaign</a> | <a href="#">help</a></p>'
+				// );
 			} else {
 				for(i in json){
 					var row = $('.wrapper-details.campaigns .details.campaigns table tr.campaign-row.hidden-template').clone()
@@ -30,10 +35,28 @@ $(function(){
 		return false;
 	}
 	
-	$('.pagination-campaigns').pagination(campaign_count, {
-        items_per_page:per_page,
-        callback:get_page_campaigns,
-		load_first_page:true
+	$('.tab-content ul li.campaigns a').click(function(){
+		$('.pagination-campaigns').pagination(campaign_count, {
+			items_per_page:per_page,
+			callback:get_page_campaigns,
+			load_first_page:true
+		});
 	});
+	
+	// $('.campaign-filter').live('click',function(){
+		// if($(this).hasClass('inactive-campaign')){
+			// filtered = true;
+			// campaign_status_id = 1;
+		// } else if($(this).hasClass('active-campaign')){
+			// filtered = true;
+			// campaign_status_id = 2;
+		// } else if($(this).hasClass('expired-campaign')){
+			// filtered = true;
+			// campaign_status_id = 3;
+		// } else {
+			// filtered = false;
+		// }
+		// get_page_campaigns(1);
+	// });
 });
 

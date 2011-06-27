@@ -531,11 +531,15 @@ class Sync extends CI_Controller {
 		$campaign_status = array(
 								array(
 								    'campaign_status_id' => 1,
-								    'campaign_status_name' => 'Inactive',
+								    'campaign_status_name' => 'Inactive'
 								),
 								array(
 								    'campaign_status_id' => 2,
-								    'campaign_status_name' => 'Active',
+								    'campaign_status_name' => 'Active'
+								),
+								array(
+								    'campaign_status_id' => 3,
+								    'campaign_status_name' => 'Expired'
 								)
 							);
 		$this->db->insert_batch('campaign_status', $campaign_status);

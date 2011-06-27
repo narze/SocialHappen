@@ -32,10 +32,11 @@ $(function(){
 		});
 		return false;
 	}
-
-	$('.pagination-users').pagination(user_count, {
-        items_per_page:per_page,
-        callback:get_page_users,
-		load_first_page:true
+	$('.tab-content ul li.users a').click(function(){
+		$('.pagination-users').pagination(user_count, {
+			items_per_page:per_page,
+			callback:get_page_users,
+			load_first_page:true
+		});
 	});
 });
