@@ -137,7 +137,7 @@ class Campaign_model extends CI_Model {
 	function count_campaigns_by_page_id_and_campaign_status_id($page_id = NULL, $campaign_status_id = NULL){
 		$this->db->where(array('page_id' => $page_id));
 		if($campaign_status_id) {
-			$this->db->where(array('campaign_status_id' => $campaign_status_id));
+			$this->db->where(array('campaign.campaign_status_id' => $campaign_status_id));
 		}
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
@@ -163,7 +163,7 @@ class Campaign_model extends CI_Model {
 	function count_campaigns_by_app_install_id_and_campaign_status_id($app_install_id = NULL, $campaign_status_id = NULL){
 		$this->db->where(array('campaign.app_install_id' => $app_install_id));
 		if($campaign_status_id) {
-			$this->db->where(array('campaign_status_id' => $campaign_status_id));
+			$this->db->where(array('campaign.campaign_status_id' => $campaign_status_id));
 		}
 		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');

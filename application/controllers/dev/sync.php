@@ -518,7 +518,7 @@ class Sync extends CI_Controller {
 							    'app_install_id' => 2, 
 							    'campaign_name' => 'Campaign test 2',
 							    'campaign_detail' => 'Campaign test detail 2', 
-							    'campaign_status_id' => 1, 
+							    'campaign_status_id' => 2, 
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18 18:05:46', 

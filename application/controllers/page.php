@@ -38,12 +38,12 @@ class Page extends CI_Controller {
 				'page_id' => $page_id,
 				'header' => $this -> socialhappen -> get_header( 
 					array(
+						'company_id' => $company['company_id'],
 						'title' => $page['page_name'],
 						'vars' => array('page_id'=>$page_id,
 							'company_id' => $company['company_id'],
 							'per_page' => $per_page,							
 							'app_count' => $app_count,
-							'campaign_count' => $campaign_count,
 							'user_count' => $user_count,
 						),
 						'script' => array(
@@ -101,7 +101,7 @@ class Page extends CI_Controller {
 					array(),
 				TRUE), 
 				'page_campaigns' => $this -> load -> view('page/page_campaigns', 
-					array(),
+					array('campaign_count' => $campaign_count),
 				TRUE),
 				'page_users' => $this -> load -> view('page/page_users', 
 					array(),
@@ -114,7 +114,33 @@ class Page extends CI_Controller {
 			return $data;
 		}
 	}
-
+	
+	/**
+	 * View page campaigns
+	 * @author Manassarn M.
+	 */
+	function campaigns($page_id = NULL, $filter = NULL){
+		$this -> load ->model('campaign_model','campaigns');
+		$campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id);
+		$this -> load -> view('page/page_campaigns', array(
+						'vars' => array('page_id'=>$page_id,
+							
+							'campaign_count' => $campaign_count
+						)));
+	}
+	
+	/**
+	 * JSON : Count campaigns
+	 * @param $page_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function json_count_campaigns($page_id = NULL, $campaign_status_id = NULL){
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+	
 	/**
 	 * JSON : Get page profile
 	 * @param $page_id

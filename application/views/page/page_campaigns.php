@@ -1,4 +1,4 @@
- <div class="wrapper-details campaigns">
+<div class="wrapper-details campaigns">
 	<div class="pagination-campaigns"></div>
         <h2 class="application"><span>Campaign</span></h2>
         <div class="filter">
