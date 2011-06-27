@@ -12,9 +12,9 @@
         <li class="drop">
 			<a href="#">
 				<span>
-					<?php if(isset($user)) : ?>
+					<?php if(isset($user) && isset($company_id)) : ?>
 						<div id="user-menu">
-							<div id="profile-setting"><?php echo anchor('path/to/profilesetting','Profile Setting');?></div>
+							<div id="profile-setting"><?php echo anchor("settings/{$company_id}/account/{$user['user_id']}",'Profile Setting');?></div>
 							<div id="logout"><?php echo anchor('home/logout','Logout');?></div>
 						</div>
 					<?php endif; ?>
