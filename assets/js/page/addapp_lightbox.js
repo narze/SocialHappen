@@ -86,7 +86,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 				ul_element.append('<li><p><img src="'+json[i].app_image+'" alt="" width="64" height="64" />'
 					+'<span class="button">'
                     +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
-                    +'<a class="bt-setting_app" href="#"><span>Setting</span></a>'
+                    +'<a class="bt-setting_app" href="'+base_url+'settings/'+page_id+'/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
                     +'</span>'
                     +'</p><p>'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 			}			
@@ -113,19 +113,26 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 						dragging_object.removeClass('draggable');
 						
 						app_install_url=app_install_url.replace("{company_id}",company_id)
-										.replace("{user_id}",user_id)
-										.replace("{page_id}",page_id);
-						
-						//TODO: remove this line				
-						refresh_installed_app_in_page_panel();
-									
+									.replace("{user_id}",user_id)
+									.replace("{page_id}",page_id)+"&force=1";										
 						jQuery.ajax({
-							url: app_install_url,
+							url: base_url+"app/curl",
 							dataType: "json",
+							type: "POST",
+							data: {url:app_install_url},
+							error: function(){
+								show_installed_app_in_page(page_id,facebook_page_id);
+								show_available_app_in_page(page_id);
+								alert("ERROR! cannot install app.");
+							},
 							success: function(json) {
-								if(json.status=="ok"){	
+								if(json.status.toUpperCase()=="OK"){
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
+									dragging_object.children('p:first').append('<span class="button">'
+				                    +'<a class="bt-update_app" href="'+base_url+'app/'+app_install_id+'"><span>Update</span></a>'
+				                    +'<a class="bt-setting_app" href="'+base_url+'settings/'+page_id+'/app/'+app_install_id+'"><span>Setting</span></a>'
+				                    +'</span>');
 									refresh_installed_app_in_page_panel();
 									show_available_app_in_page(page_id);
 									//update company installed apps count
@@ -134,10 +141,14 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 									});
 									update_app_order_in_dashboard();
 									alert("Go to Facebook to complete the action.");
-								//	alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
-									window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
+									alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
+								//	window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
 								}
-								else alert("ERROR");
+								else{
+									show_installed_app_in_page(page_id,facebook_page_id);
+									show_available_app_in_page(page_id);
+									alert("ERROR");
+								}
 							},
 						});
 					}

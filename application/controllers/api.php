@@ -351,7 +351,7 @@ class Api extends CI_Controller {
 					$action = 104;
 					break;
 				case 3:
-					$action = 105:
+					$action = 105;
 					break;
 				case 4:
 					$action = 4;

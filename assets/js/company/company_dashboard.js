@@ -15,7 +15,7 @@ var last_page_of_installed_app_in_page=1;
 var available_item_per_page=9;
 var showing_page_of_available_item=1;
 var last_page_of_available_item=1;
-
+var selected_page_id=null;
 function select_page_tab(){
 	$('li.page_tab').addClass("active");
 	$('li.app_tab').removeClass("active");
@@ -52,6 +52,9 @@ function get_add_app_to_fb_page_link(facebook_app_api_key,facebook_page_id){
 }
 //show apps in page
 function view_page_app(page_id,facebook_page_id,page_name){
+	selected_page_id=page_id;
+	$(".left-panel").find('.dragging-page div').find('ul').children("li").removeClass("dragging");
+	$("li .page_id[value="+page_id+"]").parent("li").addClass("dragging");
 	show_installed_app_in_page(page_id,facebook_page_id);
 	$(".head-box-app-list b").html(page_name);
 	$(".right-panel").html($(".dragging-event-right-app-list").html());
@@ -59,6 +62,9 @@ function view_page_app(page_id,facebook_page_id,page_name){
 }
 
 function view_page_app_nochange_right(page_id,facebook_page_id,page_name){
+	selected_page_id=page_id;
+	$(".left-panel").find('.dragging-page div').find('ul').children("li").removeClass("dragging");
+	$("li .page_id[value="+page_id+"]").parent("li").addClass("dragging");
 	show_installed_app_in_page(page_id,facebook_page_id);
 	$(".head-box-app-list b").html(page_name);
 }
@@ -178,7 +184,7 @@ function show_installed_page_in_company(){
 					+'<p><img src="'+json[i].page_image+'" alt="" width="80" height="80" />'
 					+'<span class="button">'
                     +'<a class="bt-manage_page" href="'+base_url+'page/'+json[i].page_id+'"><span>Manage</span></a>'
-                    +'<a class="bt-setting_page" href="#"><span>Setting</span></a>'
+                    +'<a class="bt-setting_page" href="'+base_url+'settings/page/'+json[i].page_id+'"><span>Setting</span></a>'
                     +'</span>'
                     +'</p><p>'+json[i].page_name+'</p><input type="hidden" class="page_id" value="'+json[i].page_id+'" />'
 					+'</li>'
@@ -191,7 +197,8 @@ function show_installed_page_in_company(){
 			ul_element.find('li').not('.drop-here,.add-page').bind('mouseover',function(){
 				$(this).addClass("dragging");
 			}).bind('mouseout',function(){
-				$(this).removeClass("dragging");
+				if(selected_page_id==null||$(this).children("input.page_id").val()!=selected_page_id)
+					$(this).removeClass("dragging");
 			});
 	        
 			ul_element.droppable({
@@ -220,29 +227,59 @@ function show_installed_page_in_company(){
 								var page_id=json.page_id;
 								var app_api_key=sh_default_fb_app_api_key;
 								dragging_object.append('<input type="hidden" value="'+page_id+'" class="page_id" />');
-								if(json.status=="OK"){									
+								dragging_object.children('p:first').append('<span class="button">'
+				                    +'<a class="bt-manage_page" href="'+base_url+'page/'+page_id+'"><span>Manage</span></a>'
+				                    +'<a class="bt-setting_page" href="'+base_url+'settings/page/'+page_id+'"><span>Setting</span></a>'
+				                    +'</span>');
+								dragging_object.attr('onclick',
+									'view_page_app('+page_id+','+facebook_page_id+',\''+page_name+'\')');
+								if(json.status.toUpperCase()=="OK"){									
 									show_available_page_in_company();
 									//update company pages count
 									$.getJSON(base_url + "company/json_get_pages_count/" + company_id, function(json){
 										$(".page-installed-count").html("Page (" + json.page_count + ")");
 									});
-									update_page_order_in_dashboard();
+									update_page_order_in_dashboard();	
+									var isSamePage=false;								
+									var k=(showing_page_of_installed_page-1)*installed_page_per_row;
+									for(j=k;j<k+installed_page_per_row;j++){
+										if(ul_element.children("li").eq(j+1).children('.page_id').val()==page_id){
+											isSamePage=true;
+											break;
+										}
+									}
+									if(!isSamePage) showing_page_of_installed_page++;
 									refresh_installed_page_panel();
 									$.getJSON(base_url + "app/json_get_app_by_api_key/" + app_api_key, function(app_info){
 										app_install_url=app_info.app_install_url;
 										app_install_url=app_install_url.replace("{company_id}",company_id)
-																.replace("{user_id}",user_id)
-																.replace("{page_id}",page_id);
+													.replace("{user_id}",user_id)
+													.replace("{page_id}",page_id)+"&force=1";										
 										jQuery.ajax({
-											url: app_install_url,
+											url: base_url+"app/curl",
 											dataType: "json",
+											type: "POST",
+											data: {url:app_install_url},
+											error: function(){
+												show_installed_app_in_page(page_id,facebook_page_id);
+												show_available_app_in_page(page_id);
+												alert("ERROR! cannot install app.");								
+											},
 											success: function(json) {
-												if(json.status=="ok"){	
+												if(json.status.toUpperCase()=="OK"){	
 													alert("Go to Facebook to complete the action.");
-												//	alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
-													window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
+													//TODO:
+													alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));													
+													//window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
 												}
-												else alert("ERROR");
+												else{
+													show_installed_app_in_page(page_id,facebook_page_id);
+													show_available_app_in_page(page_id);
+													alert("ERROR! cannot install app.");								
+												}
+											},
+											complete: function(){
+												view_page_app(page_id,facebook_page_id,page_name);
 											},
 										});
 									});
@@ -277,8 +314,8 @@ function show_installed_app_in_company(){
             	ul_element.append(
 					'<li><p><img src="'+json[i].app_image+'" alt="" width="64" height="64" />'
 					+'<span class="button">'
-                    +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_id+'"><span>Update</span></a>'
-                    +'<a class="bt-setting_app" href="#"><span>Setting</span></a>'
+                    +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
+                    +'<a class="bt-setting_app" href="'+base_url+'settings/0/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
                     +'</span>'
                     +'</p><p>'+json[i].app_name+'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>'
                 );
@@ -304,44 +341,37 @@ function show_installed_app_in_company(){
 						var app_install_url=dragging_object.children('input.app_install_url').val();
 						dragging_object.removeClass('draggable');
 						app_install_url=app_install_url.replace("{company_id}",company_id)
-										.replace("{user_id}",user_id)
-										.replace("{page_id}",0);
+									.replace("{user_id}",user_id)
+									.replace("{page_id}",0)+"&force=1";										
 						jQuery.ajax({
-							url: app_install_url,
+							url: base_url+"app/curl",
 							dataType: "json",
+							type: "POST",
+							data: {url:app_install_url},
+							error: function(){
+								show_available_app_in_company();	
+								alert("ERROR! cannot install app.");								
+							},
 							success: function(json) {
-								if(json.status=="ok"){	
+								if(json.status.toUpperCase()=="OK"){	
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
+									dragging_object.children('p:first').append('<span class="button">'
+				                    +'<a class="bt-update_app" href="'+base_url+'app/'+app_install_id+'"><span>Update</span></a>'
+				                    +'<a class="bt-setting_app" href="'+base_url+'settings/0/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
+				                    +'</span>');
 									update_app_order_in_dashboard();
 									show_available_app_in_company();		
 									//update company installed apps count
 									$.getJSON(base_url + "company/json_get_installed_apps_count_not_in_page/" + company_id, function(json){
 										$(".app-installed-count").html("Application (" + json.app_count + ")");
 									});
-									alert("DONE");								
-									/*jQuery.ajax({
-										url: base_url + "app/json_add",
-										dataType: "json",
-										type: "POST",
-										data: ({company_id : company_id, app_id : app_id, app_install_status : 1, page_id : 0 , app_install_secret_key : app_secret_key}),
-										success: function(json) {
-											if(json.status=="OK"){
-												app_install_id=json.app_install_id;
-												dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
-												update_app_order_in_dashboard();
-												show_available_app_in_company();		
-												//update company installed apps count
-												$.getJSON(base_url + "company/json_get_installed_apps_count_not_in_page/" + company_id, function(json){
-													$(".app-installed-count").html("Application (" + json.app_count + ")");
-												});
-												alert("DONE");
-											}
-											else alert("ERROR");
-										},
-									});*/
+									alert("DONE");
 								}
-								else alert("ERROR");
+								else {
+									show_available_app_in_company();	
+									alert("ERROR! cannot install app.");								
+								}
 							}
 						});
 					}
@@ -379,7 +409,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 				ul_element.append('<li><p><img src="'+json[i].app_image+'" alt="" width="64" height="64" />'
 					+'<span class="button">'
                     +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
-                    +'<a class="bt-setting_app" href="#"><span>Setting</span></a>'
+                    +'<a class="bt-setting_app" href="'+base_url+'settings/'+page_id+'/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
                     +'</span>'
                     +'</p><p>'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 			}			
@@ -407,18 +437,26 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 						
 						app_install_url=app_install_url.replace("{company_id}",company_id)
 										.replace("{user_id}",user_id)
-										.replace("{page_id}",page_id);
-						
-						//TODO: remove this line				
-						refresh_installed_app_in_page_panel();
+										.replace("{page_id}",page_id)+"&force=1";
 									
 						jQuery.ajax({
-							url: app_install_url,
+							url: base_url+"app/curl",
 							dataType: "json",
+							type: "POST",
+							data: {url:app_install_url},
+							error: function(){
+								show_installed_app_in_page(page_id,facebook_page_id);
+								show_available_app_in_page(page_id);
+								alert("ERROR");								
+							},
 							success: function(json) {
-								if(json.status=="ok"){	
+								if(json.status.toUpperCase()=="OK"){
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
+									dragging_object.children('p:first').append('<span class="button">'
+				                    +'<a class="bt-update_app" href="'+base_url+'app/'+app_install_id+'"><span>Update</span></a>'
+				                    +'<a class="bt-setting_app" href="'+base_url+'settings/'+page_id+'/app/'+app_install_id+'"><span>Setting</span></a>'
+				                    +'</span>');
 									refresh_installed_app_in_page_panel();
 									show_available_app_in_page(page_id);
 									//update company installed apps count
@@ -428,9 +466,15 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 									update_app_order_in_dashboard();
 									alert("Go to Facebook to complete the action.");
 								//	alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
-									window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
+									//TODO: remove this, uncomment window.location
+									alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));									
+								//	window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
 								}
-								else alert("ERROR");
+								else{
+									show_installed_app_in_page(page_id,facebook_page_id);
+									show_available_app_in_page(page_id);
+									alert("ERROR");
+								}
 							},
 						});
 					}
