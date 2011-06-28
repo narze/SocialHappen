@@ -26,16 +26,20 @@ $(function(){
 					row.find('td.bt-icon a.bt-go').attr('href', base_url+'path/to/go/'+ json[i].app_install_id);
 				}
 				$('.wrapper-details.apps .details table tbody tr:even').addClass('next');
-				$('.old-result').remove();
+				
 			}
+			$('.old-result').remove();
 		});
 		return false;
 	}
 	$('.tab-content ul li.apps a').click(function(){
-		$('.pagination-apps').pagination(app_count, {
-			items_per_page:per_page,
-			callback:get_page_apps,
-			load_first_page:true
+		$.getJSON(base_url+"page/json_count_apps/"+page_id,function(count){
+			$('.pagination-apps').pagination(count, {
+				items_per_page:per_page,
+				callback:get_page_apps,
+				load_first_page:true
+			});
 		});
+		return false;
 	});
 });

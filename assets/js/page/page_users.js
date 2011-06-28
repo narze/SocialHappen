@@ -1,6 +1,6 @@
 $(function(){	
 	function get_page_users(page_index, jq){
-		$.getJSON(base_url+'page/json_get_users/'+page_id,function(json){
+		$.getJSON(base_url+'page/json_get_users/'+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){
 			$('.wrapper-details.users .details table tbody tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
 				$('.wrapper-details.users .details').html(
@@ -27,16 +27,20 @@ $(function(){
 					row.find('td.bt-icon a.bt-go').attr('href', base_url+'path/to/go/'+ json[i].app_install_id); //delete
 				}
 				$('.wrapper-details.users .details table tr:even').addClass('next');
-				$('.old-result').remove();
+				
 			}
+			$('.old-result').remove();
 		});
 		return false;
 	}
 	$('.tab-content ul li.users a').click(function(){
-		$('.pagination-users').pagination(user_count, {
-			items_per_page:per_page,
-			callback:get_page_users,
-			load_first_page:true
+		$.getJSON(base_url+"page/json_count_users/"+page_id,function(count){
+			$('.pagination-users').pagination(count, {
+				items_per_page:per_page,
+				callback:get_page_users,
+				load_first_page:true
+			});
 		});
+		return false;
 	});
 });

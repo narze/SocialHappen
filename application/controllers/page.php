@@ -40,11 +40,10 @@ class Page extends CI_Controller {
 					array(
 						'company_id' => $company['company_id'],
 						'title' => $page['page_name'],
-						'vars' => array('page_id'=>$page_id,
+						'vars' => array(
+							'page_id'=>$page_id,
 							'company_id' => $company['company_id'],
-							'per_page' => $per_page,							
-							'app_count' => $app_count,
-							'user_count' => $user_count,
+							'per_page' => $per_page
 						),
 						'script' => array(
 							'common/bar',
@@ -101,7 +100,7 @@ class Page extends CI_Controller {
 					array(),
 				TRUE), 
 				'page_campaigns' => $this -> load -> view('page/page_campaigns', 
-					array('campaign_count' => $campaign_count),
+					array(),
 				TRUE),
 				'page_users' => $this -> load -> view('page/page_users', 
 					array(),
@@ -116,17 +115,14 @@ class Page extends CI_Controller {
 	}
 	
 	/**
-	 * View page campaigns
+	 * JSON : Count apps
+	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function campaigns($page_id = NULL, $filter = NULL){
-		$this -> load ->model('campaign_model','campaigns');
-		$campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id);
-		$this -> load -> view('page/page_campaigns', array(
-						'vars' => array('page_id'=>$page_id,
-							
-							'campaign_count' => $campaign_count
-						)));
+	function json_count_apps($page_id = NULL){
+		$this->load->model('installed_apps_model','installed_apps');
+		$count = $this->installed_apps->count_installed_apps_by_page_id($page_id);
+		echo json_encode($count);
 	}
 	
 	/**
@@ -138,6 +134,18 @@ class Page extends CI_Controller {
 	function json_count_campaigns($page_id = NULL, $campaign_status_id = NULL){
 		$this->load->model('campaign_model','campaigns');
 		$count = $this->campaigns->count_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+	
+	/**
+	 * JSON : Count users
+	 * @param $page_id
+	 * @param array $labels
+	 * @author Manassarn M.
+	 */
+	function json_count_users($page_id = NULL, $labels = array()){
+		$this->load->model('user_model','users');
+		$count = $this->users->count_users_by_page_id($page_id);
 		echo json_encode($count);
 	}
 	

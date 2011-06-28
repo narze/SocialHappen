@@ -55,8 +55,8 @@ $(function(){
 				callback:get_page_campaigns,
 				load_first_page:true
 			});
-		})
-		
+		});
+		return false;
 		
 	});
 });
