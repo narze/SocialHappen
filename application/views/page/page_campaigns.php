@@ -1,13 +1,13 @@
- <div class="wrapper-details campaigns">
+<div class="wrapper-details campaigns">
 	<div class="pagination-campaigns"></div>
         <h2 class="application"><span>Campaign</span></h2>
         <div class="filter">
           <ul>
             <li class="title">filter by :</li>
-            <li class="active"><a href="#">All</a></li>
-            <li><a href="#">Active</a></li>
-            <li><a href="#">Inactive</a></li>
-            <li><a href="#">Expired</a></li>
+            <li class="active campaign-filter"><a href="#">All</a></li>
+            <li class="campaign-filter active-campaign"><a href="#">Active</a></li>
+            <li class="campaign-filter inactive-campaign"><a href="#">Inactive</a></li>
+            <li class="campaign-filter expired-campaign"><a href="#">Expired</a></li>
           </ul>
         </div>
         <div class="details campaigns">
