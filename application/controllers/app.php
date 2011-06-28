@@ -27,15 +27,14 @@ class App extends CI_Controller {
 				'header' => $this -> socialhappen -> get_header( 
 					array(
 						'title' => $app['app_name'],
-						'vars' => array('app_install_id'=>$app_install_id,
-							'campaign_count' => $campaign_count,
-							'user_count' => $user_count,
+						'vars' => array(
+							'app_install_id'=>$app_install_id,
 							'per_page' => $per_page
 						),
 						'script' => array(
 							'common/bar',
 							'common/jquery.pagination',
-							'app/app_stat',
+							//'app/app_stat',
 							'app/app_users',
 							'app/app_campaigns',
 							'app/app_tabs'
@@ -82,6 +81,30 @@ class App extends CI_Controller {
 			$this -> parser -> parse('app/app_view', $data);
 			return $data;
 		}
+	}
+	
+	/**
+	 * JSON : Count campaigns
+	 * @param $app_install_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function json_count_campaigns($app_install_id = NULL, $campaign_status_id = NULL){
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_campaigns_by_app_install_id_and_campaign_status_id($app_install_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+	
+	/**
+	 * JSON : Count users
+	 * @param $app_install_id
+	 * @param array $labels
+	 * @author Manassarn M.
+	 */
+	function json_count_users($app_install_id = NULL, $labels = array()){
+		$this->load->model('user_model','users');
+		$count = $this->users->count_users_by_app_install_id($app_install_id);
+		echo json_encode($count);
 	}
 	
 	/** 
