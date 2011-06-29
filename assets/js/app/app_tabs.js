@@ -1,6 +1,6 @@
 $(function(){	
 	function show_tab(name){
-		$('.wrapper-details').hide();
+		$('[class*="wrapper-details"]').hide();
 		$('.tab-content ul li').removeClass('active');
 		$('.tab-content ul li.'+name).addClass('active');
 		
@@ -9,7 +9,7 @@ $(function(){
 		else if(name == 'users') style_name = 'member';
 		$('link.app').attr('disabled',true);
 		$('link.app#'+style_name).removeAttr('disabled');
-		$('.wrapper-details.'+name).show();
+		$('[class*="wrapper-details"][class*="'+name+'"]').show();
 	}
 
 	$('.tab-content ul li.campaigns a').click(function(){

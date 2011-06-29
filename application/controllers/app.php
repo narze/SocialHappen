@@ -26,6 +26,7 @@ class App extends CI_Controller {
 				'app_install_id' => $app_install_id,
 				'header' => $this -> socialhappen -> get_header( 
 					array(
+						'company_id' => $company['company_id'],
 						'title' => $app['app_name'],
 						'vars' => array(
 							'app_install_id'=>$app_install_id,
@@ -41,8 +42,7 @@ class App extends CI_Controller {
 						),
 						'style' => array(
 							'common/main',
-							'app/campaign',
-							'app/member'
+							'common/platform'
 						)
 					)
 				),
