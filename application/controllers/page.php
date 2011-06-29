@@ -59,10 +59,8 @@ class Page extends CI_Controller {
 						),
 						'style' => array(
 							'common/main',
+							'common/platform',
 							//'common/pagination',
-							'page/main',
-							'page/campaign',
-							'page/member',
 							//for fancybox in application tab
 							'common/fancybox/jquery.fancybox-1.3.4'
 						)

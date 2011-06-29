@@ -5,7 +5,7 @@ $(function(){
 		if(campaign_status_id != '') {url = base_url+"page/json_get_campaigns_using_status/"+page_id+'/'+campaign_status_id+'/'+per_page+'/'+(page_index * per_page);}
 		else {url = base_url+"page/json_get_campaigns/"+page_id+'/'+per_page+'/'+(page_index * per_page);}
 		$.getJSON(url,function(json){
-			$('.wrapper-details.campaigns .details table tbody tr.hidden-template').siblings().addClass('old-result');
+			$('.wrapper-details.campaigns .details table tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
 				// $('.wrapper-details.campaigns .details').html(
 					// '<p>No campaign yet</p> <p><a href="#">+ add new campaign</a> | <a href="#">help</a></p>'
