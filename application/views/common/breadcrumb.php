@@ -6,8 +6,13 @@
 
 		<?php
 		
+		$last = end($breadcrumb);
 		foreach($breadcrumb as $name => $url){
-			echo "<li><a href='{$url}'>{$name}</a></li>";
+			if($last == $url){
+				echo "<li>{$name}</li";
+			} else {
+				echo "<li><a href='{$url}'>{$name}</a></li>";
+			}
 		}
 		
 		?>
