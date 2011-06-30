@@ -1,5 +1,5 @@
 <?php // Change the css classes to suit your needs    
-		$attributes = array('class' => '', 'id' => '');
+		$attributes = array('class' => 'create-company-form', 'id' => '');
 		echo form_open('home/create_company_form', $attributes); ?>
 		<div id="company-information"><h2>Company information</h2>
 			<p>

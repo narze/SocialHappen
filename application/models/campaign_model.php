@@ -147,7 +147,6 @@ class Campaign_model extends CI_Model {
 	/** 
 	 * Count campaigns
 	 * @param $app_install_id
-	 * @param $campaign_status_id
 	 * @author Manassarn M.
 	 */
 	function count_campaigns_by_app_install_id($app_install_id = NULL){
@@ -162,6 +161,31 @@ class Campaign_model extends CI_Model {
 	 */
 	function count_campaigns_by_app_install_id_and_campaign_status_id($app_install_id = NULL, $campaign_status_id = NULL){
 		$this->db->where(array('campaign.app_install_id' => $app_install_id));
+		if($campaign_status_id) {
+			$this->db->where(array('campaign.campaign_status_id' => $campaign_status_id));
+		}
+		$this -> db -> join('campaign_status', 'campaign.campaign_status_id=campaign_status.campaign_status_id', 'left');
+		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this->db->count_all_results('campaign');
+	}
+	
+	/** 
+	 * Count campaigns
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function count_campaigns_by_company_id($company_id = NULL){
+		return $this->count_campaigns_by_company_id_and_campaign_status_id($company_id);
+	}
+	
+	/** 
+	 * Count campaigns
+	 * @param $company_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function count_campaigns_by_company_id_and_campaign_status_id($company_id = NULL, $campaign_status_id = NULL){
+		$this->db->where(array('installed_apps.company_id' => $company_id));
 		if($campaign_status_id) {
 			$this->db->where(array('campaign.campaign_status_id' => $campaign_status_id));
 		}
