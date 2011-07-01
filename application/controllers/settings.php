@@ -9,11 +9,15 @@ class Settings extends CI_Controller {
 		$this->load->library('form_validation');
 	}
 	
-	function index($company_id = NULL, $setting_name = NULL, $param_id = NULL){
+	function index(){
+		$company_id = $this->input->get('c');
+		$setting_name = $this->input->get('s');
+		$param_id = $this->input->get('id');
+		
 		$setting_names_and_ids = array('account'=>'user_id','company'=>'company_id','page'=>'page_id','package'=>'user_id','reference'=>'user_id');
-		if($company_id){
+		
 			if(!array_key_exists($setting_name, $setting_names_and_ids)){
-				redirect("settings/{$company_id}/account/".$this->socialhappen->get_user_id());
+				redirect("settings?c={$company_id}&s=account&id=".$this->socialhappen->get_user_id());
 			}
 			$user = $this->socialhappen->get_user();
 			$user_companies = $this->socialhappen->get_user_companies();
@@ -43,7 +47,7 @@ class Settings extends CI_Controller {
 						),
 						'style' => array(
 							'common/main',
-							'settings/main'
+							'common/platform'
 						)
 					)
 				),
@@ -78,7 +82,7 @@ class Settings extends CI_Controller {
 				'footer' => $this -> socialhappen -> get_footer()
 				);
 			$this -> parser -> parse('settings/settings_view', $data);
-		}
+		
 	}
 	
 	function account($user_id = NULL){
@@ -112,7 +116,7 @@ class Settings extends CI_Controller {
 				if ($this->upload->do_upload('user_image')){
 					$upload_data = $this->upload->data();
 					$user_image = base_url()."uploads/images/{$upload_data['file_name']}";
-					$this->socialhappen->resize_image($upload_data,array(16,24,50,128));
+					$this->socialhappen->resize_image($upload_data,array(20,50));
 				}
 			
 				// build array for the model

@@ -28,7 +28,7 @@
 				<label for="user_image">User image</label>
 				<?php echo form_error('user_image'); ?>
 				<br /><input id="user_image" type="file" name="user_image" />
-				<img src="<?php echo $user['user_image'];?>" />
+				<img src="<?php echo imgsize($user['user_image'],50);?>" />
 		</p>
 
 	</div>
