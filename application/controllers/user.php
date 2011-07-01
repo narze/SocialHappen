@@ -31,8 +31,7 @@ class User extends CI_Controller {
 						),
 						'style' => array(
 							'common/main',
-							'user/stat',
-							'user/activities'
+							'common/platform'
 						)
 					)
 				),
