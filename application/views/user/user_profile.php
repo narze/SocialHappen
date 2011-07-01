@@ -1,7 +1,7 @@
 <div class="box-information">
         <div class="details">
           <div class="pic">
-            <p><img src="<?php echo issetor($user_profile['user_image']); ?>" alt=""></p>
+            <p><img src="<?php echo imgsize(issetor($user_profile['user_image']),150); ?>" alt=""></p>
             <p><a class="bt-go_user" href="#"><span>Goto SH Profile</span></a></p>
             <p><a class="bt-go_user" href="#"><span>Goto FB Profile</span></a></p>
           </div>

@@ -17,7 +17,7 @@
 		foreach($campaigns as $campaign): ?>
 		<div class="campaign">
 			<div class="image">
-				<img class="image" src="<?php echo $campaign['campaign_image'];?>" />
+				<img class="image" src="<?php echo imgsize($campaign['campaign_image'],64);?>" />
 			</div>
 			<div class="campaign-detail">
 				<div class="name"><?php echo $campaign['campaign_name'];?></div>
@@ -41,7 +41,7 @@
 		foreach($installed_apps as $installed_app): ?>
 		<div class="app">
 			<div class="image">
-				<img class="image" src="<?php echo $installed_app['app_image'];?>" />
+				<img class="image" src="<?php echo imgsize($installed_app['app_image'],64);?>" />
 			</div>
 			<div class="app-name">
 				<?php echo $installed_app['app_name'];?>
