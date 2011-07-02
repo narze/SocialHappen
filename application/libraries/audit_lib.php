@@ -653,7 +653,7 @@ foreach ($data as $line_key => $line_value) {
           tickOptions:{
             formatString:'%d'
             },
-		  min: 0,
+		  //min: 0,
 		  label:'" . $ylabel . "'
         }
       },
