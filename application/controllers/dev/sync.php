@@ -153,7 +153,7 @@ class Sync extends CI_Controller {
 							    'audit_action_id' => field_option('INT', 5, $default, $null, $autoinc, TRUE),
 							    'audit_action_name' => field_option('VARCHAR', 100, $default, $null, $autoinc, $unsigned),
 							    'audit_action_active' => field_option('INT', 1, 1, $null, $autoinc, $unsigned),
-								'audic_action_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+								'audit_action_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							),
 							'campaign' => array(
 							    'campaign_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
