@@ -1,7 +1,7 @@
 <div class="box-information">
 	<div class="details">
 	  <div class="pic">
-	    <p><img src="<?php echo imgsize(issetor($company_profile['company_image']),150); ?>" alt=""></p>
+	    <p><img src="<?php echo imgsize(issetor($company_profile['company_image']),'large'); ?>" alt=""></p>
 	    <p><a class="bt-go_page" href="#"><span>Goto Page</span></a></p>
 	    <p><a class="bt-add_app" href="#"><span>Add App</span></a></p>
 	  </div>

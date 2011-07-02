@@ -9,7 +9,7 @@
 	?>
 		<li>
 			<a href="<?php echo base_url()."company/{$company['company_id']}";?>">
-				<span><img src="<?php echo imgsize($company['company_image'],50);?>" /></span>
+				<span><img src="<?php echo imgsize($company['company_image'],'square');?>" /></span>
 				<span>
 					<p><?php echo $company['company_name'];?></p>
 					<p>Pages (<span><?php echo $count['page_count'];?></span>)

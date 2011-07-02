@@ -24,7 +24,20 @@ if ( ! function_exists('imgsize'))
 	 * @param $size
 	 */
 	function imgsize($url = NULL, $size = NULL) {
-		return preg_replace('/(\S+)(\.(jpg|gif|png))/i','${1}_'.$size.'${2}',$url);
+		if($size == 'square'){
+			$size = '_q';
+		} else if($size == 'small'){
+			$size = '_t';
+		} else if($size == 'normal'){
+			$size = '_s';
+		} else if($size == 'large'){
+			$size = '_n';
+		} else if($size == 'original'){
+			$size = '_o';
+		} else {
+			return $url;
+		}
+		return preg_replace('/(\S+)_\w(\.(jpg|gif|png))/i','${1}_'.$size.'${2}',$url);
 	}
 }
 

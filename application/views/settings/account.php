@@ -28,8 +28,16 @@
 				<label for="user_image">User image</label>
 				<?php echo form_error('user_image'); ?>
 				<br /><input id="user_image" type="file" name="user_image" />
-				<img src="<?php echo imgsize($user['user_image'],50);?>" />
+				<img src="<?php echo imgsize($user['user_image'],'square');?>" />
 		</p>
+		
+		<p>
+			<?php echo form_error('use_facebook_picture'); ?>
+			<?php // Change the values/css classes to suit your needs ?>
+			<br /><input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" value="enter_value_here" class="" <?php echo set_checkbox('use_facebook_picture', 'enter_value_here'); ?>> 
+			<label for="use_facebook_picture">Use facebook picture</label>
+			<img src="<?php echo $user_profile_picture;?>" />
+		</p> 
 
 	</div>
 	

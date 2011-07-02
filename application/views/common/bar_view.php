@@ -14,7 +14,7 @@
         <li class="profile"><a href="#"><span></span></a></li>
         <li class="name">
 			<?php if(isset($user)) {
-				echo '<img src="'.imgsize(issetor($user['user_image']),20).'" alt="" />'.issetor($user['user_first_name']).' '.issetor($user['user_last_name']); 
+				echo '<img src="'.imgsize(issetor($user['user_image']),'square').'" alt="" />'.issetor($user['user_first_name']).' '.issetor($user['user_last_name']); 
 				echo '<ul>
 						<li>'.anchor("settings?s=account&id={$user['user_id']}",'&raquo Profile Setting').'</li>
 						<li>'.anchor('home/logout','&raquo Logout').'</li>
