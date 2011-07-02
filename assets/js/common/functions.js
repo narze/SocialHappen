@@ -1,15 +1,15 @@
 if(!window.imgsize){
 	function imgsize(url,size){
 		if(size == 'square'){
-			size = '_q';
+			size = 'q';
 		} else if(size == 'small'){
-			size = '_t';
+			size = 't';
 		} else if(size == 'normal'){
-			size = '_s';
+			size = 's';
 		} else if(size == 'large'){
-			size = '_n';
+			size = 'n';
 		} else if(size == 'original'){
-			size = '_o';
+			size = 'o';
 		} else {
 			return url;
 		}
