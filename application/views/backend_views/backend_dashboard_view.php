@@ -13,21 +13,13 @@
 <ul>
 <?php
 	foreach ($app_list as $app) {
-		echo "<li><b>" . $app->app_name . "</b> " . anchor('backend/edit_app/'.$app->app_id, 'Edit', 'title="edit this app information"');
-		echo "<br /> description: ".$app->app_description;
-		echo "<br /> app id: ".$app->app_id;
-		echo "<br /> app secret key: ".$app->app_secret_key."</li>";
+		echo "<li><b>" . $app['app_name'] . "</b> " . anchor('backend/edit_app/'.$app['app_id'], 'Edit', 'title="edit this app information"');
+		echo "<br /> description: ".$app['app_description'];
+		echo "<br /> app id: ".$app['app_id'];
+		echo "<br /> app secret key: ".$app['app_secret_key']."</li>";
 	}
 ?>
 </ul>
-<h1>Companies</h1>
-<ul>
-<?php
-	foreach ($company_list as $company) {
-		echo "<li><b>" . $company->company_name . "</b> " . anchor('backend/view_company/'.$company->company_id, 'View Company', 'title="see company\'s information"');
-		echo "</li>";
-	}
-?>
-</ul>
+
 </body>
 </html>

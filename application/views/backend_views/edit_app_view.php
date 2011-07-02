@@ -8,14 +8,6 @@
 <body>
 <h1>Edit App Information</h1>
 <?php
-/*
-	var $app_id = '';
-	var $app_name = '';
-	var $app_maintainance = '';
-	var $app_show_in_list = '';
-	var $app_path = '';
-	var $app_description = '';
- */
 echo form_open('backend/edit_app/'.$app_id);
 ?>
 		<ul>
@@ -52,6 +44,23 @@ echo form_open('backend/edit_app/'.$app_id);
 			</li>
 			
 			<li>
+				<?=form_label('App Type*', 'app_type_id', array(
+				'class' => 'app_type_id',
+				'style' => 'color: #000;',
+				));?>
+				<?
+					$options = array(
+					  '1'  => '1',
+					  '2'    => '2',
+					  '3'   => '3'
+					);
+				?>
+				<?=form_dropdown('app_type_id', $options, $app_type_id);?>
+				<?php echo form_error('app_type_id'); ?>
+			</li>
+			
+			
+			<li>
 				<?=form_label('App URL*', 'app_url', array(
 				'class' => 'app_url',
 				'style' => 'color: #000;',
@@ -68,7 +77,7 @@ echo form_open('backend/edit_app/'.$app_id);
 			</li>
 			
 			<li>
-				<?=form_label('App Install URL*', 'app_install_url', array(
+				<?=form_label('App Install URL*, parameters: {company_id}, {user_id}, {[page_id]}, {[force]}', 'app_install_url', array(
 				'class' => 'app_install_url',
 				'style' => 'color: #000;',
 				));?>
@@ -84,7 +93,23 @@ echo form_open('backend/edit_app/'.$app_id);
 			</li>
 			
 			<li>
-				<?=form_label('App Config URL*', 'app_config_url', array(
+				<?=form_label('App Install to Page URL*, parameters: {app_install_id}, {user_id}, {page_id}, {force}', 'app_install_page_url', array(
+				'class' => 'app_install_page_url',
+				'style' => 'color: #000;',
+				));?>
+				<?=form_input(array(
+						  'name'        => 'app_install_page_url',
+						  'id'          => 'app_install_page_url',
+						  'value'       => set_value('app_install_page_url', $app_install_page_url),
+						  'maxlength'   => '300',
+						  'size'        => '200',
+						  'class'		=> (form_error('app_install_page_url')) ? 'error' : '',
+				))?>
+				<?php echo form_error('app_install_page_url'); ?>
+			</li>
+			
+			<li>
+				<?=form_label('App Config URL*, parameters: {app_install_id}, {user_id}, {app_install_secret_key}', 'app_config_url', array(
 				'class' => 'app_config_url',
 				'style' => 'color: #000;',
 				));?>
@@ -98,6 +123,23 @@ echo form_open('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_config_url'); ?>
 			</li>
+			
+			<li>
+				<?=form_label('Facebook app API key*', 'app_facebook_api_key', array(
+				'class' => 'app_facebook_api_key',
+				'style' => 'color: #000;',
+				));?>
+				<?=form_input(array(
+						  'name'        => 'app_facebook_api_key',
+						  'id'          => 'app_facebook_api_key',
+						  'value'       => set_value('app_facebook_api_key', $app_facebook_api_key),
+						  'maxlength'   => '300',
+						  'size'        => '200',
+						  'class'		=> (form_error('app_config_url')) ? 'error' : '',
+				))?>
+				<?php echo form_error('app_config_url'); ?>
+			</li>
+			
 			
 			<li>
 				<?=form_checkbox(array(

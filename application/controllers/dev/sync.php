@@ -122,16 +122,15 @@ class Sync extends CI_Controller {
 							    'app_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'app_name' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
 							    'app_type_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
-							    'app_maintainance' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
-							    'app_show_in_list' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
 							    'app_description' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 							    'app_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_install_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_install_page_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_config_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_support_page_tab' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
 							    'app_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-								'facebook_app_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
+								'app_facebook_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
 							),
 							'app_install_status' => array(
 							    'app_install_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
@@ -337,91 +336,85 @@ class Sync extends CI_Controller {
 					    'app_id' => 1,
 					    'app_name' => 'Feed',
 					    'app_type_id' => 1,
-					    'app_maintainance' => 0,
-					    'app_show_in_list' => 1,
 					    'app_description' => 'RSS Feed in facebook tab',
 					    'app_secret_key' =>  '11111111111111111111111111111111',
 					    'app_url' =>  'http://socialhappen.dyndns.org/feed?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/feed/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}',
+					    'app_install_page_url' =>  '',
 					    'app_config_url' =>  'http://socialhappen.dyndns.org/feed/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' =>  1,
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 2, 
 					    'app_name' => 'Facebook Register', 
 					    'app_type_id' => 2, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
 					    'app_description' => 'Campaign register using Facebook id',
 					    'app_secret_key' =>  '22222222222222222222222222222222', 
 					    'app_url' => 'http://socialhappen.dyndns.org/fbreg?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbreg/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbreg/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
 					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 3, 
 					    'app_name' => 'Share to get it', 
 					    'app_type_id' => 3, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
 					    'app_description' => 'Share links by twitter / facebook to get file url', 
 					    'app_secret_key' => '33333333333333333333333333333333', 
 					    'app_url' => 'http://socialhappen.dyndns.org/sharetogetit?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
 					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 4, 
 					    'app_name' => 'Facebook CMS', 
 					    'app_type_id' => 1, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
 					    'app_description' => 'Content Management System on Facebook', 
 					    'app_secret_key' => '44444444444444444444444444444444', 
 					    'app_url' => 'http://socialhappen.dyndns.org/fbcms/blog/{app_install_id}/', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbcms/platform/install/{company_id}/{user_facebook_id}/', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbcms/platform/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}/', 
 					    'app_support_page_tab' => 1, 
 					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 5, 
 					    'app_name' => 'SocialMart', 
 					    'app_type_id' => 1, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
 					    'app_description' => 'SocialMart', 
 					    'app_secret_key' => 'fb9792b2ccb40d5482f5b7cae5e55521', 
 					    'app_url' => '', 
 					    'app_install_url' => '', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => '',
 					    'app_support_page_tab' => 1, 
 					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 6, 
 					    'app_name' => 'MockApp', 
 					    'app_type_id' => 1, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
 					    'app_description' => 'Mock Application', 
 					    'app_secret_key' => 'ab6548beccb40d5a82f5b7bae5e55521', 
 					    'app_url' => '', 
 					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' => 1, 
 					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
+						'app_facebook_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
 					)
 				);
 		$this->db->insert_batch('app', $app);
