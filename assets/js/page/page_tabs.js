@@ -17,7 +17,6 @@ $(function(){
 	});
 	$('.tab-content ul li.report a').click(function(){
 		show_tab('report');
-		var page_id = 1;
 		render_stat(page_id);
 	});
 	
