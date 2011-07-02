@@ -114,7 +114,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 						
 						app_install_url=app_install_url.replace("{company_id}",company_id)
 									.replace("{user_id}",user_id)
-									.replace("{page_id}",page_id)+"&force=1";										
+									.replace("{page_id}",page_id)+"&force=1";			
 						jQuery.ajax({
 							url: base_url+"app/curl",
 							dataType: "json",
@@ -126,7 +126,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 								alert("ERROR! cannot install app.");
 							},
 							success: function(json) {
-								if(json.status.toUpperCase()=="OK"){
+								if(json!=null&&json.status.toUpperCase()=="OK"){
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
 									dragging_object.children('p:first').append('<span class="button">'
@@ -140,9 +140,11 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 										$(".app-installed-count").html("Application (" + json.app_count + ")");
 									});
 									update_app_order_in_dashboard();
-									alert("Go to Facebook to complete the action.");
-									alert(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
-								//	window.location=get_add_app_to_fb_page_link(app_api_key,facebook_page_id);
+									$("#gotofacebook-link").attr('onclick',
+										'window.parent.location="'+get_add_app_to_fb_page_link(app_api_key,facebook_page_id)+'"');
+									$.fancybox({
+										content:$("#popup-gotofacebook").html()
+									});
 								}
 								else{
 									show_installed_app_in_page(page_id,facebook_page_id);
@@ -204,3 +206,14 @@ function show_available_app_in_page(page_id){
         },
 	});
 }
+$(function(){
+	select_app_tab();
+	//get all app install statuses
+	$.getJSON(base_url + "app/json_get_all_app_install_status", function(json){
+		for(i in json){
+			all_app_install_statuses[''+json[i].app_install_status_name] = new Array(json[i].app_install_status_id,json[i].app_install_status_description);
+		}
+	});
+	
+	$( "ul, li" ).disableSelection();
+});

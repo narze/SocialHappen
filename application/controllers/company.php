@@ -25,11 +25,16 @@ class Company extends CI_Controller {
 										,'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
 							'common/bar',
-							'company/company_dashboard'
+							'company/company_dashboard',
+							//for fancybox
+							'common/fancybox/jquery.mousewheel-3.0.4.pack',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'company/main',
-							'common/smoothness/jquery-ui-1.8.9.custom'
+							'common/smoothness/jquery-ui-1.8.9.custom',
+							//for fancybox
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),
@@ -39,14 +44,11 @@ class Company extends CI_Controller {
 					),
 				TRUE),
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-					array('breadcrumb' => 
-						array( 
-							array(
-								"name" => $company['company_name'],
-								"url" => base_url() . "company/{$company['company_id']}")
-							)
-						)
-					,
+					array(
+						'breadcrumb' => array( 
+							$company['company_name'] => base_url() . "company/{$company['company_id']}",
+						),
+					),
 				TRUE),
 				'company_profile' => $this -> load -> view('company/company_profile', 
 					array('company_profile' => $company),
