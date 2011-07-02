@@ -76,7 +76,7 @@ class User_companies_model extends CI_Model {
 	 */
 	function is_company_admin($user_id = NULL, $company_id = NULL){
 		$this->db->where(array('user_id' => $user_id, 'company_id' => $company_id));
-		echo $count = $this->db->count_all_results('user_companies');
+		$count = $this->db->count_all_results('user_companies');
 		return $count == 1;
 	}
 }

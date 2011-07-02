@@ -66,7 +66,7 @@ class Page_model extends CI_Model {
 		if(!$facebook_page_id)
 			return array();
 		$result = $this -> db ->select('page_id') -> get_where('page', array('facebook_page_id' => $facebook_page_id))-> result_array();
-		return issetor($result[0]);
+		return issetor($result[0]['page_id']);
 	}
 	
 	/**

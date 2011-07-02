@@ -8,7 +8,24 @@
 	<a href="#">Dashboard</a>
 	<?php endif; ?>
 	</div>
+	<?php if(!$is_liked) :?>
+	<div>
+	You haven't like this page yet.
+	</div>
+	<?php endif; ?>
 	<div id="friends">
+		<?php if(isset($friends)) :
+			foreach($friends as $friend): ?>
+			<div class="friend">
+				<div class="image">
+					<img class="image" src=" http://graph.facebook.com/<?php echo $friend['uid'];?>/picture" />
+				</div>
+				<div class="friend-detail">
+					<div class="name"><?php echo $friend['name'];?></div>
+				</div>
+			</div>
+		<?php endforeach; 
+		endif;?>
 	</div>
 </div>
 <div id="current-campaign">

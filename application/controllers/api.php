@@ -291,7 +291,7 @@ class Api extends CI_Controller {
 		$response = array();
 		if($page_id['page_id']!=null){
 			$response = array(	'status' => 'OK',
-							'page_id' => $page_id['page_id']);
+							'page_id' => $page_id);
 		}
 		
 		echo json_encode($response);
