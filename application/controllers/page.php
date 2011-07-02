@@ -34,6 +34,21 @@ class Page extends CI_Controller {
 			// $date = date("Ymd");
 			// $new_user_count = $this->audit_lib->count_audit($key, $app_id, $action_id, $criteria, $date));
 			
+			$this->load->library('audit_lib');
+			//var_dump($page_id);
+			$list_stat_page = $this->audit_lib->list_stat_page((int)$page_id, 102, $this->audit_lib->_date());
+			//var_dump($list_stat_page);
+			if(count($list_stat_page) == 0){
+				$new_user_count = 0;
+			}else{
+				$new_user_count = 0;
+				foreach ($list_stat_page as $stat) {
+					if(isset($stat['count'])){
+						$new_user_count += $stat['count'];
+					}
+				}
+			}
+			
 			$data = array(
 				'page_id' => $page_id,
 				'header' => $this -> socialhappen -> get_header( 
@@ -55,14 +70,27 @@ class Page extends CI_Controller {
 							'page/page_tabs',
 							//for fancybox in application tab
 							'common/fancybox/jquery.mousewheel-3.0.4.pack',
-							'common/fancybox/jquery.fancybox-1.3.4.pack'
+							'common/fancybox/jquery.fancybox-1.3.4.pack',
+							
+							
+							//stat
+		    				'stat/excanvas.min',
+		    				'stat/jquery.jqplot.min',
+			 				'stat/jqplot.highlighter.min',
+			 				'stat/jqplot.cursor.min',
+			 				'stat/jqplot.dateAxisRenderer.min',
+			 				'stat/jqplot.canvasTextRenderer.min',
+			 				'stat/jqplot.canvasAxisTickRenderer.min',
+			 				'stat/jqplot.pointLabels.min'			 				
 						),
 						'style' => array(
 							'common/main',
 							'common/platform',
 							//'common/pagination',
 							//for fancybox in application tab
-							'common/fancybox/jquery.fancybox-1.3.4'
+							'common/fancybox/jquery.fancybox-1.3.4',
+							//stat
+							'stat/jquery.jqplot.min'
 						)
 					)
 				),
@@ -85,7 +113,7 @@ class Page extends CI_Controller {
 						'app_count' => $app_count,
 						'campaign_count' => $campaign_count,
 						'user_count' => $user_count,
-						///'new_user_count' => $new_user_count,
+						'new_user_count' => $new_user_count,
 						'facebook' => array(
 							'link' => issetor($facebook_page_graph['link']),
 							'likes' =>  issetor($facebook_page_graph['likes'])
@@ -334,16 +362,7 @@ class Page extends CI_Controller {
 	
 	function get_stat_graph($page_id = NULL, $start_date = NULL, $end_date = NULL){
 		$this->load->library('audit_lib');
-		
-		echo '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/excanvas.min.js"></script><![endif]-->
-			<script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jquery.jqplot.min.js"></script>
-		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.highlighter.min.js"></script>
-		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.cursor.min.js"></script>
-		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.dateAxisRenderer.min.js"></script>
-		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
-		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
-		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.pointLabels.min.js"></script>
-		     <link rel="stylesheet" type="text/css" href="'.base_url().'assets/js/stat/jquery.jqplot.min.css" />';
+
 		if(isset($start_date) && isset($end_date)){
 			if($start_date > $end_date){
 				$temp = $start_date;
@@ -368,27 +387,10 @@ class Page extends CI_Controller {
 		$stat_page_register = array();
 		$stat_page_visit = array();
 		foreach ($dateRange as $date) {
-			$stat_page_register[$date] = isset($stat_page_register_db[$date]) ? $stat_page_register_db[$date] : rand(60, 110);
-			$stat_page_visit[$date] = isset($stat_page_visit_db[$date]) ? $stat_page_register_db[$date] : rand(130, 300);
+			$stat_page_register[$date] = isset($stat_page_register_db[$date]) ? $stat_page_register_db[$date] : 0;
+			$stat_page_visit[$date] = isset($stat_page_visit_db[$date]) ? $stat_page_register_db[$date] : 0;
 		}
 		
-		//var_dump($stat_page_register);
-		//var_dump($stat_page_visit);
-		/*
-		$data = array(array('20080223' => 5,
-					'20080323' => 10,
-					'20080423' => 4,
-					'20080523' => 7),
-					array('20080223' => 8,
-					'20080323' => 5,
-					'20080423' => 9,
-					'20080523' => 12),
-					array('20080223' => 11,
-					'20080323' => 15,
-					'20080423' => 2,
-					'20080523' => 22,
-					'20080623' => 18));
-		*/
 		$data = array($stat_page_register, $stat_page_visit);
 		$data_label = array('user register to app', 'user visit app');
 		$title = 'Users Participation in Page';
