@@ -2,7 +2,7 @@ $(function(){
 	for(i in user_companies){
 		$.ajaxSetup({'async': false});
 		$.getJSON(base_url+'company/json_get_profile/' + user_companies[i].company_id, function(data) {
-			$('.goto div ul').append('<li class="goto-list-company-'+user_companies[i].company_id+'"><p class="thumb"><img src="'+imgsize(data.company_image,50)+'" alt="" /></p><h2><a href="'+base_url+'company/'+data.company_id+'">'+data.company_name+'</a></h2></li>');
+			$('.goto div ul').append('<li class="goto-list-company-'+user_companies[i].company_id+'"><p class="thumb"><img src="'+imgsize(data.company_image,'square')+'" alt="" /></p><h2><a href="'+base_url+'company/'+data.company_id+'">'+data.company_name+'</a></h2></li>');
 		});
 		$.getJSON(base_url+'company/json_get_pages/' + user_companies[i].company_id, function(data) {
 			if(data.length>0) {
