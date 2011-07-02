@@ -1,3 +1,4 @@
 <div class="wrapper-details stat">
-	<h2 class="application"><span>Stat</span></h2>
+	<h2 class="application"></h2>
+	<div id="campaign-stat"></div>
 </div>

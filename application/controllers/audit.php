@@ -36,22 +36,35 @@ class Audit extends CI_Controller {
 		echo '</pre>';
 	}
 	
+	function list_stat_campaign(){
+		date_default_timezone_set('Asia/Bangkok');
+		$end_date = $this->audit_lib->_date();
+		$start_date = date('Ymd', time() - 2592000);
+		$action_id = 103;
+		$campaign_id = 1;
+		
+		$stat_campaign_visit_db = $this->audit_lib->list_stat_campaign($campaign_id, $action_id, (int)$start_date, $end_date);
+		echo '<pre>';
+		var_dump($stat_campaign_visit_db);
+		echo '</pre>';
+	}
+	
 	function count_visit(){
 		$date = $this->audit_lib->_date();
 		$action_id = 103;
-		$res = $this->audit_lib->count_audit('_id', NULL, $action_id, array('page_id' => 1, 'subject' => 1), $date);
+		$res = $this->audit_lib->count_audit('_id', NULL, $action_id, array('camapign_id' => 1, 'subject' => 1), $date);
 		echo '<pre>';
 		var_dump($res);
 		echo '</pre>';
 	}
 	
 	function addlog_visit(){
-		$app_id = 2;
-		$action_id = 103;
-		$subject = 3;
+		$app_id = 3;
+		$action_id = 102;
+		$subject = 1;
 		$object = NULL;
 		$objecti = NULL;
-		$additional_data = array('app_install_id' => 1, 'page_id' => 1);
+		$additional_data = array('app_install_id' => 1, 'page_id' => 1, 'campaign_id' => 1);
 		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
 		if($result) echo 'app visit';
 	}

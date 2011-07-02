@@ -11,8 +11,8 @@
         <div class="information">
           <h2>Information</h2>
           <ul>
-            <li><span>New Member</span><?php echo issetor($app_profile['new_users']); ?></li>
-            <li><span>All Member</span><?php echo issetor($app_profile['all_users']); ?></li>
+            <li><span>New Member</span><?php echo issetor($new_users); ?></li>
+            <li><span>All Member</span><?php echo issetor($all_users); ?></li>
             <li><span>Installed on</span><?php echo issetor($count_installed_on);?></li>
           </ul>
         </div>

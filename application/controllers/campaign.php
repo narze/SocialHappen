@@ -22,6 +22,13 @@ class Campaign extends CI_Controller {
 			$this->config->load('pagination', TRUE);
 			$per_page = $this->config->item('per_page','pagination');
 			
+			$this->load->library('audit_lib');
+			$campaign_daily_active = $this->audit_lib->count_audit('subject', NULL, 102, array('campaign_id' => (int)$campaign_id), $this->audit_lib->_date());
+			
+			$this -> load -> model('user_model', 'user');
+			$campaign_total_users = $this->user->count_users_by_campaign_id($campaign_id);
+			
+			
 			$data = array(
 				'campaign_id' => $campaign_id,
 				'header' => $this -> socialhappen -> get_header( 
@@ -38,12 +45,24 @@ class Campaign extends CI_Controller {
 							'campaign/campaign_stat',
 							'campaign/campaign_users',
 							'campaign/campaign_tabs',
-							'common/fancybox/jquery.fancybox-1.3.4.pack'
+							'common/fancybox/jquery.fancybox-1.3.4.pack',
+							
+							//stat
+		    				'stat/excanvas.min',
+		    				'stat/jquery.jqplot.min',
+			 				'stat/jqplot.highlighter.min',
+			 				'stat/jqplot.cursor.min',
+			 				'stat/jqplot.dateAxisRenderer.min',
+			 				'stat/jqplot.canvasTextRenderer.min',
+			 				'stat/jqplot.canvasAxisTickRenderer.min',
+			 				'stat/jqplot.pointLabels.min'
 						),
 						'style' => array(
 							'common/main',
 							'common/platform',
-							'common/fancybox/jquery.fancybox-1.3.4'
+							'common/fancybox/jquery.fancybox-1.3.4',
+							//stat
+							'stat/jquery.jqplot.min'
 						)
 					)
 				),
@@ -63,7 +82,9 @@ class Campaign extends CI_Controller {
 					,
 				TRUE),
 				'campaign_profile' => $this -> load -> view('campaign/campaign_profile', 
-					array('campaign_profile' => $campaign),
+					array('campaign_profile' => $campaign,
+						  'campaign_daily_active' => $campaign_daily_active,
+						  'campaign_total_users' => $campaign_total_users),
 				TRUE),
 				'campaign_tabs' => $this -> load -> view('campaign/campaign_tabs', 
 					array(
@@ -127,6 +148,61 @@ class Campaign extends CI_Controller {
 			$result['status'] = 'ERROR';
 		}
 		echo json_encode($result);
+	}
+	
+	function get_stat_graph($campaign_id = NULL, $start_date = NULL, $end_date = NULL){
+		$this->load->library('audit_lib');
+		
+		if(empty($campaign_id)){
+			return FALSE;
+		}
+		
+		if(isset($start_date) && isset($end_date)){
+			if($start_date > $end_date){
+				$temp = $start_date;
+				$start_date = $end_date;
+				$end_date = $temp;
+			}
+		}else{
+			date_default_timezone_set('Asia/Bangkok');
+			$end_date = $this->audit_lib->_date();
+			$start_date = (int)date('Ymd', time() - 2592000);
+		}
+		
+		$dateRange = $this->audit_lib->get_date_range($start_date, $end_date);
+		
+		//print_r($dateRange);
+		$action_id = 102;
+		$res = $this->audit_lib->list_stat_campaign((int)$campaign_id, $action_id, (int)$start_date, $end_date);
+		$stat_campaign_visit_db = array();
+		foreach($res as $item){
+			$stat_campaign_register_db[$item['date']] = $item['count'];
+		}
+		$action_id = 103;
+		$res = $this->audit_lib->list_stat_campaign((int)$campaign_id, $action_id, (int)$start_date, $end_date);
+		$stat_campaign_visit_db = array();
+		foreach($res as $item){
+			$stat_campaign_visit_db[$item['date']] = $item['count'];
+		}
+		
+		$stat_campaign_register = array();
+		$stat_campaign_visit = array();
+		foreach ($dateRange as $date) {
+			$stat_campaign_register[$date] = isset($stat_campaign_register_db[$date]) ? $stat_campaign_register_db[$date] : 0;
+			$stat_campaign_visit[$date] = isset($stat_campaign_visit_db[$date]) ? $stat_campaign_visit_db[$date] : 0;
+		}
+		
+		$data = array($stat_campaign_register, $stat_campaign_visit);
+		$data_label = array('user register to campaign', 'user visit campaign');
+		$title = 'Users Participation in Campaign';
+		$div = array('id' => 'chart1',
+					'width' => 900,
+					'height' => 480,
+					'class' => 'chart',
+					'xlabel' => 'Dates',
+					'ylabel' => 'Users');
+		//echo json_encode($data);
+		echo $this->audit_lib->render_stat_graph($data_label, $data, $title, $div);
 	}
 }
 
