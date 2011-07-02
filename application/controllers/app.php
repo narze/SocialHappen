@@ -33,16 +33,19 @@ class App extends CI_Controller {
 							'per_page' => $per_page
 						),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'common/jquery.pagination',
 							//'app/app_stat',
 							'app/app_users',
 							'app/app_campaigns',
-							'app/app_tabs'
+							'app/app_tabs',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'common/main',
-							'common/platform'
+							'common/platform',
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),

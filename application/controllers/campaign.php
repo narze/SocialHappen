@@ -32,15 +32,18 @@ class Campaign extends CI_Controller {
 							'per_page' => $per_page
 						),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'common/jquery.pagination',
 							'campaign/campaign_stat',
 							'campaign/campaign_users',
-							'campaign/campaign_tabs'
+							'campaign/campaign_tabs',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'common/main',
-							'common/platform'
+							'common/platform',
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),

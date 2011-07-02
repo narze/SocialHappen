@@ -61,6 +61,7 @@ class Home extends CI_Controller {
 							'popup_name' => $popup_name
 						),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'common/fancybox/jquery.fancybox-1.3.4.pack',
 							'common/jquery.form',
@@ -229,24 +230,8 @@ class Home extends CI_Controller {
 		}
 		else // passed validation proceed to post success logic
 		{
-			$config['upload_path'] = './uploads/images/';
-			$config['allowed_types'] = 'gif|jpg|png';
-			$config['max_size']	= '100';
-			$config['max_width']  = '1024';
-			$config['max_height']  = '768';
-			$config['encrypt_name'] = TRUE;
-
-			$this->load->library('upload', $config);
-			if ($this->upload->do_upload('user_image')){
-				$upload_data = $this->upload->data();
-				$user_image = base_url()."uploads/images/{$upload_data['file_name']}";
-				$this->socialhappen->resize_image($upload_data,array(20,50));
-			}
-			if ($this->upload->do_upload('company_image')){
-				$upload_data = $this->upload->data();
-				$company_image = base_url()."uploads/images/{$upload_data['file_name']}";
-				$this->socialhappen->resize_image($upload_data,array(35,50));
-			}
+			$user_image = $this->socialhappen->upload_image('user_image');
+			$company_image = $this->socialhappen->upload_image('company_image');
 			
 			$user = array(
 					       	'user_first_name' => set_value('first_name'),
@@ -271,7 +256,7 @@ class Home extends CI_Controller {
 					'user_id' => $user_add_result['user_id'],
 					'company_id' => $company_add_result['company_id']
 				));
-				$this->socialhappen->login('home');
+				$this->socialhappen->login();
 			}
 			else
 			{

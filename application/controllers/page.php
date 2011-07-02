@@ -61,6 +61,7 @@ class Page extends CI_Controller {
 							'per_page' => $per_page
 						),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'common/jquery.pagination',
 							'page/page_apps',

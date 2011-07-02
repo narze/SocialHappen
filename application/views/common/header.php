@@ -10,15 +10,14 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
 
 <script type="text/javascript">
-	var base_url = "<?php echo base_url(); ?>";
-	var image_url = base_url + "/assets/images/";
-	var user_companies = <?php echo json_encode(issetor($user_companies)); ?>;
 	<?php if(isset($vars)) :
 	foreach($vars as $name => $value) :
 		echo "var {$name} = '{$value}';\n";
 	endforeach; 
 endif; ?>
-	//var assets_url = "<?php echo base_url().'assets/';?>";
+	var base_url = "<?php echo base_url(); ?>";
+	var image_url = base_url + "/assets/images/";
+	var user_companies = <?php echo json_encode(issetor($user_companies)); ?>; //not safe
 </script>
 <?php if(isset($script)) :
 	foreach($script as $one) :

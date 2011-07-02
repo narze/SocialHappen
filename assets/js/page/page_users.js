@@ -13,7 +13,7 @@ $(function(){
 					.appendTo('.wrapper-details-member.users .details table');
 
 					var app_list = row.find('td.app-list div');
-					app_list.find('p.thumb img').attr('src', json[i].user_image);
+					app_list.find('p.thumb img').attr('src', imgsize(json[i].user_image,'square'));
 					app_list.find('h2,p.thumb').append('<a href="'+base_url+'user/page/'+json[i].user_id+'/'+page_id+'">'+json[i].user_first_name+' '+json[i].user_last_name+'</a>');
 					app_list.find('p.email').append(json[i].user_email); //Facebook profile link
 					//add : last active & joined date

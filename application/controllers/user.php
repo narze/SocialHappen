@@ -72,6 +72,7 @@ class User extends CI_Controller {
 										'app_install_id' => issetor($app_install_id),
 										'campaign_id' => issetor($campaign_id)),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'user/user_stat',
 							'user/user_activities',
@@ -84,12 +85,13 @@ class User extends CI_Controller {
 			 				'stat/jqplot.dateAxisRenderer.min',
 			 				'stat/jqplot.canvasTextRenderer.min',
 			 				'stat/jqplot.canvasAxisTickRenderer.min',
-			 				'stat/jqplot.pointLabels.min'	
+			 				'stat/jqplot.pointLabels.min',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'common/main',
 							'common/platform',
-							//stat
+							'common/fancybox/jquery.fancybox-1.3.4',
 							'stat/jquery.jqplot.min'
 						)
 					)

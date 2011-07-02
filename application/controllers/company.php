@@ -24,16 +24,16 @@ class Company extends CI_Controller {
 										,'sh_default_fb_app_api_key'=>$this->config->item('sh_default_fb_app_api_key')
 										,'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'company/company_dashboard',
-							//for fancybox
 							'common/fancybox/jquery.mousewheel-3.0.4.pack',
 							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
+							'common/main',
 							'common/platform',
 							'common/smoothness/jquery-ui-1.8.9.custom',
-							//for fancybox
 							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
