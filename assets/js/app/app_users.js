@@ -14,7 +14,7 @@ $(function(){
 
 					var app_list = row.find('td.app-list div');
 					app_list.find('p.thumb img').attr('src', json[i].user_image);
-					app_list.find('h2,p.thumb').append('<a href="'+base_url+'app/'+app_install_id+'/user/'+json[i].user_id+'">'+json[i].user_first_name+' '+json[i].user_last_name+'</a>');
+					app_list.find('h2,p.thumb').append('<a href="'+base_url+'/user/app/'+json[i].user_id+'/'+app_install_id+'">'+json[i].user_first_name+' '+json[i].user_last_name+'</a>');
 					app_list.find('p.email').append(json[i].user_email); //Facebook profile link
 					//add : last active & joined date
 					row.find('td.status.app-status span').append(json[i]); //star point
