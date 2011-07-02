@@ -645,7 +645,7 @@ function get_activity_log(){
 					appendingHTML+=' <a href="'+base_url+'app/'+json[i].app_install_id+'">'+json[i].app_name+'</a>';
 				else if(json[i].action_id==5)
 					appendingHTML+=' <a href="'+base_url+'page/'+json[i].page_id+'">'+json[i].page_name+'</a>';
-				if(json[i].action_id==2)) appendingHTML+=' in <a href="'+base_url+'page/'+json[i].page_id+'">'+json[i].page_name+'</a>';
+				if(json[i].action_id==2) appendingHTML+=' in <a href="'+base_url+'page/'+json[i].page_id+'">'+json[i].page_name+'</a>';
 				appendingHTML+=
 					'</p>'+
 					'<p class="thumb">'+
