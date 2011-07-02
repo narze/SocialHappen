@@ -198,8 +198,37 @@ class Page extends CI_Controller {
 	 */
 	function json_get_installed_apps($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this -> load -> model('installed_apps_model', 'installed_apps');
+		$this -> load -> model('user_model', 'user');
+		
 		$apps = $this -> installed_apps -> get_installed_apps_by_page_id($page_id, $limit, $offset);
-		echo json_encode($apps);
+		//echo '<pre>';
+		//var_dump($apps);
+		//echo '</pre>';
+		$json_out = array();
+		
+		foreach($apps as $app){
+			$this->load->library('audit_lib');
+			$this->load->library('app_url');
+			date_default_timezone_set('Asia/Bangkok');
+			$end_date = $this->audit_lib->_date();
+			$start_date = date('Ymd', time() - 2592000);
+			
+			$active_user = $this->audit_lib->count_audit_range('subject', NULL, 103,
+			 array('page_id' => (int)$page_id, 'app_install_id' => (int)$app['app_install_id']),
+			  $start_date, $end_date);
+			
+			$a = array('app_image' => $app['app_image'],
+						'app_install_id' => $app['app_install_id'],
+						'app_name' => $app['app_name'],
+						'app_description' => $app['app_description'],
+						'app_install_status_name' => $app['app_install_status_name'],
+						'app_url' => $this->app_url->translate_url($app['app_url'], $app['app_install_id']),
+						'app_member' => $this->user->count_users_by_app_install_id($app['app_install_id']),
+						'app_monthly_active_member' => $active_user
+						);
+			$json_out[] = $a;
+		}
+		echo json_encode($json_out);
 	}
 
 	/**

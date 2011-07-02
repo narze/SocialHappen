@@ -18,8 +18,8 @@ $(function(){
 					app_list.find('p.description').append(json[i].app_description);
 					
 					row.find('td.status.app-status span').append(json[i].app_install_status_name);
-					row.find('td.status.app-member b').append('[count]');
-					row.find('td.status1.app-monthly-active b').append('[count]');
+					row.find('td.status.app-member b').append(json[i].app_member);
+					row.find('td.status1.app-monthly-active b').append(json[i].app_monthly_active_member);
 					row.find('td.bt-icon a.bt-edit').attr('href', base_url+'app/'+ json[i].app_install_id);
 					row.find('td.bt-icon a.bt-setting').attr('href', base_url+'path/to/settings/'+json[i].app_install_id);
 					row.find('td.bt-icon a.bt-delete').attr('href', base_url+'path/to/delete/'+ json[i].app_install_id);

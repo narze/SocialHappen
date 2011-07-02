@@ -46,12 +46,12 @@ class Audit extends CI_Controller {
 	}
 	
 	function addlog_visit(){
-		$app_id = 3;
+		$app_id = 2;
 		$action_id = 103;
-		$subject = 1;
+		$subject = 3;
 		$object = NULL;
 		$objecti = NULL;
-		$additional_data = array('app_install_id' => 7, 'page_id' => 1);
+		$additional_data = array('app_install_id' => 1, 'page_id' => 1);
 		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
 		if($result) echo 'app visit';
 	}
