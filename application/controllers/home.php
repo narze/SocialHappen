@@ -6,7 +6,7 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 	}
-
+	
 	/**
 	 * Home page
 	 * @author Manassarn M.
@@ -17,7 +17,7 @@ class Home extends CI_Controller {
 			$data = array(
 							'header' => $this -> socialhappen -> get_header( 
 								array(
-									'title' => 'Home page',
+									'title' => 'Facebook login',
 									'style' => array(
 										'common/main',
 										'common/platform'
@@ -58,8 +58,7 @@ class Home extends CI_Controller {
 					array(
 						'title' => 'Signup',
 						'vars' => array(
-							'popup_name' => $popup_name,
-							'user_companies' => $user_companies
+							'popup_name' => $popup_name
 						),
 						'script' => array(
 							'common/bar',
@@ -78,7 +77,7 @@ class Home extends CI_Controller {
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
 					array(
 						'breadcrumb' => array( 
-							'Facebook login' => NULL
+							'Signup' => NULL
 						)
 					),
 				TRUE),
@@ -241,12 +240,12 @@ class Home extends CI_Controller {
 			if ($this->upload->do_upload('user_image')){
 				$upload_data = $this->upload->data();
 				$user_image = base_url()."uploads/images/{$upload_data['file_name']}";
-				$this->socialhappen->resize_image($upload_data,array(16,24,50,128));
+				$this->socialhappen->resize_image($upload_data,array(20,50));
 			}
 			if ($this->upload->do_upload('company_image')){
 				$upload_data = $this->upload->data();
 				$company_image = base_url()."uploads/images/{$upload_data['file_name']}";
-				$this->socialhappen->resize_image($upload_data,array(16,24,50,128));
+				$this->socialhappen->resize_image($upload_data,array(35,50));
 			}
 			
 			$user = array(

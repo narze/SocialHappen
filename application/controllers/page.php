@@ -77,7 +77,7 @@ class Page extends CI_Controller {
 							$company['company_name'] => base_url() . "company/{$company['company_id']}",
 							$page['page_name'] => base_url() . "page/{$page['page_id']}"
 							),
-						'settings_url' => base_url()."settings/{$company['company_id']}/page/{$page['page_id']}"
+						'settings_url' => base_url()."settings?s=page&id={$page['page_id']}"
 					),
 				TRUE),
 				'page_profile' => $this -> load -> view('page/page_profile', 
@@ -313,6 +313,93 @@ class Page extends CI_Controller {
 			);
 			$this->parser->parse('page/addapp_lightbox_view', $data);
 		}
+	}
+	
+	function _getDateRange($startDate, $endDate, $format="Ymd")
+	{
+		date_default_timezone_set('Asia/Bangkok');
+	    //Create output variable
+	    $datesArray = array();
+	    //Calculate number of days in the range
+	    $total_days = round(abs(strtotime($endDate) - strtotime($startDate)) / 86400, 0) + 1;
+	    if($total_days<0) { return false; }
+	    //Populate array of weekdays and counts
+	    for($day=0; $day<$total_days; $day++)
+	    {
+	        $datesArray[] = date($format, strtotime("{$startDate} + {$day} days"));
+	    }
+	    //Return results array
+	    return $datesArray;
+	}
+	
+	function get_stat_graph($page_id = NULL, $start_date = NULL, $end_date = NULL){
+		$this->load->library('audit_lib');
+		
+		echo '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/excanvas.min.js"></script><![endif]-->
+			<script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jquery.jqplot.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.highlighter.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.cursor.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.dateAxisRenderer.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
+		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.pointLabels.min.js"></script>
+		     <link rel="stylesheet" type="text/css" href="'.base_url().'assets/js/stat/jquery.jqplot.min.css" />';
+		if(isset($start_date) && isset($end_date)){
+			if($start_date > $end_date){
+				$temp = $start_date;
+				$start_date = $end_date;
+				$end_date = $temp;
+			}
+		}else{
+			date_default_timezone_set('Asia/Bangkok');
+			$end_date = $this->audit_lib->_date();
+			$start_date = date('Ymd', time() - 2592000);
+		}
+		
+		$dateRange = $this->_getDateRange($start_date, $end_date);
+		
+		//print_r($dateRange);
+		$action_id = 102;
+		$stat_page_register_db = $this->audit_lib->list_stat_page($page_id, $action_id, $start_date, $end_date);
+		
+		$action_id = 103;
+		$stat_page_visit_db = $this->audit_lib->list_stat_page($page_id, $action_id, $start_date, $end_date);
+		
+		$stat_page_register = array();
+		$stat_page_visit = array();
+		foreach ($dateRange as $date) {
+			$stat_page_register[$date] = isset($stat_page_register_db[$date]) ? $stat_page_register_db[$date] : rand(60, 110);
+			$stat_page_visit[$date] = isset($stat_page_visit_db[$date]) ? $stat_page_register_db[$date] : rand(130, 300);
+		}
+		
+		//var_dump($stat_page_register);
+		//var_dump($stat_page_visit);
+		/*
+		$data = array(array('20080223' => 5,
+					'20080323' => 10,
+					'20080423' => 4,
+					'20080523' => 7),
+					array('20080223' => 8,
+					'20080323' => 5,
+					'20080423' => 9,
+					'20080523' => 12),
+					array('20080223' => 11,
+					'20080323' => 15,
+					'20080423' => 2,
+					'20080523' => 22,
+					'20080623' => 18));
+		*/
+		$data = array($stat_page_register, $stat_page_visit);
+		$data_label = array('user register to app', 'user visit app');
+		$title = 'Users Participation in Page';
+		$div = array('id' => 'chart1',
+					'width' => 900,
+					'height' => 480,
+					'class' => 'chart',
+					'xlabel' => 'Dates',
+					'ylabel' => 'Users');
+		//echo json_encode($data);
+		echo $this->audit_lib->render_stat_graph($data_label, $data, $title, $div);
 	}
 }
 

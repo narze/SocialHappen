@@ -577,7 +577,7 @@ class Audit_lib
 	 * @return html of stat graph
 	 */
 	function render_stat_graph($data_label = NULL, $data = NULL, $title = NULL, $div = NULL){
-		$check_args = isset($data) && isset($title) && isset($div) && isset($div['id']) && 
+		$check_args = isset($data_label) && isset($data) && isset($title) && isset($div) && isset($div['id']) && 
 						isset($div['height']) && isset($div['width']);
 		if(!$check_args){
 			return NULL;
@@ -653,7 +653,7 @@ foreach ($data as $line_key => $line_value) {
           tickOptions:{
             formatString:'%d'
             },
-		  min: 0,
+		  //min: 0,
 		  label:'" . $ylabel . "'
         }
       },
