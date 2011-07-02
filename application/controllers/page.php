@@ -211,6 +211,7 @@ class Page extends CI_Controller {
 	/**
 	 * JSON : Add page
 	 * @author Manassarn M.
+	 * @author Prachya P. - add audit when install page
 	 */
 	function json_add() {
 		$this -> load -> model('page_model', 'pages');
@@ -218,6 +219,18 @@ class Page extends CI_Controller {
 		if($page_id = $this -> pages -> add_page($post_data)) {
 			$result['status'] = 'OK';
 			$result['page_id'] = $page_id;
+			$this->load->library('audit_lib');
+			$this->audit_lib->add_audit(
+				0,
+				(int)($this->session->userdata('user_id')),
+				5,
+				'', 
+				'',
+				array(
+						'page_id'=> $page_id,
+						'company_id' => (int)($this -> input -> post('company_id'))
+					)
+			);
 		} else {
 			$result['status'] = 'ERROR';
 		}
@@ -283,11 +296,16 @@ class Page extends CI_Controller {
 							'page_name'=>$page['page_name'],
 							'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
-							'page/addapp_lightbox'
+							'page/addapp_lightbox',
+							//for fancybox
+							'common/fancybox/jquery.mousewheel-3.0.4.pack',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'company/main',
-							'common/smoothness/jquery-ui-1.8.9.custom'
+							'common/smoothness/jquery-ui-1.8.9.custom',
+							//for fancybox
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),

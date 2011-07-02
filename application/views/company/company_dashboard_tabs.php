@@ -2,12 +2,12 @@
 	<div class="tab-content">
 		<ul>
 			<li class="active page_tab">
-				<a href="javascript:select_page_tab()">
+				<a href="#" onclick="select_page_tab(); return false;">
 				<span class="page-installed-count">Page (0)</span>
 				</a>
 			</li>
 			<li class="app_tab">
-				<a href="javascript:select_app_tab()">
+				<a href="#" onclick="select_app_tab(); return false;">
 				<span class="app-installed-count">Application (0)</span>
 				</a>
 			</li>

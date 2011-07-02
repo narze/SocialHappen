@@ -280,6 +280,56 @@ class Audit extends CI_Controller {
 			echo '<pre>' . print_r($audit) . '</pre>';
 		}
 	}
+	
+	/**
+	 * JSON : get company activity log
+	 * @author Prachya P.
+	 */
+	function json_get_company_activity_log($company_id){
+		$this -> load -> model('audit_action_type_model', 'audit_type');
+		$this -> load -> model('user_model', 'user');
+		$this -> load -> model('page_model', 'page');
+		$this -> load -> model('installed_apps_model', 'installed_app');
+		$action_list=array(1,2,3,4,5);
+		$action_list_name=array();
+		$limit=5;
+		$audit_list = $this->audit_lib->list_audit(
+					array(
+						'company_id'=>(int)($company_id),
+						'action_id'=>array('$in' => $action_list)
+					),$limit);
+		foreach($action_list as $action_id){
+			$audit_action=$this->audit_type->get_audit_action_by_type_id($action_id);
+			$action_list_name[$action_id]=$audit_action['audit_action_name'];
+		}
+		foreach($audit_list as $key => $audit){
+			$audit_list[$key]['action_name']=$action_list_name[$audit['action_id']];
+			$user_profile=$this->user->get_user_profile_by_user_id($audit_list[$key]['subject']);
+			$audit_list[$key]['image']=$user_profile['user_image'];
+			$audit_list[$key]['user_first_name']=$user_profile['user_first_name'];
+			$audit_list[$key]['user_id']=$user_profile['user_id'];
+			if($audit['action_id']==1){
+				$app_profile=$this->installed_app->get_app_profile_by_app_install_id($audit_list[$key]['app_install_id']);
+				$audit_list[$key]['app_name']=$app_profile['app_name'];
+				$audit_list[$key]['app_install_id']=$app_profile['app_install_id'];
+			}
+			else if($audit['action_id']==2){
+				$app_profile=$this->installed_app->get_app_profile_by_app_install_id($audit_list[$key]['app_install_id']);
+				$audit_list[$key]['app_name']=$app_profile['app_name'];
+				$audit_list[$key]['app_install_id']=$app_profile['app_install_id'];
+				$page_profile=$this->page->get_page_profile_by_page_id($audit_list[$key]['page_id']);
+				$audit_list[$key]['page_name']=$page_profile['page_name'];
+				$audit_list[$key]['page_id']=$app_profile['page_id'];
+			}
+			else if($audit['action_id']==5){
+				$page_profile=$this->page->get_page_profile_by_page_id($audit_list[$key]['page_id']);
+				$audit_list[$key]['page_name']=$page_profile['page_name'];
+				$audit_list[$key]['page_id']=$page_profile['page_id'];
+			}
+			$audit_list[$key]['datetime']=date("d/m/Y H:i:s",$audit_list[$key]['timestamp']);
+		}
+		echo json_encode($audit_list);
+	}
 
 }
 

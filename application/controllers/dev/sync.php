@@ -487,6 +487,10 @@ class Sync extends CI_Controller {
 									'audit_action_name' =>  'save config',
 								),
 								array(
+									'audit_action_id' => 5,
+									'audit_action_name' =>  'install page',
+								),
+								array(
 									'audit_action_id' => 101,
 									'audit_action_name' =>  'user register to platform',
 								),
