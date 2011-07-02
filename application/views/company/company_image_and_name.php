@@ -1,4 +1,6 @@
-<div class="title-name">
-	<p class="thumb"><img src="<?php echo issetor($company['company_image']); ?>" /></p>
-	<h2><?php echo issetor($company['company_name'],'No company name specified'); ?></h2>
-</div>
+<?php if(isset($company)) : ?>
+	<div class="title-name">
+		<p class="thumb"><img src="<?php echo $company['company_image']; ?>" /></p>
+		<h2><?php echo $company['company_name']; ?></h2>
+	</div>
+<?php endif; ?>
