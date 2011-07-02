@@ -24,6 +24,7 @@ class User extends CI_Controller {
 						'title' => $user['user_first_name'].' '.$user['user_last_name'],
 						'vars' => array('user_id'=>$user_id),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'user/user_stat',
 							'user/user_activities',
@@ -31,6 +32,7 @@ class User extends CI_Controller {
 						),
 						'style' => array(
 							'common/main',
+							'common/platform',
 							'user/stat',
 							'user/activities'
 						)
@@ -86,6 +88,7 @@ class User extends CI_Controller {
 						'title' => $user['user_first_name'].' '.$user['user_last_name'],
 						'vars' => array('user_id'=>$user_id),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'user/user_stat',
 							'user/user_activities',
@@ -93,6 +96,7 @@ class User extends CI_Controller {
 						),
 						'style' => array(
 							'common/main',
+							'common/function',
 							'user/stat',
 							'user/activities'
 						)

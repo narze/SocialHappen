@@ -162,23 +162,49 @@ class SocialHappen{
 	}
 	
 	/**
+	 * Upload and resize image
+	 * @param $name
+	 * @return $image_url
+	 * @author Manassarn M.
+	 */
+	function upload_image($name = NULL){
+		$config['upload_path'] = './uploads/images/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['max_size']	= '100';
+		$config['max_width']  = '1024';
+		$config['max_height']  = '768';
+		$config['encrypt_name'] = TRUE;
+
+		$this->CI->load->library('upload', $config);
+		if ($this->CI->upload->do_upload($name)){
+			$image_data = $this->CI->upload->data();
+			$this->resize_image($image_data);
+			return base_url()."uploads/images/{$image_data['raw_name']}_o{$image_data['file_ext']}";
+		} return NULL;
+	}
+	
+	/**
 	 * Resize image and save as separated files
 	 * @param $image_data (see http://codeigniter.com/user_guide/libraries/file_uploading.html)
 	 * @author Manassarn M.
 	 */
-	function resize_image($image_data = NULL, $square_dimensions = array()){
-		if($image_data && $square_dimensions) {
+	function resize_image($image_data = NULL, $dimensions = array()){
+		$dimensions = array('q' => array(50,50),'t' => array(50,100),'s' => array(100,200),'n' => array(200,400));
+		if($image_data) {
 			$this->CI->load->library('image_lib'); 
-			foreach($square_dimensions as $dimension){
+			foreach($dimensions as $dimension_name => $dimension_size){
 				$config['image_library'] = 'gd2';
 				$config['source_image']	= "uploads/images/{$image_data['file_name']}";
-				$config['new_image'] = "uploads/images/{$image_data['raw_name']}_{$dimension}{$image_data['file_ext']}";
+				$config['new_image'] = "uploads/images/{$image_data['raw_name']}_{$dimension_name}{$image_data['file_ext']}";
 				$config['maintain_ratio'] = TRUE;
-				$config['width']	 = $dimension;
-				$config['height']	= $dimension;
+				$config['master_dim'] = 'width';
+				$config['width'] = $dimension_size[0];
+				$config['height'] = $dimension_size[1];
+				
 				$this->CI->image_lib->initialize($config); 
 				$this->CI->image_lib->resize();
 			}
+			rename($image_data['full_path'],"{$image_data['file_path']}{$image_data['raw_name']}_o{$image_data['file_ext']}");
 		}
 	}
 }

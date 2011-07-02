@@ -38,16 +38,19 @@ class Settings extends CI_Controller {
 										'setting_name' => $setting_name,
 										'param_id' => $param_id),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'settings/company',
 							'settings/page',
 							'settings/sidebar',
 							'settings/main',
-							'common/jquery.form'
+							'common/jquery.form',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'common/main',
-							'common/platform'
+							'common/platform',
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),
@@ -92,13 +95,14 @@ class Settings extends CI_Controller {
 		
 			$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
-			$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');	
+			$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
+			$this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
 				
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/account', array('user'=>$user));
+				$this->load->view('settings/account', array('user'=>$user,'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id'])));
 			}
 			else // passed validation proceed to post success logic
 			{
@@ -109,14 +113,10 @@ class Settings extends CI_Controller {
 				$config['max_height']  = '768';
 				$config['encrypt_name'] = TRUE;
 				
-				$user_image = $user['user_image'];
-				$this->load->library('upload', $config);
-				//$this->upload->do_upload('user_image');
-				//echo "upload".print_r($this->upload->data());
-				if ($this->upload->do_upload('user_image')){
-					$upload_data = $this->upload->data();
-					$user_image = base_url()."uploads/images/{$upload_data['file_name']}";
-					$this->socialhappen->resize_image($upload_data,array(20,50));
+				if(set_value('use_facebook_picture')){
+					$user_image = $this->facebook->get_profile_picture($user['user_facebook_id']);
+				} else if (!$user_image = $this->socialhappen->upload_image('user_image')){
+					$user_image = $user['user_image'];
 				}
 			
 				// build array for the model
@@ -129,7 +129,7 @@ class Settings extends CI_Controller {
 				$this->load->model('user_model','users');
 				if ($this->users->update_user_profile_by_user_id($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/account', array('user'=>$user,'success' => TRUE));
+					$this->load->view('settings/account', array('user'=>$user,'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
 				}
 				else
 				{
