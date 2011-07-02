@@ -6,7 +6,7 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 	}
-
+	
 	/**
 	 * Home page
 	 * @author Manassarn M.

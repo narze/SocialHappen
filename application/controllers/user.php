@@ -6,19 +6,58 @@ class User extends CI_Controller {
 		parent::__construct();
 		$this->load->library('facebook');
 	}
-
-	function user_in_page($user_id = NULL, $page_id= NULL){
+	
+	function index(){
 		$this -> socialhappen -> check_logged_in('home');
-		if($page_id && $user_id && $user_id == $this->socialhappen->get_user_id()) {
-			$this -> load -> model('company_model', 'companies');
-			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
-			$this -> load -> model('page_model', 'pages');
-			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
-			$this -> load -> model('user_model','users');
-			$user = $this -> users -> get_user_profile_by_user_id($user_id);
-			$data = array(
+		$user_id = $this->input->get('uid');
+		if($user_id){
+			$page_id = $this->input->get('pid');
+			$app_install_id = $this->input->get('aid');
+			$campaign_id = $this->input->get('cid');
+			if(!$page_id && !$app_install_id && !$campaign_id){
+				//no id specified
+			} else {
+				$this -> load -> model('company_model', 'companies');
+				$this -> load -> model('user_model','users');
+				$user = $this -> users -> get_user_profile_by_user_id($user_id);
+				$breadcrumb = array();
+				if($page_id){
+					$this -> load -> model('page_model', 'pages');
+					$company = $this -> companies -> get_company_profile_by_page_id($page_id);
+					$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+					$breadcrumb = 
+						array( 
+							$company['company_name'] => base_url() . "company/{$company['company_id']}",
+							$page['page_name'] => base_url() . "page/{$page['page_id']}",
+							$user['user_first_name'].' '.$user['user_last_name'] => NULL
+						);
+				} else if ($app_install_id){
+					$this -> load -> model('installed_apps_model', 'installed_apps');
+					$company = $this -> companies -> get_company_profile_by_app_install_id($app_install_id);
+					$app = $this -> installed_apps -> get_app_profile_by_app_install_id($app_install_id);
+					$breadcrumb = 
+						array( 
+							$company['company_name'] => base_url() . "company/{$company['company_id']}",
+							$app['app_name'] => base_url() . "app/{$app['app_install_id']}",
+							$user['user_first_name'].' '.$user['user_last_name'] => NULL
+						);
+				} else if ($campaign_id){
+					$this -> load -> model('campaign_model', 'campaigns');
+					$company = $this -> companies -> get_company_profile_by_campaign_id($campaign_id);
+					$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
+					$breadcrumb = 
+						array( 
+							$company['company_name'] => base_url() . "company/{$company['company_id']}",
+							$campaign['campaign_name'] => base_url() . "campaign/{$campaign['campaign_id']}",
+							$user['user_first_name'].' '.$user['user_last_name'] => NULL
+						);
+				}
+				
+				$data = array(
 				'user_id' => $user_id,
-				'page_id' => $page_id,
+				'page_id' => issetor($page_id),
+				'app_install_id' => issetor($app_install_id),
+				'campaign_id' => issetor($campaign_id),
 				'header' => $this -> socialhappen -> get_header( 
 					array(
 						'title' => $user['user_first_name'].' '.$user['user_last_name'],
@@ -40,16 +79,7 @@ class User extends CI_Controller {
 						'company' => $company
 					),
 				TRUE),
-				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-					array('breadcrumb' => 
-						array( 
-							$company['company_name'] => base_url() . "company/{$company['company_id']}",
-							$page['page_name'] => base_url() . "page/{$page['page_id']}",
-							$user['user_first_name'].' '.$user['user_last_name'] => base_url() . "page/{$page['page_id']}/user/{$user['user_id']}"
-							)
-						)
-					,
-				TRUE),
+				'breadcrumb' => $this -> load -> view('common/breadcrumb', array('breadcrumb' => $breadcrumb),	TRUE),
 				'user_profile' => $this -> load -> view('user/user_profile', 
 					array('user_profile' => $user),
 				TRUE),
@@ -62,72 +92,42 @@ class User extends CI_Controller {
 				'user_activities' => $this -> load -> view('user/user_activities', 
 					array(),
 				TRUE),
-				'footer' => $this -> socialhappen -> get_footer());
-			$this -> parser -> parse('user/user_view', $data);
-			return $data;
+				'footer' => $this -> socialhappen -> get_footer()
+				);
+				$this -> parser -> parse('user/user_view', $data);
+			}
+			
 		}
 	}
 	
-	function user_in_app($user_id = NULL, $app_install_id= NULL){
-		$this -> socialhappen -> check_logged_in('home');
-		if($app_install_id && $user_id && $user_id == $this->socialhappen->get_user_id()) {
-			$this -> load -> model('company_model', 'companies');
-			$company = $this -> companies -> get_company_profile_by_app_install_id($app_install_id);
-			$this -> load -> model('installed_apps_model', 'installed_apps');
-			$app = $this -> installed_apps -> get_app_profile_by_app_install_id($app_install_id);
-			$this -> load -> model('user_model','users');
-			$user = $this -> users -> get_user_profile_by_app_install_id($app_install_id);
-			$data = array(
-				'user_id' => $user_id,
-				'app_install_id' => $app_install_id,
-				'header' => $this -> socialhappen -> get_header( 
-					array(
-						'title' => $user['user_first_name'].' '.$user['user_last_name'],
-						'vars' => array('user_id'=>$user_id),
-						'script' => array(
-							'common/bar',
-							'user/user_stat',
-							'user/user_activities',
-							'user/user_tabs'
-						),
-						'style' => array(
-							'common/main',
-							'user/stat',
-							'user/activities'
-						)
-					)
-				),
-				'company_image_and_name' => $this -> load -> view('company/company_image_and_name', 
-					array(
-						'company' => $company
-					),
-				TRUE),
-				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-					array('breadcrumb' => 
-						array( 
-							$company['company_name'] => base_url() . "company/{$company['company_id']}",
-							$app['app_name'] => base_url() . "app/{$app['app_install_id']}",
-							$user['user_first_name'].' '.$user['user_last_name'] => base_url() . "app/{$app['app_install_id']}/user/{$user['user_id']}"
-							)
-						)
-					,
-				TRUE),
-				'user_profile' => $this -> load -> view('user/user_profile', 
-					array('user_profile' => $user),
-				TRUE),
-				'user_tabs' => $this -> load -> view('user/user_tabs', 
-					array(),
-				TRUE), 
-				'user_stat' => $this -> load -> view('user/user_stat', 
-					array(),
-				TRUE), 
-				'user_activities' => $this -> load -> view('user/user_activities', 
-					array(),
-				TRUE),
-				'footer' => $this -> socialhappen -> get_footer());
-			$this -> parser -> parse('user/user_view', $data);
-			return $data;
-		}
+	/**
+	 * Redirect to index with get parameters
+	 * @param $user_id
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function page($user_id, $page_id){
+		redirect("user?uid={$user_id}&pid={$page_id}");
+	}
+	
+	/**
+	 * Redirect to index with get parameters
+	 * @param $user_id
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function app($user_id, $app_install_id){
+		redirect("user?uid={$user_id}&aid={$app_install_id}");
+	}
+	
+	/**
+	 * Redirect to index with get parameters
+	 * @param $user_id
+	 * @param $campaign_id
+	 * @author Manassarn M.
+	 */
+	function campaign($user_id, $campaign_id){
+		redirect("user?uid={$user_id}&cid={$campaign_id}");
 	}
 	
 	/** 

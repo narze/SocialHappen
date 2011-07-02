@@ -40,7 +40,7 @@ class Company_model extends CI_Model {
 	
 	/**
 	 * Get profile
-	 * @param $page_id
+	 * @param $campaign_id
 	 * @author Manassarn M.
 	 */
 	function get_company_profile_by_campaign_id($campaign_id = NULL){
