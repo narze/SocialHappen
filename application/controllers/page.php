@@ -77,7 +77,7 @@ class Page extends CI_Controller {
 							$company['company_name'] => base_url() . "company/{$company['company_id']}",
 							$page['page_name'] => base_url() . "page/{$page['page_id']}"
 							),
-						'settings_url' => base_url()."settings/{$company['company_id']}/page/{$page['page_id']}"
+						'settings_url' => base_url()."settings?s=page&id={$page['page_id']}"
 					),
 				TRUE),
 				'page_profile' => $this -> load -> view('page/page_profile', 

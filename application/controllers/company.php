@@ -28,7 +28,7 @@ class Company extends CI_Controller {
 							'company/company_dashboard'
 						),
 						'style' => array(
-							'company/main',
+							'common/platform',
 							'common/smoothness/jquery-ui-1.8.9.custom'
 						)
 					)
@@ -39,14 +39,13 @@ class Company extends CI_Controller {
 					),
 				TRUE),
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-					array('breadcrumb' => 
-						array( 
-							array(
-								"name" => $company['company_name'],
-								"url" => base_url() . "company/{$company['company_id']}")
-							)
-						)
-					,
+					array(
+						'breadcrumb' => 
+							array( 
+								$company['company_name'] => base_url() . "company/{$company['company_id']}"
+							),
+						'settings_url' => base_url()."settings?s=company&id={$company['company_id']}"
+					),
 				TRUE),
 				'company_profile' => $this -> load -> view('company/company_profile', 
 					array('company_profile' => $company),

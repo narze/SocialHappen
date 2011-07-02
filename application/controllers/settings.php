@@ -10,6 +10,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function index(){
+		$this -> socialhappen -> check_logged_in('home');
 		$company_id = $this->input->get('c');
 		$setting_name = $this->input->get('s');
 		$param_id = $this->input->get('id');
@@ -17,7 +18,7 @@ class Settings extends CI_Controller {
 		$setting_names_and_ids = array('account'=>'user_id','company'=>'company_id','page'=>'page_id','package'=>'user_id','reference'=>'user_id');
 		
 			if(!array_key_exists($setting_name, $setting_names_and_ids)){
-				redirect("settings?c={$company_id}&s=account&id=".$this->socialhappen->get_user_id());
+				redirect("settings?s=account&id=".$this->socialhappen->get_user_id());
 			}
 			$user = $this->socialhappen->get_user();
 			$user_companies = $this->socialhappen->get_user_companies();
