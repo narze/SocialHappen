@@ -207,4 +207,14 @@ class SocialHappen{
 			rename($image_data['full_path'],"{$image_data['file_path']}{$image_data['raw_name']}_o{$image_data['file_ext']}");
 		}
 	}
+	
+	/**
+	 * Check if is called with xml http request (ajax)
+	 * @author Manassarn M.
+	 */
+	function ajax_check(){
+		if( empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'){
+			exit();
+		}
+	}
 }
