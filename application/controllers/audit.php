@@ -19,6 +19,14 @@ class Audit extends CI_Controller {
 		echo $this->audit_lib->create_index();
 	}
 	
+	function list_register(){
+		$page_id = '1';
+		$res = $this->audit_lib->list_stat_page((int)$page_id, 102, $this->audit_lib->_date());
+		echo '<pre>';
+		var_dump($res);
+		echo '</pre>';
+	}
+	
 	function today(){
 		date_default_timezone_set('Asia/Bangkok');
 		$start = time();

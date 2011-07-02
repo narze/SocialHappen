@@ -326,7 +326,7 @@ class Audit_lib
 	 */
 	function _date(){
 		date_default_timezone_set('Asia/Bangkok');
-		return Date('Ymd');
+		return (int)Date('Ymd');
 	}
 	
 	/**
