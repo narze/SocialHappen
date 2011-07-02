@@ -8,6 +8,7 @@ $(function(){
 
 	$('.tab-content ul li.stat a').click(function(){
 		show_tab('stat');
+		render_stat(campaign_id);
 	});
 	$('.tab-content ul li.users a').click(function(){
 		show_tab('users');

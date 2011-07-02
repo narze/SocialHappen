@@ -392,20 +392,28 @@ class Page extends CI_Controller {
 		
 		//print_r($dateRange);
 		$action_id = 102;
-		$stat_page_register_db = $this->audit_lib->list_stat_page($page_id, $action_id, $start_date, $end_date);
+		$res = $this->audit_lib->list_stat_page((int)$page_id, $action_id, (int)$start_date, $end_date);
+		$stat_campaign_visit_db = array();
+		foreach($res as $item){
+			$stat_page_register_db[$item['date']] = $item['count'];
+		}
 		
 		$action_id = 103;
-		$stat_page_visit_db = $this->audit_lib->list_stat_page($page_id, $action_id, $start_date, $end_date);
+		$res = $this->audit_lib->list_stat_page((int)$page_id, $action_id, (int)$start_date, $end_date);
+		$stat_page_visit_db = array();
+		foreach($res as $item){
+			$stat_page_visit_db[$item['date']] = $item['count'];
+		}
 		
 		$stat_page_register = array();
 		$stat_page_visit = array();
 		foreach ($dateRange as $date) {
 			$stat_page_register[$date] = isset($stat_page_register_db[$date]) ? $stat_page_register_db[$date] : 0;
-			$stat_page_visit[$date] = isset($stat_page_visit_db[$date]) ? $stat_page_register_db[$date] : 0;
+			$stat_page_visit[$date] = isset($stat_page_visit_db[$date]) ? $stat_page_visit_db[$date] : 0;
 		}
 		
 		$data = array($stat_page_register, $stat_page_visit);
-		$data_label = array('user register to app', 'user visit app');
+		$data_label = array('user register to app in page', 'user visit app in page');
 		$title = 'Users Participation in Page';
 		$div = array('id' => 'chart1',
 					'width' => 900,
