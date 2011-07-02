@@ -59,8 +59,8 @@ class Audit extends CI_Controller {
 	}
 	
 	function addlog_visit(){
-		$app_id = 2;
-		$action_id = 103;
+		$app_id = 3;
+		$action_id = 102;
 		$subject = 1;
 		$object = NULL;
 		$objecti = NULL;

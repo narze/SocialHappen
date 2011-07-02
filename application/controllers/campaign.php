@@ -22,6 +22,13 @@ class Campaign extends CI_Controller {
 			$this->config->load('pagination', TRUE);
 			$per_page = $this->config->item('per_page','pagination');
 			
+			$this->load->library('audit_lib');
+			$campaign_daily_active = $this->audit_lib->count_audit('subject', NULL, 102, array('campaign_id' => (int)$campaign_id), $this->audit_lib->_date());
+			
+			$this -> load -> model('user_model', 'user');
+			$campaign_total_users = $this->user->count_users_by_campaign_id($campaign_id);
+			
+			
 			$data = array(
 				'campaign_id' => $campaign_id,
 				'header' => $this -> socialhappen -> get_header( 
@@ -75,7 +82,9 @@ class Campaign extends CI_Controller {
 					,
 				TRUE),
 				'campaign_profile' => $this -> load -> view('campaign/campaign_profile', 
-					array('campaign_profile' => $campaign),
+					array('campaign_profile' => $campaign,
+						  'campaign_daily_active' => $campaign_daily_active,
+						  'campaign_total_users' => $campaign_total_users),
 				TRUE),
 				'campaign_tabs' => $this -> load -> view('campaign/campaign_tabs', 
 					array(

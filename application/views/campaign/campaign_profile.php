@@ -12,8 +12,8 @@
           <h2>Information</h2>
           <ul>
             <li><span>Status</span><?php echo issetor($campaign_profile['campaign_status_name']); ?></li>
-            <li><span>Daily active</span><?php echo issetor($campaign_profile['campaign_daily_active']); ?></li>
-            <li><span>Total member</span><?php echo issetor($campaign_profile['campaign_total_users']); ?></li>
+            <li><span>Daily active</span><?php echo issetor($campaign_daily_active); ?></li>
+            <li><span>Total member</span><?php echo issetor($campaign_total_users); ?></li>
           </ul>
         </div>
 </div>
