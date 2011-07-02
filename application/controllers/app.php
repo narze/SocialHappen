@@ -4,55 +4,45 @@ class App extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->library('pagination');
 	}
 
 	function index($app_install_id = NULL){
 		$this->socialhappen->check_logged_in('home');
-		if($app_install_id) {
+		$this -> load -> model('installed_apps_model', 'installed_apps');
+		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		if($app) {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_app_install_id($app_install_id);
 			$this->load->model('page_model','pages');
 			$page = $this->pages->get_page_profile_by_app_install_id($app_install_id);
 			$this -> load -> model('campaign_model', 'campaigns');
 			$campaigns = $this -> campaigns -> get_campaigns_by_app_install_id($app_install_id);
-			$this -> load -> model('installed_apps_model', 'installed_apps');
-			$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."app/{$app_install_id}/campaigns",
-					'total_rows' => $campaign_count = $this->campaigns->count_campaigns_by_app_install_id($app_install_id)
-				)
-			);
-			$pagination['campaign'] = $this->pagination->create_links();
-			
-			$this -> load ->model('user_model','users');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."app/{$app_install_id}/users",
-					'total_rows' => $user_count = $this->users->count_users_by_app_install_id($app_install_id)
-				)
-			);
-			$pagination['user'] = $this->pagination->create_links();
-			
+			$campaign_count = $this->campaigns->count_campaigns_by_app_install_id($app_install_id);
+			$user_count = $this->users->count_users_by_app_install_id($app_install_id);
+			$this->config->load('pagination', TRUE);
+			$per_page = $this->config->item('per_page','pagination');
 			$data = array(
 				'app_install_id' => $app_install_id,
 				'header' => $this -> socialhappen -> get_header( 
 					array(
+						'company_id' => $company['company_id'],
 						'title' => $app['app_name'],
-						'vars' => array('app_install_id'=>$app_install_id),
+						'vars' => array(
+							'app_install_id'=>$app_install_id,
+							'per_page' => $per_page
+						),
 						'script' => array(
 							'common/bar',
-							'app/app_stat',
+							'common/jquery.pagination',
+							//'app/app_stat',
 							'app/app_users',
 							'app/app_campaigns',
 							'app/app_tabs'
 						),
 						'style' => array(
 							'common/main',
-							'app/campaign',
-							'app/member'
+							'common/platform'
 						)
 					)
 				),
@@ -72,7 +62,8 @@ class App extends CI_Controller {
 					,
 				TRUE),
 				'app_profile' => $this -> load -> view('app/app_profile', 
-					array('app_profile' => $app),
+					array('app_profile' => $app,
+						'count_installed_on' => $this->pages->count_pages_by_app_id($app['app_id'])),
 				TRUE),
 				'app_tabs' => $this -> load -> view('app/app_tabs', 
 					array(
@@ -81,15 +72,39 @@ class App extends CI_Controller {
 						),
 				TRUE), 
 				'app_campaigns' => $this -> load -> view('app/app_campaigns', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'app_users' => $this -> load -> view('app/app_users', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer());
 			$this -> parser -> parse('app/app_view', $data);
 			return $data;
 		}
+	}
+	
+	/**
+	 * JSON : Count campaigns
+	 * @param $app_install_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function json_count_campaigns($app_install_id = NULL, $campaign_status_id = NULL){
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_campaigns_by_app_install_id_and_campaign_status_id($app_install_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+	
+	/**
+	 * JSON : Count users
+	 * @param $app_install_id
+	 * @param array $labels
+	 * @author Manassarn M.
+	 */
+	function json_count_users($app_install_id = NULL, $labels = array()){
+		$this->load->model('user_model','users');
+		$count = $this->users->count_users_by_app_install_id($app_install_id);
+		echo json_encode($count);
 	}
 	
 	/** 
@@ -215,6 +230,20 @@ class App extends CI_Controller {
 			$this->installed_app->update(array('order_in_dashboard'=>$i),array("app_install_id"=>$app_install_id));
 			$i++;	
 		}
+	}
+	
+	/**
+	 * JSON : curl to app_install_url and get data back
+	 * @author Prachya P. 
+	 */	
+	function curl(){
+		$url=$_POST['url'];
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$response = curl_exec($ch);		 
+		curl_close($ch);
+		echo $response;
 	}
 }
 

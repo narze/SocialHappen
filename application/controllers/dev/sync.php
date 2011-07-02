@@ -124,7 +124,7 @@ class Sync extends CI_Controller {
 							    'app_type_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
 							    'app_maintainance' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
 							    'app_show_in_list' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
-							    'app_description' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_description' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 							    'app_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_install_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
@@ -165,6 +165,7 @@ class Sync extends CI_Controller {
 							    'campaign_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_start_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'campaign_end_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
+								'campaign_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'campaign_status' => array(
 							    'campaign_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
@@ -221,7 +222,7 @@ class Sync extends CI_Controller {
 							    'facebook_page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'page_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'page_detail' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'page_detail' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 							    'page_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_new_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
@@ -236,6 +237,9 @@ class Sync extends CI_Controller {
 							    'user_facebook_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'user_register_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'user_last_seen' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
+								'user_gender' => field_option('INT', 1, 1, TRUE, $autoinc, TRUE),
+								'user_birth_date' => field_option('DATE', $constraint, $default, TRUE, $autoinc, $unsigned),
+								'user_about' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -258,7 +262,11 @@ class Sync extends CI_Controller {
 								'user_agent' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
 								'last_activity' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
-								'user_id' => field_option('INT', 20, $default, TRUE, $autoinc, TRUE),
+								'user_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
+							),
+							'user_gender' =>array(
+								'user_gender_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
+								'user_gender_name' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned),
 							)
 						);
 		$keys = array(
@@ -280,7 +288,8 @@ class Sync extends CI_Controller {
 						'user_apps' => array('user_id', 'app_install_id'),
 						'user_campaigns' => array('user_id', 'campaign_id'),
 						'user_companies' => array('user_id', 'company_id'),
-						'sessions' => array('session_id')
+						'sessions' => array('session_id'),
+						'user_gender' =>array('user_gender_id')
 					);
 		$tables = array(
 							'app',
@@ -301,7 +310,8 @@ class Sync extends CI_Controller {
 							'user_apps',
 							'user_campaigns',
 							'user_companies',
-							'sessions'
+							'sessions',
+							'user_gender'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -509,18 +519,20 @@ class Sync extends CI_Controller {
 							    'campaign_active_member' => 2,
 							    'campaign_all_member' => 10, 
 							    'campaign_start_timestamp' => '2011-05-19 18:29:43',
-							    'campaign_end_timestamp' => '2012-05-18 00:00:00'
+							    'campaign_end_timestamp' => '2012-05-18 00:00:00',
+								'campaign_image' => 'http://www.learners.in.th/file/sckimberly/facebook-logo.png'
 							),
 							array(
 							    'campaign_id' => 2, 
 							    'app_install_id' => 2, 
 							    'campaign_name' => 'Campaign test 2',
 							    'campaign_detail' => 'Campaign test detail 2', 
-							    'campaign_status_id' => 1, 
+							    'campaign_status_id' => 2, 
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18 18:05:46', 
-							    'campaign_end_timestamp' => '2011-06-18 00:00:00'
+							    'campaign_end_timestamp' => '2011-06-18 00:00:00',
+								'campaign_image' => 'http://www.learners.in.th/file/sckimberly/facebook-logo.png'
 							)
 						);
 		$this->db->insert_batch('campaign', $campaign);
@@ -528,11 +540,15 @@ class Sync extends CI_Controller {
 		$campaign_status = array(
 								array(
 								    'campaign_status_id' => 1,
-								    'campaign_status_name' => 'Inactive',
+								    'campaign_status_name' => 'Inactive'
 								),
 								array(
 								    'campaign_status_id' => 2,
-								    'campaign_status_name' => 'Active',
+								    'campaign_status_name' => 'Active'
+								),
+								array(
+								    'campaign_status_id' => 3,
+								    'campaign_status_name' => 'Expired'
 								)
 							);
 		$this->db->insert_batch('campaign_status', $campaign_status);
@@ -776,6 +792,21 @@ class Sync extends CI_Controller {
 							)
 						);
 		$this->db->insert_batch('sessions', $sessions);
+		$user_gender = array(
+			array(
+				'user_gender_id' => 1,
+				'user_gender_name' => "Not sure"
+			),
+			array(
+				'user_gender_id' => 2,
+				'user_gender_name' => "Female"
+			),
+			array(
+				'user_gender_id' => 3,
+				'user_gender_name' => "Male"
+			)
+		);
+		$this->db->insert_batch('user_gender', $user_gender);
 		echo "Test data added<br />";
 	}
 }

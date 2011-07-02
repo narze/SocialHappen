@@ -1,25 +1,17 @@
 $(function(){
-	//Go to button
-	$('#goto').one('click',function(){
-		for(i in user_companies){
-			$.ajaxSetup({'async': false});
-			$.getJSON(base_url+'company/json_get_profile/' + user_companies[i].company_id, function(data) {
-				$('#goto-list').append('<div class="goto-list-company-'+user_companies[i].company_id+'">===Company : '+data.company_name+'</div>');
-			});
-			$.getJSON(base_url+'company/json_get_pages/' + user_companies[i].company_id, function(data) {
-				$.each(data, function(i,item){
-					$('.goto-list-company-'+ user_companies[i].company_id).append('<div class="goto-list-company-page-'+item.page_id+'">======Page : '+item.page_name+'</div>');
-				});
-			});
-		}
-		$('#goto').bind('click',function(){
-			$('#goto-list').toggle();
+	for(i in user_companies){
+		$.ajaxSetup({'async': false});
+		$.getJSON(base_url+'company/json_get_profile/' + user_companies[i].company_id, function(data) {
+			$('.goto div ul').append('<li class="goto-list-company-'+user_companies[i].company_id+'"><p class="thumb"><img src="'+data.company_image+'" alt="" /></p><h2><a href="'+base_url+'company/'+data.company_id+'">'+data.company_name+'</a></h2></li>');
 		});
-	});
-
-	//User button
-	$('#user-menu').hide();
-	$('div ul li.drop').click(function(){
-		$('#user-menu').toggle();
-	});
+		$.getJSON(base_url+'company/json_get_pages/' + user_companies[i].company_id, function(data) {
+			if(data.length>0) {
+				$.each(data, function(i,item){
+					$('.goto-list-company-'+ user_companies[i].company_id).append('<p class="goto-list-company-page-'+item.page_id+'"><a href="'+base_url+'page/'+item.page_id+'">&raquo;  '+item.page_name+'</a></p>');
+				});
+			} else {
+				$('.goto-list-company-'+ user_companies[i].company_id).append('<p>No page yet</p><p><a href="#">+ add new page</a></p>');
+			}
+		});
+	}
 });

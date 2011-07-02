@@ -35,11 +35,11 @@ class Settings extends CI_Controller {
 										'param_id' => $param_id),
 						'script' => array(
 							'common/bar',
-							'settings/account',
 							'settings/company',
 							'settings/page',
 							'settings/sidebar',
-							'settings/main'
+							'settings/main',
+							'common/jquery.form'
 						),
 						'style' => array(
 							'common/main',
@@ -88,8 +88,7 @@ class Settings extends CI_Controller {
 		
 			$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
-			$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');			
-			$this->form_validation->set_rules('user_image', 'User image', 'trim|xss_clean|max_length[255]');
+			$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');	
 				
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
@@ -99,12 +98,29 @@ class Settings extends CI_Controller {
 			}
 			else // passed validation proceed to post success logic
 			{
+				$config['upload_path'] = './uploads/images/';
+				$config['allowed_types'] = 'gif|jpg|png';
+				$config['max_size']	= '100';
+				$config['max_width']  = '1024';
+				$config['max_height']  = '768';
+				$config['encrypt_name'] = TRUE;
+				
+				$user_image = $user['user_image'];
+				$this->load->library('upload', $config);
+				//$this->upload->do_upload('user_image');
+				//echo "upload".print_r($this->upload->data());
+				if ($this->upload->do_upload('user_image')){
+					$upload_data = $this->upload->data();
+					$user_image = base_url()."uploads/images/{$upload_data['file_name']}";
+					$this->socialhappen->resize_image($upload_data,array(16,24,50,128));
+				}
+			
 				// build array for the model
 				$user_update_data = array(
 								'user_first_name' => set_value('first_name'),
 								'user_last_name' => set_value('last_name'),
 								'user_email' => set_value('email'),
-								'user_image' => set_value('user_image')
+								'user_image' => $user_image
 							);
 				$this->load->model('user_model','users');
 				if ($this->users->update_user_profile_by_user_id($user_id, $user_update_data)) // the information has therefore been successfully saved in the db

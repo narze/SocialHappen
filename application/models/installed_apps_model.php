@@ -27,6 +27,7 @@ class Installed_apps_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		$this->db->order_by("order_in_dashboard");
 		$this->db->join('app','installed_apps.app_id=app.app_id');
+		$this->db->join('app_install_status','installed_apps.app_install_status=app_install_status.app_install_status_id');
 		return $this->db->get_where('installed_apps', array('page_id' => $page_id))->result_array();
 	}
 
@@ -122,6 +123,14 @@ class Installed_apps_model extends CI_Model {
 		$this -> db -> where($where);
 		$query = $this->db->get('installed_apps');
 		return $query->num_rows();
+	}
+	
+	/*
+	 * Update data
+	 * @author Prachya P.
+	 */
+	function update($data = array(), $where = array()) {
+		$this -> db -> update('installed_apps', $data, $where);
 	}
 }
 /* End of file installed_apps_model.php */

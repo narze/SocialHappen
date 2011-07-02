@@ -1,27 +1,25 @@
 <div>
+	<h1><span>SocialHappen</span></h1>	
+	<div class="goto">
+        <p><a href="#">Go to</a></p>
+		 <div>
+          <ul>
+          </ul>
+          <p><a class="bt-create_company" href="#"><span>Create Company</span></a></p>
+        </div>
+	</div>
 	<ul>
-
         <li class="profile"><a href="#"><span></span></a></li>
-        <li class="name"><img src="<?php echo issetor($user['user_image']);?>" alt="" />
+        <li class="name">
 			<?php if(isset($user)) {
-				echo issetor($user['user_first_name']).' '.issetor($user['user_last_name']); 
+				echo '<img src="'.issetor($user['user_image']).'" alt="" />'.issetor($user['user_first_name']).' '.issetor($user['user_last_name']); 
+				echo '<ul>
+						<li>'.anchor("settings/account/{$user['user_id']}",'&raquo Profile Setting').'</li>
+						<li>'.anchor('home/logout','&raquo Logout').'</li>
+					  </ul>';
 			} else {
 				echo 'Login';
-			}?></li>
-
-        <li class="drop">
-			<a href="#">
-				<span>
-					<?php if(isset($user)) : ?>
-						<div id="user-menu">
-							<div id="profile-setting"><?php echo anchor('path/to/profilesetting','Profile Setting');?></div>
-							<div id="logout"><?php echo anchor('home/logout','Logout');?></div>
-						</div>
-					<?php endif; ?>
-				</span>
-			</a>
+			}?>
 		</li>
-
-      </ul>
+    </ul>
 </div>
-<div id="goto"><h2><a href="#">Go to</a></h2><div id="goto-list"></div></div>

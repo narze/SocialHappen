@@ -9,40 +9,38 @@ class Campaign extends CI_Controller {
 
 	function index($campaign_id = NULL){
 		$this->socialhappen->check_logged_in('home');
-		if($campaign_id) {
+		$this -> load -> model('campaign_model', 'campaigns');
+		$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
+		if($campaign) {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_campaign_id($campaign_id);
 			$this->load->model('page_model','pages');
 			$page = $this->pages->get_page_profile_by_campaign_id($campaign_id);
-			$this -> load -> model('campaign_model', 'campaigns');
-			$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
 			
 			$this -> load ->model('user_model','users');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."campaign/{$campaign_id}/users",
-					'total_rows' => $user_count = $this->users->count_users_by_campaign_id($campaign_id)
-				)
-			);
-			$pagination['user'] = $this->pagination->create_links();
+			$user_count = $this->users->count_users_by_campaign_id($campaign_id);
+			$this->config->load('pagination', TRUE);
+			$per_page = $this->config->item('per_page','pagination');
 			
 			$data = array(
 				'campaign_id' => $campaign_id,
 				'header' => $this -> socialhappen -> get_header( 
 					array(
 						'title' => $campaign['campaign_name'],
-						'vars' => array('campaign_id'=>$campaign_id),
+						'vars' => array('campaign_id'=>$campaign_id,
+							'user_count' => $user_count,
+							'per_page' => $per_page
+						),
 						'script' => array(
 							'common/bar',
+							'common/jquery.pagination',
 							'campaign/campaign_stat',
 							'campaign/campaign_users',
 							'campaign/campaign_tabs'
 						),
 						'style' => array(
 							'common/main',
-							'campaign/main',
-							'campaign/member',
-							'campaign/stat'
+							'common/platform'
 						)
 					)
 				),
@@ -73,7 +71,7 @@ class Campaign extends CI_Controller {
 					array(),
 				TRUE),
 				'campaign_users' => $this -> load -> view('campaign/campaign_users', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer());
 			$this -> parser -> parse('campaign/campaign_view', $data);

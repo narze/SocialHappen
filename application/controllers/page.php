@@ -5,61 +5,64 @@ if(!defined('BASEPATH'))
 class Page extends CI_Controller {
 	function __construct() {
 		parent::__construct();
-		$this->load->library('pagination');
 	}
 	
 	function index($page_id =NULL) {
 		$this -> socialhappen -> check_logged_in('home');
-		if($page_id) {
+		$this -> load -> model('page_model', 'pages');
+		$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+		if($page) {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
-			$this -> load -> model('page_model', 'pages');
-			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+			
+			$facebook_page_graph = json_decode(file_get_contents("http://graph.facebook.com/{$page['facebook_page_id']}"),TRUE);
 			
 			$this -> load ->model('installed_apps_model','installed_apps');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."page/{$page_id}/apps",
-					'total_rows' => $app_count = $this->installed_apps->count_installed_apps_by_page_id($page_id)
-				)
-			);
-			$pagination['app'] = $this->pagination->create_links();
+			$app_count = $this->installed_apps->count_installed_apps_by_page_id($page_id);
+			
 			$this -> load ->model('campaign_model','campaigns');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."page/{$page_id}/campaigns",
-					'total_rows' => $campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id)
-				)
-			);
-			$pagination['campaign'] = $this->pagination->create_links();
+			$campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id);
 			$this -> load ->model('user_model','users');
-			$this->pagination->initialize(
-				array(
-					'base_url' => base_url()."page/{$page_id}/users",
-					'total_rows' => $user_count = $this->users->count_users_by_page_id($page_id)
-				)
-			);
-			$pagination['user'] = $this->pagination->create_links();
+			$user_count = $this->users->count_users_by_page_id($page_id);
+			$this->config->load('pagination', TRUE);
+			$per_page = $this->config->item('per_page','pagination');
+			
+			// $key = 'subject';
+			// $app_id = ???;
+			// $action_id = ???;
+			// $criteria = array('page_id' => $page_id);
+			// $date = date("Ymd");
+			// $new_user_count = $this->audit_lib->count_audit($key, $app_id, $action_id, $criteria, $date));
 			
 			$data = array(
 				'page_id' => $page_id,
 				'header' => $this -> socialhappen -> get_header( 
 					array(
+						'company_id' => $company['company_id'],
 						'title' => $page['page_name'],
-						'vars' => array('page_id'=>$page_id),
+						'vars' => array(
+							'page_id'=>$page_id,
+							'company_id' => $company['company_id'],
+							'per_page' => $per_page
+						),
 						'script' => array(
 							'common/bar',
+							'common/jquery.pagination',
 							'page/page_apps',
 							'page/page_campaigns',
 							'page/page_report',
 							'page/page_users',
-							'page/page_tabs'
+							'page/page_tabs',
+							//for fancybox in application tab
+							'common/fancybox/jquery.mousewheel-3.0.4.pack',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'common/main',
-							'page/main',
-							'page/campaign',
-							'page/member'
+							'common/platform',
+							//'common/pagination',
+							//for fancybox in application tab
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),
@@ -69,16 +72,25 @@ class Page extends CI_Controller {
 					),
 				TRUE),
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-					array('breadcrumb' => 
-						array( 
+					array(
+						'breadcrumb' => array( 
 							$company['company_name'] => base_url() . "company/{$company['company_id']}",
 							$page['page_name'] => base_url() . "page/{$page['page_id']}"
-							)
-						)
-					,
+							),
+						'settings_url' => base_url()."settings/{$company['company_id']}/page/{$page['page_id']}"
+					),
 				TRUE),
 				'page_profile' => $this -> load -> view('page/page_profile', 
-					array('page_profile' => $page),
+					array('page_profile' => $page,
+						'app_count' => $app_count,
+						'campaign_count' => $campaign_count,
+						'user_count' => $user_count,
+						///'new_user_count' => $new_user_count,
+						'facebook' => array(
+							'link' => issetor($facebook_page_graph['link']),
+							'likes' =>  issetor($facebook_page_graph['likes'])
+						)
+					),
 				TRUE),
 				'page_tabs' => $this -> load -> view('page/page_tabs', 
 					array(
@@ -88,13 +100,13 @@ class Page extends CI_Controller {
 						),
 				TRUE), 
 				'page_apps' => $this -> load -> view('page/page_apps', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE), 
 				'page_campaigns' => $this -> load -> view('page/page_campaigns', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'page_users' => $this -> load -> view('page/page_users', 
-					array('pagination' => $pagination),
+					array(),
 				TRUE),
 				'page_report' => $this -> load -> view('page/page_report', 
 					array(),
@@ -104,7 +116,42 @@ class Page extends CI_Controller {
 			return $data;
 		}
 	}
-
+	
+	/**
+	 * JSON : Count apps
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function json_count_apps($page_id = NULL){
+		$this->load->model('installed_apps_model','installed_apps');
+		$count = $this->installed_apps->count_installed_apps_by_page_id($page_id);
+		echo json_encode($count);
+	}
+	
+	/**
+	 * JSON : Count campaigns
+	 * @param $page_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function json_count_campaigns($page_id = NULL, $campaign_status_id = NULL){
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+	
+	/**
+	 * JSON : Count users
+	 * @param $page_id
+	 * @param array $labels
+	 * @author Manassarn M.
+	 */
+	function json_count_users($page_id = NULL, $labels = array()){
+		$this->load->model('user_model','users');
+		$count = $this->users->count_users_by_page_id($page_id);
+		echo json_encode($count);
+	}
+	
 	/**
 	 * JSON : Get page profile
 	 * @param $page_id
@@ -214,6 +261,40 @@ class Page extends CI_Controller {
 			$this->page->update_page_profile_by_page_id($page_id,array('order_in_dashboard'=>$i));
 			$i++;	
 		}		
+	}
+	
+	/**
+	 * fancybox for adding app 
+	 * @author Prachya P.
+	 */
+	function addapp_lightbox($page_id){
+		$this -> socialhappen -> check_logged_in("home");
+		if($page_id){			
+			$this -> load -> model('company_model', 'companies');
+			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
+			$this -> load -> model('page_model', 'pages');
+			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+			$data = array(
+				'page_id' => $page_id,
+				'header' => $this -> socialhappen -> get_header_lightbox( 
+					array(
+						'vars' => array('company_id'=>$company['company_id'],
+							'page_id'=>$page_id,
+							'page_name'=>$page['page_name'],
+							'user_id'=>$this->session->userdata('user_id')),
+						'script' => array(
+							'page/addapp_lightbox'
+						),
+						'style' => array(
+							'company/main',
+							'common/smoothness/jquery-ui-1.8.9.custom'
+						)
+					)
+				),
+				'footer' => $this -> socialhappen -> get_footer_lightbox()
+			);
+			$this->parser->parse('page/addapp_lightbox_view', $data);
+		}
 	}
 }
 

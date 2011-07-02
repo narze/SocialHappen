@@ -84,6 +84,20 @@ class SocialHappen{
 	}
 	
 	/**
+	 * Get header view, predefine $user and $user_companies in views
+	 * @return $header
+	 * @author Manassarn M., Prachya P.
+	 */
+	function get_header_lightbox($data = array()){
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			$data['user'] = $this->get_user();
+			$data['user_companies'] = $this->get_user_companies();
+		}
+		$data['image_url'] = base_url().'assets/images/';
+		return $this->CI->load->view('common/header_lightbox', $data, TRUE);
+	}
+	
+	/**
 	 * Get footer view
 	 * @return $footer
 	 * @author Manassarn M.
@@ -98,6 +112,20 @@ class SocialHappen{
 	}
 	
 	/**
+	 * Get footer view
+	 * @return $footer
+	 * @author Manassarn M.,Prachya P.
+	 * @todo add more elements
+	 */
+	function get_footer_lightbox($data = array()){
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			return $this->CI->load->view('common/footer_lightbox', array() , TRUE);
+		} else {
+			return $this->CI->load->view('common/footer_lightbox', array() , TRUE);
+		}
+	}
+	
+	/**
 	 * Login into SocialHappen
 	 * Stores user session with facebook id
 	 * @param $redirect_url
@@ -107,12 +135,14 @@ class SocialHappen{
 		if($facebook_cookie = $this->CI->facebook->get_facebook_cookie()){
 			$user_facebook_id = $facebook_cookie['uid'];
 			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
-			$userdata = array(
-								'user_id' => $user_id,
-								'user_facebook_id' => $user_facebook_id,
-								'logged_in' => TRUE
-							);
-			$this->CI->session->set_userdata($userdata);
+			if($user_id){
+				$userdata = array(
+					'user_id' => $user_id,
+					'user_facebook_id' => $user_facebook_id,
+					'logged_in' => TRUE
+				);
+				$this->CI->session->set_userdata($userdata);
+			}
 		}
 		if($redirect_url){
 			redirect($redirect_url);
@@ -128,6 +158,27 @@ class SocialHappen{
 	    $this->CI->session->sess_destroy();
 		if($redirect_url){
 			redirect($redirect_url);
+		}
+	}
+	
+	/**
+	 * Resize image and save as separated files
+	 * @param $image_data (see http://codeigniter.com/user_guide/libraries/file_uploading.html)
+	 * @author Manassarn M.
+	 */
+	function resize_image($image_data = NULL, $square_dimensions = array()){
+		if($image_data && $square_dimensions) {
+			$this->CI->load->library('image_lib'); 
+			foreach($square_dimensions as $dimension){
+				$config['image_library'] = 'gd2';
+				$config['source_image']	= "uploads/images/{$image_data['file_name']}";
+				$config['new_image'] = "uploads/images/{$image_data['raw_name']}_{$dimension}{$image_data['file_ext']}";
+				$config['maintain_ratio'] = TRUE;
+				$config['width']	 = $dimension;
+				$config['height']	= $dimension;
+				$this->CI->image_lib->initialize($config); 
+				$this->CI->image_lib->resize();
+			}
 		}
 	}
 }

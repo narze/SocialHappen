@@ -28,28 +28,16 @@
 		</div>
 		<div class="strip">
 			<ul>
-				<li>
-					<a href="#"></a>
-				</li>
-				<li>
-					<a href="#" class="current"></a>
-				</li>
-				<li>
-					<a href="#"></a>
-				</li>
-				<li>
-					<a href="#"></a>
-				</li>
 			</ul>
 		</div>
 	</div>
 	<div class="page-tab-left" style="display:none;">
 		<div class="box-page_list">
 			<div class="dragging-page">
-				<a class="back-inactive" href="#">
+				<a class="back-inactive" href="javascript:previous_page('installed-page')">
 				<span>back</span>
 				</a>
-				<a class="next" href="#">
+				<a class="next" href="javascript:next_page('installed-page')">
 				<span>next</span>
 				</a>
 				<div>
@@ -72,18 +60,6 @@
 				</div>
 				<div class="strip">
 					<ul>
-						<li>
-							<a href="#"></a>
-						</li>
-						<li>
-							<a href="#" class="current"></a>
-						</li>
-						<li>
-							<a href="#"></a>
-						</li>
-						<li>
-							<a href="#"></a>
-						</li>
 					</ul>
 				</div>
 			</div>

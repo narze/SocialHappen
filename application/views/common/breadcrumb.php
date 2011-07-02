@@ -6,8 +6,13 @@
 
 		<?php
 		
+		$last = end($breadcrumb);
 		foreach($breadcrumb as $name => $url){
-			echo "<li><a href='{$url}'>{$name}</a></li>";
+			if($last == $url){
+				echo "<li>{$name}</li";
+			} else {
+				echo "<li><a href='{$url}'>{$name}</a></li>";
+			}
 		}
 		
 		?>
@@ -17,7 +22,7 @@
 
       <li class="group"><a href="#"><span>group</span></a></li>
 
-      <li class="setting"><a href="#"><span>setting</span></a></li>
+      <li class="setting"><a href="<?php echo issetor($settings_url,'#');?>"><span>setting</span></a></li>
 
     </ul>
 

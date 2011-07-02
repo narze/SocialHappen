@@ -84,18 +84,6 @@
 		</div>
 		<div class="strip">
 			<ul>
-				<li>
-					<a href="#"></a>
-				</li>
-				<li>
-					<a href="#" class="current"></a>
-				</li>
-				<li>
-					<a href="#"></a>
-				</li>
-				<li>
-					<a href="#"></a>
-				</li>
 			</ul>
 		</div>
 		<p class="alert">
@@ -112,18 +100,6 @@
 		</div>
 		<div class="strip">
 			<ul>
-				<li>
-					<a href="#"></a>
-				</li>
-				<li>
-					<a href="#" class="current"></a>
-				</li>
-				<li>
-					<a href="#"></a>
-				</li>
-				<li>
-					<a href="#"></a>
-				</li>
 			</ul>
 		</div>
         <p class="alert">Drag available Application to left panel to install</p>
