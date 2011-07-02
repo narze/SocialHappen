@@ -256,7 +256,7 @@ class Audit_lib
 			$data_to_add['campaign_id'] = $additional_data['campaign_id'];
 		}
 		if(isset($additional_data['company_id'])){
-			$data_to_add['company_id '] = $additional_data['company_id'];
+			$data_to_add['company_id'] = $additional_data['company_id'];
 		}
 		if(isset($additional_data['page_id'])){
 			$data_to_add['page_id'] = $additional_data['page_id'];
