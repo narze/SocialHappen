@@ -329,6 +329,23 @@ class Audit_lib
 		return (int)Date('Ymd');
 	}
 	
+	function get_date_range($startDate, $endDate, $format="Ymd")
+	{
+		date_default_timezone_set('Asia/Bangkok');
+	    //Create output variable
+	    $datesArray = array();
+	    //Calculate number of days in the range
+	    $total_days = round(abs(strtotime($endDate) - strtotime($startDate)) / 86400, 0) + 1;
+	    if($total_days<0) { return false; }
+	    //Populate array of weekdays and counts
+	    for($day=0; $day<$total_days; $day++)
+	    {
+	        $datesArray[] = date($format, strtotime("{$startDate} + {$day} days"));
+	    }
+	    //Return results array
+	    return $datesArray;
+	}
+	
 	/**
 	 * list stat app by $app_install_id or $action_id or both
 	 * you can input date range in $start_date and $end_date parameter,
@@ -513,24 +530,54 @@ class Audit_lib
 	 * count audit with distinct key for single day
 	 * 
 	 * @param key string to distinct (ex. subject)
-	 * @param app_id
+	 * @param app_id [optional]
 	 * @param action_id
-	 * @param criteria array of criteria may contain ['app_install_id', 'page_id', 'campaign_id']
+	 * @param criteria array of criteria may contain ['app_install_id', 'subject', 'object', 'objecti', 'page_id', 'campaign_id']
 	 * @param date - date in format yyyymmdd ex. 20100531
 	 * 
 	 * @return int
 	 */
 	function count_audit($key = NULL, $app_id = NULL, $action_id = NULL, $criteria = NULL, $date = NULL){
-		$check_args = isset($key) && isset($app_id) && isset($action_id) && isset($criteria) && isset($date);
+		return $this->count_audit_range($key, $app_id, $action_id, $criteria, $date, $date);
+	}
+	
+	/**
+	 * count audit with distinct key for single day
+	 * 
+	 * @param key string to distinct (ex. subject)
+	 * @param app_id [optional]
+	 * @param action_id
+	 * @param criteria array of criteria may contain ['app_install_id', 'subject', 'object', 'objecti', 'page_id', 'campaign_id']
+	 * @param start_date - date in format yyyymmdd ex. 20100531
+	 * @param end_date - date in format yyyymmdd ex. 20100531
+	 * 
+	 * @return int
+	 */
+	function count_audit_range($key = NULL, $app_id = NULL, $action_id = NULL, $criteria = NULL, $start_date = NULL, $end_date = NULL){
+		$check_args = isset($key) && isset($action_id) && isset($criteria) && isset($start_date);
 		if(!$check_args){
 			return NULL;
 		}
 		$this->CI->load->model('audit_model', 'audit');
 		
 		$db_criteria = array();
+		if(isset($app_id)){
+			$db_criteria['app_id'] = $app_id;
+		}
 		
-		$db_criteria['app_id'] = $app_id;
 		$db_criteria['action_id'] = $action_id;
+		
+		if(isset($criteria['subject'])){
+			$db_criteria['subject'] = $criteria['subject'];
+		}
+		
+		if(isset($criteria['object'])){
+			$db_criteria['object'] = $criteria['object'];
+		}
+		
+		if(isset($criteria['objecti'])){
+			$db_criteria['objecti'] = $criteria['objecti'];
+		}
 		
 		if(isset($criteria['app_install_id'])){
 			$db_criteria['app_install_id'] = $criteria['app_install_id'];
@@ -546,7 +593,7 @@ class Audit_lib
 		//var_dump($db_criteria);
 		//echo '</pre>';
 		
-		return $this->CI->audit->count_distinct_audit($key, $db_criteria, $this->convert_statdate_to_date($date));
+		return $this->CI->audit->count_distinct_audit($key, $db_criteria, $this->convert_statdate_to_date($start_date), $this->convert_statdate_to_date($end_date));
 	}
 	
 	/**

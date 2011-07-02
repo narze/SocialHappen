@@ -27,6 +27,35 @@ class Audit extends CI_Controller {
 		echo '</pre>';
 	}
 	
+	function list_audit_user(){
+		$page_id = 1;
+		$user_id = 1;
+		$activity = $this->audit_lib->list_audit(array('page_id' => $page_id, 'subject' => $user_id));
+		echo '<pre>';
+		var_dump($activity);
+		echo '</pre>';
+	}
+	
+	function count_visit(){
+		$date = $this->audit_lib->_date();
+		$action_id = 103;
+		$res = $this->audit_lib->count_audit('_id', NULL, $action_id, array('page_id' => 1, 'subject' => 1), $date);
+		echo '<pre>';
+		var_dump($res);
+		echo '</pre>';
+	}
+	
+	function addlog_visit(){
+		$app_id = 3;
+		$action_id = 103;
+		$subject = 1;
+		$object = NULL;
+		$objecti = NULL;
+		$additional_data = array('app_install_id' => 7, 'page_id' => 1);
+		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+		if($result) echo 'app visit';
+	}
+	
 	function today(){
 		date_default_timezone_set('Asia/Bangkok');
 		$start = time();
@@ -87,7 +116,7 @@ class Audit extends CI_Controller {
 		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
 		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
 		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.pointLabels.min.js"></script>
-		     <link rel="stylesheet" type="text/css" href="'.base_url().'assets/js/stat/jquery.jqplot.min.css" />';
+		     <link rel="stylesheet" type="text/css" href="'.base_url().'assets/css/stat/jquery.jqplot.min.css" />';
 		$data = array(array('20080223' => 5,
 					'20080323' => 10,
 					'20080423' => 4,

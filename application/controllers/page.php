@@ -325,23 +325,6 @@ class Page extends CI_Controller {
 		}
 	}
 	
-	function _getDateRange($startDate, $endDate, $format="Ymd")
-	{
-		date_default_timezone_set('Asia/Bangkok');
-	    //Create output variable
-	    $datesArray = array();
-	    //Calculate number of days in the range
-	    $total_days = round(abs(strtotime($endDate) - strtotime($startDate)) / 86400, 0) + 1;
-	    if($total_days<0) { return false; }
-	    //Populate array of weekdays and counts
-	    for($day=0; $day<$total_days; $day++)
-	    {
-	        $datesArray[] = date($format, strtotime("{$startDate} + {$day} days"));
-	    }
-	    //Return results array
-	    return $datesArray;
-	}
-	
 	function get_stat_graph($page_id = NULL, $start_date = NULL, $end_date = NULL){
 		$this->load->library('audit_lib');
 
@@ -357,7 +340,7 @@ class Page extends CI_Controller {
 			$start_date = date('Ymd', time() - 2592000);
 		}
 		
-		$dateRange = $this->_getDateRange($start_date, $end_date);
+		$dateRange = $this->audit_lib->get_date_range($start_date, $end_date);
 		
 		//print_r($dateRange);
 		$action_id = 102;
