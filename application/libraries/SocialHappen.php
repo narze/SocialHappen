@@ -135,12 +135,14 @@ class SocialHappen{
 		if($facebook_cookie = $this->CI->facebook->get_facebook_cookie()){
 			$user_facebook_id = $facebook_cookie['uid'];
 			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
-			$userdata = array(
-								'user_id' => $user_id,
-								'user_facebook_id' => $user_facebook_id,
-								'logged_in' => TRUE
-							);
-			$this->CI->session->set_userdata($userdata);
+			if($user_id){
+				$userdata = array(
+					'user_id' => $user_id,
+					'user_facebook_id' => $user_facebook_id,
+					'logged_in' => TRUE
+				);
+				$this->CI->session->set_userdata($userdata);
+			}
 		}
 		if($redirect_url){
 			redirect($redirect_url);

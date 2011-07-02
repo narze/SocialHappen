@@ -40,9 +40,7 @@ class Campaign extends CI_Controller {
 						),
 						'style' => array(
 							'common/main',
-							'campaign/main',
-							'campaign/member',
-							'campaign/stat'
+							'common/platform'
 						)
 					)
 				),

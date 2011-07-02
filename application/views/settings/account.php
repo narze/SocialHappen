@@ -3,7 +3,7 @@
 		<div id="authorize-information"><h2>Authorize information</h2></div>
 <?php // Change the css classes to suit your needs    
 	$attributes = array('class' => 'account', 'id' => '');
-	echo form_open("settings/account/{$user['user_id']}", $attributes); ?>
+	echo form_open_multipart("settings/account/{$user['user_id']}", $attributes); ?>
 	<div id="account-information"><h2>Account information</h2>
 		
 		<p>
@@ -23,11 +23,12 @@
 				<?php echo form_error('email'); ?>
 				<br /><input id="email" type="text" name="email" maxlength="255" value="<?php echo set_value('email',$user['user_email']); ?>"  />
 		</p>
-		
+			
 		<p>
 				<label for="user_image">User image</label>
 				<?php echo form_error('user_image'); ?>
-				<br /><input id="user_image" type="text" name="user_image" maxlength="255" value="<?php echo set_value('user_image',$user['user_image']); ?>"  />
+				<br /><input id="user_image" type="file" name="user_image" />
+				<img src="<?php echo $user['user_image'];?>" />
 		</p>
 
 	</div>
@@ -38,7 +39,7 @@
 
 	
 	<p>
-			<?php echo form_submit( 'submit', 'Submit'); ?>
+			<?php echo form_submit('submitForm', 'Submit'); ?>
 	</p>
 	
 	<?php echo form_close(); ?>

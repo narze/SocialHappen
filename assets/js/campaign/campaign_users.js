@@ -1,16 +1,16 @@
 $(function(){	
 	function get_campaign_users(page_index, jq){
 		$.getJSON(base_url+'campaign/json_get_users/'+campaign_id,function(json){
-			$('.wrapper-details.users .details table tbody tr.hidden-template').siblings().addClass('old-result');
+			$('.wrapper-details-member.users .details table tbody tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
-				$('.wrapper-details.users .details').html(
+				$('.wrapper-details-member.users .details').html(
 					'<p>No user yet</p> <p><a href="#">+ add new user</a> | <a href="#">help</a></p>'
 				);
 			} else {
 				for(i in json){
-					var row = $('.wrapper-details.users .details table tr.hidden-template').clone()
+					var row = $('.wrapper-details-member.users .details table tr.hidden-template').clone()
 					.removeClass('hidden-template')
-					.appendTo('.wrapper-details.users .details table');
+					.appendTo('.wrapper-details-member.users .details table');
 
 					var campaign_list = row.find('td.app-list div');
 					campaign_list.find('p.thumb img').attr('src', json[i].user_image);
@@ -26,7 +26,7 @@ $(function(){
 					row.find('td.bt-icon a.bt-delete').attr('href', base_url+'path/to/delete/'+ json[i].campaign_id); //detele
 					row.find('td.bt-icon a.bt-go').attr('href', base_url+'path/to/go/'+ json[i].campaign_id); //delete
 				}
-				$('.wrapper-details.users .details table tr:even').addClass('next');
+				$('.wrapper-details-member.users .details table tr:even').addClass('next');
 				$('.old-result').remove();
 			}
 		});

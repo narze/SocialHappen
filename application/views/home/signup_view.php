@@ -2,7 +2,8 @@
 {breadcrumb}
 <div class="wrapper-content">
 	<div>
-		{home}
+		{tutorial}
+		{signup_form}
 	</div>
 	<div class="bottom"><!--bottom--></div>
 </div>

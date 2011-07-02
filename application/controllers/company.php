@@ -110,6 +110,18 @@ class Company extends CI_Controller {
 	}
 	
 	/**
+	 * JSON : Get company campaigns
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function json_get_campaigns_count($company_id = NULL){
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_campaigns_by_company_id($company_id);
+		$count=array('campaign_count' => $count);
+		echo json_encode($count);
+	}
+	
+	/**
 	 * JSON : Get installed app count not in page
 	 * @param $company_id
 	 * @author Prachya P.

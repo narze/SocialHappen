@@ -1,16 +1,16 @@
 $(function(){	
 	function get_page_users(page_index, jq){
-		$.getJSON(base_url+'page/json_get_users/'+page_id,function(json){
-			$('.wrapper-details.users .details table tbody tr.hidden-template').siblings().addClass('old-result');
+		$.getJSON(base_url+'page/json_get_users/'+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){
+			$('.wrapper-details-member.users .details table tbody tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
-				$('.wrapper-details.users .details').html(
+				$('.wrapper-details-member.users .details').html(
 					'<p>No user yet</p> <p><a href="#">+ add new user</a> | <a href="#">help</a></p>'
 				);
 			} else {
 				for(i in json){
-					var row = $('.wrapper-details.users .details table tr.hidden-template').clone()
+					var row = $('.wrapper-details-member.users .details table tr.hidden-template').clone()
 					.removeClass('hidden-template')
-					.appendTo('.wrapper-details.users .details table');
+					.appendTo('.wrapper-details-member.users .details table');
 
 					var app_list = row.find('td.app-list div');
 					app_list.find('p.thumb img').attr('src', json[i].user_image);
@@ -26,16 +26,21 @@ $(function(){
 					row.find('td.bt-icon a.bt-delete').attr('href', base_url+'path/to/delete/'+ json[i].app_install_id); //detele
 					row.find('td.bt-icon a.bt-go').attr('href', base_url+'path/to/go/'+ json[i].app_install_id); //delete
 				}
-				$('.wrapper-details.users .details table tr:even').addClass('next');
-				$('.old-result').remove();
+				$('.wrapper-details-member.users .details table tr:even').addClass('next');
+				
 			}
+			$('.old-result').remove();
 		});
 		return false;
 	}
-
-	$('.pagination-users').pagination(user_count, {
-        items_per_page:per_page,
-        callback:get_page_users,
-		load_first_page:true
+	$('.tab-content ul li.users a').click(function(){
+		$.getJSON(base_url+"page/json_count_users/"+page_id,function(count){
+			$('.pagination-users').pagination(count, {
+				items_per_page:per_page,
+				callback:get_page_users,
+				load_first_page:true
+			});
+		});
+		return false;
 	});
 });

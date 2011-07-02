@@ -1,15 +1,9 @@
 $(function(){	
 	function show_tab(name){
-		$('.wrapper-details').hide();
+		$('[class*="wrapper-details"]').hide();
 		$('.tab-content ul li').removeClass('active');
 		$('.tab-content ul li.'+name).addClass('active');
-		
-		var style_name = '';
-		if(name == 'stat') style_name = 'main';
-		else if(name == 'users') style_name = 'member';
-		$('link.page').attr('disabled',true);
-		$('link.page#'+style_name).removeAttr('disabled');
-		$('.wrapper-details.'+name).show();
+		$('[class*="wrapper-details"][class*="'+name+'"]').show();
 	}
 
 	$('.tab-content ul li.stat a').click(function(){
