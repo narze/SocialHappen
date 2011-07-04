@@ -811,12 +811,14 @@ div.popup-addapp>div:first-child+div div.strip { padding: 4px 0 20px;}
 /* --------------
 Button
 -----------------*/
-*.bt-go_page, *.bt-add_app, *.bt-addnew_app, *.bt-create_page, *.bt-edit, *.bt-setting, *.bt-delete, *.bt-go, *.bt-create_company, *.bt-manage_page, *.bt-setting_page, *.bt-update_app, *.bt-setting_app, *.bt-go-cam, *.bt-remove,*.bt-block, *.bt-label, *.bt-orderby, *.bt-apply  {
+*.bt-go_page, *.bt-add_app, *.bt-addnew_app, *.bt-create_page, *.bt-edit, *.bt-setting, *.bt-delete, *.bt-go, *.bt-create_company, *.bt-manage_page, *.bt-setting_page, *.bt-update_app, *.bt-setting_app, *.bt-go-cam, *.bt-remove,*.bt-block, *.bt-label, *.bt-orderby, *.bt-apply, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-setting_company, *.bt-delete_company {
 	display: block;
 	background: url(../../images/bg/bg_button.png) no-repeat;
 	cursor: pointer;
+	border: none;
+	color: transparent;
 }
-*.bt-go_page span, *.bt-add_app span, *.bt-addnew_app span, *.bt-create_page span, *.bt-addnew_app span, *.bt-icon span, *.bt-create_company span, *.bt-manage_page span, *.bt-setting_page span , *.bt-update_app span, *.bt-setting_app span, *.bt-go span, *.bt-remove span,*.bt-block span, *.bt-label span, *.bt-orderby span,  *.bt-apply span{ display: none;}
+*.bt-go_page span, *.bt-add_app span, *.bt-addnew_app span, *.bt-create_page span, *.bt-addnew_app span, *.bt-icon span, *.bt-create_company span, *.bt-manage_page span, *.bt-setting_page span , *.bt-update_app span, *.bt-setting_app span, *.bt-go span, *.bt-remove span,*.bt-block span, *.bt-label span, *.bt-orderby span,  *.bt-apply span, *.bt-change_pic span, *.bt-update span, *.bt-close_account span, *.bt-setting_company span, *.bt-delete_company span {display: none;}
 *.bt-go_page {
 	width: 152px;
 	height: 32px;
@@ -932,9 +934,29 @@ Button
     height: 27px;
     width: 53px;
 }
-.bt-member {
-    padding-top: 7px;
+*.bt-member {padding-top: 7px;}
+*.bt-close_account {
+	display: block;
+	width: 144px;
+	height: 34px;
+	background-position: 0 -909px;
+	margin-top: 15px;
 }
+*.bt-setting_company {
+	float: left;
+	width: 18px;
+	height: 20px;
+	background-position: 0 -964px;
+}
+*.bt-delete_company {
+	float: right;
+	width: 18px;
+	height: 16px;
+	background-position: 0 -1000px;
+	margin: 3px 0 0;
+}
+
+
 .search {
 	display: block;
 	background: url(../../images/bg/bg_filter.png) no-repeat;
@@ -960,6 +982,23 @@ Button
 	background: url(../../images/bg/bg_button.png) no-repeat 0 -440px;
 	margin:5px 10px 0 0;
 }
+*.bt-change_pic {
+	display: block;
+	width: 144px;
+	height: 29px;
+	background-position: 0 -803px;
+	margin-bottom: 15px;
+}
+*.bt-update {
+	display: block;
+	width: 144px;
+	height: 39px;
+	background-position: 0 -849px;
+}
+*.bt-setting_company {}
+*.bt-delete_company {}
+
+
 /* --------------
 Filter-campaign
 -----------------*/
@@ -1338,4 +1377,162 @@ div.menuleft>ul>li>ul>li>ul>li>a:hover {
 	text-decoration: none;
 }
 div.menuleft>ul>li>ul>li>ul>li>a img {margin: 0 8px; border: 1px solid #d2d2d2; vertical-align: middle;} 
+
+
+/*setting right */
+div.wrapper-setting>div>div:first-child+div>div {
+	width: 600px;
+	margin: 0 auto;
+	border-bottom: 1px dotted #a6a6a6;
+	margin-bottom: 15px;
+}
+div.wrapper-setting>div>div:first-child+div>div.style01 {
+	background: #f3f3f3;
+	border: none;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+div.wrapper-setting>div>div:first-child+div>div>div { padding: 10px 35px;}
+div.wrapper-setting>div>div:first-child+div>div.style01>h2 span{ background: #f3f3f3 !important;}
+div.wrapper-setting>div>div:first-child+div>div.style01>h2 {background: url(../../images/bg/bg_setting-h2_01.png) 0 15px repeat-x;}
+
+div.wrapper-setting>div>div:first-child+div>div>h2 {
+	height: 33px;
+	line-height: 33px;
+	padding: 0 25px;
+	font-size: 20px;
+	font-weight: normal;
+	color: #555;
+	background: url(../../images/bg/bg_setting-h2.gif) 0 15px repeat-x;
+}
+div.wrapper-setting>div>div:first-child+div>div>h2 span {background: #fff; padding: 0 8px;}
+
+ul.form01 {padding: 15px 0;}
+ul.form01>li {
+	position: relative;
+	padding:  0 0 15px 160px;
+	font-size: 14px;
+	color: #3c3c3c;
+	min-height: 18px;
+}
+ul.form01>li>strong {
+	display: block;
+	width: 142px;
+	text-align: right;
+	position: absolute;
+	left: 0;
+	top: 0;
+	font-weight: normal;
+}
+ul.form01>li input[type="text"] {
+	width: 300px;
+	height: 25px;
+	padding: 0 5px;
+	border: 1px solid #e1e1e1;
+}
+ul.form01>li label {padding-right: 25px;}
+ul.form01>li.border {
+	border-bottom: 1px solid #e1e1e1;
+	margin-bottom: 15px;
+}
+
+p.head {
+	border-bottom: 1px solid #e1e1e1;
+	padding: 5px 0;
+	font-weight: bold;
+	width: 100%;
+	overflow: hidden;
+}
+p.head>span {float: left;}
+p.head>span:first-child {width: 142px; text-align: right;}
+p.head>span:first-child+span { width: 280px; padding-left: 18px;}
+ul.style01>li {
+	width: 290px;
+	padding: 0 0 10px 0;
+	position: relative;
+}
+ul.style01>li input[type="checkbox"] {
+	position: absolute;
+	left: 288px;
+	top: 3px;
+}
+
+div.pic-profile {
+	width: 145px;
+	min-height: 55px;
+	padding-left: 73px;
+	position: relative;
+	overflow: hidden;
+	font-size: 12px;
+	text-align: center;
+	background: url(../../images/bg/bg_or.png) 98% 32px no-repeat;
+}
+div.pic-profile p.pic {
+	float: left;
+	border: 3px solid #e3e3e3;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.box-company-manage {padding: 15px 0 !important;}
+div.box-company-manage>h2 {
+	font-size: 14px;
+	padding: 10px;
+	border-bottom: 1px solid #e1e1e1;
+	position: relative;
+}
+div.box-company-manage>h2 span {
+	position: absolute;
+	left: 514px;
+	top: 10px;
+}
+div.box-company-manage div.detail-list {
+	border-bottom: 1px solid #e1e1e1;
+	padding: 0 0 8px;
+}
+div.box-company-manage div.detail-list ul>li {position: relative;}
+div.box-company-manage div.detail-list ul>li>span {
+	display: block;
+    height: 35px;
+    line-height: 35px;
+    padding: 5px;
+	font-weight: bold;
+}
+div.box-company-manage div.detail-list ul>li>span img {
+    border: 1px solid #D2D2D2;
+    margin: 0 8px;
+    vertical-align: middle;
+}
+div.box-company-manage div.detail-list ul>li>ul {
+	padding: 10px 0 2px 20px;
+}
+div.box-company-manage div.detail-list ul>li>ul>li {
+    height: 25px;
+    line-height: 25px;
+    padding: 3px 5px 3px 9px;
+	margin-bottom: 7px;
+	position: relative;
+}
+div.box-company-manage div.detail-list ul>li>ul li img {
+	 border: 1px solid #D2D2D2;
+    margin: 0 8px;
+    vertical-align: middle;
+}
+div.box-company-manage div.detail-list ul li span.tools {
+	width: 55px;
+	height: auto;
+	line-height: inherit;
+	background: url(../../images/bg/bg_setting-company.gif) no-repeat 50% 50%;
+	overflow: hidden;
+	position: absolute;
+	right: 35px;
+	top: 7px;
+}
+div.box-company-manage div.detail-list ul>li>ul>li>span.tools {top: 0;} 
+
+
+
+
 .bg-none {background: none !important;}
+.border-none {border: none !important;}
