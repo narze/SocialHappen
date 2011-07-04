@@ -6,12 +6,8 @@
 	<div>	
 		<div class="wrapper-setting">
 			<div>
-				<div>
-					{sidebar}
-				</div>
-				<div>
-					{main}
-				</div>
+				{sidebar}
+				{main}
 			</div>
 		</div>
 	</div>

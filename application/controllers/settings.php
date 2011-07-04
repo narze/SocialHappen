@@ -15,7 +15,7 @@ class Settings extends CI_Controller {
 		$setting_name = $this->input->get('s');
 		$param_id = $this->input->get('id');
 		
-		$setting_names_and_ids = array('account'=>'user_id','company'=>'company_id','page'=>'page_id','package'=>'user_id','reference'=>'user_id');
+		$setting_names_and_ids = array('account'=>'user_id','company_pages' => 'company_id', 'company'=>'company_id','page'=>'page_id','package'=>'user_id','reference'=>'user_id');
 		
 			if(!array_key_exists($setting_name, $setting_names_and_ids)){
 				redirect("settings?s=account&id=".$this->socialhappen->get_user_id());
@@ -90,30 +90,25 @@ class Settings extends CI_Controller {
 	}
 	
 	function account($user_id = NULL){
-		$this->output->enable_profiler(TRUE);
 		if($user_id && $user_id == $this->socialhappen->get_user_id()){
 			$user = $this->socialhappen->get_user();
+			$user_facebook = $this->facebook->getUser($user['user_facebook_id']);
 		
 			$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
-			$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
+			$this->form_validation->set_rules('gender', 'Gender', 'required|xss_clean');
+			$this->form_validation->set_rules('birth_date', 'Birth date', 'required|xss_clean');
+			$this->form_validation->set_rules('about', 'About', 'trim|xss_clean');
 			$this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
 				
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/account', array('user'=>$user,'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id'])));
+				$this->load->view('settings/account', array('user'=>$user,'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id'])));
 			}
 			else // passed validation proceed to post success logic
 			{
-				$config['upload_path'] = './uploads/images/';
-				$config['allowed_types'] = 'gif|jpg|png';
-				$config['max_size']	= '100';
-				$config['max_width']  = '1024';
-				$config['max_height']  = '768';
-				$config['encrypt_name'] = TRUE;
-				
 				if(set_value('use_facebook_picture')){
 					$user_image = $this->facebook->get_profile_picture($user['user_facebook_id']);
 				} else if (!$user_image = $this->socialhappen->upload_image('user_image')){
@@ -124,13 +119,15 @@ class Settings extends CI_Controller {
 				$user_update_data = array(
 								'user_first_name' => set_value('first_name'),
 								'user_last_name' => set_value('last_name'),
-								'user_email' => set_value('email'),
+								'user_gender' => set_value('gender'),
+								'user_birth_date' => set_value('birth_date'),
+								'user_about' => set_value('about'),
 								'user_image' => $user_image
 							);
 				$this->load->model('user_model','users');
 				if ($this->users->update_user_profile_by_user_id($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/account', array('user'=>$user,'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
+					$this->load->view('settings/account', array('user'=>$user, 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
 				}
 				else
 				{
@@ -168,16 +165,19 @@ class Settings extends CI_Controller {
 			{
 				$this->load->view('settings/company', array('company'=>$company));
 			}
-			else // passed validation proceed to post success logic
+			else 
 			{
-				// build array for the model
+				if (!$company_image = $this->socialhappen->upload_image('company_image')){
+					$company_image = $company['company_image'];
+				}
 				
 				$company_update_data = array(
 								'company_name' => set_value('company_name'),
 								'company_detail' => set_value('company_detail'),
 								'company_email' => set_value('company_email'),
 								'company_telephone' => set_value('company_telephone'),
-								'company_website' => set_value('company_website')
+								'company_website' => set_value('company_website'),
+								'company_image' => $company_image
 							);
 			
 				if ($this->companies->update_company_profile_by_company_id($company_id, $company_update_data)) // the information has therefore been successfully saved in the db
@@ -197,6 +197,9 @@ class Settings extends CI_Controller {
 		if($page_id) {
 			$this->load->model('page_model','pages');
 			$page = $this->pages->get_page_profile_by_page_id($page_id);
+			
+			$page_facebook = $this->facebook->get_page_info($page['facebook_page_id']);
+			
 			$this->form_validation->set_rules('page_name', 'Page name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('page_detail', 'Page detail', 'trim|xss_clean');
 				
@@ -204,22 +207,25 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/page', array('page'=>$page));
+				$this->load->view('settings/page', array('page'=>$page,'page_facebook' => $page_facebook));
 			}
-			else // passed validation proceed to post success logic
+			else 
 			{
-				// build array for the model
+				if (!$page_image = $this->socialhappen->upload_image('page_image')){
+					$page_image = $page['page_image'];
+				}
 				
 				$page_update_data = array(
 								'page_name' => set_value('page_name'),
-								'page_detail' => set_value('page_detail')
+								'page_detail' => set_value('page_detail'),
+								'page_image' => $page_image
 							);
 						
 				// run insert model to write data to db
 			
 				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/page', array('page'=>$page, 'success'=>TRUE));
+					$this->load->view('settings/page', array('page'=>$page,'page_facebook' => $page_facebook, 'success'=>TRUE));
 				}
 				else
 				{
