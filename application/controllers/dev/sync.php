@@ -190,23 +190,6 @@ class Sync extends CI_Controller {
 							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'available_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							),
-							/*'config_item' => array(
-							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'config_key' => field_option('VARCHAR', 64, $default, $null, $autoinc, $unsigned),
-							    'config_value' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
-							),
-							'config_item_template' => array(
-							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'config_key' => field_option('64', $constraint, $default, $null, $autoinc, $unsigned),
-							    'config_value' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
-							),
-							'cron_job' => array(
-							    'job_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
-							    'job_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'job_start' => field_option('TIMESTAMP', $constraint, 'CURRENT_TIMESTAMP', $null, $autoinc, $unsigned),
-							    'job_finish' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
-							    'job_status' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							),*/
 							'installed_apps' => array(
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -227,6 +210,7 @@ class Sync extends CI_Controller {
 							    'page_new_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
+								'page_status' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -267,7 +251,11 @@ class Sync extends CI_Controller {
 							'user_gender' =>array(
 								'user_gender_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
 								'user_gender_name' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned),
-							)
+							),
+							'page_status' => array(
+							    'page_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
+							    'page_status_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							),
 						);
 		$keys = array(
 						'app' => array('app_id'),
@@ -289,7 +277,8 @@ class Sync extends CI_Controller {
 						'user_campaigns' => array('user_id', 'campaign_id'),
 						'user_companies' => array('user_id', 'company_id'),
 						'sessions' => array('session_id'),
-						'user_gender' =>array('user_gender_id')
+						'user_gender' =>array('user_gender_id'),
+						'page_status' => array('page_status_id')
 					);
 		$tables = array(
 							'app',
@@ -311,7 +300,8 @@ class Sync extends CI_Controller {
 							'user_campaigns',
 							'user_companies',
 							'sessions',
-							'user_gender'
+							'user_gender',
+							'page_status'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -796,6 +786,7 @@ class Sync extends CI_Controller {
 							)
 						);
 		$this->db->insert_batch('sessions', $sessions);
+		
 		$user_gender = array(
 			array(
 				'user_gender_id' => 1,
@@ -811,6 +802,19 @@ class Sync extends CI_Controller {
 			)
 		);
 		$this->db->insert_batch('user_gender', $user_gender);
+		
+		$page_status = array(
+								array(
+								    'page_status_id' => 1,
+								    'page_status_name' => 'Not installed'
+								),
+								array(
+								    'page_status_id' => 2,
+								    'page_status_name' => 'Installed'
+								)
+							);
+		$this->db->insert_batch('page_status', $page_status);
+		
 		echo "Test data added<br />";
 	}
 }
