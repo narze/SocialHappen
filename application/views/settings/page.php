@@ -4,7 +4,7 @@
             <div>
               <ul class="form01">
                 <li><strong>Page URL:</strong><a href="<?php echo $page_facebook['link'];?>"><?php echo $page_facebook['name'];?></a></li>
-                <li><strong>Page status :</strong><?php //echo $page['page_status_name'];?>[status]</li>
+                <li><strong>Page status :</strong><?php echo $page['page_status_name'];?></li>
               </ul>
             </div>
 </div>
