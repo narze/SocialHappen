@@ -48,6 +48,7 @@ class App extends CI_Controller {
 							'app/app_users',
 							'app/app_campaigns',
 							'app/app_tabs',
+							'app/main',
 							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
