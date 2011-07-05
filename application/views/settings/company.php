@@ -10,7 +10,7 @@
                 <li>
                   <strong>Picture profile :</strong>
 				<?php echo form_error('company_image'); ?>
-                  <div class="pic-profile">
+                  <div class="pic-profile bg-none">
                     <p class="pic"><img src="<?php echo imgsize($company['company_image'],'square');?>" /></p>
                     <p><a class="bt-change_pic" href="#"><span>Change picture</span><input id="company_image" type="file" name="company_image" style="opacity: 0; height: 30px; "/></a></p>
                   </div>
@@ -28,16 +28,36 @@
 	
 	<div id="company-admin">
 	<h2><span>Company admins</span></h2>
-        <?php foreach($company_users as $user): ?>
-			<div><?php echo $user['user_first_name'].' '.$user['user_last_name']?></div>
-		<?php endforeach; ?>
+	<div class="admin-list">
+		<ul>
+			<?php foreach($company_users as $user): ?>
+				<li class="<?php echo strtolower($user['user_role_name']);?>">
+				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /><a href="#"></a></p>
+				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
+				</li>
+			<?php endforeach; ?>
+		  </ul>
+		  <p class="popup">Check the box to make an admin</p>
+		</div>
 	</div>
 	
 	<div id="company-application">
 	<h2><span>Company Applications</span></h2>
-        <?php foreach($company_apps as $app): ?>
-			<div><?php echo $app['app_name']?></div>
-		<?php endforeach; ?>
+		<div class="company-app">
+			<ul>
+				<?php foreach($company_apps as $app): ?>
+					<li>
+					 <p><img alt="" src="<?php echo imgsize($app['app_image'],'normal');; ?>">
+                      <span class="button">
+                        <a href="#" class="bt-update_app"><span>update</span></a>
+                        <a href="#" class="bt-setting_app"><span>Setting</span></a>
+                      </span>
+                     </p>
+                    <p><?php echo $app['app_name']?></p>
+					</li>
+				<?php endforeach; ?>
+		    </ul>
+        </div>
 	</div>
 	
 	<div id="delete-company" class="style01">
@@ -45,7 +65,7 @@
 		<div>
 			  <p>Text tell user what happen when delete company</p>
 			  <p>and if user have a problem he can contact our support or see FAQs</p>
-			  <p><a class="bt-delete-company" href="#"><span>Delete Company</span></a></p>
+			  <p><a class="bt-delete_company-1" href="#"><span>Close account</span></a></p>
 		</div>
     </div>
 </div>

@@ -23,7 +23,11 @@
                   <div class="pic-profile">
                     <p class="pic"><img src="<?php echo imgsize($page['page_image'],'square');?>" /></p>
                     <p><a class="bt-change_pic" href="#"><span>Change picture</span><input id="page_image" type="file" name="page_image" style="opacity: 0; height: 30px; "/></a></p>
-                  </div>
+					<p>
+						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" value="enter_value_here" class="" <?php echo set_checkbox('use_facebook_picture', 0); ?>> 
+						<label for="use_facebook_picture">use your facebook avatar</label>
+					</p> 
+				  </div>
                 </li>
                 <li><strong>page name :</strong><?php echo form_error('page_name'); ?><input id="page_name" type="text" name="page_name" maxlength="255" value="<?php echo set_value('page_name',$page['page_name']); ?>"  /></li>
                 <li><strong>page detail :</strong><?php echo form_error('page_detail'); ?><?php echo form_textarea( array( 'name' => 'page_detail', 'id' => 'page_detail' , 'cols'=> 30 ,'value' => set_value('page_detail',$page['page_detail']) ) ); ?></li>
@@ -35,9 +39,21 @@
 	
 	<div id="page-application">
 	<h2><span>Page applications</span></h2>
-        <?php foreach($page_apps as $app): ?>
-			<div><?php echo $app['app_name']?></div>
-		<?php endforeach; ?>
+       <div class="company-app">
+			<ul>
+				<?php foreach($page_apps as $app): ?>
+					<li>
+					 <p><img alt="" src="<?php echo imgsize($app['app_image'],'normal'); ?>">
+                      <span class="button">
+                        <a href="#" class="bt-update_app"><span>update</span></a>
+                        <a href="#" class="bt-setting_app"><span>Setting</span></a>
+                      </span>
+                     </p>
+                    <p><?php echo $app['app_name']?></p>
+					</li>
+				<?php endforeach; ?>
+		    </ul>
+        </div>
 	</div>
 	
 	<div id="delete-page" class="style01">
@@ -45,7 +61,7 @@
 		<div>
 			  <p>Text tell user what happen when delete page</p>
 			  <p>and if user have a problem he can contact our support or see FAQs</p>
-			  <p><a class="bt-delete-page" href="#"><span>Delete page</span></a></p>
+			  <p><a class="bt-delete_page" href="#"><span>Delete page</span></a></p>
 		</div>
     </div>
 </div>

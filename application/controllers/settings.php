@@ -41,9 +41,6 @@ class Settings extends CI_Controller {
 						'script' => array(
 							'common/functions',
 							'common/bar',
-							'settings/company',
-							'settings/page',
-							'settings/sidebar',
 							'settings/main',
 							'common/jquery.form',
 							'common/fancybox/jquery.fancybox-1.3.4.pack'
@@ -110,7 +107,7 @@ class Settings extends CI_Controller {
 			else // passed validation proceed to post success logic
 			{
 				if(set_value('use_facebook_picture')){
-					$user_image = $this->facebook->get_profile_picture($user['user_facebook_id']);
+					$user_image = issetor($this->facebook->get_profile_picture($user['user_facebook_id']));
 				} else if (!$user_image = $this->socialhappen->upload_image('user_image')){
 					$user_image = $user['user_image'];
 				}
@@ -213,6 +210,7 @@ class Settings extends CI_Controller {
 			
 			$this->form_validation->set_rules('page_name', 'Page name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('page_detail', 'Page detail', 'trim|xss_clean');
+			$this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
 				
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
@@ -222,7 +220,9 @@ class Settings extends CI_Controller {
 			}
 			else 
 			{
-				if (!$page_image = $this->socialhappen->upload_image('page_image')){
+				if(set_value('use_facebook_picture')){
+					$page_image = issetor($page_facebook['picture']);
+				} else if (!$page_image = $this->socialhappen->upload_image('page_image')){
 					$page_image = $page['page_image'];
 				}
 				

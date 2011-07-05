@@ -156,7 +156,7 @@ class Home extends CI_Controller {
 				$user_company = array(
 						'user_id' => $this->socialhappen->get_user_id(),
 						'company_id' => $company_add_result['company_id'],
-						'user_role' => 0
+						'user_role' => 1
 					);
 				if($this->user_companies->add_user_company($user_company)){
 					echo "Company created<br />";  

@@ -811,14 +811,14 @@ div.popup-addapp>div:first-child+div div.strip { padding: 4px 0 20px;}
 /* --------------
 Button
 -----------------*/
-*.bt-go_page, *.bt-add_app, *.bt-addnew_app, *.bt-create_page, *.bt-edit, *.bt-setting, *.bt-delete, *.bt-go, *.bt-create_company, *.bt-manage_page, *.bt-setting_page, *.bt-update_app, *.bt-setting_app, *.bt-go-cam, *.bt-remove,*.bt-block, *.bt-label, *.bt-orderby, *.bt-apply, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-setting_company, *.bt-delete_company {
+*.bt-go_page, *.bt-add_app, *.bt-addnew_app, *.bt-create_page, *.bt-edit, *.bt-setting, *.bt-delete, *.bt-go, *.bt-create_company, *.bt-manage_page, *.bt-setting_page, *.bt-update_app, *.bt-setting_app, *.bt-go-cam, *.bt-remove,*.bt-block, *.bt-label, *.bt-orderby, *.bt-apply, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-setting_company, *.bt-delete_company, *.bt-delete_company-1, *.bt-delete_page, *.bt-upgrade_package, *.bt-print-invoice {
 	display: block;
 	background: url(../../images/bg/bg_button.png) no-repeat;
 	cursor: pointer;
 	border: none;
 	color: transparent;
 }
-*.bt-go_page span, *.bt-add_app span, *.bt-addnew_app span, *.bt-create_page span, *.bt-addnew_app span, *.bt-icon span, *.bt-create_company span, *.bt-manage_page span, *.bt-setting_page span , *.bt-update_app span, *.bt-setting_app span, *.bt-go span, *.bt-remove span,*.bt-block span, *.bt-label span, *.bt-orderby span,  *.bt-apply span, *.bt-change_pic span, *.bt-update span, *.bt-close_account span, *.bt-setting_company span, *.bt-delete_company span {display: none;}
+*.bt-go_page span, *.bt-add_app span, *.bt-addnew_app span, *.bt-create_page span, *.bt-addnew_app span, *.bt-icon span, *.bt-create_company span, *.bt-manage_page span, *.bt-setting_page span , *.bt-update_app span, *.bt-setting_app span, *.bt-go span, *.bt-remove span,*.bt-block span, *.bt-label span, *.bt-orderby span,  *.bt-apply span, *.bt-change_pic span, *.bt-update span, *.bt-close_account span, *.bt-setting_company span, *.bt-delete_company span, *.bt-delete_company-1 span, , *.bt-delete_page span, , *.bt-upgrade_package span, *.bt-print-invoice span {display: none;}
 *.bt-go_page {
 	width: 152px;
 	height: 32px;
@@ -955,7 +955,20 @@ Button
 	background-position: 0 -1000px;
 	margin: 3px 0 0;
 }
-
+*.bt-delete_company-1 {
+	display: block;
+	width: 164px;
+	height: 34px;
+	background-position: 0 -1029px;
+	margin: 15px 0 0;
+}
+*.bt-delete_page {
+	display: block;
+	width: 133px;
+	height: 34px;
+	background-position: 0 -1078px;
+	margin: 15px 0 0;
+}
 
 .search {
 	display: block;
@@ -997,7 +1010,18 @@ Button
 }
 *.bt-setting_company {}
 *.bt-delete_company {}
-
+*.bt-upgrade_package {
+	display: block;
+	width: 123px;
+	height: 38px;
+	background-position: 0 -1131px;
+}
+*.bt-print-invoice {
+	float: right;
+	width: 134px;
+	height: 32px;
+	background-position: 0 -1185px;
+} 
 
 /* --------------
 Filter-campaign
@@ -1040,6 +1064,7 @@ Filter-campaign
 	box-shadow: inset 0 0 5px 3px #333;
 	text-decoration: none;
 }
+
 /* --------------
 Filter
 -----------------*/
@@ -1431,6 +1456,12 @@ ul.form01>li input[type="text"] {
 	padding: 0 5px;
 	border: 1px solid #e1e1e1;
 }
+ul.form01>li textarea {
+	width: 300px;
+	height: 153px;
+	padding: 0 5px;
+	border: 1px solid #e1e1e1;
+}	
 ul.form01>li label {padding-right: 25px;}
 ul.form01>li.border {
 	border-bottom: 1px solid #e1e1e1;
@@ -1458,6 +1489,7 @@ ul.style01>li input[type="checkbox"] {
 	top: 3px;
 }
 
+div.bg-none *.bt-change_pic { margin: 15px 0 0;}
 div.pic-profile {
 	width: 145px;
 	min-height: 55px;
@@ -1531,8 +1563,191 @@ div.box-company-manage div.detail-list ul li span.tools {
 }
 div.box-company-manage div.detail-list ul>li>ul>li>span.tools {top: 0;} 
 
+div.company-app {padding: 5px 0 10px!important;}
+div.company-app ul {width: 100%;}
+div.company-app ul:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.company-app ul>li {
+	float: left;
+    font-size: 11px;
+    height: 90px;
+    padding: 5px 0 0;
+    width: 74px;
+	margin: 7px 0 7px 13px;
+}
+div.company-app ul>li:first-child {margin: 7px 0 7px 0 !important;}
+div.company-app ul>li p {
+	padding: 0 5px 7px;
+    text-align: center;
+}
+div.company-app ul li p {position: relative;}
+div.company-app ul li p:hover span.button { display: block;} 
+div.company-app ul li p span.button {
+	display: none;
+	width: 64px;
+	height: 64px;
+	position: absolute;
+	left: 5px;
+	top: 0;
+	background: rgba(0,0,0,0.7);
+	cursor: default;
+	-webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
 
+div.company-app ul li p {text-align: center; padding: 0 5px 7px;}
+
+div.admin-list {padding: 10px 0 !important;}
+div.admin-list ul {width: 100%;}
+div.admin-list ul:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.admin-list ul li {
+	float: left;
+	width: 86px;
+	height: 135px;
+	margin: 0 0 0 12px;
+	color: #37518a;
+	text-align: center;
+	position: relative;
+}
+div.admin-list ul li p {padding: 0 0 5px;}
+div.admin-list ul li p span {display: block; margin: 2px 0 0; font-size: 11px;}
+div.admin-list ul li.admin span {color: #647f0f;}
+div.admin-list ul li.waiting span {color: #a6a6a6;}
+div.admin-list ul li>p:first-child>a {
+	display: block;
+	width: 29px;
+	height: 30px;
+	background: url(../../images/bg/bg_main.png) no-repeat 0 -806px;
+	position: absolute;
+	top: 56px;
+	right: 2px;
+}
+div.admin-list ul li.admin>p:first-child>a {background: url(../../images/bg/bg_main.png) no-repeat 0 -713px;}
+div.admin-list ul li.waiting>p:first-child>a {background: url(../../images/bg/bg_main.png) no-repeat 0 -758px;}
+div.admin-list p.popup {
+	margin: 0 10px 10px;
+	padding: 8px 10px 8px 35px;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+	background: #fffdd2 url(../../images/bg/bg_pop.png) no-repeat 12px 50%;
+}
+div.box-current_package {position: relative;}
+div.box-current_package div.detail {
+	min-height: 75px;
+	padding: 10px 0 10px 110px;
+	position: relative;
+	font-size: 14px;
+	margin: 0 0 10px;
+}
+div.box-current_package div.detail p.thumb {
+	display: block;
+	border: 5px solid #e3e3e3;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.box-current_package div.detail h2 {font-size: 14px; padding: 0 0 5px;}
+div.box-current_package ul.detail {
+	width: 355px;
+	height: 67px;
+	background: url(../../images/bg/bg_current-package.png) no-repeat;
+	margin: 0 0 15px;
+	overflow: hidden;
+}
+div.box-current_package ul.detail>li {float: left; padding: 15px 0 0; text-align: center;}
+div.box-current_package ul.detail>li:first-child {width: 88px;}
+div.box-current_package ul.detail>li:first-child+li {width: 90px;}
+div.box-current_package ul.detail>li:first-child+li+li {width: 88px;}
+div.box-current_package ul.detail>li:first-child+li+li+li {width: 89px; padding: 22px 0 0;}
+div.box-current_package ul.detail>li b { font-size: 22px;}
+div.box-current_package ul.detail>li span {display: block; font-size: 12px;}
+div.box-current_package div.package-overlay {
+	width: 355px;
+	border: 1px solid #e0e0e0;
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+	padding: 10px 0 5px;
+	background: #fff;
+	position: absolute;
+	top: 190px;
+	left: 35px;
+}
+div.box-current_package div.package-overlay ul {
+	width: 100%;
+	padding: 20px 0 0;
+	margin: -17px 0 0;
+	overflow: hidden;
+	background: url(../../images/bg/top-package.png) 95% 0 no-repeat;
+}
+div.box-current_package div.package-overlay ul>li {
+	float: left;
+	height: 90px;
+	margin: 0 0 0 19px;
+	padding: 0 0 10px;
+}
+div.box-current_package div.package-overlay ul>li p {text-align: center; padding: 0 0 5px;}
+div.box-billing_info table { width: 100%;}
+div.box-billing_info table th {background: #383838; padding: 10px; text-align: left; color: #fff; font-size: 14px;}
+div.box-billing_info table td, div.box-billing_info table th {
+	border-bottom: 1px solid #fff;
+	border-right: 1px solid #fff;
+}
+div.box-billing_info table td {font-size: 13px; padding: 7px 10px;}
+div.box-billing_info table .right {text-align: right;}
+div.box-billing_info table tr.set-bg td { background: #f4f4f4;}
+
+div.box-billing_info table a { color: #596e17; text-decoration: underline;}
+div.box-billing_info table a:hover { text-decoration: none;}
+
+div.wrapper_popup {
+	width: 580px;
+	padding: 25px 25px 20px;
+	border: 8px solid #b5ca6e;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+	background: #fff;
+}
+div.wrapper_popup>h2 {
+	font-size: 24px;
+	font-family: Myriad Pro;
+	color: #424241;
+	font-weight: normal;
+	padding: 0 0 5px;
+	border-bottom: 1px dotted #a6a6a6;
+	margin: 0 0 15px;
+}
+div.wrapper_popup div.billing-detail table {margin-bottom: 12px; border: 1px solid #dedede; width: 100%;}
+div.wrapper_popup div.billing-detail table th {
+	background: #323232;
+	font-size: 13px;
+	padding: 5px 12px;
+	color: #fff;
+	text-align: left;
+}
+div.wrapper_popup div.billing-detail table td {padding: 5px 12px;}
+div.wrapper_popup div.billing-detail table td p {padding-bottom: 5px;}
+div.wrapper_popup div.billing-detail table tr.set01 td {
+	background: #f7f7f7;
+	border-top: 1px solid #dedede;
+	border-right: 1px solid #dedede;
+	text-align: right;
+}
+div.wrapper_popup div.billing-detail table tr.set01 td.border01 { border-right: none;}
+div.wrapper_popup div.billing-detail p {width: 100%; overflow: hidden;}
+div.wrapper_popup div.billing-detail table .right {text-align: right;}
 
 
 .bg-none {background: none !important;}
 .border-none {border: none !important;}
+.green {color: #617328;}

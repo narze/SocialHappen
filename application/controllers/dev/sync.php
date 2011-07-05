@@ -238,7 +238,7 @@ class Sync extends CI_Controller {
 							'user_companies' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'user_role' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
+							    'user_role' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
 							),
 							'sessions' =>array(
 								'session_id' => field_option('VARCHAR', 40, '0', $null, $autoinc, $unsigned),
@@ -255,6 +255,10 @@ class Sync extends CI_Controller {
 							'page_status' => array(
 							    'page_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
 							    'page_status_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							),
+							'user_role' => array(
+							    'user_role_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
+							    'user_role_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 						);
 		$keys = array(
@@ -278,7 +282,8 @@ class Sync extends CI_Controller {
 						'user_companies' => array('user_id', 'company_id'),
 						'sessions' => array('session_id'),
 						'user_gender' =>array('user_gender_id'),
-						'page_status' => array('page_status_id')
+						'page_status' => array('page_status_id'),
+						'user_role' => array('user_role_id')
 					);
 		$tables = array(
 							'app',
@@ -301,7 +306,8 @@ class Sync extends CI_Controller {
 							'user_companies',
 							'sessions',
 							'user_gender',
-							'page_status'
+							'page_status',
+							'user_role'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -641,7 +647,7 @@ class Sync extends CI_Controller {
 		$page = array(
 					array(
 						    'page_id' => 1, 
-						    'facebook_page_id' => 4321, 
+						    'facebook_page_id' => 40796308305, 
 						    'company_id' => 1, 
 						    'page_name' => 'Test name', 
 						    'page_detail' => 'detail', 
@@ -750,12 +756,12 @@ class Sync extends CI_Controller {
 								array(
 								    'user_id' => 1,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 2,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 3,
@@ -765,12 +771,12 @@ class Sync extends CI_Controller {
 								array(
 								    'user_id' => 4,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 2
 								),
 								array(
 								    'user_id' => 5,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 3
 								)
 							);
 		$this->db->insert_batch('user_companies', $user_companies);
@@ -814,6 +820,18 @@ class Sync extends CI_Controller {
 								)
 							);
 		$this->db->insert_batch('page_status', $page_status);
+		
+		$user_role = array(
+								array(
+								    'user_role_id' => 1,
+								    'user_role_name' => 'Admin'
+								),
+								array(
+								    'user_role_id' => 2,
+								    'user_role_name' => 'Waiting'
+								)
+							);
+		$this->db->insert_batch('user_role', $user_role);
 		
 		echo "Test data added<br />";
 	}
