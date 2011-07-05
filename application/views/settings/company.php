@@ -26,9 +26,18 @@
 	<?php echo form_close(); ?>
 	</div>
 	
+	<div id="company-admin">
+	<h2><span>Company admins</span></h2>
+        <?php foreach($company_users as $user): ?>
+			<div><?php echo $user['user_first_name'].' '.$user['user_last_name']?></div>
+		<?php endforeach; ?>
+	</div>
+	
 	<div id="company-application">
 	<h2><span>Company Applications</span></h2>
-            
+        <?php foreach($company_apps as $app): ?>
+			<div><?php echo $app['app_name']?></div>
+		<?php endforeach; ?>
 	</div>
 	
 	<div id="delete-company" class="style01">

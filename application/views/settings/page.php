@@ -33,14 +33,11 @@
 	<?php echo form_close(); ?>
 	</div>
 	
-	<div id="page-admin">
-	<h2><span>Page admins</span></h2>
-            
-	</div>
-	
 	<div id="page-application">
 	<h2><span>Page applications</span></h2>
-            
+        <?php foreach($page_apps as $app): ?>
+			<div><?php echo $app['app_name']?></div>
+		<?php endforeach; ?>
 	</div>
 	
 	<div id="delete-page" class="style01">

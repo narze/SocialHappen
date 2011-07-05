@@ -153,6 +153,13 @@ class Settings extends CI_Controller {
 		if($company_id) {
 			$this->load->model('company_model','companies');
 			$company = $this->companies->get_company_profile_by_company_id($company_id);
+			
+			$this->load->model('company_apps_model','company_apps');
+			$company_apps = $this->company_apps->get_company_apps_by_company_id($company_id);
+			
+			$this->load->model('user_companies_model','user_companies');
+			$company_users = $this->user_companies->get_company_users_by_company_id($company_id);
+			
 			$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('company_email', 'Contact email', 'required|trim|xss_clean|valid_email|max_length[255]');			
@@ -163,7 +170,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/company', array('company'=>$company));
+				$this->load->view('settings/company', array('company'=>$company, 'company_apps' => $company_apps, 'company_users' => $company_users));
 			}
 			else 
 			{
@@ -182,7 +189,7 @@ class Settings extends CI_Controller {
 			
 				if ($this->companies->update_company_profile_by_company_id($company_id, $company_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/company', array('company'=>$company, 'success'=>TRUE));
+					$this->load->view('settings/company', array('company'=>$company, 'company_apps' => $company_apps, 'company_users' => $company_users, 'success'=>TRUE));
 				}
 				else
 				{
@@ -198,6 +205,10 @@ class Settings extends CI_Controller {
 			$this->load->model('page_model','pages');
 			$page = $this->pages->get_page_profile_by_page_id($page_id);
 			
+			$this->load->model('installed_apps_model','installed_apps');
+			$page_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+			
+			
 			$page_facebook = $this->facebook->get_page_info($page['facebook_page_id']);
 			
 			$this->form_validation->set_rules('page_name', 'Page name', 'required|trim|xss_clean|max_length[255]');			
@@ -207,7 +218,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/page', array('page'=>$page,'page_facebook' => $page_facebook));
+				$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'page_facebook' => $page_facebook));
 			}
 			else 
 			{
@@ -225,7 +236,7 @@ class Settings extends CI_Controller {
 			
 				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/page', array('page'=>$page,'page_facebook' => $page_facebook, 'success'=>TRUE));
+					$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'page_facebook' => $page_facebook, 'success'=>TRUE));
 				}
 				else
 				{

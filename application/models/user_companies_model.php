@@ -70,6 +70,17 @@ class User_companies_model extends CI_Model {
 	}
 	
 	/**
+	 * Get company users
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function get_company_users_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
+		$this->db->join('user', 'user_companies.user_id = user.user_id');
+		return $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
+	}
+	
+	/**
 	 * Check if user is company admin
 	 * @param $user_id
 	 * @param $company_id
