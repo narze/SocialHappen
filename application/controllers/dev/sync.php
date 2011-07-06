@@ -260,6 +260,11 @@ class Sync extends CI_Controller {
 							    'user_role_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
 							    'user_role_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
+							'user_pages' => array(
+							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'user_role' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
+							)							
 						);
 		$keys = array(
 						'app' => array('app_id'),
@@ -283,7 +288,8 @@ class Sync extends CI_Controller {
 						'sessions' => array('session_id'),
 						'user_gender' =>array('user_gender_id'),
 						'page_status' => array('page_status_id'),
-						'user_role' => array('user_role_id')
+						'user_role' => array('user_role_id'),
+						'user_pages' => array('user_id', 'page_id')
 					);
 		$tables = array(
 							'app',
@@ -307,7 +313,8 @@ class Sync extends CI_Controller {
 							'sessions',
 							'user_gender',
 							'page_status',
-							'user_role'
+							'user_role',
+							'user_pages'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -832,6 +839,35 @@ class Sync extends CI_Controller {
 								)
 							);
 		$this->db->insert_batch('user_role', $user_role);
+		
+		$user_pages = array(
+								array(
+								    'user_id' => 1,
+								    'page_id' => 1,
+								    'user_role' => 1
+								),
+								array(
+								    'user_id' => 2,
+								    'page_id' => 1,
+								    'user_role' => 1
+								),
+								array(
+								    'user_id' => 3,
+								    'page_id' => 1,
+								    'user_role' => 0
+								),
+								array(
+								    'user_id' => 4,
+								    'page_id' => 1,
+								    'user_role' => 2
+								),
+								array(
+								    'user_id' => 5,
+								    'page_id' => 1,
+								    'user_role' => 3
+								)
+							);
+		$this->db->insert_batch('user_pages', $user_pages);
 		
 		echo "Test data added<br />";
 	}

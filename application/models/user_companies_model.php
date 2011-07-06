@@ -89,3 +89,5 @@ class User_companies_model extends CI_Model {
 		return $count == 1;
 	}
 }
+/* End of file user_companies_model.php */
+/* Location: ./application/models/user_companies_model.php */

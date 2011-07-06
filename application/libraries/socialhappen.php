@@ -217,4 +217,61 @@ class SocialHappen{
 			exit();
 		}
 	}
+	
+	/**
+	 * Check if user is admin
+	 * @param array $data
+	 * @author Manassarn M.
+	 */
+	function check_admin($data = array()){
+		if(!$user_id = $this->CI->session->userdata('user_id')){
+			return FALSE;
+		}
+		
+		function in_each_array($needle_key, $needle_value, $haystack_array = array()){
+			foreach($haystack_array as $haystack){
+				if(isset($haystack[$needle_key]) && $haystack[$needle_key] == $needle_value){
+					return TRUE;
+				}
+			}
+			return FALSE;
+		}
+		
+		if(isset($data['company_id'])){
+			$this->CI->load->model('user_companies_model','user_companies');
+			$company_users = $this->CI->user_companies->get_company_users_by_company_id($data['company_id']);
+			if(!in_each_array('user_id',$user_id,$company_users)) {
+				return FALSE;
+			}
+		}
+		if(isset($data['page_id'])){
+			$this->CI->load->model('user_pages_model','user_pages');
+			$page_users = $this->CI->user_pages->get_page_users_by_page_id($data['page_id']);
+			if(!in_each_array('user_id',$user_id,$page_users)) {
+				return FALSE;
+			}
+		}
+		if(isset($data['app_install_id'])){
+			$this->CI->load->model('user_pages_model','user_pages');
+			$user_pages = $this->CI->user_pages->get_user_pages_by_user_id($user_id);
+			$this->CI->load->model('installed_apps_model','installed_apps');
+			$installed_app = $this->CI->installed_apps->get_app_profile_by_app_install_id($data['app_install_id']);
+			if(!in_each_array('page_id',$installed_app['page_id'],$user_pages)) {
+				return FALSE;
+			}
+		}
+		if(isset($data['campaign_id'])){
+			$this->CI->load->model('user_pages_model','user_pages');
+			$user_pages = $this->CI->user_pages->get_user_pages_by_user_id($user_id);
+			$this->CI->load->model('campaign_model','campaigns');
+			$campaign = $this->CI->campaigns->get_campaign_profile_by_campaign_id($data['campaign_id']);
+			$this->CI->load->model('installed_apps_model','installed_apps');
+			$installed_app = $this->CI->installed_apps->get_app_profile_by_app_install_id($campaign['app_install_id']);
+			if(!in_each_array('page_id',$installed_app['page_id'],$user_pages)) {
+				return FALSE;
+			}
+		}
+		
+		return TRUE;
+	}
 }
