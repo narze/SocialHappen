@@ -1,9 +1,10 @@
-<?php if(isset($success)) echo 'Updated'; ?>
+
 <div id="company-information"> 
+	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Company information</span></h2>
 		
-<?php // Change the css classes to suit your needs   
-		$attributes = array('class' => 'company', 'id' => '');
+	<?php
+		$attributes = array('class' => 'company-information', 'id' => '');
 		echo form_open("settings/company/{$company['company_id']}", $attributes); ?>
 		 <div>
               <ul class="form01">
@@ -27,21 +28,32 @@
 	</div>
 	
 	<div id="company-admin">
+	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Company admins</span></h2>
 	<div class="admin-list">
 		<ul>
 			<?php foreach($company_users as $user): ?>
 				<li class="<?php echo strtolower($user['user_role_name']);?>">
-				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /><a href="#"></a></p>
+				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
 				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
 				</li>
 			<?php endforeach; ?>
 		  </ul>
-		  <p class="popup">Check the box to make an admin</p>
+		  <p class="popup">Add admin by user id
+			<?php
+				$attributes = array('class' => 'company-admin', 'id' => '');
+				echo form_open("settings/company_admin/{$company['company_id']}", $attributes); ?>
+				 <ul class="form01">
+					<li><strong>User id :</strong><?php echo form_error('user_id'); ?><input id="user_id" type="text" name="user_id" maxlength="20" value="<?php echo set_value('user_id'); ?>"  /></li>
+					<li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>
+				</ul> 
+				<?php echo form_close(); ?>
+		  </p>
 		</div>
 	</div>
 	
 	<div id="company-application">
+	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Company Applications</span></h2>
 		<div class="company-app">
 			<ul>

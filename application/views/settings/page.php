@@ -1,5 +1,6 @@
-<?php if(isset($success)) echo 'Updated'; ?>
+
 	<div id="facebook-page-information">
+	<?php if(isset($success)) echo 'Updated'; ?>
 		<h2><span>Facebook page information</span></h2>
             <div>
               <ul class="form01">
@@ -10,10 +11,11 @@
 </div>
 
 <div id="page-information"> 
+<?php if(isset($success)) echo 'Updated'; ?>
 	<h2><span>Page information</span></h2>
 		
 <?php // Change the css classes to suit your needs   
-		$attributes = array('class' => 'page', 'id' => '');
+		$attributes = array('class' => 'page-information', 'id' => '');
 		echo form_open("settings/page/{$page['page_id']}", $attributes); ?>
 		 <div>
               <ul class="form01">
@@ -37,7 +39,25 @@
 	<?php echo form_close(); ?>
 	</div>
 	
+	<div id="page-admin">
+	<?php if(isset($success)) echo 'Updated'; ?>
+	<h2><span>Page admins</span></h2>
+	<div class="admin-list">
+		<ul>
+			<?php foreach($company_users as $user): 
+				$role = issetor($user['page_user_role_name']);?>
+				<li class="<?php echo strtolower($role);?>">
+				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /><a href="#"></a></p>
+				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role) echo "({$role})";?></span></p>
+				</li>
+			<?php endforeach; ?>
+		  </ul>
+		  
+		</div>
+	</div>
+	
 	<div id="page-application">
+	<?php if(isset($success)) echo 'Updated'; ?>
 	<h2><span>Page applications</span></h2>
        <div class="company-app">
 			<ul>

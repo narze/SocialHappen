@@ -13,7 +13,12 @@ $(function(){
 	
 	function make_form(element){
 		$('form').live('submit', function() {
-			$(this).ajaxSubmit({target:'div#main',success:function(){form_style(element);}});
+			var targetSelector = 'div#main #'+$(this).attr('class');
+			var srcSelector = '#'+$(this).attr('class');
+			$(this).ajaxSubmit({success:function(response){
+				$(targetSelector).replaceWith($(response).filter(srcSelector));
+				form_style(element);
+			}});
 			return false;
 		});
 		form_style(element);

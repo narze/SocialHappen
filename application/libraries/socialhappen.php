@@ -271,7 +271,17 @@ class SocialHappen{
 				return FALSE;
 			}
 		}
-		
 		return TRUE;
+	}
+	
+	/**
+	 * Check if user is exist
+	 * @param $user_id
+	 * @author Manassarn M.
+	 */
+	function check_user($user_id = NULL){
+		$this->CI->load->model('user_model','users');
+		$user = $this->CI->users->get_user_profile_by_user_id($user_id);
+		return count($user) != 0;
 	}
 }

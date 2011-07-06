@@ -1,20 +1,21 @@
-<?php if(isset($success)) echo 'Updated'; ?>
-	<div id="authorize-information">
-		<h2><span>Authorize information</span></h2>
-            <div>
-              <ul class="form01">
-                <li><strong>Facebook ID:</strong><a href="<?php echo $user_facebook['link'];?>"><?php echo $user_facebook['name'];?></a></li>
-                <li><strong>Joined since :</strong><?php echo $user['user_register_date'];?></li>
-                <li><strong>Last Active :</strong><?php echo $user['user_last_seen'];?></li>
-              </ul>
-            </div>
+<div id="authorize-information">
+	<?php if(isset($success)) echo 'Updated'; ?>
+	<h2><span>Authorize information</span></h2>
+	<div>
+	  <ul class="form01">
+		<li><strong>Facebook ID:</strong><a href="<?php echo $user_facebook['link'];?>"><?php echo $user_facebook['name'];?></a></li>
+		<li><strong>Joined since :</strong><?php echo $user['user_register_date'];?></li>
+		<li><strong>Last Active :</strong><?php echo $user['user_last_seen'];?></li>
+	  </ul>
+	</div>
 </div>
 
 <div id="account-information"> 
+	<?php if(isset($success)) echo 'Updated'; ?>
 	<h2><span>Account information</span></h2>
 		
 <?php // Change the css classes to suit your needs   
-		$attributes = array('class' => 'account', 'id' => '');
+		$attributes = array('class' => 'account-information', 'id' => '');
 		echo form_open_multipart("settings/account/{$user['user_id']}", $attributes); ?>
 		 <div>
               <ul class="form01">
@@ -47,63 +48,68 @@
               </ul> 
             </div>
 	
-	<?php echo form_close(); ?>
-	</div>
-	
-	<div id="sharing-information">
-	<h2><span>Sharing Information</span></h2>
-            <form>
-              <div>
-                <ul class="form01">
-                  <li>
-                    <strong>Facebook :</strong><a href="<?php echo $user_facebook['link'];?>"><?php echo $user_facebook['name'];?></a>
-                    <div></div>
-                  </li>
-                  <li>
-                    <strong>Twitter :</strong> [twitter_name]
-                    <div></div>
-                  </li>
-                  <li>
-                    <strong>Thumblr :</strong> [not connected]
-                    <div><a href="#">set up</a></div>
-                  </li>
-                </ul>
-              </div>
-            </form>
-	</div>
-	<div id="email-notification"><h2><span>E-mail Notification</span></h2>
-            <form>
-              <div>
-                <p class="head"><span>Group</span><span>Details</span><span>Allow</span></p>
-                <ul class="form01">
-                  <li class="border">
-                    <strong>Member notify :</strong>
-                    <ul class="style01">
-                      <li>friend notify message <input type="checkbox" /></li>
-                      <li>page notify message <input type="checkbox" /></li>
-                      <li>application notify message <input type="checkbox" /></li>
-                      <li>campaign notify message <input type="checkbox" /></li>
-                      <li>alert new campaign <input type="checkbox" /></li>
-                      <li>alert new application <input type="checkbox" /></li>
-                    </ul>
-                  </li>
-                  <li class="border">
-                    <strong>Admin notify :</strong>
-                    <ul class="style01">
-                      <li>monthly report<input type="checkbox" /></li>
-                      <li>weekly report<input type="checkbox" /></li>
-                    </ul>
-                  </li>
-                  <li><input class="bt-update" type="submit" /></li>
-                </ul>
-              </div>
-            </form></div>
-	  <div id="close-account" class="style01">
-            <h2><span>Close Account</span></h2>
-            <div>
-              <p>Text tell user what happen when close account</p>
-              <p>and if user have a problem he can contact our support or see FAQs</p>
-              <p><a class="bt-close_account" href="#"><span>Close account</span></a></p>
-            </div>
-          </div>
+<?php echo form_close(); ?>
+</div>
+
+<div id="sharing-information">
+<?php if(isset($success)) echo 'Updated'; ?>
+<h2><span>Sharing Information</span></h2>
+		<form>
+		  <div>
+			<ul class="form01">
+			  <li>
+				<strong>Facebook :</strong><a href="<?php echo $user_facebook['link'];?>"><?php echo $user_facebook['name'];?></a>
+				<div></div>
+			  </li>
+			  <li>
+				<strong>Twitter :</strong> [twitter_name]
+				<div></div>
+			  </li>
+			  <li>
+				<strong>Thumblr :</strong> [not connected]
+				<div><a href="#">set up</a></div>
+			  </li>
+			</ul>
+		  </div>
+		</form>
+</div>
+
+<div id="email-notification">
+	<?php if(isset($success)) echo 'Updated'; ?>
+	<h2><span>E-mail Notification</span></h2>
+		<form>
+		  <div>
+			<p class="head"><span>Group</span><span>Details</span><span>Allow</span></p>
+			<ul class="form01">
+			  <li class="border">
+				<strong>Member notify :</strong>
+				<ul class="style01">
+				  <li>friend notify message <input type="checkbox" /></li>
+				  <li>page notify message <input type="checkbox" /></li>
+				  <li>application notify message <input type="checkbox" /></li>
+				  <li>campaign notify message <input type="checkbox" /></li>
+				  <li>alert new campaign <input type="checkbox" /></li>
+				  <li>alert new application <input type="checkbox" /></li>
+				</ul>
+			  </li>
+			  <li class="border">
+				<strong>Admin notify :</strong>
+				<ul class="style01">
+				  <li>monthly report<input type="checkbox" /></li>
+				  <li>weekly report<input type="checkbox" /></li>
+				</ul>
+			  </li>
+			  <li><input class="bt-update" type="submit" /></li>
+			</ul>
+		  </div>
+		</form></div>
+		
+  <div id="close-account" class="style01">
+		<h2><span>Close Account</span></h2>
+		<div>
+		  <p>Text tell user what happen when close account</p>
+		  <p>and if user have a problem he can contact our support or see FAQs</p>
+		  <p><a class="bt-close_account" href="#"><span>Close account</span></a></p>
+		</div>
+	  </div>
 </div>

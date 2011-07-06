@@ -94,7 +94,7 @@ class Settings extends CI_Controller {
 			$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('gender', 'Gender', 'required|xss_clean');
-			$this->form_validation->set_rules('birth_date', 'Birth date', 'required|xss_clean');
+			$this->form_validation->set_rules('birth_date', 'Birth date', 'trim|xss_clean');
 			$this->form_validation->set_rules('about', 'About', 'trim|xss_clean');
 			$this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
 				
@@ -124,7 +124,7 @@ class Settings extends CI_Controller {
 				$this->load->model('user_model','users');
 				if ($this->users->update_user_profile_by_user_id($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/account', array('user'=>$user, 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
+					$this->load->view('settings/account', array('user'=>array_merge($user,$user_update_data), 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
 				}
 				else
 				{
@@ -167,7 +167,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/company', array('company'=>$company, 'company_apps' => $company_apps, 'company_users' => $company_users));
+				$this->load->view('settings/company', array('company'=>$company, 'company_apps' => $company_apps, 'company_users' => $company_users, 'success'=>$this->input->get('success')));
 			}
 			else 
 			{
@@ -186,13 +186,40 @@ class Settings extends CI_Controller {
 			
 				if ($this->companies->update_company_profile_by_company_id($company_id, $company_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/company', array('company'=>$company, 'company_apps' => $company_apps, 'company_users' => $company_users, 'success'=>TRUE));
+					$this->load->view('settings/company', array('company'=>array_merge($company,$company_update_data), 'company_apps' => $company_apps, 'company_users' => $company_users, 'success'=>TRUE));
 				}
 				else
 				{
-				echo 'An error occurred saving your information. Please try again later';
-				// Or whatever error handling is necessary
+					echo 'An error occurred saving your information. Please try again later';
 				}
+			}
+		}
+	}
+	
+	function company_admin($company_id = NULL){
+		if($this->socialhappen->check_admin(array('company_id'=>$company_id))){
+			$this->form_validation->set_rules('user_id','required|trim|integer|xss_clean|max_length[20]');
+			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+			
+			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+			{
+				redirect("settings/company/{$company_id}");
+			}
+			else 
+			{
+				if($this->socialhappen->check_user(set_value('user_id'))){
+					$company_admin = array(
+								'user_id' => set_value('user_id'),
+								'company_id' => $company_id,
+								'user_role' => 1
+							);
+			
+					if ($this->user_companies->add_user_company($company_admin)) // the information has therefore been successfully saved in the db
+					{
+						redirect("settings/company/{$company_id}?success=1");
+					}
+				}
+				redirect("settings/company/{$company_id}?error=1");
 			}
 		}
 	}
@@ -205,6 +232,22 @@ class Settings extends CI_Controller {
 			$this->load->model('installed_apps_model','installed_apps');
 			$page_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
 			
+			$this->load->model('user_pages_model','user_pages');
+			$page_users = $this->user_pages->get_page_users_by_page_id($page_id);
+			
+			$this->load->model('user_companies_model','user_companies');
+			$company_users = $this->user_companies->get_company_users_by_company_id($page['company_id']);
+			
+			foreach($company_users as $company_user_key => $company_user){
+				foreach($page_users as $page_user_key => $page_user){
+					if($company_user['user_id'] == $page_user['user_id']){
+						$company_users[$company_user_key]['page_user_role_name'] = $page_user['user_role_name'];
+						$company_users[$company_user_key]['page_user_role_id'] = $page_user['user_role_id'];
+						unset($page_users[$page_user_key]);
+						break;
+					}
+				}
+			}
 			
 			$page_facebook = $this->facebook->get_page_info($page['facebook_page_id']);
 			
@@ -216,7 +259,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'page_facebook' => $page_facebook));
+				$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_facebook' => $page_facebook));
 			}
 			else 
 			{
@@ -236,13 +279,41 @@ class Settings extends CI_Controller {
 			
 				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'page_facebook' => $page_facebook, 'success'=>TRUE));
+					$this->load->view('settings/page', array('page'=>array_merge($page,$page_update_data), 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_facebook' => $page_facebook, 'success'=>TRUE));
 				}
 				else
 				{
 				echo 'An error occurred saving your information. Please try again later';
 				// Or whatever error handling is necessary
 				}
+			}
+		}
+	}
+	
+	function page_admin($page_id = NULL){
+		if($this->socialhappen->check_admin(array('page_id'=>$page_id))){
+			$this->form_validation->set_rules('user_id','required|trim|integer|xss_clean|max_length[20]');
+			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+			
+			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+			{
+				redirect("settings/page/{$page_id}");
+			}
+			else 
+			{
+				if($this->socialhappen->check_user(set_value('user_id'))){
+					$page_admin = array(
+								'user_id' => set_value('user_id'),
+								'page_id' => $page_id,
+								'user_role' => 1
+							);
+			
+					if ($this->user_companies->add_user_page($page_admin)) // the information has therefore been successfully saved in the db
+					{
+						redirect("settings/page/{$page_id}?success=1");
+					}
+				}
+				redirect("settings/page/{$page_id}?error=1");
 			}
 		}
 	}
