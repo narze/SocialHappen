@@ -42,7 +42,7 @@
 					<input id="gender" name="gender" type="radio" class="" value="1" <?php echo $this->form_validation->set_radio('gender', 1, 1 == $user['user_gender']); ?> />
 					<label for="gender" class="">Not sure</label>
 				</li>
-                <li><strong>Birth date :</strong><?php echo form_error('birth_date'); ?><input id="birth_date" type="text" name="birth_date" maxlength="255" value="<?php echo set_value('birth_date',$user['user_birth_date']); ?>"  /></li>
+                <li><strong>Birth date :</strong><?php echo form_error('birth_date'); ?><input class="date" id="birth_date" type="text" name="birth_date" maxlength="255" value="<?php echo set_value('birth_date',$user['user_birth_date']); ?>"  /></li>
                 <li><strong>About me :</strong><?php echo form_error('about'); ?><?php echo form_textarea( array( 'name' => 'about', 'id' => 'about' , 'cols'=> 30 ,'value' => set_value('about',$user['user_about']) ) ); ?></li>
                 <li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>
               </ul> 

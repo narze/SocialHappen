@@ -26,7 +26,7 @@ $(function(){
 	
 	function form_style(element){
 		if(element.hasClass("account-setting")){
-			
+			$('.date').datepicker({"dateFormat": "yy-mm-dd"});
 		} else if(element.hasClass("company-page-list")){
 	
 		} else if(element.hasClass("user-company-setting")){

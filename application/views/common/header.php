@@ -31,8 +31,8 @@ if(isset($style)) :
 			echo '<link class="'.$class.'" id="'.$id.'" rel="stylesheet" type="text/css"  href="'.base_url().'assets/css/'.$one.'.css" />'."\n";
 		}
 	endforeach; 
-endif; 
-?>
+endif; ?>
+<link rel="stylesheet" type="text/css"  href="assets/css/common/smoothness/jquery-ui-1.8.9.custom.css" />
 </head>
 <body>
 	<div class="header">
