@@ -431,7 +431,7 @@ class Sync extends CI_Controller {
 					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
+						'app_facebook_api_key' => '20046401b3b5ae931f8d552f5aeae44f' 	
 					)
 				);
 		$this->db->insert_batch('app', $app);
