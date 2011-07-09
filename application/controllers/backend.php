@@ -20,10 +20,10 @@ class Backend extends CI_Controller {
 		echo $key2;
 		echo $time;
 		
-		$this->session->unset_userdata('SHBackend_auth');
-		
 		if($this->backend_session_verify(false))
 			redirect('backend/dashboard');
+		
+		$this->session->unset_userdata('SHBackend_auth');
 		
 		if($key1=='key1'&&$key2=='key2'&&$time<time()){
 			//initial session
@@ -338,8 +338,16 @@ class Backend extends CI_Controller {
 	function backend_session_verify($autoredirectonfalse = false){
 		$token = $this->session->userdata('SHBackend_auth');
 		
-		if(@$token['authenticated'])
+		if(@$token['authenticated']){
 			return true;
+		}else{
+			if(!$autoredirectonfalse){
+				return false;
+			}else{
+				echo 'authentication fail';
+				exit();
+			}
+		}
 		
 	}
 	
