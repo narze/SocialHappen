@@ -13,7 +13,7 @@
 				<?php echo form_error('company_image'); ?>
                   <div class="pic-profile bg-none">
                     <p class="pic"><img src="<?php echo imgsize($company['company_image'],'square');?>" /></p>
-                    <p><a class="bt-change_pic" href="#"><span>Change picture</span><input id="company_image" type="file" name="company_image" style="opacity: 0; height: 30px; "/></a></p>
+                    <p><a class="bt-change_pic" href="#"><input id="company_image" type="file" name="company_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
                   </div>
                 </li>
                 <li><strong>Company name :</strong><?php echo form_error('company_name'); ?><input id="company_name" type="text" name="company_name" maxlength="255" value="<?php echo set_value('company_name',$company['company_name']); ?>"  /></li>
@@ -62,7 +62,7 @@
 					 <p><img alt="" src="<?php echo imgsize($app['app_image'],'normal');; ?>">
                       <span class="button">
                         <a href="#" class="bt-update_app"><span>update</span></a>
-                        <a href="#" class="bt-setting_app"><span>Setting</span></a>
+                        <a href="<?php echo "";?>" class="bt-setting_app"><span>Setting</span></a>
                       </span>
                      </p>
                     <p><?php echo $app['app_name']?></p>
