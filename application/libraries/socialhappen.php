@@ -170,7 +170,7 @@ class SocialHappen{
 	function upload_image($name = NULL){
 		$config['upload_path'] = './uploads/images/';
 		$config['allowed_types'] = 'gif|jpg|png';
-		$config['max_size']	= '100';
+		$config['max_size']	= '1024';
 		$config['max_width']  = '1024';
 		$config['max_height']  = '768';
 		$config['encrypt_name'] = TRUE;
@@ -180,7 +180,9 @@ class SocialHappen{
 			$image_data = $this->CI->upload->data();
 			$this->resize_image($image_data);
 			return base_url()."uploads/images/{$image_data['raw_name']}_o{$image_data['file_ext']}";
-		} return NULL;
+		} else {
+			return $this->CI->upload->display_errors(); 
+		}
 	}
 	
 	/**

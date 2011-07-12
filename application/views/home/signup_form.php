@@ -1,3 +1,10 @@
+<?php if($user) : ?>
+<div class="wrapper-details">
+	<div>
+		You have already registered SocialHappen
+	</div>
+</div>
+<?php else : ?>
 <div class="wrapper-details">
 	<div class="form">
 		<?php // Change the css classes to suit your needs    
@@ -57,3 +64,4 @@
 			<?php echo form_close(); ?>
 	</div>
 </div>
+<?php endif; ?>

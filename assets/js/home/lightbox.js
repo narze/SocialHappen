@@ -20,10 +20,7 @@ $(function(){
 		$('#create-company-form').load(base_url+'home/create_company_form');
 
 		$('form.create-company-form').live('submit',function(){
-			formData = $(this).serializeArray();
-			$.post(base_url+'home/create_company_form',formData,function(returnData){
-				$('#create-company-form').html(returnData);
-			});
+			$(this).ajaxSubmit({target:'#create-company-form'});
 			return false;
 		});
 		return false;

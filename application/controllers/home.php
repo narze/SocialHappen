@@ -89,6 +89,7 @@ class Home extends CI_Controller {
 				TRUE),
 				'signup_form' => $this -> load -> view('home/signup_form', 
 					array(
+						'user' => $user,
 						'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id'])
 					),
 				TRUE),
@@ -131,8 +132,7 @@ class Home extends CI_Controller {
 	function create_company_form(){
 		$this->socialhappen->check_logged_in('home');
 		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
-		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');			
-		$this->form_validation->set_rules('company_image', 'Company image', 'trim|xss_clean|max_length[255]');
+		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');
 			
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 	
@@ -142,10 +142,11 @@ class Home extends CI_Controller {
 		}
 		else 
 		{
+			$company_image = $this->socialhappen->upload_image('company_image');
 		 	$company = array(
 					       	'company_name' => set_value('company_name'),
 					       	'company_detail' => set_value('company_detail'),
-					       	'company_image' => set_value('company_image'),
+					       	'company_image' => issetor($company_image),
 					       	'creator_user_id' => $this->socialhappen->get_user_id()
 						);
 			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company), TRUE);
@@ -220,7 +221,7 @@ class Home extends CI_Controller {
 			
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 	
-		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+		if ($this->form_validation->run() == FALSE)
 		{
 			$this -> load -> view('home/signup_form', 
 					array(
@@ -228,7 +229,7 @@ class Home extends CI_Controller {
 					)
 			);
 		}
-		else // passed validation proceed to post success logic
+		else
 		{
 			$user_image = $this->socialhappen->upload_image('user_image');
 			$company_image = $this->socialhappen->upload_image('company_image');
