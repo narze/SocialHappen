@@ -17,7 +17,7 @@
                 <div class="detail-list-style01">
                   <p class="thumb"><img src="" /></p>
                   <h2></h2>
-                  <p class="description"> </p>
+                  <p class="description"></p>
                 </div>
               </td>
               <td class="status2 campaign-status">Status <span></span></td>
