@@ -1,9 +1,5 @@
 $(function(){
 	
-	// $('div#main').load(base_url+'settings/'+setting_name+'/'+param_id,function(){
-		// make_form($('li a.company-page-setting,li a.user-company-setting,li a.account-setting,li a.company-page-list'));
-	// });
-	
 	$('li a.company-page-setting,li a.user-company-setting,li a.account-setting,li a.company-page-list').live('click',function(){
 		$('div#main').load($(this).attr('href'));
 		make_form($(this));
