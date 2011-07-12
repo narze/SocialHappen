@@ -50,11 +50,10 @@ class Tab extends CI_Controller {
 						'script' => array(
 							'tab/bar',
 							'tab/profile',
-							'tab/account',
 							'tab/main'
 						),
 						'style' => array(
-							'tab/main'
+							'common/facebook'
 						)
 					),
 				TRUE),

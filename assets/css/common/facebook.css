@@ -1,0 +1,509 @@
+
+/*
+###########################################
+
+Social Happen Facebook
+
+author: Oat (okaynaja)
+
+###########################################
+*/
+* {margin: 0; padding: 0;}
+img, fieldset {border: 0;}
+li {list-style: none;}
+
+body {
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+	background: #fff url(../images/bg_fb/bg_body.png) repeat-x top;
+}
+div.socialhappen-fb {
+	width: 520px;
+	margin: 0 auto;
+}
+div.header {
+	width: 520px;
+	height: 35px;
+	padding: 0 0 3px;
+	background: url(../images/bg_fb/bg_header.png) no-repeat;
+}
+div.header:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.header div.name {
+	float: left;
+	height: 35px;
+	position: relative;
+}
+div.header div.name>div {
+	height: 30px;
+	padding: 5px 0 0 40px;
+	background: url(../images/bg_fb/bg_liney01.gif) repeat-y 100% 0;
+}
+div.header div.name>div:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.header div.name>div>p.pic {
+	float: left;
+	width: 27px;
+	height: 26px;
+	margin-left: -34px;
+	text-align: center;
+	position: relative;
+	padding: 1px 0 0 0;
+}
+div.header div.name>div>p.pic img {width: 25px; height: 25px;}
+div.header div.name>div>p.pic>span {
+	display: block;
+	width: 27px;
+	height: 27px;
+	background: url(../images/bg_fb/fill_top25-25.png) no-repeat;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.header div.name>div>p:first-child+p {
+	font-weight: bold;
+	color: #fff;
+	line-height: 25px;
+	padding-right: 25px;
+	background: url(../images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
+}
+div.header div.name>ul {
+	display: none;
+	width: 100%;
+	border-top: 1px solid #1c1c1c;
+	background: #292929;
+	position: absolute;
+	left: 0;
+	top: 35px;
+	-webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+	z-index: 999;
+}
+div.header div.name:hover ul {display: block;}
+div.header div.name>ul li {
+	cursor: default;
+	height: 23px;
+	line-height: 23px;
+	font-size: 11px;
+	background: url(../images/bg_fb/bg_linex03.png) repeat-x top;
+}
+div.header div.name>ul>li:first-child { background: none;}
+div.header div.name>ul>li a {
+	display: block;
+	padding: 0 10px;
+	text-decoration: none;
+	color: #fff;
+}
+div.header ul.menu {float: right; height: 35px;}
+div.header ul.menu>li {
+	float: left;
+	height: 35px;
+	background: url(../images/bg_fb/bg_liney01.gif) repeat-y 0 0;
+	padding: 0 0 0 2px;
+}
+div.header ul.menu>li.like a {
+	display: block;
+	width: 33px;
+	height: 35px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 9px 10px;
+}
+div.header ul.menu>li.like a span {display: none;}
+div.header ul.menu>li.message a {
+	display: block;
+	width: 35px;
+	height: 35px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 7px -28px;
+	text-decoration: none;
+	position: relative;
+}
+div.header ul.menu>li.message a span {
+	padding: 1px 2px;
+	font-size: 10px;
+	background: rgba(201,25,28,0.7);
+	color: #fff;
+	position: absolute;
+	bottom: 2px;
+	right: 5px;
+}
+div.header ul.menu>li.profile { position: relative;}
+div.header ul.menu>li.profile>div {
+	height: 30px;
+	padding: 5px 0 0 40px;
+}
+div.header ul.menu>li.profile>div:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.header ul.menu>li.profile>div>p.pic {
+	float: left;
+	width: 27px;
+	height: 26px;
+	margin-left: -34px;
+	text-align: center;
+	position: relative;
+	padding: 1px 0 0 0;
+}
+div.header ul.menu>li.profile>div>p.pic img {width: 25px; height: 25px;}
+div.header ul.menu>li.profile>div>p.pic>span {
+	display: block;
+	width: 27px;
+	height: 27px;
+	background: url(../images/bg_fb/fill_top25-25.png) no-repeat;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.header ul.menu>li.profile>div>p:first-child+p {
+	font-weight: bold;
+	color: #fff;
+	line-height: 25px;
+	padding-right: 25px;
+	background: url(../images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
+}
+div.header ul.menu>li.profile>ul {
+	display: none;
+	width: 100%;
+	border-top: 1px solid #1c1c1c;
+	background: #292929;
+	position: absolute;
+	left: 0;
+	top: 35px;
+	-webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+	z-index: 999;
+}
+div.header ul.menu>li.profile:hover ul {display: block;}
+div.header ul.menu>li.profile>ul li {
+	cursor: default;
+	height: 23px;
+	line-height: 23px;
+	font-size: 11px;
+	background: url(../images/bg_fb/bg_linex03.png) repeat-x top;
+}
+div.header ul.menu>li.profile>ul>li:first-child { background: none;}
+div.header ul.menu>li.profile>ul>li a {
+	display: block;
+	padding: 0 10px;
+	text-decoration: none;
+	color: #fff;
+}
+div.header ul.menu>li.setting a {
+	display: block;
+	width: 35px;
+	height: 35px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 7px -68px;
+}
+div.header ul.menu>li.setting a span {display: none;}
+
+div.account-data {
+	width: 475px;
+	margin: 0 auto 18px;
+}
+div.account-data:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.account-data div.pic {
+	float: left;
+	width: 96px;
+	height: 96px;
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+}
+div.account-data div.pic img {width: 95px;}
+div.account-data div.pic span {
+	display: block;
+	width: 96px;
+	height: 96px;
+	background: url(../images/bg_fb/fill_top95-95png.png) no-repeat;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.account-data div.data {
+	float: right;
+	width: 365px;
+}
+div.account-data div.data h1 {font-size: 14px; color: #17418d; padding: 0 0 5px;}
+div.account-data div.data p {padding: 0 0 5px;}
+div.account-data div.data ul {
+	width: 365px;
+	height: 31px;
+	background: url(../images/bg_fb/bg_datalist.png) no-repeat;
+}
+div.account-data div.data ul:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.account-data div.data ul>li {
+	float: left;
+	height: 31px;
+	line-height: 31px;
+	font-size: 11px;	
+}
+div.account-data div.data ul>li a {display: block; color: #333; text-decoration: none;}
+div.account-data div.data ul>li.fav {width: 111px;}
+div.account-data div.data ul>li.fav a {
+	padding: 0 0 0 40px;
+	height: 31px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 6px -114px;
+}
+div.account-data div.data ul>li.fav:hover {background: url(../images/bg_fb/bg_datalist-01.png) no-repeat;}
+div.account-data div.data ul>li.member {width: 69px; margin-left: 1px;}
+div.account-data div.data ul>li.member a {
+	padding: 0 0 0 42px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 6px -155px;
+}
+div.account-data div.data ul>li:hover {background: url(../images/bg_fb/bg_datalist-02.png) repeat-x;}
+div.account-data div.data ul>li.badges {width: 75px; margin-left: 1px;}
+div.account-data div.data ul>li.badges a {
+	padding: 0 0 0 38px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 6px -198px;
+}
+div.account-data div.data ul>li.point {width: 64px; margin-left: 1px;}
+div.account-data div.data ul>li.point a {
+	padding: 0 0 0 32px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 6px -238px;
+}
+div.account-data div.data ul>li.setting {width: 42px; margin-left: 1px;}
+div.account-data div.data ul>li.setting:hover {background: url(../images/bg_fb/bg_datalist-03.png) no-repeat;}
+div.account-data div.data ul>li.setting a {
+	display: block;
+	width: 42px;
+	height: 35px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 9px -280px;
+}
+div.account-data div.data ul>li.setting a span {display: none;}
+div.wrapper-content {
+	width: 498px;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	border: 1px solid #dddfe0;
+	background: #fff;
+	margin: 7px auto 0;
+	padding: 10px 0;
+}
+div.tab-head {
+	height: 33px;
+	background: url(../images/bg_fb/bg_tabhead.png) repeat-x;
+}
+div.tab-head:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.tab-head>h2 {
+	float: left;
+	height: 33px;
+	line-height: 33px;
+	margin-left: 14px;
+	font-size: 13px;
+	color: #fff;
+}
+div.tab-head>div {
+	float: right;
+	height: 33px;
+	color: #fff;
+}
+div.tab-head>div:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.tab-head>div>p {
+	float: left;
+	height: 33px;
+	line-height: 33px;
+}
+div.tab-head>div>ul {float: right;}
+div.tab-head>div>ul>li {
+	float: left;
+	height: 28px;
+	background: url(../images/bg_fb/bg_tabhead-menu.png) no-repeat 0 0;
+	padding: 5px 4px 0;
+	
+}
+div.tab-head>div>ul>li:first-child {background: none;}
+div.tab-head>div>ul>li a {
+	display: block;
+	height: 23px;
+	line-height: 23px;
+	padding: 0 10px;
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+	color: #fff;
+	text-decoration: none;
+}
+div.tab-head>div>ul>li a.active {
+	background: #343434;
+	-moz-box-shadow:inset 0 0 10px #1f1f1f;
+	-webkit-box-shadow:inset 0 0 10px #1f1f1f;
+	box-shadow:inset 0 0 10px #1f1f1f;
+}
+div.list_app-camp {
+	width: 475px;
+	margin: 0 auto;
+}
+div.list_app-camp>ul>li {
+	width: 100%;
+	padding: 12px 0;
+	border-bottom: 1px solid #e1e1e1;
+}
+div.list_app-camp>ul>li:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.list_app-camp>ul>li>div:first-child {
+	float: left;
+	width: 230px;
+	min-height: 75px;
+	padding: 5px 0 0 90px;
+	position: relative;
+}
+div.list_app-camp>ul>li>div:first-child p.pic {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.list_app-camp>ul>li>div:first-child h2 { font-size: 12px; color: #63791c; padding-bottom: 5px;}
+div.list_app-camp>ul>li>div:first-child p {padding-bottom: 5px;}
+div.list_app-camp>ul>li>div:first-child p a { color: #63791c; font-weight: bold; text-decoration: underline;}
+div.list_app-camp>ul>li>div:first-child p a:hover {text-decoration: none;}
+div.list_app-camp>ul>li>div:first-child p.link {position: absolute; left: 90px; bottom: 0; padding: 0;}
+div.list_app-camp>ul>li>div:first-child+div {
+	float: right;
+	width: 148px;
+	background: #f2f2f2;
+	border: 1px solid #ebebeb;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	padding: 7px 0 0;
+	text-align: center;
+}
+div.list_app-camp>ul>li>div:first-child+div>h2 { font-size: 12px; color: #144957; padding-bottom: 5px;}
+div.list_app-camp>ul>li>div:first-child+div>p {padding: 0 0 5px;}
+div.list_app-camp>ul>li>div:first-child+div>p stromg { font-size: 16px;}
+
+div.list_resent-activity {
+	width: 475px;
+	margin: 0 auto;
+}
+div.list_resent-activity>ul>li {
+	width: 100%;
+	padding: 10px 0;
+	border-bottom: 1px solid #e1e1e1;
+}
+div.list_resent-activity>ul>li:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.list_resent-activity>ul>li>div:first-child {
+	float: left;
+	width: 310px;
+	padding: 3px 0 0 60px;
+	font-size: 12px;
+	position: relative;
+}
+div.list_resent-activity>ul>li>div:first-child p.pic {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.list_resent-activity>ul>li>div:first-child>h2 { font-size: 13px; color: #395a9d;}
+div.list_resent-activity>ul>li>div:first-child>p span { display: block; font-size: 11px; color: #9a9a9a; padding: 4px 0 0;}
+div.list_resent-activity>ul>li>div:first-child+div {
+	float: right;
+	width: 80px;
+}
+div.list_resent-activity>ul>li>div:first-child+div {}
+div.list_resent-activity>ul>li>div:first-child+div p.star {
+	display: block;
+	height: 20px;
+	line-height: 20px;
+	font-weight: bold;
+	padding: 0 0 0 30px;
+	background: url(../images/bg_fb/bg_main.png) no-repeat 0 -370px;
+	margin: 15px auto;
+}
+
+div.strip {padding: 10px 0;}
+div.strip ul {
+    height: 10px;
+    margin: 0 auto;
+    width: 100px;
+}
+div.strip ul li {
+    float: left;
+    margin: 0 5px;
+}
+div.strip ul li a {
+    background: url(../images/bg_fb/bg_main.png) no-repeat scroll 0 -347px;
+    display: block;
+    height: 10px;
+    width: 10px;
+}
+div.strip ul li a.current {background-position: 0 -328px;}
+
+div.footer {	
+	width: 498px;
+	padding: 8px 0;
+	margin: 0 auto;
+	font-size: 11px;
+	color: #414243;
+	position: relative;
+}
+div.footer a {color: #63791c; text-decoration: none;}
+div.footer a:hover {text-decoration: underline;}
+div.footer p.logo {
+	position: absolute;
+	right: 0;
+	top: 8px;
+}
+
+/* button */
+*.bt-join, *.bt-already_join, *.bt-time_up {
+	background: url(../images/bg_fb/bg_button.png) no-repeat;
+	cursor: pointer;
+	border: none;
+	color: transparent;
+}
+*.bt-join span, *.bt-bt-already_join span, *.bt-time_up span {display: none;}
+*.bt-join {
+	display: block;
+	width: 104px;
+	height: 27px;
+	background-position: 0 0;
+	margin: 0 auto;
+}
+*.bt-already_join {
+	display: block;
+	width: 104px;
+	height: 27px;
+	background-position: 0 -38px;
+	margin: 0 auto;
+}
+*.bt-time_up {
+	display: block;
+	width: 104px;
+	height: 27px;
+	background-position: 0 -77px;
+	margin: 0 auto;
+}
