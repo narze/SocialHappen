@@ -22,9 +22,11 @@ class Tab extends CI_Controller {
 		
 		$this->load->model('User_model','User');
 		$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		$token = $this->signedRequest['oauth_token'];
 		
 		$this->load->model('Page_model','Page');
 		$page_id = $this->Page->get_page_id_by_facebook_page_id($this->page['id']);
+		
 		
 		if(!$user_id) {
 			//Guest popup
@@ -45,7 +47,8 @@ class Tab extends CI_Controller {
 						// 'title' => $company['company_name'],
 						'vars' => array( //'company_id'=>$company_id,
 										'page_id' => $page_id,
-										'user_id' => $user_id
+										'user_id' => $user_id,
+										'token' => base64_encode($token)
 						),
 						'script' => array(
 							'tab/bar',
@@ -62,6 +65,7 @@ class Tab extends CI_Controller {
 					'admin' => FALSE,
 					'page_id' => $page_id,
 					'user_id' => $user_id,
+					'token' => $token,
 					'is_admin' => $is_company_admin,
 					'is_liked' => $this->page['liked']
 					),
@@ -76,16 +80,18 @@ class Tab extends CI_Controller {
 		}
 	}
 	
-	function dashboard($page_id = NULL,$user_id = NULL){
+	function dashboard($page_id = NULL,$user_id = NULL,$token = NULL){
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
 		if($page){
-			if(!$user_id) {
+			if(!$user_id||!$token) {
 			//Guest popup
 			} else {
 				$this->load->model('user_model','users');
 				$user = $this->users->get_user_profile_by_user_id($user_id);
+				$user_facebook_id = $this->FB->getUser();
+				
 				$this->load->model('company_model','companies');
 				$company = $this->companies->get_company_profile_by_page_id($page_id);
 				$this->load->model('user_companies_model','user_companies');
@@ -95,11 +101,15 @@ class Tab extends CI_Controller {
 				$this->load->model('installed_apps_model','installed_apps');
 				$installed_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
 				
-				$fql = 'SELECT uid FROM page_fan WHERE page_id = '.$page['facebook_page_id'].' and uid IN (SELECT uid2 FROM friend WHERE uid1 = me())';
+				$fql = 'SELECT uid FROM page_fan WHERE page_id = '.$page['facebook_page_id'].' and uid IN (SELECT uid2 FROM friend WHERE uid1 = '.$user_facebook_id.')';
+				
 				$response = $this->FB->api(array(
 					'method' => 'fql.query',
+					'access_token' => base64_decode($token),
 					'query' =>$fql,
 					));
+					
+				
 				
 				$friends = array();
 				
