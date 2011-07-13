@@ -181,7 +181,7 @@ class SocialHappen{
 			$this->resize_image($image_data);
 			return base_url()."uploads/images/{$image_data['raw_name']}_o{$image_data['file_ext']}";
 		} else {
-			return $this->CI->upload->display_errors(); 
+			return FALSE; 
 		}
 	}
 	
