@@ -16,7 +16,7 @@ class Tab extends CI_Controller {
 		$this->page = $this->signedRequest['page'];
 	}
 	
-	function index($page_id = NULL){
+	function index(){
 		$this->load->library('socialhappen');
 		$user_facebook_id = $this->FB->getUser();
 		
@@ -31,16 +31,17 @@ class Tab extends CI_Controller {
 		if(!$user_id) {
 			//Guest popup
 			echo 'guest';
-			
 		} else {
 		
 			$this->load->model('user_model','users');
 			$user = $this->users->get_user_profile_by_user_id($user_id);
+			$this->load->model('page_model','pages');
+			$page = $this->pages->get_page_profile_by_page_id($page_id);
 			$this->load->model('company_model','companies');
 			$company = $this->companies->get_company_profile_by_page_id($page_id);
 			$this->load->model('user_companies_model','user_companies');
 			$is_company_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
-			
+
 			$data = array(
 				'header' => $this->load->view('tab/header', 
 					array(
@@ -53,15 +54,18 @@ class Tab extends CI_Controller {
 						'script' => array(
 							'tab/bar',
 							'tab/profile',
-							'tab/account',
-							'tab/main'
+							'tab/main',
+							'common/jquery.countdown.min'
 						),
 						'style' => array(
-							'tab/main'
+							'common/facebook',
+							'common/jquery.countdown'
 						)
 					),
 				TRUE),
 				'bar' => $this->load->view('tab/bar',array(
+					'page' => $page,
+					'user' => $user,
 					'admin' => FALSE,
 					'page_id' => $page_id,
 					'user_id' => $user_id,
@@ -122,6 +126,7 @@ class Tab extends CI_Controller {
 				}
 				
 				$data = array('user'=>$user,
+								'page' => $page,
 								'campaigns' => $campaigns,
 								'installed_apps' => $installed_apps,
 								'is_admin' => $is_company_admin,

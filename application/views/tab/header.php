@@ -35,3 +35,4 @@ endif;
 ?>
 </head>
 <body>
+	<div class="socialhappen-fb">

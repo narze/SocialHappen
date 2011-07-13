@@ -1,3 +1,5 @@
+<!-- old
+
 <div id="profile">
 	<div id="image">
 	</div>
@@ -28,30 +30,6 @@
 		endif;?>
 	</div>
 </div>
-<div id="current-campaign">
-	<h3>Campaigns in this page</h3>
-	<?php if(isset($campaigns)) :
-		foreach($campaigns as $campaign): ?>
-		<div class="campaign">
-			<div class="image">
-				<img class="image" src="<?php echo imgsize($campaign['campaign_image'],'square');?>" />
-			</div>
-			<div class="campaign-detail">
-				<div class="name"><?php echo $campaign['campaign_name'];?></div>
-				<div class="detail"><?php echo $campaign['campaign_detail'];?></div>
-				<div class="more"><a href="#">read more</a></div>
-			</div>
-			<div class="time">
-				<?php if($is_admin) :?>
-					Remaining time
-				<?php else :?>
-					<div class="join-button"><a href="#">Join</a></div>
-				<?php endif; ?>
-			</div>
-		</div>
-	<?php endforeach; 
-	endif;?>
-</div>
 <div id="installed-apps">
 	<h3>Applications in this page</h3>
 	<?php if(isset($installed_apps)) :
@@ -67,11 +45,113 @@
 	<?php endforeach; 
 	endif;?>
 </div>
-<div id="recent-activities">
-	<h3>Recent activities</h3>
-	<div id="filter">
-		Display <a href="#">All</a> | <a href="#">Applicaion</a> | <a href="#">Campaign</a>
-	</div>
-	<div id="activity-list">
-	</div>
-</div>
+-->
+
+<!-- new -->
+
+<div class="wrapper-content">
+    <div class="account-data">
+      <div class="pic"><img src="<?php echo imgsize($page['page_image'],'normal');?>" alt="" /><span></span></div>
+      <div class="data">
+        <h1><?php echo $page['page_name'];?></h1>
+        <p><?php echo $page['page_detail'];?></p>
+        <ul>
+          <li class="fav"><a href="#">Add Favorite</a></li>
+          <li class="member"><a href="#"><?php echo issetor($page_user_count,'-');?></a></li>
+          <li class="badges"><a href="#"><?php echo issetor($page_badge_count,'-');?></a></li>
+          <li class="point"><a href="#"><?php echo issetor($page_point_count,'-');?></a></li>
+          <li class="setting"><a href="#"><span>setting</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="tab-head">
+        <h2>Application and Campaign</h2>
+        <div>
+          <p>Display:</p>
+          <ul>
+            <li><a class="active" href="#">All</a></li>
+            <li><a href="#">Applicaton</a></li>
+            <li><a href="#">Campaign</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="list_app-camp">
+        <ul>
+			
+          
+         <?php if(isset($campaigns)) :
+		foreach($campaigns as $campaign): ?>
+		<li>
+            <div>
+              <p class="pic"><img src="<?php echo imgsize($campaign['campaign_image'],'normal');?>" alt="" /></p>
+              <h2><?php echo $campaign['campaign_name'];?></h2>
+              <p><?php echo $campaign['campaign_detail'];?></p>
+              <p class="link"><a href="#">read more</a></p>
+            </div>
+            <div>
+				<h2>Remaining Time</h2>
+				<div style="display: none;" class="campaign-end-time"><?php echo $campaign['campaign_end_timestamp'];?></div>
+				<?php if($is_admin) :?>
+				
+				<?php else :?>
+					<p><a class="bt-join" href="#"><span>Join</span></a></p>
+				<?php endif; ?>   
+            </div>
+          </li>
+	<?php endforeach; 
+	endif;?>
+		 
+        </ul>
+      </div>
+      <div class="strip">
+        <ul>
+          <li><a href="#"></a></li>
+          <li><a class="current" href="#"></a></li>
+          <li><a href="#"></a></li>
+          <li><a href="#"></a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="tab-head">
+        <h2>Recent Activity</h2>
+        <div>
+          <p>Display:</p>
+          <ul>
+            <li><a class="active" href="#">All</a></li>
+            <li><a href="#">Applicaton</a></li>
+            <li><a href="#">Campaign</a></li>
+            <li><a href="#">Me</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="list_resent-activity">
+        <ul>
+			<?php if(isset($user_activities)) :
+				foreach($user_activities as $user_activity) : ?>
+          <li>
+            <div>
+              <p class="pic"><img src="<?php echo imgsize(issetor($user_activity['user_image']),'square');?>" alt="" /></p>
+              <h2><?php echo issetor($user_activity['user_name']);?></h2>
+              <p><?php echo issetor($user_activity['user_activity_detail']);?></p>
+              <p><span><?php echo issetor($user_activity['user_activity_meta']);?></span></p>
+            </div>
+            <div>
+              <p class="star">x <?php echo issetor($user_activity['user_star_point']);?></p>
+            </div>
+          </li>
+			  <?php endforeach; 
+		endif;?>
+        </ul>      
+      </div>
+      <div class="strip">
+        <ul>
+          <li><a href="#"></a></li>
+          <li><a class="current" href="#"></a></li>
+          <li><a href="#"></a></li>
+          <li><a href="#"></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
