@@ -28,7 +28,7 @@
       <li class="profile">
         <div>
           <p class="pic"><img src="<?php echo $user['user_image'];?>" alt="" /><span></span></p>
-          <p><?php echo $user['user_name'];?></p>  
+          <p><?php echo "{$user['user_first_name']} {$user['user_last_name']}";?></p>  
         </div>
         <ul>
           <li><a href="#">&raquo; <b>Go to Dashboard</b></a></li>
