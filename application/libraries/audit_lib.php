@@ -188,7 +188,12 @@ class Audit_lib
 			//show_error("Invalid or missing args", 500);
 		}
 		$this->CI->load->model('audit_action_model','audit_action');
-		$result = $this->CI->audit_action->get_action($app_id, $action_id);
+		if($action_id < 1000){ // default action
+			$result = $this->CI->audit_action->get_action(0, $action_id);
+		}else{ // custom action
+			$result = $this->CI->audit_action->get_action($app_id, $action_id);
+		}
+		
 		if(count($result) == 0){
 			return NULL;
 		}else{
@@ -230,9 +235,14 @@ class Audit_lib
 			return FALSE;
 		}
 		
+		
 		// check valid action_id
 		$this->CI->load->model('audit_action_model','audit_action');
-		$result_audit_action = $this->CI->audit_action->get_action($app_id, $action_id);
+		if($action_id < 1000){ // default action
+			$result_audit_action = $this->CI->audit_action->get_action(0, $action_id);
+		}else{ // custom action
+			$result_audit_action = $this->CI->audit_action->get_action($app_id, $action_id);
+		}
 		
 		if(count($result_audit_action) == 0){
 			return FALSE;
