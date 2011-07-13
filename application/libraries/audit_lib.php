@@ -187,6 +187,8 @@ class Audit_lib
 			return FALSE;
 			//show_error("Invalid or missing args", 500);
 		}
+		$app_id = (int)$app_id;
+		$action_id = (int)$action_id;
 		$this->CI->load->model('audit_action_model','audit_action');
 		if($action_id < 1000){ // default action
 			$result = $this->CI->audit_action->get_action(0, $action_id);
