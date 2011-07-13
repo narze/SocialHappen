@@ -90,12 +90,11 @@
               <p class="link"><a href="#">read more</a></p>
             </div>
             <div>
+				<h2>Remaining Time</h2>
+				<div style="display: none;" class="campaign-end-time"><?php echo $campaign['campaign_end_timestamp'];?></div>
 				<?php if($is_admin) :?>
-					<h2>Remaining Time</h2>
-					<p><strong>72h : 32m : 30s</strong></p>
+				
 				<?php else :?>
-					<h2>Remaining Time</h2>
-					<p><strong>72h : 32m : 30s</strong></p>
 					<p><a class="bt-join" href="#"><span>Join</span></a></p>
 				<?php endif; ?>   
             </div>

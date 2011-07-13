@@ -54,10 +54,12 @@ class Tab extends CI_Controller {
 						'script' => array(
 							'tab/bar',
 							'tab/profile',
-							'tab/main'
+							'tab/main',
+							'common/jquery.countdown.min'
 						),
 						'style' => array(
-							'common/facebook'
+							'common/facebook',
+							'common/jquery.countdown'
 						)
 					),
 				TRUE),
