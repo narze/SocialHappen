@@ -62,7 +62,7 @@
 					 <p><img alt="" src="<?php echo imgsize($app['app_image'],'normal');; ?>">
                       <span class="button">
                         <a href="#" class="bt-update_app"><span>update</span></a>
-                        <a href="<?php echo "";?>" class="bt-setting_app"><span>Setting</span></a>
+                        <a href="#" class="bt-setting_app"><span>Setting</span></a>
                       </span>
                      </p>
                     <p><?php echo $app['app_name']?></p>
