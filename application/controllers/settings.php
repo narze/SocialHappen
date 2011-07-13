@@ -292,29 +292,29 @@ class Settings extends CI_Controller {
 	
 	function page_admin($page_id = NULL){
 		if($this->socialhappen->check_admin(array('page_id'=>$page_id))){
-			$this->form_validation->set_rules('user_id','required|trim|integer|xss_clean|max_length[20]');
-			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-			
-			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
-			{
-				redirect("settings/page/{$page_id}");
+			$page_admins = $this->input->post('page_admin');
+			$old_page_admins = $this->user_pages->get_page_users_by_page_id($page_id);
+			$old_ids = array();
+			foreach($old_page_admins as $old_page_admin){
+				$old_ids[] = $old_page_admin['user_id'];
 			}
-			else 
-			{
-				if($this->socialhappen->check_user(set_value('user_id'))){
-					$page_admin = array(
-								'user_id' => set_value('user_id'),
-								'page_id' => $page_id,
-								'user_role' => 1
-							);
 			
-					if ($this->user_companies->add_user_page($page_admin)) // the information has therefore been successfully saved in the db
-					{
-						redirect("settings/page/{$page_id}?success=1");
-					}
-				}
-				redirect("settings/page/{$page_id}?error=1");
+			$remove_list = array_diff($old_ids, $page_admins);
+			$add_list = array_diff($page_admins, $old_ids);
+			
+			foreach($remove_list as $user_id_to_remove){
+				$this->user_pages->remove_user_page($user_id_to_remove, $page_id);
 			}
+			
+			foreach($add_list as $user_id_to_add){
+				$page_admin = array(
+							'user_id' => $user_id_to_add,
+							'page_id' => $page_id,
+							'user_role' => 1
+						);
+				$this->user_pages->add_user_page($page_admin);
+			}
+			redirect("settings/page/{$page_id}?success=1");
 		}
 	}
 	
