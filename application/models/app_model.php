@@ -10,6 +10,8 @@ class App_model extends CI_Model {
 	var $app_install_url = '';
 	var $app_config_url = '';
 	var $app_support_page_tab = '';
+	var $app_install_page_url = '';
+	var $app_facebook_api_key = '';
 
 	function __construct() {
 		parent::__construct();

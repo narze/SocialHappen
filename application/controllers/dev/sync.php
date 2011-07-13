@@ -128,10 +128,11 @@ class Sync extends CI_Controller {
 							    'app_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_install_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_install_page_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_config_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_support_page_tab' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
 							    'app_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-								'facebook_app_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
+								'app_facebook_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
 							),
 							'app_install_status' => array(
 							    'app_install_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
@@ -346,10 +347,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' =>  '11111111111111111111111111111111',
 					    'app_url' =>  'http://socialhappen.dyndns.org/feed?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/feed/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}',
+					    'app_install_page_url' => '',
 					    'app_config_url' =>  'http://socialhappen.dyndns.org/feed/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' =>  1,
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 2, 
@@ -361,10 +363,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' =>  '22222222222222222222222222222222', 
 					    'app_url' => 'http://socialhappen.dyndns.org/fbreg?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbreg/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbreg/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 3, 
@@ -376,10 +379,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' => '33333333333333333333333333333333', 
 					    'app_url' => 'http://socialhappen.dyndns.org/sharetogetit?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 4, 
@@ -391,10 +395,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' => '44444444444444444444444444444444', 
 					    'app_url' => 'http://socialhappen.dyndns.org/fbcms/blog/{app_install_id}/', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbcms/platform/install/{company_id}/{user_facebook_id}/', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbcms/platform/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}/', 
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 5, 
@@ -406,10 +411,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' => 'fb9792b2ccb40d5482f5b7cae5e55521', 
 					    'app_url' => '', 
 					    'app_install_url' => '', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => '',
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'facebook_app_api_key' => ''
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 6, 
@@ -421,10 +427,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' => 'ab6548beccb40d5a82f5b7bae5e55521', 
 					    'app_url' => '', 
 					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_to_page/?app_install_id={app_install_id}&page_id={page_id}&force=1', 
 					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
+						'app_facebook_api_key' => '20046401b3b5ae931f8d552f5aeae44f' 	
 					)
 				);
 		$this->db->insert_batch('app', $app);
@@ -654,7 +661,7 @@ class Sync extends CI_Controller {
 		$page = array(
 					array(
 						    'page_id' => 1, 
-						    'facebook_page_id' => 40796308305, 
+						    'facebook_page_id' => 116586141725712, 
 						    'company_id' => 1, 
 						    'page_name' => 'Test name', 
 						    'page_detail' => 'detail', 
