@@ -99,6 +99,7 @@ div.header>div div.goto>div ul li p.thumb {
 	left: 9px;
 	z-index: 999;
 }
+div.header>div div.goto>div ul li p.thumb img { width: 50px; height: 50px;}
 div.header>div div.goto>div ul li a {color: #cbed5b; text-decoration: none; font-weight: bold;}
 div.header>div div.goto>div ul li a:hover {text-decoration: underline;}
 div.header>div div.goto>div>p {
@@ -130,7 +131,7 @@ div.header>div>ul>li.name {
 	cursor: pointer;
 	position: relative;
 }
-div.header>div>ul>li.name img { float: left; margin: 10px 10px 0 0;}
+div.header>div>ul>li.name img { float: left; margin: 10px 10px 0 0; width: 20px; height: 20px;}
 div.header>div>ul>li.name ul {
 	display: none;
 	width: 100%;
@@ -161,6 +162,7 @@ div.header>div>ul>li.name ul li a:hover {}
 
 div.title-name { width: 950px; margin: 0 auto; padding: 20px 0 15px; overflow: hidden;}
 div.title-name p.thumb { float: left; margin-right: 15px;}
+div.title-name p.thumb img { width: 50px; height: 50px;}
 div.title-name h2 {font-size: 24px; color: #144957; margin: 10px 0 0;}
 div.title-name p.nav { font-size: 16px; font-weight: bold;}
 div.title-name p.nav a {color: #144957}
@@ -258,6 +260,26 @@ div.box-information:after{
 }
 div.box-information div.details { float: left; width: 648px; padding: 20px; overflow: hidden; color: #d0d0d0; font-size: 14px;}
 div.box-information div.details .pic { float: left; width: 180px;}
+div.box-information div.details .pic>p:first-child {
+	width: 150px;
+	height: 150px;
+	padding: 0;
+	margin-bottom: 10px;
+	overflow: hidden;
+	position: relative;
+}
+div.box-information div.details .pic>p:first-child>img {width: 150px;}
+div.box-information div.details .pic>p:first-child>span {
+	display: block;
+	width: 150px;
+	height: 150px;
+	background: url(../../images/bg/fill_150-150.png) no-repeat;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 900;
+}
+
 div.box-information div.details .pic p {padding: 0 0 10px;}
 div.box-information div.details h2 { font-size: 24px; padding: 15px 0 15px; color: #cbed5b; font-weight: normal;}
 div.box-information div.details p {padding-bottom: 5px;}
@@ -523,6 +545,7 @@ div.member-menu-top>.member-check, div.member-menu-btm>.member-check{
 div[class$="list-style01"] {
     padding: 0 0 0 80px;
 }
+div[class$="list-style01"] p.thumb img {width: 64px; height: 64px;}
 div[class^="detail-list"] {
     font-size: 12px;
     margin: 5px 0;
@@ -641,7 +664,7 @@ div.dragging-page ul li p span.button {
 	background: rgba(0,0,0,0.7);
 	cursor: default;
 }
-div.dragging-page ul li img {border: 1px solid #c9c9c9;}
+div.dragging-page ul li img {border: 1px solid #c9c9c9; width: 80px; height: 80px;}
 div.dragging-page ul li p {text-align: center; padding: 0 5px 7px;}
 div.dragging-page ul li.add {background: url(../../images/bg/bg_ul-dragdrop01.png) no-repeat;}
 div.dragging-page ul li.dragging {background: url(../../images/bg/bg_ul-dragdrop02.png) no-repeat; }
@@ -735,6 +758,7 @@ div.dragging-app ul li p span.button {
     border-radius: 9px;
 }
 div.dragging-app ul li p {text-align: center; padding: 0 5px 7px;}
+div.dragging-app ul li p img {width: 64px; height: 64px;}
 div.dragging-app ul li.add-app {background: url(../../images/bg/bg_ul-dragdrop-app01.png) no-repeat !important;}
 div.dragging-app ul li.dragging {background: url(../../images/bg/bg_ul-dragdrop-app02.png) no-repeat; }
 div.dragging-app ul li:hover {background: url(../../images/bg/bg_ul-dragdrop-app02.png) no-repeat; cursor: pointer;}
