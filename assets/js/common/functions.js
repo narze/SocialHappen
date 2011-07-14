@@ -16,3 +16,22 @@ if(!window.imgsize){
 		return url.replace(/(\S+)_\w(\.(jpg|gif|png))/i,"$1_"+size+"$2");
 	}
 }
+
+if(!window.set_loading){
+	function set_loading(message){
+		if(!message) {
+			message = "Loading";
+		}
+		$('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').appendTo('body').ajaxStart(function() {
+			$.fancybox({
+				content: $(this)
+				//modal: true
+			});
+		})
+		.ajaxStop(function() {
+			setTimeout(function() {
+				$.fancybox.close();
+			}, 500);
+		});
+	}
+}
