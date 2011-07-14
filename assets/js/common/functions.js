@@ -16,3 +16,42 @@ if(!window.imgsize){
 		return url.replace(/(\S+)_\w(\.(jpg|gif|png))/i,"$1_"+size+"$2");
 	}
 }
+
+if(!window.set_loading){
+	function set_loading(message){
+		if(!message) {
+			message = "Loading";
+		}
+		$.fancybox.init(); //force init
+		
+		// $.ajaxSetup({
+			// beforeSend : $.fancybox({
+					// content: '<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>'
+				// }),
+			// ajaxStop : function(){setTimeout(function() {
+				// $.fancybox.close();
+			// }, 500);}
+		// });
+		
+		$('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').appendTo('body').ajaxStart(function() {
+			$.fancybox({
+				content: $(this)
+			});
+		})
+		.ajaxStop(function() {
+			setTimeout(function() {
+				$.fancybox.close();
+			}, 500);
+		});
+		
+		 // $('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').appendTo('body').bind("ajaxSend", function(){
+		   // $.fancybox({
+				// content: $(this)
+			// });
+		 // }).bind("ajaxComplete", function(){
+		   // setTimeout(function() {
+				// $.fancybox.close();
+			// }, 500);
+		 // });
+	}
+}

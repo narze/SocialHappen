@@ -1,5 +1,6 @@
 $(function(){	
 	function get_campaign_users(page_index, jq){
+		set_loading();
 		$.getJSON(base_url+'campaign/json_get_users/'+campaign_id,function(json){
 			$('.wrapper-details-member.users .details table tbody tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {

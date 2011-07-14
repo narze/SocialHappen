@@ -661,7 +661,7 @@ class Sync extends CI_Controller {
 		$page = array(
 					array(
 						    'page_id' => 1, 
-						    'facebook_page_id' => 116586141725712, 
+						    'facebook_page_id' => '116586141725712', 
 						    'company_id' => 1, 
 						    'page_name' => 'Test name', 
 						    'page_detail' => 'detail', 

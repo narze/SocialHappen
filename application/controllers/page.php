@@ -15,7 +15,7 @@ class Page extends CI_Controller {
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
 			
-			$facebook_page_graph = json_decode(file_get_contents("http://graph.facebook.com/{$page['facebook_page_id']}"),TRUE);
+			$facebook_page_graph = $this->facebook->get_page_info($page['facebook_page_id']);
 			
 			$this -> load ->model('installed_apps_model','installed_apps');
 			$app_count = $this->installed_apps->count_installed_apps_by_page_id($page_id);

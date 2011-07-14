@@ -1,6 +1,6 @@
 $(function(){
-	
 	$('li a.company-page-setting,li a.user-company-setting,li a.account-setting,li a.company-page-list').live('click',function(){
+		set_loading();		
 		$('div#main').load($(this).attr('href'));
 		make_form($(this));
 		return false;
@@ -11,6 +11,7 @@ $(function(){
 		$('form').live('submit', function() {
 			var targetSelector = 'div#main #'+$(this).attr('class');
 			var srcSelector = '#'+$(this).attr('class');
+			set_loading();
 			$(this).ajaxSubmit({success:function(response){
 				$(targetSelector).replaceWith($(response).filter(srcSelector));
 				form_style(element);

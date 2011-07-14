@@ -4,6 +4,7 @@ $(function(){
 		var url;
 		if(campaign_status_id != '') {url = base_url+"app/json_get_campaigns_using_status/"+app_install_id+'/'+campaign_status_id+'/'+per_page+'/'+(page_index * per_page);}
 		else {url = base_url+"app/json_get_campaigns/"+app_install_id+'/'+per_page+'/'+(page_index * per_page);}
+		set_loading();
 		$.getJSON(url,function(json){
 			$('.wrapper-details.campaigns .details table tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
