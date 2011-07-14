@@ -8,7 +8,7 @@
 <body>
 <h1>Manage Apps</h1>
 <?=anchor('backend/add_new_app/', 'Add New Apps', 'title="add new app to platform"');?>
- | <?=anchor('/', 'Back to home', 'title="go back to home"');?>
+ | <?=anchor('backend/dashboard', 'Back to dashboard', 'title="go back to dashboard"');?>
 <h1>Apps</h1>
 <ul>
 <?php

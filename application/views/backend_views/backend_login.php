@@ -16,7 +16,7 @@ echo form_open('backend/');
 				'class' => 'key1',
 				'style' => 'color: #000;',
 				));?>
-				<?=form_input(array(
+				<?=form_password(array(
 						  'name'        => 'key1',
 						  'id'          => 'key1',
 						  'value'       => set_value('key1'),
@@ -32,7 +32,7 @@ echo form_open('backend/');
 				'class' => 'key2',
 				'style' => 'color: #000;',
 				));?>
-				<?=form_input(array(
+				<?=form_password(array(
 						  'name'        => 'key2',
 						  'id'          => 'key2',
 						  'value'       => set_value('key2'),
@@ -52,7 +52,7 @@ echo form_open('backend/');
 		<p>
 		<?php echo form_submit(array(
 							'name' => 'submit', 
-							'value' => 'Add'
+							'value' => 'Login'
 							)); ?>
 		</p>
 		</div>

@@ -162,7 +162,7 @@ echo form_open('backend/add_new_app');
 							'name' => 'submit', 
 							'value' => 'Add',
 							'class' => 'bt-create-now'
-							)); ?> or <?php echo anchor('backend', 'Cancel');?>	
+							)); ?> or <?php echo anchor('backend/app', 'Cancel');?>	
 		</p>
 		</div>
 		<?=form_close()?>
