@@ -103,7 +103,7 @@ function refresh_available_item_panel(){
 		var ul_element=$(".right-panel").find('.dragging-page ul');
 	var strip_element=$(".right-panel").find('.strip ul');
 	strip_element.html('');
-	for(var i=1;i<=last_page_of_available_item;i++) 
+	for(var i=1; i<=last_page_of_available_item && last_page_of_available_item != 1 ;i++) 
 		strip_element.append('<li><a href="javascript:show_page(\'available_item\','+i+')"></a></li>');
 	ul_element.children("li").hide();
 	var k=(showing_page_of_available_item-1)*available_item_per_page;
@@ -134,7 +134,7 @@ function refresh_installed_app_in_page_panel(){
 	var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
 	var strip_element=$(".left-panel").find('.strip ul');
 	strip_element.html('');
-	for(var i=1;i<=last_page_of_installed_app_in_page;i++) 
+	for(var i=1;i<=last_page_of_installed_app_in_page && last_page_of_installed_app_in_page != 1 ;i++) 
 		strip_element.append('<li><a href="javascript:show_page(\'installed_app_in_page\','+i+')"></a></li>');
 	ul_element.children("li").not(ul_element.children("li:first")).hide();
 	var k=(showing_page_of_installed_app_in_page-1)*installed_app_in_page_per_row;
@@ -173,7 +173,7 @@ function show_installed_page_in_company(){
 	    url: base_url + "company/json_get_pages/" + company_id,
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".left-panel").find('.dragging-page div').html("<div class='loading'></div><ul></ul>");
+			$(".left-panel").find('.dragging-page div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
 	    },
 		success: function(json) {
 			var ul_element=$(".left-panel").find('.dragging-page div').find('ul');
@@ -266,7 +266,7 @@ function show_installed_page_in_company(){
 											error: function(){
 												show_installed_app_in_page(page_id,facebook_page_id);
 												show_available_app_in_page(page_id);
-												alert("ERROR! cannot install app.");								
+												alert("ERROR! cannot install app.");		
 											},
 											success: function(json) {
 												if(json!=null&&json.status.toUpperCase()=="OK"){																						
@@ -309,7 +309,7 @@ function show_installed_app_in_company(){
 	    url: base_url + "company/json_get_installed_apps_not_in_page/" + company_id,
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".left-panel").find('.dragging-app div').html("<div class='loading'></div><ul></ul>");
+			$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
 	    },
 		success: function(json) {
 			var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
@@ -354,6 +354,7 @@ function show_installed_app_in_company(){
 							data: {url:app_install_url},
 							error: function(){
 								show_available_app_in_company();	
+								show_installed_app_in_company();	
 								alert("ERROR! cannot install app.");								
 							},
 							success: function(json) {
@@ -375,6 +376,7 @@ function show_installed_app_in_company(){
 								}
 								else {
 									show_available_app_in_company();	
+									show_installed_app_in_company();	
 									alert("ERROR! cannot install app.");								
 								}
 							}
@@ -404,7 +406,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 	    url: base_url + "page/json_get_installed_apps/" + page_id,
 	    dataType: "json",
 	    beforeSend: function(){
-	    	$(".left-panel").find('.dragging-app div').html("<div class='loading'></div><ul></ul>");
+	    	$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
 	    	$(".head-box-app-list").hide();
 	    },
 		success: function(json) {
@@ -507,7 +509,7 @@ function show_available_page_in_company(){
 	    url: base_url + "page/json_get_not_installed_facebook_pages/" + company_id,
 	    dataType: "json",
 	    beforeSend: function(){
-	        $(".right-panel").find('.dragging-page').html("<div class='loading'></div><ul></ul>");
+	        $(".right-panel").find('.dragging-page').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
 	    },
 		success: function(json) {
 			var ul_element=$(".right-panel").find('.dragging-page').find('ul');
@@ -547,12 +549,12 @@ function show_available_page_in_company(){
 }
 
 //show company's available apps
-function show_available_app_in_company(){	
+function show_available_app_in_company(){
 	jQuery.ajax({
 	    url: base_url + "company/json_get_not_installed_apps/" + company_id + "/0",
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".right-panel").find('.dragging-app').html("<div class='loading'></div><ul></ul>");
+			$(".right-panel").find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
 	   	},
 		success: function(json) {
 			var ul_element=$(".right-panel").find('.dragging-app').find('ul');
@@ -592,7 +594,7 @@ function show_available_app_in_page(page_id){
 	    url: base_url + "company/json_get_not_installed_apps/" + company_id + "/" + page_id,
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".right-panel").find('.dragging-app').html("<div class='loading'></div><ul></ul>");
+			$(".right-panel").find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
 	   	},
 		success: function(json) {
 			var ul_element=$(".right-panel").find('.dragging-app').find('ul');
@@ -627,12 +629,12 @@ function show_available_app_in_page(page_id){
 }
 
 function get_activity_log(){	
+	$('.activity-logs ul').html('');
 	jQuery.ajax({
 	    url: base_url + "audit/json_get_company_activity_log/" + company_id,
 	    dataType: "json",
 	    beforeSend: function(){},
 		success: function(json) {
-			$('.activity-logs ul').html('');
 			for(i in json){
 				var action_desc=""
 				if(json[i].action_id==1||json[i].action_id==2) action_desc="add an application";
