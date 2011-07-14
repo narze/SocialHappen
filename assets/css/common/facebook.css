@@ -90,15 +90,13 @@ div.header div.name>ul {
 div.header div.name:hover ul {display: block;}
 div.header div.name>ul li {
 	cursor: default;
-	height: 23px;
-	line-height: 23px;
 	font-size: 11px;
 	background: url(../../images/bg_fb/bg_linex03.png) repeat-x top;
 }
 div.header div.name>ul>li:first-child { background: none;}
 div.header div.name>ul>li a {
 	display: block;
-	padding: 0 10px;
+	padding: 5px 10px;
 	text-decoration: none;
 	color: #fff;
 }
@@ -185,15 +183,13 @@ div.header ul.menu>li.profile>ul {
 div.header ul.menu>li.profile:hover ul {display: block;}
 div.header ul.menu>li.profile>ul li {
 	cursor: default;
-	height: 23px;
-	line-height: 23px;
 	font-size: 11px;
 	background: url(../../images/bg_fb/bg_linex03.png) repeat-x top;
 }
 div.header ul.menu>li.profile>ul>li:first-child { background: none;}
 div.header ul.menu>li.profile>ul>li a {
 	display: block;
-	padding: 0 10px;
+	padding: 5px 10px;
 	text-decoration: none;
 	color: #fff;
 }
