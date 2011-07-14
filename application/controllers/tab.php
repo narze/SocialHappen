@@ -52,14 +52,17 @@ class Tab extends CI_Controller {
 										'token' => base64_encode($token)
 						),
 						'script' => array(
+							'common/functions',
 							'tab/bar',
 							'tab/profile',
 							'tab/main',
-							'common/jquery.countdown.min'
+							'common/jquery.countdown.min',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'common/facebook',
-							'common/jquery.countdown'
+							'common/jquery.countdown',
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					),
 				TRUE),

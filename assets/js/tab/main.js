@@ -8,7 +8,8 @@ $(function(){
 	   }
 	   return null;   
 	}
-
+	
+	set_loading();
 	$('div#main').load(base_url+'tab/dashboard/'+page_id+'/'+user_id+'/'+token,function(){
 		$('.campaign-end-time').each(function(){
 			end_time = Date.createFromMysql($(this).text());
