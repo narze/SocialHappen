@@ -22,10 +22,20 @@ if(!window.set_loading){
 		if(!message) {
 			message = "Loading";
 		}
+		$.fancybox.init(); //force init
+		
+		// $.ajaxSetup({
+			// beforeSend : $.fancybox({
+					// content: '<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>'
+				// }),
+			// ajaxStop : function(){setTimeout(function() {
+				// $.fancybox.close();
+			// }, 500);}
+		// });
+		
 		$('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').appendTo('body').ajaxStart(function() {
 			$.fancybox({
 				content: $(this)
-				//modal: true
 			});
 		})
 		.ajaxStop(function() {
@@ -33,5 +43,15 @@ if(!window.set_loading){
 				$.fancybox.close();
 			}, 500);
 		});
+		
+		 // $('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').appendTo('body').bind("ajaxSend", function(){
+		   // $.fancybox({
+				// content: $(this)
+			// });
+		 // }).bind("ajaxComplete", function(){
+		   // setTimeout(function() {
+				// $.fancybox.close();
+			// }, 500);
+		 // });
 	}
 }

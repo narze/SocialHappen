@@ -1,5 +1,6 @@
 $(function(){
 	function get_page_apps(page_index, jq){
+		set_loading();
 		$.getJSON(base_url+'page/json_get_installed_apps/'+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){
 			$('.wrapper-details.apps .details table tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
