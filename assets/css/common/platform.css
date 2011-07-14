@@ -348,6 +348,7 @@ div.wrapper-details-member>div.details {
 	border: 1px solid #dcdcdc;
 	background: #fff;
 }
+div.wrapper-details>div.details table {width: 100%;}
 div.wrapper-details>div.details table td{
 	padding: 5px 5px;
 }
@@ -391,6 +392,7 @@ div[class$="list-style01"] {
 div[class$="list-style02"] {
     padding: 0 0 0 60px;
 }
+div[class$="list-style02"] p.thumb img {width: 50px; height: 50px;}
 div[class^="detail-list"] {
     font-size: 12px;
     margin: 5px 0;
@@ -604,7 +606,7 @@ div.wrapper-drag_drop>div:first-child+div div.activity-logs ul>li p.thumb {
 	top: 10px;
 	border: 2px solid #d1d1d1;
 }
-div.wrapper-drag_drop>div:first-child+div div.activity-logs ul>li p.thumb img {display: block;}
+div.wrapper-drag_drop>div:first-child+div div.activity-logs ul>li p.thumb img {display: block; width: 35px; height: 35px;}
 div.wrapper-drag_drop>div:first-child+div div.activity-logs ul>li>div {
 	padding: 8px 0 8px 75px;
 	position: relative;
@@ -627,7 +629,7 @@ div.box-drop_page p.install-page {
 }
 div.box-drop_page p.install-page span {display: none;}
 
-div.dragging-page {padding: 15px 25px; position: relative;}
+div.dragging-page {padding: 15px 25px 0; position: relative;}
 div.dragging-page>div {padding: 1px;}
 div.dragging-page div.in-action {
 	background: #ebeced;
@@ -647,8 +649,8 @@ div.dragging-page ul li {
 	float: left;
 	width: 100px;
 	height: 130px;
-	margin:  5px 3px;
-	padding: 5px 0 0;
+	margin:  5px 3px 0;
+	padding: 5px 0 15px;
 	font-size: 11px;
 }
 div.dragging-page ul li:first-child { margin-left: 6px;}
@@ -668,6 +670,7 @@ div.dragging-page ul li img {border: 1px solid #c9c9c9; width: 80px; height: 80p
 div.dragging-page ul li p {text-align: center; padding: 0 5px 7px;}
 div.dragging-page ul li.add {background: url(../../images/bg/bg_ul-dragdrop01.png) no-repeat;}
 div.dragging-page ul li.dragging {background: url(../../images/bg/bg_ul-dragdrop02.png) no-repeat; }
+div.dragging-page ul li.active, div.dragging-page ul li.active:hover {background: url(../../images/bg/bg_ul-dragdrop05.png) no-repeat;}
 div.dragging-page ul li:hover {background: url(../../images/bg/bg_ul-dragdrop02.png) no-repeat; cursor: pointer;}
 div.box-drop_page div.dragging-page {padding: 15px 10px 10px; min-height: 345px;}
 div.box-drop_page div.dragging-page ul li {margin: 0 7px 5px;}
@@ -715,6 +718,7 @@ div.box-app-list {
     -moz-border-radius: 0 0 5px 5px;
     border-radius: 0 0 5px 5pxx;
 	padding: 15px 15px;
+	margin-top: -1px;
 }   
 div.box-app-list>p { font-size: 16px; padding-bottom: 15px;}
 div.box-app-list>p b { color: #63791c;}
