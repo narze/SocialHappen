@@ -109,8 +109,10 @@ class Audit_action_model extends CI_Model {
 	 */
 	function delete_action($app_id = NULL, $action_id = NULL){
 		$check_args = isset($app_id);
+		$app_id = (int)$app_id;
 		if($check_args){
 			if(isset($action_id)){
+				$action_id = (int)$action_id;
 				$criteria = array('app_id' => $app_id,
 							  	  'action_id' => $action_id);
 			}else{
