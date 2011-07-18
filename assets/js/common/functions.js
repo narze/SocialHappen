@@ -33,9 +33,9 @@ if(!window.set_loading){
 			// }, 500);}
 		// });
 		
-		$('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').appendTo('body').ajaxStart(function() {
+		$('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').hide().appendTo('body').ajaxStart(function() {
 			$.fancybox({
-				content: $(this)
+				content: $(this).show()
 			});
 		})
 		.ajaxStop(function() {
