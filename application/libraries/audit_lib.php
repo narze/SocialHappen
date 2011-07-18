@@ -187,8 +187,15 @@ class Audit_lib
 			return FALSE;
 			//show_error("Invalid or missing args", 500);
 		}
+		$app_id = (int)$app_id;
+		$action_id = (int)$action_id;
 		$this->CI->load->model('audit_action_model','audit_action');
-		$result = $this->CI->audit_action->get_action($app_id, $action_id);
+		if($action_id < 1000){ // default action
+			$result = $this->CI->audit_action->get_action(0, $action_id);
+		}else{ // custom action
+			$result = $this->CI->audit_action->get_action($app_id, $action_id);
+		}
+		
 		if(count($result) == 0){
 			return NULL;
 		}else{
@@ -230,9 +237,14 @@ class Audit_lib
 			return FALSE;
 		}
 		
+		
 		// check valid action_id
 		$this->CI->load->model('audit_action_model','audit_action');
-		$result_audit_action = $this->CI->audit_action->get_action($app_id, $action_id);
+		if($action_id < 1000){ // default action
+			$result_audit_action = $this->CI->audit_action->get_action(0, $action_id);
+		}else{ // custom action
+			$result_audit_action = $this->CI->audit_action->get_action($app_id, $action_id);
+		}
 		
 		if(count($result_audit_action) == 0){
 			return FALSE;
@@ -256,7 +268,7 @@ class Audit_lib
 			$data_to_add['campaign_id'] = $additional_data['campaign_id'];
 		}
 		if(isset($additional_data['company_id'])){
-			$data_to_add['company_id '] = $additional_data['company_id'];
+			$data_to_add['company_id'] = $additional_data['company_id'];
 		}
 		if(isset($additional_data['page_id'])){
 			$data_to_add['page_id'] = $additional_data['page_id'];
@@ -326,7 +338,24 @@ class Audit_lib
 	 */
 	function _date(){
 		date_default_timezone_set('Asia/Bangkok');
-		return Date('Ymd');
+		return (int)Date('Ymd');
+	}
+	
+	function get_date_range($startDate, $endDate, $format="Ymd")
+	{
+		date_default_timezone_set('Asia/Bangkok');
+	    //Create output variable
+	    $datesArray = array();
+	    //Calculate number of days in the range
+	    $total_days = round(abs(strtotime($endDate) - strtotime($startDate)) / 86400, 0) + 1;
+	    if($total_days<0) { return false; }
+	    //Populate array of weekdays and counts
+	    for($day=0; $day<$total_days; $day++)
+	    {
+	        $datesArray[] = date($format, strtotime("{$startDate} + {$day} days"));
+	    }
+	    //Return results array
+	    return $datesArray;
 	}
 	
 	/**
@@ -513,24 +542,54 @@ class Audit_lib
 	 * count audit with distinct key for single day
 	 * 
 	 * @param key string to distinct (ex. subject)
-	 * @param app_id
+	 * @param app_id [optional]
 	 * @param action_id
-	 * @param criteria array of criteria may contain ['app_install_id', 'page_id', 'campaign_id']
+	 * @param criteria array of criteria may contain ['app_install_id', 'subject', 'object', 'objecti', 'page_id', 'campaign_id']
 	 * @param date - date in format yyyymmdd ex. 20100531
 	 * 
 	 * @return int
 	 */
 	function count_audit($key = NULL, $app_id = NULL, $action_id = NULL, $criteria = NULL, $date = NULL){
-		$check_args = isset($key) && isset($app_id) && isset($action_id) && isset($criteria) && isset($date);
+		return $this->count_audit_range($key, $app_id, $action_id, $criteria, $date, $date);
+	}
+	
+	/**
+	 * count audit with distinct key for single day
+	 * 
+	 * @param key string to distinct (ex. subject)
+	 * @param app_id [optional]
+	 * @param action_id
+	 * @param criteria array of criteria may contain ['app_install_id', 'subject', 'object', 'objecti', 'page_id', 'campaign_id']
+	 * @param start_date - date in format yyyymmdd ex. 20100531
+	 * @param end_date - date in format yyyymmdd ex. 20100531
+	 * 
+	 * @return int
+	 */
+	function count_audit_range($key = NULL, $app_id = NULL, $action_id = NULL, $criteria = NULL, $start_date = NULL, $end_date = NULL){
+		$check_args = isset($key) && isset($action_id) && isset($criteria) && isset($start_date);
 		if(!$check_args){
 			return NULL;
 		}
 		$this->CI->load->model('audit_model', 'audit');
 		
 		$db_criteria = array();
+		if(isset($app_id)){
+			$db_criteria['app_id'] = $app_id;
+		}
 		
-		$db_criteria['app_id'] = $app_id;
 		$db_criteria['action_id'] = $action_id;
+		
+		if(isset($criteria['subject'])){
+			$db_criteria['subject'] = $criteria['subject'];
+		}
+		
+		if(isset($criteria['object'])){
+			$db_criteria['object'] = $criteria['object'];
+		}
+		
+		if(isset($criteria['objecti'])){
+			$db_criteria['objecti'] = $criteria['objecti'];
+		}
 		
 		if(isset($criteria['app_install_id'])){
 			$db_criteria['app_install_id'] = $criteria['app_install_id'];
@@ -546,7 +605,7 @@ class Audit_lib
 		//var_dump($db_criteria);
 		//echo '</pre>';
 		
-		return $this->CI->audit->count_distinct_audit($key, $db_criteria, $this->convert_statdate_to_date($date));
+		return $this->CI->audit->count_distinct_audit($key, $db_criteria, $this->convert_statdate_to_date($start_date), $this->convert_statdate_to_date($end_date));
 	}
 	
 	/**
@@ -577,7 +636,7 @@ class Audit_lib
 	 * @return html of stat graph
 	 */
 	function render_stat_graph($data_label = NULL, $data = NULL, $title = NULL, $div = NULL){
-		$check_args = isset($data) && isset($title) && isset($div) && isset($div['id']) && 
+		$check_args = isset($data_label) && isset($data) && isset($title) && isset($div) && isset($div['id']) && 
 						isset($div['height']) && isset($div['width']);
 		if(!$check_args){
 			return NULL;
@@ -653,7 +712,7 @@ foreach ($data as $line_key => $line_value) {
           tickOptions:{
             formatString:'%d'
             },
-		  min: 0,
+		  //min: 0,
 		  label:'" . $ylabel . "'
         }
       },

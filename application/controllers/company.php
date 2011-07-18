@@ -24,12 +24,17 @@ class Company extends CI_Controller {
 										,'sh_default_fb_app_api_key'=>$this->config->item('sh_default_fb_app_api_key')
 										,'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
+							'common/functions',
 							'common/bar',
-							'company/company_dashboard'
+							'company/company_dashboard',
+							'common/fancybox/jquery.mousewheel-3.0.4.pack',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
-							'company/main',
-							'common/smoothness/jquery-ui-1.8.9.custom'
+							'common/main',
+							'common/platform',
+							'common/smoothness/jquery-ui-1.8.9.custom',
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),
@@ -39,14 +44,13 @@ class Company extends CI_Controller {
 					),
 				TRUE),
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-					array('breadcrumb' => 
-						array( 
-							array(
-								"name" => $company['company_name'],
-								"url" => base_url() . "company/{$company['company_id']}")
-							)
-						)
-					,
+					array(
+						'breadcrumb' => 
+							array( 
+								$company['company_name'] => base_url() . "company/{$company['company_id']}"
+							),
+						'settings_url' => base_url()."settings?s=company&id={$company['company_id']}"
+					),
 				TRUE),
 				'company_profile' => $this -> load -> view('company/company_profile', 
 					array('company_profile' => $company),
@@ -106,6 +110,18 @@ class Company extends CI_Controller {
 		$this->load->model('installed_apps_model','installed_app');
 		$count = $this->installed_app->count_all_distinct("app_id",array("company_id" => $company_id));
 		$count=array('app_count' => $count);
+		echo json_encode($count);
+	}
+	
+	/**
+	 * JSON : Get company campaigns
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function json_get_campaigns_count($company_id = NULL){
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_campaigns_by_company_id($company_id);
+		$count=array('campaign_count' => $count);
 		echo json_encode($count);
 	}
 	

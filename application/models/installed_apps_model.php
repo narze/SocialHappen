@@ -27,6 +27,7 @@ class Installed_apps_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		$this->db->order_by("order_in_dashboard");
 		$this->db->join('app','installed_apps.app_id=app.app_id');
+		$this->db->join('app_install_status','installed_apps.app_install_status=app_install_status.app_install_status_id');
 		return $this->db->get_where('installed_apps', array('page_id' => $page_id))->result_array();
 	}
 

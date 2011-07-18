@@ -38,19 +38,12 @@
 |
 */
 
-$route['default_controller'] = "landing";
+$route['default_controller'] = "home";
 $route['404_override'] = '';
 $route['company/(:num)'] = "company/index/$1";
 $route['page/(:num)'] = "page/index/$1";
 $route['app/(:num)'] = "app/index/$1";
 $route['campaign/(:num)'] = "campaign/index/$1";
-$route['page/(:num)/user/(:num)'] = "user/user_in_page/$2/$1";
-$route['page/user/(:num)/(:num)'] = "user/user_in_page/$2/$1";
-$route['app/(:num)/user/(:num)'] = "user/user_in_app/$2/$1";
-$route['app/user/(:num)/(:num)'] = "user/user_in_app/$2/$1";
-$route['campaign/(:num)/user/(:num)'] = "user/user_in_campaign/$2/$1";
-$route['campaign/user/(:num)/(:num)'] = "user/user_in_campaign/$2/$1";
-$route['settings/(:num)/(:any)/(:num)'] = "settings/index/$1/$2/$3";
 $route['tab/(:num)'] = "tab/index/$1";
 $route['facebook/(:num)'] = "tab/index/$1";
 

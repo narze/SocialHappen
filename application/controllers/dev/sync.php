@@ -128,10 +128,11 @@ class Sync extends CI_Controller {
 							    'app_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_install_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+							    'app_install_page_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_config_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_support_page_tab' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
 							    'app_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-								'facebook_app_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
+								'app_facebook_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
 							),
 							'app_install_status' => array(
 							    'app_install_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
@@ -153,7 +154,7 @@ class Sync extends CI_Controller {
 							    'audit_action_id' => field_option('INT', 5, $default, $null, $autoinc, TRUE),
 							    'audit_action_name' => field_option('VARCHAR', 100, $default, $null, $autoinc, $unsigned),
 							    'audit_action_active' => field_option('INT', 1, 1, $null, $autoinc, $unsigned),
-								'audic_action_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+								'audit_action_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							),
 							'campaign' => array(
 							    'campaign_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -190,23 +191,6 @@ class Sync extends CI_Controller {
 							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'available_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							),
-							/*'config_item' => array(
-							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'config_key' => field_option('VARCHAR', 64, $default, $null, $autoinc, $unsigned),
-							    'config_value' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
-							),
-							'config_item_template' => array(
-							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'config_key' => field_option('64', $constraint, $default, $null, $autoinc, $unsigned),
-							    'config_value' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
-							),
-							'cron_job' => array(
-							    'job_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
-							    'job_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'job_start' => field_option('TIMESTAMP', $constraint, 'CURRENT_TIMESTAMP', $null, $autoinc, $unsigned),
-							    'job_finish' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
-							    'job_status' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							),*/
 							'installed_apps' => array(
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -227,6 +211,7 @@ class Sync extends CI_Controller {
 							    'page_new_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
+								'page_status' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -254,7 +239,7 @@ class Sync extends CI_Controller {
 							'user_companies' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'user_role' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
+							    'user_role' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
 							),
 							'sessions' =>array(
 								'session_id' => field_option('VARCHAR', 40, '0', $null, $autoinc, $unsigned),
@@ -267,7 +252,20 @@ class Sync extends CI_Controller {
 							'user_gender' =>array(
 								'user_gender_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
 								'user_gender_name' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned),
-							)
+							),
+							'page_status' => array(
+							    'page_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
+							    'page_status_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							),
+							'user_role' => array(
+							    'user_role_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
+							    'user_role_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							),
+							'user_pages' => array(
+							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'user_role' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
+							)							
 						);
 		$keys = array(
 						'app' => array('app_id'),
@@ -289,7 +287,10 @@ class Sync extends CI_Controller {
 						'user_campaigns' => array('user_id', 'campaign_id'),
 						'user_companies' => array('user_id', 'company_id'),
 						'sessions' => array('session_id'),
-						'user_gender' =>array('user_gender_id')
+						'user_gender' =>array('user_gender_id'),
+						'page_status' => array('page_status_id'),
+						'user_role' => array('user_role_id'),
+						'user_pages' => array('user_id', 'page_id')
 					);
 		$tables = array(
 							'app',
@@ -311,7 +312,10 @@ class Sync extends CI_Controller {
 							'user_campaigns',
 							'user_companies',
 							'sessions',
-							'user_gender'
+							'user_gender',
+							'page_status',
+							'user_role',
+							'user_pages'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -343,10 +347,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' =>  '11111111111111111111111111111111',
 					    'app_url' =>  'http://socialhappen.dyndns.org/feed?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/feed/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}',
+					    'app_install_page_url' => '',
 					    'app_config_url' =>  'http://socialhappen.dyndns.org/feed/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' =>  1,
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 2, 
@@ -358,10 +363,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' =>  '22222222222222222222222222222222', 
 					    'app_url' => 'http://socialhappen.dyndns.org/fbreg?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbreg/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbreg/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 3, 
@@ -373,10 +379,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' => '33333333333333333333333333333333', 
 					    'app_url' => 'http://socialhappen.dyndns.org/sharetogetit?app_install_id={app_install_id}', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}', 
 					    'app_support_page_tab' => 0, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 4, 
@@ -388,10 +395,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' => '44444444444444444444444444444444', 
 					    'app_url' => 'http://socialhappen.dyndns.org/fbcms/blog/{app_install_id}/', 
 					    'app_install_url' => 'http://socialhappen.dyndns.org/fbcms/platform/install/{company_id}/{user_facebook_id}/', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => 'http://socialhappen.dyndns.org/fbcms/platform/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}/', 
 					    'app_support_page_tab' => 1, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 5, 
@@ -403,10 +411,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' => 'fb9792b2ccb40d5482f5b7cae5e55521', 
 					    'app_url' => '', 
 					    'app_install_url' => '', 
+					    'app_install_page_url' => '', 
 					    'app_config_url' => '',
 					    'app_support_page_tab' => 1, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => ''
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => ''
 					),
 					array(
 					    'app_id' => 6, 
@@ -418,10 +427,11 @@ class Sync extends CI_Controller {
 					    'app_secret_key' => 'ab6548beccb40d5a82f5b7bae5e55521', 
 					    'app_url' => '', 
 					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_to_page/?app_install_id={app_install_id}&page_id={page_id}&force=1', 
 					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' => 1, 
-					    'app_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/app-icon.png',
-						'facebook_app_api_key' => '20046401b3b5ae931f8d552f5aeae44f'
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => '20046401b3b5ae931f8d552f5aeae44f' 	
 					)
 				);
 		$this->db->insert_batch('app', $app);
@@ -487,6 +497,10 @@ class Sync extends CI_Controller {
 									'audit_action_name' =>  'save config',
 								),
 								array(
+									'audit_action_id' => 5,
+									'audit_action_name' =>  'install page',
+								),
+								array(
 									'audit_action_id' => 101,
 									'audit_action_name' =>  'user register to platform',
 								),
@@ -520,7 +534,7 @@ class Sync extends CI_Controller {
 							    'campaign_all_member' => 10, 
 							    'campaign_start_timestamp' => '2011-05-19 18:29:43',
 							    'campaign_end_timestamp' => '2012-05-18 00:00:00',
-								'campaign_image' => 'http://www.learners.in.th/file/sckimberly/facebook-logo.png'
+								'campaign_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 							),
 							array(
 							    'campaign_id' => 2, 
@@ -532,7 +546,7 @@ class Sync extends CI_Controller {
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18 18:05:46', 
 							    'campaign_end_timestamp' => '2011-06-18 00:00:00',
-								'campaign_image' => 'http://www.learners.in.th/file/sckimberly/facebook-logo.png'
+								'campaign_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 							)
 						);
 		$this->db->insert_batch('campaign', $campaign);
@@ -565,7 +579,7 @@ class Sync extends CI_Controller {
 							    'company_register_date' => '2011-05-09 17:52:17', 
 							    'company_username' => '', 
 							    'company_password' => '',
-							    'company_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb50-50.jpg'
+							    'company_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/32b299d9fb8a6e61784646ac80631153_o.png'
 							)
 						);
 		$this->db->insert_batch('company', $company);
@@ -647,13 +661,13 @@ class Sync extends CI_Controller {
 		$page = array(
 					array(
 						    'page_id' => 1, 
-						    'facebook_page_id' => 4321, 
+						    'facebook_page_id' => '116586141725712', 
 						    'company_id' => 1, 
 						    'page_name' => 'Test name', 
 						    'page_detail' => 'detail', 
 						    'page_all_member' => 22, 
 						    'page_new_member' => 222, 
-						    'page_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/logo.png'
+						    'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png'
 						)
 					);
 		$this->db->insert_batch('page', $page);
@@ -664,7 +678,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',					    
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',					    
 					    'user_facebook_id' => 713558190, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -674,7 +688,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',	
 					    'user_facebook_id' => 637741627, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -684,7 +698,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 631885465, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -694,7 +708,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 755758746, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -704,7 +718,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/assets/images/thumb20-20.jpg',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 508840994, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
@@ -756,12 +770,12 @@ class Sync extends CI_Controller {
 								array(
 								    'user_id' => 1,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 2,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 3,
@@ -771,12 +785,12 @@ class Sync extends CI_Controller {
 								array(
 								    'user_id' => 4,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 2
 								),
 								array(
 								    'user_id' => 5,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 3
 								)
 							);
 		$this->db->insert_batch('user_companies', $user_companies);
@@ -792,6 +806,7 @@ class Sync extends CI_Controller {
 							)
 						);
 		$this->db->insert_batch('sessions', $sessions);
+		
 		$user_gender = array(
 			array(
 				'user_gender_id' => 1,
@@ -807,6 +822,60 @@ class Sync extends CI_Controller {
 			)
 		);
 		$this->db->insert_batch('user_gender', $user_gender);
+		
+		$page_status = array(
+								array(
+								    'page_status_id' => 1,
+								    'page_status_name' => 'Not installed'
+								),
+								array(
+								    'page_status_id' => 2,
+								    'page_status_name' => 'Installed'
+								)
+							);
+		$this->db->insert_batch('page_status', $page_status);
+		
+		$user_role = array(
+								array(
+								    'user_role_id' => 1,
+								    'user_role_name' => 'Admin'
+								),
+								array(
+								    'user_role_id' => 2,
+								    'user_role_name' => 'Waiting'
+								)
+							);
+		$this->db->insert_batch('user_role', $user_role);
+		
+		$user_pages = array(
+								array(
+								    'user_id' => 1,
+								    'page_id' => 1,
+								    'user_role' => 1
+								),
+								array(
+								    'user_id' => 2,
+								    'page_id' => 1,
+								    'user_role' => 1
+								),
+								array(
+								    'user_id' => 3,
+								    'page_id' => 1,
+								    'user_role' => 0
+								),
+								array(
+								    'user_id' => 4,
+								    'page_id' => 1,
+								    'user_role' => 2
+								),
+								array(
+								    'user_id' => 5,
+								    'page_id' => 1,
+								    'user_role' => 3
+								)
+							);
+		$this->db->insert_batch('user_pages', $user_pages);
+		
 		echo "Test data added<br />";
 	}
 }

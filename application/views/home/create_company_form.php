@@ -1,5 +1,5 @@
-<?php // Change the css classes to suit your needs    
-		$attributes = array('class' => '', 'id' => '');
+<?php
+		$attributes = array('class' => 'create-company-form', 'id' => '');
 		echo form_open('home/create_company_form', $attributes); ?>
 		<div id="company-information"><h2>Company information</h2>
 			<p>
@@ -15,14 +15,14 @@
 			</p>
 			
 			<p>
-			        <label for="company_image">Company image</label>
-			        <?php echo form_error('company_image'); ?>
-			        <br /><input id="company_image" type="text" name="company_image" maxlength="255" value="<?php echo set_value('company_image'); ?>"  />
+					<label for="company_image">Company image</label>
+					<?php echo form_error('company_image'); ?>
+					<br /><input id="company_image" type="file" name="company_image" />
 			</p>
 		</div>
 		
 		<p>
-		        <?php echo form_submit( 'submit', 'Submit'); ?>
+		        <?php echo form_submit( 'submit-form', 'Submit'); ?>
 		</p>
 		
 		<?php echo form_close(); ?>

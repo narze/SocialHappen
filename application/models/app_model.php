@@ -10,6 +10,8 @@ class App_model extends CI_Model {
 	var $app_install_url = '';
 	var $app_config_url = '';
 	var $app_support_page_tab = '';
+	var $app_install_page_url = '';
+	var $app_facebook_api_key = '';
 
 	function __construct() {
 		parent::__construct();
@@ -60,7 +62,7 @@ class App_model extends CI_Model {
 	 * @author Prachya P.
 	 */
 	function get_app_by_api_key($fb_app_api_key = NULL){
-		$result = $this->db->get_where('app', array('facebook_app_api_key' => $fb_app_api_key))->result_array();
+		$result = $this->db->get_where('app', array('app_facebook_api_key' => $fb_app_api_key))->result_array();
 		return issetor($result[0]);				
 	}
 	

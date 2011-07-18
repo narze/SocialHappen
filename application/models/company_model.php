@@ -26,6 +26,15 @@ class Company_model extends CI_Model {
 	}
 	
 	/**
+	 * Get all profile
+	 * @author Metwara Narksook
+	 */
+	function get_company_profile(){
+		$result = $this->db->get_where('company',array())->result_array();
+		return issetor($result, NULL);
+	}
+	
+	/**
 	 * Get profile
 	 * @param $page_id
 	 * @author Manassarn M.
@@ -40,7 +49,7 @@ class Company_model extends CI_Model {
 	
 	/**
 	 * Get profile
-	 * @param $page_id
+	 * @param $campaign_id
 	 * @author Manassarn M.
 	 */
 	function get_company_profile_by_campaign_id($campaign_id = NULL){

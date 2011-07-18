@@ -22,27 +22,39 @@ class App extends CI_Controller {
 			$user_count = $this->users->count_users_by_app_install_id($app_install_id);
 			$this->config->load('pagination', TRUE);
 			$per_page = $this->config->item('per_page','pagination');
+			
+			$this->load->library('audit_lib');
+			$new_users = $this->audit_lib->list_stat_app((int)$app_install_id, 102, $this->audit_lib->_date());
+			$new_users = count($new_users) == 0 ? 0 : $new_users[0]['count'];
+			
+			$this -> load -> model('user_model', 'user');
+			$all_users = $this->user->count_users_by_app_install_id($app_install_id);
+			
 			$data = array(
 				'app_install_id' => $app_install_id,
 				'header' => $this -> socialhappen -> get_header( 
 					array(
+						'company_id' => $company['company_id'],
 						'title' => $app['app_name'],
 						'vars' => array(
 							'app_install_id'=>$app_install_id,
 							'per_page' => $per_page
 						),
 						'script' => array(
+							'common/functions',
 							'common/bar',
 							'common/jquery.pagination',
 							//'app/app_stat',
 							'app/app_users',
 							'app/app_campaigns',
-							'app/app_tabs'
+							'app/app_tabs',
+							'app/main',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
 							'common/main',
-							'app/campaign',
-							'app/member'
+							'common/platform',
+							'common/fancybox/jquery.fancybox-1.3.4'
 						)
 					)
 				),
@@ -63,6 +75,8 @@ class App extends CI_Controller {
 				TRUE),
 				'app_profile' => $this -> load -> view('app/app_profile', 
 					array('app_profile' => $app,
+						'new_users' => $new_users,
+						'all_users' => $all_users,
 						'count_installed_on' => $this->pages->count_pages_by_app_id($app['app_id'])),
 				TRUE),
 				'app_tabs' => $this -> load -> view('app/app_tabs', 

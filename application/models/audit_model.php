@@ -139,12 +139,25 @@ class Audit_model extends CI_Model {
 		return $end;
 	}
 	
-	function count_distinct_audit($key = NULL, $criteria = NULL, $date = NULL){
-		$check_args = isset($key) && isset($criteria);
+	function count_distinct_audit($key = NULL, $criteria = NULL, $start_date = NULL, $end_date = NULL){
+		$check_args = isset($key) && isset($criteria) && isset($start_date);
 		if(!$check_args){
 			return NULL;
 		}
 		$db_criteria = array();
+		
+		if(isset($criteria['subject'])){
+			$db_criteria['subject'] = $criteria['subject'];
+		}
+		
+		if(isset($criteria['object'])){
+			$db_criteria['object'] = $criteria['object'];
+		}
+		
+		if(isset($criteria['objecti'])){
+			$db_criteria['objecti'] = $criteria['objecti'];
+		}
+		
 		if(isset($criteria['app_id'])){
 			$db_criteria['app_id'] = $criteria['app_id'];
 		}
@@ -161,8 +174,12 @@ class Audit_model extends CI_Model {
 			$db_criteria['campaign_id'] = $criteria['campaign_id'];
 		}
 		
-		$start_time = $this->_get_start_day_time($date);
-		$end_time = $this->_get_end_day_time($date);
+		$start_time = $this->_get_start_day_time($start_date);
+		if(isset($end_date)){
+			$end_time = $this->_get_end_day_time($end_date);
+		}else{
+			$end_time = $this->_get_end_day_time($start_date);
+		}
 		
 		$db_criteria['timestamp'] = array('$gte' => $start_time, '$lt' => $end_time);
 		//echo 'count_distinct_audit criteria<pre>';

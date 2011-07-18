@@ -1,27 +1,27 @@
 <div>
+	<h1><span>SocialHappen</span></h1>	
+	<?php if(isset($user)) : ?>
+	<div class="goto">
+        <p><a href="#">Go to</a></p>
+		 <div>
+          <ul>
+          </ul>
+          <p><a class="bt-create_company" href="#"><span>Create Company</span></a></p>
+        </div>
+	</div>
+	<?php endif; ?>
 	<ul>
-
         <li class="profile"><a href="#"><span></span></a></li>
-        <li class="name"><img src="<?php echo issetor($user['user_image']);?>" alt="" />
+        <li class="name">
 			<?php if(isset($user)) {
-				echo issetor($user['user_first_name']).' '.issetor($user['user_last_name']); 
+				echo '<img src="'.imgsize(issetor($user['user_image']),'square').'" alt="" />'.issetor($user['user_first_name']).' '.issetor($user['user_last_name']); 
+				echo '<ul>
+						<li>'.anchor("settings?s=account&id={$user['user_id']}",'&raquo Profile Setting').'</li>
+						<li>'.anchor('home/logout','&raquo Logout').'</li>
+					  </ul>';
 			} else {
-				echo 'Login';
-			}?></li>
-
-        <li class="drop">
-			<a href="#">
-				<span>
-					<?php if(isset($user) && isset($company_id)) : ?>
-						<div id="user-menu">
-							<div id="profile-setting"><?php echo anchor("settings/{$company_id}/account/{$user['user_id']}",'Profile Setting');?></div>
-							<div id="logout"><?php echo anchor('home/logout','Logout');?></div>
-						</div>
-					<?php endif; ?>
-				</span>
-			</a>
+				echo anchor('home/login','Login');
+			}?>
 		</li>
-
-      </ul>
+    </ul>
 </div>
-<div id="goto"><h2><a href="#">Go to</a></h2><div id="goto-list"></div></div>

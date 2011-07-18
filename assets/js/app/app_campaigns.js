@@ -4,6 +4,7 @@ $(function(){
 		var url;
 		if(campaign_status_id != '') {url = base_url+"app/json_get_campaigns_using_status/"+app_install_id+'/'+campaign_status_id+'/'+per_page+'/'+(page_index * per_page);}
 		else {url = base_url+"app/json_get_campaigns/"+app_install_id+'/'+per_page+'/'+(page_index * per_page);}
+		set_loading();
 		$.getJSON(url,function(json){
 			$('.wrapper-details.campaigns .details table tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
@@ -15,7 +16,7 @@ $(function(){
 					.appendTo('.wrapper-details.campaigns .details.campaigns table');
 
 					var campaign_list = row.find('td.app-list div');
-					campaign_list.find('p.thumb img').attr('src', json[i].campaign_image);
+					campaign_list.find('p.thumb img').attr('src', imgsize(json[i].campaign_image,'normal'));
 					campaign_list.find('h2').append('<a href="'+base_url+'campaign/'+json[i].campaign_id+'">'+json[i].campaign_name+'</a>');
 					campaign_list.find('p.description').append(json[i].campaign_description);
 					

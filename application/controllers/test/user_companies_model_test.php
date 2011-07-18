@@ -30,7 +30,7 @@ class User_companies_model_test extends CI_Controller {
 		$user_company = array(
 							'user_id' => $user_id,
 							'company_id' => $company_id,
-							'user_role' => '0'
+							'user_role' => '1'
 						);
 		$add_result = $this->user_companies->add_user_company($user_company);
 		$this->unit->run($add_result,'is_true','add_user_company()');

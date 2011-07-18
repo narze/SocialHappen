@@ -19,6 +19,56 @@ class Audit extends CI_Controller {
 		echo $this->audit_lib->create_index();
 	}
 	
+	function list_register(){
+		$page_id = '1';
+		$res = $this->audit_lib->list_stat_page((int)$page_id, 102, $this->audit_lib->_date());
+		echo '<pre>';
+		var_dump($res);
+		echo '</pre>';
+	}
+	
+	function list_audit_user(){
+		$page_id = 1;
+		$user_id = 1;
+		$activity = $this->audit_lib->list_audit(array('page_id' => $page_id, 'subject' => $user_id));
+		echo '<pre>';
+		var_dump($activity);
+		echo '</pre>';
+	}
+	
+	function list_stat_campaign(){
+		date_default_timezone_set('Asia/Bangkok');
+		$end_date = $this->audit_lib->_date();
+		$start_date = date('Ymd', time() - 2592000);
+		$action_id = 103;
+		$campaign_id = 1;
+		
+		$stat_campaign_visit_db = $this->audit_lib->list_stat_campaign($campaign_id, $action_id, (int)$start_date, $end_date);
+		echo '<pre>';
+		var_dump($stat_campaign_visit_db);
+		echo '</pre>';
+	}
+	
+	function count_visit(){
+		$date = $this->audit_lib->_date();
+		$action_id = 103;
+		$res = $this->audit_lib->count_audit('_id', NULL, $action_id, array('camapign_id' => 1, 'subject' => 1), $date);
+		echo '<pre>';
+		var_dump($res);
+		echo '</pre>';
+	}
+	
+	function addlog_visit(){
+		$app_id = 3;
+		$action_id = 102;
+		$subject = 1;
+		$object = NULL;
+		$objecti = NULL;
+		$additional_data = array('app_install_id' => 1, 'page_id' => 1, 'campaign_id' => 1);
+		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+		if($result) echo 'app visit';
+	}
+	
 	function today(){
 		date_default_timezone_set('Asia/Bangkok');
 		$start = time();
@@ -79,7 +129,7 @@ class Audit extends CI_Controller {
 		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasTextRenderer.min.js"></script>
 		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.canvasAxisTickRenderer.min.js"></script>
 		     <script language="javascript" type="text/javascript" src="'.base_url().'assets/js/stat/jqplot.pointLabels.min.js"></script>
-		     <link rel="stylesheet" type="text/css" href="'.base_url().'assets/js/stat/jquery.jqplot.min.css" />';
+		     <link rel="stylesheet" type="text/css" href="'.base_url().'assets/css/stat/jquery.jqplot.min.css" />';
 		$data = array(array('20080223' => 5,
 					'20080323' => 10,
 					'20080423' => 4,
@@ -279,6 +329,56 @@ class Audit extends CI_Controller {
 			//echo $audit['subject'] . "<br/>";
 			echo '<pre>' . print_r($audit) . '</pre>';
 		}
+	}
+	
+	/**
+	 * JSON : get company activity log
+	 * @author Prachya P.
+	 */
+	function json_get_company_activity_log($company_id){
+		$this -> load -> model('audit_action_type_model', 'audit_type');
+		$this -> load -> model('user_model', 'user');
+		$this -> load -> model('page_model', 'page');
+		$this -> load -> model('installed_apps_model', 'installed_app');
+		$action_list=array(1,2,3,4,5);
+		$action_list_name=array();
+		$limit=5;
+		$audit_list = $this->audit_lib->list_audit(
+					array(
+						'company_id'=>(int)($company_id),
+						'action_id'=>array('$in' => $action_list)
+					),$limit);
+		foreach($action_list as $action_id){
+			$audit_action=$this->audit_type->get_audit_action_by_type_id($action_id);
+			$action_list_name[$action_id]=$audit_action['audit_action_name'];
+		}
+		foreach($audit_list as $key => $audit){
+			$audit_list[$key]['action_name']=$action_list_name[$audit['action_id']];
+			$user_profile=$this->user->get_user_profile_by_user_id($audit_list[$key]['subject']);
+			$audit_list[$key]['image']=$user_profile['user_image'];
+			$audit_list[$key]['user_first_name']=$user_profile['user_first_name'];
+			$audit_list[$key]['user_id']=$user_profile['user_id'];
+			if($audit['action_id']==1){
+				$app_profile=$this->installed_app->get_app_profile_by_app_install_id($audit_list[$key]['app_install_id']);
+				$audit_list[$key]['app_name']=$app_profile['app_name'];
+				$audit_list[$key]['app_install_id']=$app_profile['app_install_id'];
+			}
+			else if($audit['action_id']==2){
+				$app_profile=$this->installed_app->get_app_profile_by_app_install_id($audit_list[$key]['app_install_id']);
+				$audit_list[$key]['app_name']=$app_profile['app_name'];
+				$audit_list[$key]['app_install_id']=$app_profile['app_install_id'];
+				$page_profile=$this->page->get_page_profile_by_page_id($audit_list[$key]['page_id']);
+				$audit_list[$key]['page_name']=$page_profile['page_name'];
+				$audit_list[$key]['page_id']=$app_profile['page_id'];
+			}
+			else if($audit['action_id']==5){
+				$page_profile=$this->page->get_page_profile_by_page_id($audit_list[$key]['page_id']);
+				$audit_list[$key]['page_name']=$page_profile['page_name'];
+				$audit_list[$key]['page_id']=$page_profile['page_id'];
+			}
+			$audit_list[$key]['datetime']=date("d/m/Y H:i:s",$audit_list[$key]['timestamp']);
+		}
+		echo json_encode($audit_list);
 	}
 
 }

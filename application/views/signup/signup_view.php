@@ -1,4 +1,0 @@
-{header}
-{tutorial}
-{form}
-{footer}

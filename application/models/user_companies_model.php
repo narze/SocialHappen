@@ -1,9 +1,6 @@
 <?php
 class User_companies_model extends CI_Model {
-	var $user_id = '';
-	var $company_id = '';
-	var $user_role = '';
-	
+
 	function __construct()
 	{
 		parent::__construct();
@@ -70,13 +67,27 @@ class User_companies_model extends CI_Model {
 	}
 	
 	/**
+	 * Get company users
+	 * @param $company_id
+	 * @author Manassarn M.
+	 */
+	function get_company_users_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
+		$this->db->join('user', 'user_companies.user_id = user.user_id');
+		$this->db->join('user_role', 'user_companies.user_role = user_role.user_role_id','left');
+		return $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
+	}
+	
+	/**
 	 * Check if user is company admin
 	 * @param $user_id
 	 * @param $company_id
 	 */
 	function is_company_admin($user_id = NULL, $company_id = NULL){
 		$this->db->where(array('user_id' => $user_id, 'company_id' => $company_id));
-		echo $count = $this->db->count_all_results('user_companies');
+		$count = $this->db->count_all_results('user_companies');
 		return $count == 1;
 	}
 }
+/* End of file user_companies_model.php */
+/* Location: ./application/models/user_companies_model.php */
