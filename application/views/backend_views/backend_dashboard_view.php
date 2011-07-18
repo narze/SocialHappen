@@ -15,7 +15,7 @@
 			<?=anchor('backend/company/', 'Manage Companies', 'title="Manage Companies"');?>
 		</li>
 		<li>
-			<?=anchor('backend/user/', 'Manage Users', 'title="Manage Users"');?>
+			<?=anchor('backend/users/', 'Manage Users', 'title="Manage Users"');?>
 		</li>
 	</ul>
 	<?=anchor('backend/logout/', 'Logout', 'title="Logout backend"');?>
