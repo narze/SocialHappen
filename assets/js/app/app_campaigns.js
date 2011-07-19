@@ -52,7 +52,9 @@ $(function(){
 			$('.pagination-campaigns').pagination(count, {
 				items_per_page:per_page,
 				callback:get_app_campaigns,
-				load_first_page:true
+				load_first_page:true,
+				next_text:null,
+				prev_text:null
 			});
 		});
 		return false;

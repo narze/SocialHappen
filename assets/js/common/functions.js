@@ -39,6 +39,7 @@ if(!window.set_loading){
 			});
 		})
 		.ajaxStop(function() {
+			$(this).hide();
 			setTimeout(function() {
 				$.fancybox.close();
 			}, 500);
