@@ -96,9 +96,11 @@ div.header div.name>ul li {
 div.header div.name>ul>li:first-child { background: none;}
 div.header div.name>ul>li a {
 	display: block;
-	padding: 5px 10px;
+	padding: 5px 10px 5px 20px;
 	text-decoration: none;
 	color: #fff;
+	font-weight: bold;
+	background: url(../../images/bg_fb/bg_listmenu.png) 5px 7px no-repeat;
 }
 div.header ul.menu {float: right; height: 35px;}
 div.header ul.menu>li {
@@ -189,9 +191,11 @@ div.header ul.menu>li.profile>ul li {
 div.header ul.menu>li.profile>ul>li:first-child { background: none;}
 div.header ul.menu>li.profile>ul>li a {
 	display: block;
-	padding: 5px 10px;
+	padding: 5px 10px 5px 20px;
 	text-decoration: none;
 	color: #fff;
+	font-weight: bold;
+	background: url(../../images/bg_fb/bg_listmenu.png) 5px 7px no-repeat;
 }
 div.header ul.menu>li.setting a {
 	display: block;
@@ -258,12 +262,13 @@ div.account-data div.data ul>li.fav a {
 	background: url(../../images/bg_fb/bg_main.png) no-repeat 6px -114px;
 }
 div.account-data div.data ul>li.fav:hover {background: url(../../images/bg_fb/bg_datalist-01.png) no-repeat;}
+div.account-data div.data ul>li.active:first-child {background: url(../../images/bg_fb/bg_datalist-01.png) no-repeat;}
 div.account-data div.data ul>li.member {width: 69px; margin-left: 1px;}
 div.account-data div.data ul>li.member a {
 	padding: 0 0 0 42px;
 	background: url(../../images/bg_fb/bg_main.png) no-repeat 6px -155px;
 }
-div.account-data div.data ul>li:hover {background: url(../../images/bg_fb/bg_datalist-02.png) repeat-x;}
+div.account-data div.data ul>li:hover, div.account-data div.data ul>li.active {background: url(../../images/bg_fb/bg_datalist-02.png) repeat-x;}
 div.account-data div.data ul>li.badges {width: 75px; margin-left: 1px;}
 div.account-data div.data ul>li.badges a {
 	padding: 0 0 0 38px;
@@ -276,6 +281,7 @@ div.account-data div.data ul>li.point a {
 }
 div.account-data div.data ul>li.setting {width: 42px; margin-left: 1px;}
 div.account-data div.data ul>li.setting:hover {background: url(../../images/bg_fb/bg_datalist-03.png) no-repeat;}
+div.account-data div.data ul>li:first-child+li+li+li+li.active {background: url(../../images/bg_fb/bg_datalist-03.png) no-repeat;}
 div.account-data div.data ul>li.setting a {
 	display: block;
 	width: 42px;
@@ -474,14 +480,133 @@ div.footer p.logo {
 	top: 8px;
 }
 
+/* setting */
+div.box-setting { width: 474px; margin: 0 auto;}
+div.box-setting a {color: #37518a; text-decoration: underline}
+div.box-setting a:hover {text-decoration: none;}
+div.box-setting>div {
+	margin: 0 auto;
+	border-bottom: 1px dotted #a6a6a6;
+	margin-bottom: 15px;
+}
+div.box-setting>div.style01 {
+	background: #f3f3f3;
+	border: none;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+div.box-setting>div>div { padding: 10px 35px;}
+div.box-setting>div.style01>h2 span{ background: #f3f3f3 !important;}
+div.box-setting>div.style01>h2 {background: url(../../images/bg_fb/bg_setting-h2_01.png) 0 15px repeat-x;}
+
+div.box-setting>div>h2 {
+	height: 33px;
+	line-height: 33px;
+	padding: 0 25px;
+	font-size: 16px;
+	font-weight: normal;
+	color: #555;
+	background: url(../../images/bg_fb/bg_setting-h2.gif) 0 15px repeat-x;
+}
+div.box-setting>div>h2 span {background: #fff; padding: 0 8px;}
+
+ul.form01 {padding: 15px 0;}
+ul.form01>li {
+	position: relative;
+	padding:  0 0 15px 145px;
+	font-size: 12px;
+	color: #3c3c3c;
+	min-height: 22px;
+}
+ul.form01>li>strong {
+	display: block;
+	width: 125px;
+	text-align: right;
+	position: absolute;
+	left: 0;
+	top: 0;
+	font-weight: normal;
+	font-size: 12px;
+	color: #3c3c3c;
+}
+ul.form01>li input[type="text"] {
+	width: 300px;
+	height: 25px;
+	padding: 0 5px;
+	border: 1px solid #e1e1e1;
+}
+ul.form01>li textarea {
+	width: 300px;
+	height: 153px;
+	padding: 0 5px;
+	border: 1px solid #e1e1e1;
+}	
+ul.form01>li label {padding-right: 25px;}
+ul.form01>li.border {
+	border-bottom: 1px solid #e1e1e1;
+	margin-bottom: 15px;
+}
+ul.form01>li>div {
+	width: 160px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	overflow: hidden;
+	line-height: 22px;
+	
+}
+ul.form01>li>div a { color: #798e37;}
+ul.form01>li>div p a { padding: 0 0 0 10px;}
+
+p.head {
+	border-bottom: 1px solid #e1e1e1;
+	padding: 5px 0;
+	font-weight: bold;
+	width: 100%;
+	overflow: hidden;
+}
+p.head>span {float: left;}
+p.head>span:first-child {width: 125px; text-align: right;}
+p.head>span:first-child+span { width: 280px; padding-left: 18px;}
+ul.style01>li {
+	width: 290px;
+	padding: 0 0 10px 0;
+	position: relative;
+}
+ul.style01>li input[type="checkbox"] {
+	position: absolute;
+	left: 288px;
+	top: 3px;
+}
+
+div.bg-none *.bt-change_pic { margin: 15px 0 0;}
+div.pic-profile {
+	width: 145px !important;
+	min-height: 55px;
+	padding-left: 73px;
+	position: relative !important;
+	overflow: hidden;
+	font-size: 12px;
+	text-align: center;
+	background: url(../../images/bg_fb/bg_or.png) 98% 32px no-repeat;
+}
+div.pic-profile p.pic {
+	float: left;
+	border: 3px solid #e3e3e3;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
 /* button */
-*.bt-join, *.bt-already_join, *.bt-time_up {
+*.bt-join, *.bt-already_join, *.bt-time_up, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-button-on, *.bt-button-off {
 	background: url(../../images/bg_fb/bg_button.png) no-repeat;
 	cursor: pointer;
 	border: none;
 	color: transparent;
 }
-*.bt-join span, *.bt-bt-already_join span, *.bt-time_up span {display: none;}
+*.bt-join span, *.bt-bt-already_join span, *.bt-time_up span, *.bt-change_pic span, *.bt-update span, *.bt-close_account span, *.bt-button-on span, *.bt-button-off span {display: none;}
 *.bt-join {
 	display: block;
 	width: 104px;
@@ -502,4 +627,40 @@ div.footer p.logo {
 	height: 27px;
 	background-position: 0 -77px;
 	margin: 0 auto;
+}
+*.bt-change_pic {
+	display: block;
+	width: 144px;
+	height: 27px;
+	margin-bottom: 15px;
+	background-position: 0px -116px;
+}
+*.bt-update {
+	display: block;
+	width: 144px;
+	height: 31px;
+	background-position: 0px -155px;
+}
+*.bt-close_account {
+	display: block;
+	width: 144px;
+	height: 34px;
+	margin-top: 15px;
+	background-position: 0px -195px;
+}
+*.bt-button-on {
+	float: left;
+	width: 61px;
+	height: 24px;
+	background-position: 0px -243px;
+	margin-right: 10px;
+	padding: 0;
+}
+*.bt-button-off {
+	float: left;
+	width: 61px;
+	height: 24px;
+	margin-right: 10px;
+	background-position: 0px -281px;
+	padding: 0;
 }
