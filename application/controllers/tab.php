@@ -56,6 +56,8 @@ class Tab extends CI_Controller {
 							'tab/bar',
 							'tab/profile',
 							'tab/main',
+							'tab/account',
+							'common/jquery.form',
 							'common/jquery.countdown.min',
 							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
@@ -150,6 +152,61 @@ class Tab extends CI_Controller {
 	function favorites($user_id = NULL){}
 	
 	function notifications($user_id = NULL){}
+	
+	function account($page_id = NULL, $user_id = NULL){
+		$this->load->model('page_model','pages');
+		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		if($page){
+			
+			if($user_id && $user_id == $this->socialhappen->get_user_id()){
+				$user = $this->socialhappen->get_user();
+				$user_facebook = $this->facebook->getUser($user['user_facebook_id']);
+				
+				
+				$this->load->library('form_validation');
+				$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
+				$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
+				$this->form_validation->set_rules('gender', 'Gender', 'required|xss_clean');
+				$this->form_validation->set_rules('birth_date', 'Birth date', 'trim|xss_clean');
+				$this->form_validation->set_rules('about', 'About', 'trim|xss_clean');
+				$this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
+					
+				$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+			
+				if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+				{
+					$this->load->view('tab/account', array('page'=>$page,'user'=>$user,'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id'])));
+				}
+				else // passed validation proceed to post success logic
+				{
+					if(set_value('use_facebook_picture')){
+						$user_image = issetor($this->facebook->get_profile_picture($user['user_facebook_id']));
+					} else if (!$user_image = $this->socialhappen->upload_image('user_image')){
+						$user_image = $user['user_image'];
+					}
+				
+					// build array for the model
+					$user_update_data = array(
+									'user_first_name' => set_value('first_name'),
+									'user_last_name' => set_value('last_name'),
+									'user_gender' => set_value('gender'),
+									'user_birth_date' => set_value('birth_date'),
+									'user_about' => set_value('about'),
+									'user_image' => $user_image
+								);
+					$this->load->model('user_model','users');
+					if ($this->users->update_user_profile_by_user_id($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
+					{
+						$this->load->view('tab/account', array('page'=>$page,'user'=>array_merge($user,$user_update_data), 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
+					}
+					else
+					{
+						echo 'error occured';
+					}
+				}
+			}
+		}
+	}
 	
 	function profile($user_id = NULL){
 		$data = array('user_id' => $user_id);
