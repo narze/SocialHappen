@@ -318,8 +318,10 @@ class Settings extends CI_Controller {
 		}
 	}
 	
-	function package(){
-	
+	function package($user_id = NULL){
+		if($user_id && $user_id == $this->socialhappen->get_user_id()){	
+			$this->load->view('settings/package',array());
+		}
 	}
 	
 	function reference(){

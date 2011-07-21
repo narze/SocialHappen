@@ -265,7 +265,25 @@ class Sync extends CI_Controller {
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'user_role' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
-							)							
+							),
+							'package' => array(
+								'package_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
+								'package_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'package_detail' => field_option('VARCHAR', 255, $default, TRUE, $autoinc, $unsigned),
+								'package_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'package_max_companies' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
+								'package_max_pages' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
+								'package_max_users' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
+								'package_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
+							),
+							'package_users' => array(
+								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							),
+							'package_apps' => array(
+								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							)
 						);
 		$keys = array(
 						'app' => array('app_id'),
@@ -290,7 +308,10 @@ class Sync extends CI_Controller {
 						'user_gender' =>array('user_gender_id'),
 						'page_status' => array('page_status_id'),
 						'user_role' => array('user_role_id'),
-						'user_pages' => array('user_id', 'page_id')
+						'user_pages' => array('user_id', 'page_id'),
+						'package' => array('package_id'),
+						'package_users' => array('user_id'),
+						'package_apps' => array('package_id','app_id')
 					);
 		$tables = array(
 							'app',
@@ -315,7 +336,10 @@ class Sync extends CI_Controller {
 							'user_gender',
 							'page_status',
 							'user_role',
-							'user_pages'
+							'user_pages',
+							'package',
+							'package_users',
+							'package_apps'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -875,6 +899,72 @@ class Sync extends CI_Controller {
 								)
 							);
 		$this->db->insert_batch('user_pages', $user_pages);
+		
+		$package = array(
+			array(
+				'package_name' => 'Normal package',
+				'package_detail' => 'For normal user',
+				'package_image' => NULL,
+				'package_max_companies' => 1,
+				'package_max_pages' => 3,
+				'package_max_users' => 10000,
+				'package_price' => 0
+			),
+			array(
+				'package_name' => 'Enterprise package',
+				'package_detail' => 'For enterprise',
+				'package_image' => NULL,
+				'package_max_companies' => 3,
+				'package_max_pages' => 10,
+				'package_max_users' => 100000,
+				'package_price' => 999
+			)
+		);
+		$this->db->insert_batch('package', $package);
+		
+		$package_users = array(
+			array(
+				'package_id' => 1,
+				'user_id' => 1
+			),
+			array(
+				'package_id' => 1,
+				'user_id' => 2
+			),
+			array(
+				'package_id' => 1,
+				'user_id' => 3
+			)			,
+			array(
+				'package_id' => 1,
+				'user_id' => 4
+			)			,
+			array(
+				'package_id' => 1,
+				'user_id' => 5
+			)			
+		);
+		$this->db->insert_batch('package_users', $package_users);
+		
+		$package_apps = array(
+			array(
+				'package_id' => 1,
+				'app_id' => 1
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 2
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 3
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 4
+			)
+		);
+		$this->db->insert_batch('package_apps', $package_apps);
 		
 		echo "Test data added<br />";
 	}
