@@ -39,6 +39,11 @@ class Backend extends CI_Controller {
 		}
 		
 	}
+	function logout(){
+		$this->session->unset_userdata('SHBackend_auth');
+		//var_dump($this->session->userdata('SHBackend_auth'));
+		redirect('backend');
+	}
 	
 	/**
 	 * backend dashboard
@@ -56,6 +61,7 @@ class Backend extends CI_Controller {
 	}
 	
 	function app(){
+		$this->backend_session_verify(true);
 		$this->load->model('App_model', 'App');
 		$data['app_list'] = $this->App->get_all_apps();
 		$this->load->view('backend_views/backend_app_view', $data);	
@@ -318,7 +324,28 @@ class Backend extends CI_Controller {
 		
 		$this->load->library('audit_lib');
 		$audit_action_list = $this->audit_lib->list_audit_action((int)$app_id);
-		$data['audit_action_list'] = $audit_action_list;
+		$default_audit_action_list = array();
+		$custom_audit_action_list = array();
+		foreach($audit_action_list as $action){
+			if($action['action_id'] > 999){
+				$custom_audit_action_list[] = $action;
+			}else{
+				$default_audit_action_list[] = $action;
+			}
+		}
+		
+		if($app_id != 0){
+			$audit_action_list = $this->audit_lib->list_audit_action(0);
+			foreach($audit_action_list as $action){
+				if($action['action_id'] <= 999){
+					$default_audit_action_list[] = $action;
+				}
+			}
+		}
+		
+		
+		$data['default_audit_action_list'] = $default_audit_action_list;
+		$data['custom_audit_action_list'] = $custom_audit_action_list;
 		$data['app_id'] = $app_id;
 		$this->load->view('backend_views/list_audit_action_view', $data);
 	}
@@ -404,6 +431,11 @@ class Backend extends CI_Controller {
 			redirect('backend/list_audit_action/'.$app_id);
 		}else{
 			$data['app_id'] = $app_id;
+			$this->load->model('App_model', 'App');
+			$app = $this->App->get_app_by_app_id($app_id);
+			
+			$data['app_name'] = count($app['app_name']) > 0 ? $app['app_name'] : 'Platform';
+			
 			$data['duplicate_action_id'] = $duplicate_action?'<div class="error">Duplicate Action ID</div>':'';
 			$data['invalid_action_id'] = $invalid_action_id?'<div class="error">Invalid Action ID, please use Action ID greater than 999.</div>':'';
 			$this->load->view('backend_views/add_audit_action_view', $data);
@@ -502,6 +534,112 @@ class Backend extends CI_Controller {
 		}
 	}
 	
+	
+	function company(){
+		$this->backend_session_verify(true);
+		$this->load->model('Company_model', 'Company');
+		$company_list = $this->Company->get_company_profile();
+		$data['company_list'] = $company_list;
+		$this->load->view('backend_views/list_company_view', $data);
+		//var_dump($company_list);
+	}
+	
+	function company_detail($company_id){
+		$this->backend_session_verify(true);
+		$this->load->model('Company_model', 'Company');
+		$company_profile = $this->Company->get_company_profile_by_company_id($company_id);
+		$data['company'] = $company_profile;
+		
+		
+		$this->load->model('Page_model', 'Page');
+		$page_list = $this->Page->get_company_pages_by_company_id($company_id);
+		$data['page_list'] = $page_list;
+		
+		$this->load->model('Installed_apps_model', 'App');
+		$app_list = $this->App->get_installed_apps_by_company_id_not_in_page($company_id);
+		$data['app_list'] = $app_list;
+		
+		$this->load->view('backend_views/company_detail_view', $data);
+	}
+	
+	function page($page_id){
+		$this->backend_session_verify(true);
+		$this->load->model('Page_model', 'Page');
+		$page_profile = $this->Page->get_page_profile_by_page_id($page_id);
+		$data['page'] = $page_profile;
+		
+		$this->load->model('Installed_apps_model', 'App');
+		$app_list = $this->App->get_installed_apps_by_page_id($page_id);
+		$data['app_list'] = $app_list;
+		
+		$this->load->view('backend_views/page_detail_view', $data);
+	}
+	
+	function app_install($app_install_id){
+		$this->load->model('Installed_apps_model', 'Installed_app');
+		$installed_app = $this->Installed_app->get_app_profile_by_app_install_id($app_install_id);
+		$data['app_install'] = $installed_app;
+		//$this->dump($installed_app);
+		$this->load->model('App_model', 'App');
+		$app = $this->App->get_app_by_app_id($installed_app['app_id']);
+		$data['app'] = $app;
+		//$this->dump($app);
+		$this->load->library('app_url');
+		$data['app_url'] = $this->app_url->translate_url($app['app_url'], $app_install_id);
+		
+		$this->load->model('Campaign_model', 'Campaign');
+		$data['campaign_list'] = $this->Campaign->get_app_campaigns_by_app_install_id($app_install_id);
+		
+		$this->load->view('backend_views/app_install_view', $data);
+	}
+	
+	function campaign($campaign_id){
+		$this->load->model('Campaign_model', 'Campaign');
+		$data['campaign'] = $this->Campaign->get_campaign_profile_by_campaign_id($campaign_id);
+		//$this->dump($data['campaign']);
+		
+		$this->load->model('User_campaigns_model', 'User');
+		$data['user_list'] = $this->User->get_campaign_users_by_campaign_id($campaign_id);
+		//$this->dump($data['user_list']);
+		
+		$this->load->view('backend_views/campaign_detail_view', $data);
+	}
+	
+	function user($user_id){
+		$this->load->model('User_model', 'User');
+		$data['user'] = $this->User->get_user_profile_by_user_id($user_id);
+		//$this->dump($data['user']);
+		
+		$this->load->model('User_companies_model', 'User_companies');
+		$data['company_list'] = $this->User_companies->get_user_companies_by_user_id($user_id);
+		//$this->dump($data['company_list']);
+		
+		$this->load->model('User_apps_model', 'User_apps');
+		$app_list = $this->User_apps->get_user_apps_by_user_id($user_id);
+		
+		$this->load->model('Installed_apps_model', 'Installed_apps');
+		
+		$al = array();
+		foreach($app_list as $app){
+			$app_install = $this->Installed_apps->get_app_profile_by_app_install_id($user_id);
+			foreach ($app_install as $key => $value) {
+				$app[$key] = $value;
+			}
+			$al []= $app;
+		}
+		$data['app_list'] = $al;
+		$this->dump($data['app_list']);
+		
+		$this->load->view('backend_views/user_detail_view', $data);
+	}
+
+	function users(){
+		$this->load->model('User_model', 'User');
+		$data['user_list'] = $this->User->get_all_user_profile();
+		//$this->dump($data['user_list']);
+		$this->load->view('backend_views/user_list_view', $data);
+	}
+	
 	/**
 	 * generate random string 
 	 */
@@ -536,6 +674,12 @@ class Backend extends CI_Controller {
 			}
 		}
 		
+	}
+	
+	function dump($s){
+		echo '<pre>';
+		var_dump($s);
+		echo '</pre>';
 	}
 	
 }

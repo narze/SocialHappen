@@ -6,7 +6,7 @@
 	<?php echo link_tag('css/style.css'); ?>
 </head>
 <body>
-<h1>Add New Audit Action</h1>
+<h1>Add New Audit Action : <?php echo $app_name; ?></h1>
 <?php
 echo form_open('backend/add_audit_action/'.$app_id);
 ?>
@@ -23,7 +23,7 @@ echo form_open('backend/add_audit_action/'.$app_id);
 						  'maxlength'   => '100',
 						  'size'        => '50',
 						  'class'		=> (form_error('action_id')) ? 'error' : '',
-				))?>
+				))?> *Action ID between 0-999 are reserved for default Audit Action
 				<?php echo form_error('action_id'); ?><?php echo $duplicate_action_id;?><?php echo $invalid_action_id;?>
 			</li>
 			<li>

@@ -20,14 +20,27 @@ class Audit_action_model extends CI_Model {
 	function __construct() {
 		parent::__construct();
 		
-		// connect to database
-		$this->connection = new Mongo();
+		$this->config->load('mongo_db');
+		$mongo_user = $this->config->item('mongo_user');
+		$mongo_pass = $this->config->item('mongo_pass');
+		$mongo_host = $this->config->item('mongo_host');
+		$mongo_port = $this->config->item('mongo_port');
+		$mongo_db = $this->config->item('mongo_db');
 		
-		// select audit database
-		$this->db = $this->connection->audit;
-		
-		// select actions collection
-		$this->actions = $this->db->actions;
+		try{
+			// connect to database
+			$this->connection = new Mongo("mongodb://".$mongo_user.":"
+			.$mongo_pass
+			."@".$mongo_host.":".$mongo_port);//."/".$mongo_db);
+			
+			// select audit database
+			$this->db = $this->connection->$mongo_db;
+			
+			// select actions collection
+			$this->actions = $this->db->actions;
+		}catch(Exception $e){
+			show_error('Cannot connect to database');
+		}
 	}
 	
 	/**
