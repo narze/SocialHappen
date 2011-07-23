@@ -55,8 +55,8 @@ function get_add_app_to_fb_page_link(facebook_app_api_key,facebook_page_id){
 //show apps in page
 function view_page_app(page_id,facebook_page_id,page_name){
 	selected_page_id=page_id;
-	$(".left-panel").find('.dragging-page div').find('ul').children("li").removeClass("dragging");
-	$("li .page_id[value="+page_id+"]").parent("li").addClass("dragging");
+	$(".left-panel").find('.dragging-page div').find('ul').children("li").removeClass("dragging").removeClass("active");
+	$("li .page_id[value="+page_id+"]").parent("li").addClass("active");
 	show_installed_app_in_page(page_id,facebook_page_id);
 	$(".head-box-app-list b").html(page_name);
 	$(".right-panel").html($(".dragging-event-right-app-list").html());
@@ -65,8 +65,8 @@ function view_page_app(page_id,facebook_page_id,page_name){
 
 function view_page_app_nochange_right(page_id,facebook_page_id,page_name){
 	selected_page_id=page_id;
-	$(".left-panel").find('.dragging-page div').find('ul').children("li").removeClass("dragging");
-	$("li .page_id[value="+page_id+"]").parent("li").addClass("dragging");
+	$(".left-panel").find('.dragging-page div').find('ul').children("li").removeClass("dragging").removeClass("active");
+	$("li .page_id[value="+page_id+"]").parent("li").addClass("active");
 	show_installed_app_in_page(page_id,facebook_page_id);
 	$(".head-box-app-list b").html(page_name);
 }
@@ -538,9 +538,11 @@ function show_available_page_in_company(){
 				revert: "invalid",
 				drag: function(){
 					$(".left-panel").find('.dragging-page div').addClass('in-action');
+					$("div.dragging-page ul").css('height','auto');
 				},
 				stop: function(){
 					$(".left-panel").find('.dragging-page div').removeClass('in-action');
+					$("div.dragging-page ul").css('height','155px');
 				}
 	        });
 	        $(".right-panel").find('.loading').remove();
@@ -577,10 +579,12 @@ function show_available_app_in_company(){
 				helper: "clone",
 				revert: "invalid",
 				drag: function(){
-					$(".left-panel").find('.dragging-app div').addClass('in-action');
+					$(".left-panel").find('.dragging-app div').addClass('in-action');					
+					$("div.dragging-app ul").css('height','auto');
 				},
 				stop: function(){
-					$(".left-panel").find('.dragging-app div').removeClass('in-action');
+					$(".left-panel").find('.dragging-app div').removeClass('in-action');					
+					$("div.dragging-app ul").css('height','255px');
 				}
 	        });
 	        $(".right-panel").find('.loading').remove();
@@ -617,10 +621,12 @@ function show_available_app_in_page(page_id){
 				helper: "clone",
 				revert: "invalid",
 				drag: function(){
-					$(".left-panel").find('.dragging-app div').addClass('in-action');
+					$(".left-panel").find('.dragging-app div').addClass('in-action');					
+					$("div.dragging-app ul").css('height','auto');					
 				},
 				stop: function(){
-					$(".left-panel").find('.dragging-app div').removeClass('in-action');
+					$(".left-panel").find('.dragging-app div').removeClass('in-action');					
+					$("div.dragging-app ul").css('height','255px');
 				}
 	        });
 	        $(".right-panel").find('.loading').remove();

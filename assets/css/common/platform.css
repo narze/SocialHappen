@@ -392,7 +392,6 @@ div[class$="list-style01"] {
 div[class$="list-style02"] {
     padding: 0 0 0 60px;
 }
-div[class$="list-style02"] p.thumb img {width: 50px; height: 50px;}
 div[class^="detail-list"] {
     font-size: 12px;
     margin: 5px 0;
@@ -638,8 +637,9 @@ div.dragging-page div.in-action {
     -moz-border-radius: 5px;
     border-radius: 5px;
 	padding: 0;
+	margin-bottom: 15px;
 }
-div.dragging-page ul {width: 100%;}
+div.dragging-page ul {width: 100%;height: 155px;}
 div.dragging-page ul:after{
     clear:both;
     content:" ";
@@ -676,7 +676,8 @@ div.box-drop_page div.dragging-page {padding: 15px 10px 10px; min-height: 345px;
 div.box-drop_page div.dragging-page ul li {margin: 0 7px 5px;}
 
 div.wrapper-drag_drop>div:first-child+div div.dragging-page {padding: 15px 4px 0;}
-div.wrapper-drag_drop>div:first-child+div div.dragging-page ul li {margin: 5px 1px;}
+div.wrapper-drag_drop>div:first-child+div div.dragging-page ul { height: 435px; margin: 0 0 5px;}
+div.wrapper-drag_drop>div:first-child+div div.dragging-page ul li {margin: 5px 1px 0; padding: 5px 0;}
 div.wrapper-drag_drop>div:first-child+div div.strip {padding: 5px 0 12px;}
 div.dragging-page a.back, div.dragging-page a.back-inactive, div.dragging-page a.next, div.dragging-page a.next-inactive {
 	width: 15px;
@@ -732,7 +733,7 @@ div.dragging-app div.in-action {
     border-radius: 5px;
 	padding: 0;
 }
-div.dragging-app ul {width: 100%;}
+div.dragging-app ul {width: 100%; height: 255px;}
 div.dragging-app ul:after{
     clear:both;
     content:" ";
@@ -768,6 +769,7 @@ div.dragging-app ul li.dragging {background: url(../../images/bg/bg_ul-dragdrop-
 div.dragging-app ul li:hover {background: url(../../images/bg/bg_ul-dragdrop-app02.png) no-repeat; cursor: pointer;}
 
 div.wrapper-drag_drop>div:first-child+div div.dragging-app {padding: 5px 10px 0;}
+div.wrapper-drag_drop>div:first-child+div div.dragging-app ul {height: 380px;}
 div.wrapper-drag_drop>div:first-child+div div.dragging-app ul li {margin:  5px 9px;}
 
 div.strip {padding: 8px 0;}
@@ -789,6 +791,15 @@ div.strip ul li a {
 	background: url(../../images/bg/bg_main.png) 0 -676px no-repeat;
 }
 div.strip ul li a.current {background-position: 0 -657px;}
+
+div.details div.strip {
+	background: #e1e1e1;
+	padding: 14px 0;
+	-webkit-border-radius:  0 0 10px 10px;
+    -moz-border-radius:  0 0 10px 10px;
+    border-radius:  0 0 10px 10px;
+}
+
 
 /*popup*/
 div.popup-addapp {
@@ -1415,7 +1426,7 @@ div.menuleft>ul>li>ul>li>a:hover {
 	background: url(../../images/bg/bg_menuleft-02.png) right;
 	text-decoration: none;
 }
-div.menuleft>ul>li>ul>li>a img {margin: 0 8px; border: 1px solid #d2d2d2; vertical-align: middle;} 
+div.menuleft>ul>li>ul>li>a img {margin: 0 8px; border: 1px solid #d2d2d2; vertical-align: middle; width: 35px; height: 35px;} 
 div.menuleft>ul>li>ul>li>ul {padding: 0 0 1px 20px; background: url(../../images/bg/bg_menuleft-bottom.gif) 16px 100% no-repeat; margin-bottom: 5px;}
 div.menuleft>ul>li>ul>li>ul>li {padding-bottom: 9px;}
 div.menuleft>ul>li>ul>li>ul>li>a {
@@ -1429,7 +1440,7 @@ div.menuleft>ul>li>ul>li>ul>li>a:hover {
 	background: url(../../images/bg/bg_menuleft-03.png) right;
 	text-decoration: none;
 }
-div.menuleft>ul>li>ul>li>ul>li>a img {margin: 0 8px; border: 1px solid #d2d2d2; vertical-align: middle;} 
+div.menuleft>ul>li>ul>li>ul>li>a img {margin: 0 8px; border: 1px solid #d2d2d2; vertical-align: middle; width: 25px; height: 25px;} 
 
 
 /*setting right */
@@ -1563,6 +1574,8 @@ div.box-company-manage div.detail-list ul>li>span img {
     border: 1px solid #D2D2D2;
     margin: 0 8px;
     vertical-align: middle;
+	width: 35px;
+	height: 35px;
 }
 div.box-company-manage div.detail-list ul>li>ul {
 	padding: 10px 0 2px 20px;
@@ -1578,6 +1591,8 @@ div.box-company-manage div.detail-list ul>li>ul li img {
 	 border: 1px solid #D2D2D2;
     margin: 0 8px;
     vertical-align: middle;
+	width: 25px;
+	height: 25px;
 }
 div.box-company-manage div.detail-list ul li span.tools {
 	width: 55px;
