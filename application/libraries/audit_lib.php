@@ -70,12 +70,12 @@ class Audit_lib
 		}
 		$this->CI->load->model('audit_action_model','audit_action');
 		
-		$data = array('app_id' => $app_id,
-						'action_id' => $action_id,
+		$data = array('app_id' =>(int)$app_id,
+						'action_id' => (int)$action_id,
 						'description' => $description,
-						'stat_app' => $stat_app,
-						'stat_page' => $stat_page,
-						'stat_campaign' => $stat_campaign);
+						'stat_app' => (boolean)$stat_app,
+						'stat_page' => (boolean)$stat_page,
+						'stat_campaign' => (boolean)$stat_campaign);
 		$result = $this->CI->audit_action->add_action($data);
 		/*
 		if(!$result){
@@ -109,19 +109,19 @@ class Audit_lib
 		
 		$data_to_add = array();
 		if(isset($data['stat_app'])){
-			$data_to_add['stat_app'] = $data['stat_app'];
+			$data_to_add['stat_app'] = (boolean)$data['stat_app'];
 		}
 		if(isset($data['stat_page'])){
-			$data_to_add['stat_page'] = $data['stat_page'];
+			$data_to_add['stat_page'] = (boolean)$data['stat_page'];
 		}
 		if(isset($data['stat_campaign'])){
-			$data_to_add['stat_campaign'] = $data['stat_campaign'];
+			$data_to_add['stat_campaign'] = (boolean)$data['stat_campaign'];
 		}
 		if(isset($data['description'])){
 			$data_to_add['description'] = $data['description'];
 		}
 		
-		$result = $this->CI->audit_action->edit_action($app_id, $action_id, $data_to_add);
+		$result = $this->CI->audit_action->edit_action((int)$app_id, (int)$action_id, $data_to_add);
 		/*
 		if(!$result){
 			show_error("edit audit action fail", 500);
@@ -148,7 +148,7 @@ class Audit_lib
 		}
 		
 		$this->CI->load->model('audit_action_model','audit_action');
-		$result = $this->CI->audit_action->delete_action($app_id, $action_id);
+		$result = $this->CI->audit_action->delete_action((int)$app_id, (int)$action_id);
 		return $result;
 	}
 	
@@ -164,7 +164,7 @@ class Audit_lib
 	function list_audit_action($app_id = NULL){
 		$this->CI->load->model('audit_action_model','audit_action');
 		if(isset($app_id)){
-			$result = $this->CI->audit_action->get_action($app_id);
+			$result = $this->CI->audit_action->get_action((int)$app_id);
 		}else{
 			$result = $this->CI->audit_action->get_action_list();
 		}
@@ -237,7 +237,8 @@ class Audit_lib
 			return FALSE;
 		}
 		
-		
+		$app_id = (int)$app_id;
+		$action_id = (int)$action_id;
 		// check valid action_id
 		$this->CI->load->model('audit_action_model','audit_action');
 		if($action_id < 1000){ // default action
@@ -255,23 +256,23 @@ class Audit_lib
 		
 		// basic data
 		$data_to_add['app_id'] = $app_id;
-		$data_to_add['subject'] = $subject;
+		$data_to_add['subject'] = ''.$subject;
 		$data_to_add['action_id'] = $action_id;
-		$data_to_add['object'] = $object;
-		$data_to_add['objecti'] = $objecti;
+		$data_to_add['object'] = ''.$object;
+		$data_to_add['objecti'] = ''.$objecti;
 		
 		// additional data
 		if(isset($additional_data['app_install_id'])){
-			$data_to_add['app_install_id'] = $additional_data['app_install_id'];
+			$data_to_add['app_install_id'] = (int)$additional_data['app_install_id'];
 		}
 		if(isset($additional_data['campaign_id'])){
-			$data_to_add['campaign_id'] = $additional_data['campaign_id'];
+			$data_to_add['campaign_id'] = (int)$additional_data['campaign_id'];
 		}
 		if(isset($additional_data['company_id'])){
-			$data_to_add['company_id'] = $additional_data['company_id'];
+			$data_to_add['company_id'] = (int)$additional_data['company_id'];
 		}
 		if(isset($additional_data['page_id'])){
-			$data_to_add['page_id'] = $additional_data['page_id'];
+			$data_to_add['page_id'] = (int)$additional_data['page_id'];
 		}
 		
 		//echo '<pre>' . print_r($data_to_add, TRUE) . '</pre>';
@@ -311,7 +312,7 @@ class Audit_lib
 	 */
 	function list_audit($criteria = array(), $limit = 100, $offset = 0){
 		$this->CI->load->model('audit_model','audit');
-		$result = $this->CI->audit->list_audit($criteria, $limit, $offset);
+		$result = $this->CI->audit->list_audit($criteria, (int)$limit, (int)$offset);
 		return $result;
 	}
 	
@@ -325,7 +326,7 @@ class Audit_lib
 	 */
 	function list_recent_audit($limit = 100){
 		$this->CI->load->model('audit_model','audit');
-		$result = $this->CI->audit->list_recent_audit($limit);
+		$result = $this->CI->audit->list_recent_audit((int)$limit);
 		return $result;
 	}
 
@@ -378,26 +379,26 @@ class Audit_lib
 		$this->CI->load->model('stat_app_model','stat_app');
 		//$check_args = isset($app_install_id) || isset($action_id);
 		$criteria = array();
-		
+
 		if(isset($app_install_id)){
-			$criteria['app_install_id'] = $app_install_id;
+			$criteria['app_install_id'] = (int)$app_install_id;
 		}
 		if(isset($action_id)){
-			$criteria['action_id'] = $action_id;
+			$criteria['action_id'] = (int)$action_id;
 		}
 		if(isset($start_date) && isset($end_date)){
 			
 			if($start_date > $end_date){ // swap
-				$tmp = $start_date;
-				$start_date = $end_date;
+				$tmp = (int)$start_date;
+				$start_date = (int)$end_date;
 				$end_date = $tmp;
 			}
 			
-			$criteria['date'] = array('$gte' => $start_date, '$lte' => $end_date);
+			$criteria['date'] = array('$gte' => (int)$start_date, '$lte' => (int)$end_date);
 		}else if(isset($start_date) && empty($end_date)){
-			$criteria['date'] = $start_date;
+			$criteria['date'] = (int)$start_date;
 		}else if(empty($start_date) && isset($end_date)){
-			$criteria['date'] = $end_date;
+			$criteria['date'] = (int)$end_date;
 		}
 		//echo '<pre>' . print_r($criteria, TRUE) . '</pre>';
 		$result_stat = $this->CI->stat_app->get_stat_app($criteria, 0, 0);
@@ -439,24 +440,24 @@ class Audit_lib
 		$criteria = array();
 		
 		if(isset($page_id)){
-			$criteria['page_id'] = $page_id;
+			$criteria['page_id'] = (int)$page_id;
 		}
 		if(isset($action_id)){
-			$criteria['action_id'] = $action_id;
+			$criteria['action_id'] = (int)$action_id;
 		}
 		if(isset($start_date) && isset($end_date)){
 			
 			if($start_date > $end_date){ // swap
-				$tmp = $start_date;
-				$start_date = $end_date;
+				$tmp = (int)$start_date;
+				$start_date = (int)$end_date;
 				$end_date = $tmp;
 			}
 			
-			$criteria['date'] = array('$gte' => $start_date, '$lte' => $end_date);
+			$criteria['date'] = array('$gte' => (int)$start_date, '$lte' => (int)$end_date);
 		}else if(isset($start_date) && empty($end_date)){
-			$criteria['date'] = $start_date;
+			$criteria['date'] = (int)$start_date;
 		}else if(empty($start_date) && isset($end_date)){
-			$criteria['date'] = $end_date;
+			$criteria['date'] = (int)$end_date;
 		}
 		$result_stat = $this->CI->stat_page->get_stat_page($criteria, 0, 0);
 		return $result_stat;
@@ -497,24 +498,24 @@ class Audit_lib
 		$criteria = array();
 		
 		if(isset($campaign_id)){
-			$criteria['campaign_id'] = $campaign_id;
+			$criteria['campaign_id'] = (int)$campaign_id;
 		}
 		if(isset($action_id)){
-			$criteria['action_id'] = $action_id;
+			$criteria['action_id'] = (int)$action_id;
 		}
 		if(isset($start_date) && isset($end_date)){
 			
 			if($start_date > $end_date){ // swap
-				$tmp = $start_date;
-				$start_date = $end_date;
+				$tmp = (int)$start_date;
+				$start_date = (int)$end_date;
 				$end_date = $tmp;
 			}
 			
-			$criteria['date'] = array('$gte' => $start_date, '$lte' => $end_date);
+			$criteria['date'] = array('$gte' => (int)$start_date, '$lte' => (int)$end_date);
 		}else if(isset($start_date) && empty($end_date)){
-			$criteria['date'] = $start_date;
+			$criteria['date'] = (int)$start_date;
 		}else if(empty($start_date) && isset($end_date)){
-			$criteria['date'] = $end_date;
+			$criteria['date'] = (int)$end_date;
 		}
 		$result_stat = $this->CI->stat_campaign->get_stat_campaign($criteria, 0, 0);
 		return $result_stat;
@@ -550,7 +551,7 @@ class Audit_lib
 	 * @return int
 	 */
 	function count_audit($key = NULL, $app_id = NULL, $action_id = NULL, $criteria = NULL, $date = NULL){
-		return $this->count_audit_range($key, $app_id, $action_id, $criteria, $date, $date);
+		return $this->count_audit_range($key, (int)$app_id, (int)$action_id, $criteria, $date, (int)$date);
 	}
 	
 	/**
@@ -574,38 +575,38 @@ class Audit_lib
 		
 		$db_criteria = array();
 		if(isset($app_id)){
-			$db_criteria['app_id'] = $app_id;
+			$db_criteria['app_id'] = (int)$app_id;
 		}
 		
-		$db_criteria['action_id'] = $action_id;
+		$db_criteria['action_id'] = (int)$action_id;
 		
 		if(isset($criteria['subject'])){
-			$db_criteria['subject'] = $criteria['subject'];
+			$db_criteria['subject'] = ''.$criteria['subject'];
 		}
 		
 		if(isset($criteria['object'])){
-			$db_criteria['object'] = $criteria['object'];
+			$db_criteria['object'] = ''.$criteria['object'];
 		}
 		
 		if(isset($criteria['objecti'])){
-			$db_criteria['objecti'] = $criteria['objecti'];
+			$db_criteria['objecti'] = ''.$criteria['objecti'];
 		}
 		
 		if(isset($criteria['app_install_id'])){
-			$db_criteria['app_install_id'] = $criteria['app_install_id'];
+			$db_criteria['app_install_id'] = (int)$criteria['app_install_id'];
 		}
 		if(isset($criteria['page_id'])){
-			$db_criteria['page_id'] = $criteria['page_id'];
+			$db_criteria['page_id'] = (int)$criteria['page_id'];
 		}
 		if(isset($criteria['campaign_id'])){
-			$db_criteria['campaign_id'] = $criteria['campaign_id'];
+			$db_criteria['campaign_id'] = (int)$criteria['campaign_id'];
 		}
 		
 		//echo 'count_audit <pre>';
 		//var_dump($db_criteria);
 		//echo '</pre>';
 		
-		return $this->CI->audit->count_distinct_audit($key, $db_criteria, $this->convert_statdate_to_date($start_date), $this->convert_statdate_to_date($end_date));
+		return $this->CI->audit->count_distinct_audit($key, $db_criteria, $this->convert_statdate_to_date((int)$start_date), $this->convert_statdate_to_date((int)$end_date));
 	}
 	
 	/**
