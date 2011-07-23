@@ -16,7 +16,7 @@
 <p><b>Register Date:</b> <?php echo $company['company_register_date'];?></p>
 <p><b>Website:</b> <a href="<?php echo $company['company_website'];?>"><?php echo $company['company_website'];?></a></p>
 <p><img src="<?php echo $company['company_image'];?>" /></p>
-<h1>Page</h1>
+<h1>Pages</h1>
 <ul>
 	<?php 
 		foreach($page_list as $page){
@@ -26,7 +26,7 @@
 	?>
 </ul>
 
-<h1>App</h1>
+<h1>Apps</h1>
 <ul>
 	<?php 
 		foreach($app_list as $app){

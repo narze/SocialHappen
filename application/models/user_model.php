@@ -103,6 +103,19 @@ class User_model extends CI_Model {
 		$profiles = $this -> db -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result_array();
 		return issetor($profiles[0]);
 	}
+	
+	/**
+	 * Get all user profile
+	 * @param $limit
+	 * @param $offset
+	 * @author Metwara Narksook
+	 */
+	function get_all_user_profile($limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
+		$result = $this->db->get_where('user',array())->result_array();
+		return issetor($result, NULL);
+	}
+	
 
 	/**
 	 * Try to insert new user by user's facebook id
