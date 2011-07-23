@@ -7,6 +7,7 @@ class Audit_model extends CI_Model {
 
 	// optional data
 	var $app_id = '';
+	var $user_id = '';
 	var $app_install_id = '';
 	var $campaign_id = '';
 	var $page_id = '';
@@ -65,6 +66,7 @@ class Audit_model extends CI_Model {
 										 'action_id' => 1,
 										 'app_id' => 1,
 										 'app_install_id' => 1,
+										 'user_id' => 1,
 										 'campaign_id' => 1,
 										 'page_id' => 1,
 										 'company_id' => 1));
@@ -179,6 +181,9 @@ class Audit_model extends CI_Model {
 		}
 		if(isset($criteria['app_install_id'])){
 			$db_criteria['app_install_id'] = $criteria['app_install_id'];
+		}
+		if(isset($criteria['user_id'])){
+			$db_criteria['user_id'] = $criteria['user_id'];
 		}
 		if(isset($criteria['page_id'])){
 			$db_criteria['page_id'] = $criteria['page_id'];

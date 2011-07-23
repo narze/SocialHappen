@@ -124,33 +124,36 @@ class User extends CI_Controller {
 
 	function _get_user_activity_page($page_id, $user_id){
 		date_default_timezone_set('Asia/Bangkok');
-		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'subject' => (int)$user_id));
+		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'user_id' => (int)$user_id));
 		$activity_list = array();
 		foreach ($activity_db as $activity) {
-			$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
-			$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
+			//$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
+			//$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
+			$activity_list[] = $activity['message'];
 		}
 		return $activity_list;
 	}
 	
 	function _get_user_activity_app($app_install_id, $user_id){
 		date_default_timezone_set('Asia/Bangkok');
-		$activity_db = $this->audit_lib->list_audit(array('app_install_id' => (int)$app_install_id, 'subject' => (int)$user_id));
+		$activity_db = $this->audit_lib->list_audit(array('app_install_id' => (int)$app_install_id, 'user_id' => (int)$user_id));
 		$activity_list = array();
 		foreach ($activity_db as $activity) {
-			$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
-			$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
+			//$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
+			//$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
+			$activity_list[] = $activity['message'];
 		}
 		return $activity_list;
 	}
 	
 	function _get_user_activity_campaign($campaign_id, $user_id){
 		date_default_timezone_set('Asia/Bangkok');
-		$activity_db = $this->audit_lib->list_audit(array('campaign_id' => (int)$campaign_id, 'subject' => (int)$user_id));
+		$activity_db = $this->audit_lib->list_audit(array('campaign_id' => (int)$campaign_id, 'user_id' => (int)$user_id));
 		$activity_list = array();
 		foreach ($activity_db as $activity) {
-			$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
-			$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
+			//$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
+			//$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
+			$activity_list[] = $activity['message'];
 		}
 		return $activity_list;
 	}

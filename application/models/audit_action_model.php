@@ -8,6 +8,7 @@ class Audit_action_model extends CI_Model {
 	var $app_id = '';
 	var $action_id = '';
 	var $description = '';
+	var $format_string = '';
 	var $stat_app = '';
 	var $stat_page = '';
 	var $stat_campaign = '';
@@ -64,11 +65,12 @@ class Audit_action_model extends CI_Model {
 	function add_action($data = array()){
 		// add new
 		$check_args = isset($data['app_id']) && isset($data['action_id']) 
-		&& isset($data['description']);
+		&& isset($data['description']) && isset($data['format_string']);
 		if($check_args){
 			$data_to_add = array('app_id' => $data['app_id'],
 								'action_id' => $data['action_id'],
-								'description' => $data['description']);
+								'description' => $data['description'],
+								'format_string' => $data['format_string']);
 			if(isset($data['stat_app'])){
 				$data_to_add['stat_app'] = $data['stat_app'];
 			}

@@ -23,13 +23,14 @@ if(count($custom_audit_action_list) > 0){
 			$stat_page = $audit_action['stat_page']?'Yes':'No';
 			$stat_campaign = $audit_action['stat_campaign']?'Yes':'No';
 			
-			echo "<li><p>Action ID: ".$audit_action['action_id'].' '
+			echo "<li><p><b>Action ID:</b> ".$audit_action['action_id'].' '
 			.anchor('backend/edit_audit_action/'.$app_id.'/'.$audit_action['action_id'], 'edit', 'title="edit this audt action"')." | "
 			.anchor('backend/delete_audit_action/'.$app_id.'/'.$audit_action['action_id'], 'delete', 'title="delete this audt action"')." 
-			<br/>Description: ".$audit_action['description']."
-			<br/>Collect Stat for App: ".$stat_app."
-			<br/>Collect Stat for Page: ".$stat_page."
-			<br/>Collect Stat for Campaign: ".$stat_campaign."</p></li>";
+			<br/><b>Description:</b> ".$audit_action['description']."
+			<br/><b>Format String:</b> ".issetor($audit_action['format_string'])."
+			<br/><b>Collect Stat for App:</b> ".$stat_app."
+			<br/><b>Collect Stat for Page:</b> ".$stat_page."
+			<br/><b>Collect Stat for Campaign:</b> ".$stat_campaign."</p></li>";
 		}
 	?>
 	</ul>
@@ -50,13 +51,14 @@ if(count($default_audit_action_list) > 0){
 			$stat_page = $audit_action['stat_page']?'Yes':'No';
 			$stat_campaign = $audit_action['stat_campaign']?'Yes':'No';
 			
-			echo "<li><p>Action ID: ".$audit_action['action_id'].' '
+			echo "<li><p><b>Action ID:</b> ".$audit_action['action_id'].' '
 			.anchor('backend/edit_audit_action/'.$app_id.'/'.$audit_action['action_id'], 'edit', 'title="edit this audt action"')." | "
 			.anchor('backend/delete_audit_action/'.$app_id.'/'.$audit_action['action_id'], 'delete', 'title="delete this audt action"')." 
-			<br/>Description: ".$audit_action['description']."
-			<br/>Collect Stat for App: ".$stat_app."
-			<br/>Collect Stat for Page: ".$stat_page."
-			<br/>Collect Stat for Campaign: ".$stat_campaign."</p></li>";
+			<br/><b>Description:</b> ".$audit_action['description']."
+			<br/><b>Format String:</b> ".issetor($audit_action['format_string'])."
+			<br/><b>Collect Stat for App:</b> ".$stat_app."
+			<br/><b>Collect Stat for Page:</b> ".$stat_page."
+			<br/><b>Collect Stat for Campaign:</b> ".$stat_campaign."</p></li>";
 		}
 	?>
 	</ul>

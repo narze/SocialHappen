@@ -55,15 +55,17 @@ class Audit_lib
 	 * @param stat_app boolean want to keep in stat app or not
 	 * @param stat_page boolean want to keep in stat page or not
 	 * @param stat_campaign boolean want to keep in stat campaign or not
+	 * @param format_string string format of action string to be displayed
 	 * 
 	 * @return result boolean
 	 * 
 	 * @author Metwara Narksook
 	 */
 	function add_audit_action($app_id = NULL, $action_id = NULL, $description = NULL, $stat_app = NULL, 
-							$stat_page = NULL, $stat_campaign = NULL){
+							$stat_page = NULL, $stat_campaign = NULL, $format_string = NULL){
 		$check_args = isset($app_id) && isset($action_id) && isset($stat_app) && 
-						isset($stat_page) && isset($stat_campaign) && isset($description);
+						isset($stat_page) && isset($stat_campaign) && isset($description)
+						&& isset($format_string);
 		if(!$check_args){
 			//show_error("Invalid or missing args", 500);
 			return FALSE;
@@ -73,6 +75,7 @@ class Audit_lib
 		$data = array('app_id' =>(int)$app_id,
 						'action_id' => (int)$action_id,
 						'description' => $description,
+						'format_string' => $format_string,
 						'stat_app' => (boolean)$stat_app,
 						'stat_page' => (boolean)$stat_page,
 						'stat_campaign' => (boolean)$stat_campaign);
@@ -90,7 +93,7 @@ class Audit_lib
 	 * 
 	 * @param app_id int id of app
 	 * @param action_id int action number
-	 * @param data array contain ['stat_app', 'stat_page', 'stat_campaign', 'description']
+	 * @param data array contain ['stat_app', 'stat_page', 'stat_campaign', 'description', 'format_string']
 	 * 
 	 * @return result boolean
 	 * 
@@ -99,7 +102,8 @@ class Audit_lib
 	function edit_audit_action($app_id = NULL, $action_id = NULL, $data = NULL){
 		$check_args = isset($app_id) && isset($action_id) && 
 						(isset($data['stat_app']) || isset($data['stat_page']) || 
-						isset($data['stat_campaign']) || isset($data['description']));
+						isset($data['stat_campaign']) || isset($data['description'])
+						|| isset($data['format_string']));
 		if(!$check_args){
 			//show_error("Invalid or missing args", 500);
 			return FALSE;
@@ -119,6 +123,9 @@ class Audit_lib
 		}
 		if(isset($data['description'])){
 			$data_to_add['description'] = $data['description'];
+		}
+		if(isset($data['format_string'])){
+			$data_to_add['format_string'] = $data['format_string'];
 		}
 		
 		$result = $this->CI->audit_action->edit_action((int)$app_id, (int)$action_id, $data_to_add);
@@ -224,7 +231,7 @@ class Audit_lib
 	 * @param action_id int
 	 * @param object string [optional]
 	 * @param objecti string [optional]
-	 * @param additional_data array of additional data may contains ['app_install_id', 'campaign_id', 'company_id', 'page_id']
+	 * @param additional_data array of additional data may contains ['app_install_id', 'user_id', 'campaign_id', 'company_id', 'page_id']
 	 * 
 	 * @return result boolean
 	 * 
@@ -264,6 +271,9 @@ class Audit_lib
 		// additional data
 		if(isset($additional_data['app_install_id'])){
 			$data_to_add['app_install_id'] = (int)$additional_data['app_install_id'];
+		}
+		if(isset($additional_data['user_id'])){
+			$data_to_add['user_id'] = (int)$additional_data['user_id'];
 		}
 		if(isset($additional_data['campaign_id'])){
 			$data_to_add['campaign_id'] = (int)$additional_data['campaign_id'];
@@ -313,9 +323,119 @@ class Audit_lib
 	function list_audit($criteria = array(), $limit = 100, $offset = 0){
 		$this->CI->load->model('audit_model','audit');
 		$result = $this->CI->audit->list_audit($criteria, (int)$limit, (int)$offset);
+		$action_list = array();
+		
+		//$this->CI->load->model('audit_action_model','audit_action');
+		for($i = 0;$i < count($result); $i++){
+			$app_id = $result[$i]['app_id'];
+			$action_id = $result[$i]['action_id'];
+			if(empty($action_list[$app_id.'_'.$action_id])){
+				$result_action = $this->get_audit_action($app_id, $action_id);
+				//var_dump($result_action);
+				//$result_action = issetor($result_action[0]);
+				if(isset($result_action)){
+					$action_list[$app_id.'_'.$action_id] = $result_action;
+				}
+			}else{
+				$result_action = $action_list[$app_id.'_'.$action_id];
+			}
+			
+			if(isset($result_action['format_string'])){
+				//echo '<pre>';
+				//var_dump($result_action);
+				//echo '</pre>';
+				$result[$i]['message'] = $this->
+						translate_format_string($result_action['format_string'],
+												$result[$i]);
+			}
+		}
 		return $result;
 	}
 	
+	function transate_type($type, $value, $audit){
+		$value = isset($audit[$value]) ? $audit[$value] : $value;
+		switch ($type) {
+			case 'app':
+				$this->CI->load->model('app_model','app');
+				$result = $this->CI->app->get_app_by_app_id($value);
+				$app_name = isset($result['app_name']) ? $result['app_name'] : $value;
+				$format_value = '<span class="type_app">'.$app_name.'</span>';
+				break;
+			case 'app_install':
+				$this->CI->load->model('Installed_apps_model','app_install');
+				$result = $this->CI->app_install->get_app_profile_by_app_install_id($value);
+				$app_name = isset($result['app_name']) ? $result['app_name'] : $value;
+				$format_value = '<span class="type_app_install"><a href="'.base_url()
+						   		.'app/'.$value.'">'.$app_name.'</a></span>';
+				break;
+			case 'user':
+				$this->CI->load->model('User_model','user');
+				$result = $this->CI->user->get_user_profile_by_user_id($value);
+				$name = isset($result['user_first_name']) && isset($result['user_last_name']) > 0 ? $result['user_first_name'].' '.$result['user_last_name'] : $value;
+				$format_value = '<span class="type_user"><a href="'.base_url()
+						   		.'user/app/'.$value.'/'.$audit['app_id'].'">'.$name.'</a></span>';
+				break;
+			case 'campaign':
+				$this->CI->load->model('Campaign_model','campaign');
+				$result = $this->CI->campaign->get_campaign_profile_by_campaign_id($value);
+				$campaign_name = isset($result['campaign_name']) ? $result['campaign_name'] : $value;
+				$format_value = '<span class="type_campaign"><a href="'.base_url()
+						   		.'campaign/'.$value.'">'.$campaign_name.'</a></span>';
+				break;
+			case 'page':
+				$this->CI->load->model('Page_model','page');
+				$result = $this->CI->page->get_page_profile_by_page_id($value);
+				$page_name = isset($result['page_name']) ? $result['page_name'] : $value;
+				$format_value = '<span class="type_page"><a href="'.base_url()
+						   		.'page/'.$value.'">'.$page_name.'</a></span>';
+				break;
+			case 'company':
+				$this->CI->load->model('Company_model','company');
+				$result = $this->CI->company->get_company_profile_by_company_id($value);
+				$company_name = isset($result['company_name']) ? $result['company_name'] : $value;
+				$format_value = '<span class="type_company"><a href="'.base_url()
+						   		.'company/'.$value.'">'.$company_name.'</a></span>';
+				break;
+			case 'number':
+				$format_value = $value;
+				break;
+			case 'string':
+				$format_value = $value;
+				break;
+			default:
+				$format_value = $value;
+				break;
+		}
+		//$format_value = str_replace('{'.$type.'}', issetor($audit[$value]), $format_type[$type]);
+		return $format_value;
+	}
+	
+	function translate_format_string($format_string, $audit){
+		
+		preg_match_all('/(?P<type>\w+):(?P<variable>\w+)/', $format_string, $matches);
+		/*
+		echo '<pre>';
+		print_r($matches);
+		echo '</pre>';
+		*/
+		$type = $matches['type'];
+		$value = $matches['variable'];
+		
+		$out = $format_string;
+		for($i = 0; $i < count($type); $i++){
+			//$format_type = $this->transate_type($type[$i], $value[$i], $audit);
+			if(isset($audit[$value[$i]])){
+				$format_value = $this->transate_type($type[$i], $value[$i], $audit);
+				//$format_value = str_replace('{'.$type[$i].'}', issetor($audit[$value[$i]]), $format_type);
+			}else{
+				$format_value = $value[$i];
+			}
+			
+			$out = str_replace('{'.$type[$i].':'.$value[$i].'}', $format_value, $out);
+		}
+		
+		return $out;
+	}
 	/**
 	 * list recent audit entry
 	 * @param limit number of entries to get [optional - default 100]
@@ -326,7 +446,8 @@ class Audit_lib
 	 */
 	function list_recent_audit($limit = 100){
 		$this->CI->load->model('audit_model','audit');
-		$result = $this->CI->audit->list_recent_audit((int)$limit);
+		//$result = $this->CI->audit->list_recent_audit((int)$limit);
+		$result = $this->list_audit(array(), $limit, 0);
 		return $result;
 	}
 
