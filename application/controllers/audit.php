@@ -11,6 +11,51 @@ class Audit extends CI_Controller {
 		$this->load->library('audit_lib');
 	}
 	
+	function format(){
+		$format_string = '{user:user_id} do some thing with {user:object} at {campaign:campaign_id}';
+		$audit = array('app_id' => '*app_id*',
+					   'app_install_id' => '*app_install_id*',
+					   'user_id' => '*user_id*',
+					   'campaign_id' => '*campaign_id*',
+					   'page_id' => '*page_id*',
+					   'company_id' => '*company_id*',
+					   'subject' => '*subject*',
+					   'action_id' => '*action_id*',
+					   'object' => '*object*',
+					   'objecti' => '*objecti*');
+		echo $this->translate_format_string($format_string, $audit);
+	}
+	
+	function translate_format_string($format_string, $audit){
+		$format_type = array('app' => '{app}',
+							   'app_install' => '{app_install}',
+							   'user' => '{user}',
+							   'campaign' => '{campaign}',
+							   'page' => '{page}',
+							   'company' => '{company}');
+		preg_match_all('/(?P<type>\w+):(?P<variable>\w+)/', $format_string, $matches);
+		/*
+		echo '<pre>';
+		print_r($matches);
+		echo '</pre>';
+		*/
+		$type = $matches['type'];
+		$value = $matches['variable'];
+		
+		$out = $format_string;
+		for($i = 0; $i < count($type); $i++){
+			if(isset($audit[$value[$i]]) && isset($format_type[$type[$i]])){
+				$format_value = str_replace('{'.$type[$i].'}', issetor($audit[$value[$i]]), issetor($format_type[$type[$i]]));
+			}else{
+				$format_value = $value[$i];
+			}
+			
+			$out = str_replace('{'.$type[$i].':'.$value[$i].'}', $format_value, $out);
+		}
+		
+		return $out;
+	}
+	
 	/**
 	 * index method
 	 */
@@ -220,11 +265,15 @@ class Audit extends CI_Controller {
 	 */
 	function addlog01(){
 		$app_id = 0;
-		$action_id = 1;
-		$subject = 'userX';
-		$object = 'object';
-		$objecti = 'objecti';
-		$additional_data = array('app_install_id' => 0);
+		$action_id = 103;
+		
+		$user_id = ''.rand(10000, 20000);
+		
+		$subject = $user_id;
+		$object = NULL;
+		$objecti = NULL;
+		$additional_data = array('app_install_id' => 0,
+									'user_id' => $user_id);
 		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
 		if($result) echo 'platform visit';
 	}
@@ -234,11 +283,15 @@ class Audit extends CI_Controller {
 	 */
 	function addlog02(){
 		$app_id = 0;
-		$action_id = 2;
-		$subject = 'userX';
-		$object = 'object';
-		$objecti = 'objecti';
-		$additional_data = array('app_install_id' => 0);
+		$action_id = 102;
+		
+		$user_id = ''.rand(10000, 20000);
+		
+		$subject = $user_id;
+		$object = NULL;
+		$objecti = NULL;
+		$additional_data = array('app_install_id' => 0,
+									'user_id' => $user_id);
 		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
 		if($result) echo 'platform register';
 	}
@@ -247,34 +300,41 @@ class Audit extends CI_Controller {
 	 * app1 visit
 	 */
 	function addlog11(){
-		$app_id = 1;
-		$action_id = 1;
-		$subject = 'userU';
-		$object = 'object';
-		$objecti = 'objecti';
+		$app_id = rand(1, 6);
+		$action_id = 103;
+		
+		$user_id = ''.rand(10000, 20000);
+		
+		$subject = $user_id;
+		$object = NULL;
+		$objecti = NULL;
 		$additional_data = array('app_install_id' => rand(1, 20),
 								'campaign_id' => rand(1, 30),
 								'company_id' => rand(1, 20),
-								'page_id' => rand(1, 20));
+								'page_id' => rand(1, 20),
+									'user_id' => $user_id);
 		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
-		if($result) echo 'app1 visit';
+		if($result) echo 'app'.$app_id.' visit';
 	}
 	
 	/**
 	 * app1 register
 	 */
 	function addlog12(){
-		$app_id = 1;
-		$action_id = 2;
-		$subject = 'userX';
-		$object = 'object';
-		$objecti = 'objecti';
+		$app_id = rand(1, 6);
+		$action_id = 102;
+		$user_id = ''.rand(10000, 20000);
+		
+		$subject = $user_id;
+		$object = NULL;
+		$objecti = NULL;
 		$additional_data = array('app_install_id' => rand(1, 20),
 								'campaign_id' => rand(1, 30),
 								'company_id' => rand(1, 20),
-								'page_id' => rand(1, 20));
+								'page_id' => rand(1, 20),
+									'user_id' => $user_id);
 		$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
-		if($result) echo 'app1 register';
+		if($result) echo 'app'.$app_id.' register';
 	}
 	
 	
@@ -324,10 +384,11 @@ class Audit extends CI_Controller {
 	 * list recent audit
 	 */
 	function list_audit(){
-		$audit_list = $this->audit_lib->list_recent_audit();
+		$audit_list = $this->audit_lib->list_recent_audit(100);
 		foreach ($audit_list as $audit) {
 			//echo $audit['subject'] . "<br/>";
-			echo '<pre>' . print_r($audit) . '</pre>';
+			//echo '<pre>' . var_dump($audit) . '</pre>';
+			echo $audit['message'].'<br/>';
 		}
 	}
 	
