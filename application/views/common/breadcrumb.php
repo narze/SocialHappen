@@ -12,8 +12,9 @@
 		}
 		?>
     </ul>
-    <ul class="tool">
-      <li class="group"><a href="#"><span>group</span></a></li>
-      <li class="setting"><a href="<?php echo issetor($settings_url,'#');?>"><span>setting</span></a></li>
-    </ul>
+	<?php if(isset($settings_url)): ?>
+		<ul class="tool">
+		  <li class="setting"><a href="<?php echo $settings_url;?>"><span>setting</span></a></li>
+		</ul>
+	<?php endif; ?>
 </div>

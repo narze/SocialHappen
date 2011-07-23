@@ -73,6 +73,7 @@ class User extends CI_Controller {
 										'campaign_id' => issetor($campaign_id)),
 						'script' => array(
 							'common/functions',
+							'common/jquery.form',
 							'common/bar',
 							'user/user_stat',
 							'user/user_activities',

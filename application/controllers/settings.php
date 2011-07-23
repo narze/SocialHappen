@@ -40,9 +40,9 @@ class Settings extends CI_Controller {
 										'param_id' => $param_id),
 						'script' => array(
 							'common/functions',
+							'common/jquery.form',
 							'common/bar',
 							'settings/main',
-							'common/jquery.form',
 							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(

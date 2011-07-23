@@ -10,7 +10,7 @@ $(function(){
 					$('.goto-list-company-'+ user_companies[i].company_id).append('<p class="goto-list-company-page-'+item.page_id+'"><a href="'+base_url+'page/'+item.page_id+'">&raquo;  '+item.page_name+'</a></p>');
 				});
 			} else {
-				$('.goto-list-company-'+ user_companies[i].company_id).append('<p>No page yet</p><p><a href="#">+ add new page</a></p>');
+				$('.goto-list-company-'+ user_companies[i].company_id).append('<p>No page yet</p><p><a href="'+base_url+'company/'+user_companies[i].company_id+'">+ add new page</a></p>');
 			}
 		});
 	}
@@ -23,6 +23,7 @@ $(function(){
 			padding: 0,
 			scrolling: 'no'
 		});
+		
 		$('#create-company-form').load(base_url+'home/create_company_form');
 
 		$('form.create-company-form').live('submit',function(){

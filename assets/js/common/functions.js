@@ -43,6 +43,7 @@ if(!window.set_loading){
 			setTimeout(function() {
 				$.fancybox.close();
 			}, 500);
+			$('div.loading-popup').remove();
 		});
 		
 		 // $('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').appendTo('body').bind("ajaxSend", function(){
