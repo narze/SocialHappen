@@ -25,7 +25,7 @@
                     <p class="pic"><img src="<?php echo imgsize($page['page_image'],'square');?>" /></p>
                     <p><a class="bt-change_pic" href="#"><input id="page_image" type="file" name="page_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
 					<p>
-						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, TRUE); ?> /> 
+						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?> /> 
 						<label for="use_facebook_picture">use your facebook avatar</label>
 					</p> 
 				  </div>

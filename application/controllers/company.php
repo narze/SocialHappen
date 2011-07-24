@@ -25,6 +25,7 @@ class Company extends CI_Controller {
 										,'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
 							'common/functions',
+							'common/jquery.form',
 							'common/bar',
 							'company/company_dashboard',
 							'common/fancybox/jquery.mousewheel-3.0.4.pack',

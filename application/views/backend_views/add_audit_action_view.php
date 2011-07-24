@@ -41,7 +41,21 @@ echo form_open('backend/add_audit_action/'.$app_id);
 				))?>
 				<?php echo form_error('description'); ?>
 			</li>
-			
+			<li>
+				<?=form_label('Format String*', 'format_string', array(
+				'class' => 'format_string',
+				'style' => 'color: #000;',
+				));?>
+				<?=form_input(array(
+						  'name'        => 'format_string',
+						  'id'          => 'format_string',
+						  'value'       => set_value('format_string'),
+						  'maxlength'   => '400',
+						  'size'        => '200',
+						  'class'		=> (form_error('format_string')) ? 'error' : '',
+				))?>
+				<?php echo form_error('format_string'); ?>
+			</li>
 			<li>
 				<?=form_checkbox(array(
 						  'name'        => 'stat_app',

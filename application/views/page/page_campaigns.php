@@ -27,6 +27,6 @@
               <td class="bt-icon-cam"><a class="bt-go campaigns" href="#"><span>go</span></a></td>
             </tr>
           </table>
+		  <div class="pagination-campaigns strip"></div>
         </div>
-		<div class="pagination-campaigns"></div>
       </div>

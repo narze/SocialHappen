@@ -42,6 +42,7 @@ class App extends CI_Controller {
 						),
 						'script' => array(
 							'common/functions',
+							'common/jquery.form',
 							'common/bar',
 							'common/jquery.pagination',
 							//'app/app_stat',

@@ -40,9 +40,9 @@ class Settings extends CI_Controller {
 										'param_id' => $param_id),
 						'script' => array(
 							'common/functions',
+							'common/jquery.form',
 							'common/bar',
 							'settings/main',
-							'common/jquery.form',
 							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
@@ -318,8 +318,10 @@ class Settings extends CI_Controller {
 		}
 	}
 	
-	function package(){
-	
+	function package($user_id = NULL){
+		if($user_id && $user_id == $this->socialhappen->get_user_id()){	
+			$this->load->view('settings/package',array());
+		}
 	}
 	
 	function reference(){

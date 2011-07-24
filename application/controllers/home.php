@@ -62,9 +62,9 @@ class Home extends CI_Controller {
 						),
 						'script' => array(
 							'common/functions',
+							'common/jquery.form',
 							'common/bar',
 							'common/fancybox/jquery.fancybox-1.3.4.pack',
-							'common/jquery.form',
 							'home/lightbox',
 							'home/signup'
 						),

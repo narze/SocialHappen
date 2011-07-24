@@ -62,6 +62,7 @@ class Page extends CI_Controller {
 						),
 						'script' => array(
 							'common/functions',
+							'common/jquery.form',
 							'common/bar',
 							'common/jquery.pagination',
 							'page/page_apps',

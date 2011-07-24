@@ -1,5 +1,5 @@
 $(function(){
-	$('li a.company-page-setting,li a.user-company-setting,li a.account-setting,li a.company-page-list').live('click',function(){
+	$('li a.company-page-setting,li a.user-company-setting,li a.account-setting,li a.company-page-list,li a.package-billing').live('click',function(){
 		set_loading();		
 		$('div#main').load($(this).attr('href'));
 		make_form($(this));
