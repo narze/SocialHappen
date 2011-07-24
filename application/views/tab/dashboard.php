@@ -70,9 +70,9 @@
         <div>
           <p>Display:</p>
           <ul>
-            <li><a class="active" href="#">All</a></li>
-            <li><a href="#">Applicaton</a></li>
-            <li><a href="#">Campaign</a></li>
+            <li><a class="active a-app-campaign">All</a></li>
+            <li><a class="a-app">Applicaton</a></li>
+            <li><a class="a-campaign">Campaign</a></li>
           </ul>
         </div>
       </div>
@@ -99,8 +99,27 @@
 				<?php endif; ?>   
             </div>
           </li>
-	<?php endforeach; 
-	endif;?>
+		<?php endforeach; 
+		endif;?>
+	  
+		<?php if(isset($apps)) :
+		foreach($apps as $app): ?>
+		<li>
+            <div>
+              <p class="pic"><img src="<?php echo imgsize($app['app_image'],'normal');?>" alt="" /></p>
+              <h2><?php echo $app['app_name'];?></h2>
+              <p><?php echo $app['app_description'];?></p>
+              <p class="link"><a href="#">read more</a></p>
+            </div>
+            <?php if($is_admin) :?>
+			<div>
+				<p>Today : <?php echo '[]';?></p>
+				<p>All : <?php echo '[]';?></p>
+			</div>
+			<?php endif; ?>   
+           </li>
+		<?php endforeach; 
+		endif;?>
 		 
         </ul>
       </div>
@@ -126,25 +145,7 @@
           </ul>
         </div>
       </div>
-      <div class="list_resent-activity">
-        <ul>
-			<?php if(isset($user_activities)) :
-				foreach($user_activities as $user_activity) : ?>
-          <li>
-            <div>
-              <p class="pic"><img src="<?php echo imgsize(issetor($user_activity['user_image']),'square');?>" alt="" /></p>
-              <h2><?php echo issetor($user_activity['user_name']);?></h2>
-              <p><?php echo issetor($user_activity['user_activity_detail']);?></p>
-              <p><span><?php echo issetor($user_activity['user_activity_meta']);?></span></p>
-            </div>
-            <div>
-              <p class="star">x <?php echo issetor($user_activity['user_star_point']);?></p>
-            </div>
-          </li>
-			  <?php endforeach; 
-		endif;?>
-        </ul>      
-      </div>
+      <div class="list_resent-activity"></div>
       <div class="strip">
         <ul>
           <li><a href="#"></a></li>

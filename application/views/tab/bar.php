@@ -31,11 +31,13 @@
           <p><?php echo "{$user['user_first_name']} {$user['user_last_name']}";?></p>  
         </div>
         <ul>
-          <li><a href="#">&raquo; <b>Go to Dashboard</b></a></li>
-          <li><a href="<?php echo base_url()."tab/profile/{$user_id}";?>">&raquo; <b>View my Profile</b></a></li>
-          <li><a href="#">&raquo; <b>View as Admin</b></a></li>
-          <li><a href="#">&raquo; <b>View as Member</b></a></li>
-          <li><a href="#">&raquo; <b>View as Guest</b></a></li>
+          <li><a class="a-dashboard">&raquo; <b>Go to Dashboard</b></a></li>
+          <li><a class="a-profile">&raquo; <b>View my Profile</b></a></li>
+		  <?php if($is_admin) :?>
+			  <li><a href="<?php echo base_url()."tab/dashboard/{$page_id}";?>">&raquo; <b>View as Admin</b></a></li>
+			  <li><a href="<?php echo base_url()."tab/dashboard/{$page_id}?viewas=user";?>">&raquo; <b>View as Member</b></a></li>
+			  <li><a href="<?php echo base_url()."tab/dashboard/{$page_id}?viewas=guest";?>">&raquo; <b>View as Guest</b></a></li>
+		  <?php endif; ?>
           <li><a href="<?php echo base_url()."tab/account/{$page['page_id']}/{$user_id}";?>">&raquo; <b>Account Setting</b></a></li>
         </ul>
       </li>

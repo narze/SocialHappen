@@ -4,10 +4,7 @@ $(function(){
 		var srcSelector = '#'+$(this).attr('class');
 		set_loading();
 		$(this).ajaxSubmit({success:function(response){
-			alert(response);
-			alert(srcSelector);
-			alert($(response).filter(srcSelector).html());
-			$(targetSelector).replaceWith($(response).filter(srcSelector));
+			$(targetSelector).replaceWith($(response).find(srcSelector));
 		}});
 		return false;
 	});

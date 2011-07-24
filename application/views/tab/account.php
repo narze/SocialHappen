@@ -32,7 +32,7 @@
 							<p class="pic"><img src="<?php echo imgsize($user['user_image'],'square');?>" /></p>
 							<p><a class="bt-change_pic" href="#"><input id="user_image" type="file" name="user_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
 							<p>
-								<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" value="enter_value_here" class="" <?php echo set_checkbox('use_facebook_picture', 0); ?>> 
+								<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" /> 
 								<label for="use_facebook_picture">use your facebook avatar</label>
 							</p> 
 						  </div>
@@ -50,7 +50,7 @@
 						</li>
 						<li><strong>Birth date :</strong><?php echo form_error('birth_date'); ?><input class="date" id="birth_date" type="text" name="birth_date" maxlength="255" value="<?php echo set_value('birth_date',$user['user_birth_date']); ?>"  /></li>
 						<li><strong>About me :</strong><?php echo form_error('about'); ?><?php echo form_textarea( array( 'name' => 'about', 'id' => 'about' , 'cols'=> 30 ,'value' => set_value('about',$user['user_about']) ) ); ?></li>
-						<li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>
+						<li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></input></li>
 					  </ul> 
 					</div>
 			

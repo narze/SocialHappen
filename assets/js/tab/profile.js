@@ -1,7 +1,9 @@
-$(function(){
-	$('#profile-tab ul li a').live('click',function(){
+$(function(){ 
+	$('a.a-profile').live('click',function(){
 		set_loading();
-		$('div#profile-content').load($(this).attr('href'));
+		$('div#main').load(base_url+'tab/profile/'+user_id+'/'+token,function(){
+		
+		});
 		return false;
 	});
 });
