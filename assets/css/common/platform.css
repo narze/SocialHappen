@@ -792,6 +792,36 @@ div.strip ul li a {
 }
 div.strip ul li a.current {background-position: 0 -657px;}
 
+div.strip div.pagination {
+	width: 100px;
+	height: 10px;
+	margin: 0 auto;
+}
+div.strip div.pagination:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.strip div.pagination a {
+	float: left;
+	margin: 0 5px;
+	width: 10px;
+	height: 10px;
+	background: url(../../images/bg/bg_main.png) 0 -676px no-repeat;
+	text-indent: -999px;
+}
+div.strip div.pagination span.current {
+	float: left;
+	margin: 0 5px;
+	width: 10px;
+	height: 10px;
+	background: url(../../images/bg/bg_main.png) 0 -657px no-repeat;
+	text-indent: -999px;
+}
+
+
+
+
 div.details div.strip {
 	background: #e1e1e1;
 	padding: 14px 0;
@@ -1372,7 +1402,6 @@ div.apply>input[type="submit"] {
 }
 
 /* setting*/
-
 div.wrapper-setting {padding: 15px 20px; background: #494949;}
 div.wrapper-setting>div {
 	border: 1px solid #dcdcdc;
