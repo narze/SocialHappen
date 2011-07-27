@@ -17,11 +17,27 @@ class Tab extends CI_Controller {
 	}
 	
 	function test(){
-		$this->load->model('audit_model','audit');
-			$this->load->model('audit_action_model','audit_action');
+	
+	$data = array();
+	$data['activities'] = array();
+	$this->load->library('audit_lib');
+	$this->load->model('audit_action_model','audit_action');
 			$this->load->model('campaign_model','campaigns');
 			$this->load->model('installed_apps_model','installed_apps');
-			var_dump($this->audit->list_audit(array('app_install_id'=>1)));
+	$page_id = 1;
+		$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
+				foreach($campaigns as $campaign){
+				
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('campaign_id'=>$campaign['campaign_id'])));
+				}
+				
+				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+				foreach($apps as $app){
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('app_install_id'=>$app['app_install_id'])));
+				}
+		echo "<pre>";
+		var_dump($data);
+		echo "</pre>";
 	}
 	
 	function index(){
@@ -45,6 +61,9 @@ class Tab extends CI_Controller {
 		$company = $this->companies->get_company_profile_by_page_id($page_id);
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+		
+		$this->config->load('pagination', TRUE);
+		$per_page = $this->config->item('per_page','pagination');
 
 		//page activities
 		
@@ -57,7 +76,8 @@ class Tab extends CI_Controller {
 									'page_installed' => $page_installed,
 									'app_installed' => $app_installed,
 									'is_guest' => $user ? FALSE : TRUE,
-									'token' => base64_encode($token)
+									'token' => base64_encode($token),
+									'per_page' => $per_page
 					),
 					'script' => array(
 						'common/functions',
@@ -66,6 +86,7 @@ class Tab extends CI_Controller {
 						'tab/main',
 						'tab/account',
 						'tab/dashboard',
+						'common/jquery.pagination',
 						'common/jquery.form',
 						'common/jquery.countdown.min',
 						'common/fancybox/jquery.fancybox-1.3.4.pack'
@@ -102,55 +123,9 @@ class Tab extends CI_Controller {
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
 		if($page){
-			$user_facebook_id = $this->FB->getUser();
-		
-			$this->load->model('User_model','User');
-			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
-			$is_admin = $is_user = $is_guest = FALSE;
-			if(!$user_id) {
-				$user_id = 0;
-				$is_guest = TRUE;
-			} else {
-				$is_user = TRUE;
-			}
-		
-			$app_campaign_filter = $this->input->get('filter');
-		
-			$this->load->model('user_model','users');
-			$user = $this->users->get_user_profile_by_user_id($user_id);
 			
-			$this->load->model('company_model','companies');
-			$company = $this->companies->get_company_profile_by_page_id($page_id);
-			$this->load->model('user_companies_model','user_companies');
-			$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
-			$this->load->model('campaign_model','campaigns');
-			$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
-			$this->load->model('installed_apps_model','installed_apps');
-			$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
-			
-			if($is_admin) {
-				$view_as = $this->input->get('viewas');
-				if($view_as == 'guest'){
-					$is_guest = TRUE;
-					$is_user = FALSE;
-					$is_admin = FALSE;
-				} else if($view_as == 'user'){
-					$is_guest = FALSE;
-					$is_user = TRUE;
-					$is_admin = FALSE;
-				} else {
-					$is_guest = FALSE;
-					$is_user = FALSE;				
-				}
-			}
-			
-			$data = array('user'=>$user,
+			$data = array(
 							'page' => $page,
-							'campaigns' => ($app_campaign_filter != 'app') ? $campaigns : NULL,
-							'apps' => ($app_campaign_filter != 'campaign') ? $apps : NULL,
-							'is_admin' => $is_admin,
-							'is_user' => $is_user,
-							'is_guest' => $is_guest,
 							'is_liked' => $this->page['liked']
 			);
 			$this->load->view("tab/dashboard",$data);
@@ -206,12 +181,152 @@ class Tab extends CI_Controller {
 		}
 	}
 	
+	function apps_campaigns($page_id = NULL, $limit = NULL, $offset = NULL){
+		$this->load->model('page_model','pages');
+		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		if($page){
+			$user_facebook_id = $this->FB->getUser();
+		
+			$this->load->model('User_model','User');
+			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		
+			$this->load->model('user_model','users');
+			$user = $this->users->get_user_profile_by_user_id($user_id);
+			
+			$this->load->model('company_model','companies');
+			$company = $this->companies->get_company_profile_by_page_id($page_id);
+			
+			$this->load->model('user_companies_model','user_companies');
+			$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+			$is_user = $is_guest = FALSE;
+			if(!$user_id) {
+				$user_id = 0;
+				$is_guest = TRUE;
+			} else {
+				$is_user = TRUE;
+			}
+			
+			if($is_admin) {
+				$view_as = $this->input->get('viewas');
+				if($view_as == 'guest'){
+					$is_guest = TRUE;
+					$is_user = FALSE;
+					$is_admin = FALSE;
+				} else if($view_as == 'user'){
+					$is_guest = FALSE;
+					$is_user = TRUE;
+					$is_admin = FALSE;
+				} else {
+					$is_guest = FALSE;
+					$is_user = FALSE;				
+				}
+			}
+		
+			$app_campaign_filter = $this->input->get('filter');
+			if(!$app_campaign_filter){
+				$full_limit = $limit;
+				$limit /= 2;
+				$offset /= 2;
+			}
+			$this->load->model('campaign_model','campaigns');
+			$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id,$limit,$offset);
+			if(!$app_campaign_filter && count($campaigns)<$limit){
+				$limit = $full_limit - count($campaigns);
+			}
+			$this->load->model('installed_apps_model','installed_apps');
+			$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id,$limit,$offset);
+
+			$data = array('user'=>$user,
+							'page' => $page,
+							'is_admin' => $is_admin,
+							'is_user' => $is_user,
+							'is_guest' => $is_guest,
+							'is_liked' => $this->page['liked'],
+							'campaigns' => ($app_campaign_filter != 'app') ? $campaigns : NULL,
+							'apps' => ($app_campaign_filter != 'campaign') ? $apps : NULL
+			);
+			$this->load->view('tab/apps_campaigns', $data);
+		}
+	}
+	
+	function user_apps_campaigns($page_id = NULL, $limit = NULL, $offset = NULL){
+		$this->load->model('page_model','pages');
+		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		if($page){
+			$user_facebook_id = $this->FB->getUser();
+		
+			$this->load->model('User_model','User');
+			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		
+			$this->load->model('user_model','users');
+			$user = $this->users->get_user_profile_by_user_id($user_id);
+			
+			$this->load->model('company_model','companies');
+			$company = $this->companies->get_company_profile_by_page_id($page_id);
+			
+			$this->load->model('user_companies_model','user_companies');
+			$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+			$is_user = $is_guest = FALSE;
+			if(!$user_id) {
+				$user_id = 0;
+				$is_guest = TRUE;
+			} else {
+				$is_user = TRUE;
+			}
+			
+			if($is_admin) {
+				$view_as = $this->input->get('viewas');
+				if($view_as == 'guest'){
+					$is_guest = TRUE;
+					$is_user = FALSE;
+					$is_admin = FALSE;
+				} else if($view_as == 'user'){
+					$is_guest = FALSE;
+					$is_user = TRUE;
+					$is_admin = FALSE;
+				} else {
+					$is_guest = FALSE;
+					$is_user = FALSE;				
+				}
+			}
+		
+			$app_campaign_filter = $this->input->get('filter');
+			if(!$app_campaign_filter){
+				$full_limit = $limit;
+				$limit /= 2;
+				$offset /= 2;
+			}
+			
+			//user campaigns
+			$this->load->model('user_campaigns_model','user_campaigns');
+			$campaigns = $this->user_campaigns->get_user_campaigns_by_user_id($user_id);
+			if(!$app_campaign_filter && count($campaigns)<$limit){
+				$limit = $full_limit - count($campaigns);
+			}
+			//user apps
+			$this->load->model('user_apps_model','user_apps');
+			$apps = $this->user_apps->get_user_apps_by_user_id($user_id);
+			
+			$data = array('user'=>$user,
+							'page' => $page,
+							'is_admin' => $is_admin,
+							'is_user' => $is_user,
+							'is_guest' => $is_guest,
+							'is_liked' => $this->page['liked'],
+							'campaigns' => ($app_campaign_filter != 'app') ? $campaigns : NULL,
+							'apps' => ($app_campaign_filter != 'campaign') ? $apps : NULL
+			);
+			$this->load->view('tab/apps_campaigns', $data);
+		}
+	}
+	
 	function activities($page_id = NULL){
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		if($page){
 			$activity_filter = $this->input->get('filter'); //(all) app campaign me
-			$this->load->model('audit_model','audit');
+
+			$this->load->library('audit_lib');
 			$this->load->model('audit_action_model','audit_action');
 			$this->load->model('campaign_model','campaigns');
 			$this->load->model('installed_apps_model','installed_apps');
@@ -221,51 +336,70 @@ class Tab extends CI_Controller {
 			if($activity_filter == 'app'){
 				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
 				foreach($apps as $app){
-					$data['activities'] = array_merge($data['activities'],$this->audit->list_audit(array('app_install_id'=>$app['app_install_id'])));
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('app_install_id'=>$app['app_install_id'])));
 				}				
 			} else if ($activity_filter == 'campaign'){
 				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
 				foreach($campaigns as $campaign){
-					$data['activities'] = array_merge($data['activities'],$this->audit->list_audit(array('campaign_id'=>$campaign['campaign_id'])));
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('campaign_id'=>$campaign['campaign_id'])));
 				}
-			} else if ($activity_filter == 'me'){ //problem with user_id
+			} else if ($activity_filter == 'me'){
 				$user_facebook_id = $this->FB->getUser();
 				$this->load->model('User_model','users');
 				$user_id = $this->users->get_user_id_by_user_facebook_id($user_facebook_id);
 			
 				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
 				foreach($campaigns as $campaign){
-					$data['activities'] = array_merge($data['activities'],$this->audit->list_audit(array('user_id'=>$user_id, 'campaign_id'=>$campaign['campaign_id'])));
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('user_id'=>$user_id, 'campaign_id'=>$campaign['campaign_id'])));
 				}
 				
 				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
 				foreach($apps as $app){
-					$data['activities'] = array_merge($data['activities'],$this->audit->list_audit(array('user_id'=>$user_id, 'app_install_id'=>$app['app_install_id'])));
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('user_id'=>$user_id, 'app_install_id'=>$app['app_install_id'])));
+				}
+			} else if ($activity_filter == 'me_app'){
+				$user_facebook_id = $this->FB->getUser();
+				$this->load->model('User_model','users');
+				$user_id = $this->users->get_user_id_by_user_facebook_id($user_facebook_id);
+				
+				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+				foreach($apps as $app){
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('user_id'=>$user_id, 'app_install_id'=>$app['app_install_id'])));
+				}				
+			} else if ($activity_filter == 'me_campaign'){
+				$user_facebook_id = $this->FB->getUser();
+				$this->load->model('User_model','users');
+				$user_id = $this->users->get_user_id_by_user_facebook_id($user_facebook_id);
+				
+				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
+				foreach($campaigns as $campaign){
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('user_id'=>$user_id, 'campaign_id'=>$campaign['campaign_id'])));
 				}
 			} else {
 				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
 				foreach($campaigns as $campaign){
-					$data['activities'] = array_merge($data['activities'],$this->audit->list_audit(array('campaign_id'=>$campaign['campaign_id'])));
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('campaign_id'=>$campaign['campaign_id'])));
 				}
 				
 				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
 				foreach($apps as $app){
-					$data['activities'] = array_merge($data['activities'],$this->audit->list_audit(array('app_install_id'=>$app['app_install_id'])));
-				}
-				
-				//debug
-				foreach($data['activities'] as $key => $value){
-					$action = $this->audit_action->get_action($data['activities'][$key]['app_id'],$data['activities'][$key]['action_id']);
-					
-					$data['activities'][$key]['user_name'] = $data['activities'][$key]['subject'];
-					$data['activities'][$key]['user_image'] = '';
-					
-					$data['activities'][$key]['activity_detail'] = $action[0]['description'];
-					$data['activities'][$key]['time_ago'] = '1 day ago';
-					$data['activities'][$key]['source'] = 'web';
-					$data['activities'][$key]['star_point'] = 5;
+					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('app_install_id'=>$app['app_install_id'])));
 				}
 			}
+			
+			$this->load->model('user_model','users');
+			foreach($data['activities'] as &$activity){
+				$action = $this->audit_action->get_action($activity['app_id'],$activity['action_id']);
+				$user = $this->users->get_user_profile_by_user_id($activity['user_id']);
+				$activity['user_image'] = $user['user_image'];
+				
+				//$activity['activity_detail'] = $action[0]['description'];
+				//$activity['time_ago'] = '1 day ago';
+				//$activity['source'] = 'web';
+				//$activity['star_point'] = 5;
+			}
+			unset($activity);
+		
 			$this->load->view('tab/activities',$data);
 		}
 	}

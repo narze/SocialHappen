@@ -13,7 +13,7 @@ class Audit_example extends CI_Controller {
 	}
 	
 	function add(){
-		echo $this->audit_lib->add_audit(1,array('name'=>'test','id'=>1),1000,'object','qoq',array('campaign_id'=>1));
+		echo $this->audit_lib->add_audit(1,'subject',1001,'object','objecti',array('user_id' => 1, 'campaign_id'=>1));
 	}
 	
 	function list_audit(){

@@ -27,6 +27,7 @@ class User_campaigns_model extends CI_Model {
 	function get_user_campaigns_by_user_id($user_id =NULL, $limit = NULL, $offset = NULL){
 		$this->db->limit($limit, $offset);
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
+		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
 		return $this -> db -> get_where('user_campaigns', array('user.user_id' => $user_id)) -> result_array();
 	}
 	
@@ -50,6 +51,23 @@ class User_campaigns_model extends CI_Model {
 	function remove_user_campaign($user_id = NULL, $campaign_id = NULL){
 		$this->db->delete('user_campaigns', array('user_id' => $user_id, 'campaign_id' => $campaign_id));
 		return $this->db->affected_rows();
+	}
+	
+	/**
+	 * Count user campaigns
+	 * @param $user_id
+	 * @param $page_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function count_user_campaigns_by_user_id_and_page_id_and_campaign_status_id($user_id = NULL, $page_id = NULL, $campaign_status_id = NULL){
+		$this->db->where(array('user_id' => $user_id, 'page_id' => $page_id));
+		if(isset($campaign_status_id)){
+			$this->db->where('campaign.campaign_status_id',$campaign_status_id);
+		}
+		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
+		$this->db->join('installed_apps','campaign.app_install_id=installed_apps.app_install_id');
+		$this -> db -> count_all_results('user_campaigns');
 	}
 }
 

@@ -111,6 +111,13 @@ class Audit_model extends CI_Model {
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
+		
+		foreach($criteria as $key => $value){
+			if(preg_match('/(_id)$/i',$key)){
+				$criteria[$key] = (int) $value;
+			}
+		}
+		
 		$res = $this->audits->find($criteria)->sort(array('timestamp' => -1, '_id' => -1))->skip($offset)->limit($limit);
 		
 		$result = array();

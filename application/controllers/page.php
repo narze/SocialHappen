@@ -170,6 +170,32 @@ class Page extends CI_Controller {
 		echo json_encode($count);
 	}
 	
+	
+	/**
+	 * JSON : Count apps
+	 * @param $page_id
+	 * @param $user_id
+	 * @author Manassarn M.
+	 */
+	function json_count_user_apps($user_id = NULL, $page_id = NULL){
+		$this->load->model('user_apps_model','user_apps');
+		$count = $this->user_apps->count_user_apps_by_user_id_and_page_id($user_id, $page_id);
+		echo json_encode($count);
+	}
+	
+	/**
+	 * JSON : Count campaigns
+	 * @param $user_id
+	 * @param $page_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function json_count_user_campaigns($user_id = NULL, $page_id = NULL, $campaign_status_id = NULL){
+		$this->load->model('user_campaigns_model','user_campaigns');
+		$count = $this->user_campaigns->count_user_campaigns_by_user_id_and_page_id_and_campaign_status_id($user_id, $page_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+		
 	/**
 	 * JSON : Count users
 	 * @param $page_id
