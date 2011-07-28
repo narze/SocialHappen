@@ -108,14 +108,6 @@ class Home extends CI_Controller {
 	}
 	
 	/**
-	 * Logout and redirect to home page
-	 * @author Manassarn M.
-	 */
-	function logout(){
-		$this->socialhappen->logout('home');
-	}
-	
-	/**
 	 * Create company
 	 * @author Manassarn M.
 	 */
