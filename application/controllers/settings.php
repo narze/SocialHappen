@@ -4,13 +4,11 @@ class Settings extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this -> socialhappen -> check_logged_in('home');
-		
+		$this -> socialhappen -> check_logged_in();
 		$this->load->library('form_validation');
 	}
 	
 	function index(){
-		$this -> socialhappen -> check_logged_in('home');
 		$company_id = $this->input->get('c');
 		$setting_name = $this->input->get('s');
 		$param_id = $this->input->get('id');

@@ -1,8 +1,12 @@
 $(function(){
 	$('li a.company-page-setting,li a.user-company-setting,li a.account-setting,li a.company-page-list,li a.package-billing').live('click',function(){
-		set_loading();		
-		$('div#main').load($(this).attr('href'));
-		make_form($(this));
+		element = $(this);
+		set_loading();
+		check_login(null,function(){
+			$('div#main').load(element.attr('href'));
+		make_form(element);
+		});
+		
 		return false;
 	});
 	

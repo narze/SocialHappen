@@ -20,15 +20,25 @@ class SocialHappen{
 	 * @author Manassarn M. 
 	 */
 	function check_logged_in($redirect_url = NULL){
-		if(!$this->CI->session->userdata('logged_in') == TRUE){
-			redirect($redirect_url);
-		} else if (!$this->CI->facebook->get_facebook_cookie()){
-			redirect($redirect_url);
-		} else {
+		$this->login();
+		if($this->is_logged_in()){
 			return TRUE;
+		} else {
+			$protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') 
+                === FALSE ? 'http' : 'https';
+			$url = "{$protocol}://{$_SERVER['SERVER_NAME']}{$_SERVER['REQUEST_URI']}";
+			redirect($redirect_url."?next=".urlencode($url));
 		}
 	}
     
+	/**
+	 * Check if logged in (both facebook and SocialHappen)
+	 * @author Manassarn M. 
+	 */
+	function is_logged_in(){
+		return ($this->CI->session->userdata('logged_in') && $this->CI->facebook->get_facebook_cookie());
+	}
+	
 	/**
 	 * Get user from session
 	 * @return SocialHappen user if found, otherwise FALSE

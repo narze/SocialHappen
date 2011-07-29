@@ -8,7 +8,7 @@ class Campaign extends CI_Controller {
 	}
 
 	function index($campaign_id = NULL){
-		$this->socialhappen->check_logged_in('home');
+		$this->socialhappen->check_logged_in();
 		$this -> load -> model('campaign_model', 'campaigns');
 		$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
 		if($campaign) {

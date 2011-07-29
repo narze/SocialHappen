@@ -8,7 +8,7 @@ class Page extends CI_Controller {
 	}
 	
 	function index($page_id =NULL) {
-		$this -> socialhappen -> check_logged_in('home');
+		$this -> socialhappen -> check_logged_in();
 		$this -> load -> model('page_model', 'pages');
 		$page = $this -> pages -> get_page_profile_by_page_id($page_id);
 		if($page) {
@@ -366,7 +366,7 @@ class Page extends CI_Controller {
 	 * @author Prachya P.
 	 */
 	function addapp_lightbox($page_id){
-		$this -> socialhappen -> check_logged_in("home");
+		$this -> socialhappen -> check_logged_in();
 		if($page_id){			
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);

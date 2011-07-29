@@ -6,7 +6,7 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 	}
-	
+
 	/**
 	 * Home page
 	 * @author Manassarn M.
@@ -34,7 +34,8 @@ class Home extends CI_Controller {
 							'home' => $this->load->view('home/home',
 								array(
 									'facebook_app_id' => $this->config->item('facebook_app_id'),
-									'facebook_default_scope' => $this->config->item('facebook_default_scope')
+									'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+									'next' => $this->input->get('next')
 								),
 							TRUE),
 							'footer' => $this -> socialhappen -> get_footer()
@@ -104,7 +105,7 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function login(){
-		$this->socialhappen->login('home');
+		$this->socialhappen->login('');
 	}
 	
 	/**
@@ -112,7 +113,7 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function create_company(){
-		$this->socialhappen->check_logged_in('home');
+		$this->socialhappen->check_logged_in();
 		$this->load->view('home/create_company_view');
 	}
 
@@ -122,7 +123,7 @@ class Home extends CI_Controller {
 	 * @todo views for created/error
 	 */
 	function create_company_form(){
-		$this->socialhappen->check_logged_in('home');
+		$this->socialhappen->check_logged_in();
 		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');
 			
@@ -170,7 +171,7 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function splash(){
-		$this->socialhappen->check_logged_in('home');
+		$this->socialhappen->check_logged_in();
 		$this->load->view('home/splash_view');
 	}
 	
@@ -179,7 +180,7 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function select_company(){
-		$this -> socialhappen -> check_logged_in('home');
+		$this -> socialhappen -> check_logged_in();
 		$user = $this->socialhappen->get_user();
 		
 		$this->load->model('user_companies_model','user_companies');
@@ -256,6 +257,20 @@ class Home extends CI_Controller {
 				echo 'Error occured';
 			}
 		}
+	}
+	
+	/**
+	 * JSON : Check login
+	 * @param $redirect_url
+	 * @author Manassarn M.
+	 */
+	function json_check_login($redirect_path = NULL, $current_url = NULL){
+		//$this->socialhappen->ajax_check();
+		$json = array(
+			'logged_in' => $this->socialhappen->is_logged_in(),
+			'redirect' => base_url().issetor($redirect_path,'')
+		);
+		echo json_encode($json);
 	}
 }  
 

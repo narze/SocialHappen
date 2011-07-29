@@ -9,7 +9,7 @@
 			function fblogin() {
 				FB.login(function(response) {
 					if (response.session) {
-						window.location = '<? echo site_url('home').'/'; ?>';
+						window.location.replace('<? echo issetor($next,base_url()); ?>');
 					} else {
 						
 					}

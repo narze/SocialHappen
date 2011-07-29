@@ -44,3 +44,16 @@ if(!window.set_loading){
 	
 	}
 }
+
+if(!window.check_login){
+	function check_login(redirect_path,callback){
+		if(!redirect_path) redirect_path = '';
+		$.getJSON(base_url+'home/json_check_login/'+redirect_path,function(response){
+			if(!response.logged_in){
+				window.location.replace(response.redirect+'?next='+encodeURIComponent(window.location.href));
+			} else {
+				callback();
+			}
+		});
+	}
+}

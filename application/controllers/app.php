@@ -7,7 +7,7 @@ class App extends CI_Controller {
 	}
 
 	function index($app_install_id = NULL){
-		$this->socialhappen->check_logged_in('home');
+		$this->socialhappen->check_logged_in();
 		$this -> load -> model('installed_apps_model', 'installed_apps');
 		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if($app) {
