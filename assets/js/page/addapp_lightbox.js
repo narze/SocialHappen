@@ -126,7 +126,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 								alert("ERROR! cannot install app.");
 							},
 							success: function(json) {
-								if(json!=null&&json.status.toUpperCase()=="OK"){
+								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK"){
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
 									dragging_object.children('p:first').append('<span class="button">'
