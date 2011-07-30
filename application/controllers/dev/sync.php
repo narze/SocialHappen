@@ -456,7 +456,7 @@ class Sync extends CI_Controller {
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
 						'app_facebook_api_key' => '125970200830191' 	
-					)
+					),
 					array(
 					    'app_id' => 7, 
 					    'app_name' => 'MockApp2', 
@@ -472,7 +472,7 @@ class Sync extends CI_Controller {
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
 						'app_facebook_api_key' => '240827319274038' 	
-					)
+					),
 					array(
 					    'app_id' => 8, 
 					    'app_name' => 'MockApp3', 
@@ -488,7 +488,7 @@ class Sync extends CI_Controller {
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
 						'app_facebook_api_key' => '154511824626980' 	
-					)
+					),
 					array(
 					    'app_id' => 9, 
 					    'app_name' => 'MockApp4', 
@@ -504,7 +504,7 @@ class Sync extends CI_Controller {
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
 						'app_facebook_api_key' => '238405896194000' 	
-					)
+					),
 					array(
 					    'app_id' => 10, 
 					    'app_name' => 'MockApp5', 
