@@ -443,19 +443,83 @@ class Sync extends CI_Controller {
 					),
 					array(
 					    'app_id' => 6, 
-					    'app_name' => 'MockApp', 
-					    'app_type_id' => 1, 
+					    'app_name' => 'MockApp1', 
+					    'app_type_id' => 2, 
 					    'app_maintainance' => 0, 
 					    'app_show_in_list' => 1, 
 					    'app_description' => 'Mock Application', 
-					    'app_secret_key' => 'ab6548beccb40d5a82f5b7bae5e55521', 
-					    'app_url' => '', 
-					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp/port/install_to_page/?app_install_id={app_install_id}&page_id={page_id}&force=1', 
-					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_secret_key' => 'cd14463efa98e6ee00fde6ccd51a9f6d', 
+					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp1/', 
+					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp1/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp1/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp1/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => '20046401b3b5ae931f8d552f5aeae44f' 	
+						'app_facebook_api_key' => '125970200830191' 	
+					)
+					array(
+					    'app_id' => 7, 
+					    'app_name' => 'MockApp2', 
+					    'app_type_id' => 2, 
+					    'app_maintainance' => 0, 
+					    'app_show_in_list' => 1, 
+					    'app_description' => 'Mock Application', 
+					    'app_secret_key' => '94738d825664ccb7f03d046af4ef595b', 
+					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp2/', 
+					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp2/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp2/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp2/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_support_page_tab' => 1, 
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => '240827319274038' 	
+					)
+					array(
+					    'app_id' => 8, 
+					    'app_name' => 'MockApp3', 
+					    'app_type_id' => 2, 
+					    'app_maintainance' => 0, 
+					    'app_show_in_list' => 1, 
+					    'app_description' => 'Mock Application', 
+					    'app_secret_key' => 'de9364db919da2fbf3c4bcbb3ee7f391', 
+					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp3/', 
+					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp3/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp3/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp3/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_support_page_tab' => 1, 
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => '154511824626980' 	
+					)
+					array(
+					    'app_id' => 9, 
+					    'app_name' => 'MockApp4', 
+					    'app_type_id' => 2, 
+					    'app_maintainance' => 0, 
+					    'app_show_in_list' => 1, 
+					    'app_description' => 'Mock Application', 
+					    'app_secret_key' => '8af45604f103f8c1bdca140141c19d4e', 
+					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp4/', 
+					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp4/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp4/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp4/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_support_page_tab' => 1, 
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => '238405896194000' 	
+					)
+					array(
+					    'app_id' => 10, 
+					    'app_name' => 'MockApp5', 
+					    'app_type_id' => 2, 
+					    'app_maintainance' => 0, 
+					    'app_show_in_list' => 1, 
+					    'app_description' => 'Mock Application', 
+					    'app_secret_key' => '7b7d7cdd870d88cad5e3ec7743b00b1c', 
+					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp5/', 
+					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp5/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp5/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp5/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_support_page_tab' => 1, 
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => '189132747815592' 	
 					)
 				);
 		$this->db->insert_batch('app', $app);

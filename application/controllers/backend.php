@@ -217,6 +217,7 @@ class Backend extends CI_Controller {
 			$this->App->add_app(array('app_name' => $this->input->post('app_name', TRUE),
 								'app_url' => str_replace(';', '', $this->input->post('app_url', TRUE)),
 								'app_install_url' => str_replace(';', '', $this->input->post('app_install_url', TRUE)),
+								'app_install_page_url' => str_replace(';', '', $this->input->post('app_install_page_url', TRUE)),
 								'app_config_url' => str_replace(';', '', $this->input->post('app_config_url', TRUE)),
 								'app_support_page_tab' => $this->input->post('app_support_page_tab', FALSE) == 'app_support_page_tab',
 								'app_description' => $this->input->post('app_description', TRUE),
