@@ -347,6 +347,8 @@ class Audit_lib
 				$result[$i]['message'] = $this->
 						translate_format_string($result_action['format_string'],
 												$result[$i]);
+			}else{
+				$result[$i]['message'] = '[empty format audit]';
 			}
 		}
 		return $result;

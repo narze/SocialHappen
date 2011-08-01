@@ -574,6 +574,10 @@ class Backend extends CI_Controller {
 		$app_list = $this->App->get_installed_apps_by_company_id_not_in_page($company_id);
 		$data['app_list'] = $app_list;
 		
+		$this->load->library('audit_lib');
+		$activity = $this->audit_lib->list_audit(array('company_id'=>$company_id));
+		$data['activity_list'] = $activity;
+		
 		$this->load->view('backend_views/company_detail_view', $data);
 	}
 	
@@ -586,6 +590,10 @@ class Backend extends CI_Controller {
 		$this->load->model('Installed_apps_model', 'App');
 		$app_list = $this->App->get_installed_apps_by_page_id($page_id);
 		$data['app_list'] = $app_list;
+		
+		$this->load->library('audit_lib');
+		$activity = $this->audit_lib->list_audit(array('page_id'=>$page_id));
+		$data['activity_list'] = $activity;
 		
 		$this->load->view('backend_views/page_detail_view', $data);
 	}
@@ -605,6 +613,10 @@ class Backend extends CI_Controller {
 		$this->load->model('Campaign_model', 'Campaign');
 		$data['campaign_list'] = $this->Campaign->get_app_campaigns_by_app_install_id($app_install_id);
 		
+		$this->load->library('audit_lib');
+		$activity = $this->audit_lib->list_audit(array('app_install_id'=>$app_install_id));
+		$data['activity_list'] = $activity;
+		
 		$this->load->view('backend_views/app_install_view', $data);
 	}
 	
@@ -616,6 +628,11 @@ class Backend extends CI_Controller {
 		$this->load->model('User_campaigns_model', 'User');
 		$data['user_list'] = $this->User->get_campaign_users_by_campaign_id($campaign_id);
 		//$this->dump($data['user_list']);
+		
+		$this->load->library('audit_lib');
+		$activity = $this->audit_lib->list_audit(array('campaign_id'=>$campaign_id));
+		$data['activity_list'] = $activity;
+		
 		
 		$this->load->view('backend_views/campaign_detail_view', $data);
 	}
@@ -643,7 +660,12 @@ class Backend extends CI_Controller {
 			$al []= $app;
 		}
 		$data['app_list'] = $al;
-		$this->dump($data['app_list']);
+		//$this->dump($data['app_list']);
+		
+		$this->load->library('audit_lib');
+		$activity = $this->audit_lib->list_audit(array('user_id'=>$user_id));
+		$data['activity_list'] = $activity;
+		//$this->dump($data['activity_list']);
 		
 		$this->load->view('backend_views/user_detail_view', $data);
 	}

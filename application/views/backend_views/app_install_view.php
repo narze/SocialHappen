@@ -31,5 +31,14 @@
 	?>
 	
 </ul>
+
+<h1>Activities</h1>
+<ul>
+	<?php 
+		foreach($activity_list as $activity){
+			echo '<li>'.$activity['message'].'</li>';
+		}
+	?>
+</ul>
 </body>
 </html>

@@ -46,5 +46,17 @@
 		}
 	?>
 </ul>
+
+<h1>Activities</h1>
+<ul>
+	<?php 
+		foreach($activity_list as $activity){
+			//var_dump($app);
+			//echo '<li>'.anchor('backend/page/'.$page['page_id'], $page['page_name'], 'title="view page detail"').'</li>';
+			echo '<li>'.$activity['message'].'</li>';
+		}
+	?>
+</ul>
+
 </body>
 </html>
