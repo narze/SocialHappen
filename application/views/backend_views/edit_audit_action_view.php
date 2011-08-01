@@ -25,6 +25,7 @@ echo form_open('backend/edit_audit_action/'.$app_id.'/'.$action_id);
 						  'class'		=> (form_error('action_id')) ? 'error' : '',
 						  'readonly'	=>	TRUE
 				))?>
+				* cannot edit
 				<?php echo form_error('action_id'); ?>
 			</li>
 			<li>
@@ -55,6 +56,8 @@ echo form_open('backend/edit_audit_action/'.$app_id.'/'.$action_id);
 						  'size'        => '200',
 						  'class'		=> (form_error('format_string')) ? 'error' : '',
 				))?>
+				<p>use varible in format <i>{<b>type</b>:<b>variable</b>}</i> which <i><b>type</b></i> can be one of [app, app_install, user, campaign, pag, company, number, string]</p>
+				<p><i><b>variable</b></i> can be one of [app_id, user_id, app_install_id, campaign_id, page_id, company_id, timestamp, subject, action_id, object, objecti] note that the variable can be rendered only if it was inserted in such that audit.</p>
 				<?php echo form_error('format_string'); ?>
 			</li>
 			<li>
