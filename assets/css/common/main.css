@@ -1,3 +1,62 @@
 .hidden-template {
 	display: none;
 }
+
+/* Member list */
+div[class^="detail-list"] p.thumb {
+	width:50px!important;
+}
+div[class^="detail-list"] p.thumb img {
+	width:50px;
+	height:50px;
+	overflow:hidden;
+}
+
+.clear {clear:both;}
+
+/* Select Company Box*/
+.company-wrapper {
+	padding:0 20px;
+	margin:20px 0;
+}
+hr.dot01 {
+	border:none;
+	margin:10px auto;
+	border-bottom: 1px dotted #e4e4e4; 
+	width: 100%;
+}
+ul.company {
+	
+}
+ul.company li {
+	display:block;
+	border-bottom: 1px solid #e4e4e4; 
+}
+ul.company li:last-child {
+	border-bottom: none; 
+}
+ul.company li a {
+	margin-top:10px;
+	margin-bottom:10px;
+	text-decoration:none;
+	display:block;
+}
+ul.company li a span {
+	display:block;
+	float:left;
+}
+ul.company li p.company-name { 
+	font-weight:bold;
+	color:#617328;
+	padding-left:5px;
+}
+ul.company li p.company-info { 
+	color:#999;
+	font-size:90%;
+	padding-left:5px;
+}
+img.thumb {
+	width:50px;
+	height:50px;
+	border: 1px solid #e4e4e4;
+}

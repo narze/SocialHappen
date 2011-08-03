@@ -9,7 +9,7 @@
           <p class="member-check"><input type="checkbox" /></p>
           <p class="bt-member"><a class="bt-remove" href="#"><span>remove</span></a><a class="bt-block" href="#"><span>block</span></a></p>
         </div>
-        <div class="filter-member">
+        <!-- <div class="filter-member">
           <ul>
             <li class="title">order by :</li>
             <li class="active"><a href="#">Star point</a></li>
@@ -19,6 +19,7 @@
             <li><a href="#">Recent Activity</a></li>
           </ul>
         </div>
+		-->
         <div class="details">
           <table cellpadding="0" cellspacing="0">
             <tr class="hidden-template">
@@ -28,17 +29,19 @@
                   <p class="thumb"><a href="#"><img src="" /></a></p>
                   <h2></h2>
                    <p><a class="view-fb" href="#">View facebook profile</a></p>
-                  <ul class="member-label">
+                  <!--<ul class="member-label">
                     <li><a class="label-1" href="#"><span></span></a></li>
                     <li><a class="label-2" href="#"><span></span></a></li>
                   </ul>
+				  -->
 				</div>
+				<br class="clear" />
               </td>
              <td class="status">Last active<b></b></td>
               <td class="status">Join since<b></b></td>
-              <td class="status1"><img src="<?php echo base_url()."assets/images/bg/bg_member-star.png";?>" /><span> Star point</span><b></b></td>
-              <td class="status1"><img src="<?php echo base_url()."assets/images/bg/bg_member-star.png";?>" /><span> Happy point</span><b></b></td>
-              <td class="status1">Friends<b></b></td>
+              <td class="status1"><img src="<?php echo base_url()."assets/images/bg/bg_member-star.png";?>" /><span> Star point</span><b>0</b></td>
+              <td class="status1"><img src="<?php echo base_url()."assets/images/bg/bg_member-star.png";?>" /><span> Happy point</span><b>0</b></td>
+              <td class="status1">Friends<b>0</b></td>
               <td class="bt-icon"><a class="bt-go" href="#"><span>go</span></a></td>
             </tr>
           </table>
