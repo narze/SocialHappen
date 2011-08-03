@@ -93,6 +93,7 @@ class Tab extends CI_Controller {
 					),
 					'style' => array(
 						'common/facebook',
+						'common/facebook-main',
 						'common/jquery.countdown',
 						'common/fancybox/jquery.fancybox-1.3.4'
 					)

@@ -1,0 +1,21 @@
+
+/*
+###########################################
+
+Social Happen Facebook
+
+author: Oat (okaynaja)
+
+###########################################
+*/
+div.list_app-camp>ul>li>div:first-child p.pic img {
+	width:80px;
+	height:80px;
+}
+
+div.tab-head>div>ul>li a {
+	cursor:pointer;
+}
+div.header ul.menu>li.profile>ul>li a {
+	cursor:pointer;
+}
