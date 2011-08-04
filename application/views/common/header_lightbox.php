@@ -14,14 +14,12 @@
 	foreach($vars as $name => $value) :
 		echo "var {$name} = '{$value}';\n";
 	endforeach; 
+endif; ?>
 	var base_url = "<?php echo base_url(); ?>";
 	var image_url = base_url + "/assets/images/";
-	var user_companies = <?php echo json_encode(issetor($user_companies)); ?>;
-endif; ?>
-	//var assets_url = "<?php echo base_url().'assets/';?>";
+	var user_companies = <?php echo json_encode(issetor($user_companies)); ?>; //not safe
 </script>
-<?php echo '<script type="text/javascript" src="'.base_url().'assets/js/functions.js"></script>'; 
-if(isset($script)) :
+<?php if(isset($script)) :
 	foreach($script as $one) :
 		if ($one) echo '<script type="text/javascript" src="'.base_url().'assets/js/'.$one.'.js"></script>'."\n";
 	endforeach; 
@@ -33,7 +31,7 @@ if(isset($style)) :
 			echo '<link class="'.$class.'" id="'.$id.'" rel="stylesheet" type="text/css"  href="'.base_url().'assets/css/'.$one.'.css" />'."\n";
 		}
 	endforeach; 
-endif; 
-?>
+endif; ?>
+<link rel="stylesheet" type="text/css"  href="<?php echo base_url()."assets/css/common/smoothness/jquery-ui-1.8.9.custom.css";?>" />
 </head>
 <body>

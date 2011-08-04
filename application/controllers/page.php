@@ -381,6 +381,7 @@ class Page extends CI_Controller {
 							'page_name'=>$page['page_name'],
 							'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
+							'common/functions',
 							'page/addapp_lightbox',
 							//for fancybox
 							'common/fancybox/jquery.mousewheel-3.0.4.pack',

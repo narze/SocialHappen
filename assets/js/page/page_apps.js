@@ -4,9 +4,7 @@ $(function(){
 		$.getJSON(base_url+'page/json_get_installed_apps/'+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){
 			$('.wrapper-details.apps .details table tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
-				$('.wrapper-details.apps .details').html(
-					'<p>No app yet</p> <p><a href="#">+ add new app</a> | <a href="#">help</a></p>'
-				);
+				
 			} else {
 				for(i in json){
 					var row = $('.wrapper-details.apps .details table tr.hidden-template').clone()
@@ -36,30 +34,39 @@ $(function(){
 	
 	$('.tab-content ul li.apps a').click(function(){
 		$.getJSON(base_url+"page/json_count_apps/"+page_id,function(count){
-			$('.pagination-apps').pagination(count, {
-				items_per_page:per_page,
-				callback:get_page_apps,
-				load_first_page:true,
-				next_text:null,
-				prev_text:null
-			});
+			if(count==0){
+				$('.wrapper-details.apps .details').html(
+					'<p>No app yet</p> <p><a class="a-addapp">+ add new app</a> | <a href="#">help</a></p>'
+				);
+			}
+			else {
+				$('.pagination-apps').pagination(count, {
+					items_per_page:per_page,
+					callback:get_page_apps,
+					load_first_page:true,
+					next_text:null,
+					prev_text:null
+				});
+			}
 		});
 		return false;
 	});
 	
 	//fancybox for adding app to page
-	$('a.bt-addnew_app').attr('href',base_url+'/page/addapp_lightbox/'+page_id);
-	$('a.bt-addnew_app').fancybox({
-		type:'iframe',
-		transitionIn: 'elastic',
-		transitionOut: 'elastic',
-		padding: 0,
-		width: 908,
-		height: 355,
-    	autoDimensions: false,
-    	scrolling: 'no',
-    	onStart: function() {
-			$("<style type='text/css'> #fancybox-wrap{ top:550px !important;} </style>").appendTo("head");
-	   	}
+	$('a.bt-addnew_app,a.a-addapp').live('click',function(){
+		$.fancybox({
+			href:base_url+'page/addapp_lightbox/'+page_id,
+			type:'iframe',
+			transitionIn: 'elastic',
+			transitionOut: 'elastic',
+			padding: 0,
+			width: 908,
+			height: 355,
+			autoDimensions: false,
+			scrolling: 'no',
+			onStart: function() {
+				$("<style type='text/css'> #fancybox-wrap{ top:550px !important;} </style>").appendTo("head");
+			}
+		});
 	});
 });
