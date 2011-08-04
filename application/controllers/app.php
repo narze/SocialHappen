@@ -99,6 +99,27 @@ class App extends CI_Controller {
 	}
 	
 	/**
+	 * Go to app config page
+	 * @param $app_install_id
+	 */
+	function config($app_install_id = NULL){
+		if($this->socialhappen->check_admin(array('app_install_id'=>$app_install_id))){
+			$this->load->model('installed_apps_model','installed_apps');
+			$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+			if($app && isset($app['app_config_url'])){
+				$this->load->library('app_url');
+				$this->load->model('user_model','users');
+				$config_url = $this->app_url->translate_config_url(
+											$app['app_config_url'], 
+											$app['app_install_id'], 
+											$this->users->get_user_facebook_id_by_user_id($this->socialhappen->get_user_id()), 
+											$app['app_install_secret_key']);
+				redirect($config_url);
+			}
+		}
+	}
+	
+	/**
 	 * JSON : Count campaigns
 	 * @param $app_install_id
 	 * @param $campaign_status_id

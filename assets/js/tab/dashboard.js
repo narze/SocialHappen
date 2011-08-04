@@ -15,19 +15,33 @@ $(function(){
 			
 			if(is_guest){
 				$.fancybox({
-					href: base_url+'tab/signup'
+					href: base_url+'tab/guest'
 				});
-				$('form.signup-form').live('submit', function() {
-					$(this).ajaxSubmit({target:'#signup-form'});
-					return false;
+				$('a.a-close').live('click',function(){
+					$.fancybox.close();
+				});
+				$('a.a-signup').live('click',function(){
+					$.fancybox({
+						href: base_url+'tab/signup'
+					});
+					$('form.signup-form').live('submit', function() {
+						$(this).ajaxSubmit({target:'#signup-form'});
+						return false;
+					});
 				});
 			} else if(page_app_installed_id!=0) {
 				$.fancybox({
-					content: 'app installed id: ' + page_app_installed_id
+					href: base_url+'tab/app_installed/'+ page_app_installed_id
 				});
-			} else if(!page_installed){
+				$('a.a-close').live('click',function(){
+					$.fancybox.close();
+				});
+			} else if(page_installed==0){
 				$.fancybox({
-					content: 'page installed'
+					href: base_url+'tab/page_installed/'+ page_id
+				});
+				$('a.a-close').live('click',function(){
+					$.fancybox.close();
 				});
 			}
 			

@@ -33,13 +33,14 @@ class User_model extends CI_Model {
 	}
 
 	/**
-	 * Get user id by user_facebook_id
+	 * DEPRECATED
+	 * Get user id by user_facebook_id 
 	 * @param $user_facebook_id
 	 * @author Wachiraph C.
 	 */
 	function get_user_id($user_facebook_id =NULL) {
 		$result = $this -> db ->select('user_id') -> get_where('user', array('user_facebook_id' => $user_facebook_id))-> result_array();
-		return $result[0];
+		return issetor($result[0]);
 	}
 	
 	/**
@@ -50,6 +51,16 @@ class User_model extends CI_Model {
 	function get_user_id_by_user_facebook_id($user_facebook_id =NULL){
 		$user = $this -> db -> select('user_id') -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result_array();
 		return issetor($user[0]['user_id']);
+	}
+
+	/**
+	 * Get user facebook id
+	 * @param $user_id
+	 * @author Manassarn M.
+	 */
+	function get_user_facebook_id_by_user_id($user_id =NULL){
+		$user = $this -> db -> select('user_facebook_id') -> get_where('user', array('user_id' => $user_id)) -> result_array();
+		return issetor($user[0]['user_facebook_id']);
 	}
 
 	/**

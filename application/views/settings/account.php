@@ -50,7 +50,7 @@
 	
 <?php echo form_close(); ?>
 </div>
-
+<!--
 <div id="sharing-information">
 <?php if(isset($success)) echo 'Updated'; ?>
 <h2><span>Sharing Information</span></h2>
@@ -113,3 +113,4 @@
 		</div>
 	  </div>
 </div>
+-->

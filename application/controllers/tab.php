@@ -450,6 +450,10 @@ class Tab extends CI_Controller {
 		}
 	}
 	
+	function guest(){
+		$this->load->view('tab/guest');
+	}
+	
 	function signup(){
 		$this->load->library('form_validation');
 		$facebook_user = $this->facebook->getUser();
@@ -498,6 +502,16 @@ class Tab extends CI_Controller {
 				echo 'Error occured';
 			}
 		}
+	}
+	
+	function page_installed($page_id = NULL){
+		$data = array('page_id' => $page_id);
+		$this->load->view('tab/page_installed', $data);
+	}
+	
+	function app_installed($app_install_id = NULL){
+		$data = array('app_install_id' => $app_install_id);
+		$this->load->view('tab/app_installed', $data);
 	}
 }
 /* End of file tab.php */
