@@ -16,31 +16,7 @@ class Tab extends CI_Controller {
 		$this->page = $this->signedRequest['page'];
 	}
 	
-	function test(){
-	
-	$data = array();
-	$data['activities'] = array();
-	$this->load->library('audit_lib');
-	$this->load->model('audit_action_model','audit_action');
-			$this->load->model('campaign_model','campaigns');
-			$this->load->model('installed_apps_model','installed_apps');
-	$page_id = 1;
-		$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
-				foreach($campaigns as $campaign){
-				
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('campaign_id'=>$campaign['campaign_id'])));
-				}
-				
-				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
-				foreach($apps as $app){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('app_install_id'=>$app['app_install_id'])));
-				}
-		echo "<pre>";
-		var_dump($data);
-		echo "</pre>";
-	}
-	
-	function index(){
+	function index($page_id = NULL){
 		$user_facebook_id = $this->FB->getUser();
 		
 		$this->load->model('User_model','User');
@@ -48,10 +24,10 @@ class Tab extends CI_Controller {
 		$token = $this->signedRequest['oauth_token'];
 		
 		$this->load->model('Page_model','Page');
-		$page_id = $this->Page->get_page_id_by_facebook_page_id($this->page['id']);
-
-		$page_installed = $this->input->get('page');
-		$app_installed = $this->input->get('app');
+		if(!$page_id){
+			if(!$this->Page->get_page_id_by_facebook_page_id($this->page['id'])) exit(); //HARDCODE prevent redirect loop
+			redirect("tab/".$this->Page->get_page_id_by_facebook_page_id($this->page['id']));
+		}
 		
 		$this->load->model('user_model','users');
 		$user = $this->users->get_user_profile_by_user_id($user_id);
@@ -65,7 +41,14 @@ class Tab extends CI_Controller {
 		$this->config->load('pagination', TRUE);
 		$per_page = $this->config->item('per_page','pagination');
 
-		//page activities
+		$page_update = array();
+		if(!$page['page_installed']){
+			$page_update['page_installed'] = TRUE;
+		}
+		if($page['page_app_installed_id'] != 0){
+			$page_update['page_app_installed_id'] = 0;
+		}		
+		$this->pages->update_page_profile_by_page_id($page_id, $page_update);
 		
 		$data = array(
 			'header' => $this->load->view('tab/header', 
@@ -73,11 +56,11 @@ class Tab extends CI_Controller {
 					'vars' => array(
 									'page_id' => $page_id,
 									'user_id' => $user_id,
-									'page_installed' => $page_installed,
-									'app_installed' => $app_installed,
 									'is_guest' => $user ? FALSE : TRUE,
 									'token' => base64_encode($token),
-									'per_page' => $per_page
+									'per_page' => $per_page,
+									'page_app_installed_id' => $page['page_app_installed_id'],
+									'page_installed' => $page['page_installed']
 					),
 					'script' => array(
 						'common/functions',
@@ -463,6 +446,56 @@ class Tab extends CI_Controller {
 						echo 'error occured';
 					}
 				}
+			}
+		}
+	}
+	
+	function signup(){
+		$this->load->library('form_validation');
+		$facebook_user = $this->facebook->getUser();
+		//$this->load->model('user_model','users');
+		
+		
+		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
+		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
+		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
+		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
+			
+		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+	
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this -> load -> view('tab/signup', 
+					array(
+						'user_profile_picture'=>$user_facebook_image
+					)
+			);
+		}
+		else
+		{
+			if (!$user_image = $this->socialhappen->upload_image('user_image')){
+				$user_image = $user_facebook_image;
+			}
+			$user = array(
+					       	'user_first_name' => set_value('first_name'),
+					       	'user_last_name' => set_value('last_name'),
+					       	'user_email' => set_value('email'),
+					       	'user_image' => $user_image,
+					       	'user_facebook_id' => $facebook_user['id']
+						);
+					
+			$user_add_result = json_decode($this->curl->simple_post(base_url().'user/json_add', $user), TRUE);
+			//$user_add_result = array('status'=>'OK');
+			
+			if ($user_add_result['status'] == 'OK')
+			{
+				$this->socialhappen->login();
+				echo 'Registered';
+				$this->load->view('common/redirect',array('refresh_parent' => TRUE));
+			}
+			else
+			{
+				echo 'Error occured';
 			}
 		}
 	}

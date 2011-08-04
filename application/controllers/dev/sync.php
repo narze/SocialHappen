@@ -212,6 +212,8 @@ class Sync extends CI_Controller {
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
 								'page_status' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
+								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
+								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),

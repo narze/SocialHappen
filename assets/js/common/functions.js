@@ -22,26 +22,49 @@ if(!window.set_loading){
 		if(!message) {
 			message = "Loading";
 		}
-		$.fancybox.init(); //force init
+		//$.fancybox.init(); //force init
 		
+		var height = $(window).height();
+		var width = $(document).width();
+
 		if(!$('div.loading-popup').length){ //Add loading div once
-			$('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').hide().appendTo('body');
+			popup = $('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>');
+			$(popup).css('position', 'fixed')
+				.css('display', 'block')
+				.css('font-weight', 'bold')
+				.css('width', '200px')
+				.css('height', '100px')
+				.css('left', width/2 - (popup.width() / 2))
+				.css('top', height/2 - (popup.height() / 2))
+				.css('margin', 'auto')
+				.css('zIndex', '100')
+				.css('backgroundColor', 'white')
+				.css('border', 'solid 1px')
+				.css('text-align', 'center')
+
+          
+			.hide().prependTo('body');
 		}
 		
+		// $('div.loading-popup').ajaxStart(function() {
+			// if(!$('#fancybox-content').html().length){ //if fancybox is hidden : show it and hide when ajax is loaded
+				// $.fancybox({
+					// content: $(this).show()
+				// });
+				// $(this).ajaxStop(function() {
+					// setTimeout(function() {
+						// $.fancybox.close();
+						// $('div.loading-popup').remove();
+					// }, 500);
+				// });
+			// }
+		// });
+		
 		$('div.loading-popup').ajaxStart(function() {
-			if(!$('#fancybox-content').html().length){ //if fancybox is hidden : show it and hide when ajax is loaded
-				$.fancybox({
-					content: $(this).show()
-				});
-				$(this).ajaxStop(function() {
-					setTimeout(function() {
-						$.fancybox.close();
-						$('div.loading-popup').remove();
-					}, 500);
-				});
-			}
+			$(this).fadeIn('slow');
+		}).ajaxStop(function() {
+			$(this).fadeOut('slow');
 		});
-	
 	}
 }
 

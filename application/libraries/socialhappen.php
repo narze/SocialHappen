@@ -180,9 +180,9 @@ class SocialHappen{
 	function upload_image($name = NULL){
 		$config['upload_path'] = './uploads/images/';
 		$config['allowed_types'] = 'gif|jpg|png';
-		$config['max_size']	= '1024';
-		$config['max_width']  = '1024';
-		$config['max_height']  = '768';
+		$config['max_size']	= '2048';
+		$config['max_width']  = '2048';
+		$config['max_height']  = '2048';
 		$config['encrypt_name'] = TRUE;
 
 		$this->CI->load->library('upload', $config);

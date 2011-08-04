@@ -15,15 +15,19 @@ $(function(){
 			
 			if(is_guest){
 				$.fancybox({
-					content: 'you are guest'
+					href: base_url+'tab/signup'
 				});
-			} else if(page_installed) {
+				$('form.signup-form').live('submit', function() {
+					$(this).ajaxSubmit({target:'#signup-form'});
+					return false;
+				});
+			} else if(page_app_installed_id!=0) {
+				$.fancybox({
+					content: 'app installed id: ' + page_app_installed_id
+				});
+			} else if(!page_installed){
 				$.fancybox({
 					content: 'page installed'
-				});
-			} else if(app_installed){
-				$.fancybox({
-					content: 'app installed'
 				});
 			}
 			

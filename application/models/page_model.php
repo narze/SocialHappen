@@ -65,7 +65,7 @@ class Page_model extends CI_Model {
 	 */
 	function get_page_id_by_facebook_page_id($facebook_page_id =NULL) {
 		if(!$facebook_page_id)
-			return array();
+			return NULL;
 		$result = $this -> db ->select('page_id') -> get_where('page', array('facebook_page_id' => $facebook_page_id))-> result_array();
 		return issetor($result[0]['page_id']);
 	}
@@ -124,6 +124,9 @@ class Page_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function update_page_profile_by_page_id($page_id = NULL, $data = array()){
+		if(!$data){
+			return FALSE;
+		}
 		return $this->db->update('page', $data, array('page_id' => $page_id));
 	}
 	
