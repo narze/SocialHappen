@@ -4,6 +4,7 @@
       <div class="data">
         <h1><?php echo $page['page_name'];?></h1>
         <p><?php echo $page['page_detail'];?></p>
+		<!--
         <ul>
           <li class="fav"><a href="#">Add Favorite</a></li>
           <li class="member"><a href="#"><?php echo issetor($page_user_count,'-');?></a></li>
@@ -11,6 +12,7 @@
           <li class="point"><a href="#"><?php echo issetor($page_point_count,'-');?></a></li>
           <li class="setting"><a href="#"><span>setting</span></a></li>
         </ul>
+		-->
       </div>
     </div>
 
@@ -29,13 +31,13 @@
 						  <strong>Picture profile :</strong>
 						<?php echo form_error('user_image'); ?>
 						  <div class="pic-profile">
-							<p class="pic"><img src="<?php echo imgsize($user['user_image'],'square');?>" /></p>
-							<p><a class="bt-change_pic" href="#"><input id="user_image" type="file" name="user_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
-							<p>
-								<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" /> 
-								<label for="use_facebook_picture">use your facebook avatar</label>
-							</p> 
-						  </div>
+                    <p class="pic"><img src="<?php echo imgsize($user['user_image'],'square');?>" /></p>
+                    <p><a class="bt-change_pic" href="#"><input id="user_image" type="file" name="user_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
+					<p>
+						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?>> 
+						<label for="use_facebook_picture">use your facebook avatar</label>
+					</p> 
+                  </div>
 						</li>
 						<li><strong>First name :</strong><?php echo form_error('first_name'); ?><input id="first_name" type="text" name="first_name" maxlength="255" value="<?php echo set_value('first_name',$user['user_first_name']); ?>"  /></li>
 						<li><strong>Last name :</strong><?php echo form_error('last_name'); ?><input id="last_name" type="text" name="last_name" maxlength="255" value="<?php echo set_value('last_name',$user['user_last_name']); ?>"  /></li>
@@ -57,6 +59,7 @@
 		<?php echo form_close(); ?>
 		</div>
 
+		<!--
 		<div id="sharing-information">
 		<?php if(isset($success)) echo 'Updated'; ?>
 		<h2><span>Sharing Information</span></h2>
@@ -117,6 +120,6 @@
 			  <p>and if user have a problem he can contact our support or see FAQs</p>
 			  <p><a class="bt-close_account" href="#"><span>Close account</span></a></p>
 			</div>
-		  </div>
+		  </div>-->
 	</div>
 </div>

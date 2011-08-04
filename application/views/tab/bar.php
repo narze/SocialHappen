@@ -38,7 +38,7 @@
 			  <li><a href="<?php echo base_url()."tab/dashboard/{$page_id}?viewas=user";?>">&raquo; <b>View as Member</b></a></li>
 			  <li><a href="<?php echo base_url()."tab/dashboard/{$page_id}?viewas=guest";?>">&raquo; <b>View as Guest</b></a></li>
 		  <?php endif; ?>
-          <li><a href="<?php echo base_url()."tab/account/{$page['page_id']}/{$user_id}";?>">&raquo; <b>Account Setting</b></a></li>
+          <li><a class="a-account">&raquo; <b>Account Setting</b></a></li>
         </ul>
       </li>
     </ul>
