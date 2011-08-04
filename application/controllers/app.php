@@ -45,6 +45,7 @@ class App extends CI_Controller {
 							'common/jquery.form',
 							'common/bar',
 							'common/jquery.pagination',
+							'common/jquery.countdown.min',
 							//'app/app_stat',
 							'app/app_users',
 							'app/app_campaigns',
@@ -55,7 +56,8 @@ class App extends CI_Controller {
 						'style' => array(
 							'common/main',
 							'common/platform',
-							'common/fancybox/jquery.fancybox-1.3.4'
+							'common/fancybox/jquery.fancybox-1.3.4',
+							'common/jquery.countdown'
 						)
 					)
 				),
