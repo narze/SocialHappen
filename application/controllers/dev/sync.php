@@ -832,6 +832,16 @@ class Sync extends CI_Controller {
 					    'user_facebook_id' => 508840994, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24'
+					),
+					array(
+					    'user_id' => 6, 
+					    'user_first_name' => 'test',
+					    'user_last_name' => 'test',
+					    'user_email' => 'tes@test.com',
+					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_facebook_id' => 688700832, 
+					    'user_register_date' => '2011-05-09 17:36:14',
+					    'user_last_seen' => '2011-05-18 12:57:24'
 					)
 				);
 		$this->db->insert_batch('user', $user);
@@ -872,6 +882,10 @@ class Sync extends CI_Controller {
 								array(
 								    'user_id' => 5,
 								    'campaign_id' => 2
+								),
+								array(
+								    'user_id' => 6,
+								    'campaign_id' => 1
 								)
 							);
 		$this->db->insert_batch('user_campaigns', $user_campaigns);
@@ -901,6 +915,11 @@ class Sync extends CI_Controller {
 								    'user_id' => 5,
 								    'company_id' => 1,
 								    'user_role' => 3
+								),
+								array(
+								    'user_id' => 6,
+								    'company_id' => 1,
+								    'user_role' => 1
 								)
 							);
 		$this->db->insert_batch('user_companies', $user_companies);
@@ -980,6 +999,11 @@ class Sync extends CI_Controller {
 								),
 								array(
 								    'user_id' => 5,
+								    'page_id' => 1,
+								    'user_role' => 3
+								),
+								array(
+								    'user_id' => 6,
 								    'page_id' => 1,
 								    'user_role' => 3
 								)
