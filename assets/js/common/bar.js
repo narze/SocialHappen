@@ -26,6 +26,7 @@ $(function(){
 		
 		$('#create-company-form').load(base_url+'home/create_company_form');
 
+		$('form.create-company-form').die('submit');
 		$('form.create-company-form').live('submit',function(){
 			$(this).ajaxSubmit({target:'#create-company-form'});
 			return false;

@@ -17,13 +17,16 @@ $(function(){
 				$.fancybox({
 					href: base_url+'tab/guest'
 				});
+				$('a.a-close').die('click');
 				$('a.a-close').live('click',function(){
 					$.fancybox.close();
 				});
+				$('a.a-signup').die('click');
 				$('a.a-signup').live('click',function(){
 					$.fancybox({
 						href: base_url+'tab/signup'
 					});
+					$('form.signup-form').die('submit');
 					$('form.signup-form').live('submit', function() {
 						$(this).ajaxSubmit({target:'#signup-form'});
 						return false;
@@ -33,6 +36,7 @@ $(function(){
 				$.fancybox({
 					href: base_url+'tab/app_installed/'+ page_app_installed_id
 				});
+				$('a.a-close').die('click');
 				$('a.a-close').live('click',function(){
 					$.fancybox.close();
 				});
@@ -40,6 +44,7 @@ $(function(){
 				$.fancybox({
 					href: base_url+'tab/page_installed/'+ page_id
 				});
+				$('a.a-close').die('click');
 				$('a.a-close').live('click',function(){
 					$.fancybox.close();
 				});

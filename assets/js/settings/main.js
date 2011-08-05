@@ -4,7 +4,7 @@ $(function(){
 		set_loading();
 		check_login(null,function(){
 			$('div#main').load(element.attr('href'));
-		make_form(element);
+			make_form(element);
 		});
 		
 		return false;
@@ -12,6 +12,7 @@ $(function(){
 	
 	
 	function make_form(element){
+		$('form').die('submit');
 		$('form').live('submit', function() {
 			var targetSelector = 'div#main #'+$(this).attr('class');
 			var srcSelector = '#'+$(this).attr('class');
