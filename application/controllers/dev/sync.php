@@ -542,6 +542,22 @@ class Sync extends CI_Controller {
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
 						'app_facebook_api_key' => '189132747815592' 	
+					),
+					array(
+					    'app_id' => 11, 
+					    'app_name' => '[beta]FGF', 
+					    'app_type_id' => 2, 
+					    'app_maintainance' => 0, 
+					    'app_show_in_list' => 1, 
+					    'app_description' => 'Friend get fans', 
+					    'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4', 
+					    'app_url' => 'http://apps.figabyte.com/freferral/sohapfgf', 
+					    'app_install_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_install_page_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_config_url' => 'http://apps.figabyte.com/freferral/sohapfgf/config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_support_page_tab' => 1, 
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => '125138914244914' 	
 					)
 				);
 		$this->db->insert_batch('app', $app);
