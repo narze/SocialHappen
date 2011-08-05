@@ -6,7 +6,7 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 	}
-
+function test(){if ($this->socialhappen->check_admin(array('campaign_id'=>1),array('role_campaign_edit'))) echo 'pass';}
 	/**
 	 * Home page
 	 * @author Manassarn M.
