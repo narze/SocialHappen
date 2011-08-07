@@ -760,6 +760,11 @@ class Sync extends CI_Controller {
 							    'company_id' => 1, 
 							    'app_id' => 10, 
 							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 11, 
+							    'available_date' => '2011-05-19 16:01:20'
 							)
 						);
 		$this->db->insert_batch('company_apps', $company_apps);
