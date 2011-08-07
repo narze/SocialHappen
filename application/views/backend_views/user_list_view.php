@@ -9,6 +9,8 @@
 <h1>Users</h1>
 <?=anchor('backend/dashboard', 'Back to dashboard', 'title="go back to dashboard"');?>
 <h1>Users List</h1>
+<p>total users: <?php echo $total_user; ?></p>
+<p><?php echo $pagination; ?></p>
 <ul>
 	<?php 
 		foreach($user_list as $user){
@@ -20,5 +22,6 @@
 	?>
 	
 </ul>
+<p><?php echo $pagination; ?></p>
 </body>
 </html>

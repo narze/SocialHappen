@@ -50,10 +50,22 @@ class Installed_apps_model extends CI_Model {
 	 * @return array
 	 * @author Prachya P.
 	 */
-	function get_installed_apps_by_company_id_not_in_page($company_id = NULL){
+	function get_installed_apps_by_company_id_not_in_page($company_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		$this->db->order_by("order_in_dashboard");
 		return $this->db->get_where('installed_apps',array('company_id'=>$company_id,'page_id'=>0))->result_array();
+	}
+	
+	/*
+	 * Count installed apps (not in page)
+	 * @param $company_id
+	 * @return array
+	 * @author Prachya P.
+	 */
+	function count_installed_apps_by_company_id_not_in_page($company_id = NULL){
+		$this->db->join('app','installed_apps.app_id=app.app_id');
+		return $this->db->where(array('company_id'=>$company_id,'page_id'=>0))->count_all_results('installed_apps');
 	}
 	
 	/**

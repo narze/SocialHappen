@@ -159,6 +159,14 @@ class User_model extends CI_Model {
 	
 	/**
 	 * Count users
+	 * @author Manassarn M.
+	 */
+	function count_users(){
+		return $this->db->count_all_results('user');
+	}
+	
+	/**
+	 * Count users
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */

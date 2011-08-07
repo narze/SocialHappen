@@ -37,6 +37,19 @@ class User_apps_model extends CI_Model {
 	}
 	
 	/**
+	 * Count user apps
+	 * @param $user_id
+	 * @return int
+	 * @author Manassarn M.
+	 */
+	function count_user_apps_by_user_id($user_id = NULL){
+		$this->db->join('user','user.user_id=user_apps.user_id');
+		$this->db->join('installed_apps','user_apps.app_install_id=installed_apps.app_install_id');
+		$this->db->join('app','installed_apps.app_id=app.app_id');
+		return $this->db->where(array('user.user_id'=>$user_id))->count_all_results('user_apps');
+	}
+	
+	/**
 	 * Adds user_app
 	 * @param array $data
 	 * @return TRUE if inserted successfully
