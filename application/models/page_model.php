@@ -71,6 +71,19 @@ class Page_model extends CI_Model {
 	}
 	
 	/**
+	 * Get facebook_page_id by page id
+	 * @param $page_id
+	 * @author Wachiraph C.
+	 * @author Manassarn M.
+	 */
+	function get_facebook_page_idby_page_id_($page_id =NULL) {
+		if(!$page_id)
+			return NULL;
+		$result = $this -> db ->select('facebook_page_id') -> get_where('page', array('page_id' => $page_id))-> result_array();
+		return issetor($result[0]['facebook_page_id']);
+	}
+	
+	/**
 	 * Adds page
 	 * @param array $data
 	 * @return $page_id
