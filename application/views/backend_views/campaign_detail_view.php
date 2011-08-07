@@ -16,6 +16,8 @@
 <p><b>End Date:</b> <?php echo $campaign['campaign_end_timestamp'];?></p>
 <p><img src="<?php echo $campaign['campaign_image'];?>" /></p>
 <h1>Users</h1>
+<p>total users: <?php echo $total_user; ?></p>
+<p><?php echo $pagination; ?></p>
 <ul>
 	<?php 
 		foreach($user_list as $user){
@@ -27,7 +29,7 @@
 	?>
 	
 </ul>
-
+<p><?php echo $pagination; ?></p>
 <h1>Activities</h1>
 <ul>
 	<?php 

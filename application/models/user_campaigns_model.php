@@ -17,6 +17,16 @@ class User_campaigns_model extends CI_Model {
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
 		return $this -> db -> get_where('user_campaigns', array('campaign_id' => $campaign_id)) -> result_array();
 	}
+	
+	/**
+	 * Count campaign users
+	 * @param $campaign_id
+	 * @return array
+	 * @author Manassarn M.
+	 */
+	function count_campaign_users_by_campaign_id($campaign_id =NULL){
+		return $this -> db -> where(array('campaign_id' => $campaign_id)) -> count_all_results('user_campaigns');
+	}
 
 	/**
 	 * Get user campaigns
