@@ -560,7 +560,7 @@ class Sync extends CI_Controller {
 					    'app_url' => 'http://apps.figabyte.com/freferral/sohapfgf', 
 					    'app_install_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
 					    'app_install_page_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-					    'app_config_url' => 'http://apps.figabyte.com/freferral/sohapfgf/config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_config_url' => 'http://apps.figabyte.com/freferral/sohapfgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
 						'app_facebook_api_key' => '125138914244914' 	
