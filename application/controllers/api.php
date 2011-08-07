@@ -312,12 +312,12 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->model('Page_model', 'Page');
-		$page_id = $this->Page->get_facebook_page_id_by_page_id($page_id);
+		$facebook_page_id = $this->Page->get_facebook_page_id_by_page_id($page_id);
 		
 		$response = array();
 		if($page_id['page_id']!=null){
 			$response = array(	'status' => 'OK',
-							'page_id' => $facebook_page_id);
+							'facebook_page_id' => $facebook_page_id);
 		}
 		
 		echo json_encode($response);

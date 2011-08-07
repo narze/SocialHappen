@@ -76,7 +76,7 @@ class Page_model extends CI_Model {
 	 * @author Wachiraph C.
 	 * @author Manassarn M.
 	 */
-	function get_facebook_page_id_by_page_id_($page_id =NULL) {
+	function get_facebook_page_id_by_page_id($page_id =NULL) {
 		if(!$page_id)
 			return NULL;
 		$result = $this -> db ->select('facebook_page_id') -> get_where('page', array('page_id' => $page_id))-> result_array();
