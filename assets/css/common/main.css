@@ -86,3 +86,25 @@ img.thumb {
 	height:50px;
 	border: 1px solid #e4e4e4;
 }
+
+/* Company dashboard */
+div.loading  {
+	display: block;
+	background-color:#FFFFFF;
+	border-radius:6px;
+	padding:6px;
+}
+
+/* Go to bar */
+div.header > div div.goto > div ul li a {
+	color:#FFF!important;
+}
+div.header > div div.goto > div ul li p a {
+	font-weight:normal;
+}
+div.header > div div.goto > div ul li {
+	min-height: 50px;
+}
+.bt-create_company {
+	margin: 8px!important;
+}

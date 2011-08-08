@@ -173,7 +173,7 @@ function show_installed_page_in_company(){
 	    url: base_url + "company/json_get_pages/" + company_id,
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".left-panel").find('.dragging-page div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
+			$(".left-panel").find('.dragging-page div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 	    },
 		success: function(json) {
 			var ul_element=$(".left-panel").find('.dragging-page div').find('ul');
@@ -309,7 +309,7 @@ function show_installed_app_in_company(){
 	    url: base_url + "company/json_get_installed_apps_not_in_page/" + company_id,
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
+			$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 	    },
 		success: function(json) {
 			var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
@@ -406,7 +406,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 	    url: base_url + "page/json_get_installed_apps/" + page_id,
 	    dataType: "json",
 	    beforeSend: function(){
-	    	$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
+	    	$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 	    	$(".head-box-app-list").hide();
 	    },
 		success: function(json) {
@@ -509,7 +509,7 @@ function show_available_page_in_company(){
 	    url: base_url + "page/json_get_not_installed_facebook_pages/" + company_id,
 	    dataType: "json",
 	    beforeSend: function(){
-	        $(".right-panel").find('.dragging-page').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
+	        $(".right-panel").find('.dragging-page').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 	    },
 		success: function(json) {
 			var ul_element=$(".right-panel").find('.dragging-page').find('ul');
@@ -556,7 +556,7 @@ function show_available_app_in_company(){
 	    url: base_url + "company/json_get_not_installed_apps/" + company_id + "/0",
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".right-panel").find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
+			$(".right-panel").find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 	   	},
 		success: function(json) {
 			var ul_element=$(".right-panel").find('.dragging-app').find('ul');
@@ -598,7 +598,7 @@ function show_available_app_in_page(page_id){
 	    url: base_url + "company/json_get_not_installed_apps/" + company_id + "/" + page_id,
 	    dataType: "json",
 	    beforeSend: function(){
-			$(".right-panel").find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /> Loading</div><ul></ul>");
+			$(".right-panel").find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 	   	},
 		success: function(json) {
 			var ul_element=$(".right-panel").find('.dragging-app').find('ul');

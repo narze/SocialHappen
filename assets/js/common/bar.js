@@ -7,7 +7,7 @@ $(function(){
 		$.getJSON(base_url+'company/json_get_pages/' + user_companies[i].company_id, function(data) {
 			if(data.length>0) {
 				$.each(data, function(i,item){
-					$('.goto-list-company-'+ user_companies[i].company_id).append('<p class="goto-list-company-page-'+item.page_id+'"><a href="'+base_url+'page/'+item.page_id+'">&raquo;  '+item.page_name+'</a></p>');
+					$('.goto-list-company-'+ user_companies[i].company_id).append('<p class="goto-list-company-page-'+item.page_id+'">&raquo; <a href="'+base_url+'page/'+item.page_id+'">'+item.page_name+'</a></p>');
 				});
 			} else {
 				$('.goto-list-company-'+ user_companies[i].company_id).append('<p>No page yet</p><p><a href="'+base_url+'company/'+user_companies[i].company_id+'">+ add new page</a></p>');
