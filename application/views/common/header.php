@@ -28,7 +28,7 @@ if(isset($style)) :
 	foreach($style as $one) :
 		if($one){
 			list($class, $id) = explode('/', $one, 2);
-			echo '<link class="'.$class.'" id="'.$id.'" rel="stylesheet" type="text/css"  href="'.base_url().'assets/css/'.$one.'.css" />'."\n";
+			echo '<link class="stylesheet '.$class.' '.$id.'" rel="stylesheet" type="text/css"  href="'.base_url().'assets/css/'.$one.'.css" />'."\n";
 		}
 	endforeach; 
 endif; ?>

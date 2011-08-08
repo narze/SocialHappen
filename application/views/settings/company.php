@@ -72,12 +72,12 @@
         </div>
 	</div>
 	
-	<div id="delete-company" class="style01">
+	<!--<div id="delete-company" class="style01">
 		<h2><span>Delete Company</span></h2>
 		<div>
 			  <p>Text tell user what happen when delete company</p>
 			  <p>and if user have a problem he can contact our support or see FAQs</p>
 			  <p><a class="bt-delete_company-1" href="#"><span>Close account</span></a></p>
 		</div>
-    </div>
+    </div>-->
 </div>

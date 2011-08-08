@@ -16,10 +16,6 @@ class Backend extends CI_Controller {
 		$key2 = $this->input->post('key2');
 		$time = $this->input->post('time');
 		
-		echo $key1;
-		echo $key2;
-		echo $time;
-		
 		if($this->backend_session_verify(false))
 			redirect('backend/dashboard');
 		
@@ -553,7 +549,24 @@ class Backend extends CI_Controller {
 	function company(){
 		$this->backend_session_verify(true);
 		$this->load->model('Company_model', 'Company');
-		$company_list = $this->Company->get_company_profile();
+		
+		
+		$this->load->library('pagination');
+		
+		$offset = $this->uri->segment(3, 0);
+		
+		$config['base_url'] = base_url() . 'backend/company/';
+		$config['total_rows'] = $this->Company->count_company_profile();
+		$config['per_page'] = '25'; 
+		
+		
+		$this->pagination->initialize($config); 
+		
+		$data['total_company'] = $config['total_rows'];
+		$data['pagination'] = $this->pagination->create_links();
+		
+		
+		$company_list = $this->Company->get_company_profile($config['per_page'], $offset);
 		$data['company_list'] = $company_list;
 		$this->load->view('backend_views/list_company_view', $data);
 		//var_dump($company_list);
@@ -571,7 +584,23 @@ class Backend extends CI_Controller {
 		$data['page_list'] = $page_list;
 		
 		$this->load->model('Installed_apps_model', 'App');
-		$app_list = $this->App->get_installed_apps_by_company_id_not_in_page($company_id);
+		
+		$this->load->library('pagination');
+		
+		$config['uri_segment'] = 4;
+		$offset = $this->uri->segment($config['uri_segment'], 0);
+		
+		$config['base_url'] = base_url() . 'backend/company_detail/'.$this->uri->segment(3, 0).'/';
+		$config['total_rows'] = $this->App->count_installed_apps_by_company_id_not_in_page($company_id);
+		$config['per_page'] = '25'; 
+		
+		$this->pagination->initialize($config); 
+		
+		$data['total_app'] = $config['total_rows'];
+		$data['pagination'] = $this->pagination->create_links();
+		
+		
+		$app_list = $this->App->get_installed_apps_by_company_id_not_in_page($company_id, $config['per_page'], $offset);
 		$data['app_list'] = $app_list;
 		
 		$this->load->library('audit_lib');
@@ -588,7 +617,19 @@ class Backend extends CI_Controller {
 		$data['page'] = $page_profile;
 		
 		$this->load->model('Installed_apps_model', 'App');
-		$app_list = $this->App->get_installed_apps_by_page_id($page_id);
+		
+		$this->load->library('pagination');
+		$config['uri_segment'] = 4;
+		$offset = $this->uri->segment($config['uri_segment'], 0);
+		$config['base_url'] = base_url() . 'backend/page/'.$this->uri->segment(3, 0).'/';
+		//$config['total_rows'] =  5;
+		$config['total_rows'] = $this->App->count_installed_apps_by_page_id($page_id);
+		$config['per_page'] = '15'; 
+		$this->pagination->initialize($config);
+		$data['total_app'] = $config['total_rows'];
+		$data['pagination'] = $this->pagination->create_links();
+		
+		$app_list = $this->App->get_installed_apps_by_page_id($page_id, $config['per_page'], $offset);
 		$data['app_list'] = $app_list;
 		
 		$this->load->library('audit_lib');
@@ -626,7 +667,21 @@ class Backend extends CI_Controller {
 		//$this->dump($data['campaign']);
 		
 		$this->load->model('User_campaigns_model', 'User');
-		$data['user_list'] = $this->User->get_campaign_users_by_campaign_id($campaign_id);
+		
+		$this->load->library('pagination');
+		$config['uri_segment'] = 4;
+		$offset = $this->uri->segment($config['uri_segment'], 0);
+		$config['base_url'] = base_url() . 'backend/campaign/'.$this->uri->segment(3, 0).'/';
+		//$config['total_rows'] =  5;
+		$config['total_rows'] = $this->User->count_campaign_users_by_campaign_id($campaign_id);
+		$config['per_page'] = '25'; 
+		$this->pagination->initialize($config);
+		$data['total_user'] = $config['total_rows'];
+		$data['pagination'] = $this->pagination->create_links();
+		
+		
+		$data['user_list'] = $this->User->get_campaign_users_by_campaign_id($campaign_id, $config['per_page'], $offset);
+		//$data['user_list'] = $this->User->get_campaign_users_by_campaign_id($campaign_id);
 		//$this->dump($data['user_list']);
 		
 		$this->load->library('audit_lib');
@@ -646,11 +701,26 @@ class Backend extends CI_Controller {
 		$data['company_list'] = $this->User_companies->get_user_companies_by_user_id($user_id);
 		//$this->dump($data['company_list']);
 		
-		$this->load->model('User_apps_model', 'User_apps');
-		$app_list = $this->User_apps->get_user_apps_by_user_id($user_id);
+		
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
 		
+		$this->load->library('pagination');
+		$config['uri_segment'] = 4;
+		$offset = $this->uri->segment($config['uri_segment'], 0);
+		$config['base_url'] = base_url() . 'backend/user/'.$this->uri->segment(3, 0).'/';
+		//$config['total_rows'] =  5;
+		
+		$this->load->model('User_apps_model', 'User_apps');
+		
+		$config['total_rows'] = $this->User_apps->count_user_apps_by_user_id($user_id);
+		$config['per_page'] = '15'; 
+		$this->pagination->initialize($config);
+		$data['total_app'] = $config['total_rows'];
+		$data['pagination'] = $this->pagination->create_links();
+		
+		
+		$app_list = $this->User_apps->get_user_apps_by_user_id($user_id, $config['per_page'], $offset);
 		$al = array();
 		foreach($app_list as $app){
 			$app_install = $this->Installed_apps->get_app_profile_by_app_install_id($user_id);
@@ -672,7 +742,21 @@ class Backend extends CI_Controller {
 
 	function users(){
 		$this->load->model('User_model', 'User');
-		$data['user_list'] = $this->User->get_all_user_profile();
+		$this->load->library('pagination');
+		
+		$offset = $this->uri->segment(3, 0);
+		
+		$config['base_url'] = base_url() . 'backend/users/';
+		$config['total_rows'] = $this->User->count_users();
+		$config['per_page'] = '50'; 
+		
+		
+		$this->pagination->initialize($config); 
+		
+		$data['total_user'] = $config['total_rows'];
+		$data['pagination'] = $this->pagination->create_links();
+		
+		$data['user_list'] = $this->User->get_all_user_profile($config['per_page'], $offset);
 		//$this->dump($data['user_list']);
 		$this->load->view('backend_views/user_list_view', $data);
 	}

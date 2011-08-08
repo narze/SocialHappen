@@ -1,4 +1,3 @@
-<div class="company-wrapper">
 	<h1>Select company</h1>
 	<h3>Or <?php echo anchor('/home/create_company', 'Create company',array('id'=>'create_company'));?></h3>
 	<hr class="dot01"/>
@@ -24,4 +23,3 @@
 			</li>
 		<?php endforeach; ?>
 	</ul>
-</div>

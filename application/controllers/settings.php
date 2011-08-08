@@ -236,13 +236,21 @@ class Settings extends CI_Controller {
 			$this->load->model('user_companies_model','user_companies');
 			$company_users = $this->user_companies->get_company_users_by_company_id($page['company_id']);
 			
-			foreach($company_users as $company_user_key => $company_user){
-				foreach($page_users as $page_user_key => $page_user){
-					if($company_user['user_id'] == $page_user['user_id']){
-						$company_users[$company_user_key]['page_user_role_name'] = $page_user['user_role_name'];
-						$company_users[$company_user_key]['page_user_role_id'] = $page_user['user_role_id'];
-						unset($page_users[$page_user_key]);
-						break;
+			foreach($company_users as $key => &$value){ //Company admins
+				if(!($company_users[$key]['role_all'] || $company_users[$key]['role_all_company_pages_edit'])){
+					unset($company_users[$key]);
+				}
+			}
+			
+			foreach($page_users as $key => &$value){ //Page admins
+				if(!($page_users[$key]['role_all'] || $page_users[$key]['role_page_edit'])){
+					unset($page_users[$key]);
+				} else {
+					foreach($company_users as $company_user){
+						if($company_user['user_id'] == $page_users[$key]['user_id']){
+							unset($page_users[$key]);
+							break;
+						}
 					}
 				}
 			}
@@ -257,7 +265,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_facebook' => $page_facebook));
+				$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook));
 			}
 			else 
 			{
@@ -277,7 +285,7 @@ class Settings extends CI_Controller {
 			
 				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/page', array('page'=>array_merge($page,$page_update_data), 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_facebook' => $page_facebook, 'success'=>TRUE));
+					$this->load->view('settings/page', array('page'=>array_merge($page,$page_update_data), 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'success'=>TRUE));
 				}
 				else
 				{
@@ -290,29 +298,68 @@ class Settings extends CI_Controller {
 	
 	function page_admin($page_id = NULL){
 		if($this->socialhappen->check_admin(array('page_id'=>$page_id))){
-			$page_admins = $this->input->post('page_admin');
-			$old_page_admins = $this->user_pages->get_page_users_by_page_id($page_id);
-			$old_ids = array();
-			foreach($old_page_admins as $old_page_admin){
-				$old_ids[] = $old_page_admin['user_id'];
-			}
+			$this->form_validation->set_rules('user_id','required|trim|integer|xss_clean|max_length[20]');
+			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 			
-			$remove_list = array_diff($old_ids, $page_admins);
-			$add_list = array_diff($page_admins, $old_ids);
-			
-			foreach($remove_list as $user_id_to_remove){
-				$this->user_pages->remove_user_page($user_id_to_remove, $page_id);
+			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+			{
+				redirect("settings/page/{$page_id}");
 			}
-			
-			foreach($add_list as $user_id_to_add){
-				$page_admin = array(
-							'user_id' => $user_id_to_add,
-							'page_id' => $page_id,
-							'user_role' => 1
-						);
-				$this->user_pages->add_user_page($page_admin);
+			else 
+			{
+				$this->load->model('company_model','companies');
+				$company = $this->companies->get_company_profile_by_page_id($page_id);
+				if($this->socialhappen->check_user(set_value('user_id'))){
+					if(!$this->user_companies->is_company_admin(set_value('user_id'),$company['company_id'])){
+						$company_admin = array(
+									'user_id' => set_value('user_id'),
+									'company_id' => $company['company_id'],
+									'user_role' => 2
+								);
+						$this->user_companies->add_user_company($company_admin);
+					}
+					$page_admin = array(
+								'user_id' => set_value('user_id'),
+								'page_id' => $page_id,
+								'user_role' => 2
+							);
+					$this->user_pages->add_user_page($page_admin);
+				}
+				redirect("settings/page/{$page_id}?success=1");
 			}
-			redirect("settings/page/{$page_id}?success=1");
+			////
+			// $page_admins = $this->input->post('page_admin');
+			// $old_page_admins = $this->user_pages->get_page_users_by_page_id($page_id);
+			// $old_ids = array();
+			// foreach($old_page_admins as $old_page_admin){
+				// $old_ids[] = $old_page_admin['user_id'];
+			// }
+			
+			// $remove_list = array_diff($old_ids, $page_admins);
+			// $add_list = array_diff($page_admins, $old_ids);
+			
+			// foreach($remove_list as $user_id_to_remove){
+				// $this->user_pages->remove_user_page($user_id_to_remove, $page_id);
+			// }
+			
+			// $this->load->model('company_model','companies');
+			// $company = $this->companies->get_company_profile_by_page_id($page_id);
+			// foreach($add_list as $user_id_to_add){
+				// $company_admin = array(
+								// 'user_id' => $user_id_to_add,
+								// 'company_id' => $company['company_id'],
+								// 'user_role' => 2
+							// );
+				// $this->user_companies->add_user_company($company_admin)
+				
+				// $page_admin = array(
+							// 'user_id' => $user_id_to_add,
+							// 'page_id' => $page_id,
+							// 'user_role' => 1
+						// );
+				// $this->user_pages->add_user_page($page_admin);
+			// }
+			// redirect("settings/page/{$page_id}?success=1");
 		}
 	}
 	

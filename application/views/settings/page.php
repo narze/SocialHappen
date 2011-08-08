@@ -1,5 +1,5 @@
 <div id="facebook-page-information">
-<?php if(isset($success)) echo 'Updated'; ?>
+<?php if(isset($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Facebook page information</span></h2>
 	<div>
 	  <ul class="form01">
@@ -10,7 +10,7 @@
 </div>
 
 <div id="page-information"> 
-<?php if(isset($success)) echo 'Updated'; ?>
+<?php if(isset($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Page information</span></h2>
 		
 <?php // Change the css classes to suit your needs   
@@ -38,8 +38,9 @@
 	<?php echo form_close(); ?>
 </div>
 	
+<!--
 <div id="page-admin">
-	<?php if(isset($success)) echo 'Updated'; ?>
+	<?php if(isset($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Page admins</span></h2>
 	<?php // Change the css classes to suit your needs   
 	$attributes = array('class' => 'page-admin', 'id' => '');
@@ -60,9 +61,41 @@
 	</div>
 	<?php echo form_close(); ?>
 </div>
+-->
+
+<div id="admin-admin">
+	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
+	<h2><span>Page admins</span></h2>
+	<div class="admin-list">
+		<ul> 
+			<?php foreach($company_users as $user): ?>
+				<li class="<?php echo strtolower($user['user_role_name']);?>">
+				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
+				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
+				</li>
+			<?php endforeach; ?>
+			<?php foreach($page_users as $user): ?>
+				<li class="<?php echo strtolower($user['user_role_name']);?>">
+				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
+				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
+				</li>
+			<?php endforeach; ?>
+		  </ul>
+		  <p class="popup">Add admin by user id
+			<?php
+				$attributes = array('class' => 'page-admin', 'id' => '');
+				echo form_open("settings/page_admin/{$page['page_id']}", $attributes); ?>
+				 <ul class="form01">
+					<li><strong>User id :</strong><?php echo form_error('user_id'); ?><input id="user_id" type="text" name="user_id" maxlength="20" value="<?php echo set_value('user_id'); ?>"  /></li>
+					<li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>
+				</ul> 
+				<?php echo form_close(); ?>
+		  </p>
+		</div>
+	</div>
 	
 <div id="page-application">
-<?php if(isset($success)) echo 'Updated'; ?>
+<?php if(isset($success)==TRUE) echo 'Updated'; ?>
 <h2><span>Page applications</span></h2>
    <div class="company-app">
 		<ul>
@@ -80,7 +113,7 @@
 		</ul>
 	</div>
 </div>
-
+<!--
 <div id="delete-page" class="style01">
 	<h2><span>Delete Page</span></h2>
 	<div>
@@ -89,3 +122,4 @@
 		  <p><a class="bt-delete_page" href="#"><span>Delete page</span></a></p>
 	</div>
 </div>
+-->

@@ -37,6 +37,7 @@ class User_pages_model extends CI_Model {
 	function get_user_pages_by_user_id($user_id = NULL, $limit = NULL, $offset = NULL){
 		$this->db->limit($limit, $offset);
 		$this->db->join('page','user_pages.page_id=page.page_id');
+		$this->db->join('user_role', 'user_pages.user_role = user_role.user_role_id','left');
 		return $this->db->get_where('user_pages', array('user_id' => $user_id))->result_array();
 	}
 	

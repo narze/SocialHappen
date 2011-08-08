@@ -35,6 +35,8 @@
 
 
 <h1>App</h1>
+<p>total apps: <?php echo $total_app; ?></p>
+<p><?php echo $pagination; ?></p>
 <ul>
 	<?php 
 		foreach($app_list as $app){
@@ -46,7 +48,7 @@
 		}
 	?>
 </ul>
-
+<p><?php echo $pagination; ?></p>
 <h1>Activities</h1>
 <ul>
 	<?php 

@@ -22,26 +22,65 @@ if(!window.set_loading){
 		if(!message) {
 			message = "Loading";
 		}
-		$.fancybox.init(); //force init
+		//$.fancybox.init(); //force init
 		
-		if(!$('div.loading-popup').length){ //Add loading div once
-			$('<div class="loading-popup"><img src="'+base_url+'assets/images/loading.gif" /> '+message+'</div>').hide().appendTo('body');
+		var height = $(window).height();
+		var width = $(document).width();
+
+		if(!$('div.overlay').length){ //Add loading div once
+			
+			overlay = $('<div class="overlay"></div>')
+				.css('zIndex', '99')
+				.hide().prependTo('body');
+				
+			overlaybg = $('<div class="overlay-bg"></div>');
+			$(overlaybg)
+				.css('position', 'fixed')
+				.css('zIndex', '100')
+				.css('display', 'block')
+				.css('width', '100%')
+				.css('height', '100%')
+				.css('margin', 0)
+				.css('backgroundColor', 'black')
+				.css('opacity', 0.75)
+				.css('filter', 'alpha(opacity=75)')
+			.appendTo(overlay);
+			
+			poptext = $('<p class="loading-text"><img src="'+base_url+'assets/images/loading.gif" /><br /> '+message+'</p>');
+			$(poptext)
+				.css('position', 'fixed')
+				.css('zIndex', '101')
+				.css('backgroundColor', '#FFFFFF')
+				.css('borderRadius', '5px')
+				.css('font-weight', 'bold')
+				.css('text-align', 'center')
+				.css('width', '80px')
+				.css('height', '60px')
+				.css('padding-top', '6px')
+				.css('left', width/2 - (poptext.width() / 2))
+				.css('top', height/2 - (poptext.height() / 2))
+			.appendTo(overlay);
 		}
 		
-		$('div.loading-popup').ajaxStart(function() {
-			if(!$('#fancybox-content').html().length){ //if fancybox is hidden : show it and hide when ajax is loaded
-				$.fancybox({
-					content: $(this).show()
-				});
-				$(this).ajaxStop(function() {
-					setTimeout(function() {
-						$.fancybox.close();
-						$('div.loading-popup').remove();
-					}, 500);
-				});
-			}
+		// $('div.loading-popup').ajaxStart(function() {
+			// if(!$('#fancybox-content').html().length){ //if fancybox is hidden : show it and hide when ajax is loaded
+				// $.fancybox({
+					// content: $(this).show()
+				// });
+				// $(this).ajaxStop(function() {
+					// setTimeout(function() {
+						// $.fancybox.close();
+						// $('div.loading-popup').remove();
+					// }, 500);
+				// });
+			// }
+		// });
+		
+		$('div.overlay').ajaxStart(function() {
+			$(this).fadeIn(0);
+		}).ajaxStop(function() {
+			$(this).fadeOut('slow');
 		});
-	
 	}
 }
 

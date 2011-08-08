@@ -9,6 +9,8 @@
 <h1>Manage Companies</h1>
 <?=anchor('backend/dashboard', 'Back to dashboard', 'title="go back to dashboard"');?>
 <h1>Companies</h1>
+<p>total companies: <?php echo $total_company; ?></p>
+<p><?php echo $pagination; ?></p>
 <ul>
 <?php
 	foreach ($company_list as $company) {
@@ -19,6 +21,6 @@
 	}
 ?>
 </ul>
-
+<p><?php echo $pagination; ?></p>
 </body>
 </html>

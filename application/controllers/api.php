@@ -296,7 +296,33 @@ class Api extends CI_Controller {
 		
 		echo json_encode($response);
 	}
-					
+	
+	/**
+	 * Request for facebook page's id using  platform page's id
+	 * @author Wachiraph C.
+	 */
+	function request_facebook_page_id(){
+		
+		$page_id = $this->input->get('page_id', TRUE);
+		
+		if(!($page_id)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: page_id)'));
+			return;
+		}
+		
+		$this->load->model('Page_model', 'Page');
+		$facebook_page_id = $this->Page->get_facebook_page_id_by_page_id($page_id);
+		
+		$response = array();
+		if($page_id['page_id']!=null){
+			$response = array(	'status' => 'OK',
+							'facebook_page_id' => $facebook_page_id);
+		}
+		
+		echo json_encode($response);
+	}
+								
 	/**
 	 * Request for log 	
 	 * @author Wachiraph C. - revise June 2011

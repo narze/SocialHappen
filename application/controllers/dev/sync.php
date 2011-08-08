@@ -7,8 +7,8 @@
 class Sync extends CI_Controller {
 	
 	function __construct(){
-		$this->preload();
 		parent::__construct();
+		$this->preload();
 		$this->load->dbforge();
 		$this->output->enable_profiler(TRUE);
 	}
@@ -24,9 +24,9 @@ class Sync extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function preload(){
-		$host = 'localhost';
-		$username = 'root';
-		$password = '';
+		$host = $this->db->hostname;
+		$username = $this->db->username;
+		$password = $this->db->password;
 		if(isset($_GET['u']) && isset($_GET['p'])){
 			$username = $_GET['u'];
 			$password = $_GET['p'];
@@ -212,6 +212,8 @@ class Sync extends CI_Controller {
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
 								'page_status' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
+								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
+								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -239,7 +241,7 @@ class Sync extends CI_Controller {
 							'user_companies' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'user_role' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
+							    'user_role' => field_option('INT', 2, 0, $null, $autoinc, TRUE),
 							),
 							'sessions' =>array(
 								'session_id' => field_option('VARCHAR', 40, '0', $null, $autoinc, $unsigned),
@@ -258,13 +260,39 @@ class Sync extends CI_Controller {
 							    'page_status_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'user_role' => array(
-							    'user_role_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
+							    'user_role_id' => field_option('INT', 2, $default, $null, TRUE, TRUE),
 							    'user_role_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'role_all' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								//'role_company_view' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_company_add' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_company_edit' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_company_delete' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								//'role_all_company_pages_view' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_all_company_pages_edit' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_all_company_pages_delete' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								//'role_all_company_apps_view' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_all_company_apps_edit' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_all_company_apps_delete' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								//'role_all_company_campaigns_view' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_all_company_campaigns_edit' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_all_company_campaigns_delete' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								//'role_page_view' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_page_add' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_page_edit' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_page_delete' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								//'role_app_view' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_app_add' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_app_edit' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_app_delete' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								//'role_campaign_view' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_campaign_add' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_campaign_edit' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'role_campaign_delete' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 							),
 							'user_pages' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'user_role' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
+							    'user_role' => field_option('INT', 2, 0, $null, $autoinc, TRUE),
 							),
 							'package' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -520,6 +548,22 @@ class Sync extends CI_Controller {
 					    'app_support_page_tab' => 1, 
 					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
 						'app_facebook_api_key' => '189132747815592' 	
+					),
+					array(
+					    'app_id' => 11, 
+					    'app_name' => '[beta]FGF', 
+					    'app_type_id' => 2, 
+					    'app_maintainance' => 0, 
+					    'app_show_in_list' => 1, 
+					    'app_description' => 'Friend get fans', 
+					    'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4', 
+					    'app_url' => 'http://apps.figabyte.com/freferral/sohapfgf', 
+					    'app_install_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_install_page_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+					    'app_config_url' => 'http://apps.figabyte.com/freferral/sohapfgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+					    'app_support_page_tab' => 1, 
+					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+						'app_facebook_api_key' => '125138914244914' 	
 					)
 				);
 		$this->db->insert_batch('app', $app);
@@ -721,6 +765,11 @@ class Sync extends CI_Controller {
 							array(
 							    'company_id' => 1, 
 							    'app_id' => 10, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 11, 
 							    'available_date' => '2011-05-19 16:01:20'
 							)
 						);
@@ -965,11 +1014,93 @@ class Sync extends CI_Controller {
 		$user_role = array(
 								array(
 								    'user_role_id' => 1,
-								    'user_role_name' => 'Admin'
+								    'user_role_name' => 'Company Admin',
+									'role_all' => 1,
+									//'role_company_view' => 0,
+									'role_company_add' => 0,
+									'role_company_edit' => 0,
+									'role_company_delete' => 0,
+									//'role_all_company_pages_view' => 0,
+									'role_all_company_pages_edit' => 0,
+									'role_all_company_pages_delete' => 0,
+									//'role_all_company_apps_view' => 0,
+									'role_all_company_apps_edit' => 0,
+									'role_all_company_apps_delete' => 0,
+									//'role_all_company_campaigns_view' => 0,
+									'role_all_company_campaigns_edit' => 0,
+									'role_all_company_campaigns_delete' => 0,
+									//'role_page_view' => 0,
+									'role_page_add' => 0,
+									'role_page_edit' => 0,
+									'role_page_delete' => 0,
+									//'role_app_view' => 0,
+									'role_app_add' => 0,
+									'role_app_edit' => 0,
+									'role_app_delete' => 0,
+									//'role_campaign_view' => 0,
+									'role_campaign_add' => 0,
+									'role_campaign_edit' => 0,
+									'role_campaign_delete' => 0
 								),
 								array(
 								    'user_role_id' => 2,
-								    'user_role_name' => 'Waiting'
+								    'user_role_name' => 'Page Admin',
+									'role_all' => 0,
+									//'role_company_view' => 1,
+									'role_company_add' => 0,
+									'role_company_edit' => 0,
+									'role_company_delete' => 0,
+									//'role_all_company_pages_view' => 0,
+									'role_all_company_pages_edit' => 0,
+									'role_all_company_pages_delete' => 0,
+									//'role_all_company_apps_view' => 0,
+									'role_all_company_apps_edit' => 0,
+									'role_all_company_apps_delete' => 0,
+									//'role_all_company_campaigns_view' => 0,
+									'role_all_company_campaigns_edit' => 0,
+									'role_all_company_campaigns_delete' => 0,
+									//'role_page_view' => 1,
+									'role_page_add' => 0,
+									'role_page_edit' => 1,
+									'role_page_delete' => 1,
+									//'role_app_view' => 1,
+									'role_app_add' => 0,
+									'role_app_edit' => 0,
+									'role_app_delete' => 0,
+									//'role_campaign_view' => 1,
+									'role_campaign_add' => 0,
+									'role_campaign_edit' => 0,
+									'role_campaign_delete' => 0
+								),
+								array(
+								    'user_role_id' => 3,
+								    'user_role_name' => 'Test admin',
+									'role_all' => 0,
+									//'role_company_view' => 1,
+									'role_company_add' => 1,
+									'role_company_edit' => 1,
+									'role_company_delete' => 1,
+									//'role_all_company_pages_view' => 0,
+									'role_all_company_pages_edit' => 1,
+									'role_all_company_pages_delete' => 1,
+									//'role_all_company_apps_view' => 0,
+									'role_all_company_apps_edit' => 1,
+									'role_all_company_apps_delete' => 1,
+									//'role_all_company_campaigns_view' => 0,
+									'role_all_company_campaigns_edit' => 1,
+									'role_all_company_campaigns_delete' => 1,
+									//'role_page_view' => 1,
+									'role_page_add' => 1,
+									'role_page_edit' => 1,
+									'role_page_delete' => 1,
+									//'role_app_view' => 1,
+									'role_app_add' => 1,
+									'role_app_edit' => 1,
+									'role_app_delete' => 1,
+									//'role_campaign_view' => 1,
+									'role_campaign_add' => 1,
+									'role_campaign_edit' => 1,
+									'role_campaign_delete' => 1
 								)
 							);
 		$this->db->insert_batch('user_role', $user_role);

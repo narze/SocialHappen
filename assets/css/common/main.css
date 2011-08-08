@@ -9,19 +9,42 @@ a {
 div[class^="detail-list"] p.thumb {
 	width:50px!important;
 }
-div[class^="detail-list"] p.thumb img {
+div[class^="detail-list"] p.thumb img,
+div.pic-profile p.pic img,
+{
 	width:50px;
 	height:50px;
 	overflow:hidden;
 }
 
+/* Company setting */
+.form01 div.pic-profile p.pic img {
+	width:50px;
+	height:50px;
+	overflow:hidden;
+}
+div.admin-list ul li p img {
+	width:100px;
+	height:100px;
+	overflow:hidden;
+}
+div.admin-list p.popup {
+	margin: 10px!important;
+}
+ul.form01 > li {
+	width:auto!important;
+	height:auto!important;
+}
+div.company-app ul li p img {
+	width:64px;
+	height:64px;
+	overflow:hidden;
+}
+
+
 .clear {clear:both;}
 
 /* Select Company Box*/
-.company-wrapper {
-	padding:0 20px;
-	margin:20px 0;
-}
 hr.dot01 {
 	border:none;
 	margin:10px auto;

@@ -65,6 +65,7 @@ class Page extends CI_Controller {
 							'common/jquery.form',
 							'common/bar',
 							'common/jquery.pagination',
+							'common/jquery.countdown.min',
 							'page/page_apps',
 							'page/page_campaigns',
 							'page/page_report',
@@ -92,7 +93,8 @@ class Page extends CI_Controller {
 							//for fancybox in application tab
 							'common/fancybox/jquery.fancybox-1.3.4',
 							//stat
-							'stat/jquery.jqplot.min'
+							'stat/jquery.jqplot.min',
+							'common/jquery.countdown'
 						)
 					)
 				),
@@ -381,6 +383,7 @@ class Page extends CI_Controller {
 							'page_name'=>$page['page_name'],
 							'user_id'=>$this->session->userdata('user_id')),
 						'script' => array(
+							'common/functions',
 							'page/addapp_lightbox',
 							//for fancybox
 							'common/fancybox/jquery.mousewheel-3.0.4.pack',

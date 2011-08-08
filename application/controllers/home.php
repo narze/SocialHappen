@@ -6,7 +6,7 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 	}
-
+function test(){if ($this->socialhappen->check_admin(array('campaign_id'=>1),array('role_campaign_edit'))) echo 'pass';}
 	/**
 	 * Home page
 	 * @author Manassarn M.
@@ -205,7 +205,7 @@ class Home extends CI_Controller {
 			return;
 		}
 		
-		$user_image = $this->facebook->get_profile_picture($facebook_user['id']);
+		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
 		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
@@ -218,13 +218,15 @@ class Home extends CI_Controller {
 		{
 			$this -> load -> view('home/signup_form', 
 					array(
-						'user_profile_picture'=>$user_image
+						'user_profile_picture'=>$user_facebook_image
 					)
 			);
 		}
 		else
 		{
-			$user_image = $this->socialhappen->upload_image('user_image');
+			if (!$user_image = $this->socialhappen->upload_image('user_image')){
+				$user_image = $user_facebook_image;
+			}
 			$company_image = $this->socialhappen->upload_image('company_image');
 			
 			$user = array(
@@ -251,6 +253,7 @@ class Home extends CI_Controller {
 					'company_id' => $company_add_result['company_id']
 				));
 				$this->socialhappen->login();
+				$this->load->view('common/redirect',array('refresh_parent' => TRUE));
 			}
 			else
 			{
