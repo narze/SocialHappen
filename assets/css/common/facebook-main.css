@@ -8,6 +8,10 @@ author: Oat (okaynaja)
 
 ###########################################
 */
+div.account-data div.pic img {
+	width: 95px;
+	height: 95px;
+}
 div.list_app-camp>ul>li>div:first-child p.pic img {
 	width:80px;
 	height:80px;
@@ -18,4 +22,25 @@ div.tab-head>div>ul>li a {
 }
 div.header ul.menu>li.profile>ul>li a {
 	cursor:pointer;
+}
+div.header {
+	/*background: url(../../images/bg_fb/bg_header.png) no-repeat;*/
+	background-color:#FFF;
+}
+#friends {
+	
+	width: 148px;
+	background: #F2F2F2;
+	border: 1px solid #EBEBEB;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 7px;
+	position: absolute;
+	top: 56px;
+	right: 22px;
+}
+#friends img.image {
+	width:28px;
+	height:28px;
 }

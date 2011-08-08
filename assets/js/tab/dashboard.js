@@ -7,8 +7,8 @@ $(function(){
 					end_time = Date.createFromMysql($(this).text());
 					$(this).replaceWith($("<p></p>").countdown({
 						until: end_time,
-						format: 'HMS',
-						layout: '<strong>{hnn}h {sep} {mnn}m {sep} {snn}s</strong>'})
+						format: 'DHMS',
+						layout: '<strong>{dn}days {hnn}h {sep} {mnn}m {sep} {snn}s</strong>'})
 					.removeClass('hasCountdown'));
 				});
 			};
