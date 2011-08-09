@@ -59,7 +59,7 @@ $db['default']['stricton'] = FALSE;
 
 $db['test']['hostname'] = 'localhost';
 $db['test']['username'] = 'root';
-$db['test']['password'] = '123456';
+$db['test']['password'] = '';
 $db['test']['database'] = 'socialhappen';
 $db['test']['dbdriver'] = 'mysql';
 $db['test']['dbprefix'] = 'sh_';
