@@ -30,13 +30,13 @@ if(!window.set_loading){
 		if(!$('div.overlay').length){ //Add loading div once
 			
 			overlay = $('<div class="overlay"></div>')
-				.css('zIndex', '99')
+				.css('zIndex', '999')
 				.hide().prependTo('body');
 				
 			overlaybg = $('<div class="overlay-bg"></div>');
 			$(overlaybg)
 				.css('position', 'fixed')
-				.css('zIndex', '100')
+				.css('zIndex', '1000')
 				.css('display', 'block')
 				.css('width', '100%')
 				.css('height', '100%')
@@ -49,7 +49,7 @@ if(!window.set_loading){
 			poptext = $('<p class="loading-text"><img src="'+base_url+'assets/images/loading.gif" /><br /> '+message+'</p>');
 			$(poptext)
 				.css('position', 'fixed')
-				.css('zIndex', '101')
+				.css('zIndex', '1001')
 				.css('backgroundColor', '#FFFFFF')
 				.css('borderRadius', '5px')
 				.css('font-weight', 'bold')
@@ -60,6 +60,13 @@ if(!window.set_loading){
 				.css('left', width/2 - (poptext.width() / 2))
 				.css('top', height/2 - (poptext.height() / 2))
 			.appendTo(overlay);
+			
+			
+			$(overlay).ajaxStart(function() {
+				$(this).fadeIn(0);
+			}).ajaxStop(function() {
+				$(this).fadeOut('slow',function(){$(this).remove()});
+			});
 		}
 		
 		// $('div.loading-popup').ajaxStart(function() {
@@ -76,11 +83,6 @@ if(!window.set_loading){
 			// }
 		// });
 		
-		$('div.overlay').ajaxStart(function() {
-			$(this).fadeIn(0);
-		}).ajaxStop(function() {
-			$(this).fadeOut('slow');
-		});
 	}
 }
 
