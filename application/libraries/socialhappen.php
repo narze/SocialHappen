@@ -225,7 +225,10 @@ class SocialHappen{
 	 * @author Manassarn M.
 	 */
 	function ajax_check(){
-		if( empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'){
+		//file_get_content is allowed (no user agent)
+		if( ! isset($_SERVER['HTTP_USER_AGENT']) ){
+		
+		} else if( empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'){
 			exit();
 		}
 	}
@@ -239,20 +242,25 @@ class SocialHappen{
 	 */
 	function _has_company_roles($user_id = NULL, $company_id = NULL, $roles = array(), $required_roles = array()){
 		$this->CI->load->model('user_companies_model','user_companies');
-			$company_users = $this->CI->user_companies->get_company_users_by_company_id($company_id);
-			foreach($company_users as $company_user){
-				if($company_user['user_id'] == $user_id){
-					if($company_user['role_all']){
-						return TRUE;
-					} else {
-						foreach($roles as $role){
-							if(in_array($role,$required_roles) && $company_user[$role] == TRUE){
-								return TRUE;
-							}
-						}						
-					}
+		$company_users = $this->CI->user_companies->get_company_users_by_company_id($company_id);
+		foreach($company_users as $company_user){
+			if($company_user['user_id'] == $user_id){
+				if($company_user['role_all']){
+					return TRUE;
+				} else {
+				//echo 'no role_all.';
+					$has_company_roles = TRUE;
+					foreach($roles as $role){
+						if(in_array($role,$required_roles) && $company_user[$role] == FALSE){
+							//echo 'no company role.';
+							$has_company_roles = FALSE;
+						}
+					}						
+					return $has_company_roles;
 				}
 			}
+		}
+		
 	}
 	
 	/**
@@ -280,14 +288,16 @@ class SocialHappen{
 			if(!in_each_array('user_id',$user_id,$company_users)) {
 				return FALSE;
 			}
-			foreach($company_users as $company_user){
-				if($company_user['user_id'] == $user_id){var_dump($company_user);
-					if($company_user['role_all'] == FALSE){
-						foreach($roles as $role){
-							if(in_array($role,array('role_company_edit','role_company_delete','role_all_company_pages_edit','role_all_company_pages_delete')) && $company_user[$role] == FALSE){
-								return FALSE;
-							}
-						}						
+			if($roles){
+				foreach($company_users as $company_user){
+					if($company_user['user_id'] == $user_id){
+						if($company_user['role_all'] == FALSE){
+							foreach($roles as $role){
+								if(in_array($role,array('role_company_edit','role_company_delete','role_all_company_pages_edit','role_all_company_pages_delete')) && $company_user[$role] == FALSE){
+									return FALSE;
+								}
+							}						
+						}
 					}
 				}
 			}
@@ -295,21 +305,23 @@ class SocialHappen{
 		if(isset($data['page_id'])){ 
 			$this->CI->load->model('page_model','pages');
 			$page = $this->CI->pages->get_page_profile_by_page_id($data['page_id']);
-			$required_roles = array('role_all_company_pages_edit','role_all_company_pages_delete');
-			if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
-				$this->CI->load->model('user_pages_model','user_pages');
-				$page_users = $this->CI->user_pages->get_page_users_by_page_id($data['page_id']);
-				if(!in_each_array('user_id',$user_id,$page_users)) {
-					return FALSE;
-				}
-				foreach($page_users as $page_user){
-					if($page_user['user_id'] == $user_id){var_dump($page_user);
-						if($page_user['role_all'] == FALSE){
-							foreach($roles as $role){
-								if(in_array($role,array('role_page_edit','role_page_delete')) && $page_user[$role] == FALSE){
-									return FALSE;
-								}
-							}						
+			$this->CI->load->model('user_pages_model','user_pages');
+			$page_users = $this->CI->user_pages->get_page_users_by_page_id($data['page_id']);
+			if(!in_each_array('user_id',$user_id,$page_users)) {
+				return FALSE;
+			}
+			if($roles){
+				$required_roles = array('role_all_company_pages_edit','role_all_company_pages_delete');
+				if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
+					foreach($page_users as $page_user){
+						if($page_user['user_id'] == $user_id){
+							if($page_user['role_all'] == FALSE){
+								foreach($roles as $role){
+									if(in_array($role,array('role_page_edit','role_page_delete')) && $page_user[$role] == FALSE){
+										return FALSE;
+									}
+								}						
+							}
 						}
 					}
 				}
@@ -318,23 +330,28 @@ class SocialHappen{
 		if(isset($data['app_install_id'])){
 			$this->CI->load->model('page_model','pages');
 			$page = $this->CI->pages->get_page_profile_by_app_install_id($data['app_install_id']);
-			$required_roles = array('role_all_company_apps_edit','role_all_company_apps_delete');
-			if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
-				$this->CI->load->model('user_pages_model','user_pages');
-				$user_pages = $this->CI->user_pages->get_user_pages_by_user_id($user_id);
-				$this->CI->load->model('installed_apps_model','installed_apps');
-				$installed_app = $this->CI->installed_apps->get_app_profile_by_app_install_id($data['app_install_id']);
-				if(!in_each_array('page_id',$installed_app['page_id'],$user_pages)) {
-					return FALSE;
-				}
-				foreach($user_pages as $user_page){
-					if($user_page['user_id'] == $user_id){var_dump($user_page);
-						if($user_page['role_all'] == FALSE){
-							foreach($roles as $role){
-								if(in_array($role,array('role_app_edit','role_app_delete')) && $user_page[$role] == FALSE){
-									return FALSE;
-								}
-							}						
+			$this->CI->load->model('user_pages_model','user_pages');
+			$user_pages = $this->CI->user_pages->get_user_pages_by_user_id($user_id);
+			$this->CI->load->model('installed_apps_model','installed_apps');
+			$installed_app = $this->CI->installed_apps->get_app_profile_by_app_install_id($data['app_install_id']);
+			if(!in_each_array('page_id',$installed_app['page_id'],$user_pages)) {
+				return FALSE;
+			}
+			if($roles){ //echo 'has roles ';
+				$required_roles = array('role_all_company_apps_edit','role_all_company_apps_delete');
+				if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
+					//echo 'no company roles ';
+					foreach($user_pages as $user_page){
+						if($user_page['user_id'] == $user_id){
+							if($user_page['role_all'] == FALSE){
+								foreach($roles as $role){
+									//echo "role = {$role}";
+									if(in_array($role,array('role_app_edit','role_app_delete')) && $user_page[$role] == FALSE){
+										//echo 'no role';
+										return FALSE;
+									}
+								}						
+							}
 						}
 					}
 				}
@@ -343,9 +360,7 @@ class SocialHappen{
 		if(isset($data['campaign_id'])){
 			$this->CI->load->model('page_model','pages');
 			$page = $this->CI->pages->get_page_profile_by_campaign_id($data['campaign_id']);
-			$required_roles = array('role_all_company_campaigns_edit','role_all_company_campaigns_delete');
-			if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
-				$this->CI->load->model('user_pages_model','user_pages');
+			$this->CI->load->model('user_pages_model','user_pages');
 				$user_pages = $this->CI->user_pages->get_user_pages_by_user_id($user_id);
 				$this->CI->load->model('campaign_model','campaigns');
 				$campaign = $this->CI->campaigns->get_campaign_profile_by_campaign_id($data['campaign_id']);
@@ -354,14 +369,19 @@ class SocialHappen{
 				if(!in_each_array('page_id',$installed_app['page_id'],$user_pages)) {
 					return FALSE;
 				}
-				foreach($user_pages as $user_page){
-					if($user_page['user_id'] == $user_id){var_dump($user_page);
-						if($user_page['role_all'] == FALSE){
-							foreach($roles as $role){
-								if(in_array($role,array('role_campaign_edit','role_campaign_delete')) && $user_page[$role] == FALSE){
-									return FALSE;
-								}
-							}						
+			if($roles){
+				$required_roles = array('role_all_company_campaigns_edit','role_all_company_campaigns_delete');
+				
+				if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
+					foreach($user_pages as $user_page){
+						if($user_page['user_id'] == $user_id){
+							if($user_page['role_all'] == FALSE){
+								foreach($roles as $role){
+									if(in_array($role,array('role_campaign_edit','role_campaign_delete')) && $user_page[$role] == FALSE){
+										return FALSE;
+									}
+								}						
+							}
 						}
 					}
 				}

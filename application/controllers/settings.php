@@ -145,7 +145,9 @@ class Settings extends CI_Controller {
 	}
 	
 	function company($company_id = NULL){
-		if($company_id) {
+		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array('role_company_edit'))){
+			//no access
+		} else {
 			$this->load->model('company_model','companies');
 			$company = $this->companies->get_company_profile_by_company_id($company_id);
 			
@@ -195,7 +197,9 @@ class Settings extends CI_Controller {
 	}
 	
 	function company_admin($company_id = NULL){
-		if($this->socialhappen->check_admin(array('company_id'=>$company_id))){
+		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array('role_company_edit'))){
+			//no access
+		} else {
 			$this->form_validation->set_rules('user_id','required|trim|integer|xss_clean|max_length[20]');
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 			
@@ -223,7 +227,9 @@ class Settings extends CI_Controller {
 	}
 	
 	function page($page_id = NULL){
-		if($page_id) {
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			//no access
+		} else {
 			$this->load->model('page_model','pages');
 			$page = $this->pages->get_page_profile_by_page_id($page_id);
 			
@@ -297,7 +303,9 @@ class Settings extends CI_Controller {
 	}
 	
 	function page_admin($page_id = NULL){
-		if($this->socialhappen->check_admin(array('page_id'=>$page_id))){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			//no access
+		} else {
 			$this->form_validation->set_rules('user_id','required|trim|integer|xss_clean|max_length[20]');
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 			

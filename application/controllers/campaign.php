@@ -9,98 +9,102 @@ class Campaign extends CI_Controller {
 
 	function index($campaign_id = NULL){
 		$this->socialhappen->check_logged_in();
-		$this -> load -> model('campaign_model', 'campaigns');
-		$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
-		if($campaign) {
-			$this -> load -> model('company_model', 'companies');
-			$company = $this -> companies -> get_company_profile_by_campaign_id($campaign_id);
-			$this->load->model('page_model','pages');
-			$page = $this->pages->get_page_profile_by_campaign_id($campaign_id);
-			
-			$this -> load ->model('user_model','users');
-			$user_count = $this->users->count_users_by_campaign_id($campaign_id);
-			$this->config->load('pagination', TRUE);
-			$per_page = $this->config->item('per_page','pagination');
-			
-			$this->load->library('audit_lib');
-			$campaign_daily_active = $this->audit_lib->count_audit('subject', NULL, 102, array('campaign_id' => (int)$campaign_id), $this->audit_lib->_date());
-			
-			$this -> load -> model('user_model', 'user');
-			$campaign_total_users = $this->user->count_users_by_campaign_id($campaign_id);
-			
-			
-			$data = array(
-				'campaign_id' => $campaign_id,
-				'header' => $this -> socialhappen -> get_header( 
-					array(
-						'title' => $campaign['campaign_name'],
-						'vars' => array('campaign_id'=>$campaign_id,
-							'user_count' => $user_count,
-							'per_page' => $per_page
-						),
-						'script' => array(
-							'common/functions',
-							'common/jquery.form',
-							'common/bar',
-							'common/jquery.pagination',
-							'campaign/campaign_stat',
-							'campaign/campaign_users',
-							'campaign/campaign_tabs',
-							'common/fancybox/jquery.fancybox-1.3.4.pack',
-							
-							//stat
-		    				'stat/excanvas.min',
-		    				'stat/jquery.jqplot.min',
-			 				'stat/jqplot.highlighter.min',
-			 				'stat/jqplot.cursor.min',
-			 				'stat/jqplot.dateAxisRenderer.min',
-			 				'stat/jqplot.canvasTextRenderer.min',
-			 				'stat/jqplot.canvasAxisTickRenderer.min',
-			 				'stat/jqplot.pointLabels.min'
-						),
-						'style' => array(
-							'common/main',
-							'common/platform',
-							'common/fancybox/jquery.fancybox-1.3.4',
-							//stat
-							'stat/jquery.jqplot.min'
-						)
-					)
-				),
-				'company_image_and_name' => $this -> load -> view('company/company_image_and_name', 
-					array(
-						'company' => $company
-					),
-				TRUE),
-				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-					array('breadcrumb' => 
+		if(!$this->socialhappen->check_admin(array('campaign_id' => $campaign_id),array())){
+			//no access
+		} else {
+			$this -> load -> model('campaign_model', 'campaigns');
+			$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
+			if($campaign) {
+				$this -> load -> model('company_model', 'companies');
+				$company = $this -> companies -> get_company_profile_by_campaign_id($campaign_id);
+				$this->load->model('page_model','pages');
+				$page = $this->pages->get_page_profile_by_campaign_id($campaign_id);
+				
+				$this -> load ->model('user_model','users');
+				$user_count = $this->users->count_users_by_campaign_id($campaign_id);
+				$this->config->load('pagination', TRUE);
+				$per_page = $this->config->item('per_page','pagination');
+				
+				$this->load->library('audit_lib');
+				$campaign_daily_active = $this->audit_lib->count_audit('subject', NULL, 102, array('campaign_id' => (int)$campaign_id), $this->audit_lib->_date());
+				
+				$this -> load -> model('user_model', 'user');
+				$campaign_total_users = $this->user->count_users_by_campaign_id($campaign_id);
+				
+				
+				$data = array(
+					'campaign_id' => $campaign_id,
+					'header' => $this -> socialhappen -> get_header( 
 						array(
-							$company['company_name'] => base_url() . "company/{$company['company_id']}",
-							$page['page_name'] => base_url() . "page/{$page['page_id']}",
-							$campaign['campaign_name'] => base_url() . "campaign/{$campaign['campaign_id']}"
+							'title' => $campaign['campaign_name'],
+							'vars' => array('campaign_id'=>$campaign_id,
+								'user_count' => $user_count,
+								'per_page' => $per_page
+							),
+							'script' => array(
+								'common/functions',
+								'common/jquery.form',
+								'common/bar',
+								'common/jquery.pagination',
+								'campaign/campaign_stat',
+								'campaign/campaign_users',
+								'campaign/campaign_tabs',
+								'common/fancybox/jquery.fancybox-1.3.4.pack',
+								
+								//stat
+								'stat/excanvas.min',
+								'stat/jquery.jqplot.min',
+								'stat/jqplot.highlighter.min',
+								'stat/jqplot.cursor.min',
+								'stat/jqplot.dateAxisRenderer.min',
+								'stat/jqplot.canvasTextRenderer.min',
+								'stat/jqplot.canvasAxisTickRenderer.min',
+								'stat/jqplot.pointLabels.min'
+							),
+							'style' => array(
+								'common/main',
+								'common/platform',
+								'common/fancybox/jquery.fancybox-1.3.4',
+								//stat
+								'stat/jquery.jqplot.min'
 							)
 						)
-					,
-				TRUE),
-				'campaign_profile' => $this -> load -> view('campaign/campaign_profile', 
-					array('campaign_profile' => $campaign,
-						  'campaign_daily_active' => $campaign_daily_active,
-						  'campaign_total_users' => $campaign_total_users),
-				TRUE),
-				'campaign_tabs' => $this -> load -> view('campaign/campaign_tabs', 
-					array(
-						'user_count' => $user_count
+					),
+					'company_image_and_name' => $this -> load -> view('company/company_image_and_name', 
+						array(
+							'company' => $company
 						),
-				TRUE), 
-				'campaign_stat' => $this -> load -> view('campaign/campaign_stat', 
-					array(),
-				TRUE),
-				'campaign_users' => $this -> load -> view('campaign/campaign_users', 
-					array(),
-				TRUE),
-				'footer' => $this -> socialhappen -> get_footer());
-			$this -> parser -> parse('campaign/campaign_view', $data);
-			return $data;
+					TRUE),
+					'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+						array('breadcrumb' => 
+							array(
+								$company['company_name'] => base_url() . "company/{$company['company_id']}",
+								$page['page_name'] => base_url() . "page/{$page['page_id']}",
+								$campaign['campaign_name'] => base_url() . "campaign/{$campaign['campaign_id']}"
+								)
+							)
+						,
+					TRUE),
+					'campaign_profile' => $this -> load -> view('campaign/campaign_profile', 
+						array('campaign_profile' => $campaign,
+							  'campaign_daily_active' => $campaign_daily_active,
+							  'campaign_total_users' => $campaign_total_users),
+					TRUE),
+					'campaign_tabs' => $this -> load -> view('campaign/campaign_tabs', 
+						array(
+							'user_count' => $user_count
+							),
+					TRUE), 
+					'campaign_stat' => $this -> load -> view('campaign/campaign_stat', 
+						array(),
+					TRUE),
+					'campaign_users' => $this -> load -> view('campaign/campaign_users', 
+						array(),
+					TRUE),
+					'footer' => $this -> socialhappen -> get_footer());
+				$this -> parser -> parse('campaign/campaign_view', $data);
+				return $data;
+			}
 		}
 	}
 	
@@ -110,6 +114,7 @@ class Campaign extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_profile($campaign_id = NULL){
+		$this->socialhappen->ajax_check();
 		$this->load->model('campaign_model','campaigns');
 		$profile = $this->campaigns->get_campaign_profile_by_campaign_id($campaign_id);
 		echo json_encode($profile);
@@ -121,6 +126,7 @@ class Campaign extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_users($campaign_id = NULL, $limit = NULL, $offset = NULL){
+		$this->socialhappen->ajax_check();
 		$this->load->model('user_campaigns_model','user_campaigns');
 		$profile = $this->user_campaigns->get_campaign_users_by_campaign_id($campaign_id, $limit, $offset);
 		echo json_encode($profile);
@@ -132,6 +138,7 @@ class Campaign extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_add(){
+		$this->socialhappen->ajax_check();
 		$this->load->model('campaign_model','campaigns');
 		$post_data = array(
 							'app_install_id' => $this->input->post('app_install_id'),

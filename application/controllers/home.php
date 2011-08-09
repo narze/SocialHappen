@@ -6,7 +6,7 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 	}
-function test(){if ($this->socialhappen->check_admin(array('campaign_id'=>1),array('role_campaign_edit'))) echo 'pass';}
+	
 	/**
 	 * Home page
 	 * @author Manassarn M.
@@ -268,7 +268,7 @@ function test(){if ($this->socialhappen->check_admin(array('campaign_id'=>1),arr
 	 * @author Manassarn M.
 	 */
 	function json_check_login($redirect_path = NULL, $current_url = NULL){
-		//$this->socialhappen->ajax_check();
+		$this->socialhappen->ajax_check();
 		$json = array(
 			'logged_in' => $this->socialhappen->is_logged_in(),
 			'redirect' => base_url().issetor($redirect_path,'')
