@@ -2,8 +2,8 @@
         <div class="details">
           <div class="pic">
             <p><img src="<?php echo issetor($app_profile['app_image']); ?>" alt=""></p>
-            <p><a class="bt-go_page" href="#"><span>Uninstall</span></a></p>
-            <p><a class="bt-add_app" href="#"><span>New campaign</span></a></p>
+            <p><a class="bt-go_page" href="<?php echo base_url()."app/go/{$app_profile['app_install_id']}";?>"><span>Go to app</span></a></p>
+            <p><a class="bt-add_app" href="<?php echo base_url()."company/{$company_id}";?>"><span>Add new app</span></a></p>
           </div>
           <h2><?php echo issetor($app_profile['app_name']); ?></h2>
           <p><?php echo issetor($app_profile['app_detail']); ?></p>

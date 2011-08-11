@@ -91,7 +91,7 @@ $config['charset'] = 'UTF-8';
 | setting this variable to TRUE (boolean).  See the user guide for details.
 |
 */
-$config['enable_hooks'] = FALSE;
+$config['enable_hooks'] = TRUE;
 
 
 /*
@@ -364,6 +364,18 @@ $config['proxy_ips'] = '';
 |
 */
 $config['sh_default_fb_app_api_key'] = '20046401b3b5ae931f8d552f5aeae44f';
+
+/*
+|--------------------------------------------------------------------------
+| SocialHappen test mode
+|--------------------------------------------------------------------------
+|
+| When enabled, test mode password is required.
+| (CI's hook must be enabled to use this)
+|
+*/
+$config['sh_test_mode'] = FALSE;
+$config['sh_test_mode_password'] = 'happyeveryday';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

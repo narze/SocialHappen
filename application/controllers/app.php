@@ -83,7 +83,8 @@ class App extends CI_Controller {
 						array('app_profile' => $app,
 							'new_users' => $new_users,
 							'all_users' => $all_users,
-							'count_installed_on' => $this->pages->count_pages_by_app_id($app['app_id'])),
+							'count_installed_on' => $this->pages->count_pages_by_app_id($app['app_id']),
+							'company_id' => $company['company_id']),
 					TRUE),
 					'app_tabs' => $this -> load -> view('app/app_tabs', 
 						array(
@@ -107,6 +108,7 @@ class App extends CI_Controller {
 	/**
 	 * Go to app config page
 	 * @param $app_install_id
+	 * @author Manassarn M.
 	 */
 	function config($app_install_id = NULL){
 		$this->socialhappen->check_logged_in();
@@ -125,6 +127,24 @@ class App extends CI_Controller {
 											$app['app_install_secret_key']);
 				redirect($config_url);
 			}
+		}
+	}
+	
+	/**
+	 * Go to app
+	 * @param $app_install_id
+	 * @author Manassarn M.
+	 */
+	function go($app_install_id = NULL){
+		$this->socialhappen->check_logged_in();
+		$this->load->model('installed_apps_model','installed_apps');
+		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		if($app && isset($app['app_url'])){
+			$this->load->library('app_url');
+			$app_url = $this->app_url->translate_url(
+										$app['app_url'], 
+										$app['app_install_id']);
+			redirect($app_url);
 		}
 	}
 	
