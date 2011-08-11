@@ -1,67 +1,48 @@
-<?php if($user) : ?>
-<div class="wrapper-details">
-	<div>
-		You have already registered SocialHappen
-	</div>
-</div>
-<?php else : ?>
-<div class="wrapper-details">
-	<div class="form">
-		<?php // Change the css classes to suit your needs    
+          <div class="form">
+			<?php // Change the css classes to suit your needs    
 			$attributes = array('class' => '', 'id' => 'signup-form');
 			echo form_open_multipart('home/signup_form', $attributes); ?>
-			<div id="user-information"><h2>User information</h2>
-				<p>
-						<label for="first_name">First name <span class="required">*</span></label>
-						<?php echo form_error('first_name'); ?>
-						<br /><input id="first_name" type="text" name="first_name" maxlength="255" value="<?php echo set_value('first_name'); ?>"  />
-				</p>
-				
-				<p>
-						<label for="last_name">Last name <span class="required">*</span></label>
-						<?php echo form_error('last_name'); ?>
-						<br /><input id="last_name" type="text" name="last_name" maxlength="255" value="<?php echo set_value('last_name'); ?>"  />
-				</p>
-				
-				<p>
-						<label for="email">Email <span class="required">*</span></label>
-						<?php echo form_error('email'); ?>
-						<br /><input id="email" type="text" name="email" maxlength="255" value="<?php echo set_value('email'); ?>"  />
-				</p>
-				
-				<p>
-						<label for="user_image">User image</label>
-						<?php echo form_error('user_image'); ?>
-						<br /><input id="user_image" type="file" name="user_image" />
-						<img src="<?php echo $user_profile_picture;?>" />
-				</p>
-
-			</div>
-			<div id="company-information"><h2>Company information</h2>
-				<p>
-						<label for="company_name">Company name <span class="required">*</span></label>
-						<?php echo form_error('company_name'); ?>
-						<br /><input id="company_name" type="text" name="company_name" maxlength="255" value="<?php echo set_value('company_name'); ?>"  />
-				</p>
-				
-				<p>
-						<label for="company_detail">Company detail</label>
-						<?php echo form_error('company_detail'); ?>
-						<br /><input id="company_detail" type="text" name="company_detail"  value="<?php echo set_value('company_detail'); ?>"  />
-				</p>
-				
-				<p>
-						<label for="company_image">Company image</label>
-						<?php echo form_error('company_image'); ?>
-						<br /><input id="company_image" type="file" name="company_image" />
-				</p>
-			</div>
-			
-			<p>
-					<?php echo form_submit( 'submit-form', 'Submit'); ?>
+            <h2>User Information</h2>
+            <ul class="form">
+              <li>
+				<?php echo form_error('first_name'); ?>
+				<input id="first_name" type="text" name="first_name" maxlength="255" value="<?php echo set_value('first_name'); ?>"  /><span>*</span>
+			  </li>
+              <li>
+				<?php echo form_error('last_name'); ?>
+				<input id="last_name" type="text" name="last_name" maxlength="255" value="<?php echo set_value('last_name'); ?>"  /><span>*</span>
+			  </li>
+              <li>
+				<?php echo form_error('email'); ?>
+				<input id="email" type="text" name="email" maxlength="255" value="<?php echo set_value('email'); ?>"  /><span>*</span>
+			  </li>
+              <li class="pic">
+				<?php echo form_error('user_image'); ?>
+				<div class="img-wrapper"><img src="<?php echo $user_profile_picture.'?type=normal';?>" /></div>
+				<input id="user_image" type="file" name="user_image" style="display:none"/>
+				<span><a href="#">(Change)</a></span>
+			  </li>
+            </ul>
+            <h2>Company information</h2>
+            <ul class="form">
+              <li>
+				<?php echo form_error('company_name'); ?>
+				<input id="company_name" type="text" name="company_name" maxlength="255" value="<?php echo set_value('company_name'); ?>"  /><span>*</span>
+			  </li>
+              <li>
+			    <?php echo form_error('company_detail'); ?>
+				<textarea id="company_detail" name="company_detail"><?php echo set_value('company_detail'); ?></textarea>
+			  </li>
+              <li class="pic">
+				<?php echo form_error('company_image'); ?>
+				<img src="images/thumb80-80-3.jpg" alt="" />
+				<input id="company_image" type="file" name="company_image" style="display:none"/>
+				<span><a href="#">(Change)</a></span></li>
+            </ul>
+            <p>
+				<a class="bt-continue" href="#"><span>Continue</span></a>
 			</p>
-			
-			<?php echo form_close(); ?>
-	</div>
-</div>
-<?php endif; ?>
+            <?php 
+			echo form_submit('signup-form', 'Submit', 'style="display:none"');
+			echo form_close(); ?>
+          </div><!-- div.form -->

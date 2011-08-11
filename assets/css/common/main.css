@@ -108,3 +108,21 @@ div.header > div div.goto > div ul li {
 .bt-create_company {
 	margin: 8px!important;
 }
+
+/* Company application */
+p.alert, div.strip {
+	clear:both;
+}
+
+/* Signup */
+div.wrapper-register > div > div ul > li.pic div.img-wrapper {
+	width:80px;
+	height:80px;
+	overflow:hidden;
+}
+div.wrapper-register > div > div ul > li.pic img {
+	width:80px;
+}
+div.wrapper-register > div > div h2 {
+	clear:both;
+}
