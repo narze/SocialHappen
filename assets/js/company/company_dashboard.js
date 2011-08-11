@@ -266,7 +266,8 @@ function show_installed_page_in_company(){
 											error: function(){
 												show_installed_app_in_page(page_id,facebook_page_id);
 												show_available_app_in_page(page_id);
-												alert("ERROR! cannot install app.");		
+												alert("ERROR! cannot install app.");	
+												console.log("app/curl failed 1");												
 											},
 											success: function(json) {
 												if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK"){																						
@@ -279,7 +280,8 @@ function show_installed_page_in_company(){
 												else{
 													show_installed_app_in_page(page_id,facebook_page_id);
 													show_available_app_in_page(page_id);
-													alert("ERROR! cannot install app.");								
+													alert("ERROR! cannot install app.");	
+													console.log("app/curl json mismatch 1 : " + json);													
 												}
 											},
 											complete: function(){
@@ -289,7 +291,10 @@ function show_installed_page_in_company(){
 									});
 									
 								}
-								else alert("ERROR");
+								else {
+									alert("ERROR");
+									console.log("page/json_add json mismatch 1 : " + json);	
+								}
 							},
 						});
 					}
@@ -355,7 +360,8 @@ function show_installed_app_in_company(){
 							error: function(){
 								show_available_app_in_company();	
 								show_installed_app_in_company();	
-								alert("ERROR! cannot install app.");								
+								alert("ERROR! cannot install app.");	
+								console.log("app/curl failed 2");								
 							},
 							success: function(json) {
 								if(json!=null&&json.status.toUpperCase()=="OK"){	
@@ -377,7 +383,8 @@ function show_installed_app_in_company(){
 								else {
 									show_available_app_in_company();	
 									show_installed_app_in_company();	
-									alert("ERROR! cannot install app.");								
+									alert("ERROR! cannot install app.");
+									console.log("app/curl json mismatch 2 : " + json);
 								}
 							}
 						});
@@ -454,7 +461,8 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 							error: function(){
 								show_installed_app_in_page(page_id,facebook_page_id);
 								show_available_app_in_page(page_id);
-								alert("ERROR");								
+								alert("ERROR");
+								console.log("app/curl failed 3");
 							},
 							success: function(json) {
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK"){
@@ -482,6 +490,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 									show_installed_app_in_page(page_id,facebook_page_id);
 									show_available_app_in_page(page_id);
 									alert("ERROR");
+									console.log("app/curl json mismatch 3 : " + json);
 								}
 							},
 						});
