@@ -4,7 +4,7 @@ class TestMode {
 	function test_mode(){
 		$ci =& get_instance();
 		if($ci->config->item('sh_test_mode')){
-		  $this->load->helper('form');
+		  $ci->load->helper('form');
 			if(isset($_SERVER['HTTP_USER_AGENT'])
 			|| (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')){ //letting calls from file_get_contents() bypass
 				
@@ -29,7 +29,7 @@ class TestMode {
 	function logout(){
 		$ci =& get_instance();
 		$ci->session->unset_userdata('test_mode');
-    $this->load->helper('form');
+    $ci->load->helper('form');
 		$ci->load->view('test_mode');
 	}
 }
