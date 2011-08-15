@@ -303,6 +303,7 @@ class Sync extends CI_Controller {
 								'package_max_pages' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'package_max_users' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'package_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
+								'package_custom_badge' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned)
 							),
 							'package_users' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -1147,7 +1148,8 @@ class Sync extends CI_Controller {
 				'package_max_companies' => 1,
 				'package_max_pages' => 3,
 				'package_max_users' => 10000,
-				'package_price' => 0
+				'package_price' => 0,
+				'package_custom_badge' => 1
 			),
 			array(
 				'package_name' => 'Enterprise package',
@@ -1157,6 +1159,7 @@ class Sync extends CI_Controller {
 				'package_max_pages' => 10,
 				'package_max_users' => 100000,
 				'package_price' => 999
+				'package_custom_badge' => 1
 			)
 		);
 		$this->db->insert_batch('package', $package);
