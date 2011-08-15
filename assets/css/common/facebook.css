@@ -289,6 +289,63 @@ div.account-data div.data ul>li.setting a {
 	background: url(../../images/bg_fb/bg_main.png) no-repeat 9px -280px;
 }
 div.account-data div.data ul>li.setting a span {display: none;}
+
+div.account-data div.userview {
+	float: left;
+	width: 170px;
+	margin-left: 12px;
+}
+div.account-data div.userview>h1 {
+	font-size: 14px;
+	padding: 0 0 5px;
+}
+div.account-data div.friend {
+	float: right;
+	width: 175px;
+	background: #f2f2f2;
+	border: 1px solid #ebebeb;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	padding: 7px 5px 0;
+}
+div.account-data div.friend ul { width: 100%; overflow: hidden; margin: 0 0 5px -2px;}
+div.account-data div.friend ul>li {float:left; margin-left: 5px;}
+div.account-data div.friend p {margin-bottom: 5px; font-size: 11px;}
+div.account-data div.friend p a {
+	display: block;
+	height: 20px;
+	padding: 0 0 0 28px;
+	line-height: 20px;
+	color: #14495b;
+}
+div.account-data div.friend p a:hover {text-decoration: none;}
+div.account-data div.friend a.link-friendsjoin { background: url(../../images/bg_fb/bg_main.png) no-repeat 0 -530px;}
+div.account-data div.friend a.link-invite_friend {background: url(../../images/bg_fb/bg_main.png) no-repeat 2px -557px;}
+div.account-data div.userview ul {
+	width: 156px;
+	height: 48px;
+	background: url(../../images/bg_fb/bg_datalist2.png) no-repeat;
+}
+div.account-data div.userview ul>li {
+	float: left;
+	height: 48px;
+	text-align: right;
+	line-height: 48px;
+	font-weight: bold;
+	font-size: 14px;
+}
+div.account-data div.userview ul>li:first-child {
+	width: 54px;	
+	padding: 0 5px 0 30px;
+}
+div.account-data div.userview ul>li:first-child+li {
+	width: 35px;
+	padding: 0 5px 0 25px;
+}
+
+
+
 div.wrapper-content {
 	width: 498px;
 	-webkit-border-radius: 5px;
@@ -388,6 +445,11 @@ div.list_app-camp>ul>li>div:first-child p {padding-bottom: 5px;}
 div.list_app-camp>ul>li>div:first-child p a { color: #63791c; font-weight: bold; text-decoration: underline;}
 div.list_app-camp>ul>li>div:first-child p a:hover {text-decoration: none;}
 div.list_app-camp>ul>li>div:first-child p.link {position: absolute; left: 90px; bottom: 0; padding: 0;}
+div.list_app-camp>ul>li>div:first-child p.link>a+a {
+	margin-left: 5px;
+	padding-left: 11px;
+	background:url(../../images/bg_fb/bg_main.png) 0 -580px;
+}
 div.list_app-camp>ul>li>div:first-child+div {
 	float: right;
 	width: 148px;
@@ -402,6 +464,11 @@ div.list_app-camp>ul>li>div:first-child+div {
 div.list_app-camp>ul>li>div:first-child+div>h2 { font-size: 12px; color: #144957; padding-bottom: 5px;}
 div.list_app-camp>ul>li>div:first-child+div>p {padding: 0 0 5px;}
 div.list_app-camp>ul>li>div:first-child+div>p stromg { font-size: 16px;}
+div.list_app-camp>ul>li>div:first-child+div>ul {width: 100%; overflow: hidden; padding: 5px 0; background: #f9f9f9; border-top: 1px solid #e1e1e1;}
+div.list_app-camp>ul>li>div:first-child+div>ul>li { float: left; width: 50%; text-align: center; font-weight: bold;}
+div.list_app-camp>ul>li>div:first-child+div>ul>li>span {display: block; color: #65781c; font-size: 11px; font-weight: normal;}
+div.list_app-camp>ul>li>div:first-child+div.clear { background: #f9f9f9;}
+div.list_app-camp>ul>li>div:first-child+div.clear>ul {border: none;}
 
 div.list_resent-activity {
 	width: 475px;
@@ -635,13 +702,13 @@ div.box-intro>div.slide a.back { background-position: 0 -466px; left: 0;}
 div.box-intro>div.slide a.next {background-position: 0 -407px; right: 0;}
 
 /* button */
-*.bt-join, *.bt-already_join, *.bt-time_up, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-button-on, *.bt-button-off, *.bt-go_dashboard {
+*.bt-join, *.bt-already_join, *.bt-time_up, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-button-on, *.bt-button-off, *.bt-go_dashboard, *.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome {
 	background: url(../../images/bg_fb/bg_button.png) no-repeat;
 	cursor: pointer;
 	border: none;
 	color: transparent;
 }
-*.bt-join span, *.bt-bt-already_join span, *.bt-time_up span, *.bt-change_pic span, *.bt-update span, *.bt-close_account span, *.bt-button-on span, *.bt-button-off span, *.bt-go_dashboard span {display: none;}
+*.bt-join span, *.bt-bt-already_join span, *.bt-time_up span, *.bt-change_pic span, *.bt-update span, *.bt-close_account span, *.bt-button-on span, *.bt-button-off span, *.bt-go_dashboard span, *.bt-back_dashboard span, *.bt-config span, *.bt-stay_fb span, *.bt-register-now span, *.bt-join-social span, *.bt-don-awesome span{display: none;}
 *.bt-join {
 	display: block;
 	width: 104px;
@@ -706,3 +773,124 @@ div.box-intro>div.slide a.next {background-position: 0 -407px; right: 0;}
 	height: 32px;
 	background-position: 0 -313px;
 }
+*.bt-back_dashboard {
+	float: left;
+	width: 143px;
+	height: 32px;
+	background-position: 0 -351px;
+}
+*.bt-config {
+	float: left;
+	width: 67px;
+	height: 32px;
+	background-position: 0 -464px;
+	margin-left: 9px;
+}
+*.bt-stay_fb {
+	float: left;
+	width: 127px;
+	height: 32px;
+	background-position: 0 -389px;
+	margin-left: 9px;
+}
+*.bt-register-now {
+	display: block;
+	margin: 0 auto;
+	width: 175px;
+	height: 32px;
+	background-position: 0 -427px;
+}
+*.bt-join-social {
+	display: block;
+	margin: 0 auto;
+	width: 175px;
+	height: 32px;
+	background-position: 0 -502px;
+}
+*.bt-don-awesome {
+	display: block;
+	margin: 0 auto;
+	width: 176px;
+	height: 32px;
+	background-position: 0 -540px;
+}
+/* Popup */
+div.popup-fb {
+	width: 445px;
+	padding: 15px 15px 5px; 
+	border: 5px solid #adca4a;
+	background: #fff;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+div.popup-fb>h2 {
+	border-bottom: 1px dotted #a6a6a6;
+    color: #424242;
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0 0 14px;
+    padding: 0 0 7px;
+}
+div.popup-fb div.button {
+	position: relative;
+	min-height: 32px;
+	margin: 10px 0;
+}
+div.popup-fb div.button p.right {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+div.popup-fb-2col {
+	width: 455px;
+	padding: 15px 15px 5px; 
+	border: 5px solid #adca4a;
+	background: #fff;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+div.popup-fb-2col>div {
+	width: 100%;
+	overflow: hidden;
+}
+div.popup-fb-2col>div>div:first-child {float: left; width: 260px;}
+div.popup-fb-2col>div>div:first-child+div {float: right; width: 180px;}
+div.popup-fb-2col>div>div:first-child+div div.profile {
+	position: relative;
+	min-height: 50px;
+	padding-left: 60px;
+	margin-bottom: 10px;
+}
+div.popup-fb-2col>div>div:first-child+div div.profile p.thumb {position: absolute; left: 0; top: 0;}
+div.popup-fb-2col>div>div:first-child+div div.profile p {font-size: 12px; font-weight: bold; color: #38599c;}
+div.popup-fb-2col>div>div:first-child+div div.profile p span {display: block;}
+div.popup-fb-2col>div>div:first-child+div div.form>h2 { font-size: 12px; margin-bottom: 3px;}
+div.popup-fb-2col>div>div:first-child+div div.form p {padding: 5px 0 10px;}
+div.popup-fb-2col>div>div:first-child+div div.form ul>li {width: 100%; overflow: hidden; margin-bottom: 5px;}
+div.popup-fb-2col>div>div:first-child+div div.form ul>li label {float: left; width: 57px; text-align: right; padding-right: 8px;}
+div.popup-fb-2col>div>div:first-child+div div.form ul>li input[type="text"] {
+	width: 110px;
+	height: 18px;
+	background: #fff;
+	border: 1px solid #c5c5c5;
+}
+div.popup-fb-2col>div>div:first-child+div div.join>h2 {
+	font-size: 14px;
+	padding: 0 0 10px;
+}
+div.popup-fb-2col>div>div:first-child+div div.join>ul {min-height: 90px;}
+div.popup-fb-2col>div>div:first-child+div div.join>ul>li {
+	position: relative;
+	min-height: 15px;
+	padding: 0 0 4px 15px;
+}
+div.popup-fb-2col>div>div:first-child+div div.join>ul>li>span {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.popup-fb-2col>div>div:first-child+div div.join>P {padding-bottom: 10px;}
+
+
