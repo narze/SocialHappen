@@ -4,7 +4,7 @@ $(function(){
 			href: base_url+'home/'+popup_name,
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
-			padding: 20,
+			padding: 0,
 			scrolling: 'no'
 		});
 	}
@@ -14,7 +14,7 @@ $(function(){
 			href: base_url+'home/create_company',
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
-			padding: 20,
+			padding: 0,
 			scrolling: 'no'
 		});
 		$('#create-company-form').load(base_url+'home/create_company_form');
