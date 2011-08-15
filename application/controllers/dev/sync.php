@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define("SESSION_TABLE_NAME","sessions");
+
 /**
  * @class Sync
  * @category Controller
@@ -27,6 +29,9 @@ class Sync extends CI_Controller {
 		$host = $this->db->hostname;
 		$username = $this->db->username;
 		$password = $this->db->password;
+		$database = $this->db->database;
+		$prefix = $this->db->dbprefix;
+		$session_table = SESSION_TABLE_NAME;
 		if(isset($_GET['u']) && isset($_GET['p'])){
 			$username = $_GET['u'];
 			$password = $_GET['p'];
@@ -34,13 +39,13 @@ class Sync extends CI_Controller {
 		$con = mysql_connect($host,$username,$password);
 		if (!$con)
 		    {
-				die('Could not connect: ' . mysql_error());
+				die('Could not connect to mysql: ' . mysql_error());
  		    }
-		if (!mysql_query("CREATE DATABASE IF NOT EXISTS socialhappen",$con)){
-			echo "Error creating database: " . mysql_error()."<h3>Try dev/sync?u=username&p=password</h3>";
+		if (!mysql_query("CREATE DATABASE IF NOT EXISTS {$database}",$con)){
+			echo "Error creating database '{$database}': " . mysql_error()."<h3>Try dev/sync?u=username&p=password</h3>";
 		}
 		
-		if (!mysql_query("CREATE TABLE IF NOT EXISTS socialhappen.sh_sessions (
+		if (!mysql_query("CREATE TABLE IF NOT EXISTS {$database}.{$prefix}{$session_table} (
 						session_id varchar(40) DEFAULT '0' NOT NULL,
 						ip_address varchar(16) DEFAULT '0' NOT NULL,
 						user_agent varchar(50) NOT NULL,
@@ -49,7 +54,7 @@ class Sync extends CI_Controller {
 						PRIMARY KEY (session_id)
 						); 
 					",$con)){
-			echo "Error creating table: " . mysql_error();
+			echo "Error creating session table: " . mysql_error();
 		}
 	}
 	
@@ -84,7 +89,7 @@ class Sync extends CI_Controller {
 	}
 	
 	function create_database(){
-		$this->dbforge->create_database('socialhappen');
+		$this->dbforge->create_database($this->db->database);
 	}
 	
 	function create_tables(){
