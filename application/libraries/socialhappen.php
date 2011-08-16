@@ -402,7 +402,7 @@ class SocialHappen{
 	}
 	
 	/**
-	 * Check package previledges
+	 * Check package
 	 * @param $user_id
 	 * @param $mode
 	 * @author Manassarn M.
@@ -415,6 +415,6 @@ class SocialHappen{
 			return $this->packages->check_user_package_can_add_page($user_id);
 		} else if ($mode == "user"){
 			return $this->packages->check_user_package_can_add_user($user_id);
-		}
+		} else return FALSE;
 	}
 }
