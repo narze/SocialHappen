@@ -5,16 +5,53 @@ a {
 	display: none;
 }
 
+.bt-go_page, .bt-add_app, .bt-addnew_app, .bt-create_page, .bt-edit, .bt-setting, .bt-delete, .bt-go, .bt-create_company, .bt-manage_page, .bt-setting_page, .bt-update_app, .bt-setting_app, .bt-go-cam, .bt-remove, .bt-block, .bt-label, .bt-orderby, .bt-apply, .bt-change_pic, .bt-update, .bt-close_account, .bt-setting_company, .bt-delete_company, .bt-delete_company-1, .bt-delete_page, .bt-upgrade_package, .bt-print-invoice, .bt-learn_more, .bt-continue, .bt-register-now, .bt-go_community, .bt-go_company, .bt-save_addmore, .bt-save_config, .bt-cancel, .bt-install_app, .bt-campaign_page, .bt-setting_campaign, .bt-view_reward {
+	text-indent: -9000px;
+	overflow:hidden;
+}
+
+/* FancyBox Hack */
+#fancybox-outer {
+	background:none!important;
+}
+#fancybox-content {
+	border: 8px solid #B5CA6E!important;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+#fancybox-bg-w {
+	left: -16px!important;
+}
+#fancybox-close {
+	right: -30px!important;
+}
+
+/* Pop up */
+div.popup_fb-connect, div.popup_select-destination, div.popup_select-company, div.popup_create-company, div.popup_add-app {
+	-webkit-border-radius: 0px!important;
+    -moz-border-radius: 0px!important;
+    border-radius: 0px!important;
+	background: #fff;
+	padding: 20px 20px 10px;
+	border:none!important;
+	border-radius: 0 	!important;
+	min-width:300px;
+}
+
 /* Member list */
-div[class^="detail-list"] p.thumb {
+.popup_select-company > div[class^="detail-list"] p.thumb {
 	width:50px!important;
+	height:50px;
+	overflow:hidden;
 }
 div[class^="detail-list"] p.thumb img,
-div.pic-profile p.pic img,
+div.pic-profile p.pic img
 {
 	width:50px;
 	height:50px;
 	overflow:hidden;
+	border:0!important;
 }
 
 /* Company setting */
@@ -45,46 +82,14 @@ div.company-app ul li p img {
 .clear {clear:both;}
 
 /* Select Company Box*/
-hr.dot01 {
-	border:none;
-	margin:10px auto;
-	border-bottom: 1px dotted #e4e4e4; 
-	width: 100%;
+div.popup_select-company > ul > li div.detail-list h2 a {
+	color: #677D2A;
 }
-ul.company {
-	
-}
-ul.company li {
-	display:block;
-	border-bottom: 1px solid #e4e4e4; 
-}
-ul.company li:last-child {
-	border-bottom: none; 
-}
-ul.company li a {
-	margin-top:10px;
-	margin-bottom:10px;
-	text-decoration:none;
-	display:block;
-}
-ul.company li a span {
-	display:block;
-	float:left;
-}
-ul.company li p.company-name { 
-	font-weight:bold;
-	color:#617328;
-	padding-left:5px;
-}
-ul.company li p.company-info { 
-	color:#999;
-	font-size:90%;
-	padding-left:5px;
-}
-img.thumb {
-	width:50px;
-	height:50px;
-	border: 1px solid #e4e4e4;
+div[class^="detail-list"] p.thumb img, div.pic-profile p.pic img
+{
+	width:80px;
+	height:80px;
+	overflow:hidden;
 }
 
 /* Company dashboard */
@@ -125,4 +130,65 @@ div.wrapper-register > div > div ul > li.pic img {
 }
 div.wrapper-register > div > div h2 {
 	clear:both;
+}
+div.upload-pic {
+	width:80px;
+	height:20px; 
+	cursor: pointer; 
+	overflow: hidden; 
+	position: absolute;
+}
+div.upload-pic input {
+	filter: alpha(opacity = 0);
+	zoom:1;
+	opacity:0;
+	position:absolute;
+	top:0;
+	right:0;
+}
+
+/* Create company */
+div.popup_create-company  {
+	width:320px;
+}
+div.popup_create-company  h2 {
+	margin-bottom:10px;
+}
+div.popup_create-company  ul {
+	padding: 0 0 0 95px;
+	position: relative;
+}
+div.popup_create-company ul>li{
+	margin-bottom: 10px;
+}
+div.popup_create-company ul>li.pic {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.popup_create-company ul>li.pic div.upload-pic {
+	text-align:center;
+}
+div.popup_create-company ul > li a {
+	color: #65781F;
+	text-decoration: underline;
+}
+div.popup_create-company ul > li > span {
+	position: absolute;
+	top: -10px;
+	right: 2px;
+	color: #DB3332;
+	font-size: 11px;
+}
+div.popup_create-company ul>li input[type="text"] {
+	width: 210px;
+	border: 1px solid #c5c5c5;
+	padding: 0 5px;
+	height: 25px;
+}
+div.popup_create-company ul>li textarea {
+	width: 210px;
+	height: 105px;
+	border: 1px solid #c5c5c5;
+	padding: 5px;
 }

@@ -1,11 +1,5 @@
 $(function(){
 
-	//User image
-	$('li.pic:first-child').click(function() {
-		$('#user_image').click();
-	});
-	
-	
 	//First name
 	var firstname = $('#first_name').val('First name').addClass('inactive');
 	firstname.focus(function () {

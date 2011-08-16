@@ -20,17 +20,27 @@ $(function(){
 			href: base_url+'home/create_company',
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
-			padding: 20,
+			padding: 0,
 			scrolling: 'no'
 		});
 		
 		$('#create-company-form').load(base_url+'home/create_company_form');
-
+	
 		$('form.create-company-form').die('submit');
 		$('form.create-company-form').live('submit',function(){
 			$(this).ajaxSubmit({target:'#create-company-form'});
 			return false;
 		});
+		return false;
+	});
+	
+	$('.bt-continue').live('click',function(){
+		
+		if($('#company_name').attr('class') == 'inactive') $('#company_name').val('');
+		if($('#company_detail').attr('class') == 'inactive') $('#company_detail').val('');
+		
+		$('form.create-company-form').die('submit');
+		$('form.create-company-form').ajaxSubmit({target:'#create-company-form'});
 		return false;
 	});
 });

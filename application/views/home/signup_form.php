@@ -19,8 +19,10 @@
               <li class="pic">
 				<?php echo form_error('user_image'); ?>
 				<div class="img-wrapper"><img src="<?php echo $user_profile_picture.'?type=normal';?>" /></div>
-				<input id="user_image" type="file" name="user_image" style="display:none"/>
-				<span><a href="#">(Change)</a></span>
+				<div class="upload-pic">
+					<span><a href="#">(Change)</a></span>
+					<input id="user_image" type="file" name="user_image" />
+				</div>
 			  </li>
             </ul>
             <h2>Company information</h2>
@@ -36,8 +38,11 @@
               <li class="pic">
 				<?php echo form_error('company_image'); ?>
 				<img src="images/thumb80-80-3.jpg" alt="" />
-				<input id="company_image" type="file" name="company_image" style="display:none"/>
-				<span><a href="#">(Change)</a></span></li>
+				<div class="upload-pic">
+					<span><a href="#">(Change)</a></span>
+					<input id="company_image" type="file" name="company_image" />
+				</div>
+			  </li>
             </ul>
             <p>
 				<a class="bt-continue" href="#"><span>Continue</span></a>
