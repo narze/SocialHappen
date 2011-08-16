@@ -45,6 +45,38 @@ class Package_model extends CI_Model {
 	function remove_package_app_by_app_id($user_id = NULL){
 	
 	}
+	
+	function get_package_by_user_id($user_id = NULL){
+		$this->db->join('package','package.package_id=package_users.package_id');
+		return $this->db->get_where('package_users',array('user_id' => $user_id))->result_array();
+	}
+	
+	function check_user_package_can_add_company($user_id = NULL){
+		$package = $this->get_package_by_user_id($user_id);
+		$company_max_count = (int) $package['package_max_companies'];
+		
+		$this->db->where(array('user_id' => $user_id));
+		$count = $this->db->count_all_results('user_companies');
+		return ($company_max_count - $count > 0);
+	}
+	
+	function check_user_package_can_add_page($user_id = NULL){
+		$package = $this->get_package_by_user_id($user_id);
+		$page_max_count = (int) $package['package_max_pages'];
+		
+		$this->db->where(array('user_id' => $user_id));
+		$count = $this->db->count_all_results('user_companies');
+		return ($page_max_count - $count > 0);
+	}
+	
+	function check_user_package_can_add_user($user_id = NULL){
+		$package = $this->get_package_by_user_id($user_id);
+		$user_max_count = (int) $package['package_max_users'];
+		
+		$this->db->where(array('user_id' => $user_id));
+		$count = $this->db->count_all_results('user_companies');
+		return ($user_max_count - $count > 0);
+	}
 }
 
 /* End of file package_model.php */
