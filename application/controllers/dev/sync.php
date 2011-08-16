@@ -9,6 +9,13 @@ define("SESSION_TABLE_NAME","sessions");
 class Sync extends CI_Controller {
 	
 	function __construct(){
+		if (defined('ENVIRONMENT'))
+		{
+			if (ENVIRONMENT == 'production')
+			{
+				exit('For development & testing only.');
+			}
+		}
 		parent::__construct();
 		$this->preload();
 		$this->load->dbforge();
@@ -44,17 +51,18 @@ class Sync extends CI_Controller {
 		if (!mysql_query("CREATE DATABASE IF NOT EXISTS {$database}",$con)){
 			echo "Error creating database '{$database}': " . mysql_error()."<h3>Try dev/sync?u=username&p=password</h3>";
 		}
-		
-		if (!mysql_query("CREATE TABLE IF NOT EXISTS {$database}.{$prefix}{$session_table} (
-						session_id varchar(40) DEFAULT '0' NOT NULL,
-						ip_address varchar(16) DEFAULT '0' NOT NULL,
-						user_agent varchar(50) NOT NULL,
-						last_activity int(10) unsigned DEFAULT 0 NOT NULL,
-						session_data text default '' not null,
-						PRIMARY KEY (session_id)
-						); 
-					",$con)){
-			echo "Error creating session table: " . mysql_error();
+		if($this->config->item('sess_use_database')) {
+			if (!mysql_query("CREATE TABLE IF NOT EXISTS {$database}.{$prefix}{$session_table} (
+							session_id varchar(40) DEFAULT '0' NOT NULL,
+							ip_address varchar(16) DEFAULT '0' NOT NULL,
+							user_agent varchar(50) NOT NULL,
+							last_activity int(10) unsigned DEFAULT 0 NOT NULL,
+							session_data text default '' not null,
+							PRIMARY KEY (session_id)
+							); 
+						",$con)){
+				echo "Error creating session table: " . mysql_error();
+			}
 		}
 	}
 	
