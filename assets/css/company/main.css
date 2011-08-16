@@ -596,12 +596,8 @@ div.strip ul li a.current {background-position: 0 -657px;}
 
 /*popup*/
 div.popup-addapp {
-	width: 905px;
-	-webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+	width: 908px;
 	background: #fff;
-	border: 1px solid #dcdcdc;
 }
 div.popup-addapp:after{
     clear:both;
@@ -618,7 +614,7 @@ div.popup-addapp>div:first-child>p b { color: #63791c;}
 div.popup-addapp>div:first-child  div.dragging-app {padding: 0 10px;}
 div.popup-addapp>div:first-child+div {
 	float: left;
-	width: 323px;
+	width: 326px;
 	border: 1px solid #d4d4d4;
 	-webkit-border-radius: 5px;
     -moz-border-radius: 5px;

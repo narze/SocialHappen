@@ -30,11 +30,13 @@
               <p><?php echo $app['app_description'];?></p>
               <p class="link"><a href="#">read more</a></p>
             </div>
-            <?php if($is_admin) :?>
-			<div>
-				<p>Today : <?php echo '[]';?></p>
-				<p>All : <?php echo '[]';?></p>
-			</div>
+            <?php if($is_admin) :?>			
+			<div class="clear">
+              <ul>
+                <li><?php echo '[]';?><span>Today</span></li>
+                <li><?php echo '[]';?><span>All</span></li>
+              </ul>
+            </div>
 			<?php endif; ?>   
            </li>
 		<?php endforeach; 
