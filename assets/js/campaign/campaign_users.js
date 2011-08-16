@@ -31,12 +31,19 @@ $(function(){
 				$('.old-result').remove();
 			}
 		});
+		
+		if($('div.pagination-users').find('a').length == 0) {
+			$('div.pagination-users').find('div.pagination').remove();
+		}
+		
 		return false;
 	}
 
 	$('.pagination-users').pagination(user_count, {
         items_per_page:per_page,
         callback:get_campaign_users,
-		load_first_page:true
+		load_first_page:true,
+		next_text:'>',
+		prev_text:'<'
 	});
 });

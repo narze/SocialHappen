@@ -15,7 +15,7 @@ $(function(){
 
 					var app_list = row.find('td.app-list div');
 					app_list.find('p.thumb img').attr('src', imgsize(json[i].user_image,'square'));
-					app_list.find('h2,p.thumb').append('<a href="'+base_url+'/user/app/'+json[i].user_id+'/'+app_install_id+'">'+json[i].user_first_name+' '+json[i].user_last_name+'</a>');
+					app_list.find('h2').append('<a href="'+base_url+'/user/app/'+json[i].user_id+'/'+app_install_id+'">'+json[i].user_first_name+' '+json[i].user_last_name+'</a>');
 					app_list.find('p.email').append(json[i].user_email); //Facebook profile link
 					//add : last active & joined date
 					row.find('td.status.app-status span').append(json[i]); //star point
@@ -31,6 +31,11 @@ $(function(){
 			}
 			$('.old-result').remove();
 		});
+		
+		if($('div.pagination-users').find('a').length == 0) {
+			$('div.pagination-users').find('div.pagination').remove();
+		}
+		
 		return false;
 	}
 
@@ -39,7 +44,9 @@ $(function(){
 			$('.pagination-users').pagination(count, {
 				items_per_page:per_page,
 				callback:get_app_users,
-				load_first_page:true
+				load_first_page:true,
+				next_text:'>',
+				prev_text:'<'
 			});
 		});
 		return false;

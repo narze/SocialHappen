@@ -29,6 +29,11 @@ $(function(){
 			}
 			$('.old-result').remove();
 		});
+		
+		if($('div.pagination-apps').find('a').length == 0) {
+			$('div.pagination-apps').find('div.pagination').remove();
+		}
+		
 		return false;
 	}
 	
