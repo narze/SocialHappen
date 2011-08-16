@@ -1,49 +1,59 @@
 $(function(){
 
-	//First name
-	var firstname = $('#first_name').val('First name').addClass('inactive');
-	firstname.focus(function () {
-		if($(this).val() == 'First name') $(this).val('').removeClass('inactive');
-	});
-	firstname.blur(function () {
-		if($(this).val() == '') $(this).val('First name').addClass('inactive');
-	});
+	var firstname;
+	var lastname;
+	var email;
+	var companyname;
+	var companydetail;
 	
-	//Last name
-	var lastname = $('#last_name').val('Last name').addClass('inactive');
-	lastname.focus(function () {
-		if($(this).val() == 'Last name') $(this).val('').removeClass('inactive');
-	});
-	lastname.blur(function () {
-		if($(this).val() == '') $(this).val('Last name').addClass('inactive');
-	});
+	label();
 	
-	//Email
-	var email = $('#email').val('Email').addClass('inactive');
-	email.focus(function () {
-		if($(this).val() == 'Email') $(this).val('').removeClass('inactive');
-	});
-	email.blur(function () {
-		if($(this).val() == '') $(this).val('Email').addClass('inactive');
-	});
-	
-	//Company name
-	var companyname = $('#company_name').val('Company name').addClass('inactive');
-	companyname.focus(function () {
-		if($(this).val() == 'Company name') $(this).val('').removeClass('inactive');
-	});
-	companyname.blur(function () {
-		if($(this).val() == '') $(this).val('Company name').addClass('inactive');
-	});
-	
-	//Company detail
-	var companydetail = $('#company_detail').val('Company detail').addClass('inactive');
-	companydetail.focus(function () {
-		if($(this).val() == 'Company detail') $(this).val('').removeClass('inactive');
-	});
-	companydetail.blur(function () {
-		if($(this).val() == '') $(this).val('Company detail').addClass('inactive');
-	});
+	function label() {
+		//First name
+		firstname = $('#first_name').val('First name').addClass('inactive');
+		firstname.focus(function () {
+			if($(this).val() == 'First name') $(this).val('').removeClass('inactive');
+		});
+		firstname.blur(function () {
+			if($(this).val() == '') $(this).val('First name').addClass('inactive');
+		});
+		
+		//Last name
+		lastname = $('#last_name').val('Last name').addClass('inactive');
+		lastname.focus(function () {
+			if($(this).val() == 'Last name') $(this).val('').removeClass('inactive');
+		});
+		lastname.blur(function () {
+			if($(this).val() == '') $(this).val('Last name').addClass('inactive');
+		});
+		
+		//Email
+		email = $('#email').val('Email').addClass('inactive');
+		email.focus(function () {
+			if($(this).val() == 'Email') $(this).val('').removeClass('inactive');
+		});
+		email.blur(function () {
+			if($(this).val() == '') $(this).val('Email').addClass('inactive');
+		});
+		
+		//Company name
+		companyname = $('#company_name').val('Company name').addClass('inactive');
+		companyname.focus(function () {
+			if($(this).val() == 'Company name') $(this).val('').removeClass('inactive');
+		});
+		companyname.blur(function () {
+			if($(this).val() == '') $(this).val('Company name').addClass('inactive');
+		});
+		
+		//Company detail
+		companydetail = $('#company_detail').val('Company detail').addClass('inactive');
+		companydetail.focus(function () {
+			if($(this).val() == 'Company detail') $(this).val('').removeClass('inactive');
+		});
+		companydetail.blur(function () {
+			if($(this).val() == '') $(this).val('Company detail').addClass('inactive');
+		});
+	}
 	
 	function reset_blank_field()
 	{
@@ -56,7 +66,7 @@ $(function(){
 	
 	$('a.bt-continue').click(function() {
 		reset_blank_field();
-		$('#signup-form').ajaxSubmit({target:'div.form'});
+		$('#signup-form').ajaxSubmit({target:'div.form',success:label});
 		return false;
 	});
 });

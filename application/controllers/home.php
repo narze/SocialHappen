@@ -139,7 +139,7 @@ class Home extends CI_Controller {
 		 	$company = array(
 					       	'company_name' => set_value('company_name'),
 					       	'company_detail' => set_value('company_detail'),
-					       	'company_image' => issetor($company_image),
+					       	'company_image' => !$company_image ? base_url().'images/thumb80-80-3.jpg' : $company_image,
 					       	'creator_user_id' => $this->socialhappen->get_user_id()
 						);
 			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company), TRUE);

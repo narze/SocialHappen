@@ -14,7 +14,7 @@
 			  </li>
               <li class="pic">
 				<?php echo form_error('company_image'); ?>
-				<img src="../images/thumb80-80-3.jpg" alt="" />
+				<img src="<?php echo base_url(); ?>images/thumb80-80-3.jpg" alt="" />
 				<div class="upload-pic">
 					<span><a href="#">(Change)</a></span>
 					<input id="company_image" type="file" name="company_image" />
