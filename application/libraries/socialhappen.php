@@ -400,4 +400,21 @@ class SocialHappen{
 		$user = $this->CI->users->get_user_profile_by_user_id($user_id);
 		return count($user) != 0;
 	}
+	
+	/**
+	 * Check package previledges
+	 * @param $user_id
+	 * @param $mode
+	 * @author Manassarn M.
+	 */
+	function check_package_by_user_id_and_mode($user_id = NULL, $mode = NULL){
+		$this->load->model("package_model","packages");
+		if($mode == "company"){
+			return $this->packages->check_user_package_can_add_company($user_id);
+		} else if ($mode == "page"){
+			return $this->packages->check_user_package_can_add_page($user_id);
+		} else if ($mode == "user"){
+			return $this->packages->check_user_package_can_add_user($user_id);
+		}
+	}
 }
