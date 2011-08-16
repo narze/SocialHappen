@@ -44,3 +44,30 @@ div.header {
 	width:28px;
 	height:28px;
 }
+/* Pagination */
+div.strip {padding: 10px 0;}
+div.strip div.pagination {
+    height: 10px;
+    margin: 0 auto;
+    width: 100px;
+}
+div.strip div.pagination a , div.strip div.pagination span.current {
+    float: left;
+    margin: 0 5px;
+}
+div.strip div.pagination a {
+    background: url(../../images/bg_fb/bg_main.png) no-repeat scroll 0 -347px;
+    display: block;
+    height: 10px;
+    width: 10px;
+	text-indent:-900px;
+	overflow:hidden;
+}
+div.strip div.pagination span.current {
+	background: url(../../images/bg_fb/bg_main.png) no-repeat scroll 0 -328px;
+    display: block;
+    height: 10px;
+    width: 10px;
+	text-indent:-900px;
+	overflow:hidden;
+}

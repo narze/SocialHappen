@@ -53,6 +53,9 @@ $(function(){
 			var mode = '';
 			function get_apps_campaigns(page_index,jq){
 				$('div.list_app-camp').load(base_url+'tab/apps_campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode,trigger_countdown);
+				if($('div.pagination-app-campaign').find('a').length == 0) {
+					$('div.pagination-app-campaign').find('div.pagination').remove();
+				}
 			}
 			
 			$('div.list_app-camp').load(base_url+'tab/apps_campaigns/'+page_id+'/'+per_page,function(){
@@ -116,6 +119,10 @@ $(function(){
 				$('div.list_resent-activity').children('ul').children('li').hide();
 				for(i=0;i<per_page;i++){
 					$('div.list_resent-activity').children('ul').children('li:eq('+((page_index * per_page)+i)+')').show();
+				}
+				
+				if($('div.pagination-activity').find('a').length == 0) {
+					$('div.pagination-activity').find('div.pagination').remove();
 				}
 			}
 			
