@@ -431,6 +431,8 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$company_id = $this->input->get('company_id', TRUE);
+		$page_id = $this->input->get('page_id', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
 			echo json_encode(array( 'error' => '100',
@@ -998,6 +1000,54 @@ class Api extends CI_Controller {
 							'session_id' => $session_id);
 		}
 
+		echo json_encode($response);
+	}
+	
+	/**
+	 * Request user profile
+	 * @author Manassarn M.
+	 */
+	function request_user(){
+								
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
+			return;
+		}
+		
+		// authenticate app with $app_id and $app_secret_key
+		if(!($this->_authenticate_app($app_id, $app_secret_key))){
+			echo json_encode(array( 'error' => '200',
+									'message' => 'invalid app_secret_key'));
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid app_install_secret_key'));
+			return;
+		}
+
+		$response = array('status' => 'OK');
+		
+		// get user
+		$this->load->model('User_model', 'User');
+		if(!$this->User->check_exist($user_facebook_id)){
+			$response['message'] = 'User not found';
+		} else {
+			$user = $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
+			$response['user_id'] = $user['user_id'];
+			$response['user_first_name'] = $user['user_first_name'];
+			$response['user_last_name'] = $user['user_last_name'];
+			$response['user_email'] = $user['user_email'];
+		}
 		echo json_encode($response);
 	}
 	
