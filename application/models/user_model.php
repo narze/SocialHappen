@@ -212,8 +212,9 @@ class User_model extends CI_Model {
 	 * Update user last seen
 	 * @param $user_id
 	 * @author Wachiraph C. - revise May 2011
+	 * @author Manassarn M. - Fix bugs
 	 */
 	function update_user_last_seen($user_id) {
-		$this -> update( array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
+		return $this -> db -> update('user', array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
 	}
 }
