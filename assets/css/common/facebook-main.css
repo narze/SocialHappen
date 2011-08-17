@@ -44,6 +44,7 @@ div.header {
 	width:28px;
 	height:28px;
 }
+
 /* Pagination */
 div.strip {padding: 10px 0;}
 div.strip div.pagination {
@@ -70,4 +71,85 @@ div.strip div.pagination span.current {
     width: 10px;
 	text-indent:-900px;
 	overflow:hidden;
+}
+
+/* Guest popup */
+div.popup-fb-2col {
+	width: 390px;
+	padding: 15px 15px 5px 15px;
+	border: 0px solid #ADCA4A;
+	background: white;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+div.popup-fb-2col > div > div:first-child {
+	float: left;
+	width: 210px;
+	overflow: hidden;
+}
+div.popup-fb-2col > div > div:first-child img {
+	width: 200px;
+	height: 190px;
+}
+div.popup-fb-2col > div > div:first-child + div {
+	float: left;
+	width: 180px;
+}
+
+/* Signup */
+div.upload-pic {
+	width:50px;
+	height:20px; 
+	cursor: pointer; 
+	overflow: hidden; 
+	position: absolute;
+	left: 0;
+	top: 50px;
+	font-size:11px;
+	text-align: center;
+}
+div.upload-pic a {
+	color:#65781F;
+}
+div.upload-pic input {
+	filter: alpha(opacity = 0);
+	zoom:1;
+	opacity:0;
+	position:absolute;
+	top:0;
+	right:0;
+}
+label.error {color:red;}
+
+/* Dashboard */
+.bt-time_up {
+	cursor:auto;
+}
+
+/*  Popup FB */
+div.popup-fb {
+	width:390px;
+	padding: 15px 15px 5px 15px;
+	border: 0px solid #ADCA4A;
+	background: white;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+div.popup-fb div div img {
+	width:390px;
+}
+
+
+/* FancyBox Hack */
+#fancybox-outer {
+	border: 8px solid #B5CA6E!important;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+#fancybox-close {
+	top: -20px!important;
+	right: -20px!important;
 }

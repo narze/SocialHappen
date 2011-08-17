@@ -17,12 +17,12 @@ $(function(){
 				$.fancybox({
 					href: base_url+'tab/guest'
 				});
-				$('a.a-close').die('click');
-				$('a.a-close').live('click',function(){
+				$('a.bt-don-awesome').die('click');
+				$('a.bt-don-awesome').live('click',function(){
 					$.fancybox.close();
 				});
-				$('a.a-signup').die('click');
-				$('a.a-signup').live('click',function(){
+				$('a.bt-join-social').die('click');
+				$('a.bt-join-social').live('click',function(){
 					$.fancybox({
 						href: base_url+'tab/signup'
 					});
@@ -31,21 +31,26 @@ $(function(){
 						$(this).ajaxSubmit({target:'#signup-form'});
 						return false;
 					});
+					
+					$('a.bt-register-now').live('click', function(){
+						$('form.signup-form').ajaxSubmit({target:'.popup-fb-2col', replaceTarget:true});
+						return false;
+					});
 				});
 			} else if(page_app_installed_id!=0) {
 				$.fancybox({
 					href: base_url+'tab/app_installed/'+ page_app_installed_id
 				});
-				$('a.a-close').die('click');
-				$('a.a-close').live('click',function(){
+				$('a.bt-stay_fb').die('click');
+				$('a.bt-stay_fb').live('click',function(){
 					$.fancybox.close();
 				});
 			} else if(page_installed==0){
 				$.fancybox({
 					href: base_url+'tab/page_installed/'+ page_id
 				});
-				$('a.a-close').die('click');
-				$('a.a-close').live('click',function(){
+				$('a.bt-stay_fb').die('click');
+				$('a.bt-stay_fb').live('click',function(){
 					$.fancybox.close();
 				});
 			}

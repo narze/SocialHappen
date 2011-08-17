@@ -106,11 +106,21 @@ class Tab extends CI_Controller {
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
+		//is_admin
+		$user_facebook_id = $this->FB->getUser();
+		$this->load->model('User_model','User');
+		$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		$this->load->model('company_model','companies');
+		$company = $this->companies->get_company_profile_by_page_id($page_id);
+		$this->load->model('user_companies_model','user_companies');
+		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+		
 		if($page){
 			
 			$data = array(
 							'page' => $page,
-							'is_liked' => $this->page['liked']
+							'is_liked' => $this->page['liked'],
+							'is_admin' => $is_admin
 			);
 			$this->load->view("tab/dashboard",$data);
 		
@@ -472,6 +482,7 @@ class Tab extends CI_Controller {
 		{
 			$this -> load -> view('tab/signup', 
 					array(
+						'facebook_user'=>$facebook_user,
 						'user_profile_picture'=>$user_facebook_image
 					)
 			);

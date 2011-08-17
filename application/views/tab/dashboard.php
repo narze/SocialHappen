@@ -1,18 +1,19 @@
-<div class="wrapper-content">
-    <div class="account-data">
+<div class="wrapper-content">	
+	<div class="account-data">
       <div class="pic"><img src="<?php echo imgsize($page['page_image'],'normal');?>" alt="" /><span></span></div>
-      <div class="data">
-        <h1><?php echo $page['page_name'];?></h1>
-        <p><?php echo $page['page_detail'];?></p>
-        <ul>
-          <li class="fav"><a href="#">Add Favorite</a></li>
-          <li class="member"><a href="#"><?php echo issetor($page_user_count,'-');?></a></li>
-          <li class="badges"><a href="#"><?php echo issetor($page_badge_count,'-');?></a></li>
-          <li class="point"><a href="#"><?php echo issetor($page_point_count,'-');?></a></li>
-          <li class="setting"><a href="#"><span>setting</span></a></li>
-        </ul>
-      </div>
+		<div class="data">
+			<h1><?php echo $page['page_name'];?></h1>
+			<p><?php echo $page['page_detail'];?></p>
+			<ul>
+			  <li class="fav"><a href="#">Add Favorite</a></li>
+			  <li class="member"><a href="#"><?php echo issetor($page_user_count,'-');?></a></li>
+			  <li class="badges"><a href="#"><?php echo issetor($page_badge_count,'-');?></a></li>
+			  <li class="point"><a href="#"><?php echo issetor($page_point_count,'-');?></a></li>
+			  <li class="setting"><a href="#"><span>setting</span></a></li>
+			</ul>
+		</div>
     </div>
+	
     <div>
       <div class="tab-head">
         <h2>Application and Campaign</h2>

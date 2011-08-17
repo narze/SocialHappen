@@ -12,19 +12,14 @@ a {
 
 /* FancyBox Hack */
 #fancybox-outer {
-	background:none!important;
-}
-#fancybox-content {
 	border: 8px solid #B5CA6E!important;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
 }
-#fancybox-bg-w {
-	left: -16px!important;
-}
 #fancybox-close {
-	right: -30px!important;
+	top: -20px!important;
+	right: -20px!important;
 }
 
 /* Pop up */
