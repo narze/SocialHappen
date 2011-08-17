@@ -89,10 +89,12 @@ class Sync extends CI_Controller {
 	function drop_tables(){
 		$tables = $this->db->list_tables();
 		foreach ($tables as $table){
-			$table = str_replace($this->db->dbprefix,'',$table);
-		    if($this->dbforge->drop_table($table)){
-		    	echo "Dropped table : {$table}<br />";	
-		    }
+			if(strpos($table, $this->db->dbprefix) === 0){
+				$table = str_replace($this->db->dbprefix,'',$table);
+				if($this->dbforge->drop_table($table)){
+					echo "Dropped table : {$table}<br />";	
+				}
+			}
 		}
 	}
 	
