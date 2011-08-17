@@ -27,7 +27,7 @@
 			  <li><a class="a-dashboard view-as-user"><b>View as Member</b></a></li>
 			  <li><a class="a-dashboard view-as-guest"><b>View as Guest</b></a></li>
 		  <?php endif; ?>
-          <li><a href="<?php echo base_url()."tab/account/{$page['page_id']}/{$user_id}";?>"><b>Account Setting</b></a></li>
+          <li><a class="a-account"><b>Account Setting</b></a></li>
         </ul>
       </li>
     </ul>

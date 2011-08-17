@@ -399,8 +399,8 @@ class Tab extends CI_Controller {
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		if($page){
 			
-			if(!$user_id = $this->socialhappen->get_user_id()){
-				
+			if($user_id != $this->socialhappen->get_user_id()){
+				echo 'error : id mismatch'; //DEBUG
 			} else {
 				$user = $this->socialhappen->get_user();
 				$user_facebook = $this->facebook->getUser($user['user_facebook_id']);
