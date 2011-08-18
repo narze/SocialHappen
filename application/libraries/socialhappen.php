@@ -15,6 +15,33 @@ class SocialHappen{
     }
 	
 	/**
+	 * Global variables
+	 * @author Manassarn M.
+	 */
+	var $global_variables = array(
+		'item_type' => array(1=>'Package', 2=>'App'),
+		'order_status' => array(1=>'Processed',2=>'Failed'),
+	);
+	
+	/**
+	 * Get a global variable key
+	 * @param $var_name
+	 * @author Manassarn M.
+	 */
+	function get_k($var_name, $value){
+		return array_search(strtolower($value),array_map('strtolower',issetor($this->global_variables[$var_name], NULL)));
+	}
+	
+	/**
+	 * Get a global variable vale
+	 * @param $var_name
+	 * @author Manassarn M.
+	 */
+	function get_v($var_name, $key){
+		return issetor($this->global_variables[$var_name][$key], NULL);
+	}
+	
+	/**
 	 * Check if logged in (both facebook and SocialHappen) if not, redirect to specified url
 	 * @param $redirect_url
 	 * @author Manassarn M. 
@@ -417,4 +444,5 @@ class SocialHappen{
 			return $this->packages->check_user_package_can_add_user($user_id);
 		} else return FALSE;
 	}
+	
 }
