@@ -83,7 +83,6 @@ class Order_items_model_test extends CI_Controller {
 		$this->unit->run($result === TRUE,'is_true', 'Updated item_unit without error');
 		
 		$result = $this->order_items->get_order_items_by_order_id($order_id);
-		print_r($result);
 		$this->unit->run($result[0]['item_unit'] == '2','is_true',"Updated item_unit to {2}");
 		
 	}	
