@@ -156,7 +156,8 @@ class Tab extends CI_Controller {
 					$facebook_user = $this->FB->api('/'.$friend['uid'].'');
 					$friends[] = array(
 										'uid' => $friend['uid'],
-										'name' => $facebook_user['name']
+										'name' => $facebook_user['name'],
+										'image' => 'http://graph.facebook.com/'.$friend['uid'].'/picture'
 									);
 				}
 				
