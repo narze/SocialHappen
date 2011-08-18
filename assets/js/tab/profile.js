@@ -1,6 +1,7 @@
 $(function(){
 	$('a.a-profile').live('click',function(){
 		set_loading();
+		
 		$('div#main').load(base_url+'tab/profile/'+page_id+'/'+token,function(){
 			trigger_countdown = function (){
 				$('.campaign-end-time').each(function(){

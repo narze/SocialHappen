@@ -16,7 +16,7 @@ class Tab extends CI_Controller {
 		$this->page = $this->signedRequest['page'];
 	}
 	
-	function index($page_id = NULL){
+	function index($page_id = NULL, $token = NULL){
 		$user_facebook_id = $this->FB->getUser();
 		
 		$this->load->model('User_model','User');
@@ -25,8 +25,13 @@ class Tab extends CI_Controller {
 		
 		$this->load->model('Page_model','Page');
 		if(!$page_id){
-			if(!$this->Page->get_page_id_by_facebook_page_id($this->page['id'])) exit(); //HARDCODE prevent redirect loop
-			redirect("tab/".$this->Page->get_page_id_by_facebook_page_id($this->page['id']));
+			if(!$this->Page->get_page_id_by_facebook_page_id($this->page['id'])) 
+				exit(); //HARDCODE prevent redirect loop
+			//redirect("tab/".$this->Page->get_page_id_by_facebook_page_id($this->page['id']).'/'.$token);	
+
+			//passive assign page_id
+			$page_id = $this->Page->get_page_id_by_facebook_page_id($this->page['id']);
+			
 		}
 		
 		$this->load->model('user_model','users');
@@ -98,7 +103,7 @@ class Tab extends CI_Controller {
 			TRUE)
 		);
 		$this->parser->parse('tab/tab_view', $data);
-		
+		 
 		
 	}
 	
@@ -139,6 +144,7 @@ class Tab extends CI_Controller {
 			} else {
 				$user_id = $user['user_id'];
 				$fql = 'SELECT uid FROM page_fan WHERE page_id = '.$page['facebook_page_id'].' and uid IN (SELECT uid2 FROM friend WHERE uid1 = '.$user_facebook_id.')';
+				
 				$response = $this->FB->api(array(
 					'method' => 'fql.query',
 					'access_token' => base64_decode($token),
