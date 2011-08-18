@@ -327,6 +327,25 @@ class Sync extends CI_Controller {
 							'package_apps' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 								'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							),
+							'order' => array(
+								'order_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
+								'order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+								'order_status' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'order_net_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
+								'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'payment_method' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'billing_info' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned)
+							),
+							'order_items' => array(
+								'order_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'item_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'item_type' => field_option('INT', 10, $default, $null, $autoinc, TRUE),
+								'item_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'item_description' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
+								'item_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
+								'item_unit' => field_option('INT', 10, 1, $null, $autoinc, TRUE),
+								'item_discount' => field_option('BIGINT', 20, 0, TRUE, $autoinc, TRUE)
 							)
 						);
 		$keys = array(
@@ -355,7 +374,9 @@ class Sync extends CI_Controller {
 						'user_pages' => array('user_id', 'page_id'),
 						'package' => array('package_id'),
 						'package_users' => array('user_id'),
-						'package_apps' => array('package_id','app_id')
+						'package_apps' => array('package_id','app_id'),
+						'order' => array('order_id'),
+						'order_items' => array('order_id','item_id', 'item_type')
 					);
 		$tables = array(
 							'app',
@@ -383,7 +404,9 @@ class Sync extends CI_Controller {
 							'user_pages',
 							'package',
 							'package_users',
-							'package_apps'
+							'package_apps',
+							'order',
+							'order_items'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -898,13 +921,13 @@ class Sync extends CI_Controller {
 					),
 					array(
 					    'user_id' => 6, 
-					    'user_first_name' => 'test',
-					    'user_last_name' => 'test',
-					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_first_name' => 'Weerapat',
+					    'user_last_name' => 'Poosri',
+					    'user_email' => 'tong@figabyte.com',
+					    'user_image' => 'http://graph.facebook.com/688700832/picture',		
 					    'user_facebook_id' => 688700832, 
-					    'user_register_date' => '2011-05-09 17:36:14',
-					    'user_last_seen' => '2011-05-18 12:57:24'
+					    'user_register_date' => '2011-08-03 19:00:00',
+					    'user_last_seen' => '2011-08-18 09:27:04'
 					)
 				);
 		$this->db->insert_batch('user', $user);
