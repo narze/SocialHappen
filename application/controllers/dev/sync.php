@@ -1246,6 +1246,60 @@ class Sync extends CI_Controller {
 		);
 		$this->db->insert_batch('package_apps', $package_apps);
 		
+		$order = array(
+			array(
+				'order_id' => 1,
+				'order_date' => '2011-08-18 16:33:00',
+				'order_status' => 2,
+				'order_net_price' => 999,
+				'user_id' => 1,
+				'payment_method' => 'paypal',
+				'billing_info' => 'Name: Weerapat Poosri	
+									 Address: 45/6 Surawong	
+									  Bangkok 10010
+									 Phone: +66.0814558839
+									 Email: tong@figabyte.com'
+			),
+			array(
+				'order_id' => 2,
+				'order_date' => '2011-08-18 17:12:00',
+				'order_status' => 1,
+				'order_net_price' => 999,
+				'user_id' => 1,
+				'payment_method' => 'paypal',
+				'billing_info' => 'Name: Weerapat Poosri	
+									 Address: 45/6 Surawong	
+									  Bangkok 10010
+									 Phone: +66.0814558839
+									 Email: tong@figabyte.com'
+			)
+		);
+		$this->db->insert_batch('order', $order);
+		
+		$order_items = array(
+			array(
+				'order_id' => 1,
+				'item_id' => 2,
+				'item_type' => 1,
+				'item_name' => 'Enterprise package',
+				'item_description' => 'For enterprise',
+				'item_price' => 999,
+				'item_unit' => 1,
+				'item_discount' => 0
+			),
+			array(
+				'order_id' => 2,
+				'item_id' => 2,
+				'item_type' => 1,
+				'item_name' => 'Enterprise package',
+				'item_description' => 'For enterprise',
+				'item_price' => 999,
+				'item_unit' => 1,
+				'item_discount' => 0
+			)
+		);
+		$this->db->insert_batch('order_items', $order_items);
+		
 		echo "Test data added<br />";
 	}
 }
