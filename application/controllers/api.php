@@ -433,6 +433,16 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		$company_id = $this->input->get('company_id', TRUE);
 		$page_id = $this->input->get('page_id', TRUE);
+		//user profile
+		$user_first_name = $this->input->get('user_first_name', TRUE);
+		$user_last_name = $this->input->get('user_last_name', TRUE);
+		$user_email = $this->input->get('user_email', TRUE);
+		$user_profile = array(
+			'user_facebook_id' => $user_facebook_id,
+			'user_first_name' => $user_first_name,
+			'user_last_name' => $user_last_name,
+			'user_email' => $user_email
+		);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
 			echo json_encode(array( 'error' => '100',
@@ -459,25 +469,24 @@ class Api extends CI_Controller {
 		
 		// register new user
 		$this->load->model('User_model', 'User');
-		if(!$this->User->check_exist($user_facebook_id)){
-			$user_id = $this->User->add_by_facebook_id($user_facebook_id);
-			if($user_id){
-				$this->load->library('audit_lib');
-				$this->audit_lib->add_audit(
-											$app_id,
-											$user_id,
-											102, //presently hard coded
-											'', 
-											'',
-											array(
-													'app_install_id'=> $app_install_id,
-													'page_id' => $page_id
-												)
-										);
-				$response['user_id'] = $user_id;
-				$response['User'] = 'added ';
-			}
-		}else{
+		$user_id = $this->User->add_user($user_profile);
+		if($user_id){
+			$this->load->library('audit_lib');
+			$this->audit_lib->add_audit(
+										$app_id,
+										$user_id,
+										102, //presently hard coded
+										'', 
+										'',
+										array(
+												'app_install_id'=> $app_install_id,
+												'page_id' => $page_id
+											)
+									);
+			$response['user_id'] = $user_id;
+			$response['User'] = 'added ';
+		
+		} else {
 			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
 			$this->load->library('audit_lib');
 			$this->audit_lib->add_audit(
@@ -1047,6 +1056,7 @@ class Api extends CI_Controller {
 			$response['user_first_name'] = $user['user_first_name'];
 			$response['user_last_name'] = $user['user_last_name'];
 			$response['user_email'] = $user['user_email'];
+			//TODO: more fields
 		}
 		echo json_encode($response);
 	}

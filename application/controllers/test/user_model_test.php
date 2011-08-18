@@ -97,10 +97,10 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($user_id,'is_int','add_user()');
 		
 		$removed = $this->users->remove_user($user_id);
-		$this->unit->run($removed == 1,'is_true','remove_user()');
+		$this->unit->run($removed,'is_true','remove_user()');
 		
 		$removed_again = $this->users->remove_user($user_id);
-		$this->unit->run($removed_again == 0,'is_true','remove_user()');
+		$this->unit->run($removed_again,'is_false','remove_user()');
 	}
 	
 	/**
