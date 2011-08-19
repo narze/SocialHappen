@@ -106,6 +106,15 @@ class Package_users_model_test extends CI_Controller {
 		$result = $this->package_users->remove_package_user_by_user_id(100);
 		$this->unit->run($result, 'is_false', 'remove_package_user_by_user_id(100)');
 	}
+	
+	/**
+	 * Tests is_package_expire()
+	 * @author Weerapat P.
+	 */
+	function is_package_expire_test(){
+		$result = $this->package_users->is_package_expire($user_id = 1);
+		$this->unit->run($result, 'is_true', 'is_package_expire('.$user_id.')');
+	}
 }
 /* End of file package_users_model_test.php */
 /* Location: ./application/controllers/test/package_users_model_test.php */

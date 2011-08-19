@@ -319,11 +319,13 @@ class Sync extends CI_Controller {
 								'package_max_pages' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'package_max_users' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'package_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
-								'package_custom_badge' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned)
+								'package_custom_badge' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'package_duration' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
 							),
 							'package_users' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 								'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'package_expire' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned)
 							),
 							'package_apps' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -332,7 +334,7 @@ class Sync extends CI_Controller {
 							'order' => array(
 								'order_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 								'order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-								'order_status' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'order_status' => field_option('INT', 10, $default, $null, $autoinc, TRUE),
 								'order_net_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
 								'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 								'payment_method' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
@@ -1207,7 +1209,8 @@ class Sync extends CI_Controller {
 				'package_max_pages' => 3,
 				'package_max_users' => 10000,
 				'package_price' => 0,
-				'package_custom_badge' => 1
+				'package_custom_badge' => 1,
+				'package_duration' => 0
 			),
 			array(
 				'package_name' => 'Enterprise package',
@@ -1217,7 +1220,8 @@ class Sync extends CI_Controller {
 				'package_max_pages' => 10,
 				'package_max_users' => 100000,
 				'package_price' => 999,
-				'package_custom_badge' => 1
+				'package_custom_badge' => 1,
+				'package_duration' => 'month'
 			)
 		);
 		$this->db->insert_batch('package', $package);
@@ -1225,24 +1229,34 @@ class Sync extends CI_Controller {
 		$package_users = array(
 			array(
 				'package_id' => 1,
-				'user_id' => 1
+				'user_id' => 1,
+				'package_expire' => '2011-06-19 19:12:20'
 			),
 			array(
 				'package_id' => 1,
-				'user_id' => 2
+				'user_id' => 2,
+				'package_expire' => '2011-07-19 20:12:20'
 			),
 			array(
 				'package_id' => 1,
-				'user_id' => 3
-			)			,
+				'user_id' => 3,
+				'package_expire' => '2011-08-19 23:59:59'
+			),
 			array(
 				'package_id' => 1,
-				'user_id' => 4
-			)			,
+				'user_id' => 4,
+				'package_expire' => '2011-09-19 19:12:20'
+			),
 			array(
 				'package_id' => 1,
-				'user_id' => 5
-			)			
+				'user_id' => 5,
+				'package_expire' => '2012-01-19 23:59:59'
+			),
+			array(
+				'package_id' => 2,
+				'user_id' => 6,
+				'package_expire' => '2012-02-19 23:59:59'
+			)
 		);
 		$this->db->insert_batch('package_users', $package_users);
 		
