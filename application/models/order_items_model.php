@@ -37,6 +37,11 @@ class Order_items_model extends CI_Model {
 		$this->db->delete('order_items', array('order_id' => $order_id, 'item_id' => $item_id, 'item_type' => $item_type));
 		return $this->db->affected_rows() == 1;
 	}
+	
+	function remove_items_by_order_id($order_id = NULL){
+		$this->db->delete('order_items', array('order_id' => $order_id));
+		return $this->db->affected_rows();
+	}
 
 }
 

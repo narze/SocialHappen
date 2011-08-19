@@ -45,26 +45,41 @@ class Order_items_model_test extends CI_Controller {
 	 * @author Weerapat P.
 	 */
 	function add_order_item_and_remove_item_by_order_id_and_item_id_and_item_type_test(){
-		$order_id = 3;
-		$item_id = 2;
-		$item_type = 1;
-		$order = array(
-				'order_id' => $order_id,
-				'item_id' => $item_id,
-				'item_type' => $item_type,
+		$order = array( 
+			array(
+				'order_id' => 3,
+				'item_id' => 2,
+				'item_type' => 1,
 				'item_name' => 'Enterprise package',
 				'item_description' => 'For enterprise',
 				'item_price' => 999,
 				'item_unit' => 1,
 				'item_discount' => 0
+			),
+			array(
+				'order_id' => 3,
+				'item_id' => 3,
+				'item_type' => 2,
+				'item_name' => 'Enterprise package',
+				'item_description' => 'For enterprise',
+				'item_price' => 999,
+				'item_unit' => 1,
+				'item_discount' => 0
+			)
 		);
-		$result = $this->order_items->add_order_item($order);
+		
+		$result = $this->order_items->add_order_item($order[0]);
 		$this->unit->run($result,'is_true','add_order()');
 		
-		$removed = $this->order_items->remove_item_by_order_id_and_item_id_and_item_type($order_id, $item_id, $item_type);
+		$this->order_items->add_order_item($order[1]);
+		$removed_all = $this->order_items->remove_items_by_order_id(3);
+		$this->unit->run($removed_all == count($order),'is_true','remove_items_by_order_id()');
+		
+		$this->order_items->add_order_item($order[0]);
+		$removed = $this->order_items->remove_item_by_order_id_and_item_id_and_item_type(3, 2, 1);
 		$this->unit->run($removed,'is_true','remove_item_by_order_id_and_item_id_and_item_type()');
 		
-		$removed_again = $this->order_items->remove_item_by_order_id_and_item_id_and_item_type($order_id, $item_id, $item_type);
+		$removed_again = $this->order_items->remove_item_by_order_id_and_item_id_and_item_type(3, 2, 1);
 		$this->unit->run($removed_again,'is_false','remove_item_by_order_id_and_item_id_and_item_type() again');
 	}
 	
@@ -84,7 +99,6 @@ class Order_items_model_test extends CI_Controller {
 		
 		$result = $this->order_items->get_order_items_by_order_id($order_id);
 		$this->unit->run($result[0]['item_unit'] == '2','is_true',"Updated item_unit to {2}");
-		
 	}	
 
 }
