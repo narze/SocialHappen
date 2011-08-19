@@ -38,6 +38,10 @@ class Package_model extends CI_Model {
 		$this->db->delete('package', array('package_id' => $package_id));
 		return $this->db->affected_rows() == 1;
 	}
+	
+	function count_packages(){
+		return $this->db->count_all_results('package');
+	}
 }
 
 /* End of file package_model.php */

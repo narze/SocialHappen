@@ -761,6 +761,109 @@ class Backend extends CI_Controller {
 		$this->load->view('backend_views/user_list_view', $data);
 	}
 	
+	function edit_package($package_id){
+		$this->load->helper('form');
+		$this->load->library('form_validation');
+		$this->load->model('Package_model', 'Package');
+		
+		// set up validation rules
+		$config = array(
+						array(
+							 'field'   => 'package_name',
+							 'label'   => 'Package Name',
+							 'rules'   => 'required|trim'
+						),
+						array(
+							 'field'   => 'package_detail',
+							 'label'   => 'Package Detail',
+							 'rules'   => 'trim|xss_clean'
+						),
+						array(
+							 'field'   => 'package_image',
+							 'label'   => 'Package Image',
+							 'rules'   => 'xss_clean'
+						),
+						array(
+							 'field'   => 'package_max_companies',
+							 'label'   => 'Max companies',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'package_max_pages',
+							 'label'   => 'Max pages',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'package_max_users',
+							 'label'   => 'Max users',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'package_price',
+							 'label'   => 'Price',
+							 'rules'   => 'trim|xss_clean'
+						),
+						array(
+							 'field'   => 'package_custom_badge',
+							 'label'   => 'Custom badge',
+							 'rules'   => 'trim|xss_clean'
+						),
+						array(
+							 'field'   => 'package_duration',
+							 'label'   => 'Duration',
+							 'rules'   => 'required|trim|xss_clean'
+						)
+				);
+		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_rules($config); 
+		
+		if($this->form_validation->run()){
+			$data = array(
+				'package_name' => $this->input->post('package_name', TRUE),
+				'package_detail' => $this->input->post('package_detail', TRUE),
+				'package_max_companies' => $this->input->post('package_max_companies', TRUE),
+				'package_max_pages' => $this->input->post('package_max_pages', TRUE),
+				'package_max_users' => $this->input->post('package_max_users', TRUE),
+				'package_price' => $this->input->post('package_price', TRUE),
+				'package_custom_badge' => set_value('package_custom_badge') == 'on' ? 1 : 0,
+				'package_duration' => $this->input->post('package_duration', TRUE)
+			);
+			if($package_image = $this->socialhappen->upload_image('package_image')){
+				//Should delete old image
+				//$package_image_old = $this->input->post('package_image_old', TRUE);
+				//$images
+				//unlink($package_image_old);
+				$data['package_image'] = $package_image;
+			}
+			$result = $this->Package->update_package_by_package_id($package_id, $data);
+			if($result) redirect('backend/packages');
+		}else{
+			$data = $this->Package->get_package_by_package_id($package_id);
+			$this->load->view('backend_views/edit_package_view', $data);	
+		}
+	}
+	
+	function packages(){
+		$this->load->model('Package_model', 'Package');
+		$this->load->library('pagination');
+		
+		$offset = $this->uri->segment(3, 0);
+		
+		$config['base_url'] = base_url() . 'backend/packages/';
+		$config['total_rows'] = $this->Package->count_packages();
+		$config['per_page'] = '10'; 
+		
+		
+		$this->pagination->initialize($config); 
+		
+		$data['total_package'] = $config['total_rows'];
+		$data['pagination'] = $this->pagination->create_links();
+		
+		$data['package_list'] = $this->Package->get_packages($config['per_page'], $offset);
+		//$this->dump($data['package_list']);
+		$this->load->view('backend_views/package_list_view', $data);
+	}
+	
 	/**
 	 * generate random string 
 	 */
