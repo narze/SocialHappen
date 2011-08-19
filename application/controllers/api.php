@@ -1061,6 +1061,53 @@ class Api extends CI_Controller {
 		echo json_encode($response);
 	}
 	
+	/**
+	 * Request page users
+	 * @author Manassarn M.
+	 */
+	function request_page_users(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$page_id = $this->input->get('page_id', TRUE);
+		
+		//TODO check if page has app_install_id
+		
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
+			return;
+		}
+		
+		// authenticate app with $app_id and $app_secret_key
+		if(!($this->_authenticate_app($app_id, $app_secret_key))){
+			echo json_encode(array( 'error' => '200',
+									'message' => 'invalid app_secret_key'));
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid app_install_secret_key'));
+			return;
+		}
+		
+		$response = array('status' => 'OK');
+		
+		$this->load->model('page_user_data_model','page_users');
+		if(!$page_users = $this->page_users->get_page_users_by_page_id($page_id)){
+			$response['message'] = 'User / page not found';
+			$response['page_users'] = array();
+		} else {
+			$response['page_users'] = $page_users;
+			//TODO: limit fields
+		}
+		echo json_encode($response);
+	}
+	
 	function _authenticate_app($app_id, $app_secret_key){
 		// authenticate app with $app_id and $app_secret_key
 		$this->load->model('App_model', 'App');

@@ -229,6 +229,7 @@ class Sync extends CI_Controller {
 								'page_status' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
 								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'page_user_fields' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -346,6 +347,11 @@ class Sync extends CI_Controller {
 								'item_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
 								'item_unit' => field_option('INT', 10, 1, $null, $autoinc, TRUE),
 								'item_discount' => field_option('BIGINT', 20, 0, TRUE, $autoinc, TRUE)
+							),
+							'page_user_data' => array(
+							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned)
 							)
 						);
 		$keys = array(
@@ -376,7 +382,8 @@ class Sync extends CI_Controller {
 						'package_users' => array('user_id'),
 						'package_apps' => array('package_id','app_id'),
 						'order' => array('order_id'),
-						'order_items' => array('order_id','item_id', 'item_type')
+						'order_items' => array('order_id','item_id', 'item_type'),
+						'page_user_data' => array('user_id','page_id')
 					);
 		$tables = array(
 							'app',
@@ -406,7 +413,8 @@ class Sync extends CI_Controller {
 							'package_users',
 							'package_apps',
 							'order',
-							'order_items'
+							'order_items',
+							'page_user_data'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -863,9 +871,21 @@ class Sync extends CI_Controller {
 						    'page_detail' => 'detail', 
 						    'page_all_member' => 22, 
 						    'page_new_member' => 222, 
-						    'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png'
-						)
-					);
+						    'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+							'page_user_fields' => 'size,color'
+					),
+					array(
+						'page_id' => 2, 
+						'facebook_page_id' => '135287989899131', 
+						'company_id' => 1, 
+						'page_name' => 'SH Beta', 
+						'page_detail' => 'detail', 
+						'page_all_member' => 10, 
+						'page_new_member' => 100, 
+						'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						'page_user_fields' => 'size,color'
+					),
+				);
 		$this->db->insert_batch('page', $page);
 		
 		$user = array(
@@ -1299,6 +1319,40 @@ class Sync extends CI_Controller {
 			)
 		);
 		$this->db->insert_batch('order_items', $order_items);
+		
+		$page_user_data = array(
+			array(
+				'user_id' => 1,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'L', 'color' => 'red'))
+			),
+			array(
+				'user_id' => 2,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'S', 'color' => 'blue'))
+			),
+			array(
+				'user_id' => 3,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'M', 'color' => 'red'))
+			),
+			array(
+				'user_id' => 4,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'S', 'color' => 'blue'))
+			),
+			array(
+				'user_id' => 5,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'L', 'color' => 'blue'))
+			),
+			array(
+				'user_id' => 6,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'L', 'color' => 'red'))
+			)
+		);
+		$this->db->insert_batch('page_user_data', $page_user_data);
 		
 		echo "Test data added<br />";
 	}
