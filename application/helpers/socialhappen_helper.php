@@ -24,20 +24,26 @@ if ( ! function_exists('imgsize'))
 	 * @param $size
 	 */
 	function imgsize($url = NULL, $size = NULL) {
-		if($size == 'square'){
-			$size = 'q';
-		} else if($size == 'small'){
-			$size = 't';
-		} else if($size == 'normal'){
-			$size = 's';
-		} else if($size == 'large'){
-			$size = 'n';
-		} else if($size == 'original'){
-			$size = 'o';
+		if(strpos($url, 'graph.facebook.com') === FALSE){
+			if($size == 'square'){
+				$size = 'q';
+			} else if($size == 'small'){
+				$size = 't';
+			} else if($size == 'normal'){
+				$size = 's';
+			} else if($size == 'large'){
+				$size = 'n';
+			} else if($size == 'original'){
+				$size = 'o';
+			} else {
+				return $url;
+			}
+			return preg_replace('/(\S+)_\w(\.(jpg|gif|png))/i','${1}_'.$size.'${2}',$url);
 		} else {
-			return $url;
+			return "{$url}?type={$size}";
 		}
-		return preg_replace('/(\S+)_\w(\.(jpg|gif|png))/i','${1}_'.$size.'${2}',$url);
+		
+		
 	}
 }
 
