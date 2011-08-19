@@ -67,6 +67,11 @@ class Package_users_model extends CI_Model {
 		$count = $this->db->count_all_results('user_companies');
 		return ($user_max_count - $count > 0);
 	}
+	
+	function is_package_expire($user_id = NULL){
+		$results = $this->db->get_where('package_users',array('user_id' => $user_id))->result_array();
+		return date('Y-m-d H:i:s') > $results[0]['package_expire'];
+	}
 }
 /* End of file package_users_model.php */
 /* Location: ./application/models/package_users_model.php */
