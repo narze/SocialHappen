@@ -223,6 +223,27 @@ class SocialHappen{
 	}
 	
 	/**
+	 * Replace image
+	 * @param $new_image
+	 * @param $old_image
+	 * @author Manassarn M.
+	 */
+	function replace_image($new_image = NULL, $old_image = NULL){
+		if($new_image = $this->upload_image($new_image)){
+			if(strpos($old_image, base_url()) === 0){
+				$dimensions = array('q','t','s','n','o');
+				$old_image = str_replace(base_url(), "./", $old_image); // "./uploads/images/[imagename]_o.[ext]", facebook image will not be removed
+				$image_ext = pathinfo($old_image, PATHINFO_EXTENSION);
+				$image_name = substr($old_image, 0, strrpos($old_image, "_"));
+				foreach($dimensions as $dimension){
+					unlink("{$image_name}_{$dimension}.{$image_ext}");
+				}
+			}
+			return $new_image;
+		}
+	}
+	
+	/**
 	 * Resize image and save as separated files
 	 * @param $image_data (see http://codeigniter.com/user_guide/libraries/file_uploading.html)
 	 * @author Manassarn M.
