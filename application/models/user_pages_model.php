@@ -13,6 +13,9 @@ class User_pages_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function add_user_page($data = array()){
+		if(!$data){
+			return FALSE;
+		}
 		return $this -> db -> insert('user_pages', $data);
 	}
 	
@@ -20,12 +23,11 @@ class User_pages_model extends CI_Model {
 	 * Removes user_page
 	 * @param $user_id
 	 * @param $page_id
-	 * @return Number of affected rows
 	 * @author Manassarn M.
 	 */
 	function remove_user_page($user_id = NULL, $page_id = NULL){
 		$this->db->delete('user_pages', array('user_id' => $user_id, 'page_id' => $page_id));
-		return $this->db->affected_rows();
+		return $this->db->affected_rows() == 1;
 	}
 	
 	/**
