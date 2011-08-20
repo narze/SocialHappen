@@ -16,7 +16,7 @@ class Tab extends CI_Controller {
 		$this->page = $this->signedRequest['page'];
 	}
 	
-	function index($page_id = NULL){
+	function index($page_id = NULL, $token = NULL){
 		$user_facebook_id = $this->FB->getUser();
 		
 		$this->load->model('User_model','User');
@@ -25,8 +25,13 @@ class Tab extends CI_Controller {
 		
 		$this->load->model('Page_model','Page');
 		if(!$page_id){
-			if(!$this->Page->get_page_id_by_facebook_page_id($this->page['id'])) exit(); //HARDCODE prevent redirect loop
-			redirect("tab/".$this->Page->get_page_id_by_facebook_page_id($this->page['id']));
+			if(!$this->Page->get_page_id_by_facebook_page_id($this->page['id'])) 
+				exit(); //HARDCODE prevent redirect loop
+			//redirect("tab/".$this->Page->get_page_id_by_facebook_page_id($this->page['id']).'/'.$token);	
+
+			//passive assign page_id
+			$page_id = $this->Page->get_page_id_by_facebook_page_id($this->page['id']);
+			
 		}
 		
 		$this->load->model('user_model','users');
@@ -98,7 +103,7 @@ class Tab extends CI_Controller {
 			TRUE)
 		);
 		$this->parser->parse('tab/tab_view', $data);
-		
+		 
 		
 	}
 	
@@ -106,11 +111,21 @@ class Tab extends CI_Controller {
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
+		//is_admin
+		$user_facebook_id = $this->FB->getUser();
+		$this->load->model('User_model','User');
+		$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		$this->load->model('company_model','companies');
+		$company = $this->companies->get_company_profile_by_page_id($page_id);
+		$this->load->model('user_companies_model','user_companies');
+		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+		
 		if($page){
 			
 			$data = array(
 							'page' => $page,
-							'is_liked' => $this->page['liked']
+							'is_liked' => $this->page['liked'],
+							'is_admin' => $is_admin
 			);
 			$this->load->view("tab/dashboard",$data);
 		
@@ -129,6 +144,7 @@ class Tab extends CI_Controller {
 			} else {
 				$user_id = $user['user_id'];
 				$fql = 'SELECT uid FROM page_fan WHERE page_id = '.$page['facebook_page_id'].' and uid IN (SELECT uid2 FROM friend WHERE uid1 = '.$user_facebook_id.')';
+				
 				$response = $this->FB->api(array(
 					'method' => 'fql.query',
 					'access_token' => base64_decode($token),
@@ -140,7 +156,8 @@ class Tab extends CI_Controller {
 					$facebook_user = $this->FB->api('/'.$friend['uid'].'');
 					$friends[] = array(
 										'uid' => $friend['uid'],
-										'name' => $facebook_user['name']
+										'name' => $facebook_user['name'],
+										'image' => 'http://graph.facebook.com/'.$friend['uid'].'/picture'
 									);
 				}
 				
@@ -399,8 +416,8 @@ class Tab extends CI_Controller {
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		if($page){
 			
-			if(!$user_id = $this->socialhappen->get_user_id()){
-				
+			if($user_id != $this->socialhappen->get_user_id()){
+				echo 'error : id mismatch'; //DEBUG
 			} else {
 				$user = $this->socialhappen->get_user();
 				$user_facebook = $this->facebook->getUser($user['user_facebook_id']);
@@ -472,6 +489,7 @@ class Tab extends CI_Controller {
 		{
 			$this -> load -> view('tab/signup', 
 					array(
+						'facebook_user'=>$facebook_user,
 						'user_profile_picture'=>$user_facebook_image
 					)
 			);

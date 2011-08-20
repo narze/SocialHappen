@@ -13,6 +13,7 @@ $(function(){
 
 					var app_list = row.find('td.app-list div');
 					app_list.find('p.thumb img').attr('src', imgsize(json[i].app_image,'normal'));
+					app_list.find('p.thumb img').attr('title', json[i].app_name);
 					app_list.find('h2').append('<a href="'+base_url+'app/'+json[i].app_install_id+'">'+json[i].app_name+'</a>');
 					app_list.find('p.description').append(json[i].app_description);
 					
@@ -29,6 +30,11 @@ $(function(){
 			}
 			$('.old-result').remove();
 		});
+		
+		if($('div.pagination-apps').find('a').length == 0) {
+			$('div.pagination-apps').find('div.pagination').remove();
+		}
+		
 		return false;
 	}
 	
@@ -58,10 +64,10 @@ $(function(){
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
 			padding: 0,
-			width: 908,
+			width: 932,
 			height: 355,
 			autoDimensions: false,
-			scrolling: 'no',
+			scrolling: 'yes',
 			onStart: function() {
 				$("<style type='text/css'> #fancybox-wrap{ top:550px !important;} </style>").appendTo("head");
 			}

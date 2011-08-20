@@ -43,6 +43,11 @@ $(function(){
 			}
 			$('.old-result').remove();
 		});
+		
+		if($('div.pagination-campaigns').find('a').length == 0) {
+			$('div.pagination-campaigns').find('div.pagination').remove();
+		}
+		
 		return false;
 	}
 	

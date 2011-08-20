@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define("SESSION_TABLE_NAME","sessions");
+
 /**
  * @class Sync
  * @category Controller
@@ -7,6 +9,13 @@
 class Sync extends CI_Controller {
 	
 	function __construct(){
+		if (defined('ENVIRONMENT'))
+		{
+			if (ENVIRONMENT == 'production')
+			{
+				exit('For development & testing only.');
+			}
+		}
 		parent::__construct();
 		$this->preload();
 		$this->load->dbforge();
@@ -27,6 +36,9 @@ class Sync extends CI_Controller {
 		$host = $this->db->hostname;
 		$username = $this->db->username;
 		$password = $this->db->password;
+		$database = $this->db->database;
+		$prefix = $this->db->dbprefix;
+		$session_table = SESSION_TABLE_NAME;
 		if(isset($_GET['u']) && isset($_GET['p'])){
 			$username = $_GET['u'];
 			$password = $_GET['p'];
@@ -34,22 +46,23 @@ class Sync extends CI_Controller {
 		$con = mysql_connect($host,$username,$password);
 		if (!$con)
 		    {
-				die('Could not connect: ' . mysql_error());
+				die('Could not connect to mysql: ' . mysql_error());
  		    }
-		if (!mysql_query("CREATE DATABASE IF NOT EXISTS socialhappen",$con)){
-			echo "Error creating database: " . mysql_error()."<h3>Try dev/sync?u=username&p=password</h3>";
+		if (!mysql_query("CREATE DATABASE IF NOT EXISTS {$database}",$con)){
+			echo "Error creating database '{$database}': " . mysql_error()."<h3>Try dev/sync?u=username&p=password</h3>";
 		}
-		
-		if (!mysql_query("CREATE TABLE IF NOT EXISTS socialhappen.sh_sessions (
-						session_id varchar(40) DEFAULT '0' NOT NULL,
-						ip_address varchar(16) DEFAULT '0' NOT NULL,
-						user_agent varchar(50) NOT NULL,
-						last_activity int(10) unsigned DEFAULT 0 NOT NULL,
-						session_data text default '' not null,
-						PRIMARY KEY (session_id)
-						); 
-					",$con)){
-			echo "Error creating table: " . mysql_error();
+		if($this->config->item('sess_use_database')) {
+			if (!mysql_query("CREATE TABLE IF NOT EXISTS {$database}.{$prefix}{$session_table} (
+							session_id varchar(40) DEFAULT '0' NOT NULL,
+							ip_address varchar(16) DEFAULT '0' NOT NULL,
+							user_agent varchar(50) NOT NULL,
+							last_activity int(10) unsigned DEFAULT 0 NOT NULL,
+							session_data text default '' not null,
+							PRIMARY KEY (session_id)
+							); 
+						",$con)){
+				echo "Error creating session table: " . mysql_error();
+			}
 		}
 	}
 	
@@ -76,15 +89,17 @@ class Sync extends CI_Controller {
 	function drop_tables(){
 		$tables = $this->db->list_tables();
 		foreach ($tables as $table){
-			$table = str_replace($this->db->dbprefix,'',$table);
-		    if($this->dbforge->drop_table($table)){
-		    	echo "Dropped table : {$table}<br />";	
-		    }
+			if(strpos($table, $this->db->dbprefix) === 0){
+				$table = str_replace($this->db->dbprefix,'',$table);
+				if($this->dbforge->drop_table($table)){
+					echo "Dropped table : {$table}<br />";	
+				}
+			}
 		}
 	}
 	
 	function create_database(){
-		$this->dbforge->create_database('socialhappen');
+		$this->dbforge->create_database($this->db->database);
 	}
 	
 	function create_tables(){
@@ -214,6 +229,7 @@ class Sync extends CI_Controller {
 								'page_status' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
 								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'page_user_fields' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -303,15 +319,41 @@ class Sync extends CI_Controller {
 								'package_max_pages' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'package_max_users' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'package_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
-								'package_custom_badge' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned)
+								'package_custom_badge' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
+								'package_duration' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
 							),
 							'package_users' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 								'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'package_expire' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned)
 							),
 							'package_apps' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 								'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							),
+							'order' => array(
+								'order_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
+								'order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+								'order_status' => field_option('INT', 10, $default, $null, $autoinc, TRUE),
+								'order_net_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
+								'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'payment_method' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'billing_info' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned)
+							),
+							'order_items' => array(
+								'order_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'item_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'item_type' => field_option('INT', 10, $default, $null, $autoinc, TRUE),
+								'item_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'item_description' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
+								'item_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
+								'item_unit' => field_option('INT', 10, 1, $null, $autoinc, TRUE),
+								'item_discount' => field_option('BIGINT', 20, 0, TRUE, $autoinc, TRUE)
+							),
+							'page_user_data' => array(
+							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'page_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+							    'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned)
 							)
 						);
 		$keys = array(
@@ -340,7 +382,10 @@ class Sync extends CI_Controller {
 						'user_pages' => array('user_id', 'page_id'),
 						'package' => array('package_id'),
 						'package_users' => array('user_id'),
-						'package_apps' => array('package_id','app_id')
+						'package_apps' => array('package_id','app_id'),
+						'order' => array('order_id'),
+						'order_items' => array('order_id','item_id', 'item_type'),
+						'page_user_data' => array('user_id','page_id')
 					);
 		$tables = array(
 							'app',
@@ -368,7 +413,10 @@ class Sync extends CI_Controller {
 							'user_pages',
 							'package',
 							'package_users',
-							'package_apps'
+							'package_apps',
+							'order',
+							'order_items',
+							'page_user_data'
 						);
 		$tables = array_map(array($this->db,'dbprefix'), $tables);
 		
@@ -825,9 +873,21 @@ class Sync extends CI_Controller {
 						    'page_detail' => 'detail', 
 						    'page_all_member' => 22, 
 						    'page_new_member' => 222, 
-						    'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png'
-						)
-					);
+						    'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+							'page_user_fields' => 'size,color'
+					),
+					array(
+						'page_id' => 2, 
+						'facebook_page_id' => '135287989899131', 
+						'company_id' => 1, 
+						'page_name' => 'SH Beta', 
+						'page_detail' => 'detail', 
+						'page_all_member' => 10, 
+						'page_new_member' => 100, 
+						'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						'page_user_fields' => 'size,color'
+					),
+				);
 		$this->db->insert_batch('page', $page);
 		
 		$user = array(
@@ -883,13 +943,13 @@ class Sync extends CI_Controller {
 					),
 					array(
 					    'user_id' => 6, 
-					    'user_first_name' => 'test',
-					    'user_last_name' => 'test',
-					    'user_email' => 'tes@test.com',
-					    'user_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_first_name' => 'Weerapat',
+					    'user_last_name' => 'Poosri',
+					    'user_email' => 'tong@figabyte.com',
+					    'user_image' => 'http://graph.facebook.com/688700832/picture',		
 					    'user_facebook_id' => 688700832, 
-					    'user_register_date' => '2011-05-09 17:36:14',
-					    'user_last_seen' => '2011-05-18 12:57:24'
+					    'user_register_date' => '2011-08-03 19:00:00',
+					    'user_last_seen' => '2011-08-18 09:27:04'
 					)
 				);
 		$this->db->insert_batch('user', $user);
@@ -1149,7 +1209,8 @@ class Sync extends CI_Controller {
 				'package_max_pages' => 3,
 				'package_max_users' => 10000,
 				'package_price' => 0,
-				'package_custom_badge' => 1
+				'package_custom_badge' => 1,
+				'package_duration' => 0
 			),
 			array(
 				'package_name' => 'Enterprise package',
@@ -1158,8 +1219,9 @@ class Sync extends CI_Controller {
 				'package_max_companies' => 3,
 				'package_max_pages' => 10,
 				'package_max_users' => 100000,
-				'package_price' => 999
-				'package_custom_badge' => 1
+				'package_price' => 999,
+				'package_custom_badge' => 1,
+				'package_duration' => 'month'
 			)
 		);
 		$this->db->insert_batch('package', $package);
@@ -1167,24 +1229,34 @@ class Sync extends CI_Controller {
 		$package_users = array(
 			array(
 				'package_id' => 1,
-				'user_id' => 1
+				'user_id' => 1,
+				'package_expire' => '2011-06-19 19:12:20'
 			),
 			array(
 				'package_id' => 1,
-				'user_id' => 2
+				'user_id' => 2,
+				'package_expire' => '2011-07-19 20:12:20'
 			),
 			array(
 				'package_id' => 1,
-				'user_id' => 3
-			)			,
+				'user_id' => 3,
+				'package_expire' => '2011-08-19 23:59:59'
+			),
 			array(
 				'package_id' => 1,
-				'user_id' => 4
-			)			,
+				'user_id' => 4,
+				'package_expire' => '2011-09-19 19:12:20'
+			),
 			array(
 				'package_id' => 1,
-				'user_id' => 5
-			)			
+				'user_id' => 5,
+				'package_expire' => '2012-01-19 23:59:59'
+			),
+			array(
+				'package_id' => 2,
+				'user_id' => 6,
+				'package_expire' => '2012-02-19 23:59:59'
+			)
 		);
 		$this->db->insert_batch('package_users', $package_users);
 		
@@ -1207,6 +1279,94 @@ class Sync extends CI_Controller {
 			)
 		);
 		$this->db->insert_batch('package_apps', $package_apps);
+		
+		$order = array(
+			array(
+				'order_id' => 1,
+				'order_date' => '2011-08-18 16:33:00',
+				'order_status' => 2,
+				'order_net_price' => 999,
+				'user_id' => 1,
+				'payment_method' => 'paypal',
+				'billing_info' => 'Name: Weerapat Poosri	
+									 Address: 45/6 Surawong	
+									  Bangkok 10010
+									 Phone: +66.0814558839
+									 Email: tong@figabyte.com'
+			),
+			array(
+				'order_id' => 2,
+				'order_date' => '2011-08-18 17:12:00',
+				'order_status' => 1,
+				'order_net_price' => 999,
+				'user_id' => 1,
+				'payment_method' => 'paypal',
+				'billing_info' => 'Name: Weerapat Poosri	
+									 Address: 45/6 Surawong	
+									  Bangkok 10010
+									 Phone: +66.0814558839
+									 Email: tong@figabyte.com'
+			)
+		);
+		$this->db->insert_batch('order', $order);
+		
+		$order_items = array(
+			array(
+				'order_id' => 1,
+				'item_id' => 2,
+				'item_type' => 1,
+				'item_name' => 'Enterprise package',
+				'item_description' => 'For enterprise',
+				'item_price' => 999,
+				'item_unit' => 1,
+				'item_discount' => 0
+			),
+			array(
+				'order_id' => 2,
+				'item_id' => 2,
+				'item_type' => 1,
+				'item_name' => 'Enterprise package',
+				'item_description' => 'For enterprise',
+				'item_price' => 999,
+				'item_unit' => 1,
+				'item_discount' => 0
+			)
+		);
+		$this->db->insert_batch('order_items', $order_items);
+		
+		$page_user_data = array(
+			array(
+				'user_id' => 1,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'L', 'color' => 'red'))
+			),
+			array(
+				'user_id' => 2,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'S', 'color' => 'blue'))
+			),
+			array(
+				'user_id' => 3,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'M', 'color' => 'red'))
+			),
+			array(
+				'user_id' => 4,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'S', 'color' => 'blue'))
+			),
+			array(
+				'user_id' => 5,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'L', 'color' => 'blue'))
+			),
+			array(
+				'user_id' => 6,
+				'page_id' => 1,
+				'user_data' => json_encode(array('size' => 'L', 'color' => 'red'))
+			)
+		);
+		$this->db->insert_batch('page_user_data', $page_user_data);
 		
 		echo "Test data added<br />";
 	}

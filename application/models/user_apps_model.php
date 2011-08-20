@@ -109,9 +109,10 @@ class User_apps_model extends CI_Model {
 	 * @param $user_id
 	 * @param $app_install_id
 	 * @author Wachiraph C. - revise May 2011
+	 * @author Manassarn M. - Fix bugs
 	 */
 	function update_user_last_seen($user_id, $app_install_id){
-		$this->update(array('user_apps_last_seen' => date ("Y-m-d H:i:s", time())),
+		return $this->db->update('user_apps', array('user_apps_last_seen' => date ("Y-m-d H:i:s", time())),
 						array('user_id' => $user_id,
 							 'app_install_id' => $app_install_id));
 	}

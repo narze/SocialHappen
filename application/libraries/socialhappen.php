@@ -15,6 +15,33 @@ class SocialHappen{
     }
 	
 	/**
+	 * Global variables
+	 * @author Manassarn M.
+	 */
+	var $global_variables = array(
+		'item_type' => array(1=>'Package', 2=>'App'),
+		'order_status' => array(1=>'Processed',2=>'Failed'),
+	);
+	
+	/**
+	 * Get a global variable key
+	 * @param $var_name
+	 * @author Manassarn M.
+	 */
+	function get_k($var_name, $value){
+		return array_search(strtolower($value),array_map('strtolower',issetor($this->global_variables[$var_name], NULL)));
+	}
+	
+	/**
+	 * Get a global variable vale
+	 * @param $var_name
+	 * @author Manassarn M.
+	 */
+	function get_v($var_name, $key){
+		return issetor($this->global_variables[$var_name][$key], NULL);
+	}
+	
+	/**
 	 * Check if logged in (both facebook and SocialHappen) if not, redirect to specified url
 	 * @param $redirect_url
 	 * @author Manassarn M. 
@@ -192,6 +219,27 @@ class SocialHappen{
 			return base_url()."uploads/images/{$image_data['raw_name']}_o{$image_data['file_ext']}";
 		} else {
 			return FALSE; 
+		}
+	}
+	
+	/**
+	 * Replace image
+	 * @param $new_image
+	 * @param $old_image
+	 * @author Manassarn M.
+	 */
+	function replace_image($new_image = NULL, $old_image = NULL){
+		if($new_image = $this->upload_image($new_image)){
+			if(strpos($old_image, base_url()) === 0){
+				$dimensions = array('q','t','s','n','o');
+				$old_image = str_replace(base_url(), "./", $old_image); // "./uploads/images/[imagename]_o.[ext]", facebook image will not be removed
+				$image_ext = pathinfo($old_image, PATHINFO_EXTENSION);
+				$image_name = substr($old_image, 0, strrpos($old_image, "_"));
+				foreach($dimensions as $dimension){
+					unlink("{$image_name}_{$dimension}.{$image_ext}");
+				}
+			}
+			return $new_image;
 		}
 	}
 	
@@ -400,4 +448,22 @@ class SocialHappen{
 		$user = $this->CI->users->get_user_profile_by_user_id($user_id);
 		return count($user) != 0;
 	}
+	
+	/**
+	 * Check package
+	 * @param $user_id
+	 * @param $mode
+	 * @author Manassarn M.
+	 */
+	function check_package_by_user_id_and_mode($user_id = NULL, $mode = NULL){
+		$this->load->model("package_model","packages");
+		if($mode == "company"){
+			return $this->packages->check_user_package_can_add_company($user_id);
+		} else if ($mode == "page"){
+			return $this->packages->check_user_package_can_add_page($user_id);
+		} else if ($mode == "user"){
+			return $this->packages->check_user_package_can_add_user($user_id);
+		} else return FALSE;
+	}
+	
 }

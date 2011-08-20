@@ -12,19 +12,14 @@ a {
 
 /* FancyBox Hack */
 #fancybox-outer {
-	background:none!important;
-}
-#fancybox-content {
 	border: 8px solid #B5CA6E!important;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
 }
-#fancybox-bg-w {
-	left: -16px!important;
-}
 #fancybox-close {
-	right: -30px!important;
+	top: -20px!important;
+	right: -20px!important;
 }
 
 /* Pop up */
@@ -52,6 +47,9 @@ div.pic-profile p.pic img
 	height:50px;
 	overflow:hidden;
 	border:0!important;
+}
+div.wrapper-details-member > div.details p.thumb {
+width: 50px;
 }
 
 /* Company setting */
@@ -85,7 +83,7 @@ div.company-app ul li p img {
 div.popup_select-company > ul > li div.detail-list h2 a {
 	color: #677D2A;
 }
-div[class^="detail-list"] p.thumb img, div.pic-profile p.pic img
+div.popup_select-company div[class^="detail-list"] p.thumb img, div.pic-profile p.pic img
 {
 	width:80px;
 	height:80px;
@@ -191,4 +189,17 @@ div.popup_create-company ul>li textarea {
 	height: 105px;
 	border: 1px solid #c5c5c5;
 	padding: 5px;
+}
+
+/* Pagination */
+.paging span.current {
+	display: block;
+	background: url(../../images/bg/bg_main.png) no-repeat;
+	float:left;
+	width:21px;
+	height:21px;
+	text-align:center;
+	padding:3px 2px 0 2px;
+	background-position:-30px -250px;
+	color:fff;
 }

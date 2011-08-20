@@ -40,6 +40,7 @@
 			Drag available Application to left panel to install
 		</p>
 	</div>
+	<br class="clear" />
 	<!-- end right panel -->
 </div>
 {footer}

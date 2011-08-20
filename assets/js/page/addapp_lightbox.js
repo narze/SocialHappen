@@ -45,6 +45,10 @@ function refresh_available_item_panel(){
 	var k=(showing_page_of_available_item-1)*available_item_per_page;
 	for(j=k;j<k+available_item_per_page;j++) ul_element.children("li").eq(j).show();
 	strip_element.children('li').eq(showing_page_of_available_item-1).children('a').attr('class','current');
+	//Remove pagination if there is one page
+	if(strip_element.find("li").length == 1) {
+		strip_element.find('li').remove();
+	}
 }
 
 function refresh_installed_app_in_page_panel(){	
@@ -57,6 +61,10 @@ function refresh_installed_app_in_page_panel(){
 	var k=(showing_page_of_installed_app_in_page-1)*installed_app_in_page_per_row;
 	for(j=k;j<k+installed_app_in_page_per_row;j++) ul_element.children("li").eq(j+1).show();
 	strip_element.children('li').eq(showing_page_of_installed_app_in_page-1).children('a').attr('class','current');
+	//Remove pagination if there is one page
+	if(strip_element.find("li").length == 1) {
+		strip_element.find('li').remove();
+	}
 }
 
 function show_page(elementName,page){

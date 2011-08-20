@@ -1,5 +1,12 @@
 $(function(){
 	$('a.a-dashboard').live('click',function(){
+		var viewas = '';
+		if($(this).hasClass('view-as-user')){
+			viewas = 'viewas=user';
+		} else if ($(this).hasClass('view-as-guest')){
+			viewas = 'viewas=guest';
+		}
+		
 		set_loading();
 		$('div#main').load(base_url+'tab/dashboard/'+page_id+'/'+token,function(){
 			trigger_countdown = function (){
@@ -17,12 +24,12 @@ $(function(){
 				$.fancybox({
 					href: base_url+'tab/guest'
 				});
-				$('a.a-close').die('click');
-				$('a.a-close').live('click',function(){
+				$('a.bt-don-awesome').die('click');
+				$('a.bt-don-awesome').live('click',function(){
 					$.fancybox.close();
 				});
-				$('a.a-signup').die('click');
-				$('a.a-signup').live('click',function(){
+				$('a.bt-join-social').die('click');
+				$('a.bt-join-social').live('click',function(){
 					$.fancybox({
 						href: base_url+'tab/signup'
 					});
@@ -31,28 +38,36 @@ $(function(){
 						$(this).ajaxSubmit({target:'#signup-form'});
 						return false;
 					});
+					
+					$('a.bt-register-now').live('click', function(){
+						$('form.signup-form').ajaxSubmit({target:'.popup-fb-2col', replaceTarget:true});
+						return false;
+					});
 				});
 			} else if(page_app_installed_id!=0) {
 				$.fancybox({
 					href: base_url+'tab/app_installed/'+ page_app_installed_id
 				});
-				$('a.a-close').die('click');
-				$('a.a-close').live('click',function(){
+				$('a.bt-stay_fb').die('click');
+				$('a.bt-stay_fb').live('click',function(){
 					$.fancybox.close();
 				});
 			} else if(page_installed==0){
 				$.fancybox({
 					href: base_url+'tab/page_installed/'+ page_id
 				});
-				$('a.a-close').die('click');
-				$('a.a-close').live('click',function(){
+				$('a.bt-stay_fb').die('click');
+				$('a.bt-stay_fb').live('click',function(){
 					$.fancybox.close();
 				});
 			}
 			
-			var mode = '';
+			var mode = '?';
 			function get_apps_campaigns(page_index,jq){
-				$('div.list_app-camp').load(base_url+'tab/apps_campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode,trigger_countdown);
+				$('div.list_app-camp').load(base_url+'tab/apps_campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode + viewas,trigger_countdown);
+				if($('div.pagination-app-campaign').find('a').length == 0) {
+					$('div.pagination-app-campaign').find('div.pagination').remove();
+				}
 			}
 			
 			$('div.list_app-camp').load(base_url+'tab/apps_campaigns/'+page_id+'/'+per_page,function(){
@@ -60,7 +75,7 @@ $(function(){
 					$.getJSON(base_url+"page/json_count_apps/"+page_id,function(app_count){
 						$.getJSON(base_url+"page/json_count_campaigns/"+page_id,function(campaign_count){
 							count = app_count+campaign_count;
-							mode = '';
+							mode = '?';
 							$('.pagination-app-campaign').pagination(count, {
 								items_per_page:per_page,
 								callback:get_apps_campaigns,
@@ -78,7 +93,7 @@ $(function(){
 					$.getJSON(base_url+"page/json_count_apps/"+page_id,function(app_count){
 					
 						count = app_count;
-						mode = '?filter=app';
+						mode = '?filter=app&';
 						$('.pagination-app-campaign').pagination(count, {
 							items_per_page:per_page,
 							callback:get_apps_campaigns,
@@ -96,7 +111,7 @@ $(function(){
 					
 						$.getJSON(base_url+"page/json_count_campaigns/"+page_id,function(campaign_count){
 							count = campaign_count;
-							mode = '?filter=campaign';
+							mode = '?filter=campaign&';
 							$('.pagination-app-campaign').pagination(count, {
 								items_per_page:per_page,
 								callback:get_apps_campaigns,
@@ -116,6 +131,10 @@ $(function(){
 				$('div.list_resent-activity').children('ul').children('li').hide();
 				for(i=0;i<per_page;i++){
 					$('div.list_resent-activity').children('ul').children('li:eq('+((page_index * per_page)+i)+')').show();
+				}
+				
+				if($('div.pagination-activity').find('a').length == 0) {
+					$('div.pagination-activity').find('div.pagination').remove();
 				}
 			}
 			
@@ -159,5 +178,5 @@ $(function(){
 		});
 		return false;
 	});
-	$('a.a-dashboard').click();
+	$('a#a-dashboard.a-dashboard').click();
 });

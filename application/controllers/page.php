@@ -333,6 +333,14 @@ class Page extends CI_Controller {
 						'company_id' => (int)($this -> input -> post('company_id'))
 					)
 			);
+			$this -> load -> model('user_pages_model', 'user_pages');
+			$this -> user_pages -> add_user_page(
+				array(
+				'user_id' => (int)($this->session->userdata('user_id')),
+				'page_id' => $page_id,
+				'user_role' => 1
+				)
+			);
 		} else {
 			$result['status'] = 'ERROR';
 		}

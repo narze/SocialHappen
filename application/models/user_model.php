@@ -90,6 +90,9 @@ class User_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function add_user($data = array()){
+		if(!$data || $this->check_exist(issetor($data['user_facebook_id']))){
+			return FALSE;
+		}
 		$this -> db -> insert('user', $data);
 		return $this->db->insert_id();
 	}
@@ -102,7 +105,7 @@ class User_model extends CI_Model {
 	 */
 	function remove_user($user_id = NULL){
 		$this->db->delete('user', array('user_id' => $user_id));
-		return $this->db->affected_rows();
+		return $this->db->affected_rows() == 1;
 	}
 	
 	/**
@@ -212,8 +215,9 @@ class User_model extends CI_Model {
 	 * Update user last seen
 	 * @param $user_id
 	 * @author Wachiraph C. - revise May 2011
+	 * @author Manassarn M. - Fix bugs
 	 */
 	function update_user_last_seen($user_id) {
-		$this -> update( array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
+		return $this -> db -> update('user', array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
 	}
 }

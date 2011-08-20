@@ -8,15 +8,6 @@ author: Oat (okaynaja)
 
 ###########################################
 */
-div.account-data div.pic img {
-	width: 95px;
-	height: 95px;
-}
-div.list_app-camp>ul>li>div:first-child p.pic img {
-	width:80px;
-	height:80px;
-}
-
 div.tab-head>div>ul>li a {
 	cursor:pointer;
 }
@@ -27,20 +18,124 @@ div.header {
 	/*background: url(../../images/bg_fb/bg_header.png) no-repeat;*/
 	background-color:#FFF;
 }
-#friends {
-	
-	width: 148px;
-	background: #F2F2F2;
-	border: 1px solid #EBEBEB;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	padding: 7px;
-	position: absolute;
-	top: 56px;
-	right: 22px;
+
+/* Pagination */
+div.strip {padding: 10px 0;}
+div.strip div.pagination {
+    height: 10px;
+    margin: 0 auto;
+    width: 100px;
 }
-#friends img.image {
-	width:28px;
-	height:28px;
+div.strip div.pagination a , div.strip div.pagination span.current {
+    float: left;
+    margin: 0 5px;
+}
+div.strip div.pagination a {
+    background: url(../../images/bg_fb/bg_main.png) no-repeat scroll 0 -347px;
+    display: block;
+    height: 10px;
+    width: 10px;
+	text-indent:-900px;
+	overflow:hidden;
+}
+div.strip div.pagination span.current {
+	background: url(../../images/bg_fb/bg_main.png) no-repeat scroll 0 -328px;
+    display: block;
+    height: 10px;
+    width: 10px;
+	text-indent:-900px;
+	overflow:hidden;
+}
+
+/* Guest popup */
+div.popup-fb-2col {
+	width: 390px;
+	padding: 15px 15px 5px 15px;
+	border: 0px solid #ADCA4A;
+	background: white;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+div.popup-fb-2col > div > div:first-child {
+	float: left;
+	width: 210px;
+	overflow: hidden;
+}
+div.popup-fb-2col > div > div:first-child img {
+	width: 200px;
+	height: 190px;
+}
+div.popup-fb-2col > div > div:first-child + div {
+	float: left;
+	width: 180px;
+}
+
+/* Signup */
+div.upload-pic {
+	width:50px;
+	height:20px; 
+	cursor: pointer; 
+	overflow: hidden; 
+	position: absolute;
+	left: 0;
+	top: 50px;
+	font-size:11px;
+	text-align: center;
+}
+div.upload-pic a {
+	color:#65781F;
+}
+div.upload-pic input {
+	filter: alpha(opacity = 0);
+	zoom:1;
+	opacity:0;
+	position:absolute;
+	top:0;
+	right:0;
+}
+label.error {color:red;}
+
+/* Dashboard */
+div.list_app-camp>ul>li>div:first-child p.pic img {
+	width:80px;
+}
+.bt-time_up {
+	cursor:auto;
+}
+
+/*  Popup FB */
+div.popup-fb {
+	width:390px;
+	padding: 15px 15px 5px 15px;
+	border: 0px solid #ADCA4A;
+	background: white;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+div.popup-fb div div img {
+	width:390px;
+}
+
+
+/* FancyBox Hack */
+#fancybox-outer {
+	border: 8px solid #B5CA6E!important;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+#fancybox-close {
+	top: -20px!important;
+	right: -20px!important;
+}
+
+/* View my profile */
+div.account-data div.pic img {
+	width: 95px;
+}
+div.account-data div.friend ul > li a img {
+	width:30px;
+	height:30px;
 }

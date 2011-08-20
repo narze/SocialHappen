@@ -1,26 +1,26 @@
 <div class="wrapper-content">
     <div class="account-data">
-      <div class="pic"><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /><span></span></div>
-      <div class="data">
+      <div class="pic"><img src="<?php echo $user['user_image'].'?type=normal';?>" /><span></span></div>
+      <div class="userview">
         <h1><?php echo $user['user_first_name']." ".$user['user_last_name'];?></h1>
-		<p>Level: </p>
+        <p>Level: 3</p>
+        <ul>
+          <li class="fav">20,000</li>
+          <li class="point">120</li>
+        </ul>
       </div>
-	 
-    </div>
-	 <div id="friends">
-		<?php if(isset($friends)) :
+      <div class="friend">
+        <ul><?php
+			if(isset($friends)) :
 			foreach($friends as $friend): ?>
-			<div class="friend">
-				<div class="image">
-					<img class="image" src=" http://graph.facebook.com/<?php echo $friend['uid'];?>/picture" />
-				</div>
-				<div class="friend-detail">
-					<div class="name"><?php echo $friend['name'];?></div>
-				</div>
-			</div>
-		<?php endforeach; 
-		endif;?>
-		</div>
+				<li><a href="#"><img class="image" src="<?php echo  $friend['image']; ?>" title="<?php echo $friend['name'];?>" /></a></li><?php 
+			endforeach; 
+			endif;?>
+        </ul>
+        <p><a class="link-friendsjoin" href="#">1,220 friends joined this page</a></p>
+        <p><a class="link-invite_friend" href="#">invite friends</a></p>
+      </div>
+    </div>
 	
       <div>
       <div class="tab-head">
