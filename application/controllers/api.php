@@ -464,8 +464,7 @@ class Api extends CI_Controller {
 			return;
 		}
 		
-		$response = array(	'status' => 'OK',
-							'message' => 'registered');
+		$response = array(	'status' => 'OK');
 		
 		// register new user
 		$this->load->model('User_model', 'User');
@@ -484,7 +483,8 @@ class Api extends CI_Controller {
 											)
 									);
 			$response['user_id'] = $user_id;
-			$response['User'] = 'added ';
+			$response['User'] = 'added';
+			$response['message'] = 'New user registered';
 		
 		} else {
 			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
@@ -1073,8 +1073,6 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		$page_id = $this->input->get('page_id', TRUE);
 		
-		//TODO check if page has app_install_id
-		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
@@ -1095,6 +1093,14 @@ class Api extends CI_Controller {
 			return;
 		}
 		
+		$this->load->model('installed_apps_model','installed_apps');
+		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		if(issetor($app['page_id'])==$page_id){
+			echo json_encode(array( 'error' => '600',
+									'message' => 'invalid page_id'));
+			return;
+		}
+		
 		$response = array('status' => 'OK');
 		
 		$this->load->model('page_user_data_model','page_users');
@@ -1106,6 +1112,51 @@ class Api extends CI_Controller {
 			//TODO: limit fields
 		}
 		echo json_encode($response);
+	}
+	
+	/**
+	 * Request add user point
+	 * @author Manassarn M.
+	 */
+	function request_add_user_point(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$point = $this->input->get('point', TRUE);
+		
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id) || !$point){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id, point)'));
+			return;
+		}
+		
+		// authenticate app with $app_id and $app_secret_key
+		if(!($this->_authenticate_app($app_id, $app_secret_key))){
+			echo json_encode(array( 'error' => '200',
+									'message' => 'invalid app_secret_key'));
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid app_install_secret_key'));
+			return;
+		}
+		
+		$response = array('status' => 'OK');
+		
+		$this->load->model('User_model', 'User');
+		if(!$user = $this->User->get_user_profile_by_user_facebook_id($user_facebook_id)){
+			$response['message'] = 'User not found';
+		} else {
+			$this->User->update_user($user['user_id'],array('user_point' => $user['user_point'] + (int)$point));
+			$response['message'] = 'Point added';
+		}
+		echo json_encode($response);
+		//TODO audit
 	}
 	
 	function _authenticate_app($app_id, $app_secret_key){

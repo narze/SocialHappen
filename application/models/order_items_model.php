@@ -12,10 +12,7 @@ class Order_items_model extends CI_Model {
 	
 	function get_order_items_by_order_id($order_id = NULL){
 		$results = $this->db->get_where('order_items', array('order_id'=>$order_id))->result_array();
-		foreach($results as &$result) {
-			$result['item_type'] = $this->socialhappen->get_v('item_type',$result['item_type']);
-		}
-		unset($result);
+		$this->socialhappen->map_v($results,'item_type');
 		return $results;
 	}
 	

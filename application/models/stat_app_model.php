@@ -104,6 +104,7 @@ class Stat_app_model extends CI_Model {
 			$this->apps->update($criteria, array(
 												'$inc' => array('count' => 1)
 											), TRUE);
+
 			return TRUE;
 		}else{
 			return FALSE;

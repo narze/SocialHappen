@@ -9,7 +9,7 @@ class Company_model_test extends CI_Controller {
 	}
 	
 	function __destruct(){
-		echo $this->unit->report();
+		$this->unit->report_with_counter();
 	}
 
 	function index(){

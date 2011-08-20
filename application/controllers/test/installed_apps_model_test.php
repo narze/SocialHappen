@@ -9,7 +9,7 @@ class Installed_apps_model_test extends CI_Controller {
 	}
 	
 	function __destruct(){
-		echo $this->unit->report();
+		$this->unit->report_with_counter();
 	}
 
 	function index(){
@@ -28,11 +28,10 @@ class Installed_apps_model_test extends CI_Controller {
 	function get_installed_apps_by_company_id_test(){
 		$result = $this->installed_apps->get_installed_apps_by_company_id(1);
 		$this->unit->run($result,'is_array', 'get_installed_apps_by_company_id()');
-		$this->unit->run(count($result[0]) == 19,'is_true', 'number of column');
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_status'] == 'Installed','is_true','app_install_status == Installed');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
@@ -47,7 +46,7 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($result[0]['app_support_page_tab'],'is_string','app_support_page_tab');
 		$this->unit->run($result[0]['app_image'],'is_string','app_image');
-		$this->unit->run($result[0]['facebook_app_api_key'],'is_string','facebook_app_api_key');
+		$this->unit->run($result[0]['app_facebook_api_key'],'is_string','app_facebook_api_key');
 	}
 	
 	/**
@@ -57,11 +56,10 @@ class Installed_apps_model_test extends CI_Controller {
 	function get_app_profile_by_app_install_id_test(){
 		$result = $this->installed_apps->get_app_profile_by_app_install_id(1);
 		$this->unit->run($result,'is_array', 'get_app_profile_by_app_install_id()');
-		$this->unit->run(count($result) == 19,'is_true', 'number of column');
 		$this->unit->run($result['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result['company_id'],'is_string','company_id');
 		$this->unit->run($result['app_id'],'is_string','app_id');
-		$this->unit->run($result['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result['app_install_status'] == 'Installed','is_true','app_install_status == Installed');
 		$this->unit->run($result['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result['page_id'],'is_string','page_id');
 		$this->unit->run($result['app_install_secret_key'],'is_string','app_install_secret_key');
@@ -76,7 +74,10 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($result['app_support_page_tab'],'is_string','app_support_page_tab');
 		$this->unit->run($result['app_image'],'is_string','app_image');
-		$this->unit->run($result['facebook_app_api_key'],'is_string','facebook_app_api_key');
+		$this->unit->run($result['app_facebook_api_key'],'is_string','app_facebook_api_key');
+		
+		$result = $this->installed_apps->get_app_profile_by_app_install_id(100);
+		$this->unit->run($result,'is_null', 'get_app_profile_by_app_install_id()');
 	}
 	
 	/**
@@ -118,11 +119,10 @@ class Installed_apps_model_test extends CI_Controller {
 	function get_installed_apps_by_page_id_test(){
 		$result = $this->installed_apps->get_installed_apps_by_page_id(1);
 		$this->unit->run($result,'is_array', 'get_installed_apps_by_page_id()');
-		$this->unit->run(count($result[0]) == 19,'is_true', 'number of column');
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_status'] == 'Installed','is_true','app_install_status == Installed');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
@@ -137,7 +137,7 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($result[0]['app_support_page_tab'],'is_string','app_support_page_tab');
 		$this->unit->run($result[0]['app_image'],'is_string','app_image');
-		$this->unit->run($result[0]['facebook_app_api_key'],'is_string','facebook_app_api_key');
+		$this->unit->run($result[0]['app_facebook_api_key'],'is_string','app_facebook_api_key');
 	}		
 }
 /* End of file installed_apps_model_test.php */

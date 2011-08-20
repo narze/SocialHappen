@@ -23,7 +23,7 @@
 			//var_dump($app);
 			//echo '<li>'.anchor('backend/page/'.$page['page_id'], $page['page_name'], 'title="view page detail"').'</li>';
 			echo '<li>'.anchor('backend/app_install/'.$app['app_install_id'], $app['app_name'], 'title="view app installed detail"').'
-			<br/>Status: '.$app['app_install_status_name'].'
+			<br/>Status: '.$app['app_install_status'].'
 			
 			</li>';
 		}
