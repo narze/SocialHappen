@@ -6,10 +6,6 @@ class App_test extends CI_Controller {
 		$this->load->library('unit_test');
 	}
 	
-	function __destruct(){
-		echo $this->unit->report();
-	}
-	
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
@@ -17,6 +13,7 @@ class App_test extends CI_Controller {
     			$this->$method();
     		}
 		}
+		$this->unit->report_with_counter();
 	}
 	
 	/**
@@ -162,7 +159,7 @@ class App_test extends CI_Controller {
 		$app = array(
 						'company_id' => 1,
 						'app_id' => 1,
-						'app_install_status' => 1,
+						'app_install_status' => $this->socialhappen->get_k('app_install_status', 'installed'),
 						'page_id' => 1,
 						'app_install_secret_key' => rand(1,10000000)
 					);
