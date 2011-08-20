@@ -149,15 +149,15 @@ class User_model_test extends CI_Controller {
 	}
 	
 	/**
-	 * Test update_user_profile_by_user_id()
+	 * Test update_user()
 	 * @author Manassarn M.
 	 */
-	function update_user_profile_by_user_id_test(){
+	function update_user_test(){
 		$new_first_name = rand(1,10000);
 		$data = array(
 			'user_first_name' => $new_first_name
 		);
-		$result = $this->users->update_user_profile_by_user_id(1,$data);
+		$result = $this->users->update_user(1,$data);
 		$this->unit->run($result === TRUE,'is_true', 'Updated user_first_name without error');
 		
 		$result = $this->users->get_user_profile_by_user_id(1);

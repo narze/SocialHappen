@@ -243,6 +243,7 @@ class Sync extends CI_Controller {
 								'user_gender' => field_option('INT', 1, 1, TRUE, $autoinc, TRUE),
 								'user_birth_date' => field_option('DATE', $constraint, $default, TRUE, $autoinc, $unsigned),
 								'user_about' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
+								'user_point' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE)
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),

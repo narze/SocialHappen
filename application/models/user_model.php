@@ -203,11 +203,11 @@ class User_model extends CI_Model {
 	}
 	
 	/**
-	 * Update user profile
+	 * Update user
 	 * @param $user_id
 	 * @author Manassarn M.
 	 */
-	function update_user_profile_by_user_id($user_id = NULL, $data = array()){
+	function update_user($user_id = NULL, $data = array()){
 		return $this->db->update('user', $data, array('user_id' => $user_id));
 	}
 	

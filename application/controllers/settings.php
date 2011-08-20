@@ -120,7 +120,7 @@ class Settings extends CI_Controller {
 								'user_image' => $user_image
 							);
 				$this->load->model('user_model','users');
-				if ($this->users->update_user_profile_by_user_id($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
+				if ($this->users->update_user($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
 				{
 					$this->load->view('settings/account', array('user'=>array_merge($user,$user_update_data), 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
 				}
