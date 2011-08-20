@@ -57,7 +57,7 @@ class achievement_stat_model_test extends CI_Controller {
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_false', 'increment', print_r($result, TRUE));
 		
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 0, 'increment', print_r($result, TRUE));
 	}
 	
@@ -69,7 +69,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 1, 'increment', print_r($result, TRUE));
 		
 		$app_id = 1;
@@ -80,7 +80,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 1, 'increment', print_r($result, TRUE));
 		
 		$app_id = 1;
@@ -91,7 +91,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 1, 'increment', print_r($result, TRUE));
 		
 		$app_id = 1;
@@ -102,7 +102,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 1, 'increment', print_r($result, TRUE));
 		
 		$app_id = 1;
@@ -113,7 +113,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 1, 'increment', print_r($result, TRUE));
 		
 		$app_id = 2;
@@ -125,7 +125,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 2, 'increment', print_r($result, TRUE));
 		
 		$app_id = 2;
@@ -138,7 +138,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 2, 'increment', print_r($result, TRUE));
 		
 		$app_id = 2;
@@ -151,7 +151,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 2, 'increment', print_r($result, TRUE));
 	}
 	
@@ -200,7 +200,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->set($app_id, $user_id, $info);
 		$this->unit->run($result, 'is_true', 'set', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 2, 'increment', print_r($result, TRUE));
 		
 		$app_id = 10;
@@ -209,7 +209,7 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->set($app_id, $user_id, $info);
 		$this->unit->run($result, 'is_true', 'set', print_r($result, TRUE));
-		$total = count($this->achievement_stat->listStat());
+		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 3, 'increment', print_r($result, TRUE));
 	}
 	
@@ -246,7 +246,7 @@ class achievement_stat_model_test extends CI_Controller {
 	}
 	
 	function end_test(){
-		//$this->achievement_stat->drop_collection();
+		$this->achievement_stat->drop_collection();
 	}
 }
 /* End of file achievement_stat_model_test.php */

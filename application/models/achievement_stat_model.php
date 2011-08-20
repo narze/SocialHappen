@@ -147,7 +147,8 @@ class Achievement_stat_model extends CI_Model {
 			
 			
 			$res = $this->achievement_stat->find(array('app_id' => $app_id,
-																								 'user_id' => $user_id));
+																								 'user_id' => $user_id))
+																		->limit(1);;
 			$result = array();
 			foreach ($res as $stat) {
 				$result[] = $stat;
@@ -162,7 +163,7 @@ class Achievement_stat_model extends CI_Model {
 	 * list achievement stat
 	 * @param criteria array of criteria
 	 */
-	function listStat($criteria = array()){
+	function list_stat($criteria = array()){
 		$res = $this->achievement_stat->find($criteria);
 		
 		$result = array();
@@ -173,7 +174,7 @@ class Achievement_stat_model extends CI_Model {
 	}
 	/**
 	 * drop entire collection
-	 * you will lost all stat app data
+	 * you will lost all achievement_stat data
 	 * 
 	 * @author Metwara Narksook
 	 */
