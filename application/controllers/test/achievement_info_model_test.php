@@ -169,6 +169,12 @@ class achievement_info_model_test extends CI_Controller {
 		
 		$result = $this->achievement_info->get($achievement_id);
 		$this->unit->run($result, 'is_null', 'delete', print_r($result, TRUE));
+		
+		$result = $this->achievement_info->delete($achievement_id);
+		$this->unit->run($result, 'is_true', 'delete', print_r($result, TRUE));
+		
+		$result = $this->achievement_info->get($achievement_id);
+		$this->unit->run($result, 'is_null', 'delete', print_r($result, TRUE));
 	}
 
 	function end_test(){

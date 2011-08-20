@@ -25,7 +25,7 @@ class Achievement extends CI_Controller {
 	}
 	
 	function test(){
-		print_r(strpos('action.6.count', 'action.'));
+		
 	}
 
 }

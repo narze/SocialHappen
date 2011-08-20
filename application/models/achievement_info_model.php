@@ -49,7 +49,8 @@ class Achievement_info_model extends CI_Model {
 	function create_index(){
 		return $this->achievement_info->ensureIndex(array(
 										'app_id' => 1,
-										'app_install_id' => 1));
+										'app_install_id' => 1,
+										'info.page_id' => 1));
 	}
 	
 	

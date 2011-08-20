@@ -148,7 +148,7 @@ class Achievement_stat_model extends CI_Model {
 			
 			$res = $this->achievement_stat->find(array('app_id' => $app_id,
 																								 'user_id' => $user_id))
-																		->limit(1);;
+																		->limit(1);
 			$result = array();
 			foreach ($res as $stat) {
 				$result[] = $stat;
