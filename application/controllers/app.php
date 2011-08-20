@@ -259,26 +259,35 @@ class App extends CI_Controller {
 	}
 	
 	/**
-	 * JSON : Get app install status by app_install_status_name
+	 * JSON : Get app install status
 	 * @param : $status_name
 	 * @author Prachya P.
+	 * @author Manassarn M.
 	 */
-	function json_get_app_install_status_by_status_name($status_name = NULL){	
-		$this->socialhappen->ajax_check();
+	function json_get_app_install_status($status_name = NULL){	
+		//$this->socialhappen->ajax_check();
 		$this->load->model('app_model','app');
-		$app_install_status = $this->app->get_app_install_status_by_status_name($status_name);
+		$app_install_status = array();
+		if($app_install_status_id = $this->socialhappen->get_k('app_install_status', $status_name)){
+			$app_install_status['app_install_status_id'] = $app_install_status_id;
+			$app_install_status['app_install_status_name'] = $app_install_status['app_install_status_description'] = $this->socialhappen->get_v('app_install_status',$app_install_status['app_install_status_id']);
+		}
 		echo json_encode($app_install_status);
 	}
 	
 	/**
 	 * JSON : Get all app install status
 	 * @author Prachya P.
+	 * @author Manassarn M.
 	 */
 	function json_get_all_app_install_status(){
-		$this->socialhappen->ajax_check();
-		$this->load->model('app_model','app');
-		$app_install_statuses = $this->app->get_all_app_install_status();
-		echo json_encode($app_install_statuses);
+		//$this->socialhappen->ajax_check();
+		$app_install_statuses = array();
+		foreach($this->socialhappen->get_global('app_install_status') as $key => $value){
+			$app_install_statuses[$key]['app_install_status_id'] = $key;
+			$app_install_statuses[$key]['app_install_status_name'] = $app_install_statuses[$key]['app_install_status_description'] = $value;
+		}
+		echo json_encode(array_values($app_install_statuses));
 	}
 	
 	/**

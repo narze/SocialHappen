@@ -149,11 +149,6 @@ class Sync extends CI_Controller {
 							    'app_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'app_facebook_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
 							),
-							'app_install_status' => array(
-							    'app_install_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
-							    'app_install_status_name' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
-							    'app_install_status_description' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							),
 							/*'app_statistic' => array(
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, $unsigned),
 							    'job_time' => field_option('TIMESTAMP', $constraint, 'CURRENT_TIMESTAMP', $null, $autoinc, $unsigned),
@@ -243,6 +238,7 @@ class Sync extends CI_Controller {
 								'user_gender' => field_option('INT', 1, 1, TRUE, $autoinc, TRUE),
 								'user_birth_date' => field_option('DATE', $constraint, $default, TRUE, $autoinc, $unsigned),
 								'user_about' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
+								'user_point' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE)
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -358,7 +354,6 @@ class Sync extends CI_Controller {
 						);
 		$keys = array(
 						'app' => array('app_id'),
-						'app_install_status' => array('app_install_status_id'),
 						//'app_statistic' => array('app_install_id','job_time'),
 						'app_type' => array('app_type_id'),
 						'audit_action_type' => array('audit_action_id'),
@@ -389,7 +384,6 @@ class Sync extends CI_Controller {
 					);
 		$tables = array(
 							'app',
-							'app_install_status',
 							//'app_statistic',
 							'app_type',
 							'audit_action_type',
@@ -616,30 +610,6 @@ class Sync extends CI_Controller {
 					)
 				);
 		$this->db->insert_batch('app', $app);
-		
-		$app_install_status = array(
-									array(
-									    'app_install_status_id' => 1,
-									    'app_install_status_name' => 'active',
-									    'app_install_status_description' => 'Active'
-									),
-									array(
-									    'app_install_status_id' => 2,
-									    'app_install_status_name' => 'inactive',
-									    'app_install_status_description' => 'Inactive'
-									),
-									array(
-									    'app_install_status_id' => 3,
-									    'app_install_status_name' => 'not complete install',
-									    'app_install_status_description' => 'Installed but not complete'
-									),
-									array(
-									    'app_install_status_id' => 6,
-									    'app_install_status_name' => 'not complete install',
-									    'app_install_status_description' => 'Installed but not complete'
-									)
-								);
-		$this->db->insert_batch('app_install_status', $app_install_status);
 		
 		$app_type = array(
 							array(

@@ -21,24 +21,61 @@ class SocialHappen{
 	var $global_variables = array(
 		'item_type' => array(1=>'Package', 2=>'App'),
 		'order_status' => array(1=>'Processed',2=>'Failed'),
+		'app_install_status' => array(1=>'Installed', 2=>'Active', 3=>'Inactive'),
 	);
+	
+	/**
+	 * Get global variable
+	 * @param $var_name
+	 * @author Manassarn
+	 */
+	function get_global($var_name){
+		return issetor($this->global_variables[$var_name]);
+	}
 	
 	/**
 	 * Get a global variable key
 	 * @param $var_name
+	 * @param $value
 	 * @author Manassarn M.
 	 */
-	function get_k($var_name, $value){
+	function get_k($var_name = NULL, $value = NULL){
 		return array_search(strtolower($value),array_map('strtolower',issetor($this->global_variables[$var_name], NULL)));
 	}
 	
 	/**
-	 * Get a global variable vale
+	 * Get a global variable value
 	 * @param $var_name
+	 * @param $key
 	 * @author Manassarn M.
 	 */
-	function get_v($var_name, $key){
+	function get_v($var_name = NULL, $key = NULL){
 		return issetor($this->global_variables[$var_name][$key], NULL);
+	}
+	
+	/**
+	 * Map global value in array
+	 * @param &$each
+	 * @param $var_name_and_array_index
+	 */
+	function map_one_v(&$each = NULL, $var_name_and_array_index = NULL){
+		if($each) {
+			$each[$var_name_and_array_index] = $this->get_v($var_name_and_array_index,$each[$var_name_and_array_index]);
+		}
+		return $each;
+	}
+	
+	/**
+	 * Maps global values in multi array
+	 * @param &$array
+	 * @param $var_name_and_array_index
+	 */
+	function map_v(&$array = NULL, $var_name_and_array_index = NULL){
+		foreach($array as &$each){
+			$this->map_one_v($each,$var_name_and_array_index);
+		}
+		unset($each);
+		return $array;
 	}
 	
 	/**
