@@ -246,7 +246,7 @@ class achievement_stat_model_test extends CI_Controller {
 	}
 	
 	function end_test(){
-		//$this->achievement_stat->drop_collection();
+		$this->achievement_stat->drop_collection();
 	}
 }
 /* End of file achievement_stat_model_test.php */
