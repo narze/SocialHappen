@@ -1,4 +1,4 @@
-          <div class="form">
+          
 			<?php // Change the css classes to suit your needs    
 			$attributes = array('class' => '', 'id' => 'signup-form');
 			echo form_open_multipart('home/signup_form', $attributes); ?>
@@ -50,4 +50,3 @@
             <?php 
 			echo form_submit('signup-form', 'Submit', 'style="display:none"');
 			echo form_close(); ?>
-          </div><!-- div.form -->
