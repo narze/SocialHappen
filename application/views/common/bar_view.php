@@ -32,7 +32,7 @@
 				}
 			</script>
 		<ul>
-		<li class="fb"><a href="#" onclick="fblogin();" ><img src="images/fb-login.jpg" alt=""></a></li>
+		<li class="fb"><a href="#" onclick="fblogin();" ><img src="<?php echo base_url(); ?>images/fb-login.jpg" alt=""></a></li>
 		</ul>
 	<?php elseif(issetor($facebook_user)) : ?>
 		<?php if(isset($user) && $user) : ?>

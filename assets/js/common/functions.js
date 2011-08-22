@@ -102,3 +102,24 @@ if(!window.check_login){
 		});
 	}
 }
+
+if(!window.is_login){
+	function is_login(){
+		var result = null;
+		$.ajax({
+			url:base_url+'home/json_check_login/',
+			dataType:'json',
+			async:false,
+			success:function(data){
+				result = data;
+			}
+		
+		});
+		
+		if(result.logged_in){
+			return true;
+		} else {
+			return false;
+		}
+	}
+}

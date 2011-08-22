@@ -158,6 +158,62 @@ class Home extends CI_Controller {
 		}
 	}
 	
+	function package()
+	{
+		$package = $this->load->model('package_model','package');
+		$data = array(
+			'header' => $this -> socialhappen -> get_header( 
+				array(
+					'title' => 'Package',
+					'script' => array(
+						'common/functions',
+						'common/jquery.form',
+						'common/bar',
+						'common/fancybox/jquery.fancybox-1.3.4.pack',
+						'home/lightbox',
+						'home/signup'
+					),
+					'style' => array(
+						'common/main',
+						'common/platform',
+						'common/fancybox/jquery.fancybox-1.3.4'
+					)
+				)
+			),
+			'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+				array(
+					'breadcrumb' => array( 
+						'Package' => NULL
+					)
+				),
+			TRUE),
+			'tutorial' => $this -> load -> view('home/tutorial', 
+				array(
+					
+				),
+			TRUE),
+			'home' => $this -> load -> view('home/package', 
+				array(
+					'packages' => $this->package->get_packages()
+					//'user' => $user,
+					//'facebook_user' => $facebook_user,
+					//'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id'])
+				),
+			TRUE),
+			'footer' => $this -> socialhappen -> get_footer()
+			);
+		$this -> parser -> parse('home/home_view', $data);
+	}
+	
+	function facebook_connect() {
+		$data = array(
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+			'next' => $this->config->item('next')
+		);
+		$this -> load -> view('home/facebook_connect', $data);
+	}
+	
 	/**
 	 * JSON : Check login
 	 * @param $redirect_url
