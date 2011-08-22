@@ -13,7 +13,7 @@
 					<h2>Tutorial</h2>
 					<div><img src="images/banner-slider.png" alt="Tutorial" /></div>
 				  </div>
-					{signup_form}
+					<div class="form">{signup_form}</div>
 				</div>
 
 			<?php endif; ?>

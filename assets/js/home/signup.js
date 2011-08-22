@@ -64,9 +64,29 @@ $(function(){
 		if(companydetail.attr('class') == 'inactive') companydetail.val('');
 	}
 	
-	$('a.bt-continue').click(function() {
+	$('a.bt-continue').live('click', function() {
 		reset_blank_field();
 		$('#signup-form').ajaxSubmit({target:'div.form',success:label});
 		return false;
+	});
+	
+	$('a.bt-select-package').live('click',function(){
+		$.fancybox({
+			href: base_url+'home/signup',
+			transitionIn: 'elastic',
+			transitionOut: 'elastic',
+			padding: 0,
+			scrolling: 'no'
+		});
+		
+		//$('div.form').load(base_url+'home/signup_form', label);
+	
+		$('#signup-form').die('submit');
+		$('#signup-form').live('submit',function(){
+			$(this).ajaxSubmit({target:'div.form',replaceTarget:true});
+			return false;
+		});
+		return false;
+		
 	});
 });
