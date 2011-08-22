@@ -27,7 +27,7 @@ $(function(){
 	
 	if(popup_name != ''){
 		$.fancybox({
-			href: base_url+'home/'+popup_name,
+			href: base_url+'bar/'+popup_name,
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
 			padding: 0,
@@ -37,13 +37,13 @@ $(function(){
 	
 	$('#create_company').live('click',function(){
 		$.fancybox({
-			href: base_url+'home/create_company',
+			href: base_url+'bar/create_company',
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
 			padding: 0,
 			scrolling: 'no'
 		});
-		$('#create-company-form').load(base_url+'home/create_company_form',label);
+		$('#create-company-form').load(base_url+'bar/create_company_form',label);
 
 		$('form.create-company-form').die('submit');
 		$('form.create-company-form').live('submit',function(){

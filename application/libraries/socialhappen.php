@@ -149,11 +149,45 @@ class SocialHappen{
 	 * @author Manassarn M.
 	 */
 	function get_header($data = array()){
-		if($this->CI->session->userdata('logged_in') == TRUE){
-			$data['user'] = $this->get_user();
-			$data['user_companies'] = $this->get_user_companies();
+		$common = array();
+		if(!$this->CI->facebook->is_authentication()){
+			$this->logout(); // should relogin facebook to extend cookies TODO : fix
+			$common = array(
+				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
+				'facebook_default_scope' => $this->CI->config->item('facebook_default_scope'),
+				'next' => $this->CI->config->item('next')
+			);
+		} else {
+			$this->login();
+			if($this->CI->session->userdata('logged_in') == TRUE){
+				$data['user'] = $this->get_user();
+				if($data['user_companies'] = $this->get_user_companies()){
+					$popup_name = 'select_company';
+				} else {
+					$popup_name = 'splash';
+				}
+			}
+			$common = array(
+				'image_url' => base_url().'assets/images/',
+				'vars' => array(
+					'popup_name' => $popup_name
+				),
+				'script' => array(
+					'common/functions',
+					'common/jquery.form',
+					'common/bar',
+					'common/fancybox/jquery.fancybox-1.3.4.pack',
+					'home/lightbox',
+					'home/signup'
+				),
+				'style' => array(
+					'common/platform',
+					'common/main',
+					'common/fancybox/jquery.fancybox-1.3.4'
+				)
+			);
 		}
-		$data['image_url'] = base_url().'assets/images/';
+		$data = array_merge($data, $common);
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	

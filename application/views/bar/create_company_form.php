@@ -1,6 +1,6 @@
 <?php
 		$attributes = array('class' => 'create-company-form', 'id' => '');
-		echo form_open('home/create_company_form', $attributes); ?>
+		echo form_open('bar/create_company_form', $attributes); ?>
 		
 		<div class="form">
             <ul class="form">

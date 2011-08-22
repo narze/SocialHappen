@@ -1,6 +1,6 @@
 	<div class="popup_select-company">
     <h2>Select company</h2>
-	<p>Or <?php echo anchor('/home/create_company', 'Create company',array('id'=>'create_company'));?></p>
+	<p>Or <?php echo anchor('/bar/create_company', 'Create company',array('id'=>'create_company'));?></p>
     <ul>
 		<?php foreach($user_companies as $company) : 
 			$count =  array_merge(json_decode(file_get_contents(base_url()."company/json_get_pages_count/{$company['company_id']}"),TRUE),
