@@ -186,7 +186,7 @@ function show_installed_page_in_company(){
 					+'<p><img src="'+imgsize(json[i].page_image,'normal')+'" alt="" width="80" height="80" />'
 					+'<span class="button">'
                     +'<a class="bt-manage_page" href="'+base_url+'page/'+json[i].page_id+'"><span>Manage</span></a>'
-                    +'<a class="bt-setting_page" href="'+base_url+'settings/page/'+json[i].page_id+'"><span>Setting</span></a>'
+                    +'<a class="bt-setting_page" href="'+base_url+'settings?s=page&id='+json[i].page_id+'"><span>Setting</span></a>'
                     +'</span>'
                     +'</p><p>'+json[i].page_name+'</p><input type="hidden" class="page_id" value="'+json[i].page_id+'" />'
 					+'</li>'
@@ -231,7 +231,7 @@ function show_installed_page_in_company(){
 								dragging_object.append('<input type="hidden" value="'+page_id+'" class="page_id" />');
 								dragging_object.children('p:first').append('<span class="button">'
 				                    +'<a class="bt-manage_page" href="'+base_url+'page/'+page_id+'"><span>Manage</span></a>'
-				                    +'<a class="bt-setting_page" href="'+base_url+'settings/page/'+page_id+'"><span>Setting</span></a>'
+				                    +'<a class="bt-setting_page" href="'+base_url+'settings?s=page&id='+page_id+'"><span>Setting</span></a>'
 				                    +'</span>');
 								dragging_object.attr('onclick',
 									'view_page_app('+page_id+','+facebook_page_id+',\''+page_name+'\')');
@@ -324,7 +324,7 @@ function show_installed_app_in_company(){
 					'<li><p><img src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
 					+'<span class="button">'
                     +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
-                    +'<a class="bt-setting_app" href="'+base_url+'settings/0/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
+                    +'<a class="bt-setting_app" href="'+base_url+'app/config/'+json[i].app_install_id+'"><span>Setting</span></a>'
                     +'</span>'
                     +'</p><p>'+json[i].app_name+'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>'
                 );
@@ -369,7 +369,7 @@ function show_installed_app_in_company(){
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
 									dragging_object.children('p:first').append('<span class="button">'
 				                    +'<a class="bt-update_app" href="'+base_url+'app/'+app_install_id+'"><span>Update</span></a>'
-				                    +'<a class="bt-setting_app" href="'+base_url+'settings/0/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
+				                    +'<a class="bt-setting_app" href="'+base_url+'app/config'+json[i].app_install_id+'"><span>Setting</span></a>'
 				                    +'</span>');
 									update_app_order_in_dashboard();
 									show_available_app_in_company();		
@@ -423,7 +423,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 				ul_element.append('<li><p><img src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
 					+'<span class="button">'
                     +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
-                    +'<a class="bt-setting_app" href="'+base_url+'settings/'+page_id+'/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
+                    +'<a class="bt-setting_app" href="'+base_url+'app/config/'+json[i].app_install_id+'"><span>Setting</span></a>'
                     +'</span>'
                     +'</p><p>'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 			}			
@@ -470,7 +470,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
 									dragging_object.children('p:first').append('<span class="button">'
 				                    +'<a class="bt-update_app" href="'+base_url+'app/'+app_install_id+'"><span>Update</span></a>'
-				                    +'<a class="bt-setting_app" href="'+base_url+'settings/'+page_id+'/app/'+app_install_id+'"><span>Setting</span></a>'
+				                    +'<a class="bt-setting_app" href="'+base_url+'app/config/'+app_install_id+'"><span>Setting</span></a>'
 				                    +'</span>');
 									refresh_installed_app_in_page_panel();
 									show_available_app_in_page(page_id);

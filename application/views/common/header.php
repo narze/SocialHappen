@@ -36,5 +36,5 @@ endif; ?>
 </head>
 <body>
 	<div class="header">
-		<?php $this->load->view('common/bar_view'); ?>
+		<?php $this->load->view('bar/bar_view'); ?>
 	</div>

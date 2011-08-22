@@ -102,3 +102,16 @@ if(!window.check_login){
 		});
 	}
 }
+
+if(!window.get_query){
+	function get_query(string, key) {
+		query_string = string.substring(string.lastIndexOf("?")+1);
+		query_array = query_string.split("&");
+		for (i=0;i<query_array.length;i++) {
+			pair = query_array[i].split("=");
+			if (pair[0] == key) {
+				return pair[1];
+			}
+		}
+	}
+}

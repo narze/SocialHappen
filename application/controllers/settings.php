@@ -19,11 +19,12 @@ class Settings extends CI_Controller {
 				redirect("settings?s=account&id=".$this->socialhappen->get_user_id());
 			}
 			$user = $this->socialhappen->get_user();
-			$user_companies = $this->socialhappen->get_user_companies();
-			$this->load->model('page_model','pages');
-			$company_pages = array();
-			foreach ($user_companies as $user_company){
-				$company_pages[$user_company['company_id']] = $this->pages->get_company_pages_by_company_id($user_company['company_id']);
+			if($user_companies = $this->socialhappen->get_user_companies()){
+				$this->load->model('page_model','pages');
+				$company_pages = array();
+				foreach ($user_companies as $user_company){
+					$company_pages[$user_company['company_id']] = $this->pages->get_company_pages_by_company_id($user_company['company_id']);
+				}
 			}
 			
 			$this -> load -> model('company_model', 'companies');
@@ -85,6 +86,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function account($user_id = NULL){
+		$this->socialhappen->ajax_check();
 		if($user_id && $user_id == $this->socialhappen->get_user_id()){
 			$user = $this->socialhappen->get_user();
 			$user_facebook = $this->facebook->getUser($user['user_facebook_id']);
@@ -133,6 +135,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function company_pages($user_id = NULL){
+		$this->socialhappen->ajax_check();
 		if($user_id && $user_id == $this->socialhappen->get_user_id()){
 			$user_companies = $this->socialhappen->get_user_companies();
 			$this->load->model('page_model','pages');
@@ -145,6 +148,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function company($company_id = NULL){
+		$this->socialhappen->ajax_check();
 		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array('role_company_edit'))){
 			//no access
 		} else {
@@ -197,6 +201,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function company_admin($company_id = NULL){
+		$this->socialhappen->ajax_check();
 		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array('role_company_edit'))){
 			//no access
 		} else {
@@ -227,6 +232,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function page($page_id = NULL){
+		$this->socialhappen->ajax_check();
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
@@ -303,6 +309,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function page_admin($page_id = NULL){
+		$this->socialhappen->ajax_check();
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
@@ -335,43 +342,11 @@ class Settings extends CI_Controller {
 				}
 				redirect("settings/page/{$page_id}?success=1");
 			}
-			////
-			// $page_admins = $this->input->post('page_admin');
-			// $old_page_admins = $this->user_pages->get_page_users_by_page_id($page_id);
-			// $old_ids = array();
-			// foreach($old_page_admins as $old_page_admin){
-				// $old_ids[] = $old_page_admin['user_id'];
-			// }
-			
-			// $remove_list = array_diff($old_ids, $page_admins);
-			// $add_list = array_diff($page_admins, $old_ids);
-			
-			// foreach($remove_list as $user_id_to_remove){
-				// $this->user_pages->remove_user_page($user_id_to_remove, $page_id);
-			// }
-			
-			// $this->load->model('company_model','companies');
-			// $company = $this->companies->get_company_profile_by_page_id($page_id);
-			// foreach($add_list as $user_id_to_add){
-				// $company_admin = array(
-								// 'user_id' => $user_id_to_add,
-								// 'company_id' => $company['company_id'],
-								// 'user_role' => 2
-							// );
-				// $this->user_companies->add_user_company($company_admin)
-				
-				// $page_admin = array(
-							// 'user_id' => $user_id_to_add,
-							// 'page_id' => $page_id,
-							// 'user_role' => 1
-						// );
-				// $this->user_pages->add_user_page($page_admin);
-			// }
-			// redirect("settings/page/{$page_id}?success=1");
 		}
 	}
 	
 	function package($user_id = NULL){
+		$this->socialhappen->ajax_check();
 		if($user_id && $user_id == $this->socialhappen->get_user_id()){	
 			$this->load->view('settings/package',array());
 		}

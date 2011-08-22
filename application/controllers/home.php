@@ -174,7 +174,6 @@ class Home extends CI_Controller {
 	
 	function logout(){
 		$this->socialhappen->logout();
-		
 	}
 }  
 

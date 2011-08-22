@@ -13,14 +13,13 @@
 						if (response.session) {
 							FB.api('/me', function(response) {
 								$.getJSON(base_url+"api/request_user_id?user_facebook_id=" + response.id , function(json){
-									alert(json.status);
 									if(json.status != 'OK'){
 										window.location.replace(base_url+"home/signup");
 									} else {
-										<?php if(isset($next)): ?>
+										<?php if(issetor($next)): ?>
 											window.location.replace('<? echo $next; ?>');
 										<?php else : ?>
-											window.location.replace(window.location.href);
+											window.location.replace(window.location.href+"?logged_in=true");
 										<?php endif; ?>
 									}
 								});
@@ -32,7 +31,7 @@
 				}
 			</script>
 		<ul>
-		<li class="fb"><a href="#" onclick="fblogin();" ><img src="images/fb-login.jpg" alt=""></a></li>
+		<li class="fb"><a onclick="fblogin();" ><img src="images/fb-login.jpg" alt=""></a></li>
 		</ul>
 	<?php elseif(issetor($facebook_user)) : ?>
 		<?php if(isset($user) && $user) : ?>

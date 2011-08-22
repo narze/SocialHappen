@@ -139,7 +139,7 @@ class SocialHappen{
 			$this->CI->load->model('user_companies_model','user_companies');
 			return $this->CI->user_companies->get_user_companies_by_user_id($this->CI->session->userdata('user_id'));
 		} else {
-			return FALSE;
+			return array();
 		}
 	}
 	
@@ -160,14 +160,17 @@ class SocialHappen{
 		} else {
 			$this->login();
 			if($this->CI->session->userdata('logged_in') == TRUE){
-				$data['user'] = $this->get_user();
-				if($data['user_companies'] = $this->get_user_companies()){
-					$popup_name = 'select_company';
-				} else {
-					$popup_name = 'splash';
+				$data['user_companies'] = $this->get_user_companies();
+				if($this->CI->input->get('logged_in') == TRUE){
+					if($data['user_companies']){
+						$popup_name = 'select_company';
+					} else {
+						$popup_name = 'splash';
+					}
 				}
 			}
 			$common = array(
+				'user' => $this->get_user(),
 				'image_url' => base_url().'assets/images/',
 				'vars' => array(
 					'popup_name' => issetor($popup_name)
@@ -188,7 +191,7 @@ class SocialHappen{
 				)
 			);
 		}
-		$data = array_merge($data, $common);
+		$data = array_merge_recursive($data, $common);
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	
