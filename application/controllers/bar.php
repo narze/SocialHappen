@@ -90,21 +90,6 @@ class Bar extends CI_Controller {
 		$this->parser->parse('bar/select_company_view', $data);
 		return $data;
 	}
-
-	
-	/**
-	 * JSON : Check login
-	 * @param $redirect_url
-	 * @author Manassarn M.
-	 */
-	function json_check_login($redirect_path = NULL, $current_url = NULL){
-		$this->socialhappen->ajax_check();
-		$json = array(
-			'logged_in' => $this->socialhappen->is_logged_in(),
-			'redirect' => base_url().issetor($redirect_path,'')
-		);
-		echo json_encode($json);
-	}
 }  
 
 /* End of file bar.php */

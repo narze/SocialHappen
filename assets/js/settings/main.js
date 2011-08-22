@@ -1,9 +1,13 @@
 $(function(){
+	
 	$('li a.company-page-setting,li a.user-company-setting,li a.account-setting,li a.company-page-list,li a.package-billing').live('click',function(){
-		element = $(this);
+		element = $(this);			
+		url = element.attr('href');
+		s = get_query(url, 's');
+		id = get_query(url, 'id');
 		set_loading();
 		check_login(null,function(){
-			$('div#main').load(element.attr('href'));
+			$('div#main').load(base_url+"settings/"+s+"/"+id);
 			make_form(element);
 		});
 		
