@@ -42,23 +42,33 @@ if ( ! function_exists('imgsize'))
 		} else {
 			return "{$url}?type={$size}";
 		}
-		
-		
 	}
 }
 
-if(!function_exists('array_merge_overwrite'))
+if(!function_exists('array_unique_recursive'))
 {
-	function array_merge_overwrite($x, $y){
-		foreach($y as $key => $value){
-			if(array_key_exists($key, $x) && is_array($value)){
-				$x[$key] = array_merge_overwrite($x[$key], $y[$key]);
-			} else {
-			  $x[$key] = $value;
+	function array_unique_recursive($array){
+		foreach($array as $key => $value){
+			if(is_array($value)) {
+				$array[$key] = array_unique_recursive($array[$key]);
+				$array[$key] = array_unique_value($array[$key]);
 			}
 		}
-		return $x;
+		return $array;
 	}
+}
+
+if(!function_exists('array_unique_value'))
+{
+	function array_unique_value($array){
+		$return = array();
+		foreach ($array as $key => $value){
+			if(!is_numeric($key) || array_search($value, $return) === FALSE){
+				$return[$key] = $value;
+			} 
+		}
+		return $return;
+    }
 }
 
 /* End of file socialhappen_helper.php */
