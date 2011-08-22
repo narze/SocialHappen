@@ -25,7 +25,7 @@ $(function(){
 
 	}
 	
-	if(popup_name != ''){
+	if(typeof popup_name != 'undefined' && popup_name != ''){
 		$.fancybox({
 			href: base_url+'bar/'+popup_name,
 			transitionIn: 'elastic',

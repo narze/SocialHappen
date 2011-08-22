@@ -263,9 +263,11 @@ class Api extends CI_Controller {
 		$this->load->model('User_model', 'User');
 		$user_id = $this->User->get_user_id($user_facebook_id);
 		
-		if(isset($user_id)){
+		if($user_id){
 			$response = array(	'status' => 'OK',
 							'user_id' => $user_id['user_id']);
+		} else {
+			$response = array(	'error' => '200');
 		}
 
 		echo json_encode($response);
