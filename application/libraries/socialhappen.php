@@ -172,6 +172,7 @@ class SocialHappen{
 				'vars' => array(
 					'popup_name' => issetor($popup_name)
 				),
+				'facebook_user' => $this->CI->facebook->getUser(),
 				'script' => array(
 					'common/functions',
 					'common/jquery.form',

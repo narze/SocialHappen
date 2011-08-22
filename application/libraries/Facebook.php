@@ -49,6 +49,8 @@ class Facebook{
 	                return json_decode(file_get_contents(
 	                                'https://graph.facebook.com/me?access_token=' .
 	                                $cookie['access_token']), true);
+			   } else {
+				return FALSE;
 			   }
         }
 

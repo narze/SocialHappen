@@ -19,7 +19,7 @@
 			</ul>
 		</li>
 	</ul>
-	<?php elseif(!isset($facebook_user)) : ?>
+	<?php elseif(!issetor($facebook_user)) : ?>
 		
 		<div id="fb-root"></div>
 			<script src="http://connect.facebook.net/en_US/all.js" type="text/javascript"></script>
@@ -44,5 +44,13 @@
 		<ul>
 		<li class="fb"><a href="#" onclick="fblogin();" ><img src="images/fb-login.jpg" alt=""></a></li>
 		</ul>
+	<?php elseif(issetor($facebook_user)) : ?>
+		<ul>
+		<li class="name">
+			<img src="<?php echo imgsize("http://graph.facebook.com/{$facebook_user['id']}/picture",'square');?>" alt="" />
+			<?php echo issetor($facebook_user['name']); ?>
+		</li>
+	</ul>
+	
 	<?php endif; ?>
 </div>
