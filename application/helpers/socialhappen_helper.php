@@ -47,6 +47,19 @@ if ( ! function_exists('imgsize'))
 	}
 }
 
+if(!function_exists('array_merge_overwrite'))
+{
+	function array_merge_overwrite($x, $y){
+		foreach($y as $key => $value){
+			if(array_key_exists($key, $x) && is_array($value)){
+				$x[$key] = array_merge_overwrite($x[$key], $y[$key]);
+			} else {
+			  $x[$key] = $value;
+			}
+		}
+		return $x;
+	}
+}
 
 /* End of file socialhappen_helper.php */
 /* Location: ./system/helpers/socialhappen_helper.php */

@@ -191,7 +191,7 @@ class SocialHappen{
 				)
 			);
 		}
-		$data = array_merge_recursive($data, $common);
+		$data = array_merge_overwrite($data, $common);
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	
