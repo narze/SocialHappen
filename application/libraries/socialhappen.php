@@ -170,7 +170,7 @@ class SocialHappen{
 			$common = array(
 				'image_url' => base_url().'assets/images/',
 				'vars' => array(
-					'popup_name' => $popup_name
+					'popup_name' => issetor($popup_name)
 				),
 				'script' => array(
 					'common/functions',

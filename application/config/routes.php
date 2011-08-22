@@ -39,7 +39,8 @@
 */
 
 $route['default_controller'] = "home";
-$route['404_override'] = '';
+$route['404_override'] = 'error/index/404';
+$route['error/(:num)'] = 'error/index/$1';
 $route['company/(:num)'] = "company/index/$1";
 $route['page/(:num)'] = "page/index/$1";
 $route['app/(:num)'] = "app/index/$1";

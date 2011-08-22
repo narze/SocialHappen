@@ -13,7 +13,6 @@
 			FB.logout(function(){
 				window.location.replace('<?php echo $redirect_url ? $redirect_url : base_url(); ?>');
 			});
-			
 		</script>
 </body>
 </html>
