@@ -8,7 +8,6 @@ class Achievement_user_model extends CI_Model {
 	var $achievement_user;
 	var $achievement_id;
 	var $user_id;
-
 	
 	/**
 	 * constructor
