@@ -71,7 +71,7 @@ class Settings extends CI_Controller {
 				TRUE),
 				'sidebar' => $this -> load -> view('settings/sidebar', 
 					array(
-						'company_pages' => $company_pages
+						'company_pages' => issetor($company_pages)
 					),
 				TRUE),
 				'main' => $this -> load -> view("settings/main", 
