@@ -25,7 +25,7 @@
 				<li><input type="radio" name="payment_method" value="counter_service"> Counter Service</li>
             </ul>
 			<p>
-				<a href="#">cancel</a> <a class="bt-continue" href="#"><span>Continue</span></a>
+				<a href="#">cancel</a> <a class="bt-continue"><span>Continue</span></a>
 				<?php echo form_submit( 'submit-form', 'Submit', 'style="display:none"'); ?> 
 			</p>
 			<br class="clear" />

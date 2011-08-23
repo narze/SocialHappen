@@ -149,7 +149,15 @@ class Home extends CI_Controller {
 					'company_id' => $company_add_result['company_id']
 				));
 				$this->socialhappen->login();
-				$this->load->view('common/redirect',array('refresh_parent' => TRUE));
+				if($this->input->post('package_id')) 
+				{
+					$redirect_path = base_url().'home/package?package_id='. $this->input->get('package_id') .'&payment=true';
+				}
+				else
+				{
+					$redirect_path = base_url().'?logged_in=true';
+				}
+				$this->load->view('common/redirect',array('refresh_parent' => TRUE, 'redirect_path'=>$redirect_path));
 			}
 			else
 			{
@@ -158,6 +166,10 @@ class Home extends CI_Controller {
 		}
 	}
 	
+	/**
+	 * Package page
+	 * @author Weerapat P.
+	 */
 	function package()
 	{
 		$package = $this->load->model('package_model','package');
@@ -171,7 +183,8 @@ class Home extends CI_Controller {
 						'common/bar',
 						'common/fancybox/jquery.fancybox-1.3.4.pack',
 						'home/lightbox',
-						'home/signup'
+						'home/signup',
+						'payment/payment'
 					),
 					'style' => array(
 						'common/main',
@@ -205,7 +218,12 @@ class Home extends CI_Controller {
 		$this -> parser -> parse('home/home_view', $data);
 	}
 	
+	/**
+	 * Facebook connect popup
+	 * @author Weerapat P.
+	 */
 	function facebook_connect() {
+		$this->socialhappen->ajax_check();
 		$data = array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
 			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
