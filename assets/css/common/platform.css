@@ -352,7 +352,10 @@ div.box-information div.information>ul>li>ul.status>li>ul>li.stop a {
 	color: #fd401a;
 	background: url(../../images/bg/bg_main.png) no-repeat 15px -952px;
 }
-
+div.box-information div.recently-app {
+	margin: 20px 0;
+}
+div.box-information div.recently-app div.strip{ background: none; padding: 0;}
 
 div.tab-content {height: 38px; background: url(../../images/bg/bg_tab-content.gif) repeat-x; padding: 0 10px;}
 div.tab-content ul {width: 100%; overflow: hidden;}
@@ -364,7 +367,7 @@ div.tab-content ul li.active a span  {background: url(../../images/bg/bg_tab-con
 
 div.wrapper-details {
 	width: 902px;
-	padding: 30px 0;
+	padding: 30px 0 0;
 	margin: 0 auto;
 	position: relative;
 }
@@ -467,7 +470,7 @@ div[class$="list-style01"] {
     padding: 0 0 0 80px;
 	min-height:64px;
 }
-div[class$="list-style02"] {padding: 0 0 0 60px;}
+div[class$="list-style02"] {padding: 0 0 0 60px; min-height: 50px;}
 div[class^="detail-list"] {
     font-size: 12px;
     margin: 5px 0;
@@ -578,8 +581,8 @@ div.member-menu-top>.member-check, div.member-menu-btm>.member-check{
 	margin:13px 0 0 3px;
 }
 .member-menu-btm{
-	background:#b2b2b2;
-	height:40px;
+	background:#e1e1e1;
+	padding: 5px 0;
 	-webkit-border-bottom-right-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	-moz-border-radius-bottomright: 10px;
@@ -967,14 +970,14 @@ div.popup-addapp>div:first-child+div div.strip { padding: 4px 0 20px;}
 /* --------------
 Button
 -----------------*/
-*.bt-go_page, *.bt-add_app, *.bt-addnew_app, *.bt-create_page, *.bt-edit, *.bt-setting, *.bt-delete, *.bt-go, *.bt-create_company, *.bt-manage_page, *.bt-setting_page, *.bt-update_app, *.bt-setting_app, *.bt-go-cam, *.bt-remove,*.bt-block, *.bt-label, *.bt-orderby, *.bt-apply, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-setting_company, *.bt-delete_company, *.bt-delete_company-1, *.bt-delete_page, *.bt-upgrade_package, *.bt-print-invoice, *.bt-learn_more, *.bt-continue, *.bt-register-now, *.bt-go_community, *.bt-go_company, *.bt-save_addmore, *.bt-save_config, *.bt-cancel, *.bt-install_app, *.bt-campaign_page, *.bt-setting_campaign, *.bt-view_reward {
+*.bt-go_page, *.bt-add_app, *.bt-addnew_app, *.bt-create_page, *.bt-edit, *.bt-setting, *.bt-delete, *.bt-go, *.bt-create_company, *.bt-manage_page, *.bt-setting_page, *.bt-update_app, *.bt-setting_app, *.bt-go-cam, *.bt-remove,*.bt-block, *.bt-label, *.bt-orderby, *.bt-apply, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-setting_company, *.bt-delete_company, *.bt-delete_company-1, *.bt-delete_page, *.bt-upgrade_package, *.bt-print-invoice, *.bt-learn_more, *.bt-continue, *.bt-register-now, *.bt-go_community, *.bt-go_company, *.bt-save_addmore, *.bt-save_config, *.bt-cancel, *.bt-install_app, *.bt-campaign_page, *.bt-setting_campaign, *.bt-view_reward, *.bt-uninstall, *.bt-new-campaign, *.bt-sh-profile, *.bt-fb-profile {
 	display: block;
 	background: url(../../images/bg/bg_button.png) no-repeat;
 	cursor: pointer;
 	border: none;
 	color: transparent !important;
 }
-*.bt-go_page span, *.bt-add_app span, *.bt-addnew_app span, *.bt-create_page span, *.bt-addnew_app span, *.bt-icon span, *.bt-create_company span, *.bt-manage_page span, *.bt-setting_page span , *.bt-update_app span, *.bt-setting_app span, *.bt-go span, *.bt-remove span,*.bt-block span, *.bt-label span, *.bt-orderby span,  *.bt-apply span, *.bt-change_pic span, *.bt-update span, *.bt-close_account span, *.bt-setting_company span, *.bt-delete_company span, *.bt-delete_company-1 span, , *.bt-delete_page span, , *.bt-upgrade_package span, *.bt-print-invoice span, *.bt-learn_more span, *.bt-continue span, *.bt-register-now span, *.bt-go_community span, *.bt-go_company span, *.bt-save_addmore span, *.bt-save_config span, *.bt-cancel span, *.bt-install_app span, *.bt-campaign_page span, *.bt-setting_campaign span, *.bt-view_reward span {display: none;}
+*.bt-go_page span, *.bt-add_app span, *.bt-addnew_app span, *.bt-create_page span, *.bt-addnew_app span, *.bt-icon span, *.bt-create_company span, *.bt-manage_page span, *.bt-setting_page span , *.bt-update_app span, *.bt-setting_app span, *.bt-go span, *.bt-remove span,*.bt-block span, *.bt-label span, *.bt-orderby span,  *.bt-apply span, *.bt-change_pic span, *.bt-update span, *.bt-close_account span, *.bt-setting_company span, *.bt-delete_company span, *.bt-delete_company-1 span, , *.bt-delete_page span, , *.bt-upgrade_package span, *.bt-print-invoice span, *.bt-learn_more span, *.bt-continue span, *.bt-register-now span, *.bt-go_community span, *.bt-go_company span, *.bt-save_addmore span, *.bt-save_config span, *.bt-cancel span, *.bt-install_app span, *.bt-campaign_page span, *.bt-setting_campaign span, *.bt-view_reward span, *.bt-uninstall span, *.bt-new-campaign span, *.bt-sh-profile span, *.bt-fb-profile span {display: none;}
 *.bt-go_page {
 	width: 152px;
 	height: 32px;
@@ -1243,6 +1246,31 @@ Button
 	height: 31px;
 	background-position: 0 -1691px;
 }
+*.bt-uninstall {
+	display: block;
+	width: 152px;
+	height: 32px;
+	background-position: 0 -1732px;
+}
+*.bt-new-campaign {
+	display: block;
+	width: 152px;
+	height: 32px;
+	background-position: 0 -1772px;
+}
+*.bt-sh-profile {
+	display: block;
+	width: 152px;
+	height: 32px;
+	background-position: 0 -1812px;	
+}
+*.bt-fb-profile {
+	display: block;
+	width: 152px;
+	height: 32px;
+	background-position: 0 -1854px;
+}
+
 
 /* --------------
 Filter-campaign
