@@ -63,7 +63,8 @@ class Achievement_lib
 	 */
 	function add_achievement_info($app_id = NULL, $app_install_id = NULL,
 							 $info = array(), $criteria = array()){
-		
+		if(empty($app_id) || empty($app_install_id)
+		 || empty($info) || empty($criteria)) return FALSE;
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		
 		return $this->CI->achievement_info->add($app_id, $app_install_id, $info
@@ -90,7 +91,9 @@ class Achievement_lib
 	 */
 	function set_achievement_info($achievement_id = NULL, $app_id = NULL,
 			$app_install_id = NULL, $info = array(), $criteria = array()){
-		
+		if(empty($app_id) || empty($app_install_id)
+		 || empty($info) || empty($criteria) || empty($achievement_id))
+		  return FALSE;
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		
 		return $this->CI->achievement_info->set($achievement_id, $app_id,
@@ -106,7 +109,7 @@ class Achievement_lib
 	 */
 	function list_achievement_info_by_app_id($app_id = NULL){
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		
+		if(empty($app_id)) return NULL;
 		return $this->CI->achievement_info->list_info(array('app_id' => $app_id));
 	}
 	
@@ -117,9 +120,9 @@ class Achievement_lib
 	 * 
 	 * @return result array
 	 */
-	function list_achievement_info_by_app_id($page_id = NULL){
+	function list_achievement_info_by_page_id($page_id = NULL){
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		
+		if(empty($page_id)) return NULL;
 		return $this->CI->achievement_info->list_info(array('page_id' => $page_id));
 	}
 	
@@ -130,9 +133,9 @@ class Achievement_lib
 	 * 
 	 * @return result array
 	 */
-	function list_achievement_info_by_app_id($campaign_id = NULL){
+	function list_achievement_info_by_campaign_id($campaign_id = NULL){
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		
+		if(empty($campaign_id)) return NULL;
 		return $this->CI->achievement_info->list_info(array(
 			'campaign_id' => $campaign_id));
 	}
@@ -146,7 +149,7 @@ class Achievement_lib
 	 */
 	function delete_achievement_info($achievement_id = NULL){
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		
+		if(empty($achievement_id)) return FALSE;
 		return $this->CI->achievement_info->delete($achievement_id);
 	}
 	/**
@@ -166,6 +169,10 @@ class Achievement_lib
 	 */
 	function reward_user($user_id = NULL, $achievement_id = NULL, $app_id = NULL, 
 							$app_install_id = NULL, $info = array()){
+		if(empty($app_id) || empty($app_install_id)
+		 || empty($user_id) || empty($achievement_id))
+		  return FALSE;
+		
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		
 		return $this->CI->achievement_user->add($user_id, $achievement_id, $app_id, 
@@ -181,7 +188,7 @@ class Achievement_lib
 	 */
 	function list_user_achieved_by_user_id($user_id = NULL){
 		$this->CI->load->model('achievement_user_model','achievement_user');
-		
+		if(empty($user_id)) return NULL;
 		return $this->CI->achievement_user->list_user(array('user_id' => $user_id));
 	}
 	
@@ -195,7 +202,7 @@ class Achievement_lib
 	 */
 	function list_user_achieved_in_page($user_id = NULL, $page_id = NULL){
 		$this->CI->load->model('achievement_user_model','achievement_user');
-		
+		if(empty($user_id) || empty($page_id)) return NULL;
 		return $this->CI->achievement_user->list_user(array('user_id' => $user_id
 			,'page_id' => $page_id));
 	}
@@ -210,7 +217,7 @@ class Achievement_lib
 	 */
 	function list_user_achieved_in_campaign($user_id = NULL, $campaign_id = NULL){
 		$this->CI->load->model('achievement_user_model','achievement_user');
-		
+		if(empty($user_id) || empty($campaign_id)) return NULL;
 		return $this->CI->achievement_user->list_user(array('user_id' => $user_id
 			,'campaign_id' => $campaign_id));
 	}
@@ -225,7 +232,7 @@ class Achievement_lib
 	 */
 	function delete_user_achieved($user_id = NULL, $achievement_id = NULL){
 		$this->CI->load->model('achievement_user_model','achievement_user');
-		
+		if(empty($user_id) || empty($achievement_id)) return FALSE;
 		return $this->CI->achievement_user->delete($user_id, $achievement_id);
 	}
 	
@@ -239,7 +246,7 @@ class Achievement_lib
 	 */
 	function set_achievement_stat(
 		$app_id = NULL, $user_id = NULL, $info = array()){
-		
+		if(empty($user_id) || empty($app_id) || empty($info)) return FALSE;
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
 		
 		return $this->CI->achievement_stat->set($app_id, $user_id, $info);
@@ -255,6 +262,8 @@ class Achievement_lib
 	 * @author Metwara Narksook
 	 */
 	function get_achievement_stat_of_user_in_app($app_id = NULL, $user_id = NULL){
+		if(empty($user_id) || empty($app_id)) return NULL;
+		
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
 		
 		return $this->CI->achievement_stat->get($app_id, $user_id);
