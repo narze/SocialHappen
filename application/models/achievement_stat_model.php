@@ -135,9 +135,11 @@ class Achievement_stat_model extends CI_Model {
 	
 	/**
 	 * get stat achievement
-	 * @param param criteria may contains ['app_install_id', 'action_id', 'date']
 	 * 
-	 * @return result array
+	 * @param app_id
+	 * @param user_id
+	 * 
+	 * @return result
 	 * 
 	 * @author Metwara Narksook
 	 */
@@ -161,7 +163,11 @@ class Achievement_stat_model extends CI_Model {
 	
 	/**
 	 * list achievement stat
+	 * 
 	 * @param criteria array of criteria
+	 * 
+	 * @return result array
+	 * 
 	 */
 	function list_stat($criteria = array()){
 		$res = $this->achievement_stat->find($criteria);
@@ -172,6 +178,7 @@ class Achievement_stat_model extends CI_Model {
 		}
 		return $result;
 	}
+	
 	/**
 	 * drop entire collection
 	 * you will lost all achievement_stat data

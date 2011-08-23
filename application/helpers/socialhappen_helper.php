@@ -42,11 +42,34 @@ if ( ! function_exists('imgsize'))
 		} else {
 			return "{$url}?type={$size}";
 		}
-		
-		
 	}
 }
 
+if(!function_exists('array_unique_recursive'))
+{
+	function array_unique_recursive($array){
+		foreach($array as $key => $value){
+			if(is_array($value)) {
+				$array[$key] = array_unique_recursive($array[$key]);
+				$array[$key] = array_unique_value($array[$key]);
+			}
+		}
+		return $array;
+	}
+}
+
+if(!function_exists('array_unique_value'))
+{
+	function array_unique_value($array){
+		$return = array();
+		foreach ($array as $key => $value){
+			if(!is_numeric($key) || array_search($value, $return) === FALSE){
+				$return[$key] = $value;
+			} 
+		}
+		return $return;
+    }
+}
 
 /* End of file socialhappen_helper.php */
 /* Location: ./system/helpers/socialhappen_helper.php */

@@ -182,7 +182,6 @@ class SocialHappen{
 					'common/bar',
 					'common/fancybox/jquery.fancybox-1.3.4.pack',
 					'home/lightbox',
-					'home/signup'
 				),
 				'style' => array(
 					'common/platform',
@@ -191,7 +190,8 @@ class SocialHappen{
 				)
 			);
 		}
-		$data = array_merge_recursive($data, $common);
+		$data = array_merge_recursive( $common,$data);
+		$data = array_unique_recursive($data);
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	

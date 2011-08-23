@@ -8,7 +8,6 @@ class Achievement_info_model extends CI_Model {
 	var $achievement_info;
 	var $achievement_id;
 	var $app_id;
-
 	
 	/**
 	 * constructor
