@@ -253,6 +253,87 @@ class Achievement_lib
 	}
 	
 	/**
+	 * increment stat of achievement
+	 * if increment non-exist stat, it'll create new stat entry
+	 * 
+	 * @param app_id int
+	 * @param user_id int user_id
+	 * @param info array of data to add 
+	 * 				may contain['action_id', 'app_install_id' ,'page_id', 'campaign_id']
+	 * 				ex. array('action_id'=>5,'app_install_id'=>2)
+	 * 				app_install_id is required*
+	 * @param amount int amount to increment
+	 * 
+	 * @return result boolean
+	 * 
+	 * @author Metwara Narksook
+	 */
+	function increment_achievement_stat($app_id = NULL, $user_id = NULL,
+		 $info = array(), $amount = 1){
+		
+		if(empty($user_id) || empty($app_id) || empty($info) ||
+			 empty($info['app_install_id'])) return FALSE;
+		
+		$this->CI->load->model('achievement_stat_model','achievement_stat');
+		
+		$increment_result = $this->CI->achievement_stat->increment($app_id, $user_id, $info,
+		 $amount);
+		
+		if($increment_result){
+			$this->CI->load->model('achievement_user_model','achievement_user');
+			$user_achieved = $this->CI->achievement_user->list_user(array('user_id' => $user_id, 'app_id' => $app_id));
+			$user_achieved_id_list = array();
+			foreach ($user_achieved as $achieved){
+				$user_achieved_id_list[] = $achieved['achievement_id']['$id'];
+			}
+			
+			$candidate_achievement_criteria = 
+				array('$nin' => array('_id', $user_achieved_id_list),
+					 		'app_id' => $app_id);
+			
+			if(isset($info['page_id'])){
+				$candidate_achievement_criteria['page_id'] = $info['page_id'];
+			}
+			
+			$candidate_achievement_criteria['app_install_id'] = $info['app_install_id'];
+			
+			if(isset($info['campaign_id'])){
+				$candidate_achievement_criteria['campaign_id'] = $info['campaign_id'];
+			}
+			
+			$this->CI->load->model('achievement_info_model','achievement_info');
+			$achievement_list = $this->CI->achievement_info->list_info($candidate_achievement_criteria);
+			
+			foreach ($achievement_list as $achievement) {
+				
+				$stat_criteria = array('app_id' => $app_id,
+															 'user_id' => $user_id);
+				foreach($achievement['criteria'] as $key => $value){
+					$stat_criteria[$key] = array('$gte' => $value);
+				}
+
+				$matched_achievement = $this->CI->achievement_stat->list_stat($stat_criteria);
+				
+				if(count($matched_achievement) > 0){
+					
+					$achieved_info = array();
+					if(isset($info['page_id'])){
+						$achieved_info['page_id'] = $info['page_id'];
+					}
+					if(isset($info['campaign_id'])){
+						$achieved_info['campaign_id'] = $info['campaign_id'];
+					}
+					
+					$this->CI->achievement_user->add($user_id, $achievement_list['_id'], $app_id, 
+						$info['app_install_id'], $achieved_info);
+				}
+			}
+		}
+		
+		return $increment_result;
+	}
+	
+	/**
 	 * get achievement stat of user by app_id
 	 * 
 	 * @param param criteria may contains ['app_install_id', 'action_id', 'date']
@@ -268,6 +349,8 @@ class Achievement_lib
 		
 		return $this->CI->achievement_stat->get($app_id, $user_id);
 	}
+	
+	
 }
 /* End of file achievement_lib.php */
 /* Location: ./application/libraries/achievement_lib.php */

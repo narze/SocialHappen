@@ -127,7 +127,7 @@ class achievement_user_model_test extends CI_Controller {
 	}
 
 	function end_test(){
-		$this->achievement_user->drop_collection();
+		// $this->achievement_user->drop_collection();
 	}
 }
 /* End of file achievement_user_model_test.php */

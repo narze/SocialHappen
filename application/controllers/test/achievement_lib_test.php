@@ -241,9 +241,9 @@ class achievement_lib_test extends CI_Controller {
 	}
 
 	function end_test(){
-		$this->achievement_info->drop_collection();
-		$this->achievement_stat->drop_collection();
-		$this->achievement_user->drop_collection();
+		// $this->achievement_info->drop_collection();
+		// $this->achievement_stat->drop_collection();
+		// $this->achievement_user->drop_collection();
 	}
 }
 /* End of file achievement_lib_test.php */
