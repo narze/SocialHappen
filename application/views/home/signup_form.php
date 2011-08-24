@@ -45,6 +45,8 @@
 			  </li>
             </ul>
             <p>
+				<input type="hidden" name="package_id" value="<?php echo $this->input->get('package_id'); ?>"/>
+				<input type="hidden" name="payment" value="<?php echo $this->input->get('payment'); ?>"/>
 				<a class="bt-continue" href="#"><span>Continue</span></a>
 			</p>
             <?php 

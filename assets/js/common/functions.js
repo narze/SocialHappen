@@ -103,6 +103,28 @@ if(!window.check_login){
 	}
 }
 
+
+if(!window.is_login){
+	function is_login(){
+		var result = null;
+		$.ajax({
+			url:base_url+'home/json_check_login/',
+			dataType:'json',
+			async:false,
+			success:function(data){
+				result = data;
+			}
+		
+		});
+		
+		if(result.logged_in){
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
 if(!window.get_query){
 	function get_query(string, key) {
 		query_string = string.substring(string.lastIndexOf("?")+1);
@@ -112,6 +134,7 @@ if(!window.get_query){
 			if (pair[0] == key) {
 				return pair[1];
 			}
+
 		}
 	}
 }

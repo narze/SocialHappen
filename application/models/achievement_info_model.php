@@ -202,7 +202,12 @@ class Achievement_info_model extends CI_Model {
 	
 	/**
 	 * list achievement info
+	 * 
 	 * @param criteria array of criteria
+	 * 
+	 * @return result array
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function list_info($criteria = array()){
 		$res = $this->achievement_info->find($criteria);

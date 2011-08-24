@@ -149,13 +149,87 @@ class Home extends CI_Controller {
 					'company_id' => $company_add_result['company_id']
 				));
 				$this->socialhappen->login();
-				$this->load->view('common/redirect',array('refresh_parent' => TRUE));
+				if($this->input->post('package_id')) 
+				{
+					$redirect_path = base_url().'home/package?package_id='. $this->input->get('package_id') .'&payment=true';
+				}
+				else
+				{
+					$redirect_path = base_url().'?logged_in=true';
+				}
+				$this->load->view('common/redirect',array('refresh_parent' => TRUE, 'redirect_path'=>$redirect_path));
 			}
 			else
 			{
 				echo 'Error occured';
 			}
 		}
+	}
+	
+	/**
+	 * Package page
+	 * @author Weerapat P.
+	 */
+	function package()
+	{
+		$package = $this->load->model('package_model','package');
+		$data = array(
+			'header' => $this -> socialhappen -> get_header( 
+				array(
+					'title' => 'Package',
+					'script' => array(
+						'common/functions',
+						'common/jquery.form',
+						'common/bar',
+						'common/fancybox/jquery.fancybox-1.3.4.pack',
+						'home/lightbox',
+						'home/signup',
+						'payment/payment'
+					),
+					'style' => array(
+						'common/main',
+						'common/platform',
+						'common/fancybox/jquery.fancybox-1.3.4'
+					)
+				)
+			),
+			'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+				array(
+					'breadcrumb' => array( 
+						'Package' => NULL
+					)
+				),
+			TRUE),
+			'tutorial' => $this -> load -> view('home/tutorial', 
+				array(
+					
+				),
+			TRUE),
+			'home' => $this -> load -> view('home/package', 
+				array(
+					'packages' => $this->package->get_packages()
+					//'user' => $user,
+					//'facebook_user' => $facebook_user,
+					//'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id'])
+				),
+			TRUE),
+			'footer' => $this -> socialhappen -> get_footer()
+			);
+		$this -> parser -> parse('home/home_view', $data);
+	}
+	
+	/**
+	 * Facebook connect popup
+	 * @author Weerapat P.
+	 */
+	function facebook_connect() {
+		$this->socialhappen->ajax_check();
+		$data = array(
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+			'next' => $this->config->item('next')
+		);
+		$this -> load -> view('home/facebook_connect', $data);
 	}
 	
 	/**

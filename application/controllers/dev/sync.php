@@ -317,11 +317,12 @@ class Sync extends CI_Controller {
 								'package_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
 								'package_custom_badge' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 								'package_duration' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
+								
 							),
 							'package_users' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 								'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-								'package_expire' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned)
+								'package_expire TIMESTAMP NOT NULL DEFAULT "0000-00-00 00:00:00"',
 							),
 							'package_apps' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -1192,11 +1193,7 @@ class Sync extends CI_Controller {
 				'order_net_price' => 999,
 				'user_id' => 1,
 				'payment_method' => 'paypal',
-				'billing_info' => 'Name: Weerapat Poosri	
-									 Address: 45/6 Surawong	
-									  Bangkok 10010
-									 Phone: +66.0814558839
-									 Email: tong@figabyte.com'
+				'billing_info' => 'a:7:{s:15:"user_first_name";s:8:"Weerapat";s:14:"user_last_name";s:6:"Poosri";s:10:"user_email";s:17:"tong@figabyte.com";s:18:"credit_card_number";s:0:"";s:24:"credit_card_expire_month";s:0:"";s:23:"credit_card_expire_year";s:0:"";s:15:"credit_card_csc";s:0:"";}'
 			),
 			array(
 				'order_id' => 2,
@@ -1205,11 +1202,7 @@ class Sync extends CI_Controller {
 				'order_net_price' => 999,
 				'user_id' => 1,
 				'payment_method' => 'paypal',
-				'billing_info' => 'Name: Weerapat Poosri	
-									 Address: 45/6 Surawong	
-									  Bangkok 10010
-									 Phone: +66.0814558839
-									 Email: tong@figabyte.com'
+				'billing_info' => 'a:7:{s:15:"user_first_name";s:8:"Weerapat";s:14:"user_last_name";s:6:"Poosri";s:10:"user_email";s:17:"tong@figabyte.com";s:18:"credit_card_number";s:0:"";s:24:"credit_card_expire_month";s:0:"";s:23:"credit_card_expire_year";s:0:"";s:15:"credit_card_csc";s:0:"";}'
 			)
 		);
 		$this->db->insert_batch('order', $order);

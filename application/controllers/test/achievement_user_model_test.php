@@ -102,7 +102,7 @@ class achievement_user_model_test extends CI_Controller {
 		$app_id = 2;
 		$app_install_id = 3;
 		$info = array('page_id' => 20,
-									'campaing_id' => 30);
+									'campaign_id' => 30);
 		
 		$result = $this->achievement_user->add($user_id, $achievement_id, $app_id, $app_install_id, $info);
 		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
