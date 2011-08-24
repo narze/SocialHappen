@@ -28,7 +28,7 @@ class Installed_apps_model extends CI_Model {
 		$this->db->order_by("order_in_dashboard");
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		$results = $this->db->get_where('installed_apps', array('page_id' => $page_id))->result_array();
-		return $this->socialhappen->map_v($results,'app_install_status');
+		return $this->socialhappen->map_v($results,array('app_type','app_install_status'));
 	}
 
 	/*
@@ -42,7 +42,7 @@ class Installed_apps_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		$results = $this->db->get_where('installed_apps',array('company_id'=>$company_id))->result_array();
-		return $this->socialhappen->map_v($results,'app_install_status');
+		return $this->socialhappen->map_v($results,array('app_type','app_install_status'));
 	}
 	
 	/*
@@ -56,7 +56,7 @@ class Installed_apps_model extends CI_Model {
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		$this->db->order_by("order_in_dashboard");
 		$results = $this->db->get_where('installed_apps',array('company_id'=>$company_id,'page_id'=>0))->result_array();
-		return $this->socialhappen->map_v($results,'app_install_status');
+		return $this->socialhappen->map_v($results,array('app_type','app_install_status'));
 	}
 	
 	/*
@@ -79,7 +79,7 @@ class Installed_apps_model extends CI_Model {
 	function get_app_profile_by_app_install_id($app_install_id = NULL){
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		$results = $this->db->get_where('installed_apps',array('app_install_id'=>$app_install_id))->result_array();
-		return $this->socialhappen->map_one_v($results[0], 'app_install_status');
+		return $this->socialhappen->map_one_v($results[0], array('app_type','app_install_status'));
 	}
 	
 	/**

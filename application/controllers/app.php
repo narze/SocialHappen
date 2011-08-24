@@ -245,7 +245,7 @@ class App extends CI_Controller {
 		$post_data = array(
 							'company_id' =>  $this->input->post('company_id'),
 							'app_id' =>  $this->input->post('app_id'),
-							'app_install_status' =>  $this->input->post('app_install_status'),
+							'app_install_status_id' =>  $this->input->post('app_install_status_id'),
 							'page_id' =>  $this->input->post('page_id'),
 							'app_install_secret_key' =>  $this->input->post('app_install_secret_key')
 						);
@@ -270,7 +270,7 @@ class App extends CI_Controller {
 		$app_install_status = array();
 		if($app_install_status_id = $this->socialhappen->get_k('app_install_status', $status_name)){
 			$app_install_status['app_install_status_id'] = $app_install_status_id;
-			$app_install_status['app_install_status_name'] = $app_install_status['app_install_status_description'] = $this->socialhappen->get_v('app_install_status',$app_install_status['app_install_status_id']);
+			$app_install_status['app_install_status'] = $app_install_status['app_install_status_description'] = $this->socialhappen->get_v('app_install_status',$app_install_status['app_install_status_id']);
 		}
 		echo json_encode($app_install_status);
 	}
@@ -285,7 +285,7 @@ class App extends CI_Controller {
 		$app_install_statuses = array();
 		foreach($this->socialhappen->get_global('app_install_status') as $key => $value){
 			$app_install_statuses[$key]['app_install_status_id'] = $key;
-			$app_install_statuses[$key]['app_install_status_name'] = $app_install_statuses[$key]['app_install_status_description'] = $value;
+			$app_install_statuses[$key]['app_install_status'] = $app_install_statuses[$key]['app_install_status_description'] = $value;
 		}
 		echo json_encode(array_values($app_install_statuses));
 	}

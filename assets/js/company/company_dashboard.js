@@ -49,8 +49,8 @@ function add_app_button_click(){
 	$(".right-panel").html($(".dragging-event-right-app-list").html());
 }
 //add app to facebook page
-function get_add_app_to_fb_page_link(facebook_app_api_key,facebook_page_id){
-	return "http://www.facebook.com/add.php?api_key="+facebook_app_api_key+"&pages=1"+"&page="+facebook_page_id;
+function get_add_app_to_fb_page_link(app_facebook_api_key,facebook_page_id){
+	return "http://www.facebook.com/add.php?api_key="+app_facebook_api_key+"&pages=1"+"&page="+facebook_page_id;
 }
 //show apps in page
 function view_page_app(page_id,facebook_page_id,page_name){
@@ -576,7 +576,7 @@ function show_available_app_in_company(){
 					+"<input class='app_id' type='hidden' value='" + json[i].app_id + "'/>"
 					+"<input class='app_install_url' type='hidden' value='" + json[i].app_install_url + "'/>"
 					+"<input class='app_secret_key' type='hidden' value='" + json[i].app_secret_key + "'/>"
-					+"<input class='app_api_key' type='hidden' value='" + json[i].facebook_app_api_key + "'/></li>"
+					+"<input class='app_api_key' type='hidden' value='" + json[i].app_facebook_api_key + "'/></li>"
 				);
 			}
 			showing_page_of_available_item=1;
@@ -618,7 +618,7 @@ function show_available_app_in_page(page_id){
 					+"<input class='app_id' type='hidden' value='" + json[i].app_id + "'/>"
 					+"<input class='app_install_url' type='hidden' value='" + json[i].app_install_url + "'/>"		    
 					+"<input class='app_secret_key' type='hidden' value='" + json[i].app_secret_key + "'/>"
-					+"<input class='app_api_key' type='hidden' value='" + json[i].facebook_app_api_key + "'/></li>"
+					+"<input class='app_api_key' type='hidden' value='" + json[i].app_facebook_api_key + "'/></li>"
 				);
 			}
 			showing_page_of_available_item=1;
@@ -699,7 +699,7 @@ $(function() {
 	//get all app install statuses
 	$.getJSON(base_url + "app/json_get_all_app_install_status", function(json){
 		for(i in json){
-			all_app_install_statuses[''+json[i].app_install_status_name] = new Array(json[i].app_install_status_id,json[i].app_install_status_description);
+			all_app_install_statuses[''+json[i].app_install_status] = new Array(json[i].app_install_status_id,json[i].app_install_status_description);
 		}
 	});
 	

@@ -155,11 +155,6 @@ class Sync extends CI_Controller {
 							    'job_id' => field_option('BIGINT', 20, $default, $null, $autoinc, $unsigned),
 							    'active_user' => field_option('BIGINT', 20, $default, $null, $autoinc, $unsigned),
 							),*/
-							'app_type' => array(
-							    'app_type_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
-							    'app_type_name' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
-							    'app_type_description' => field_option('VARCHAR', 255, $default, TRUE, $autoinc, $unsigned),
-							),
 							'audit_action_type' => array(
 							    'audit_action_id' => field_option('INT', 5, $default, $null, $autoinc, TRUE),
 							    'audit_action_name' => field_option('VARCHAR', 100, $default, $null, $autoinc, $unsigned),
@@ -171,16 +166,12 @@ class Sync extends CI_Controller {
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'campaign_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'campaign_detail' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
-							    'campaign_status_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
+							    'campaign_status_id' => field_option('INT', 2, $default, $null, $autoinc, TRUE),
 							    'campaign_active_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_start_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'campaign_end_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
 								'campaign_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							),
-							'campaign_status' => array(
-							    'campaign_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
-							    'campaign_status_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'company' => array(
 							    'company_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -205,7 +196,7 @@ class Sync extends CI_Controller {
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'company_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'app_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-							    'app_install_status' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
+							    'app_install_status_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
 							    'app_install_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'page_id' => field_option('BIGINT', 20, 0, TRUE, $autoinc, TRUE),
 							    'app_install_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
@@ -356,10 +347,8 @@ class Sync extends CI_Controller {
 		$keys = array(
 						'app' => array('app_id'),
 						//'app_statistic' => array('app_install_id','job_time'),
-						'app_type' => array('app_type_id'),
 						'audit_action_type' => array('audit_action_id'),
 						'campaign' => array('campaign_id'),
-						'campaign_status' => array('campaign_status_id'),
 						'company' => array('company_id'),
 						'company_apps' => array('company_id', 'app_id'),
 						//'config_item' => array('app_install_id','config_key'),
@@ -386,10 +375,8 @@ class Sync extends CI_Controller {
 		$tables = array(
 							'app',
 							//'app_statistic',
-							'app_type',
 							'audit_action_type',
 							'campaign',
-							'campaign_status',
 							'company',
 							'company_apps',
 							//'config_item',
@@ -515,25 +502,6 @@ class Sync extends CI_Controller {
 			)
 		);
 		$this->db->insert_batch('app', $app);
-		
-		$app_type = array(
-							array(
-							    'app_type_id' => 1,
-							    'app_type_name' => 'Page Only',
-							    'app_type_description' => 'Apps will be in page only',
-							),
-							array(
-							    'app_type_id' => 2,
-							    'app_type_name' => 'Support Page',
-							    'app_type_description' => 'Apps can be installed into page'
-							),
-							array(
-							    'app_type_id' => 3, 
-							    'app_type_name' => 'Standalone', 
-							    'app_type_description' => 'Apps cannot be installed into page'
-							)
-					);
-		$this->db->insert_batch('app_type', $app_type);
 				
 		$audit_action_type = array(
 								array(
@@ -606,22 +574,6 @@ class Sync extends CI_Controller {
 							)
 						);
 		$this->db->insert_batch('campaign', $campaign);
-		
-		$campaign_status = array(
-								array(
-								    'campaign_status_id' => 1,
-								    'campaign_status_name' => 'Inactive'
-								),
-								array(
-								    'campaign_status_id' => 2,
-								    'campaign_status_name' => 'Active'
-								),
-								array(
-								    'campaign_status_id' => 3,
-								    'campaign_status_name' => 'Expired'
-								)
-							);
-		$this->db->insert_batch('campaign_status', $campaign_status);
 		
 		$company = array(
 						array(
@@ -704,7 +656,7 @@ class Sync extends CI_Controller {
 								    'app_install_id' => 1, 
 								    'company_id' => 1, 
 								    'app_id' => 1, 
-								    'app_install_status' => 1, 
+								    'app_install_status_id' => 1, 
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
 								    'app_install_secret_key' => '457f81902f7b768c398543e473c47465'
@@ -713,7 +665,7 @@ class Sync extends CI_Controller {
 								  	'app_install_id' => 2, 
 								    'company_id' => 1, 
 								    'app_id' => 2, 
-								    'app_install_status' => 1, 
+								    'app_install_status_id' => 1, 
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
 								    'app_install_secret_key' => 'b4504b54bb0c27a22fedba10cca4eb55'
@@ -722,7 +674,7 @@ class Sync extends CI_Controller {
 								    'app_install_id' => 3, 
 								    'company_id' => 1, 
 								    'app_id' => 3, 
-								    'app_install_status' => 1, 
+								    'app_install_status_id' => 1, 
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
 								    'app_install_secret_key' => '1dd5a598414f201bc521348927c265c3'
@@ -731,7 +683,7 @@ class Sync extends CI_Controller {
 								  	'app_install_id' => 4, 
 								    'company_id' => 1, 
 								    'app_id' => 4, 
-								    'app_install_status' => 1, 
+								    'app_install_status_id' => 1, 
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
 								    'app_install_secret_key' => '19323810aedbbc8384b383fa21904626'

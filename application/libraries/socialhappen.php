@@ -22,6 +22,8 @@ class SocialHappen{
 		'item_type' => array(1=>'Package', 2=>'App'),
 		'order_status' => array(1=>'Processed',2=>'Failed'),
 		'app_install_status' => array(1=>'Installed', 2=>'Active', 3=>'Inactive'),
+		'app_type' => array(1=>'Page Only', 2=>'Support Page', 3=>'Standalone'),
+		'campaign_status' => array(1=>'Inactive', 2=>'Active', 3=>'Expired')
 	);
 	
 	/**
@@ -60,7 +62,13 @@ class SocialHappen{
 	 */
 	function map_one_v(&$each = NULL, $var_name_and_array_index = NULL){
 		if($each) {
-			$each[$var_name_and_array_index] = $this->get_v($var_name_and_array_index,$each[$var_name_and_array_index]);
+			if(is_array($var_name_and_array_index)){
+				foreach($var_name_and_array_index as $one){
+					$each[$one] = $this->get_v($one,$each["{$one}_id"]);
+				}
+			} else {
+				$each[$var_name_and_array_index] = $this->get_v($var_name_and_array_index,$each["{$var_name_and_array_index}_id"]);
+			}
 		}
 		return $each;
 	}
@@ -70,7 +78,7 @@ class SocialHappen{
 	 * @param &$array
 	 * @param $var_name_and_array_index
 	 */
-	function map_v(&$array = NULL, $var_name_and_array_index = NULL){
+	function map_v(&$array = array(), $var_name_and_array_index = NULL){
 		foreach($array as &$each){
 			$this->map_one_v($each,$var_name_and_array_index);
 		}

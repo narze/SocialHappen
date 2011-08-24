@@ -38,7 +38,8 @@ class User_campaigns_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
 		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
-		return $this -> db -> get_where('user_campaigns', array('user.user_id' => $user_id)) -> result_array();
+		$result = $this -> db -> get_where('user_campaigns', array('user.user_id' => $user_id)) -> result_array();
+		return $this->socialhappen->map_v($result, 'campaign_status');
 	}
 	
 	/**

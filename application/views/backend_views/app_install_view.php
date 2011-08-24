@@ -21,7 +21,7 @@
 			//var_dump($campaign);
 			echo '<li><b>'.anchor('backend/campaign/'.$campaign['campaign_id'], $campaign['campaign_name'], 'title="view campaign installed detail"').'</b>
 			<br/><b>Detail:</b> '.$campaign['campaign_detail'].'
-			<br/><b>Status:</b> '.$campaign['campaign_status_name'].'
+			<br/><b>Status:</b> '.$campaign['campaign_status'].'
 			<br/><b>Members:</b> '.$campaign['campaign_all_member'].'
 			<br/><b>Start Date:</b> '.$campaign['campaign_start_timestamp'].'
 			<br/><b>End Date:</b> '.$campaign['campaign_end_timestamp'].'
