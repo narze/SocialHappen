@@ -19,7 +19,7 @@ class Payments_pro extends CI_Controller
 			'APIVersion' => $this->config->item('APIVersion')		// API version you'd like to use for your call.  You can set a default version in the class and leave this blank if you want.
 		);
 		
-		$this->load->library('paypal/Paypal_pro', $config);	
+		$this->load->library('Paypal_pro', $config);	
 	}
 	
 	
