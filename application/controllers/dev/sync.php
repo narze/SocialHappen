@@ -432,183 +432,87 @@ class Sync extends CI_Controller {
 	
 	function insert_test_data(){
 		$app = array(
-					array(
-					    'app_id' => 1,
-					    'app_name' => 'Feed',
-					    'app_type_id' => 1,
-					    'app_maintainance' => 0,
-					    'app_show_in_list' => 1,
-					    'app_description' => 'RSS Feed in facebook tab',
-					    'app_secret_key' =>  '11111111111111111111111111111111',
-					    'app_url' =>  'http://socialhappen.dyndns.org/feed?app_install_id={app_install_id}', 
-					    'app_install_url' => 'http://socialhappen.dyndns.org/feed/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}',
-					    'app_install_page_url' => '',
-					    'app_config_url' =>  'http://socialhappen.dyndns.org/feed/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}',
-					    'app_support_page_tab' =>  1,
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => ''
-					),
-					array(
-					    'app_id' => 2, 
-					    'app_name' => 'Facebook Register', 
-					    'app_type_id' => 2, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Campaign register using Facebook id',
-					    'app_secret_key' =>  '22222222222222222222222222222222', 
-					    'app_url' => 'http://socialhappen.dyndns.org/fbreg?app_install_id={app_install_id}', 
-					    'app_install_url' => 'http://socialhappen.dyndns.org/fbreg/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
-					    'app_install_page_url' => '', 
-					    'app_config_url' => 'http://socialhappen.dyndns.org/fbreg/sh/config?app_install_id={app_install_id}&user_facebook_id={user_facebook_id}&app_install_secret_key={app_install_secret_key}', 
-					    'app_support_page_tab' => 0, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => ''
-					),
-					array(
-					    'app_id' => 3, 
-					    'app_name' => 'Share to get it', 
-					    'app_type_id' => 3, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Share links by twitter / facebook to get file url', 
-					    'app_secret_key' => '33333333333333333333333333333333', 
-					    'app_url' => 'http://socialhappen.dyndns.org/sharetogetit?app_install_id={app_install_id}', 
-					    'app_install_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/install?company_id={company_id}&user_facebook_id={user_facebook_id}', 
-					    'app_install_page_url' => '', 
-					    'app_config_url' => 'http://socialhappen.dyndns.org/sharetogetit/sh/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}', 
-					    'app_support_page_tab' => 0, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => ''
-					),
-					array(
-					    'app_id' => 4, 
-					    'app_name' => 'Facebook CMS', 
-					    'app_type_id' => 1, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Content Management System on Facebook', 
-					    'app_secret_key' => '44444444444444444444444444444444', 
-					    'app_url' => 'http://socialhappen.dyndns.org/fbcms/blog/{app_install_id}/', 
-					    'app_install_url' => 'http://socialhappen.dyndns.org/fbcms/platform/install/{company_id}/{user_facebook_id}/', 
-					    'app_install_page_url' => '', 
-					    'app_config_url' => 'http://socialhappen.dyndns.org/fbcms/platform/config/{app_install_id}/{user_facebook_id}/{app_install_secret_key}/', 
-					    'app_support_page_tab' => 1, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => ''
-					),
-					array(
-					    'app_id' => 5, 
-					    'app_name' => 'SocialMart', 
-					    'app_type_id' => 1, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'SocialMart', 
-					    'app_secret_key' => 'fb9792b2ccb40d5482f5b7cae5e55521', 
-					    'app_url' => '', 
-					    'app_install_url' => '', 
-					    'app_install_page_url' => '', 
-					    'app_config_url' => '',
-					    'app_support_page_tab' => 1, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => ''
-					),
-					array(
-					    'app_id' => 6, 
-					    'app_name' => 'MockApp1', 
-					    'app_type_id' => 2, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Mock Application', 
-					    'app_secret_key' => 'cd14463efa98e6ee00fde6ccd51a9f6d', 
-					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp1/', 
-					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp1/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp1/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp1/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
-					    'app_support_page_tab' => 1, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => '125970200830191' 	
-					),
-					array(
-					    'app_id' => 7, 
-					    'app_name' => 'MockApp2', 
-					    'app_type_id' => 2, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Mock Application', 
-					    'app_secret_key' => '94738d825664ccb7f03d046af4ef595b', 
-					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp2/', 
-					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp2/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp2/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp2/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
-					    'app_support_page_tab' => 1, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => '240827319274038' 	
-					),
-					array(
-					    'app_id' => 8, 
-					    'app_name' => 'MockApp3', 
-					    'app_type_id' => 2, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Mock Application', 
-					    'app_secret_key' => 'de9364db919da2fbf3c4bcbb3ee7f391', 
-					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp3/', 
-					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp3/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp3/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp3/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
-					    'app_support_page_tab' => 1, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => '154511824626980' 	
-					),
-					array(
-					    'app_id' => 9, 
-					    'app_name' => 'MockApp4', 
-					    'app_type_id' => 2, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Mock Application', 
-					    'app_secret_key' => '8af45604f103f8c1bdca140141c19d4e', 
-					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp4/', 
-					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp4/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp4/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp4/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
-					    'app_support_page_tab' => 1, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => '238405896194000' 	
-					),
-					array(
-					    'app_id' => 10, 
-					    'app_name' => 'MockApp5', 
-					    'app_type_id' => 2, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Mock Application', 
-					    'app_secret_key' => '7b7d7cdd870d88cad5e3ec7743b00b1c', 
-					    'app_url' => 'http://beta.figabyte.com/figtest/mockapp5/', 
-					    'app_install_url' => 'http://beta.figabyte.com/figtest/mockapp5/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-					    'app_install_page_url' => 'http://beta.figabyte.com/figtest/mockapp5/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-					    'app_config_url' => 'http://beta.figabyte.com/figtest/mockapp5/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
-					    'app_support_page_tab' => 1, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => '189132747815592' 	
-					),
-					array(
-					    'app_id' => 11, 
-					    'app_name' => '[beta]FGF', 
-					    'app_type_id' => 2, 
-					    'app_maintainance' => 0, 
-					    'app_show_in_list' => 1, 
-					    'app_description' => 'Friend get fans', 
-					    'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4', 
-					    'app_url' => 'http://apps.figabyte.com/freferral/sohapfgf', 
-					    'app_install_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
-					    'app_install_page_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-					    'app_config_url' => 'http://apps.figabyte.com/freferral/sohapfgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
-					    'app_support_page_tab' => 1, 
-					    'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
-						'app_facebook_api_key' => '125138914244914' 	
-					)
-				);
+			array(
+				'app_id' => 1, 
+				'app_name' => 'Friend Get Fans', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Page Only'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Friend Get Fans', 
+				'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4', 
+				'app_url' => 'http://apps.socialhappen.com/fgf', 
+				'app_install_url' => 'http://apps.socialhappen.com/fgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_install_page_url' => 'http://apps.socialhappen.com/fgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'http://apps.socialhappen.com/fgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_image' =>  'http://apps.socialhappen.com/fgf/app_image.png',
+				'app_facebook_api_key' => '202663143123531' 	
+			),
+			array(
+				'app_id' => 2, 
+				'app_name' => '[Local]Friend Get Fans', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Page Only'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Friend Get Fans', 
+				'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4', 
+				'app_url' => 'http://socialhappen.dyndns.org/fgf', 
+				'app_install_url' => 'http://socialhappen.dyndns.org/fgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_install_page_url' => 'http://socialhappen.dyndns.org/fgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'http://socialhappen.dyndns.org/fgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_image' =>  'http://socialhappen.dyndns.org/fgf/app_image.png',
+				'app_facebook_api_key' => '154899207922915' 	
+			),
+			array(
+				'app_id' => 3, 
+				'app_name' => 'MockApp', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Standalone'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Mock Application', 
+				'app_secret_key' => 'cd14463efa98e6ee00fde6ccd51a9f6d', 
+				'app_url' => 'http://apps.socialhappen.com/mockapp/', 
+				'app_install_url' => 'http://apps.socialhappen.com/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'http://apps.socialhappen.com/mockapp/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'http://apps.socialhappen.com/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_image' =>  'http://apps.socialhappen.com/mockapp/app_image.png',
+				'app_facebook_api_key' => '177890852283217' 	
+			),
+			array(
+				'app_id' => 4, 
+				'app_name' => '[Local]MockApp', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Standalone'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Mock Application', 
+				'app_secret_key' => 'cd14463efa98e6ee00fde6ccd51a9f6d', 
+				'app_url' => 'http://socialhappen.dyndns.org/mockapp/', 
+				'app_install_url' => 'http://socialhappen.dyndns.org/mockapp/port/install_unit/?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'http://socialhappen.dyndns.org/mockapp/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'http://socialhappen.dyndns.org/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_image' =>  'http://socialhappen.dyndns.org/mockapp/app_image.png',
+				'app_facebook_api_key' => '204755022911798' 	
+			),			
+			array(
+				'app_id' => 5, 
+				'app_name' => '[beta]FGF', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Page Only'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Friend get fans', 
+				'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4', 
+				'app_url' => 'http://apps.figabyte.com/freferral/sohapfgf', 
+				'app_install_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_install_page_url' => 'http://apps.figabyte.com/freferral/sohapfgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'http://apps.figabyte.com/freferral/sohapfgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_image' =>  'http://socialhappen.dyndns.org/socialhappen/uploads/images/c3d08482305d185a572f967333b6a608_o.png',
+				'app_facebook_api_key' => '125138914244914' 	
+			)
+		);
 		$this->db->insert_batch('app', $app);
 		
 		$app_type = array(
@@ -839,7 +743,7 @@ class Sync extends CI_Controller {
 						    'page_id' => 1, 
 						    'facebook_page_id' => '116586141725712', 
 						    'company_id' => 1, 
-						    'page_name' => 'Test name', 
+						    'page_name' => 'SH Test', 
 						    'page_detail' => 'detail', 
 						    'page_all_member' => 22, 
 						    'page_new_member' => 222, 
@@ -1166,7 +1070,37 @@ class Sync extends CI_Controller {
 								    'user_id' => 6,
 								    'page_id' => 1,
 								    'user_role' => 3
-								)
+								),
+								array(
+								    'user_id' => 1,
+								    'page_id' => 2,
+								    'user_role' => 1
+								),
+								array(
+								    'user_id' => 2,
+								    'page_id' => 2,
+								    'user_role' => 1
+								),
+								array(
+								    'user_id' => 3,
+								    'page_id' => 2,
+								    'user_role' => 0
+								),
+								array(
+								    'user_id' => 4,
+								    'page_id' => 2,
+								    'user_role' => 2
+								),
+								array(
+								    'user_id' => 5,
+								    'page_id' => 2,
+								    'user_role' => 3
+								),
+								array(
+								    'user_id' => 6,
+								    'page_id' => 2,
+								    'user_role' => 3
+								),
 							);
 		$this->db->insert_batch('user_pages', $user_pages);
 		
