@@ -329,7 +329,9 @@ class App extends CI_Controller {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$response = curl_exec($ch);		 
 		curl_close($ch);
-		echo $response;
+		$encoded = json_encode($response);
+		$stripped = str_replace("\ufeff", "", $encoded); //trim zero-width white spaces
+		echo json_decode($stripped);
 	}
 }
 
