@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://socialhappen.dyndns.oasfrg/socialhappen/';
+$config['base_url']	= 'http://socialhappen.com/socialhappen/';
 
 /*
 |--------------------------------------------------------------------------
@@ -366,7 +366,6 @@ $config['rewrite_short_tags'] = FALSE;
 |
 */
 $config['proxy_ips'] = '';
-
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

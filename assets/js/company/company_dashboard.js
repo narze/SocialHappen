@@ -480,10 +480,10 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 							data: {
 								url:app_install_url
 							},
-							error: function() {
+							error: function(jqXHR, textStatus, errorThrown) {
 								show_installed_app_in_page(page_id,facebook_page_id);
 								show_available_app_in_page(page_id);
-								alert("ERROR");
+								alert(app_install_url + errorThrown);
 								console.log("app/curl failed 3");
 							},
 							success: function(json) {
@@ -511,7 +511,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 								} else {
 									show_installed_app_in_page(page_id,facebook_page_id);
 									show_available_app_in_page(page_id);
-									alert("ERROR");
+									alert(app_install_url);
 									console.log("app/curl json mismatch 3 : " + json);
 								}
 							},

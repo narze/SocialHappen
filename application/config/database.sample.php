@@ -38,12 +38,12 @@
 | the active record class
 */
 
-$active_group = 'test';
-$active_record = TRUE;
+
+$active_group = 'default';
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'socialhappen';
-$db['default']['password'] = 'figyfigy';
+$db['default']['username'] = 'root';
+$db['default']['password'] = '';
 $db['default']['database'] = 'socialhappen';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = 'sh_';
@@ -56,23 +56,6 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
-
-$db['test']['hostname'] = 'localhost';
-$db['test']['username'] = 'root';
-$db['test']['password'] = '';
-$db['test']['database'] = 'socialhappen';
-$db['test']['dbdriver'] = 'mysql';
-$db['test']['dbprefix'] = 'sh_';
-$db['test']['pconnect'] = TRUE;
-$db['test']['db_debug'] = TRUE;
-$db['test']['cache_on'] = FALSE;
-$db['test']['cachedir'] = '';
-$db['test']['char_set'] = 'utf8';
-$db['test']['dbcollat'] = 'utf8_general_ci';
-$db['test']['swap_pre'] = '';
-$db['test']['autoinit'] = TRUE;
-$db['test']['stricton'] = FALSE;
-
 
 
 /* End of file database.php */

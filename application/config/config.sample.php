@@ -14,7 +14,19 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://socialhappen.dyndns.oasfrg/socialhappen/';
+$config['base_url']	= 'http://socialhappen.dyndns.org/socialhappen/';
+
+/*
+|--------------------------------------------------------------------------
+| SocialHappen test mode
+|--------------------------------------------------------------------------
+|
+| When enabled, test mode password is required.
+| (CI's hook must be enabled to use this)
+|
+*/
+$config['sh_test_mode'] = FALSE;
+$config['sh_test_mode_password'] = 'happyeveryday';
 
 /*
 |--------------------------------------------------------------------------
@@ -354,28 +366,6 @@ $config['rewrite_short_tags'] = FALSE;
 |
 */
 $config['proxy_ips'] = '';
-
-/*
-|--------------------------------------------------------------------------
-| Default SH Facebook app
-|--------------------------------------------------------------------------
-|
-| This application will be installed after installing page to company
-|
-*/
-$config['sh_default_fb_app_api_key'] = '20046401b3b5ae931f8d552f5aeae44f';
-
-/*
-|--------------------------------------------------------------------------
-| SocialHappen test mode
-|--------------------------------------------------------------------------
-|
-| When enabled, test mode password is required.
-| (CI's hook must be enabled to use this)
-|
-*/
-$config['sh_test_mode'] = FALSE;
-$config['sh_test_mode_password'] = 'happyeveryday';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
