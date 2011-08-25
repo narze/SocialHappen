@@ -38,24 +38,23 @@
 | the active record class
 */
 
-$active_group = 'local';
-$active_record = TRUE;
+$active_group = 'testing';
 
-$db['local']['hostname'] = 'localhost';
-$db['local']['username'] = 'root';
-$db['local']['password'] = '';
-$db['local']['database'] = 'socialhappen';
-$db['local']['dbdriver'] = 'mysql';
-$db['local']['dbprefix'] = 'sh_';
-$db['local']['pconnect'] = TRUE;
-$db['local']['db_debug'] = TRUE;
-$db['local']['cache_on'] = FALSE;
-$db['local']['cachedir'] = '';
-$db['local']['char_set'] = 'utf8';
-$db['local']['dbcollat'] = 'utf8_general_ci';
-$db['local']['swap_pre'] = '';
-$db['local']['autoinit'] = TRUE;
-$db['local']['stricton'] = FALSE;
+$db['testing']['hostname'] = 'localhost';
+$db['testing']['username'] = 'soha';
+$db['testing']['password'] = 'figyfigy';
+$db['testing']['database'] = 'soha_beta';
+$db['testing']['dbdriver'] = 'mysql';
+$db['testing']['dbprefix'] = 'sh_';
+$db['testing']['pconnect'] = TRUE;
+$db['testing']['db_debug'] = TRUE;
+$db['testing']['cache_on'] = FALSE;
+$db['testing']['cachedir'] = '';
+$db['testing']['char_set'] = 'utf8';
+$db['testing']['dbcollat'] = 'utf8_general_ci';
+$db['testing']['swap_pre'] = '';
+$db['testing']['autoinit'] = TRUE;
+$db['testing']['stricton'] = FALSE;
 
 
 

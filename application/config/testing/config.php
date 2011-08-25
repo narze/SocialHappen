@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://socialhappen.dyndns.org/socialhappen/';
+$config['base_url']	= 'http://beta.socialhappen.com/';
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ $config['base_url']	= 'http://socialhappen.dyndns.org/socialhappen/';
 | (CI's hook must be enabled to use this)
 |
 */
-$config['sh_test_mode'] = FALSE;
+$config['sh_test_mode'] = TRUE;
 $config['sh_test_mode_password'] = 'happyeveryday';
 
 /*
@@ -366,7 +366,6 @@ $config['rewrite_short_tags'] = FALSE;
 |
 */
 $config['proxy_ips'] = '';
-
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
