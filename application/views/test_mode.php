@@ -8,7 +8,11 @@
 <body>
 <h1>You've reached SH beta page!</h1>
 <?php
-echo form_open('');
+$url = '';
+if(isset($_GET['next'])) {
+	$url = $_GET['next'];
+}
+echo form_open($url);
 ?>
 		<ul>
 			<li>

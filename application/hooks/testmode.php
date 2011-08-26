@@ -5,8 +5,8 @@ class TestMode {
 		$ci =& get_instance();
 		if($ci->config->item('sh_test_mode')){
 		  $ci->load->helper('form');
-			if(isset($_SERVER['HTTP_USER_AGENT'])
-			|| (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')){ //letting calls from file_get_contents() bypass
+			if(isset($_SERVER['HTTP_USER_AGENT']) //letting calls from file_get_contents() bypass
+			&& (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest')){ //letting calls from ajax bypass
 				
 				$ci->load->library('session');
 				if(!$ci->session->userdata('test_mode')){
