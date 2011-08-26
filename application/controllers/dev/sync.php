@@ -1180,8 +1180,8 @@ class Sync extends CI_Controller {
 				'package_max_pages' => 3,
 				'package_max_users' => 10000,
 				'package_price' => 0,
-				'package_custom_badge' => 1,
-				'package_duration' => 0
+				'package_custom_badge' => 0,
+				'package_duration' => 'unlimited'
 			),
 			array(
 				'package_name' => 'Enterprise package',
@@ -1192,7 +1192,7 @@ class Sync extends CI_Controller {
 				'package_max_users' => 100000,
 				'package_price' => 999,
 				'package_custom_badge' => 1,
-				'package_duration' => 'month'
+				'package_duration' => '1month'
 			)
 		);
 		$this->db->insert_batch('package', $package);

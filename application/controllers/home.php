@@ -157,7 +157,7 @@ class Home extends CI_Controller {
 				{
 					$redirect_path = base_url().'?logged_in=true';
 				}
-				$this->load->view('common/redirect',array('refresh_parent' => TRUE, 'redirect_path'=>$redirect_path));
+				$this->load->view('common/redirect',array('refresh_parent' => 'TRUE', 'redirect'=>$redirect_path));
 			}
 			else
 			{
