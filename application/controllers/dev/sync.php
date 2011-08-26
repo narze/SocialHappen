@@ -212,7 +212,7 @@ class Sync extends CI_Controller {
 							    'page_new_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'page_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
-								'page_status' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
+								'page_status_id' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
 								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 								'page_user_fields' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
@@ -257,10 +257,6 @@ class Sync extends CI_Controller {
 							'user_gender' =>array(
 								'user_gender_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
 								'user_gender_name' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned),
-							),
-							'page_status' => array(
-							    'page_status_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
-							    'page_status_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'user_role' => array(
 							    'user_role_id' => field_option('INT', 2, $default, $null, TRUE, TRUE),
@@ -362,7 +358,6 @@ class Sync extends CI_Controller {
 						'user_companies' => array('user_id', 'company_id'),
 						'sessions' => array('session_id'),
 						'user_gender' =>array('user_gender_id'),
-						'page_status' => array('page_status_id'),
 						'user_role' => array('user_role_id'),
 						'user_pages' => array('user_id', 'page_id'),
 						'package' => array('package_id'),
@@ -390,7 +385,6 @@ class Sync extends CI_Controller {
 							'user_companies',
 							'sessions',
 							'user_gender',
-							'page_status',
 							'user_role',
 							'user_pages',
 							'package',
@@ -886,18 +880,6 @@ class Sync extends CI_Controller {
 			)
 		);
 		$this->db->insert_batch('user_gender', $user_gender);
-		
-		$page_status = array(
-								array(
-								    'page_status_id' => 1,
-								    'page_status_name' => 'Not installed'
-								),
-								array(
-								    'page_status_id' => 2,
-								    'page_status_name' => 'Installed'
-								)
-							);
-		$this->db->insert_batch('page_status', $page_status);
 		
 		$user_role = array(
 								array(

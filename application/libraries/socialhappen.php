@@ -23,7 +23,8 @@ class SocialHappen{
 		'order_status' => array(1=>'Processed',2=>'Failed'),
 		'app_install_status' => array(1=>'Installed', 2=>'Active', 3=>'Inactive'),
 		'app_type' => array(1=>'Page Only', 2=>'Support Page', 3=>'Standalone'),
-		'campaign_status' => array(1=>'Inactive', 2=>'Active', 3=>'Expired')
+		'campaign_status' => array(1=>'Inactive', 2=>'Active', 3=>'Expired'),
+		'page_status' => array(1=>'Not Installed', 2=>'Installed')
 	);
 	
 	/**
@@ -64,10 +65,10 @@ class SocialHappen{
 		if($each) {
 			if(is_array($var_name_and_array_index)){
 				foreach($var_name_and_array_index as $one){
-					$each[$one] = $this->get_v($one,$each["{$one}_id"]);
+					$each[$one] = $this->get_v($one,issetor($each["{$one}_id"]));
 				}
 			} else {
-				$each[$var_name_and_array_index] = $this->get_v($var_name_and_array_index,$each["{$var_name_and_array_index}_id"]);
+				$each[$var_name_and_array_index] = $this->get_v($var_name_and_array_index,issetor($each["{$var_name_and_array_index}_id"]));
 			}
 		}
 		return $each;
