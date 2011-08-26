@@ -29,7 +29,7 @@ class TestMode {
 	function logout(){
 		$ci =& get_instance();
 		$ci->session->unset_userdata('test_mode');
-    $ci->load->helper('form');
+		$ci->load->helper('form');
 		$ci->load->view('test_mode');
 	}
 }
