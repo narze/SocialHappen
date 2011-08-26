@@ -164,7 +164,7 @@ class SocialHappen{
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'facebook_default_scope' => $this->CI->config->item('facebook_default_scope'),
-				'next' => $this->CI->config->item('next')
+				'next' => $this->CI->input->get('next')
 			);
 		} else {
 			$this->login();
