@@ -34,9 +34,9 @@ echo form_open('backend/add_new_app');
 				));?>
 				<?
 					$options = array(
-					  '1'  => '1',
-					  '2'    => '2',
-					  '3'   => '3'
+					  $this->socialhappen->get_k('app_type','Page Only')  => "Page Only",
+					  $this->socialhappen->get_k('app_type','Support Page')  => "Support Page",
+					  $this->socialhappen->get_k('app_type','Standalone')  => "Standalone"
 					);
 				?>
 				<?=form_dropdown('app_type_id', $options);?>

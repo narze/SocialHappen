@@ -1,4 +1,5 @@
 $(function(){	
+	var campaign_status_var = {"Inactive":1,"Active":2,"Expired":3};
 	var campaign_status_id = '';
 	Date.createFromMysql = function(mysql_string){ 
 	   if(typeof mysql_string === 'string')
@@ -29,7 +30,7 @@ $(function(){
 					campaign_list.find('h2').append('<a href="'+base_url+'campaign/'+json[i].campaign_id+'">'+json[i].campaign_name+'</a>');
 					campaign_list.find('p.description').append(json[i].campaign_description);
 					
-					row.find('td.status2.campaign-status span').append(json[i].campaign_status_name);
+					row.find('td.status2.campaign-status span').append(json[i].campaign_status);
 					row.find('td.status2.campaign-visitor b').append(json[i].campaign_visitor);
 					row.find('td.status2.campaign-member b').append(json[i].campaign_users);
 					row.find('td.status2.remaining-days b').countdown({
@@ -57,13 +58,13 @@ $(function(){
 		
 		if($(this).hasClass('inactive-campaign')){
 			filtered = true;
-			campaign_status_id = 1;
+			campaign_status_id = campaign_status_var["Inactive"];
 		} else if($(this).hasClass('active-campaign')){
 			filtered = true;
-			campaign_status_id = 2;
+			campaign_status_id = campaign_status_var["Active"];
 		} else if($(this).hasClass('expired-campaign')){
 			filtered = true;
-			campaign_status_id = 3;
+			campaign_status_id = campaign_status_var["Expired"];
 		} else if($(this).hasClass('all-campaign')){
 			filtered = false;
 			campaign_status_id = '';

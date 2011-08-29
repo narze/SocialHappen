@@ -56,8 +56,8 @@ class Achievement_info_model extends CI_Model {
 	/**
 	 * add new achievement info
 	 * 
-	 * @param app_id int app_id
-	 * @param app_install_id int app_install_id
+	 * @param app_id int app_id*
+	 * @param app_install_id int app_install_id [optional]
 	 * @param info array of info contains 
 	 * 				['name',*
 	 * 				 'description', *
@@ -72,7 +72,7 @@ class Achievement_info_model extends CI_Model {
 	 */
 	function add($app_id = NULL, $app_install_id = NULL, $info = array()
 							, $criteria = array()){
-		$check_args = isset($app_id) && isset($app_install_id) && isset($info)
+		$check_args = isset($app_id) && isset($info)
 							 && isset($info['name']) && isset($info['description'])
 							 && isset($info['criteria_string'])
 							 && count($info['criteria_string']) > 0
@@ -84,8 +84,10 @@ class Achievement_info_model extends CI_Model {
 			 * keys
 			 */
 			$achievement_info['app_id'] = $app_id;
-			$achievement_info['app_install_id'] = $app_install_id;
 			
+			if($app_install_id){
+				$achievement_info['app_install_id'] = $app_install_id;
+			}
 			if(isset($info['page_id'])){
 				$achievement_info['page_id'] = $info['page_id'];
 			}
@@ -114,9 +116,9 @@ class Achievement_info_model extends CI_Model {
 	/**
 	 * set exists achievement info
 	 * 
-	 * @param achievement_id string achievement_id
-	 * @param app_id int app_id
-	 * @param app_install_id int app_install_id
+	 * @param achievement_id string achievement_id*
+	 * @param app_id int app_id*
+	 * @param app_install_id int app_install_id [optional]
 	 * @param info array of info contains 
 	 * 				['name',
 	 * 				 'description', 
@@ -132,7 +134,7 @@ class Achievement_info_model extends CI_Model {
 	function set($achievement_id = NULL, $app_id = NULL, $app_install_id = NULL, $info = array()
 							, $criteria = array()){
 		$check_args = isset($achievement_id) && isset($app_id) 
-							 && isset($app_install_id) && isset($info)
+							 && isset($info)
 							 && isset($info['name']) && isset($info['description'])
 							 && isset($info['criteria_string'])
 							 && count($info['criteria_string']) > 0
@@ -144,7 +146,10 @@ class Achievement_info_model extends CI_Model {
 			 * keys
 			 */
 			$achievement_info['app_id'] = $app_id;
-			$achievement_info['app_install_id'] = $app_install_id;
+			
+			if($app_install_id){
+				$achievement_info['app_install_id'] = $app_install_id;
+			}
 			
 			if(isset($info['page_id'])){
 				$achievement_info['page_id'] = $info['page_id'];
@@ -202,7 +207,12 @@ class Achievement_info_model extends CI_Model {
 	
 	/**
 	 * list achievement info
+	 * 
 	 * @param criteria array of criteria
+	 * 
+	 * @return result array
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function list_info($criteria = array()){
 		$res = $this->achievement_info->find($criteria);

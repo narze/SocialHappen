@@ -262,7 +262,7 @@ class Page extends CI_Controller {
 						'app_install_id' => $app['app_install_id'],
 						'app_name' => $app['app_name'],
 						'app_description' => $app['app_description'],
-						'app_install_status_name' => $app['app_install_status_name'],
+						'app_install_status' => $app['app_install_status'],
 						'app_url' => $this->app_url->translate_url($app['app_url'], $app['app_install_id']),
 						'app_member' => $this->user->count_users_by_app_install_id($app['app_install_id']),
 						'app_monthly_active_member' => $active_user

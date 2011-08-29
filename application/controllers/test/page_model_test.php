@@ -36,7 +36,6 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_all_member'],'is_string','page_all_member');
 		$this->unit->run($result['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result['page_image'],'is_string','page_image');
-		$this->unit->run(count($result) == 8,'is_true', 'number of column');
 	}
 	
 	/** 
@@ -54,7 +53,6 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[0]['page_all_member'],'is_string','page_all_member');
 		$this->unit->run($result[0]['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result[0]['page_image'],'is_string','page_image');
-		$this->unit->run(count($result[0]) == 8,'is_true', 'number of column');
 	}
 	
 	/**
@@ -91,7 +89,8 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result[0]['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
@@ -101,7 +100,6 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[0]['page_all_member'],'is_string','page_all_member');
 		$this->unit->run($result[0]['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result[0]['page_image'],'is_string','page_image');
-		$this->unit->run(count($result[0]) == 13,'is_true', 'number of column');
 	}
 	
 	/**
@@ -119,7 +117,6 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_all_member'],'is_string','page_all_member');
 		$this->unit->run($result['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result['page_image'],'is_string','page_image');
-		$this->unit->run(count($result) == 8,'is_true', 'number of column');
 	}
 	
 	/**
@@ -137,7 +134,6 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_all_member'],'is_string','page_all_member');
 		$this->unit->run($result['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result['page_image'],'is_string','page_image');
-		$this->unit->run(count($result) == 8,'is_true', 'number of column');
 	}
 	
 	/**

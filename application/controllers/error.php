@@ -4,7 +4,6 @@ class Error extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->library('form_validation');
 	}
 	
 	/**
@@ -16,6 +15,9 @@ class Error extends CI_Controller {
 			403 => 'Forbidden',
 			404 => 'Page not Found',
 		);
+		if(!array_key_exists($error_num, $title)){
+			redirect('error/404');
+		}
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
 				array(

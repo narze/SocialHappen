@@ -10,8 +10,7 @@ class App_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_all_apps(){
-		$this->db->join('app_type', 'app.app_type_id = app_type.app_type_id');
-		return $this->db->get('app')->result_array();
+		return $this->socialhappen->map_v($this->db->get('app')->result_array(), 'app_type');
 	}
 	
 	/**
@@ -41,7 +40,7 @@ class App_model extends CI_Model {
 	 */
 	function get_app_by_app_id($app_id = NULL){
 		$result = $this->db->get_where('app', array('app_id' => $app_id))->result_array();
-		return issetor($result[0]);				
+		return $this->socialhappen->map_one_v($result[0], 'app_type');
 	}
 	
 	/**
@@ -51,6 +50,19 @@ class App_model extends CI_Model {
 	 */
 	function get_app_by_api_key($fb_app_api_key = NULL){
 		$result = $this->db->get_where('app', array('app_facebook_api_key' => $fb_app_api_key))->result_array();
-		return issetor($result[0]);				
+		return $this->socialhappen->map_one_v($result[0], 'app_type');			
+	}
+	
+	/**
+	 * Update app
+	 * @param $app_id
+	 * @param $data
+	 * @author Manassarn M.
+	 */
+	function update_app_by_app_id($app_id = NULL, $data = array()){
+		if(!$data){
+			return FALSE;
+		}
+		return $this->db->update('app', $data, array('app_id' => $app_id));
 	}
 }

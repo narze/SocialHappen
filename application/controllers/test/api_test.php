@@ -17,10 +17,12 @@ define('PAGE_ID','1');
 	
 class Api_test extends CI_Controller {
 
-	private $app_install_id;
-	private $app_install_secret_key;
+	private $app_install_id = 1;
+	private $app_install_secret_key = "457f81902f7b768c398543e473c47465";
 	private $page_id;
 	private $campaign_id;
+	private $campaign_status_id;
+	private $campaign_status;
 	
 	function __construct(){
 		parent::__construct();
@@ -273,7 +275,7 @@ class Api_test extends CI_Controller {
 						'campaign_start_timestamp' => '2011-05-19 00:00:00',
 						'campaign_end_timestamp' => '2012-05-19 00:00:00',
 						'campaign_detail' => 'Test Campaign Detail',
-						'campaign_status_id' => 1
+						'campaign_status_id' => $this->socialhappen->get_k("campaign_status", "Inactive")
 					);
 				
 		$content = $this->curl->simple_get(base_url().'api/request_create_campaign', $app);
@@ -282,6 +284,8 @@ class Api_test extends CI_Controller {
 		$this->unit->run($content, 'is_array', 'request_create_campaign()');
 		$this->unit->run(@$content['campaign_id'],'is_int','campaign_id');
 		$this->campaign_id = @$content['campaign_id'];
+		$this->campaign_status_id = @$content['campaign_status_id'];
+		$this->campaign_status = @$content['campaign_status_name'];
 	}
 	
 	/**
@@ -290,18 +294,20 @@ class Api_test extends CI_Controller {
 	 */
 	function request_campaign_list_test(){
 		$app = array(	
-						'app_id' => APP_ID,
-						'app_secret_key' => APP_SECRET_KEY,
-						'app_install_id' => $this->app_install_id,
-						'app_install_secret_key' => $this->app_install_secret_key
+						'app_id' => 1,
+						'app_secret_key' => "11111111111111111111111111111111",
+						'app_install_id' => 1,
+						'app_install_secret_key' => "457f81902f7b768c398543e473c47465"
 					);
-				
+			var_dump($app);	
 		$content = $this->curl->simple_get(base_url().'api/request_campaign_list', $app);
 		$content = json_decode($content, TRUE);
-		
+		var_dump($content);
 		$this->unit->run($content, 'is_array', 'request_campaign_list()');
 		$this->unit->run(@$content[0]['campaign_id']==$this->campaign_id,'is_true','last campaign_id in list');
-		
+		//echo $content[0]['campaign_status_id'];
+		$this->unit->run(@$content[0]['campaign_status_id']==$this->socialhappen->get_k("campaign_status", "Inactive"),'is_true','last campaign_status_id in list');
+		$this->unit->run(@$content[0]['campaign_status_name']=="Inactive",'is_true','last campaign_status_name in list');
 	}
 	
 	/**

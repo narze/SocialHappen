@@ -117,7 +117,8 @@ class Page_model extends CI_Model {
 		$app_id = $result[0]['app_id'];
 		$company_id = $result[0]['company_id'];
 		$this->db->join('page','installed_apps.page_id=page.page_id');
-		return $this->db->get_where('installed_apps',array('app_id' => $app_id, 'page.company_id' => $company_id))->result_array();
+		$result = $this->db->get_where('installed_apps',array('app_id' => $app_id, 'page.company_id' => $company_id))->result_array();
+		return $this->socialhappen->map_v($result, 'app_install_status');
 	}
 	
 	/**

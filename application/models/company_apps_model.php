@@ -17,7 +17,8 @@ class Company_apps_model extends CI_Model {
 	function get_company_apps_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->db->limit($limit, $offset);
 		$this->db->join('app','company_apps.app_id=app.app_id');
-		return $this->db->get_where('company_apps',array('company_id'=>$company_id))->result_array();
+		$result = $this->db->get_where('company_apps',array('company_id'=>$company_id))->result_array();
+		return $this->socialhappen->map_v($result, array('app_type'));
 	}
 	
 	/**
@@ -29,7 +30,7 @@ class Company_apps_model extends CI_Model {
 	function get_app_install_by_app_install_id($app_install_id = NULL){
 		$this->db->join('installed_apps','company_apps.app_id=installed_apps.app_id');
 		$result = $this->db->get_where('company_apps',array('app_install_id'=>$app_install_id))->result();
-		return issetor($result[0]);
+		return $this->socialhappen->map_one_v($result[0], 'app_install_status');
 	}
 	
 	/**
@@ -52,7 +53,8 @@ class Company_apps_model extends CI_Model {
 		$this->db->where('company_id',$company_id);
 		if(sizeof($installed_app_id)>0)
 			$this->db->where_not_in('company_apps.app_id', $installed_app_id);
-		return $this->db->get('company_apps')->result_array();	
+		$result = $this->db->get('company_apps')->result_array();	
+		return $this->socialhappen->map_v($result, 'app_type');
 	}
 	
 	/**

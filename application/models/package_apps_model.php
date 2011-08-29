@@ -29,7 +29,8 @@ class Package_apps_model extends CI_Model {
 	 */
 	function get_apps_by_package_id($package_id = NULL){
 		$this->db->join('app', 'app.app_id=package_apps.app_id');
-		return $this->db->get_where('package_apps', array('package_id' => $package_id))->result_array();
+		$result = $this->db->get_where('package_apps', array('package_id' => $package_id))->result_array();
+		return $this->socialhappen->map_v($result, 'app_type');
 	}
 	
 	/**

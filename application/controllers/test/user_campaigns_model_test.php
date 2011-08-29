@@ -37,7 +37,6 @@ class User_campaigns_model_test extends CI_Controller {
 		$this->unit->run($result[0]['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result[0]['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result[0]['user_last_seen'],'is_string','user_last_seen');
-		$this->unit->run(count($result[0]) == 9,'is_true', 'number of column');
 	}
 	
 	/**
@@ -48,7 +47,9 @@ class User_campaigns_model_test extends CI_Controller {
 		$result = $this->user_campaigns->get_user_campaigns_by_user_id(1);
 		$this->unit->run($result,'is_array', 'get_user_campaigns_by_user_id()');
 		$this->unit->run($result[0]['user_id'],'is_string','user_id');
-		$this->unit->run($result[0]['campaign_id'],'is_string','campaign_id');		
+		$this->unit->run($result[0]['campaign_id'],'is_string','campaign_id');
+		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
+		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status == 1');
 		$this->unit->run($result[0]['user_first_name'],'is_string','user_first_name');
 		$this->unit->run($result[0]['user_last_name'],'is_string','user_last_name');
 		$this->unit->run($result[0]['user_email'],'is_string','user_email');
@@ -56,7 +57,6 @@ class User_campaigns_model_test extends CI_Controller {
 		$this->unit->run($result[0]['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result[0]['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result[0]['user_last_seen'],'is_string','user_last_seen');
-		$this->unit->run(count($result[0]) == 9,'is_true', 'number of column');
 	}
 	
 	/**

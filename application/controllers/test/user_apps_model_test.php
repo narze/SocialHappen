@@ -39,7 +39,6 @@ class User_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result[0]['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result[0]['user_last_seen'],'is_string','user_last_seen');
-		$this->unit->run(count($result[0]) == 11,'is_true', 'number of column');
 	}
 	
 	/**
@@ -60,7 +59,10 @@ class User_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result[0]['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result[0]['user_last_seen'],'is_string','user_last_seen');
-		$this->unit->run(count($result[0]) == 11,'is_true', 'number of column');
+		$this->unit->run($result[0]['app_type_id'] == 1,'is_true',"app_type_id == 1");
+		$this->unit->run($result[0]['app_type'] == "Page Only",'is_true',"app_type == 'Page Only");
+		$this->unit->run($result[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result[0]['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 	}
 	
 	/**

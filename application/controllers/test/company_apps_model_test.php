@@ -29,12 +29,12 @@ class Company_apps_model_test extends CI_Controller {
 	function get_company_apps_by_company_id_test(){
 		$result = $this->company_apps->get_company_apps_by_company_id(1);
 		$this->unit->run($result,'is_array', 'get_company_apps_by_company_id()');
-		$this->unit->run(count($result[0]) == 15,'is_true', 'number of column');
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
 		$this->unit->run($result[0]['available_date'],'is_string','available_date');
 		$this->unit->run($result[0]['app_name'],'is_string','app_name');
-		$this->unit->run($result[0]['app_type_id'],'is_string','app_type_id');
+		$this->unit->run($result[0]['app_type_id'] == 1,'is_true','app_type_id == 1');
+		$this->unit->run($result[0]['app_type'] == "Page Only",'is_true','app_type == "Page Only"');
 		$this->unit->run($result[0]['app_maintainance'],'is_string','app_maintainance');
 		$this->unit->run($result[0]['app_show_in_list'],'is_string','app_show_in_list');
 		$this->unit->run($result[0]['app_description'],'is_string','app_description');
@@ -44,7 +44,7 @@ class Company_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($result[0]['app_support_page_tab'],'is_string','app_support_page_tab');
 		$this->unit->run($result[0]['app_image'],'is_string','app_image');
-		$this->unit->run($result[0]['facebook_app_api_key'],'is_string','facebook_app_api_key');
+		$this->unit->run($result[0]['app_facebook_api_key'],'is_string','app_facebook_api_key');
 	}
 
 	/**

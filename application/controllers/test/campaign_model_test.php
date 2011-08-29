@@ -32,8 +32,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['campaign_name'],'is_string','campaign_name');
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
-		$this->unit->run($result[0]['campaign_status_id'],'is_string','campaign_status_id');
-		$this->unit->run($result[0]['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
+		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
@@ -41,11 +41,11 @@ class Campaign_model_test extends CI_Controller {
 		
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result[0]['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
-		$this->unit->run(count($result[0]) == 16,'is_true', 'number of column');
 	}	
 	
 	/**
@@ -59,9 +59,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['campaign_name'],'is_string','campaign_name');
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
-		$this->unit->run($result[0]['campaign_status_id'],'is_string','campaign_status_id');
-		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true','campaign_status_id');
-		$this->unit->run($result[0]['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
+		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
@@ -69,11 +68,11 @@ class Campaign_model_test extends CI_Controller {
 		
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result[0]['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
-		$this->unit->run(count($result[0]) == 16,'is_true', 'number of column');
 	}
 
 	/**
@@ -87,8 +86,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result['campaign_name'],'is_string','campaign_name');
 		$this->unit->run($result['campaign_detail'],'is_string','campaign_detail');
-		$this->unit->run($result['campaign_status_id'],'is_string','campaign_status_id');
-		$this->unit->run($result['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($result['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
+		$this->unit->run($result['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
 		$this->unit->run($result['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($result['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
@@ -96,11 +95,11 @@ class Campaign_model_test extends CI_Controller {
 		
 		$this->unit->run($result['company_id'],'is_string','company_id');
 		$this->unit->run($result['app_id'],'is_string','app_id');
-		$this->unit->run($result['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result['page_id'],'is_string','page_id');
 		$this->unit->run($result['app_install_secret_key'],'is_string','app_install_secret_key');
-		$this->unit->run(count($result) == 16,'is_true', 'number of column');	
 	}
 
 	/**
@@ -115,8 +114,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['campaign_name'],'is_string','campaign_name');
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
-		$this->unit->run($result[0]['campaign_status_id'],'is_string','campaign_status_id');
-		$this->unit->run($result[0]['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
+		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status == 1');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
@@ -124,11 +123,11 @@ class Campaign_model_test extends CI_Controller {
 		
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result[0]['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
-		$this->unit->run(count($result[0]) == 16,'is_true', 'number of column');	
 	}
 
 	/**
@@ -142,9 +141,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['campaign_name'],'is_string','campaign_name');
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
-		$this->unit->run($result[0]['campaign_status_id'],'is_string','campaign_status_id');
-		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true','campaign_status_id');
-		$this->unit->run($result[0]['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
+		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status == 1');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
@@ -152,11 +150,11 @@ class Campaign_model_test extends CI_Controller {
 		
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($result[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result[0]['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
-		$this->unit->run(count($result[0]) == 16,'is_true', 'number of column');
 	}
 	
 	/**

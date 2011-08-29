@@ -18,7 +18,8 @@ class User_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		$this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
 		$this -> db -> join('installed_apps', 'installed_apps.app_install_id=user_apps.app_install_id');
-		return $this -> db -> get_where('user', array('page_id' => $page_id)) -> result_array();
+		$result = $this -> db -> get_where('user', array('page_id' => $page_id)) -> result_array();
+		return $this->socialhappen->map_v($result, 'app_install_status');
 	}
 
 	/**

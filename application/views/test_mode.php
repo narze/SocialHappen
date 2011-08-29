@@ -8,7 +8,17 @@
 <body>
 <h1>You've reached SH beta page!</h1>
 <?php
-echo form_open('');
+$url = '';
+if(isset($_GET['next'])) {
+	$url = $_GET['next'];
+} else {
+	$host = $_SERVER['HTTP_HOST'];
+	$self = $_SERVER['PHP_SELF'];
+	$query = !empty($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
+	$url = !empty($query) ? "http://$host$self?$query" : "http://$host$self";
+	$url = str_replace("index.php/","",$url);
+}
+echo form_open($url);
 ?>
 		<ul>
 			<li>

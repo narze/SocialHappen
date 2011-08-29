@@ -80,7 +80,7 @@ class Api extends CI_Controller {
 											array(
 												'company_id' => $company_id,
 												'app_id' => $app_id,
-												'app_install_status' => TRUE,
+												'app_install_status_id' => $this->socialhappen->get_k("app_install_status", "Installed"),
 												'app_install_secret_key' => $app_install_secret_key
 											));
 											
@@ -697,7 +697,7 @@ class Api extends CI_Controller {
 								'campaign_id' => $campaign['campaign_id'],
 								'campaign_name' => $campaign['campaign_name'],
 								'campaign_status_id' => $campaign['campaign_status_id'],
-								'campaign_status_name' => $campaign['campaign_status_name']
+								'campaign_status_name' => $campaign['campaign_status']
 							);
 				}
 				echo json_encode($response);
@@ -771,7 +771,7 @@ class Api extends CI_Controller {
 								'campaign_name' => $campaign['campaign_name'],
 								'campaign_detail' => $campaign['campaign_detail'],
 								'campaign_status_id' => $campaign['campaign_status_id'],
-								'campaign_status_name' => $campaign['campaign_status_name'],
+								'campaign_status_name' => $campaign['campaign_status'],
 								'campaign_active_member' => $campaign['campaign_active_member'],
 								'campaign_all_member' => $campaign['campaign_all_member'],
 								'campaign_start_timestamp' => $campaign['campaign_start_timestamp'],
@@ -852,7 +852,7 @@ class Api extends CI_Controller {
 		$campaign_id = 0;
 				
 		if(!$campaign_status_id)
-			$campaign_status_id = '2';	// default = active
+			$campaign_status_id = $this->socialhappen->get_k('campaign_status',"Active");	// default = active
 			
 		$campaign_id = $this->Campaign->add_campaign(
 									array(

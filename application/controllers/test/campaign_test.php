@@ -32,8 +32,8 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($array['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($array['campaign_name'],'is_string','campaign_name');
 		$this->unit->run($array['campaign_detail'],'is_string','campaign_detail');
-		$this->unit->run($array['campaign_status_id'],'is_string','campaign_status_id');
-		$this->unit->run($array['campaign_status_name'],'is_string','campaign_status_name');
+		$this->unit->run($array['campaign_status_id'] == 1,'is_true','campaign_status_id == 1');
+		$this->unit->run($array['campaign_status'] == "Inactive",'is_true','campaign_status == "Inactive"');
 		$this->unit->run($array['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($array['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($array['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
@@ -41,11 +41,11 @@ class Campaign_test extends CI_Controller {
 		
 		$this->unit->run($array['company_id'],'is_string','company_id');
 		$this->unit->run($array['app_id'],'is_string','app_id');
-		$this->unit->run($array['app_install_status'],'is_string','app_install_status');
+		$this->unit->run($array['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($array['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($array['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($array['page_id'],'is_string','page_id');
 		$this->unit->run($array['app_install_secret_key'],'is_string','app_install_secret_key');
-		$this->unit->run(count($array) == 16,'is_true', 'number of column');
 	}
 
 	/**
@@ -66,7 +66,6 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($array[0]['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($array[0]['user_last_seen'],'is_string','user_last_seen');
 		$this->unit->run($array[0]['user_register_date'],'is_string','app_install_id');
-		$this->unit->run(count($array[0]) == 9,'is_true', 'number of column');
 	}
 	
 	/**

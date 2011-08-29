@@ -31,12 +31,14 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'] == 'Installed','is_true','app_install_status == Installed');
+		$this->unit->run($result[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result[0]['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
 		$this->unit->run($result[0]['app_name'],'is_string','app_name');
-		$this->unit->run($result[0]['app_type_id'],'is_string','app_type_id');
+		$this->unit->run($result[0]['app_type_id'] == 1,'is_true',"app_type_id == 1");
+		$this->unit->run($result[0]['app_type'] == "Page Only",'is_true',"app_type == 'Page Only");
 		$this->unit->run($result[0]['app_maintainance'],'is_string','app_maintainance');
 		$this->unit->run($result[0]['app_show_in_list'],'is_string','app_show_in_list');
 		$this->unit->run($result[0]['app_description'],'is_string','app_description');
@@ -59,12 +61,14 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result['company_id'],'is_string','company_id');
 		$this->unit->run($result['app_id'],'is_string','app_id');
-		$this->unit->run($result['app_install_status'] == 'Installed','is_true','app_install_status == Installed');
+		$this->unit->run($result['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result['page_id'],'is_string','page_id');
 		$this->unit->run($result['app_install_secret_key'],'is_string','app_install_secret_key');
 		$this->unit->run($result['app_name'],'is_string','app_name');
-		$this->unit->run($result['app_type_id'],'is_string','app_type_id');
+		$this->unit->run($result['app_type_id'] == 1,'is_true',"app_type_id == 1");
+		$this->unit->run($result['app_type'] == "Page Only",'is_true',"app_type == 'Page Only");
 		$this->unit->run($result['app_maintainance'],'is_string','app_maintainance');
 		$this->unit->run($result['app_show_in_list'],'is_string','app_show_in_list');
 		$this->unit->run($result['app_description'],'is_string','app_description');
@@ -88,7 +92,7 @@ class Installed_apps_model_test extends CI_Controller {
 		$installed_app = array(
 							'company_id' => '1',
 							'app_id' => '1',
-							'app_install_status' => '1',
+							'app_install_status_id' => '1',
 							'app_install_date' => '1',
 							'page_id' => '1',
 							'app_install_secret_key' => 'test'
@@ -122,12 +126,14 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_id'],'is_string','app_install_id');
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
-		$this->unit->run($result[0]['app_install_status'] == 'Installed','is_true','app_install_status == Installed');
+		$this->unit->run($result[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
+		$this->unit->run($result[0]['app_install_status'] == "Installed",'is_true','app_install_status == "Installed"');
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
 		$this->unit->run($result[0]['app_name'],'is_string','app_name');
-		$this->unit->run($result[0]['app_type_id'],'is_string','app_type_id');
+		$this->unit->run($result[0]['app_type_id'] == 1,'is_true',"app_type_id == 1");
+		$this->unit->run($result[0]['app_type'] == "Page Only",'is_true',"app_type == 'Page Only");
 		$this->unit->run($result[0]['app_maintainance'],'is_string','app_maintainance');
 		$this->unit->run($result[0]['app_show_in_list'],'is_string','app_show_in_list');
 		$this->unit->run($result[0]['app_description'],'is_string','app_description');

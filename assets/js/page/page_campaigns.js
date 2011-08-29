@@ -1,4 +1,5 @@
 $(function(){
+	var campaign_status_var = {"Inactive":1,"Active":2,"Expired":3};
 	var campaign_status_id = '';
 	Date.createFromMysql = function(mysql_string){ 
 	   if(typeof mysql_string === 'string')
@@ -57,13 +58,13 @@ $(function(){
 		
 		if($(this).hasClass('inactive-campaign')){
 			filtered = true;
-			campaign_status_id = 1;
+			campaign_status_id = campaign_status_var["Inactive"];
 		} else if($(this).hasClass('active-campaign')){
 			filtered = true;
-			campaign_status_id = 2;
+			campaign_status_id = campaign_status_var["Active"];
 		} else if($(this).hasClass('expired-campaign')){
 			filtered = true;
-			campaign_status_id = 3;
+			campaign_status_id = campaign_status_var["Expired"];
 		} else if($(this).hasClass('all-campaign')){
 			filtered = false;
 			campaign_status_id = '';

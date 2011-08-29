@@ -222,7 +222,7 @@ class Backend extends CI_Controller {
 								'app_secret_key' => md5($this->_generate_random_string())));
 			redirect('backend/dashboard');
 		}else{
-			$this->load->view('backend_views/add_new_app_view');	
+			$this->load->view('backend_views/add_new_app_view');
 		}
 	}
 	
@@ -283,7 +283,7 @@ class Backend extends CI_Controller {
 		$this->form_validation->set_rules($config); 
 		if($this->form_validation->run()){
 			$this->load->model('App_model', 'App');
-			$this->App->update(array('app_name' => $this->input->post('app_name', TRUE),
+			$this->App->update_app_by_app_id($app_id, array('app_name' => $this->input->post('app_name', TRUE),
 								'app_url' => str_replace(';', '', $this->input->post('app_url', TRUE)),
 								'app_install_url' => str_replace(';', '', $this->input->post('app_install_url', TRUE)),
 								'app_install_page_url' => str_replace(';', '', $this->input->post('app_install_page_url', TRUE)),
@@ -291,8 +291,8 @@ class Backend extends CI_Controller {
 								'app_support_page_tab' => $this->input->post('app_support_page_tab', FALSE) == 'app_support_page_tab',
 								'app_description' => $this->input->post('app_description', TRUE),
 								'app_type_id' => $this->input->post('app_type_id', TRUE),
-								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE))
-								, array('app_id' => $app_id));
+								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE)
+								));
 			redirect('backend');
 		}else{
 			$this->load->model('App_model', 'App');

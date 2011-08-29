@@ -24,7 +24,7 @@ class Company extends CI_Controller {
 						array(
 							'title' => $company['company_name'],
 							'vars' => array('company_id'=>$company_id
-											,'sh_default_fb_app_api_key'=>$this->config->item('sh_default_fb_app_api_key')
+											,'sh_default_fb_app_api_key'=>$this->config->item('facebook_app_id')
 											,'user_id'=>$this->session->userdata('user_id')),
 							'script' => array(
 								'common/functions',
