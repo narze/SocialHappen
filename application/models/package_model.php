@@ -42,6 +42,14 @@ class Package_model extends CI_Model {
 	function count_packages(){
 		return $this->db->count_all_results('package');
 	}
+	
+	function is_upgradable($package_id = NULL) {
+		$this->db->select_max('package_price');
+		$result = $this->db->get('package')->result_array();
+		$max_price = $result[0]['package_price'];
+		$current_package = $this->get_package_by_package_id($package_id);
+		return $current_package['package_price'] < $max_price;
+	}
 }
 
 /* End of file package_model.php */

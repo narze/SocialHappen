@@ -26,7 +26,9 @@
 			<?php } ?>
 		</li>
 	  </ul>
-	  <p><a class="bt-upgrade_package" href="#"><span>Upgrade</span></a></p>
+	  <?php if($is_upgradable) { ?>
+		<p><a class="bt-upgrade_package" href="<?php echo base_url().'home/package'; ?>"><span>Upgrade</span></a></p>
+	  <?php } ?>
 	  
 	</div>
   </div>

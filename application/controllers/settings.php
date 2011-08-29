@@ -377,8 +377,11 @@ class Settings extends CI_Controller {
 			$user_pages = $this->user_pages->get_user_pages_by_user_id($user_id);
 			
 			//Count members
-			
 			$members = $this->package_users->count_user_members_by_user_id($user_id);
+			
+			//is upgradable?
+			$this->load->model('package_model','package');
+			$is_upgradable = $this->package->is_upgradable($current_package['package_id']);
 			
 			$data = array(
 				'orders' => $orders,
@@ -386,7 +389,8 @@ class Settings extends CI_Controller {
 				'user_companies' => count($user_companies),
 				'user_pages' => count($user_pages),
 				'members' => $members,
-				'apps' => $apps
+				'apps' => $apps,
+				'is_upgradable' => $is_upgradable
 			);
 			$this->load->view('settings/package',$data);
 		}
