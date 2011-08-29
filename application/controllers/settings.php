@@ -86,7 +86,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function account($user_id = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		if($user_id && $user_id == $this->socialhappen->get_user_id()){
 			$user = $this->socialhappen->get_user();
 			$user_facebook = $this->facebook->getUser($user['user_facebook_id']);
@@ -135,7 +135,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function company_pages($user_id = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		if($user_id && $user_id == $this->socialhappen->get_user_id()){
 			$user_companies = $this->socialhappen->get_user_companies();
 			$this->load->model('page_model','pages');
@@ -148,7 +148,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function company($company_id = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array('role_company_edit'))){
 			//no access
 		} else {
@@ -201,7 +201,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function company_admin($company_id = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array('role_company_edit'))){
 			//no access
 		} else {
@@ -232,7 +232,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function page($page_id = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
@@ -309,7 +309,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function page_admin($page_id = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
@@ -346,7 +346,7 @@ class Settings extends CI_Controller {
 	}
 	
 	function package($user_id = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		if($user_id && $user_id == $this->socialhappen->get_user_id()){	
 			$this->load->view('settings/package',array());
 		}
