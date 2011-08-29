@@ -80,6 +80,9 @@ class Audit_action_model extends CI_Model {
 			if(isset($data['stat_campaign'])){
 				$data_to_add['stat_campaign'] = $data['stat_campaign'];
 			}
+			if(isset($data['score'])){
+				$data_to_add['score'] = $data['score'];
+			}
 
 			$this->actions->insert($data_to_add);
 			return TRUE;
@@ -93,7 +96,7 @@ class Audit_action_model extends CI_Model {
 	 * 
 	 * @param app_id
 	 * @param action_id
-	 * @param data 
+	 * @param data
 	 * 
 	 * @return result boolean
 	 * 
