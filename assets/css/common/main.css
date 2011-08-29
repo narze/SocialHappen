@@ -203,3 +203,8 @@ div.popup_create-company ul>li textarea {
 	background-position:-30px -250px;
 	color:fff;
 }
+
+/* Setting > Package/Billing */
+div.box-current_package div.package-overlay {
+	top:171px;
+}
