@@ -38,7 +38,7 @@ class Payment extends CI_Controller {
 		$this->socialhappen->check_logged_in( base_url().'home/facebook_connect?package_id='.set_value('package_id') );
 		
 		$this->form_validation->set_rules('package_id', 'Package ID', 'required|trim|xss_clean');
-		$this->form_validation->set_rules('payment_method', 'Payment method', 'required|trim|xss_clean|max_length[255]');
+		$this->form_validation->set_rules('payment_method', 'Payment method', 'trim|xss_clean|max_length[255]');
 		/*
 		if(set_value('payment_method') == 'credit_card') 
 		{
@@ -53,26 +53,12 @@ class Payment extends CI_Controller {
 		$this->load->model('package_model','packages');
 		$user = $this->socialhappen->get_user();
 		
-		$options = array();
-		$packages = $this->packages->get_packages();
-		foreach($packages as $package) {
-			$price = $package['package_price'] ? ' ('.$package['package_price'].'THB' : ' (FREE)';
-			$duration = $package['package_duration'] ? '/'.$package['package_duration'].')' : '';
-			$options[$package['package_id']] = $package['package_name'].$price.$duration;
-        }
-		unset($package);
-		
 		if ($this->form_validation->run() == FALSE) //
 		{
 			$selected_package = $this->packages->get_package_by_package_id($this->input->get('package_id'));
-			if (!$selected_package) {
-				$selected_package = $packages[0];
-			}
 			$this->load->view('payment/payment_form', 
 					array(
-						'packages' => $packages,
 						'selected_package' => $selected_package,
-						'options' => $options
 					)
 			);
 		}
