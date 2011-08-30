@@ -6,6 +6,7 @@ $(function(){
 		$('.payment-form').ajaxSubmit({
 			async:true,
 			success: function(data){
+				alert("You will now be directed to Paypal's website to continue your order");
 				window.location = data;
 			}
 		});
@@ -14,11 +15,13 @@ $(function(){
 	
 	$('div.popup_payment-confirm a.bt-continue').live('click', function() {
 
+		var loading = $('<img src="'+base_url+'assets/images/loading.gif" />');
+		$('a.bt-continue').after(loading).hide();
 		$('.payment-form').ajaxSubmit({
 			async:true,
 			success: function(json){
+				//console.log(json);
 				json = JSON.parse(json);
-				console.log(json);
 				if(json.status == 'OK')
 				{
 					$.fancybox({
@@ -26,7 +29,9 @@ $(function(){
 						transitionIn: 'elastic',
 						transitionOut: 'elastic',
 						padding: 0,
-						scrolling: 'no'
+						scrolling: 'no',
+						hideOnOverlayClick: false,
+						showCloseButton: false
 					});
 				} 
 				else

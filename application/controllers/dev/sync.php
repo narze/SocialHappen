@@ -331,7 +331,7 @@ class Sync extends CI_Controller {
 							'order' => array(
 								'order_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 								'order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-								'order_status' => field_option('INT', 10, $default, $null, $autoinc, TRUE),
+								'order_status_id' => field_option('INT', 10, $default, $null, $autoinc, TRUE),
 								'order_net_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
 								'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 								'payment_method' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
@@ -340,7 +340,7 @@ class Sync extends CI_Controller {
 							'order_items' => array(
 								'order_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 								'item_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
-								'item_type' => field_option('INT', 10, $default, $null, $autoinc, TRUE),
+								'item_type_id' => field_option('INT', 10, $default, $null, $autoinc, TRUE),
 								'item_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'item_description' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 								'item_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
@@ -380,7 +380,7 @@ class Sync extends CI_Controller {
 						'package_users' => array('user_id'),
 						'package_apps' => array('package_id','app_id'),
 						'order' => array('order_id'),
-						'order_items' => array('order_id','item_id', 'item_type'),
+						'order_items' => array('order_id','item_id', 'item_type_id'),
 						'page_user_data' => array('user_id','page_id')
 					);
 		$tables = array(
@@ -1255,7 +1255,7 @@ class Sync extends CI_Controller {
 			array(
 				'order_id' => 1,
 				'order_date' => '2011-08-18 16:33:00',
-				'order_status' => 2,
+				'order_status_id' => 2,
 				'order_net_price' => 999,
 				'user_id' => 1,
 				'payment_method' => 'paypal',
@@ -1264,11 +1264,11 @@ class Sync extends CI_Controller {
 			array(
 				'order_id' => 2,
 				'order_date' => '2011-08-18 17:12:00',
-				'order_status' => 1,
+				'order_status_id' => 1,
 				'order_net_price' => 999,
 				'user_id' => 1,
 				'payment_method' => 'paypal',
-				'billing_info' => 'a:7:{s:15:"user_first_name";s:8:"Weerapat";s:14:"user_last_name";s:6:"Poosri";s:10:"user_email";s:17:"tong@figabyte.com";s:18:"credit_card_number";s:0:"";s:24:"credit_card_expire_month";s:0:"";s:23:"credit_card_expire_year";s:0:"";s:15:"credit_card_csc";s:0:"";}'
+				'billing_info' => 'a:12:{s:15:"user_first_name";s:8:"Weerapat";s:14:"user_last_name";s:6:"Poosri";s:10:"user_email";s:17:"tong@figabyte.com";s:18:"credit_card_number";s:0:"";s:24:"credit_card_expire_month";s:0:"";s:23:"credit_card_expire_year";s:0:"";s:15:"credit_card_csc";s:0:"";s:8:"payer_id";s:13:"GEYCL6WB86N62";s:6:"txn_id";s:17:"9CP746008S6070136";s:14:"payment_status";s:9:"Completed";s:14:"pending_reason";s:4:"None";s:11:"reason_code";s:4:"None";}'
 			)
 		);
 		$this->db->insert_batch('order', $order);
@@ -1277,7 +1277,7 @@ class Sync extends CI_Controller {
 			array(
 				'order_id' => 1,
 				'item_id' => 2,
-				'item_type' => 1,
+				'item_type_id' => 1,
 				'item_name' => 'Enterprise package',
 				'item_description' => 'For enterprise',
 				'item_price' => 999,
@@ -1287,7 +1287,7 @@ class Sync extends CI_Controller {
 			array(
 				'order_id' => 2,
 				'item_id' => 2,
-				'item_type' => 1,
+				'item_type_id' => 1,
 				'item_name' => 'Enterprise package',
 				'item_description' => 'For enterprise',
 				'item_price' => 999,

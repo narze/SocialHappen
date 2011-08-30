@@ -174,7 +174,6 @@ class Payment extends CI_Controller {
 		$this->load->model('order_model','orders');
 		$order = $this->orders->get_order_by_order_id($order_id);
 		$order['billing_info'] = unserialize($order['billing_info']);
-		//print_r($order);
 		
 		$this->load->model('order_items_model','order_items');
 		$order_items = $this->order_items->get_order_items_by_order_id($order_id);
@@ -237,43 +236,59 @@ class Payment extends CI_Controller {
 				'order_items' => $order_items,
 				'user' => $user
 			);
-			if($this->_get_express_checkout_details($data))
+			//Get express checkout details
+			$PayPalResult = $this->_get_express_checkout_details($data);
+			
+			if($PayPalResult['ERRORS']) 
 			{
-				if($this->_do_express_checkout_payment($data))
-				{
-					//Update order status to "Processed"
-					$update_data = array(
-						'order_status_id' => $this->socialhappen->get_k('order_status', 'Processed')
-					);
-					if( $result = $this->orders->update_order_by_order_id($order['order_id'], $update_data) )
-					{
-						//echo '<pre>'; print_r($result); echo '</pre>';
-						//$this->load->view('payment/payment_complete');
-						echo json_encode(array('status' => 'OK'));
-					}
-					else
-					{
-						echo json_encode(array(
-								'status' => 'ERROR',
-								'message' => 'Error while updating order stutus'
-							)
-						);
-					}
-				}
-				else
-				{
-					echo json_encode(array(
-							'status' => 'ERROR',
-							'message' => 'Error while getting checkout details'
-						)
-					);
-				}
+				echo json_encode(array(
+						'status' => 'ERROR',
+						'message' => 'Error while getting checkout details'
+					)
+				);
+				exit();
+			
+			}
+			$order['billing_info']['payer_id'] = issetor($PayPalResult['PAYERID']);
+			unset($PayPalResult);
+			
+			//Do express checkout payment
+			$PayPalResult = $this->_do_express_checkout_payment($data);
+			
+			if($PayPalResult['ERRORS'])
+			{
+				echo json_encode(array(
+						'status' => 'ERROR',
+						'message' => 'Error while checking out.'
+					)
+				);
+				exit();
+			}
+			
+			//Update order status to "Processed" and Update billing info form paypal
+			$order['billing_info']['txn_id'] = issetor($PayPalResult['PAYMENTS'][0]['TRANSACTIONID']);
+			$order['billing_info']['payment_status'] = issetor($PayPalResult['PAYMENTS'][0]['PAYMENTSTATUS']);
+			$order['billing_info']['pending_reason'] = issetor($PayPalResult['PAYMENTS'][0]['PENDINGREASON']);
+			$order['billing_info']['reason_code'] = issetor($PayPalResult['PAYMENTS'][0]['REASONCODE']);
+			//$order['billing_info'] = array_merge($order['billing_info'], $PayPalResult);
+			$update_data = array(
+				'order_status_id' => $this->socialhappen->get_k('order_status', 'Processed'),
+				'billing_info' => serialize($order['billing_info'])
+			);
+			if( $this->orders->update_order_by_order_id($order['order_id'], $update_data) )
+			{
+				//Payment complete
+				echo json_encode(array(
+						'status' => 'OK',
+						'message' => 'Payment complete'
+					)
+				);
 			}
 			else
 			{
 				echo json_encode(array(
 						'status' => 'ERROR',
-						'message' => 'There was an error processing your payment'
+						'message' => 'Error while updating order status'
 					)
 				);
 			}
@@ -297,19 +312,53 @@ class Payment extends CI_Controller {
 	 */
 	function paypal_listener()
 	{
-		//echo '<pre>';print_r($this->input->get());echo '</pre>';
-		$order = array(
-			'order_id' => NULL,
-			'order_date' => NULL,
-			'order_status_id' => 11,
-			'order_net_price' => 800,
-			'user_id' => 6,
-			'payment_method' => 'paypal-refund',
-			'billing_info' => serialize($_REQUEST)
-		);
+		if (!in_array($_SERVER['REMOTE_ADDR'], array('216.113.188.202','216.113.188.203','216.113.188.204','66.211.170.66'))) { header("HTTP/1.0 404 Not Found"); exit(); }
+		//$_REQUEST = unserialize('a:27:{s:8:"test_ipn";s:1:"1";s:12:"payment_type";s:7:"instant";s:12:"payment_date";s:25:"23:49:12 Aug 28, 2011 PDT";s:14:"payment_status";s:8:"Refunded";s:12:"payer_status";s:8:"verified";s:10:"first_name";s:4:"John";s:9:"last_name";s:5:"Smith";s:11:"payer_email";s:23:"buyer@paypalsandbox.com";s:8:"payer_id";s:13:"TESTBUYERID01";s:8:"business";s:24:"seller@paypalsandbox.com";s:14:"receiver_email";s:24:"seller@paypalsandbox.com";s:11:"receiver_id";s:13:"TESTSELLERID1";s:17:"residence_country";s:2:"US";s:8:"quantity";s:1:"1";s:8:"shipping";s:4:"3.04";s:3:"tax";s:4:"2.02";s:11:"mc_currency";s:3:"USD";s:6:"mc_fee";s:5:"-0.44";s:8:"mc_gross";s:6:"-12.34";s:8:"txn_type";s:10:"web_accept";s:6:"txn_id";s:8:"12830649";s:13:"parent_txn_id";s:17:"EARLIERTRANSID001";s:14:"notify_version";s:3:"2.1";s:11:"reason_code";s:6:"refund";s:6:"custom";s:6:"xyz123";s:7:"charset";s:12:"windows-1252";s:11:"verify_sign";s:56:"ATCphFG86.fZzLxvM22gzNaDwjDFAZnm2N.uexNJ6tVTv8TSXm5CXc-G";}');
+		//$_REQUEST = unserialize('a:36:{s:8:"test_ipn";s:1:"1";s:12:"payment_type";s:7:"instant";s:12:"payment_date";s:25:"00:27:31 Aug 30, 2011 PDT";s:14:"payment_status";s:17:"Canceled_Reversal";s:14:"address_status";s:9:"confirmed";s:12:"payer_status";s:8:"verified";s:10:"first_name";s:4:"John";s:9:"last_name";s:5:"Smith";s:11:"payer_email";s:23:"buyer@paypalsandbox.com";s:8:"payer_id";s:13:"TESTBUYERID01";s:12:"address_name";s:10:"John Smith";s:15:"address_country";s:13:"United States";s:20:"address_country_code";s:2:"US";s:13:"address_state";s:2:"CA";s:11:"address_zip";s:5:"95131";s:12:"address_city";s:8:"San Jose";s:14:"address_street";s:15:"123, any street";s:8:"business";s:24:"seller@paypalsandbox.com";s:14:"receiver_email";s:24:"seller@paypalsandbox.com";s:11:"receiver_id";s:13:"TESTSELLERID1";s:17:"residence_country";s:2:"US";s:9:"item_name";s:9:"something";s:11:"item_number";s:7:"AK-1234";s:8:"quantity";s:1:"1";s:8:"shipping";s:4:"3.04";s:11:"mc_currency";s:3:"USD";s:6:"mc_fee";s:4:"0.44";s:8:"mc_gross";s:5:"12.34";s:6:"txn_id";s:8:"31830727";s:14:"notify_version";s:3:"2.1";s:13:"parent_txn_id";s:17:"SOMEPRIORTXNID003";s:11:"reason_code";s:5:"other";s:6:"custom";s:6:"xyz123";s:7:"invoice";s:7:"abc1234";s:7:"charset";s:12:"windows-1252";s:11:"verify_sign";s:56:"An5ns1Kso7MWUdW4ErQKJJJ4qi4-A0-qjJHaZqW71I928TMGWaW15gIl";}');
+		//echo '<pre>';print_r($_REQUEST);echo '</pre>';
 		
-		$this->load->model('order_model','orders');
-		$this->orders->add_order($order);
+		$response = $_REQUEST;
+		switch(strtolower($response['payment_status']))
+		{
+			case 'canceled_reversal' : //Canceled_Reversal: A reversal has been canceled. For example, you won a dispute with the customer, and the funds for the transaction that was reversed have been returned to you.
+				break;
+			case 'completed' : //Completed: The payment has been completed, and the funds have been added successfully to your account balance.
+				break;
+			case 'created' : //Created: A German ELV payment is made using Express Checkout.
+				break;
+			case 'denied' : //Denied: You denied the payment. This happens only if the payment was previously pending because of possible reasons described for the pending_reason variable or the Fraud_Management_Filters_x variable.
+				break;
+			case 'expired' : //Expired: This authorization has expired and cannot be captured.
+				break;
+			case 'failed' : //Failed: The payment has failed. This happens only if the payment was made from your customer’s bank account.
+				break;
+			case 'pending' : //Pending: The payment is pending. See pending_reason for more information.
+				break;
+			case 'refunded' : //Refunded: You refunded the payment.
+				$this->load->model('order_model','orders');
+				$order = $this->orders->get_order_by_txn_id($response['txn_id']);
+				$result = true;
+				
+				//Switch to Free package
+				$this->load->model('package_users_model','package_users');
+				$data = array('package_id'=>1, 'package_expire'=>date('Y-m-d H:i:s'));
+				if(!$this->package_users->update_package_user_by_user_id($order['user_id'], $data)) $result = false;
+				
+				//Change order status
+				$data = array('order_status_id' => $this->socialhappen->get_k('order_status', 'Refunded'));
+				if(!$this->orders->update_order_by_order_id($order['order_id'], $data)) $result = false;
+				
+				if($result) { echo 'Order status changed to "Refunded"'; }
+				
+				break;
+			case 'reversed' : //Reversed: A payment was reversed due to a chargeback or other type of reversal. The funds have been removed from your account balance and returned to the buyer. The reason for the reversal is specified in the ReasonCode element.
+				break;
+			case 'processed' : //Processed: A payment has been accepted.
+				break;
+			case 'voided' : //Voided: This authorization has been voided.
+				break;
+			default : break;
+		}
 	}
 	
 	/**
@@ -511,12 +560,12 @@ class Payment extends CI_Controller {
 		{
 			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
 			//$this->load->view('payment/paypal_error',$errors);
-			return false;
+			return $PayPalResult;
 		}
 		else
 		{
 			// Successful call.  Load view or whatever you need to do here.	
-			return true;
+			return $PayPalResult;
 		}
 	}
 	
@@ -647,12 +696,12 @@ class Payment extends CI_Controller {
 		{
 			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
 			//$this->load->view('payment/paypal_error',$errors);
-			return false;
+			return $PayPalResult;
 		}
 		else
 		{
 			// Successful call.  Load view or whatever you need to do here.	
-			return true;
+			return $PayPalResult;
 		}
 	}
 }
