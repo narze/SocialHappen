@@ -9,10 +9,16 @@
 <div class="wrapper-content">
 	<div>		
 		{company_profile}
-		<div class="wrapper-drag_drop">
-			{company_dashboard_tabs}
-			{company_dashboard_right_panel}
-		</div>
+		<?php
+			if($is_package_over_the_limit) { ?>
+				{package_limited}<?php 
+			} else { ?>
+			<div class="wrapper-drag_drop">
+				{company_dashboard_tabs}
+				{company_dashboard_right_panel}
+			</div><?php
+			} ?>
+		
 	</div>
 	<div class="bottom"><!--bottom--></div>
 </div>

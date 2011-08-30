@@ -539,14 +539,43 @@ class SocialHappen{
 	 * @author Manassarn M.
 	 */
 	function check_package_by_user_id_and_mode($user_id = NULL, $mode = NULL){
-		$this->load->model("package_model","packages");
+		$this->CI->load->model("package_users_model","package_users");
 		if($mode == "company"){
-			return $this->packages->check_user_package_can_add_company($user_id);
+			return $this->CI->package_users->check_user_package_can_add_company($user_id);
 		} else if ($mode == "page"){
-			return $this->packages->check_user_package_can_add_page($user_id);
+			return $this->CI->package_users->check_user_package_can_add_page($user_id);
 		} else if ($mode == "user"){
-			return $this->packages->check_user_package_can_add_user($user_id);
+			return $this->CI->package_users->check_user_package_can_add_user($user_id);
 		} else return FALSE;
+	}
+	
+	/**
+	 * Check package over the limit
+	 * @param $user_id
+	 * @author Weerapat P.
+	 */
+	function ckeck_package_over_the_limit_by_user_id($user_id = NULL){
+		//Get current package
+		$this->CI->load->model('package_users_model','package_users');
+		$current_package = $this->CI->package_users->get_package_by_user_id($user_id);
+		
+		//Count user companies
+		$this->CI->load->model('company_model','companies');
+		$user_companies = count($this->CI->companies->get_companies_by_user_id($user_id));
+		
+		//Count user pages
+		$this->CI->load->model('user_pages_model','user_pages');
+		$user_pages = count($this->CI->user_pages->get_user_pages_by_user_id($user_id));
+		
+		//Count members
+		$members = $this->CI->package_users->count_user_members_by_user_id($user_id);
+		
+		$over = false;
+		if($user_companies > $current_package['package_max_companies']) $over = true;
+		if($user_pages > $current_package['package_max_pages']) $over = true;
+		if($members > $current_package['package_max_users']) $over = true;
+		
+		return $over;
 	}
 	
 }
