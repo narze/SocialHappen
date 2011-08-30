@@ -151,6 +151,93 @@ class Page_model extends CI_Model {
 		$this->db->join('installed_apps','page.page_id=installed_apps.page_id');
 		return $this->db->count_all_results('page');
 	}
+	
+	/**
+	 * Add page user fields
+	 * @param $page_id
+	 * @param array $fields
+	 * @author Manassarn M.
+	 */
+	function add_page_user_fields_by_page_id($page_id = NULL, $fields = array()){
+		if(!$fields || !$page = $this->get_page_profile_by_page_id($page_id)){
+			return FALSE;
+		}
+		$page_fields = json_decode($page['page_user_fields'], TRUE);
+		$added_ids = array();
+		foreach($fields as $field){
+			if(!issetor($field['name']) || !issetor($field['type']) || !issetor($field['label']) ||
+				!in_array($field['type'], array('text','textarea','checkbox','radio'))) {
+				return FALSE;
+			}
+			$page_fields[] = $field;
+			end($page_fields);
+			$added_ids[] = key($page_fields);
+		}
+		if($this->update_page_profile_by_page_id($page_id, array('page_user_fields' => json_encode($page_fields)))){
+			return $added_ids;
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Get page user fields
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function get_page_user_fields_by_page_id($page_id = NULL){
+		if(!$page = $this->get_page_profile_by_page_id($page_id)){
+			return FALSE;
+		}
+		return json_decode($page['page_user_fields'], TRUE);
+	}
+	
+	/**
+	 * Update page user fields
+	 * @param $page_id
+	 * @param array $fields
+	 * @author Manassarn M.
+	 */
+	function update_page_user_fields_by_page_id($page_id = NULL, $fields = array()){
+		if(!$fields || !$page = $this->get_page_profile_by_page_id($page_id)){
+			return FALSE;
+		}
+		$page_fields = json_decode($page['page_user_fields'], TRUE);
+		foreach($fields as $key => $field){
+			if(!isset($page_fields[$key]) ||
+				(isset($field['name']) && !$field['name']) || 
+				(isset($field['label']) && !$field['label']) ||
+				(isset($field['type']) && !in_array($field['type'], array('text','textarea','checkbox','radio'))) ||
+				(isset($field['type']) &&  in_array($field['type'], array('checkbox','radio')) && !issetor($field['items']))
+			){
+				return FALSE;
+			}
+			foreach($field as $field_key => $field_value){
+				$page_fields[$key][$field_key] = $field_value;
+			}
+		}
+		return $this->update_page_profile_by_page_id($page_id, array('page_user_fields' => json_encode($page_fields)));
+	}
+	
+	/**
+	 * Remove page user fields
+	 * @param $page_id
+	 * @param array $ids
+	 * @author Manassarn M.
+	 */
+	function remove_page_user_fields_by_page_id($page_id = NULL, $ids = array()){
+		if(!$ids || !$page = $this->get_page_profile_by_page_id($page_id)){
+			return FALSE;
+		}
+		$page_fields = json_decode($page['page_user_fields'], TRUE);
+		foreach($ids as $id){
+			if(!isset($page_fields[$id])){
+				return FALSE;
+			}
+			unset($page_fields[$id]);
+		}
+		return $this->update_page_profile_by_page_id($page_id, array('page_user_fields' => json_encode($page_fields)));
+	}
 }
 /* End of file page_model.php */
 /* Location: ./application/models/page_model.php */

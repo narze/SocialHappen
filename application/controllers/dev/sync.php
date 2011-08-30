@@ -215,7 +215,7 @@ class Sync extends CI_Controller {
 								'page_status_id' => field_option('INT', 1, 1, $null, $autoinc, TRUE),
 								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
-								'page_user_fields' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+								'page_user_fields' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -695,7 +695,26 @@ class Sync extends CI_Controller {
 						    'page_all_member' => 22, 
 						    'page_new_member' => 222, 
 						    'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
-							'page_user_fields' => 'size,color'
+							'page_user_fields' => json_encode(array(
+								1 => array(
+									'name' => 'size',
+									'label' => 'Shirt size',
+									'type' => 'radio',
+									'required' => FALSE,
+									'rules' => NULL,
+									'items' => array(1=>'S',2=>'M',3=>'L',4=>'XL'),
+									'order' => 1
+									),
+								2 => array(
+									'name' => 'color',
+									'label' => 'Shirt color',
+									'type' => 'text',
+									'required' => FALSE,
+									'rules' => NULL,
+									'items' => NULL,
+									'order' => 2
+								)
+							))
 					),
 					array(
 						'page_id' => 2, 
@@ -706,7 +725,47 @@ class Sync extends CI_Controller {
 						'page_all_member' => 10, 
 						'page_new_member' => 100, 
 						'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
-						'page_user_fields' => 'size,color'
+						'page_user_fields' => json_encode(array(
+								1 => array(
+									'name' => 'size',
+									'label' => 'Shirt size',
+									'type' => 'radio',
+									'required' => TRUE,
+									'rules' => NULL,
+									'items' => array(1=>'S',2=>'M',3=>'L',4=>'XL'),
+									'order' => 1
+									),
+								2 => array(
+									'name' => 'color',
+									'label' => 'Shirt color',
+									'type' => 'text',
+									'required' => FALSE,
+									'rules' => NULL,
+									'items' => NULL,
+									'order' => 2
+								),
+								3 => array(
+									'name' => 'checkbox_name',
+									'label' => 'Checkbox',
+									'type' => 'checkbox',
+									'required' => FALSE,
+									'rules' => NULL,
+									'items' => array('value1' => 'Label 1', 'value2' => 'Label 2', 'value3' => 'Label 3'),
+									'order' => 3
+								)
+								
+							))
+					),
+					array(
+						'page_id' => 3, 
+						'facebook_page_id' => '135287989899131', 
+						'company_id' => 1, 
+						'page_name' => 'SH Beta', 
+						'page_detail' => 'detail', 
+						'page_all_member' => 10, 
+						'page_new_member' => 100, 
+						'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						'page_user_fields' => NULL
 					),
 				);
 		$this->db->insert_batch('page', $page);
@@ -1169,32 +1228,32 @@ class Sync extends CI_Controller {
 			array(
 				'user_id' => 1,
 				'page_id' => 1,
-				'user_data' => json_encode(array('size' => 'L', 'color' => 'red'))
+				'user_data' => json_encode(array(1 => 'L', 2 => 'red'))
 			),
 			array(
 				'user_id' => 2,
 				'page_id' => 1,
-				'user_data' => json_encode(array('size' => 'S', 'color' => 'blue'))
+				'user_data' => json_encode(array(1 => 'S', 2 => 'blue'))
 			),
 			array(
 				'user_id' => 3,
 				'page_id' => 1,
-				'user_data' => json_encode(array('size' => 'M', 'color' => 'red'))
+				'user_data' => json_encode(array(1 => 'M', 2 => 'red'))
 			),
 			array(
 				'user_id' => 4,
 				'page_id' => 1,
-				'user_data' => json_encode(array('size' => 'S', 'color' => 'blue'))
+				'user_data' => json_encode(array(1 => 'S', 2 => 'blue'))
 			),
 			array(
 				'user_id' => 5,
 				'page_id' => 1,
-				'user_data' => json_encode(array('size' => 'L', 'color' => 'blue'))
+				'user_data' => json_encode(array(1 => 'L', 2 => 'blue'))
 			),
 			array(
 				'user_id' => 6,
 				'page_id' => 1,
-				'user_data' => json_encode(array('size' => 'L', 'color' => 'red'))
+				'user_data' => json_encode(array(1 => 'L', 2 => 'red'))
 			)
 		);
 		$this->db->insert_batch('page_user_data', $page_user_data);
