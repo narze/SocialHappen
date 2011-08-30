@@ -73,7 +73,7 @@ class Payment extends CI_Controller {
 			$order = array(
 		       	'order_id' => NULL,
 				'order_date' => NULL,
-				'order_status' => NULL,
+				'order_status_id' => NULL,
 				'order_net_price' => ($package['package_price'] * $item_unit) * (1-($item_discount/100)),
 				'user_id' => $user['user_id'],
 				'payment_method' => NULL,
@@ -92,12 +92,12 @@ class Payment extends CI_Controller {
 			if($order['order_net_price'] > 0) // Comercial package
 			{
 				$order['payment_method'] = set_value('payment_method');
-				$order['order_status'] = $this->socialhappen->get_k('order_status', 'Pending');
+				$order['order_status_id'] = $this->socialhappen->get_k('order_status', 'Pending');
 			}
 			else // Free package
 			{
 				$order['payment_method'] = '';
-				$order['order_status'] = $this->socialhappen->get_k('order_status', 'Processed');
+				$order['order_status_id'] = $this->socialhappen->get_k('order_status', 'Processed');
 			}
 			$this->load->model('order_model','orders');
 			if(!$order['order_id'] = $this->orders->add_order($order)) { $transaction_status = false; }
@@ -107,7 +107,7 @@ class Payment extends CI_Controller {
 				array(
 					'order_id' => $order['order_id'],
 					'item_id' => $package['package_id'],
-					'item_type' => $this->socialhappen->get_k('item_type', 'Package'),
+					'item_type_id' => $this->socialhappen->get_k('item_type', 'Package'),
 					'item_name' => $package['package_name'],
 					'item_description' => $package['package_detail'],
 					'item_price' => $package['package_price'],
@@ -243,7 +243,7 @@ class Payment extends CI_Controller {
 				{
 					//Update order status to "Processed"
 					$update_data = array(
-						'order_status' => $this->socialhappen->get_k('order_status', 'Processed')
+						'order_status_id' => $this->socialhappen->get_k('order_status', 'Processed')
 					);
 					if( $result = $this->orders->update_order_by_order_id($order['order_id'], $update_data) )
 					{
@@ -289,6 +289,27 @@ class Payment extends CI_Controller {
 	{
 		$this->socialhappen->ajax_check();
 		$this->load->view('payment/payment_complete');
+	}
+	
+	/**
+	 * Recieve paypal notifications
+	 * @author Weerapat P.
+	 */
+	function paypal_listener()
+	{
+		//echo '<pre>';print_r($this->input->get());echo '</pre>';
+		$order = array(
+			'order_id' => NULL,
+			'order_date' => NULL,
+			'order_status_id' => 11,
+			'order_net_price' => 800,
+			'user_id' => 6,
+			'payment_method' => 'paypal-refund',
+			'billing_info' => serialize($_REQUEST)
+		);
+		
+		$this->load->model('order_model','orders');
+		$this->orders->add_order($order);
 	}
 	
 	/**
@@ -367,7 +388,7 @@ class Payment extends CI_Controller {
 						'desc' => '', 							// Description of items on the order.  127 char max.
 						'custom' => '', 						// Free-form field for your own use.  256 char max.
 						'invnum' => '', 						// Your own invoice or tracking number.  127 char max.
-						'notifyurl' => '', 						// URL for receiving Instant Payment Notifications
+						'notifyurl' => base_url().'payment/paypal_listener', 						// URL for receiving Instant Payment Notifications
 						'shiptoname' => '', 					// Required if shipping is included.  Person's name associated with this address.  32 char max.
 						'shiptostreet' => '', 					// Required if shipping is included.  First street address.  100 char max.
 						'shiptostreet2' => '', 					// Second street address.  100 char max.
@@ -545,7 +566,7 @@ class Payment extends CI_Controller {
 						'desc' => '', 							// Description of items on the order.  127 char max.
 						'custom' => '', 						// Free-form field for your own use.  256 char max.
 						'invnum' => '', 						// Your own invoice or tracking number.  127 char max.
-						'notifyurl' => '', 						// URL for receiving Instant Payment Notifications
+						'notifyurl' => base_url().'payment/paypal_listener', 						// URL for receiving Instant Payment Notifications
 						'shiptoname' => '', 					// Required if shipping is included.  Person's name associated with this address.  32 char max.
 						'shiptostreet' => '', 					// Required if shipping is included.  First street address.  100 char max.
 						'shiptostreet2' => '', 					// Second street address.  100 char max.
