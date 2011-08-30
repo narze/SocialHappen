@@ -238,17 +238,31 @@ class Achievement_lib
 	 * set achievement stat
 	 * @param app_id int
 	 * @param user_id int user_id
-	 * @param info array of data to set ex. array('friend' => 5)
+	 * @param data array of data to set ex. array('friend' => 5)
 	 * 				*array's key cannot be 'action' or 'score'
-	 * 
+	 * @param info array of data to add 
+	 * 				may contain['app_install_id' ,'page_id', 'campaign_id']
+	 * 				ex. array('app_install_id'=>2)
+	 * 				app_install_id is required*
 	 * @return result boolean
 	 */
 	function set_achievement_stat(
-		$app_id = NULL, $user_id = NULL, $info = array()){
-		if(empty($user_id) || empty($app_id) || empty($info)) return FALSE;
-		$this->CI->load->model('achievement_stat_model','achievement_stat');
+		$app_id = NULL, $user_id = NULL, $data = array(), $info = array()){
+		if(empty($user_id) || empty($app_id) || empty($data) || empty($info)||
+			 empty($info['app_install_id'])){ echo 'fail'; return FALSE; }
 		
-		return $this->CI->achievement_stat->set($app_id, $user_id, $info);
+		$keys = array_keys($data);
+		$check_args = TRUE;
+		foreach ($keys as $key => $value) {
+			if(preg_match("/^((action.?)|(score.?))+/", $value)){
+				return FALSE;
+			}
+		}
+				 
+		$this->CI->load->model('achievement_stat_model','achievement_stat');
+		$result = $this->CI->achievement_stat->set($app_id, $user_id, $data);
+		$this->_test_reward_achievement($app_id, $user_id, $info);
+		return $result;
 	}
 	
 	/**
@@ -279,73 +293,100 @@ class Achievement_lib
 			$user_id, $info, $amount);
 		
 		if($increment_result){
-			$this->CI->load->model('achievement_user_model','achievement_user');
-			$user_achieved = $this->CI->achievement_user->list_user(
-				array('user_id' => $user_id, 'app_id' => $app_id));
-			
-			$user_achieved_id_list = array();
-			foreach ($user_achieved as $achieved){
-				$user_achieved_id_list[] = $achieved['achievement_id']['$id'];
+			if(isset($info['action_id'])){
+				$this->_increment_platform_score($user_id, $app_id, $info['action_id'], $amount);
 			}
-
-			//echo '<br/>$user_achieved_id_list:<br/>';
-			//var_dump($user_achieved_id_list);
-			
-			if(count($user_achieved_id_list) > 0 ){
-				$candidate_achievement_criteria = 
-					array('$nin' => array('_id', $user_achieved_id_list),
-					 			'app_id' => $app_id);
-			}else{
-				$candidate_achievement_criteria = array('app_id' => $app_id);
-			}
-			
-			if(isset($info['page_id'])){
-				$candidate_achievement_criteria['page_id'] = $info['page_id'];
-			}
-			
-			if(isset($info['campaign_id'])){
-				$candidate_achievement_criteria['campaign_id'] = $info['campaign_id'];
-			}
-			
-			//echo '<br/>$candidate_achievement_criteria:<br/>';
-			//var_dump($candidate_achievement_criteria);
-			
-			$this->CI->load->model('achievement_info_model','achievement_info');
-			$achievement_list = 
-				$this->CI->achievement_info->list_info($candidate_achievement_criteria);
-			
-			//echo '<br/>$achievement_list:<br/>';
-			//echo '<pre>';
-			//var_dump($achievement_list);
-			//echo '</pre>';
-			foreach ($achievement_list as $achievement) {
-				
-				$stat_criteria = array('app_id' => $app_id,
-															 'user_id' => $user_id);
-				foreach($achievement['criteria'] as $key => $value){
-					$stat_criteria[$key] = array('$gte' => $value);
-				}
-
-				$matched_achievement = 
-					$this->CI->achievement_stat->list_stat($stat_criteria);
-				
-				if(count($matched_achievement) > 0){
-					
-					$achieved_info = array();
-					if(isset($info['page_id'])){
-						$achieved_info['page_id'] = $info['page_id'];
-					}
-					if(isset($info['campaign_id'])){
-						$achieved_info['campaign_id'] = $info['campaign_id'];
-					}
-					
-					$this->CI->achievement_user->add($user_id, $achievement['_id'], 
-						$app_id, $info['app_install_id'], $achieved_info);
-				}
-			}
+			$this->_test_reward_achievement($app_id, $user_id, $info);
 		}
 		
 		return $increment_result;
+	}
+	
+	function _increment_platform_score($user_id = NULL, $app_id = NULL,
+		 $action_id = NULL, $amount = 0){
+		if(empty($user_id) || empty($app_id) || empty($action_id)
+		 || empty($amount)) return FALSE;
+		
+		$this->CI->load->library('audit_lib');
+		$action = $this->CI->audit_lib->get_audit_action($app_id, $action_id);
+		
+		$platform_app_id = 0;
+		
+		if($action != NULL && isset($action['score']) && $action['score'] > 0){
+			$score = $amount * $action['score'];
+			$this->CI->achievement_stat->increment($platform_app_id, 
+			$user_id, array('score' => 'score'), $score);
+		}
+	}
+	
+	function _test_reward_achievement($app_id = NULL, $user_id = NULL,
+		 $info = array()){
+		
+		$this->CI->load->model('achievement_user_model','achievement_user');
+		
+		$user_achieved = $this->CI->achievement_user->list_user(
+			array('user_id' => $user_id, 'app_id' => $app_id));
+		
+		$user_achieved_id_list = array();
+		foreach ($user_achieved as $achieved){
+			$user_achieved_id_list[] = $achieved['achievement_id']['$id'];
+		}
+
+		//echo '<br/>$user_achieved_id_list:<br/>';
+		//var_dump($user_achieved_id_list);
+		
+		if(count($user_achieved_id_list) > 0 ){
+			$candidate_achievement_criteria = 
+				array('$nin' => array('_id', $user_achieved_id_list),
+				 			'app_id' => $app_id);
+		}else{
+			$candidate_achievement_criteria = array('app_id' => $app_id);
+		}
+		
+		if(isset($info['page_id'])){
+			$candidate_achievement_criteria['page_id'] = $info['page_id'];
+		}
+		
+		if(isset($info['campaign_id'])){
+			$candidate_achievement_criteria['campaign_id'] = $info['campaign_id'];
+		}
+		
+		//echo '<br/>$candidate_achievement_criteria:<br/>';
+		//var_dump($candidate_achievement_criteria);
+		
+		$this->CI->load->model('achievement_info_model','achievement_info');
+		$achievement_list = 
+			$this->CI->achievement_info->list_info($candidate_achievement_criteria);
+		
+		//echo '<br/>$achievement_list:<br/>';
+		//echo '<pre>';
+		//var_dump($achievement_list);
+		//echo '</pre>';
+		foreach ($achievement_list as $achievement) {
+			
+			$stat_criteria = array('app_id' => $app_id,
+														 'user_id' => $user_id);
+			foreach($achievement['criteria'] as $key => $value){
+				$stat_criteria[$key] = array('$gte' => $value);
+			}
+
+			$matched_achievement = 
+				$this->CI->achievement_stat->list_stat($stat_criteria);
+			
+			if(count($matched_achievement) > 0){
+				
+				$achieved_info = array();
+				if(isset($info['page_id'])){
+					$achieved_info['page_id'] = $info['page_id'];
+				}
+				if(isset($info['campaign_id'])){
+					$achieved_info['campaign_id'] = $info['campaign_id'];
+				}
+				
+				$this->CI->achievement_user->add($user_id, $achievement['_id'], 
+					$app_id, $info['app_install_id'], $achieved_info);
+			}
+		}
 	}
 	
 	/**

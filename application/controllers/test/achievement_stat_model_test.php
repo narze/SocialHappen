@@ -184,34 +184,6 @@ class achievement_stat_model_test extends CI_Controller {
 		
 		$result = $this->achievement_stat->set($app_id, $user_id, $info);
 		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
-		
-		$app_id = 2;
-		$user_id = 2;
-		$info = array('action.6.count' => 6);
-		
-		$result = $this->achievement_stat->set($app_id, $user_id, $info);
-		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
-		
-		$app_id = 2;
-		$user_id = 2;
-		$info = array('action' => 6);
-		
-		$result = $this->achievement_stat->set($app_id, $user_id, $info);
-		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
-		
-		$app_id = 2;
-		$user_id = 2;
-		$info = array('score.6.count' => 6);
-		
-		$result = $this->achievement_stat->set($app_id, $user_id, $info);
-		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
-		
-		$app_id = 2;
-		$user_id = 2;
-		$info = array('score' => 6);
-		
-		$result = $this->achievement_stat->set($app_id, $user_id, $info);
-		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
 	}
 	
 	function set_test(){

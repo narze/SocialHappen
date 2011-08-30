@@ -74,6 +74,7 @@ class Achievement_stat_model extends CI_Model {
 			$criteria = array('app_id' => $app_id, 'user_id' => $user_id);
 				
 			$inc = array();
+			$result = TRUE;
 			if(isset($info['action_id'])){
 				$inc['action.' . $info['action_id'] . '.count'] = $amount;
 				if(isset($info['app_install_id'])){
@@ -89,10 +90,18 @@ class Achievement_stat_model extends CI_Model {
 						 . $info['page_id'] . '.count'] = $amount;
 					}
 				}
+				
+				$result = $this->achievement_stat->update($criteria,
+				array('$inc' => $inc), TRUE);
+			}else if(isset($info['score'])){
+				
+				$inc['score'] = $amount;
+				
+				$result = $this->achievement_stat->update($criteria,
+				array('$inc' => $inc), TRUE);
 			}
 			
-			$result = $this->achievement_stat->update($criteria,
-				array('$inc' => $inc), TRUE);
+			
 
 			return $result;
 		}else{
@@ -112,17 +121,6 @@ class Achievement_stat_model extends CI_Model {
 		$check_args = isset($app_id) && isset($user_id)
 									&& empty($info['action']) && empty($info['app_id'])
 									 && empty($info['user_id']);
-		$keys = array_keys($info);
-		foreach ($keys as $key => $value) {
-			// if(strpos($value, 'action.') !== FALSE
-				 // || strpos($value, 'action') !== FALSE
-				 // || strpos($value, 'score') !== FALSE
-				 // || strpos($value, 'score.') !== FALSE){
-			if(preg_match("/^((action.?)|(score.?))+/", $value)){
-				$check_args = FALSE;
-				break;
-			}
-		}
 		
 		if($check_args){
 			$criteria = array('app_id' => $app_id, 'user_id' => $user_id);
