@@ -26,7 +26,7 @@
             </div>
 	<?php echo form_close(); ?>
 	</div>
-	
+<!--
 	<div id="company-admin">
 	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Company admins</span></h2>
@@ -51,7 +51,7 @@
 		  </p>
 		</div>
 	</div>
-	
+-->
 	<div id="company-application">
 	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Company Applications</span></h2>

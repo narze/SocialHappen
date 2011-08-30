@@ -62,7 +62,7 @@
 	<?php echo form_close(); ?>
 </div>
 -->
-
+<!--
 <div id="admin-admin">
 	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Page admins</span></h2>
@@ -93,7 +93,7 @@
 		  </p>
 		</div>
 	</div>
-	
+-->
 <div id="page-application">
 <?php if(isset($success)==TRUE) echo 'Updated'; ?>
 <h2><span>Page applications</span></h2>
