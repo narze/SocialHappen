@@ -6,7 +6,7 @@ class Payment extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 		// Load PayPal library
-		$this->config->load('Paypal_pro');
+		$this->config->load('paypal_pro');
 		
 		$config = array(
 			'APIUsername' => $this->config->item('APIUsername'), 	// PayPal API username of the API caller
@@ -16,7 +16,7 @@ class Payment extends CI_Controller {
 			'APIVersion' => $this->config->item('APIVersion')		// API version you'd like to use for your call.  You can set a default version in the class and leave this blank if you want.
 		);
 		
-		$this->load->library('Paypal_pro', $config);	
+		$this->load->library('paypal_pro', $config);	
 	}
 	
 	/**
