@@ -238,7 +238,8 @@ class Achievement_lib
 	 * set achievement stat
 	 * @param app_id int
 	 * @param user_id int user_id
-	 * @param info array of data to set ex. friends
+	 * @param info array of data to set ex. array('friend' => 5)
+	 * 				*array's key cannot be 'action' or 'score'
 	 * 
 	 * @return result boolean
 	 */
@@ -287,8 +288,8 @@ class Achievement_lib
 				$user_achieved_id_list[] = $achieved['achievement_id']['$id'];
 			}
 
-			echo '<br/>$user_achieved_id_list:<br/>';
-			var_dump($user_achieved_id_list);
+			//echo '<br/>$user_achieved_id_list:<br/>';
+			//var_dump($user_achieved_id_list);
 			
 			if(count($user_achieved_id_list) > 0 ){
 				$candidate_achievement_criteria = 
@@ -306,17 +307,17 @@ class Achievement_lib
 				$candidate_achievement_criteria['campaign_id'] = $info['campaign_id'];
 			}
 			
-			echo '<br/>$candidate_achievement_criteria:<br/>';
-			var_dump($candidate_achievement_criteria);
+			//echo '<br/>$candidate_achievement_criteria:<br/>';
+			//var_dump($candidate_achievement_criteria);
 			
 			$this->CI->load->model('achievement_info_model','achievement_info');
 			$achievement_list = 
 				$this->CI->achievement_info->list_info($candidate_achievement_criteria);
 			
-			echo '<br/>$achievement_list:<br/>';
-			echo '<pre>';
-			var_dump($achievement_list);
-			echo '</pre>';
+			//echo '<br/>$achievement_list:<br/>';
+			//echo '<pre>';
+			//var_dump($achievement_list);
+			//echo '</pre>';
 			foreach ($achievement_list as $achievement) {
 				
 				$stat_criteria = array('app_id' => $app_id,

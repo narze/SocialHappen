@@ -56,13 +56,14 @@ class Audit_lib
 	 * @param stat_page boolean want to keep in stat page or not
 	 * @param stat_campaign boolean want to keep in stat campaign or not
 	 * @param format_string string format of action string to be displayed
+	 * @param score int score for this audit
 	 * 
 	 * @return result boolean
 	 * 
 	 * @author Metwara Narksook
 	 */
 	function add_audit_action($app_id = NULL, $action_id = NULL, $description = NULL, $stat_app = NULL, 
-							$stat_page = NULL, $stat_campaign = NULL, $format_string = NULL){
+							$stat_page = NULL, $stat_campaign = NULL, $format_string = NULL, $score = 0){
 		$check_args = isset($app_id) && isset($action_id) && isset($stat_app) && 
 						isset($stat_page) && isset($stat_campaign) && isset($description)
 						&& isset($format_string);
@@ -78,7 +79,8 @@ class Audit_lib
 						'format_string' => $format_string,
 						'stat_app' => (boolean)$stat_app,
 						'stat_page' => (boolean)$stat_page,
-						'stat_campaign' => (boolean)$stat_campaign);
+						'stat_campaign' => (boolean)$stat_campaign,
+						'score' => (int)$score);
 		$result = $this->CI->audit_action->add_action($data);
 		/*
 		if(!$result){
@@ -93,7 +95,7 @@ class Audit_lib
 	 * 
 	 * @param app_id int id of app
 	 * @param action_id int action number
-	 * @param data array contain ['stat_app', 'stat_page', 'stat_campaign', 'description', 'format_string']
+	 * @param data array contain ['stat_app', 'stat_page', 'stat_campaign', 'description', 'format_string', 'score']
 	 * 
 	 * @return result boolean
 	 * 
@@ -103,7 +105,7 @@ class Audit_lib
 		$check_args = isset($app_id) && isset($action_id) && 
 						(isset($data['stat_app']) || isset($data['stat_page']) || 
 						isset($data['stat_campaign']) || isset($data['description'])
-						|| isset($data['format_string']));
+						|| isset($data['format_string']) || isset($data['score']));
 		if(!$check_args){
 			//show_error("Invalid or missing args", 500);
 			return FALSE;
@@ -126,6 +128,9 @@ class Audit_lib
 		}
 		if(isset($data['format_string'])){
 			$data_to_add['format_string'] = $data['format_string'];
+		}
+		if(isset($data['score'])){
+			$data_to_add['score'] = (int)$data['score'];
 		}
 		
 		$result = $this->CI->audit_action->edit_action((int)$app_id, (int)$action_id, $data_to_add);

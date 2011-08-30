@@ -114,7 +114,11 @@ class Achievement_stat_model extends CI_Model {
 									 && empty($info['user_id']);
 		$keys = array_keys($info);
 		foreach ($keys as $key => $value) {
-			if(strpos($value, 'action.') !== FALSE){
+			// if(strpos($value, 'action.') !== FALSE
+				 // || strpos($value, 'action') !== FALSE
+				 // || strpos($value, 'score') !== FALSE
+				 // || strpos($value, 'score.') !== FALSE){
+			if(preg_match("/^((action.?)|(score.?))+/", $value)){
 				$check_args = FALSE;
 				break;
 			}

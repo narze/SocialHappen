@@ -59,6 +59,24 @@ echo form_open('backend/add_audit_action/'.$app_id);
 				
 				<?php echo form_error('format_string'); ?>
 			</li>
+			
+			<li>
+				<?=form_label('Score*', 'score', array(
+				'class' => 'score',
+				'style' => 'color: #000;',
+				));?>
+				<?=form_input(array(
+						  'name'        => 'score',
+						  'id'          => 'score',
+						  'value'       => set_value('score', 0),
+						  'maxlength'   => '400',
+						  'size'        => '20',
+						  'class'		=> (form_error('score')) ? 'error' : '',
+				))?>
+				<p>score(integer) that user will get for this single action</p>
+				<?php echo form_error('score'); ?>
+			</li>
+			
 			<li>
 				<?=form_checkbox(array(
 						  'name'        => 'stat_app',
