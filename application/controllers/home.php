@@ -157,7 +157,7 @@ class Home extends CI_Controller {
 				{
 					$redirect_path = base_url().'?logged_in=true';
 				}
-				$this->load->view('common/redirect',array('refresh_parent' => TRUE, 'redirect'=>$redirect_path));
+				$this->load->view('common/redirect',array('refresh_parent' => 'TRUE', 'redirect'=>$redirect_path));
 			}
 			else
 			{
@@ -172,7 +172,10 @@ class Home extends CI_Controller {
 	 */
 	function package()
 	{
-		$package = $this->load->model('package_model','package');
+		$this->load->model('package_model','package');
+		$user = $this->socialhappen->get_user();
+		$this->load->model('package_users_model','package_users');
+		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
 				array(
@@ -207,7 +210,8 @@ class Home extends CI_Controller {
 			TRUE),
 			'home' => $this -> load -> view('home/package', 
 				array(
-					'packages' => $this->package->get_packages()
+					'packages' => $this->package->get_packages(),
+					'user_current_package' => $user_current_package
 					//'user' => $user,
 					//'facebook_user' => $facebook_user,
 					//'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id'])

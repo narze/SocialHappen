@@ -1066,8 +1066,8 @@ class Sync extends CI_Controller {
 				'package_max_pages' => 3,
 				'package_max_users' => 10000,
 				'package_price' => 0,
-				'package_custom_badge' => 1,
-				'package_duration' => 0
+				'package_custom_badge' => 0,
+				'package_duration' => 'unlimited'
 			),
 			array(
 				'package_name' => 'Enterprise package',
@@ -1078,7 +1078,7 @@ class Sync extends CI_Controller {
 				'package_max_users' => 100000,
 				'package_price' => 999,
 				'package_custom_badge' => 1,
-				'package_duration' => 'month'
+				'package_duration' => '1month'
 			)
 		);
 		$this->db->insert_batch('package', $package);
@@ -1154,7 +1154,7 @@ class Sync extends CI_Controller {
 				'order_net_price' => 999,
 				'user_id' => 1,
 				'payment_method' => 'paypal',
-				'billing_info' => 'a:7:{s:15:"user_first_name";s:8:"Weerapat";s:14:"user_last_name";s:6:"Poosri";s:10:"user_email";s:17:"tong@figabyte.com";s:18:"credit_card_number";s:0:"";s:24:"credit_card_expire_month";s:0:"";s:23:"credit_card_expire_year";s:0:"";s:15:"credit_card_csc";s:0:"";}'
+				'billing_info' => 'a:12:{s:15:"user_first_name";s:8:"Weerapat";s:14:"user_last_name";s:6:"Poosri";s:10:"user_email";s:17:"tong@figabyte.com";s:18:"credit_card_number";s:0:"";s:24:"credit_card_expire_month";s:0:"";s:23:"credit_card_expire_year";s:0:"";s:15:"credit_card_csc";s:0:"";s:8:"payer_id";s:13:"GEYCL6WB86N62";s:6:"txn_id";s:17:"9CP746008S6070136";s:14:"payment_status";s:9:"Completed";s:14:"pending_reason";s:4:"None";s:11:"reason_code";s:4:"None";}'
 			)
 		);
 		$this->db->insert_batch('order', $order);
