@@ -193,20 +193,63 @@ class achievement_lib_test extends CI_Controller {
 	}
 	
 	function set_achievement_stat_test(){
+		// invalid
 		$app_id = 2;
 		$user_id = 2;
-		$info = array('friend' => 100);
+		$data = array('action.6.count' => 6);
+		$info = array('app_install_id' => 5,
+									'page_id' => 7,
+									'campaign_id' => 5);
+		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
+		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
 		
-		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $info);
+		$app_id = 2;
+		$user_id = 2;
+		$data = array('action' => 6);
+		$info = array('app_install_id' => 5,
+									'page_id' => 7,
+									'campaign_id' => 5);
+		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
+		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
+		
+		$app_id = 2;
+		$user_id = 2;
+		$data = array('score.6.count' => 6);
+		$info = array('app_install_id' => 5,
+									'page_id' => 7,
+									'campaign_id' => 5);
+		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
+		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
+		
+		$app_id = 2;
+		$user_id = 2;
+		$data = array('score' => 6);
+		$info = array('app_install_id' => 5,
+									'page_id' => 7,
+									'campaign_id' => 5);
+		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
+		$this->unit->run($result, 'is_false', 'set', print_r($result, TRUE));
+		
+		// valid
+		
+		$app_id = 2;
+		$user_id = 2;
+		$data = array('friend' => 100);
+		$info = array('app_install_id' => 5,
+									'page_id' => 7,
+									'campaign_id' => 5);
+		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
 		$this->unit->run($result, 'is_true', 'set', print_r($result, TRUE));
 		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 1, 'increment', print_r($result, TRUE));
 		
 		$app_id = 10;
 		$user_id = 2;
-		$info = array('friend' => 100);
-		
-		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $info);
+		$data = array('friend' => 100);
+		$info = array('app_install_id' => 5,
+									'page_id' => 7,
+									'campaign_id' => 5);
+		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
 		$this->unit->run($result, 'is_true', 'set', print_r($result, TRUE));
 		$total = count($this->achievement_stat->list_stat());
 		$this->unit->run($total, 2, 'increment', print_r($result, TRUE));

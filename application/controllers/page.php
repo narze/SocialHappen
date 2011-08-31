@@ -146,7 +146,18 @@ class Page extends CI_Controller {
 					'page_report' => $this -> load -> view('page/page_report', 
 						array(),
 					TRUE),
-					'footer' => $this -> socialhappen -> get_footer());
+					'footer' => $this -> socialhappen -> get_footer()
+				);
+				
+				//If package over the limit
+				if($this->socialhappen->ckeck_package_over_the_limit_by_user_id($company['creator_user_id']) == TRUE) {
+					$data['is_package_over_the_limit'] = TRUE;
+					$data['package_limited'] = $this -> load -> view('payment/package_limited', array(), TRUE);
+				}
+				else {
+					$data['is_package_over_the_limit'] = FALSE;
+				}
+				
 				$this -> parser -> parse('page/page_view', $data);
 				return $data;
 			}

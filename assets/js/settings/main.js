@@ -55,4 +55,9 @@ $(function(){
 	} else if(setting_name == 'reference'){
 	
 	}
+	
+	$('ul.detail li.package-apps').live('hover', function () {
+		$('div.package-overlay').slideToggle("slow");
+	});
+	
 });

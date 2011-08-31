@@ -182,6 +182,7 @@ function previous_page(elementName) {
 //show installed pages in company
 function show_installed_page_in_company() {
 	jQuery.ajax({
+		async:true,
 		url: base_url + "company/json_get_pages/" + company_id,
 		dataType: "json",
 		beforeSend: function() {
@@ -233,6 +234,7 @@ function show_installed_page_in_company() {
 						var page_image=available_pages[''+facebook_page_id].page_info.picture;
 						dragging_object.removeClass('draggable');
 						jQuery.ajax({
+							async:true,
 							url: base_url + "page/json_add",
 							dataType: "json",
 							type: "POST",
@@ -280,6 +282,7 @@ function show_installed_page_in_company() {
 										.replace("{user_id}",user_id)
 										.replace("{page_id}",page_id)+"&force=1";
 										jQuery.ajax({
+											async:true,
 											url: base_url+"app/curl",
 											dataType: "json",
 											type: "POST",
@@ -331,6 +334,7 @@ function show_installed_page_in_company() {
 //show installed apps in company
 function show_installed_app_in_company() {
 	jQuery.ajax({
+		async:true,
 		url: base_url + "company/json_get_installed_apps_not_in_page/" + company_id,
 		dataType: "json",
 		beforeSend: function() {
@@ -373,6 +377,7 @@ function show_installed_app_in_company() {
 						.replace("{user_id}",user_id)
 						.replace("{page_id}",0)+"&force=1";
 						jQuery.ajax({
+							async:true,
 							url: base_url+"app/curl",
 							dataType: "json",
 							type: "POST",
@@ -430,6 +435,7 @@ function show_installed_app_in_company() {
 function show_installed_app_in_page(page_id,facebook_page_id) {
 	//get installed pages
 	jQuery.ajax({
+		async:true,
 		url: base_url + "page/json_get_installed_apps/" + page_id,
 		dataType: "json",
 		beforeSend: function() {
@@ -474,6 +480,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 						.replace("{page_id}",page_id)+"&force=1";
 
 						jQuery.ajax({
+							async:true,
 							url: base_url+"app/curl",
 							dataType: "json",
 							type: "POST",
@@ -536,6 +543,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 //show company's available pages
 function show_available_page_in_company() {
 	jQuery.ajax({
+		async:true,
 		url: base_url + "page/json_get_not_installed_facebook_pages/" + company_id,
 		dataType: "json",
 		beforeSend: function() {
@@ -583,6 +591,7 @@ function show_available_page_in_company() {
 //show company's available apps
 function show_available_app_in_company() {
 	jQuery.ajax({
+		async:true,
 		url: base_url + "company/json_get_not_installed_apps/" + company_id + "/0",
 		dataType: "json",
 		beforeSend: function() {
@@ -625,6 +634,7 @@ function show_available_app_in_company() {
 //show page's available apps
 function show_available_app_in_page(page_id) {
 	jQuery.ajax({
+		async:true,
 		url: base_url + "company/json_get_not_installed_apps/" + company_id + "/" + page_id,
 		dataType: "json",
 		beforeSend: function() {
@@ -667,6 +677,7 @@ function show_available_app_in_page(page_id) {
 function get_activity_log() {
 	$('.activity-logs ul').html('');
 	jQuery.ajax({
+		async:true,
 		url: base_url + "audit/json_get_company_activity_log/" + company_id,
 		dataType: "json",
 		beforeSend: function() {

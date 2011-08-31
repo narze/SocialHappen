@@ -371,6 +371,11 @@ class Backend extends CI_Controller {
 							 'rules'   => 'required|trim|xss_clean'
 						),
 						array(
+							 'field'   => 'score',
+							 'label'   => 'Score',
+							 'rules'   => 'required|is_natural|trim|xss_clean'
+						),
+						array(
 							 'field'   => 'stat_app',
 							 'label'   => 'Collect Stat for App',
 							 'rules'   => 'trim|xss_clean'
@@ -412,9 +417,11 @@ class Backend extends CI_Controller {
 			$action_id = $this->input->post('action_id', TRUE);
 			$description = $this->input->post('description', TRUE);
 			$format_string = $this->input->post('format_string', TRUE);
+			$score = $this->input->post('score', TRUE);
 			$stat_app = $this->input->post('stat_app', TRUE) == 'stat_app';
 			$stat_page = $this->input->post('stat_page', TRUE) == 'stat_page';
 			$stat_campaign = $this->input->post('stat_campaign', TRUE) == 'stat_campaign';
+			
 			/*
 			echo $app_id . "<br>";
 			echo $action_id . "<br>";
@@ -429,7 +436,7 @@ class Backend extends CI_Controller {
 			
 			//$action_list = $this
 			
-			$result = $this->audit_lib->add_audit_action((int)$app_id, (int)$action_id, $description, $stat_app, $stat_page, $stat_campaign, $format_string);
+			$result = $this->audit_lib->add_audit_action((int)$app_id, (int)$action_id, $description, $stat_app, $stat_page, $stat_campaign, $format_string, $score);
 
 			redirect('backend/list_audit_action/'.$app_id);
 		}else{
@@ -469,6 +476,11 @@ class Backend extends CI_Controller {
 							 'rules'   => 'required|trim|xss_clean'
 						),
 						array(
+							 'field'   => 'score',
+							 'label'   => 'Score',
+							 'rules'   => 'required|is_natural|trim|xss_clean'
+						),
+						array(
 							 'field'   => 'stat_app',
 							 'label'   => 'Collect Stat for App',
 							 'rules'   => 'trim|xss_clean'
@@ -491,6 +503,7 @@ class Backend extends CI_Controller {
 			$this->load->library('audit_lib');
 			$action_id = $this->input->post('action_id', TRUE);
 			$description = $this->input->post('description', TRUE);
+			$score = $this->input->post('score', TRUE);
 			$format_string = $this->input->post('format_string', TRUE);
 			$stat_app = $this->input->post('stat_app', TRUE) == 'stat_app';
 			$stat_page = $this->input->post('stat_page', TRUE) == 'stat_page';
@@ -501,7 +514,8 @@ class Backend extends CI_Controller {
 			  'format_string' => $format_string,
 			  'stat_app' => $stat_app,
 			  'stat_page' => $stat_page,
-			  'stat_campaign' => $stat_campaign));
+			  'stat_campaign' => $stat_campaign,
+				'score' => $score));
 
 			redirect('backend/list_audit_action/'.$app_id);
 		}else{
@@ -516,6 +530,7 @@ class Backend extends CI_Controller {
 			$data['stat_app'] = $result['stat_app'];
 			$data['stat_page'] = $result['stat_page'];
 			$data['stat_campaign'] = $result['stat_campaign'];
+			$data['score'] = isset($result['score'])? $result['score'] : 0;
 			$this->load->view('backend_views/edit_audit_action_view', $data);
 		}
 	}

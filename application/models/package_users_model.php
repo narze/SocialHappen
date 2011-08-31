@@ -72,6 +72,19 @@ class Package_users_model extends CI_Model {
 		$results = $this->db->get_where('package_users',array('user_id' => $user_id))->result_array();
 		return date('Y-m-d H:i:s') > $results[0]['package_expire'];
 	}
+	
+	/**
+	 * Count user mambers
+	 * @param $user_id
+	 * @return int
+	 * @author Weerapat P.
+	 */
+	function count_user_members_by_user_id($user_id = NULL){	
+		$this->db->join('company','company.company_id=page.company_id');
+		$this->db->join('page_user_data','page_user_data.page_id=page.page_id');
+		return $this->db->where(array('company.creator_user_id'=>$user_id))->count_all_results('page');
+		
+	}
 }
 /* End of file package_users_model.php */
 /* Location: ./application/models/package_users_model.php */

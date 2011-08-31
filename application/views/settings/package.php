@@ -3,41 +3,33 @@
 	<h2><span>Current Package</span></h2>
 	<div class="box-current_package">
 	  <div class="detail">
-		<h2>Enterprise Deluxe</h2>
-		<p>Text display package detail</p>
-		<p class="thumb"><img src="images/enterprise-deluxe.png" alt="" /></p>
+		<h2><?php echo $current_package['package_name']; ?></h2>
+		<p><?php echo $current_package['package_detail']; ?></p>
+		<p class="thumb"><img src="<?php echo $current_package['package_image'] ? $current_package['package_image'] : base_url().'images/enterprise-deluxe.png' ; ?>" alt="<?php echo $current_package['package_name']; ?>" /></p>
 	  </div>
 	  <ul class="detail">
-		<li><b>2/3</b><span>Companies</span></li>
-		<li><b>3/6</b><span>Pages</span></li>
-		<li><b>3,000</b><span>Members</span></li>
-		<li><img src="images/enterprise-package.png" alt="" /></li>
+		<li><b><?php echo $user_companies.'/'.$current_package['package_max_companies']; ?></b><span>Companies</span></li>
+		<li><b><?php echo $user_pages.'/'.$current_package['package_max_pages']; ?></b><span>Pages</span></li>
+		<li><b><abbr title="<?php echo $members.'/'.$current_package['package_max_users']; ?>"><?php echo $members; ?></abbr></b><span>Members</span></li>
+		<li class="package-apps"><img src="images/enterprise-package.png" alt="" />
+			<?php if($apps) { ?>
+			<div class="package-overlay" style="display:none;">
+				<ul>
+				  <?php foreach($apps as $app) { ?>
+				  <li>
+					<p><img style="width:64px;height:64px;" src="<?php echo $app['app_image']; ?>" alt="<?php echo $app['app_name']; ?>" /></p>
+					<p><?php echo $app['app_name']; ?></p>
+				  </li>
+				  <? } ?>
+				</ul>
+			</div>
+			<?php } ?>
+		</li>
 	  </ul>
-	  <p><a class="bt-upgrade_package" href="#"><span>Upgrade</span></a></p>
-	  <div class="package-overlay">
-		<ul>
-		  <li>
-			<p><img src="images/thumb-app64-64.png" alt=""></p>
-			<p>Chrome</p>
-		  </li>
-		  <li>
-			<p><img src="images/thumb-app64-64.png" alt=""></p>
-			<p>Chrome</p>
-		  </li>
-		  <li>
-			<p><img src="images/thumb-app64-64.png" alt=""></p>
-			<p>Chrome</p>
-		  </li>
-		  <li>
-			<p><img src="images/thumb-app64-64.png" alt=""></p>
-			<p>Chrome</p>
-		  </li>
-		  <li>
-			<p><img src="images/thumb-app64-64.png" alt=""></p>
-			<p>Chrome</p>
-		  </li>
-		</ul>
-	  </div>
+	  <?php if($is_upgradable) { ?>
+		<p><a class="bt-upgrade_package" href="<?php echo base_url().'home/package'; ?>"><span>Upgrade</span></a></p>
+	  <?php } ?>
+	  
 	</div>
   </div>
   
@@ -51,54 +43,21 @@
 		  <th>Package name</th>
 		  <th></th>
 		</tr>
-		<tr>
-		  <td>2011/05/11</td>
-		  <td><a href="#">BK051223</a></td>
-		  <td>Enterprise Package</td>
-		  <td class="right">1290.00 THB</td>
-		</tr>
-		<tr class="set-bg">
-		  <td>2011/05/11</td>
-		  <td><a href="#">BK051223</a></td>
-		  <td>Enterprise Package</td>
-		  <td class="right">1290.00 THB</td>
-		</tr>
-		<tr>
-		  <td>2011/05/11</td>
-		  <td><a href="#">BK051223</a></td>
-		  <td>Enterprise Package</td>
-		  <td class="right">1290.00 THB</td>
-		</tr>
-		<tr class="set-bg">
-		  <td>2011/05/11</td>
-		  <td><a href="#">BK051223</a></td>
-		  <td>Enterprise Package</td>
-		  <td class="right">1290.00 THB</td>
-		</tr>
-		<tr>
-		  <td>2011/05/11</td>
-		  <td><a href="#">BK051223</a></td>
-		  <td>Enterprise Package</td>
-		  <td class="right">1290.00 THB</td>
-		</tr>
-		<tr class="set-bg">
-		  <td>2011/05/11</td>
-		  <td><a href="#">BK051223</a></td>
-		  <td>Enterprise Package</td>
-		  <td class="right">1290.00 THB</td>
-		</tr>
-		<tr>
-		  <td>2011/05/11</td>
-		  <td><a href="#">BK051223</a></td>
-		  <td>Enterprise Package</td>
-		  <td class="right">1290.00 THB</td>
-		</tr>
-		<tr class="set-bg">
-		  <td>2011/05/11</td>
-		  <td><a href="#">BK051223</a></td>
-		  <td>Enterprise Package</td>
-		  <td class="right">1290.00 THB</td>
-		</tr>
+		<?php if($orders) 
+		{
+			foreach($orders as $order) { ?>
+			<tr>
+			  <td><?php echo $order['order_date']; ?></td>
+			  <td><a href="#"><?php echo $order['order_id']; ?></a></td>
+			  <td><?php echo $order['package_name']; ?></td>
+			  <td class="right"><?php echo $order['order_net_price']; ?> THB</td>
+			</tr>
+			<?php } 
+		} else { ?>
+			<tr>
+			  <td colspan="4" align="center">No invoice found.</td>
+			</tr>
+		<?php } ?>
 	  </table>
 	</div>
   </div>
