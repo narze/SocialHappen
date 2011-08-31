@@ -23,7 +23,8 @@ class SocialHappen{
 		'order_status' => array(1=>'Pending',2=>'Processed',3=>'Failed',4=>'Refunded',5=>'Voided'),
 		'app_install_status' => array(1=>'Installed', 2=>'Active', 3=>'Inactive'),
 		'app_type' => array(1=>'Page Only', 2=>'Support Page', 3=>'Standalone'),
-		'campaign_status' => array(1=>'Inactive', 2=>'Active', 3=>'Expired')
+		'campaign_status' => array(1=>'Inactive', 2=>'Active', 3=>'Expired'),
+		'page_status' => array(1=>'Not Installed', 2=>'Installed')
 	);
 	
 	/**
@@ -64,10 +65,10 @@ class SocialHappen{
 		if($each) {
 			if(is_array($var_name_and_array_index)){
 				foreach($var_name_and_array_index as $one){
-					$each[$one] = $this->get_v($one,$each["{$one}_id"]);
+					$each[$one] = $this->get_v($one,issetor($each["{$one}_id"]));
 				}
 			} else {
-				$each[$var_name_and_array_index] = $this->get_v($var_name_and_array_index,$each["{$var_name_and_array_index}_id"]);
+				$each[$var_name_and_array_index] = $this->get_v($var_name_and_array_index,issetor($each["{$var_name_and_array_index}_id"]));
 			}
 		}
 		return $each;
@@ -163,7 +164,7 @@ class SocialHappen{
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'facebook_default_scope' => $this->CI->config->item('facebook_default_scope'),
-				'next' => $this->CI->config->item('next')
+				'next' => $this->CI->input->get('next')
 			);
 		} else {
 			$this->login();
