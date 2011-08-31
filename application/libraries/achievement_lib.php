@@ -249,7 +249,7 @@ class Achievement_lib
 	function set_achievement_stat(
 		$app_id = NULL, $user_id = NULL, $data = array(), $info = array()){
 		if(empty($user_id) || empty($app_id) || empty($data) || empty($info)||
-			 empty($info['app_install_id'])){ echo 'fail'; return FALSE; }
+			 empty($info['app_install_id'])){ return FALSE; }
 		
 		$keys = array_keys($data);
 		$check_args = TRUE;
@@ -261,7 +261,10 @@ class Achievement_lib
 				 
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
 		$result = $this->CI->achievement_stat->set($app_id, $user_id, $data);
-		$this->_test_reward_achievement($app_id, $user_id, $info);
+		if($result){
+			$this->_test_reward_achievement($app_id, $user_id, $info);
+		}
+		
 		return $result;
 	}
 	
@@ -294,7 +297,8 @@ class Achievement_lib
 		
 		if($increment_result){
 			if(isset($info['action_id'])){
-				$this->_increment_platform_score($user_id, $app_id, $info['action_id'], $amount);
+				$this->_increment_platform_score($user_id, $app_id, $info['action_id'],
+				 $amount);
 			}
 			$this->_test_reward_achievement($app_id, $user_id, $info);
 		}
@@ -315,7 +319,8 @@ class Achievement_lib
 		if($action != NULL && isset($action['score']) && $action['score'] > 0){
 			$score = $amount * $action['score'];
 			$this->CI->achievement_stat->increment($platform_app_id, 
-			$user_id, array('score' => 'score'), $score);
+				$user_id, array('score' => 'score'), $score);
+			// echo '<br/>_increment_platform_score for user_id: '.$user_id.'<br/>';
 		}
 	}
 	
@@ -332,12 +337,12 @@ class Achievement_lib
 			$user_achieved_id_list[] = $achieved['achievement_id']['$id'];
 		}
 
-		//echo '<br/>$user_achieved_id_list:<br/>';
-		//var_dump($user_achieved_id_list);
+		// echo '<br/>$user_achieved_id_list:<br/>';
+		// var_dump($user_achieved_id_list);
 		
 		if(count($user_achieved_id_list) > 0 ){
 			$candidate_achievement_criteria = 
-				array('$nin' => array('_id', $user_achieved_id_list),
+				array('_id' => array('$nin' => $user_achieved_id_list),
 				 			'app_id' => $app_id);
 		}else{
 			$candidate_achievement_criteria = array('app_id' => $app_id);
@@ -351,29 +356,52 @@ class Achievement_lib
 			$candidate_achievement_criteria['campaign_id'] = $info['campaign_id'];
 		}
 		
-		//echo '<br/>$candidate_achievement_criteria:<br/>';
-		//var_dump($candidate_achievement_criteria);
+		// echo '<br/>$candidate_achievement_criteria:<br/>';
+		// echo '<pre>';
+		// print_r($candidate_achievement_criteria);
+		// echo '</pre>';
 		
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		$achievement_list = 
 			$this->CI->achievement_info->list_info($candidate_achievement_criteria);
 		
-		//echo '<br/>$achievement_list:<br/>';
-		//echo '<pre>';
-		//var_dump($achievement_list);
-		//echo '</pre>';
+		// echo '<br/>$achievement_list:<br/>';
+		// echo '<pre>';
+		// print_r($achievement_list);
+		// echo '</pre>';
+		
 		foreach ($achievement_list as $achievement) {
 			
 			$stat_criteria = array('app_id' => $app_id,
 														 'user_id' => $user_id);
+			$score = NULL;
+			
 			foreach($achievement['criteria'] as $key => $value){
-				$stat_criteria[$key] = array('$gte' => $value);
+				if($key != 'score'){
+					$stat_criteria[$key] = array('$gte' => $value);
+				}else{
+					$score = $value;
+				}
 			}
 
+			// echo '<br/>$stat_criteria:<br/>';
+			// echo '<pre>';
+			// print_r($stat_criteria);
+			// echo '</pre>';
+			
 			$matched_achievement = 
 				$this->CI->achievement_stat->list_stat($stat_criteria);
 			
-			if(count($matched_achievement) > 0){
+			if($score != NULL){
+				$matched_score = 
+					count($this->CI->achievement_stat->list_stat(
+								array('app_id' => 0,
+											'score' => array('$gte' => $score)))) > 0;
+			}else{
+				$matched_score = TRUE;
+			}
+			
+			if(count($matched_achievement) > 0 && $matched_score){
 				
 				$achieved_info = array();
 				if(isset($info['page_id'])){
@@ -385,6 +413,7 @@ class Achievement_lib
 				
 				$this->CI->achievement_user->add($user_id, $achievement['_id'], 
 					$app_id, $info['app_install_id'], $achieved_info);
+				// echo 'user_id: '.$user_id.' got reward!';
 			}
 		}
 	}

@@ -299,14 +299,24 @@ class achievement_lib_test extends CI_Controller {
 		 */
 		$app_id = 1;
 		$app_install_id = 2;
-		$info = array('name' => 'most visit',
-									'description' => 'visit mak mak',
+		$info = array('name' => 'most friend',
+									'description' => 'friend mak mak',
 									'hidden' => FALSE,
 									'campaign_id' => 4,
 									'page_id' => 6,
-									'criteria_string' => array('visit campaign >= 2', 'visti app_install >= 2'));
-		$criteria = array('action.103.campaign.4.count' => 2,
-										  'action.103.app_install.2.count' => 2);
+									'criteria_string' => array('friend >= 2'));
+		$criteria = array('friend' => 2);
+		$this->achievement_info->add($app_id, $app_install_id, $info, $criteria);
+		
+		$app_id = 7;
+		$app_install_id = NULL;
+		$info = array('name' => 'most score',
+									'description' => 'score mak mak',
+									'hidden' => FALSE,
+									'campaign_id' => 4,
+									'page_id' => 6,
+									'criteria_string' => array('score >= 2'));
+		$criteria = array('score' => 2);
 		$this->achievement_info->add($app_id, $app_install_id, $info, $criteria);
 		
 		$app_id = 1;
@@ -358,7 +368,7 @@ class achievement_lib_test extends CI_Controller {
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$total = count($this->achievement_stat->list_stat());
-		$this->unit->run($total, 1, 'increment', print_r($result, TRUE));
+		$this->unit->run($total, 2, 'increment', print_r($total, TRUE));
 		
 		$res = $this->achievement_info->list_info(array('app_id' => $app_id, 'app_install_id' => $app_install_id));
 		$achievement_id = $res[0]['_id'];
@@ -375,6 +385,7 @@ class achievement_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 1, 'increment', print_r($result, TRUE));
 	}
 	
+	
 	function increment_achievement_stat_test(){
 		$app_id = 1;
 		$user_id = 2;
@@ -389,7 +400,7 @@ class achievement_lib_test extends CI_Controller {
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$total = count($this->achievement_stat->list_stat());
-		$this->unit->run($total, 2, 'increment', print_r($result, TRUE));
+		$this->unit->run($total, 4, 'increment', print_r($total, TRUE));
 		
 		$res = $this->achievement_info->list_info(array('app_id' => $app_id, 'app_install_id' => $app_install_id));
 		$achievement_id = $res[0]['_id'];
@@ -414,7 +425,7 @@ class achievement_lib_test extends CI_Controller {
 	}
 
 	function increment_achievement_stat_app_test(){
-		echo '<b>';
+		//echo '<b>';
 		$app_id = 10;
 		$user_id = 2;
 		$app_install_id = 5;
@@ -426,7 +437,7 @@ class achievement_lib_test extends CI_Controller {
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$total = count($this->achievement_stat->list_stat());
-		$this->unit->run($total, 3, 'increment', print_r($result, TRUE));
+		$this->unit->run($total, 5, 'increment', print_r($total, TRUE));
 		
 		$res = $this->achievement_info->list_info(array('app_id' => $app_id));
 		$achievement_id = $res[0]['_id'];
@@ -449,6 +460,95 @@ class achievement_lib_test extends CI_Controller {
 		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
 		$this->unit->run(count($result), 1, 'increment', print_r($result, TRUE));
 	}
+
+	function set_and_get_reward_test(){
+		
+		/*
+		$app_id = 1;
+		$app_install_id = 2;
+		$info = array('name' => 'most friend',
+									'description' => 'friend mak mak',
+									'hidden' => FALSE,
+									'campaign_id' => 4,
+									'page_id' => 6,
+									'criteria_string' => array('friend >= 2'));
+		$criteria = array('friend' => 2);
+		$this->achievement_info->add($app_id, $app_install_id, $info, $criteria);
+		
+		$app_id = 0;
+		$app_install_id = NULL;
+		$info = array('name' => 'most score',
+									'description' => 'score mak mak',
+									'hidden' => FALSE,
+									'campaign_id' => 4,
+									'page_id' => 6,
+									'criteria_string' => array('score >= 2'));
+		$criteria = array('score' => 2);
+		$this->achievement_info->add($app_id, $app_install_id, $info, $criteria);
+		*/
+		
+		$app_id = 1;
+		$user_id = 2;
+		$data = array('friend' => 1);
+		$info = array('app_install_id' => 2,
+									'page_id' => 6,
+									'campaign_id' => 4);
+		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
+		$this->unit->run($result, 'is_true', 'set', print_r($result, TRUE));
+		$total = count($this->achievement_stat->list_stat(array('app_id' => $app_id, 'user_id' => $user_id)));
+		$this->unit->run($total, 1, 'set', print_r($result, TRUE));
+		
+		$res = $this->achievement_info->list_info(array('app_id' => $app_id, 'app_install_id' => $info['app_install_id']));
+		$achievement_id = $res[0]['_id'];
+		
+		$achievement_id_ref = MongoDBRef::create("achievement_info", 
+																								new MongoId($achievement_id));
+
+		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
+		$this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
+		
+		echo '<b>';
+		
+		$app_id = 1;
+		$user_id = 2;
+		$data = array('friend' => 2);
+		$info = array('app_install_id' => 2,
+									'page_id' => 6,
+									'campaign_id' => 4);
+		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
+		$this->unit->run($result, 'is_true', 'set', print_r($result, TRUE));
+		$total = count($this->achievement_stat->list_stat(array('app_id' => $app_id, 'user_id' => $user_id)));
+		$this->unit->run($total, 1, 'set', print_r($result, TRUE));
+		
+		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
+		$this->unit->run(count($result), 1, 'set', print_r($result, TRUE));
+	}
+
+	function increment_score_test(){
+		$app_id = 7;
+		$user_id = 2;
+		$app_install_id = 3;
+		$action_id = 103;
+		$info = array('app_install_id' => $app_install_id,
+									'page_id' => 6,
+									'campaign_id' => 4,
+									'action_id' => $action_id);
+		$amount = 1;
+		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+		
+		$total = count($this->achievement_stat->list_stat());
+		$this->unit->run($total, 6, 'increment', print_r($total, TRUE));
+		
+		$res = $this->achievement_info->list_info(array('app_id' => $app_id, 'campaign_id' => 4));
+		$achievement_id = $res[0]['_id'];
+		
+		$achievement_id_ref = MongoDBRef::create("achievement_info", 
+																								new MongoId($achievement_id));
+		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
+		$this->unit->run(count($result), 1, 'increment', print_r($result, TRUE));
+	}
+
 	
 	function end_test(){
 		// $this->achievement_info->drop_collection();
