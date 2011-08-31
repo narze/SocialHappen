@@ -169,6 +169,9 @@ class Page_model extends CI_Model {
 				!in_array($field['type'], array('text','textarea','checkbox','radio'))) {
 				return FALSE;
 			}
+			if(issetor($field['type']) == 'checkbox'){ //Checkbox cannot be required
+				$field['required'] = FALSE;	
+			}
 			$page_fields[] = $field;
 			end($page_fields);
 			$added_ids[] = key($page_fields);
@@ -208,9 +211,13 @@ class Page_model extends CI_Model {
 				(isset($field['name']) && !$field['name']) || 
 				(isset($field['label']) && !$field['label']) ||
 				(isset($field['type']) && !in_array($field['type'], array('text','textarea','checkbox','radio'))) ||
-				(isset($field['type']) &&  in_array($field['type'], array('checkbox','radio')) && !issetor($field['items']))
+				(isset($field['type']) &&  in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) ||
+				!$field['items'] || !is_array($field['items']) || in_array('',$field['items'])))
 			){
 				return FALSE;
+			}
+			if(issetor($field['type']) == 'checkbox'){ //Checkbox cannot be required
+				$field['required'] = FALSE;	
 			}
 			foreach($field as $field_key => $field_value){
 				$page_fields[$key][$field_key] = $field_value;
@@ -228,6 +235,9 @@ class Page_model extends CI_Model {
 	function remove_page_user_fields_by_page_id($page_id = NULL, $ids = array()){
 		if(!$ids || !$page = $this->get_page_profile_by_page_id($page_id)){
 			return FALSE;
+		}
+		if(is_int($ids)){
+			$ids = array($ids);
 		}
 		$page_fields = json_decode($page['page_user_fields'], TRUE);
 		foreach($ids as $id){
