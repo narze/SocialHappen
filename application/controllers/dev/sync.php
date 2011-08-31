@@ -750,7 +750,7 @@ class Sync extends CI_Controller {
 									'type' => 'checkbox',
 									'required' => FALSE,
 									'rules' => NULL,
-									'items' => array('value1' => 'Label 1', 'value2' => 'Label 2', 'value3' => 'Label 3'),
+									'items' => array('value1', 'value2', 'value3'),
 									'order' => 3
 								)
 								

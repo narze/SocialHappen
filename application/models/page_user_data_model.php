@@ -86,8 +86,8 @@ class Page_user_data_model extends CI_Model {
 						case 'checkbox':
 							$processed_data[$key] = array();
 							$items = $value['items'];
-							foreach($data['user_data'][$value['name']] as $data_key => $data_value){
-								if(isset($items[$data_value])){
+							foreach($data['user_data'][$value['name']] as $data_value){
+								if(in_array($data_value, $items)){
 									$processed_data[$key][] = $data_value;
 								}
 							}

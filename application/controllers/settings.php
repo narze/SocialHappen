@@ -238,6 +238,7 @@ class Settings extends CI_Controller {
 		} else {
 			$this->load->model('page_model','pages');
 			$page = $this->pages->get_page_profile_by_page_id($page_id);
+			$page_user_fields = $this->pages->get_page_user_fields_by_page_id($page_id);
 			
 			$this->load->model('installed_apps_model','installed_apps');
 			$page_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
@@ -247,6 +248,7 @@ class Settings extends CI_Controller {
 			
 			$this->load->model('user_companies_model','user_companies');
 			$company_users = $this->user_companies->get_company_users_by_company_id($page['company_id']);
+			
 			
 			foreach($company_users as $key => &$value){ //Company admins
 				if(!($company_users[$key]['role_all'] || $company_users[$key]['role_all_company_pages_edit'])){
@@ -277,7 +279,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook));
+				$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'page_user_fields' => $page_user_fields));
 			}
 			else 
 			{
@@ -297,7 +299,7 @@ class Settings extends CI_Controller {
 			
 				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/page', array('page'=>array_merge($page,$page_update_data), 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'success'=>TRUE));
+					$this->load->view('settings/page', array('page'=>array_merge($page,$page_update_data), 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'success'=>TRUE, 'page_user_fields' => $page_user_fields));
 				}
 				else
 				{
@@ -316,7 +318,7 @@ class Settings extends CI_Controller {
 			$this->form_validation->set_rules('user_id','required|trim|integer|xss_clean|max_length[20]');
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 			
-			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+			if ($this->form_validation->run() == FALSE)
 			{
 				redirect("settings/page/{$page_id}");
 			}
@@ -342,6 +344,93 @@ class Settings extends CI_Controller {
 				}
 				redirect("settings/page/{$page_id}?success=1");
 			}
+		}
+	}
+	
+	function page_user_fields($page_id = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			//no access
+		} else {
+			$this->form_validation->set_rules('name', 'Name', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('label', 'Label', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('type', 'Type', 'required|trim|xss_clean|max_length[20]');			
+			$this->form_validation->set_rules('required', 'Required', 'trim|xss_clean');		
+			//$this->form_validation->set_rules('rules', 'Rules', 'trim|xss_clean');			
+			$this->form_validation->set_rules('items', 'Items', 'trim|xss_clean');			
+			$this->form_validation->set_rules('order', 'Order', 'required|trim|xss_clean|is_numeric|max_length[5]');
+				
+			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+			
+			$success = FALSE;
+			if ($this->form_validation->run() != FALSE)
+			{
+				$this->load->model('page_model','pages');
+				$new_page_user_fields = array(
+					array(
+						'name' => set_value('name'),
+						'label' => set_value('label'),
+						'type' => set_value('type'),
+						'required' => set_value('required') == 1,
+						//'rules' => set_value('rules'),
+						'items' => explode(',',set_value('items')),
+						'order' => set_value('order')
+					)
+				);
+				
+				var_export($new_page_user_fields);
+				if ($this->pages->add_page_user_fields_by_page_id($page_id, $new_page_user_fields))
+				{
+					$success = TRUE;
+				}
+				
+			}
+			
+			$this->form_validation->set_rules('edit_name[]', 'Name', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('edit_label[]', 'Label', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('edit_type[]', 'Type', 'required|trim|xss_clean|max_length[20]');			
+			$this->form_validation->set_rules('edit_required[]', 'Required', 'trim|xss_clean|max_length[1]');		
+			//$this->form_validation->set_rules('edit_rules[]', 'Rules', 'trim|xss_clean');			
+			$this->form_validation->set_rules('edit_items[]', 'Items', 'trim|xss_clean');			
+			$this->form_validation->set_rules('edit_order[]', 'Order', 'required|trim|xss_clean|is_numeric|max_length[5]');
+		
+			$required_checked = $this->input->post('edit_required');
+			$fields_count = count($this->input->post('edit_name'));
+			$edit_required = array();
+			foreach(range(0,$fields_count-1) as $nth){
+				$edit_required[$nth] = in_array($nth, $required_checked) ? TRUE : FALSE;
+			}
+			
+			$this->load->model('page_model','pages');
+			$temp_page_user_fields = array(
+				
+				'name' => $this->input->post('edit_name'),
+				'label' => $this->input->post('edit_label'),
+				'type' => $this->input->post('edit_type'),
+				'required' => $edit_required,
+				//'rules' => $this->input->post('edit_rules'),
+				'items' => $this->input->post('edit_items'),
+				'order' => $this->input->post('edit_order')
+			);
+			$page_user_fields = array();
+			$field_ids = $this->input->post('id');
+			foreach($temp_page_user_fields as $field_name => $data_array) {
+				foreach($data_array as $key => $value) {
+					if($field_name == 'items' && $value != ''){
+						$value = explode(',',$value);
+					}
+					$page_user_fields[$field_ids[$key]][$field_name] = $value;
+				}
+			}
+			var_export($page_user_fields);
+			if ($this->pages->update_page_user_fields_by_page_id($page_id, $page_user_fields))
+			{
+				$success = TRUE;
+			}
+			
+			if($success) {
+				redirect("settings/page/{$page_id}?success=1");
+			}
+			redirect("settings/page/{$page_id}");
 		}
 	}
 	

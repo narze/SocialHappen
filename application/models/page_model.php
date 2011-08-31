@@ -166,7 +166,9 @@ class Page_model extends CI_Model {
 		$added_ids = array();
 		foreach($fields as $field){
 			if(!issetor($field['name']) || !issetor($field['type']) || !issetor($field['label']) ||
-				!in_array($field['type'], array('text','textarea','checkbox','radio'))) {
+				!in_array($field['type'], array('text','textarea','checkbox','radio')) ||
+				(in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) || !$field['items'] || !is_array($field['items']) || in_array('',$field['items'])))
+				) {
 				return FALSE;
 			}
 			if(issetor($field['type']) == 'checkbox'){ //Checkbox cannot be required

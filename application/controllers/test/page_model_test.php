@@ -331,6 +331,57 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result, 'is_array', 'Checkbox with required = TRUE');
 		$this->unit->run(count($result) == 1, 'is_true', 'Added 1 field');
 		$this->unit->run(in_array(6,$result), 'is_true', 'Added 1 field');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name6',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'items' => array(),
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Checkbox without items');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name6',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Checkbox without items');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name6',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Checkbox without items');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name6',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'items' => array(''),
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Checkbox with blank item');
 	}
 	
 	/**
@@ -348,8 +399,6 @@ class Page_model_test extends CI_Controller {
 		
 		$this->unit->run($result[6], 'is_array', 'id 6');
 		$this->unit->run($result[6]['required'], 'is_false', "required reset to FALSE due to checkbox type");
-		
-		
 		
 		$result = $this->pages->get_page_user_fields_by_page_id(100);
 		$this->unit->run($result, 'is_false', 'get_page_user_fields_by_page_id(100)');
