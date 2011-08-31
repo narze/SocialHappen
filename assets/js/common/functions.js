@@ -26,7 +26,6 @@ if(!window.set_loading){
 		if(!message) {
 			message = "Loading";
 		}
-		//$.fancybox.init(); //force init
 		
 		var height = $(window).height();
 		var width = $(document).width();
@@ -67,9 +66,9 @@ if(!window.set_loading){
 			
 			
 			$(overlay).ajaxStart(function() {
-				$(this).fadeIn(0);
+				$(this).fadeIn('fast');
 			}).ajaxStop(function() {
-				$(this).fadeOut('slow',function(){$(this).remove()});
+				$(this).fadeOut('fast',function(){$(this).remove()});
 			});
 		}
 		
