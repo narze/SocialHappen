@@ -1128,22 +1128,22 @@ class Sync extends CI_Controller {
 			array(
 				'package_id' => 1,
 				'user_id' => 1,
-				'package_expire' => '2011-06-19 19:12:20'
+				'package_expire' => '2012-06-19 19:12:20'
 			),
 			array(
 				'package_id' => 1,
 				'user_id' => 2,
-				'package_expire' => '2011-07-19 20:12:20'
+				'package_expire' => '2012-07-19 20:12:20'
 			),
 			array(
 				'package_id' => 1,
 				'user_id' => 3,
-				'package_expire' => '2011-08-19 23:59:59'
+				'package_expire' => '2012-08-19 23:59:59'
 			),
 			array(
 				'package_id' => 1,
 				'user_id' => 4,
-				'package_expire' => '2011-09-19 19:12:20'
+				'package_expire' => '2012-09-19 19:12:20'
 			),
 			array(
 				'package_id' => 1,
