@@ -69,7 +69,8 @@ class Company extends CI_Controller {
 				);
 				
 				//If package over the limit
-				if($this->socialhappen->ckeck_package_over_the_limit_by_user_id($company['creator_user_id']) == TRUE) {
+				//Noom : change user_id to check to get_user_id() for the time being
+				if($this->socialhappen->check_package_over_the_limit_by_user_id($this->socialhappen->get_user_id()) == TRUE) {
 					$data['is_package_over_the_limit'] = TRUE;
 					$data['package_limited'] = $this -> load -> view('payment/package_limited', array(), TRUE);
 				}

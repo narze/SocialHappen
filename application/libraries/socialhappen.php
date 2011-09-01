@@ -555,11 +555,11 @@ class SocialHappen{
 	 * @param $user_id
 	 * @author Weerapat P.
 	 */
-	function ckeck_package_over_the_limit_by_user_id($user_id = NULL){
+	function check_package_over_the_limit_by_user_id($user_id = NULL){
 		//Get current package
 		$this->CI->load->model('package_users_model','package_users');
 		$current_package = $this->CI->package_users->get_package_by_user_id($user_id);
-		
+		var_export($user_id);
 		//Count user companies
 		$this->CI->load->model('company_model','companies');
 		$user_companies = count($this->CI->companies->get_companies_by_user_id($user_id));
