@@ -377,7 +377,7 @@ class Settings extends CI_Controller {
 					)
 				);
 				
-				var_export($new_page_user_fields);
+				//var_export($new_page_user_fields);
 				if ($this->pages->add_page_user_fields_by_page_id($page_id, $new_page_user_fields))
 				{
 					$success = TRUE;
@@ -421,7 +421,7 @@ class Settings extends CI_Controller {
 					$page_user_fields[$field_ids[$key]][$field_name] = $value;
 				}
 			}
-			var_export($page_user_fields);
+			//var_export($page_user_fields);
 			if ($this->pages->update_page_user_fields_by_page_id($page_id, $page_user_fields))
 			{
 				$success = TRUE;
