@@ -22,27 +22,11 @@ $(function(){
 			
 			if(is_guest){
 				$.fancybox({
-					href: base_url+'tab/guest'
+					href: base_url+'tab/guest/'+page_id
 				});
 				$('a.bt-don-awesome').die('click');
 				$('a.bt-don-awesome').live('click',function(){
 					$.fancybox.close();
-				});
-				$('a.bt-join-social').die('click');
-				$('a.bt-join-social').live('click',function(){
-					$.fancybox({
-						href: base_url+'tab/signup'
-					});
-					$('form.signup-form').die('submit');
-					$('form.signup-form').live('submit', function() {
-						$(this).ajaxSubmit({target:'#signup-form'});
-						return false;
-					});
-					
-					$('a.bt-register-now').live('click', function(){
-						$('form.signup-form').ajaxSubmit({target:'.popup-fb-2col', replaceTarget:true});
-						return false;
-					});
 				});
 			} else if(page_app_installed_id!=0) {
 				$.fancybox({

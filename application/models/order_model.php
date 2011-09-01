@@ -15,6 +15,22 @@ class Order_model extends CI_Model {
 		return issetor($result[0]);
 	}
 	
+	function get_order_by_txn_id($txn_id = NULL){
+		$this->db->like('billing_info', $txn_id);
+		$result = $this->db->get('order')->result_array();
+		
+		//Check again
+		$result[0]['billing_info'] = unserialize($result[0]['billing_info']);
+		if( $result[0]['billing_info']['txn_id'] == $txn_id)
+		{
+			return issetor($result[0]);
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 	function add_order($data = array()){
 		if(!$data){
 			return FALSE;

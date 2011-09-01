@@ -12,8 +12,8 @@ class Package_users_model extends CI_Model {
 
 	function get_package_by_user_id($user_id = NULL){
 		$this->db->join('package','package.package_id=package_users.package_id');
-		$packages = $this->db->get_where('package_users',array('user_id' => $user_id))->result_array();
-		return issetor($packages[0], NULL);
+		$package = $this->db->get_where('package_users',array('user_id' => $user_id))->row_array();
+		return issetor($package, NULL);
 	}
 	
 	function add_package_user($data = array()){
@@ -68,9 +68,33 @@ class Package_users_model extends CI_Model {
 		return ($user_max_count - $count > 0);
 	}
 	
-	function is_package_expire($user_id = NULL){
-		$results = $this->db->get_where('package_users',array('user_id' => $user_id))->result_array();
-		return date('Y-m-d H:i:s') > $results[0]['package_expire'];
+	/**
+	 * Check package expire
+	 * @param $user_id
+	 * @return boolean
+	 * @author Weerapat P.
+	 */
+	function is_package_expire($user_id = NULL){	
+		$this->db->join('package_users','package_users.package_id=package.package_id');
+		$this->db->where(array('package_users.user_id'=>$user_id));
+		$package = $this->db->get('package')->row_array();
+		
+		if($package['package_duration'] == 'unlimited' || $package['package_price'] == 0) return FALSE; //Free package
+		
+		return (date('Y-m-d H:i:s') > $package['package_expire']);
+	}
+	
+	/**
+	 * Count user mambers
+	 * @param $user_id
+	 * @return int
+	 * @author Weerapat P.
+	 */
+	function count_user_members_by_user_id($user_id = NULL){	
+		$this->db->join('company','company.company_id=page.company_id');
+		$this->db->join('page_user_data','page_user_data.page_id=page.page_id');
+		return $this->db->where(array('company.creator_user_id'=>$user_id))->count_all_results('page');
+		
 	}
 }
 /* End of file package_users_model.php */

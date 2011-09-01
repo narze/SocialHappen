@@ -113,7 +113,7 @@ class Package_users_model_test extends CI_Controller {
 	 */
 	function is_package_expire_test(){
 		$result = $this->package_users->is_package_expire($user_id = 1);
-		$this->unit->run($result, 'is_true', 'is_package_expire('.$user_id.')');
+		$this->unit->run($result, 'is_false', 'is_package_expire('.$user_id.')');
 	}
 }
 /* End of file package_users_model_test.php */

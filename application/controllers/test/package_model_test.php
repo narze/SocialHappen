@@ -94,6 +94,15 @@ class Package_model_test extends CI_Controller {
 		$result = $this->packages->remove_package(100);
 		$this->unit->run($result, 'is_false', 'remove_package(100)');
 	}
+	
+	/**
+	 * Tests is_upgradable()
+	 * @author Weerapat P.
+	 */
+	function is_upgradable_test(){
+		$result = $this->packages->is_upgradable(1);
+		$this->unit->run($result, 'is_true', 'is_upgradable(1)');
+	}
 }
 /* End of file package_model_test.php */
 /* Location: ./application/controllers/test/package_model_test.php */

@@ -469,10 +469,14 @@ class Tab extends CI_Controller {
 	}
 	
 	function guest(){
-		$this->load->view('tab/guest');
+		$data = array(
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_default_scope' => $this->config->item('facebook_default_scope')
+		);
+		$this->load->view('tab/guest', $data);
 	}
 	
-	function signup(){
+	function signup($page_id = NULL){
 		$this->load->library('form_validation');
 		$facebook_user = $this->facebook->getUser();
 		//$this->load->model('user_model','users');
@@ -490,7 +494,8 @@ class Tab extends CI_Controller {
 			$this -> load -> view('tab/signup', 
 					array(
 						'facebook_user'=>$facebook_user,
-						'user_profile_picture'=>$user_facebook_image
+						'user_profile_picture'=>$user_facebook_image,
+						'page_id' => $page_id
 					)
 			);
 		}
@@ -512,7 +517,7 @@ class Tab extends CI_Controller {
 			if ($user_add_result['status'] == 'OK')
 			{
 				$this->socialhappen->login();
-				$this->load->view('common/redirect',array('refresh_parent' => TRUE));
+				$this->load->view('common/redirect',array('redirect_parent' => base_url().'tab/'.$page_id));
 			}
 			else
 			{

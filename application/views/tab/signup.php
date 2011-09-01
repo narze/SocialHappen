@@ -5,7 +5,7 @@
 
 <?php // Change the css classes to suit your needs    
 		$attributes = array('class' => 'signup-form', 'id' => '');
-		echo form_open('tab/signup', $attributes); ?>
+		echo form_open('tab/signup/'.$page_id, $attributes); ?>
         <div class="profile">
           <p><?php echo $facebook_user['first_name'];?><span><?php echo $facebook_user['last_name'];?></span></p>
           <p class="thumb">

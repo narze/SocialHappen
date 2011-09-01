@@ -5,9 +5,9 @@
 		<?php elseif(isset($refresh) && $refresh) : ?>
 			window.location.reload();
 		<?php elseif(isset($redirect_parent)) : ?>
-			window.parent.location.replace($redirect_parent);
+			window.parent.location.replace('<?php echo $redirect_parent; ?>');
 		<?php elseif(isset($redirect)) : ?>
-			window.location.replace($redirect);
+			window.location.replace('<?php echo $redirect; ?>');
 		<?php endif; ?>	
 	};
 </script>
