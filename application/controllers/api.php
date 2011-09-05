@@ -274,6 +274,33 @@ class Api extends CI_Controller {
 	}
 	
 	/**
+	 * Request for platform user's facebook id using user's id 
+	 * @author Weerapat P.
+	 */				
+	function request_user_facebook_id(){
+		
+		$user_id = $this->input->get('user_id', TRUE);
+		
+		if(!($user_id)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: user_id)'));
+			return;
+		}
+		
+		$this->load->model('User_model', 'User');
+		$user_facebook_id = $this->User->get_user_facebook_id_by_user_id($user_id);
+		
+		if($user_facebook_id){
+			$response = array(	'status' => 'OK',
+							'user_facebook_id' => $user_facebook_id);
+		} else {
+			$response = array(	'error' => '200');
+		}
+
+		echo json_encode($response);
+	}
+	
+	/**
 	 * Request for platform page's id using facebook page's id
 	 * @author Wachiraph C.
 	 */
