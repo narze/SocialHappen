@@ -20,6 +20,9 @@
 		<li>
 			<?=anchor('backend/packages/', 'Manage Packages', 'title="Manage Packages"');?>
 		</li>
+		<li>
+			<?=anchor('backend/achievements/', 'Manage Achievements', 'title="Manage Achievements"');?>
+		</li>
 	</ul>
 	<?=anchor('backend/logout/', 'Logout', 'title="Logout backend"');?>
 </body>
