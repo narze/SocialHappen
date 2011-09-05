@@ -27,9 +27,9 @@ class App_url
 		return str_replace($pattern, $replace_with, $app_install_url);
 	}
 	
-	function translate_config_url($app_config_url, $app_install_id, $user_facebook_id, $app_install_secret_key){
-		$pattern = array('{app_install_id}', '{user_facebook_id}', '{app_install_secret_key}');
-		$replace_with = array($app_install_id, $user_facebook_id, $app_install_secret_key);
+	function translate_config_url($app_config_url, $app_install_id, $user_id, $app_install_secret_key){
+		$pattern = array('{app_install_id}', '{user_id}', '{app_install_secret_key}');
+		$replace_with = array($app_install_id, $user_id, $app_install_secret_key);
 		return str_replace($pattern, $replace_with, $app_config_url);
 	}
 }
