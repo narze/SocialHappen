@@ -980,65 +980,108 @@ class Backend extends CI_Controller {
 		// set up validation rules
 		$config = array(
 						array(
-							 'field'   => 'app_name',
-							 'label'   => 'App Name',
+							 'field'   => 'name',
+							 'label'   => 'Achievement Name',
 							 'rules'   => 'required|trim|xss_clean'
 						),
 						array(
-							 'field'   => 'app_description',
-							 'label'   => 'App Description',
+							 'field'   => 'description',
+							 'label'   => 'Achievement Description',
 							 'rules'   => 'required|trim|xss_clean'
 						),
 						array(
-							 'field'   => 'app_url',
-							 'label'   => 'App URL',
-							 'rules'   => 'required|trim|xss_clean'
+							 'field'   => 'app_id',
+							 'label'   => 'App ID',
+							 'rules'   => 'is_natural|required|trim|xss_clean'
 						),
 						array(
-							 'field'   => 'app_install_url',
-							 'label'   => 'App Install URL',
-							 'rules'   => 'required|trim|xss_clean'
+							 'field'   => 'app_install_id',
+							 'label'   => 'App Install ID',
+							 'rules'   => 'is_natural|trim|xss_clean'
 						),
 						array(
-							 'field'   => 'app_install_page_url',
-							 'label'   => 'App Install to Page URL',
-							 'rules'   => 'required|trim|xss_clean'
+							 'field'   => 'page_id',
+							 'label'   => 'Page ID',
+							 'rules'   => 'is_natural|trim|xss_clean'
 						),
 						array(
-							 'field'   => 'app_config_url',
-							 'label'   => 'App Config URL',
-							 'rules'   => 'required|trim|xss_clean'
+							 'field'   => 'campaign_id',
+							 'label'   => 'Campaign ID',
+							 'rules'   => 'is_natural|trim|xss_clean'
 						),
 						array(
-							 'field'   => 'app_support_page_tab',
-							 'label'   => 'App Support Page Tab',
-							 'rules'   => 'xss_clean'
+							 'field'   => 'criteria_string[]',
+							 'label'   => 'Criteria String',
+							 'rules'   => 'required|xss_clean'
 						),
 						array(
-							 'field'   => 'app_facebook_api_key',
-							 'label'   => 'App Facebook API Key',
-							 'rules'   => 'required|trim|xss_clean'
+							 'field'   => 'criteria_key[]',
+							 'label'   => 'criteria_key',
+							 'rules'   => 'required|xss_clean'
+						),
+						array(
+							 'field'   => 'criteria_value[]',
+							 'label'   => 'Criteria',
+							 'rules'   => 'required|xss_clean'
 						)
 				);
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
 		$this->form_validation->set_rules($config); 
-				
 		if($this->form_validation->run()){
-			$this->load->model('App_model', 'App');
-			$this->App->add_app(array('app_name' => $this->input->post('app_name', TRUE),
-								'app_url' => str_replace(';', '', $this->input->post('app_url', TRUE)),
-								'app_install_url' => str_replace(';', '', $this->input->post('app_install_url', TRUE)),
-								'app_install_page_url' => str_replace(';', '', $this->input->post('app_install_page_url', TRUE)),
-								'app_config_url' => str_replace(';', '', $this->input->post('app_config_url', TRUE)),
-								'app_support_page_tab' => $this->input->post('app_support_page_tab', FALSE) == 'app_support_page_tab',
-								'app_description' => $this->input->post('app_description', TRUE),
-								'app_type_id' => $this->input->post('app_type_id', TRUE),
-								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE),
-								'app_secret_key' => md5($this->_generate_random_string())));
-			redirect('backend/dashboard');
+			$name = str_replace(';', '', $this->input->post('name', TRUE));
+			$description = str_replace(';', '', $this->input->post('description', TRUE));
+			$app_id = str_replace(';', '', $this->input->post('app_id', TRUE));
+			$app_install_id = str_replace(';', '', $this->input->post('app_install_id', TRUE));
+			$page_id = str_replace(';', '', $this->input->post('page_id', TRUE));
+			$campaign_id = str_replace(';', '', $this->input->post('campaign_id', TRUE));
+			
+			$criteria_string = $this->input->post('criteria_string', TRUE);
+			
+			
+			if($criteria_string === FALSE){
+				$criteria_string = array();
+			}
+
+			$info = array(
+				'name' => $name,
+				'description' => $description,
+				'criteria_string' => $criteria_string,
+			);
+			
+			if(strlen($app_install_id) > 0){
+				$info['app_install_id'] = $app_install_id;
+			}
+			
+			if(strlen($page_id) > 0){
+				$info['page_id'] = $page_id;
+			}
+			
+			if(strlen($campaign_id) > 0){
+				$info['campaign_id'] = $campaign_id;
+			}
+			
+			$criteria_key = $this->input->post('criteria_key', TRUE);
+			$criteria_value = $this->input->post('criteria_value', TRUE);
+
+			$criteria = array();
+			if($criteria_key !== FALSE && $criteria_value !== FALSE){
+				for($i = 0; $i < count($criteria_key); $i++){
+					$criteria[$criteria_key[$i]] = $criteria_value[$i];
+				}
+			}
+			
+			$this->load->library('achievement_lib');
+			$this->achievement_lib->add_achievement_info(
+				$app_id, $app_install_id,
+				$info, $criteria);
+			redirect('backend/achievements');
 		}else{
-			$this->load->view('backend_views/add_new_app_view');
+			$this->load->view('backend_views/achievement_add_view');
 		}
+	}
+
+	function edit_achievement_info(){
+		
 	}
 	
 	/**
