@@ -1145,6 +1145,7 @@ class Api extends CI_Controller {
 		
 		$users = array(); //id => value
 		$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+		$this->load->model('user_apps_model','user_apps');
 		foreach($apps as $app){
 			$app_install_id = $app['app_install_id'];
 			if($app_users = $this->user_apps->get_app_users_by_app_install_id($app_install_id)){
