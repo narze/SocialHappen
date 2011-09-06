@@ -43,6 +43,10 @@ class Tab extends CI_Controller {
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
 		
+		//is user register to current page
+		$this->load->model('page_user_data_model','page_user_data');
+		$is_user_register_to_page = $this->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
+		
 		$this->config->load('pagination', TRUE);
 		$per_page = $this->config->item('per_page','pagination');
 
@@ -65,7 +69,8 @@ class Tab extends CI_Controller {
 									'token' => base64_encode($token),
 									'per_page' => $per_page,
 									'page_app_installed_id' => $page['page_app_installed_id'],
-									'page_installed' => $page['page_installed']
+									'page_installed' => $page['page_installed'],
+									'is_user_register_to_page' => $is_user_register_to_page ? TRUE : FALSE
 					),
 					'script' => array(
 						'common/functions',
