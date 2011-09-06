@@ -7,7 +7,8 @@
 </head>
 <body>
 <h1>Packages</h1>
-<?=anchor('backend/dashboard', 'Back to dashboard', 'title="go back to dashboard"');?>
+<?=anchor('backend/add_new_package/', 'Add New Package', 'title="add new package to platform"');?>
+ | <?=anchor('backend/dashboard', 'Back to dashboard', 'title="go back to dashboard"');?>
 <h1>Packages List</h1>
 <p>total packages: <?php echo $total_package; ?></p>
 <p><?php echo $pagination; ?></p>
