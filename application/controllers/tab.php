@@ -513,7 +513,6 @@ class Tab extends CI_Controller {
 						);
 					
 			$user_add_result = json_decode($this->curl->simple_post(base_url().'user/json_add', $user), TRUE);
-			//$user_add_result = array('status'=>'OK');
 			
 			if ($user_add_result['status'] == 'OK')
 			{
@@ -524,6 +523,65 @@ class Tab extends CI_Controller {
 			{
 				echo 'Error occured';
 			}
+		}
+	}
+	
+	function signup_page($page_id = NULL){
+		$this->load->library('form_validation');
+		$facebook_user = $this->facebook->getUser();
+		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
+		
+		$this->load->model('page_model','pages');
+		$page_user_fields = $this->pages->get_page_user_fields_by_page_id($page_id);
+		
+		foreach($page_user_fields as $user_fields){
+			$required = ($user_fields['required']) ? "|required" : "";
+			$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);	
+		}
+		
+		$data = array();
+		foreach($page_user_fields as $user_fields){
+			$required = ($user_fields['required']) ? "|required" : "";
+			switch($user_fields['type']){
+				case 'radio':
+					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);	
+				break;
+				case 'checkbox':
+					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'xss_clean');	
+				break;
+				case 'textarea':
+					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
+				break;					
+				case 'text':
+				default:
+					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
+			}
+			$data[$user_fields['name']] = $this->input->post($user_fields['name']);
+		}
+		
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->load->view('tab/signup_page', array(
+				'page_id' => $page_id,
+				'page_user_fields' => $page_user_fields,
+				'facebook_user'=>$facebook_user,
+				'user_profile_picture'=>$user_facebook_image
+			));
+		} else {
+			
+			$this->load->model('page_user_data_model','page_users');
+			$data = array(
+				'user_id' => $this->socialhappen->get_user_id(),
+				'page_id' => $page_id,
+				'user_data' => $data
+			);
+			
+			if($this->page_users->add_page_user($data)){
+				echo "finished";
+			} else {
+				echo "cannot signup page";
+			}
+			
 		}
 	}
 	

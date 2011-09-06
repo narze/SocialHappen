@@ -62,7 +62,7 @@
 	<?php echo form_close(); ?>
 </div>
 -->
-
+<!--
 <div id="admin-admin">
 	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
 	<h2><span>Page admins</span></h2>
@@ -93,7 +93,158 @@
 		  </p>
 		</div>
 	</div>
+-->
+
+<div id="page-user-fields">
+	<?php if(isset($success)==TRUE) echo 'Updated'; ?>
+	<h2><span>Page user fields</span></h2>
+	<?php 
+	$attributes = array('class' => 'page-user-fields', 'id' => '');
+	echo form_open("settings/page_user_fields/{$page['page_id']}", $attributes); ?>
+	<div class="field-list">
+		<?php if(isset($page_user_fields)) :
+			$nth = 0;
+			foreach($page_user_fields as $id => $field) : ?>
+				<?php echo $id; ?>
+				<input type="hidden" name="id[]" value="<?php echo $id;?>" />
+				<p>
+						<label for="name">Name <span class="required">*</span></label>
+						<?php echo form_error('edit_name[]'); ?>
+						<input type="text" name="edit_name[]" maxlength="255" value="<?php echo set_value('edit_name[]', issetor($field['name'])); ?>"  />
+				</p>
+
+				<p>
+						<label for="label">Label <span class="required">*</span></label>
+						<?php echo form_error('edit_label[]'); ?>
+						<input type="text" name="edit_label[]" maxlength="255" value="<?php echo set_value('edit_label[]',  issetor($field['label'])); ?>"  />
+				</p>
+
+				<p>
+						<label for="type">Type <span class="required">*</span></label>
+						<?php echo form_error('type'); ?>
+						
+						<?php $options = array(
+						  ''  => 'Select Type',
+						  'text'    => 'Text',
+						  'textarea' => 'Textarea',
+						  'checkbox' => 'Checkbox',
+						  'radio' => 'Radio'
+						); ?>
+
+						<?php echo form_dropdown('edit_type[]', $options, set_value('edit_type[]',  issetor($field['type'])))?>
+				</p>                                             
+											
+				<p>
+					
+						<?php echo form_error('edit_required[]'); ?>
+						
+						<?php // Change the values/css classes to suit your needs ?>
+						<input type="checkbox" name="edit_required[]" value="<?php echo $nth;?>" class="" <?php echo set_checkbox('edit_required[]', $nth, issetor($field['required']) != ''); ?>> 
+								   
+					<label for="required">Required</label>
+				</p> 
+
+<!-- next release
+				<p>
+					
+						<?php echo form_error('edit_rules[]'); ?>
+						
+						<?php // Change the values/css classes to suit your needs ?>
+						<input type="checkbox" name="edit_rules[]" value="rules" class="" <?php echo set_checkbox('edit_rules[]', 'rules'); ?>> 
+								   
+					<label for="rules">Rules</label>
+				</p>
+-->				
+				<p>
+						<label for="items">Items</label>
+						<?php echo form_error('edit_items[]'); ?>
+						<?php if(is_array(issetor($field['items']))) : ?>
+							<input type="text" name="edit_items[]"  value="<?php echo set_value('edit_items[]',  implode(',',$field['items'])); ?>" />
+						<?php else :?>
+							<input type="text" name="edit_items[]"  value="<?php echo set_value('edit_items[]'); ?>" />
+						<?php endif; ?>
+				</p>
+
+				<p>
+						<label for="order">Order <span class="required">*</span></label>
+						<?php echo form_error('edit_order[]'); ?>
+						<input type="text" name="edit_order[]" maxlength="5" value="<?php echo set_value('edit_order[]', issetor($field['order'])); ?>"  />
+				</p>
+
+				[Button] remove this field!
+				<hr />
+			<?php $nth++;
+			endforeach;
+		endif;
+		?>
+		add new field
+		<p>
+						<label for="name">Name <span class="required">*</span></label>
+						<?php echo form_error('name'); ?>
+						<input type="text" name="name" maxlength="255" value="<?php echo set_value('name'); ?>"  />
+				</p>
+
+				<p>
+						<label for="label">Label <span class="required">*</span></label>
+						<?php echo form_error('label'); ?>
+						<input type="text" name="label" maxlength="255" value="<?php echo set_value('label'); ?>"  />
+				</p>
+
+				<p>
+						<label for="type">Type <span class="required">*</span></label>
+						<?php echo form_error('type'); ?>
+						
+						<?php // Change the values in this array to populate your dropdown as required ?>
+						<?php $options = array(
+						  ''  => 'Select Type',
+						  'text'    => 'Text',
+						  'textarea' => 'Textarea',
+						  'checkbox' => 'Checkbox',
+						  'radio' => 'Radio'
+						); ?>
+
+						<?php echo form_dropdown('type', $options, set_value('type'))?>
+				</p>                                             
+											
+				<p>
+					
+						<?php echo form_error('required'); ?>
+						
+						<?php // Change the values/css classes to suit your needs ?>
+						<input type="checkbox" name="required" value="1" class="" <?php echo set_checkbox('required', 1); ?>> 
+								   
+					<label for="required">Required</label>
+				</p> 
+
+<!-- next release
+				<p>
+					
+						<?php echo form_error('rules'); ?>
+						
+						<?php // Change the values/css classes to suit your needs ?>
+						<input type="checkbox" name="rules" value="enter_value_here" class="" <?php echo set_checkbox('rules'); ?>> 
+								   
+					<label for="rules">Rules</label>
+				</p>
+-->				
+				<p>
+						<label for="items">Items</label>
+						<?php echo form_error('items'); ?>
+						<input type="text" name="items" value="<?php echo set_value('items'); ?>"  />
+				</p>
+
+				<p>
+						<label for="order">Order <span class="required">*</span></label>
+						<?php echo form_error('order'); ?>
+						<input type="text" name="order" maxlength="5" value="<?php echo set_value('order'); ?>"  />
+				</p>
+	</div>
+		
+		<div><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></div>
 	
+	<?php echo form_close(); ?>
+</div>
+
 <div id="page-application">
 <?php if(isset($success)==TRUE) echo 'Updated'; ?>
 <h2><span>Page applications</span></h2>

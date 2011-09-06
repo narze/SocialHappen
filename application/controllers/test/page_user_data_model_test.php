@@ -34,7 +34,7 @@ class Page_user_data_model_test extends CI_Controller {
 		$user = array(
 						'user_id' => '1',
 						'page_id' => '2',
-						'user_data' => array('size' => 'M', 'color'=> 'red')
+						'user_data' => array('size' => 'M', 'color'=> 'red', 'checkbox_name' => array('value1','value2','value100')),
 					);
 		$result = $this->page_users->add_page_user($user);
 		$this->unit->run($result,'is_true',"add_page_user()");
@@ -52,10 +52,10 @@ class Page_user_data_model_test extends CI_Controller {
 		$user = array(
 						'user_id' => '3',
 						'page_id' => '2',
-						'user_data' => array('foo'=> 'bar')
+						'user_data' => array('size' => 'M', 'foo'=> 'bar')
 					);
 		$result = $this->page_users->add_page_user($user);
-		$this->unit->run($result,'is_true',"add_page_user() w/ wrong user_data");
+		$this->unit->run($result,'is_true',"add_page_user() w/ wrong user_data (filtered)");
 		
 		$user = array(
 						'user_id' => '4',
@@ -63,7 +63,7 @@ class Page_user_data_model_test extends CI_Controller {
 						'user_data' => NULL
 					);
 		$result = $this->page_users->add_page_user($user);
-		$this->unit->run($result,'is_true',"add_page_user() w/ NULL user_data");
+		$this->unit->run($result,'is_false',"add_page_user() w/ NULL user_data (lacks required data)");
 		
 		$user = array(
 						//'user_id' => '4',
@@ -101,6 +101,16 @@ class Page_user_data_model_test extends CI_Controller {
 		$result = $this->page_users->add_page_user($user);
 		$this->unit->run($result,'is_false',"add_page_user() no user exist");
 		
+		$user = array(
+						'user_id' => '5',
+						'page_id' => '3',
+						'user_data' => array('size' => 'M', 'color'=> 'red')
+					);
+		$result = $this->page_users->add_page_user($user);
+		$this->unit->run($result,'is_true',"add_page_user() no page user fields (blank user_data)");
+		
+		
+		
 	}
 	
 	/**
@@ -119,12 +129,30 @@ class Page_user_data_model_test extends CI_Controller {
 		$this->unit->run($result,'is_null', 'get_page_user_by_user_id_and_page_id()');
 		$this->unit->run($result,'is_null','user_data');
 		
+		$result = $this->page_users->get_page_user_by_user_id_and_page_id(5, 3);
+		$this->unit->run($result,'is_array', 'get_page_user_by_user_id_and_page_id()');
+		$this->unit->run($result['user_facebook_id'],'is_string','first user_facebook_id');
+		$this->unit->run($result['user_data'],'is_array','user_data');
+		$this->unit->run(count($result['user_data']) === 0, 'is_true', 'no elements due to zero fields');
+		
+		$result = $this->page_users->get_page_user_by_user_id_and_page_id(1, 1);
+		$this->unit->run($result,'is_array', 'get_page_user_by_user_id_and_page_id()');
+		$this->unit->run($result['user_facebook_id'],'is_string','first user_facebook_id');
+		$this->unit->run($result['user_data'],'is_array','user_data');
+		$this->unit->run($result['user_data']['size'] == 'L','is_true','size == "L"');
+		$this->unit->run($result['user_data']['color'] == 'red','is_true','color == "red"');	
+		
 		$result = $this->page_users->get_page_user_by_user_id_and_page_id(1, 2);
 		$this->unit->run($result,'is_array', 'get_page_user_by_user_id_and_page_id()');
 		$this->unit->run($result['user_facebook_id'],'is_string','first user_facebook_id');
 		$this->unit->run($result['user_data'],'is_array','user_data');
 		$this->unit->run($result['user_data']['size'] == 'M','is_true','size == "M"');
 		$this->unit->run($result['user_data']['color'] == 'red','is_true','color == "red"');
+		$this->unit->run($result['user_data']['checkbox_name'],'is_array','checkbox');
+		$this->unit->run(in_array('value1', $result['user_data']['checkbox_name']),'is_true','checkbox value1 checked');
+		$this->unit->run(in_array('value2', $result['user_data']['checkbox_name']),'is_true','checkbox value2 checked');
+		$this->unit->run(in_array('value3', $result['user_data']['checkbox_name']),'is_false','checkbox value3 unchecked');
+		$this->unit->run(in_array('value100', $result['user_data']['checkbox_name']),'is_false','checkbox value100 unchecked (no field name)');
 		
 		$result = $this->page_users->get_page_user_by_user_id_and_page_id(2, 2);
 		$this->unit->run($result,'is_array', 'get_page_user_by_user_id_and_page_id()');
@@ -186,6 +214,9 @@ class Page_user_data_model_test extends CI_Controller {
 		
 		$result = $this->page_users->update_page_user_by_user_id_and_page_id(2,2,array());
 		$this->unit->run($result,'is_false',"no data update :  no input");	
+
+		$result = $this->page_users->update_page_user_by_user_id_and_page_id(1,2,array('size' => '', 'color'=> 'green'));
+		$this->unit->run($result, 'is_false', 'delete size data which is required');
 	}
 	
 	/**
@@ -203,10 +234,10 @@ class Page_user_data_model_test extends CI_Controller {
 		$this->unit->run($result,'is_true', 'remove_page_user_by_user_id_and_page_id(3,2)');
 		
 		$result = $this->page_users->remove_page_user_by_user_id_and_page_id(4,2);
-		$this->unit->run($result,'is_true', 'remove_page_user_by_user_id_and_page_id(4,2)');
+		$this->unit->run($result,'is_false', 'remove_page_user_by_user_id_and_page_id(4,2)');
 		
-		$result = $this->page_users->remove_page_user_by_user_id_and_page_id(4,2);
-		$this->unit->run($result,'is_false', 'remove_page_user_by_user_id_and_page_id(4,2) again');
+		$result = $this->page_users->remove_page_user_by_user_id_and_page_id(5,3);
+		$this->unit->run($result,'is_true', 'remove_page_user_by_user_id_and_page_id(5,3)');
 		
 		$result = $this->page_users->remove_page_user_by_user_id_and_page_id(1,NULL);
 		$this->unit->run($result,'is_false', 'remove_page_user_by_user_id_and_page_id(1,NULL)');

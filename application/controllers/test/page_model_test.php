@@ -164,6 +164,481 @@ class Page_model_test extends CI_Controller {
 		$result = $this->pages->count_pages_by_app_id(1);
 		$this->unit->run($result,'is_int', 'count_pages_by_app_id()');
 	}
+	
+	/**
+	 * Test add_page_user_fields_by_page_id()
+	 * @author Manasssarn M.
+	 */
+	function add_page_user_fields_by_page_id_test(){
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name1',
+				'required' => FALSE,
+				'type' => 'text',
+				'label' => 'Name 1',
+				'order' => 1,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_array', 'Added 1 field');
+		$this->unit->run(count($result) == 1, 'is_true', 'Added 1 field');
+		$this->unit->run(in_array(3,$result), 'is_true', 'Added 1 field');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name2',
+				'required' => FALSE,
+				'type' => 'text',
+				'label' => 'Name 2',
+				'order' => 2,
+				'items' => NULL,
+				'rules' => NULL,
+			),
+			array(
+				'name' => 'name3',
+				'required' => FALSE,
+				'type' => 'radio',
+				'label' => 'Name 3',
+				'order' => 3,
+				'items' => array('radio1', 'radio2'),
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_array', 'Added 2 fields');
+		$this->unit->run(count($result) == 2, 'is_true', 'Added 2 fields');
+		$this->unit->run(in_array(4,$result), 'is_true', 'Added 2 fields');
+		$this->unit->run(in_array(5,$result), 'is_true', 'Added 2 fields');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array());
+		$this->unit->run($result, 'is_false', 'no input');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1);
+		$this->unit->run($result, 'is_false', 'blank input');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(100, array(
+			array(
+				'name' => 'name4',
+				'required' => FALSE,
+				'type' => 'text',
+				'label' => 'Name 4',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'page not found');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'required' => FALSE,
+				'type' => 'text',
+				'label' => 'Name 4',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'no name');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => '',
+				'required' => FALSE,
+				'type' => 'text',
+				'label' => 'Name 4',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'blank name');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name4',
+				'required' => FALSE,
+				'type' => 'text',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'no Label');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name4',
+				'required' => FALSE,
+				'type' => 'text',
+				'label' => '',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'blank label');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name4',
+				'required' => FALSE,
+				'label' => 'Name 4',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'no type');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name4',
+				'required' => FALSE,
+				'type' => '',
+				'label' => 'Name 4',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'blank type');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name4',
+				'required' => FALSE,
+				'type' => 'wrongtype',
+				'label' => 'Name 4',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'wrong type');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name5',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'items' => array(1,2,3),
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_array', 'Checkbox with required = TRUE');
+		$this->unit->run(count($result) == 1, 'is_true', 'Added 1 field');
+		$this->unit->run(in_array(6,$result), 'is_true', 'Added 1 field');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name6',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'items' => array(),
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Checkbox without items');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name6',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'items' => NULL,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Checkbox without items');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name6',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Checkbox without items');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'name' => 'name6',
+				'required' => TRUE,
+				'type' => 'checkbox',
+				'label' => 'Name 5',
+				'order' => 4,
+				'items' => array(''),
+				'rules' => NULL,
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Checkbox with blank item');
+	}
+	
+	/**
+	 * Test get_page_user_fields_by_page_id()
+	 * @author Manassarn M.
+	 */
+	function get_page_user_fields_by_page_id_test(){
+		$result = $this->pages->get_page_user_fields_by_page_id(1);
+		$this->unit->run($result, 'is_array', 'get_page_user_fields_by_page_id(1)');
+		$this->unit->run($result[3], 'is_array', 'id 3');
+		$this->unit->run($result[3]['name'], 'is_string', "result[3]['name'] = {$result[3]['name']}");
+		$this->unit->run($result[3]['type'], 'is_string', "result[3]['type'] = {$result[3]['type']}");
+		$this->unit->run($result[3]['label'], 'is_string', "result[3]['label'] = {$result[3]['label']}");
+		$this->unit->run($result[3]['order'], 'is_int', "result[3]['order'] = {$result[3]['order']}");
+		
+		$this->unit->run($result[6], 'is_array', 'id 6');
+		$this->unit->run($result[6]['required'], 'is_false', "required reset to FALSE due to checkbox type");
+		
+		$result = $this->pages->get_page_user_fields_by_page_id(100);
+		$this->unit->run($result, 'is_false', 'get_page_user_fields_by_page_id(100)');
+	}
+	
+	/**
+	 * Test update_page_user_fields_by_page_id()
+	 * @author Manassarn M.
+	 */
+	function update_page_user_fields_by_page_id_test(){
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed',
+					'required' => TRUE,
+					'label' => 'Renamed label'
+				)
+			)
+		);
+		$this->unit->run($result, 'is_true', 'Edited one field');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'label' => 'New label'
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_true', 'Edited fields');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'type' => 'checkbox',
+					'items' => array(1,2,3,4)
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_true', 'Change type to checkbox with items');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(100, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'label' => 'New label'
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'Page not found');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => '',
+					'required' => FALSE,
+					'label' => 'New label'
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'Blank name');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'label' => ''
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'Blank label');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'type' => 'radio',
+					'items' => ''
+				),
+				4=>array(
+					'name' => 'renamed2',
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'Change type to radio without items');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'type' => 'checkbox',
+					'items' => array()
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'Change type to checkbox without items');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'type' => 'checkbox',
+					'items' => array('')
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'Change type to checkbox with blank item in array');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'type' => 'wrongtype'
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'wrong type');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				3=>array(
+					'name' => 'renamed1',
+					'required' => FALSE,
+					'type' => ''
+				),
+				4=>array(
+					'name' => 'renamed2',
+				),
+				5=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'Blank type');
+		
+		$result = $this->pages->update_page_user_fields_by_page_id(1, 
+			array(
+				1000=>array(
+					'name' => 'renamed1',
+					'required' => FALSE
+				),
+				1002=>array(
+					'name' => 'renamed2',
+				),
+				1003=>array(
+					'order' => 5
+				)
+			)
+		);
+		$this->unit->run($result, 'is_false', 'Id not found');
+		
+		
+	}
+		
+	/**
+	 * Test remove_page_user_fields_by_page_id()
+	 * @author Manassarn M.
+	 */
+	function remove_page_user_fields_by_page_id_test(){
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, array());
+		$this->unit->run($result, 'is_false', 'Remove nothing');
+		
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, array('three','four'));
+		$this->unit->run($result, 'is_false', 'Wrong remove');
+		
+		$result = $this->pages->remove_page_user_fields_by_page_id(100, array(3,4));
+		$this->unit->run($result, 'is_false', 'Wrong page');
+		
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(3,4));
+		$this->unit->run($result, 'is_true', 'Removed');
+		
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(3,4));
+		$this->unit->run($result, 'is_false', 'Remove again');
+		
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(5,4));
+		$this->unit->run($result, 'is_false', 'Partial wrong remove (4 is removed already)');
+		
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, array('5'));
+		$this->unit->run($result, 'is_true', 'Remove using string number');
+		
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, 6);
+		$this->unit->run($result, 'is_true', 'Remove using string number without array');
+	}
 }
 /* End of file page_model_test.php */
 /* Location: ./application/controllers/test/page_model_test.php */
