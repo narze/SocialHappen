@@ -1132,14 +1132,30 @@ class Api extends CI_Controller {
 		
 		$response = array('status' => 'OK');
 		
-		$this->load->model('page_user_data_model','page_users');
-		if(!$page_users = $this->page_users->get_page_users_by_page_id($page_id)){
-			$response['message'] = 'User / page not found';
-			$response['page_users'] = array();
-		} else {
-			$response['page_users'] = $page_users;
+		//Old method
+		// $this->load->model('page_user_data_model','page_users');
+		// if(!$page_users = $this->page_users->get_page_users_by_page_id($)){
+			// $response['message'] = 'User / page not found';
+			// $response['page_users'] = array();
+		// } else {
+			// $response['page_users'] = $page_users;
 			//TODO: limit fields
+		// }
+		// echo json_encode($response);
+		
+		$users = array(); //id => value
+		$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+		foreach($apps as $app){
+			$app_install_id = $app['app_install_id'];
+			if($app_users = $this->user_apps->get_app_users_by_app_install_id($app_install_id)){
+				foreach($app_users as $app_user){
+					if(!isset($users[$app_user['user_id']])){
+						$users[$app_user['user_id']] = $app_user;
+					}
+				}
+			}
 		}
+		$response['app_users'] = array_values($users);
 		echo json_encode($response);
 	}
 	
