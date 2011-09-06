@@ -99,6 +99,16 @@ class Achievement_lib
 	}
 	
 	/**
+	 * list all achievement info
+	 * 
+	 * @return result array
+	 */
+	function list_achievement_info(){
+		$this->CI->load->model('achievement_info_model','achievement_info');
+		return $this->CI->achievement_info->list_info(array());
+	}
+	
+	/**
 	 * list achievement info by app_id
 	 * 
 	 * @param app_id

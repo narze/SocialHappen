@@ -123,7 +123,7 @@ class App extends CI_Controller {
 				$config_url = $this->app_url->translate_config_url(
 											$app['app_config_url'], 
 											$app['app_install_id'], 
-											$this->users->get_user_facebook_id_by_user_id($this->socialhappen->get_user_id()), 
+											$this->socialhappen->get_user_id(), 
 											$app['app_install_secret_key']);
 				redirect($config_url);
 			}

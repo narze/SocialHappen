@@ -536,6 +536,7 @@ class Backend extends CI_Controller {
 	}
 
 	function delete_audit_action($app_id, $action_id){
+		$this->backend_session_verify(true);
 		$this->load->library('audit_lib');
 		$result = $this->audit_lib->delete_audit_action($app_id, $action_id);
 		//var_dump($result);
@@ -655,6 +656,7 @@ class Backend extends CI_Controller {
 	}
 	
 	function app_install($app_install_id){
+		$this->backend_session_verify(true);
 		$this->load->model('Installed_apps_model', 'Installed_app');
 		$installed_app = $this->Installed_app->get_app_profile_by_app_install_id($app_install_id);
 		$data['app_install'] = $installed_app;
@@ -677,6 +679,7 @@ class Backend extends CI_Controller {
 	}
 	
 	function campaign($campaign_id){
+		$this->backend_session_verify(true);
 		$this->load->model('Campaign_model', 'Campaign');
 		$data['campaign'] = $this->Campaign->get_campaign_profile_by_campaign_id($campaign_id);
 		//$this->dump($data['campaign']);
@@ -708,6 +711,7 @@ class Backend extends CI_Controller {
 	}
 	
 	function user($user_id){
+		$this->backend_session_verify(true);
 		$this->load->model('User_model', 'User');
 		$data['user'] = $this->User->get_user_profile_by_user_id($user_id);
 		//$this->dump($data['user']);
@@ -756,6 +760,7 @@ class Backend extends CI_Controller {
 	}
 
 	function users(){
+		$this->backend_session_verify(true);
 		$this->load->model('User_model', 'User');
 		$this->load->library('pagination');
 		
@@ -777,6 +782,7 @@ class Backend extends CI_Controller {
 	}
 	
 	function edit_package($package_id){
+		$this->backend_session_verify(true);
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		$this->load->model('Package_model', 'Package');
@@ -855,6 +861,7 @@ class Backend extends CI_Controller {
 	}
 	
 	function packages(){
+		$this->backend_session_verify(true);
 		$this->load->model('Package_model', 'Package');
 		$this->load->library('pagination');
 		
@@ -873,6 +880,84 @@ class Backend extends CI_Controller {
 		$data['package_list'] = $this->Package->get_packages($config['per_page'], $offset);
 		//$this->dump($data['package_list']);
 		$this->load->view('backend_views/package_list_view', $data);
+	}
+	
+	function achievements(){
+		$this->backend_session_verify(true);
+		$data = array();
+		$this->load->library('achievement_lib');
+		$data['achievement_list'] = $this->achievement_lib->list_achievement_info();
+		$this->load->view('backend_views/achievement_list_view', $data);
+	}
+	
+	function new_achievement_info(){
+		$this->backend_session_verify(true);
+		
+		$this->load->helper('form');
+		$this->load->library('form_validation');
+				
+		// set up validation rules
+		$config = array(
+						array(
+							 'field'   => 'app_name',
+							 'label'   => 'App Name',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_description',
+							 'label'   => 'App Description',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_url',
+							 'label'   => 'App URL',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_install_url',
+							 'label'   => 'App Install URL',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_install_page_url',
+							 'label'   => 'App Install to Page URL',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_config_url',
+							 'label'   => 'App Config URL',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_support_page_tab',
+							 'label'   => 'App Support Page Tab',
+							 'rules'   => 'xss_clean'
+						),
+						array(
+							 'field'   => 'app_facebook_api_key',
+							 'label'   => 'App Facebook API Key',
+							 'rules'   => 'required|trim|xss_clean'
+						)
+				);
+		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_rules($config); 
+				
+		if($this->form_validation->run()){
+			$this->load->model('App_model', 'App');
+			$this->App->add_app(array('app_name' => $this->input->post('app_name', TRUE),
+								'app_url' => str_replace(';', '', $this->input->post('app_url', TRUE)),
+								'app_install_url' => str_replace(';', '', $this->input->post('app_install_url', TRUE)),
+								'app_install_page_url' => str_replace(';', '', $this->input->post('app_install_page_url', TRUE)),
+								'app_config_url' => str_replace(';', '', $this->input->post('app_config_url', TRUE)),
+								'app_support_page_tab' => $this->input->post('app_support_page_tab', FALSE) == 'app_support_page_tab',
+								'app_description' => $this->input->post('app_description', TRUE),
+								'app_type_id' => $this->input->post('app_type_id', TRUE),
+								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE),
+								'app_secret_key' => md5($this->_generate_random_string())));
+			redirect('backend/dashboard');
+		}else{
+			$this->load->view('backend_views/add_new_app_view');
+		}
 	}
 	
 	/**
