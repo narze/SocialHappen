@@ -83,16 +83,16 @@ class Achievement_info_model extends CI_Model {
 			/**
 			 * keys
 			 */
-			$achievement_info['app_id'] = $app_id;
+			$achievement_info['app_id'] = (int)$app_id;
 			
 			if($app_install_id){
-				$achievement_info['app_install_id'] = $app_install_id;
+				$achievement_info['app_install_id'] = (int)$app_install_id;
 			}
 			if(isset($info['page_id'])){
-				$achievement_info['page_id'] = $info['page_id'];
+				$achievement_info['page_id'] = (int)$info['page_id'];
 			}
 			if(isset($info['campaign_id'])){
-				$achievement_info['campaign_id'] = $info['campaign_id'];
+				$achievement_info['campaign_id'] = (int)$info['campaign_id'];
 			}
 			/**
 			 * info fields
@@ -145,17 +145,17 @@ class Achievement_info_model extends CI_Model {
 			/**
 			 * keys
 			 */
-			$achievement_info['app_id'] = $app_id;
+			$achievement_info['app_id'] = (int)$app_id;
 			
 			if($app_install_id){
-				$achievement_info['app_install_id'] = $app_install_id;
+				$achievement_info['app_install_id'] = (int)$app_install_id;
 			}
 			
 			if(isset($info['page_id'])){
-				$achievement_info['page_id'] = $info['page_id'];
+				$achievement_info['page_id'] = (int)$info['page_id'];
 			}
 			if(isset($info['campaign_id'])){
-				$achievement_info['campaign_id'] = $info['campaign_id'];
+				$achievement_info['campaign_id'] = (int)$info['campaign_id'];
 			}
 			/**
 			 * info fields
@@ -169,7 +169,7 @@ class Achievement_info_model extends CI_Model {
 			
 			$achievement_info['criteria'] = $criteria;
 			
-			return $this->achievement_info->update(array('_id' => $achievement_id),
+			return $this->achievement_info->update(array('_id' => new MongoId($achievement_id)),
 																													 $achievement_info);
 			
 		}else{

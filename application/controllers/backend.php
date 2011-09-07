@@ -1066,21 +1066,185 @@ class Backend extends CI_Controller {
 			$criteria = array();
 			if($criteria_key !== FALSE && $criteria_value !== FALSE){
 				for($i = 0; $i < count($criteria_key); $i++){
-					$criteria[$criteria_key[$i]] = $criteria_value[$i];
+					if(isset($criteria_key[$i]) 
+					&& strlen($criteria_key[$i]) > 0 
+					&& isset($criteria_value[$i])
+					&& strlen($criteria_value[$i]) > 0)
+						$criteria[$criteria_key[$i]] = (int)$criteria_value[$i];
 				}
 			}
 			
 			$this->load->library('achievement_lib');
-			$this->achievement_lib->add_achievement_info(
+			$result = $this->achievement_lib->add_achievement_info(
 				$app_id, $app_install_id,
 				$info, $criteria);
-			redirect('backend/achievements');
+			if($result){
+				redirect('backend/achievements');
+			}else{
+				echo 'add failed.';
+			}
 		}else{
 			$this->load->view('backend_views/achievement_add_view');
 		}
 	}
 
-	function edit_achievement_info(){
+	function edit_achievement_info($achievement_id = NULL){
+		$this->backend_session_verify(true);
+		
+		if(empty($achievement_id)){
+			redirect('backend/dashboard');
+			return;
+		}
+		
+		$this->load->helper('form');
+		$this->load->library('form_validation');
+		
+		// set up validation rules
+		$config = array(
+						array(
+							 'field'   => 'name',
+							 'label'   => 'Achievement Name',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'description',
+							 'label'   => 'Achievement Description',
+							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_id',
+							 'label'   => 'App ID',
+							 'rules'   => 'is_natural|required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_install_id',
+							 'label'   => 'App Install ID',
+							 'rules'   => 'is_natural|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'page_id',
+							 'label'   => 'Page ID',
+							 'rules'   => 'is_natural|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'campaign_id',
+							 'label'   => 'Campaign ID',
+							 'rules'   => 'is_natural|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'criteria_string[]',
+							 'label'   => 'Criteria String',
+							 'rules'   => 'required|xss_clean'
+						),
+						array(
+							 'field'   => 'criteria_key[]',
+							 'label'   => 'criteria_key',
+							 'rules'   => 'required|xss_clean'
+						),
+						array(
+							 'field'   => 'criteria_value[]',
+							 'label'   => 'Criteria',
+							 'rules'   => 'required|xss_clean'
+						)
+				);
+		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_rules($config); 
+		if($this->form_validation->run()){
+			$name = str_replace(';', '', $this->input->post('name', TRUE));
+			$description = str_replace(';', '', $this->input->post('description', TRUE));
+			$app_id = str_replace(';', '', $this->input->post('app_id', TRUE));
+			$app_install_id = str_replace(';', '', $this->input->post('app_install_id', TRUE));
+			$page_id = str_replace(';', '', $this->input->post('page_id', TRUE));
+			$campaign_id = str_replace(';', '', $this->input->post('campaign_id', TRUE));
+			
+			$criteria_string = $this->input->post('criteria_string', TRUE);
+			
+			
+			if($criteria_string === FALSE){
+				$criteria_string = array();
+			}
+
+			$info = array(
+				'name' => $name,
+				'description' => $description,
+				'criteria_string' => $criteria_string,
+			);
+			
+			if(strlen($app_install_id) > 0){
+				$info['app_install_id'] = $app_install_id;
+			}
+			
+			if(strlen($page_id) > 0){
+				$info['page_id'] = $page_id;
+			}
+			
+			if(strlen($campaign_id) > 0){
+				$info['campaign_id'] = $campaign_id;
+			}
+			
+			$criteria_key = $this->input->post('criteria_key', TRUE);
+			$criteria_value = $this->input->post('criteria_value', TRUE);
+			// echo '$criteria_key<pre>';
+			// print_r($criteria_key);
+			// echo '</pre>';
+			// echo '$criteria_value<pre>';
+			// print_r($criteria_value);
+			// echo '</pre>';
+			$criteria = array();
+			if($criteria_key !== FALSE && $criteria_value !== FALSE){
+				for($i = 0; $i < count($criteria_key); $i++){
+					if(isset($criteria_key[$i]) 
+					&& strlen($criteria_key[$i]) > 0 
+					&& isset($criteria_value[$i])
+					&& strlen($criteria_value[$i]) > 0)
+						$criteria[$criteria_key[$i]] = (int)$criteria_value[$i];
+				}
+			}
+			
+			$this->load->library('achievement_lib');
+			$result = $this->achievement_lib->set_achievement_info(
+				$achievement_id, $app_id, $app_install_id,
+				$info, $criteria);
+			if($result){
+				redirect('backend/achievements');
+			}else{
+				echo 'save failed.';
+			}
+		}else{
+			
+			$this->load->library('achievement_lib');
+			$achievement = $this->achievement_lib->get_achievement_info($achievement_id);
+
+			$data['achievement_id'] = $achievement_id;
+			$data['app_id'] = issetor($achievement['app_id']);
+			$data['name'] = issetor($achievement['info']['name']);
+			$data['description'] = issetor($achievement['info']['description']);
+			$data['criteria_string'] = issetor($achievement['info']['criteria_string']);
+			$data['app_install_id'] = issetor($achievement['app_install_id']);
+			$data['page_id'] = issetor($achievement['page_id']);
+			$data['campaign_id'] = issetor($achievement['campaign_id']);
+			$data['criteria'] = issetor($achievement['criteria']);
+
+			$this->load->view('backend_views/achievement_edit_view', $data);
+		}
+	}
+	
+	function delete_achievement_info($achievement_id = NULL){
+		$this->backend_session_verify(true);
+		
+		if(empty($achievement_id)){
+			redirect('backend/dashboard');
+			return;
+		}
+		
+		$this->load->library('achievement_lib');
+			$result = $this->achievement_lib->delete_achievement_info(
+				$achievement_id);
+			if($result){
+				redirect('backend/achievements');
+			}else{
+				echo 'delete failed.';
+			}
 		
 	}
 	

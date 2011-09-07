@@ -12,15 +12,17 @@
 <h1>Achievements</h1>
 <ul>
 <?php
-	foreach ($achievement_list as $achievement) {
-		
-		echo "<li><b>" . anchor('backend/edit_achievement_info/'.$achievement['_id'], $achievement['info']['name'], 'title="edit this achievement information"') . "</b>";
-		echo "<br /> description: ".$achievement['info']['description'];
-		echo "<br /> app id: ".$achievement['app_id'];
-		echo "<br /> app_install_id: ".issetor($achievement['app_install_id']);
-		echo "<br /> page_id: ".issetor($achievement['page_id']);
-		echo "<br /> campaign_id: ".issetor($achievement['campaign_id']);
-		echo "<br /> criteria string:<ul>";
+
+	for($i = count($achievement_list) - 1; $i >= 0; $i--){
+		$achievement = $achievement_list[$i];
+		echo "<li><b>achievement_id: " . anchor('backend/edit_achievement_info/'.$achievement['_id'], $achievement['_id'], 'title="edit this achievement information"') . "</b>";
+		echo "<br /> <b>name:</b> ".$achievement['info']['name'];
+		echo " <b>description:</b> ".$achievement['info']['description'];
+		echo "<br /> <b>app id:</b> ".$achievement['app_id'];
+		echo " <b>app_install_id:</b> ".issetor($achievement['app_install_id']);
+		echo " <b>page_id:</b> ".issetor($achievement['page_id']);
+		echo " <b>campaign_id:</b> ".issetor($achievement['campaign_id']);
+		echo "<br /> <b>criteria string:</b><ul>";
 		if(isset($achievement['info']) && isset($achievement['info']['criteria_string'])){
 			foreach($achievement['info']['criteria_string'] as $criteria){
 				echo "<li>".$criteria."</li>";
@@ -28,7 +30,7 @@
 		}
 		echo "</ul>";
 		
-		echo "criteria:<ul>";
+		echo "<b>criteria:</b><ul>";
 		if(isset($achievement['criteria'])){
 			foreach($achievement['criteria'] as $criteria => $count){
 				echo "<li>".$criteria." >= ".$count."</li>";
