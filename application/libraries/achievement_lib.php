@@ -213,8 +213,9 @@ class Achievement_lib
 	 */
 	function list_user_achieved_by_user_id($user_id = NULL){
 		$this->CI->load->model('achievement_user_model','achievement_user');
+		$this->CI->load->model('achievement_info_model','achievement_info');
 		if(empty($user_id)) return NULL;
-		return $this->CI->achievement_user->list_user(array('user_id' => $user_id));
+		return $this->CI->achievement_user->list_user(array('user_id' => (int)$user_id));
 	}
 	
 	/**

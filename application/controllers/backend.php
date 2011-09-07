@@ -756,6 +756,10 @@ class Backend extends CI_Controller {
 		$data['activity_list'] = $activity;
 		//$this->dump($data['activity_list']);
 		
+		$this->load->library('achievement_lib');
+		$user_achieved = $this->achievement_lib->
+			list_user_achieved_by_user_id($user_id);
+		$data['achievement_list'] = $user_achieved;
 		$this->load->view('backend_views/user_detail_view', $data);
 	}
 
@@ -1214,7 +1218,10 @@ class Backend extends CI_Controller {
 			
 			$this->load->library('achievement_lib');
 			$achievement = $this->achievement_lib->get_achievement_info($achievement_id);
-
+			if(empty($achievement)){
+				echo 'not found achievement_id: '.$achievement_id;
+				return;
+			}
 			$data['achievement_id'] = $achievement_id;
 			$data['app_id'] = issetor($achievement['app_id']);
 			$data['name'] = issetor($achievement['info']['name']);

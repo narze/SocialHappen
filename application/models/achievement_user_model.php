@@ -8,6 +8,7 @@ class Achievement_user_model extends CI_Model {
 	var $achievement_user;
 	var $achievement_id;
 	var $user_id;
+	var $db;
 	
 	/**
 	 * constructor
@@ -121,6 +122,7 @@ class Achievement_user_model extends CI_Model {
 		
 		$result = array();
 		foreach ($res as $stat) {
+			$stat['achievement_info'] = $this->db->getDBRef($stat['achievement_id']);
 			$result[] = $stat;
 		}
 		return $result;
