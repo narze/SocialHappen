@@ -34,7 +34,7 @@
 			<li class="fb"><a onclick="fblogin();" ><img src="<?php echo base_url(); ?>images/fb-login.jpg" alt=""></a></li>
 		</ul>
 	<?php elseif(issetor($facebook_user)) : ?>
-		<?php if(isset($user) && $user) : ?>
+		<?php if(isset($user) && $user && $user_can_create_company) : ?>
 	<div class="goto">
         <p><a href="#">Go to</a></p>
 		 <div>

@@ -196,7 +196,8 @@ class SocialHappen{
 					'common/platform',
 					'common/main',
 					'common/fancybox/jquery.fancybox-1.3.4'
-				)
+				),
+				'user_can_create_company' => $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company') //Check user can create company
 			);
 		}
 		$data = array_merge_recursive( $common,$data);
