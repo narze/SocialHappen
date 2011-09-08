@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "home";
+$route['default_controller'] = "home/package";
 $route['404_override'] = 'error/index/404';
 $route['error/(:num)'] = 'error/index/$1';
 $route['company/(:num)'] = "company/index/$1";

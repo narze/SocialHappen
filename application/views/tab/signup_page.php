@@ -68,8 +68,8 @@
           <?php endforeach; ?>
 		  </ul>
           <p>
-				<a class="bt-register-now" href="#"><span>Register now</span></a>
-				<?php echo form_submit( 'submit-form', 'Submit'); ?>
+				<a class="bt-register-now"><span>Register now</span></a>
+				
 		  </p>
         </div>
 <?php echo form_close(); ?>

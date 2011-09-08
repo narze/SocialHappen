@@ -5,6 +5,7 @@ $(function(){
 			dataType: 'json',
 			async: false,
 			success: function(data){
+				var j = i;
 				$('.goto div ul').append('<li class="goto-list-company-'+user_companies[i].company_id+'"><p class="thumb"><img src="'+imgsize(data.company_image,'square')+'" alt="" /></p><h2><a href="'+base_url+'company/'+data.company_id+'">'+data.company_name+'</a></h2></li>');
 				$.getJSON(base_url+'company/json_get_pages/' + user_companies[i].company_id, function(data) {
 					if(data.length>0) {
@@ -12,24 +13,11 @@ $(function(){
 							$('.goto-list-company-'+ item.company_id).append('<p class="goto-list-company-page-'+item.page_id+'">&raquo; <a href="'+base_url+'page/'+item.page_id+'">'+item.page_name+'</a></p>');
 						});
 					} else {
-						$('.goto-list-company-'+ user_companies[i].company_id).append('<p>No page yet</p><p><a href="'+base_url+'company/'+user_companies[i].company_id+'">+ add new page</a></p>');
+						$('.goto-list-company-'+ user_companies[j].company_id).append('<p>No page yet</p><p><a href="'+base_url+'company/'+user_companies[j].company_id+'">+ add new page</a></p>');
 					}
 				});
 			}
 		});
-		// $.ajaxSetup({'async': false});
-		// $.getJSON(base_url+'company/json_get_profile/' + user_companies[i].company_id, function(data) {
-			// $('.goto div ul').append('<li class="goto-list-company-'+user_companies[i].company_id+'"><p class="thumb"><img src="'+imgsize(data.company_image,'square')+'" alt="" /></p><h2><a href="'+base_url+'company/'+data.company_id+'">'+data.company_name+'</a></h2></li>');
-		// });
-		// $.getJSON(base_url+'company/json_get_pages/' + user_companies[i].company_id, function(data) {
-			// if(data.length>0) {
-				// $.each(data, function(i,item){
-					// $('.goto-list-company-'+ item.company_id).append('<p class="goto-list-company-page-'+item.page_id+'">&raquo; <a href="'+base_url+'page/'+item.page_id+'">'+item.page_name+'</a></p>');
-				// });
-			// } else {
-				// $('.goto-list-company-'+ user_companies[i].company_id).append('<p>No page yet</p><p><a href="'+base_url+'company/'+user_companies[i].company_id+'">+ add new page</a></p>');
-			// }
-		// });
 	}
 	
 	var companyname;

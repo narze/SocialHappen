@@ -33,23 +33,7 @@ class Home extends CI_Controller {
 							'home' => $this->load->view('home/home', array(), TRUE),
 							'footer' => $this -> socialhappen -> get_footer()
 						);
-			
-			//Temporary override 'home'
-				$this->load->model('package_model','package');
-				$this->load->model('package_users_model','package_users');
-				$user = $this->socialhappen->get_user();
-				$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
-				if(!$user_current_package) $user_current_package['package_price'] = 0; //no cuurent package, set price = 0
-		
-				$data['home'] = $this->load->view('home/package', array(
-					'packages'=> $this->package->get_packages(),
-					'user_current_package' => $user_current_package
-				)
-				, TRUE);
-			//End temporary override 'home'
-			
 			$this->parser->parse('home/home_view',$data);
-	
 	}
 	
 	/**
@@ -166,13 +150,13 @@ class Home extends CI_Controller {
 				$this->socialhappen->login();
 				if($this->input->post('package_id')) 
 				{
-					$redirect_path = base_url().'home/package?package_id='. $this->input->get('package_id') .'&payment=true';
+					$redirect_path = base_url().'home/package?package_id='. $this->input->post('package_id') .'&payment=true';
 				}
 				else
 				{
 					$redirect_path = base_url().'?logged_in=true';
 				}
-				$this->load->view('common/redirect',array('refresh_parent' => 'TRUE', 'redirect'=>$redirect_path));
+				$this->load->view('common/redirect',array('redirect_parent'=>$redirect_path));
 			}
 			else
 			{
@@ -203,7 +187,6 @@ class Home extends CI_Controller {
 						'common/bar',
 						'common/fancybox/jquery.fancybox-1.3.4.pack',
 						'home/lightbox',
-						'home/signup',
 						'payment/payment'
 					),
 					'style' => array(

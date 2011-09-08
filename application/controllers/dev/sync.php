@@ -23,6 +23,7 @@ class Sync extends CI_Controller {
 	}
 
 	function index(){
+		echo '<a href="'.base_url().'dev/sync/remove_users">Remove users</a><br />';
 		echo '<a href="'.base_url().'dev/sync/db_reset">RESET (drop -> create -> insert data)</a><br />';
 		echo '<a href="'.base_url().'dev/sync/generate_field_code">Generate field PHP code</a><br />';
 		echo '<a href="'.base_url().'dev/sync/create_database">Create datebase "socialhappen"</a>';
@@ -64,6 +65,16 @@ class Sync extends CI_Controller {
 				echo "Error creating session table: " . mysql_error();
 			}
 		}
+	}
+	
+	function remove_users(){
+		$tables = array('package_users', 'page_user_data', 'sessions', 'user', 'user_apps', 'user_campaigns', 'user_companies', 'user_pages');
+		foreach($tables as $table){
+			if($this->db->empty_table($table)) {
+				echo "Emptied table : {$table}<br />";
+			}
+		}
+		echo "Remove users successfully";
 	}
 	
 	function db_reset(){

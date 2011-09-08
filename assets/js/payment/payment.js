@@ -47,4 +47,39 @@ $(function(){
 		$.fancybox.close();
 		window.location = base_url;
 	});
+	
+	
+	$('a.bt-select-package').live('click',function(){
+		var package_id = $(this).attr('rel');
+		var pop;
+
+		if(is_login()){
+			pop = 'payment/payment_form?package_id='+ package_id;
+		} else {
+			pop = 'home/facebook_connect?package_id='+ package_id;
+		}
+		
+		$.fancybox({
+			href: base_url+pop,
+			transitionIn: 'elastic',
+			transitionOut: 'elastic',
+			padding: 0,
+			scrolling: 'no'
+		});
+		
+	});
+	
+	
+	if(get_query(window.location.href, 'payment') == 'true')
+	{ 
+		package_id = get_query(window.location.href, 'package_id');
+
+		$.fancybox({
+			href: base_url+'payment/payment_form?package_id='+ package_id,
+			transitionIn: 'elastic',
+			transitionOut: 'elastic',
+			padding: 0,
+			scrolling: 'no'
+		});
+	}
 });
