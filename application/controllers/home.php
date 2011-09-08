@@ -33,6 +33,21 @@ class Home extends CI_Controller {
 							'home' => $this->load->view('home/home', array(), TRUE),
 							'footer' => $this -> socialhappen -> get_footer()
 						);
+			
+			//Temporary override 'home'
+				$this->load->model('package_model','package');
+				$this->load->model('package_users_model','package_users');
+				$user = $this->socialhappen->get_user();
+				$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
+				if(!$user_current_package) $user_current_package['package_price'] = 0; //no cuurent package, set price = 0
+		
+				$data['home'] = $this->load->view('home/package', array(
+					'packages'=> $this->package->get_packages(),
+					'user_current_package' => $user_current_package
+				)
+				, TRUE);
+			//End temporary override 'home'
+			
 			$this->parser->parse('home/home_view',$data);
 	
 	}
@@ -176,6 +191,8 @@ class Home extends CI_Controller {
 		$user = $this->socialhappen->get_user();
 		$this->load->model('package_users_model','package_users');
 		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
+		if(!$user_current_package) $user_current_package['package_price'] = 0; //no cuurent package, set price = 0
+		
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
 				array(
