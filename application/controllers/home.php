@@ -34,7 +34,6 @@ class Home extends CI_Controller {
 							'footer' => $this -> socialhappen -> get_footer()
 						);
 			$this->parser->parse('home/home_view',$data);
-	
 	}
 	
 	/**
@@ -151,13 +150,13 @@ class Home extends CI_Controller {
 				$this->socialhappen->login();
 				if($this->input->post('package_id')) 
 				{
-					$redirect_path = base_url().'home/package?package_id='. $this->input->get('package_id') .'&payment=true';
+					$redirect_path = base_url().'home/package?package_id='. $this->input->post('package_id') .'&payment=true';
 				}
 				else
 				{
 					$redirect_path = base_url().'?logged_in=true';
 				}
-				$this->load->view('common/redirect',array('refresh_parent' => 'TRUE', 'redirect'=>$redirect_path));
+				$this->load->view('common/redirect',array('redirect_parent'=>$redirect_path));
 			}
 			else
 			{
@@ -176,6 +175,7 @@ class Home extends CI_Controller {
 		$user = $this->socialhappen->get_user();
 		$this->load->model('package_users_model','package_users');
 		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
+		
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
 				array(
@@ -186,7 +186,6 @@ class Home extends CI_Controller {
 						'common/bar',
 						'common/fancybox/jquery.fancybox-1.3.4.pack',
 						'home/lightbox',
-						'home/signup',
 						'payment/payment'
 					),
 					'style' => array(
