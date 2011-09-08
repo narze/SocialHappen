@@ -10,7 +10,7 @@
 					<h3><?php echo $package['package_name']; ?></h3>
 					<h4><?php echo $package['package_price'] == 0 ? 'Free!': $package['package_price']; ?></h4>
 					<p><?php echo $package['package_detail']; ?></p>
-					<?php if($package['package_price'] > $user_current_package['package_price'] && $package['package_price'] > 0) { ?>
+					<?php if(!$user_current_package || $package['package_price'] > $user_current_package['package_price'] ) { ?>
 					<a rel="<?php echo $package['package_id']; ?>" class="bt-select-package">Add to cart</a>
 					<?php } ?>
 				</li>

@@ -6,7 +6,10 @@ $(function(){
 		$('.payment-form').ajaxSubmit({
 			async:true,
 			success: function(data){
-				alert("You will now be directed to Paypal's website to continue your order");
+				if(data != base_url) 
+				{
+					alert("You will now be directed to Paypal's website to continue your order");
+				}
 				window.location = data;
 			}
 		});

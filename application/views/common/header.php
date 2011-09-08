@@ -36,5 +36,5 @@ endif; ?>
 </head>
 <body>
 	<div class="header">
-		<?php $this->load->view('bar/bar_view', array('user_can_create_company'=>$user_can_create_company)); ?>
+		<?php $this->load->view('bar/bar_view', array('user_can_create_company'=>isset($user_can_create_company))); ?>
 	</div>

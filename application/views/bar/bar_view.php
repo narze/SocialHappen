@@ -60,7 +60,7 @@
 			<img src="<?php echo imgsize("http://graph.facebook.com/{$facebook_user['id']}/picture",'square');?>" alt="" />
 			<?php echo issetor($facebook_user['name']); ?>
 			<ul>
-				
+				<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 				<li><?php echo anchor('logout','&raquo Logout');?></li>
 			</ul>
 		</li>
