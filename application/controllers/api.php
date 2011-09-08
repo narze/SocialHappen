@@ -1124,7 +1124,7 @@ class Api extends CI_Controller {
 		
 		$this->load->model('installed_apps_model','installed_apps');
 		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
-		if(issetor($app['page_id'])==$page_id){
+		if(issetor($app['page_id'])!=$page_id){
 			echo json_encode(array( 'error' => '600',
 									'message' => 'invalid page_id'));
 			return;
@@ -1132,12 +1132,74 @@ class Api extends CI_Controller {
 		
 		$response = array('status' => 'OK');
 		
-		$this->load->model('page_user_data_model','page_users');
-		if(!$page_users = $this->page_users->get_page_users_by_page_id($page_id)){
+		//Old method
+		// $this->load->model('page_user_data_model','page_users');
+		// if(!$page_users = $this->page_users->get_page_users_by_page_id($)){
+			// $response['message'] = 'User / page not found';
+			// $response['page_users'] = array();
+		// } else {
+			// $response['page_users'] = $page_users;
+			//TODO: limit fields
+		// }
+		// echo json_encode($response);
+		
+		$users = array(); //id => value
+		$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+		$this->load->model('user_apps_model','user_apps');
+		foreach($apps as $app){
+			$app_install_id = $app['app_install_id'];
+			if($app_users = $this->user_apps->get_app_users_by_app_install_id($app_install_id)){
+				foreach($app_users as $app_user){
+					if(!isset($users[$app_user['user_id']])){
+						$users[$app_user['user_id']] = $app_user;
+					}
+				}
+			}
+		}
+		$response['page_users'] = array_values($users);
+		echo json_encode($response);
+	}
+	
+	/**
+	 * Request app users
+	 * @author Manassarn M.
+	 */
+	function request_app_users(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		//$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		//$page_id = $this->input->get('page_id', TRUE);
+		
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
+			return;
+		}
+		
+		// authenticate app with $app_id and $app_secret_key
+		if(!($this->_authenticate_app($app_id, $app_secret_key))){
+			echo json_encode(array( 'error' => '200',
+									'message' => 'invalid app_secret_key'));
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid app_install_secret_key'));
+			return;
+		}
+		
+		$response = array('status' => 'OK');
+		
+		$this->load->model('user_apps_model','user_apps');
+		if(!$app_users = $this->user_apps->get_app_users_by_app_install_id($app_install_id)){
 			$response['message'] = 'User / page not found';
-			$response['page_users'] = array();
+			$response['app_users'] = array();
 		} else {
-			$response['page_users'] = $page_users;
+			$response['app_users'] = $app_users;
 			//TODO: limit fields
 		}
 		echo json_encode($response);
