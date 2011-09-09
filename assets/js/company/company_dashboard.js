@@ -250,76 +250,93 @@ function show_installed_page_in_company() {
 							success: function(json) {
 								var page_id=json.page_id;
 								var app_api_key=sh_default_fb_app_api_key;
-								dragging_object.append('<input type="hidden" value="'+page_id+'" class="page_id" />');
-								dragging_object.children('p:first').append('<span class="button">'
-								+'<a class="bt-manage_page" href="'+base_url+'page/'+page_id+'"><span>Manage</span></a>'
-								+'<a class="bt-setting_page" href="'+base_url+'settings?s=page&id='+page_id+'"><span>Setting</span></a>'
-								+'</span>');
-								dragging_object.attr('onclick',
-								'view_page_app('+page_id+','+facebook_page_id+',\''+page_name+'\')');
-								if(json!=null&&json.status.toUpperCase()=="OK") {
-									show_available_page_in_company();
-									//update company pages count
-									$.getJSON(base_url + "company/json_get_pages_count/" + company_id, function(json) {
-										$(".page-installed-count").html("Page (" + json.page_count + ")");
-										$("#info-installed-page").html('<span>Installed Page</span>'+json.page_count);
+								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
+									$(".gotofacebook-link").live('click',function(){
+										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
 									});
-									update_page_order_in_dashboard();
-									var isSamePage=false;
-									var k=(showing_page_of_installed_page-1)*installed_page_per_row;
-									for(j=k;j<k+installed_page_per_row;j++) {
-										if(ul_element.children("li").eq(j+1).children('.page_id').val()==page_id) {
-											isSamePage=true;
-											break;
-										}
-									}
-									if(!isSamePage)
-										showing_page_of_installed_page++;
-									refresh_installed_page_panel();
-									$.getJSON(base_url + "app/json_get_app_by_api_key/" + app_api_key, function(app_info) {
-										app_install_url=app_info.app_install_url;
-										app_install_url=app_install_url.replace("{company_id}",company_id)
-										.replace("{user_id}",user_id)
-										.replace("{page_id}",page_id)+"&force=1";
-										jQuery.ajax({
-											async:true,
-											url: base_url+"app/curl",
-											dataType: "json",
-											type: "POST",
-											data: {
-												url:app_install_url
-											},
-											error: function() {
-												show_installed_app_in_page(page_id,facebook_page_id);
-												show_available_app_in_page(page_id);
-												alert("ERROR! cannot install app.");
-												console.log("app/curl failed 1");
-											},
-											success: function(json) {
-												if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
-													$(".gotofacebook-link").live('click',function(){
-														window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
-													});
-													$.fancybox({
-														content:$("#popup-gotofacebook").html()
-													});
-												} else {
-													show_installed_app_in_page(page_id,facebook_page_id);
-													show_available_app_in_page(page_id);
-													alert("ERROR! cannot install app.");
-													console.log("app/curl json mismatch 1 : " + json);
-												}
-											},
-											complete: function() {
-												view_page_app(page_id,facebook_page_id,page_name);
-											},
-										});
+									$.fancybox({
+										content:$("#popup-gotofacebook").html()
 									});
 								} else {
-									alert("ERROR");
-									console.log("page/json_add json mismatch 1 : " + json);
+									show_installed_app_in_page(page_id,facebook_page_id);
+									show_available_app_in_page(page_id);
+									alert("ERROR! cannot install app.");
+									console.log("app/curl json mismatch 1 : " + json);
 								}
 							},
+								
+								// var page_id=json.page_id;
+								// var app_api_key=sh_default_fb_app_api_key;
+								// dragging_object.append('<input type="hidden" value="'+page_id+'" class="page_id" />');
+								// dragging_object.children('p:first').append('<span class="button">'
+								// +'<a class="bt-manage_page" href="'+base_url+'page/'+page_id+'"><span>Manage</span></a>'
+								// +'<a class="bt-setting_page" href="'+base_url+'settings?s=page&id='+page_id+'"><span>Setting</span></a>'
+								// +'</span>');
+								// dragging_object.attr('onclick',
+								// 'view_page_app('+page_id+','+facebook_page_id+',\''+page_name+'\')');
+								// if(json!=null&&json.status.toUpperCase()=="OK") {
+									// show_available_page_in_company();
+									////update company pages count
+									// $.getJSON(base_url + "company/json_get_pages_count/" + company_id, function(json) {
+										// $(".page-installed-count").html("Page (" + json.page_count + ")");
+										// $("#info-installed-page").html('<span>Installed Page</span>'+json.page_count);
+									// });
+									// update_page_order_in_dashboard();
+									// var isSamePage=false;
+									// var k=(showing_page_of_installed_page-1)*installed_page_per_row;
+									// for(j=k;j<k+installed_page_per_row;j++) {
+										// if(ul_element.children("li").eq(j+1).children('.page_id').val()==page_id) {
+											// isSamePage=true;
+											// break;
+										// }
+									// }
+									// if(!isSamePage)
+										// showing_page_of_installed_page++;
+									// refresh_installed_page_panel();
+									// $.getJSON(base_url + "app/json_get_app_by_api_key/" + app_api_key, function(app_info) {
+										// app_install_url=app_info.app_install_url;
+										// app_install_url=app_install_url.replace("{company_id}",company_id)
+										// .replace("{user_id}",user_id)
+										// .replace("{page_id}",page_id)+"&force=1";
+										// jQuery.ajax({
+											// async:true,
+											// url: base_url+"app/curl",
+											// dataType: "json",
+											// type: "POST",
+											// data: {
+												// url:app_install_url
+											// },
+											// error: function() {
+												// show_installed_app_in_page(page_id,facebook_page_id);
+												// show_available_app_in_page(page_id);
+												// alert("ERROR! cannot install app.");
+												// console.log("app/curl failed 1");
+											// },
+											// success: function(json) {
+												// if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
+													// $(".gotofacebook-link").live('click',function(){
+														// window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
+													// });
+													// $.fancybox({
+														// content:$("#popup-gotofacebook").html()
+													// });
+												// } else {
+													// show_installed_app_in_page(page_id,facebook_page_id);
+													// show_available_app_in_page(page_id);
+													// alert("ERROR! cannot install app.");
+													// console.log("app/curl json mismatch 1 : " + json);
+												// }
+											// },
+											// complete: function() {
+												// view_page_app(page_id,facebook_page_id,page_name);
+											// },
+										// });
+									// });
+								// } else {
+									// alert("ERROR");
+									// console.log("page/json_add json mismatch 1 : " + json);
+								// }
+							
 						});
 					} else {
 						update_page_order_in_dashboard();
