@@ -178,7 +178,6 @@ class Home extends CI_Controller {
 		$user = $this->socialhappen->get_user();
 		$this->load->model('package_users_model','package_users');
 		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
-		if(!$user_current_package) $user_current_package['package_price'] = 0; //no cuurent package, set price = 0
 		
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 

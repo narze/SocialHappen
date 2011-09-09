@@ -49,6 +49,26 @@
 	?>
 </ul>
 <p><?php echo $pagination; ?></p>
+
+<h1>Achievements</h1>
+<ul>
+	<?php 
+		foreach($achievement_list as $achievement){
+			//var_dump($app);
+			//echo '<li>'.anchor('backend/page/'.$page['page_id'], $page['page_name'], 'title="view page detail"').'</li>';
+			 // echo '<li><pre>'.print_r($achievement, TRUE).'</pre></li>';
+			echo '<li>'
+			.'<b>achievement_id:</b> '
+			.anchor('backend/edit_achievement_info/'.$achievement['achievement_info']['_id'], $achievement['achievement_info']['_id'], 'title="view achievement info detail"')
+			.'<br/><b>name:</b> '
+			.$achievement['achievement_info']['info']['name']
+			.'<br/><b>description: </b>'
+			.$achievement['achievement_info']['info']['description']
+			.'</li>';
+		}
+	?>
+</ul>
+
 <h1>Activities</h1>
 <ul>
 	<?php 
