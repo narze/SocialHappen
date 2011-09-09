@@ -65,7 +65,7 @@ class Achievement_lib
 							 $info = array(), $criteria = array()){
 		if(empty($app_id) || empty($info) || empty($criteria)) return FALSE;
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		
+
 		return $this->CI->achievement_info->add($app_id, $app_install_id, $info
 							, $criteria);
 	}
@@ -93,7 +93,9 @@ class Achievement_lib
 		if(empty($app_id) || empty($info) || empty($criteria) || empty($achievement_id))
 		  return FALSE;
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		
+		echo '<pre>';
+		print_r($criteria);
+		echo '</pre>';
 		return $this->CI->achievement_info->set($achievement_id, $app_id,
 		 $app_install_id, $info, $criteria);
 	}
@@ -119,6 +121,21 @@ class Achievement_lib
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		if(empty($app_id)) return NULL;
 		return $this->CI->achievement_info->list_info(array('app_id' => $app_id));
+	}
+	
+	/**
+	 * get achievement info
+	 * @param achievement_id
+	 * 
+	 * @return achievement info object
+	 */
+	function get_achievement_info($achievement_id = NULL){
+		if(empty($achievement_id)){
+			return FALSE;
+		}else{
+			$this->CI->load->model('achievement_info_model','achievement_info');
+			return $this->CI->achievement_info->get($achievement_id);
+		}
 	}
 	
 	/**
@@ -196,8 +213,9 @@ class Achievement_lib
 	 */
 	function list_user_achieved_by_user_id($user_id = NULL){
 		$this->CI->load->model('achievement_user_model','achievement_user');
+		$this->CI->load->model('achievement_info_model','achievement_info');
 		if(empty($user_id)) return NULL;
-		return $this->CI->achievement_user->list_user(array('user_id' => $user_id));
+		return $this->CI->achievement_user->list_user(array('user_id' => (int)$user_id));
 	}
 	
 	/**
