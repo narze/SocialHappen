@@ -131,21 +131,24 @@ class Home extends CI_Controller {
 					       	'user_image' => $user_image,
 					       	'user_facebook_id' => $facebook_user['id']
 						);
+						
+			$user_add_result = json_decode($this->curl->simple_post(base_url().'user/json_add', $user), TRUE);
 			
 			$company = array(
 					       	'company_name' => set_value('company_name'),
 					       	'company_detail' => set_value('company_detail'),
-					       	'company_image' => issetor($company_image)
+					       	'company_image' => issetor($company_image),
+							'creator_user_id' => $user_add_result['user_id']
 						);
-					
-			$user_add_result = json_decode($this->curl->simple_post(base_url().'user/json_add', $user), TRUE);
+			
 			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company), TRUE);
 			if ($user_add_result['status'] == 'OK' && $company_add_result['status'] == 'OK')
 			{	
 				$this->load->model('user_companies_model','user_companies');
 				$this->user_companies->add_user_company(array(
 					'user_id' => $user_add_result['user_id'],
-					'company_id' => $company_add_result['company_id']
+					'company_id' => $company_add_result['company_id'],
+					'user_role' => 1 //Company admin
 				));
 				$this->socialhappen->login();
 				if($this->input->post('package_id')) 

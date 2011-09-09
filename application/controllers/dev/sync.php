@@ -1233,7 +1233,56 @@ class Sync extends CI_Controller {
 			array(
 				'package_id' => 1,
 				'app_id' => 4
-			)
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 5
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 6
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 7
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 8
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 1
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 2
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 3
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 4
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 5
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 6
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 7
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 8
+			),
+			
 		);
 		$this->db->insert_batch('package_apps', $package_apps);
 		

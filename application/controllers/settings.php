@@ -218,7 +218,7 @@ class Settings extends CI_Controller {
 					$company_admin = array(
 								'user_id' => set_value('user_id'),
 								'company_id' => $company_id,
-								'user_role' => 1
+								'user_role' => 1 // Company Admin
 							);
 			
 					if ($this->user_companies->add_user_company($company_admin)) // the information has therefore been successfully saved in the db
@@ -331,14 +331,14 @@ class Settings extends CI_Controller {
 						$company_admin = array(
 									'user_id' => set_value('user_id'),
 									'company_id' => $company['company_id'],
-									'user_role' => 2
+									'user_role' => 2 //Page admin
 								);
 						$this->user_companies->add_user_company($company_admin);
 					}
 					$page_admin = array(
 								'user_id' => set_value('user_id'),
 								'page_id' => $page_id,
-								'user_role' => 2
+								'user_role' => 2 //Page admin
 							);
 					$this->user_pages->add_user_page($page_admin);
 				}

@@ -137,7 +137,31 @@ class Payment extends CI_Controller {
 				$add_package_users_result = $this->package_users->add_package_user($package_user);
 			}
 			if(!$add_package_users_result) { $transaction_status = false; }
-			
+			else { //add/update company apps
+				/* 1.Find companies that user is admin
+				 * 2.For each company remove old company apps
+				 * 3.For each company add new company apps
+				 */
+				$this->load->model('user_companies_model','user_companies');
+				$this->load->model('company_apps_model','company_apps');
+				$this->load->model('package_apps_model','package_apps');
+				$user_companies = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
+				foreach($user_companies as $company){
+					if($company['user_role'] != 1) { //Not company admin
+						continue;
+					}
+					$company_id = $company['company_id'];
+					$this->company_apps->remove_company_apps($company_id);
+					$package_apps = $this->package_apps->get_package_apps_by_package_id($package['package_id']);
+					foreach($package_apps as $package_app){
+						$this->company_apps->add_company_app(array(
+							'company_id' => $company_id,
+							'app_id' => $package_app['app_id']
+						));
+					}
+				}
+					
+			}
 			//Return result
 			if ($transaction_status)
 			{	

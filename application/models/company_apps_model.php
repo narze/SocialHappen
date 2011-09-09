@@ -78,6 +78,17 @@ class Company_apps_model extends CI_Model {
 		$this->db->delete('company_apps', array('company_id' => $company_id, 'app_id' => $app_id));
 		return $this->db->affected_rows();
 	}
+	
+	/**
+	 * Removes company app
+	 * @param $company_id
+	 * @return Number of affected rows
+	 * @author Manassarn M.
+	 */
+	function remove_company_apps($company_id = NULL){
+		$this->db->delete('company_apps', array('company_id' => $company_id));
+		return $this->db->affected_rows();
+	}
 }
 /* End of file company_apps_model.php */
 /* Location: ./application/models/company_apps_model.php */

@@ -34,6 +34,15 @@ class Package_apps_model extends CI_Model {
 	}
 	
 	/**
+	 * Get package apps
+	 * @param $package_id
+	 * @author Manassarn M.
+	 */
+	function get_package_apps_by_package_id($package_id = NULL){
+		return $this->db->get_where('package_apps', array('package_id' => $package_id))->result_array();
+	}
+	
+	/**
 	 * Remove package app
 	 * @param $app_id
 	 * @author Manassarn M.
