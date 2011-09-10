@@ -201,7 +201,7 @@ function show_installed_page_in_company() {
 				+'<a class="bt-manage_page" href="'+base_url+'page/'+json[i].page_id+'"><span>Manage</span></a>'
 				+'<a class="bt-setting_page" href="'+base_url+'settings?s=page&id='+json[i].page_id+'"><span>Setting</span></a>'
 				+'</span>'
-				+'</p><p>'+json[i].page_name+'</p><input type="hidden" class="page_id" value="'+json[i].page_id+'" />'
+				+'</p><p class="pagename">'+json[i].page_name+'</p><input type="hidden" class="page_id" value="'+json[i].page_id+'" />'
 				+'</li>'
 				);
 			}
@@ -367,7 +367,7 @@ function show_installed_app_in_company() {
 				+'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
 				+'<a class="bt-setting_app" href="'+base_url+'app/config/'+json[i].app_install_id+'"><span>Setting</span></a>'
 				+'</span>'
-				+'</p><p>'+json[i].app_name+'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>'
+				+'</p><p class="appname">'+json[i].app_name+'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>'
 				);
 			}
 			showing_page_of_installed_app_in_page=1;
@@ -468,7 +468,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 				+'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
 				+'<a class="bt-setting_app" href="'+base_url+'app/config/'+json[i].app_install_id+'"><span>Setting</span></a>'
 				+'</span>'
-				+'</p><p>'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
+				+'</p><p class="appname">'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 			}
 			showing_page_of_installed_app_in_page=1;
 			last_page_of_installed_app_in_page=Math.ceil(json.length/installed_app_in_page_per_row);
@@ -619,7 +619,7 @@ function show_available_app_in_company() {
 			for(i in json) {
 				ul_element.append(
 				'<li class="draggable"><p><img src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" /></p>'
-				+'<p>'+ json[i].app_name +'</p>'
+				+'<p class="appname">'+ json[i].app_name +'</p>'
 				+"<input class='app_id' type='hidden' value='" + json[i].app_id + "'/>"
 				+"<input class='app_install_url' type='hidden' value='" + json[i].app_install_url + "'/>"
 				+"<input class='app_secret_key' type='hidden' value='" + json[i].app_secret_key + "'/>"
@@ -662,7 +662,7 @@ function show_available_app_in_page(page_id) {
 			for(i in json) {
 				ul_element.append(
 				'<li class="draggable"><p><img src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" /></p>'
-				+'<p>'+ json[i].app_name +'</p>'
+				+'<p class="appname">'+ json[i].app_name +'</p>'
 				+"<input class='app_id' type='hidden' value='" + json[i].app_id + "'/>"
 				+"<input class='app_install_url' type='hidden' value='" + json[i].app_install_url + "'/>"
 				+"<input class='app_secret_key' type='hidden' value='" + json[i].app_secret_key + "'/>"

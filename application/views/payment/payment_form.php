@@ -9,7 +9,7 @@
               <li>
 				<input type="hidden" name="package_id" value="<?php echo $selected_package['package_id']; ?>" />
 				<?php echo $selected_package['package_name'];
-					echo $selected_package['package_price'] ? ' ('.$selected_package['package_price'].'THB' : ' (FREE)';
+					echo $selected_package['package_price'] ? ' ('.$selected_package['package_price'].'USD' : ' (FREE)';
 					echo $selected_package['package_duration'] ? '/'.$selected_package['package_duration'].')' : ''; 
 				?>
 			  </li>

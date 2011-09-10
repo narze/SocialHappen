@@ -18,7 +18,7 @@
                 </li>
                 <li><strong>Company name :</strong><?php echo form_error('company_name'); ?><input id="company_name" type="text" name="company_name" maxlength="255" value="<?php echo html_entity_decode(set_value('company_name',$company['company_name'])); ?>"  /></li>
                 <li><strong>Company detail :</strong><?php echo form_error('company_detail'); ?><?php echo form_textarea( array( 'name' => 'company_detail', 'id' => 'company_detail' , 'cols'=> 30 ,'value' => html_entity_decode(set_value('company_detail',$company['company_detail']) ) ) ); ?></li>
-                <li><strong>Company name :</strong><?php echo form_error('company_email'); ?><input id="company_email" type="text" name="company_email" maxlength="255" value="<?php echo set_value('company_email',$company['company_email']); ?>"  /></li>
+                <li><strong>Company email :</strong><?php echo form_error('company_email'); ?><input id="company_email" type="text" name="company_email" maxlength="255" value="<?php echo set_value('company_email',$company['company_email']); ?>"  /></li>
                 <li><strong>Company telephone number :</strong><?php echo form_error('company_telephone'); ?><input id="company_telephone" type="text" name="company_telephone" maxlength="255" value="<?php echo set_value('company_telephone',$company['company_telephone']); ?>"  /></li>
                 <li><strong>Company website :</strong><?php echo form_error('company_website'); ?><input id="company_website" type="text" name="company_website" maxlength="255" value="<?php echo set_value('company_website',$company['company_website']); ?>"  /></li>
                 <li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>

@@ -50,7 +50,7 @@
 			  <td><?php echo $order['order_date']; ?></td>
 			  <td><a href="#"><?php echo $order['order_id']; ?></a></td>
 			  <td><?php echo $order['package_name']; ?></td>
-			  <td class="right"><?php echo $order['order_net_price']; ?> THB</td>
+			  <td class="right"><?php echo $order['order_net_price']; ?> USD</td>
 			</tr>
 			<?php } 
 		} else { ?>

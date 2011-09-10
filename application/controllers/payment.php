@@ -450,7 +450,7 @@ class Payment extends CI_Controller {
 		$Payments = array();
 		$Payment = array(
 						'amt' => $order['order_net_price'], 							// Required.  The total cost of the transaction to the customer.  If shipping cost and tax charges are known, include them in this value.  If not, this value should be the current sub-total of the order.
-						'currencycode' => 'THB', 					// A three-character currency code.  Default is USD.
+						'currencycode' => 'USD', 					// A three-character currency code.  Default is USD.
 						'itemamt' => '', 						// Required if you specify itemized L_AMT fields. Sum of cost of all items in this order.  
 						'shippingamt' => '', 					// Total shipping costs for this order.  If you specify SHIPPINGAMT you mut also specify a value for ITEMAMT.
 						'shipdiscamt' => '', 				// Shipping discount for this order, specified as a negative number.
@@ -628,7 +628,7 @@ class Payment extends CI_Controller {
 		$Payments = array();
 		$Payment = array(
 						'amt' => $order['order_net_price'], 							// Required.  The total cost of the transaction to the customer.  If shipping cost and tax charges are known, include them in this value.  If not, this value should be the current sub-total of the order.
-						'currencycode' => 'THB', 					// A three-character currency code.  Default is USD.
+						'currencycode' => 'USD', 					// A three-character currency code.  Default is USD.
 						'itemamt' => '', 						// Required if you specify itemized L_AMT fields. Sum of cost of all items in this order.  
 						'shippingamt' => '', 					// Total shipping costs for this order.  If you specify SHIPPINGAMT you mut also specify a value for ITEMAMT.
 						'shipdiscamt' => '', 					// Shipping discount for this order, specified as a negative number.
