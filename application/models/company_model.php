@@ -110,6 +110,7 @@ class Company_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_companies_by_user_id($user_id = NULL){
+		$this->db->order_by("company_id", "asc"); 
 		return $this->db->get_where('company',array('creator_user_id'=>$user_id))->result_array();
 	}
 	
