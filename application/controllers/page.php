@@ -364,7 +364,16 @@ class Page extends CI_Controller {
 	 * @author Prachya P.
 	 */
 	function json_get_not_installed_facebook_pages($company_id, $limit = NULL, $offset = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
+		$this->load->library('fb_library/fb_library',
+			array(
+			  'appId'  => $this->config->item('facebook_app_id'),
+			  'secret' => $this->config->item('facebook_api_secret'),
+			  'cookie' => true,
+			),
+			'FB');
+		file_get_contents($this->FB->getLoginUrl()); //TODO : Get session
+		$page_pics = $this->FB->api(array('method'=>'fql.query', 'query' => "SELECT page_id, pic from page WHERE page_id IN (SELECT page_id from page_admin WHERE uid=me())"));
 		$this->load->model('page_model','page');
 		$pages = $this->page->get_company_pages_by_company_id($company_id, $limit, $offset);
 		$all_installed_fb_page_id=array();
@@ -373,11 +382,15 @@ class Page extends CI_Controller {
 		}
 		$not_installed_facebook_pages=array();
 		$facebook_pages=$this->facebook->get_user_pages();
+		$pics = array();
+		foreach($page_pics as $page_pic){
+			$pics[$page_pic['page_id']] = $page_pic['pic'];
+		}
 		if($facebook_pages!=NULL){
 			$facebook_pages=$facebook_pages['data'];
 			foreach($facebook_pages as $facebook_page){
 				if(!in_array($facebook_page['id'],$all_installed_fb_page_id)){
-					$facebook_page['page_info']=$this->facebook->get_page_info($facebook_page['id']);
+					$facebook_page['page_info']['picture'] = $pics[$facebook_page['id']]; //It's slow, should use FQL
 					$not_installed_facebook_pages[]=$facebook_page;
 				}
 			}

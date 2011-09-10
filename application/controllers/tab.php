@@ -539,11 +539,6 @@ class Tab extends CI_Controller {
 		$this->load->model('page_model','pages');
 		$page_user_fields = $this->pages->get_page_user_fields_by_page_id($page_id);
 		
-		foreach($page_user_fields as $user_fields){
-			$required = ($user_fields['required']) ? "|required" : "";
-			$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);	
-		}
-		
 		$data = array();
 		foreach($page_user_fields as $user_fields){
 			$required = ($user_fields['required']) ? "|required" : "";

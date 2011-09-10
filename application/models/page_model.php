@@ -194,7 +194,8 @@ class Page_model extends CI_Model {
 		if(!$page = $this->get_page_profile_by_page_id($page_id)){
 			return FALSE;
 		}
-		return json_decode($page['page_user_fields'], TRUE);
+		$fields = json_decode($page['page_user_fields'], TRUE);
+		return $fields ? $fields : array();
 	}
 	
 	/**
