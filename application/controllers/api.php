@@ -1249,6 +1249,83 @@ class Api extends CI_Controller {
 		echo json_encode($response);
 		//TODO audit
 	}
+
+	function bar(){
+		
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
+			return;
+		}
+		
+		// authenticate app with $app_id and $app_secret_key
+		if(!($this->_authenticate_app($app_id, $app_secret_key))){
+			echo json_encode(array( 'error' => '200',
+									'message' => 'invalid app_secret_key'));
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid app_install_secret_key'));
+			return;
+		}
+		
+		$response = array('status' => 'OK');
+		
+		$this->load->model('User_model', 'User');
+		if(!$user = $this->User->get_user_profile_by_user_facebook_id($user_facebook_id)){
+			$response['message'] = 'User not found';
+		}
+		
+		$data = array();
+		
+		$this->load->model('Installed_apps_model', 'app');
+		$app = $this->app->get_app_profile_by_app_install_id($app_install_id);
+		
+		$data['left_menu'] = array();
+		
+		if(isset($app['page_id'])){
+			$apps = $this->app->get_installed_apps_by_page_id($app['page_id']);
+			$this->load->library('app_url');
+			foreach($apps as $page_app){
+				$data['left_menu'][] = 
+					array('location' => 
+						$this->app_url->translate_url($page_app['app_url'], 
+						$page_app['app_install_url']),
+								'title' => $page_app['app_name']);
+				
+			}
+		}
+		
+		$data['app_icon_url'] = $app['app_image'];
+		$data['app_name'] = $app['app_name'];
+		
+		$data['user_diplay_picture_url'] = $user['user_image'];
+		$data['user_display_name'] = $user['user_first_name']
+																	. ' ' . $user['user_last_name'];
+
+		
+		$data['right_menu'] = array(array('location' => '#', 'title' => 'Go to Dashboard'),
+																array('location' => '#', 'title' => 'View My Profile'));
+		$response['html'] = $this->load->view('api/app_bar_view', $data, TRUE);
+		$response['css'] = base_url() . 'css/api_app_bar.css';
+		echo json_encode($response);
+	}
+
+	function test_bar_api(){
+		$result = json_decode(file_get_contents('http://127.0.0.1/socialhappen/api/bar?app_id=1&app_install_id=1&app_secret_key=ad3d4f609ce1c21261f45d0a09effba4&app_install_secret_key=457f81902f7b768c398543e473c47465&user_facebook_id=755758746'), true);
+		echo '<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>';
+		echo '<link type="text/css" rel="stylesheet" href="'.$result['css'].'" />';
+		echo '<div style="width:800px;margin:0 auto;">'.$result['html'].'</div>';
+	}
 	
 	function _authenticate_app($app_id, $app_secret_key){
 		// authenticate app with $app_id and $app_secret_key
