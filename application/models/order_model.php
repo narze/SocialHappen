@@ -62,6 +62,19 @@ class Order_model extends CI_Model {
 		return $this->db->get_where('order', array('user_id' => $user_id))->result_array();
 	}
 	
+	/**
+	 * Get latest ordered by user and item type, EX. get latest user ordered package, latest user ordered app.
+	 * @param $user_id, $item_type_id
+	 * @return array
+	 * @author Weerapat P.
+	 */
+	function get_latest_ordered_by_user_id_and_item_type_id($user_id = NULL, $item_type_id = NULL){	
+		$this->db->join('order','order.order_id=order_items.order_id');
+		$this->db->where(array('user_id' => $user_id, 'item_type_id' => $item_type_id));
+		$this->db->order_by("order.order_id", "desc");
+		return $this->db->get('order_items')->row_array();
+	}
+	
 	function get_orders_by_month($month = NULL){
 	}
 	
