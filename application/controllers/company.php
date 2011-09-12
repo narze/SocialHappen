@@ -16,23 +16,43 @@ class Company extends CI_Controller {
 			//no access
 		} else {
 			if($company_id){
+
 				$this -> load -> model('company_model', 'companies');
+				$this -> load -> model('package_users_model', 'package_users');
 				$company = $this -> companies -> get_company_profile_by_company_id($company_id);
+				
+				$user_id = $this->socialhappen->get_user_id();
+				$user_have_package = false;
+				$is_package_over_the_limit = false;
+				
+				if($this->package_users->get_package_by_user_id($user_id)) //If user have package
+				{
+					$user_have_package = true;
+					//If package over the limit
+					//Noom : change user_id to check to get_user_id() for the time being
+					$is_package_over_the_limit = $this->socialhappen->check_package_over_the_limit_by_user_id($user_id);
+				}
+				//$is_package_over_the_limit = true; //for Testing
+				
 				$data = array(
 					'company_id' => $company_id,
 					'header' => $this -> socialhappen -> get_header( 
 						array(
 							'title' => $company['company_name'],
-							'vars' => array('company_id'=>$company_id
-											,'sh_default_fb_app_api_key'=>$this->config->item('facebook_app_id')
-											,'user_id'=>$this->session->userdata('user_id')),
+							'vars' => array('company_id'=>$company_id,
+											'sh_default_fb_app_api_key'=>$this->config->item('facebook_app_id'),
+											'user_id'=>$user_id,
+											'user_have_package' => $user_have_package,
+											'is_package_over_the_limit' => $is_package_over_the_limit
+											),
 							'script' => array(
 								'common/functions',
 								'common/jquery.form',
 								'common/bar',
 								'company/company_dashboard',
 								'common/fancybox/jquery.mousewheel-3.0.4.pack',
-								'common/fancybox/jquery.fancybox-1.3.4.pack'
+								'common/fancybox/jquery.fancybox-1.3.4.pack',
+								'payment/payment'
 							),
 							'style' => array(
 								'common/main',
@@ -67,20 +87,19 @@ class Company extends CI_Controller {
 					TRUE),
 					'footer' => $this -> socialhappen -> get_footer()
 				);
-				
-				//If package over the limit
-				//Noom : change user_id to check to get_user_id() for the time being
-				if($this->socialhappen->check_package_over_the_limit_by_user_id($this->socialhappen->get_user_id()) == TRUE) {
-					$data['is_package_over_the_limit'] = TRUE;
-					$data['package_limited'] = $this -> load -> view('payment/package_limited', array(), TRUE);
-				}
-				else {
-					$data['is_package_over_the_limit'] = FALSE;
-				}
-				
+
 				$this->parser->parse('company/company_view', $data);
 			}
 		}
+	}
+	
+	/**
+	 * Over package limit popup
+	 * @author Weerapat P.
+	 */
+	function company_package_limited()
+	{
+		$this->load->view('company/company_package_limited');
 	}
 	
 	/** 

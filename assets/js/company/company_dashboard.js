@@ -744,6 +744,37 @@ function get_activity_log() {
 }
 
 $( function() {
+	
+	var popup;
+	var closeButton = true;
+	
+	if(user_have_package == false)
+	{
+		popup = 'payment/payment_form';
+		closeButton = false;
+	} 
+	else if( get_query( window.location.href, 'popup' ) == 'thanks') //Thanks msg after sign up
+	{
+		popup = 'home/signup_complete';
+	}
+	else if(is_package_over_the_limit)
+	{
+		popup = 'company/company_package_limited';
+	}
+	
+	if(popup)
+	{
+		$.fancybox({
+			href: base_url + popup,
+			transitionIn: 'elastic',
+			transitionOut: 'elastic',
+			padding: 0,
+			scrolling: 'no',
+			hideOnOverlayClick: closeButton,
+			showCloseButton: closeButton
+		});
+	}
+
 	get_activity_log();
 	$(".add-page").live('click', function() {
 		add_page_button_click();

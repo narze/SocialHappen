@@ -20,7 +20,7 @@ class SocialHappen{
 	 */
 	var $global_variables = array(
 		'item_type' => array(1=>'Package', 2=>'App'),
-		'order_status' => array(1=>'Pending',2=>'Processed',3=>'Failed',4=>'Refunded',5=>'Voided'),
+		'order_status' => array(1=>'Pending',2=>'Processed',3=>'Failed',4=>'Refunded',5=>'Voided',6=>'Canceled'),
 		'app_install_status' => array(1=>'Installed', 2=>'Active', 3=>'Inactive'),
 		'app_type' => array(1=>'Page Only', 2=>'Support Page', 3=>'Standalone'),
 		'campaign_status' => array(1=>'Inactive', 2=>'Active', 3=>'Expired'),

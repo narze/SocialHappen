@@ -157,7 +157,8 @@ class Home extends CI_Controller {
 				}
 				else
 				{
-					$redirect_path = base_url().'?logged_in=true';
+					//$redirect_path = base_url().'?logged_in=true';
+					$redirect_path = base_url().'home/package?payment=true';
 				}
 				$this->load->view('common/redirect',array('redirect_parent'=>$redirect_path));
 			}
@@ -166,6 +167,15 @@ class Home extends CI_Controller {
 				echo 'Error occured';
 			}
 		}
+	}
+	
+	/**
+	 * Signup complete
+	 * @author Weerapat P.
+	 */
+	function signup_complete()
+	{
+		$this->load->view('home/signup_complete');
 	}
 	
 	/**

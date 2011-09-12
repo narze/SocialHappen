@@ -30,7 +30,7 @@ class Order_model_test extends CI_Controller {
 		$this->unit->run($result,'is_array', 'get_order_by_order_id()');
 		$this->unit->run($result['order_id'],'is_string','order_id');
 		$this->unit->run($result['order_date'],'is_string','order_date');
-		$this->unit->run($result['order_status'],'is_string','order_status');
+		$this->unit->run($result['order_status_id'],'is_string','order_status');
 		$this->unit->run($result['order_net_price'],'is_string','order_net_price');
 		$this->unit->run($result['user_id'],'is_string','user_id');
 		$this->unit->run($result['payment_method'],'is_string','payment_method');
@@ -48,7 +48,7 @@ class Order_model_test extends CI_Controller {
 		$this->unit->run($result,'is_array', 'get_all_orders()');
 		$this->unit->run($result[0]['order_id'],'is_string','order_id');
 		$this->unit->run($result[0]['order_date'],'is_string','order_date');
-		$this->unit->run($result[0]['order_status'],'is_string','order_status');
+		$this->unit->run($result[0]['order_status_id'],'is_string','order_status');
 		$this->unit->run($result[0]['order_net_price'],'is_string','order_net_price');
 		$this->unit->run($result[0]['user_id'],'is_string','user_id');
 		$this->unit->run($result[0]['payment_method'],'is_string','payment_method');
@@ -67,7 +67,7 @@ class Order_model_test extends CI_Controller {
 		$this->unit->run($result,'is_array', 'get_orders_by_user_id()');
 		$this->unit->run($result[0]['order_id'],'is_string','order_id');
 		$this->unit->run($result[0]['order_date'],'is_string','order_date');
-		$this->unit->run($result[0]['order_status'],'is_string','order_status');
+		$this->unit->run($result[0]['order_status_id'],'is_string','order_status');
 		$this->unit->run($result[0]['order_net_price'],'is_string','order_net_price');
 		$this->unit->run($result[0]['user_id'],'is_string','user_id');
 		$this->unit->run($result[0]['payment_method'],'is_string','payment_method');
@@ -85,7 +85,7 @@ class Order_model_test extends CI_Controller {
 		$order = array(
 				'order_id' => NULL,
 				'order_date' => NULL,
-				'order_status' => 'processed',
+				'order_status_id' => $this->socialhappen->get_k('order_status', 'Processed'),
 				'order_net_price' => 999,
 				'user_id' => 1,
 				'payment_method' => 'paypal',
@@ -106,14 +106,15 @@ class Order_model_test extends CI_Controller {
 	 * @author Weerapat P.
 	 */
 	function update_order_by_order_id_test(){
+		$status = 'Processed';
 		$data = array(
-			'order_status' => 'processed'
+			'order_status_id' => $this->socialhappen->get_k('order_status', $status)
 		);
 		$result = $this->orders->update_order_by_order_id(1,$data);
 		$this->unit->run($result === TRUE,'is_true', 'Updated order_status without error');
 		
 		$result = $this->orders->get_order_by_order_id(1);
-		$this->unit->run($result['order_status'] == 'processed','is_true',"Updated order_status to {processed}");
+		$this->unit->run($result['order_status_id'],$data['order_status_id'],"Updated order_status to {$status}");
 		
 	}
 	
@@ -126,6 +127,32 @@ class Order_model_test extends CI_Controller {
 		$this->unit->run($result,'is_int', 'count_orders()');
 	}
 	
+	/**
+	 * Tests get_latest_ordered_by_user_id_and_item_type_id()
+	 * @author Weerapat P.
+	 */
+	function get_latest_ordered_by_user_id_and_item_type_id_test(){
+		$result = $this->orders->get_latest_ordered_by_user_id_and_item_type_id(6, 1);
+		$this->unit->run($result,'is_array', 'get_latest_ordered_by_user_id_and_item_type_id()');
+		
+		$this->unit->run($result['order_id'],'is_string','order_id');
+		$this->unit->run($result['order_date'],'is_string','order_date');
+		$this->unit->run($result['order_status_id'],'is_string','order_status');
+		$this->unit->run($result['order_net_price'],'is_string','order_net_price');
+		$this->unit->run($result['user_id'],'is_string','user_id');
+		$this->unit->run($result['payment_method'],'is_string','payment_method');
+		$this->unit->run($result['billing_info'],'is_string','billing_info');
+		
+		$this->unit->run($result['item_id'],'is_string','item_id');
+		$this->unit->run($result['item_type_id'],'is_string','item_type');
+		$this->unit->run($result['item_name'],'is_string','item_name');
+		$this->unit->run($result['item_description'],'is_string','item_description');
+		$this->unit->run($result['item_price'],'is_string','item_price');
+		$this->unit->run($result['item_unit'],'is_string','item_unit');
+		$this->unit->run($result['item_discount'],'is_string','item_discount');
+
+		$this->unit->run(count($result),14, 'number of column'); //14 form two tables
+	}
 	
 }
 /* End of file campaign_model_test.php */

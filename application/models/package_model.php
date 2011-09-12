@@ -11,11 +11,17 @@ class Package_model extends CI_Model {
 	}
 
 	function get_packages(){
+		$this->db->order_by("package_id", "asc"); 
 		return  $this->db->get('package')->result_array();
 	}
 	
 	function get_package_by_package_id($package_id = NULL){
 		$result = $this->db->get_where('package', array('package_id'=>$package_id))->result_array();
+		return issetor($result[0], NULL);
+	}
+	
+	function get_free_package(){
+		$result = $this->db->get_where('package', array('package_price'=>0))->result_array();
 		return issetor($result[0], NULL);
 	}
 	
