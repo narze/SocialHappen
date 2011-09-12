@@ -362,18 +362,11 @@ class Page extends CI_Controller {
 	/**
 	 * JSON : Get facebook pages available to install
 	 * @author Prachya P.
+	 * @author Manassarn M. (get page_pics POST data)
 	 */
 	function json_get_not_installed_facebook_pages($company_id, $limit = NULL, $offset = NULL){
-		//$this->socialhappen->ajax_check();
-		$this->load->library('fb_library/fb_library',
-			array(
-			  'appId'  => $this->config->item('facebook_app_id'),
-			  'secret' => $this->config->item('facebook_api_secret'),
-			  'cookie' => true,
-			),
-			'FB');
-		file_get_contents($this->FB->getLoginUrl()); //TODO : Get session
-		$page_pics = $this->FB->api(array('method'=>'fql.query', 'query' => "SELECT page_id, pic from page WHERE page_id IN (SELECT page_id from page_admin WHERE uid=me())"));
+		$this->socialhappen->ajax_check();
+		$page_pics = json_decode($this->input->post('page_pics'), TRUE);
 		$this->load->model('page_model','page');
 		$pages = $this->page->get_company_pages_by_company_id($company_id, $limit, $offset);
 		$all_installed_fb_page_id=array();
