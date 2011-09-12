@@ -49,16 +49,52 @@ class Payment extends CI_Controller {
 		}
 		*/
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-	
-		$this->load->model('package_model','packages');
-		$user = $this->socialhappen->get_user();
 		
+		$this->load->model('package_model','packages');
+		$this->load->model('package_users_model','package_users');
+		$user = $this->socialhappen->get_user();
+		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
+		$is_upgradable = $user_current_package ? $this->packages->is_upgradable($user_current_package['package_id']) : true ;
+
 		if ($this->form_validation->run() == FALSE) //
 		{
-			$selected_package = $this->packages->get_package_by_package_id($this->input->get('package_id'));
+			$packages = $this->packages->get_packages();
+			
+			if($this->input->get('package_id') > 0)
+			{
+				$selected_package = $this->packages->get_package_by_package_id($this->input->get('package_id'));
+			}
+			else
+			{
+				$selected_package = $this->packages->get_package_by_package_id($packages[0]['package_id']);
+			}
+			
+			$options = array();
+			
+			foreach($packages as &$package) 
+			{
+				if($package['package_price'] == 0) $free_package_id = $package['package_id'];
+				
+				if(!$user_current_package || $package['package_price'] > $user_current_package['package_price']) //Show only package that user can buy
+				{
+					$price = $package['package_price'] ? ' ('.$package['package_price'].'USD' : ' (FREE)';
+					$duration = $package['package_duration'] ? '/'.$package['package_duration'].')' : '';
+					$options[$package['package_id']] = $package['package_name'].$price.$duration;
+				}
+				else 
+				{
+					unset($package);
+				}
+			}
+
 			$this->load->view('payment/payment_form', 
 					array(
+						'packages' => $packages,
+						'user_current_package' => $user_current_package,
 						'selected_package' => $selected_package,
+						'options' => $options,
+						'free_package_id' => isset($free_package_id),
+						'is_upgradable' => $is_upgradable
 					)
 			);
 		}
@@ -98,6 +134,10 @@ class Payment extends CI_Controller {
 			{
 				$order['payment_method'] = '';
 				$order['order_status_id'] = $this->socialhappen->get_k('order_status', 'Processed');
+				//Get user first company
+				$this->load->model('company_model','company');
+				$user_own_companies = $this->company->get_companies_by_user_id($user['user_id']);
+				$user_first_company = $user_own_companies[0];
 			}
 			$this->load->model('order_model','orders');
 			if(!$order['order_id'] = $this->orders->add_order($order)) { $transaction_status = false; }
@@ -127,8 +167,8 @@ class Payment extends CI_Controller {
 				'user_id' => $user['user_id'],
 				'package_expire' => $package['package_duration'] == 'unlimited' ? '0' : date('Y-m-d H:i:s', strtotime('+'.$package['package_duration']))
 			);
-			$this->load->model('package_users_model','package_users');
-			if($this->package_users->get_package_by_user_id($user['user_id']))
+			
+			if($user_current_package) //if user already have one package
 			{
 				$add_package_users_result = $this->package_users->update_package_user_by_user_id($user['user_id'], $package_user);
 			}
@@ -177,7 +217,7 @@ class Payment extends CI_Controller {
 					case 'paypal': $this->_set_express_checkout($data); break;
 					//case 'credit_card': break;
 					//case 'counter_service': break;
-					default : echo base_url(); break;
+					default : echo base_url().'company/'.$user_first_company['company_id'].'?popup=thanks'; break; //Free package, redirect to first company
 				}
 			}
 			else
@@ -188,13 +228,41 @@ class Payment extends CI_Controller {
 	}
 	
 	/**
-	 * Paypal confirmation page
+	 * Paypal payment summary page (Redirect from paypal site)
 	 * @author Weerapat P.
 	 * @param $order_id
-	 * Redirect from paypal site
 	 */
-	function confirm_paypal($order_id = NULL)
+	function payment_summary_paypal($order_id = NULL)
 	{
+		$view_data = array(
+				'header' => $this -> socialhappen -> get_header( 
+					array(
+						'title' => 'Payment Confirm',
+						'script' => array(
+							'common/functions',
+							'common/jquery.form',
+							'common/bar',
+							'common/fancybox/jquery.fancybox-1.3.4.pack',
+							'home/lightbox',
+							'payment/payment'
+						),
+						'style' => array(
+							'common/platform',
+							'common/main',
+							'common/fancybox/jquery.fancybox-1.3.4'
+						)
+					)
+				),
+				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+					array(
+						'breadcrumb' => array( 
+							'Signup' => NULL
+						)
+					),
+				TRUE),
+				'footer' => $this -> socialhappen -> get_footer()
+ 		);
+
 		$this->load->model('order_model','orders');
 		$order = $this->orders->get_order_by_order_id($order_id);
 		$order['billing_info'] = unserialize($order['billing_info']);
@@ -205,118 +273,67 @@ class Payment extends CI_Controller {
 		$this->load->model('user_model','users');
 		$user = $this->users->get_user_profile_by_user_id($order['user_id']);
 		
-		if (!$this->input->post())
+		$data = array(
+			'token' => $this->input->get('token'),
+			'payerid' => $this->input->get('PayerID'),
+			'order' => $order,
+			'order_items' => $order_items,
+			'user' => $user
+		);
+		
+		//Get express checkout details
+		$PayPalResult = $this->_get_express_checkout_details($data);
+
+		if($PayPalResult['ERRORS']) 
 		{
-			if($order_id)
-			{
-				$data = array(
-					'header' => $this -> socialhappen -> get_header( 
-						array(
-							'title' => 'Payment Confirm',
-							'script' => array(
-								'common/functions',
-								'common/jquery.form',
-								'common/bar',
-								'common/fancybox/jquery.fancybox-1.3.4.pack',
-								'home/lightbox',
-								'payment/payment'
-							),
-							'style' => array(
-								'common/platform',
-								'common/main',
-								'common/fancybox/jquery.fancybox-1.3.4'
-							)
-						)
-					),
-					'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-						array(
-							'breadcrumb' => array( 
-								'Signup' => NULL
-							)
-						),
-					TRUE),
-					'payment_body' => $this->load->view('payment/confirm_paypal',
-						array(
-							'order' => array(
-								'order_id' => $order_id,
-								'billing_info' => $order['billing_info']['user_first_name'].' '.$order['billing_info']['user_last_name'],
-								'package' => $order_items[0]['item_name'],
-								'payment_method' => ucfirst(str_replace('_', ' ', $order['payment_method'])),
-								'order_net_price' => $order['order_net_price']
-							)
-						),
-					TRUE),
-					'footer' => $this -> socialhappen -> get_footer()
-				);
-				$this->parser->parse('payment/payment_view', $data);
-			}
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while getting checkout details'),TRUE);
+			//$this->parser->parse('payment/payment_view', $view_data);
+			//return false;
+		}
+		$order['billing_info']['payer_id'] = issetor($PayPalResult['PAYERID']);
+		unset($PayPalResult);
+		
+		//Do express checkout payment
+		$PayPalResult = $this->_do_express_checkout_payment($data);
+
+		if($PayPalResult['ERRORS'])
+		{
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while checking out.'),TRUE);
+			//$this->parser->parse('payment/payment_view', $view_data);
+			//return false;
+		}
+		
+		//Update order status to "Processed" and Update billing info form paypal
+		$order['billing_info']['txn_id'] = issetor($PayPalResult['PAYMENTS'][0]['TRANSACTIONID']);
+		$order['billing_info']['payment_status'] = issetor($PayPalResult['PAYMENTS'][0]['PAYMENTSTATUS']);
+		$order['billing_info']['pending_reason'] = issetor($PayPalResult['PAYMENTS'][0]['PENDINGREASON']);
+		$order['billing_info']['reason_code'] = issetor($PayPalResult['PAYMENTS'][0]['REASONCODE']);
+		//$order['billing_info'] = array_merge($order['billing_info'], $PayPalResult);
+		$update_data = array(
+			'order_status_id' => $this->socialhappen->get_k('order_status', 'Processed'),
+			'billing_info' => serialize($order['billing_info'])
+		);
+		if( $this->orders->update_order_by_order_id($order['order_id'], $update_data) )
+		{
+			//Payment complete
+			$view_data['payment_body'] = $this->load->view('payment/payment_summary_paypal', array(
+				'order' => array(
+					'order_id' => $order['order_id'],
+					'billing_info' => $order['billing_info']['user_first_name'].' '.$order['billing_info']['user_last_name'],
+					'package' => $order_items[0]['item_name'],
+					'payment_method' => ucfirst(str_replace('_', ' ', $order['payment_method'])),
+					'order_net_price' => $order['order_net_price']
+				),
+				'popup' => 'payment_complete'
+				)
+			,TRUE);
 		}
 		else
 		{
-			$data = array(
-				'token' => $this->input->post('token'),
-				'payerid' => $this->input->post('PayerID'),
-				'order' => $order,
-				'order_items' => $order_items,
-				'user' => $user
-			);
-			//Get express checkout details
-			$PayPalResult = $this->_get_express_checkout_details($data);
-			
-			if($PayPalResult['ERRORS']) 
-			{
-				echo json_encode(array(
-						'status' => 'ERROR',
-						'message' => 'Error while getting checkout details'
-					)
-				);
-				exit();
-			
-			}
-			$order['billing_info']['payer_id'] = issetor($PayPalResult['PAYERID']);
-			unset($PayPalResult);
-			
-			//Do express checkout payment
-			$PayPalResult = $this->_do_express_checkout_payment($data);
-			
-			if($PayPalResult['ERRORS'])
-			{
-				echo json_encode(array(
-						'status' => 'ERROR',
-						'message' => 'Error while checking out.'
-					)
-				);
-				exit();
-			}
-			
-			//Update order status to "Processed" and Update billing info form paypal
-			$order['billing_info']['txn_id'] = issetor($PayPalResult['PAYMENTS'][0]['TRANSACTIONID']);
-			$order['billing_info']['payment_status'] = issetor($PayPalResult['PAYMENTS'][0]['PAYMENTSTATUS']);
-			$order['billing_info']['pending_reason'] = issetor($PayPalResult['PAYMENTS'][0]['PENDINGREASON']);
-			$order['billing_info']['reason_code'] = issetor($PayPalResult['PAYMENTS'][0]['REASONCODE']);
-			//$order['billing_info'] = array_merge($order['billing_info'], $PayPalResult);
-			$update_data = array(
-				'order_status_id' => $this->socialhappen->get_k('order_status', 'Processed'),
-				'billing_info' => serialize($order['billing_info'])
-			);
-			if( $this->orders->update_order_by_order_id($order['order_id'], $update_data) )
-			{
-				//Payment complete
-				echo json_encode(array(
-						'status' => 'OK',
-						'message' => 'Payment complete'
-					)
-				);
-			}
-			else
-			{
-				echo json_encode(array(
-						'status' => 'ERROR',
-						'message' => 'Error while updating order status'
-					)
-				);
-			}
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while updating order status'));
 		}
+		
+		$this->parser->parse('payment/payment_view', $view_data);
 	}
 	
 	/**
@@ -328,6 +345,35 @@ class Payment extends CI_Controller {
 	{
 		$this->socialhappen->ajax_check();
 		$this->load->view('payment/payment_complete');
+	}
+	
+	/**
+	 * Cancel package
+	 * @author Weerapat P.
+	 */
+	function cancel_package($user_id)
+	{
+		$this->load->model('order_model','orders');
+		$this->load->model('package_model','package');
+		$this->load->model('package_users_model','package_users');
+		
+		$item_type_id = $this->socialhappen->get_k('item_type', 'Package');
+		$latest_ordered_package = $this->orders->get_latest_ordered_by_user_id_and_item_type_id($user_id, $item_type_id);
+		$result = true;
+		
+		//Switch to Free package
+		$free_package = $this->package->get_free_package();
+		$data = array('package_id'=>$free_package['package_id'], 'package_expire'=>date('Y-m-d H:i:s'));
+		if(!$this->package_users->update_package_user_by_user_id($latest_ordered_package['user_id'], $data)) $result = false;
+		
+		//or remove package
+		//if(!$this->package_users->remove_package_user_by_user_id($latest_ordered_package['user_id'])) $result = false;
+
+		//Change order status
+		$data = array('order_status_id' => $this->socialhappen->get_k('order_status', 'Canceled'));
+		if(!$this->orders->update_order_by_order_id($latest_ordered_package['order_id'], $data)) $result = false;
+		
+		return $result;
 	}
 	
 	/**
@@ -360,19 +406,11 @@ class Payment extends CI_Controller {
 			case 'refunded' : //Refunded: You refunded the payment.
 				$this->load->model('order_model','orders');
 				$order = $this->orders->get_order_by_txn_id($response['txn_id']);
-				$result = true;
-				
-				//Switch to Free package
-				$this->load->model('package_users_model','package_users');
-				$data = array('package_id'=>1, 'package_expire'=>date('Y-m-d H:i:s'));
-				if(!$this->package_users->update_package_user_by_user_id($order['user_id'], $data)) $result = false;
+				$this->cancel_package($order['user_id']);
 				
 				//Change order status
 				$data = array('order_status_id' => $this->socialhappen->get_k('order_status', 'Refunded'));
-				if(!$this->orders->update_order_by_order_id($order['order_id'], $data)) $result = false;
-				
-				if($result) { echo 'Order status changed to "Refunded"'; }
-				
+				if(!$this->orders->update_order_by_order_id($latest_ordered_package['order_id'], $data)) $result = false;
 				break;
 			case 'reversed' : //Reversed: A payment was reversed due to a chargeback or other type of reversal. The funds have been removed from your account balance and returned to the buyer. The reason for the reversal is specified in the ReasonCode element.
 				break;
@@ -399,7 +437,7 @@ class Payment extends CI_Controller {
 		$SECFields = array(
 							'token' => '', 								// A timestamped token, the value of which was returned by a previous SetExpressCheckout call.
 							'maxamt' => '', 						// The expected maximum total amount the order will be, including S&H and sales tax.
-							'returnurl' => base_url().'payment/confirm_paypal/'.$order['order_id'], 							// Required.  URL to which the customer will be returned after returning from PayPal.  2048 char max.
+							'returnurl' => base_url().'payment/payment_summary_paypal/'.$order['order_id'], 							// Required.  URL to which the customer will be returned after returning from PayPal.  2048 char max.
 							'cancelurl' => base_url().'home/package', 							// Required.  URL to which the customer will be returned if they cancel payment on PayPal's site.
 							'callback' => '', 							// URL to which the callback request from PayPal is sent.  Must start with https:// for production.
 							'callbacktimeout' => '', 					// An override for you to request more or less time to be able to process the callback request and response.  Acceptable range for override is 1-6 seconds.  If you specify greater than 6 PayPal will use default value of 3 seconds.
@@ -573,7 +611,7 @@ class Payment extends CI_Controller {
 	 * Get express checkout details
 	 * @author Weerapat P.
 	 * @param $data
-	 * Called by confirm_paypal()
+	 * Called by payment_summary_paypal()
 	 */
 	function _get_express_checkout_details($data)
 	{	
@@ -596,7 +634,7 @@ class Payment extends CI_Controller {
 	 * Do express checkout payment
 	 * @author Weerapat P.
 	 * @param $data
-	 * Called by confirm_paypal()
+	 * Called by payment_summary_paypal()
 	 */
 	function _do_express_checkout_payment($data)
 	{

@@ -1176,7 +1176,18 @@ class Sync extends CI_Controller {
 				'package_max_companies' => 3,
 				'package_max_pages' => 10,
 				'package_max_users' => 100000,
-				'package_price' => 999,
+				'package_price' => 99,
+				'package_custom_badge' => 1,
+				'package_duration' => '1month'
+			),
+			array(
+				'package_name' => 'Ultimate package',
+				'package_detail' => 'For Ultimate enterprise',
+				'package_image' => NULL,
+				'package_max_companies' => 9,
+				'package_max_pages' => 99,
+				'package_max_users' => 500000,
+				'package_price' => 199,
 				'package_custom_badge' => 1,
 				'package_duration' => '1month'
 			)
