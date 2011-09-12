@@ -171,7 +171,7 @@ class Page_test extends CI_Controller {
 						'page_new_member' => rand(1, 10000000),
 						'page_image' => 'page_image',
 						);
-		$content = $this->curl->simple_post(base_url().'page/json_add', $page);
+		$content = $this->curl->ssl(FALSE)->simple_post(base_url().'page/json_add', $page);
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content,'is_array', 'json_add()');
 		$this->unit->run($content['page_id'],'is_int','page_id');
