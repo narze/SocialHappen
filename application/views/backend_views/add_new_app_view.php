@@ -59,7 +59,7 @@ echo form_open('backend/add_new_app');
 			</li>
 			
 			<li>
-				<?=form_label('App URL*', 'app_url', array(
+				<?=form_label('App URL*, parameter: {app_install_id}', 'app_url', array(
 				'class' => 'app_url',
 				'style' => 'color: #000;',
 				));?>
