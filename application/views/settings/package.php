@@ -61,3 +61,6 @@
 	  </table>
 	</div>
   </div>
+  <?php if($current_package['package_price'] > 0) { ?>
+  <p><a href="<?php echo base_url().'payment/cancel_package/'.$user_id; ?>">Cancel package</a></p>
+  <?php } ?>
