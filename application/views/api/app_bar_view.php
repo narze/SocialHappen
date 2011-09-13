@@ -40,8 +40,10 @@
 				?>
 			</ul>
 		</li>
-		<li class="setting">
-			<a href="#"><span>setting</span></a>
-		</li>
+		<?php if($view_as == 'admin') : ?>
+			<li class="setting">
+				<a href="#"><span>setting</span></a>
+			</li>
+		<?php endif; ?>
 	</ul>
 </div>
