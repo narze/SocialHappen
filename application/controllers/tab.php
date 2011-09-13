@@ -66,6 +66,7 @@ class Tab extends CI_Controller {
 									'page_id' => $page_id,
 									'user_id' => $user_id,
 									'is_guest' => $user ? FALSE : TRUE,
+									'is_admin' => $is_admin,
 									'token' => base64_encode($token),
 									'per_page' => $per_page,
 									'page_app_installed_id' => $page['page_app_installed_id'],
