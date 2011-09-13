@@ -20,7 +20,7 @@
 
 	margin: 0 auto;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_header.png) repeat-x;
+	background: url(../assets/images/bg_fb/bg_header.png) repeat-x;
 
 	}
 
@@ -50,7 +50,7 @@
 
 	padding: 5px 0 0 40px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_liney01.gif) repeat-y 100% 0;
+	background: url(../assets/images/bg_fb/bg_liney01.gif) repeat-y 100% 0;
 
 	}
 
@@ -92,7 +92,7 @@
 
 	height: 27px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/fill_top25-25.png) no-repeat;
+	background: url(../assets/images/bg_fb/fill_top25-25.png) no-repeat;
 
 	position: absolute;
 
@@ -114,7 +114,7 @@
 	
 	min-width: 120px;
 	
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_droptop.png) 90% 7px no-repeat;
+	background: url(../assets/images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
 
 	}
 
@@ -152,7 +152,7 @@
 
 	font-size: 11px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_linex03.png) repeat-x top;
+	background: url(../assets/images/bg_fb/bg_linex03.png) repeat-x top;
 
 	}
 
@@ -170,7 +170,7 @@
 
 	font-weight: bold;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_listmenu.png) 5px 7px no-repeat;
+	background: url(../assets/images/bg_fb/bg_listmenu.png) 5px 7px no-repeat;
 
 	}
 
@@ -182,7 +182,7 @@
 
 	height: 35px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_liney01.gif) repeat-y 0 0;
+	background: url(../assets/images/bg_fb/bg_liney01.gif) repeat-y 0 0;
 
 	padding: 0 0 0 2px;
 
@@ -196,7 +196,7 @@
 
 	height: 35px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_main.png) no-repeat 9px 10px;
+	background: url(../assets/images/bg_fb/bg_main.png) no-repeat 9px 10px;
 
 	}
 
@@ -210,7 +210,7 @@
 
 	height: 35px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_main.png) no-repeat 7px -28px;
+	background: url(../assets/images/bg_fb/bg_main.png) no-repeat 7px -28px;
 
 	text-decoration: none;
 
@@ -284,7 +284,7 @@
 
 	height: 27px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/fill_top25-25.png) no-repeat;
+	background: url(../assets/images/bg_fb/fill_top25-25.png) no-repeat;
 
 	position: absolute;
 
@@ -306,7 +306,7 @@
 	
 	min-width: 120px;
 	
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_droptop.png) 90% 7px no-repeat;
+	background: url(../assets/images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
 
 	}
 
@@ -344,7 +344,7 @@
 
 	font-size: 11px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_linex03.png) repeat-x top;
+	background: url(../assets/images/bg_fb/bg_linex03.png) repeat-x top;
 
 	}
 
@@ -362,7 +362,7 @@
 
 	font-weight: bold;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_listmenu.png) 5px 7px no-repeat;
+	background: url(../assets/images/bg_fb/bg_listmenu.png) 5px 7px no-repeat;
 
 	}
 
@@ -374,7 +374,7 @@
 
 	height: 35px;
 
-	background: url(http://socialhappen.dyndns.org/socialhappen/images/bg/bg_main.png) no-repeat 2px -73px;
+	background: url(../assets/images/bg_fb/bg_main.png) no-repeat 7px -69px;
 
 	}
 

@@ -1299,7 +1299,7 @@ class Api extends CI_Controller {
 				$data['left_menu'][] = 
 					array('location' => 
 						$this->app_url->translate_url($page_app['app_url'], 
-						$page_app['app_install_url']),
+						$page_app['app_install_id']),
 								'title' => $page_app['app_name']);
 				
 			}
@@ -1315,6 +1315,7 @@ class Api extends CI_Controller {
 		
 		$data['right_menu'] = array(array('location' => '#', 'title' => 'Go to Dashboard'),
 																array('location' => '#', 'title' => 'View My Profile'));
+		$data['view_as'] = 'admin'; //admin,user,guest
 		$response['html'] = $this->load->view('api/app_bar_view', $data, TRUE);
 		$response['css'] = base_url() . 'css/api_app_bar.css';
 		echo json_encode($response);
