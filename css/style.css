@@ -41,6 +41,10 @@ code {
  padding: 12px 10px 12px 10px;
 }
 
+.clear { 
+	clear:both;
+}
+
 .button {
 	display: inline-block;
 	outline: none;
@@ -150,3 +154,32 @@ div.message{
 	background-color: #f9f9f9;
  	border: 1px solid #D0D0D0;
 }
+
+/* Package */
+#package-apps {
+	position: relative;
+}
+#package-apps ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+#package-apps ul li {
+	display:block;
+	float:left;
+	padding:0 0 0 10px;
+	width:100px;
+	height:100px;
+	overflow:hidden;
+}
+#package-apps ul li.selected {
+	background-color:#f78d1d;
+}
+#package-apps ul li p {
+	margin:0;
+	text-align:center;
+	font-size:10px;
+	width:100px;
+	overflow:hidden;
+}
+/* end Package*/
