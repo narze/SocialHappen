@@ -109,6 +109,22 @@ class Page_user_data_model_test extends CI_Controller {
 		$result = $this->page_users->add_page_user($user);
 		$this->unit->run($result,'is_true',"add_page_user() no page user fields (blank user_data)");
 		
+		$user = array(
+						'user_id' => '4',
+						'page_id' => '3',
+						'user_data' => array()
+					);
+		$result = $this->page_users->add_page_user($user);
+		$this->unit->run($result,'is_true',"add_page_user() no page user fields (blank user_data)");
+		
+		$user = array(
+						'user_id' => '6',
+						'page_id' => '3',
+						'user_data' => NULL
+					);
+		$result = $this->page_users->add_page_user($user);
+		$this->unit->run($result,'is_true',"add_page_user() no page user fields (blank user_data)");
+		
 		
 		
 	}
@@ -237,6 +253,12 @@ class Page_user_data_model_test extends CI_Controller {
 		$this->unit->run($result,'is_false', 'remove_page_user_by_user_id_and_page_id(4,2)');
 		
 		$result = $this->page_users->remove_page_user_by_user_id_and_page_id(5,3);
+		$this->unit->run($result,'is_true', 'remove_page_user_by_user_id_and_page_id(5,3)');
+		
+		$result = $this->page_users->remove_page_user_by_user_id_and_page_id(4,3);
+		$this->unit->run($result,'is_true', 'remove_page_user_by_user_id_and_page_id(5,3)');
+		
+		$result = $this->page_users->remove_page_user_by_user_id_and_page_id(6,3);
 		$this->unit->run($result,'is_true', 'remove_page_user_by_user_id_and_page_id(5,3)');
 		
 		$result = $this->page_users->remove_page_user_by_user_id_and_page_id(1,NULL);

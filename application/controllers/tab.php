@@ -517,7 +517,7 @@ class Tab extends CI_Controller {
 					       	'user_facebook_id' => $facebook_user['id']
 						);
 					
-			$user_add_result = json_decode($this->curl->simple_post(base_url().'user/json_add', $user), TRUE);
+			$user_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'user/json_add', $user), TRUE);
 			
 			if ($user_add_result['status'] == 'OK')
 			{
@@ -559,9 +559,14 @@ class Tab extends CI_Controller {
 			$data[$user_fields['name']] = $this->input->post($user_fields['name']);
 		}
 		
+		if(!$page_user_fields){
+			$this->form_validation->set_rules('empty', 'Empty', 'required');
+		}
+		
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->load->view('tab/signup_page', array(
+				'user' => $this->socialhappen->get_user(),
 				'page_id' => $page_id,
 				'page_user_fields' => $page_user_fields,
 				'facebook_user'=>$facebook_user,

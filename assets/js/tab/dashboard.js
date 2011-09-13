@@ -52,7 +52,8 @@ $(function(){
 					$('a.bt-register-now').die('click');
 					$('a.bt-register-now').live('click',function(){
 						$('.signup-form').ajaxSubmit({
-							target:'div.popup-fb-2col'
+							target:'div.popup-fb-2col',
+							replaceTarget: true
 						});
 					});
 				}
