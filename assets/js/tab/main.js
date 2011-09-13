@@ -7,4 +7,9 @@ $(function(){
 	   }
 	   return null;   
 	}
+	
+	$('.bt-back_dashboard').live('click', function(){
+		window.parent.location.replace($(this).attr('href'));
+		return false;
+	});
 });
