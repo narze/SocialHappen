@@ -1299,7 +1299,7 @@ class Api extends CI_Controller {
 				$data['left_menu'][] = 
 					array('location' => 
 						$this->app_url->translate_url($page_app['app_url'], 
-						$page_app['app_install_url']),
+						$page_app['app_install_id']),
 								'title' => $page_app['app_name']);
 				
 			}
