@@ -141,7 +141,7 @@ class Order_model_test extends CI_Controller {
 		$this->unit->run($result['order_net_price'],'is_string','order_net_price');
 		$this->unit->run($result['user_id'],'is_string','user_id');
 		$this->unit->run($result['payment_method'],'is_string','payment_method');
-		$this->unit->run($result['billing_info'],'is_string','billing_info');
+		$this->unit->run($result['billing_info'],'is_array','billing_info');
 		
 		$this->unit->run($result['item_id'],'is_string','item_id');
 		$this->unit->run($result['item_type_id'],'is_string','item_type');
@@ -152,6 +152,15 @@ class Order_model_test extends CI_Controller {
 		$this->unit->run($result['item_discount'],'is_string','item_discount');
 
 		$this->unit->run(count($result),14, 'number of column'); //14 form two tables
+	}
+	
+	/**
+	 * Tests get_latest_paypal_profile_id_by_user_id()
+	 * @author Weerapat P.
+	 */
+	function get_latest_paypal_profile_id_by_user_id_test(){
+		$result = $this->orders->get_latest_paypal_profile_id_by_user_id(7);
+		$this->unit->run($result,'is_string', 'get_latest_paypal_profile_id_by_user_id()');
 	}
 	
 }

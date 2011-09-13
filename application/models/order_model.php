@@ -72,7 +72,31 @@ class Order_model extends CI_Model {
 		$this->db->join('order','order.order_id=order_items.order_id');
 		$this->db->where(array('user_id' => $user_id, 'item_type_id' => $item_type_id));
 		$this->db->order_by("order.order_id", "desc");
-		return $this->db->get('order_items')->row_array();
+		$result = $this->db->get('order_items')->row_array();
+		$result['billing_info'] = unserialize($result['billing_info']);
+		return $result;
+	}
+	
+	/**
+	 * Get latest paypal profile_id by user id
+	 * @param $user_id
+	 * @return array
+	 * @author Weerapat P.
+	 */
+	function get_latest_paypal_profile_id_by_user_id($user_id = NULL){	
+		$order_status_id = $this->socialhappen->get_k('order_status', 'Processed');
+		$this->db->join('order','order.order_id=order_items.order_id');
+		$this->db->where(array('user_id' => $user_id));
+		$this->db->where(array('order_status_id' => $order_status_id));
+		$this->db->like('billing_info', 'profile_id');
+		$this->db->order_by("order.order_id", "desc");
+		$result = $this->db->get('order_items')->row_array();
+		if(count($result))
+		{	
+			$result['billing_info'] = unserialize($result['billing_info']);
+			return issetor($result['billing_info']['profile_id']);
+		}
+		return false;
 	}
 	
 	function get_orders_by_month($month = NULL){
