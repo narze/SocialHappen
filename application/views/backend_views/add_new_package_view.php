@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Add new package</h1>
-<?php
+<?php 
 echo form_open_multipart('backend/add_new_package/');
 ?>
 		<ul>
@@ -118,8 +118,8 @@ echo form_open_multipart('backend/add_new_package/');
 				<?php echo form_error('package_price'); ?>
 			</li>
 			
-			<li>
-				<input type="checkbox" id="package_custom_badge" name="package_custom_badge" <?php echo set_checkbox('package_custom_badge', NULL); ?>> 
+			<li><?php echo $selected_custom_badge; ?>
+				<input name="package_custom_badge" type="checkbox" <?php if($selected_custom_badge) echo 'checked'; ?> />
 				<?=form_label('Custom badge', 'package_custom_badge', array(
 				'class' => 'package_custom_badge',
 				'style' => 'color: #000;',
@@ -143,17 +143,31 @@ echo form_open_multipart('backend/add_new_package/');
 				<?php echo form_error('package_duration'); ?>
 				(EX. 1month, 1year)
 			</li>
+			
+			<?php if($all_apps) { ?>
+			<li id="package-apps">
+				<ul>
+				<?php foreach($all_apps as $app) { ?>
+					<li>
+					<input name="package_apps[]" type="checkbox" value="<?php echo $app['app_id']; ?>" <?php if( $selected_apps && in_array($app['app_id'], $selected_apps) ) echo 'checked'; ?> />
+					<p><img style="width:64px;height:64px;" src="<?php echo $app['app_image']; ?>" alt="<?php echo $app['app_name']; ?>" /></p>
+					<p><?php echo $app['app_name']; ?></p>
+					</li>
+				<?php } ?>
+				</ul>
+			</li>
+			<?php } ?>
+			
 		</ul>
 		
-		<div class="button-style">
-		
-		<p>
-		<?php echo form_submit(array(
-							'name' => 'submit', 
-							'value' => 'Save',
-							'class' => 'bt-create-now'
-							)); ?> or <?php echo anchor('backend/packages', 'Cancel');?>	
-		</p>
+		<div class="button-style clear">
+			<p>
+			<?php echo form_submit(array(
+								'name' => 'submit', 
+								'value' => 'Save',
+								'class' => 'bt-create-now'
+								)); ?> or <?php echo anchor('backend/packages', 'Cancel');?>	
+			</p>
 		</div>
 		<?=form_close()?>
 </body>
