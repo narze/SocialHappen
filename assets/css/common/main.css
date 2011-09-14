@@ -34,7 +34,16 @@ div.popup_payment
 	border:none!important;
 	border-radius: 0 	!important;
 }
+h2.in-popup {
+	font-size: 24px;
+	font-family: Myriad Pro;
+	font-weight: normal;
+	padding: 0 0 5px;
+	border-bottom: 1px dotted #A6A6A6;
+	margin: 0 0 10px;
+}
 
+/* Popup FB connect */
 div.popup_fb-connect {
 	padding: 20px 40px 20px 40px;
 	width:auto;
@@ -44,18 +53,11 @@ div.popup_fb-connect > div {
 	width: 100%;
 	padding: 5px;
 }
+
 /* Popup Payment form */
 div.popup_payment {
 	width:380px;
 	color: #424241;
-}
-div.popup_payment h2 {
-	font-size: 24px;
-	font-family: Myriad Pro;
-	font-weight: normal;
-	padding: 0 0 5px;
-	border-bottom: 1px dotted #A6A6A6;
-	margin: 0 0 10px;
 }
 #package-image {
 	float:left;
@@ -155,7 +157,21 @@ div.popup_payment h2 {
 	padding:0 5px 0 23px;
 }
 
-
+/* Popup Company thanks -- after signup or payment complete */
+div.popup_company-thanks {
+	padding: 20px;
+	width:auto;
+	font-weight:bold;
+	color: #424241;
+}
+div.popup_company-thanks p.thanks {
+	color:#4c5b1a;
+	font-size:16px;
+	font-weight:bold;
+}
+div.popup_company-thanks p.message {
+	margin:0!important;
+}
 
 
 /* Member list */

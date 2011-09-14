@@ -173,9 +173,13 @@ class Home extends CI_Controller {
 	 * Signup complete
 	 * @author Weerapat P.
 	 */
-	function signup_complete()
+	function signup_complete($package_id)
 	{
-		$this->load->view('home/signup_complete');
+		$this->load->model('package_model','packages');
+		$data = array(
+			'package' => $this->packages->get_package_by_package_id($package_id)
+		);
+		$this->load->view('home/signup_complete', $data);
 	}
 	
 	/**

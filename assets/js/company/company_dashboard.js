@@ -747,6 +747,7 @@ $( function() {
 	
 	var popup;
 	var closeEnable = true;
+	var package_id = get_query( window.location.href, 'package_id' );
 	
 	if(user_have_package == false)
 	{
@@ -755,7 +756,7 @@ $( function() {
 	} 
 	else if( get_query( window.location.href, 'popup' ) == 'thanks') //Thanks msg after sign up
 	{
-		popup = 'home/signup_complete';
+		popup = 'home/signup_complete/'+package_id;
 	}
 	else if(is_package_over_the_limit)
 	{
@@ -771,6 +772,10 @@ $( function() {
 			padding: 0,
 			scrolling: 'no',
 			modal: !closeEnable
+		});
+		
+		$('div.popup_company-thanks a.bt-continue').live('click', function () {
+			$.fancybox.close();
 		});
 	}
 

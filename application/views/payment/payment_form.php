@@ -7,7 +7,7 @@
 	<?php $attributes = array('class' => 'payment-form', 'id' => '');
 		echo form_open('payment/payment_form', $attributes); ?>
 		<div class="form">
-            <h2><?php echo $selected_package['package_name']; ?></h2>
+            <h2 class="in-popup"><?php echo $selected_package['package_name']; ?></h2>
 			
 				<div id="package-image"><?php
 					foreach ($packages as $package)

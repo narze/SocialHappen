@@ -199,7 +199,11 @@ class Payment extends CI_Controller {
 				case 'paypal': $this->_set_express_checkout($data); break;
 				//case 'credit_card': break;
 				//case 'counter_service': break;
-				default : echo json_encode(array('status'=>'OK', 'msg'=> base_url().'company/'.$user_first_company['company_id'].'?popup=thanks' )); break; //Free package, redirect to first company
+				default : 
+					//Free package, redirect to first company
+					$url = base_url().'company/'.$user_first_company['company_id'].'?popup=thanks&package_id='.$package['package_id'];
+					echo json_encode(array('status'=>'OK', 'msg'=> $url ));  
+					break;
 			}
 
 		}
