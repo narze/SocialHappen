@@ -180,6 +180,7 @@ class SocialHappen{
 				}
 			}
 			$common = array(
+				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'user' => $this->get_user(),
 				'image_url' => base_url().'assets/images/',
 				'vars' => array(
@@ -201,7 +202,7 @@ class SocialHappen{
 				'user_can_create_company' => $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company') //Check user can create company
 			);
 		}
-		$data = array_merge_recursive( $common,$data);
+		$data = array_merge_recursive($common,$data);
 		$data = array_unique_recursive($data);
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
