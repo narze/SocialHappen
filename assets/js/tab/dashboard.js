@@ -47,7 +47,8 @@ $(function(){
 					});
 				} else if(!is_user_register_to_page) {
 					$.fancybox({
-						href: base_url+'tab/signup_page/'+page_id
+						href: base_url+'tab/signup_page/'+page_id,
+						modal: true
 					});
 					$('a.bt-register-now').die('click');
 					$('a.bt-register-now').live('click',function(){

@@ -431,7 +431,9 @@ class Page extends CI_Controller {
 						'vars' => array('company_id'=>$company['company_id'],
 							'page_id'=>$page_id,
 							'page_name'=>$page['page_name'],
-							'user_id'=>$this->session->userdata('user_id')),
+							'user_id'=>$this->session->userdata('user_id'),
+							'facebook_page_id' => $page['facebook_page_id']
+						),
 						'script' => array(
 							'common/functions',
 							'page/addapp_lightbox',
