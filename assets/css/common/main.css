@@ -375,6 +375,12 @@ div.popup_create-company ul>li textarea {
 }
 
 /* Setting > Package/Billing */
+div.box-current_package div.detail p.thumb {
+	background-position: 4px 0px;
+	background-repeat:no-repeat;
+	width: 75px;
+	height: 75px;
+}
 div.box-current_package div.package-overlay {
 	top:171px;
 }

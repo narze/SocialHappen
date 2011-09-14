@@ -5,13 +5,14 @@
 	  <div class="detail">
 		<h2><?php echo $current_package['package_name']; ?></h2>
 		<p><?php echo $current_package['package_detail']; ?></p>
-		<p class="thumb"><img src="<?php echo $current_package['package_image'] ? $current_package['package_image'] : base_url().'images/enterprise-deluxe.png' ; ?>" alt="<?php echo $current_package['package_name']; ?>" /></p>
+		<p class="thumb" style="background-image:url('<?php echo $current_package['package_image'] ? $current_package['package_image'] : base_url().'images/enterprise-deluxe.png' ; ?>');">
+		</p>
 	  </div>
 	  <ul class="detail">
-		<li><b><?php echo $user_companies.'/'.$current_package['package_max_companies']; ?></b><span>Companies</span></li>
-		<li><b><?php echo $user_pages.'/'.$current_package['package_max_pages']; ?></b><span>Pages</span></li>
-		<li><b><abbr title="<?php echo $members.'/'.$current_package['package_max_users']; ?>"><?php echo $members; ?></abbr></b><span>Members</span></li>
-		<li class="package-apps"><img src="images/enterprise-package.png" alt="" />
+		<li><b><?php echo number_format($user_companies).'/'.number_format($current_package['package_max_companies']); ?></b><span>Companies</span></li>
+		<li><b><?php echo number_format($user_pages).'/'.number_format($current_package['package_max_pages']); ?></b><span>Pages</span></li>
+		<li><b><abbr title="<?php echo number_format($members).'/'.number_format($current_package['package_max_users']); ?>"><?php echo $members; ?></abbr></b><span>Members</span></li>
+		<li class="package-apps"><img src="<?php echo str_replace('_icon_', '_app_', $current_package['package_image']);?>" alt="" />
 			<?php if($apps) { ?>
 			<div class="package-overlay" style="display:none;">
 				<ul>
@@ -50,7 +51,7 @@
 			  <td><?php echo $order['order_date']; ?></td>
 			  <td><a href="#"><?php echo $order['order_id']; ?></a></td>
 			  <td><?php echo $order['package_name']; ?></td>
-			  <td class="right"><?php echo $order['order_net_price']; ?> USD</td>
+			  <td class="right"><?php echo number_format($order['order_net_price']); ?> USD</td>
 			</tr>
 			<?php } 
 		} else { ?>
@@ -59,8 +60,8 @@
 			</tr>
 		<?php } ?>
 	  </table>
+	  <?php if($current_package['package_price'] > 0) { ?>
+	  <p style="text-align:right"><br /><a href="<?php echo base_url().'payment/cancel_package/'.$user_id; ?>">Cancel package</a></p>
+	  <?php } ?>
 	</div>
   </div>
-  <?php if($current_package['package_price'] > 0) { ?>
-  <p><a href="<?php echo base_url().'payment/cancel_package/'.$user_id; ?>">Cancel package</a></p>
-  <?php } ?>
