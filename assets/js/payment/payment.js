@@ -40,13 +40,14 @@ $(function(){
 	//Payment summary page => show payment complete popup
 	if( $('input[name="popup"]').val() == 'payment_complete' ) {
 		$.fancybox({
-			href: base_url+'payment/payment_complete',
+			href: base_url+'payment/payment_complete/' + $('input[name="package_id"]').val(),
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
 			padding: 0,
 			scrolling: 'no',
 		});
-		$('a.bt-back_dashboard').live('click', function() {
+		
+		$('div.popup_payment-complete a.bt-continue').live('click', function () {
 			window.location = base_url + '?logged_in=true'; //Redirect to dashboard
 		});
 	}

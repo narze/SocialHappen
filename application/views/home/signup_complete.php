@@ -1,5 +1,5 @@
 <div class="popup_company-thanks">
-    <h2 class="in-popup"><?php echo $package['package_price'] > 0 ? 'Payment Complete' : 'Free package Selected'; ?></h2>
+    <h2 class="in-popup">Free package Selected</h2>
     <div id="package-image">
 		<img src="<?php echo $package['package_image'] ? $package['package_image'] : base_url().'images/package_icon_default.png' ; ?>" />
 	</div>

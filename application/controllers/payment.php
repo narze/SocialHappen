@@ -353,6 +353,7 @@ class Payment extends CI_Controller {
 			'order' => array(
 				'order_id' => $order['order_id'],
 				'billing_info' => $order['billing_info']['user_first_name'].' '.$order['billing_info']['user_last_name'],
+				'package_id' => $order_items[0]['item_id'],
 				'package' => $order_items[0]['item_name'],
 				'payment_method' => ucfirst(str_replace('_', ' ', $order['payment_method'])),
 				'order_net_price' => $order['order_net_price']
@@ -369,10 +370,14 @@ class Payment extends CI_Controller {
 	 * @author Weerapat P.
 	 * Redirect from paypal site
 	 */
-	function payment_complete()
+	function payment_complete($package_id)
 	{
 		$this->socialhappen->ajax_check();
-		$this->load->view('payment/payment_complete');
+		$this->load->model('package_model','packages');
+		$data = array(
+			'package' => $this->packages->get_package_by_package_id($package_id)
+		);
+		$this->load->view('payment/payment_complete', $data);
 	}
 	
 	/**

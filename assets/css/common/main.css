@@ -24,7 +24,7 @@ a {
 
 /* Popup */
 div.popup_fb-connect, div.popup_select-destination, div.popup_select-company, div.popup_create-company, div.popup_add-app,
-div.popup_payment
+div.popup_payment, div.popup_payment-complete
 {
 	-webkit-border-radius: 0px!important;
     -moz-border-radius: 0px!important;
@@ -164,12 +164,15 @@ div.popup_company-thanks {
 	font-weight:bold;
 	color: #424241;
 }
-div.popup_company-thanks p.thanks {
+div.popup_company-thanks p.thanks,
+div.popup_payment-complete p.thanks {
 	color:#4c5b1a;
 	font-size:16px;
 	font-weight:bold;
 }
-div.popup_company-thanks p.message {
+div.popup_company-thanks p.message,
+div.popup_payment-complete p.message {
+	font-weight:bold;
 	margin:0!important;
 }
 
