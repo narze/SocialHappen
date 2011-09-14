@@ -21,7 +21,7 @@ class Tab extends CI_Controller {
 		
 		$this->load->model('User_model','User');
 		$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
-		$token = $this->signedRequest['oauth_token'];
+		$token = issetor($this->signedRequest['oauth_token']);
 		
 		$this->load->model('Page_model','Page');
 		if(!$page_id){
@@ -59,9 +59,22 @@ class Tab extends CI_Controller {
 		}		
 		$this->pages->update_page_profile_by_page_id($page_id, $page_update);
 		
+		$this->load->model('installed_apps_model','installed_apps');
+		$page_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+		$this->load->library('app_url');
+		foreach($page_apps as &$page_app){
+			$page_app = array('location' => 
+				$this->app_url->translate_url($page_app['app_url'], 
+				$page_app['app_install_id']),
+				'title' => $page_app['app_name']
+			);
+		}
+		unset($page_app);
+		
 		$data = array(
 			'header' => $this->load->view('tab/header', 
 				array(
+					'facebook_app_id' => $this->config->item('facebook_app_id'),
 					'vars' => array(
 									'page_id' => $page_id,
 									'user_id' => $user_id,
@@ -100,7 +113,8 @@ class Tab extends CI_Controller {
 				'user_id' => $user_id,
 				'token' => base64_encode($token),
 				'is_admin' => $is_admin,
-				'is_liked' => $this->page['liked']
+				'is_liked' => $this->page['liked'],
+				'page_apps' => $page_apps
 				),
 			TRUE),
 			'main' => $this->load->view('tab/main',array(),
@@ -486,8 +500,12 @@ class Tab extends CI_Controller {
 		$this->load->library('form_validation');
 		$facebook_user = $this->facebook->getUser();
 		//$this->load->model('user_model','users');
-		
-		
+		$this->load->model('user_model','users');
+		//if is sh user redirect popup to "regged"
+		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
+			echo "You're already a Socialhappen user";
+			exit();
+		}
 		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
 		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
@@ -584,6 +602,7 @@ class Tab extends CI_Controller {
 			
 			if($this->page_users->add_page_user($data)){
 				echo "finished";
+				$this->load->view('common/redirect',array('refresh_parent' => TRUE));
 			} else {
 				echo "cannot signup page";
 			}

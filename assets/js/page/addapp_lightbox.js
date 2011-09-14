@@ -13,7 +13,7 @@ var showing_page_of_available_item=1;
 var last_page_of_available_item=1;
 
 function select_app_tab(){
-	show_installed_app_in_page(page_id);
+	show_installed_app_in_page(page_id, facebook_page_id);
 	show_available_app_in_page(page_id);
 }
 //add app to facebook page
@@ -128,10 +128,10 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 							dataType: "json",
 							type: "POST",
 							data: {url:app_install_url},
-							error: function(){
+							error: function(jqXHR, textStatus, errorThrown) {
 								show_installed_app_in_page(page_id,facebook_page_id);
 								show_available_app_in_page(page_id);
-								alert("ERROR! cannot install app.");
+								console.log(app_install_url + errorThrown);
 							},
 							success: function(json) {
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK"){
@@ -149,6 +149,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 									});
 									update_app_order_in_dashboard();
 									$(".gotofacebook-link").live('click',function(){
+										
 										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
 									});
 									$.fancybox({

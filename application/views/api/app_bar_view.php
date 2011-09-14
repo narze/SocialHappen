@@ -26,11 +26,18 @@
 		-->
 		<li class="profile">
 			<div>
-				<p class="pic"><img src="<?php echo $user_diplay_picture_url; ?>" alt="<?php echo $user_display_name; ?>" /><span></span>
-				</p>
-				<p>
-					<?php echo $user_display_name; ?>
-				</p>
+				<?php if(in_array($view_as, array('admin','user'))) : ?>
+					<p class="pic"><img src="<?php echo $user_diplay_picture_url; ?>" alt="<?php echo $user_display_name; ?>" />
+					</p>
+					<p>
+						<?php echo $user_display_name; ?>
+					</p>
+				<?php elseif($view_as == 'guest') : ?>
+					
+					<p>
+						Guest
+					</p>
+				<?php endif; ?>
 			</div>
 			<ul>
 				<?php
