@@ -59,6 +59,18 @@ class Tab extends CI_Controller {
 		}		
 		$this->pages->update_page_profile_by_page_id($page_id, $page_update);
 		
+		$this->load->model('installed_apps_model','installed_apps');
+		$page_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
+		$this->load->library('app_url');
+		foreach($page_apps as &$page_app){
+			$page_app = array('location' => 
+				$this->app_url->translate_url($page_app['app_url'], 
+				$page_app['app_install_id']),
+				'title' => $page_app['app_name']
+			);
+		}
+		unset($page_app);
+		
 		$data = array(
 			'header' => $this->load->view('tab/header', 
 				array(
@@ -101,7 +113,8 @@ class Tab extends CI_Controller {
 				'user_id' => $user_id,
 				'token' => base64_encode($token),
 				'is_admin' => $is_admin,
-				'is_liked' => $this->page['liked']
+				'is_liked' => $this->page['liked'],
+				'page_apps' => $page_apps
 				),
 			TRUE),
 			'main' => $this->load->view('tab/main',array(),

@@ -4,17 +4,22 @@
         <p class="pic"><img src="<?php echo imgsize($page['page_image'],'square');?>" alt="" /><span></span></p>
         <p><?php echo $page['page_name'];?></p>  
       </div>
-      <ul>
-        <li><a href="#"><b>Menu01</b></a></li>
-        <li><a href="#"><b>Menu02</b></a></li>
-        <li><a href="#"><b>Menu03</b></a></li>
-        <li><a href="#"><b>Menu04</b></a></li>
-      </ul>
+	<?php if($page_apps) :?>
+		<ul>
+			<?php
+				foreach($page_apps as $item){
+					echo '<li><a href="'.$item['location'].'">'.$item['title'].'</a></li>';
+				}
+			?>
+		</ul>
+	<?php endif; ?>
     </div>
     <ul class="menu">
-      <li class="like"><a href="#"><span>like</span></a></li>
-      <li class="message"><a href="#"><?php if( isset($messages) && count($messages)>0 ) { ?><span><?php echo count($messages);?></span> <?php } ?></a></li>
-      <li class="profile">
+      <!--
+	  <li class="like"><a><span>like</span></a></li>
+      <li class="message"><a><?php if( isset($messages) && count($messages)>0 ) { ?><span><?php echo count($messages);?></span> <?php } ?></a></li>
+      -->
+	  <li class="profile">
         <div>
           <p class="pic"><img src="<?php echo $user['user_image'];?>" alt="" /><span></span></p>
           <p><?php echo "{$user['user_first_name']} {$user['user_last_name']}";?></p>  
