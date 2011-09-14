@@ -746,12 +746,12 @@ function get_activity_log() {
 $( function() {
 	
 	var popup;
-	var closeButton = true;
+	var closeEnable = true;
 	
 	if(user_have_package == false)
 	{
 		popup = 'payment/payment_form';
-		closeButton = false;
+		closeEnable = false;
 	} 
 	else if( get_query( window.location.href, 'popup' ) == 'thanks') //Thanks msg after sign up
 	{
@@ -770,8 +770,7 @@ $( function() {
 			transitionOut: 'elastic',
 			padding: 0,
 			scrolling: 'no',
-			hideOnOverlayClick: closeButton,
-			showCloseButton: closeButton
+			modal: !closeEnable
 		});
 	}
 

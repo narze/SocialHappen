@@ -1,6 +1,6 @@
 <div class="popup-fb-2col">
     <div>
-      <div><img src="<?php echo base_url(); ?>images/slide-show260-190.jpg" alt="" /></div>
+		<div></div>
       <div id="signup-form">
 
 <?php // Change the css classes to suit your needs    
@@ -9,26 +9,25 @@
         <div class="profile">
           <p><?php echo $facebook_user['first_name'];?><span><?php echo $facebook_user['last_name'];?></span></p>
           <p class="thumb">
-				<img src="<?php echo $user_profile_picture;?>" />
+				<img src="<?php echo imgsize($user_profile_picture, 'square');?>" />
 		  </p>
         </div>
 		<br class="clear" />
         <div class="form">
           <h2>Page register</h2>
           <ul>
+		  <label>Socialhappen User</label><input type="text" name="sh_name" disabled="true" value="<?php echo $user['user_first_name'].' '.$user['user_last_name'];?>"/>
+		  <input type="hidden" name="empty" value="0" />
 		  <?php foreach($page_user_fields as $user_fields) : ?>
-			<pre>
-				<?php //var_export($user_fields);
-			?>
-			</pre>
-			
+			<li>
 			<?php
-				echo form_label($user_fields['label']);
+				
+				
 				if($user_fields['required']) {
 					echo ' REQUIRED ';
 				}
 				echo "<br />";
-				echo form_error($user_fields['name'])? 'error':'';
+				echo "<label ".(form_error($user_fields['name'])? 'class="error" ':'').">".form_label($user_fields['label'])."</label>";
 				switch($user_fields['type']){
 					case 'radio':
 						foreach($user_fields['items'] as $item){
@@ -64,7 +63,7 @@
 						));
 				}
 				?>
-			
+			</li>
           <?php endforeach; ?>
 		  </ul>
           <p>

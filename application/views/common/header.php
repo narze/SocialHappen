@@ -8,7 +8,6 @@
 <title>SocialHappen<?php if (isset($title)) { echo " - $title"; }?></title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
-
 <script type="text/javascript">
 	<?php if(isset($vars)) :
 	foreach($vars as $name => $value) :
@@ -35,6 +34,19 @@ endif; ?>
 <link rel="stylesheet" type="text/css"  href="<?php echo base_url()."assets/css/common/smoothness/jquery-ui-1.8.9.custom.css";?>" />
 </head>
 <body>
+	<div id="fb-root"></div>
+	<script>
+	  window.fbAsyncInit = function() {
+		FB.init({appId: '<?php echo $facebook_app_id; ?>', status: true, cookie: true,
+				 xfbml: true});
+	  };
+	  (function() {
+		var e = document.createElement('script'); e.async = true;
+		e.src = document.location.protocol +
+		  '//connect.facebook.net/en_US/all.js';
+		document.getElementById('fb-root').appendChild(e);
+	  }());
+	</script>
 	<div class="header">
 		<?php $this->load->view('bar/bar_view', array('user_can_create_company'=>isset($user_can_create_company))); ?>
 	</div>

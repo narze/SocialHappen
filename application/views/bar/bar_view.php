@@ -1,14 +1,8 @@
 <div>
 	<h1><span>SocialHappen</span></h1>	
-	
 	<?php if(!issetor($facebook_user)) : ?>
-		
-		<div id="fb-root"></div>
-			<script src="http://connect.facebook.net/en_US/all.js" type="text/javascript"></script>
-			<script type="text/javascript">
-				FB.init({appId: '<?php echo $facebook_app_id; ?>', status: true, cookie: true, xfbml: true});
-			
-				function fblogin() {
+		<script>
+		function fblogin() {
 					FB.login(function(response) {
 						if (response.session) {
 							FB.api('/me', function(response) {
@@ -29,7 +23,7 @@
 						}
 					}, {perms:'<? echo $facebook_default_scope ; ?>'});
 				}
-			</script>
+		</script>
 		<ul>
 			<li class="fb"><a onclick="fblogin();" ><img src="<?php echo base_url(); ?>images/fb-login.jpg" alt=""></a></li>
 		</ul>

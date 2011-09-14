@@ -129,7 +129,7 @@ class Facebook{
 						
 			//print_r($post);
 			$this->curl->post($post);
-			$this->curl->execute();
+			$this->curl->ssl(FALSE)->execute();
 			
 			//print_r($this->curl->info);
 		}
@@ -138,7 +138,7 @@ class Facebook{
 			$this->_ci->load->library('curl');
 			$url = "https://graph.facebook.com/".$id;
 			$this->_ci->curl->create($url);
-			return json_decode($this->_ci->curl->execute());
+			return json_decode($this->_ci->curl->ssl(FALSE)->execute());
 		}
 
 		/** 
