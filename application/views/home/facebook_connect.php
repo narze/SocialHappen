@@ -1,4 +1,5 @@
-<p>please login to facebook to continue</p>
+<div class="popup_fb-connect">
+	<p>Please login to facebook to continue</p>
 	<div id="fb-root"></div>
 	<script type="text/javascript">
 	  window.fbAsyncInit = function() {
@@ -35,5 +36,6 @@
 			}, {perms:'<? echo $facebook_default_scope ; ?>'});
 		}
 	</script>
-	
-<a onclick="fblogin();" ><img src="<?php echo base_url(); ?>images/fb-login.jpg" alt=""></a>
+
+	<a onclick="fblogin();" ><img src="<?php echo base_url(); ?>images/fb-login.jpg" alt=""></a>
+</div>
