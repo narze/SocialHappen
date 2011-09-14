@@ -6,9 +6,11 @@ $(function(){
 		var package_id = selected.val();
 		var index = selected.index();
 		//alert(index);
-		$('#package_detail p').hide();
-		$('#package_detail p:eq('+index+')').show();
-		if( package_id == $('input[name=free_package_id]').val() ) 
+		$('#package-image img').hide();
+		$('#package-image img:eq('+index+')').show();
+		$('#package-detail p').hide();
+		$('#package-detail p:eq('+index+')').show();
+		if( package_id == $('input[name=free_package_id]').val() ) //Hide payment when select free package
 		{
 			$('#select-payment').hide();
 		}
@@ -21,7 +23,7 @@ $(function(){
 	//Click continue in "Select payment method"
 	$('div.popup_payment a.bt-continue').live('click', function() {
 		var loading = $('<img src="'+base_url+'assets/images/loading.gif" />');
-		$('a.bt-continue').after(loading).hide();
+		$('a.bt-continue').after(loading).remove();
 		$('.payment-form').ajaxSubmit({
 			async:true,
 			success: function(data){

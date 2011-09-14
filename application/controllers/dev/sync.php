@@ -1161,7 +1161,7 @@ class Sync extends CI_Controller {
 			array(
 				'package_name' => 'Normal package',
 				'package_detail' => 'For normal user',
-				'package_image' => NULL,
+				'package_image' => 'http://socialhappen.dyndns.org/socialhappen/images/package_icon_free.png',
 				'package_max_companies' => 1,
 				'package_max_pages' => 3,
 				'package_max_users' => 10000,
@@ -1170,9 +1170,20 @@ class Sync extends CI_Controller {
 				'package_duration' => 'unlimited'
 			),
 			array(
+				'package_name' => 'Standard package',
+				'package_detail' => 'For SMEs',
+				'package_image' => 'http://socialhappen.dyndns.org/socialhappen/images/package_icon_standard.png',
+				'package_max_companies' => 3,
+				'package_max_pages' => 7,
+				'package_max_users' => 50000,
+				'package_price' => 49,
+				'package_custom_badge' => 1,
+				'package_duration' => '1month'
+			),
+			array(
 				'package_name' => 'Enterprise package',
-				'package_detail' => 'For enterprise',
-				'package_image' => NULL,
+				'package_detail' => 'For Enterprise',
+				'package_image' => 'http://socialhappen.dyndns.org/socialhappen/images/package_icon_enterprise.png',
 				'package_max_companies' => 3,
 				'package_max_pages' => 10,
 				'package_max_users' => 100000,
@@ -1180,17 +1191,6 @@ class Sync extends CI_Controller {
 				'package_custom_badge' => 1,
 				'package_duration' => '1month'
 			),
-			array(
-				'package_name' => 'Ultimate package',
-				'package_detail' => 'For Ultimate enterprise',
-				'package_image' => NULL,
-				'package_max_companies' => 9,
-				'package_max_pages' => 99,
-				'package_max_users' => 500000,
-				'package_price' => 199,
-				'package_custom_badge' => 1,
-				'package_duration' => '1month'
-			)
 		);
 		$this->db->insert_batch('package', $package);
 		

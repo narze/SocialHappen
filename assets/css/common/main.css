@@ -22,17 +22,141 @@ a {
 	right: -20px!important;
 }
 
-/* Pop up */
-div.popup_fb-connect, div.popup_select-destination, div.popup_select-company, div.popup_create-company, div.popup_add-app {
+/* Popup */
+div.popup_fb-connect, div.popup_select-destination, div.popup_select-company, div.popup_create-company, div.popup_add-app,
+div.popup_payment
+{
 	-webkit-border-radius: 0px!important;
     -moz-border-radius: 0px!important;
     border-radius: 0px!important;
 	background: #fff;
-	padding: 20px 20px 10px;
+	padding: 20px 20px 20px;
 	border:none!important;
 	border-radius: 0 	!important;
-	min-width:300px;
 }
+
+div.popup_fb-connect {
+	padding: 20px 40px 20px 40px;
+	width:auto;
+	font-weight:bold;
+}
+div.popup_fb-connect > div {
+	width: 100%;
+	padding: 5px;
+}
+/* Popup Payment form */
+div.popup_payment {
+	width:380px;
+	color: #424241;
+}
+div.popup_payment h2 {
+	font-size: 24px;
+	font-family: Myriad Pro;
+	font-weight: normal;
+	padding: 0 0 5px;
+	border-bottom: 1px dotted #A6A6A6;
+	margin: 0 0 10px;
+}
+#package-image {
+	float:left;
+	width:90px;
+	height:90px;
+	overflow:hidden;
+}
+#package-detail {
+	float:left;
+	padding-left:15px;
+	width: 275px;
+	height: 120px;
+}
+#package-detail div.selected-package {
+	border-bottom:1px solid #ddd;
+}
+#package-detail div.selected-package select {
+	background: transparent;
+	width: 280px;
+	padding: 5px 5px 5px 0;
+	border: none;
+	font-weight: bold;
+	height: 34px;
+}
+#package-detail p {
+	margin-top:10px;
+}
+#package-detail p span {
+	text-align:right;
+	display:inline-block;
+	width: 100%;
+}
+#package-detail p span b {
+	float:left;
+}
+
+#select-payment {
+	border-top:1px solid #ddd;
+}
+#select-payment h3 {
+	margin:10px 0;
+	font-size: 18px;
+}
+#select-payment ul {
+	position:relative;
+	left: 20px;
+}
+#select-payment ul li {
+	margin: 10px 0;
+}
+#select-payment ul li input[name="payment_method"] {
+	position: relative;
+	top: 2px;
+	left: -20px;
+}
+#select-payment ul li label {
+	position: relative;
+	left: -15px;
+	font-weight:bold;
+}
+#select-payment ul li p {
+	margin-top: 10px;
+	line-height: 35px;
+	position: relative;
+	left: 1px;
+}
+#select-payment ul li.credit_card img {
+	position: relative;
+	left: 1px;
+	top: 9px;
+}
+#select-payment ul li.credit_card input[name=credit_card_number] {
+	width:174px;
+	height:20px;
+}
+#select-payment ul li.credit_card input[name="credit_card_expire_month"],
+#select-payment ul li.credit_card input[name="credit_card_expire_year"],
+#select-payment ul li.credit_card input[name="credit_card_csc"]
+ {
+	text-align:center;
+	width:40px;
+	height:20px;
+}
+#select-payment ul li.credit_card span {
+	display:inline-block;
+}
+#select-payment ul li.credit_card span.card_number {
+	width:125px;
+}
+#select-payment ul li.credit_card span.exp_date {
+	width:96px;
+}
+#select-payment ul li.credit_card span.slash {
+	padding:0 6px;
+}
+#select-payment ul li.credit_card span.csc {
+	padding:0 5px 0 23px;
+}
+
+
+
 
 /* Member list */
 .popup_select-company > div[class^="detail-list"] p.thumb {
@@ -78,6 +202,7 @@ div.company-app ul li p img {
 
 
 .clear {clear:both;}
+.txt-center {text-align:center;}
 
 /* Select Company Box*/
 div.popup_select-company > ul > li div.detail-list h2 a {

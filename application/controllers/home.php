@@ -18,8 +18,8 @@ class Home extends CI_Controller {
 									'vars' => array(),
 									'title' => 'Facebook login',
 									'style' => array(
-										'common/main',
-										'common/platform'
+										'common/platform',
+										'common/main'
 									)
 								)
 							),
@@ -202,8 +202,8 @@ class Home extends CI_Controller {
 						'payment/payment'
 					),
 					'style' => array(
-						'common/main',
 						'common/platform',
+						'common/main',
 						'common/fancybox/jquery.fancybox-1.3.4'
 					)
 				)

@@ -70,26 +70,31 @@ class Payment extends CI_Controller {
 			}
 			
 			$options = array();
-			
-			foreach($packages as &$package) 
+			$buyable_packages = array();
+			if($packages) 
 			{
-				if($package['package_price'] == 0) $free_package_id = $package['package_id'];
-				
-				if(!$user_current_package || $package['package_price'] > $user_current_package['package_price']) //Show only package that user can buy
+				foreach($packages as &$package) 
 				{
-					$price = $package['package_price'] ? ' ('.$package['package_price'].'USD' : ' (FREE)';
-					$duration = $package['package_duration'] ? '/'.$package['package_duration'].')' : '';
-					$options[$package['package_id']] = $package['package_name'].$price.$duration;
-				}
-				else 
-				{
-					unset($package);
-				}
+					if($package['package_price'] == 0) $free_package_id = $package['package_id'];
+					
+					if($package['package_price'] > @$user_current_package['package_price']) //Show only package that user can buy
+					{
+						$price = $package['package_price'] ? number_format($package['package_price']).'USD' : 'FREE';
+						$duration = $package['package_duration'] == 'unlimited' ? '' : '/'.$package['package_duration'] ;
+						$options[$package['package_id']] = $package['package_name'].' <span>('.$price.$duration.')</span>';
+						$buyable_packages[] = $package;
+					}
+				}	
+			}
+			
+			if(!count($user_current_package)) 
+			{
+				$buyable_packages = $packages;
 			}
 
 			$this->load->view('payment/payment_form', 
 					array(
-						'packages' => $packages,
+						'packages' => $buyable_packages,
 						'user_current_package' => $user_current_package,
 						'selected_package' => $selected_package,
 						'options' => $options,
