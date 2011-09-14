@@ -104,13 +104,12 @@ class Payment extends CI_Controller {
 			);
 		}
 		else //Pass validation
-		{	
+		{
 			$package = $this->packages->get_package_by_package_id(set_value('package_id'));
 			$item_unit = 1;
 			$item_discount = 0;
-			$transaction_status = true;
 			
-			//add order
+			// 1. Add order
 			$order = array(
 		       	'order_id' => NULL,
 				'order_date' => NULL,
@@ -145,9 +144,9 @@ class Payment extends CI_Controller {
 				$user_first_company = $user_own_companies[0];
 			}
 			$this->load->model('order_model','orders');
-			if(!$order['order_id'] = $this->orders->add_order($order)) { $transaction_status = false; }
+			if(!$order['order_id'] = $this->orders->add_order($order)) { echo json_encode(array('status'=>'ERROR', 'msg'=>'Error while adding order.' )); return false; }
 			
-			//add order_items
+			// 2. Add order_items
 			$order_items = array(
 				array(
 					'order_id' => $order['order_id'],
@@ -163,31 +162,46 @@ class Payment extends CI_Controller {
 			$this->load->model('order_items_model','order_items');
 			foreach ($order_items as $order_item)
 			{
-				if(!$this->order_items->add_order_item($order_item)) { $transaction_status = false; }
+				if(!$this->order_items->add_order_item($order_item)) { echo json_encode(array('status'=>'ERROR', 'msg'=>'Error while adding item to order.' )); return false; }
+			}
+			
+			// 3. Add package_user and company_apps
+			if($order['order_net_price'] > 0) // Comercial package
+			{
+				//Add after payment complete.
+			}
+			else // Free package
+			{
+				// 3.1. Add package_users
+				$add_package_user_result = $this->_add_package_user($user['user_id'], $package['package_id']);
+				if(!$add_package_user_result) 
+				{ 
+					echo json_encode(array('status'=>'ERROR', 'msg'=>'Error while adding package.' )); return false;
+				}
+				// 3.2. Add/Update company_apps
+				$add_company_app_result = $this->_add_company_app($user['user_id'], $package['package_id']);
+				if(!$add_company_app_result) 
+				{ 
+					echo json_encode(array('status'=>'ERROR', 'msg'=>'Error while adding app.' )); return false;
+				}
 			}
 			
 			//Return result
-			if ($transaction_status)
-			{	
-				$data = array(
-					'user' => $user,
-					'order' => $order,
-					'order_items' => $order_items
-				);
+			$data = array(
+				'user' => $user,
+				'order' => $order,
+				'order_items' => $order_items
+			);
 
-				switch($order['payment_method'])
-				{
-					//case 'bank_transfer': break;
-					case 'paypal': $this->_set_express_checkout($data); break;
-					//case 'credit_card': break;
-					//case 'counter_service': break;
-					default : echo base_url().'company/'.$user_first_company['company_id'].'?popup=thanks'; break; //Free package, redirect to first company
-				}
-			}
-			else
+			switch($order['payment_method'])
 			{
-				echo 'Error occured';
+				//case 'bank_transfer': break;
+				case 'paypal': $this->_set_express_checkout($data); break;
+				//case 'credit_card': break;
+				//case 'counter_service': break;
+				default : echo json_encode(array('status'=>'OK', 'msg'=> base_url().'company/'.$user_first_company['company_id'].'?popup=thanks' )); break; //Free package, redirect to first company
 			}
+
 		}
 	}
 	
@@ -313,64 +327,21 @@ class Payment extends CI_Controller {
 		}
 		
 		// 6. Add package_users
-		$this->load->model('package_model','packages');
-		$this->load->model('package_users_model','package_users');
-		$package = $this->packages->get_package_by_package_id($order_items[0]['item_id']);
-		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
-		$package_user = array(
-			'package_id' => $package['package_id'],
-			'user_id' => $user['user_id'],
-			'package_expire' => $package['package_duration'] == 'unlimited' ? '0' : date('Y-m-d H:i:s', strtotime('+'.$package['package_duration']))
-		);
-		
-		if($user_current_package) //if user already have one package
-		{
-			$add_package_users_result = $this->package_users->update_package_user_by_user_id($user['user_id'], $package_user);
-		}
-		else
-		{
-			$add_package_users_result = $this->package_users->add_package_user($package_user);
-		}
-		if(!$add_package_users_result) 
+		$add_package_user_result = $this->_add_package_user($user['user_id'], $order_items[0]['item_id']);
+		if(!$add_package_user_result) 
 		{ 
 			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while adding package user.'),TRUE);
 			$this->parser->parse('payment/payment_view', $view_data);
 			return false;
 		}
 		
-		
-		// 7. Add/Update company apps
-		
-		/* 1.Find companies that user is admin
-		*  2.For each company remove old company apps
-		*  3.For each company add new company apps
-		*/
-		$this->load->model('user_companies_model','user_companies');
-		$this->load->model('company_apps_model','company_apps');
-		$this->load->model('package_apps_model','package_apps');
-		$user_companies = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
-		foreach($user_companies as $company)
-		{
-			if($company['user_role'] != 1) { //Not company admin
-				continue;
-			}
-			$company_id = $company['company_id'];
-			$this->company_apps->remove_company_apps($company_id);
-			$package_apps = $this->package_apps->get_package_apps_by_package_id($package['package_id']);
-			foreach($package_apps as $package_app)
-			{
-				$result = $this->company_apps->add_company_app(array(
-					'company_id' => $company_id,
-					'app_id' => $package_app['app_id']
-				));
-				
-				if(!$result) 
-				{ 
-					$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while adding company app.'),TRUE);
-					$this->parser->parse('payment/payment_view', $view_data);
-					return false;
-				}
-			}
+		// 7. Add/Update company_apps
+		$add_company_app_result = $this->_add_company_app($user['user_id'], $order_items[0]['item_id']);
+		if(!$add_company_app_result) 
+		{ 
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while adding company app.'),TRUE);
+			$this->parser->parse('payment/payment_view', $view_data);
+			return false;
 		}
 		
 		//8. Payment complete
@@ -495,6 +466,61 @@ class Payment extends CI_Controller {
 				break;
 			default : break;
 		}
+	}
+	
+	function _add_package_user($user_id, $package_id)
+	{		
+		$this->load->model('package_model','packages');
+		$this->load->model('package_users_model','package_users');
+		$package = $this->packages->get_package_by_package_id($package_id);
+		$user_current_package = $this->package_users->get_package_by_user_id($user_id);
+		$package_user = array(
+			'package_id' => $package['package_id'],
+			'user_id' => $user_id,
+			'package_expire' => $package['package_duration'] == 'unlimited' ? '0' : date('Y-m-d H:i:s', strtotime('+'.$package['package_duration']))
+		);
+		
+		if($user_current_package) //if user already have one package
+		{
+			$add_package_users_result = $this->package_users->update_package_user_by_user_id($user_id, $package_user);
+		}
+		else
+		{
+			$add_package_users_result = $this->package_users->add_package_user($package_user);
+		}
+		if(!$add_package_users_result) return false;
+		return true;
+	}
+	
+	function _add_company_app($user_id, $package_id)
+	{
+		/* 1.Find companies that user is admin
+		*  2.For each company remove old company apps
+		*  3.For each company add new company apps
+		*/
+		$this->load->model('user_companies_model','user_companies');
+		$this->load->model('company_apps_model','company_apps');
+		$this->load->model('package_apps_model','package_apps');
+		$user_companies = $this->user_companies->get_user_companies_by_user_id($user_id);
+		foreach($user_companies as $company)
+		{
+			if($company['user_role'] != 1) { //Not company admin
+				continue;
+			}
+			$company_id = $company['company_id'];
+			$this->company_apps->remove_company_apps($company_id);
+			$package_apps = $this->package_apps->get_package_apps_by_package_id($package_id);
+			foreach($package_apps as $package_app)
+			{
+				$result = $this->company_apps->add_company_app(array(
+					'company_id' => $company_id,
+					'app_id' => $package_app['app_id']
+				));
+				
+				if(!$result) { return false; }
+			}
+		}
+		return true;
 	}
 	
 	/**
@@ -678,7 +704,7 @@ class Payment extends CI_Controller {
 		else
 		{
 			// Successful call.  Load view or whatever you need to do here.	
-			echo $PayPalResult['REDIRECTURL'];
+			echo json_encode(array('status'=>'OK', 'msg'=> $PayPalResult['REDIRECTURL'] ));
 		}
 	}
 

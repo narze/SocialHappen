@@ -27,10 +27,12 @@ $(function(){
 		$('.payment-form').ajaxSubmit({
 			async:true,
 			success: function(data){
-				if( get_query(data, 'popup') == 'thanks' ) { } //Free package, do nothing
+				console.log(data);
+				if( get_query(data.msg, 'popup') == 'thanks' ) { } //Free package, alert nothing
 				else { alert("You will now be directed to Paypal's website to continue your order"); } //Paypal
-				window.location = data;
-			}
+				window.location = data.msg;
+			},
+			dataType: 'json'
 		});
 		return false;
 	});
