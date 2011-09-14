@@ -3,22 +3,24 @@
       <div class="pic"><img src="<?php echo $user['user_image'].'?type=normal';?>" /><span></span></div>
       <div class="userview">
         <h1><?php echo $user['user_first_name']." ".$user['user_last_name'];?></h1>
-        <p>Level: 3</p>
+        <!--
+		<p>Level: 3</p>
         <ul>
           <li class="fav">20,000</li>
           <li class="point">120</li>
         </ul>
+		-->
       </div>
       <div class="friend">
         <ul><?php
 			if(isset($friends)) :
 			foreach($friends as $friend): ?>
-				<li><a href="#"><img class="image" src="<?php echo  $friend['image']; ?>" title="<?php echo $friend['name'];?>" /></a></li><?php 
+				<li><a><img class="image" src="<?php echo  $friend['image']; ?>" title="<?php echo $friend['name'];?>" /></a></li><?php 
 			endforeach; 
 			endif;?>
         </ul>
-        <p><a class="link-friendsjoin" href="#">1,220 friends joined this page</a></p>
-        <p><a class="link-invite_friend" href="#">invite friends</a></p>
+        <p><a class="link-friendsjoin">1,220 friends joined this page</a></p>
+        <p><a class="link-invite_friend">invite friends</a></p>
       </div>
     </div>
 	

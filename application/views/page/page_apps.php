@@ -14,10 +14,10 @@
 			  <td class="status app-status">Status <span></span></td>
 			  <td class="status app-member">Member <b></b></td>
 			  <td class="status1 app-monthly-active">Monthly active user <b></b></td>
-			  <td class="bt-icon"><a class="bt-edit" href="#" title="Edit"><span>Edit</span></a></td>
-			  <td class="bt-icon"><a class="bt-setting" href="#" title="Setting"><span>Setting</span></a></td>
-			  <td class="bt-icon"><a class="bt-delete" href="#" title="Delete"><span>Delete</span></a></td>
-			  <td class="bt-icon"><a class="bt-go apps" href="#" title="Go"><span>Go</span></a></td>
+			  <td class="bt-icon"><a class="bt-edit" title="Edit"><span>Edit</span></a></td>
+			  <td class="bt-icon"><a class="bt-setting" title="Setting"><span>Setting</span></a></td>
+			  <td class="bt-icon"><a class="bt-delete" title="Delete"><span>Delete</span></a></td>
+			  <td class="bt-icon"><a class="bt-go apps" title="Go"><span>Go</span></a></td>
 			</tr>
 		</table>
 	    <div class="pagination-apps strip"></div>

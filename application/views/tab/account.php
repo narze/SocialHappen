@@ -6,11 +6,11 @@
         <p><?php echo $page['page_detail'];?></p>
 		<!--
         <ul>
-          <li class="fav"><a href="#">Add Favorite</a></li>
-          <li class="member"><a href="#"><?php echo issetor($page_user_count,'-');?></a></li>
-          <li class="badges"><a href="#"><?php echo issetor($page_badge_count,'-');?></a></li>
-          <li class="point"><a href="#"><?php echo issetor($page_point_count,'-');?></a></li>
-          <li class="setting"><a href="#"><span>setting</span></a></li>
+          <li class="fav"><a>Add Favorite</a></li>
+          <li class="member"><a><?php echo issetor($page_user_count,'-');?></a></li>
+          <li class="badges"><a><?php echo issetor($page_badge_count,'-');?></a></li>
+          <li class="point"><a><?php echo issetor($page_point_count,'-');?></a></li>
+          <li class="setting"><a><span>setting</span></a></li>
         </ul>
 		-->
       </div>
@@ -32,7 +32,7 @@
 						<?php echo form_error('user_image'); ?>
 						  <div class="pic-profile">
                     <p class="pic"><img src="<?php echo imgsize($user['user_image'],'square');?>" /></p>
-                    <p><a class="bt-change_pic" href="#"><input id="user_image" type="file" name="user_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
+                    <p><a class="bt-change_pic"><input id="user_image" type="file" name="user_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
 					<p>
 						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?>> 
 						<label for="use_facebook_picture">use your facebook avatar</label>
@@ -76,7 +76,7 @@
 					  </li>
 					  <li>
 						<strong>Thumblr :</strong> [not connected]
-						<div><a href="#">set up</a></div>
+						<div><a>set up</a></div>
 					  </li>
 					</ul>
 				  </div>
@@ -118,7 +118,7 @@
 			<div>
 			  <p>Text tell user what happen when close account</p>
 			  <p>and if user have a problem he can contact our support or see FAQs</p>
-			  <p><a class="bt-close_account" href="#"><span>Close account</span></a></p>
+			  <p><a class="bt-close_account"><span>Close account</span></a></p>
 			</div>
 		  </div>-->
 	</div>

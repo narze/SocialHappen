@@ -1,17 +1,4 @@
-
-/*
-###########################################
-
-Social Happen Facebook
-
-author: Oat (okaynaja)
-
-###########################################
-*/
-div.tab-head>div>ul>li a {
-	cursor:pointer;
-}
-div.header ul.menu>li.profile>ul>li a {
+a {
 	cursor:pointer;
 }
 div.header {

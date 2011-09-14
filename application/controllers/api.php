@@ -1279,29 +1279,47 @@ class Api extends CI_Controller {
 		}
 		
 		$response = array('status' => 'OK');
-		
-		$this->load->model('User_model', 'User');
-		if(!$user = $this->User->get_user_profile_by_user_facebook_id($user_facebook_id)){
-			$response['message'] = 'User not found';
-		}
-		
 		$data = array();
 		
 		$this->load->model('Installed_apps_model', 'app');
 		$app = $this->app->get_app_profile_by_app_install_id($app_install_id);
+		if(!isset($app['page_id'])){
+			//no page_id, app not found
+		}
+		
+		$this->load->model('User_model', 'User');
+		$this->load->model('user_pages_model','user_pages');
+		if(!$user = $this->User->get_user_profile_by_user_facebook_id($user_facebook_id)){
+			$data['view_as'] = 'guest';
+			$data['right_menu'] = array();
+		} else if($this->user_pages->is_page_admin($user['user_id'], $app['page_id'])){
+			$data['view_as'] = 'admin';
+			$data['right_menu'] = array(
+				array('location' => '#', 'title' => 'Config this app'),
+				array('location' => '#', 'title' => 'View my profile'),
+				array('location' => '#', 'title' => 'Go to dashboard'),
+				array('location' => '#', 'title' => 'Go to platform')
+			);
+		} else {
+			$data['view_as'] = 'user';
+			$data['right_menu'] = array(
+				array('location' => '#', 'title' => 'View my profile'),
+				array('location' => '#', 'title' => 'Go to Dashboard'),
+			);
+		}
 		
 		$data['left_menu'] = array();
-		
-		if(isset($app['page_id'])){
+		if($app['page_id']){
 			$apps = $this->app->get_installed_apps_by_page_id($app['page_id']);
 			$this->load->library('app_url');
 			foreach($apps as $page_app){
-				$data['left_menu'][] = 
+				if($page_app['app_install_id'] != $app_install_id){
+					$data['left_menu'][] = 
 					array('location' => 
 						$this->app_url->translate_url($page_app['app_url'], 
 						$page_app['app_install_id']),
 								'title' => $page_app['app_name']);
-				
+				}
 			}
 		}
 		
@@ -1309,13 +1327,8 @@ class Api extends CI_Controller {
 		$data['app_name'] = $app['app_name'];
 		
 		$data['user_diplay_picture_url'] = $user['user_image'];
-		$data['user_display_name'] = $user['user_first_name']
-																	. ' ' . $user['user_last_name'];
-
+		$data['user_display_name'] = $user['user_first_name']. ' ' . $user['user_last_name'];
 		
-		$data['right_menu'] = array(array('location' => '#', 'title' => 'Go to Dashboard'),
-																array('location' => '#', 'title' => 'View My Profile'));
-		$data['view_as'] = 'admin'; //admin,user,guest
 		$response['html'] = $this->load->view('api/app_bar_view', $data, TRUE);
 		$response['css'] = base_url() . 'css/api_app_bar.css';
 		echo json_encode($response);
