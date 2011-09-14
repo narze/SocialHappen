@@ -447,7 +447,7 @@ class Settings extends CI_Controller {
 				$items = $this->order_items->get_order_items_by_order_id($order['order_id']);
 				$order['package_name'] = $items[0]['item_name'];
 			}
-			arsort($orders); //reverse order
+			arsort($orders); //reverse order. sort by desc
 			
 			//Get current package
 			$this->load->model('package_users_model','package_users');
@@ -473,6 +473,7 @@ class Settings extends CI_Controller {
 			$is_upgradable = $this->package->is_upgradable($current_package['package_id']);
 			
 			$data = array(
+				'user_id' => $user_id,
 				'orders' => $orders,
 				'current_package' => $current_package,
 				'user_companies' => count($user_companies),

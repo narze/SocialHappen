@@ -49,16 +49,52 @@ class Payment extends CI_Controller {
 		}
 		*/
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-	
-		$this->load->model('package_model','packages');
-		$user = $this->socialhappen->get_user();
 		
+		$this->load->model('package_model','packages');
+		$this->load->model('package_users_model','package_users');
+		$user = $this->socialhappen->get_user();
+		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
+		$is_upgradable = $user_current_package ? $this->packages->is_upgradable($user_current_package['package_id']) : true ;
+
 		if ($this->form_validation->run() == FALSE) //
 		{
-			$selected_package = $this->packages->get_package_by_package_id($this->input->get('package_id'));
+			$packages = $this->packages->get_packages();
+			
+			if($this->input->get('package_id') > 0)
+			{
+				$selected_package = $this->packages->get_package_by_package_id($this->input->get('package_id'));
+			}
+			else
+			{
+				$selected_package = $this->packages->get_package_by_package_id($packages[0]['package_id']);
+			}
+			
+			$options = array();
+			
+			foreach($packages as &$package) 
+			{
+				if($package['package_price'] == 0) $free_package_id = $package['package_id'];
+				
+				if(!$user_current_package || $package['package_price'] > $user_current_package['package_price']) //Show only package that user can buy
+				{
+					$price = $package['package_price'] ? ' ('.$package['package_price'].'USD' : ' (FREE)';
+					$duration = $package['package_duration'] ? '/'.$package['package_duration'].')' : '';
+					$options[$package['package_id']] = $package['package_name'].$price.$duration;
+				}
+				else 
+				{
+					unset($package);
+				}
+			}
+
 			$this->load->view('payment/payment_form', 
 					array(
+						'packages' => $packages,
+						'user_current_package' => $user_current_package,
 						'selected_package' => $selected_package,
+						'options' => $options,
+						'free_package_id' => isset($free_package_id),
+						'is_upgradable' => $is_upgradable
 					)
 			);
 		}
@@ -98,6 +134,10 @@ class Payment extends CI_Controller {
 			{
 				$order['payment_method'] = '';
 				$order['order_status_id'] = $this->socialhappen->get_k('order_status', 'Processed');
+				//Get user first company
+				$this->load->model('company_model','company');
+				$user_own_companies = $this->company->get_companies_by_user_id($user['user_id']);
+				$user_first_company = $user_own_companies[0];
 			}
 			$this->load->model('order_model','orders');
 			if(!$order['order_id'] = $this->orders->add_order($order)) { $transaction_status = false; }
@@ -121,47 +161,6 @@ class Payment extends CI_Controller {
 				if(!$this->order_items->add_order_item($order_item)) { $transaction_status = false; }
 			}
 			
-			//add package_users
-			$package_user = array(
-				'package_id' => $package['package_id'],
-				'user_id' => $user['user_id'],
-				'package_expire' => $package['package_duration'] == 'unlimited' ? '0' : date('Y-m-d H:i:s', strtotime('+'.$package['package_duration']))
-			);
-			$this->load->model('package_users_model','package_users');
-			if($this->package_users->get_package_by_user_id($user['user_id']))
-			{
-				$add_package_users_result = $this->package_users->update_package_user_by_user_id($user['user_id'], $package_user);
-			}
-			else
-			{
-				$add_package_users_result = $this->package_users->add_package_user($package_user);
-			}
-			if(!$add_package_users_result) { $transaction_status = false; }
-			else { //add/update company apps
-				/* 1.Find companies that user is admin
-				 * 2.For each company remove old company apps
-				 * 3.For each company add new company apps
-				 */
-				$this->load->model('user_companies_model','user_companies');
-				$this->load->model('company_apps_model','company_apps');
-				$this->load->model('package_apps_model','package_apps');
-				$user_companies = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
-				foreach($user_companies as $company){
-					if($company['user_role'] != 1) { //Not company admin
-						continue;
-					}
-					$company_id = $company['company_id'];
-					$this->company_apps->remove_company_apps($company_id);
-					$package_apps = $this->package_apps->get_package_apps_by_package_id($package['package_id']);
-					foreach($package_apps as $package_app){
-						$this->company_apps->add_company_app(array(
-							'company_id' => $company_id,
-							'app_id' => $package_app['app_id']
-						));
-					}
-				}
-					
-			}
 			//Return result
 			if ($transaction_status)
 			{	
@@ -177,7 +176,7 @@ class Payment extends CI_Controller {
 					case 'paypal': $this->_set_express_checkout($data); break;
 					//case 'credit_card': break;
 					//case 'counter_service': break;
-					default : echo base_url(); break;
+					default : echo base_url().'company/'.$user_first_company['company_id'].'?popup=thanks'; break; //Free package, redirect to first company
 				}
 			}
 			else
@@ -188,13 +187,41 @@ class Payment extends CI_Controller {
 	}
 	
 	/**
-	 * Paypal confirmation page
+	 * Paypal payment summary page (Redirect from paypal site)
 	 * @author Weerapat P.
 	 * @param $order_id
-	 * Redirect from paypal site
 	 */
-	function confirm_paypal($order_id = NULL)
+	function payment_summary_paypal($order_id = NULL)
 	{
+		$view_data = array(
+				'header' => $this -> socialhappen -> get_header( 
+					array(
+						'title' => 'Payment Confirm',
+						'script' => array(
+							'common/functions',
+							'common/jquery.form',
+							'common/bar',
+							'common/fancybox/jquery.fancybox-1.3.4.pack',
+							'home/lightbox',
+							'payment/payment'
+						),
+						'style' => array(
+							'common/platform',
+							'common/main',
+							'common/fancybox/jquery.fancybox-1.3.4'
+						)
+					)
+				),
+				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+					array(
+						'breadcrumb' => array( 
+							'Signup' => NULL
+						)
+					),
+				TRUE),
+				'footer' => $this -> socialhappen -> get_footer()
+ 		);
+
 		$this->load->model('order_model','orders');
 		$order = $this->orders->get_order_by_order_id($order_id);
 		$order['billing_info'] = unserialize($order['billing_info']);
@@ -205,118 +232,156 @@ class Payment extends CI_Controller {
 		$this->load->model('user_model','users');
 		$user = $this->users->get_user_profile_by_user_id($order['user_id']);
 		
-		if (!$this->input->post())
+		$data = array(
+			'token' => $this->input->get('token'),
+			'payerid' => $this->input->get('PayerID'),
+			'order' => $order,
+			'order_items' => $order_items,
+			'user' => $user
+		);
+		
+		// 1. Get express checkout details
+		$PayPalResult = $this->_get_express_checkout_details($data);
+		if($PayPalResult['ERRORS']) 
 		{
-			if($order_id)
-			{
-				$data = array(
-					'header' => $this -> socialhappen -> get_header( 
-						array(
-							'title' => 'Payment Confirm',
-							'script' => array(
-								'common/functions',
-								'common/jquery.form',
-								'common/bar',
-								'common/fancybox/jquery.fancybox-1.3.4.pack',
-								'home/lightbox',
-								'payment/payment'
-							),
-							'style' => array(
-								'common/platform',
-								'common/main',
-								'common/fancybox/jquery.fancybox-1.3.4'
-							)
-						)
-					),
-					'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-						array(
-							'breadcrumb' => array( 
-								'Signup' => NULL
-							)
-						),
-					TRUE),
-					'payment_body' => $this->load->view('payment/confirm_paypal',
-						array(
-							'order' => array(
-								'order_id' => $order_id,
-								'billing_info' => $order['billing_info']['user_first_name'].' '.$order['billing_info']['user_last_name'],
-								'package' => $order_items[0]['item_name'],
-								'payment_method' => ucfirst(str_replace('_', ' ', $order['payment_method'])),
-								'order_net_price' => $order['order_net_price']
-							)
-						),
-					TRUE),
-					'footer' => $this -> socialhappen -> get_footer()
-				);
-				$this->parser->parse('payment/payment_view', $data);
-			}
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while getting checkout details'),TRUE);
+			$this->parser->parse('payment/payment_view', $view_data);
+			return false;
+		}
+		$order['billing_info']['payer_id'] = issetor($PayPalResult['PAYERID']);
+		unset($PayPalResult);
+		
+		// 2. Do express checkout payment
+		$PayPalResult = $this->_do_express_checkout_payment($data);
+		if($PayPalResult['ERRORS'])
+		{
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while checking out.'),TRUE);
+			$this->parser->parse('payment/payment_view', $view_data);
+			return false;
+		}
+		unset($PayPalResult);
+		
+		// 3. Cancel exist paypal recurrent payment
+		$profileid = $this->orders->get_latest_paypal_profile_id_by_user_id($user['user_id']);
+		if($profileid)
+		{
+			//$current_recurring_payment = $this->_get_recurring_payments_profile_details($profileid);
+			$data = array(
+				'profileid' => $profileid,
+				'action' => 'Cancel', 	// Cancel, Suspend, Reactivate
+				'note' => 'Upgrade package'
+			);
+			$this->_manage_recurring_payments_profile_status($data);
+		}
+		
+		// 4. Create recurring payments profile
+		$data['schedule_details'] = array(
+				'desc' => $order_items[0]['item_description'],
+				'maxfailedpayments' => 3,
+				'autobillamt' => 'AddToNextBilling'
+			);
+		$data['billing_period'] = array(
+				'billingperiod' => 'Day', // Month
+				'billingfrequency' => 1, //1 = monthly , 2 = every2months
+				'totalbillingcycles' => 0, //0 = until canceled
+				'amt' => $order['order_net_price'], //Price
+				'currencycode' => 'USD'
+			);
+		$PayPalResult = $this->_create_recurring_payments_profile($data);
+
+		// 5. Update order status to "Processed" and Update billing info form paypal
+		$order['billing_info']['profile_id'] = issetor($PayPalResult['PROFILEID']);
+		$order['billing_info']['profile_status'] = issetor($PayPalResult['PROFILESTATUS']);
+		$order['billing_info']['txn_id'] = issetor($PayPalResult['PAYMENTS'][0]['TRANSACTIONID']);
+		$order['billing_info']['payment_status'] = issetor($PayPalResult['PAYMENTS'][0]['PAYMENTSTATUS']);
+		$order['billing_info']['pending_reason'] = issetor($PayPalResult['PAYMENTS'][0]['PENDINGREASON']);
+		$order['billing_info']['reason_code'] = issetor($PayPalResult['PAYMENTS'][0]['REASONCODE']);
+		$update_data = array(
+			'order_status_id' => $this->socialhappen->get_k('order_status', 'Processed'),
+			'billing_info' => serialize($order['billing_info'])
+		);
+		if(!$this->orders->update_order_by_order_id($order['order_id'], $update_data))
+		{
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while updating order status.'),TRUE);
+			$this->parser->parse('payment/payment_view', $view_data);
+			return false;
+		}
+		
+		// 6. Add package_users
+		$this->load->model('package_model','packages');
+		$this->load->model('package_users_model','package_users');
+		$package = $this->packages->get_package_by_package_id($order_items[0]['item_id']);
+		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
+		$package_user = array(
+			'package_id' => $package['package_id'],
+			'user_id' => $user['user_id'],
+			'package_expire' => $package['package_duration'] == 'unlimited' ? '0' : date('Y-m-d H:i:s', strtotime('+'.$package['package_duration']))
+		);
+		
+		if($user_current_package) //if user already have one package
+		{
+			$add_package_users_result = $this->package_users->update_package_user_by_user_id($user['user_id'], $package_user);
 		}
 		else
 		{
-			$data = array(
-				'token' => $this->input->post('token'),
-				'payerid' => $this->input->post('PayerID'),
-				'order' => $order,
-				'order_items' => $order_items,
-				'user' => $user
-			);
-			//Get express checkout details
-			$PayPalResult = $this->_get_express_checkout_details($data);
-			
-			if($PayPalResult['ERRORS']) 
-			{
-				echo json_encode(array(
-						'status' => 'ERROR',
-						'message' => 'Error while getting checkout details'
-					)
-				);
-				exit();
-			
+			$add_package_users_result = $this->package_users->add_package_user($package_user);
+		}
+		if(!$add_package_users_result) 
+		{ 
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while adding package user.'),TRUE);
+			$this->parser->parse('payment/payment_view', $view_data);
+			return false;
+		}
+		
+		
+		// 7. Add/Update company apps
+		
+		/* 1.Find companies that user is admin
+		*  2.For each company remove old company apps
+		*  3.For each company add new company apps
+		*/
+		$this->load->model('user_companies_model','user_companies');
+		$this->load->model('company_apps_model','company_apps');
+		$this->load->model('package_apps_model','package_apps');
+		$user_companies = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
+		foreach($user_companies as $company)
+		{
+			if($company['user_role'] != 1) { //Not company admin
+				continue;
 			}
-			$order['billing_info']['payer_id'] = issetor($PayPalResult['PAYERID']);
-			unset($PayPalResult);
-			
-			//Do express checkout payment
-			$PayPalResult = $this->_do_express_checkout_payment($data);
-			
-			if($PayPalResult['ERRORS'])
+			$company_id = $company['company_id'];
+			$this->company_apps->remove_company_apps($company_id);
+			$package_apps = $this->package_apps->get_package_apps_by_package_id($package['package_id']);
+			foreach($package_apps as $package_app)
 			{
-				echo json_encode(array(
-						'status' => 'ERROR',
-						'message' => 'Error while checking out.'
-					)
-				);
-				exit();
-			}
-			
-			//Update order status to "Processed" and Update billing info form paypal
-			$order['billing_info']['txn_id'] = issetor($PayPalResult['PAYMENTS'][0]['TRANSACTIONID']);
-			$order['billing_info']['payment_status'] = issetor($PayPalResult['PAYMENTS'][0]['PAYMENTSTATUS']);
-			$order['billing_info']['pending_reason'] = issetor($PayPalResult['PAYMENTS'][0]['PENDINGREASON']);
-			$order['billing_info']['reason_code'] = issetor($PayPalResult['PAYMENTS'][0]['REASONCODE']);
-			//$order['billing_info'] = array_merge($order['billing_info'], $PayPalResult);
-			$update_data = array(
-				'order_status_id' => $this->socialhappen->get_k('order_status', 'Processed'),
-				'billing_info' => serialize($order['billing_info'])
-			);
-			if( $this->orders->update_order_by_order_id($order['order_id'], $update_data) )
-			{
-				//Payment complete
-				echo json_encode(array(
-						'status' => 'OK',
-						'message' => 'Payment complete'
-					)
-				);
-			}
-			else
-			{
-				echo json_encode(array(
-						'status' => 'ERROR',
-						'message' => 'Error while updating order status'
-					)
-				);
+				$result = $this->company_apps->add_company_app(array(
+					'company_id' => $company_id,
+					'app_id' => $package_app['app_id']
+				));
+				
+				if(!$result) 
+				{ 
+					$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while adding company app.'),TRUE);
+					$this->parser->parse('payment/payment_view', $view_data);
+					return false;
+				}
 			}
 		}
+		
+		//8. Payment complete
+		$view_data['payment_body'] = $this->load->view('payment/payment_summary_paypal', array(
+			'order' => array(
+				'order_id' => $order['order_id'],
+				'billing_info' => $order['billing_info']['user_first_name'].' '.$order['billing_info']['user_last_name'],
+				'package' => $order_items[0]['item_name'],
+				'payment_method' => ucfirst(str_replace('_', ' ', $order['payment_method'])),
+				'order_net_price' => $order['order_net_price']
+			),
+			'popup' => 'payment_complete'
+			)
+		,TRUE);
+
+		$this->parser->parse('payment/payment_view', $view_data);
 	}
 	
 	/**
@@ -328,6 +393,44 @@ class Payment extends CI_Controller {
 	{
 		$this->socialhappen->ajax_check();
 		$this->load->view('payment/payment_complete');
+	}
+	
+	/**
+	 * Cancel package
+	 * @author Weerapat P.
+	 */
+	function cancel_package($user_id)
+	{
+		$this->load->model('order_model','orders');
+		$this->load->model('package_model','package');
+		$this->load->model('package_users_model','package_users');
+		
+		$item_type_id = $this->socialhappen->get_k('item_type', 'Package');
+		$latest_ordered_package = $this->orders->get_latest_ordered_by_user_id_and_item_type_id($user_id, $item_type_id);
+		$error = array();
+		
+		//Switch to Free package
+		$free_package = $this->package->get_free_package();
+		$data = array('package_id'=>$free_package['package_id'], 'package_expire'=>date('Y-m-d H:i:s'));
+		if(!$this->package_users->update_package_user_by_user_id($latest_ordered_package['user_id'], $data)) $error[] = 'Can not switch to free package';
+
+		//Cancel paypal recurring payment
+		if(isset($latest_ordered_package['billing_info']['profile_id']))
+		{
+			$data = array(
+				'profileid' => $latest_ordered_package['billing_info']['profile_id'], 	// Required. Recurring payments profile ID returned from CreateRecurring...
+				'action' => 'Cancel', 	// Cancel, Suspend, Reactivate
+				'note' => 'User cancel package'
+			);
+			if(!$this->_manage_recurring_payments_profile_status($data)) $error[] = 'Can not cancel paypal recurring payment';
+		}
+		
+		//Change order status
+		$data = array('order_status_id' => $this->socialhappen->get_k('order_status', 'Canceled'));
+		if(!$this->orders->update_order_by_order_id($latest_ordered_package['order_id'], $data)) $error[] = 'Error. Can not update order status';
+		
+		if(count($error)) { echo '<pre>'; print_r($error); echo '</pre>'; }
+		else { return true; }
 	}
 	
 	/**
@@ -358,22 +461,27 @@ class Payment extends CI_Controller {
 			case 'pending' : //Pending: The payment is pending. See pending_reason for more information.
 				break;
 			case 'refunded' : //Refunded: You refunded the payment.
+				
 				$this->load->model('order_model','orders');
+				$this->load->model('package_model','package');
+				$this->load->model('package_users_model','package_users');
+				
 				$order = $this->orders->get_order_by_txn_id($response['txn_id']);
+				
 				$result = true;
 				
 				//Switch to Free package
-				$this->load->model('package_users_model','package_users');
-				$data = array('package_id'=>1, 'package_expire'=>date('Y-m-d H:i:s'));
+				$free_package = $this->package->get_free_package();
+				$data = array('package_id'=>$free_package['package_id'], 'package_expire'=>date('Y-m-d H:i:s'));
 				if(!$this->package_users->update_package_user_by_user_id($order['user_id'], $data)) $result = false;
 				
 				//Change order status
 				$data = array('order_status_id' => $this->socialhappen->get_k('order_status', 'Refunded'));
 				if(!$this->orders->update_order_by_order_id($order['order_id'], $data)) $result = false;
 				
-				if($result) { echo 'Order status changed to "Refunded"'; }
-				
+				if(!$result) { } //Do something
 				break;
+				
 			case 'reversed' : //Reversed: A payment was reversed due to a chargeback or other type of reversal. The funds have been removed from your account balance and returned to the buyer. The reason for the reversal is specified in the ReasonCode element.
 				break;
 			case 'processed' : //Processed: A payment has been accepted.
@@ -399,7 +507,7 @@ class Payment extends CI_Controller {
 		$SECFields = array(
 							'token' => '', 								// A timestamped token, the value of which was returned by a previous SetExpressCheckout call.
 							'maxamt' => '', 						// The expected maximum total amount the order will be, including S&H and sales tax.
-							'returnurl' => base_url().'payment/confirm_paypal/'.$order['order_id'], 							// Required.  URL to which the customer will be returned after returning from PayPal.  2048 char max.
+							'returnurl' => base_url().'payment/payment_summary_paypal/'.$order['order_id'], 							// Required.  URL to which the customer will be returned after returning from PayPal.  2048 char max.
 							'cancelurl' => base_url().'home/package', 							// Required.  URL to which the customer will be returned if they cancel payment on PayPal's site.
 							'callback' => '', 							// URL to which the callback request from PayPal is sent.  Must start with https:// for production.
 							'callbacktimeout' => '', 					// An override for you to request more or less time to be able to process the callback request and response.  Acceptable range for override is 1-6 seconds.  If you specify greater than 6 PayPal will use default value of 3 seconds.
@@ -450,7 +558,7 @@ class Payment extends CI_Controller {
 		$Payments = array();
 		$Payment = array(
 						'amt' => $order['order_net_price'], 							// Required.  The total cost of the transaction to the customer.  If shipping cost and tax charges are known, include them in this value.  If not, this value should be the current sub-total of the order.
-						'currencycode' => 'THB', 					// A three-character currency code.  Default is USD.
+						'currencycode' => 'USD', 					// A three-character currency code.  Default is USD.
 						'itemamt' => '', 						// Required if you specify itemized L_AMT fields. Sum of cost of all items in this order.  
 						'shippingamt' => '', 					// Total shipping costs for this order.  If you specify SHIPPINGAMT you mut also specify a value for ITEMAMT.
 						'shipdiscamt' => '', 				// Shipping discount for this order, specified as a negative number.
@@ -539,8 +647,8 @@ class Payment extends CI_Controller {
 		// payments, order items, and shipping options.	
 		$BillingAgreements = array();
 		$Item = array(
-					  'l_billingtype' => '', 							// Required.  Type of billing agreement.  For recurring payments it must be RecurringPayments.  You can specify up to ten billing agreements.  For reference transactions, this field must be either:  MerchantInitiatedBilling, or MerchantInitiatedBillingSingleSource
-					  'l_billingagreementdescription' => '', 			// Required for recurring payments.  Description of goods or services associated with the billing agreement.  
+					  'l_billingtype' => 'RecurringPayments', 							// Required.  Type of billing agreement.  For recurring payments it must be RecurringPayments.  You can specify up to ten billing agreements.  For reference transactions, this field must be either:  MerchantInitiatedBilling, or MerchantInitiatedBillingSingleSource
+					  'l_billingagreementdescription' => $order_items[0]['item_description'], 			// Required for recurring payments.  Description of goods or services associated with the billing agreement.  
 					  'l_paymenttype' => '', 							// Specifies the type of PayPal payment you require for the billing agreement.  Any or IntantOnly
 					  'l_billingagreementcustom' => ''					// Custom annotation field for your own use.  256 char max.
 					  );
@@ -573,7 +681,7 @@ class Payment extends CI_Controller {
 	 * Get express checkout details
 	 * @author Weerapat P.
 	 * @param $data
-	 * Called by confirm_paypal()
+	 * Called by payment_summary_paypal()
 	 */
 	function _get_express_checkout_details($data)
 	{	
@@ -596,7 +704,7 @@ class Payment extends CI_Controller {
 	 * Do express checkout payment
 	 * @author Weerapat P.
 	 * @param $data
-	 * Called by confirm_paypal()
+	 * Called by payment_summary_paypal()
 	 */
 	function _do_express_checkout_payment($data)
 	{
@@ -628,7 +736,7 @@ class Payment extends CI_Controller {
 		$Payments = array();
 		$Payment = array(
 						'amt' => $order['order_net_price'], 							// Required.  The total cost of the transaction to the customer.  If shipping cost and tax charges are known, include them in this value.  If not, this value should be the current sub-total of the order.
-						'currencycode' => 'THB', 					// A three-character currency code.  Default is USD.
+						'currencycode' => 'USD', 					// A three-character currency code.  Default is USD.
 						'itemamt' => '', 						// Required if you specify itemized L_AMT fields. Sum of cost of all items in this order.  
 						'shippingamt' => '', 					// Total shipping costs for this order.  If you specify SHIPPINGAMT you mut also specify a value for ITEMAMT.
 						'shipdiscamt' => '', 					// Shipping discount for this order, specified as a negative number.
@@ -727,6 +835,167 @@ class Payment extends CI_Controller {
 			return $PayPalResult;
 		}
 	}
+	
+	function _create_recurring_payments_profile($data)
+	{		
+		$user = $data['user'];
+		$order = $data['order'];
+		$order_items = $data['order_items'];
+		
+		$schedule_details = $data['schedule_details'];
+		$billing_period = $data['billing_period'];
+		
+		$CRPPFields = array(
+					'token' => $data['token'], 								// Token returned from PayPal SetExpressCheckout.  Can also use token returned from SetCustomerBillingAgreement.
+						);
+						
+		$ProfileDetails = array(
+							'subscribername' => $user['user_first_name'].' '.$user['user_last_name'], 	// Full name of the person receiving the product or service paid for by the recurring payment.  32 char max.
+							'profilestartdate' => date('Y-m-d H:i:s'), 	// Required.  The date when the billing for this profiile begins.  Must be a valid date in UTC/GMT format.
+							'profilereference' => $order['order_id'] 	// The merchant's own unique invoice number or reference ID.  127 char max.
+						);
+						
+		$ScheduleDetails = array(
+							'desc' => $schedule_details['desc'], 							// Required.  Description of the recurring payment.  This field must match the corresponding billing agreement description included in SetExpressCheckout.
+							'maxfailedpayments' => $schedule_details['maxfailedpayments'], 	// The number of scheduled payment periods that can fail before the profile is automatically suspended.  
+							'autobillamt' => $schedule_details['autobillamt'] 				// This field indiciates whether you would like PayPal to automatically bill the outstanding balance amount in the next billing cycle.  Values can be: NoAutoBill or AddToNextBilling
+						);
+						
+		$BillingPeriod = array(
+							'trialbillingperiod' => '', 
+							'trialbillingfrequency' => '', 
+							'trialtotalbillingcycles' => '', 
+							'trialamt' => '', 
+							'billingperiod' => $billing_period['billingperiod'], 			// Required.  Unit for billing during this subscription period.  One of the following: Day, Week, SemiMonth, Month, Year
+							'billingfrequency' => $billing_period['billingfrequency'], 		// Required.  Number of billing periods that make up one billing cycle.  The combination of billing freq. and billing period must be less than or equal to one year. 
+							'totalbillingcycles' => $billing_period['totalbillingcycles'],	// the number of billing cycles for the payment period (regular or trial).  For trial period it must be greater than 0.  For regular payments 0 means indefinite...until canceled.  
+							'amt' => $billing_period['amt'], 								// Required.  Billing amount for each billing cycle during the payment period.  This does not include shipping and tax. 
+							'currencycode' => $billing_period['currencycode'], 				// Required.  Three-letter currency code.
+							'shippingamt' => '', 											// Shipping amount for each billing cycle during the payment period.
+							'taxamt' => '' 													// Tax amount for each billing cycle during the payment period.
+						);
+						
+		$ActivationDetails = array(
+							'initamt' => '', 							// Initial non-recurring payment amount due immediatly upon profile creation.  Use an initial amount for enrolment or set-up fees.
+							'failedinitamtaction' => '', 				// By default, PayPal will suspend the pending profile in the event that the initial payment fails.  You can override this.  Values are: ContinueOnFailure or CancelOnFailure
+						);
+						
+		$CCDetails = array(
+							'creditcardtype' => '', 	// Required. Type of credit card.  Visa, MasterCard, Discover, Amex, Maestro, Solo.  If Maestro or Solo, the currency code must be GBP.  In addition, either start date or issue number must be specified.
+							'acct' => '', 						// Required.  Credit card number.  No spaces or punctuation.  
+							'expdate' => '', 				// Required.  Credit card expiration date.  Format is MMYYYY
+							'cvv2' => '', 						// Requirements determined by your PayPal account settings.  Security digits for credit card.
+							'startdate' => '', 									// Month and year that Maestro or Solo card was issued.  MMYYYY
+							'issuenumber' => ''									// Issue number of Maestro or Solo card.  Two numeric digits max.
+						);
+						
+		$PayerInfo = array(
+							'email' => $user['user_email'], 			// Email address of payer.
+							'payerid' => '', 							// Unique PayPal customer ID for payer.
+							'payerstatus' => '', 						// Status of payer.  Values are verified or unverified
+							'business' => '' 							// Payer's business name.
+						);
+						
+		$PayerName = array(
+							'salutation' => '', 						// Payer's salutation.  20 char max.
+							'firstname' => '', 							// Payer's first name.  25 char max.
+							'middlename' => '', 						// Payer's middle name.  25 char max.
+							'lastname' => '', 							// Payer's last name.  25 char max.
+							'suffix' => ''								// Payer's suffix.  12 char max.
+						);
+						
+		$BillingAddress = array(
+								'street' => '', 			// Required.  First street address.
+								'street2' => '', 			// Second street address.
+								'city' => '', 				// Required.  Name of City.
+								'state' => '', 				// Required. Name of State or Province.
+								'countrycode' => '', 		// Required.  Country code.
+								'zip' => '', 				// Required.  Postal code of payer.
+								'phonenum' => '' 			// Phone Number of payer.  20 char max.
+							);
+							
+		$ShippingAddress = array(
+								'shiptoname' => '', 					// Required if shipping is included.  Person's name associated with this address.  32 char max.
+								'shiptostreet' => '', 					// Required if shipping is included.  First street address.  100 char max.
+								'shiptostreet2' => '', 					// Second street address.  100 char max.
+								'shiptocity' => '', 					// Required if shipping is included.  Name of city.  40 char max.
+								'shiptostate' => '', 					// Required if shipping is included.  Name of state or province.  40 char max.
+								'shiptozip' => '', 						// Required if shipping is included.  Postal code of shipping address.  20 char max.
+								'shiptocountry' => '', 					// Required if shipping is included.  Country code of shipping address.  2 char max.
+								'shiptophonenum' => ''					// Phone number for shipping address.  20 char max.
+								);
+								
+		$PayPalRequestData = array(
+							'CRPPFields' => $CRPPFields, 
+							'ProfileDetails' => $ProfileDetails, 
+							'ScheduleDetails' => $ScheduleDetails, 
+							'BillingPeriod' => $BillingPeriod, 
+							'ActivationDetails' => $ActivationDetails, 
+							'CCDetails' => $CCDetails, 
+							'PayerInfo' => $PayerInfo, 
+							'PayerName' => $PayerName, 
+							'BillingAddress' => $BillingAddress, 
+							'ShippingAddress' => $ShippingAddress
+						);	
+						
+		$PayPalResult = $this->paypal_pro->CreateRecurringPaymentsProfile($PayPalRequestData);
+		
+		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
+		{
+			$errors = array('Errors'=>$PayPalResult['ERRORS']);
+			$this->load->view('payment/paypal_error',$errors);
+		}
+		else
+		{
+			// Successful call.  Load view or whatever you need to do here.	
+			return $PayPalResult;
+		}	
+	}
+	
+	function _manage_recurring_payments_profile_status($data)
+	{
+		$MRPPSFields = array(
+						'profileid' => $data['profileid'], 	// Required. Recurring payments profile ID returned from CreateRecurring...
+						'action' => $data['action'], 	// Required. The action to be performed.  Mest be: Cancel, Suspend, Reactivate
+						'note' => $data['note']		// The reason for the change in status.  For express checkout the message will be included in email to buyers.  Can also be seen in both accounts in the status history.
+						);
+						
+		$PayPalRequestData = array('MRPPSFields' => $MRPPSFields);
+		
+		$PayPalResult = $this->paypal_pro->ManageRecurringPaymentsProfileStatus($PayPalRequestData);
+		
+		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
+		{
+			$errors = array('Errors'=>$PayPalResult['ERRORS']);
+			$this->load->view('payment/paypal_error',$errors);
+		}
+		else
+		{
+			// Successful call.  Load view or whatever you need to do here.	
+		}		
+	}
+	
+	function _get_recurring_payments_profile_details($profileid)
+	{
+		$GRPPDFields = array(
+					   'profileid' => $profileid	// Profile ID of the profile you want to get details for.
+					   );
+					   
+		$PayPalRequestData = array('GRPPDFields' => $GRPPDFields);
+		
+		$PayPalResult = $this->paypal_pro->GetRecurringPaymentsProfileDetails($PayPalRequestData);
+		
+		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
+		{
+			$errors = array('Errors'=>$PayPalResult['ERRORS']);
+			$this->load->view('paypal_error',$errors);
+		}
+		else
+		{
+			// Successful call.  Load view or whatever you need to do here.	
+		}	
+	}
+
 }
 
 /* End of file payment.php */

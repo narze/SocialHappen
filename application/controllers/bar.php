@@ -41,7 +41,7 @@ class Bar extends CI_Controller {
 					       	'company_image' => !$company_image ? base_url().'images/thumb80-80-3.jpg' : $company_image,
 					       	'creator_user_id' => $this->socialhappen->get_user_id()
 						);
-			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company), TRUE);
+			$company_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'company/json_add', $company), TRUE);
 			
 			if ($company_add_result['status'] == 'OK') 
 			{

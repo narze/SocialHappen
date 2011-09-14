@@ -132,7 +132,7 @@ class Home extends CI_Controller {
 					       	'user_facebook_id' => $facebook_user['id']
 						);
 						
-			$user_add_result = json_decode($this->curl->simple_post(base_url().'user/json_add', $user), TRUE);
+			$user_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'user/json_add', $user), TRUE);
 			
 			$company = array(
 					       	'company_name' => set_value('company_name'),
@@ -141,7 +141,7 @@ class Home extends CI_Controller {
 							'creator_user_id' => $user_add_result['user_id']
 						);
 			
-			$company_add_result = json_decode($this->curl->simple_post(base_url().'company/json_add', $company), TRUE);
+			$company_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'company/json_add', $company), TRUE);
 			if ($user_add_result['status'] == 'OK' && $company_add_result['status'] == 'OK')
 			{	
 				$this->load->model('user_companies_model','user_companies');
@@ -157,7 +157,8 @@ class Home extends CI_Controller {
 				}
 				else
 				{
-					$redirect_path = base_url().'?logged_in=true';
+					//$redirect_path = base_url().'?logged_in=true';
+					$redirect_path = base_url().'home/package?payment=true';
 				}
 				$this->load->view('common/redirect',array('redirect_parent'=>$redirect_path));
 			}
@@ -166,6 +167,15 @@ class Home extends CI_Controller {
 				echo 'Error occured';
 			}
 		}
+	}
+	
+	/**
+	 * Signup complete
+	 * @author Weerapat P.
+	 */
+	function signup_complete()
+	{
+		$this->load->view('home/signup_complete');
 	}
 	
 	/**

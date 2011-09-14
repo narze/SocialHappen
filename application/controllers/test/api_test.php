@@ -75,7 +75,7 @@ class Api_test extends CI_Controller {
 						'user_id' => USER_ID
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_user_session', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_user_session', $app);
 		
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content, 'is_array', 'request_user_session()');
@@ -94,7 +94,7 @@ class Api_test extends CI_Controller {
 						'user_id' => USER_ID
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_install_app', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_install_app', $app);
 		$content = json_decode($content, TRUE);
 		
 		$this->unit->run($content, 'is_array', 'request_install_app()');
@@ -118,7 +118,7 @@ class Api_test extends CI_Controller {
 						'page_id' => PAGE_ID
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_install_page', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_install_page', $app);
 		$content = json_decode($content, TRUE);
 		
 		$this->unit->run($content, 'is_array', 'request_install_page()');
@@ -134,7 +134,7 @@ class Api_test extends CI_Controller {
 						'user_facebook_id' => USER_FACEBOOK_ID
 					);
 		
-		$content = $this->curl->simple_get(base_url().'api/request_user_id', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_user_id', $app);
 		$content = json_decode($content, TRUE);
 		
 		$this->unit->run($content, 'is_array', 'request_user_id()');
@@ -150,7 +150,7 @@ class Api_test extends CI_Controller {
 						'facebook_page_id' => FACEBOOK_PAGE_ID
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_page_id', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_page_id', $app);
 		$content = json_decode($content, TRUE);
 		
 		$this->unit->run($content, 'is_array', 'request_page_id()');
@@ -170,7 +170,7 @@ class Api_test extends CI_Controller {
 						'user_facebook_id' => rand(1,100000000),
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_register_user', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_register_user', $app);
 		
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content, 'is_array', 'request_register_user()');
@@ -192,7 +192,7 @@ class Api_test extends CI_Controller {
 						'action' => '1'
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_log_user', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_log_user', $app);
 		
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content, 'is_array', 'request_log_user()');
@@ -213,7 +213,7 @@ class Api_test extends CI_Controller {
 						'user_id' => USER_ID
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_config_log', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_config_log', $app);
 		
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content, 'is_array', 'request_config_log()');
@@ -233,7 +233,7 @@ class Api_test extends CI_Controller {
 						'user_id' => USER_ID,
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_authenticate', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_authenticate', $app);
 		
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content, 'is_array', 'request_authenticate()');
@@ -253,7 +253,7 @@ class Api_test extends CI_Controller {
 						'user_id' => USER_ID,
 					);
 					
-		$content = $this->curl->simple_get(base_url().'api/request_platform_navigation', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_platform_navigation', $app);
 		
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content, 'is_array', 'request_platform_navigation()');
@@ -278,7 +278,7 @@ class Api_test extends CI_Controller {
 						'campaign_status_id' => $this->socialhappen->get_k("campaign_status", "Inactive")
 					);
 				
-		$content = $this->curl->simple_get(base_url().'api/request_create_campaign', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_create_campaign', $app);
 		
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content, 'is_array', 'request_create_campaign()');
@@ -300,7 +300,7 @@ class Api_test extends CI_Controller {
 						'app_install_secret_key' => "457f81902f7b768c398543e473c47465"
 					);
 			var_dump($app);	
-		$content = $this->curl->simple_get(base_url().'api/request_campaign_list', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_campaign_list', $app);
 		$content = json_decode($content, TRUE);
 		var_dump($content);
 		$this->unit->run($content, 'is_array', 'request_campaign_list()');
@@ -323,7 +323,7 @@ class Api_test extends CI_Controller {
 						'campaign_id' => $this->campaign_id
 					);
 				
-		$content = $this->curl->simple_get(base_url().'api/request_campaign_info', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_campaign_info', $app);
 		$content = json_decode($content, TRUE);
 		
 		$this->unit->run($content, 'is_array', 'request_campaign_list()');
@@ -346,7 +346,7 @@ class Api_test extends CI_Controller {
 						'campaign_name' => 'Changed campaign name'
 					);
 				
-		$content = $this->curl->simple_get(base_url().'api/request_update_campaign', $app);
+		$content = $this->curl->ssl(FALSE)->simple_get(base_url().'api/request_update_campaign', $app);
 		$content = json_decode($content, TRUE);
 		
 		$this->unit->run($content, 'is_array', 'request_update_campaign()');

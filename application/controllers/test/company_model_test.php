@@ -139,6 +139,30 @@ class Company_model_test extends CI_Controller {
 	}
 	
 	/**
+	 * Tests get_companies_by_user_id()
+	 * @author Weerapat P.
+	 */
+	function get_companies_by_user_id_test(){
+		$user_id = 1;
+		$results = $this->companies->get_companies_by_user_id($user_id);
+		$this->unit->run($results,'is_array', 'get_companies_by_user_id()');
+		$this->unit->run($results[0]['company_id'],'is_string','company_id');
+		$this->unit->run($results[0]['creator_user_id'],'is_string','creator_user_id');
+		$this->unit->run($results[0]['company_name'],'is_string','company_name');
+		$this->unit->run($results[0]['company_detail'],'is_string','company_detail');
+		$this->unit->run($results[0]['company_address'],'is_string','company_address');
+		$this->unit->run($results[0]['company_email'],'is_string','company_email');
+		$this->unit->run($results[0]['company_telephone'],'is_string','company_telephone');
+		$this->unit->run($results[0]['company_register_date'],'is_string','company_register_date');
+		$this->unit->run($results[0]['company_username'],'is_string','company_username');
+		$this->unit->run($results[0]['company_password'],'is_string','company_password');
+		$this->unit->run($results[0]['company_image'],'is_string','company_image');
+		$this->unit->run(count($results[0]),12, 'number of column');
+
+		$this->unit->run($results[0]['company_id'],1,'$company_id == 1');
+	}
+	
+	/**
 	 * Test update_company_profile_by_company_id()
 	 * @author Manassarn M.
 	 */

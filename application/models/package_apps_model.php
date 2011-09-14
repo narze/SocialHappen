@@ -51,6 +51,16 @@ class Package_apps_model extends CI_Model {
 		$this->db->delete('package_apps', array('app_id' => $app_id));
 		return $this->db->affected_rows() == 1;
 	}
+	
+	/**
+	 * Remove all package apps
+	 * @param $package_id
+	 * @author Weerapat P.
+	 */
+	function remove_all_package_apps_by_package_id($package_id = NULL){
+		$this->db->delete('package_apps', array('package_id' => $package_id));
+		return $this->db->affected_rows() == 1;
+	}
 }
 /* End of file package_apps_model.php */
 /* Location: ./application/models/package_apps_model.php */

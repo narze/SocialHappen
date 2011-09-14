@@ -81,7 +81,7 @@ class Campaign_test extends CI_Controller {
 						'campaign_active_member' => 1,
 						'campaign_all_member' => 1
 					);
-		$content = $this->curl->simple_post(base_url().'campaign/json_add', $campaign);
+		$content = $this->curl->ssl(FALSE)->simple_post(base_url().'campaign/json_add', $campaign);
 		$content = json_decode($content, TRUE);
 		$this->unit->run($content,'is_array', 'json_add()');
 		$this->unit->run($content['campaign_id'],'is_int','campaign_id');

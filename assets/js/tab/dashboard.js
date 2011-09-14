@@ -28,7 +28,7 @@ $(function(){
 				$('a.bt-don-awesome').live('click',function(){
 					$.fancybox.close();
 				});
-			} else {
+			} else if(is_admin){
 				if(page_app_installed_id!=0) {
 					$.fancybox({
 						href: base_url+'tab/app_installed/'+ page_app_installed_id
@@ -45,7 +45,9 @@ $(function(){
 					$('a.bt-stay_fb').live('click',function(){
 						$.fancybox.close();
 					});
-				} else if(!is_user_register_to_page) {
+				}
+			} else {
+				if(!is_user_register_to_page) {
 					$.fancybox({
 						href: base_url+'tab/signup_page/'+page_id,
 						modal: true

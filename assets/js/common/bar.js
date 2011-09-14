@@ -66,7 +66,7 @@ $(function(){
 		return false;
 	});
 	
-	$('.bt-continue').live('click',function(){
+	$('#create-company a.bt-continue').live('click',function(){
 		
 		if($('#company_name').attr('class') == 'inactive') $('#company_name').val('');
 		if($('#company_detail').attr('class') == 'inactive') $('#company_detail').val('');

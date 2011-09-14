@@ -793,8 +793,7 @@ class Backend extends CI_Controller {
 		$this->backend_session_verify(true);
 		$this->load->helper('form');
 		$this->load->library('form_validation');
-		$this->load->model('Package_model', 'Package');
-				
+
 		// set up validation rules
 		$config = array(
 						array(
@@ -846,7 +845,9 @@ class Backend extends CI_Controller {
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
 		$this->form_validation->set_rules($config); 
 				
-		if($this->form_validation->run()){
+		if($this->form_validation->run())
+		{
+			//Add package
 			$package_image = $this->socialhappen->upload_image('package_image');
 			$data = array(
 				'package_name' => $this->input->post('package_name', TRUE),
@@ -859,10 +860,28 @@ class Backend extends CI_Controller {
 				'package_custom_badge' => set_value('package_custom_badge') == 'on' ? 1 : 0,
 				'package_duration' => $this->input->post('package_duration', TRUE)
 			);
-			$this->Package->add_package($data);
+			$this->load->model('package_model', 'package');
+			$package_id = $this->package->add_package($data);
+			
+			//Add package apps
+			$this->load->model('package_apps_model', 'package_apps');
+			if($apps_id = $this->input->post('package_apps'))
+			{
+				foreach($apps_id as $app_id)
+				$this->package_apps->add_package_app(array('package_id'=>$package_id, 'app_id'=>$app_id));
+			}
+			
 			redirect('backend/dashboard');
-		}else{
-			$this->load->view('backend_views/add_new_package_view');
+		}
+		else
+		{
+			$this->load->model('app_model', 'apps');
+			$data = array(
+				'all_apps' => $this->apps->get_all_apps(),
+				'selected_custom_badge' => $this->input->post('package_custom_badge'),
+				'selected_apps' => $this->input->post('package_apps'),
+			);
+			$this->load->view('backend_views/add_new_package_view', $data);
 		}
 	}
 	
@@ -870,7 +889,6 @@ class Backend extends CI_Controller {
 		$this->backend_session_verify(true);
 		$this->load->helper('form');
 		$this->load->library('form_validation');
-		$this->load->model('Package_model', 'Package');
 		
 		// set up validation rules
 		$config = array(
@@ -923,7 +941,12 @@ class Backend extends CI_Controller {
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
 		$this->form_validation->set_rules($config); 
 		
-		if($this->form_validation->run()){
+		$this->load->model('Package_model', 'Package');
+		$this->load->model('package_apps_model', 'package_apps');
+		
+		if($this->form_validation->run())
+		{
+			//Update package
 			$data = array(
 				'package_name' => $this->input->post('package_name', TRUE),
 				'package_detail' => $this->input->post('package_detail', TRUE),
@@ -938,9 +961,35 @@ class Backend extends CI_Controller {
 				$data['package_image'] = $package_image;
 			}
 			$result = $this->Package->update_package_by_package_id($package_id, $data);
-			if($result) redirect('backend/packages');
-		}else{
-			$data = $this->Package->get_package_by_package_id($package_id);
+			
+			//Update package apps
+			$this->package_apps->remove_all_package_apps_by_package_id($package_id);
+			if($apps_id = $this->input->post('package_apps'))
+			{
+				foreach($apps_id as $app_id)
+				$this->package_apps->add_package_app(array('package_id'=>$package_id, 'app_id'=>$app_id));
+			}
+			
+			//redirect('backend/packages');
+			redirect('backend/edit_package/'.$package_id);
+		}
+		else
+		{
+			$this->load->model('app_model', 'apps');
+			$selected_apps = array();
+			if($package_apps = $this->package_apps->get_apps_by_package_id($package_id))
+			{
+				foreach($package_apps as $app)
+				{
+					$selected_apps[] = $app['app_id'];
+				}
+			}
+			$data = array(
+				'package' => $this->Package->get_package_by_package_id($package_id),
+				'all_apps' => $this->apps->get_all_apps(),
+				'selected_custom_badge' => $this->input->post('package_custom_badge'),
+				'selected_apps' => $selected_apps
+			);
 			$this->load->view('backend_views/edit_package_view', $data);	
 		}
 	}

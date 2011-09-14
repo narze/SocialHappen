@@ -50,7 +50,7 @@
 			  <td><?php echo $order['order_date']; ?></td>
 			  <td><a href="#"><?php echo $order['order_id']; ?></a></td>
 			  <td><?php echo $order['package_name']; ?></td>
-			  <td class="right"><?php echo $order['order_net_price']; ?> THB</td>
+			  <td class="right"><?php echo $order['order_net_price']; ?> USD</td>
 			</tr>
 			<?php } 
 		} else { ?>
@@ -61,3 +61,6 @@
 	  </table>
 	</div>
   </div>
+  <?php if($current_package['package_price'] > 0) { ?>
+  <p><a href="<?php echo base_url().'payment/cancel_package/'.$user_id; ?>">Cancel package</a></p>
+  <?php } ?>
