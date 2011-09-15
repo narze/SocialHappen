@@ -1,6 +1,6 @@
 <body>
 <div class="popup_payment">
-<?php if($is_upgradable == false) { ?>
+<?php if(count($packages) == 0) { ?>
 	<p>You are already use a maximum package</p>
 <? } else { ?>
 	<div id="payment-form">

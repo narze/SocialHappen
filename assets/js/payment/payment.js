@@ -57,8 +57,8 @@ $(function(){
 		window.location = base_url;
 	});
 	
-	
-	$('a.bt-select-package').live('click',function(){
+	//Call payment form popup when click
+	$('a.payment-pop').live('click',function(){
 		var package_id = get_query( $(this).attr('href'), 'package_id' );
 		var pop;
 
@@ -78,6 +78,12 @@ $(function(){
 		
 		return false;
 		
+	});
+	
+	//Cancel package
+	$('a.unsubscribe').click(function () {
+		var agree = confirm("Are you sure you want to unsubscribe this package?");
+		if (!agree) return false ;
 	});
 	
 	

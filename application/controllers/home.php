@@ -189,9 +189,12 @@ class Home extends CI_Controller {
 	function package()
 	{
 		$this->load->model('package_model','package');
-		$user = $this->socialhappen->get_user();
 		$this->load->model('package_users_model','package_users');
+		$user = $this->socialhappen->get_user();
 		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
+		
+		$user_current_package_id = isset($user_current_package['package_id']) ? $user_current_package['package_id'] : 0;
+		$user_current_package_price = isset($user_current_package['package_price']) ? $user_current_package['package_price'] : 0;
 		
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
@@ -227,10 +230,9 @@ class Home extends CI_Controller {
 			'home' => $this -> load -> view('home/package', 
 				array(
 					'packages' => $this->package->get_packages(),
-					'user_current_package' => $user_current_package
-					//'user' => $user,
-					//'facebook_user' => $facebook_user,
-					//'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id'])
+					'user_id' => $user['user_id'],
+					'user_current_package_id' => $user_current_package_id,
+					'user_current_package_price' => $user_current_package_price
 				),
 			TRUE),
 			'footer' => $this -> socialhappen -> get_footer()

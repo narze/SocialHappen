@@ -54,7 +54,6 @@ class Payment extends CI_Controller {
 		$this->load->model('package_users_model','package_users');
 		$user = $this->socialhappen->get_user();
 		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
-		$is_upgradable = $user_current_package ? $this->packages->is_upgradable($user_current_package['package_id']) : true ;
 
 		if ($this->form_validation->run() == FALSE) //
 		{
@@ -76,30 +75,28 @@ class Payment extends CI_Controller {
 				foreach($packages as &$package) 
 				{
 					if($package['package_price'] == 0) $free_package_id = $package['package_id'];
-					
+					$price = $package['package_price'] ? number_format($package['package_price']).'USD' : 'FREE';
+					$duration = $package['package_duration'] == 'unlimited' ? '' : '/'.$package['package_duration'] ;
+
 					if($package['package_price'] > @$user_current_package['package_price']) //Show only package that user can buy
 					{
-						$price = $package['package_price'] ? number_format($package['package_price']).'USD' : 'FREE';
-						$duration = $package['package_duration'] == 'unlimited' ? '' : '/'.$package['package_duration'] ;
 						$options[$package['package_id']] = $package['package_name'].' <span>('.$price.$duration.')</span>';
 						$buyable_packages[] = $package;
 					}
+					else 
+					{
+						unset($package);
+					}
 				}	
-			}
-			
-			if(!count($user_current_package)) 
-			{
-				$buyable_packages = $packages;
 			}
 
 			$this->load->view('payment/payment_form', 
 					array(
-						'packages' => $buyable_packages,
+						'packages' => $user_current_package ? $buyable_packages : $packages,
 						'user_current_package' => $user_current_package,
 						'selected_package' => $selected_package,
 						'options' => $options,
-						'free_package_id' => isset($free_package_id),
-						'is_upgradable' => $is_upgradable
+						'free_package_id' => isset($free_package_id)
 					)
 			);
 		}
@@ -415,7 +412,7 @@ class Payment extends CI_Controller {
 		if(!$this->orders->update_order_by_order_id($latest_ordered_package['order_id'], $data)) $error[] = 'Error. Can not update order status';
 		
 		if(count($error)) { echo '<pre>'; print_r($error); echo '</pre>'; }
-		else { return true; }
+		else {  redirect();//home }
 	}
 	
 	/**
