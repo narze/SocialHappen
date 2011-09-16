@@ -37,7 +37,7 @@
 			  </li>
               <li class="pic">
 				<?php echo form_error('company_image'); ?>
-				<img src="<?php echo $this->socialhappen->get_default_url('company_image')?>" alt="" />
+				<img class="company-image" src="<?php echo $this->socialhappen->get_default_url('company_image')?>" alt="" />
 				<div class="upload-pic">
 					<span><a>(Change)</a></span>
 					<input id="company_image" type="file" name="company_image" />

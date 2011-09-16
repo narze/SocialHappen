@@ -24,6 +24,6 @@ $(function(){
 			};
 		}
 	}
-	failsafeImg();
+	//failsafeImg();
 	$("*").ajaxStop(failsafeImg);
 });
