@@ -39,7 +39,7 @@
 					</li>
 					<li class="package_companies feature"><p><?php echo number_format($package['package_max_companies']); ?> <?php echo $package['package_max_companies'] > 1 ? 'Companies' : 'Company'; ?></p></li>
 					<li class="package_pages feature"><p><?php echo number_format($package['package_max_pages']); ?> <?php echo $package['package_max_pages'] > 1 ? 'Pages' : 'Page'; ?></p></li>
-					<li class="package_users feature"><p><?php echo number_format($package['package_max_users']); ?> <?php echo $package['package_max_users'] > 1 ? 'Users' : 'User'; ?></p></li>
+					<li class="package_users feature"><p><?php echo number_format($package['package_max_users']); ?> <?php echo $package['package_max_users'] > 1 ? 'Members' : 'Member'; ?></p></li>
 					<li class="package_apps feature"><p>3 Applications</p></li>
 					<li class="package_stat feature"><p>Full<span class="asterisk">*</span></p></li>
 					<li class="package_detail feature"><p><br /><?php echo $package['package_detail']; ?><br /><a class="more">For more detail</a></p></li>

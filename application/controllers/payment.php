@@ -80,21 +80,29 @@ class Payment extends CI_Controller {
 					$price = $package['package_price'] ? number_format($package['package_price']).'USD' : 'FREE';
 					$duration = $package['package_duration'] == 'unlimited' ? '' : '/'.$package['package_duration'] ;
 
-					if($package['package_price'] > $user_current_package_price) //Show only package that user can buy
+					if($user_current_package_id)
+					{
+						if($package['package_price'] > $user_current_package_price) //Show only package that user can buy
+						{
+							$options[$package['package_id']] = $package['package_name'].' <span>('.$price.$duration.')</span>';
+							$buyable_packages[] = $package;
+						}
+						else 
+						{
+							unset($package);
+						}
+					}
+					else //User have no package
 					{
 						$options[$package['package_id']] = $package['package_name'].' <span>('.$price.$duration.')</span>';
 						$buyable_packages[] = $package;
-					}
-					else 
-					{
-						unset($package);
 					}
 				}	
 			}
 
 			$this->load->view('payment/payment_form', 
 					array(
-						'packages' => $user_current_package_id ? $buyable_packages : $packages,
+						'packages' => $buyable_packages,
 						'selected_package' => $selected_package,
 						'options' => $options,
 						'free_package_id' => isset($free_package_id)
