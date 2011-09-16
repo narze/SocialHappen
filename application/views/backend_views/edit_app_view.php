@@ -8,7 +8,7 @@
 <body>
 <h1>Edit App Information</h1>
 <?php
-echo form_open('backend/edit_app/'.$app_id);
+echo form_open_multipart('backend/edit_app/'.$app_id);
 ?>
 		<ul>
 			<li>
@@ -28,6 +28,35 @@ echo form_open('backend/edit_app/'.$app_id);
 			</li>
 			
 			<li>
+				<?=form_label('App Type*', 'app_type_id', array(
+				'class' => 'app_type_id',
+				'style' => 'color: #000;',
+				));?>
+				<?
+					$options = array(
+					  $this->socialhappen->get_k('app_type','Page Only')  => "Page Only",
+					  $this->socialhappen->get_k('app_type','Support Page')  => "Support Page",
+					  $this->socialhappen->get_k('app_type','Standalone')  => "Standalone"
+					);
+				?>
+				<?=form_dropdown('app_type_id', $options, $app_type_id);?>
+				<?php echo form_error('app_type_id'); ?>
+			</li>
+			
+			<li>
+				<?=form_label('App Image', 'app_image', array(
+				'class' => 'app_image',
+				'style' => 'color: #000;',
+				));
+				if($app_image) { ?>
+				<img src="<?php echo imgsize($app_image, 'small'); ?>" />
+				<?php } ?>
+				<input id="app_image" type="file" name="app_image" />
+				<input type="hidden" name="app_image_old" value="<?php echo $app_image; ?>">
+				<?php echo form_error('app_image'); ?>
+			</li>
+			
+			<li>
 				<?=form_label('App Description*', 'app_description', array(
 				'class' => 'app_description',
 				'style' => 'color: #000;',
@@ -43,21 +72,6 @@ echo form_open('backend/edit_app/'.$app_id);
 				<?php echo form_error('app_description'); ?>
 			</li>
 			
-			<li>
-				<?=form_label('App Type*', 'app_type_id', array(
-				'class' => 'app_type_id',
-				'style' => 'color: #000;',
-				));?>
-				<?
-					$options = array(
-					  $this->socialhappen->get_k('app_type','Page Only')  => "Page Only",
-					  $this->socialhappen->get_k('app_type','Support Page')  => "Support Page",
-					  $this->socialhappen->get_k('app_type','Standalone')  => "Standalone"
-					);
-				?>
-				<?=form_dropdown('app_type_id', $options, $app_type_id);?>
-				<?php echo form_error('app_type_id'); ?>
-			</li>
 			
 			
 			<li>

@@ -210,7 +210,9 @@ class Backend extends CI_Controller {
 				
 		if($this->form_validation->run()){
 			$this->load->model('App_model', 'App');
+			$app_image = $this->socialhappen->upload_image('app_image');
 			$this->App->add_app(array('app_name' => $this->input->post('app_name', TRUE),
+								'app_image' => $app_image ? $app_image : $this->socialhappen->get_default_url('app_image'),
 								'app_url' => str_replace(';', '', $this->input->post('app_url', TRUE)),
 								'app_install_url' => str_replace(';', '', $this->input->post('app_install_url', TRUE)),
 								'app_install_page_url' => str_replace(';', '', $this->input->post('app_install_page_url', TRUE)),
@@ -220,7 +222,7 @@ class Backend extends CI_Controller {
 								'app_type_id' => $this->input->post('app_type_id', TRUE),
 								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE),
 								'app_secret_key' => md5($this->_generate_random_string())));
-			redirect('backend/dashboard');
+			redirect('backend/app');
 		}else{
 			$this->load->view('backend_views/add_new_app_view');
 		}
@@ -247,6 +249,11 @@ class Backend extends CI_Controller {
 							 'field'   => 'app_description',
 							 'label'   => 'App Description',
 							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_image',
+							 'label'   => 'App Image',
+							 'rules'   => 'xss_clean'
 						),
 						array(
 							 'field'   => 'app_url',
@@ -283,7 +290,7 @@ class Backend extends CI_Controller {
 		$this->form_validation->set_rules($config); 
 		if($this->form_validation->run()){
 			$this->load->model('App_model', 'App');
-			$this->App->update_app_by_app_id($app_id, array('app_name' => $this->input->post('app_name', TRUE),
+			$app = array('app_name' => $this->input->post('app_name', TRUE),
 								'app_url' => str_replace(';', '', $this->input->post('app_url', TRUE)),
 								'app_install_url' => str_replace(';', '', $this->input->post('app_install_url', TRUE)),
 								'app_install_page_url' => str_replace(';', '', $this->input->post('app_install_page_url', TRUE)),
@@ -292,12 +299,17 @@ class Backend extends CI_Controller {
 								'app_description' => $this->input->post('app_description', TRUE),
 								'app_type_id' => $this->input->post('app_type_id', TRUE),
 								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE)
-								));
-			redirect('backend');
+								);
+			if($app_image = $this->socialhappen->replace_image('app_image', $this->input->post('app_image_old', TRUE))){
+				$app['app_image'] = $app_image;
+			}
+			$this->App->update_app_by_app_id($app_id, $app);
+			redirect('backend/app');
 		}else{
 			$this->load->model('App_model', 'App');
 			$app = $this->App->get_app_by_app_id($app_id);
 			$data['app_name'] = $app['app_name'];
+			$data['app_image'] = $app['app_image'];
 			$data['app_description'] = $app['app_description'];
 			$data['app_url'] = $app['app_url'];
 			$data['app_config_url'] = $app['app_config_url'];
@@ -871,7 +883,7 @@ class Backend extends CI_Controller {
 				$this->package_apps->add_package_app(array('package_id'=>$package_id, 'app_id'=>$app_id));
 			}
 			
-			redirect('backend/dashboard');
+			redirect('backend/packages');
 		}
 		else
 		{
@@ -970,8 +982,8 @@ class Backend extends CI_Controller {
 				$this->package_apps->add_package_app(array('package_id'=>$package_id, 'app_id'=>$app_id));
 			}
 			
-			//redirect('backend/packages');
-			redirect('backend/edit_package/'.$package_id);
+			redirect('backend/packages');
+			//redirect('backend/edit_package/'.$package_id);
 		}
 		else
 		{

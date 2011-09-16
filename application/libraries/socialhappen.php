@@ -27,6 +27,16 @@ class SocialHappen{
 		'page_status' => array(1=>'Not Installed', 2=>'Installed')
 	);
 	
+	/** Default urls
+	 * @author Manassarn M.'
+	 */
+	var $default_urls = array(
+		'app_image' => 'assets/images/default/app.png',
+		'campaign_image' => 'assets/images/default/campaign.png',
+		'company_image' => 'assets/images/default/company.png',
+		'user_image' => 'assets/images/default/user.png'
+	);
+	
 	/**
 	 * Get global variable
 	 * @param $var_name
@@ -85,6 +95,18 @@ class SocialHappen{
 		}
 		unset($each);
 		return $array;
+	}
+	
+	/**
+	 * Get a default url
+	 * @param $var_name
+	 * @author Manassarn M.
+	 */
+	function get_default_url($var_name = NULL){
+		if(isset($this->default_urls[$var_name])){
+			return base_url().$this->default_urls[$var_name];
+		}
+		return NULL;
 	}
 	
 	/**
@@ -189,6 +211,7 @@ class SocialHappen{
 				'facebook_user' => $this->CI->facebook->getUser(),
 				'script' => array(
 					'common/functions',
+					'common/onload',
 					'common/jquery.form',
 					'common/bar',
 					'common/fancybox/jquery.fancybox-1.3.4.pack',
@@ -327,7 +350,8 @@ class SocialHappen{
 				}
 			}
 			return $new_image;
-		}
+		} 
+		return FALSE;
 	}
 	
 	/**

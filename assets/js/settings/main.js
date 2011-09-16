@@ -51,7 +51,7 @@ $(function(){
 	} else if(setting_name == 'page'){
 		$('li a.company-page-setting').click();
 	} else if(setting_name == 'package'){
-	
+		$('li a.package-billing').click();
 	} else if(setting_name == 'reference'){
 	
 	}

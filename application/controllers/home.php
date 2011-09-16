@@ -137,7 +137,7 @@ class Home extends CI_Controller {
 			$company = array(
 					       	'company_name' => set_value('company_name'),
 					       	'company_detail' => set_value('company_detail'),
-					       	'company_image' => issetor($company_image),
+					       	'company_image' => $company_image ? $company_image : $this->socialhappen->get_default_url('company_image'),
 							'creator_user_id' => $user_add_result['user_id']
 						);
 			

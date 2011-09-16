@@ -8,7 +8,7 @@
 <body>
 <h1>Add new app</h1>
 <?php
-echo form_open('backend/add_new_app');
+echo form_open_multipart('backend/add_new_app');
 ?>
 		<ul>
 			<li>
@@ -41,6 +41,15 @@ echo form_open('backend/add_new_app');
 				?>
 				<?=form_dropdown('app_type_id', $options);?>
 				<?php echo form_error('app_type_id'); ?>
+			</li>
+			<li>
+				<?=form_label('App Image', 'app_image', array(
+				'class' => 'app_image',
+				'style' => 'color: #000;',
+				));
+				?>
+				<input id="app_image" type="file" name="app_image" />
+				<?php echo form_error('app_image'); ?>
 			</li>
 			<li>
 				<?=form_label('App Description*', 'app_description', array(

@@ -108,7 +108,7 @@ class Settings extends CI_Controller {
 			{
 				if(set_value('use_facebook_picture')){
 					$user_image = issetor($this->facebook->get_profile_picture($user['user_facebook_id']));
-				} else if (!$user_image = $this->socialhappen->upload_image('user_image')){
+				} else if (!$user_image = $this->socialhappen->replace_image('user_image', $user['user_image'])){
 					$user_image = $user['user_image'];
 				}
 			
@@ -175,7 +175,7 @@ class Settings extends CI_Controller {
 			}
 			else 
 			{
-				if (!$company_image = $this->socialhappen->upload_image('company_image')){
+				if (!$company_image = $this->socialhappen->replace_image('company_image', $company['company_image'])){
 					$company_image = $company['company_image'];
 				}
 				
@@ -285,7 +285,7 @@ class Settings extends CI_Controller {
 			{
 				if(set_value('use_facebook_picture')){
 					$page_image = issetor($page_facebook['picture']);
-				} else if (!$page_image = $this->socialhappen->upload_image('page_image')){
+				} else if (!$page_image = $this->socialhappen->replace_image('page_image', $page['page_image'])){
 					$page_image = $page['page_image'];
 				}
 				

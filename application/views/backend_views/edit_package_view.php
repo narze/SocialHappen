@@ -17,7 +17,7 @@ echo form_open_multipart('backend/edit_package/'.$package['package_id']);
 				'style' => 'color: #000;',
 				));
 				if($package['package_image']) { ?>
-				<img src="<?php echo str_replace('_o','_t',$package['package_image']); ?>" />
+				<img src="<?php echo imgsize($package['package_image'], 'small'); ?>" />
 				<?php } ?>
 				<input id="package_image" type="file" name="package_image" />
 				<input type="hidden" name="package_image_old" value="<?php echo $package['package_image']; ?>">
