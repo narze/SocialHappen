@@ -18,7 +18,7 @@
 				<ul>
 				  <?php foreach($apps as $app) { ?>
 				  <li>
-					<p><img style="width:64px;height:64px;" src="<?php echo $app['app_image']; ?>" alt="<?php echo $app['app_name']; ?>" /></p>
+					<p><img class="app-image" style="width:64px;height:64px;" src="<?php echo $app['app_image']; ?>" alt="<?php echo $app['app_name']; ?>" /></p>
 					<p><?php echo $app['app_name']; ?></p>
 				  </li>
 				  <? } ?>

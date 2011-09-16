@@ -12,7 +12,7 @@ $(function(){
 					.appendTo('.wrapper-details.apps .details table');
 
 					var app_list = row.find('td.app-list div');
-					app_list.find('p.thumb img').attr('src', imgsize(json[i].app_image,'normal'));
+					app_list.find('p.thumb img').attr('src', imgsize(json[i].app_image,'normal')).addClass('app-image');
 					app_list.find('p.thumb img').attr('title', json[i].app_name);
 					app_list.find('h2').append('<a href="'+base_url+'app/'+json[i].app_install_id+'">'+json[i].app_name+'</a>');
 					app_list.find('p.description').append(json[i].app_description);

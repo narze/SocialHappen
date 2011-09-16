@@ -499,6 +499,13 @@ class Page extends CI_Controller {
 		//echo json_encode($data);
 		echo $this->audit_lib->render_stat_graph($data_label, $data, $title, $div);
 	}
+	
+	function json_get_page_user_data($user_id = NULL, $page_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('page_user_data_model', 'page_users');
+		$page_user = $this->page_users->get_page_user_by_user_id_and_page_id($user_id, $page_id);
+		echo json_encode(issetor($page_user['user_data'], array()));
+	}
 }
 
 /* End of file page.php */

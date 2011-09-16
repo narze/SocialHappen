@@ -23,9 +23,7 @@ $(function(){
 					row.find('td.status.app-monthly-active b').append('active'); //friends count
 					row.find('td.bt-icon a.bt-edit').attr('href', base_url+'path/to/edit/'+ json[i].app_install_id); //go to user
 					
-					row.find('td.bt-icon a.bt-setting').attr('href', base_url+'path/to/setting/'+ json[i].app_install_id); //delete
-					row.find('td.bt-icon a.bt-delete').attr('href', base_url+'path/to/delete/'+ json[i].app_install_id); //detele
-					row.find('td.bt-icon a.bt-go').attr('href', base_url+'path/to/go/'+ json[i].app_install_id); //delete
+					row.find('td.bt-icon a.bt-go').attr('data-pageuserid', json[i].user_id);
 				}
 				$('.wrapper-details-member.users .details table tr:even').addClass('next');
 			}
@@ -48,6 +46,14 @@ $(function(){
 				next_text:'>',
 				prev_text:'<'
 			});
+		});
+		return false;
+	});
+	
+	$('.wrapper-details-member.users .details a.bt-go').live('click', function(){
+		page_user_id = $(this).attr('data-pageuserid');
+		$.fancybox({
+			href: base_url+'page/json_get_page_user_data/'+ page_user_id + '/' + page_id
 		});
 		return false;
 	});

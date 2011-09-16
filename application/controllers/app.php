@@ -41,7 +41,8 @@ class App extends CI_Controller {
 							'title' => $app['app_name'],
 							'vars' => array(
 								'app_install_id'=>$app_install_id,
-								'per_page' => $per_page
+								'per_page' => $per_page,
+								'page_id' => $page['page_id']
 							),
 							'script' => array(
 								'common/functions',

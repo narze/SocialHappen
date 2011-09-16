@@ -1,5 +1,6 @@
+<?php if(!isset($partial) || $partial == 'facebook-page-information') : ?>
 <div id="facebook-page-information">
-<?php if(isset($success)==TRUE) echo 'Updated'; ?>
+<?php if(isset($success)) echo 'Updated'; ?>
 	<h2><span>Facebook page information</span></h2>
 	<div>
 	  <ul class="form01">
@@ -8,9 +9,11 @@
 	  </ul>
 	</div>
 </div>
+<?php endif; ?>
 
+<?php if(!isset($partial) || $partial == 'page-information') : ?>
 <div id="page-information"> 
-<?php if(isset($success)==TRUE) echo 'Updated'; ?>
+<?php if(isset($success)) echo 'Updated'; ?>
 	<h2><span>Page information</span></h2>
 		
 <?php // Change the css classes to suit your needs   
@@ -40,10 +43,11 @@
             </div>
 	<?php echo form_close(); ?>
 </div>
-	
+<?php endif; ?>
+
 <!--
 <div id="page-admin">
-	<?php if(isset($success)==TRUE) echo 'Updated'; ?>
+	<?php if(isset($success)) echo 'Updated'; ?>
 	<h2><span>Page admins</span></h2>
 	<?php // Change the css classes to suit your needs   
 	$attributes = array('class' => 'page-admin', 'id' => '');
@@ -67,7 +71,7 @@
 -->
 <!--
 <div id="admin-admin">
-	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
+	<?php if(issetor($success)) echo 'Updated'; ?>
 	<h2><span>Page admins</span></h2>
 	<div class="admin-list">
 		<ul> 
@@ -98,11 +102,14 @@
 	</div>
 -->
 
+
+
+<?php if(!isset($partial) || $partial == 'page-user-fields') : ?>
 <div id="page-user-fields">
-	<?php if(isset($success)==TRUE) echo 'Updated'; ?>
+	<?php if(isset($success)) echo 'Updated'; ?>
 	<h2><span>Page user fields</span></h2>
 	<?php 
-	$attributes = array('class' => 'page-user-fields', 'id' => '');
+	$attributes = array('class' => 'page-user-fields', 'id' => '');echo validation_errors();
 	echo form_open("settings/page_user_fields/{$page['page_id']}", $attributes); ?>
 	<div class="field-list">
 		<?php if(isset($page_user_fields)) :
@@ -111,20 +118,17 @@
 				<?php echo $id; ?>
 				<input type="hidden" name="id[]" value="<?php echo $id;?>" />
 				<p>
-						<label for="name">Name <span class="required">*</span></label>
-						<?php echo form_error('edit_name[]'); ?>
-						<input type="text" name="edit_name[]" maxlength="255" value="<?php echo set_value('edit_name[]', issetor($field['name'])); ?>"  />
+						<label <?php echo (form_error('edit_name[]')? 'class="error" style="color: red"':''); ?>>Name <span class="required">*</span></label>
+						<input type="text" name="edit_name[]" maxlength="255" value="<?php echo issetor($field['name']); ?>"  /><?php print($field['name']);?>
 				</p>
 
 				<p>
-						<label for="label">Label <span class="required">*</span></label>
-						<?php echo form_error('edit_label[]'); ?>
-						<input type="text" name="edit_label[]" maxlength="255" value="<?php echo set_value('edit_label[]',  issetor($field['label'])); ?>"  />
+						<label <?php echo (form_error('edit_label[]')? 'class="error" style="color: red"':''); ?>>Label <span class="required">*</span></label>
+						<input type="text" name="edit_label[]" maxlength="255" value="<?php echo issetor($field['label']); ?>"  />
 				</p>
 
 				<p>
-						<label for="type">Type <span class="required">*</span></label>
-						<?php echo form_error('type'); ?>
+						<label <?php echo (form_error('edit_type[]')? 'class="error" style="color: red"':''); ?>>Type <span class="required">*</span></label>
 						
 						<?php $options = array(
 						  ''  => 'Select Type',
@@ -134,70 +138,60 @@
 						  'radio' => 'Radio'
 						); ?>
 
-						<?php echo form_dropdown('edit_type[]', $options, set_value('edit_type[]',  issetor($field['type'])))?>
+						<?php echo form_dropdown('edit_type[]', $options, issetor($field['type']))?>
 				</p>                                             
 											
 				<p>
+						<input type="checkbox" name="edit_required[]" value="<?php echo $nth;?>" class="" <?php echo issetor($field['required']) != '' ? 'checked' : ''; ?>> 
 					
-						<?php echo form_error('edit_required[]'); ?>
-						
-						<?php // Change the values/css classes to suit your needs ?>
-						<input type="checkbox" name="edit_required[]" value="<?php echo $nth;?>" class="" <?php echo set_checkbox('edit_required[]', $nth, issetor($field['required']) != ''); ?>> 
-								   
-					<label for="required">Required</label>
+					<label <?php echo (form_error('edit_required[]')? 'class="error" style="color: red"':''); ?>>Required <span class="required">*</span></label>
 				</p> 
 
 <!-- next release
 				<p>
 					
-						<?php echo form_error('edit_rules[]'); ?>
-						
-						<?php // Change the values/css classes to suit your needs ?>
 						<input type="checkbox" name="edit_rules[]" value="rules" class="" <?php echo set_checkbox('edit_rules[]', 'rules'); ?>> 
 								   
-					<label for="rules">Rules</label>
+						<label <?php echo (form_error('edit_rules[]')? 'class="error" style="color: red"':''); ?>>Rules <span class="required">*</span></label>
 				</p>
 -->				
 				<p>
-						<label for="items">Items</label>
-						<?php echo form_error('edit_items[]'); ?>
+						<label <?php echo (form_error('edit_items[]')? 'class="error" style="color: red"':''); ?>>Items <span class="required">*</span></label>
 						<?php if(is_array(issetor($field['items']))) : ?>
-							<input type="text" name="edit_items[]"  value="<?php echo set_value('edit_items[]',  implode(',',$field['items'])); ?>" />
+							<input type="text" name="edit_items[]"  value="<?php echo implode(',',$field['items']); ?>" />
 						<?php else :?>
-							<input type="text" name="edit_items[]"  value="<?php echo set_value('edit_items[]'); ?>" />
+							<input type="text" name="edit_items[]"  value="" />
 						<?php endif; ?>
 				</p>
 
 				<p>
-						<label for="order">Order <span class="required">*</span></label>
-						<?php echo form_error('edit_order[]'); ?>
-						<input type="text" name="edit_order[]" maxlength="5" value="<?php echo set_value('edit_order[]', issetor($field['order'])); ?>"  />
+						<label <?php echo (form_error('edit_order[]')? 'class="error" style="color: red"':''); ?>>Order <span class="required">*</span></label>
+						<input type="text" name="edit_order[]" maxlength="5" value="<?php echo  issetor($field['order']); ?>"  />
 				</p>
-
-				[Button] remove this field!
+				
+				<p>
+						<input type="checkbox" name="edit_remove[]" value="<?php echo $id;?>" class=""> 
+						<label <?php echo (form_error('edit_remove[]')? 'class="error" style="color: red"':''); ?>>Remove <span class="required">*</span></label>
+				</p> 
 				<hr />
 			<?php $nth++;
 			endforeach;
 		endif;
 		?>
 		add new field
-		<p>
-						<label for="name">Name <span class="required">*</span></label>
-						<?php echo form_error('name'); ?>
+				<p>		
+						<label <?php echo (form_error('name')? 'class="error" style="color: red"':''); ?>>Name <span class="required">*</span></label>
 						<input type="text" name="name" maxlength="255" value="<?php echo set_value('name'); ?>"  />
 				</p>
 
 				<p>
-						<label for="label">Label <span class="required">*</span></label>
-						<?php echo form_error('label'); ?>
+						<label <?php echo (form_error('label')? 'class="error" style="color: red"':''); ?>>Label <span class="required">*</span></label>
 						<input type="text" name="label" maxlength="255" value="<?php echo set_value('label'); ?>"  />
 				</p>
 
 				<p>
-						<label for="type">Type <span class="required">*</span></label>
-						<?php echo form_error('type'); ?>
+						<label <?php echo (form_error('type')? 'class="error" style="color: red"':''); ?>>Type <span class="required">*</span></label>
 						
-						<?php // Change the values in this array to populate your dropdown as required ?>
 						<?php $options = array(
 						  ''  => 'Select Type',
 						  'text'    => 'Text',
@@ -210,35 +204,24 @@
 				</p>                                             
 											
 				<p>
-					
-						<?php echo form_error('required'); ?>
-						
-						<?php // Change the values/css classes to suit your needs ?>
 						<input type="checkbox" name="required" value="1" class="" <?php echo set_checkbox('required', 1); ?>> 
-								   
-					<label for="required">Required</label>
+						<label <?php echo (form_error('required')? 'class="error" style="color: red"':''); ?>>Required <span class="required">*</span></label>
 				</p> 
 
 <!-- next release
 				<p>
-					
-						<?php echo form_error('rules'); ?>
-						
-						<?php // Change the values/css classes to suit your needs ?>
 						<input type="checkbox" name="rules" value="enter_value_here" class="" <?php echo set_checkbox('rules'); ?>> 
 								   
-					<label for="rules">Rules</label>
+					<label <?php echo (form_error('rules')? 'class="error" style="color: red"':''); ?>>Rules <span class="required">*</span></label>
 				</p>
 -->				
 				<p>
-						<label for="items">Items</label>
-						<?php echo form_error('items'); ?>
+						<label <?php echo (form_error('items')? 'class="error" style="color: red"':''); ?>>Items <span class="required">*</span></label>
 						<input type="text" name="items" value="<?php echo set_value('items'); ?>"  />
 				</p>
 
 				<p>
-						<label for="order">Order <span class="required">*</span></label>
-						<?php echo form_error('order'); ?>
+						<label <?php echo (form_error('order')? 'class="error" style="color: red"':''); ?>>Order <span class="required">*</span></label>
 						<input type="text" name="order" maxlength="5" value="<?php echo set_value('order'); ?>"  />
 				</p>
 	</div>
@@ -247,9 +230,11 @@
 	
 	<?php echo form_close(); ?>
 </div>
+<?php endif; ?>
 
+<?php if(!isset($partial) || $partial == 'page-application') : ?>
 <div id="page-application">
-<?php if(isset($success)==TRUE) echo 'Updated'; ?>
+<?php if(isset($success)) echo 'Updated'; ?>
 <h2><span>Page applications</span></h2>
    <div class="company-app">
 		<ul>
@@ -267,6 +252,7 @@
 		</ul>
 	</div>
 </div>
+<?php endif; ?>
 <!--
 <div id="delete-page" class="style01">
 	<h2><span>Delete Page</span></h2>
