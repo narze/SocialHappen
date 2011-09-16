@@ -22,7 +22,9 @@
 				<?php endforeach; ?>
 			</ul>
 			</li>
+			<?php if($user_current_package_id) { ?>
 			<li><a class="package-billing" href="<?php echo base_url()."settings?s=package&id={$user['user_id']}";?>"><b>Package/Billing</b></a>
+			<?php } ?>
 			<!--<li><a><b>Reference</b></a></li>-->
 		</ul>
 	</div>

@@ -1,4 +1,9 @@
 $(function(){
+	
+	$('.notice a.close').live('click', function() {
+		$(this).parent().toggle();
+	});
+
 	for(i in user_companies){
 		$.ajax({
 			url: base_url+'company/json_get_profile/' + user_companies[i].company_id,
