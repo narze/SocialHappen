@@ -12,8 +12,8 @@
                   <strong>Picture profile :</strong>
 				<?php echo form_error('company_image'); ?>
                   <div class="pic-profile bg-none">
-                    <p class="pic"><img src="<?php echo imgsize($company['company_image'],'square');?>" /></p>
-                    <p><a class="bt-change_pic" href="#"><input id="company_image" type="file" name="company_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
+                    <p class="pic"><img class="company-image" src="<?php echo imgsize($company['company_image'],'square');?>" /></p>
+                    <p><a class="bt-change_pic"><input id="company_image" type="file" name="company_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
                   </div>
                 </li>
                 <li><strong>Company name :</strong><?php echo form_error('company_name'); ?><input id="company_name" type="text" name="company_name" maxlength="255" value="<?php echo html_entity_decode(set_value('company_name',$company['company_name'])); ?>"  /></li>
@@ -34,7 +34,7 @@
 		<ul>
 			<?php foreach($company_users as $user): ?>
 				<li class="<?php echo strtolower($user['user_role_name']);?>">
-				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
+				  <p><img class="user-image" src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
 				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
 				</li>
 			<?php endforeach; ?>
@@ -59,10 +59,10 @@
 			<ul>
 				<?php foreach($company_apps as $app): ?>
 					<li>
-					 <p><img alt="" src="<?php echo imgsize($app['app_image'],'normal');; ?>">
+					 <p><img alt="" class="app-image" src="<?php echo imgsize($app['app_image'],'normal');; ?>">
                       <span class="button">
-                        <a href="#" class="bt-update_app"><span>update</span></a>
-                        <a href="#" class="bt-setting_app"><span>Setting</span></a>
+                        <a class="bt-update_app"><span>update</span></a>
+                        <a class="bt-setting_app"><span>Setting</span></a>
                       </span>
                      </p>
                     <p><?php echo $app['app_name']?></p>
@@ -77,7 +77,7 @@
 		<div>
 			  <p>Text tell user what happen when delete company</p>
 			  <p>and if user have a problem he can contact our support or see FAQs</p>
-			  <p><a class="bt-delete_company-1" href="#"><span>Close account</span></a></p>
+			  <p><a class="bt-delete_company-1"><span>Close account</span></a></p>
 		</div>
     </div>-->
 </div>

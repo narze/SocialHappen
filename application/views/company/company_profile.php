@@ -1,7 +1,7 @@
 <div class="box-information">
 	<div class="details">
 	  <div class="pic">
-	    <p><img src="<?php echo imgsize(issetor($company_profile['company_image']),'large'); ?>" alt=""></p>
+	    <p><img class="company-image" src="<?php echo imgsize(issetor($company_profile['company_image']),'large'); ?>" alt=""></p>
 	  </div>
 	  <h2><?php echo issetor($company_profile['company_name']); ?></h2>
 	  <p><?php echo issetor($company_profile['company_detail']); ?></p>

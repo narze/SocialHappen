@@ -91,7 +91,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 		success: function(json) {
 			var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
             for(i in json){
-				ul_element.append('<li><p><img src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
+				ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
 					+'<span class="button">'
                     +'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
                     +'<a class="bt-setting_app" href="'+base_url+'settings/'+page_id+'/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
@@ -189,7 +189,7 @@ function show_available_app_in_page(page_id){
 			var ul_element=$(".right-panel").find('.dragging-app').find('ul');
             for(i in json){
 				ul_element.append(
-					'<li class="draggable"><p><img src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" /></p>'
+					'<li class="draggable"><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" /></p>'
 					+'<p>'+ json[i].app_name +'</p>'
 					+"<input class='app_id' type='hidden' value='" + json[i].app_id + "'/>"
 					+"<input class='app_install_url' type='hidden' value='" + json[i].app_install_url + "'/>"		    

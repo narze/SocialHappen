@@ -26,7 +26,7 @@ $(function(){
 					.appendTo('.wrapper-details.campaigns .details.campaigns table');
 
 					var campaign_list = row.find('td.app-list div');
-					campaign_list.find('p.thumb img').attr('src', imgsize(json[i].campaign_image,'normal'));
+					campaign_list.find('p.thumb img').attr('src', imgsize(json[i].campaign_image,'normal')).addClass('campaign-image');
 					campaign_list.find('h2').append('<a href="'+base_url+'campaign/'+json[i].campaign_id+'">'+json[i].campaign_name+'</a>');
 					campaign_list.find('p.description').append(json[i].campaign_description);
 					

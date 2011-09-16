@@ -23,7 +23,7 @@
                   <strong>Picture profile :</strong>
 				<?php echo form_error('user_image'); ?>
                   <div class="pic-profile">
-                    <p class="pic"><img src="<?php echo imgsize($user['user_image'],'square');?>" /></p>
+                    <p class="pic"><img class="user-image" src="<?php echo imgsize($user['user_image'],'square');?>" /></p>
                     <p><a class="bt-change_pic" href="#"><input id="user_image" type="file" name="user_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
 					<p>
 						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?>> 

@@ -22,7 +22,7 @@
                   <strong>Picture profile :</strong>
 				<?php echo form_error('page_image'); ?>
                   <div class="pic-profile">
-                    <p class="pic"><img src="<?php echo imgsize($page['page_image'],'square');?>" /></p>
+                    <p class="pic"><img class="page-image" src="<?php echo imgsize($page['page_image'],'square');?>" /></p>
                     <p><a class="bt-change_pic"><input id="page_image" type="file" name="page_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
 					<p>
 						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?> /> 
@@ -50,7 +50,7 @@
 			<?php foreach($company_users as $user): 
 				$role = issetor($user['page_user_role_name']);?>
 				<li class="<?php echo strtolower($role);?>">
-				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /><a href="#"></a></p>
+				  <p><img class="user-image" class="user-image" src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /><a></a></p>
 				  <p>
 					<input type="checkbox" name="page_admin[]" class="page_admin" value=<?php echo $user['user_id'];?> <?php echo set_checkbox('page_admin', $user['user_id'], issetor($user['page_user_role_id'])!=''); ?> />
 				  </p>
@@ -76,7 +76,7 @@
 			<?php endforeach; ?>
 			<?php foreach($page_users as $user): ?>
 				<li class="<?php echo strtolower($user['user_role_name']);?>">
-				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
+				  <p><img class="user-image" src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
 				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
 				</li>
 			<?php endforeach; ?>
@@ -252,10 +252,10 @@
 		<ul>
 			<?php foreach($page_apps as $app): ?>
 				<li>
-				 <p><img alt="" src="<?php echo imgsize($app['app_image'],'normal'); ?>">
+				 <p><img alt="" class="app-image" src="<?php echo imgsize($app['app_image'],'normal'); ?>">
 				  <span class="button">
-					<a href="#" class="bt-update_app"><span>update</span></a>
-					<a href="#" class="bt-setting_app"><span>Setting</span></a>
+					<a class="bt-update_app"><span>update</span></a>
+					<a class="bt-setting_app"><span>Setting</span></a>
 				  </span>
 				 </p>
 				<p><?php echo $app['app_name']?></p>
@@ -270,7 +270,7 @@
 	<div>
 		  <p>Text tell user what happen when delete page</p>
 		  <p>and if user have a problem he can contact our support or see FAQs</p>
-		  <p><a class="bt-delete_page" href="#"><span>Delete page</span></a></p>
+		  <p><a class="bt-delete_page"><span>Delete page</span></a></p>
 	</div>
 </div>
 -->
