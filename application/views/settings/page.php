@@ -21,14 +21,17 @@
                 <li>
                   <strong>Picture profile :</strong>
 				<?php echo form_error('page_image'); ?>
-                  <div class="pic-profile">
+				   <div class="pic-profile">
                     <p class="pic"><img class="page-image" src="<?php echo imgsize($page['page_image'],'square');?>" /></p>
-                    <p><a class="bt-change_pic"><input id="page_image" type="file" name="page_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
+                    <p>
+						<input id="page_image" type="file" name="page_image" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 144px; "/>
+						<a class="bt-change_pic" href="#"><span>Change picture</span></a>
+					</p>
 					<p>
-						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?> /> 
-						<label for="use_facebook_picture">use your facebook avatar</label>
+						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?>> 
+						<label for="use_facebook_picture">use your facebook page avatar</label>
 					</p> 
-				  </div>
+                  </div>
                 </li>
                 <li><strong>page name :</strong><?php echo form_error('page_name'); ?><input id="page_name" type="text" name="page_name" maxlength="255" value="<?php echo set_value('page_name',$page['page_name']); ?>"  /></li>
                 <li><strong>page detail :</strong><?php echo form_error('page_detail'); ?><?php echo form_textarea( array( 'name' => 'page_detail', 'id' => 'page_detail' , 'cols'=> 30 ,'value' => set_value('page_detail',$page['page_detail']) ) ); ?></li>

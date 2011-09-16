@@ -11,9 +11,12 @@
                 <li>
                   <strong>Picture profile :</strong>
 				<?php echo form_error('company_image'); ?>
-                  <div class="pic-profile bg-none">
+				  <div class="pic-profile bg-none">
                     <p class="pic"><img class="company-image" src="<?php echo imgsize($company['company_image'],'square');?>" /></p>
-                    <p><a class="bt-change_pic"><input id="company_image" type="file" name="company_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
+                    <p>
+						<input id="company_image" type="file" name="company_image" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 144px; "/>
+						<a class="bt-change_pic" href="#"><span>Change picture</span></a>
+					</p>
                   </div>
                 </li>
                 <li><strong>Company name :</strong><?php echo form_error('company_name'); ?><input id="company_name" type="text" name="company_name" maxlength="255" value="<?php echo html_entity_decode(set_value('company_name',$company['company_name'])); ?>"  /></li>
