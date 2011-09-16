@@ -19,11 +19,11 @@ $(function(){
 					// $.get(document.images[i].src).error(function(){console.log('ss');
 						// $(this).attr('src', cpyImg.src);
 					// });
-					document.images[i].src = base_url +'assets/images/blank.png';
+					//document.images[i].src = base_url +'assets/images/blank.png';
 				}
 			};
 		}
 	}
-	failsafeImg();
+	//failsafeImg();
 	$("*").ajaxStop(failsafeImg);
 });
