@@ -11,7 +11,9 @@
 </div>
 
 <div id="account-information"> 
-	<?php if(isset($success)) echo 'Updated'; ?>
+	<?php if(isset($success)) { ?>
+	<div class="notice success">Updated<a class="close"></a></div>
+	<?php } ?>
 	<h2><span>Account information</span></h2>
 		
 <?php // Change the css classes to suit your needs   
@@ -24,7 +26,10 @@
 				<?php echo form_error('user_image'); ?>
                   <div class="pic-profile">
                     <p class="pic"><img class="user-image" src="<?php echo imgsize($user['user_image'],'square');?>" /></p>
-                    <p><a class="bt-change_pic" href="#"><input id="user_image" type="file" name="user_image" style="opacity: 0; height: 30px; "/><span>Change picture</span></a></p>
+                    <p>
+						<input id="user_image" type="file" name="user_image" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 144px; "/>
+						<a class="bt-change_pic" href="#"><span>Change picture</span></a>
+					</p>
 					<p>
 						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?>> 
 						<label for="use_facebook_picture">use your facebook avatar</label>

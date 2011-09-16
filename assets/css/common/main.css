@@ -17,6 +17,21 @@ a {
 	overflow:hidden;
 }
 
+/* Notification */
+.notice { line-height:30px; margin:5px auto; padding:0 10px!important; border:1px solid #999;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; position:relative; }
+.notice p {  }
+.notice ul { padding-left: 18px; }
+.notice ul li { list-style:disc!important; }
+.notice ol li { list-style:decimal!important; }
+.notice a { text-decoration:underline; font-weight:bold; }
+.notice a.close{ background: url(../../images/bg/notice_close.png) no-repeat top left; width: 10px; height: 10px; display: block; position: absolute; top: 10px; right: 10px; cursor:pointer; text-indent:-9000px; }
+.success { background-color:#efffbd; border-color:#cbd7a8; }
+.success a { color:#444e26; }
+.error { background-color:#ffc7c1; border-color:#e4aaa5; }
+.error a { color:#7f2b2b; }
+.warning { background-color:#fff6a8; border-color:#d9ce6e; }
+.warning a { color:#6d6311; }
+
 /* New botton */
 .bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs {
 	display: block;
@@ -28,10 +43,9 @@ a {
 	overflow:hidden;
 }
 .bt-pick {
-	width: 74px;
+	width: 64px;
 	height: 25px;
 	background-position: 0 0;
-	margin:-1px 11px 0 0;
 }
 .bt-free-trial { 
 	width: 183px;
@@ -69,104 +83,51 @@ div.wrapper-package { background-color: #494949; }
 div.packages-intro-text { color:#d3d3d3; height: 60px; margin-bottom:20px; font-size:16px; font-weight:bold; border-bottom:1px solid #5c5c5c; }
 div.packages-intro-text h2 { color:#FFF; font-size:20px; }
 
-div.remark {
-	width: 902px;
-	padding: 20px 0 10px;
-	margin: 0 auto;
-	position: relative;
-}
-div.more-info {
-	position:absolute;
-	top:20px;
-	right:0;
-	width:146px;
-	text-align:center;
-}
-div.more-info a { margin-top:5px;}
-
-ul#package_key {
-	float:left;
-	width:200px;
-	overflow:hidden;
-	color:#e2e2e2;
-	text-align:right;
-	font-weight:bold;
-}
-ul#package_key li { width: 190px; border-bottom:1px solid #5f5f5f; }
+ul#package_key { float:left; width:190px; padding-right:10px; overflow:hidden; color:#e2e2e2; text-align:right; font-weight:bold;}
+ul#package_key li { border-bottom:1px solid #5f5f5f; }
 ul#package_key li.package_price { height:82px; }
 ul#package_key li.package_price p { font-size:26px; position:relative; top:47px;}
-ul#package_key li.package_companies,
-ul#package_key li.package_pages,
-ul#package_key li.package_users,
-ul#package_key li.package_apps,
-ul#package_key li.package_stat { height:35px; line-height:36px;}
+ul#package_key li.feature { height:35px; line-height:36px;}
 ul#package_key li.package_detail { height:70px; line-height:36px;}
 
 div.packages {float:left; margin-bottom:20px;}
-
-ul.package {
-	float:left;
-	width:232px;
-	overflow:hidden;
-}
+ul.package { float:left; width:232px; overflow:hidden; }
+ul.package.last-child { width:229px; overflow:hidden; }
 ul.package li { font-weight:bold; text-align:center; }
-ul.package li.package_name { height:43px; background:url(../../images/bg/package_bg.png); }
+ul.package li.package_name, ul.package li.package_price, ul.package li.feature, ul.package li.buy { background-image:url(../../images/bg/package_bg.png); background-repeat:no-repeat; }
+ul.package li.package_name { height:43px; }
 ul.package li.package_name p { height:25px; line-height:25px; text-align:left; position:relative; top:10px; left:10px; font-size:14px; }
-ul.package li.package_price { width:229px; overflow:hidden; background:url(../../images/bg/package_bg.png) no-repeat -693px -46px; }
+ul.package li.package_name p a.bt-pick { position:absolute; top:-1px; left:148px; }
+ul.package li.package_price { width:229px; overflow:hidden; background-position: -693px -46px; }
 ul.package li.package_price p { color:#060606; height:40px; width:229px; background-position:7px -14px; background-repeat:no-repeat; text-align:right; font-size:24px;}
 ul.package li.package_price p span { position:relative; top:5px; right:4px }
 ul.package li.package_price p span small { font-size:60%; }
-ul.package li.package_companies,
-ul.package li.package_pages,
-ul.package li.package_users,
-ul.package li.package_apps,
-ul.package li.package_stat { height:36px; background-color:#FFF; border-right: 3px solid #909090;}
-ul.package li.package_detail { font-weight:normal; background-color:#FFF; border-right: 3px solid #909090; }
-ul.package li.buy { height:72px; background:url(../../images/bg/package_bg.png) no-repeat -925px bottom; }
-ul.package li.buy a { position:relative; left:22px;}
-
-ul.package li.package_companies p,
-ul.package li.package_pages p,
-ul.package li.package_users p,
-ul.package li.package_apps p,
-ul.package li.package_stat p { line-height:35px; width:229px; background-color:#FFF; border-bottom: 1px solid #e7e7e7;}
-ul.package li.package_detail p { width:229px; background-color:#FFF; border-bottom: 1px solid #e7e7e7; }
-ul.package li.package_detail a.more { display:block; color:#5e6f2a; line-height: 40px; font-weight:bold; }
+ul.package li.feature { height:36px; background-color:#FFF; background-position:-693px -87px; border-right: 3px solid #909090;}
+ul.package li.feature p { line-height:35px; width:229px; background-color:#FFF; border-bottom: 1px solid #e7e7e7;}
+ul.package li.package_detail { height:71px; overflow:hidden; font-weight:normal; background-color:#FFF; border-right: 3px solid #909090; }
+ul.package li.package_detail p { line-height:15px;}
+ul.package li.package_detail a.more { color:#5e6f2a; line-height: 40px; font-weight:bold; }
+ul.package li.buy { height:72px; background-position:-925px bottom; position:relative }
 ul.package li.buy p { text-align:center; }
-ul.package li.buy a.unsubscribe { color:#797979; font-size:11px; display:block; width: 184px; text-decoration:underline; }
+ul.package li.buy a.payment-pop { position:absolute; left:22px;}
+ul.package li.buy a.unsubscribe { color:#797979; font-size:11px; text-decoration:underline; }
 
-ul.package:first-child li.package_companies,
-ul.package:first-child li.package_pages,
-ul.package:first-child li.package_users,
-ul.package:first-child li.package_apps,
-ul.package:first-child li.package_stat { height:36px; padding-left:10px; background:url(../../images/bg/package_bg.png) no-repeat -693px -87px; }
-ul.package:first-child li.package_detail { padding-left:10px; background:url(../../images/bg/package_bg.png) no-repeat -693px -87px; }
-ul.package:first-child li.buy { background:url(../../images/bg/package_bg.png) no-repeat -693px bottom; }
+ul.package:first-child li.feature { padding-left:10px;}
+ul.package:first-child li.feature p { width:219px; border-bottom: 1px solid #e7e7e7;}
+ul.package:first-child li.buy { background-position:-693px bottom; }
+ul.last-child li.feature { padding-right:10px; border-right:0; }
+ul.last-child li.feature p { width:219px;}
+ul.last-child li.buy { background-position:-1157px bottom; }
 
-ul.package:first-child li.package_companies p,
-ul.package:first-child li.package_pages p,
-ul.package:first-child li.package_users p,
-ul.package:first-child li.package_apps p,
-ul.package:first-child li.package_stat p { line-height:35px; width:219px; border-bottom: 1px solid #e7e7e7;}
-ul.package:first-child li.package_detail p { width:219px; border-bottom: 1px solid #e7e7e7; }
+ul.selected li.feature { background-position:left -87px; }
+ul.selected li.feature p { background-color:#cbcbcb; }
+ul.selected li.buy { height:72px; background-position:-232px bottom; }
+ul.selected:first-child li.buy { background-position:left bottom; }
+ul.selected.last-child li.buy { background-position:-464px bottom; }
 
-
-ul.package:last-child li.package_companies,
-ul.package:last-child li.package_pages,
-ul.package:last-child li.package_users,
-ul.package:last-child li.package_apps,
-ul.package:last-child li.package_stat { height:36px; padding-right:10px; border-right:0; background:url(../../images/bg/package_bg.png) no-repeat -1157px -87px; }
-ul.package:last-child li.package_detail { padding-right:10px; border-right:0; background:url(../../images/bg/package_bg.png) no-repeat -1157px -87px; }
-ul.package:last-child li.buy { background:url(../../images/bg/package_bg.png) no-repeat -1157px bottom; }
-
-ul.package:last-child li.package_companies p,
-ul.package:last-child li.package_pages p,
-ul.package:last-child li.package_users p,
-ul.package:last-child li.package_apps p,
-ul.package:last-child li.package_stat p { line-height:35px; width:219px; background-color:#FFF; border-bottom: 1px solid #e7e7e7;}
-ul.package:last-child li.package_detail p { width:219px; background-color:#FFF; border-bottom: 1px solid #e7e7e7; }
-
-
+div.remark { width: 902px; padding: 20px 0 10px; margin: 0 auto; position: relative; }
+div.more-info { position:absolute; top:20px; right:0; width:146px; text-align:center; }
+div.more-info a { margin-top:5px;}
 
 /* FancyBox Hack */
 #fancybox-outer {

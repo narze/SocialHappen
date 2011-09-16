@@ -2,22 +2,22 @@
 	
 	<div class="wrapper-details">
 		<div class="packages-intro-text">
-			<a class="bt-package-setting fr" href="<?php echo base_url().'settings?s=package&id='.$user_id;?>">Package Setting</a>
+			<?php if($user_current_package_id) { ?><a class="bt-package-setting fr" href="<?php echo base_url().'settings?s=package&id='.$user_id;?>">Package Setting</a><?php } ?>
 			<h2>Choose the package that's best for your needs</h2>
 			<p>You can updrade at any time.</p>
 		</div>
 	
 		<ul id="package_key">				
 			<li class="package_price"><p>Feature</p></li>
-			<li class="package_companies"><p>Companies</p></li>
-			<li class="package_pages"><p>Pages</p></li>
-			<li class="package_users"><p>Members</p></li>
-			<li class="package_apps"><p>Applications</p></li>
-			<li class="package_stat"><p>Members' Stat</p></li>
-			<li class="package_detail"><p>Package Details</p></li>
+			<li class="package_companies feature"><p>Companies</p></li>
+			<li class="package_pages feature"><p>Pages</p></li>
+			<li class="package_users feature"><p>Members</p></li>
+			<li class="package_apps feature"><p>Applications</p></li>
+			<li class="package_stat feature"><p>Members' Stat</p></li>
+			<li class="package_detail feature"><p>Package Details</p></li>
 		</ul>
 		<div class="packages">
-			<?php
+			<?php $i=1; $last_package = count($packages);
 			foreach($packages as $package) 
 			{
 				
@@ -25,11 +25,11 @@
 				else $selected = false;
 				
 				?>  
-				<ul id="package-<?php echo $package['package_id']; ?>" class="package<?php if($selected) echo ' selected'; ?>">
+				<ul id="package-<?php echo $package['package_id']; ?>" class="package<?php if($selected) echo ' selected'; if($i == $last_package) echo ' last-child'; ?>">
 					<li class="package_name">
 						<p>
 							<?php echo $package['package_name']; ?>
-							<?php if(!$selected && $package['package_price'] >= $user_current_package_price) { ?><a class="bt-pick fr payment-pop" href="<?php echo base_url().'home/package?package_id='.$package['package_id']; ?>" >Pick</a><?php } ?>
+							<?php if(!$selected && $package['package_price'] >= $user_current_package_price) { ?><a class="bt-pick payment-pop" href="<?php echo base_url().'home/package?package_id='.$package['package_id']; ?>" >Pick</a><?php } ?>
 						</p>
 					</li>
 					<li class="package_price">
@@ -37,12 +37,12 @@
 						<span><?php echo $package['package_price'] == 0 ? 'Free': number_format($package['package_price']).'<small>USD/Month</small>'; ?></span>
 						</p>
 					</li>
-					<li class="package_companies"><p><?php echo number_format($package['package_max_companies']); ?> <?php echo $package['package_max_companies'] > 1 ? 'Companies' : 'Company'; ?></p></li>
-					<li class="package_pages"><p><?php echo number_format($package['package_max_pages']); ?> <?php echo $package['package_max_pages'] > 1 ? 'Companies' : 'Company'; ?></p></li>
-					<li class="package_users"><p><?php echo number_format($package['package_max_users']); ?> <?php echo $package['package_max_users'] > 1 ? 'Companies' : 'Company'; ?></p></li>
-					<li class="package_apps"><p>3 Applications</p></li>
-					<li class="package_stat"><p>Full<span class="asterisk">*</span></p></li>
-					<li class="package_detail"><p><br /><?php echo $package['package_detail']; ?><a class="more">For more detail</a></p></li>
+					<li class="package_companies feature"><p><?php echo number_format($package['package_max_companies']); ?> <?php echo $package['package_max_companies'] > 1 ? 'Companies' : 'Company'; ?></p></li>
+					<li class="package_pages feature"><p><?php echo number_format($package['package_max_pages']); ?> <?php echo $package['package_max_pages'] > 1 ? 'Pages' : 'Page'; ?></p></li>
+					<li class="package_users feature"><p><?php echo number_format($package['package_max_users']); ?> <?php echo $package['package_max_users'] > 1 ? 'Users' : 'User'; ?></p></li>
+					<li class="package_apps feature"><p>3 Applications</p></li>
+					<li class="package_stat feature"><p>Full<span class="asterisk">*</span></p></li>
+					<li class="package_detail feature"><p><br /><?php echo $package['package_detail']; ?><br /><a class="more">For more detail</a></p></li>
 					<li class="buy">
 						<p><br /><?php 
 						if($selected)
@@ -71,7 +71,7 @@
 						} ?>
 						</p>
 					</li>
-				</ul><?php
+				</ul><?php $i++;
 			} ?>
 			
 			

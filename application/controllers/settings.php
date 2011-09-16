@@ -27,6 +27,10 @@ class Settings extends CI_Controller {
 				}
 			}
 			
+			$this->load->model('package_users_model','package_users');
+			$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
+			$user_current_package_id = isset($user_current_package['package_id']) ? $user_current_package['package_id'] : 0;
+			
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_company_id($company_id);
 			$data = array(
@@ -71,7 +75,8 @@ class Settings extends CI_Controller {
 				TRUE),
 				'sidebar' => $this -> load -> view('settings/sidebar', 
 					array(
-						'company_pages' => issetor($company_pages)
+						'company_pages' => issetor($company_pages),
+						'user_current_package_id' => $user_current_package_id
 					),
 				TRUE),
 				'main' => $this -> load -> view("settings/main", 
