@@ -57,7 +57,8 @@ $(function(){
 	}
 	
 	$('ul.detail li.package-apps').live('hover', function () {
-		$('div.package-overlay').slideToggle("slow");
+		//$('div.package-overlay').slideToggle("slow");
+		$('div.package-overlay').toggle();
 	});
 	
 });

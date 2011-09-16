@@ -499,3 +499,8 @@ div.box-current_package div.detail p.thumb {
 div.box-current_package div.package-overlay {
 	top:171px;
 }
+div.box-current_package div.package-overlay ul > li
+{
+	font-size:10px;
+	width:90px;
+}
