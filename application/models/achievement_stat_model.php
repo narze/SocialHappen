@@ -71,7 +71,7 @@ class Achievement_stat_model extends CI_Model {
 			&& (empty($info['campaign_id']) || isset($info['app_install_id']));
 		
 		if($check_args){
-			$criteria = array('app_id' => $app_id, 'user_id' => $user_id);
+			$criteria = array('app_id' => (int)$app_id, 'user_id' => (int)$user_id);
 				
 			$inc = array();
 			$result = TRUE;
@@ -123,7 +123,7 @@ class Achievement_stat_model extends CI_Model {
 									 && empty($info['user_id']);
 		
 		if($check_args){
-			$criteria = array('app_id' => $app_id, 'user_id' => $user_id);
+			$criteria = array('app_id' => (int)$app_id, 'user_id' => (int)$user_id);
 			
 			$result = $this->achievement_stat->update($criteria,
 				array('$set' => $info), TRUE);
@@ -150,8 +150,8 @@ class Achievement_stat_model extends CI_Model {
 		if($check_args){
 			
 			
-			$res = $this->achievement_stat->find(array('app_id' => $app_id,
-																								 'user_id' => $user_id))
+			$res = $this->achievement_stat->find(array('app_id' => (int)$app_id,
+																								 'user_id' => (int)$user_id))
 																		->limit(1);
 			$result = array();
 			foreach ($res as $stat) {

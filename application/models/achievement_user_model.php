@@ -86,20 +86,20 @@ class Achievement_user_model extends CI_Model {
 			/**
 			 * keys
 			 */
-			$achievement_user['user_id'] = $user_id;
+			$achievement_user['user_id'] = (int)$user_id;
 			
 			$achievement_user['achievement_id'] = $achievement_id_ref;
-			$achievement_user['app_id'] = $app_id;
-			$achievement_user['app_install_id'] = $app_install_id;
+			$achievement_user['app_id'] = (int)$app_id;
+			$achievement_user['app_install_id'] = (int)$app_install_id;
 			
 			date_default_timezone_set('Asia/Bangkok');
 			$achievement_user['timestamp'] = time();
 
 			if(isset($info['page_id'])){
-				$achievement_user['page_id'] = $info['page_id'];
+				$achievement_user['page_id'] = (int)$info['page_id'];
 			}
 			if(isset($info['campaign_id'])){
-				$achievement_user['campaign_id'] = $info['campaign_id'];
+				$achievement_user['campaign_id'] = (int)$info['campaign_id'];
 			}
 			
 			return $this->achievement_user->insert($achievement_user);

@@ -355,6 +355,7 @@ class Api extends CI_Controller {
 	/**
 	 * Request for log 	
 	 * @author Wachiraph C. - revise June 2011
+	 * @author Manassarn M. - Add increment achievement
 	 */		
 	function request_log_user(){
 		
@@ -363,9 +364,11 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$campaign_id = $this->input->get('campaign_id', TRUE);
 		$action = $this->input->get('action', TRUE);
 			
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id || $user_facebook_id)){
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id)'));
 			return;
@@ -389,6 +392,9 @@ class Api extends CI_Controller {
 		$this->load->model('User_apps_model', 'User_apps');
 		$this->load->model('User_model', 'User');
 		
+		if(!$user_id){
+			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		}
 		// if not exist user, create it
 		if(!$this->User_apps->check_exist($user_id, $app_install_id)){
 			$this->User_apps->add_new($user_id, $app_install_id);
@@ -398,45 +404,59 @@ class Api extends CI_Controller {
 		$this->User_apps->update_user_last_seen($user_id, $app_install_id);
 		$this->User->update_user_last_seen($user_id);
 				
-		if(!($action)){
+		if(!($action)){ //TODO : use sh globals
 			$action = 103;
-		}else{
-			switch ($action) {
-				case 2:
-					$action = 104;
-					break;
-				case 3:
-					$action = 105;
-					break;
-				case 4:
-					$action = 4;
-				default:
-					$action = 103;
-					break;
-			}
 		}
-		
+		$this->load->model('installed_apps_model','installed_apps');
+		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		$company_id = $app['company_id'];
 		$this->load->model('Audit_action_type_model', 'Audit_action_type');
 		$audit_auction_type = $this->Audit_action_type->get_audit_action_by_type_id($action);
 		$action_text = $audit_auction_type['audit_action_name'];
-		
-		$this->audit_lib->add_audit(
-										$app_id,
-										$user_id,
-										$action,
-										'', 
-										'',
-										array(
-												'app_install_id'=> $app_install_id,
-												'company_id' => $company_id
-											)
-									);
-		$response = array(	'status' => 'OK',
-						'action_text' => $action_text,
-						'message' => 'logged');
+		$this->load->library('audit_lib');
+		//($app_id = NULL, $subject = NULL, $action_id = NULL, $object = NULL, $objecti = NULL, $additional_data = array())
+		$result = $this->audit_lib->add_audit(
+			$app_id,
+			NULL,
+			$action,
+			NULL, 
+			NULL,
+			array(
+				'app_install_id'=> $app_install_id,
+				'company_id' => $company_id,
+				'user_id'=> $user_id,
+				'page_id' => issetor($app['page_id'])
+			)
+		);
+		if(!$result){
+		$response = array(
+			'status' => 'ERROR',
+			'message' => 'not logged');
+			echo json_encode($response);
+			return;
+		}
+	
+		$this->load->library('achievement_lib');
+		$info = array('action_id'=> $action, 'app_install_id'=>$app_install_id, 'page_id' =>issetor($app['page_id']));
+		if($campaign_id){
+			$info['campaign_id'] = $campaign_id;
+		}
+		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, 1);
+		if($result){
+			$response = array(	
+				'status' => 'OK',
+				'action_text' => $action_text,
+				'message' => 'logged, incremented'
+			);
+		} else {	
+			$response = array(	
+				'status' => 'ERROR',
+				'action_text' => $action_text,
+				'message' => 'logged, not inremented'
+			);
+		}
 		
 		echo json_encode($response);
-		 
 	}
 	
 	/**

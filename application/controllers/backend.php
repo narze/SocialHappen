@@ -754,7 +754,7 @@ class Backend extends CI_Controller {
 		$app_list = $this->User_apps->get_user_apps_by_user_id($user_id, $config['per_page'], $offset);
 		$al = array();
 		foreach($app_list as $app){
-			$app_install = $this->Installed_apps->get_app_profile_by_app_install_id($user_id);
+			$app_install = $this->Installed_apps->get_app_profile_by_app_install_id($app['app_install_id']);
 			foreach ($app_install as $key => $value) {
 				$app[$key] = $value;
 			}
