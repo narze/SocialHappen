@@ -202,16 +202,25 @@ class Payment extends CI_Controller {
 			switch($order['payment_method'])
 			{
 				//case 'bank_transfer': break;
-				case 'paypal': $this->_set_express_checkout($data); break;
-				//case 'credit_card': break;
 				//case 'counter_service': break;
-				default : 
-					//Free package, redirect to first company
-					$url = base_url().'company/'.$user_first_company['company_id'].'?popup=thanks&package_id='.$package['package_id'];
-					echo json_encode(array('status'=>'OK', 'msg'=> $url ));  
+				case 'credit_card':
+				case 'paypal':
+					$PayPalResult = $this->_set_express_checkout($data);
+					if($PayPalResult['ERRORS']) 
+					{
+						echo json_encode(array('status'=>'ERROR', 'msg'=> implode('<br />', $PayPalResult['ERRORS']) ));
+						return false;
+					}
+					else
+					{
+						$url = $PayPalResult['REDIRECTURL'];
+					}
+					break;
+				default : //Free package, redirect to first company
+					$url = base_url().'company/'.$user_first_company['company_id'].'?popup=thanks';
 					break;
 			}
-
+			echo json_encode(array('status'=>'OK', 'msg'=> $url ));
 		}
 	}
 	
@@ -225,7 +234,7 @@ class Payment extends CI_Controller {
 		$view_data = array(
 				'header' => $this -> socialhappen -> get_header( 
 					array(
-						'title' => 'Payment Confirm',
+						'title' => 'Payment Summary',
 						'script' => array(
 							'common/functions',
 							'common/jquery.form',
@@ -244,7 +253,7 @@ class Payment extends CI_Controller {
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
 					array(
 						'breadcrumb' => array( 
-							'Signup' => NULL
+							'Payment Summary' => NULL
 						)
 					),
 				TRUE),
@@ -295,12 +304,19 @@ class Payment extends CI_Controller {
 		if($profileid)
 		{
 			//$current_recurring_payment = $this->_get_recurring_payments_profile_details($profileid);
-			$data = array(
+			$cancel_data = array(
 				'profileid' => $profileid,
 				'action' => 'Cancel', 	// Cancel, Suspend, Reactivate
 				'note' => 'Upgrade package'
 			);
-			$this->_manage_recurring_payments_profile_status($data);
+			$PayPalResult = $this->_manage_recurring_payments_profile_status($cancel_data);
+			
+			if($PayPalResult['ERRORS']) 
+			{ 			
+				$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while canceling paypal recurring payments profile.'),TRUE);
+				$this->parser->parse('payment/payment_view', $view_data);
+				return false;
+			}
 		}
 		
 		// 4. Create recurring payments profile
@@ -310,13 +326,19 @@ class Payment extends CI_Controller {
 				'autobillamt' => 'AddToNextBilling'
 			);
 		$data['billing_period'] = array(
-				'billingperiod' => 'Day', // Month
+				'billingperiod' => 'Month', // Month
 				'billingfrequency' => 1, //1 = monthly , 2 = every2months
 				'totalbillingcycles' => 0, //0 = until canceled
 				'amt' => $order['order_net_price'], //Price
 				'currencycode' => 'USD'
 			);
 		$PayPalResult = $this->_create_recurring_payments_profile($data);
+		if($PayPalResult['ERRORS']) 
+		{ 			
+			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while creating paypal recurring payments profile.'),TRUE);
+			$this->parser->parse('payment/payment_view', $view_data);
+			return false;
+		}
 
 		// 5. Update order status to "Processed" and Update billing info form paypal
 		$order['billing_info']['profile_id'] = issetor($PayPalResult['PROFILEID']);
@@ -355,17 +377,27 @@ class Payment extends CI_Controller {
 		}
 		
 		//8. Payment complete
+		$view_data['header'] = $this->socialhappen->get_header( 
+					array(
+						'title' => 'Payment Summary',
+						'script' => array(
+							'home/lightbox',
+							'payment/payment'
+						),
+						'vars' => array(
+							'popup_name' => 'payment/payment_complete/'.$order_items[0]['item_id']
+						)
+					)
+				);
 		$view_data['payment_body'] = $this->load->view('payment/payment_summary_paypal', array(
 			'order' => array(
 				'order_id' => $order['order_id'],
 				'billing_info' => $order['billing_info']['user_first_name'].' '.$order['billing_info']['user_last_name'],
-				'package_id' => $order_items[0]['item_id'],
 				'package' => $order_items[0]['item_name'],
 				'payment_method' => ucfirst(str_replace('_', ' ', $order['payment_method'])),
 				'order_net_price' => $order['order_net_price']
-			),
-			'popup' => 'payment_complete'
 			)
+		)
 		,TRUE);
 
 		$this->parser->parse('payment/payment_view', $view_data);
@@ -413,7 +445,13 @@ class Payment extends CI_Controller {
 				'action' => 'Cancel', 	// Cancel, Suspend, Reactivate
 				'note' => 'User cancel package'
 			);
-			if(!$this->_manage_recurring_payments_profile_status($data)) $error[] = 'Can not cancel paypal recurring payment';
+
+			$PayPalResult = $this->_manage_recurring_payments_profile_status($data);
+			if($PayPalResult['ERRORS']) 
+			{ 			
+				$error[] = 'Can not cancel paypal recurring payment';
+				return false;
+			}
 		}
 		
 		//Change order status
@@ -495,7 +533,7 @@ class Payment extends CI_Controller {
 			'package_expire' => $package['package_duration'] == 'unlimited' ? '0' : date('Y-m-d H:i:s', strtotime('+'.$package['package_duration']))
 		);
 		
-		if($user_current_package) //if user already have one package
+		if(is_array($user_current_package)) //if user already have one package
 		{
 			$add_package_users_result = $this->package_users->update_package_user_by_user_id($user_id, $package_user);
 		}
@@ -713,13 +751,14 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
-			$errors = array('Errors'=>$PayPalResult['ERRORS']);
-			$this->load->view('payment/paypal_error',$errors);
+			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
+			//$this->load->view('payment/paypal_error',$errors);
+			return $PayPalResult;
 		}
 		else
 		{
 			// Successful call.  Load view or whatever you need to do here.	
-			echo json_encode(array('status'=>'OK', 'msg'=> $PayPalResult['REDIRECTURL'] ));
+			return $PayPalResult;
 		}
 	}
 
@@ -988,8 +1027,9 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
-			$errors = array('Errors'=>$PayPalResult['ERRORS']);
-			$this->load->view('payment/paypal_error',$errors);
+			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
+			//$this->load->view('payment/paypal_error',$errors);
+			return $PayPalResult;
 		}
 		else
 		{
@@ -1012,12 +1052,14 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
-			$errors = array('Errors'=>$PayPalResult['ERRORS']);
-			$this->load->view('payment/paypal_error',$errors);
+			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
+			//$this->load->view('payment/paypal_error',$errors);
+			return $PayPalResult;
 		}
 		else
 		{
 			// Successful call.  Load view or whatever you need to do here.	
+			return $PayPalResult;
 		}		
 	}
 	
@@ -1033,12 +1075,14 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
-			$errors = array('Errors'=>$PayPalResult['ERRORS']);
-			$this->load->view('paypal_error',$errors);
+			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
+			//$this->load->view('paypal_error',$errors);
+			return $PayPalResult;
 		}
 		else
 		{
 			// Successful call.  Load view or whatever you need to do here.	
+			return $PayPalResult;
 		}	
 	}
 

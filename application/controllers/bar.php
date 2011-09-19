@@ -86,6 +86,7 @@ class Bar extends CI_Controller {
 		$user_companies = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
 		$data = array(
 			'user_companies' => $user_companies,
+			'user_can_create_company' => $this->socialhappen->check_package_by_user_id_and_mode($user['user_id'], 'company')  //Check user can create company
 		);
 		$this->parser->parse('bar/select_company_view', $data);
 		return $data;

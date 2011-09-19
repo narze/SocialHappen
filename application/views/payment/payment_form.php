@@ -39,8 +39,10 @@
 				<li><input type="radio" id="bank_transfer" name="payment_method" value="bank_transfer" /> <label for="bank_transfer">Bank Transfer</label></li>
 				<li class="credit_card"><input type="radio" id="credit_card" name="payment_method" value="credit_card" /> <label for="credit_card">Credit Card</label>
 					<img src="<?php echo base_url(); ?>images/credit_card.gif" /><br />
+					<?php /*
 					<p><span class="card_number">Credit Card Number:</span><input type="text" name="credit_card_number" maxlength="19" /><br />
 					<span class="exp_date">Expiration Date:</span><input name="credit_card_expire_month" type="text" maxlength="2" /><span class="slash">/</span><input name="credit_card_expire_year" type="text" maxlength="4" /> <span class="csc">CSC:</span><input name="credit_card_csc" type="text" maxlength="3" /></p>
+					*/ ?>
 				</li>
 				<li><input type="radio" id="paypal" name="payment_method" value="paypal" checked /> <label for="paypal">Paypal</label></li>
 				<li><input type="radio" id="counter_service" name="payment_method" value="counter_service" /> <label for="counter_service">Counter Service</label></li>

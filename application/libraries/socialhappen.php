@@ -190,24 +190,11 @@ class SocialHappen{
 				'user_can_create_company' => FALSE
 			);
 		} else {
-			$this->login();
-			if($this->CI->session->userdata('logged_in') == TRUE){
-				$data['user_companies'] = $this->get_user_companies();
-				if($this->CI->input->get('logged_in') == TRUE){
-					if($data['user_companies']){
-						$popup_name = 'select_company';
-					} else {
-						$popup_name = 'splash';
-					}
-				}
-			}
+			
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'user' => $this->get_user(),
 				'image_url' => base_url().'assets/images/',
-				'vars' => array(
-					'popup_name' => issetor($popup_name)
-				),
 				'facebook_user' => $this->CI->facebook->getUser(),
 				'script' => array(
 					'common/functions',
@@ -227,6 +214,21 @@ class SocialHappen{
 		}
 		$data = array_merge_recursive($common,$data);
 		$data = array_unique_recursive($data);
+		
+		$this->login();
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			$data['user_companies'] = $this->get_user_companies();
+			if($this->CI->input->get('logged_in') == TRUE){
+				if($data['user_companies']){
+					$data['vars']['popup_name'] = 'bar/select_company';
+				} else {
+					$data['vars']['popup_name'] = 'bar/splash';
+				}
+			}
+		}
+		
+		if( isset($data['vars']['popup_name']) && !isset($data['vars']['closeEnable']) ) $data['vars']['closeEnable'] = true;
+
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	

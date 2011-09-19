@@ -1,6 +1,8 @@
 	<div class="popup_select-company">
     <h2>Select company</h2>
-	<p>Or <?php echo anchor('/bar/create_company', 'Create company',array('id'=>'create_company'));?></p>
+	<?php if($user_can_create_company) { ?>
+	<p>Or <?php echo anchor('#', 'Create company',array('class'=>'bt-create_company', 'style'=>'background:none;display:inline;float:none;color:#333!important;text-indent:0'));?></p>
+	<?php } ?>
     <ul>
 		<?php foreach($user_companies as $company) : 
 			$count =  array_merge(json_decode(file_get_contents(base_url()."company/json_get_pages_count/{$company['company_id']}"),TRUE),
