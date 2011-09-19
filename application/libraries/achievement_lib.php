@@ -353,7 +353,7 @@ class Achievement_lib
 	}
 	
 	function _test_reward_achievement($app_id = NULL, $user_id = NULL,
-		 $info = array()){
+		$info = array()){
 		
 		$app_id = (int) $app_id;
 		$user_id = (int) $user_id;
@@ -368,8 +368,8 @@ class Achievement_lib
 			$user_achieved_id_list[] = $achieved['achievement_id']['$id'];
 		}
 
-		echo '<br/>$user_achieved_id_list:<br/>';
-		var_dump($user_achieved_id_list);
+		// echo '<br/>$user_achieved_id_list:<br/>';
+		// var_dump($user_achieved_id_list);
 		
 		if(count($user_achieved_id_list) > 0 ){
 			$candidate_achievement_criteria = 
@@ -391,22 +391,22 @@ class Achievement_lib
 		} else {
 			$candidate_achievement_criteria['$and'][] = array('campaign_id' => array('$exists' => FALSE));
 		}
-		echo "<br /><br />";
-		echo json_encode($candidate_achievement_criteria);
+		// echo "<br /><br />";
+		// echo json_encode($candidate_achievement_criteria);
 		
-		echo '<br/>$candidate_achievement_criteria:<br/>';
-		echo '<pre>';
-		var_dump($candidate_achievement_criteria);
-		echo '</pre>';
+		// echo '<br/>$candidate_achievement_criteria:<br/>';
+		// echo '<pre>';
+		// var_dump($candidate_achievement_criteria);
+		// echo '</pre>';
 		
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		$achievement_list = 
 			$this->CI->achievement_info->list_info($candidate_achievement_criteria);
 		
-		echo '<br/>$achievement_list:<br/>';
-		echo '<pre>';
-		print_r($achievement_list);
-		echo '</pre>';
+		// echo '<br/>$achievement_list:<br/>';
+		// echo '<pre>';
+		// print_r($achievement_list);
+		// echo '</pre>';
 		
 		foreach ($achievement_list as $achievement) {
 			
@@ -422,10 +422,10 @@ class Achievement_lib
 				}
 			}
 
-			echo '<br/>$stat_criteria:<br/>';
-			echo '<pre>';
-			var_dump($stat_criteria);
-			echo '</pre>';
+			// echo '<br/>$stat_criteria:<br/>';
+			// echo '<pre>';
+			// var_dump($stat_criteria);
+			// echo '</pre>';
 			
 			$matched_achievement = 
 				$this->CI->achievement_stat->list_stat($stat_criteria);
@@ -451,7 +451,7 @@ class Achievement_lib
 				
 				$this->CI->achievement_user->add($user_id, $achievement['_id'], 
 					$app_id, $info['app_install_id'], $achieved_info);
-				echo 'user_id: '.$user_id.' got reward!';
+				// echo 'user_id: '.$user_id.' got reward!';
 			}
 		}
 	}
