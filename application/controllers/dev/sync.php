@@ -23,6 +23,7 @@ class Sync extends CI_Controller {
 	}
 
 	function index(){
+		echo '<a href="'.base_url().'dev/sync/mongodb_reset">MongoDB reset</a><br />';
 		echo '<a href="'.base_url().'dev/sync/remove_users">Remove users</a><br />';
 		echo '<a href="'.base_url().'dev/sync/db_reset">RESET (drop -> create -> insert data)</a><br />';
 		echo '<a href="'.base_url().'dev/sync/generate_field_code">Generate field PHP code</a><br />';
@@ -1378,6 +1379,153 @@ class Sync extends CI_Controller {
 		$this->db->insert_batch('page_user_data', $page_user_data);
 		
 		echo "Test data added<br />";
+	}
+	
+	function drop_mongo_collections(){
+		foreach(func_get_args() as $collection){
+			echo $this->mongo_db->drop_collection($collection) ? "Dropped {$collection}<br />" : "Cannot drop {$collection}<br />";
+		}
+	}
+	
+	function mongodb_reset(){
+		
+		$this->load->library('mongo_db');
+		$this->load->library('audit_lib');
+		$this->load->library('achievement_lib');
+		$this->mongo_db->switch_db('achievement');
+		$this->drop_mongo_collections('achievement_info','achievement_stat','achievement_user');
+		$this->mongo_db->switch_db('audit');
+		$this->drop_mongo_collections('actions','audits');
+		$this->mongo_db->switch_db('stat');
+		$this->drop_mongo_collections('apps','campaigns','pages');
+		echo 'Dropped collections<br />';
+		
+		$audit_actions = array(
+			array(
+				'app_id' => 5,
+				'action_id' => 1001,
+				'description' => 'View video',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has viewed video {string:object} in {app:app_id}',
+				'score' => 1
+			),
+			array(
+				'app_id' => 5,
+				'action_id' => 1002,
+				'description' => 'Share video',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has shared video {string:object} in {app:app_id}',
+				'score' => 1
+			),
+			array(
+				'app_id' => 6,
+				'action_id' => 1001,
+				'description' => 'View video',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has viewed video {string:object} in {app:app_id}',
+				'score' => 1
+			),
+			array(
+				'app_id' => 6,
+				'action_id' => 1002,
+				'description' => 'Share video',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has shared video {string:object} in {app:app_id}',
+				'score' => 1
+			),
+			array(
+				'app_id' => 7,
+				'action_id' => 1001,
+				'description' => 'Share feed',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has shared feed {string:object} in {app:app_id}',
+				'score' => 1
+			),
+			array(
+				'app_id' => 8,
+				'action_id' => 1001,
+				'description' => 'Share feed',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has shared feed {string:object} in {app:app_id}',
+				'score' => 1
+			),
+		);
+		foreach($audit_actions as $audit_action){
+			$this->audit_lib->add_audit_action($audit_action['app_id'], $audit_action['action_id'], 
+				$audit_action['description'], $audit_action['stat_app'], $audit_action['stat_page'],
+				$audit_action['stat_campaign'], $audit_action['format_string'], $audit_action['score']);
+		}
+		echo 'Added '.count($audit_actions).' audit actions<br />';
+		
+		$achievement_infos = array(
+			array(
+				'app_id' => 5,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'First share',
+					'description' => 'Shared video for the first time',
+					'criteria_string' => array('Share = 1')
+				),
+				'criteria' => array(
+					'action.1002.count' => 1
+				)
+			),
+			array(
+				'app_id' => 6,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'First share',
+					'description' => 'Shared video for the first time',
+					'criteria_string' => array('Share = 1')
+				),
+				'criteria' => array(
+					'action.1002.count' => 1
+				)
+			),
+			array(
+				'app_id' => 7,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'First share',
+					'description' => 'Shared video for the first time',
+					'criteria_string' => array('Share = 1')
+				),
+				'criteria' => array(
+					'action.1001.count' => 1
+				)
+			),
+			array(
+				'app_id' => 8,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'First share',
+					'description' => 'Shared video for the first time',
+					'criteria_string' => array('Share = 1')
+				),
+				'criteria' => array(
+					'action.1001.count' => 1
+				)
+			),
+		);
+		foreach($achievement_infos as $achievement_info){
+			$this->achievement_lib->add_achievement_info(
+				$achievement_info['app_id'], $achievement_info['app_install_id'],
+				$achievement_info['info'], $achievement_info['criteria']);
+		}
+		echo 'Added '.count($achievement_infos).' achievement infos<br />';
+		echo 'MongoDB reset successfully';
 	}
 }
 /* End of file sync.php */
