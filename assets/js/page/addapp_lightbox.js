@@ -89,7 +89,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 	    	$(".head-dragging-app").hide();
 	    },
 		success: function(json) {
-			var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
+			var ul_element=$(".left-panel").find('.dragging-app div').find('ul').css('min-height', '127px');
             for(i in json){
 				ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
 					+'<span class="button">'
