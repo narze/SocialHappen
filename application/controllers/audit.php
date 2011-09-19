@@ -395,6 +395,7 @@ class Audit extends CI_Controller {
 	/**
 	 * JSON : get company activity log
 	 * @author Prachya P.
+	 * @TODO Use audit action from Mongo instead of mysql & use globals
 	 */
 	function json_get_company_activity_log($company_id){
 		$this -> load -> model('audit_action_type_model', 'audit_type');

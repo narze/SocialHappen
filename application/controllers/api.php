@@ -410,8 +410,8 @@ class Api extends CI_Controller {
 		$this->User_apps->update_user_last_seen($user_id, $app_install_id);
 		$this->User->update_user_last_seen($user_id);
 				
-		if(!($action)){ //TODO : use sh globals
-			$action = 103;
+		if(!$action){ //User default action if not specified
+			$action = $this->socialhappen->get_k('audit_action', 'User Visit');
 		}
 		$this->load->model('installed_apps_model','installed_apps');
 		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);

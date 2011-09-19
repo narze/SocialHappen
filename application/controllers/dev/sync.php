@@ -1400,6 +1400,119 @@ class Sync extends CI_Controller {
 		$this->drop_mongo_collections('apps','campaigns','pages');
 		echo 'Dropped collections<br />';
 		
+		$platform_audit_actions = $audit_actions = array(
+			array(
+				'app_id' => 0,
+				'action_id' => 1,
+				'description' => 'Install App',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has installed {app:app_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 2,
+				'description' => 'Install App To Page',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has installed {app:app_id} in {page:page_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 3,
+				'description' => 'Remove App',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has removed {app:app_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 4,
+				'description' => 'Update Config',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has updated {app:app_id} configuration',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 5,
+				'description' => 'Install Page',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has installed {page:page_id} in {company:company_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 101,
+				'description' => 'User Register SocialHappen',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} has registered SocialHappen',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 102,
+				'description' => 'User Register App',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} has registered {app:app_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 103,
+				'description' => 'User Visit',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} visited {app:app_id} in {page:page_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 104,
+				'description' => 'User Action',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} has action', //@TODO What action?
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 105,
+				'description' => 'User Join Campaign',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} has joined {campaign:campaign_id} in {app:app_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 106,
+				'description' => 'User Register Page',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} registered {page:page_id}',
+				'score' => 0
+			),
+		);
+		
 		$audit_actions = array(
 			array(
 				'app_id' => 5,
@@ -1462,7 +1575,7 @@ class Sync extends CI_Controller {
 				'score' => 1
 			),
 		);
-		foreach($audit_actions as $audit_action){
+		foreach(array_merge($platform_audit_actions,$audit_actions) as $audit_action){
 			$this->audit_lib->add_audit_action($audit_action['app_id'], $audit_action['action_id'], 
 				$audit_action['description'], $audit_action['stat_app'], $audit_action['stat_page'],
 				$audit_action['stat_campaign'], $audit_action['format_string'], $audit_action['score']);
