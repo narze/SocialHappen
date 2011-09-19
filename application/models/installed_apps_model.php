@@ -53,6 +53,7 @@ class Installed_apps_model extends CI_Model {
 	 */
 	function get_installed_apps_by_company_id_not_in_page($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->db->limit($limit, $offset);
+		//$this->db->where('app_type_id', 3);
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		$this->db->order_by("order_in_dashboard");
 		$results = $this->db->get_where('installed_apps',array('company_id'=>$company_id,'page_id'=>0))->result_array();

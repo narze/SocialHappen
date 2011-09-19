@@ -233,7 +233,7 @@ class Company extends CI_Controller {
 	 * @author Prachya P.
 	 */
 	function json_get_installed_apps_not_in_page($company_id = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		$this->load->model('installed_apps_model','installed_apps');
 		$apps = $this->installed_apps->get_installed_apps_by_company_id_not_in_page($company_id);
 		echo json_encode($apps);
@@ -245,7 +245,7 @@ class Company extends CI_Controller {
 	 * @author Prachya P.
 	 */
 	function json_get_not_installed_apps($company_id = NULL,$page_id = NULL, $limit = NULL, $offset = NULL){
-		$this->socialhappen->ajax_check();
+		//$this->socialhappen->ajax_check();
 		$this->load->model('company_apps_model','company_apps');
 		$apps = $this->company_apps->get_company_not_installed_apps($company_id,$page_id, $limit, $offset);
 		echo json_encode($apps);
