@@ -128,13 +128,14 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$page_id = $this->input->get('page_id', TRUE);
+		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		
 		// check parameter
-		if(!($app_id) || !($app_install_id) || !($app_secret_key) || !($app_install_secret_key) || !($page_id) || (!$user_id && !$user_facebook_id ) ){
+		if(!($app_id) || !($app_install_id) || !($app_secret_key) || !($app_install_secret_key) || (!$page_id || !$facebook_page_id) || (!$user_id && !$user_facebook_id ) ){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id, user_id/user_facebook_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id, user_id/user_facebook_id)'));
 			return;
 		}
 		
@@ -187,10 +188,11 @@ class Api extends CI_Controller {
 		}
 		*/
 		
-		// check if there is exist page
-		$page = $this->Page->get_page_profile_by_page_id($page_id);
+		if(!$page_id){
+			$page_id = $this->Page->get_page_id_by_facebook_page_id($facebook_page_id);
+		}
 		
-		if(sizeof($page)!=0){
+		if($page = $this->Page->get_page_profile_by_page_id($page_id)){
 			// add app to page = new page_apps
 			if($page['company_id']==$company_id){
 					
@@ -223,7 +225,6 @@ class Api extends CI_Controller {
 		}
 		
 		echo json_encode($response);
-		
 	}
 
 	/**
@@ -262,7 +263,6 @@ class Api extends CI_Controller {
 	 * @author Wachiraph C.
 	 */				
 	function request_user_id(){
-		
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		
 		if(!($user_facebook_id)){
@@ -289,7 +289,6 @@ class Api extends CI_Controller {
 	 * @author Weerapat P.
 	 */				
 	function request_user_facebook_id(){
-		
 		$user_id = $this->input->get('user_id', TRUE);
 		
 		if(!($user_id)){
@@ -342,7 +341,6 @@ class Api extends CI_Controller {
 	 * @author Wachiraph C.
 	 */
 	function request_facebook_page_id(){
-		
 		$page_id = $this->input->get('page_id', TRUE);
 		
 		if(!($page_id)){
@@ -369,7 +367,6 @@ class Api extends CI_Controller {
 	 * @author Manassarn M. - Add increment achievement
 	 */		
 	function request_log_user(){
-		
 		$app_id = $this->input->get('app_id', TRUE);
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
@@ -491,6 +488,7 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		$company_id = $this->input->get('company_id', TRUE);
 		$page_id = $this->input->get('page_id', TRUE);
+		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
 		//user profile
 		$user_first_name = $this->input->get('user_first_name', TRUE);
 		$user_last_name = $this->input->get('user_last_name', TRUE);
@@ -523,6 +521,10 @@ class Api extends CI_Controller {
 		}
 		
 		$response = array(	'status' => 'OK');
+		
+		if(!$page_id){
+			$page_id = $this->Page->get_page_id_by_facebook_page_id($facebook_page_id);
+		}
 		
 		// register new user
 		$this->load->model('User_model', 'User');
@@ -1155,10 +1157,11 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$page_id = $this->input->get('page_id', TRUE);
+		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$page_id && !$facebook_page_id)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id)'));
 			return;
 		}
 		
@@ -1178,6 +1181,13 @@ class Api extends CI_Controller {
 		
 		$this->load->model('installed_apps_model','installed_apps');
 		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		
+		
+		if(!$page_id){
+			$this->load->model('page_model','Page');
+			$page_id = $this->Page->get_page_id_by_facebook_page_id($facebook_page_id);
+		}
+		
 		if(issetor($app['page_id'])!=$page_id){
 			echo json_encode(array( 'error' => '600',
 									'message' => 'invalid page_id'));
