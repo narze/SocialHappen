@@ -61,7 +61,8 @@ class Home extends CI_Controller {
 						'common/main',
 						'common/platform',
 						'common/fancybox/jquery.fancybox-1.3.4'
-					)
+					),
+					'user_companies' => FALSE
 				)
 			),
 			'breadcrumb' => $this -> load -> view('common/breadcrumb', 
@@ -79,7 +80,7 @@ class Home extends CI_Controller {
 			'signup_form' => $this -> load -> view('home/signup_form', 
 				array(
 					'user' => $user,
-					'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id'])
+					'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id']),
 				),
 			TRUE),
 			'footer' => $this -> socialhappen -> get_footer()
@@ -173,11 +174,12 @@ class Home extends CI_Controller {
 	 * Signup complete
 	 * @author Weerapat P.
 	 */
-	function signup_complete($package_id)
+	function signup_complete()
 	{
-		$this->load->model('package_model','packages');
+		$user = $this->socialhappen->get_user();
+		$this->load->model('package_users_model','package_users');
 		$data = array(
-			'package' => $this->packages->get_package_by_package_id($package_id)
+			'package' => $this->package_users->get_package_by_user_id($user['user_id'])
 		);
 		$this->load->view('home/signup_complete', $data);
 	}

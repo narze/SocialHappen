@@ -244,9 +244,9 @@ div.popup_payment {
 	left: 1px;
 }
 #select-payment ul li.credit_card img {
-	position: relative;
-	left: 1px;
-	top: 9px;
+	position: absolute;
+	left: 80px;
+	top: 20px;
 }
 #select-payment ul li.credit_card input[name=credit_card_number] {
 	width:174px;

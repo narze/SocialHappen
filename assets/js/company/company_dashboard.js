@@ -746,41 +746,11 @@ function get_activity_log() {
 }
 
 $( function() {
-	
-	var popup;
-	var closeEnable = true;
-	var package_id = get_query( window.location.href, 'package_id' );
-	
-	if(user_have_package == false)
-	{
-		popup = 'payment/payment_form';
-		closeEnable = false;
-	} 
-	else if( get_query( window.location.href, 'popup' ) == 'thanks') //Thanks msg after sign up
-	{
-		popup = 'home/signup_complete/'+package_id;
-	}
-	else if(is_package_over_the_limit)
-	{
-		popup = 'company/company_package_limited';
-	}
-	
-	if(popup)
-	{
-		$.fancybox({
-			href: base_url + popup,
-			transitionIn: 'elastic',
-			transitionOut: 'elastic',
-			padding: 0,
-			scrolling: 'no',
-			modal: !closeEnable
-		});
-		
-		$('div.popup_company-thanks a.bt-continue').live('click', function () {
-			$.fancybox.close();
-		});
-	}
 
+	$('div.popup_company-thanks a.bt-continue').live('click', function () {
+		$.fancybox.close();
+	});
+	
 	get_activity_log();
 	$(".add-page").live('click', function() {
 		add_page_button_click();

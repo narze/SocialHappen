@@ -1,7 +1,5 @@
 <div class="payment-summary">
     <h2>Payment Summary</h2>
-	<input type="hidden" name="popup" value="<?php echo $popup; ?>" />
-	<input type="hidden" name="package_id" value="<?php echo $package_id; ?>" />
     <p><b>Billing Information</b> <?php echo $order['billing_info'];?></p>
     <p><b>Package</b> <?php echo $order['package']; ?> (<?php echo $order['order_net_price']? '<span class="price">'.$order['order_net_price'].' USD</span>' : 'FREE' ; ?>)</p>
     <p><b>Payment Method</b> <?php echo $order['payment_method']; ?></p>

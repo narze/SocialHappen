@@ -24,15 +24,29 @@ class Company extends CI_Controller {
 				$user_id = $this->socialhappen->get_user_id();
 				$user_have_package = false;
 				$is_package_over_the_limit = false;
+				$popup_name = '';
+				$closeEnable = true;
 				
 				if($this->package_users->get_package_by_user_id($user_id)) //If user have package
 				{
 					$user_have_package = true;
-					//If package over the limit
 					//Noom : change user_id to check to get_user_id() for the time being
 					$is_package_over_the_limit = $this->socialhappen->check_package_over_the_limit_by_user_id($user_id);
 				}
-				//$is_package_over_the_limit = true; //for Testing
+				
+				if($user_have_package == false)
+				{
+					$popup_name = 'payment/payment_form';
+					$closeEnable = false;
+				} 
+				else if($this->input->get('popup') == 'thanks') //Thanks msg after sign up
+				{
+					$popup_name = 'home/signup_complete/';
+				}
+				else if($is_package_over_the_limit)
+				{
+					$popup_name = 'company/company_package_limited';
+				}
 				
 				$data = array(
 					'company_id' => $company_id,
@@ -42,8 +56,8 @@ class Company extends CI_Controller {
 							'vars' => array('company_id'=>$company_id,
 											'sh_default_fb_app_api_key'=>$this->config->item('facebook_app_id'),
 											'user_id'=>$user_id,
-											'user_have_package' => $user_have_package,
-											'is_package_over_the_limit' => $is_package_over_the_limit
+											'popup_name'=>$popup_name,
+											'closeEnable'=>$closeEnable
 											),
 							'script' => array(
 								'common/functions',

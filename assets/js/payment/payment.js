@@ -37,26 +37,6 @@ $(function(){
 		return false;
 	});
 	
-	//Payment summary page => show payment complete popup
-	if( $('input[name="popup"]').val() == 'payment_complete' ) {
-		$.fancybox({
-			href: base_url+'payment/payment_complete/' + $('input[name="package_id"]').val(),
-			transitionIn: 'elastic',
-			transitionOut: 'elastic',
-			padding: 0,
-			scrolling: 'no',
-		});
-		
-		$('div.popup_payment-complete a.bt-continue').live('click', function () {
-			window.location = base_url + '?logged_in=true'; //Redirect to dashboard
-		});
-	}
-	
-	$('div.popup_payment-complete a.close').live('click', function() {
-		$.fancybox.close();
-		window.location = base_url;
-	});
-	
 	//Call payment form popup when click
 	$('a.payment-pop').live('click',function(){
 		var package_id = get_query( $(this).attr('href'), 'package_id' );
@@ -86,8 +66,8 @@ $(function(){
 		if (!agree) return false ;
 	});
 	
-	
-	if(get_query(window.location.href, 'payment') == 'true')
+	//Automatic popup 
+	/*if(get_query(window.location.href, 'payment') == 'true')
 	{ 
 		package_id = get_query(window.location.href, 'package_id');
 
@@ -99,4 +79,5 @@ $(function(){
 			scrolling: 'no'
 		});
 	}
+	*/
 });

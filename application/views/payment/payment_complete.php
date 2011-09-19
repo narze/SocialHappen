@@ -6,6 +6,6 @@
 	<div id="package-detail">
 		<p class="thanks">Thank you!</p>
 		<p class="message">You've upgraded to <?php echo $package['package_name']; ?>.</p>
-		<p><a class="bt-continue" style="position: relative;top: 10px;left: -180px;">Back to dashboard</a></p>
+		<p><a class="bt-continue" href="<?php echo base_url(); ?>" style="position: relative;top: 10px;left: -180px;">Back to dashboard</a></p>
 	</div>
 </div>
