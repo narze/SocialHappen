@@ -25,7 +25,7 @@
 			  <td class="member-check"><input type="checkbox" /></td>
               <td class="app-list">
                 <div class="detail-list-style02">
-                  <p class="thumb"><a><img src="" /></a></p>
+                  <p class="thumb"><a><img src="<?php echo base_url()."assets/images/default/user.png";?>"></a></p>
                   <h2></h2>
                    <p><a class="view-fb">View facebook profile</a></p>
                   <!--<ul class="member-label">

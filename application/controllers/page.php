@@ -13,14 +13,16 @@ class Page extends CI_Controller {
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array())){
 			//no access
 		} else {
+			
 			$this -> load -> model('page_model', 'pages');
 			$page = $this -> pages -> get_page_profile_by_page_id($page_id);
+			
 			if($page) {
 				$this -> load -> model('company_model', 'companies');
 				$company = $this -> companies -> get_company_profile_by_page_id($page_id);
 				
 				$facebook_page_graph = $this->facebook->get_page_info($page['facebook_page_id']);
-				
+
 				$this -> load ->model('installed_apps_model','installed_apps');
 				$app_count = $this->installed_apps->count_installed_apps_by_page_id($page_id);
 				

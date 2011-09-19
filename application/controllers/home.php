@@ -190,6 +190,7 @@ class Home extends CI_Controller {
 	 */
 	function package()
 	{
+		
 		$this->load->model('package_model','package');
 		$this->load->model('package_users_model','package_users');
 		$user = $this->socialhappen->get_user();
@@ -239,6 +240,7 @@ class Home extends CI_Controller {
 			TRUE),
 			'footer' => $this -> socialhappen -> get_footer()
 			);
+		
 		$this -> parser -> parse('home/home_view', $data);
 	}
 	

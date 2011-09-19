@@ -190,6 +190,7 @@ class SocialHappen{
 	 */
 	function get_header($data = array()){
 		$common = array();
+		
 		if(!$this->CI->facebook->is_authentication()){
 			$this->logout(); // should relogin facebook to extend cookies TODO : fix
 			$common = array(
@@ -198,6 +199,7 @@ class SocialHappen{
 				'next' => $this->CI->input->get('next'),
 				'user_can_create_company' => FALSE
 			);
+			
 		} else {
 			
 			$common = array(
@@ -221,6 +223,7 @@ class SocialHappen{
 				'user_can_create_company' => $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company') //Check user can create company
 			);
 		}
+		
 		$data = array_merge_recursive($common,$data);
 		$data = array_unique_recursive($data);
 		

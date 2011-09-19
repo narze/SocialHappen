@@ -15,7 +15,7 @@
             <tr class="campaign-row hidden-template">
               <td class="app-list">
                 <div class="detail-list-style01">
-                  <p class="thumb"><img src="" /></p>
+                  <p class="thumb"><img src="<?php echo base_url()."assets/images/default/campaign.png";?>" /></p>
                   <h2></h2>
                   <p class="description"> </p>
                 </div>
