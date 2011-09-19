@@ -24,15 +24,20 @@ class Api extends CI_Controller {
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$company_id = $this->input->get('company_id', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 
-		if(!($app_id) || !($app_secret_key) || !($company_id) || !($user_id) ){
+		if(!($app_id) || !($app_secret_key) || !($company_id) || (!$user_id && !$user_facebook_id) ){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, company_id, user_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, company_id, user_id/user_facebook_id)'));
 			return;
 		}
 		
-		$this->load->model('Session_model','Session');
+		if(!$user_id){
+			$this->load->model('user_model','user');
+			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
+		}
 		
+		$this->load->model('Session_model','Session');
 		if(!$this->Session->get_session_id_by_user_id($user_id)){
 			echo json_encode(array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
@@ -124,12 +129,18 @@ class Api extends CI_Controller {
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$page_id = $this->input->get('page_id', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		
 		// check parameter
-		if(!($app_id) || !($app_install_id) || !($app_secret_key) || !($app_install_secret_key) || !($page_id) || !($user_id) ){
+		if(!($app_id) || !($app_install_id) || !($app_secret_key) || !($app_install_secret_key) || !($page_id) || (!$user_id && !$user_facebook_id ) ){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id, user_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id, user_id/user_facebook_id)'));
 			return;
+		}
+		
+		if(!$user_id){
+			$this->load->model('user_model','user');
+			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
 		
 		$this->load->model('Session_model','Session');
@@ -368,9 +379,9 @@ class Api extends CI_Controller {
 		$campaign_id = $this->input->get('campaign_id', TRUE);
 		$action = $this->input->get('action', TRUE);
 			
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id || $user_facebook_id)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 			return;
 		}
 		
@@ -394,9 +405,7 @@ class Api extends CI_Controller {
 		
 		if(!$user_id){
 			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
-		}
-		// if not exist user, create it
-		if(!$this->User_apps->check_exist($user_id, $app_install_id)){
+		}else if(!$this->User_apps->check_exist($user_id, $app_install_id)){ // if not exist user, create it
 			$this->User_apps->add_new($user_id, $app_install_id);
 		}
 		
@@ -577,10 +586,11 @@ class Api extends CI_Controller {
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 					
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($user_id)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || (!$user_id && !$user_facebook_id)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, user_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, user_id/user_facebook_id)'));
 			return;
 		}
 		
@@ -604,7 +614,10 @@ class Api extends CI_Controller {
 		}
 		
 		// authenticate user with $company_id and $user_facebook_id
-		if(!($this->_authenticate_user($company_id, $user_id))){
+		if(!$user_id){
+			$this->load->model('user_model','user');
+			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
+		} else if(!($this->_authenticate_user($company_id, $user_id))){
 			echo json_encode(array( 'error' => '300',
 									'message' => 'you have no permission on this app'));
 			return;
@@ -625,7 +638,7 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
-			
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 			
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
 			echo json_encode(array( 'error' => '100',
@@ -647,10 +660,10 @@ class Api extends CI_Controller {
 			return;
 		}
 		
-		if($user_id){
+		$this->load->model('User_model', 'User');
+		if($user_id || $user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id)){
 			// log user
 			$this->load->model('User_apps_model', 'User_apps');
-			$this->load->model('User_model', 'User');
 			
 			// if not exist user, create it
 			if(!$this->User_apps->check_exist($user_id, $app_install_id)){
@@ -846,16 +859,22 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		$campaign_name = $this->input->get('campaign_name', TRUE);
 		$campaign_detail = $this->input->get('campaign_detail', TRUE);
 		$campaign_start_timestamp = $this->input->get('campaign_start_timestamp', TRUE);
 		$campaign_end_timestamp = $this->input->get('campaign_end_timestamp', TRUE);
 		$campaign_status_id = $this->input->get('campaign_status_id', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id) || !($campaign_name) || !($campaign_start_timestamp) || !($campaign_end_timestamp)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id) || !($campaign_name) || !($campaign_start_timestamp) || !($campaign_end_timestamp)){
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_name, campaign_start_timestamp, campaign_end_timestamp)'));
 			return;
+		}
+		
+		if(!$user_id){
+			$this->load->model('user_model','user');
+			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
 		
 		$this->load->model('Session_model','Session');
@@ -935,6 +954,7 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		$campaign_id = $this->input->get('campaign_id', TRUE);
 		$campaign_name = $this->input->get('campaign_name', TRUE);
 		$campaign_detail = $this->input->get('campaign_detail', TRUE);
@@ -942,10 +962,15 @@ class Api extends CI_Controller {
 		$campaign_end_timestamp = $this->input->get('campaign_end_timestamp', TRUE);
 		$campaign_status_id = $this->input->get('campaign_status_id', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_id) || !($campaign_id)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id) || !($campaign_id)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_id'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id, campaign_id'));
 			return;
+		}
+		
+		if(!$user_id){
+			$this->load->model('user_model','user');
+			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
 		
 		$this->load->model('Session_model','Session');
@@ -978,7 +1003,6 @@ class Api extends CI_Controller {
 		}
 		$company_id = $company_id['company_id'];
 		
-		// authenticate user with $company_id and $user_facebook_id
 		if(!($this->_authenticate_user($company_id, $user_id))){
 			echo json_encode(array( 'error' => '300',
 									'message' => 'you have no permission to install app on this company'));
@@ -1038,16 +1062,22 @@ class Api extends CI_Controller {
 	}
 	
 	/**
-	 * Request user session on platform using user_-id
+	 * Request user session on platform using user_id or user_facebook_id
 	 * @author Wachiraph C. 
 	 */
 	function request_user_session(){
 		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		
-		if(!($user_id)){
+		if(!$user_id && !$user_facebook_id){
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: user_id'));
 			return;
+		}
+		
+		if(!$user_id){
+			$this->load->model('user_model','user');
+			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
 		
 		$this->load->model('Session_model','Session');
@@ -1071,11 +1101,12 @@ class Api extends CI_Controller {
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$user_id = $this->input->get('user_id', TRUE);
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_facebook_id && !$user_id)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 			return;
 		}
 		
@@ -1097,6 +1128,10 @@ class Api extends CI_Controller {
 		
 		// get user
 		$this->load->model('User_model', 'User');
+		if(!$user_facebook_id){
+			$user_facebook_id = $this->User->get_user_facebook_id_by_user_id($user_id);
+		}
+		
 		if(!$this->User->check_exist($user_facebook_id)){
 			$response['message'] = 'User not found';
 		} else {
@@ -1119,12 +1154,11 @@ class Api extends CI_Controller {
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
-		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		$page_id = $this->input->get('page_id', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 			return;
 		}
 		
@@ -1194,7 +1228,7 @@ class Api extends CI_Controller {
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 			return;
 		}
 		
@@ -1235,11 +1269,12 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$user_id = $this->input->get('user_id', TRUE);
 		$point = $this->input->get('point', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id) || !$point){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_facebook_id && !$user_id) || !$point){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id, point)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id, point)'));
 			return;
 		}
 		
@@ -1259,8 +1294,9 @@ class Api extends CI_Controller {
 		
 		$response = array('status' => 'OK');
 		
-		$this->load->model('User_model', 'User');
-		if(!$user = $this->User->get_user_profile_by_user_facebook_id($user_facebook_id)){
+		$user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
+
+		if(!$user){
 			$response['message'] = 'User not found';
 		} else {
 			$this->User->update_user($user['user_id'],array('user_point' => $user['user_point'] + (int)$point));
@@ -1277,10 +1313,11 @@ class Api extends CI_Controller {
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$user_id = $this->input->get('user_id', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_facebook_id && !$user_id)){
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 			return;
 		}
 		
@@ -1309,7 +1346,8 @@ class Api extends CI_Controller {
 		
 		$this->load->model('User_model', 'User');
 		$this->load->model('user_pages_model','user_pages');
-		if(!$user = $this->User->get_user_profile_by_user_facebook_id($user_facebook_id)){
+		$user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
+		if(!$user){
 			$data['view_as'] = 'guest';
 			$data['right_menu'] = array();
 		} else if($this->user_pages->is_page_admin($user['user_id'], $app['page_id'])){
