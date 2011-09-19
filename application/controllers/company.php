@@ -8,10 +8,10 @@ class Company extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		$this -> socialhappen -> check_logged_in();
 	}
 
 	function index($company_id = NULL){
-		$this -> socialhappen -> check_logged_in();
 		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array())){
 			//no access
 		} else {

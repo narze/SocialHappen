@@ -5,10 +5,11 @@ class Campaign extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('pagination');
+		$this->socialhappen->check_logged_in();
 	}
 
 	function index($campaign_id = NULL){
-		$this->socialhappen->check_logged_in();
+		
 		if(!$this->socialhappen->check_admin(array('campaign_id' => $campaign_id),array())){
 			//no access
 		} else {

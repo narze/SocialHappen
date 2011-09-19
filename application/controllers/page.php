@@ -5,10 +5,11 @@ if(!defined('BASEPATH'))
 class Page extends CI_Controller {
 	function __construct() {
 		parent::__construct();
+		$this -> socialhappen -> check_logged_in();
 	}
 	
 	function index($page_id =NULL) {
-		$this -> socialhappen -> check_logged_in();
+		
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array())){
 			//no access
 		} else {
@@ -411,7 +412,7 @@ class Page extends CI_Controller {
 	 * @author Prachya P.
 	 */
 	function addapp_lightbox($page_id){
-		$this -> socialhappen -> check_logged_in();
+
 		if($page_id){			
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);

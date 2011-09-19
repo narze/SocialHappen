@@ -4,10 +4,10 @@ class App extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		$this->socialhappen->check_logged_in();
 	}
 	
 	function index($app_install_id = NULL){
-		$this->socialhappen->check_logged_in();
 		if(!$this->socialhappen->check_admin(array('app_install_id' => $app_install_id),array())){
 			//no access
 		} else {
@@ -112,7 +112,6 @@ class App extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function config($app_install_id = NULL){
-		$this->socialhappen->check_logged_in();
 		if(!$this->socialhappen->check_admin(array('app_install_id'=>$app_install_id),array('role_all_company_apps_edit','role_app_edit'))){
 			
 		} else {
@@ -137,7 +136,6 @@ class App extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function go($app_install_id = NULL){
-		$this->socialhappen->check_logged_in();
 		$this->load->model('installed_apps_model','installed_apps');
 		$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if($app && isset($app['app_url'])){
