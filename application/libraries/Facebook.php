@@ -1,4 +1,4 @@
-﻿<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 //original code from http://kentislearningcodeigniter.com/facebook_connect
 //phnx : 16-02-2011
 class Facebook{
