@@ -69,7 +69,7 @@ class Sync extends CI_Controller {
 	}
 	
 	function remove_users(){
-		$tables = array('package_users', 'page_user_data', 'sessions', 'user', 'user_apps', 'user_campaigns', 'user_companies', 'user_pages');
+		$tables = array('package_users', 'page_user_data', 'sessions', 'user', 'user_apps', 'user_campaigns', 'user_companies', 'user_pages', 'page');
 		foreach($tables as $table){
 			if($this->db->empty_table($table)) {
 				echo "Emptied table : {$table}<br />";
@@ -1643,7 +1643,7 @@ class Sync extends CI_Controller {
 				'app_install_id' => NULL,
 				'info' => array(
 					'name' => 'First share',
-					'description' => 'Shared video for the first time',
+					'description' => 'Shared feed for the first time',
 					'criteria_string' => array('Share = 1')
 				),
 				'criteria' => array(
@@ -1655,7 +1655,7 @@ class Sync extends CI_Controller {
 				'app_install_id' => NULL,
 				'info' => array(
 					'name' => 'First share',
-					'description' => 'Shared video for the first time',
+					'description' => 'Shared feed for the first time',
 					'criteria_string' => array('Share = 1')
 				),
 				'criteria' => array(

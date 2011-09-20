@@ -1316,6 +1316,10 @@ class Api extends CI_Controller {
 		//TODO audit
 	}
 
+	/**
+	 * Request app bar
+	 * @author Manassarn M.
+	 */
 	function bar(){
 		
 		$app_id = $this->input->get('app_id', TRUE);
@@ -1407,6 +1411,49 @@ class Api extends CI_Controller {
 		echo '<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>';
 		echo '<link type="text/css" rel="stylesheet" href="'.$result['css'].'" />';
 		echo '<div style="width:800px;margin:0 auto;">'.$result['html'].'</div>';
+	}
+	
+	/**
+	 * Request add achievement infos
+	 * @author Manassarn M.
+	 */
+	function request_add_achievement_infos(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$achievement_infos = $this->input->get('achievement_infos', TRUE);
+		
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($achievement_infos)){
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, achievement_infos)'));
+			return;
+		}
+		
+		// authenticate app with $app_id and $app_secret_key
+		if(!($this->_authenticate_app($app_id, $app_secret_key))){
+			echo json_encode(array( 'error' => '200',
+									'message' => 'invalid app_secret_key'));
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
+			echo json_encode(array( 'error' => '500',
+									'message' => 'invalid app_install_secret_key'));
+			return;
+		}
+		
+		$response = array('status' => 'OK');
+		$achievement_infos = json_decode(base64_decode($achievement_infos), TRUE);
+		$this->load->library('achievement_lib');
+		foreach($achievement_infos as $achievement_info){
+			$this->achievement_lib->add_achievement_info(
+				$app_id, $app_install_id,
+				$achievement_info['info'], $achievement_info['criteria']);
+		}
+		
+		echo json_encode($response);
 	}
 	
 	function _authenticate_app($app_id, $app_secret_key){
