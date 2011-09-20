@@ -133,22 +133,23 @@ class Home extends CI_Controller {
 					       	'user_facebook_id' => $facebook_user['id']
 						);
 						
-			$user_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'user/json_add', $user), TRUE);
+			$user_id = $this->users->add_user($user);
 			
 			$company = array(
 					       	'company_name' => set_value('company_name'),
 					       	'company_detail' => set_value('company_detail'),
 					       	'company_image' => $company_image ? $company_image : $this->socialhappen->get_default_url('company_image'),
-							'creator_user_id' => $user_add_result['user_id']
+							'creator_user_id' => $user_id
 						);
+			$this->load->model('company_model','company');
+			$company_id = $this->company->add_company($company);
 			
-			$company_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'company/json_add', $company), TRUE);
-			if ($user_add_result['status'] == 'OK' && $company_add_result['status'] == 'OK')
+			if ($user_id && $company_id)
 			{	
 				$this->load->model('user_companies_model','user_companies');
 				$this->user_companies->add_user_company(array(
-					'user_id' => $user_add_result['user_id'],
-					'company_id' => $company_add_result['company_id'],
+					'user_id' => $user_id,
+					'company_id' => $company_id,
 					'user_role' => 1 //Company admin
 				));
 				$this->socialhappen->login();

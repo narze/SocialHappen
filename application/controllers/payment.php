@@ -220,7 +220,7 @@ class Payment extends CI_Controller {
 					$url = base_url().'company/'.$user_first_company['company_id'].'?popup=thanks';
 					break;
 			}
-			echo json_encode(array('status'=>'OK', 'msg'=> $url ));
+			echo json_encode(array('status'=>'OK', 'msg'=>'Redirect', 'url'=> $url ));
 		}
 	}
 	
@@ -533,16 +533,14 @@ class Payment extends CI_Controller {
 			'package_expire' => $package['package_duration'] == 'unlimited' ? '0' : date('Y-m-d H:i:s', strtotime('+'.$package['package_duration']))
 		);
 		
-		if(is_array($user_current_package)) //if user already have one package
+		if(count($user_current_package)) //if user already have one package
 		{
-			$add_package_users_result = $this->package_users->update_package_user_by_user_id($user_id, $package_user);
+			return $this->package_users->update_package_user_by_user_id($user_id, $package_user);
 		}
 		else
 		{
-			$add_package_users_result = $this->package_users->add_package_user($package_user);
+			return $this->package_users->add_package_user($package_user);
 		}
-		if(!$add_package_users_result) return false;
-		return true;
 	}
 	
 	function _add_company_app($user_id, $package_id)
