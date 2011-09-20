@@ -285,12 +285,13 @@ function show_installed_page_in_company() {
 									$.fancybox({
 										content:$("#popup-gotofacebook").html()
 									});
+									$(dragging_object).attr('onclick','view_page_app('+page_id+','+facebook_page_id+',"'+page_name+'")');
 								} else {
 									// show_installed_app_in_page(page_id,facebook_page_id); //no page_id
 									// show_available_app_in_page(page_id);
-									alert("This page is already installed.");
 									console.log("app/curl json mismatch 1 : " + json);
 									$(dragging_object).remove();
+									alert("This page is already installed by another company.");
 								}
 							},
 						});
