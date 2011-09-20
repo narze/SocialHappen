@@ -189,7 +189,7 @@ function show_installed_page_in_company() {
 			$(".left-panel").find('.dragging-page div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 		},
 		success: function(json) {
-			var ul_element=$(".left-panel").find('.dragging-page div').find('ul');
+			var ul_element=$(".left-panel").find('.dragging-page div').find('ul').css('max-height', '155px').css('overflow', 'hidden');
 			ul_element.append('<li class="add-page"></li>');
 			for(i in json) {
 				//	if(j%installed_page_per_row==0) ul_element.append('<div></div>');
