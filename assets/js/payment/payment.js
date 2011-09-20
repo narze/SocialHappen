@@ -28,9 +28,12 @@ $(function(){
 			async:true,
 			success: function(data){
 				console.log(data);
-				if( get_query(data.msg, 'popup') == 'thanks' ) { } //Free package, alert nothing
-				else { alert("You will now be directed to Paypal's website to continue your order"); } //Paypal
-				window.location = data.msg;
+				if(data.status == 'OK')
+				{
+					if( get_query(data.url, 'popup') == 'thanks' ) { } //Free package, alert nothing
+					else { alert("You will now be directed to Paypal's website to continue your order"); } //Paypal
+					window.location = data.url;
+				}
 			},
 			dataType: 'json'
 		});

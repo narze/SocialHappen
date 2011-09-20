@@ -84,6 +84,20 @@ class Bar extends CI_Controller {
 		
 		$this->load->model('user_companies_model','user_companies');
 		$user_companies = $this->user_companies->get_user_companies_by_user_id($user['user_id']);
+		
+		if($user_companies)
+		{
+			$this->load->model('page_model','page');
+			$this->load->model('installed_apps_model','installed_app');
+			$this->load->model('campaign_model','campaigns');
+			foreach($user_companies as &$company) 
+			{
+				$company['page_count'] = $this->page->count_all(array("company_id" => $company['company_id']));
+				$company['app_count'] = $this->installed_app->count_all_distinct("app_id",array("company_id" => $company['company_id']));
+				$company['campaign_count'] = $this->campaigns->count_campaigns_by_company_id($company['company_id']);
+			}
+		}
+		
 		$data = array(
 			'user_companies' => $user_companies,
 			'user_can_create_company' => $this->socialhappen->check_package_by_user_id_and_mode($user['user_id'], 'company')  //Check user can create company
