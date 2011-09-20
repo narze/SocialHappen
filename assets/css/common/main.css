@@ -19,6 +19,7 @@ a {
 
 /* Notification */
 .notice { line-height:30px; margin:5px auto; padding:0 10px!important; border:1px solid #999;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; position:relative; }
+.notice h2 { margin:10px 0 5px 0; }
 .notice p {  }
 .notice ul { padding-left: 18px; }
 .notice ul li { list-style:disc!important; }

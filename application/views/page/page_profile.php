@@ -3,7 +3,9 @@
           <div class="pic">
             <p><img class="page-image" src="<?php echo imgsize(issetor($page_profile['page_image']),'large'); ?>" alt=""></p>
             <p><a class="bt-go_page" href="<?php echo $facebook['link'];?>"><span>Goto Page</span></a></p>
-            <p><a class="bt-add_app" href="#"><span>Add App</span></a></p>
+            <?php if($page_profile['page_installed'] == 1) { ?>
+			<p><a class="bt-add_app" href="#"><span>Add App</span></a></p>
+			<?php } ?>
           </div>
           <h2><?php echo issetor($page_profile['page_name']); ?></h2>
           <p><?php echo issetor($page_profile['page_detail']); ?></p>

@@ -48,6 +48,8 @@
 				</div>
 			</div>
 			<div class="box-app-list">
+				<div class="notice" style="display:none">
+				</div>
 				<p class="head-box-app-list">
 					<strong></strong>
 					<b></b>

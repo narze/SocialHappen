@@ -57,6 +57,9 @@ class Page extends CI_Controller {
 				
 				$data = array(
 					'page_id' => $page_id,
+					'page_installed' => $page['page_installed'],
+					'facebook_page_id' => $page['facebook_page_id'],
+					'app_facebook_api_key' => $this->config->item('facebook_app_id'),
 					'header' => $this -> socialhappen -> get_header( 
 						array(
 							'company_id' => $company['company_id'],
@@ -151,16 +154,6 @@ class Page extends CI_Controller {
 					TRUE),
 					'footer' => $this -> socialhappen -> get_footer()
 				);
-				
-				//If package over the limit
-				//Noom : change user_id to check to get_user_id() for the time being
-				if($this->socialhappen->check_package_over_the_limit_by_user_id($this->socialhappen->get_user_id()) == TRUE) {
-					$data['is_package_over_the_limit'] = TRUE;
-					$data['package_limited'] = $this -> load -> view('payment/package_limited', array(), TRUE);
-				}
-				else {
-					$data['is_package_over_the_limit'] = FALSE;
-				}
 				
 				$this -> parser -> parse('page/page_view', $data);
 				return $data;

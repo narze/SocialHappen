@@ -2,9 +2,9 @@
 {company_image_and_name}
 {breadcrumb}
 <div id="popup-gotofacebook" style="display:none">
+	<h2>Page installation is not complete</h2>
 	Please, go to facebook to complete the action.
-	<a class="gotofacebook-link">Go to facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a onclick="$.fancybox.close(); return false;">Close</a>
+	<a class="gotofacebook-link">Go to facebook</a>
 </div>
 <div class="wrapper-content">
 	<div>		
