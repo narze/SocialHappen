@@ -41,9 +41,11 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function signup(){
-		$facebook_user = $this->facebook->getUser();
+		if($this->socialhappen->get_user()){
+			redirect();
+		}
 		
-		$user = $this->socialhappen->get_user();
+		$facebook_user = $this->facebook->getUser();
 	
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
@@ -79,7 +81,6 @@ class Home extends CI_Controller {
 			TRUE),
 			'signup_form' => $this -> load -> view('home/signup_form', 
 				array(
-					'user' => $user,
 					'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id']),
 				),
 			TRUE),
