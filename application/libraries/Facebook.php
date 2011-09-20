@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+﻿<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 //original code from http://kentislearningcodeigniter.com/facebook_connect
 //phnx : 16-02-2011
 class Facebook{
@@ -45,16 +45,19 @@ class Facebook{
         }
 
         function getUser(){
-               if($cookie = $this->get_facebook_cookie()){
-               		$facebook_result = file_get_contents(
-	                                'https://graph.facebook.com/me?access_token=' .
-	                                $cookie['access_token']);
-									// $facebook_result = '{"id":"755758746","name":"Metwara Narksook","first_name":"Metwara","last_name":"Narksook","link":"http:\/\/www.facebook.com\/hybridknight","username":"hybridknight","bio":"127.0.0.1\r\n\r\nComputer Engineering Student, \r\nChulalongkorn University","gender":"male","email":"book2k\u0040hotmail.com","timezone":7,"locale":"en_US","verified":true,"updated_time":"2011-08-04T14:13:34+0000"}';
-									// echo "<pre>" . $facebook_result . "</pre>";
-	                return json_decode($facebook_result, true);
-			   } else {
+			if($facebook_user = $this->_ci->session->userdata('facebook_user')){
+				return json_decode(base64_decode($facebook_user), TRUE);
+		    } else if($cookie = $this->get_facebook_cookie()){
+				$facebook_result = file_get_contents(
+								'https://graph.facebook.com/me?access_token=' .
+								$cookie['access_token']);
+								// $facebook_result = '{"id":"755758746","name":"Metwara Narksook","first_name":"Metwara","last_name":"Narksook","link":"http:\/\/www.facebook.com\/hybridknight","username":"hybridknight","bio":"127.0.0.1\r\n\r\nComputer Engineering Student, \r\nChulalongkorn University","gender":"male","email":"book2k\u0040hotmail.com","timezone":7,"locale":"en_US","verified":true,"updated_time":"2011-08-04T14:13:34+0000"}';
+								// echo "<pre>" . $facebook_result . "</pre>";
+				$this->_ci->session->set_userdata(array('facebook_user' => base64_encode($facebook_result)));
+				return json_decode($facebook_result, true);
+		    } else {
 				return FALSE;
-			   }
+		    }
         }
 
         function getFriendIds($include_self = TRUE){

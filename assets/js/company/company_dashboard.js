@@ -632,7 +632,7 @@ function show_available_app_in_company() {
 		success: function(json) {
 			var ul_element=$(".right-panel").find('.dragging-app').find('ul');
 			for(i in json) {
-				if(json[i].app_type_id == 3){ // Stand alone app only
+				if(json[i].app_type == 'Page Support' || json[i].app_type == 'Standalone'){
 					ul_element.append(
 					'<li class="draggable"><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" /></p>'
 					+'<p class="appname">'+ json[i].app_name +'</p>'

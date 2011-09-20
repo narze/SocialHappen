@@ -191,7 +191,7 @@ class SocialHappen{
 	function get_header($data = array()){
 		$common = array();
 		
-		if(!$this->CI->facebook->is_authentication()){
+		if(!$facebook_user = $this->CI->facebook->getUser()){
 			$this->logout(); // should relogin facebook to extend cookies TODO : fix
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
@@ -199,14 +199,12 @@ class SocialHappen{
 				'next' => $this->CI->input->get('next'),
 				'user_can_create_company' => FALSE
 			);
-			
 		} else {
-			
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'user' => $this->get_user(),
 				'image_url' => base_url().'assets/images/',
-				'facebook_user' => $this->CI->facebook->getUser(),
+				'facebook_user' => $facebook_user,
 				'script' => array(
 					'common/functions',
 					'common/onload',

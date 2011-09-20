@@ -493,7 +493,7 @@ class Sync extends CI_Controller {
 			array(
 				'app_id' => 5, 
 				'app_name' => 'FeedVideo', 
-				'app_type_id' => $this->socialhappen->get_k('app_type','Page Support'), 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Support Page'), 
 				'app_maintainance' => 0, 
 				'app_show_in_list' => 1, 
 				'app_description' => 'Video Feed', 
@@ -509,7 +509,7 @@ class Sync extends CI_Controller {
 			array(
 				'app_id' => 6, 
 				'app_name' => '[Local]FeedVideo', 
-				'app_type_id' => $this->socialhappen->get_k('app_type','Page Support'), 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Support Page'), 
 				'app_maintainance' => 0, 
 				'app_show_in_list' => 1, 
 				'app_description' => 'Video Feed', 
@@ -525,7 +525,7 @@ class Sync extends CI_Controller {
 			array(
 				'app_id' => 7, 
 				'app_name' => 'FeedRSS', 
-				'app_type_id' => $this->socialhappen->get_k('app_type','Page Support'), 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Support Page'), 
 				'app_maintainance' => 0, 
 				'app_show_in_list' => 1, 
 				'app_description' => 'RSS Feed', 
@@ -541,7 +541,7 @@ class Sync extends CI_Controller {
 			array(
 				'app_id' => 8, 
 				'app_name' => '[Local]FeedRSS', 
-				'app_type_id' => $this->socialhappen->get_k('app_type','Page Support'), 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Support Page'), 
 				'app_maintainance' => 0, 
 				'app_show_in_list' => 1, 
 				'app_description' => 'RSS Feed', 
