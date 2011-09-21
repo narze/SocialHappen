@@ -509,7 +509,7 @@ class SocialHappen{
 				}
 				if($roles){
 					$required_roles = array('role_all_company_apps_edit','role_all_company_apps_delete');
-					if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
+					if(!$this->_has_company_roles($user_id,$installed_app['company_id'],$roles,$required_roles)){
 						return FALSE;
 					}
 				}
