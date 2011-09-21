@@ -2,7 +2,7 @@
 {company_image_and_name}
 {breadcrumb}
 <div id="popup-gotofacebook" style="display:none">
-	<h2>Page installation is not complete</h2>
+	<h2>Page installation : One step more</h2>
 	Please, go to facebook to complete the action.
 	<a class="gotofacebook-link">Go to facebook</a>
 </div>

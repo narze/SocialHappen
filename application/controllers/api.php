@@ -93,7 +93,7 @@ class Api extends CI_Controller {
 				$this->audit_lib->add_audit(
 											$app_id,
 											$user_id,
-											1, //presently hard coded
+											$this->socialhappen->get_k('audit_action','Install App'),
 											'', 
 											'',
 											array(
@@ -202,7 +202,7 @@ class Api extends CI_Controller {
 				$this->audit_lib->add_audit(
 											$app_id,
 											$user_id,
-											2, //presently hard coded
+											$this->socialhappen->get_k('audit_action','Install App To Page'),
 											'', 
 											'',
 											array(
@@ -423,7 +423,7 @@ class Api extends CI_Controller {
 		//($app_id = NULL, $subject = NULL, $action_id = NULL, $object = NULL, $objecti = NULL, $additional_data = array())
 		$result = $this->audit_lib->add_audit(
 			$app_id,
-			NULL,
+			$user_id,
 			$action,
 			NULL, 
 			NULL,
@@ -534,7 +534,7 @@ class Api extends CI_Controller {
 			$this->audit_lib->add_audit(
 										$app_id,
 										$user_id,
-										102, //presently hard coded
+										$this->socialhappen->get_k('audit_action','User Register App'),
 										'', 
 										'',
 										array(
@@ -552,7 +552,7 @@ class Api extends CI_Controller {
 			$this->audit_lib->add_audit(
 										$app_id,
 										$user_id,
-										103, //presently hard coded
+										$this->socialhappen->get_k('audit_action','User Visit'),
 										'', 
 										'',
 										array(
