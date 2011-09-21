@@ -499,29 +499,43 @@ class SocialHappen{
 			}
 		}
 		if(isset($data['app_install_id'])){
-			$this->CI->load->model('page_model','pages');
-			$page = $this->CI->pages->get_page_profile_by_app_install_id($data['app_install_id']);
-			$this->CI->load->model('user_pages_model','user_pages');
-			$user_pages = $this->CI->user_pages->get_user_pages_by_user_id($user_id);
 			$this->CI->load->model('installed_apps_model','installed_apps');
 			$installed_app = $this->CI->installed_apps->get_app_profile_by_app_install_id($data['app_install_id']);
-			if(!in_each_array('page_id',$installed_app['page_id'],$user_pages)) {
-				return FALSE;
-			}
-			if($roles){ //echo 'has roles ';
-				$required_roles = array('role_all_company_apps_edit','role_all_company_apps_delete');
-				if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
-					//echo 'no company roles ';
-					foreach($user_pages as $user_page){
-						if($user_page['user_id'] == $user_id){
-							if($user_page['role_all'] == FALSE){
-								foreach($roles as $role){
-									//echo "role = {$role}";
-									if(in_array($role,array('role_app_edit','role_app_delete')) && $user_page[$role] == FALSE){
-										//echo 'no role';
-										return FALSE;
-									}
-								}						
+			if($installed_app['page_id'] == 0){ //Standalone app
+				$this->CI->load->model('user_companies_model','user_companies');
+				$company_users = $this->CI->user_companies->get_company_users_by_company_id($installed_app['company_id']);
+				if(!in_each_array('user_id',$user_id,$company_users)) {
+					return FALSE;
+				}
+				if($roles){
+					$required_roles = array('role_all_company_apps_edit','role_all_company_apps_delete');
+					if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
+						return FALSE;
+					}
+				}
+			} else {
+				$this->CI->load->model('page_model','pages');
+				$page = $this->CI->pages->get_page_profile_by_app_install_id($data['app_install_id']);
+				$this->CI->load->model('user_pages_model','user_pages');
+				$user_pages = $this->CI->user_pages->get_user_pages_by_user_id($user_id);
+				if(!in_each_array('page_id',$installed_app['page_id'],$user_pages)) {
+					return FALSE;
+				}
+				if($roles){ //echo 'has roles ';
+					$required_roles = array('role_all_company_apps_edit','role_all_company_apps_delete');
+					if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
+						//echo 'no company roles ';
+						foreach($user_pages as $user_page){
+							if($user_page['user_id'] == $user_id){
+								if($user_page['role_all'] == FALSE){
+									foreach($roles as $role){
+										//echo "role = {$role}";
+										if(in_array($role,array('role_app_edit','role_app_delete')) && $user_page[$role] == FALSE){
+											//echo 'no role';
+											return FALSE;
+										}
+									}						
+								}
 							}
 						}
 					}
