@@ -5,15 +5,22 @@
 	<ul><?php 
 	if($fields)
 	{
-		foreach($fields as $field)
+		foreach($fields as $key => $field)
 		{ ?>
-			<li id="field-<?php echo $field['field_id']?>">
+			<li id="field-<?php echo $key?>">
 				<label><?php echo $field['label']; ?>: </label><?php 
-				foreach ($field['inputs'] as $input)
-				{
-					echo $input;
-				}?>
-				<input type="checkbox" name="required" id="required-<?php echo $field['field_id']?>" /> <label for="required-<?php echo $field['field_id']?>">Required</label> | 
+				if(isset($field['items'])) {
+					foreach ($field['items'] as $item)
+					{?>
+						<input type="<?php echo $field['type'];?>" name="<?php echo $item; ?>"><?php echo $item;?></input>;
+					<?php }
+				} else {
+				?>
+					<input type="<?php echo $field['type'];?>"></input>
+				<?php
+				}
+				?>
+				<input type="checkbox" name="required" id="required-<?php echo $key?>" /> <label for="required-<?php echo $key?>">Required</label> | 
 				<a class="bt-remove-field">Remove</a>
 			</li> <?php
 		} 
@@ -37,7 +44,7 @@
 	<h2>Add more field</h2>
 	<p>Choose from the list below</p>
 	<ul><?php
-	foreach($default_fields as $field)
+	foreach($fields as $field)
 	{ ?>
 		<li>
 			<input type="checkbox" name="<?php echo $field['name']?>" id="<?php echo $field['name']?>" />
@@ -73,6 +80,6 @@
 	<a class="add-more-field">Add more field</a>
 	
 	<p style="text-align:center">
-		<a class="bt-add-these-field">Add this fields the sign up form</a>
+		<a class="bt-add-these-custom-field">Add this fields the sign up form</a>
 	</p>
 </div>

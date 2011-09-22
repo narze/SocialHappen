@@ -502,6 +502,14 @@ class Page extends CI_Controller {
 		$page_user = $this->page_users->get_page_user_by_user_id_and_page_id($user_id, $page_id);
 		echo json_encode(issetor($page_user['user_data'], array()));
 	}
+	
+	/**
+	 * Redirect to page config
+	 * @author Manassarn M.
+	 */
+	function config($page_id){
+		redirect(base_url().'configs/'.$page_id);
+	}
 }
 
 /* End of file page.php */

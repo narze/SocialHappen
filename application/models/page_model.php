@@ -274,7 +274,7 @@ class Page_model extends CI_Model {
 			'gender' => array(
 				'name' => 'gender',
 				'label' => 'Gender',
-				'type' => 'checkbox',
+				'type' => 'radio',
 				'items' => array('Male','Female')
 			),
 			'date_of_birth' => array(
@@ -300,12 +300,12 @@ class Page_model extends CI_Model {
 			'marital_status' => array(
 				'name' => 'marital_status',
 				'label' => 'Marital Status',
-				'type' => 'Checkbox',
+				'type' => 'radio',
 				'items' => array('Single', 'Engaged', 'Married', 'Widowed', 'Divorced')
 			),
 			'number_of_children' => array(
 				'name' => 'number_of_children',
-				'label' => 'Number of Childred',
+				'label' => 'Number of Children',
 				'type' => 'text'
 			),
 			'address_number' => array(
