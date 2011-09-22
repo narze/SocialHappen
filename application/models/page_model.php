@@ -168,7 +168,11 @@ class Page_model extends CI_Model {
 		}
 		$page_fields = json_decode($page['page_user_fields'], TRUE);
 		$added_ids = array();
+		$templates = $this->get_user_field_templates();
 		foreach($fields as $field){
+			if(isset($field['template'])){
+				$field = array_merge($templates[$field['template']], $field);//var_dump($field);echo "<br />";
+			}
 			if(!issetor($field['name']) || !issetor($field['type']) || !issetor($field['label']) ||
 				!in_array($field['type'], array('text','textarea','checkbox','radio')) ||
 				(in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) || !$field['items'] || !is_array($field['items']) || in_array('',$field['items'])))
@@ -254,6 +258,113 @@ class Page_model extends CI_Model {
 			unset($page_fields[$id]);
 		}
 		return $this->update_page_profile_by_page_id($page_id, array('page_user_fields' => json_encode($page_fields)));
+	}
+	
+	/**
+	 * Get user field templates
+	 * @author Manassarn M.
+	 */
+	function get_user_field_templates(){
+		$templates = array(
+			'id_card_number' => array(
+				'name' => 'id_card_number',
+				'label' => 'ID Card Number',
+				'type' => 'text'
+			),
+			'gender' => array(
+				'name' => 'gender',
+				'label' => 'Gender',
+				'type' => 'checkbox',
+				'items' => array('Male','Female')
+			),
+			'date_of_birth' => array(
+				'name' => 'date_of_birth',
+				'label' => 'Date of Birth',
+				'type' => 'text'
+			),
+			'education' => array(
+				'name' => 'education',
+				'label' => 'Education',
+				'type' => 'text'
+			),
+			'occupation' => array(
+				'name' => 'occupation',
+				'label' => 'Occupation',
+				'type' => 'text'
+			),
+			'income' => array(
+				'name' => 'income',
+				'label' => 'Income',
+				'type' => 'text'
+			),
+			'marital_status' => array(
+				'name' => 'marital_status',
+				'label' => 'Marital Status',
+				'type' => 'Checkbox',
+				'items' => array('Single', 'Engaged', 'Married', 'Widowed', 'Divorced')
+			),
+			'number_of_children' => array(
+				'name' => 'number_of_children',
+				'label' => 'Number of Childred',
+				'type' => 'text'
+			),
+			'address_number' => array(
+				'name' => 'address_number',
+				'label' => 'Address Number',
+				'type' => 'text'
+			),
+			'street' => array(
+				'name' => 'street',
+				'label' => 'Street',
+				'type' => 'text'
+			),
+			'town' => array(
+				'name' => 'town',
+				'label' => 'Town',
+				'type' => 'text'
+			),
+			'city' => array(
+				'name' => 'city',
+				'label' => 'City',
+				'type' => 'text'
+			),
+			'zip_code' => array(
+				'name' => 'zip_code',
+				'label' => 'Zip Code',
+				'type' => 'text'
+			),
+			'country' => array(
+				'name' => 'country',
+				'label' => 'Country',
+				'type' => 'text'
+			),
+			'telephone' => array(
+				'name' => 'telephone',
+				'label' => 'Telephone',
+				'type' => 'text'
+			),
+			'mobile_phone' => array(
+				'name' => 'mobile_phone',
+				'label' => 'Mobile Phone',
+				'type' => 'text'
+			),
+			'website' => array(
+				'name' => 'website',
+				'label' => 'Website',
+				'type' => 'text'
+			),
+			'twitter' => array(
+				'name' => 'twitter',
+				'label' => 'Twitter',
+				'type' => 'text'
+			),
+			'facebook' => array(
+				'name' => 'facebook',
+				'label' => 'Facebook',
+				'type' => 'text'
+			),
+		);
+		return $templates;
 	}
 }
 /* End of file page_model.php */
