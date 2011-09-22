@@ -382,6 +382,34 @@ class Page_model_test extends CI_Controller {
 			)
 		));
 		$this->unit->run($result, 'is_false', 'Checkbox with blank item');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'template' => 'id_card_number'
+			)
+		));
+		$this->unit->run($result, 'is_array', 'Template : id_card_number');
+		$this->unit->run(count($result) == 1, 'is_true', 'Added 1 field');
+		$this->unit->run(in_array(7,$result), 'is_true', 'Added 1 field');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'template' => 'gender',
+				'required' => TRUE
+			)
+		));
+		$this->unit->run($result, 'is_array', 'Template : gender with required flag');
+		$this->unit->run(count($result) == 1, 'is_true', 'Added 1 field');
+		$this->unit->run(in_array(8,$result), 'is_true', 'Added 1 field');
+		
+		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
+			array(
+				'template' => 'gender',
+				'name' => 'gender2',
+				'items' => array()
+			)
+		));
+		$this->unit->run($result, 'is_false', 'Template : gender with empty item');
 	}
 	
 	/**
@@ -399,6 +427,13 @@ class Page_model_test extends CI_Controller {
 		
 		$this->unit->run($result[6], 'is_array', 'id 6');
 		$this->unit->run($result[6]['required'], 'is_false', "required reset to FALSE due to checkbox type");
+		
+		$this->unit->run($result[7], 'is_array', 'id 7');
+		$this->unit->run($result[7]['type'], 'text', "id_card_number type = text");
+		
+		$this->unit->run($result[8], 'is_array', 'id 8');
+		$this->unit->run($result[8]['type'], 'checkbox', "gender type = checkbox");
+		$this->unit->run($result[8]['required'], 'is_false', "gender with required = true, reverted to false due to checkbox");
 		
 		$result = $this->pages->get_page_user_fields_by_page_id(100);
 		$this->unit->run($result, 'is_false', 'get_page_user_fields_by_page_id(100)');
@@ -624,7 +659,7 @@ class Page_model_test extends CI_Controller {
 		$result = $this->pages->remove_page_user_fields_by_page_id(100, array(3,4));
 		$this->unit->run($result, 'is_false', 'Wrong page');
 		
-		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(3,4));
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(3,4,7,8));
 		$this->unit->run($result, 'is_true', 'Removed');
 		
 		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(3,4));
