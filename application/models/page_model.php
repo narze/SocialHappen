@@ -168,7 +168,7 @@ class Page_model extends CI_Model {
 		}
 		$page_fields = json_decode($page['page_user_fields'], TRUE);
 		$added_ids = array();
-		$templates = $this->_get_user_field_templates();
+		$templates = $this->get_user_field_templates();
 		foreach($fields as $field){
 			if(isset($field['template'])){
 				$field = array_merge($templates[$field['template']], $field);//var_dump($field);echo "<br />";
@@ -264,7 +264,7 @@ class Page_model extends CI_Model {
 	 * Get user field templates
 	 * @author Manassarn M.
 	 */
-	function _get_user_field_templates(){
+	function get_user_field_templates(){
 		$templates = array(
 			'id_card_number' => array(
 				'name' => 'id_card_number',
