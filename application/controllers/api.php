@@ -1362,9 +1362,14 @@ class Api extends CI_Controller {
 		$this->load->model('user_pages_model','user_pages');
 		$user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		if(!$user){
+			$this->load->model('page_model','page');
+			$page = $this->page->get_page_profile_by_page_id($app['page_id']);
+			$facebook_page = $this->facebook->get_page_info($page['facebook_page_id']);
 			$data['view_as'] = 'guest';
-			$data['right_menu'] = array();
-		} else if($this->user_pages->is_page_admin($user['user_id'], $app['page_id'])){
+			$data['right_menu'] = array(
+				array('location' => $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id'), 'title' => 'Signup SocialHappen', 'target'=>'_top')
+			);
+		} else if($this->user_pages->is_page_admin($user['user_id'], $app['page_id'])){			
 			$data['view_as'] = 'admin';
 			$data['right_menu'] = array(
 				array('location' => '#', 'title' => 'Config this app'),

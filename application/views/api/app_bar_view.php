@@ -10,7 +10,7 @@
 		<ul>
 			<?php
 				foreach($left_menu as $item){
-					echo '<li><a href="'.$item['location'].'">'.$item['title'].'</a></li>';
+					echo '<li><a target="'. issetor($item['target'], '_self') .'" href="'.$item['location'].'">'.$item['title'].'</a></li>';
 				}
 			?>
 		</ul>
@@ -42,7 +42,7 @@
 			<ul>
 				<?php
 					foreach($right_menu as $item){
-						echo '<li><a href="'.$item['location'].'">'.$item['title'].'</a></li>';
+						echo '<li><a target="'. issetor($item['target'], '_self') .'" href="'.$item['location'].'">'.$item['title'].'</a></li>';
 					}
 				?>
 			</ul>

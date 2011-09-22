@@ -426,7 +426,8 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 			$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 			$(".head-box-app-list").hide();
 		},
-		success: function(json) {	
+		success: function(json) {
+			$(".notice").hide();
 			var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
 			ul_element.append('<li class="add-app"></li>');
 			for(i in json) {

@@ -247,6 +247,63 @@ class Home extends CI_Controller {
 	}
 	
 	/**
+	 * App page - show all applications
+	 * @author Weerapat P.
+	 */
+	function apps($app_id = NULL)
+	{
+		$this->load->model('app_model','app');
+		
+		$data = array(
+			'header' => $this -> socialhappen -> get_header( 
+				array(
+					'title' => 'Applications',
+					'script' => array(
+						'common/functions',
+						'common/jquery.form',
+						'common/bar',
+						'common/fancybox/jquery.fancybox-1.3.4.pack',
+						'home/lightbox',
+						'payment/payment'
+					),
+					'style' => array(
+						'common/platform',
+						'common/main',
+						'common/fancybox/jquery.fancybox-1.3.4'
+					)
+				)
+			),
+			'breadcrumb' => $this->load->view('common/breadcrumb', 
+				array(
+					'breadcrumb' => array( 
+						'Applications' => NULL
+					)
+				),
+			TRUE),
+			'footer' => $this->socialhappen->get_footer()
+		);
+		
+		if(!$app_id)
+		{
+			$data['home'] = $this->load->view('home/apps', 
+				array(
+					'apps' => $this->app->get_all_apps()
+				),
+			TRUE);
+		}
+		else
+		{
+			$data['home'] = $this->load->view('home/app', 
+				array(
+					'app' => $this->app->get_app_by_app_id($app_id)
+				),
+			TRUE);
+		}
+		
+		$this -> parser -> parse('home/home_view', $data);
+	}
+	
+	/**
 	 * Facebook connect popup
 	 * @author Weerapat P.
 	 */
@@ -255,7 +312,7 @@ class Home extends CI_Controller {
 		$data = array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
 			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
-			'next' => $this->config->item('next')
+			'next' => $this->input->get('next') ? $this->input->get('next') : ''
 		);
 		$this -> load -> view('home/facebook_connect', $data);
 	}

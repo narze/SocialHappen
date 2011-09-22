@@ -9,8 +9,9 @@
 						$.getJSON(base_url+"api/request_user_id?user_facebook_id=" + response.id , function(json){
 							if(json.status != 'OK'){
 								window.location.replace(base_url+"home/signup?package_id=<?php echo $this->input->get('package_id'); ?>&payment=true");
-							} else {
-								window.location.replace(base_url+"home/package?package_id=<?php echo $this->input->get('package_id'); ?>&payment=true");
+							} else { <?php 
+								if($next) { ?> window.location.replace('<?php echo $next; ?>'); <?php }
+								else { ?> window.location.replace(base_url+"home/package?package_id=<?php echo $this->input->get('package_id'); ?>&payment=true"); <?php }?>
 							}
 						});
 					});

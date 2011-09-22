@@ -63,6 +63,23 @@ $(function(){
 		
 	});
 	
+	//Call facebook_connect popup when click install app
+	$('a.bt-install-app').live('click',function(){
+		if(is_login()){
+
+		} else {
+			$.fancybox({
+				href: base_url+'home/facebook_connect?next=' + encodeURIComponent(window.location.href) + '?logged_in=true' ,
+				transitionIn: 'elastic',
+				transitionOut: 'elastic',
+				padding: 0,
+				scrolling: 'no'
+			});
+			
+			return false;
+		}
+	});
+	
 	//Cancel package
 	$('a.unsubscribe').click(function () {
 		var agree = confirm("Are you sure you want to unsubscribe this package?");
