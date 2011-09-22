@@ -34,7 +34,8 @@ a {
 .warning a { color:#6d6311; }
 
 /* New botton */
-.bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs {
+.bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs,
+.bt-apply, .bt-apply-to-signup-form, .bt-add-field-from-list, .bt-create-own-field {
 	display: block;
 	background: url(../../images/bg/bg_button_2.png) no-repeat;
 	cursor: pointer;
@@ -42,6 +43,7 @@ a {
 	color: transparent !important;
 	text-indent: -9000px;
 	overflow:hidden;
+	margin: 0;
 }
 .bt-pick {
 	width: 64px;
@@ -52,31 +54,51 @@ a {
 	width: 183px;
 	height: 34px;
 	background-position: 0 -27px;
-	margin: 0;
 }
 .bt-choose-package { 
 	width: 184px;
 	height: 35px;
 	background-position: 0 -62px;
-	margin: 0;
 }
 .bt-upgrade-package { 
 	width: 184px;
 	height: 35px;
 	background-position: 0 -98px;
-	margin: 0;
 }
 .bt-package-setting { 
 	background-position: 0 -135px;
     height: 34px;
-    margin: 0;
     width: 157px;
 }
 .bt-read-faqs { 
 	width: 146px;
 	height: 32px;
 	background-position: 0 -170px;
-	margin: 0;
+}
+.bt-apply { 
+	width: 92px;
+	height: 36px;
+	background-position: 0 -204px;
+}
+.bt-apply-to-signup-form {
+	width: 237px;
+	height: 36px;
+	background-position: 0 -241px;
+}
+.bt-add-field-from-list {
+	width: 296px;
+	height: 36px;
+	background-position: 0 -277px;
+} 
+.bt-create-own-field {
+	width: 296px;
+	height: 36px;
+	background-position: 0 -319px;
+}
+.bt-remove-field {
+	width: 15px;
+	height: 15px;
+	background-position: -284px -1px;
 }
 
 /* Packages home */
