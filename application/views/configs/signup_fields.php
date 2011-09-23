@@ -83,7 +83,9 @@
 			</li><?php
 		} ?>
 		</ul>
-		<a class="bt-add-these-field">Add these fields to the sign up form</a>
+		<p class="apply">
+			<a class="bt-apply-to-signup-form">Add these fields to the sign up form</a>
+		</p>
 	</div>
 	
 	<!-- Pop up custom field-->
