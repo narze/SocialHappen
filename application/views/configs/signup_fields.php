@@ -95,11 +95,10 @@
 				<label>Field title: </label><input type="text" name="new-field" />
 				<label>Field type</label> 
 					<select name="field-type">
-						<option selected="selected">Text</option>
-						<option>Paragraph Text</option>
-						<option>Multiple choices</option>
-						<option>Check box</option>
-						<option>Dropdown</option>
+						<option value='text' selected="selected">Text</option>
+						<option value='textarea'>Paragraph Text</option>
+						<option value='radio'>Radio Button</option>
+						<option value='checkbox'>Checkbox</option>
 					</select>
 				</div>
 				<div class="right">
