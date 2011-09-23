@@ -47,7 +47,6 @@ $(function(){
 				content: $('#custom-fields').appendTo(this),
 				onCleanup: function(){ 
 					$('#custom-fields').clone().appendTo($('#fancy')); //Clone to make ux better, it'll be remove by fancybox
-				}
 			});
 			
 			$('#custom-fields ul li div.options ul li.add-option input').click(function(){
