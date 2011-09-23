@@ -92,8 +92,8 @@
 		<ul class="fields">
 			<li>
 				<div class="left">
-				<label>Field title: </label><input type="text" name="new-field" />
-				<label>Field type</label> 
+				<label>Field title :</label><input type="text" name="new-field" />
+				<label>Field type :</label> 
 					<select name="field-type">
 						<option value='text' selected="selected">Text</option>
 						<option value='textarea'>Paragraph Text</option>
@@ -104,14 +104,17 @@
 				<div class="right">
 				<input type="checkbox" name="new-field-required" /> <label>Required</label> | 
 				<a class="bt-remove-field">Remove</a>
-				<div class="options">
-					<input type="text" value="Option 1" /><br />
-					<input type="text" value="Click to add option" disabled="disabled" /> or add <a class="add-other">"Other"</a>
 				</div>
+				<div class="options"> 
+					<ul>
+						<li class="option"><input type="hidden" class="option-type" /><input type="text" value="Option 1" /><a class="bt-remove-option">Remove option</a></li>
+						<li class="add-option"><input type="hidden" class="option-type" /><input type="text" value="Click to add option" readonly="readonly" /> or add <a class="add-other">"Other"</a></li>
+					</ul>
 				</div>
+				
 			</li>
 		</ul>
-		<a class="add-more-field">Add more field</a>
+		<a class="add-more-field">+ Add more field</a>
 		
 		<p style="text-align:center">
 			<a class="bt-add-these-custom-field">Add this fields the sign up form</a>
