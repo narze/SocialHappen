@@ -34,7 +34,8 @@ a {
 .warning a { color:#6d6311; }
 
 /* New botton */
-.bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs {
+.bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs,
+.bt-apply, .bt-apply-to-signup-form, .bt-add-field-from-list, .bt-create-own-field, .bt-remove-field {
 	display: block;
 	background: url(../../images/bg/bg_button_2.png) no-repeat;
 	cursor: pointer;
@@ -42,42 +43,19 @@ a {
 	color: transparent !important;
 	text-indent: -9000px;
 	overflow:hidden;
-}
-.bt-pick {
-	width: 64px;
-	height: 25px;
-	background-position: 0 0;
-}
-.bt-free-trial { 
-	width: 183px;
-	height: 34px;
-	background-position: 0 -27px;
 	margin: 0;
 }
-.bt-choose-package { 
-	width: 184px;
-	height: 35px;
-	background-position: 0 -62px;
-	margin: 0;
-}
-.bt-upgrade-package { 
-	width: 184px;
-	height: 35px;
-	background-position: 0 -98px;
-	margin: 0;
-}
-.bt-package-setting { 
-	background-position: 0 -135px;
-    height: 34px;
-    margin: 0;
-    width: 157px;
-}
-.bt-read-faqs { 
-	width: 146px;
-	height: 32px;
-	background-position: 0 -170px;
-	margin: 0;
-}
+.bt-pick { width: 64px; height: 25px; background-position: 0 0; }
+.bt-free-trial { width: 183px; height: 34px; background-position: 0 -27px; }
+.bt-choose-package { width: 184px; height: 35px; background-position: 0 -62px; }
+.bt-upgrade-package { width: 184px; height: 35px; background-position: 0 -98px; }
+.bt-package-setting { background-position: 0 -135px; height: 34px; width: 157px; }
+.bt-read-faqs { width: 146px; height: 32px; background-position: 0 -170px; }
+.bt-apply { width: 92px; height: 40px; background-position: 0 -204px; }
+.bt-apply-to-signup-form { width: 237px; height: 40px; background-position: 0 -241px; }
+.bt-add-field-from-list { width: 296px; height: 40px; background-position: 0 -277px; display:inline-block; } 
+.bt-create-own-field { width: 296px; height: 40px; background-position: 0 -318px; display:inline-block; }
+.bt-remove-field { width: 15px; height: 15px; background-position: -284px -1px; display:inline-block; }
 
 /* Packages home */
 div.wrapper-package { background-color: #494949; }
@@ -504,4 +482,64 @@ div.box-current_package div.package-overlay ul > li
 {
 	font-size:10px;
 	width:90px;
+}
+
+/* Page config (Sign up Fields) */
+#signup-fields ul.fields {
+	margin: 20px 0;
+	position:relative;
+}
+#signup-fields ul.fields li,
+#custom-fields ul.fields li {
+	position:relative;
+	margin:7px 0;
+	background-color:#f3f3f3;
+	border:1px dashed #c9c9c9;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+#signup-fields ul.fields li div.left,
+#custom-fields ul.fields li div.left {
+	display:inline-block;
+	padding-left:177px;
+	width:300px;
+	position:relative;
+	background-color:#FFF;
+	border-right:1px solid #d7d7d7;
+}
+#signup-fields ul.fields li div.left label {
+	text-align: right;
+	display: inline-block;
+	width: 170px;
+	overflow: hidden;
+	position: absolute;
+	top: 8px;
+	left: 0px;
+	line-height:20px;
+}
+#signup-fields ul.fields li div.left div.inputs {
+	margin:7px 0;
+	line-height:20px;
+}
+#signup-fields ul.fields li div.left input[type=text] {
+	height:20px;
+}
+#signup-fields ul.fields li div.right {
+	position: absolute;
+	right: 7px;
+	text-align: right;
+	top: 10px;
+	
+}
+#signup-fields ul.fields li div.right label {
+	height:20px;
+}
+#signup-fields span.separator {
+	padding:0 4px 0 5px;
+	color:#a5a5a5;
+}
+
+#custom-fields ul.fields li div.left label {
+
 }
