@@ -52,7 +52,7 @@ a {
 .bt-package-setting { background-position: 0 -135px; height: 34px; width: 157px; }
 .bt-read-faqs { width: 146px; height: 32px; background-position: 0 -170px; }
 .bt-apply { width: 92px; height: 40px; background-position: 0 -204px; }
-.bt-apply-to-signup-form { width: 237px; height: 40px; background-position: 0 -241px; }
+.bt-apply-to-signup-form { width: 237px; height: 36px; background-position: 0 -241px; display:inline-block; }
 .bt-add-field-from-list { width: 296px; height: 40px; background-position: 0 -277px; display:inline-block; } 
 .bt-create-own-field { width: 296px; height: 40px; background-position: 0 -318px; display:inline-block; }
 .bt-remove-field { width: 15px; height: 15px; background-position: -284px -1px; display:inline-block; }
@@ -506,7 +506,7 @@ div.box-current_package div.package-overlay ul > li
 	background-color:#FFF;
 	border-right:1px solid #d7d7d7;
 }
-#signup-fields ul.fields li div.left label {
+#signup-fields ul.fields li div.left label.title {
 	text-align: right;
 	display: inline-block;
 	width: 170px;
@@ -520,8 +520,18 @@ div.box-current_package div.package-overlay ul > li
 	margin:7px 0;
 	line-height:20px;
 }
-#signup-fields ul.fields li div.left input[type=text] {
+#signup-fields ul.fields li div.left div.inputs label {
+	padding-right:5px;
+	display: inline-block;
+}
+#signup-fields ul.fields li div.left input[type=text],
+#custom-fields ul.fields li div.left input[type=text] {
 	height:20px;
+}
+#signup-fields ul.fields li div.left input[type=checkbox],
+#signup-fields ul.fields li div.left input[type=radio] {
+	top: 2px;
+	position: relative;
 }
 #signup-fields ul.fields li div.right {
 	position: absolute;
@@ -532,16 +542,24 @@ div.box-current_package div.package-overlay ul > li
 #signup-fields ul.fields li div.right label {
 	height:20px;
 }
-#signup-fields span.separator {
+#signup-fields ul.fields li div.right input[type=checkbox] {
+	top: 2px;
+	position: relative;
+}
+#signup-fields span.separator,
+#custom-fields span.separator {
 	padding:0 4px 0 5px;
 	color:#a5a5a5;
 }
 
 #custom-fields { width:600px; }
+#custom-fields ul.fields {
+	margin-top: 20px;
+}
 #custom-fields ul.fields li {
 	position:relative;
 	margin:7px 0 0 0;
-	background-color:#f3f3f3;
+	background-color:#fff;
 	border:1px dashed #c9c9c9;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -549,28 +567,58 @@ div.box-current_package div.package-overlay ul > li
 }
 #custom-fields ul.fields li div.left {
 	display:inline-block;
-	width:300px;
+	width:470px;
 	position:relative;
-	background-color:#FFF;
-	border-right:1px solid #d7d7d7;
+	padding:0 10px;
 }
 #custom-fields ul.fields li div.left label {
-	text-align: right;
 	display: inline-block;
-	width: 120px;
+	width: 60px;
+	padding:0 10px;
 	overflow: hidden;
 	line-height:20px;
+	margin:10px 0;
+}
+#custom-fields ul.fields li div.left select {
+	width:140px;
+	height:24px;
 }
 #custom-fields ul.fields li div.right {
 	position: absolute;
-	right: 7px;
+	right: 14px;
 	text-align: right;
 	top: 10px;
 }
+#custom-fields ul.fields li div.right input[type=checkbox] {
+	top: 2px;
+	position: relative;
+}
 #custom-fields ul.fields li div.options {
 	background-color:#fffadd;
+	padding:0 10px 0 75px;
 }
 #custom-fields ul.fields li div.options ul li {
+	margin:0;
 	border:none;
 	background-color:transparent;
 }
+#custom-fields ul.fields li div.options ul li.add-option input[type=text] {
+	margin-bottom: 10px;
+	background-color:#fffdf1;
+	border:1px solid #dcdacf;
+	padding:1px;
+}
+#custom-fields ul.fields li div.options input[type=text] {
+	margin-top: 10px;
+}
+#custom-fields ul.fields li div.options input[type=checkbox],
+#custom-fields ul.fields li div.options input[type=radio] {
+	position: absolute;
+	left: -20px;
+	top: 13px;
+}
+#custom-fields a.bt-remove-option{ background: url(../../images/bg/notice_close.png) no-repeat top left; width: 10px; height: 10px; display: inline-block; position: relative; left: 4px; cursor:pointer; text-indent:-9000px; }
+#custom-fields a.add-other { text-decoration:underline; }
+#custom-fields p.apply { text-align:center; border-top:1px solid #e6e6e6; }
+#custom-fields p.apply a.bt-apply-to-signup-form { margin-top:12px; }
+#custom-fields a.add-more-field { margin:20px 0 20px 10px; display:block; text-decoration:underline; color:#54661b; font-weight:bold }

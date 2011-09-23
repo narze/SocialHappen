@@ -3,19 +3,19 @@
 	<ul class="fields">
 		<li>
 			<div class="left">
-				<label>First Name :</label>
+				<label class="title">First Name :</label>
 				<div class="inputs"><input type="text"></div>
 			</div>
 		</li>
 		<li>
 			<div class="left">
-				<label>Last Name :</label>
+				<label class="title">Last Name :</label>
 				<div class="inputs"><input type="text"></div>
 			</div>
 		</li>
 		<li>
 			<div class="left">
-				<label>Email :</label>
+				<label class="title">Email :</label>
 				<div class="inputs"><input type="text"></div>
 			</div>
 		</li>
@@ -30,13 +30,13 @@
 		{ ?>
 			<li class="<?php echo $key?>">
 				<div class="left">
-				<label><?php echo $field['label']; ?> :</label>
+				<label class="title"><?php echo $field['label']; ?> :</label>
 				<div class="inputs"><?php 
 
 				if(isset($field['items'])) {
 					foreach ($field['items'] as $item)
 					{?>
-						<input type="<?php echo $field['type'];?>" name="<?php echo $key; ?>"> <?php echo $item;?></input><br />
+						<label><input type="<?php echo $field['type'];?>" name="<?php echo $key; ?>"> <?php echo $item;?></input></label>
 					<?php }
 				} else {
 				?>
@@ -72,7 +72,7 @@
 <div id="fancy" style="display:none">
 	<!-- Pop up default field-->
 	<div id="default-fields">
-		<h2>Add more field</h2>
+		<h2 class="in-popup">Add more field</h2>
 		<p>Choose from the list below</p>
 		<ul><?php
 		foreach($fields as $field)
@@ -88,7 +88,7 @@
 	
 	<!-- Pop up custom field-->
 	<div id="custom-fields">
-		<h2>Create your own field</h2>
+		<h2 class="in-popup">Create your own field</h2>
 		<ul class="fields">
 			<li>
 				<div class="left">
@@ -103,7 +103,7 @@
 					</select>
 				</div>
 				<div class="right">
-				<input type="checkbox" name="new-field-required" /> <label>Required</label> | 
+				<label><input type="checkbox" name="new-field-required" /> Required</label><span class="separator">|</span> 
 				<a class="bt-remove-field">Remove</a>
 				</div>
 				<div class="options"> 
@@ -117,8 +117,8 @@
 		</ul>
 		<a class="add-more-field">+ Add more field</a>
 		
-		<p style="text-align:center">
-			<a class="bt-add-these-custom-field">Add this fields the sign up form</a>
+		<p class="apply">
+			<a class="bt-apply-to-signup-form">Add this fields the sign up form</a>
 		</p>
 	</div>
 </div>
