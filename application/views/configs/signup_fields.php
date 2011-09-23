@@ -83,14 +83,14 @@
 			</li><?php
 		} ?>
 		</ul>
-		<a class="bt-add-these-field">Add these fields to the sign up form</a>
+		<a class="bt-apply-to-signup-form">Add these fields to the sign up form</a>
 	</div>
 	
 	<!-- Pop up custom field-->
 	<div id="custom-fields">
 		<h2 class="in-popup">Create your own field</h2>
 		<ul class="fields">
-			<li>
+			<li class="field">
 				<div class="left">
 				<label>Field title :</label><input type="text" name="new-field" />
 				<label>Field type :</label> 
@@ -105,9 +105,34 @@
 				<label><input type="checkbox" name="new-field-required" /> Required</label><span class="separator">|</span> 
 				<a class="bt-remove-field">Remove</a>
 				</div>
-				<div class="options"> 
+				<div class="options" style="display: none;"> 
 					<ul>
-						<li class="option"><input type="hidden" class="option-type" /><input type="text" value="Option 1" /><a class="bt-remove-option">Remove option</a></li>
+						<li class="option"><input type="hidden" name="option-type-example" class="option-type" /><input type="text" value="Option 1" /><a class="bt-remove-option">Remove option</a></li>
+						<li class="add-option"><input type="hidden" class="option-type" /><input type="text" value="Click to add option" readonly="readonly" /> or add <a class="add-other">"Other"</a></li>
+					</ul>
+				</div>
+				
+			</li>
+		</ul>
+		<ul class="fields-template" style="display:none;">
+			<li class="field">
+				<div class="left">
+				<label>Field title :</label><input type="text" name="new-field" />
+				<label>Field type :</label> 
+					<select name="field-type">
+						<option value='text' selected="selected">Text</option>
+						<option value='textarea'>Paragraph Text</option>
+						<option value='radio'>Radio Button</option>
+						<option value='checkbox'>Checkbox</option>
+					</select>
+				</div>
+				<div class="right">
+				<label><input type="checkbox" name="new-field-required" /> Required</label><span class="separator">|</span> 
+				<a class="bt-remove-field">Remove</a>
+				</div>
+				<div class="options" style="display: none;"> 
+					<ul>
+						<li class="option"><input type="hidden" name="option-type-example" class="option-type" /><input type="text" value="Option 1" /><a class="bt-remove-option">Remove option</a></li>
 						<li class="add-option"><input type="hidden" class="option-type" /><input type="text" value="Click to add option" readonly="readonly" /> or add <a class="add-other">"Other"</a></li>
 					</ul>
 				</div>
