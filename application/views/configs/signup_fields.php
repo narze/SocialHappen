@@ -1,18 +1,41 @@
 <div id="signup-fields">
-	<h2><span>Sign Up Form</span></h2>
+	<h2><span>SocialHappen Form</span></h2>
+	<ul class="fields">
+		<li>
+			<div class="left">
+				<label>First Name :</label>
+				<div class="inputs"><input type="text"></div>
+			</div>
+		</li>
+		<li>
+			<div class="left">
+				<label>Last Name :</label>
+				<div class="inputs"><input type="text"></div>
+			</div>
+		</li>
+		<li>
+			<div class="left">
+				<label>Email :</label>
+				<div class="inputs"><input type="text"></div>
+			</div>
+		</li>
+	</ul>
+	<h2><span>Your Sign Up Form</span></h2>
 	<?php echo form_open("configs/signup_fields/{$page['page_id']}", array('class' => 'signup-fields')); ?>
 	
-	<ul><?php 
+	<ul class="fields"><?php 
 	if($fields)
 	{
 		foreach($fields as $key => $field)
 		{ ?>
 			<li id="field-<?php echo $key?>">
-				<label><?php echo $field['label']; ?>: </label><?php 
+				<div class="left">
+				<label><?php echo $field['label']; ?> :</label>
+				<div class="inputs"><?php 
 				if(isset($field['items'])) {
 					foreach ($field['items'] as $item)
 					{?>
-						<input type="<?php echo $field['type'];?>" name="<?php echo $item; ?>"><?php echo $item;?></input>;
+						<input type="<?php echo $field['type'];?>" name="<?php echo $key; ?>"> <?php echo $item;?></input><br />
 					<?php }
 				} else {
 				?>
@@ -20,11 +43,15 @@
 				<?php
 				}
 				?>
-				<input type="checkbox" name="required" id="required-<?php echo $key?>" /> <label for="required-<?php echo $key?>">Required</label> | 
+				</div>
+				</div>
+				<div class="right">
+				<label><input type="checkbox" name="required" id="required-<?php echo $key?>" /> Required</label><span class="separator">|</span> 
 				<a class="bt-remove-field">Remove</a>
+				</div>
 			</li> <?php
-		} 
-	} 
+		}
+	}
 	else
 	{ ?>
 		<li class="no-field">to start adding more sign up field, click the button below</li><?php
@@ -58,8 +85,9 @@
 <!-- Pop up custom field-->
 <div id="custom-fields" style="display:none">
 	<h2>Create your own field</h2>
-	<ul>
+	<ul class="fields">
 		<li>
+			<div class="left">
 			<label>Field title: </label><input type="text" name="new-field" />
 			<label>Field type</label> 
 				<select name="field-type">
@@ -69,11 +97,14 @@
 					<option>Check box</option>
 					<option>Dropdown</option>
 				</select>
+			</div>
+			<div class="right">
 			<input type="checkbox" name="new-field-required" /> <label>Required</label> | 
 			<a class="bt-remove-field">Remove</a>
 			<div class="options">
 				<input type="text" value="Option 1" /><br />
 				<input type="text" value="Click to add option" disabled="disabled" /> or add <a class="add-other">"Other"</a>
+			</div>
 			</div>
 		</li>
 	</ul>
