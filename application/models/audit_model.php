@@ -85,7 +85,8 @@ class Audit_model extends CI_Model {
 		$check_args = isset($data['action_id']);
 		if($check_args){
 			date_default_timezone_set('Asia/Bangkok');
-			$data_to_add = array('timestamp' => time());
+			$time = isset($data['timestamp']) ? $data['timestamp'] : time();
+			$data_to_add = array('timestamp' => $time);
 			$data_to_add = array_merge($data_to_add, $data);
 			// add new 
 			$this->audits->insert($data_to_add);
