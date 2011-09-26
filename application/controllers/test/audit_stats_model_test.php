@@ -115,6 +115,26 @@ class Audit_stats_model_test extends CI_Controller {
 		$this->unit->run($result, 0, 'add', print_r($result, TRUE));
 	}
 	
+	function remove_test(){
+		$criteria = array();
+		$result = $this->stats->remove();
+		$this->unit->run($result, 'is_false', 'remove', print_r($result, TRUE));
+		
+		$result = $this->stats->count_stat();
+		$this->unit->run($result, 3, 'remove', print_r($result, TRUE));
+		
+		$criteria = array('timestamp' => array('$gte' => 0));
+		$result = $this->stats->remove($criteria);
+		$this->unit->run($result, 'is_true', 'remove', print_r($result, TRUE));
+		
+		$result = $this->stats->count_stat();
+		$this->unit->run($result, 0, 'remove', print_r($result, TRUE));
+	}
+	
+	function drop_test(){
+		$this->stats->drop_collection();
+	}
+	
 }
 
 /* End of file audit_stat_model_test.php */

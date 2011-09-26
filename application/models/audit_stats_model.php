@@ -114,10 +114,26 @@ class Audit_stats_model extends CI_Model {
 	 * @param criteria array
 	 * 
 	 * @return number
+	 * @author Metwara Narksook
 	 */
 	function count_stat($criteria = array()){
 		$result = $this->stats->count($criteria);
 		return $result;
+	}
+	
+	/**
+	 * remove stat by criteria
+	 * @param criteria array
+	 * 
+	 * @return boolean
+	 * @author Metwara Narksook
+	 */
+	function remove($criteria = array()){
+		if(empty($criteria)){
+			return FALSE;
+		}else{
+			return $this->stats->remove($criteria);
+		}
 	}
 	
 	/**

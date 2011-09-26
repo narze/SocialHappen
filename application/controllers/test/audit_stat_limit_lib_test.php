@@ -247,6 +247,24 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$this->unit->run($result, 2, 'count', print_r($result, TRUE));
 	}
 	
+	function prune_test(){
+		$back_time_interval = 500;
+		$result = $this->audit_stat_limit_lib->prune();
+		$this->unit->run($result, 'is_true', 'prune_test', print_r($result, TRUE));
+		
+		$result = $this->stats->count_stat();
+		$this->unit->run($result, 7, 'prune_test', print_r($result, TRUE));
+		
+		$result = $this->audit_stat_limit_lib->prune($back_time_interval);
+		$this->unit->run($result, 'is_true', 'prune_test', print_r($result, TRUE));
+		
+		$result = $this->stats->count_stat();
+		$this->unit->run($result, 0, 'prune_test', print_r($result, TRUE));
+	}
+	
+	function drop_test(){
+		$this->stats->drop_collection();
+	}
 }
 
 /* End of file audit_stat_limit_lib_test.php */
