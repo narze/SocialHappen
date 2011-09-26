@@ -430,6 +430,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 			$(".notice").hide();
 			var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
 			ul_element.append('<li class="add-app"></li>');
+			//Signup Form
 			ul_element.append('<li><p><img class="app-image" src="'+imgsize('','normal')+'" alt="" width="64" height="64" />'
 				+'<span class="button">'
 				+'<a class="bt-update_app" href="'+base_url+'configs?p='+page_id+'&c=signup_fields"><span>Update</span></a>'
