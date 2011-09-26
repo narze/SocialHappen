@@ -1,4 +1,5 @@
 <div id="signup-fields">
+
 	<h2><span>SocialHappen Form</span></h2>
 	<ul class="fields">
 		<li>
@@ -21,33 +22,40 @@
 		</li>
 	</ul>
 	<h2><span>Your Sign Up Form</span></h2>
-	<?php echo form_open("configs/signup_fields/{$page['page_id']}", array('class' => 'signup-fields')); ?>
-	
-	<ul class="fields"><?php 
-	if($fields)
+	<?php echo form_open("configs/signup_fields/{$page['page_id']}", array('class' => 'signup-fields')); 
+	if($updated) echo 'Updated'; ?>
+	<ul class="submitting fields"><?php 
+	if(isset($signup_fields)) //Existing fields
 	{
-		foreach($fields as $key => $field)
-		{ ?>
+		foreach($signup_fields as $signup_field)
+		{ 
+		$key = issetor($signup_field['name']); ?>
 			<li class="<?php echo $key?>">
 				<div class="left">
-				<label class="title"><?php echo $field['label']; ?> :</label>
-				<div class="inputs"><?php 
-
-				if(isset($field['items'])) {
-					foreach ($field['items'] as $item)
+				<label class="title"><?php echo $signup_field['label']; ?> :</label>
+				<div class="inputs">
+					<input class="type" type="hidden" name="<?php echo $key; ?>[type]" value="<?php echo $signup_field['type'];?>"></input>
+					<input class="name" type="hidden" name="<?php echo $key; ?>[name]" value="<?php echo $key; ?>"></input>
+					<input class="label" type="hidden" name="<?php echo $key; ?>[label]" value="<?php echo $signup_field['label'] ?>"></input>
+				<?php 
+				if(isset($signup_field['items']) && is_array($signup_field['items'])) {
+					foreach ($signup_field['items'] as $item)
 					{?>
-						<label><input type="<?php echo $field['type'];?>" name="<?php echo $key; ?>"> <?php echo $item;?></input></label>
+						<label><input type="<?php echo $signup_field['type'];?>"> <?php echo $item;?></input></label>
+						<input class="items" type="hidden" name="<?php echo $key; ?>[items][]" value="<?php echo $item; ?>"></input>
 					<?php }
 				} else {
 				?>
-					<input type="<?php echo $field['type'];?>"></input>
+					<input type="<?php echo $signup_field['type'];?>"></input>
 				<?php
 				}
 				?>
 				</div>
 				</div>
 				<div class="right">
-				<label><input type="checkbox" name="required" id="required-<?php echo $key?>" /> Required</label><span class="separator">|</span> 
+				<label class="required">
+					<input class="required" type="checkbox" name="<?php echo $key?>[required]" value=1 <?php echo ($signup_field['required']) ? 'checked="checked"' : '';?>/> Required</label>
+					<span class="separator">|</span> 
 				<a class="bt-remove-field">Remove</a>
 				</div>
 			</li> <?php
@@ -59,12 +67,70 @@
 	}?>
 	</ul>
 	
-	<a href="#default-fields" id="bt-add-field-from-list" class="bt-add-field-from-list">Add field by choose from the list</a>
+	<a id="bt-add-field-from-list" class="bt-add-field-from-list">Add field by choose from the list</a>
 	<a class="bt-create-own-field">Create your own field</a>
 	<?php 
 	echo form_submit('submitForm', 'Submit', 'class="bt-update"');
 	echo form_close(); ?>
-	<div id="no-submit" style="display:none"><ul></ul></div>
+	<div id="no-submit" style="display:none"><ul>
+		<li class="template">
+			<div class="left">
+				<label class="title"> :</label>
+				<div class="inputs">
+					<input class="type" type="hidden"></input>
+					<input class="name" type="hidden"></input>
+					<input class="label" type="hidden"></input>
+				</div>
+			</div>
+			<div class="right">
+				<label class="required">
+					<input class="required" type="checkbox" value=1 name="" id=""/> Required</label>
+					<span class="separator">|</span> 
+				<a class="bt-remove-field">Remove</a>
+			</div>
+		</li>
+		<?php 
+		if(isset($default_fields))
+		{
+			foreach($default_fields as $default_field)
+			{ 
+				$key = issetor($default_field['name']);
+				if(!in_array($key, array_keys($signup_fields))){ //for default fields that was not use, we hide it here?>
+					<li class="<?php echo $key?>">
+						<div class="left">
+						<label class="title"><?php echo $default_field['label']; ?> :</label>
+						<div class="inputs">
+							<input class="type" type="hidden" name="<?php echo $key; ?>[type]" value="<?php echo $default_field['type'];?>"></input>
+							<input class="name" type="hidden" name="<?php echo $key; ?>[name]" value="<?php echo $key; ?>"></input>
+							<input class="label" type="hidden" name="<?php echo $key; ?>[label]" value="<?php echo $default_field['label'] ?>"></input>
+						<?php 
+
+						if(isset($default_field['items'])) {
+							foreach ($default_field['items'] as $item)
+							{?>
+								<label><input type="<?php echo $default_field['type'];?>"> <?php echo $item;?></input></label>
+								<input class="items" type="hidden" name="<?php echo $key; ?>[items][]" value="<?php echo $item; ?>"></input>
+							<?php }
+						} else {
+						?>
+							<input type="<?php echo $default_field['type'];?>"></input>
+						<?php
+						}
+						?>
+						</div>
+						</div>
+						<div class="right">
+						<label class="required">
+							<input class="required" type="checkbox" value=1 name="<?php echo $key?>[required]" /> Required</label>
+							<span class="separator">|</span> 
+						<a class="bt-remove-field">Remove</a>
+						</div>
+					</li> <?php
+				}
+			}
+		}
+		?>
+	</ul></div>
 	
 </div>
 
@@ -75,11 +141,11 @@
 		<h2 class="in-popup">Add more field</h2>
 		<p>Choose from the list below</p>
 		<ul><?php
-		foreach($fields as $field)
+		foreach($default_fields as $default_field)
 		{ ?>
 			<li>
-				<input type="checkbox" name="<?php echo $field['name']?>" id="<?php echo $field['name']?>" />
-				<label for="<?php echo $field['name']?>"><?php echo $field['label']; ?></label>
+				<input type="checkbox" name="<?php echo $default_field['name']?>" />
+				<label for="<?php echo $default_field['name']?>"><?php echo $default_field['label']; ?></label>
 			</li><?php
 		} ?>
 		</ul>
@@ -89,12 +155,12 @@
 	</div>
 	
 	<!-- Pop up custom field-->
-	<div id="custom-fields">
+	<div id="custom-fields-template">
 		<h2 class="in-popup">Create your own field</h2>
 		<ul class="fields">
 			<li class="field">
 				<div class="left">
-				<label>Field title :</label><input type="text" name="new-field" />
+				<label>Field title :</label><input type="text" class="new-field" name="new-field" />
 				<label>Field type :</label> 
 					<select name="field-type">
 						<option value='text' selected="selected">Text</option>
@@ -104,22 +170,21 @@
 					</select>
 				</div>
 				<div class="right">
-				<label><input type="checkbox" name="new-field-required" /> Required</label><span class="separator">|</span> 
+				<label><input type="checkbox" value=1 name="new-field-required" /> Required</label><span class="separator">|</span> 
 				<a class="bt-remove-field">Remove</a>
 				</div>
 				<div class="options" style="display: none;"> 
 					<ul>
-						<li class="option"><input type="hidden" name="option-type-example" class="option-type" /><input type="text" value="Option 1" /><a class="bt-remove-option">Remove option</a></li>
+						<li class="option"><input type="hidden" name="option-type-example" class="option-type" /><input class="option-item" type="text" value="Option 1" /><a class="bt-remove-option">Remove option</a></li>
 						<li class="add-option"><input type="hidden" class="option-type" /><input type="text" value="Click to add option" readonly="readonly" /> or add <a class="add-other">"Other"</a></li>
 					</ul>
 				</div>
-				
 			</li>
 		</ul>
 		<ul class="fields-template" style="display:none;">
 			<li class="field">
 				<div class="left">
-				<label>Field title :</label><input type="text" name="new-field" />
+				<label>Field title :</label><input type="text" class="new-field"  name="new-field" />
 				<label>Field type :</label> 
 					<select name="field-type">
 						<option value='text' selected="selected">Text</option>
@@ -129,12 +194,12 @@
 					</select>
 				</div>
 				<div class="right">
-				<label><input type="checkbox" name="new-field-required" /> Required</label><span class="separator">|</span> 
+				<label><input type="checkbox" value=1 name="new-field-required" /> Required</label><span class="separator">|</span> 
 				<a class="bt-remove-field">Remove</a>
 				</div>
 				<div class="options" style="display: none;"> 
 					<ul>
-						<li class="option"><input type="hidden" name="option-type-example" class="option-type" /><input type="text" value="Option 1" /><a class="bt-remove-option">Remove option</a></li>
+						<li class="option"><input type="hidden" name="option-type-example" class="option-type" /><input class="option-item" type="text" value="Option 1" /><a class="bt-remove-option">Remove option</a></li>
 						<li class="add-option"><input type="hidden" class="option-type" /><input type="text" value="Click to add option" readonly="readonly" /> or add <a class="add-other">"Other"</a></li>
 					</ul>
 				</div>

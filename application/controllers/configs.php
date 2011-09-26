@@ -75,13 +75,43 @@ class Configs extends CI_Controller {
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
+			
 			$this->load->model('page_model','page');
 			$page = $this->page->get_page_profile_by_page_id($page_id);
-			$fields = $this->page->get_user_field_templates();
+			$default_fields = $this->page->get_user_field_templates();
+			$signup_fields = $this->page->get_page_user_fields_by_page_id($page_id);
 			$this->load->vars(array(
 				'page' => $page,
-				'fields' => $fields
+				'signup_fields' => $signup_fields,
+				'test' => print_r($this->input->post(),true),
+				'default_fields' => $default_fields,
+				'updated' => FALSE
 			));
+			if(!$fields = $this->input->post()){
+			
+			} else {
+				
+				//signup - fields = remove
+				//fields - signup = add
+				foreach($signup_fields as $key => $signup_field){
+					if(isset($fields[$signup_field['name']])){
+						unset($signup_fields[$key]); //To remove
+						//unset($fields[$signup_field['name']]); //To add, unused because we need to update
+					}
+				}
+				
+				$this->page->add_page_user_fields_by_page_id($page_id,$fields);
+				
+				$remove_ids = array_keys($signup_fields);
+				$this->page->remove_page_user_fields_by_page_id($page_id,$remove_ids);
+			
+				$this->load->vars(array(
+					'signup_fields' => $this->page->get_page_user_fields_by_page_id($page_id),
+					'updated' => TRUE
+				));
+				
+			}
+			
 			$this->load->view('configs/signup_fields');
 		}
 	}

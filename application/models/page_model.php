@@ -157,7 +157,7 @@ class Page_model extends CI_Model {
 	}
 	
 	/**
-	 * Add page user fields
+	 * Add page user fields, if exists, just update
 	 * @param $page_id
 	 * @param array $fields
 	 * @author Manassarn M.
@@ -167,24 +167,38 @@ class Page_model extends CI_Model {
 			return FALSE;
 		}
 		$page_fields = json_decode($page['page_user_fields'], TRUE);
+		$field_names = array_map(create_function('$field', 'return $field["name"];'), $page_fields);
 		$added_ids = array();
 		$templates = $this->get_user_field_templates();
+		$update_fields = array();
 		foreach($fields as $field){
 			if(isset($field['template'])){
-				$field = array_merge($templates[$field['template']], $field);//var_dump($field);echo "<br />";
+				$field = array_merge($templates[$field['template']], $field);//TODO: Deprecated, not used
 			}
 			if(!issetor($field['name']) || !issetor($field['type']) || !issetor($field['label']) ||
 				!in_array($field['type'], array('text','textarea','checkbox','radio')) ||
-				(in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) || !$field['items'] || !is_array($field['items']) || in_array('',$field['items'])))
+				(in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) || 
+				!$field['items'] || !is_array($field['items']) || in_array('',$field['items'])))
 				) {
 				return FALSE;
 			}
-			if(issetor($field['type']) == 'checkbox'){ //Checkbox cannot be required
+			if(isset($field['required']) && $field['required']){ //if isset and is not FALSE (true, 1, 'on'), it is true
+				$field['required'] = TRUE;	
+			}
+			
+			if(issetor($field['type']) == 'checkbox' || !isset($field['required'])){ //Checkbox cannot be required OR if not specified
 				$field['required'] = FALSE;	
 			}
-			$page_fields[] = $field;
-			end($page_fields);
-			$added_ids[] = key($page_fields);
+			
+			if($key = array_search($field['name'], $field_names)){ //If exists, update
+				foreach($field as $field_key => $field_value){
+					$page_fields[$key][$field_key] = $field_value;
+				}
+			} else { //Add new field
+				$page_fields[] = $field; //Extend old fields
+				end($page_fields);
+				$added_ids[] = key($page_fields);
+			}
 		}
 		if($this->update_page_profile_by_page_id($page_id, array('page_user_fields' => json_encode($page_fields)))){
 			return $added_ids;
@@ -227,7 +241,7 @@ class Page_model extends CI_Model {
 			){
 				return FALSE;
 			}
-			if(issetor($field['type']) == 'checkbox'){ //Checkbox cannot be required
+			if(issetor($field['type']) == 'checkbox' || !isset($field['required'])){ //Checkbox cannot be required OR if not specified
 				$field['required'] = FALSE;	
 			}
 			foreach($field as $field_key => $field_value){
