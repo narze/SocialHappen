@@ -23,40 +23,36 @@
 	<h2><span>Your Sign Up Form</span></h2>
 	<?php echo form_open("configs/signup_fields/{$page['page_id']}", array('class' => 'signup-fields')); ?>
 	
-	<ul class="fields"><?php 
-	if($fields)
-	{
-		foreach($fields as $key => $field)
-		{ ?>
-			<li class="<?php echo $key?>">
-				<div class="left">
-				<label class="title"><?php echo $field['label']; ?> :</label>
-				<div class="inputs"><?php 
-
-				if(isset($field['items'])) {
-					foreach ($field['items'] as $item)
-					{?>
-						<label><input type="<?php echo $field['type'];?>" name="<?php echo $key; ?>"> <?php echo $item;?></input></label>
-					<?php }
-				} else {
-				?>
-					<input type="<?php echo $field['type'];?>"></input>
-				<?php
-				}
-				?>
-				</div>
-				</div>
-				<div class="right">
-				<label><input type="checkbox" name="required" id="required-<?php echo $key?>" /> Required</label><span class="separator">|</span> 
-				<a class="bt-remove-field">Remove</a>
-				</div>
-			</li> <?php
-		}
-	}
-	else
-	{ ?>
-		<li class="no-field">to start adding more sign up field, click the button below</li><?php
-	}?>
+	<ul class="fields">
+		<li class="no-field" <?php echo $fields ? 'style="display:none"' : '' ;?>>to start adding more sign up field, click the button below</li><?
+		if($fields)
+		{
+			foreach($fields as $key => $field)
+			{ ?>
+				<li class="field <?php echo $key?>">
+					<div class="left">
+						<label class="title"><?php echo $field['label']; ?> :</label>
+						<div class="inputs"><?php 
+							if(isset($field['items'])) {
+								foreach ($field['items'] as $item)
+								{?>
+									<label><input type="<?php echo $field['type'];?>" name="<?php echo $key; ?>"> <?php echo $item;?></input></label>
+								<?php }
+							} else {
+							?>
+								<input type="<?php echo $field['type'];?>"></input>
+							<?php
+							}
+							?>
+						</div>
+					</div>
+					<div class="right">
+						<label><input type="checkbox" name="required" id="required-<?php echo $key?>" /> Required</label><span class="separator">|</span> 
+						<a class="bt-remove-field">Remove</a>
+					</div>
+				</li> <?php
+			}
+		} ?>
 	</ul>
 	
 	<a href="#default-fields" id="bt-add-field-from-list" class="bt-add-field-from-list">Add field by choose from the list</a>

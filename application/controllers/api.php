@@ -1349,8 +1349,7 @@ class Api extends CI_Controller {
 			return;
 		}
 		
-		$response = array('status' => 'OK');
-		$data = array();
+		
 		
 		$this->load->model('Installed_apps_model', 'app');
 		$app = $this->app->get_app_profile_by_app_install_id($app_install_id);
@@ -1361,37 +1360,27 @@ class Api extends CI_Controller {
 		$this->load->model('User_model', 'User');
 		$this->load->model('user_pages_model','user_pages');
 		$user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
+		
+		$menu = array();
+		//Right menu
 		if(!$user){
-			$this->load->model('page_model','page');
-			$page = $this->page->get_page_profile_by_page_id($app['page_id']);
+			$page = $this->pages->get_page_profile_by_page_id($app['page_id']);
 			$facebook_page = $this->facebook->get_page_info($page['facebook_page_id']);
-			$data['view_as'] = 'guest';
-			$data['right_menu'] = array(
-				array('location' => $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id'), 'title' => 'Signup SocialHappen', 'target'=>'_top')
-			);
+			$view_as = 'guest';
+			$signup_link = $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id');
 		} else if($this->user_pages->is_page_admin($user['user_id'], $app['page_id'])){			
-			$data['view_as'] = 'admin';
-			$data['right_menu'] = array(
-				array('location' => '#', 'title' => 'Config this app'),
-				array('location' => '#', 'title' => 'View my profile'),
-				array('location' => '#', 'title' => 'Go to dashboard'),
-				array('location' => '#', 'title' => 'Go to platform')
-			);
+			$view_as = 'admin';
 		} else {
-			$data['view_as'] = 'user';
-			$data['right_menu'] = array(
-				array('location' => '#', 'title' => 'View my profile'),
-				array('location' => '#', 'title' => 'Go to Dashboard'),
-			);
+			$view_as = 'user';
 		}
 		
-		$data['left_menu'] = array();
+		$menu['left'] = array();
 		if($app['page_id']){
 			$apps = $this->app->get_installed_apps_by_page_id($app['page_id']);
 			$this->load->library('app_url');
 			foreach($apps as $page_app){
 				if($page_app['app_install_id'] != $app_install_id){
-					$data['left_menu'][] = 
+					$menu['left'][] = 
 					array('location' => 
 						$this->app_url->translate_url($page_app['app_url'], 
 						$page_app['app_install_id']),
@@ -1400,12 +1389,18 @@ class Api extends CI_Controller {
 			}
 		}
 		
-		$data['app_icon_url'] = $app['app_image'];
-		$data['app_name'] = $app['app_name'];
+		$data = array();
+		$data['bar_type'] = 'app';
+		$data['view_as'] = $view_as;
+		$data['app_install_id'] = $app_install_id;
+		$data['page_id'] = $app['page_id'];
+		$data['menu'] = $menu;
+		$data['user'] = $user;
+		$data['current_menu']['icon_url'] = $app['app_image'];
+		$data['current_menu']['name'] = $app['app_name'];
+		$data['signup_link'] = issetor($signup_link, '#');
 		
-		$data['user_diplay_picture_url'] = $user['user_image'];
-		$data['user_display_name'] = $user['user_first_name']. ' ' . $user['user_last_name'];
-		
+		$response = array('status' => 'OK');
 		$response['html'] = $this->load->view('api/app_bar_view', $data, TRUE);
 		$response['css'] = base_url() . 'css/api_app_bar.css';
 		echo json_encode($response);

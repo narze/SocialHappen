@@ -59,6 +59,7 @@ class Tab extends CI_Controller {
 		}		
 		$this->pages->update_page_profile_by_page_id($page_id, $page_update);
 		
+		//Left menu
 		$this->load->model('installed_apps_model','installed_apps');
 		$page_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
 		$this->load->library('app_url');
@@ -70,6 +71,20 @@ class Tab extends CI_Controller {
 			);
 		}
 		unset($page_app);
+		$menu['left'] = $page_apps;
+		
+		//Right menu
+		$this->load->model('user_pages_model','user_pages');
+		if(!$user){
+			$view_as = 'guest';
+			$page = $this->pages->get_page_profile_by_page_id($page_id);
+			$facebook_page = $this->facebook->get_page_info($page['facebook_page_id']);
+			$signup_link = $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id');
+		} else if($this->user_pages->is_page_admin($user['user_id'], $page_id)){			
+			$view_as = 'admin';
+		} else {
+			$view_as = 'user';
+		}
 		
 		$data = array(
 			'header' => $this->load->view('tab/header', 
@@ -102,19 +117,26 @@ class Tab extends CI_Controller {
 						'common/facebook',
 						'common/facebook-main',
 						'common/jquery.countdown',
-						'common/fancybox/jquery.fancybox-1.3.4'
+						'common/fancybox/jquery.fancybox-1.3.4',
+						'../../css/api_app_bar'
 					)
 				),
 			TRUE),
-			'bar' => $this->load->view('tab/bar',array(
-				'page' => $page,
-				'user' => $user,
-				'page_id' => $page_id,
-				'user_id' => $user_id,
-				'token' => base64_encode($token),
-				'is_admin' => $is_admin,
-				'is_liked' => $this->page['liked'],
-				'page_apps' => $page_apps
+			'bar' => $this->load->view('api/app_bar_view',array(
+					'page' => $page,
+					'user' => $user,
+					'page_id' => $page_id,
+					'user_id' => $user_id,
+					'token' => base64_encode($token),
+					'is_liked' => $this->page['liked'],
+					'current_menu' => array(
+						'name'=>$page['page_name'], 
+						'icon_url'=>imgsize($page['page_image'],'square')
+						),
+					'menu' => $menu,
+					'view_as' => $view_as,
+					'bar_type' => 'platform',
+					'signup_link' => issetor($signup_link, '#')
 				),
 			TRUE),
 			'main' => $this->load->view('tab/main',array(),
@@ -123,8 +145,13 @@ class Tab extends CI_Controller {
 			TRUE)
 		);
 		$this->parser->parse('tab/tab_view', $data);
-		 
-		
+	}
+	
+	function logout($redirect_url = NULL)
+	{
+		$redirect_url = $this->input->get('url');
+		$this->socialhappen->logout();
+		$this->load->view('common/redirect', array('refresh'=>TRUE));
 	}
 	
 	function dashboard($page_id = NULL){
@@ -409,15 +436,19 @@ class Tab extends CI_Controller {
 			}
 			
 			$this->load->model('user_model','users');
-			foreach($data['activities'] as &$activity){
-				$action = $this->audit_action->get_action($activity['app_id'],$activity['action_id']);
-				$user = $this->users->get_user_profile_by_user_id($activity['user_id']);
-				$activity['user_image'] = $user['user_image'];
-				
-				//$activity['activity_detail'] = $action[0]['description'];
-				//$activity['time_ago'] = '1 day ago';
-				//$activity['source'] = 'web';
-				//$activity['star_point'] = 5;
+			foreach($data['activities'] as &$activity)
+			{
+				if(isset($activity['user_id']))
+				{
+					$action = $this->audit_action->get_action($activity['app_id'],$activity['action_id']);
+					$user = $this->users->get_user_profile_by_user_id($activity['user_id']);
+					$activity['user_image'] = $user['user_image'];
+					
+					//$activity['activity_detail'] = $action[0]['description'];
+					//$activity['time_ago'] = '1 day ago';
+					//$activity['source'] = 'web';
+					//$activity['star_point'] = 5;
+				}
 			}
 			unset($activity);
 		
