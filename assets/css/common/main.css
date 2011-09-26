@@ -12,6 +12,11 @@ a {
 	display: none;
 }
 
+input.form-error {
+	border: 1px solid red;
+	padding: 1px;
+}
+
 .bt-go_page, .bt-add_app, .bt-addnew_app, .bt-create_page, .bt-edit, .bt-setting, .bt-delete, .bt-go, .bt-create_company, .bt-manage_page, .bt-setting_page, .bt-update_app, .bt-setting_app, .bt-go-cam, .bt-remove, .bt-block, .bt-label, .bt-orderby, .bt-apply, .bt-change_pic, .bt-update, .bt-close_account, .bt-setting_company, .bt-delete_company, .bt-delete_company-1, .bt-delete_page, .bt-upgrade_package, .bt-print-invoice, .bt-learn_more, .bt-continue, .bt-register-now, .bt-go_community, .bt-go_company, .bt-save_addmore, .bt-save_config, .bt-cancel, .bt-install_app, .bt-campaign_page, .bt-setting_campaign, .bt-view_reward {
 	text-indent: -9000px;
 	overflow:hidden;
