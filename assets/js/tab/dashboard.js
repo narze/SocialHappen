@@ -180,5 +180,5 @@ $(function(){
 		});
 		return false;
 	});
-	$('a#a-dashboard.a-dashboard').click();
+	$('a.a-dashboard').click();
 });

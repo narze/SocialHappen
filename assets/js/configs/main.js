@@ -9,7 +9,7 @@ $(function(){
 		$('a.bt-add-field-from-list').die().live('click', function(){
 			//Uncheck all and check only showing fields
 			$('#default-fields li input:checkbox').attr('checked', false);
-			var fields = $('form.signup-fields ul li').map(function(){
+			var fields = $('form.signup-fields ul li:not(".no-field")').map(function(){
 				return this.className;
 			}).get();
 			for(i in fields){

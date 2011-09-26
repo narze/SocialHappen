@@ -33,6 +33,8 @@ class Audit_stat_limit_lib
 	
 	/**
 	 * create index for all collection in database
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function create_index(){
 		$this->CI->load->model('audit_stats_model', 'stats');
@@ -79,6 +81,8 @@ class Audit_stat_limit_lib
 	 * 														(require - 1 hour default)
 	 * 
 	 * @return count (int)
+	 * 
+	 * @author Metwara Narksook
 	 */
 	function count($user_id = NULL, $action_no = NULL, $app_install_id = NULL,
 	 $campaign_id = NULL, $back_time_interval = 3600){
@@ -99,6 +103,25 @@ class Audit_stat_limit_lib
 		}
 		$criteria['timestamp'] = array('$gte' => $now - $back_time_interval);
 		return $this->CI->stats->count_stat($criteria);
+	}
+	
+	/**
+	 * prune collection by time
+	 * audit entry that inserted before this interval from now will be removed
+	 * 
+	 * @param back_time_interval (int) time interval (require - default 1 day)
+	 * 
+	 * @return boolean
+	 * 
+	 * @author Metwara Narksook
+	 */
+	function prune($back_time_interval = 86400){
+		date_default_timezone_set('Asia/Bangkok');
+		$now = time();
+		$criteria = array('timestamp' => 
+			array('$lte' => $now - $back_time_interval));
+		
+		return $this->CI->stats->remove($criteria);
 	}
 }
 /* End of file audit_stat_limit_lib.php */

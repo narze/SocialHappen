@@ -1,8 +1,9 @@
-* {margin: 0; padding: 0;}
+div.header * {margin: 0; padding: 0;}
 
-	img, fieldset {border: 0;}
+div.header img, div.header fieldset {border: 0;}
 
-	li {list-style: none;}
+div.header li {list-style: none;}
+div.header a {cursor:pointer;}
 
 
 
@@ -10,7 +11,7 @@
 
 	font-size: 12px;
 
-  font-family: Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 
 	width: 100%;
 
@@ -20,7 +21,7 @@
 
 	margin: 0 auto;
 
-	background: url(../assets/images/bg_fb/bg_header.png) repeat-x;
+	background: url(../assets/images/bg_fb/bg_header.png) repeat-x right top #fff;
 
 	}
 
@@ -41,17 +42,16 @@
 	height: 35px;
 
 	position: relative;
+	background: url(../assets/images/bg_fb/bg_header.png) repeat-x left top #fff;
 
 	}
 
 	div.header div.name>div {
-
 	height: 30px;
-
 	padding: 5px 0 0 40px;
-
 	background: url(../assets/images/bg_fb/bg_liney01.gif) repeat-y 100% 0;
-
+	max-width:140px;
+	overflow:hidden;
 	}
 
 	div.header div.name>div:after{
@@ -114,10 +114,27 @@
 	
 	min-width: 120px;
 	
-	background: url(../assets/images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
+	background: none;
+	white-space:nowrap;
 
 	}
-
+	div.header div.name > div div.dropdown {
+		width: 15px;
+		height: 35px;
+		background: url(../assets/images/bg_fb/bg_header.png) no-repeat;
+		position: absolute;
+		right: 5px;
+		top: 0;
+	}
+	div.header div.name > div div.dropdown span {
+		width: 12px;
+		height: 25px;
+		background: url(../assets/images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
+		display: block;
+		position: absolute;
+		right: 0;
+		top: 5px;
+	}
 	div.header div.name>ul {
 
 	display: none;
@@ -188,6 +205,15 @@
 
 	}
 
+	div.header ul.menu>li.guest a {
+		color:#FFF;
+		display:block;
+		font-weight:bold;
+		line-height:35px;
+		padding:0 5px;
+		text-decoration:none;
+	}
+	
 	div.header ul.menu>li.like a {
 
 	display: block;
@@ -311,29 +337,18 @@
 	}
 
 	div.header ul.menu>li.profile>ul {
-
-	display: none;
-
-	width: 100%;
-
-	border-top: 1px solid #1c1c1c;
-
-	background: #292929;
-
-	position: absolute;
-
-	left: 0;
-
-	top: 35px;
-
-	-webkit-border-radius: 0 0 5px 5px;
-
-	-moz-border-radius: 0 0 5px 5px;
-
-	border-radius: 0 0 5px 5px;
-
-	z-index: 999;
-
+		display: none;
+		width: 150px;
+		overflow:hidden;
+		border-top: 1px solid #1C1C1C;
+		background: #292929;
+		position: absolute;
+		left: -71px;
+		top: 35px;
+		-webkit-border-radius: 0 0 5px 5px;
+		-moz-border-radius: 0 0 5px 5px;
+		border-radius: 0 0 5px 5px;
+		z-index: 999;
 	}
 
 	div.header ul.menu>li.profile:hover ul {display: block;}
@@ -345,10 +360,28 @@
 	font-size: 11px;
 
 	background: url(../assets/images/bg_fb/bg_linex03.png) repeat-x top;
+	
+	color:#FFF;
+	font-weight:bold;
 
 	}
 
 	div.header ul.menu>li.profile>ul>li:first-child { background: none;}
+
+	div.header ul.menu > li.profile > ul > li.user-info {
+		height: 55px;
+	}
+	div.header ul.menu > li.profile > ul > li.user-info div {
+		padding-left:60px;
+		margin-top:5px;
+	}
+	div.header ul.menu > li.profile > ul > li.user-info div img {
+		width:50px;
+		height:50px;
+		position:absolute;
+		top:5px;
+		left:5px;
+	}
 
 	div.header ul.menu>li.profile>ul>li a {
 
@@ -366,18 +399,47 @@
 
 	}
 
-	div.header ul.menu>li.setting a {
-
-	display: block;
-
-	width: 35px;
-
-	height: 35px;
-
-	background: url(../assets/images/bg_fb/bg_main.png) no-repeat 7px -69px;
-
+	
+	div.header ul.menu > li.setting {
+		position:relative;
 	}
-
-	div.header ul.menu>li.setting a span {display: none;}
-
-
+	div.header ul.menu > li.setting div:first-child {
+		text-indent:-9000px;
+		cursor:pointer;
+		display: block;
+		width: 35px;
+		height: 35px;
+		background: url(../assets/images/bg_fb/bg_main.png) no-repeat 7px -68px;
+	}
+	div.header ul.menu > li.setting > ul {
+		display: none;
+		width: 150px;
+		border-top: 1px solid #1C1C1C;
+		background: #292929;
+		position: absolute;
+		left: -113px;
+		top: 35px;
+		-webkit-border-radius: 0 0 5px 5px;
+		-moz-border-radius: 0 0 5px 5px;
+		border-radius: 0 0 5px 5px;
+		z-index: 999;
+	}
+	div.header ul.menu > li.setting:hover > ul {
+		display:block;
+	}
+	div.header ul.menu > li.setting > ul li {
+		font-size: 11px;
+	}
+	div.header ul.menu > li.setting > ul li.separator {
+		background: url(../assets/images/bg_fb/bg_linex03.png) repeat-x top;
+	}
+	div.header ul.menu > li.setting a {
+		display: block;
+		width: auto;
+		height: auto;
+		padding: 5px 10px 5px 20px;
+		text-decoration: none;
+		color: white;
+		font-weight: bold;
+		background: url(../assets/images/bg_fb/bg_listmenu.png) 5px 7px no-repeat;
+	}

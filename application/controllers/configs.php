@@ -80,9 +80,11 @@ class Configs extends CI_Controller {
 			$page = $this->page->get_page_profile_by_page_id($page_id);
 			$default_fields = $this->page->get_user_field_templates();
 			$signup_fields = $this->page->get_page_user_fields_by_page_id($page_id);
+			$field_names = array_map(create_function('$field', 'return $field["name"];'), $signup_fields);
 			$this->load->vars(array(
 				'page' => $page,
 				'signup_fields' => $signup_fields,
+				'signup_field_names' => $field_names,
 				'test' => print_r($this->input->post(),true),
 				'default_fields' => $default_fields,
 				'updated' => FALSE

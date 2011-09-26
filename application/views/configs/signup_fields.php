@@ -24,47 +24,45 @@
 	<h2><span>Your Sign Up Form</span></h2>
 	<?php echo form_open("configs/signup_fields/{$page['page_id']}", array('class' => 'signup-fields')); 
 	if($updated) echo 'Updated'; ?>
-	<ul class="submitting fields"><?php 
-	if(isset($signup_fields)) //Existing fields
-	{
-		foreach($signup_fields as $signup_field)
-		{ 
-		$key = issetor($signup_field['name']); ?>
-			<li class="<?php echo $key?>">
-				<div class="left">
-				<label class="title"><?php echo $signup_field['label']; ?> :</label>
-				<div class="inputs">
-					<input class="type" type="hidden" name="<?php echo $key; ?>[type]" value="<?php echo $signup_field['type'];?>"></input>
-					<input class="name" type="hidden" name="<?php echo $key; ?>[name]" value="<?php echo $key; ?>"></input>
-					<input class="label" type="hidden" name="<?php echo $key; ?>[label]" value="<?php echo $signup_field['label'] ?>"></input>
-				<?php 
-				if(isset($signup_field['items']) && is_array($signup_field['items'])) {
-					foreach ($signup_field['items'] as $item)
-					{?>
-						<label><input type="<?php echo $signup_field['type'];?>"> <?php echo $item;?></input></label>
-						<input class="items" type="hidden" name="<?php echo $key; ?>[items][]" value="<?php echo $item; ?>"></input>
-					<?php }
-				} else {
-				?>
-					<input type="<?php echo $signup_field['type'];?>"></input>
-				<?php
-				}
-				?>
-				</div>
-				</div>
-				<div class="right">
-				<label class="required">
-					<input class="required" type="checkbox" name="<?php echo $key?>[required]" value=1 <?php echo ($signup_field['required']) ? 'checked="checked"' : '';?>/> Required</label>
-					<span class="separator">|</span> 
-				<a class="bt-remove-field">Remove</a>
-				</div>
-			</li> <?php
-		}
-	}
-	else
-	{ ?>
-		<li class="no-field">to start adding more sign up field, click the button below</li><?php
-	}?>
+	<ul class="submitting fields">
+	<li class="no-field" <?php echo $signup_fields ? 'style="display:none"' : '' ;?>>to start adding more sign up field, click the button below</li>
+		<?php 
+		if($signup_fields) //Existing fields
+		{
+			foreach($signup_fields as $signup_field)
+			{ 
+			$key = issetor($signup_field['name']); ?>
+				<li class="<?php echo $key?>">
+					<div class="left">
+					<label class="title"><?php echo $signup_field['label']; ?> :</label>
+					<div class="inputs">
+						<input class="type" type="hidden" name="<?php echo $key; ?>[type]" value="<?php echo $signup_field['type'];?>"></input>
+						<input class="name" type="hidden" name="<?php echo $key; ?>[name]" value="<?php echo $key; ?>"></input>
+						<input class="label" type="hidden" name="<?php echo $key; ?>[label]" value="<?php echo $signup_field['label'] ?>"></input>
+					<?php 
+					if(isset($signup_field['items']) && is_array($signup_field['items'])) {
+						foreach ($signup_field['items'] as $item)
+						{?>
+							<label><input type="<?php echo $signup_field['type'];?>"> <?php echo $item;?></input></label>
+							<input class="items" type="hidden" name="<?php echo $key; ?>[items][]" value="<?php echo $item; ?>"></input>
+						<?php }
+					} else {
+					?>
+						<input type="<?php echo $signup_field['type'];?>"></input>
+					<?php
+					}
+					?>
+					</div>
+					</div>
+					<div class="right">
+					<label class="required">
+						<input class="required" type="checkbox" name="<?php echo $key?>[required]" value=1 <?php echo ($signup_field['required']) ? 'checked="checked"' : '';?>/> Required</label>
+						<span class="separator">|</span> 
+					<a class="bt-remove-field">Remove</a>
+					</div>
+				</li> <?php
+			}
+		} ?>
 	</ul>
 	
 	<a id="bt-add-field-from-list" class="bt-add-field-from-list">Add field by choose from the list</a>
@@ -95,7 +93,7 @@
 			foreach($default_fields as $default_field)
 			{ 
 				$key = issetor($default_field['name']);
-				if(!in_array($key, array_keys($signup_fields))){ //for default fields that was not use, we hide it here?>
+				if(!in_array($key, $signup_field_names)){ //for default fields that was not use, we hide it here?>
 					<li class="<?php echo $key?>">
 						<div class="left">
 						<label class="title"><?php echo $default_field['label']; ?> :</label>
