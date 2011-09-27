@@ -64,10 +64,9 @@
 		<div>Settings</div>
 		<ul>
           <li><a href="<?php echo base_url()."page/".$page_id;?>" class="platform-link">Page Settings</a></li>
-          <?php if($bar_type == 'app') { ?>
+          <?php if($app_install_id) { ?>
 		  <li><a href="<?php echo base_url().'app/config/'.$app_install_id?>" class="platform-link">App Settings</a></li>
-		  <?php } ?>
-          <?php if($bar_type == 'platform') { ?>
+		  <?php } else { ?>
 		  <li class="separator"><a class="a-dashboard">View as Admin</a></li>
 		  <li><a class="a-dashboard view-as-user">View as Member</a></li>
 		  <li><a class="a-dashboard view-as-guest">View as Guest</a></li>

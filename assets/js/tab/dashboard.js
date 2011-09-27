@@ -1,5 +1,5 @@
 $(function(){
-	$('a.a-dashboard').live('click',function(){
+	function load_dashboard(){
 		var viewas = '';
 		if($(this).hasClass('view-as-user')){
 			viewas = 'viewas=user';
@@ -178,7 +178,12 @@ $(function(){
 				$('a.a-activity-app-campaign').click();
 			});
 		});
+	}
+	
+	$('a.a-dashboard').live('click',function(){
+		load_dashboard();
 		return false;
 	});
-	$('a.a-dashboard').click();
+	
+	load_dashboard();
 });

@@ -59,33 +59,6 @@ class Tab extends CI_Controller {
 		}		
 		$this->pages->update_page_profile_by_page_id($page_id, $page_update);
 		
-		//Left menu
-		$this->load->model('installed_apps_model','installed_apps');
-		$page_apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
-		$this->load->library('app_url');
-		foreach($page_apps as &$page_app){
-			$page_app = array('location' => 
-				$this->app_url->translate_url($page_app['app_url'], 
-				$page_app['app_install_id']),
-				'title' => $page_app['app_name']
-			);
-		}
-		unset($page_app);
-		$menu['left'] = $page_apps;
-		
-		//Right menu
-		$this->load->model('user_pages_model','user_pages');
-		if(!$user){
-			$view_as = 'guest';
-			$page = $this->pages->get_page_profile_by_page_id($page_id);
-			$facebook_page = $this->facebook->get_page_info($page['facebook_page_id']);
-			$signup_link = $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id');
-		} else if($this->user_pages->is_page_admin($user['user_id'], $page_id)){			
-			$view_as = 'admin';
-		} else {
-			$view_as = 'user';
-		}
-		
 		$data = array(
 			'header' => $this->load->view('tab/header', 
 				array(
@@ -122,23 +95,14 @@ class Tab extends CI_Controller {
 					)
 				),
 			TRUE),
-			'bar' => $this->load->view('api/app_bar_view',array(
-					'page' => $page,
-					'user' => $user,
-					'page_id' => $page_id,
+			'bar' => 
+			$this->socialhappen->get_bar(
+				array(
 					'user_id' => $user_id,
-					'token' => base64_encode($token),
-					'is_liked' => $this->page['liked'],
-					'current_menu' => array(
-						'name'=>$page['page_name'], 
-						'icon_url'=>imgsize($page['page_image'],'square')
-						),
-					'menu' => $menu,
-					'view_as' => $view_as,
-					'bar_type' => 'platform',
-					'signup_link' => issetor($signup_link, '#')
-				),
-			TRUE),
+					'user_facebook_id' => $user_facebook_id,
+					'page_id' => $page_id
+				)
+			),
 			'main' => $this->load->view('tab/main',array(),
 			TRUE),
 			'footer' => $this->load->view('tab/footer',array(),

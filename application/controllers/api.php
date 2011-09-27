@@ -1351,57 +1351,14 @@ class Api extends CI_Controller {
 		
 		
 		
-		$this->load->model('Installed_apps_model', 'app');
-		$app = $this->app->get_app_profile_by_app_install_id($app_install_id);
-		if(!isset($app['page_id'])){
-			//no page_id, app not found
-		}
-		
-		$this->load->model('User_model', 'User');
-		$this->load->model('user_pages_model','user_pages');
-		$user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
-		
-		$menu = array();
-		//Right menu
-		if(!$user){
-			$page = $this->pages->get_page_profile_by_page_id($app['page_id']);
-			$facebook_page = $this->facebook->get_page_info($page['facebook_page_id']);
-			$view_as = 'guest';
-			$signup_link = $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id');
-		} else if($this->user_pages->is_page_admin($user['user_id'], $app['page_id'])){			
-			$view_as = 'admin';
-		} else {
-			$view_as = 'user';
-		}
-		
-		$menu['left'] = array();
-		if($app['page_id']){
-			$apps = $this->app->get_installed_apps_by_page_id($app['page_id']);
-			$this->load->library('app_url');
-			foreach($apps as $page_app){
-				if($page_app['app_install_id'] != $app_install_id){
-					$menu['left'][] = 
-					array('location' => 
-						$this->app_url->translate_url($page_app['app_url'], 
-						$page_app['app_install_id']),
-								'title' => $page_app['app_name']);
-				}
-			}
-		}
-		
-		$data = array();
-		$data['bar_type'] = 'app';
-		$data['view_as'] = $view_as;
-		$data['app_install_id'] = $app_install_id;
-		$data['page_id'] = $app['page_id'];
-		$data['menu'] = $menu;
-		$data['user'] = $user;
-		$data['current_menu']['icon_url'] = $app['app_image'];
-		$data['current_menu']['name'] = $app['app_name'];
-		$data['signup_link'] = issetor($signup_link, '#');
+		$data = array(
+			'app_install_id' => $app_install_id,
+			'user_id' => $user_id,
+			'user_facebook_id' => $user_facebook_id,
+		);
 		
 		$response = array('status' => 'OK');
-		$response['html'] = $this->load->view('api/app_bar_view', $data, TRUE);
+		$response['html'] = $this->socialhappen->get_bar($data);
 		$response['css'] = base_url() . 'css/api_app_bar.css';
 		echo json_encode($response);
 	}
