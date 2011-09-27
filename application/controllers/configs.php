@@ -89,10 +89,11 @@ class Configs extends CI_Controller {
 				'default_fields' => $default_fields,
 				'updated' => FALSE
 			));
-			if(!$fields = $this->input->post()){
+			if(!$this->input->post('submit-form')){
 			
 			} else {
-				
+				$fields = $this->input->post();
+				unset($fields['submit-form']);
 				//signup - fields = remove
 				//fields - signup = add
 				foreach($signup_fields as $key => $signup_field){
@@ -102,7 +103,7 @@ class Configs extends CI_Controller {
 					}
 				}
 				
-				$this->page->add_page_user_fields_by_page_id($page_id,$fields);
+				$add_result = $this->page->add_page_user_fields_by_page_id($page_id,$fields);
 				
 				$remove_ids = array_keys($signup_fields);
 				$this->page->remove_page_user_fields_by_page_id($page_id,$remove_ids);
