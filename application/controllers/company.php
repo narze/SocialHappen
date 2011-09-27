@@ -94,7 +94,7 @@ class Company extends CI_Controller {
 						array('company_profile' => $company),
 					TRUE),
 					'company_dashboard_tabs' => $this -> load -> view('company/company_dashboard_tabs', 
-						array(),
+						array('user_have_package'=>$user_have_package),
 					TRUE),
 					'company_dashboard_right_panel' => $this -> load -> view('company/company_dashboard_right_panel', 
 						array(),
