@@ -29,6 +29,7 @@ class Audit_stat_limit_lib
 			 500);
 		}
 		$this->CI =& get_instance();
+		$this->CI->load->model('audit_stats_model', 'stats');
 	}
 	
 	/**
@@ -37,7 +38,6 @@ class Audit_stat_limit_lib
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->CI->load->model('audit_stats_model', 'stats');
 		$this->CI->stats->create_index();
 	}
 	
