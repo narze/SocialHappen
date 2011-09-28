@@ -3,6 +3,7 @@ $(function(){
 	function signup_fields(){
 		$('form.signup-fields ul li a.bt-remove-field').die().live('click', function(){
 			$(this).parents('form ul li').appendTo('div#no-submit ul');
+			trigger_empty_field_message();
 		});
 		
 		//Choose template fields
@@ -44,6 +45,8 @@ $(function(){
 				for(i in deselected){
 					$('form ul li.'+deselected[i]).appendTo('div#no-submit ul');
 				}
+				
+				trigger_empty_field_message();
 			});
 		});
 		
@@ -100,6 +103,7 @@ $(function(){
 			$('#custom-fields p.apply a.bt-apply-to-signup-form').click(function (){ 
 				if(add_new_fields()){
 					$.fancybox.close();
+					trigger_empty_field_message();
 				}
 			});
 		});
@@ -211,6 +215,15 @@ $(function(){
 				}
 			}
 			return has;
+		}
+		
+		function trigger_empty_field_message(){
+			var field_count = $('form ul.submitting.fields li:not(.no-field)').length;
+			if(field_count == 0){
+				$('form ul.submitting.fields li.no-field').show();
+			} else {
+				$('form ul.submitting.fields li.no-field').hide();
+			}
 		}
 	}
 	
