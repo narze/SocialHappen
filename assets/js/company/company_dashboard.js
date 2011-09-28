@@ -278,7 +278,7 @@ function show_installed_page_in_company() {
 								var page_id=json.page_id;
 								var app_api_key=sh_default_fb_app_api_key;
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
-									$(".gotofacebook-link").live('click',function(){
+									$(".bt-go-facebook").live('click',function(){
 										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
 									});
 									$.fancybox({
@@ -410,7 +410,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 	{
 		$('.head-box-app-list').hide();
 		$('div.dragging-app').hide();
-		$(".gotofacebook-link").attr('href', get_add_app_to_fb_page_link(sh_default_fb_app_api_key,facebook_page_id));
+		$(".bt-go-facebook").attr('href', get_add_app_to_fb_page_link(sh_default_fb_app_api_key,facebook_page_id));
 		$(".notice").html( $('#popup-gotofacebook').html() );
 		$(".notice").addClass('warning').show(); 
 		return false;
@@ -498,7 +498,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 										$("#info-installed-app").html('<span>Installed Application</span>'+json.app_count);
 									});
 									update_app_order_in_dashboard();
-									$(".gotofacebook-link").live('click',function(){
+									$(".bt-go-facebook").live('click',function(){
 										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
 									});
 									$.fancybox({

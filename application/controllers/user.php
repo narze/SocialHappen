@@ -30,10 +30,13 @@ class User extends CI_Controller {
 						array( 
 							$company['company_name'] => base_url() . "company/{$company['company_id']}",
 							$page['page_name'] => base_url() . "page/{$page['page_id']}",
-							$user['user_first_name'].' '.$user['user_last_name'] => NULL
+							'Member' => NULL
 						);
 						
 					$activity = $this->_get_user_activity_page($page_id, $user_id);
+					
+					$this->load->model('page_user_data_model', 'page_user_data');
+					$user_with_signup_fields = $this->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
 					
 				} else if ($app_install_id){
 					$this -> load -> model('installed_apps_model', 'installed_apps');
@@ -43,7 +46,7 @@ class User extends CI_Controller {
 						array( 
 							$company['company_name'] => base_url() . "company/{$company['company_id']}",
 							$app['app_name'] => base_url() . "app/{$app['app_install_id']}",
-							$user['user_first_name'].' '.$user['user_last_name'] => NULL
+							'Member' => NULL
 						);
 					$activity = $this->_get_user_activity_app($app_install_id, $user_id);
 				} else if ($campaign_id){
@@ -54,7 +57,7 @@ class User extends CI_Controller {
 						array( 
 							$company['company_name'] => base_url() . "company/{$company['company_id']}",
 							$campaign['campaign_name'] => base_url() . "campaign/{$campaign['campaign_id']}",
-							$user['user_first_name'].' '.$user['user_last_name'] => NULL
+							'Member' => NULL
 						);
 					$activity = $this->_get_user_activity_campaign($campaign_id, $user_id);
 				}
@@ -114,6 +117,9 @@ class User extends CI_Controller {
 				TRUE), 
 				'user_activities' => $this -> load -> view('user/user_activities', 
 					array('activity' => $activity),
+				TRUE), 
+				'user_info' => $this -> load -> view('user/user_info', 
+					array('user' => $user_with_signup_fields),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer()
 				);

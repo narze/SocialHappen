@@ -1,7 +1,9 @@
 $(function(){
 	
 	$('li a.company-page-setting,li a.user-company-setting,li a.account-setting,li a.company-page-list,li a.package-billing').live('click',function(){
-		element = $(this);			
+		element = $(this);		
+		element.parents('.menuleft').find('a').removeClass('active');
+		element.addClass('active'); 
 		url = element.attr('href');
 		s = get_query(url, 's');
 		id = get_query(url, 'id');
@@ -10,7 +12,6 @@ $(function(){
 			$('div#main').load(base_url+"settings/"+s+"/"+id);
 			make_form(element);
 		});
-		
 		return false;
 	});
 	

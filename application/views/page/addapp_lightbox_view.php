@@ -1,7 +1,7 @@
 {header}
 <div id="popup-gotofacebook" style="display:none">
 	Please, go to facebook to complete the action.
-	<a class="gotofacebook-link">Go to facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a class="bt-go-facebook">Go to facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<a onclick="$.fancybox.close(); return false;">Close</a>
 </div>
 <div class="popup-addapp">

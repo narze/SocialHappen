@@ -46,6 +46,10 @@ class Home extends CI_Controller {
 		}
 		
 		$facebook_user = $this->facebook->getUser();
+		$this->load->model('user_model','users');
+		if($this->users->get_user_id_by_user_facebook_id($facebook_user['id'])){
+			$is_registered = true;
+		}
 	
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
@@ -79,13 +83,18 @@ class Home extends CI_Controller {
 					
 				),
 			TRUE),
-			'signup_form' => $this -> load -> view('home/signup_form', 
+			'footer' => $this -> socialhappen -> get_footer(),
+			'is_registered' => $is_registered
+			);
+		
+		if(!$is_registered) 
+		{
+			$data['signup_form'] = $this -> load -> view('home/signup_form', 
 				array(
 					'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id']),
 				),
-			TRUE),
-			'footer' => $this -> socialhappen -> get_footer()
-			);
+			TRUE);
+		}
 		$this -> parser -> parse('home/signup_view', $data);
 	}
 	
@@ -97,10 +106,6 @@ class Home extends CI_Controller {
 	{
 		$facebook_user = $this->facebook->getUser();
 		$this->load->model('user_model','users');
-		if($this->users->get_user_id_by_user_facebook_id($facebook_user['id'])){
-			echo 'You have already registered SocialHappen';
-			return;
-		}
 		
 		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
 		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
@@ -115,7 +120,8 @@ class Home extends CI_Controller {
 		{
 			$this -> load -> view('home/signup_form', 
 					array(
-						'user_profile_picture'=>$user_facebook_image
+						'user_profile_picture'=>$user_facebook_image,
+						'is_registered'=>$is_registered
 					)
 			);
 		}

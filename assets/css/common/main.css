@@ -38,9 +38,28 @@ input.form-error {
 .warning { background-color:#fff6a8; border-color:#d9ce6e; }
 .warning a { color:#6d6311; }
 
+/* Button */
+*.bt-join, *.bt-already_join, *.bt-time_up, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-button-on, *.bt-button-off, *.bt-go_dashboard, *.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome {
+	display: block;
+	background: url(../../images/bg_fb/bg_button.png) no-repeat;
+	cursor: pointer;
+	border: none;
+	color: transparent !important;
+	text-indent: -9000px;
+	overflow:hidden;
+	margin: 0;
+}
+.bt-go_dashboard {
+	display: block;
+	width: 143px;
+	height: 32px;
+	background-position: 0 -313px;
+}
+
 /* New botton */
 .bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs,
-.bt-apply, .bt-apply-to-signup-form, .bt-add-field-from-list, .bt-create-own-field, .bt-remove-field {
+.bt-apply, .bt-apply-to-signup-form, .bt-add-field-from-list, .bt-create-own-field, .bt-remove-field,
+.bt-go-facebook, .bt-view-all-apps, .bt-learn-more-campaign, .bt-addnew_campaign {
 	display: block;
 	background: url(../../images/bg/bg_button_2.png) no-repeat;
 	cursor: pointer;
@@ -74,6 +93,10 @@ input.form-error {
 }
 .bt-go_user_profile { width: 152px; height: 32px; background-position: 0 0; }
 .bt-go_user_fb { width: 152px; height: 32px; background-position: 0 -33px; }
+.bt-go-facebook { width: 131px; height: 32px; background-position: -160px -134px; }
+.bt-view-all-apps { width: 231px; height: 42px; background-position: 0 -359px; }
+.bt-learn-more-campaign { width: 231px; height: 42px; background-position: 0 -402px; }
+.bt-addnew_campaign { width: 175px; height: 32px; background-position: 0 -445px; }
 .icon-star { width: 12px; height: 13px; background-position: -155px 0; display:inline-block; position:relative; left: 5px; } 
 .icon-happy { width: 12px; height: 13px; background-position: -155px -13px; display:inline-block; position:relative; left: 5px; }
 
@@ -98,7 +121,7 @@ ul.package li.package_name { height:43px; }
 ul.package li.package_name p { height:25px; line-height:25px; text-align:left; position:relative; top:10px; left:10px; font-size:14px; }
 ul.package li.package_name p a.bt-pick { position:absolute; top:-1px; left:148px; }
 ul.package li.package_price { width:229px; overflow:hidden; background-position: -693px -46px; }
-ul.package li.package_price p { color:#060606; height:40px; width:229px; background-position:7px -14px; background-repeat:no-repeat; text-align:right; font-size:24px;}
+ul.package li.package_price p { display:block; color:#060606; height:40px; width:229px; background-position:7px -14px; background-repeat:no-repeat; text-align:right; font-size:24px;}
 ul.package li.package_price p span { position:relative; top:5px; right:4px }
 ul.package li.package_price p span small { font-size:60%; }
 ul.package li.feature { height:36px; background-color:#FFF; background-position:-693px -87px; border-right: 3px solid #909090;}
@@ -294,6 +317,17 @@ div.popup_payment-complete p.message {
 	margin:0!important;
 }
 
+/* Popup go to Facebook */
+div.popup-gotofacebook {
+	margin:15px 0;
+	min-width: 380px;
+}
+div.popup-gotofacebook p {
+	margin:15px 0;
+}
+div.popup-gotofacebook p a.bt-go-facebook {
+	margin-bottom:15px;
+}
 
 /* Member list */
 .popup_select-company > div[class^="detail-list"] p.thumb {
@@ -496,6 +530,23 @@ div.popup_create-company ul>li textarea {
 	color:fff;
 }
 
+/* Setting > Left menu */
+div.menuleft > ul > li a {
+	overflow:hidden;
+}
+div.menuleft > ul > li > a.active {
+	background: url(../../images/bg/bg_menuleft-01.png) right;
+	text-decoration: none;
+}
+div.menuleft > ul > li > ul > li > a.active {
+	background: url(../../images/bg/bg_menuleft-02.png) right;
+	text-decoration: none;
+}
+div.menuleft > ul > li > ul > li > ul > li > a.active {
+	background: url(../../images/bg/bg_menuleft-03.png) right;
+	text-decoration: none;
+}
+
 /* Setting > Package/Billing */
 div.box-current_package div.detail p.thumb {
 	background-position: 4px 0px;
@@ -665,11 +716,40 @@ p.apply { text-align:center; border-top:1px solid #e6e6e6; }
 p.apply a.bt-apply-to-signup-form { margin-top:12px; }
 #custom-fields a.add-more-field { margin:20px 0 20px 10px; display:block; text-decoration:underline; color:#54661b; font-weight:bold }
 
+/* Page dashboard */
+#page-dashboard div.box-information {
+	background: #494949 url(../../images/bg/bg_liney02.gif) 579px 0 repeat-y;
+}
+#page-dashboard .bt-add_app, #page-dashboard .bt-go_page { display:inline-block;}
+#page-dashboard div.box-information div.details {
+	width: 538px;
+}
+#page-dashboard div.box-information div.information {
+	width: 340px;
+}
+
+#page-dashboard .blank-tab {
+	background-position: right bottom;
+	background-repeat: no-repeat;
+	padding:0 25px;
+	position:relative;
+	min-height: 370px;
+}
+#page-dashboard .blank-tab h2 { font-size: 24px; font-family: Myriad Pro; font-weight: normal; padding: 0 0 5px; margin: 15px 0 0; }
+#page-dashboard .blank-tab p.sub-title { color:#63791c; line-height: 15px; margin: 0; }
+#page-dashboard .blank-tab div.new-item { display:block; position: absolute; top: 15px; right: 15px; }
+#page-dashboard .blank-tab hr { border:0; color: #dcdcdc; background-color: #dcdcdc; height: 1px; width: 900px; position: relative; left: -25px; top:10px; }
+#page-dashboard .blank-tab h3 { font-size: 14px; padding: 0 0 5px; margin: 30px 0 0; color:#63791c; }
+#page-dashboard .blank-tab ul { margin:10px 0 25px 0; padding:0 20px; width:350px; }
+#page-dashboard .blank-tab ul li { list-style:disc; margin:10px 0; }
+
 /* User landing page */
 div.box-information div.information > ul {
 	padding:0;
 }
 div.box-information div.information ul {
+	width:150px;
+	float:left;
 	background: url(../../images/bg/bg_linex01.gif) bottom repeat-x;
 }
 div.box-information div.recent-app {
@@ -694,4 +774,32 @@ div.box-information div.information div.no-app-no-campaigns p {
 	color:#fff;
 	margin:15px 0;
 	font-weight:normal;
+}
+div#user-tabs h2 {
+	margin-bottom:15px;
+}
+div.white-box-01 {
+	border:1px solid #dcdcdc;
+	background-color:#fff;
+	padding:0 10px;
+	-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
+}
+div.white-box-01 p {
+	line-height:15px;
+	margin:10px 0 5px 0;
+}
+div#user-tabs div.user-info ul {
+	width:500px;
+	margin:20px auto;
+}
+div#user-tabs div.user-info ul li {
+	height:30px;
+}
+div#user-tabs div.user-info label {
+	width:160px;
+	display:inline-block;
+	line-height: 20px;
+	font-weight:bold;
+	text-align:right;
+	padding-right:30px;
 }

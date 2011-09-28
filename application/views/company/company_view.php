@@ -2,9 +2,11 @@
 {company_image_and_name}
 {breadcrumb}
 <div id="popup-gotofacebook" style="display:none">
-	<h2>Page installation : One step more</h2>
-	Please, go to facebook to complete the action.
-	<a class="gotofacebook-link">Go to facebook</a>
+	<div class="popup-gotofacebook">
+		<h2 class="in-popup">Page installation : One step more</h2>
+		<p><b>Please, go to facebook to complete the action.</b></p>
+		<a class="bt-go-facebook">Go to facebook</a>
+	</div>
 </div>
 <div class="wrapper-content">
 	<div>		

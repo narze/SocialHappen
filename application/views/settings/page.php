@@ -29,7 +29,7 @@
                     <p class="pic"><img class="page-image" src="<?php echo imgsize($page['page_image'],'square');?>" /></p>
                     <p>
 						<input id="page_image" type="file" name="page_image" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 144px; "/>
-						<a class="bt-change_pic" href="#"><span>Change picture</span></a>
+						<a class="bt-change_pic" href="#" style="margin-bottom:15px;"><span>Change picture</span></a>
 					</p>
 					<p>
 						<input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?>> 

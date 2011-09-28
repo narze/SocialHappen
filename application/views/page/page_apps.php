@@ -1,5 +1,6 @@
 <div class="wrapper-details apps">
 	<h2 class="application"><span>Appication</span></h2>
+	<?php if($app_count > 0) { ?>
 	<div class="option apps"><a class="bt-addnew_app"><span>Add new appication</span></a></div>
 	<div class="details apps">
 		  <table cellpadding="0" cellspacing="0">
@@ -22,4 +23,20 @@
 		</table>
 	    <div class="pagination-apps strip"></div>
 	</div>
+	<?php } else { ?>
+	<div class="blank-tab white-box-01" style="background-image: url(<?php echo base_url(); ?>assets/images/bg/blank_app.jpg);">
+		<h2>There's no application was installed</h2>
+		<p class="sub-title">Do you want to add one?</p>
+		<div class="new-item"><a class="bt-addnew_app"><span>Add new appication</span></a></div>
+		<hr />
+		<h3>Why do I have to install these application?</h3>
+		<ul>
+			<li>Tell users why thay have to install the application on the page</li>
+			<li>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis </li>
+			<li>Praesentium voluptatum deleniti atque corrupti ducid muntibo quos dolores et quas molestias excepturi sint occaecat</li>
+		</ul>
+		<a class="bt-view-all-apps" href="<?php echo base_url().'home/apps'; ?>">View all applications' details</a>
+	</div>
+	<?php } ?>
+	<br />
 </div>

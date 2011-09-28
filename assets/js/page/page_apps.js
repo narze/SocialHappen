@@ -57,7 +57,7 @@ $(function(){
 	});
 	
 	//fancybox for adding app to page
-	$('a.bt-addnew_app,a.a-addapp').live('click',function(){
+	$('a.bt-addnew_app,a.a-addapp, a.bt-add_app').live('click',function(){
 		$.fancybox({
 			href:base_url+'page/addapp_lightbox/'+page_id,
 			type:'iframe',

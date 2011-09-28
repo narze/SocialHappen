@@ -1,6 +1,6 @@
  <div class="wrapper-details campaigns">
         <h2 class="campaign"><span>Campaign</span></h2>
-
+		<?php if($campaign_count > 0) { ?>
         <div class="filter">
           <ul>
 			<li class="title">filter by :</li>
@@ -29,4 +29,23 @@
           </table>
 		  <div class="pagination-campaigns strip"></div>
         </div>
-      </div>
+		<?php } else { ?>
+		<div class="blank-tab white-box-01" style="background-image: url(<?php echo base_url(); ?>assets/images/bg/blank_campaign.jpg);">
+			<h2>There's no campaign yet.</h2>
+			<p class="sub-title">What's campaign?</p>
+			<div class="new-item"><a class="bt-addnew_campaign" href="<?php echo base_url().'configs/'.$page_id; ?>"><span>Add new campaign</span></a></div>
+			<hr />
+			<h3>Why do I have to create a campaign?</h3>
+			<ul>
+				<li>Tell users why thay have to create a campaign on the page.</li>
+				<li>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</li>
+			</ul>
+			<h3>Online Marketing Solution</h3>
+			<ul>
+				<li>Jett vero eos et accusamus et iusto odio dignissimos bolone qui blanditiis</li>
+			</ul>
+			<a class="bt-learn-more-campaign" href="<?php echo base_url().''; ?>">Learn more about campaign</a>
+		</div>
+		<?php } ?>
+		<br />
+</div>

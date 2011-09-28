@@ -1,5 +1,6 @@
 <div class="wrapper-details-member users">
         <h2 class="member"><span>Member</span></h2>
+		<?php if($user_count > 0) { ?>
 		<div class="option">
           <form>
 			<p class="search"><input name="" type="text" value="search" /><input class="bt-search" type="submit" /></p>
@@ -48,4 +49,23 @@
           <p class="bt-member"><a class="bt-remove"><span>remove</span></a><a class="bt-block"><span>block</span></a></p>
           <div class="paging pagination-users"></div>
         </div>
+		
+		<?php } else { ?>
+		<div class="blank-tab white-box-01" style="background-image: url('<?php echo base_url(); ?>assets/images/bg/blank_member.jpg');">
+			<h2>There's no member yet.</h2>
+			<p class="sub-title">Do you want to add one?</p>
+			<hr />
+			<h3>Why do I have to add member?</h3>
+			<ul>
+				<li>Tell users why they have to add member.</li>
+				<li>At vero eos et accusamus et iusto odio dignissimos ducimus cord upti ducid qui blanditiis atque .</li>
+				<li>Praesentium voluptatum deleniti atque corrupti ducid muntibo quos dolores et quas molestias excepturi sint occaecat</li>
+				<li>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis </li>
+				<li>Praesentium voluptatum deleniti atque corrupti ducid muntibo quos dolores et quas molestias excepturi sint occaecat</li>
+			</ul>
+			<a class="bt-learn-more-campaign" href="<?php echo base_url().''; ?>">Learn more about campaign</a>
+			<br />
+		</div>
+		<?php } ?>
+		<br />
       </div>

@@ -4,9 +4,14 @@
 <div class="wrapper-content">
 	<div>
 		{user_profile}
-		{user_tabs}
-		{user_stat}
-		{user_activities}	
+		<div id="user-tabs">
+			{user_tabs}
+			<div class="wrapper-details">
+				<div class="tab stat">{user_stat}</div>
+				<div class="tab activities">{user_activities}</div>
+				<div class="tab information">{user_info}</div>
+			</div>
+		</div>
 	</div>
 	<div class="bottom"><!--bottom--></div>
 </div>
