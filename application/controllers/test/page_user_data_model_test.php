@@ -275,10 +275,14 @@ class Page_user_data_model_test extends CI_Controller {
 		$this->unit->run($result,'is_false', 'remove_page_user_by_user_id_and_page_id(1,300) (not existed)');
 	}
 	
-	// function post_test(){
-		// $this->load->model('fields_model','fields');
-		// $this->fields->remove_fields(100,array('first_name','last_name','id'));
-	// }
+	/**
+	 * Test count_page_users_by_page_id()
+	 * @author Manassarn M.
+	 */
+	function count_page_users_by_page_id_test(){
+		$result = $this->page_users->count_page_users_by_page_id(1);
+		$this->unit->run($result,'is_int', 'count_page_users_by_page_id()'.$result);
+	}
 
 }
 /* End of file user_model_test.php */

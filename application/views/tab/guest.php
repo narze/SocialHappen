@@ -9,7 +9,19 @@
             <li><span>2)</span>Win leader board </li>
             <li><span>3)</span>....</li>
           </ul>
-		  
+			<div id="fb-root"></div>
+			<script>
+			  window.fbAsyncInit = function() {
+				FB.init({appId: '<?php echo $facebook_app_id; ?>', status: true, cookie: true,
+						 xfbml: true});
+			  };
+			  (function() {
+				var e = document.createElement('script'); e.async = true;
+				e.src = document.location.protocol +
+				  '//connect.facebook.net/en_US/all.js';
+				document.getElementById('fb-root').appendChild(e);
+			  }());
+			</script>
 			<script type="text/javascript">
 				function fblogin() {
 					FB.login(function(response) {

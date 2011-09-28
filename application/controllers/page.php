@@ -28,8 +28,8 @@ class Page extends CI_Controller {
 				
 				$this -> load ->model('campaign_model','campaigns');
 				$campaign_count = $this->campaigns->count_campaigns_by_page_id($page_id);
-				$this -> load ->model('user_model','users');
-				$user_count = $this->users->count_users_by_page_id($page_id);
+				$this -> load ->model('page_user_data_model','page_users');
+				$user_count = $this->page_users->count_page_users_by_page_id($page_id);
 				$this->config->load('pagination', TRUE);
 				$per_page = $this->config->item('per_page','pagination');
 				
@@ -222,8 +222,8 @@ class Page extends CI_Controller {
 	 */
 	function json_count_users($page_id = NULL, $labels = array()){
 		$this->socialhappen->ajax_check();
-		$this->load->model('user_model','users');
-		$count = $this->users->count_users_by_page_id($page_id);
+		$this->load->model('page_user_data_model','page_users');
+		$count = $this->page_users->count_page_users_by_page_id($page_id);
 		echo json_encode($count);
 	}
 	
@@ -312,8 +312,8 @@ class Page extends CI_Controller {
 	 */
 	function json_get_users($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this -> load -> model('user_model', 'users');
-		$users = $this -> users -> get_page_users_by_page_id($page_id, $limit, $offset);
+		$this -> load -> model('page_user_data_model', 'page_user');
+		$users = $this -> page_user -> get_page_users_by_page_id($page_id, $limit, $offset);
 		echo json_encode($users);
 	}
 

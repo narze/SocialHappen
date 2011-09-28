@@ -251,6 +251,9 @@ class App extends CI_Controller {
 		if($app_install_id = $this->installed_apps->add_installed_app($post_data)){
 			$result['status'] = 'OK';
 			$result['app_install_id'] = $app_install_id;
+			
+			$this->load->model('page_model','page');
+			$this->page->update_page_profile_by_page_id($post_data['page_id'], array('page_app_installed_id' => $app_install_id));
 		} else {
 			$result['status'] = 'ERROR';
 		}

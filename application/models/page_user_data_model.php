@@ -48,7 +48,8 @@ class Page_user_data_model extends CI_Model {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function get_page_users_by_page_id($page_id = NULL) {
+	function get_page_users_by_page_id($page_id = NULL, $limit = NULL, $offset = NULL){
+		$this->db->limit($limit, $offset);
 		$this->db->join('user','user.user_id=page_user_data.user_id');
 		$page_users = $this -> db -> get_where('page_user_data', array('page_id' => $page_id)) -> result_array();
 		$page_users = $this->socialhappen->map_v($page_users, 'user_gender');
@@ -180,7 +181,17 @@ class Page_user_data_model extends CI_Model {
 		$this->db->delete('page_user_data', array('user_id' => $user_id, 'page_id' => $page_id));
 		return $this->db->affected_rows()==1;
 	}
-
+	
+	/**
+	 * Count users
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function count_page_users_by_page_id($page_id = NULL){
+		$this->db->where(array('page_id' => $page_id));
+		return $this->db->count_all_results('page_user_data');
+	}
+	
 	// /**
 	 // * Check if user is existed
 	 // * @param $user_id
@@ -195,16 +206,6 @@ class Page_user_data_model extends CI_Model {
 		// return ($count != 0);
 	// }
 	
-	// /**
-	 // * Count users
-	 // * @param $page_id
-	 // * @author Manassarn M.
-	 // */
-	// function count_users_by_page_id($page_id = NULL){
-		// $this->db->where(array('page_id' => $page_id));
-		// $this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
-		// return $this->db->count_all_results('user');
-	// }
 }
 /* End of file page_user_data_model.php */
 /* Location: ./application/models/page_user_data_model.php */
