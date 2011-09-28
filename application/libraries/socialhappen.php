@@ -683,17 +683,27 @@ class SocialHappen{
 			}
 		}
 		
-		$data = array();
-		$data['test'] = $app;
-		$data['bar_type'] = 'app';
-		$data['view_as'] = $view_as;
-		$data['app_install_id'] = $app_install_id;
-		$data['page_id'] = $page_id;
-		$data['menu'] = $menu;
-		$data['user'] = $user;
-		$data['current_menu']['icon_url'] = $app_mode ? $app['app_image'] : $page['page_image'];
-		$data['current_menu']['name'] = $app_mode ? $app['app_name'] : $page['page_name'];
-		$data['signup_link'] = issetor($signup_link, '#');
-		return $this->CI->load->view('api/app_bar_view', $data, TRUE);
+		$this->CI->load->model('page_user_data_model','page_user_data');
+		$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
+		
+		$this->CI->load->vars(array(
+			'vars' => array(
+				'view_as' => $view_as,
+				'page_id' => $page_id,
+				'is_user_register_to_page' => $is_user_register_to_page
+			),
+			'view_as' => $view_as,
+			'app_install_id' => $app_install_id,
+			'page_id' => $page_id,
+			'menu' => $menu,
+			'user' => $user,
+			'current_menu' => array(
+				'icon_url' => $app_mode ? $app['app_image'] : $page['page_image'],
+				'name' => $app_mode ? $app['app_name'] : $page['page_name']
+			),
+			'signup_link' =>issetor($signup_link, '#'),
+			'facebook_app_id' => $this->CI->config->item('facebook_app_id')
+		));
+		return $this->CI->load->view('api/app_bar_view', array(), TRUE);
 	}
 }

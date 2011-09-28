@@ -536,7 +536,7 @@ class Tab extends CI_Controller {
 			if ($user_add_result['status'] == 'OK')
 			{
 				$this->socialhappen->login();
-				$this->load->view('common/redirect',array('redirect_parent' => base_url().'tab/'.$page_id));
+				redirect('tab/signup_page/'.$page_id);
 			}
 			else
 			{
@@ -599,7 +599,7 @@ class Tab extends CI_Controller {
 				echo "finished";
 				$this->load->view('common/redirect',array('refresh_parent' => TRUE));
 			} else {
-				echo "cannot signup page";
+				echo "already register/cannot signup page";
 			}
 			
 		}
