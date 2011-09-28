@@ -62,7 +62,20 @@ class User_companies_model_test extends CI_Controller {
 		$this->unit->run($result[0]['company_username'],'is_string','company_username');
 		$this->unit->run($result[0]['company_password'],'is_string','company_password');
 		$this->unit->run($result[0]['company_image'],'is_string','company_image');
-		$this->unit->run(count($result[0]) == 13,'is_true', 'number of column');
+	}
+	
+	/**
+	 * Test get_company_users_by_company_id()
+	 * @author Manassarn M.
+	 */
+	function get_company_users_by_company_id_test(){
+		$result = $this->user_companies->get_company_users_by_company_id(1);
+		$this->unit->run($result,'is_array', 'get_user_companies_by_user_id()');
+		$this->unit->run($result[0]['user_id'],'is_string','user_id');
+		$this->unit->run($result[0]['company_id'],'is_string','company_id');
+		$this->unit->run($result[0]['user_role'],'is_string','user_role');
+		$this->unit->run($result[0]['user_gender_id'] == 1,'is_true','user_gender_id == 1');
+		$this->unit->run($result[0]['user_gender'] == "Not sure",'is_true','user_gender == "Not sure"');
 	}
 }
 /* End of file user_company_model_test.php */

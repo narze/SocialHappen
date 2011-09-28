@@ -46,8 +46,9 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_date'],'is_string','app_install_date');
 		$this->unit->run($result[0]['page_id'],'is_string','page_id');
 		$this->unit->run($result[0]['app_install_secret_key'],'is_string','app_install_secret_key');
-
-		$this->unit->run(count($result[0]) == 17,'is_true', 'number of column');
+		$this->unit->run($result[0]['user_gender_id'] == 1,'is_true','user_gender_id == 1');
+		$this->unit->run($result[0]['user_gender'] == "Not sure",'is_true','user_gender == "Not sure"');
+		
 		
 	}
 

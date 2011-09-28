@@ -238,7 +238,7 @@ class Sync extends CI_Controller {
 							    'user_facebook_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
 							    'user_register_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'user_last_seen' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
-								'user_gender' => field_option('INT', 1, 1, TRUE, $autoinc, TRUE),
+								'user_gender_id' => field_option('INT', 1, 1, TRUE, $autoinc, TRUE),
 								'user_birth_date' => field_option('DATE', $constraint, $default, TRUE, $autoinc, $unsigned),
 								'user_about' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 								'user_point' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE)
@@ -265,10 +265,6 @@ class Sync extends CI_Controller {
 								'last_activity' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 								'user_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
-							),
-							'user_gender' =>array(
-								'user_gender_id' => field_option('INT', 1, $default, $null, TRUE, TRUE),
-								'user_gender_name' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned),
 							),
 							'user_role' => array(
 							    'user_role_id' => field_option('INT', 2, $default, $null, TRUE, TRUE),
@@ -369,7 +365,6 @@ class Sync extends CI_Controller {
 						'user_campaigns' => array('user_id', 'campaign_id'),
 						'user_companies' => array('user_id', 'company_id'),
 						'sessions' => array('session_id'),
-						'user_gender' =>array('user_gender_id'),
 						'user_role' => array('user_role_id'),
 						'user_pages' => array('user_id', 'page_id'),
 						'package' => array('package_id'),
@@ -396,7 +391,6 @@ class Sync extends CI_Controller {
 							'user_campaigns',
 							'user_companies',
 							'sessions',
-							'user_gender',
 							'user_role',
 							'user_pages',
 							'package',
@@ -983,22 +977,6 @@ class Sync extends CI_Controller {
 							)
 						);
 		$this->db->insert_batch('sessions', $sessions);
-		
-		$user_gender = array(
-			array(
-				'user_gender_id' => 1,
-				'user_gender_name' => "Not sure"
-			),
-			array(
-				'user_gender_id' => 2,
-				'user_gender_name' => "Female"
-			),
-			array(
-				'user_gender_id' => 3,
-				'user_gender_name' => "Male"
-			)
-		);
-		$this->db->insert_batch('user_gender', $user_gender);
 		
 		$user_role = array(
 								array(

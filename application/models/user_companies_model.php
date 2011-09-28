@@ -29,22 +29,6 @@ class User_companies_model extends CI_Model {
 	}
 	
 	/**
-	 * Get user/s information
-	 * @param array $company_id
-	 * @param $limit
-	 * @param $offset
-	 * @author Wachiraph C.
-	 */
-	function _get($where = array(), $limit =0, $offset =0) {
-		if (array_key_exists('user_facebook_id', $where)) {
-			$this->db->join('user', 'user_companies.user_id = user.user_id');
-			$where = array('user_facebook_id'=>$where['user_facebook_id']);
-		}
-		$query = $this -> db -> get_where('user_companies', $where, $limit, $offset);
-		return $query -> result();
-	}
-	
-	/**
 	 * Get user companies
 	 * @param $user_id
 	 * @return array
@@ -75,7 +59,8 @@ class User_companies_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		$this->db->join('user', 'user_companies.user_id = user.user_id');
 		$this->db->join('user_role', 'user_companies.user_role = user_role.user_role_id','left');
-		return $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
+		$result = $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
+		return $this->socialhappen->map_v($result, 'user_gender');
 	}
 	
 	/**

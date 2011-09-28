@@ -15,7 +15,8 @@ class User_campaigns_model extends CI_Model {
 	function get_campaign_users_by_campaign_id($campaign_id =NULL, $limit = NULL, $offset = NULL){
 		$this->db->limit($limit, $offset);
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
-		return $this -> db -> get_where('user_campaigns', array('campaign_id' => $campaign_id)) -> result_array();
+		$result = $this -> db -> get_where('user_campaigns', array('campaign_id' => $campaign_id)) -> result_array();
+		return $this->socialhappen->map_v($result, 'user_gender');
 	}
 	
 	/**
@@ -39,7 +40,7 @@ class User_campaigns_model extends CI_Model {
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
 		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
 		$result = $this -> db -> get_where('user_campaigns', array('user.user_id' => $user_id)) -> result_array();
-		return $this->socialhappen->map_v($result, 'campaign_status');
+		return $this->socialhappen->map_v($result, array('campaign_status', 'user_gender'));
 	}
 	
 	/**

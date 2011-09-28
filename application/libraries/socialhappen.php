@@ -25,6 +25,7 @@ class SocialHappen{
 		'app_type' => array(1=>'Page Only', 2=>'Support Page', 3=>'Standalone'),
 		'campaign_status' => array(1=>'Inactive', 2=>'Active', 3=>'Expired'),
 		'page_status' => array(1=>'Not Installed', 2=>'Installed'),
+		'user_gender' => array(1=>'Not sure', 2=>'Female', 3=>'Male'),
 		'audit_action' => array( //See actions in MongoDB
 			1 => 'Install App', 2 => 'Install App To Page', 3 => 'Remove App', 4 => 'Update Config', 5 => 'Install Page',
 			101 => 'User Register SocialHappen',

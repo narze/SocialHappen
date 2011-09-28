@@ -40,7 +40,8 @@ class User_pages_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		$this->db->join('page','user_pages.page_id=page.page_id');
 		$this->db->join('user_role', 'user_pages.user_role = user_role.user_role_id','left');
-		return $this->db->get_where('user_pages', array('user_id' => $user_id))->result_array();
+		$result = $this->db->get_where('user_pages', array('user_id' => $user_id))->result_array();
+		return $this->socialhappen->map_v($result, array('page_status'));
 	}
 	
 	/**
@@ -52,7 +53,8 @@ class User_pages_model extends CI_Model {
 		$this->db->limit($limit, $offset);
 		$this->db->join('user', 'user_pages.user_id = user.user_id');
 		$this->db->join('user_role', 'user_pages.user_role = user_role.user_role_id','left');
-		return $this->db->get_where('user_pages', array('page_id' => $page_id))->result_array();
+		$result = $this->db->get_where('user_pages', array('page_id' => $page_id))->result_array();
+		return $this->socialhappen->map_v($result, array('user_gender'));
 	}
 	
 	/**
