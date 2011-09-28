@@ -50,15 +50,16 @@ class Tab extends CI_Controller {
 		$this->config->load('pagination', TRUE);
 		$per_page = $this->config->item('per_page','pagination');
 
-		$page_update = array();
-		if(!$page['page_installed']){
-			$page_update['page_installed'] = TRUE;
-		}
-		if($page['page_app_installed_id'] != 0){
-			$page_update['page_app_installed_id'] = 0;
-		}		
-		$this->pages->update_page_profile_by_page_id($page_id, $page_update);
 		
+		// if($is_admin){
+			// $page_update = array();
+			// if(!$page['page_installed']){
+				// $page_update['page_installed'] = TRUE;
+			// } else if($page['page_app_installed_id'] != 0){
+				// $page_update['page_app_installed_id'] = 0;
+			// }		
+			// $this->pages->update_page_profile_by_page_id($page_id, $page_update);
+		// }
 		$data = array(
 			'header' => $this->load->view('tab/header', 
 				array(
@@ -67,12 +68,8 @@ class Tab extends CI_Controller {
 									'page_id' => $page_id,
 									'user_id' => $user_id,
 									'is_guest' => $user ? FALSE : TRUE,
-									'is_admin' => $is_admin,
 									'token' => base64_encode($token),
 									'per_page' => $per_page,
-									'page_app_installed_id' => $page['page_app_installed_id'],
-									'page_installed' => $page['page_installed'],
-									'is_user_register_to_page' => $is_user_register_to_page ? TRUE : FALSE
 					),
 					'script' => array(
 						'common/functions',
@@ -561,7 +558,7 @@ class Tab extends CI_Controller {
 					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);	
 				break;
 				case 'checkbox':
-					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'xss_clean');	
+					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'xss_clean'.$required);
 				break;
 				case 'textarea':
 					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
@@ -601,6 +598,14 @@ class Tab extends CI_Controller {
 			} else {
 				echo "already register/cannot signup page";
 			}
+			
+			$this->load->view('tab/signup_page', array(
+				'user' => $this->socialhappen->get_user(),
+				'page_id' => $page_id,
+				'page_user_fields' => $page_user_fields,
+				'facebook_user'=>$facebook_user,
+				'user_profile_picture'=>$user_facebook_image
+			));
 			
 		}
 	}

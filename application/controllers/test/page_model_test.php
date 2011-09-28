@@ -426,13 +426,13 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[3]['order'], 'is_int', "result[3]['order'] = {$result[3]['order']}");
 		
 		$this->unit->run($result[6], 'is_array', 'id 6');
-		$this->unit->run($result[6]['required'], 'is_false', "required reset to FALSE due to checkbox type");
+		$this->unit->run($result[6]['required'], 'is_true', "required == true");
 		
 		$this->unit->run($result[7], 'is_array', 'id 7');
 		$this->unit->run($result[7]['type'], 'text', "id_card_number type = text");
 		
 		$this->unit->run($result[8], 'is_array', 'id 8');
-		$this->unit->run($result[8]['type'], 'radio', "gender type = checkbox");
+		$this->unit->run($result[8]['type'], 'radio', "gender type = radio");
 		$this->unit->run($result[8]['required'], 'is_true', "gender with required = true");
 		
 		$result = $this->pages->get_page_user_fields_by_page_id(100);

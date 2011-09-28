@@ -665,6 +665,14 @@ class SocialHappen{
 			$signup_link = $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
 		} else if($this->CI->user_pages->is_page_admin($user['user_id'], $page_id)){			
 			$view_as = 'admin';
+			
+			$page_update = array();
+			if(!$page['page_installed']){
+				$page_update['page_installed'] = TRUE;
+			} else if($page['page_app_installed_id'] != 0){
+				$page_update['page_app_installed_id'] = 0;
+			}		
+			$this->CI->pages->update_page_profile_by_page_id($page_id, $page_update);
 		} else {
 			$view_as = 'user';
 		}
@@ -691,7 +699,9 @@ class SocialHappen{
 			'vars' => array(
 				'view_as' => $view_as,
 				'page_id' => $page_id,
-				'is_user_register_to_page' => $is_user_register_to_page
+				'page_app_installed_id' => issetor($page['page_app_installed_id'],0),
+				'page_installed' => issetor($page['page_installed'],1),
+				'is_user_register_to_page' => $is_user_register_to_page ? TRUE : FALSE
 			),
 			'view_as' => $view_as,
 			'app_install_id' => $app_install_id,

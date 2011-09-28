@@ -198,6 +198,9 @@ class Api extends CI_Controller {
 					
 				$this->Installed_apps->update_page_id($app_install_id, $page_id);
 				
+				//Update latest installed app install id in page
+				$this->Page->update_page_profile_by_page_id($page_id, array('page_app_installed_id' => $app_install_id));
+				
 				$this->load->library('audit_lib');
 				$this->audit_lib->add_audit(
 											$app_id,

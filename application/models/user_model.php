@@ -10,19 +10,6 @@ class User_model extends CI_Model {
 	}
 
 	/**
-	 * Get page users
-	 * @param $page_id
-	 * @author Manassarn M.
-	 */
-	function get_page_users_by_page_id($page_id =NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
-		$this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
-		$this -> db -> join('installed_apps', 'installed_apps.app_install_id=user_apps.app_install_id');
-		$result = $this -> db -> get_where('user', array('page_id' => $page_id)) -> result_array();
-		return $this->socialhappen->map_v($result, array('app_install_status', 'user_gender'));
-	}
-
-	/**
 	 * Get user profile
 	 * @param $user_id
 	 * @author Manassarn M.
@@ -166,18 +153,6 @@ class User_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function count_users(){
-		return $this->db->count_all_results('user');
-	}
-	
-	/**
-	 * Count users
-	 * @param $page_id
-	 * @author Manassarn M.
-	 */
-	function count_users_by_page_id($page_id = NULL){
-		$this->db->where(array('page_id' => $page_id));
-		$this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
-		$this -> db -> join('installed_apps', 'installed_apps.app_install_id=user_apps.app_install_id');
 		return $this->db->count_all_results('user');
 	}
 

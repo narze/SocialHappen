@@ -186,7 +186,7 @@ class Page_model extends CI_Model {
 				$field['required'] = TRUE;	
 			}
 			
-			if(issetor($field['type']) == 'checkbox' || !isset($field['required'])){ //Checkbox cannot be required OR if not specified
+			if(!isset($field['required'])){ //if not specified
 				$field['required'] = FALSE;	
 			}
 			
@@ -241,7 +241,7 @@ class Page_model extends CI_Model {
 			){
 				return FALSE;
 			}
-			if(issetor($field['type']) == 'checkbox' || !isset($field['required'])){ //Checkbox cannot be required OR if not specified
+			if(!isset($field['required'])){ //if not specified
 				$field['required'] = FALSE;	
 			}
 			foreach($field as $field_key => $field_value){

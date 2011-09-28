@@ -22,32 +22,32 @@ $(function(){
 	
 	if(view_as == 'guest'){
 		$.fancybox({
-			href: base_url+'tab/guest/'+page_id
+			href: base_url+'tab/guest'
 		});
 		$('a.bt-don-awesome').die('click');
 		$('a.bt-don-awesome').live('click',function(){
 			$.fancybox.close();
 		});
 	} else if(view_as == 'admin'){
-		// if(page_app_installed_id!=0) {
-			// $.fancybox({
-				// href: base_url+'tab/app_installed/'+ page_app_installed_id
-			// });
-			// $('a.bt-stay_fb').die('click');
-			// $('a.bt-stay_fb').live('click',function(){
-				// $.fancybox.close();
-			// });
-			// page_app_installed_id=0;
-		// } else if(page_installed==0){
-			// $.fancybox({
-				// href: base_url+'tab/page_installed/'+ page_id
-			// });
-			// $('a.bt-stay_fb').die('click');
-			// $('a.bt-stay_fb').live('click',function(){
-				// $.fancybox.close();
-			// });
-			// page_installed=1;
-		// }
+		if(page_app_installed_id!=0) {
+			$.fancybox({
+				href: base_url+'tab/app_installed/'+ page_app_installed_id
+			});
+			$('a.bt-stay_fb').die('click');
+			$('a.bt-stay_fb').live('click',function(){
+				$.fancybox.close();
+			});
+			page_app_installed_id=0;
+		} else if(page_installed==0){
+			$.fancybox({
+				href: base_url+'tab/page_installed/'+ page_id
+			});
+			$('a.bt-stay_fb').die('click');
+			$('a.bt-stay_fb').live('click',function(){
+				$.fancybox.close();
+			});
+			page_installed=1;
+		}
 	} else {
 		if(!is_user_register_to_page) {
 			$.fancybox({
