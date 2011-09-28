@@ -37,7 +37,8 @@ class Page_user_data_model extends CI_Model {
 		if(isset($page_users[0])){
 			$page_user = $this->_fetch_page_user_data_by_page_id($page_users[0], $page_id);
 			$users = $this->db->get_where('user', array('user_id'=>$user_id))->result_array();
-			return array_merge($page_user, issetor($users[0],array()));
+			$user = $this->socialhappen->map_one_v($users[0], 'user_gender');
+			return array_merge($page_user, issetor($user,array()));
 		}
 		return NULL;
 	}
@@ -50,6 +51,7 @@ class Page_user_data_model extends CI_Model {
 	function get_page_users_by_page_id($page_id = NULL) {
 		$this->db->join('user','user.user_id=page_user_data.user_id');
 		$page_users = $this -> db -> get_where('page_user_data', array('page_id' => $page_id)) -> result_array();
+		$page_users = $this->socialhappen->map_v($page_users, 'user_gender');
 		foreach($page_users as &$page_user){
 			$page_user = $this->_fetch_page_user_data_by_page_id($page_user, $page_id);
 		}

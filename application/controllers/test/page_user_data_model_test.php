@@ -154,6 +154,8 @@ class Page_user_data_model_test extends CI_Controller {
 		$result = $this->page_users->get_page_user_by_user_id_and_page_id(1, 1);
 		$this->unit->run($result,'is_array', 'get_page_user_by_user_id_and_page_id()');
 		$this->unit->run($result['user_facebook_id'],'is_string','first user_facebook_id');
+		$this->unit->run($result['user_gender_id'] == 1,'is_true','user_gender_id == 1');
+		$this->unit->run($result['user_gender'] == "Not sure",'is_true','user_gender == "Not sure"');
 		$this->unit->run($result['user_data'],'is_array','user_data');
 		$this->unit->run($result['user_data']['size'] == 'L','is_true','size == "L"');
 		$this->unit->run($result['user_data']['color'] == 'red','is_true','color == "red"');	
@@ -195,6 +197,8 @@ class Page_user_data_model_test extends CI_Controller {
 		$this->unit->run($result,'is_array', 'get_page_users_by_page_id(2)');
 		$this->unit->run($result[0],'is_array','first row');
 		$this->unit->run($result[0]['user_facebook_id'],'is_string','first user_facebook_id');
+		$this->unit->run($result[0]['user_gender_id'] == 1,'is_true','user_gender_id == 1');
+		$this->unit->run($result[0]['user_gender'] == "Not sure",'is_true','user_gender == "Not sure"');
 		$this->unit->run($result[0]['user_data'],'is_array','user_data');
 		$this->unit->run($result[0]['user_data']['size'] == 'M','is_true','size == "M"');
 		$this->unit->run($result[0]['user_data']['color'] == 'red','is_true','color == "red"');

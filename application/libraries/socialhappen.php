@@ -25,6 +25,7 @@ class SocialHappen{
 		'app_type' => array(1=>'Page Only', 2=>'Support Page', 3=>'Standalone'),
 		'campaign_status' => array(1=>'Inactive', 2=>'Active', 3=>'Expired'),
 		'page_status' => array(1=>'Not Installed', 2=>'Installed'),
+		'user_gender' => array(1=>'Not sure', 2=>'Female', 3=>'Male'),
 		'audit_action' => array( //See actions in MongoDB
 			1 => 'Install App', 2 => 'Install App To Page', 3 => 'Remove App', 4 => 'Update Config', 5 => 'Install Page',
 			101 => 'User Register SocialHappen',
@@ -631,4 +632,79 @@ class SocialHappen{
 		return $over;
 	}
 	
+	/** 
+	 * Get socialhappen bar
+	 * @param $data
+	 * @author Manassarn M.
+	 */
+	function get_bar($data = array()){
+		$app_install_id = issetor($data['app_install_id']);
+		$page_id = issetor($data['page_id']);
+		$user_id = issetor($data['user_id']);
+		$user_facebook_id = issetor($data['user_facebook_id']);
+		$app_mode = FALSE;
+		
+		$this->CI->load->model('Installed_apps_model', 'app');
+		$app = $this->CI->app->get_app_profile_by_app_install_id($app_install_id);
+		if($app && isset($app['page_id'])){
+			$app_mode = TRUE;
+			$page_id = $app['page_id'];
+		}
+		
+		$this->CI->load->model('User_model', 'User');
+		$this->CI->load->model('user_pages_model','user_pages');
+		$this->CI->load->model('page_model','pages');
+		$user = $user_id ? $this->CI->User->get_user_profile_by_user_id($user_id) : $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
+		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
+		
+		$menu = array();
+		//Right menu
+		if(!$user){
+			$facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
+			$view_as = 'guest';
+			$signup_link = $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
+		} else if($this->CI->user_pages->is_page_admin($user['user_id'], $page_id)){			
+			$view_as = 'admin';
+		} else {
+			$view_as = 'user';
+		}
+		
+		$menu['left'] = array();
+		if($page_id){
+			$apps = $this->CI->app->get_installed_apps_by_page_id($page_id);
+			$this->CI->load->library('app_url');
+			foreach($apps as $page_app){
+				if($page_app['app_install_id'] != $app_install_id){
+					$menu['left'][] = 
+					array('location' => 
+						$this->CI->app_url->translate_url($page_app['app_url'], 
+						$page_app['app_install_id']),
+								'title' => $page_app['app_name']);
+				}
+			}
+		}
+		
+		$this->CI->load->model('page_user_data_model','page_user_data');
+		$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
+		
+		$this->CI->load->vars(array(
+			'vars' => array(
+				'view_as' => $view_as,
+				'page_id' => $page_id,
+				'is_user_register_to_page' => $is_user_register_to_page
+			),
+			'view_as' => $view_as,
+			'app_install_id' => $app_install_id,
+			'page_id' => $page_id,
+			'menu' => $menu,
+			'user' => $user,
+			'current_menu' => array(
+				'icon_url' => $app_mode ? $app['app_image'] : $page['page_image'],
+				'name' => $app_mode ? $app['app_name'] : $page['page_name']
+			),
+			'signup_link' =>issetor($signup_link, '#'),
+			'facebook_app_id' => $this->CI->config->item('facebook_app_id')
+		));
+		return $this->CI->load->view('api/app_bar_view', array(), TRUE);
+	}
 }

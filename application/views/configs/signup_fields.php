@@ -1,5 +1,4 @@
 <div id="signup-fields">
-
 	<h2><span>SocialHappen Form</span></h2>
 	<ul class="fields">
 		<li>
@@ -24,6 +23,7 @@
 	<h2><span>Your Sign Up Form</span></h2>
 	<?php echo form_open("configs/signup_fields/{$page['page_id']}", array('class' => 'signup-fields')); 
 	if($updated) echo 'Updated'; ?>
+	<input type="hidden" name="submit-form" value=1></input>
 	<ul class="submitting fields">
 	<li class="no-field" <?php echo $signup_fields ? 'style="display:none"' : '' ;?>>to start adding more sign up field, click the button below</li>
 		<?php 

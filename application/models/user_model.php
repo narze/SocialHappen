@@ -19,7 +19,7 @@ class User_model extends CI_Model {
 		$this -> db -> join('user_apps', 'user_apps.user_id=user.user_id');
 		$this -> db -> join('installed_apps', 'installed_apps.app_install_id=user_apps.app_install_id');
 		$result = $this -> db -> get_where('user', array('page_id' => $page_id)) -> result_array();
-		return $this->socialhappen->map_v($result, 'app_install_status');
+		return $this->socialhappen->map_v($result, array('app_install_status', 'user_gender'));
 	}
 
 	/**
@@ -30,7 +30,7 @@ class User_model extends CI_Model {
 	function get_user_profile_by_user_id($user_id =NULL, $limit = NULL, $offset = NULL){
 		$this->db->limit($limit, $offset);
 		$profiles = $this -> db -> get_where('user', array('user_id' => $user_id)) -> result_array();
-		return issetor($profiles[0]);
+		return $this->socialhappen->map_one_v($profiles[0], 'user_gender');
 	}
 
 	/**
@@ -116,7 +116,7 @@ class User_model extends CI_Model {
 	 */
 	function get_user_profile_by_user_facebook_id($user_facebook_id =NULL) {
 		$profiles = $this -> db -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result_array();
-		return issetor($profiles[0]);
+		return $this->socialhappen->map_one_v($profiles[0], 'user_gender');
 	}
 	
 	/**
@@ -128,7 +128,7 @@ class User_model extends CI_Model {
 	function get_all_user_profile($limit = NULL, $offset = NULL){
 		$this->db->limit($limit, $offset);
 		$result = $this->db->get_where('user',array())->result_array();
-		return issetor($result, NULL);
+		return $this->socialhappen->map_v($result, 'user_gender');
 	}
 	
 

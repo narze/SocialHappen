@@ -37,6 +37,8 @@ class User_campaigns_model_test extends CI_Controller {
 		$this->unit->run($result[0]['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result[0]['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result[0]['user_last_seen'],'is_string','user_last_seen');
+		$this->unit->run($result[0]['user_gender_id'] == 1,'is_true','user_gender_id == 1');
+		$this->unit->run($result[0]['user_gender'] == "Not sure",'is_true','user_gender == "Not sure"');
 	}
 	
 	/**
@@ -57,6 +59,8 @@ class User_campaigns_model_test extends CI_Controller {
 		$this->unit->run($result[0]['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result[0]['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result[0]['user_last_seen'],'is_string','user_last_seen');
+		$this->unit->run($result[0]['user_gender_id'] == 1,'is_true','user_gender_id == 1');
+		$this->unit->run($result[0]['user_gender'] == "Not sure",'is_true','user_gender == "Not sure"');
 	}
 	
 	/**

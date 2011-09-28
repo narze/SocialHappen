@@ -1,12 +1,42 @@
+<link rel="stylesheet" type="text/css"  href="<?php echo base_url().'assets/css/common/fancybox/jquery.fancybox-1.3.4.css'; ?>" />
 <script>
+	var base_url = "<?php echo base_url(); ?>";
+	<?php if(isset($vars)) :
+		foreach($vars as $name => $value) :
+			echo "var {$name} = '{$value}';\n";
+		endforeach; 
+	endif; ?>
 	if(typeof jQuery == 'undefined')
 	{
-		var fileref = document.createElement('script');
-		fileref.setAttribute("type","text/javascript");
-		fileref.setAttribute("src", 'http://code.jquery.com/jquery-latest.min.js');
+		var file1 = document.createElement('script');
+		file1.setAttribute("type","text/javascript");
+		file1.setAttribute("src", 'http://code.jquery.com/jquery-latest.min.js');
+	}
+	if(typeof jQuery.fancybox == 'undefined')
+	{
+		var file1 = document.createElement('script');
+		file1.setAttribute("type","text/javascript");
+		file1.setAttribute("src", base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.pack.js');
 	}
 </script>
 <script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
+<script src="<?php echo base_url().'assets/js/common/jquery.form.js'; ?>" type="text/javascript"></script>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+	FB.init({appId: '<?php echo $facebook_app_id; ?>', status: true, cookie: true,
+			 xfbml: true});
+  };
+  (function() {
+	if(typeof FB == 'undefined')
+	{
+		var e = document.createElement('script'); e.async = true;
+		e.src = document.location.protocol +
+		  '//connect.facebook.net/en_US/all.js';
+		document.getElementById('fb-root').appendChild(e);
+	}
+  }());
+</script>
 <div class="header">
     
 	<div class="name toggle">
@@ -64,10 +94,9 @@
 		<div>Settings</div>
 		<ul>
           <li><a href="<?php echo base_url()."page/".$page_id;?>" class="platform-link">Page Settings</a></li>
-          <?php if($bar_type == 'app') { ?>
+          <?php if($app_install_id) { ?>
 		  <li><a href="<?php echo base_url().'app/config/'.$app_install_id?>" class="platform-link">App Settings</a></li>
-		  <?php } ?>
-          <?php if($bar_type == 'platform') { ?>
+		  <?php } else { ?>
 		  <li class="separator"><a class="a-dashboard">View as Admin</a></li>
 		  <li><a class="a-dashboard view-as-user">View as Member</a></li>
 		  <li><a class="a-dashboard view-as-guest">View as Guest</a></li>
