@@ -182,7 +182,7 @@ div.header ul.menu>li.profile>ul {
     border-radius: 0 0 5px 5px;
 	z-index: 999;
 }
-div.header ul.menu>li.profile:hover ul {display: block;}
+
 div.header ul.menu>li.profile>ul li {
 	cursor: default;
 	font-size: 11px;

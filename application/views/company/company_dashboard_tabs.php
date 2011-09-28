@@ -5,12 +5,12 @@
 				<a href="#" onclick="select_page_tab(); return false;">
 				<span class="page-installed-count">Page (0)</span>
 				</a>
-			</li>
+			</li><!-- 
 			<li class="app_tab">
 				<a href="#" onclick="select_app_tab(); return false;">
 				<span class="app-installed-count">Application (0)</span>
 				</a>
-			</li>
+			</li> -->
 		</ul>
 	</div>
 	<div class="left-panel">
@@ -32,6 +32,7 @@
 		</div>
 	</div>
 	<div class="page-tab-left" style="display:none;">
+		<?php if($user_have_package) { ?>
 		<div class="box-page_list">
 			<div class="dragging-page">
 				<a class="back-inactive" href="javascript:previous_page('installed-page')">
@@ -42,8 +43,7 @@
 				</a>
 				<div>
 					<ul>
-						<li class="add-page">
-						</li>
+						<li class="add-page"></li>
 					</ul>
 				</div>
 			</div>
@@ -66,5 +66,6 @@
 				</div>
 			</div>
 		</div>
+		<?php } ?>
 	</div>
 </div>

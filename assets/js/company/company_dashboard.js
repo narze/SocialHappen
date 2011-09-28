@@ -77,24 +77,23 @@ function get_page_installed(page_id) {
 
 //show apps in page
 function view_page_app(page_id,facebook_page_id,page_name) {
+	$(".left-panel").find('.dragging-page div').find('ul').children("li").removeClass("dragging").removeClass("active");
+	$("li .page_id[value="+page_id+"]").parent("li").addClass("active");
+	$('div.dragging-app').show();
 	
-			if(get_page_installed(page_id) == 0) //Page installation is not complete
-			{
-				$(".gotofacebook-link").attr('href', get_add_app_to_fb_page_link(sh_default_fb_app_api_key,facebook_page_id));
-				$.fancybox({
-					content:$("#popup-gotofacebook").html()
-				});
-			}
-			else 
-			{
-				selected_page_id=page_id;
-				$(".left-panel").find('.dragging-page div').find('ul').children("li").removeClass("dragging").removeClass("active");
-				$("li .page_id[value="+page_id+"]").parent("li").addClass("active");
-				show_installed_app_in_page(page_id,facebook_page_id);
-				$(".head-box-app-list b").html(page_name);
-				$(".right-panel").html($(".dragging-event-right-app-list").html());
-				show_available_app_in_page(page_id);
-			}
+	selected_page_id=page_id;
+	show_installed_app_in_page(page_id,facebook_page_id);
+	$(".head-box-app-list b").html(page_name);
+	
+	if(page_installed == 0) //Page installation not complete
+	{
+		$(".right-panel .dragging-app").html('');
+		$(".right-panel p.alert").remove();
+		return false;
+	}
+	
+	$(".right-panel").html($(".dragging-event-right-app-list").html());
+	show_available_app_in_page(page_id);
 }
 
 function view_page_app_nochange_right(page_id,facebook_page_id,page_name) {
@@ -286,6 +285,7 @@ function show_installed_page_in_company() {
 										content:$("#popup-gotofacebook").html()
 									});
 									$(dragging_object).attr('onclick','view_page_app('+page_id+','+facebook_page_id+',"'+page_name+'")');
+									$(dragging_object).append('<input type="hidden" class="page_id" value="'+ page_id +'">');
 								} else {
 									// show_installed_app_in_page(page_id,facebook_page_id); //no page_id
 									// show_available_app_in_page(page_id);
@@ -321,7 +321,6 @@ function show_installed_app_in_company() {
 				ul_element.append(
 				'<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
 				+'<span class="button">'
-				+'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
 				+'<a class="bt-setting_app" href="'+base_url+'app/config/'+json[i].app_install_id+'"><span>Setting</span></a>'
 				+'</span>'
 				+'</p><p class="appname">'+json[i].app_name+'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>'
@@ -369,7 +368,6 @@ function show_installed_app_in_company() {
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
 									dragging_object.children('p:first').append('<span class="button">'
-									+'<a class="bt-update_app" href="'+base_url+'app/'+app_install_id+'"><span>Update</span></a>'
 									+'<a class="bt-setting_app" href="'+base_url+'app/config/'+app_install_id+'"><span>Setting</span></a>'
 									+'</span>');
 									update_app_order_in_dashboard();
@@ -410,7 +408,8 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 	
 	if(get_page_installed(page_id)==0)
 	{
-		$('.head-box-app-list b').hide();
+		$('.head-box-app-list').hide();
+		$('div.dragging-app').hide();
 		$(".gotofacebook-link").attr('href', get_add_app_to_fb_page_link(sh_default_fb_app_api_key,facebook_page_id));
 		$(".notice").html( $('#popup-gotofacebook').html() );
 		$(".notice").addClass('warning').show(); 
@@ -433,14 +432,12 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 			//Signup Form
 			ul_element.append('<li><p><img class="app-image" src="'+imgsize('','normal')+'" alt="" width="64" height="64" />'
 				+'<span class="button">'
-				+'<a class="bt-update_app" href="'+base_url+'configs?p='+page_id+'&c=signup_fields"><span>Update</span></a>'
 				+'<a class="bt-setting_app" href="'+base_url+'configs?p='+page_id+'&c=signup_fields"><span>Setting</span></a>'
 				+'</span>'
 				+'</p><p class="appname">'+ 'Page Signup Form' +'</p><input type="hidden" class="app_install_id" value="'+0+'" /></li>');
 			for(i in json) {
 				ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
 				+'<span class="button">'
-				+'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
 				+'<a class="bt-setting_app" href="'+base_url+'app/config/'+json[i].app_install_id+'"><span>Setting</span></a>'
 				+'</span>'
 				+'</p><p class="appname">'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
@@ -755,4 +752,5 @@ $( function() {
 		}
 	});
 	$( "ul, li" ).disableSelection();
+	
 });
