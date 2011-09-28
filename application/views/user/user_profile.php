@@ -5,6 +5,7 @@
             <p><a class="bt-go_user_profile" href="#">Goto SH Profile</a></p>
             <p><a class="bt-go_user_fb" href="#">Goto FB Profile</a></p>
           </div>
+		  <div class="info">
           <h2><?php echo issetor($user_profile['user_first_name']).' '.issetor($user_profile['user_last_name']); ?></h2>
           <p><?php echo issetor($user_profile['user_email']); ?></p>
 		  
@@ -15,6 +16,7 @@
 					<li>This user did not use any applications.</li>
 				</ul>
 			</fieldset>
+		  </div>
 		  </div>
 		  
         </div>

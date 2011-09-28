@@ -721,13 +721,18 @@ p.apply a.bt-apply-to-signup-form { margin-top:12px; }
 	background: #494949 url(../../images/bg/bg_liney02.gif) 579px 0 repeat-y;
 }
 #page-dashboard .bt-add_app, #page-dashboard .bt-go_page { display:inline-block;}
+
 #page-dashboard div.box-information div.details {
 	width: 538px;
 }
 #page-dashboard div.box-information div.information {
 	width: 340px;
 }
-
+#page-dashboard div.box-information div.information ul {
+	width:150px;
+	float:left;
+	background: url(../../images/bg/bg_linex01.gif) bottom repeat-x;
+}
 #page-dashboard .blank-tab {
 	background-position: right bottom;
 	background-repeat: no-repeat;
@@ -744,13 +749,11 @@ p.apply a.bt-apply-to-signup-form { margin-top:12px; }
 #page-dashboard .blank-tab ul li { list-style:disc; margin:10px 0; }
 
 /* User landing page */
+div.box-information div.info {
+	padding-left:160px;
+}
 div.box-information div.information > ul {
 	padding:0;
-}
-div.box-information div.information ul {
-	width:150px;
-	float:left;
-	background: url(../../images/bg/bg_linex01.gif) bottom repeat-x;
 }
 div.box-information div.recent-app {
 	position:relative;
