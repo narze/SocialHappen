@@ -119,7 +119,7 @@ class User extends CI_Controller {
 					array('activity' => $activity),
 				TRUE), 
 				'user_info' => $this -> load -> view('user/user_info', 
-					array('user' => $user_with_signup_fields),
+					array('user' => $user, 'user_data' => $user_with_signup_fields['user_data']),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer()
 				);

@@ -4,11 +4,11 @@
       <div>
         <div class="join">
           <h2>Join Social Happen Now!!</h2>
-          <ul>
-            <li><span>1)</span>discovery awesom campain</li>
-            <li><span>2)</span>Win leader board </li>
-            <li><span>3)</span>....</li>
-          </ul>
+          <ol>
+            <li>Discovery awesom campain</li>
+            <li>Win leader board </li>
+            <li>....</li>
+          </ol>
 			<div id="fb-root"></div>
 			<script>
 			  window.fbAsyncInit = function() {

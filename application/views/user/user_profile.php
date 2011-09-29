@@ -23,8 +23,8 @@
         <div class="information">
           <h2>Information</h2>
           <ul>
-            <li><span>Star point<div class="icon-star"></div></span>12</li>
-            <li><span>Happy point<div class="icon-happy"></div></span>1335</li>
+            <li><span>Star point<div class="icon-star-white"></div></span>12</li>
+            <li><span>Happy point<div class="icon-happy-white"></div></span>1335</li>
             <li><span>Friends</span>232</li>
             <?php if (isset($count['app']) && $count['app'] > 0) { ?><li><span>Joined apps</span><?php echo number_format($count['app']); } ?></li>
             <?php if (isset($count['campaigns']) && $count['campaigns'] > 0) { ?><li><span>Joined campaigns</span><?php echo number_format($count['campaigns']); } ?></li>
