@@ -50,6 +50,8 @@ input.form-error {
 	margin: 0;
 }
 .bt-go_dashboard { width: 143px; height: 32px; background-position: 0 -313px; display: block; }
+.bt-go_page { width: 122px; height: 32px; background-position: 0 0; }
+.bt-add_app { width: 111px; height: 32px; background-position: 0 -42px; }
 
 /* New botton */
 .bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs,
@@ -772,12 +774,44 @@ div.box-information div.recent-app legend {
 	font-weight:bold;
 }
 div.box-information div.recent-app ul {
-	border:1px dashed #787878;
 	margin:15px 0 0 -15px;
+	overflow:hidden;
+	height:100px;
+}
+div.box-information div.recent-app ul.no-app {
+	border:1px dashed #787878;
 	padding:15px;
+	height:auto;
 	-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
 }
-div.box-information div.information div.no-app-no-campaigns p {
+div.box-information div.recent-app ul.no-app li {
+	width:auto;
+	height:auto;
+}
+div.box-information div.recent-app ul li {
+	width:68px;
+	height:100px;
+	display:inline-block;
+	padding-left:6px;
+}
+div.box-information div.recent-app ul li img {
+	width:64px;
+	height:64px;
+	border:none;
+}
+div.box-information div.recent-app ul li p {
+	margin-top:5px;
+	width:64px;
+	display:block;
+	word-wrap: break-word;
+	text-align:center;
+	font-size:11px;
+	font-weight:bold;
+}
+div.box-information div.recent-app ul li a {
+	color:#fff;
+}
+div.box-information div.information div.app-and-campaigns p {
 	color:#fff;
 	margin:15px 0;
 	font-weight:normal;
@@ -811,4 +845,8 @@ div#user-tabs div.user-info label {
 	text-align:right;
 	position:absolute;
 	left:0;
+}
+div#user-tabs ul.activities {
+	margin:15px 0;
+	padding:0 15px;
 }

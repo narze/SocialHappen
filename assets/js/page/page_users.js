@@ -23,6 +23,7 @@ $(function(){
 					row.find('td.status.app-monthly-active b').append('active'); //friends count
 					row.find('td.bt-icon a.bt-edit').attr('href', base_url+'path/to/edit/'+ json[i].app_install_id); //go to user
 					
+					row.find('td.bt-icon a.icon-user-card').attr('href', base_url+'user/page/'+json[i].user_id+'/'+page_id);
 					row.find('td.bt-icon a.bt-go').attr('data-pageuserid', json[i].user_id);
 				}
 				$('.wrapper-details-member.users .details table tr:even').addClass('next');

@@ -12,9 +12,22 @@
 		  <div class="recent-app">
 			<fieldset>
 				<legend>Recent Application</legend>
-				<ul>
-					<li>This user did not use any applications.</li>
-				</ul>
+				<ul <?php echo $recent_apps ? '' : 'class="no-app"'; ?>><?php
+					if($recent_apps)
+					{
+						foreach($recent_apps as $app)
+						{ ?>
+							<li>
+								<a href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img src="<?php echo $app['app_image']; ?>" /></a>
+								<p><a href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a><p>
+							</li><?php
+						}
+					}
+					else
+					{ ?>
+						<li>This user did not use any applications.</li><?php
+					} ?>
+				</ul><br />
 			</fieldset>
 		  </div>
 		  </div>
@@ -30,12 +43,10 @@
             <?php if (isset($count['campaigns']) && $count['campaigns'] > 0) { ?><li><span>Joined campaigns</span><?php echo number_format($count['campaigns']); } ?></li>
           </ul>
 		  
-		  <?php if (!isset($count['app']) || $count['app']==0 || !isset($count['campaigns']) || $count['campaigns']==0 ) { ?>
-		  <div class="no-app-no-campaigns">
-			<?php if (!isset($count['app']) || $count['app']==0) { ?><p>Did not use any Applications.</p><?php } ?>
-			<?php if (!isset($count['campaigns']) || $count['campaigns']==0) { ?><p>Did not use any Campaigns.</p><?php } ?>
+		  <div class="app-and-campaigns">
+			<p><?php echo $recent_apps ? 'Joined '.count($recent_apps). ' applications' : 'Did not use any Applications.'; ?></p>
+			<p><?php echo $recent_campaigns ? 'Joined '.count($recent_campaigns). ' campaigns' : 'Did not use any Campaigns.'; ?></p>
 		  </div>
-		  <?php } ?>
 		  
         </div>
 </div>

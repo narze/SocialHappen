@@ -7,7 +7,7 @@
 			if(isset($user_data))
 			{
 				foreach($user_data as $key=>$field) { ?>
-				<li><label><?php echo ucfirst($key); ?> :</label><?php 
+				<li><label><?php echo ucfirst(str_replace('_', ' ', $key)); ?> :</label><?php 
 					if (is_array($field)) {
 						echo implode(', ', $field);
 					} else {

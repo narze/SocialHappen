@@ -34,6 +34,8 @@ class User extends CI_Controller {
 						);
 						
 					$activity = $this->_get_user_activity_page($page_id, $user_id);
+					$recent_apps = $this->_get_user_activity_recent_apps($page_id, $user_id);
+					$recent_campaigns = $this->_get_user_activity_recent_campaigns($page_id, $user_id);
 					
 					$this->load->model('page_user_data_model', 'page_user_data');
 					$user_with_signup_fields = $this->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
@@ -78,7 +80,6 @@ class User extends CI_Controller {
 							'common/functions',
 							'common/jquery.form',
 							'common/bar',
-							'user/user_stat',
 							'user/user_activities',
 							'user/user_tabs',
 							//stat
@@ -107,12 +108,9 @@ class User extends CI_Controller {
 				TRUE),
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', array('breadcrumb' => $breadcrumb),	TRUE),
 				'user_profile' => $this -> load -> view('user/user_profile', 
-					array('user_profile' => $user),
+					array('user_profile' => $user, 'recent_apps' => $recent_apps, 'recent_campaigns' => $recent_campaigns),
 				TRUE),
 				'user_tabs' => $this -> load -> view('user/user_tabs', 
-					array(),
-				TRUE), 
-				'user_stat' => $this -> load -> view('user/user_stat', 
 					array(),
 				TRUE), 
 				'user_activities' => $this -> load -> view('user/user_activities', 
@@ -139,6 +137,21 @@ class User extends CI_Controller {
 			$activity_list[] = $activity['message'];
 		}
 		return $activity_list;
+	}
+	
+	function _get_user_activity_recent_apps($page_id, $user_id){
+		date_default_timezone_set('Asia/Bangkok');
+		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'user_id' => (int)$user_id));
+		$app_list = array();
+		$this->load->model('app_model', 'app');
+		foreach ($activity_db as $activity) {
+			$app_list[] = $this->app->get_app_by_app_id($activity['app_id']);
+		}
+		return $app_list;
+	}
+	
+	function _get_user_activity_recent_campaigns($page_id, $user_id){
+		return $campaign_list = array(); //Test view
 	}
 	
 	function _get_user_activity_app($app_install_id, $user_id){
