@@ -62,4 +62,11 @@ $(function(){
 		$('div.package-overlay').toggle();
 	});
 	
+	$('td.billing-popup a').live('click', function () {
+		$.fancybox({
+			href: $(this).attr('href')
+		});
+		return false;
+	});
+	
 });

@@ -1,7 +1,19 @@
 $(function(){	
+	function get_date(date)
+	{
+		//var M_names = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+		var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
+		var d = new Date(date);
+		var curr_date = d.getDate();
+		var curr_month = d.getMonth();
+		var curr_year = d.getFullYear();
+		return curr_date + " " + m_names[curr_month] + " " + curr_year;
+	}
+	
 	function get_page_users(page_index, jq){
 		set_loading();
-		$.getJSON(base_url+'page/json_get_users/'+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){
+		$.getJSON(base_url+'page/json_get_users/'+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){ console.log(json);
 			$('.wrapper-details-member.users .details table tbody tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
 				$('.wrapper-details-member.users .details').html(
@@ -13,16 +25,16 @@ $(function(){
 					.removeClass('hidden-template')
 					.appendTo('.wrapper-details-member.users .details table');
 
-					var app_list = row.find('td.app-list div');
-					app_list.find('p.thumb img').attr('src', imgsize(json[i].user_image,'square')).addClass('user-image');
-					app_list.find('h2').append('<a href="'+base_url+'user/page/'+json[i].user_id+'/'+page_id+'">'+json[i].user_first_name+' '+json[i].user_last_name+'</a>');
-					app_list.find('p.email').append(json[i].user_email); //Facebook profile link
-					//add : last active & joined date
-					row.find('td.status.app-status span').append(json[i]); //star point
-					row.find('td.status.app-member b').append('user'); //happy point
-					row.find('td.status.app-monthly-active b').append('active'); //friends count
-					row.find('td.bt-icon a.bt-edit').attr('href', base_url+'path/to/edit/'+ json[i].app_install_id); //go to user
-					
+					var member_list = row.find('td.member-list div');
+					member_list.find('p.thumb img').attr('src', imgsize(json[i].user_image,'square')).addClass('user-image');
+					member_list.find('h2').append('<a href="'+base_url+'user/page/'+json[i].user_id+'/'+page_id+'">'+json[i].user_first_name+' '+json[i].user_last_name+'</a>');
+					member_list.find('p a.view-fb').attr('href', 'http://www.facebook.com/profile.php?id='+json[i].user_facebook_id); //Facebook profile link
+
+					row.find('td.last-active b').append( get_date(json[i].user_last_seen) ); //Last active
+					row.find('td.joined-date b').append( get_date(json[i].user_register_date)); //Join since
+					row.find('td.star-point b').append('0'); //star point
+					row.find('td.happy-point b').append('0'); //happy point
+					row.find('td.friends b').append('0'); //friends count					
 					row.find('td.bt-icon a.icon-user-card').attr('href', base_url+'user/page/'+json[i].user_id+'/'+page_id);
 					row.find('td.bt-icon a.bt-go').attr('data-pageuserid', json[i].user_id);
 				}

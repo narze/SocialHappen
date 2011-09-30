@@ -419,6 +419,37 @@ class Payment extends CI_Controller {
 	}
 	
 	/**
+	 * Billing detail
+	 * @author Weerapat P.
+	 */
+	function invoice($order_id = NULL)
+	{
+		if(!$order_id) return false;
+		
+		$user = $this->socialhappen->get_user();
+		$this->load->model('order_model','orders');				
+		$order = $this->orders->get_order_by_order_id($order_id);
+		
+		if(!$order) echo 'Order not found.';
+		
+		//allow only buyer
+		if($user['user_id'] != $order['user_id']) return false;
+		
+		$this->load->model('order_items_model','order_items');	
+		$items = $this->order_items->get_order_items_by_order_id($order['order_id']);
+		$order['package_name'] = isset($items[0]['item_name']) ? $items[0]['item_name'] : '-';
+		
+		$this->load->vars(array(
+				'user' => $user,
+				'order' => $order,
+				'print_view' => $this->input->get('action') == 'print' ? TRUE : FALSE 
+			)
+		);
+		
+		$this->load->view('payment/invoice');
+	}
+	
+	/**
 	 * Cancel package
 	 * @author Weerapat P.
 	 */

@@ -49,7 +49,7 @@
 			foreach($orders as $order) { ?>
 			<tr>
 			  <td><?php echo $order['order_date']; ?></td>
-			  <td><a href="#"><?php echo $order['order_id']; ?></a></td>
+			  <td class="billing-popup"><a href="<?php echo base_url().'payment/invoice/'.$order['order_id']; ?>"><?php echo $order['order_id']; ?></a></td>
 			  <td><?php echo $order['package_name']; ?></td>
 			  <td class="right"><?php echo number_format($order['order_net_price']); ?> USD</td>
 			</tr>

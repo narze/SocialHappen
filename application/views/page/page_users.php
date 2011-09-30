@@ -24,7 +24,7 @@
           <table cellpadding="0" cellspacing="0">
             <tr class="hidden-template">
 			  <td class="member-check"><input type="checkbox" /></td>
-              <td class="app-list">
+              <td class="member-list">
                 <div class="detail-list-style02">
                   <p class="thumb"><a><img src="<?php echo base_url()."assets/images/default/user.png";?>"></a></p>
                   <h2></h2>
@@ -35,11 +35,11 @@
                   </ul>-->
 				</div>
               </td>
-             <td class="status">Last active<b></b></td>
-              <td class="status">Join since<b></b></td>
-              <td class="status1"><div class="icon-star-green"></div><span> Star point</span><b></b></td>
-              <td class="status1"><div class="icon-happy-green"></div><span> Happy point</span><b></b></td>
-              <td class="status1">Friends<b></b></td>
+             <td class="status last-active">Last active<b></b></td>
+              <td class="status joined-date">Join since<b></b></td>
+              <td class="status1 star-point"><div class="icon-star-green"></div><span> Star point</span><b></b></td>
+              <td class="status1 happy-point"><div class="icon-happy-green"></div><span> Happy point</span><b></b></td>
+              <td class="status1 friends">Friends<b></b></td>
               <td class="bt-icon"><a class="icon-user-card">card</a></td>
               <td class="bt-icon"><a class="bt-go"><span>go</span></a></td>
             </tr>

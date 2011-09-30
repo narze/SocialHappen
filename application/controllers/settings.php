@@ -450,7 +450,7 @@ class Settings extends CI_Controller {
 			foreach($orders as &$order)
 			{
 				$items = $this->order_items->get_order_items_by_order_id($order['order_id']);
-				$order['package_name'] = $items[0]['item_name'];
+				$order['package_name'] = isset($items[0]['item_name']) ? $items[0]['item_name'] : '-';
 			}
 			arsort($orders); //reverse order. sort by desc
 			

@@ -47,11 +47,9 @@
 							<input class="items" type="hidden" name="<?php echo $key; ?>[items][]" value="<?php echo $item; ?>"></input>
 						<?php }
 					} else {
-					?>
-						<input type="<?php echo $signup_field['type'];?>"></input>
-					<?php
-					}
-					?>
+						if($signup_field['type'] == 'textarea') { ?> <textarea></textarea> <?php }
+						else { ?> <input type="<?php echo $signup_field['type'];?>"></input> <?php }
+					} ?>
 					</div>
 					</div>
 					<div class="right">
