@@ -47,9 +47,7 @@ class Home extends CI_Controller {
 		
 		$facebook_user = $this->facebook->getUser();
 		$this->load->model('user_model','users');
-		if($this->users->get_user_id_by_user_facebook_id($facebook_user['id'])){
-			$is_registered = true;
-		}
+		$is_registered = $this->users->get_user_id_by_user_facebook_id($facebook_user['id']) ? TRUE : FALSE ; 
 	
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
@@ -120,8 +118,7 @@ class Home extends CI_Controller {
 		{
 			$this -> load -> view('home/signup_form', 
 					array(
-						'user_profile_picture'=>$user_facebook_image,
-						'is_registered'=>$is_registered
+						'user_profile_picture'=>$user_facebook_image
 					)
 			);
 		}

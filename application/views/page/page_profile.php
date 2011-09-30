@@ -4,7 +4,7 @@
             <p><img class="page-image" src="<?php echo imgsize(issetor($page_profile['page_image']),'large'); ?>" alt=""></p>
           </div>
           <h2><?php echo issetor($page_profile['page_name']); ?></h2>
-          <p><?php echo issetor($page_profile['page_detail']); ?></p>
+          <?php echo $page_profile['page_detail'] ? '<p>'.$page_profile['page_detail'].'</p>' : ''; ?>
 		  <p>
 			<a class="bt-go_page" href="<?php echo $facebook['link'];?>"><span>Goto Page</span></a>
 			<?php if($page_profile['page_installed'] == 1) { ?>

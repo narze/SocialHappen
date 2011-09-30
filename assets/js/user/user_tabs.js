@@ -10,9 +10,5 @@ $(function(){
 		$('.wrapper-details div.tab').eq( $(this).index() ).show();
 	});
 
-	$('.tab-content ul li.stat a').click(function(){
-		render_user_stat(page_id, user_id);
-	});
-
 	render_user_stat(page_id, user_id);
 });

@@ -34,30 +34,6 @@ div.strip div.pagination span.current {
 	overflow:hidden;
 }
 
-/* Guest popup */
-div.popup-fb-2col {
-	width: 390px;
-	padding: 15px 15px 5px 15px;
-	border: 0px solid #ADCA4A;
-	background: white;
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
-	border-radius: 0px;
-}
-div.popup-fb-2col > div > div:first-child {
-	float: left;
-	width: 210px;
-	overflow: hidden;
-}
-div.popup-fb-2col > div > div:first-child img {
-	width: 200px;
-	height: 190px;
-}
-div.popup-fb-2col > div > div:first-child + div {
-	float: left;
-	width: 180px;
-}
-
 /* Signup */
 div.upload-pic {
 	width:50px;
@@ -89,20 +65,6 @@ div.list_app-camp>ul>li>div:first-child p.pic img {
 }
 .bt-time_up {
 	cursor:auto;
-}
-
-/*  Popup FB */
-div.popup-fb {
-	width:390px;
-	padding: 15px 15px 5px 15px;
-	border: 0px solid #ADCA4A;
-	background: white;
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
-	border-radius: 0px;
-}
-div.popup-fb div div img {
-	width:390px;
 }
 
 

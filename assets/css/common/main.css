@@ -39,9 +39,9 @@ input.form-error {
 .warning a { color:#6d6311; }
 
 /* Button */
-*.bt-join, *.bt-already_join, *.bt-time_up, *.bt-change_pic, *.bt-update, *.bt-close_account, *.bt-button-on, *.bt-button-off, *.bt-go_dashboard, *.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome {
+.bt-go_dashboard {
 	display: block;
-	background: url(../../images/bg_fb/bg_button.png) no-repeat;
+	background-image: url(../../images/bg_fb/bg_button.png);
 	cursor: pointer;
 	border: none;
 	color: transparent !important;
@@ -49,12 +49,9 @@ input.form-error {
 	overflow:hidden;
 	margin: 0;
 }
-.bt-go_dashboard {
-	display: block;
-	width: 143px;
-	height: 32px;
-	background-position: 0 -313px;
-}
+.bt-go_dashboard { width: 143px; height: 32px; background-position: 0 -313px; display: block; }
+.bt-go_page { width: 122px; height: 32px; background-position: 0 0; }
+.bt-add_app { width: 111px; height: 32px; background-position: 0 -42px; }
 
 /* New botton */
 .bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs,
@@ -81,7 +78,7 @@ input.form-error {
 .bt-create-own-field { width: 296px; height: 40px; background-position: 0 -318px; display:inline-block; }
 .bt-remove-field { width: 15px; height: 15px; background-position: -284px -1px; display:inline-block; }
 
-.bt-go_user_profile, .bt-go_user_fb, .icon-star, .icon-happy {
+.bt-go_user_profile, .bt-go_user_fb, .icon-star-white, .icon-happy-white, .icon-star-green, .icon-happy-green, .icon-user-card {
 	display: block;
 	background: url(../../images/bg/bg_main_2.png) no-repeat;
 	cursor: pointer;
@@ -97,8 +94,11 @@ input.form-error {
 .bt-view-all-apps { width: 231px; height: 42px; background-position: 0 -359px; }
 .bt-learn-more-campaign { width: 231px; height: 42px; background-position: 0 -402px; }
 .bt-addnew_campaign { width: 175px; height: 32px; background-position: 0 -445px; }
-.icon-star { width: 12px; height: 13px; background-position: -155px 0; display:inline-block; position:relative; left: 5px; } 
-.icon-happy { width: 12px; height: 13px; background-position: -155px -13px; display:inline-block; position:relative; left: 5px; }
+.icon-star-green { width: 12px; height: 13px; background-position: -172px -2px; display:inline-block; cursor: default; } 
+.icon-happy-green { width: 12px; height: 13px; background-position: -172px -16px; display:inline-block; cursor: default; }
+.icon-star-white { width: 12px; height: 13px; background-position: -157px -2px; display:inline-block; cursor: default; }
+.icon-happy-white { width: 12px; height: 13px; background-position: -157px -16px; display:inline-block; cursor: default; }
+.icon-user-card { width: 38px; height: 27px; background-position: -187px 0; display: inline-block; }
 
 /* Packages home */
 div.wrapper-package { background-color: #494949; }
@@ -344,8 +344,12 @@ div.pic-profile p.pic img
 	border:0!important;
 }
 div.wrapper-details-member > div.details p.thumb {
-width: 50px;
+	width: 50px;
 }
+.member-menu-btm { padding: 0; min-height: 40px; }
+div.member-menu-top > .member-check, 
+div.member-menu-btm > .member-check { display: inline-block; }
+.bt-member { padding-top: 0; display: inline-block; position: relative; top: 7px; }
 
 /* Company setting */
 .form01 div.pic-profile p.pic img {
@@ -748,13 +752,15 @@ p.apply a.bt-apply-to-signup-form { margin-top:12px; }
 #page-dashboard .blank-tab ul { margin:10px 0 25px 0; padding:0 20px; width:350px; }
 #page-dashboard .blank-tab ul li { list-style:disc; margin:10px 0; }
 
-/* User landing page */
+/* User landing page */ 
 div.box-information div.info {
 	padding-left:160px;
 }
 div.box-information div.information > ul {
 	padding:0;
 }
+div.box-information div.information > ul > li span div.icon-star-white { position:relative; left: 5px; }
+div.box-information div.information > ul > li span div.icon-happy-white { position:relative; left: 5px; }
 div.box-information div.recent-app {
 	position:relative;
 	top:25px;
@@ -768,12 +774,44 @@ div.box-information div.recent-app legend {
 	font-weight:bold;
 }
 div.box-information div.recent-app ul {
-	border:1px dashed #787878;
 	margin:15px 0 0 -15px;
+	overflow:hidden;
+	height:100px;
+}
+div.box-information div.recent-app ul.no-app {
+	border:1px dashed #787878;
 	padding:15px;
+	height:auto;
 	-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
 }
-div.box-information div.information div.no-app-no-campaigns p {
+div.box-information div.recent-app ul.no-app li {
+	width:auto;
+	height:auto;
+}
+div.box-information div.recent-app ul li {
+	width:68px;
+	height:100px;
+	display:inline-block;
+	padding-left:6px;
+}
+div.box-information div.recent-app ul li img {
+	width:64px;
+	height:64px;
+	border:none;
+}
+div.box-information div.recent-app ul li p {
+	margin-top:5px;
+	width:64px;
+	display:block;
+	word-wrap: break-word;
+	text-align:center;
+	font-size:11px;
+	font-weight:bold;
+}
+div.box-information div.recent-app ul li a {
+	color:#fff;
+}
+div.box-information div.information div.app-and-campaigns p {
 	color:#fff;
 	margin:15px 0;
 	font-weight:normal;
@@ -796,13 +834,19 @@ div#user-tabs div.user-info ul {
 	margin:20px auto;
 }
 div#user-tabs div.user-info ul li {
-	height:30px;
+	padding-left:190px;
+	position:relative;
+	line-height:30px;
 }
 div#user-tabs div.user-info label {
 	width:160px;
 	display:inline-block;
-	line-height: 20px;
 	font-weight:bold;
 	text-align:right;
-	padding-right:30px;
+	position:absolute;
+	left:0;
+}
+div#user-tabs ul.activities {
+	margin:15px 0;
+	padding:0 15px;
 }

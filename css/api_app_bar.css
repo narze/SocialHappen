@@ -352,6 +352,205 @@ height:auto;
 text-decoration:none;
 color:#FFF;
 font-weight:bold;
-background:url(../assets/images/bg_fb/bg_listmenu.png) 5px 7px no-repeat;
+background:url(../assets/images/bg_fb/bg_listmenu.png) 5px 12px no-repeat;
 padding:5px 10px 5px 20px;
+}
+
+/* Popup Facebook */
+div.popup-fb {
+width:390px;
+background:#fff;
+padding:15px 15px 5px;
+}
+div.popup-fb p {
+margin: 0;
+}
+div.popup-fb div div img {
+width:390px;
+}
+
+div.popup-fb-2col {
+width:390px;
+background:#fff;
+padding:15px 15px 5px;
+}
+div.popup-fb-2col p {
+margin: 0;
+}
+div.popup-fb-2col > div > div:first-child {
+float:left;
+width:210px;
+overflow:hidden;
+}
+
+div.popup-fb-2col > div > div:first-child img {
+width:200px;
+height:190px;
+}
+
+div.popup-fb-2col > div > div:first-child + div {
+float:left;
+width:180px;
+}
+
+div.popup-fb>h2 {
+border-bottom:1px dotted #a6a6a6;
+color:#424242;
+font-size:18px;
+font-weight:normal;
+margin:0 0 14px;
+padding:0 0 7px;
+}
+
+div.popup-fb div.button {
+position:relative;
+min-height:32px;
+margin:10px 0;
+}
+
+div.popup-fb div.button p.right {
+position:absolute;
+right:0;
+top:0;
+}
+
+div.popup-fb-2col {
+	font-size:12px;
+}
+div.popup-fb-2col ol li {
+
+}
+div.popup-fb-2col>div {
+width:100%;
+overflow:hidden;
+}
+
+div.popup-fb-2col>div>div:first-child+div {
+float:right;
+width:180px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.profile {
+position:relative;
+min-height:50px;
+padding-left:60px;
+margin-bottom:10px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.profile p {
+font-size:12px;
+font-weight:bold;
+color:#38599c;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.profile p span {
+display:block;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.form>h2 {
+font-size:12px;
+margin-bottom:3px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.form p {
+padding:5px 0 10px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.form ul>li {
+width:100%;
+overflow:hidden;
+margin-bottom:5px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.form ul>li label {
+float:left;
+width:57px;
+text-align:right;
+padding-right:8px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.form ul>li input[type="text"] {
+width:110px;
+height:18px;
+background:#fff;
+border:1px solid #c5c5c5;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.join>h2 {
+font-size:14px;
+padding:0 0 10px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.join>ul {
+min-height:90px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.join>ul>li {
+position:relative;
+min-height:15px;
+padding:0 0 4px 15px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.join>P {
+padding-bottom:10px;
+}
+
+div.popup-fb-2col>div>div:first-child+div div.profile p.thumb,div.popup-fb-2col>div>div:first-child+div div.join>ul>li>span {
+position:absolute;
+left:0;
+top:0;
+}
+
+div.popup-fb-signup-page {
+	width:390px;
+}
+
+/* Button Facebook */
+*.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome {
+	background: url(../assets/images/bg_fb/bg_button.png) no-repeat;
+	cursor: pointer;
+	border: none;
+	color: transparent;
+}
+
+*.bt-back_dashboard {
+	float: left;
+	width: 143px;
+	height: 32px;
+	background-position: 0 -351px;
+}
+*.bt-config {
+	float: left;
+	width: 67px;
+	height: 32px;
+	background-position: 0 -464px;
+	margin-left: 9px;
+}
+*.bt-stay_fb {
+	float: left;
+	width: 127px;
+	height: 32px;
+	background-position: 0 -389px;
+	margin-left: 9px;
+}
+*.bt-register-now {
+	display: block;
+	margin: 0 auto;
+	width: 175px;
+	height: 32px;
+	background-position: 0 -427px;
+}
+*.bt-join-social {
+	display: block;
+	margin: 0 auto;
+	width: 175px;
+	height: 32px;
+	background-position: 0 -502px;
+}
+*.bt-don-awesome {
+	display: block;
+	margin: 0 auto;
+	width: 176px;
+	height: 32px;
+	background-position: 0 -540px;
 }

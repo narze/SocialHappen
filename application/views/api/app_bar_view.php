@@ -94,15 +94,15 @@
 	  <li class="setting toggle">
 		<div>Settings</div>
 		<ul>
-          <li><a href="<?php echo base_url()."page/".$page_id;?>" class="platform-link">Page Settings</a></li>
+          <li><a href="<?php echo base_url()."page/".$page_id;?>" target="_top" >Page Settings</a></li>
           <?php if($app_install_id) { ?>
-		  <li><a href="<?php echo base_url().'app/config/'.$app_install_id?>" class="platform-link">App Settings</a></li>
+		  <li><a href="<?php echo base_url().'app/config/'.$app_install_id?>" target="_top" >App Settings</a></li>
 		  <?php } else { ?>
 		  <li class="separator"><a class="a-dashboard">View as Admin</a></li>
 		  <li><a class="a-dashboard view-as-user">View as Member</a></li>
 		  <li><a class="a-dashboard view-as-guest">View as Guest</a></li>
 		  <?php } ?>
-		  <li class="separator platform-link last-child"><a href="<?php echo base_url(); ?>" id="a-dashboard">GO TO DASHBOARD</a></li>
+		  <li class="separator last-child"><a href="<?php echo base_url().'?logged_in=true'; ?>" id="a-dashboard" target="_top">GO TO DASHBOARD</a></li>
         </ul>
       </li>
 	  <?php endif; ?>

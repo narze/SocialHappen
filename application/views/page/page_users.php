@@ -37,9 +37,10 @@
               </td>
              <td class="status">Last active<b></b></td>
               <td class="status">Join since<b></b></td>
-              <td class="status1"><img src="<?php echo base_url()."assets/images/bg/bg_member-star.png";?>" /><span> Star point</span><b></b></td>
-              <td class="status1"><img src="<?php echo base_url()."assets/images/bg/bg_member-star.png";?>" /><span> Happy point</span><b></b></td>
+              <td class="status1"><div class="icon-star-green"></div><span> Star point</span><b></b></td>
+              <td class="status1"><div class="icon-happy-green"></div><span> Happy point</span><b></b></td>
               <td class="status1">Friends<b></b></td>
+              <td class="bt-icon"><a class="icon-user-card">card</a></td>
               <td class="bt-icon"><a class="bt-go"><span>go</span></a></td>
             </tr>
           </table>

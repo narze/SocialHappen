@@ -1,4 +1,4 @@
-<div class="popup-fb-2col">
+<div class="popup-fb-signup-page">
     <div>
 		<div></div>
       <div id="signup-form">
@@ -50,7 +50,8 @@
 							'id'          => $user_fields['name'],
 							'value'		  => set_value($user_fields['name']),
 							'size'        => '50',
-							'rows'		  => '3'
+							'rows'		  => '3',
+							'cols'		  => '36'
 						));
 					break;					
 					case 'text':

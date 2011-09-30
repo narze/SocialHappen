@@ -7,7 +7,6 @@
 		<div id="user-tabs">
 			{user_tabs}
 			<div class="wrapper-details">
-				<div class="tab stat">{user_stat}</div>
 				<div class="tab activities">{user_activities}</div>
 				<div class="tab information">{user_info}</div>
 			</div>
