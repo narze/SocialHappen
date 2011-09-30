@@ -619,6 +619,19 @@ class Tab extends CI_Controller {
 		$data = array('app_install_id' => $app_install_id);
 		$this->load->view('tab/app_installed', $data);
 	}
+	
+	/**
+	 * View login button
+	 * @author Manassarn M.
+	 */
+	function login_button($page_id = NULL){
+		$this->load->vars(array(
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+			'page_id' => $page_id
+		));
+		$this->load->view('tab/login_button');
+	}
 }
 /* End of file tab.php */
 /* Location: ./application/controllers/tab.php */

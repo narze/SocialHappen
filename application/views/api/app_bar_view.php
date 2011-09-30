@@ -21,21 +21,22 @@
 </script>
 <script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
 <script src="<?php echo base_url().'assets/js/common/jquery.form.js'; ?>" type="text/javascript"></script>
-<div id="fb-root"></div>
 <script>
-  window.fbAsyncInit = function() {
-	FB.init({appId: '<?php echo $facebook_app_id; ?>', status: true, cookie: true,
-			 xfbml: true});
-  };
-  (function() {
-	if(typeof FB == 'undefined')
-	{
-		var e = document.createElement('script'); e.async = true;
-		e.src = document.location.protocol +
-		  '//connect.facebook.net/en_US/all.js';
-		document.getElementById('fb-root').appendChild(e);
+	function shregister(){
+		$.fancybox({
+			href: '<?php echo base_url().'tab/signup/'.$page_id;?>'
+		});
+		$('form.signup-form').die('submit');
+		$('form.signup-form').live('submit', function() {
+			$(this).ajaxSubmit({target:'#signup-form'});
+			return false;
+		});
+		
+		$('a.bt-register-now').live('click', function(){
+			$('form.signup-form').ajaxSubmit({target:'.popup-fb-2col', replaceTarget:true});
+			return false;
+		});
 	}
-  }());
 </script>
 <div class="header">
     
