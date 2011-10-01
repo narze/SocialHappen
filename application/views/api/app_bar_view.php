@@ -1,4 +1,6 @@
 <link rel="stylesheet" type="text/css"  href="<?php echo base_url().'assets/css/common/fancybox/jquery.fancybox-1.3.4.css'; ?>" />
+
+<script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
 <script>
 	var base_url = "<?php echo base_url(); ?>";
 	<?php if(isset($vars)) :
@@ -6,37 +8,6 @@
 			echo "var {$name} = '{$value}';\n";
 		endforeach; 
 	endif; ?>
-	if(typeof jQuery == 'undefined')
-	{
-		var file1 = document.createElement('script');
-		file1.setAttribute("type","text/javascript");
-		file1.setAttribute("src", 'http://code.jquery.com/jquery-latest.min.js');
-	}
-	if(typeof jQuery.fancybox == 'undefined')
-	{
-		var file1 = document.createElement('script');
-		file1.setAttribute("type","text/javascript");
-		file1.setAttribute("src", base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.pack.js');
-	}
-</script>
-<script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
-<script src="<?php echo base_url().'assets/js/common/jquery.form.js'; ?>" type="text/javascript"></script>
-<script>
-	function shregister(){
-		$.fancybox({
-			href: '<?php echo base_url().'tab/signup/'.$page_id;?>'
-		});
-		$('form.signup-form').die('submit');
-		$('form.signup-form').live('submit', function() {
-			$(this).ajaxSubmit({target:'#signup-form'});
-			return false;
-		});
-		
-		$('a.bt-register-now').live('click', function(){
-			$('form.signup-form').ajaxSubmit({target:'.popup-fb-2col', replaceTarget:true});
-			return false;
-		});
-	}
 </script>
 <div class="header">
     
