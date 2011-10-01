@@ -1371,7 +1371,77 @@ class Api extends CI_Controller {
 		echo '<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>';
 		echo '<link type="text/css" rel="stylesheet" href="'.$result['css'].'" />';
 		echo '<div style="width:800px;margin:0 auto;">'.$result['html'].'</div>';
+		?>
+		
+		<script src="http://socialhappen.dyndns.org:8080/socket.io/socket.io.js"></script>
+		<script>
+      var user_id = 20;
+      var session = 'SESSIONNAJA';
+      
+      var socket = io.connect('http://socialhappen.dyndns.org:8080');
+      
+      socket.on('connect', function(){
+      	console.log('send subscribe');
+      	socket.emit('subscribe', user_id, session);
+      });
+      
+      socket.on('subscribeResult', function (data) {
+      	console.log('got subscribe result: ' + JSON.stringify(data));
+      });
+      
+      socket.on('newNotificationAmount', function (notification_amount) {
+      	console.log('notification_amount: ' + notification_amount);
+      	if(notification_amount > 0){
+      	  $('div.header ul.menu li.message a').append('<span>').children('span').html(notification_amount);
+      	}else{
+      	  $('div.header ul.menu li.message a').append('<span>').children('span').remove();
+      	}
+      });
+      
+      socket.on('newNotificationMessage', function (notification_message) {
+      	console.log('notification_message: ' + JSON.stringify(notification_message));
+      });
+		</script>
+		
+		<?
 	}
+
+  function show_notification(){
+    $user_id = $this->input->get('user_id', TRUE);
+    $limit = $this->input->get('limit', TRUE);
+    
+    // @TODO: validate user_id here
+    
+    $this->load->library('notification_lib');
+    $limit = !$limit ? 10 : $limit;
+    if(!$user_id){
+      $notification_list = array();
+    }else{
+      $notification_list = $this->notification_lib->lists($user_id, $limit, 0);
+      $notification_list = !$notification_list ? array() : $notification_list;
+      for ($i = 0; $i < count($notification_list); $i++) { 
+        $notification_list[$i]['_id'] = (string) $notification_list[$i]['_id']; 
+      }
+    }
+    echo json_encode(array('notification_list' => $notification_list));
+  }
+
+  function read_notification(){
+    $user_id = $this->input->get('user_id', TRUE);
+    $notification_list = $this->input->get('notification_list', TRUE);
+    $notification_list = !$notification_list ? array() :
+     json_decode($notification_list);
+    
+    // @TODO: validate user_id here
+    
+    if(!$user_id || count($notification_list) == 0){
+      echo json_encode(array('result' => 'OK'));
+    }else{
+      $this->load->library('notification_lib');
+      $this->notification_lib->read($user_id, $notification_list);
+      echo json_encode(array('result' => 'OK'));
+    }
+  }
 	
 	/**
 	 * Request add achievement infos

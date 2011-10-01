@@ -169,7 +169,7 @@ class notification_lib_test extends CI_Controller {
 	}
 	
 	function end_test(){
-		$this->notification->drop_collection();
+		// $this->notification->drop_collection();
 	}
 	
 }
