@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css"  href="<?php echo base_url().'assets/css/common/fancybox/jquery.fancybox-1.3.4.css'; ?>" />
 
-<script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
 <script>
 	var base_url = "<?php echo base_url(); ?>";
 	<?php if(isset($vars)) :
@@ -9,6 +8,7 @@
 		endforeach; 
 	endif; ?>
 </script>
+<script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
 <div class="header">
     
 	<div class="name toggle">
