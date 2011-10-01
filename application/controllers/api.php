@@ -1320,6 +1320,102 @@ class Api extends CI_Controller {
 	}
 
 	/**
+	 * Request add limit service
+	 * @author Wachiraph C.
+	 */
+	function request_add_limit_service(){
+	
+		$user_id = $this->input->get('user_id', TRUE);
+		$action_no = $this->input->get('action_no', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$campaign_id = $this->input->get('campaign_id', TRUE);
+	
+		if(empty($user_id))
+			$user_id = NULL;
+		else
+			$user_id = (int) $user_id;
+		
+		if(empty($action_no))
+			$action_no = NULL;
+		else
+			$action_no = (int) $action_no;
+		
+		if(empty($app_install_id))
+			$app_install_id = NULL;
+		else
+			$app_install_id = (int) $app_install_id;
+		
+		if(empty($campaign_id))
+			$campaign_id = NULL;
+		else
+			$campaign_id = (int) $campaign_id;
+	
+		$this->load->library('audit_stat_limit_lib');
+		$result = $this->audit_stat_limit_lib->add($user_id, 
+										$action_no,
+										$app_install_id,
+										$campaign_id);
+		if(!$result)
+			$response = array('status' => 'Error');
+		else
+			$response = array('status' => 'OK');
+		echo json_encode($response);
+	}
+	
+	/**
+	 * Request count limit service
+	 * @author Wachiraph C.
+	 */
+	function request_count_limit_service(){
+	
+		$user_id = $this->input->get('user_id', TRUE);
+		$action_no = $this->input->get('action_no', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$campaign_id = $this->input->get('campaign_id', TRUE);
+		$back_time_interval = $this->input->get('back_time_interval', TRUE);
+		
+		if(empty($user_id))
+			$user_id = NULL;
+		else
+			$user_id = (int) $user_id;
+		
+		if(empty($action_no))
+			$action_no = NULL;
+		else
+			$action_no = (int) $action_no;
+		
+		if(empty($app_install_id))
+			$app_install_id = NULL;
+		else
+			$app_install_id = (int) $app_install_id;
+		
+		if(empty($campaign_id))
+			$campaign_id = NULL;
+		else
+			$campaign_id = (int) $campaign_id;
+		
+		if(empty($back_time_interval))
+			$back_time_interval = NULL;
+		else
+			$back_time_interval = (int) $back_time_interval;
+		
+		$this->load->library('audit_stat_limit_lib');
+		$result = $this->audit_stat_limit_lib->count($user_id,
+													$action_no,
+													$app_install_id,
+													$campaign_id,
+													$back_time_interval);
+		
+		
+		$response = array(
+						'status' => 'OK',
+						'count' => $result 			
+						);
+		echo json_encode($response);
+	}
+	
+	
+	/**
 	 * Request app bar
 	 * @author Manassarn M.
 	 */
