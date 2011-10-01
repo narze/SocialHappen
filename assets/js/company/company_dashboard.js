@@ -532,11 +532,11 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 
 //show company's available pages
 function show_available_page_in_company() {
-	
+
 	FB.api(
 	  {
 		method: 'fql.query',
-		query: "SELECT page_id, pic from page WHERE page_id IN (SELECT page_id from page_admin WHERE uid=me())"
+		query: "SELECT page_id, name, has_added_app, pic from page WHERE page_id IN (SELECT page_id from page_admin WHERE uid=me())"
 	  },
 	  function(page_pics) {
 		json_page_pics = JSON.stringify(page_pics);
@@ -557,7 +557,7 @@ function show_available_page_in_company() {
 					ul_element.append(
 					// "<li class='draggable'><p><img src='"
 					// +(json[i].page_info.picture==null?'http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yA/r/gPCjrIGykBe.gif':json[i].page_info.picture)
-					"<li class='draggable'><p><img class='page-image' src='"
+					"<li data-hasaddedapp='"+json[i].has_added_app+"' class='draggable'><p><img class='page-image' src='"
 					+json[i].page_info.picture
 					+"' alt='' width='80' height='80' /></p><p>"+json[i].name
 					+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/></li>"
@@ -567,12 +567,12 @@ function show_available_page_in_company() {
 				available_item_per_page=9;
 				last_page_of_available_item=Math.ceil(json.length/available_item_per_page);
 				refresh_available_item_panel();
-				ul_element.find('li').bind('mouseover', function() {
+				ul_element.find('li[data-hasaddedapp="false"]').bind('mouseover', function() {
 					$(this).addClass("dragging");
 				}).bind('mouseout', function() {
 					$(this).removeClass("dragging");
 				});
-				ul_element.find('li.draggable').draggable({
+				ul_element.find('li.draggable[data-hasaddedapp="false"]').draggable({
 					connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
 					helper: "clone",
 					revert: "invalid",
@@ -584,6 +584,11 @@ function show_available_page_in_company() {
 						$(".left-panel").find('.dragging-page div').removeClass('in-action');
 						$("div.dragging-page ul").css('height','155px');
 					}
+				});
+				ul_element.find('li.draggable[data-hasaddedapp="true"]').die().live('click',function(){
+					$.fancybox({
+						content: 'This page has already been added by other user. If this page is yours, please remove Socialhappen Application from this page first'
+					});
 				});
 				$(".right-panel").find('.loading').remove();
 			},
