@@ -1467,7 +1467,52 @@ class Api extends CI_Controller {
 		echo '<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>';
 		echo '<link type="text/css" rel="stylesheet" href="'.$result['css'].'" />';
 		echo '<div style="width:800px;margin:0 auto;">'.$result['html'].'</div>';
+		?>
+		
+		
+		
+		<?
 	}
+
+  function show_notification(){
+    header("Access-Control-Allow-Origin: *");
+    $user_id = $this->input->get('user_id', TRUE);
+    $limit = $this->input->get('limit', TRUE);
+    
+    // @TODO: validate user_id here
+    
+    $this->load->library('notification_lib');
+    $limit = !$limit ? 10 : $limit;
+    if(!$user_id){
+      $notification_list = array();
+    }else{
+      $notification_list = $this->notification_lib->lists($user_id, $limit, 0);
+      $notification_list = !$notification_list ? array() : $notification_list;
+      for ($i = 0; $i < count($notification_list); $i++) { 
+        $notification_list[$i]['_id'] = (string) $notification_list[$i]['_id']; 
+      }
+    }
+    echo json_encode(array('notification_list' => $notification_list));
+  }
+
+  function read_notification(){
+    header("Access-Control-Allow-Origin: *");
+    $user_id = $this->input->get('user_id', TRUE);
+    $notification_list = $this->input->get('notification_list', TRUE);
+    $notification_list = !$notification_list ? array() :
+     json_decode($notification_list);
+    
+    // @TODO: validate user_id here
+    
+    if(!$user_id || count($notification_list) == 0){
+      echo json_encode(array('result' => 'OK', 'read' => 0));
+    }else{
+      $this->load->library('notification_lib');
+      $result = $this->notification_lib->read($user_id, $notification_list);
+      
+      echo json_encode(array('result' => $result ? 'OK' : 'FAIL'));
+    }
+  }
 	
 	/**
 	 * Request add achievement infos
