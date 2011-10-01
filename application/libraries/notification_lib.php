@@ -118,10 +118,17 @@ class Notification_lib
 			return FALSE;
 		}
 		
+    $notification_id_list_criteria = array();
+    foreach($notification_id_list as $notification){
+      $notification_id_list_criteria[] = new MongoId($notification);
+    }
+    
 		$result = $this->CI->notification->lists(array(
 			'user_id' => (int)$user_id,
-			'_id' => array('$in' => $notification_id_list)));
+			'_id' => array('$in' => $notification_id_list_criteria)));
 		
+    var_dump($result);
+    
 		$criteria = array();
 		foreach($result as $notification){
 			$criteria[] = new MongoId($notification['_id']);

@@ -44,20 +44,49 @@ getScript('http://code.jquery.com/jquery-latest.min.js', function(){ console.log
 
 onLoad = function(){
 	$(function(){
-		$('.toggle').live('click',function(){	
+		$('.toggle').live('click',function(){
+		  $('.notificationtoggle').not(this).find('ul').hide();
 			$('.toggle').not(this).find('ul').hide();
 			$(this).find('ul').toggle();
 		});
+		
+		$('.notificationtoggle').live('click',function(){
+		  $('.notificationtoggle').not(this).find('ul').hide();
+      $('.toggle').not(this).find('ul').hide();
+      $.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
+        if(result.notification_list){
+          var notification_list = result.notification_list;
+          if(notification_list.length > 0){
+            var notification_id_list = [];
+            
+            $('ul.notification_list_bar li').not('li.last-child').remove();
+            for(var i = notification_list.length - 1; i >= 0; i--){
+              if(!notification_list[i].read){
+                notification_id_list.push(notification_list[i]._id);
+              }
+              
+              var unread = notification_list[i].read ? '' : 'unread';
+              $('ul.notification_list_bar').prepend('<li class="separator '+unread+'"><a href="'+notification_list[i].link+'">'+notification_list[i].message+'</a></li>');
+            }
+            
+            $.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
+
+            }, 'json');
+          }
+        }
+      }, 'json');
+      $(this).find('ul').toggle();
+    });
 			
 		var mouse_is_inside = false;
-		$('.toggle').hover(function(){ 
+		$('.toggle, .notificationtoggle').hover(function(){ 
 			mouse_is_inside=true;
 		}, function(){ 
 			mouse_is_inside=false;
 		});
 
 		$("body").mouseup(function(){
-			if(! mouse_is_inside) $('.toggle').find('ul').hide();
+			if(! mouse_is_inside) $('.toggle, .notificationtoggle').find('ul').hide();
 		});
 		
 		socialhappen_popup();

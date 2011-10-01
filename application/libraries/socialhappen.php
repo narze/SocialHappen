@@ -695,13 +695,17 @@ class SocialHappen{
 		$this->CI->load->model('page_user_data_model','page_user_data');
 		$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
 		
+    $this->CI->load->library('notification_lib');
+    $notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
+    
 		$this->CI->load->vars(array(
 			'vars' => array(
 				'view_as' => $view_as,
 				'page_id' => $page_id,
 				'page_app_installed_id' => issetor($page['page_app_installed_id'],0),
 				'page_installed' => issetor($page['page_installed'],1),
-				'is_user_register_to_page' => $is_user_register_to_page ? TRUE : FALSE
+				'is_user_register_to_page' => $is_user_register_to_page ? TRUE : FALSE,
+				'user_id' => $user['user_id']
 			),
 			'view_as' => $view_as,
 			'app_install_id' => $app_install_id,
@@ -713,7 +717,8 @@ class SocialHappen{
 				'name' => $app_mode ? $app['app_name'] : $page['page_name']
 			),
 			'signup_link' =>issetor($signup_link, '#'),
-			'facebook_app_id' => $this->CI->config->item('facebook_app_id')
+			'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
+			'notification_amount' => $notification_amount
 		));
 		return $this->CI->load->view('api/app_bar_view', array(), TRUE);
 	}

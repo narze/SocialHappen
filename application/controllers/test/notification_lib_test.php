@@ -42,13 +42,13 @@ class notification_lib_test extends CI_Controller {
 		$result = $this->notification_lib->add($user_id, $message, $link);
 		$this->unit->run($result, 'is_false', 'add', print_r($result, TRUE));
 		
-		$user_id = '20';
+		$user_id = '4';
 		$message = NULL;
 		$link = 'http://1';
 		$result = $this->notification_lib->add($user_id, $message, $link);
 		$this->unit->run($result, 'is_false', 'add', print_r($result, TRUE));
 		
-		$user_id = '20';
+		$user_id = '4';
 		$message = 'noti1';
 		$link = NULL;
 		$result = $this->notification_lib->add($user_id, $message, $link);
@@ -62,7 +62,7 @@ class notification_lib_test extends CI_Controller {
 	}
 	
 	function add_test(){
-		$user_id = '20';
+		$user_id = '4';
 		$message = 'noti1';
 		$link = 'http://1';
 		$result = $this->notification_lib->add($user_id, $message, $link);
@@ -70,7 +70,7 @@ class notification_lib_test extends CI_Controller {
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 1, 'list', print_r(count($result), TRUE));
 		
-		$user_id = '20';
+		$user_id = '4';
 		$message = 'noti2';
 		$link = 'http://2';
 		$result = $this->notification_lib->add($user_id, $message, $link);
@@ -78,7 +78,7 @@ class notification_lib_test extends CI_Controller {
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 2, 'list', print_r($result, TRUE));
 		
-		$user_id = '20';
+		$user_id = '4';
 		$message = 'noti3';
 		$link = 'http://3';
 		$result = $this->notification_lib->add($user_id, $message, $link);
@@ -86,7 +86,7 @@ class notification_lib_test extends CI_Controller {
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 3, 'list', print_r($result, TRUE));
 		
-		$user_id = '20';
+		$user_id = '4';
 		$message = 'noti4';
 		$link = 'http://4';
 		$result = $this->notification_lib->add($user_id, $message, $link);
@@ -94,7 +94,7 @@ class notification_lib_test extends CI_Controller {
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 4, 'list', print_r($result, TRUE));
 		
-		$user_id = '20';
+		$user_id = '4';
 		$message = 'noti5';
 		$link = 'http://5';
 		$result = $this->notification_lib->add($user_id, $message, $link);
@@ -115,10 +115,10 @@ class notification_lib_test extends CI_Controller {
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 6, 'list', print_r($result, TRUE));
 		
-		$result = $this->notification_lib->lists(20);
+		$result = $this->notification_lib->lists(4);
 		$this->unit->run(count($result), 5, 'list', print_r($result, TRUE));
 		
-		$result = $this->notification_lib->lists(20, 2, 0);
+		$result = $this->notification_lib->lists(4, 2, 0);
 		$this->unit->run(count($result), 2, 'list', print_r($result, TRUE));
 		
 		$result = $this->notification_lib->lists(21);
@@ -126,22 +126,22 @@ class notification_lib_test extends CI_Controller {
 	}
 	
 	function update_test(){
-		$notification_list = $this->notification_lib->lists('20', 4, 0);
+		$notification_list = $this->notification_lib->lists('4', 4, 0);
 		$this->unit->run(count($notification_list), 4, 'list', print_r($notification_list, TRUE));
 		
 		$result = $this->notification_lib->read();
 		$this->unit->run($result, 'is_false', 'update', print_r($result, TRUE));
 		
-		$result = $this->notification_lib->read('20', array());
+		$result = $this->notification_lib->read('4', array());
 		$this->unit->run($result, 'is_false', 'update', print_r($result, TRUE));
 		
-		$result = $this->notification_lib->read('20', array($notification_list[0]['_id'], $notification_list[1]['_id']), '4e8213a36803fa330600000f', '4e8213a36803fa330600000a');
+		$result = $this->notification_lib->read('4', array($notification_list[0]['_id'], $notification_list[1]['_id']), '4e8213a36803fa330600000f', '4e8213a36803fa330600000a');
 		$this->unit->run($result, 'is_true', 'update', print_r($result, TRUE));
 		
-		$notification_list = $this->notification_lib->lists(20);
+		$notification_list = $this->notification_lib->lists(4);
 
 		$this->unit->run($notification_list[0]['read'], 'is_true', 'update', print_r($result, TRUE));
-		$this->unit->run($notification_list[0]['user_id'], 20, 'update', print_r($result, TRUE));
+		$this->unit->run($notification_list[0]['user_id'], 4, 'update', print_r($result, TRUE));
 		$this->unit->run($notification_list[0]['message'], 'noti5', 'update', print_r($result, TRUE));
 		$this->unit->run($notification_list[0]['link'], 'http://5', 'update', print_r($result, TRUE));
 		
@@ -155,7 +155,7 @@ class notification_lib_test extends CI_Controller {
 	}
 
 	function count_unread_test(){
-		$result = $this->notification_lib->count_unread('20');
+		$result = $this->notification_lib->count_unread('4');
 		$this->unit->run($result, 3, 'count', print_r($result, TRUE));
 		
 		$result = $this->notification_lib->count_unread();
