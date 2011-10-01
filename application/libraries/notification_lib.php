@@ -127,8 +127,6 @@ class Notification_lib
 			'user_id' => (int)$user_id,
 			'_id' => array('$in' => $notification_id_list_criteria)));
 		
-    var_dump($result);
-    
 		$criteria = array();
 		foreach($result as $notification){
 			$criteria[] = new MongoId($notification['_id']);

@@ -90,18 +90,18 @@ class Audit_stat_limit_lib
 		$now = time();
 		$criteria = array();
 		if(isset($user_id)){
-			$criteria['user_id'] = $user_id;
+			$criteria['user_id'] = (int)$user_id;
 		}
 		if(isset($action_no)){
-			$criteria['action_no'] = $action_no;
+			$criteria['action_no'] = (int)$action_no;
 		}
 		if(isset($app_install_id)){
-			$criteria['app_install_id'] = $app_install_id;
+			$criteria['app_install_id'] = (int)$app_install_id;
 		}
 		if(isset($campaign_id)){
-			$criteria['campaign_id'] = $campaign_id;
+			$criteria['campaign_id'] = (int)$campaign_id;
 		}
-		$criteria['timestamp'] = array('$gte' => $now - $back_time_interval);
+		$criteria['timestamp'] = array('$gte' => $now - (int)$back_time_interval);
 		return $this->CI->stats->count_stat($criteria);
 	}
 	
