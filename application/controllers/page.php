@@ -60,6 +60,7 @@ class Page extends CI_Controller {
 					'page_installed' => $page['page_installed'],
 					'facebook_page_id' => $page['facebook_page_id'],
 					'app_facebook_api_key' => $this->config->item('facebook_app_id'),
+					'facebook_tab_url' => $page['facebook_tab_url'],
 					'header' => $this -> socialhappen -> get_header( 
 						array(
 							'company_id' => $company['company_id'],

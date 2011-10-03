@@ -278,12 +278,10 @@ function show_installed_page_in_company() {
 								var page_id=json.page_id;
 								var app_api_key=sh_default_fb_app_api_key;
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
-									$(".bt-go-facebook").live('click',function(){
-										window.parent.location.href = json.page_tab_url;
-										return false;
-									});
+									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+									popup.find(".bt-go-facebook").attr('href', json.page_tab_url);
 									$.fancybox({
-										content:$("#popup-gotofacebook").html()
+										content: popup
 									});
 									$(dragging_object).attr('onclick','view_page_app('+page_id+','+facebook_page_id+',"'+page_name+'")');
 									$(dragging_object).append('<input type="hidden" class="page_id" value="'+ page_id +'">');
@@ -411,8 +409,9 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 	{
 		$('.head-box-app-list').hide();
 		$('div.dragging-app').hide();
-		$(".bt-go-facebook").attr('href', get_add_app_to_fb_page_link(sh_default_fb_app_api_key,facebook_page_id));
-		$(".notice").html( $('#popup-gotofacebook').html() );
+		popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+		popup.find(".bt-go-facebook").attr('href', get_add_app_to_fb_page_link(sh_default_fb_app_api_key,facebook_page_id));
+		$(".notice").html(popup);
 		$(".notice").addClass('warning').show(); 
 		return false;
 	}
@@ -485,7 +484,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 								alert(app_install_url + errorThrown);
 								console.log("app/curl failed 3");
 							},
-							success: function(json) {console.log(json);
+							success: function(json) {
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
@@ -501,12 +500,11 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 										$("#info-installed-app").html('<span>Installed Application</span>'+json.app_count);
 									});
 									update_app_order_in_dashboard();
-									$(".bt-go-facebook").live('click',function(){
-										window.parent.location.href = json.page_tab_url;
-										return false;
-									});
+									
+									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+									popup.find(".bt-go-facebook").attr('href', json.page_tab_url);
 									$.fancybox({
-										content:$("#popup-gotofacebook").html()
+										content: popup
 									});
 								} else {
 									show_installed_page_in_company();
@@ -576,7 +574,27 @@ function show_available_page_in_company() {
 				}).bind('mouseout', function() {
 					$(this).removeClass("dragging");
 				});
-				ul_element.find('li.draggable[data-hasaddedapp="false"]').draggable({
+				// //for real use : don't allow re-install
+				// ul_element.find('li.draggable[data-hasaddedapp="false"]').draggable({ 
+					// connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
+					// helper: "clone",
+					// revert: "invalid",
+					// drag: function() {
+						// $(".left-panel").find('.dragging-page div').addClass('in-action');
+						// $("div.dragging-page ul").css('height','auto');
+					// },
+					// stop: function() {
+						// $(".left-panel").find('.dragging-page div').removeClass('in-action');
+						// $("div.dragging-page ul").css('height','155px');
+					// }
+				// });
+				// ul_element.find('li.draggable[data-hasaddedapp="true"]').die().live('click',function(){
+					// $.fancybox({
+						// content: 'This page has already been added by other user. If this page is yours, please remove Socialhappen Application from this page first'
+					// });
+				// });
+				//for debug
+				ul_element.find('li.draggable').draggable({ 
 					connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
 					helper: "clone",
 					revert: "invalid",
@@ -589,11 +607,7 @@ function show_available_page_in_company() {
 						$("div.dragging-page ul").css('height','155px');
 					}
 				});
-				ul_element.find('li.draggable[data-hasaddedapp="true"]').die().live('click',function(){
-					$.fancybox({
-						content: 'This page has already been added by other user. If this page is yours, please remove Socialhappen Application from this page first'
-					});
-				});
+				//end for debug
 				$(".right-panel").find('.loading').remove();
 			},
 		});
