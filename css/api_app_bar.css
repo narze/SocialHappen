@@ -34,7 +34,7 @@ display:block;
 div.header div.name {
 float:left;
 height:35px;
-width: 120px;
+min-width: 10px;
 position:relative;
 background-image:url(../assets/images/bg_fb/bg_header.png);
 background-repeat:repeat-x;

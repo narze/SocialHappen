@@ -114,7 +114,7 @@ class User extends CI_Controller {
 					array(),
 				TRUE), 
 				'user_activities' => $this -> load -> view('user/user_activities', 
-					array('activity' => $activity),
+					array('activities' => $activity),
 				TRUE), 
 				'user_info' => $this -> load -> view('user/user_info', 
 					array('user' => $user, 'user_data' => $user_with_signup_fields['user_data']),
@@ -130,11 +130,21 @@ class User extends CI_Controller {
 	function _get_user_activity_page($page_id, $user_id){
 		date_default_timezone_set('Asia/Bangkok');
 		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'user_id' => (int)$user_id));
+		
+		$this->load->model('app_model', 'apps');
+		$this->load->model('page_model', 'pages');
 		$activity_list = array();
 		foreach ($activity_db as $activity) {
-			//$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
-			//$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
-			$activity_list[] = $activity['message'];
+			$app = $this->apps->get_app_by_app_id($activity['app_id']);
+			$page = $this->pages->get_page_profile_by_page_id($activity['page_id']);
+			$audit_action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
+			$activity_list[] = array(
+				'page_name' => $page['page_name'],
+				'app_name' => $app['app_name'],
+				'campaign_name' => NULL,
+				'activity_detail' => $audit_action['description'],
+				'date' => $activity['timestamp']
+			);
 		}
 		return $activity_list;
 	}

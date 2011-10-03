@@ -697,6 +697,7 @@ class SocialHappen{
 		
 		$this->CI->load->library('notification_lib');
 		$notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
+		$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
     
 		$this->CI->load->vars(array(
 			'vars' => array(
@@ -719,7 +720,7 @@ class SocialHappen{
 			'signup_link' =>issetor($signup_link, '#'),
 			'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 			'notification_amount' => $notification_amount,
-			'all_notification_link' => $app_mode ? $this->get_tab_url_by_app_install_id($app_install_id) : base_url().'tab/notifications/'.$user['user_id'],
+			'all_notification_link' => $app_mode ? $this->get_tab_url_by_app_install_id($app_install_id).'&app_data='.base64_encode(json_encode($app_data)) : base_url().'tab/notifications/'.$user['user_id'],
 			'app_mode' => $app_mode
 		));
 		return $this->CI->load->view('api/app_bar_view', array(), TRUE);

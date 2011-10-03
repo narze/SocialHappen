@@ -180,10 +180,30 @@ $(function(){
 		});
 	}
 	
+	function load_notification(){
+		set_loading();
+		
+		$('div#main').load(base_url+'tab/notifications/'+user_id+'?return_url='+return_url, function(){
+			$('a.back-to-app').attr('href', return_url);
+		});
+		
+		$('li.notificationtoggle').find('ul').hide();
+		return false;
+	}
+	
 	$('a.a-dashboard').live('click',function(){
 		load_dashboard();
 		return false;
 	});
 	
-	load_dashboard();
+	$('a.a-notification').live('click',function(){
+		load_notification();
+		return false;
+	});
+	
+	switch(view) {
+		case 'notification' : load_notification(); break;
+		default : load_dashboard();
+	}
+	
 });

@@ -1,5 +1,5 @@
 <div class="main-wrapper">
-	<a class="back-to-app">Back to app</a>
+	<?php if($return_url) { ?><a class="back-to-app" target="_top">Back to app</a><?php } ?>
 </div>
 
 <div id="notifications">

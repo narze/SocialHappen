@@ -12,8 +12,6 @@
 <p><b>Firstname:</b> <?php echo $user['user_first_name'];?></p>
 <p><b>Lastname:</b> <?php echo $user['user_last_name'];?></p>
 <p><b>Email:</b> <?php echo $user['user_email'];?></p>
-<p><b>Birthdate:</b> <?php echo $user['user_birth_date'];?></p>
-<p><b>Gender:</b> <?php echo $user['user_gender'];?></p>
 <p><b>About:</b> <?php echo $user['user_about'];?></p>
 <p><b>Go to facebook:</b> <a href="https://www.facebook.com/profile.php?id=<?php echo $user['user_facebook_id'];?>"><?php echo $user['user_facebook_id'];?></a></p>
 <p><b>Register Date:</b> <?php echo $user['user_register_date'];?></p>
