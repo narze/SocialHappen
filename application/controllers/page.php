@@ -359,10 +359,12 @@ class Page extends CI_Controller {
 				)
 			);
 			$socialhappen_app_id = $this->config->item('facebook_app_id');
-			if($this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_app_id, $post_data['facebook_page_id'])){
+			$facebook_page_id = $post_data['facebook_page_id'];
+			if($this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_app_id, $facebook_page_id)){
 				$result['status'] = 'OK';
 				$result['page_id'] = $page_id;
-				$result['page_tab_url'] = $this->facebook->get_facebook_tab_link($socialhappen_app_id, $post_data['facebook_page_id']);
+				$result['page_tab_url'] = $this->facebook->get_facebook_tab_url($socialhappen_app_id, $facebook_page_id);
+				$this->pages->update_facebook_tab_url_by_facebook_page_id($facebook_page_id, $result['page_tab_url']);
 			} else {
 				$result['status'] = 'ERROR';
 				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
@@ -535,28 +537,27 @@ class Page extends CI_Controller {
 	function config($page_id){
 		redirect(base_url().'configs/'.$page_id);
 	}
-	function test(){
-		// $this->load->library('fb_library/FB_library',
-							// array(
-							  // 'appId'  => $this->config->item('facebook_app_id'),
-							  // 'secret' => $this->config->item('facebook_api_secret'),
-							  // 'cookie' => true,
-							// ),
-							// 'FB');
-								// echo $loginUrl = $this->FB->getLoginUrl(
-									// array(
-										// 'redirect_uri' => 'http://socialhappen.dyndns.org/socialhappen/page/test',	// permission successful target
-
-									// )
-								// );
-							// var_dump($this->FB->api('/me'));
-							echo '<pre>';
-		var_dump($page_access_token = $this->facebook->get_facebook_tab_link('108290455924296','135287989899131'));
-		// var_dump($page_access_token = $this->facebook->get_page_tabs_by_facebook_page_id('135287989899131'));
-		// var_dump($page_access_token = $this->facebook->get_page_tabs_by_facebook_page_id('135287989899131'));
-							echo '</pre>';
-		
+	
+	/**
+	 * Go to socialhappen facebook tab in specified page
+	 * @param $page_id
+	 * @param $force_update If true, page_tab_url will be forced to update
+	 * @author Manassarn M.
+	 */
+	function facebook_tab($page_id = NULL, $force_update = FALSE){
+		$this->load->model('page_model','page');
+		if(!$page = $this->page->get_page_profile_by_page_id($page_id)){
+			return FALSE;
+		}
+		$page_tab_url = $page['page_tab_url'];
+		if(!$page_tab_url || $force_update){
+			$page_tab_url = $this->facebook->get_facebook_tab_url($this->config->item('facebook_app_id'), $page['facebook_page_id']);
+			
+			$this->page->update_facebook_tab_url_by_page_id($page_id, $page_tab_url);
+		}
+		redirect($page_tab_url);
 	}
+
 }
 
 /* End of file page.php */

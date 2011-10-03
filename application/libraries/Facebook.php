@@ -240,12 +240,12 @@ class Facebook {
 	}
 	
 	/**
-	 * Get facebook tab link
+	 * Get facebook tab url
 	 * @param $facebook_app_id
 	 * @param $facebook_page_id
 	 * @author Manassarn M.
 	 */
-	function get_facebook_tab_link($facebook_app_id = NULL, $facebook_page_id = NULL){
+	function get_facebook_tab_url($facebook_app_id = NULL, $facebook_page_id = NULL){
 		$page_tabs = $this->get_page_tabs_by_facebook_page_id($facebook_page_id);
 		if(is_array($page_tabs)){
 			foreach($page_tabs as $tab){
