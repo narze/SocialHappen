@@ -323,7 +323,9 @@ class App extends CI_Controller {
 			$facebook_page_id = $this->input->post('facebook_page_id');
 			$facebook_app_id = $this->input->post('facebook_app_id');
 			if($this->facebook->install_facebook_app_to_facebook_page_tab($facebook_app_id, $facebook_page_id)){
-				$result['page_tab_link'] = $this->facebook->get_facebook_tab_link($facebook_app_id, $facebook_page_id);
+				$result['page_tab_url'] = $this->facebook->get_facebook_tab_link($facebook_app_id, $facebook_page_id);
+				$this->load->model('installed_apps_model','installed_app');
+				$this->installed_app->update_facebook_tab_url(array('facebook_app_id'=>$facebook_app_id), $result['page_tab_url']);
 			} else {
 				$result['status'] = 'ERROR';
 				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';

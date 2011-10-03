@@ -213,6 +213,7 @@ class Sync extends CI_Controller {
 							    'page_id' => field_option('BIGINT', 20, 0, TRUE, $autoinc, TRUE),
 							    'app_install_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'order_in_dashboard' => field_option('INT', 5, 0, $null, $autoinc, TRUE),
+							    'facebook_tab_url' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'page' => array(
 							    'page_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -228,6 +229,7 @@ class Sync extends CI_Controller {
 								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 								'page_user_fields' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
+							    'facebook_tab_url' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -707,7 +709,8 @@ class Sync extends CI_Controller {
 								    'app_install_status_id' => 1, 
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
-								    'app_install_secret_key' => '457f81902f7b768c398543e473c47465'
+								    'app_install_secret_key' => '457f81902f7b768c398543e473c47465',
+									'facebook_tab_url' => ''
 								),
 								array(
 								  	'app_install_id' => 2, 
@@ -716,7 +719,8 @@ class Sync extends CI_Controller {
 								    'app_install_status_id' => 1, 
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
-								    'app_install_secret_key' => 'b4504b54bb0c27a22fedba10cca4eb55'
+								    'app_install_secret_key' => 'b4504b54bb0c27a22fedba10cca4eb55',
+									'facebook_tab_url' => ''
 								),
 								array(
 								    'app_install_id' => 3, 
@@ -725,7 +729,8 @@ class Sync extends CI_Controller {
 								    'app_install_status_id' => 1, 
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
-								    'app_install_secret_key' => '1dd5a598414f201bc521348927c265c3'
+								    'app_install_secret_key' => '1dd5a598414f201bc521348927c265c3',
+									'facebook_tab_url' => ''
 								),
 								array(
 								  	'app_install_id' => 4, 
@@ -734,7 +739,8 @@ class Sync extends CI_Controller {
 								    'app_install_status_id' => 1, 
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
-								    'app_install_secret_key' => '19323810aedbbc8384b383fa21904626'
+								    'app_install_secret_key' => '19323810aedbbc8384b383fa21904626',
+									'facebook_tab_url' => ''
 								)
 							);
 		$this->db->insert_batch('installed_apps', $installed_apps);
@@ -768,7 +774,8 @@ class Sync extends CI_Controller {
 									'items' => NULL,
 									'order' => 2
 								)
-							))
+							)),
+							'facebook_tab_url' => ''
 					),
 					array(
 						'page_id' => 2, 
@@ -780,35 +787,35 @@ class Sync extends CI_Controller {
 						'page_new_member' => 100, 
 						'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 						'page_user_fields' => json_encode(array(
-								1 => array(
-									'name' => 'size',
-									'label' => 'Shirt size',
-									'type' => 'radio',
-									'required' => TRUE,
-									'rules' => NULL,
-									'items' => array(1=>'S',2=>'M',3=>'L',4=>'XL'),
-									'order' => 1
-									),
-								2 => array(
-									'name' => 'color',
-									'label' => 'Shirt color',
-									'type' => 'text',
-									'required' => FALSE,
-									'rules' => NULL,
-									'items' => NULL,
-									'order' => 2
+							1 => array(
+								'name' => 'size',
+								'label' => 'Shirt size',
+								'type' => 'radio',
+								'required' => TRUE,
+								'rules' => NULL,
+								'items' => array(1=>'S',2=>'M',3=>'L',4=>'XL'),
+								'order' => 1
 								),
-								3 => array(
-									'name' => 'checkbox_name',
-									'label' => 'Checkbox',
-									'type' => 'checkbox',
-									'required' => FALSE,
-									'rules' => NULL,
-									'items' => array('value1', 'value2', 'value3'),
-									'order' => 3
-								)
-								
-							))
+							2 => array(
+								'name' => 'color',
+								'label' => 'Shirt color',
+								'type' => 'text',
+								'required' => FALSE,
+								'rules' => NULL,
+								'items' => NULL,
+								'order' => 2
+							),
+							3 => array(
+								'name' => 'checkbox_name',
+								'label' => 'Checkbox',
+								'type' => 'checkbox',
+								'required' => FALSE,
+								'rules' => NULL,
+								'items' => array('value1', 'value2', 'value3'),
+								'order' => 3
+							)	
+						)),
+						'facebook_tab_url' => ''
 					),
 					array(
 						'page_id' => 3, 
@@ -819,7 +826,8 @@ class Sync extends CI_Controller {
 						'page_all_member' => 10, 
 						'page_new_member' => 100, 
 						'page_image' => 'http://socialhappen.dyndns.org/socialhappen/uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
-						'page_user_fields' => NULL
+						'page_user_fields' => NULL,
+						'facebook_tab_url' => ''
 					),
 				);
 		$this->db->insert_batch('page', $page);

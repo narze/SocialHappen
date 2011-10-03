@@ -279,7 +279,7 @@ function show_installed_page_in_company() {
 								var app_api_key=sh_default_fb_app_api_key;
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
 									$(".bt-go-facebook").live('click',function(){
-										window.parent.location.href = json.page_tab_link;
+										window.parent.location.href = json.page_tab_url;
 										return false;
 									});
 									$.fancybox({
@@ -502,7 +502,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 									});
 									update_app_order_in_dashboard();
 									$(".bt-go-facebook").live('click',function(){
-										window.parent.location.href = json.page_tab_link;
+										window.parent.location.href = json.page_tab_url;
 										return false;
 									});
 									$.fancybox({

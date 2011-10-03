@@ -362,7 +362,7 @@ class Page extends CI_Controller {
 			if($this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_app_id, $post_data['facebook_page_id'])){
 				$result['status'] = 'OK';
 				$result['page_id'] = $page_id;
-				$result['page_tab_link'] = $this->facebook->get_facebook_tab_link($socialhappen_app_id, $post_data['facebook_page_id']);
+				$result['page_tab_url'] = $this->facebook->get_facebook_tab_link($socialhappen_app_id, $post_data['facebook_page_id']);
 			} else {
 				$result['status'] = 'ERROR';
 				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';

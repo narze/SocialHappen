@@ -145,6 +145,15 @@ class Installed_apps_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_image'],'is_string','app_image');
 		$this->unit->run($result[0]['app_facebook_api_key'],'is_string','app_facebook_api_key');
 	}		
+	
+	/**
+	 * Test update_facebook_tab_url_by_app_install_id()
+	 * @author Manassarn M.
+	 */
+	function update_facebook_tab_url_by_app_install_id_test(){
+		$result = $this->installed_apps->update_facebook_tab_url_by_app_install_id(1, 'http://test.com/');
+		$this->unit->run($result, TRUE, 'update_facebook_tab_url_by_app_install_id()');
+	}
 }
 /* End of file installed_apps_model_test.php */
 /* Location: ./application/controllers/test/installed_apps_model_test.php */
