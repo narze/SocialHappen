@@ -78,6 +78,7 @@ class Tab extends CI_Controller {
 						'tab/main',
 						'tab/account',
 						'tab/dashboard',
+						'tab/notification',
 						'common/jquery.pagination',
 						'common/jquery.form',
 						'common/jquery.countdown.min',
@@ -420,8 +421,18 @@ class Tab extends CI_Controller {
 	function leaderboard($page_id = NULL){}
 	
 	function favorites($user_id = NULL){}
+
+	function notifications($user_id = NULL) {
+		
+		$this->load->library('notification_lib');
+		$this->load->vars(array(
+			'notifications' => $this->notification_lib->lists($user_id, $limit = NULL, $offset = 0)
+			)
+		);
+		
+		$this->load->view('tab/notifications');
 	
-	function notifications($user_id = NULL){}
+	}
 	
 	function account($page_id = NULL, $user_id = NULL){
 		$this->load->model('page_model','pages');

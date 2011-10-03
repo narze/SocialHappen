@@ -695,8 +695,8 @@ class SocialHappen{
 		$this->CI->load->model('page_user_data_model','page_user_data');
 		$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
 		
-    $this->CI->load->library('notification_lib');
-    $notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
+		$this->CI->load->library('notification_lib');
+		$notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
     
 		$this->CI->load->vars(array(
 			'vars' => array(
@@ -718,8 +718,24 @@ class SocialHappen{
 			),
 			'signup_link' =>issetor($signup_link, '#'),
 			'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
-			'notification_amount' => $notification_amount
+			'notification_amount' => $notification_amount,
+			'all_notification_link' => $app_mode ? $this->get_tab_url_by_app_install_id($app_install_id) : base_url().'tab/notifications/'.$user['user_id'],
+			'app_mode' => $app_mode
 		));
 		return $this->CI->load->view('api/app_bar_view', array(), TRUE);
+	}
+	
+	/** 
+	 * Get socialhappen tab bar url
+	 * @param $app_install_id
+	 * @author Weerapat P.
+	 */
+	function get_tab_url_by_app_install_id($app_install_id = NULL) {
+		$this->CI->load->model('installed_apps_model', 'installed_apps');
+		$app = $this->CI->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		$this->CI->load->model('page_model', 'pages');
+		$page = $this->CI->pages->get_page_profile_by_page_id($app['page_id']);
+		$facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
+		return $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
 	}
 }
