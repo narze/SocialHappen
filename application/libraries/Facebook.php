@@ -180,16 +180,19 @@ class Facebook {
 			return $this->page_access_token[$facebook_page_id];
 		}
 		$cookie = $this -> get_facebook_cookie();
+		$page_access_token = NULL;
 		$accounts = json_decode(file_get_contents('https://graph.facebook.com/me/accounts?access_token=' . $cookie['access_token']),TRUE);
 		if(isset($accounts['data'])){
 			foreach($accounts['data'] as $account){
-				if(isset($account['id']) && $account['id'] == $facebook_page_id && isset($account['access_token'])){
-					$this->page_access_token[$facebook_page_id] = $account['access_token'];
-					return $account['access_token'];
+				if(isset($account['id']) && isset($account['access_token'])){
+					$this->page_access_token[$account['id']] = $account['access_token'];
+					if($account['id'] == $facebook_page_id){
+						$page_access_token = $account['access_token'];
+					}
 				}
 			}
 		} 
-		return NULL;
+		return $page_access_token;
 	}
 	
 	/**

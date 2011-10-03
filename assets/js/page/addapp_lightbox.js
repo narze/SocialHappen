@@ -153,12 +153,10 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 										$(".app-installed-count").html("Application (" + json.app_count + ")");
 									});
 									update_app_order_in_dashboard();
-									$(".bt-go-facebook").live('click',function(){
-										
-										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
-									});
+									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+									popup.find(".bt-go-facebook").attr('href', json.page_tab_url);
 									$.fancybox({
-										content:$("#popup-gotofacebook").html()
+										content: popup
 									});
 								}
 								else{
