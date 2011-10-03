@@ -279,7 +279,8 @@ function show_installed_page_in_company() {
 								var app_api_key=sh_default_fb_app_api_key;
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
 									$(".bt-go-facebook").live('click',function(){
-										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
+										window.parent.location.href = json.page_tab_url;
+										return false;
 									});
 									$.fancybox({
 										content:$("#popup-gotofacebook").html()
@@ -351,7 +352,7 @@ function show_installed_app_in_company() {
 						.replace("{page_id}",0)+"&force=1";
 						jQuery.ajax({
 							async:true,
-							url: base_url+"app/curl",
+							url: base_url+"app/json_add",
 							dataType: "json",
 							type: "POST",
 							data: {
@@ -415,7 +416,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 		$(".notice").addClass('warning').show(); 
 		return false;
 	}
-
+	set_loading();
 	//get installed pages
 	jQuery.ajax({
 		async:true,
@@ -470,11 +471,13 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 
 						jQuery.ajax({
 							async:true,
-							url: base_url+"app/curl",
+							url: base_url+"app/json_add_to_page",
 							dataType: "json",
 							type: "POST",
 							data: {
-								url:app_install_url
+								install_url:app_install_url,
+								facebook_page_id:facebook_page_id,
+								facebook_app_id:app_api_key
 							},
 							error: function(jqXHR, textStatus, errorThrown) {
 								show_installed_app_in_page(page_id,facebook_page_id);
@@ -482,7 +485,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 								alert(app_install_url + errorThrown);
 								console.log("app/curl failed 3");
 							},
-							success: function(json) {
+							success: function(json) {console.log(json);
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
@@ -499,7 +502,8 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 									});
 									update_app_order_in_dashboard();
 									$(".bt-go-facebook").live('click',function(){
-										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
+										window.parent.location.href = json.page_tab_url;
+										return false;
 									});
 									$.fancybox({
 										content:$("#popup-gotofacebook").html()

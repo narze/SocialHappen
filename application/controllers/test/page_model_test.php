@@ -40,6 +40,25 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');		
 	}
 	
+	/**
+	 * Tests get_page_profile_by_facebook_page_id()
+	 * @author Manassarn M.
+	 */
+	function get_page_profile_by_facebook_page_id_test(){
+		$result = $this->pages->get_page_profile_by_facebook_page_id('116586141725712');
+		$this->unit->run($result,'is_array', 'get_page_profile_by_facebook_page_id()');
+		$this->unit->run($result['page_id'],'is_string','page_id');
+		$this->unit->run($result['facebook_page_id'],'is_string','facebook_page_id');
+		$this->unit->run($result['company_id'],'is_string','company_id');
+		$this->unit->run($result['page_name'],'is_string','page_name');
+		$this->unit->run($result['page_detail'],'is_string','page_detail');
+		$this->unit->run($result['page_all_member'],'is_string','page_all_member');
+		$this->unit->run($result['page_new_member'],'is_string','page_new_member');
+		$this->unit->run($result['page_image'],'is_string','page_image');
+		$this->unit->run($result['page_status_id'] == 1,'is_true','page_status_id == 1');		
+		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');		
+	}
+	
 	/** 
 	 * Tests get_company_pages_by_company_id()
 	 * @author Manassarn M.
@@ -673,6 +692,24 @@ class Page_model_test extends CI_Controller {
 		
 		$result = $this->pages->remove_page_user_fields_by_page_id(1, 6);
 		$this->unit->run($result, 'is_true', 'Remove using string number without array');
+	}
+	
+	/**
+	 * Test update_facebook_tab_url_by_page_id()
+	 * @author Manassarn M.
+	 */
+	function update_facebook_tab_url_by_page_id_test(){
+		$result = $this->pages->update_facebook_tab_url_by_page_id(1, 'http://test.com/');
+		$this->unit->run($result, TRUE, 'update_facebook_tab_url_by_page_id()');
+	}
+	
+	/**
+	 * Test update_facebook_tab_url_by_facebook_page_id()
+	 * @author Manassarn M.
+	 */
+	function update_facebook_tab_url_by_facebook_page_id_test(){
+		$result = $this->pages->update_facebook_tab_url_by_facebook_page_id('116586141725712', 'http://test.com/');
+		$this->unit->run($result, TRUE, 'update_facebook_tab_url_by_facebook_page_id()');
 	}
 }
 /* End of file page_model_test.php */

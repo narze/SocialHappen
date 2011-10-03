@@ -325,18 +325,24 @@ class Page extends CI_Controller {
 	function json_add() {
 		$this->socialhappen->ajax_check();
 		$this -> load -> model('page_model', 'pages');
-		$post_data = array('facebook_page_id' => $this -> input -> post('facebook_page_id'), 'company_id' => $this -> input -> post('company_id'), 'page_name' => $this -> input -> post('page_name'), 'page_detail' => $this -> input -> post('page_detail'), 'page_all_member' => $this -> input -> post('page_all_member'), 'page_new_member' => $this -> input -> post('page_new_member'), 'page_image' => $this -> input -> post('page_image'));
+		$post_data = array(
+			'facebook_page_id' => $this -> input -> post('facebook_page_id'), 
+			'company_id' => $this -> input -> post('company_id'), 
+			'page_name' => $this -> input -> post('page_name'), 
+			'page_detail' => $this -> input -> post('page_detail'), 
+			'page_all_member' => $this -> input -> post('page_all_member'), 
+			'page_new_member' => $this -> input -> post('page_new_member'), 
+			'page_image' => $this -> input -> post('page_image')
+		);
 		if($this->pages->get_page_id_by_facebook_page_id($post_data['facebook_page_id'])){
 			$result['status'] = 'ERROR';
 			$result['message'] = 'This page has already installed Socialhappen';
 		} else if($page_id = $this -> pages -> add_page($post_data)) {
-			$result['status'] = 'OK';
-			$result['page_id'] = $page_id;
 			$this->load->library('audit_lib');
 			$this->audit_lib->add_audit(
 				0,
 				(int)($this->session->userdata('user_id')),
-				5,
+				$this->socialhappen->get_k('audit_action','Install Page'),
 				'', 
 				'',
 				array(
@@ -352,6 +358,15 @@ class Page extends CI_Controller {
 				'user_role' => 1
 				)
 			);
+			$socialhappen_app_id = $this->config->item('facebook_app_id');
+			if($this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_app_id, $post_data['facebook_page_id'])){
+				$result['status'] = 'OK';
+				$result['page_id'] = $page_id;
+				$result['page_tab_url'] = $this->facebook->get_facebook_tab_link($socialhappen_app_id, $post_data['facebook_page_id']);
+			} else {
+				$result['status'] = 'ERROR';
+				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
+			}
 		} else {
 			$result['status'] = 'ERROR';
 			$result['message'] = 'Cannot add page, please contact administrator';
@@ -536,7 +551,9 @@ class Page extends CI_Controller {
 								// );
 							// var_dump($this->FB->api('/me'));
 							echo '<pre>';
-		var_dump($page_access_token = $this->facebook->install_facebook_app_to_facebook_page_tab('108290455924296','135287989899131'));
+		var_dump($page_access_token = $this->facebook->get_facebook_tab_link('108290455924296','135287989899131'));
+		// var_dump($page_access_token = $this->facebook->get_page_tabs_by_facebook_page_id('135287989899131'));
+		// var_dump($page_access_token = $this->facebook->get_page_tabs_by_facebook_page_id('135287989899131'));
 							echo '</pre>';
 		
 	}

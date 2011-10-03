@@ -122,12 +122,17 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 						
 						app_install_url=app_install_url.replace("{company_id}",company_id)
 									.replace("{user_id}",user_id)
-									.replace("{page_id}",page_id)+"&force=1";			
+									.replace("{page_id}",page_id)+"&force=1";		
+						set_loading();									
 						jQuery.ajax({
-							url: base_url+"app/curl",
+							url: base_url+"app/json_add_to_page",
 							dataType: "json",
 							type: "POST",
-							data: {url:app_install_url},
+							data: {
+								install_url:app_install_url,
+								facebook_page_id:facebook_page_id,
+								facebook_app_id:app_api_key
+							},
 							error: function(jqXHR, textStatus, errorThrown) {
 								show_installed_app_in_page(page_id,facebook_page_id);
 								show_available_app_in_page(page_id);

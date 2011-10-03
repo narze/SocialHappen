@@ -235,32 +235,6 @@ class App extends CI_Controller {
 	}
 	
 	/**
-	 * JSON : Add app
-	 * @author Manassarn M.
-	 */
-	function json_add(){
-		$this->socialhappen->ajax_check();
-		$this->load->model('installed_apps_model','installed_apps');
-		$post_data = array(
-							'company_id' =>  $this->input->post('company_id'),
-							'app_id' =>  $this->input->post('app_id'),
-							'app_install_status_id' =>  $this->input->post('app_install_status_id'),
-							'page_id' =>  $this->input->post('page_id'),
-							'app_install_secret_key' =>  $this->input->post('app_install_secret_key')
-						);
-		if($app_install_id = $this->installed_apps->add_installed_app($post_data)){
-			$result['status'] = 'OK';
-			$result['app_install_id'] = $app_install_id;
-			
-			$this->load->model('page_model','page');
-			$this->page->update_page_profile_by_page_id($post_data['page_id'], array('page_app_installed_id' => $app_install_id));
-		} else {
-			$result['status'] = 'ERROR';
-		}
-		echo json_encode($result);
-	}
-	
-	/**
 	 * JSON : Get app install status
 	 * @param : $status_name
 	 * @author Prachya P.
@@ -324,8 +298,7 @@ class App extends CI_Controller {
 	 * JSON : curl to app_install_url and get data back
 	 * @author Prachya P. 
 	 */	
-	function curl(){
-		$url=$_POST['url'];
+	function curl($url = NULL){
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -335,7 +308,41 @@ class App extends CI_Controller {
 		curl_close($ch);
 		$encoded = json_encode($response);
 		$stripped = str_replace("\ufeff", "", $encoded); //trim zero-width white spaces
-		echo json_decode($stripped);
+		return json_decode($stripped); //Normal JSON
+	}
+	
+	/**
+	 * JSON : Add app to page
+	 * @author Manassarn M.
+	 */
+	function json_add_to_page(){
+		$this->socialhappen->ajax_check();
+		$url = $this->input->post('install_url');
+		$result = json_decode($this->curl($url), TRUE);
+		if(strtoupper($result['status']) == 'OK'){
+			$facebook_page_id = $this->input->post('facebook_page_id');
+			$facebook_app_id = $this->input->post('facebook_app_id');
+			if($this->facebook->install_facebook_app_to_facebook_page_tab($facebook_app_id, $facebook_page_id)){
+				$result['page_tab_url'] = $this->facebook->get_facebook_tab_link($facebook_app_id, $facebook_page_id);
+				$this->load->model('installed_apps_model','installed_app');
+				$this->installed_app->update_facebook_tab_url(array('facebook_app_id'=>$facebook_app_id), $result['page_tab_url']);
+			} else {
+				$result['status'] = 'ERROR';
+				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
+			}
+		}
+		echo json_encode($result);
+	}
+	
+	/**
+	 * JSON : Add app
+	 * @author Manassarn M.
+	 */
+	function json_add(){
+		$this->socialhappen->ajax_check();
+		$url = $_POST['url'];
+		$result = json_decode($this->curl($url), TRUE);
+		echo $result;
 	}
 }
 

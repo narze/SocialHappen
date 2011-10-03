@@ -145,7 +145,16 @@ class Installed_apps_model extends CI_Model {
 	 * @author Prachya P.
 	 */
 	function update($data = array(), $where = array()) {
-		$this -> db -> update('installed_apps', $data, $where);
+		return $this -> db -> update('installed_apps', $data, $where);
+	}
+	
+	/**
+	 * Update facebook_tab_url
+	 * @param $app_install_id
+	 * @param $facebook_tab_url
+	 */
+	function update_facebook_tab_url_by_app_install_id($app_install_id = NULL, $facebook_tab_url = NULL){
+		return $this->db->update('installed_apps', array('facebook_tab_url' => $facebook_tab_url), array('app_install_id'=>$app_install_id));
 	}
 }
 /* End of file installed_apps_model.php */

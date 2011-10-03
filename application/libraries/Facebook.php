@@ -5,6 +5,8 @@ if (!defined('BASEPATH'))
 //phnx : 16-02-2011
 class Facebook {
 
+	protected $page_access_token;
+	
 	function __construct() {
 		$this -> _ci = &get_instance();
 	}
@@ -174,11 +176,15 @@ class Facebook {
 	 * @author Manassarn M.
 	 */
 	function get_page_access_token_by_facebook_page_id($facebook_page_id = NULL){
+		if(isset($this->page_access_token[$facebook_page_id])) {
+			return $this->page_access_token[$facebook_page_id];
+		}
 		$cookie = $this -> get_facebook_cookie();
 		$accounts = json_decode(file_get_contents('https://graph.facebook.com/me/accounts?access_token=' . $cookie['access_token']),TRUE);
 		if(isset($accounts['data'])){
 			foreach($accounts['data'] as $account){
 				if(isset($account['id']) && $account['id'] == $facebook_page_id && isset($account['access_token'])){
+					$this->page_access_token[$facebook_page_id] = $account['access_token'];
 					return $account['access_token'];
 				}
 			}
@@ -189,14 +195,10 @@ class Facebook {
 	/**
 	 * Get page tabs
 	 * @param $facebook_page_id
-	 * @param $facebook_page_access_token
 	 * @author Manassarn M.
 	 */
-	function get_page_tabs_by_facebook_page_id($facebook_page_id = NULL, $facebook_page_access_token = NULL){
-		
-		if(!$facebook_page_access_token) {
-			$facebook_page_access_token = $this->get_page_access_token_by_facebook_page_id($facebook_page_id);
-		}
+	function get_page_tabs_by_facebook_page_id($facebook_page_id = NULL){
+		$facebook_page_access_token = $this->get_page_access_token_by_facebook_page_id($facebook_page_id);
 		$tabs = json_decode(file_get_contents('https://graph.facebook.com/'.$facebook_page_id.'/tabs?access_token=' . $facebook_page_access_token),TRUE);
 		if(isset($tabs['data'])){
 			return $tabs['data'];
@@ -235,5 +237,23 @@ class Facebook {
 		$this -> _ci -> curl -> create($url);
 		$this -> _ci -> curl -> post($post);
 		return $this -> _ci -> curl -> ssl(FALSE) -> execute();
+	}
+	
+	/**
+	 * Get facebook tab link
+	 * @param $facebook_app_id
+	 * @param $facebook_page_id
+	 * @author Manassarn M.
+	 */
+	function get_facebook_tab_link($facebook_app_id = NULL, $facebook_page_id = NULL){
+		$page_tabs = $this->get_page_tabs_by_facebook_page_id($facebook_page_id);
+		if(is_array($page_tabs)){
+			foreach($page_tabs as $tab){
+				if(isset($tab['application']['id']) && $tab['application']['id'] == $facebook_app_id){
+					return $tab['link'];
+				}
+			}
+		}
+		return FALSE;
 	}
 }
