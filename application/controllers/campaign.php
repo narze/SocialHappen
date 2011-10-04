@@ -154,6 +154,7 @@ class Campaign extends CI_Controller {
 			$result['status'] = 'OK';
 			$result['campaign_id'] = $campaign_id;
 		} else {
+			log_message('error','campaign add failed');
 			$result['status'] = 'ERROR';
 		}
 		echo json_encode($result);

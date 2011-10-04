@@ -369,10 +369,12 @@ class Page extends CI_Controller {
 				$result['facebook_tab_url'] = $this->facebook->get_facebook_tab_url($socialhappen_app_id, $facebook_page_id);
 				$this->pages->update_facebook_tab_url_by_facebook_page_id($facebook_page_id, $result['facebook_tab_url']);
 			} else {
+				log_message('error','cannot install app to facebook page tab');
 				$result['status'] = 'ERROR';
 				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
 			}
 		} else {
+			log_message('error','page add failed');
 			$result['status'] = 'ERROR';
 			$result['message'] = 'Cannot add page, please contact administrator';
 		}
@@ -380,6 +382,7 @@ class Page extends CI_Controller {
 
 		if ($this->db->trans_status() === FALSE)
 		{
+			log_message('error','transaction error');
 			$result['status'] = 'ERROR';
 			$result['message'] = 'Transaction error';
 		}

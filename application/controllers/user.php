@@ -287,6 +287,7 @@ class User extends CI_Controller {
 			$result->status = 'OK';
 			$result->user_id = $user_id;
 		} else {
+			log_message('error','add user failed');
 			$result->status = 'ERROR';
 		}
 		echo json_encode($result);
