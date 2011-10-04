@@ -12,28 +12,7 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function index(){
-			$data = array(
-							'header' => $this -> socialhappen -> get_header( 
-								array(
-									'vars' => array(),
-									'title' => 'Facebook login',
-									'style' => array(
-										'common/platform',
-										'common/main'
-									)
-								)
-							),
-							'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-								array(
-									'breadcrumb' => array( 
-										'Facebook login' => NULL
-									)
-								),
-							TRUE),
-							'home' => $this->load->view('home/home', array(), TRUE),
-							'footer' => $this -> socialhappen -> get_footer()
-						);
-			$this->parser->parse('home/home_view',$data);
+		redirect();
 	}
 	
 	/**
@@ -151,11 +130,13 @@ class Home extends CI_Controller {
 			if ($user_id && $company_id)
 			{	
 				$this->load->model('user_companies_model','user_companies');
-				$this->user_companies->add_user_company(array(
+				if(!$this->user_companies->add_user_company(array(
 					'user_id' => $user_id,
 					'company_id' => $company_id,
 					'user_role' => 1 //Company admin
-				));
+				))){
+					log_message('error','company_user add failed');
+				}
 				$this->socialhappen->login();
 				if($this->input->post('package_id')) 
 				{
@@ -170,6 +151,7 @@ class Home extends CI_Controller {
 			}
 			else
 			{
+				log_message('error','company,user add failed');
 				echo 'Error occured';
 			}
 		}

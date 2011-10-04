@@ -15,7 +15,7 @@ class Settings extends CI_Controller {
 		
 		$setting_names_and_ids = array('account'=>'user_id','company_pages' => 'company_id', 'company'=>'company_id','page'=>'page_id','package'=>'user_id','reference'=>'user_id');
 		
-			if(!array_key_exists($setting_name, $setting_names_and_ids)){
+			if(!$setting_name || !array_key_exists($setting_name, $setting_names_and_ids)){
 				redirect("settings?s=account&id=".$this->socialhappen->get_user_id());
 			}
 			$user = $this->socialhappen->get_user();
@@ -133,6 +133,7 @@ class Settings extends CI_Controller {
 				}
 				else
 				{
+					log_message('error','update user failed');
 					echo 'error occured';
 				}
 			}
@@ -199,6 +200,7 @@ class Settings extends CI_Controller {
 				}
 				else
 				{
+					log_message('error','update company failed');
 					echo 'An error occurred saving your information. Please try again later';
 				}
 			}
@@ -231,6 +233,7 @@ class Settings extends CI_Controller {
 						redirect("settings/company/{$company_id}?success=1");
 					}
 				}
+				log_message('error','check user_id failed');
 				redirect("settings/company/{$company_id}?error=1");
 			}
 		}
@@ -299,17 +302,15 @@ class Settings extends CI_Controller {
 								'page_detail' => set_value('page_detail'),
 								'page_image' => $page_image
 							);
-						
-				// run insert model to write data to db
 			
-				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data)) // the information has therefore been successfully saved in the db
+				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data))
 				{
 					$this->load->view('settings/page', array('page'=>array_merge($page,$page_update_data), 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'success'=>TRUE, 'page_user_fields' => $page_user_fields));
 				}
 				else
 				{
-				echo 'An error occurred saving your information. Please try again later';
-				// Or whatever error handling is necessary
+					log_message('error','update company failed');
+					echo 'An error occurred saving your information. Please try again later';
 				}
 			}
 		}

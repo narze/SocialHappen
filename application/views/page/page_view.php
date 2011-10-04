@@ -15,7 +15,7 @@
 						<?php if($facebook_tab_url) : ?>
 							<a class="bt-go-facebook" href="<?php echo $facebook_tab_url; ?>" >Go to facebook</a>
 						<?php else : ?>
-							<a class="bt-go-facebook" href="http://www.facebook.com/add.php?api_key=<?php echo $app_facebook_api_key; ?>&pages=1&page=<?php echo $facebook_page_id; ?>" >Go to facebook</a>
+							<a class="bt-go-facebook" href="<?php echo base_url()."page/facebook_tab/{$page_id}"; ?>" >Go to facebook</a>
 						<?php endif; ?>
 					</div>
 				</div><br />

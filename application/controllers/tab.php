@@ -448,6 +448,7 @@ class Tab extends CI_Controller {
 		if($page){
 			
 			if($user_id != $this->socialhappen->get_user_id()){
+				log_message('error','user_id mismatch');
 				echo 'error : id mismatch'; //DEBUG
 			} else {
 				$user = $this->socialhappen->get_user();
@@ -492,6 +493,7 @@ class Tab extends CI_Controller {
 					}
 					else
 					{
+						log_message('error','update user failed');
 						echo 'error occured';
 					}
 				}
@@ -556,6 +558,7 @@ class Tab extends CI_Controller {
 			}
 			else
 			{
+				log_message('error','add user failed');
 				echo 'Error occured';
 			}
 		}

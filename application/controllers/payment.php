@@ -147,10 +147,17 @@ class Payment extends CI_Controller {
 				//Get user first company
 				$this->load->model('company_model','company');
 				$user_own_companies = $this->company->get_companies_by_user_id($user['user_id']);
-				$user_first_company = $user_own_companies[0];
+				$user_first_company = $user_own_companies[0]; //TODO : user maybe has no company (reg from facebook)
 			}
 			$this->load->model('order_model','orders');
-			if(!$order['order_id'] = $this->orders->add_order($order)) { echo json_encode(array('status'=>'ERROR', 'msg'=>'Error while adding order.' )); return false; }
+			if(!$order['order_id'] = $this->orders->add_order($order)) {
+				log_message('error','add order failed');
+				echo json_encode(array(
+					'status'=>'ERROR',
+					'msg'=>'Error while adding order.' 
+				));
+				return false; 
+			}
 			
 			// 2. Add order_items
 			$order_items = array(
@@ -168,7 +175,13 @@ class Payment extends CI_Controller {
 			$this->load->model('order_items_model','order_items');
 			foreach ($order_items as $order_item)
 			{
-				if(!$this->order_items->add_order_item($order_item)) { echo json_encode(array('status'=>'ERROR', 'msg'=>'Error while adding item to order.' )); return false; }
+				if(!$this->order_items->add_order_item($order_item)) { 
+					log_message('error','add order item failed');
+					echo json_encode(array(
+						'status'=>'ERROR', 
+						'msg'=>'Error while adding item to order.' 
+					)); 
+					return false; }
 			}
 			
 			// 3. Add package_user and company_apps
@@ -182,6 +195,7 @@ class Payment extends CI_Controller {
 				$add_package_user_result = $this->_add_package_user($user['user_id'], $package['package_id']);
 				if(!$add_package_user_result) 
 				{ 
+					log_message('error','add package user failed');
 					echo json_encode(array('status'=>'ERROR', 'msg'=>'Error while adding package.' )); return false;
 				}
 				// 3.2. Add/Update company_apps
@@ -208,6 +222,7 @@ class Payment extends CI_Controller {
 					$PayPalResult = $this->_set_express_checkout($data);
 					if($PayPalResult['ERRORS']) 
 					{
+						log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 						echo json_encode(array('status'=>'ERROR', 'msg'=> implode('<br />', $PayPalResult['ERRORS']) ));
 						return false;
 					}
@@ -282,6 +297,7 @@ class Payment extends CI_Controller {
 		$PayPalResult = $this->_get_express_checkout_details($data);
 		if($PayPalResult['ERRORS']) 
 		{
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while getting checkout details'),TRUE);
 			$this->parser->parse('payment/payment_view', $view_data);
 			return false;
@@ -293,6 +309,7 @@ class Payment extends CI_Controller {
 		$PayPalResult = $this->_do_express_checkout_payment($data);
 		if($PayPalResult['ERRORS'])
 		{
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while checking out.'),TRUE);
 			$this->parser->parse('payment/payment_view', $view_data);
 			return false;
@@ -313,6 +330,7 @@ class Payment extends CI_Controller {
 			
 			if($PayPalResult['ERRORS']) 
 			{ 			
+				log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 				$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while canceling paypal recurring payments profile.'),TRUE);
 				$this->parser->parse('payment/payment_view', $view_data);
 				return false;
@@ -335,6 +353,7 @@ class Payment extends CI_Controller {
 		$PayPalResult = $this->_create_recurring_payments_profile($data);
 		if($PayPalResult['ERRORS']) 
 		{ 			
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while creating paypal recurring payments profile.'),TRUE);
 			$this->parser->parse('payment/payment_view', $view_data);
 			return false;
@@ -353,6 +372,7 @@ class Payment extends CI_Controller {
 		);
 		if(!$this->orders->update_order_by_order_id($order['order_id'], $update_data))
 		{
+			log_message('error','update order failed');
 			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while updating order status.'),TRUE);
 			$this->parser->parse('payment/payment_view', $view_data);
 			return false;
@@ -362,6 +382,7 @@ class Payment extends CI_Controller {
 		$add_package_user_result = $this->_add_package_user($user['user_id'], $order_items[0]['item_id']);
 		if(!$add_package_user_result) 
 		{ 
+			log_message('error','add package user failed');
 			$view_data['payment_body'] = $this->load->view('payment/payment_error', array('error' => 'Error while adding package user.'),TRUE);
 			$this->parser->parse('payment/payment_view', $view_data);
 			return false;
@@ -479,7 +500,8 @@ class Payment extends CI_Controller {
 
 			$PayPalResult = $this->_manage_recurring_payments_profile_status($data);
 			if($PayPalResult['ERRORS']) 
-			{ 			
+			{ 	
+				log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 				$error[] = 'Can not cancel paypal recurring payment';
 				return false;
 			}
@@ -489,7 +511,10 @@ class Payment extends CI_Controller {
 		$data = array('order_status_id' => $this->socialhappen->get_k('order_status', 'Canceled'));
 		if(!$this->orders->update_order_by_order_id($latest_ordered_package['order_id'], $data)) $error[] = 'Error. Can not update order status';
 		
-		if(count($error)) { echo '<pre>'; print_r($error); echo '</pre>'; }
+		if(count($error)) { 
+			log_message('error','cancel package error : '.print_r($error));
+			echo '<pre>'; print_r($error); echo '</pre>'; 
+		}
 		else {  redirect(); }
 	}
 	
@@ -599,7 +624,10 @@ class Payment extends CI_Controller {
 					'app_id' => $package_app['app_id']
 				));
 				
-				if(!$result) { return false; }
+				if(!$result) { 
+					log_message('error','add compoany apps failed');
+					return false; 
+				}
 			}
 		}
 		return true;
@@ -780,6 +808,7 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
 			//$this->load->view('payment/paypal_error',$errors);
 			return $PayPalResult;
@@ -803,6 +832,7 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
 			//$this->load->view('payment/paypal_error',$errors);
 			return $PayPalResult;
@@ -939,6 +969,7 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
 			//$this->load->view('payment/paypal_error',$errors);
 			return $PayPalResult;
@@ -1056,6 +1087,7 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
 			//$this->load->view('payment/paypal_error',$errors);
 			return $PayPalResult;
@@ -1081,6 +1113,7 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
 			//$this->load->view('payment/paypal_error',$errors);
 			return $PayPalResult;
@@ -1104,6 +1137,7 @@ class Payment extends CI_Controller {
 		
 		if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
 		{
+			log_message('error','paypal result error : '.print_r($PayPalResult['ERRORS']));
 			//$errors = array('Errors'=>$PayPalResult['ERRORS']);
 			//$this->load->view('paypal_error',$errors);
 			return $PayPalResult;

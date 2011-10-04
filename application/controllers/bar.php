@@ -60,6 +60,7 @@ class Bar extends CI_Controller {
 			}
 			else
 			{
+				log_message('error','company add failed');
 				echo 'Error adding company';
 			}
 		}

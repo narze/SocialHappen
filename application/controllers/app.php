@@ -323,10 +323,11 @@ class App extends CI_Controller {
 			$facebook_page_id = $this->input->post('facebook_page_id');
 			$facebook_app_id = $this->input->post('facebook_app_id');
 			if($this->facebook->install_facebook_app_to_facebook_page_tab($facebook_app_id, $facebook_page_id)){
-				$result['page_tab_url'] = $this->facebook->get_facebook_tab_url($facebook_app_id, $facebook_page_id);
+				$result['facebook_tab_url'] = $this->facebook->get_facebook_tab_url($facebook_app_id, $facebook_page_id);
 				$this->load->model('installed_apps_model','installed_app');
-				$this->installed_app->update_facebook_tab_url_by_app_install_id($result['app_install_id'], $result['page_tab_url']);
+				$this->installed_app->update_facebook_tab_url_by_app_install_id($result['app_install_id'], $result['facebook_tab_url']);
 			} else {
+				log_message('error','install facebook app to page tab failed');
 				$result['status'] = 'ERROR';
 				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
 			}
@@ -348,7 +349,7 @@ class App extends CI_Controller {
 	/**
 	 * Go to app's facebook tab
 	 * @param $app_install_id
-	 * @param $force_update If true, page_tab_url will be forced to update
+	 * @param $force_update If true, facebook_tab_url will be forced to update
 	 * @author Manassarn M.
 	 */
 	function facebook_tab($app_install_id = NULL, $force_update = FALSE){
@@ -356,15 +357,15 @@ class App extends CI_Controller {
 		if(!$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id)){
 			return FALSE;
 		}
-		$page_tab_url = $app['page_tab_url'];
-		if(!$page_tab_url || $force_update){
+		$facebook_tab_url = $app['facebook_tab_url'];
+		if(!$facebook_tab_url || $force_update){
 			$this->load->model('page_model','page');
 			$page = $this->page->get_page_profile_by_page_id($app['page_id']);
-			$page_tab_url = $this->facebook->get_facebook_tab_url($app['app_facebook_api_key'], $page['facebook_page_id']);
+			$facebook_tab_url = $this->facebook->get_facebook_tab_url($app['app_facebook_api_key'], $page['facebook_page_id']);
 			
-			$this->page->update_facebook_tab_url_by_page_id($page_id, $page_tab_url);
+			$this->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
 		}
-		redirect($page_tab_url);
+		redirect($facebook_tab_url);
 	}
 }
 

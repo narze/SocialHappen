@@ -154,7 +154,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 									});
 									update_app_order_in_dashboard();
 									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
-									popup.find(".bt-go-facebook").attr('href', json.page_tab_url);
+									popup.find(".bt-go-facebook").attr('href', json.facebook_tab_url);
 									$.fancybox({
 										content: popup
 									});

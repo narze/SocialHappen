@@ -27,6 +27,7 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 
 		if(!($app_id) || !($app_secret_key) || !($company_id) || (!$user_id && !$user_facebook_id) ){
+			log_message('error','Missing parameters (app_id, app_secret_key, company_id, user_id/user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, company_id, user_id/user_facebook_id)'));
 			return;
@@ -39,6 +40,7 @@ class Api extends CI_Controller {
 		
 		$this->load->model('Session_model','Session');
 		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			log_message('error',"User #{$user_id} has no session");
 			echo json_encode(array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
 			return;
@@ -55,17 +57,13 @@ class Api extends CI_Controller {
 			$this->Installed_apps->delete($app_id, $company_id, $user_facebook_id);
 		}*/
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate user with $company_id and $user_facebook_id
-		if(!($this->_authenticate_user($company_id, $user_id))){
-			echo json_encode(array( 'error' => '300',
-									'message' => 'you have no permission to install app on this company'));
+		if(!$this->_authenticate_user($company_id, $user_id)){
 			return;
 		}
 		
@@ -111,6 +109,8 @@ class Api extends CI_Controller {
 			}
 			
 		}
+		
+		log_message('error','This company doesn\'t have this app');
 		echo json_encode(array( 'error' => '300',
 										'message' => 'application is not available for company'));
 				return;
@@ -134,6 +134,7 @@ class Api extends CI_Controller {
 		
 		// check parameter
 		if(!($app_id) || !($app_install_id) || !($app_secret_key) || !($app_install_secret_key) || (!$page_id && !$facebook_page_id) || (!$user_id && !$user_facebook_id ) ){
+			log_message('error','Missing parameters (app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id, user_id/user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id, user_id/user_facebook_id)'));
 			return;
@@ -146,22 +147,19 @@ class Api extends CI_Controller {
 		
 		$this->load->model('Session_model','Session');
 		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			log_message('error',"User #{$user_id} has no session");
 			echo json_encode(array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -218,11 +216,13 @@ class Api extends CI_Controller {
 				$response = array(	'status' => 'OK',
 							'message' => 'page saved');
 			}else{
+				log_message('error','company_id mismatch');
 				$response = array('error' => '500',
 									'message' => 'invalid page_id of company');
 				
 			}
 		}else{
+			log_message('error','invalid page_id');
 			$response = array('error' => '500',
 									'message' => 'invalid page_id');
 		}
@@ -236,22 +236,19 @@ class Api extends CI_Controller {
 	function request_log_app($app_id = NULL, $app_secret_key = NULL
 							, $app_install_id = NULL, $app_install_secret_key = NULL){
 		if(!isset($app_id) || !isset($app_secret_key) || !isset($app_install_id) || !isset($app_install_secret_key)){
+			log_message('error','Missing parameters (app_id, app_secret_key, app_install_id, app_install_secret_key)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -269,6 +266,7 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		
 		if(!($user_facebook_id)){
+			log_message('error','Missing parameter (user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: user_facebook_id)'));
 			return;
@@ -281,6 +279,7 @@ class Api extends CI_Controller {
 			$response = array(	'status' => 'OK',
 							'user_id' => $user_id['user_id']);
 		} else {
+			log_message('error','user_id not found');
 			$response = array(	'error' => '200');
 		}
 
@@ -295,6 +294,7 @@ class Api extends CI_Controller {
 		$user_id = $this->input->get('user_id', TRUE);
 		
 		if(!($user_id)){
+			log_message('error','Missing parameter (user_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: user_id)'));
 			return;
@@ -307,6 +307,7 @@ class Api extends CI_Controller {
 			$response = array(	'status' => 'OK',
 							'user_facebook_id' => $user_facebook_id);
 		} else {
+			log_message('error','user_facebook_id not found');
 			$response = array(	'error' => '200');
 		}
 
@@ -322,6 +323,7 @@ class Api extends CI_Controller {
 		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
 		
 		if(!($facebook_page_id)){
+			log_message('error','Missing parameter (facebook_page_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: facebook_page_id)'));
 			return;
@@ -347,6 +349,7 @@ class Api extends CI_Controller {
 		$page_id = $this->input->get('page_id', TRUE);
 		
 		if(!($page_id)){
+			log_message('error','Missing parameter (page_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: page_id)'));
 			return;
@@ -380,22 +383,19 @@ class Api extends CI_Controller {
 		$action = $this->input->get('action', TRUE);
 			
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -438,6 +438,7 @@ class Api extends CI_Controller {
 			)
 		);
 		if(!$result){
+		log_message('error','add_audit failed');
 		$response = array(
 			'status' => 'ERROR',
 			'message' => 'not logged');
@@ -458,6 +459,7 @@ class Api extends CI_Controller {
 				'message' => 'logged, incremented'
 			);
 		} else {	
+			log_message('error','increment_achievement_stat failed');
 			$response = array(	
 				'status' => 'ERROR',
 				'action_text' => $action_text,
@@ -504,22 +506,19 @@ class Api extends CI_Controller {
 		);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($user_facebook_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -594,15 +593,14 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 					
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || (!$user_id && !$user_facebook_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, user_id/user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, user_id/user_facebook_id)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
@@ -613,6 +611,7 @@ class Api extends CI_Controller {
 		if(sizeof($app)!=0){
 			$company_id = $app['company_id'];
 		}else{
+			log_message('error','app not found');
 			echo json_encode(array( 'error' => '250',
 									'message' => 'invalid app'));
 			return;
@@ -622,9 +621,7 @@ class Api extends CI_Controller {
 		if(!$user_id){
 			$this->load->model('user_model','user');
 			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
-		} else if(!($this->_authenticate_user($company_id, $user_id))){
-			echo json_encode(array( 'error' => '300',
-									'message' => 'you have no permission on this app'));
+		} else if(!$this->_authenticate_user($company_id, $user_id)){
 			return;
 		}
 		
@@ -646,22 +643,19 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 			
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -717,28 +711,26 @@ class Api extends CI_Controller {
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
 		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if(sizeof($company_id)==0){
+			log_message('error','company not found');
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid company_id'));
 			return;			
@@ -752,6 +744,7 @@ class Api extends CI_Controller {
 		if(sizeof($campaigns)>0){
 
 			if($campaigns[0]['app_install_id'] != $app_install_id){
+				log_message('error','app_install_id mismatch');
 				echo json_encode(array( 'error' => '300',
 									'message' => 'you have no permission to access this campaign'));
 				return;
@@ -770,6 +763,7 @@ class Api extends CI_Controller {
 			}
 			
 		}else{
+			log_message('error','campaign not found');
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid campaign id'));
 			return;		
@@ -790,28 +784,26 @@ class Api extends CI_Controller {
 		$campaign_id = $this->input->get('campaign_id', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($campaign_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, campaign_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, campaign_id)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
 		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if(sizeof($company_id)==0){
+			log_message('error','company not found');
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid company_id'));
 			return;			
@@ -825,6 +817,7 @@ class Api extends CI_Controller {
 		if(sizeof($campaign)>0){
 
 			if($campaign['app_install_id'] != $app_install_id){
+				log_message('error','app_install_id mismatch');
 				echo json_encode(array( 'error' => '300',
 									'message' => 'you have no permission to access this campaign'));
 				return;
@@ -846,6 +839,7 @@ class Api extends CI_Controller {
 			}
 			
 		}else{
+			log_message('error','campaign not found');
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid campaign id'));
 			return;		
@@ -872,6 +866,7 @@ class Api extends CI_Controller {
 		$campaign_status_id = $this->input->get('campaign_status_id', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id) || !($campaign_name) || !($campaign_start_timestamp) || !($campaign_end_timestamp)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_name, campaign_start_timestamp, campaign_end_timestamp)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_name, campaign_start_timestamp, campaign_end_timestamp)'));
 			return;
@@ -884,28 +879,26 @@ class Api extends CI_Controller {
 		
 		$this->load->model('Session_model','Session');
 		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			log_message('error',"User #{$user_id} has no session");
 			echo json_encode(array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
 		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if(sizeof($company_id)==0){
+			log_message('error','company not found');
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid company_id'));
 			return;			
@@ -913,9 +906,7 @@ class Api extends CI_Controller {
 		$company_id = $company_id['company_id'];
 		
 		// authenticate user with $company_id and $user_facebook_id
-		if(!($this->_authenticate_user($company_id, $user_id))){
-			echo json_encode(array( 'error' => '300',
-									'message' => 'you have no permission to install app on this company'));
+		if(!$this->_authenticate_user($company_id, $user_id)){
 			return;
 		}
 		
@@ -942,6 +933,7 @@ class Api extends CI_Controller {
 							);
 				echo json_encode($response);
 		}else{
+			log_message('error','cannot add campaign');
 			echo json_encode(array( 'error' => '500',
 									'message' => 'database error'));
 			return;	
@@ -968,6 +960,7 @@ class Api extends CI_Controller {
 		$campaign_status_id = $this->input->get('campaign_status_id', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id) || !($campaign_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id, campaign_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id, campaign_id'));
 			return;
@@ -980,37 +973,33 @@ class Api extends CI_Controller {
 		
 		$this->load->model('Session_model','Session');
 		if(!$this->Session->get_session_id_by_user_id($user_id)){
+			log_message('error',"User #{$user_id} has no session");
 			echo json_encode(array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
 		$this->load->model('Installed_apps_model', 'Installed_apps');
 		$company_id = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if(sizeof($company_id)==0){
+			log_message('error','company not found');
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid company_id'));
 			return;			
 		}
 		$company_id = $company_id['company_id'];
 		
-		if(!($this->_authenticate_user($company_id, $user_id))){
-			echo json_encode(array( 'error' => '300',
-									'message' => 'you have no permission to install app on this company'));
+		if(!$this->_authenticate_user($company_id, $user_id)){
 			return;
 		}
 				
@@ -1020,6 +1009,7 @@ class Api extends CI_Controller {
 		if(sizeof($campaign)>0){
 			
 			if($campaign['app_install_id'] != $app_install_id){
+				log_message('error','app_install_id mismatch');
 				echo json_encode(array( 'error' => '300',
 									'message' => 'you have no permission to access this campaign'));
 				return;
@@ -1053,12 +1043,14 @@ class Api extends CI_Controller {
 									);
 						echo json_encode($response);
 				}else{
+					log_message('error','campaign update failed');
 					echo json_encode(array( 'error' => '500',
 											'message' => 'database error'));
 					return;	
 				}
 			}
 		}else{
+			log_message('error','campaign not found');
 			echo json_encode(array( 'error' => '500',
 									'message' => 'invalid campaign id'));
 			return;		
@@ -1075,8 +1067,9 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		
 		if(!$user_id && !$user_facebook_id){
+			log_message('error','Missing parameter (user_id/user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: user_id'));
+									'message' => 'invalid parameter, some are missing (need: user_id/user_facebook_id'));
 			return;
 		}
 		
@@ -1110,22 +1103,19 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_facebook_id && !$user_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 
@@ -1163,22 +1153,19 @@ class Api extends CI_Controller {
 		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$page_id && !$facebook_page_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -1192,6 +1179,7 @@ class Api extends CI_Controller {
 		}
 		
 		if(issetor($app['page_id'])!=$page_id){
+			log_message('error','page_id mismatch');
 			echo json_encode(array( 'error' => '600',
 									'message' => 'invalid page_id'));
 			return;
@@ -1240,22 +1228,19 @@ class Api extends CI_Controller {
 		//$page_id = $this->input->get('page_id', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -1286,22 +1271,19 @@ class Api extends CI_Controller {
 		$point = $this->input->get('point', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_facebook_id && !$user_id) || !$point){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id, point)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id, point)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -1355,10 +1337,12 @@ class Api extends CI_Controller {
 										$action_no,
 										$app_install_id,
 										$campaign_id);
-		if(!$result)
+		if(!$result) {
+			log_message('error','audit_stat_limit_lib failed');
 			$response = array('status' => 'Error');
-		else
+		} else {
 			$response = array('status' => 'OK');
+		}
 		echo json_encode($response);
 	}
 	
@@ -1429,22 +1413,19 @@ class Api extends CI_Controller {
 		$user_id = $this->input->get('user_id', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_facebook_id && !$user_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -1526,22 +1507,19 @@ class Api extends CI_Controller {
 		$achievement_infos = $this->input->get('achievement_infos', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || !($achievement_infos)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, achievement_infos)');
 			echo json_encode(array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, achievement_infos)'));
 			return;
 		}
 		
-		// authenticate app with $app_id and $app_secret_key
-		if(!($this->_authenticate_app($app_id, $app_secret_key))){
-			echo json_encode(array( 'error' => '200',
-									'message' => 'invalid app_secret_key'));
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!($this->_authenticate_app_install($app_install_id, $app_install_secret_key))){
-			echo json_encode(array( 'error' => '500',
-									'message' => 'invalid app_install_secret_key'));
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
 			return;
 		}
 		
@@ -1561,20 +1539,32 @@ class Api extends CI_Controller {
 		// authenticate app with $app_id and $app_secret_key
 		$this->load->model('App_model', 'App');
 		$app = $this->App->get_app_by_app_id($app_id);
-		if($app != NULL){
-			return ($app['app_secret_key']== $app_secret_key);
+		if($app != NULL && $app['app_secret_key']== $app_secret_key){
+			return TRUE;
+		} else {
+			log_message('error','app_secret_key mismatch, app authenticate failed');
+			echo json_encode(array( 
+				'error' => '200',
+				'message' => 'invalid app_secret_key')
+			);
+			return FALSE;
 		}
-		return FALSE;
 	}
 	
 	function _authenticate_app_install($app_install_id, $app_install_secret_key){
-		// authenticate app with $app_id and $app_secret_key
+		// authenticate app with $app_id and $app_install_secret_key
 		$this->load->model('Installed_apps_model', 'Installed_apps');
 		$app = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		if($app != NULL){
 			return ($app['app_install_secret_key'] == $app_install_secret_key);
+		} else {
+			log_message('error','app_install_secret_key mismatch, app authenticate failed');
+			echo json_encode(array( 
+				'error' => '500',
+				'message' => 'invalid app_install_secret_key')
+			);
+			return FALSE;
 		}
-		return FALSE;
 	}
 	
 	function _authenticate_user($company_id, $user_id){
@@ -1585,7 +1575,16 @@ class Api extends CI_Controller {
 		foreach ($company_admin_list_query as $admin) {
 			$company_admin_list[] = $admin['user_id'];
 		}
-		return in_array($user_id, $company_admin_list);
+		if(in_array($user_id, $company_admin_list)){
+			return TRUE;
+		} else {
+			log_message('error',"User #{$user_id} has no permission in company #{$company_id}");
+			echo json_encode(array( 
+				'error' => '300',
+				'message' => 'you have no permission to install app on this company')
+			);
+			return FALSE;
+		}
 	}
 
 	function _generate_app_install_secret_key($company_id, $app_id){
@@ -1606,8 +1605,6 @@ class Api extends CI_Controller {
 
     	return $string;
 	}
-	
-	
 }
 
 /* End of file api.php */
