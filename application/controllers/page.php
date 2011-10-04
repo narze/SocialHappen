@@ -335,7 +335,9 @@ class Page extends CI_Controller {
 			'page_new_member' => $this -> input -> post('page_new_member'), 
 			'page_image' => $this -> input -> post('page_image')
 		);
+		$this->db->trans_start();
 		if($this->pages->get_page_id_by_facebook_page_id($post_data['facebook_page_id'])){
+			log_message('error','Duplicated facebook page id');
 			$result['status'] = 'ERROR';
 			$result['message'] = 'This page has already installed Socialhappen';
 		} else if($page_id = $this -> pages -> add_page($post_data)) {
@@ -364,8 +366,8 @@ class Page extends CI_Controller {
 			if($this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_app_id, $facebook_page_id)){
 				$result['status'] = 'OK';
 				$result['page_id'] = $page_id;
-				$result['page_tab_url'] = $this->facebook->get_facebook_tab_url($socialhappen_app_id, $facebook_page_id);
-				$this->pages->update_facebook_tab_url_by_facebook_page_id($facebook_page_id, $result['page_tab_url']);
+				$result['facebook_tab_url'] = $this->facebook->get_facebook_tab_url($socialhappen_app_id, $facebook_page_id);
+				$this->pages->update_facebook_tab_url_by_facebook_page_id($facebook_page_id, $result['facebook_tab_url']);
 			} else {
 				$result['status'] = 'ERROR';
 				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
@@ -373,6 +375,13 @@ class Page extends CI_Controller {
 		} else {
 			$result['status'] = 'ERROR';
 			$result['message'] = 'Cannot add page, please contact administrator';
+		}
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE)
+		{
+			$result['status'] = 'ERROR';
+			$result['message'] = 'Transaction error';
 		}
 		echo json_encode($result);
 	}
@@ -542,7 +551,7 @@ class Page extends CI_Controller {
 	/**
 	 * Go to socialhappen facebook tab in specified page
 	 * @param $page_id
-	 * @param $force_update If true, page_tab_url will be forced to update
+	 * @param $force_update If true, facebook_tab_url will be forced to update
 	 * @author Manassarn M.
 	 */
 	function facebook_tab($page_id = NULL, $force_update = FALSE){
@@ -550,13 +559,13 @@ class Page extends CI_Controller {
 		if(!$page = $this->page->get_page_profile_by_page_id($page_id)){
 			return FALSE;
 		}
-		$page_tab_url = $page['page_tab_url'];
-		if(!$page_tab_url || $force_update){
-			$page_tab_url = $this->facebook->get_facebook_tab_url($this->config->item('facebook_app_id'), $page['facebook_page_id']);
+		$facebook_tab_url = $page['facebook_tab_url'];
+		if(!$facebook_tab_url || $force_update){
+			$facebook_tab_url = $this->facebook->get_facebook_tab_url($this->config->item('facebook_app_id'), $page['facebook_page_id']);
 			
-			$this->page->update_facebook_tab_url_by_page_id($page_id, $page_tab_url);
+			$this->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
 		}
-		redirect($page_tab_url);
+		redirect($facebook_tab_url);
 	}
 
 }

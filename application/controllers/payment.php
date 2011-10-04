@@ -147,7 +147,7 @@ class Payment extends CI_Controller {
 				//Get user first company
 				$this->load->model('company_model','company');
 				$user_own_companies = $this->company->get_companies_by_user_id($user['user_id']);
-				$user_first_company = $user_own_companies[0];
+				$user_first_company = $user_own_companies[0]; //TODO : user maybe has no company (reg from facebook)
 			}
 			$this->load->model('order_model','orders');
 			if(!$order['order_id'] = $this->orders->add_order($order)) { echo json_encode(array('status'=>'ERROR', 'msg'=>'Error while adding order.' )); return false; }

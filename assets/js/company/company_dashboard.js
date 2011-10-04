@@ -279,7 +279,7 @@ function show_installed_page_in_company() {
 								var app_api_key=sh_default_fb_app_api_key;
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
 									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
-									popup.find(".bt-go-facebook").attr('href', json.page_tab_url);
+									popup.find(".bt-go-facebook").attr('href', json.facebook_tab_url);
 									$.fancybox({
 										content: popup
 									});
@@ -502,7 +502,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 									update_app_order_in_dashboard();
 									
 									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
-									popup.find(".bt-go-facebook").attr('href', json.page_tab_url);
+									popup.find(".bt-go-facebook").attr('href', json.facebook_tab_url);
 									$.fancybox({
 										content: popup
 									});
