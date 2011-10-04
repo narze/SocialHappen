@@ -94,31 +94,6 @@ div.paging> a.active{
     color:fff;
 }
 
-/* Signup */
-div.upload-pic {
-	width:50px;
-	height:20px; 
-	cursor: pointer; 
-	overflow: hidden; 
-	position: absolute;
-	left: 0;
-	top: 50px;
-	font-size:11px;
-	text-align: center;
-}
-div.upload-pic a {
-	color:#65781F;
-}
-div.upload-pic input {
-	filter: alpha(opacity = 0);
-	zoom:1;
-	opacity:0;
-	position:absolute;
-	top:0;
-	right:0;
-}
-label.error {color:red;}
-
 /* Dashboard */
 div.list_app-camp>ul>li>div:first-child p.pic img {
 	width:80px;

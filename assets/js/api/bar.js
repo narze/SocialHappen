@@ -8,8 +8,18 @@ shregister = function(){
 		return false;
 	});
 	
-	$('a.bt-register-now').live('click', function(){
-		$('form.signup-form').ajaxSubmit({target:'.popup-fb-2col', replaceTarget:true});
+	$('form.signup-form input').live('keyup', function(){
+		
+		var complete = true;
+		$.each( $('form.signup-form input[type="text"]'), function () {
+			if( $(this).val() == '') complete = false;
+		});
+		if(complete) $('a.bt-next-inactive').attr('class', 'bt-next');
+		else $('a.bt-next').attr('class', 'bt-next-inactive');
+	});
+	
+	$('a.bt-next').live('click', function(){
+		$('form.signup-form').ajaxSubmit({target:'.popup-fb.signup', replaceTarget:true});
 		return false;
 	});
 }
@@ -128,10 +138,16 @@ socialhappen_popup = function(){
 				href: base_url+'tab/signup_page/'+page_id,
 				modal: true
 			});
-			$('a.bt-register-now').die('click');
-			$('a.bt-register-now').live('click',function(){
+			
+			$('#policy').live('click', function() {
+				if ( $('#policy:checked').length > 0 ) $('a.bt-done-inactive').attr('class', 'bt-done');
+				else $('a.bt-done').attr('class', 'bt-done-inactive');
+			});
+			
+			$('a.bt-done').die('click');
+			$('a.bt-done').live('click',function(){
 				$('.signup-form').ajaxSubmit({
-					target:'div.popup-fb-2col',
+					target:'div.popup-fb.signup-page',
 					replaceTarget: true
 				});
 			});

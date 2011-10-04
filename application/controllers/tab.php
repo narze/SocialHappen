@@ -568,6 +568,7 @@ class Tab extends CI_Controller {
 		
 		$this->load->model('page_model','pages');
 		$page_user_fields = $this->pages->get_page_user_fields_by_page_id($page_id);
+		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
 		$data = array();
 		foreach($page_user_fields as $user_fields){
@@ -593,15 +594,19 @@ class Tab extends CI_Controller {
 			$this->form_validation->set_rules('empty', 'Empty', 'required');
 		}
 		
-		if ($this->form_validation->run() == FALSE)
-		{
-			$this->load->view('tab/signup_page', array(
+		$this->load->vars(array(
 				'user' => $this->socialhappen->get_user(),
 				'page_id' => $page_id,
+				'page' => $page,
 				'page_user_fields' => $page_user_fields,
 				'facebook_user'=>$facebook_user,
 				'user_profile_picture'=>$user_facebook_image
-			));
+			)
+		);
+		
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->load->view('tab/signup_page');
 		} else {
 			
 			$this->load->model('page_user_data_model','page_users');
@@ -618,14 +623,7 @@ class Tab extends CI_Controller {
 				echo "already register/cannot signup page";
 			}
 			
-			$this->load->view('tab/signup_page', array(
-				'user' => $this->socialhappen->get_user(),
-				'page_id' => $page_id,
-				'page_user_fields' => $page_user_fields,
-				'facebook_user'=>$facebook_user,
-				'user_profile_picture'=>$user_facebook_image
-			));
-			
+			$this->load->view('tab/signup_page');
 		}
 	}
 	

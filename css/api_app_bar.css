@@ -340,6 +340,7 @@ padding:5px 10px 5px 20px;
 
 /* Popup Facebook */
 div.popup-fb {
+position:relative;
 width:390px;
 background:#fff;
 padding:15px 15px 5px;
@@ -347,9 +348,207 @@ padding:15px 15px 5px;
 div.popup-fb p {
 margin: 0;
 }
-div.popup-fb div div img {
-width:390px;
+div.popup-fb h2 {
+font-size: 24px;
+font-family: Myriad Pro;
+color: #424241;
+font-weight: normal;
+padding: 0 0 5px;
+border-bottom: 1px dotted #a6a6a6;
+margin: 0 0 15px;
 }
+
+div.popup-fb div.button {
+position:relative;
+min-height:32px;
+margin:10px 0;
+}
+
+div.popup-fb div.button p.right {
+position:absolute;
+right:0;
+top:0;
+}
+
+/* FB popup */
+div.popup-fb div.step {
+position:absolute;
+top:20px;
+right:5px;
+}
+div.popup-fb div.step ul li {
+float:left;
+color:#fff;
+position:relative;
+width:30px;
+text-align:center;
+}
+div.popup-fb div.step ul li span {
+width:21px;
+height:20px;
+text-align:center;
+font-weight:bold;
+background-image: url(../assets/images/bg_fb/bg_button_2.png);
+background-position:186px -41px;
+line-height: 20px;
+display: block;
+}
+div.popup-fb div.step ul li:first-child { text-align:left; }
+div.popup-fb div.step ul li.active span { background-position:218px -41px; padding: 0; }
+div.popup-fb div.step span.connector { border-top:1px solid #d0d0d0; position:absolute; top:10px; left:1px; width:85%}
+li.error p {color:red; font-style:italic;}
+li.error input[type="text"] { border:1px solid red!important; }
+span.required {color:red}
+
+/* Popup Signup SH */
+div.popup-fb.signup div.profile { 
+position:relative;
+margin: 15px 0;
+background-color:#f1f1f2;
+padding-left:70px;
+height:80px;
+}
+div.popup-fb.signup div.profile p.name {
+font-size:12px;
+font-weight:bold;
+color:#38599c;
+line-height:70px;
+}
+div.popup-fb.signup div.profile img {
+position:absolute;
+left:10px;
+top:10px;
+}
+div.popup-fb.signup div.upload-pic {
+width:50px;
+height:20px; 
+cursor: pointer; 
+overflow: hidden; 
+position: absolute;
+left: 10px;
+top: 60px;
+font-size:11px;
+text-align: center;
+}
+div.popup-fb.signup div.upload-pic a {
+color:#65781F;
+}
+div.popup-fb.signup div.upload-pic input {
+filter: alpha(opacity = 0);
+zoom:1;
+opacity:0;
+position:absolute;
+top:0;
+right:0;
+}
+div.popup-fb.signup div.form ul li {
+position:relative;
+margin-bottom: 10px;
+padding-left: 110px;
+}
+div.popup-fb.signup div.form ul li label {
+width:100px;
+display:block;
+text-align:right;
+position:absolute;
+left:0;
+top:4px;
+}
+div.popup-fb.signup div.form ul li input[type="text"] {
+border:1px solid #d0d0d0;
+padding:3px;
+width: 255px;
+}
+div.popup-fb.signup div.form input::-webkit-input-placeholder,
+div.popup-fb.signup div.form input::-moz-placeholder { font-style:italic }
+
+/* Popup Signup Page */
+div.popup-fb.signup-page div.connect { 
+position:relative;
+margin: 15px 0;
+background-color:#f1f1f2;
+width:390px;
+overflow:hidden;
+}
+div.popup-fb.signup-page div.connect div.wrapper { 
+position:relative;
+left:37px;
+top:20px;
+height:95px;
+}
+div.popup-fb.signup-page div.connect div.wrapper div { 
+float:left;
+}
+div.popup-fb.signup-page div.connect div.profile { 
+width:120px;
+text-align:center;
+position:relative;
+}
+div.popup-fb.signup-page div.connect div.profile img { 
+border:1px solid #9a9a9b;
+}
+div.popup-fb.signup-page div.connect div.profile p.name { 
+font-size:12px;
+font-weight:bold;
+color:#38599c;
+display:block;
+width:120px;
+word-wrap: break-word;
+line-height: 30px;
+}
+div.popup-fb.signup-page div.connect div.connect-arrow {
+background: url(../assets/images/bg_fb/bg_button_2.png) no-repeat -182px -38px;
+display: block;
+width: 76px;
+height: 37px;
+margin-top: 12px;
+}
+div.popup-fb.signup-page div.connect>p { 
+line-height:30px;
+text-align:center;
+word-wrap: break-word;
+}
+div.popup-fb.signup-page div.form ul li {
+position:relative;
+margin-bottom: 10px;
+padding-left: 150px;
+}
+div.popup-fb.signup-page div.form ul li label.title {
+text-align: right;
+display: inline-block;
+width: 140px;
+overflow: hidden;
+position: absolute;
+top: 0px;
+left: 0px;
+line-height: 20px;
+}
+div.popup-fb.signup-page div.form ul li div.inputs {
+margin: 7px 0;
+line-height: 20px;
+}
+div.popup-fb.signup-page div.form ul li div.inputs label {
+padding-right: 5px;
+display: inline-block;
+}
+div.popup-fb.signup-page div.form ul li div.inputs input[type=checkbox],
+div.popup-fb.signup-page div.form ul li div.inputs input[type=radio] {
+	top: 2px;
+	position: relative;
+}
+div.popup-fb.signup-page div.form ul li div.inputs input[type=text] { 
+width:220px;
+height:20px;
+}
+div.popup-fb.signup-page div.form ul li div.inputs textarea {
+width:220px;
+}
+div.popup-fb.signup-page div.form ul li div.inputs div.checkbox label {
+display:block;
+}
+div.popup-fb.signup-page div.form p.policy { position:relative; padding-left: 20px; font-size:11px; line-height: 18px; margin-bottom:10px;}
+div.popup-fb.signup-page div.form p.policy input { position:absolute; left:0; top:2px;}
+div.popup-fb.signup-page div.form p.policy a { color:#5c6f23; font-style:italic; font-weight:bold; text-decoration:none;}
 
 div.popup-fb-2col {
 width:390px;
@@ -374,28 +573,6 @@ div.popup-fb-2col > div > div:first-child + div {
 float:left;
 width:180px;
 }
-
-div.popup-fb>h2 {
-border-bottom:1px dotted #a6a6a6;
-color:#424242;
-font-size:18px;
-font-weight:normal;
-margin:0 0 14px;
-padding:0 0 7px;
-}
-
-div.popup-fb div.button {
-position:relative;
-min-height:32px;
-margin:10px 0;
-}
-
-div.popup-fb div.button p.right {
-position:absolute;
-right:0;
-top:0;
-}
-
 div.popup-fb-2col {
 	font-size:12px;
 }
@@ -488,11 +665,14 @@ div.popup-fb-signup-page {
 }
 
 /* Button Facebook */
-*.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome {
-	background: url(../assets/images/bg_fb/bg_button.png) no-repeat;
+*.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome,
+.bt-next, .bt-next-inactive, .bt-cancel, .bt-done, .bt-done-inactive {
+	background: url(../assets/images/bg_fb/bg_button_2.png) no-repeat;
 	cursor: pointer;
 	border: none;
 	color: transparent;
+	text-indent:-9000px;
+	display: block;
 }
 
 *.bt-back_dashboard {
@@ -536,6 +716,11 @@ div.popup-fb-signup-page {
 	height: 32px;
 	background-position: 0 -540px;
 }
+.bt-next {width: 73px; height: 30px; background-position: -256px 0px; display: inline-block;}
+.bt-next-inactive {width: 73px; height: 30px; background-position: -181px 0px; display: inline-block; cursor:default;}
+.bt-cancel {width: 73px; height: 30px; background-position: -106px 0px; display: inline-block;}
+.bt-done {width: 73px; height: 30px; background-position: -256px -76px; display: inline-block;}
+.bt-done-inactive {width: 73px; height: 30px; background-position: -181px -76px; display: inline-block; cursor:default;}
 
 div.header ul.menu>li.notification>ul {
 background-color:#292929;
