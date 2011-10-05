@@ -201,6 +201,7 @@ class SocialHappen{
 				'user_can_create_company' => FALSE
 			);
 		} else {
+			$user_companies = $this->get_user_companies();
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'user' => $this->get_user(),
@@ -219,7 +220,7 @@ class SocialHappen{
 					'common/main',
 					'common/fancybox/jquery.fancybox-1.3.4'
 				),
-				'user_can_create_company' => $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company') //Check user can create company
+				'user_can_create_company' => !$user_companies ? TRUE : $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company') //Check user can create company
 			);
 		}
 		
@@ -228,7 +229,7 @@ class SocialHappen{
 		
 		$this->login();
 		if($this->CI->session->userdata('logged_in') == TRUE){
-			$data['user_companies'] = $this->get_user_companies();
+			$data['user_companies'] = isset($user_companies) ? $user_companies : NULL;
 			if($this->CI->input->get('logged_in') == TRUE){
 				if($data['user_companies']){
 					$data['vars']['popup_name'] = 'bar/select_company';

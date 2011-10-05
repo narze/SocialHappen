@@ -30,7 +30,7 @@ class Bar extends CI_Controller {
 	
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this->load->view('bar/create_company_form');
+			$this->load->view('bar/create_company_view');
 		}
 		else 
 		{
@@ -41,19 +41,21 @@ class Bar extends CI_Controller {
 					       	'company_image' => !$company_image ? base_url().'images/thumb80-80-3.jpg' : $company_image,
 					       	'creator_user_id' => $this->socialhappen->get_user_id()
 						);
-			$company_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'company/json_add', $company), TRUE);
+			//$company_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'company/json_add', $company), TRUE);
+			$this->load->model('company_model', 'companies');
+			$company_id = $this->companies->add_company($company);
 			
-			if ($company_add_result['status'] == 'OK') 
+			if ($company_id) 
 			{
 				$this->load->model('user_companies_model','user_companies');
 				$user_company = array(
 						'user_id' => $this->socialhappen->get_user_id(),
-						'company_id' => $company_add_result['company_id'],
+						'company_id' => $company_id,
 						'user_role' => 1 //Company Admin
 					);
-				if($this->user_companies->add_user_company($user_company)){
+				if($result = $this->user_companies->add_user_company($user_company)){
 					echo "Company created<br />";  
-					echo anchor("company/{$company_add_result['company_id']}", 'Go to company');
+					echo anchor("company/{$company_id}", 'Go to company');
 				} else {
 					echo "Error adding user company";
 				}

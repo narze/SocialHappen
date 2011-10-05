@@ -50,24 +50,35 @@ $(function(){
 		
 	}
 	
+	$('form.create-company-form').die('submit');
+	$('form.create-company-form').live('submit',function(){
+		$(this).ajaxSubmit({
+			target:'div.popup_create-company',
+			replaceTarget:true
+		});
+		return false;
+	});
+	
 	$('.bt-create_company').live('click',function(){
 		$.fancybox({
 			href: base_url+'bar/create_company',
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
 			padding: 0,
-			scrolling: 'no',
-			onComplete: function(){
-				$('#create-company-form').load(base_url+'bar/create_company_form', label);
-				$('form.create-company-form').die('submit');
-				$('form.create-company-form').live('submit',function(){
-					$(this).ajaxSubmit({target:'#create-company-form'});
-					return false;
-				});
-			}
+			scrolling: 'no'
 		});
 		
+		label();
 		
+		$('form.create-company-form').die('submit');
+		$('form.create-company-form').live('submit',function(){
+			$(this).ajaxSubmit({
+				target:'div.popup_create-company',
+				replaceTarget:true
+			});
+			return false;
+		});
+
 		return false;
 	});
 	
