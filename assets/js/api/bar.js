@@ -8,8 +8,7 @@ shregister = function(){
 		return false;
 	});
 	
-	$('form.signup-form input').live('keyup', function(){
-		
+	$('div.popup-fb.signup').live('keyup mousemove', function(){
 		var complete = true;
 		$.each( $('form.signup-form input[type="text"]'), function () {
 			if( $(this).val() == '') complete = false;
@@ -100,6 +99,25 @@ onLoad = function(){
 		});
 		
 		socialhappen_popup();
+		
+		$('div.popup-fb.signup-page #policy').live('click', function() {
+			if ( $('#policy:checked').length > 0 ) $('a.bt-done-inactive').attr('class', 'bt-done');
+			else $('a.bt-done').attr('class', 'bt-done-inactive');
+		});
+			
+		$('div.popup-fb.signup-page a.bt-done').die('click');
+		$('div.popup-fb.signup-page a.bt-done').live('click',function(){
+			$('.signup-form').ajaxSubmit({
+				target:'div.popup-fb.signup-page',
+				replaceTarget: true
+			});
+		});
+		
+		$('div.popup-fb a.bt-cancel, a.bt-start').live('click',function(){
+			$.fancybox.close();
+			window.parent.location.reload(); //Error - Unsafe JavaScript attempt to access frame 
+		});
+		
 	});
 };
 
@@ -137,19 +155,6 @@ socialhappen_popup = function(){
 			$.fancybox({
 				href: base_url+'tab/signup_page/'+page_id,
 				modal: true
-			});
-			
-			$('#policy').live('click', function() {
-				if ( $('#policy:checked').length > 0 ) $('a.bt-done-inactive').attr('class', 'bt-done');
-				else $('a.bt-done').attr('class', 'bt-done-inactive');
-			});
-			
-			$('a.bt-done').die('click');
-			$('a.bt-done').live('click',function(){
-				$('.signup-form').ajaxSubmit({
-					target:'div.popup-fb.signup-page',
-					replaceTarget: true
-				});
 			});
 		}
 	}

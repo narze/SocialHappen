@@ -135,6 +135,10 @@ $(function(){
 					$('div.list_resent-activity').children('ul').children('li:eq('+((page_index * per_page)+i)+')').show();
 				}
 				
+				if($('div.pagination-activity').find('a').attr('href') == '#') { 
+					$('div.pagination-activity').find('a').removeAttr('href'); // Remove href="#"
+				}
+				
 				if($('div.pagination-activity').find('a').length == 0) {
 					$('div.pagination-activity').find('div.pagination').remove();
 				}
@@ -149,6 +153,8 @@ $(function(){
 					next_text:null,
 					prev_text:null
 				});
+				
+				
 			}
 			
 			$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id,function(){

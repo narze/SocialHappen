@@ -32,7 +32,7 @@
     <ul class="menu">
 
 	  <?php if($view_as == 'guest') : ?>
-	  <li class="guest">
+	  <li class="guest last-child">
 		<a href="<?php echo $signup_link; ?>" target="_top">Sign up SocialHappen</a>
 	  </li>
 	  <?php endif; ?>
@@ -45,7 +45,7 @@
         <li class="separator last-child"><a class="a-notification" href="<?php echo $all_notification_link; ?>" <?php echo $app_mode ? 'target="_top"' : ''; ?>>See All Notifications</a></li>
       </ul>
     </li>
-	  <li class="profile toggle">
+	  <li class="profile toggle<?php echo $view_as!='admin' ? ' last-child' : ''; ?>">
         <div>
 			<p class="pic">
 				<img src="<?php echo $user['user_image']; ?>" alt="<?php echo $user['user_first_name']. ' '. $user['user_last_name'];?>" />
@@ -67,7 +67,7 @@
 	  <?php endif; ?>
 	  
 	  <?php if($view_as == 'admin') : ?>
-	  <li class="setting toggle">
+	  <li class="setting toggle last-child">
 		<div>Settings</div>
 		<ul>
           <li><a href="<?php echo base_url()."page/".$page_id;?>" target="_top" >Page Settings</a></li>

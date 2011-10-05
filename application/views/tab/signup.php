@@ -11,7 +11,7 @@
 	</ul>
 	</div>
 	
-    <div><img src="<?php echo base_url(); ?>images/register-step-01.png" /></div>
+    <div><img src="<?php echo base_url(); ?>images/register-step-01.jpg" /></div>
 
 	<div id="signup-form">
 		<?php $attributes = array('class' => 'signup-form', 'id' => ''); echo form_open('tab/signup/'.$page_id, $attributes); ?>
@@ -33,11 +33,13 @@
 					<?php echo form_error('email')? '<p>Enter email in the format : someone@example.com.</p>':''; ?>
 				</li>
 			</ul>
-			<p style="text-align:right;">
-				<a class="bt-cancel"><span>Cancel</span></a>
-				<a class="bt-next-inactive"><span>Next</span></a>
-				<?php echo form_submit( 'submit-form', 'Submit', 'style="display:none"'); ?>
-			</p>
+			<div class="buttons">
+				 <p class="right">
+					<a class="bt-cancel"><span>Cancel</span></a>
+					<a class="bt-next-inactive"><span>Next</span></a>
+					<?php echo form_submit( 'submit-form', 'Submit', 'style="display:none"'); ?>
+				</p>
+			</div>
         </div>
 		<?php echo form_close(); ?>	
     </div>
