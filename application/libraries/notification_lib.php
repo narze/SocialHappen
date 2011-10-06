@@ -54,7 +54,44 @@ class Notification_lib
 		if(empty($user_id) || empty($message) || empty($link)){
 			return FALSE;
 		}
+		$this->_send_notification($user_id, $message, $link);
 		return $this->CI->notification->add((int)$user_id, $message, $link);
+	}
+	
+	/**
+	 * private function
+	 */
+	function _send_notification($user_id = NULL, $message = NULL, $link = NULL){
+		if(empty($user_id) || empty($message) || empty($link)){
+			return FALSE;
+		}
+		$this->CI->load->library('Curl');
+		$notification_message = json_encode((object)array(
+			'message' => $message,
+			'link' => $link
+		));
+		
+		$notification_amount = $this->count_unread($user_id);
+		
+		$result = $this->_get(
+		'http://127.0.0.1:8080/publish?key=WOW&notification_message='
+		.urlencode($notification_message).'&user_id='.$user_id
+		.'&notification_amount='.$notification_amount);
+	}
+	
+	/**
+	 * HTTP GET method wrapper
+	 * @param url
+	 * @return result
+	 * @author Metwara Narksook
+	 */
+	function _get($url) {
+		try{
+			$return = @file_get_contents($url);
+		}catch(exception $e){
+			$retun = FALSE;
+		}
+		return $return;
 	}
 	
 	/**
@@ -110,5 +147,34 @@ class Notification_lib
 	}
 }
 
+/*
+
+<script src="http://socialhappen.dyndns.org:8080/socket.io/socket.io.js"></script>
+<script>
+	var user_id = 20;
+	var session = 'SESSIONNAJA';
+
+  var socket = io.connect('http://socialhappen.dyndns.org:8080');
+  
+  socket.on('connect', function(){
+  	console.log('send subscribe');
+  	socket.emit('subscribe', user_id, session);
+  });
+  
+  socket.on('subscribeResult', function (data) {
+  	console.log('got subscribe result: ' + JSON.stringify(data));
+  });
+  
+  socket.on('newNotificationAmount', function (notification_amount) {
+  	console.log('notification_amount: ' + notification_amount);
+  });
+  
+  socket.on('newNotificationMessage', function (notification_message) {
+  	console.log('notification_message: ' + JSON.stringify(notification_message));
+  });
+</script>
+http://socialhappen.dyndns.org:8080/publish?key=WOW&notification_message={%22message%22:%22You%20got%20new%20achievement!%22,%22link%22:%22http://socialhappen.com/passport%22}&user_id=5001&notification_amount=100
+
+*/
 /* End of file notification_lib.php */
 /* Location: ./application/libraries/notification_lib.php */
