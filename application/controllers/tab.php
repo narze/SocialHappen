@@ -620,13 +620,12 @@ class Tab extends CI_Controller {
 			);
 			
 			if($this->page_users->add_page_user($data)){
-				echo "finished";
-				$this->load->view('common/redirect',array('refresh_parent' => TRUE));
+				$this->load->view('tab/signup_complete');
 			} else {
-				echo "already register/cannot signup page";
+				$this->load->view('tab/signup_page', array('error'=>'Already register/cannot signup page'));
 			}
 			
-			$this->load->view('tab/signup_page');
+			
 		}
 	}
 	

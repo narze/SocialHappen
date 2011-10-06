@@ -179,9 +179,6 @@ sh_popup = function(){
 			}
 		}
 	})(jQuery);
- }
+}
  
- 
-
-
-	getScript('http://code.jquery.com/jquery-latest.min.js', 'jQuery', loadChildScripts);
+getScript('http://code.jquery.com/jquery-latest.min.js', 'jQuery', loadChildScripts);

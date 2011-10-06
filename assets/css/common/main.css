@@ -485,7 +485,9 @@ div.dragging-page ul li p.pagename
 	padding: 0 0 7px 8px;
 	overflow: hidden;
 	width: 82px;
+	height: 17px;
 	line-height: 12px;
+	word-wrap: break-word;
 }
 div.dragging-app ul li p
 {
@@ -496,7 +498,9 @@ div.dragging-app ul li p.appname {
 	padding: 0 0 7px 8px;
 	overflow: hidden;
 	width: 64px;
+	height: 17px;
 	line-height: 12px;
+	word-wrap: break-word;
 }
 div.dragging-page ul li p span.button {
 	left:8px;
@@ -911,6 +915,9 @@ div.white-box-01 p {
 	line-height:15px;
 	margin:10px 0 5px 0;
 }
+div#user-tabs div.user-info {
+	padding:0 30px;
+}
 div#user-tabs div.user-info ul {
 	width:500px;
 	margin:20px auto;
@@ -927,6 +934,16 @@ div#user-tabs div.user-info label {
 	text-align:right;
 	position:absolute;
 	left:0;
+}
+div#user-tabs div.user-info fieldset {
+	border-top: 5px solid #e1e1e1;
+	padding-left:20px;
+	margin-top:20px;
+}
+div#user-tabs div.user-info legend {
+	padding: 0 10px;
+	font-size:20px;
+	color:#555555;
 }
 div#user-tabs div.activities-table {
 	position:relative;

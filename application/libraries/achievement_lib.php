@@ -451,8 +451,12 @@ class Achievement_lib
 				
 				$this->CI->achievement_user->add($user_id, $achievement['_id'], 
 					$app_id, $info['app_install_id'], $achieved_info);
+					
 				$this->CI->load->library('notification_lib');
-				$this->CI->notification_lib->add($user_id, 'You have unlocked new achievement.', '');
+				$message = 'You have unlocked a new achievement: ' . $achievement['info']['name'] . '.';
+				$link = '#';
+				$this->CI->notification_lib->add($user_id, $message, $link);
+				// $this->CI->notification_lib->add($user_id, 'You have unlocked new achievement.', '');
 				// echo 'user_id: '.$user_id.' got reward!';
 			}
 		}

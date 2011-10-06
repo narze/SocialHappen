@@ -151,7 +151,7 @@ class User extends CI_Controller {
 	
 	function _get_user_activity_recent_apps($page_id, $user_id){
 		date_default_timezone_set('Asia/Bangkok');
-		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'user_id' => (int)$user_id));
+		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'user_id' => (int)$user_id), $limit = 30, $offset = 0);
 		
 		$app_ids = array();
 		foreach ($activity_db as $activity) {
@@ -164,6 +164,7 @@ class User extends CI_Controller {
 		foreach($app_ids as $app_id)
 		{
 			$app_list[] = $this->app->get_app_by_app_id($app_id);
+			if(isset($app_list[5])) break; //limit 6 apps
 		}
 		return $app_list;
 	}

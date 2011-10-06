@@ -413,9 +413,12 @@ class achievement_lib_test extends CI_Controller {
 		
 		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-		
+		// echo '<pre>';
+		// print_r($achievement_id);
+		// echo '</pre>';
 		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
 		$this->unit->run(count($result), 1, 'increment', print_r($result, TRUE));
+		// print_r($result);
 		
 		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
