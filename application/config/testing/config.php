@@ -16,6 +16,11 @@
 */
 $config['base_url']	= 'https://beta.socialhappen.com/';
 
+/**
+ * Node.js server base url
+ */
+$config['node_base_url'] = 'http://beta.socialhappen.com:8080/';
+
 /*
 |--------------------------------------------------------------------------
 | SocialHappen test mode

@@ -16,6 +16,12 @@
 */
 $config['base_url']	= 'https://socialhappen.dyndns.org/socialhappen/';
 
+/**
+ * Node.js server base url
+ */
+$config['node_base_url'] = 'http://socialhappen.dyndns.org:8080/';
+
+
 /*
 |--------------------------------------------------------------------------
 | SocialHappen test mode

@@ -1,4 +1,15 @@
-shregister = function(){
+sh_guest = function(){
+	(function($){
+		$.fancybox({
+			href: base_url+'tab/guest'
+		});
+		$('a.bt-don-awesome').die('click');
+		$('a.bt-don-awesome').live('click',function(){
+			$.fancybox.close();
+		});
+	})(jQuery);
+}
+sh_register = function(){
 	(function($){
 		$.fancybox({
 			href: base_url+'tab/signup/'+page_id
@@ -106,21 +117,15 @@ onLoad = function(){
 				if(! mouse_is_inside) $('.toggle, .notificationtoggle').find('ul').hide();
 			});
 			
-			socialhappen_popup();
+			sh_popup();
 		});
 	})(jQuery);
 };
 
-socialhappen_popup = function(){
+sh_popup = function(){
 	(function($){
-		if(view_as == 'guest'){
-			$.fancybox({
-				href: base_url+'tab/guest'
-			});
-			$('a.bt-don-awesome').die('click');
-			$('a.bt-don-awesome').live('click',function(){
-				$.fancybox.close();
-			});
+		if(view_as == 'guest'){ //@TODO : User should not see view_as, let's decide it server-side
+			sh_guest();
 		} else if(view_as == 'admin'){
 			if(page_app_installed_id!=0) {
 				$.fancybox({

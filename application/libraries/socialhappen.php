@@ -721,7 +721,8 @@ class SocialHappen{
 			'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 			'notification_amount' => $notification_amount,
 			'all_notification_link' => $app_mode ? $this->get_tab_url_by_app_install_id($app_install_id).'&app_data='.base64_encode(json_encode($app_data)) : base_url().'tab/notifications/'.$user['user_id'],
-			'app_mode' => $app_mode
+			'app_mode' => $app_mode,
+			'node_base_url' => $this->CI->config->item('node_base_url')
 		));
 		return $this->CI->load->view('api/app_bar_view', array(), TRUE);
 	}

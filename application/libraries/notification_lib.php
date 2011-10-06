@@ -66,26 +66,27 @@ class Notification_lib
 			return FALSE;
 		}
     
-    if(empty($message) || empty($link)){
-      $notification_amount = $this->count_unread($user_id);
-      
-      $result = $this->_get(
-      'http://127.0.0.1:8080/publish?key=WOW&user_id='.$user_id
-      .'&notification_amount='.$notification_amount);
-      
-    }else if(isset($message) && isset($link)){
-      $notification_message = json_encode((object)array(
-        'message' => $message,
-        'link' => $link
-      ));
-      
-      $notification_amount = $this->count_unread($user_id);
-      
-      $result = $this->_get(
-      'http://127.0.0.1:8080/publish?key=WOW&notification_message='
-      .urlencode($notification_message).'&user_id='.$user_id
-      .'&notification_amount='.$notification_amount);
-    }
+		$node_base_url = $this->CI->config->item('node_base_url');
+		if(empty($message) || empty($link)){
+		  $notification_amount = $this->count_unread($user_id);
+		  
+		  $result = $this->_get(
+		  $node_base_url.'publish?key=WOW&user_id='.$user_id
+		  .'&notification_amount='.$notification_amount);
+		  
+		}else if(isset($message) && isset($link)){
+		  $notification_message = json_encode((object)array(
+			'message' => $message,
+			'link' => $link
+		  ));
+		  
+		  $notification_amount = $this->count_unread($user_id);
+		  
+		  $result = $this->_get(
+		  $node_base_url.'publish?key=WOW&notification_message='
+		  .urlencode($notification_message).'&user_id='.$user_id
+		  .'&notification_amount='.$notification_amount);
+		}
 		
 	}
 	
@@ -99,7 +100,7 @@ class Notification_lib
 		try{
 			$return = @file_get_contents($url);
 		}catch(exception $e){
-			$retun = FALSE;
+			$return = FALSE;
 		}
 		return $return;
 	}

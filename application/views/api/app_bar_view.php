@@ -33,7 +33,7 @@
 
 	  <?php if($view_as == 'guest') : ?>
 	  <li class="guest">
-		<a href="<?php echo $signup_link; ?>" target="_top">Sign up SocialHappen</a>
+		<a onclick="sh_guest()">Sign up SocialHappen</a>
 	  </li>
 	  <?php endif; ?>
 
@@ -85,10 +85,10 @@
 	  
     </ul>
   </div>
-  <script src="http://socialhappen.dyndns.org:8080/socket.io/socket.io.js"></script>
+  <script src="<?php echo $node_base_url;?>socket.io/socket.io.js"></script>
   <script>
     var session = 'SESSIONNAJA';
-    var socket = io.connect('http://socialhappen.dyndns.org:8080');
+    var socket = io.connect('<?php echo $node_base_url;?>');
     
     socket.on('connect', function(){
       console.log('send subscribe');

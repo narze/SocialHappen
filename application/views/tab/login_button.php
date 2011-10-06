@@ -20,7 +20,7 @@
 	function fblogin() {
 		FB.login(function(response) {
 			if (response.session) {
-				parent.shregister(); //Call popup function
+				parent.sh_register(); //Call popup function
 			}
 		}, {perms:'<? echo $facebook_default_scope ; ?>'});
 	}
