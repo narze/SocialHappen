@@ -176,23 +176,19 @@ class Facebook {
 	 * @author Manassarn M.
 	 */
 	function get_page_access_token_by_facebook_page_id($facebook_page_id = NULL){
+		if(!$facebook_page_id) {
+			return NULL;
+		}
 		if(isset($this->page_access_token[$facebook_page_id])) {
 			return $this->page_access_token[$facebook_page_id];
 		}
 		$cookie = $this -> get_facebook_cookie();
-		$page_access_token = NULL;
-		$accounts = json_decode(file_get_contents('https://graph.facebook.com/me/accounts?access_token=' . $cookie['access_token']),TRUE);
-		if(isset($accounts['data'])){
-			foreach($accounts['data'] as $account){
-				if(isset($account['id']) && isset($account['access_token'])){
-					$this->page_access_token[$account['id']] = $account['access_token'];
-					if($account['id'] == $facebook_page_id){
-						$page_access_token = $account['access_token'];
-					}
-				}
-			}
-		} 
-		return $page_access_token;
+		$data = json_decode(file_get_contents('https://graph.facebook.com/'.$facebook_page_id.'?fields=access_token&access_token=' . $cookie['access_token']),TRUE);
+		if(isset($data['access_token'])){
+			return $data['access_token'];
+		} else {
+			return NULL;
+		}
 	}
 	
 	/**
