@@ -289,6 +289,7 @@ function show_installed_page_in_company() {
 									// show_installed_app_in_page(page_id,facebook_page_id); //no page_id
 									// show_available_app_in_page(page_id);
 									console.log("app/curl json mismatch 1 : " + json);
+									console.log(json);
 									$(dragging_object).remove();
 									alert("This page is already installed by another company.");
 								}
