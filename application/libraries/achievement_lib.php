@@ -63,7 +63,7 @@ class Achievement_lib
 	 */
 	function add_achievement_info($app_id = NULL, $app_install_id = NULL,
 							 $info = array(), $criteria = array()){
-		if(empty($app_id) || empty($info) || empty($criteria)) return FALSE;
+		if(!isset($app_id) || empty($info) || empty($criteria)) return FALSE;
 		$this->CI->load->model('achievement_info_model','achievement_info');
 
 		return $this->CI->achievement_info->add($app_id, $app_install_id, $info

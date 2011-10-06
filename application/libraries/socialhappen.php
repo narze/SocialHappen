@@ -27,13 +27,20 @@ class SocialHappen{
 		'page_status' => array(1=>'Not Installed', 2=>'Installed'),
 		'user_gender' => array(1=>'Not sure', 2=>'Female', 3=>'Male'),
 		'audit_action' => array( //See actions in MongoDB
-			1 => 'Install App', 2 => 'Install App To Page', 3 => 'Remove App', 4 => 'Update Config', 5 => 'Install Page',
+			1 => 'Install App', 2 => 'Install App To Page', 3 => 'Remove App', 4 => 'Update Config', 5 => 'Install Page', 6 => 'Buy Package',
 			101 => 'User Register SocialHappen',
 			102 => 'User Register App',
 			103 => 'User Visit',
 			104 => 'User Action',
 			105 => 'User Join Campaign',
-			106 => 'User Register Page'
+			106 => 'User Register Page',
+			107 => 'User Share Profile',
+			108 => 'User Share',
+			109 => 'User Login',
+			110 => 'User Connect Twitter',
+			111 => 'User Connect Facebook',
+			112 => 'User Connect Foursquare',
+			113 => 'User Invite',
 		)
 	);
 	

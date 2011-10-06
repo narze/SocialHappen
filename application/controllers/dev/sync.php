@@ -1649,12 +1649,352 @@ class Sync extends CI_Controller {
 				)
 			),
 		);
-		foreach($achievement_infos as $achievement_info){
+		$platform_achievements = array(
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'I\'m using SocialHappen',
+					'description' => 'Share profile the 1st time',
+					'criteria_string' => array('Share Profile = 1')
+				),
+				'criteria' => array(
+					'action.107.count' => 1
+				),
+				'score' => 10
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Bragger',
+					'description' => 'Share profile 10 times',
+					'criteria_string' => array('Share Profile = 10')
+				),
+				'criteria' => array(
+					'action.107.count' => 10
+				),
+				'score' => 50
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Hello World',
+					'description' => 'Share the 1st time',
+					'criteria_string' => array('Share = 1')
+				),
+				'criteria' => array(
+					'action.108.count' => 1
+				),
+				'score' => 10
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Speaker',
+					'description' => 'Share 10 times',
+					'criteria_string' => array('Share = 10')
+				),
+				'criteria' => array(
+					'action.108.count' => 10
+				),
+				'score' => 50
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Crazy Reporter',
+					'description' => 'Share 50 times',
+					'criteria_string' => array('Share = 20')
+				),
+				'criteria' => array(
+					'action.108.count' => 50
+				),
+				'score' => 250
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'News Channel',
+					'description' => 'Share 100 times',
+					'criteria_string' => array('Share = 100')
+				),
+				'criteria' => array(
+					'action.108.count' => 100
+				),
+				'score' => 500
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Share Troll',
+					'description' => 'Share 250 times',
+					'criteria_string' => array('Share = 250')
+				),
+				'criteria' => array(
+					'action.108.count' => 250
+				),
+				'score' => 1000
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Just Arrived',
+					'description' => 'Sign Up SocialHappen',
+					'criteria_string' => array('Signup = 1')
+				),
+				'criteria' => array(
+					'action.101.count' => 1
+				),
+				'score' => 10
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Hello the Club',
+					'description' => 'First time register to any page',
+					'criteria_string' => array('Register Page = 1')
+				),
+				'criteria' => array(
+					'action.106.count' => 1
+				),
+				'score' => 10
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Club Newbie',
+					'description' => 'Joined 3 SocialHappen Pages',
+					'criteria_string' => array('Register Page = 3')
+				),
+				'criteria' => array(
+					'action.106.count' => 3
+				),
+				'score' => 50
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Club Master',
+					'description' => 'Joined 10 SocialHappen Pages',
+					'criteria_string' => array('Register Page = 10')
+				),
+				'criteria' => array(
+					'action.106.count' => 10
+				),
+				'score' => 50
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Hello Old Friend',
+					'description' => 'Login 5 times',
+					'criteria_string' => array('Login Count = 5')
+				),
+				'criteria' => array(
+					'action.109.count' => 5
+				),
+				'score' => 10
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Kudos For Coming Back',
+					'description' => 'Login 10 times',
+					'criteria_string' => array('Login Count = 10')
+				),
+				'criteria' => array(
+					'action.109.count' => 1
+				),
+				'score' => 50
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Loyal Friend',
+					'description' => 'Login 50 times',
+					'criteria_string' => array('Login Count = 10')
+				),
+				'criteria' => array(
+					'action.109.count' => 1
+				),
+				'score' => 100
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'The Tweet Bird',
+					'description' => 'Connect to Twitter',
+					'criteria_string' => array('Connect Twitter Count = 1')
+				),
+				'criteria' => array(
+					'action.110.count' => 1
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'The Mark Zuckerburg Network Effect',
+					'description' => 'Connect to Facebook',
+					'criteria_string' => array('Connect Facebook Count = 1')
+				),
+				'criteria' => array(
+					'action.111.count' => 1
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'I\'m a Mayor',
+					'description' => 'Connect to Foursquare',
+					'criteria_string' => array('Connect Foursquare Count = 1')
+				),
+				'criteria' => array(
+					'action.112.count' => 1
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'You\'re Not Alone',
+					'description' => 'Invite your 1st friend',
+					'criteria_string' => array('Invite = 1')
+				),
+				'criteria' => array(
+					'action.113.count' => 1
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'I Have A Team',
+					'description' => 'Invite 10 friends',
+					'criteria_string' => array('Invite = 10')
+				),
+				'criteria' => array(
+					'action.113.count' => 10
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Social Animal',
+					'description' => 'Invite 50 friends',
+					'criteria_string' => array('Invite = 50')
+				),
+				'criteria' => array(
+					'action.113.count' => 50
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Celebrity',
+					'description' => 'Invite 100 Friends',
+					'criteria_string' => array('Invite = 100')
+				),
+				'criteria' => array(
+					'action.113.count' => 100
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'The Invitation Engine',
+					'description' => 'Invite 500 Friends',
+					'criteria_string' => array('Invite = 500')
+				),
+				'criteria' => array(
+					'action.113.count' => 500
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'You Are Admin',
+					'description' => 'Buy a package',
+					'criteria_string' => array('Package Bought = 1')
+				),
+				'criteria' => array(
+					'action.6.count' => 1
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Nobel',
+					'description' => 'Buy the most expensive package',
+					'criteria_string' => array('Package Bought = Most Expensive')
+				),
+				'criteria' => array(
+					'action.6.count' => 65535 //@TODO : fix this criteria
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Admin Newbie',
+					'description' => 'Install SocialHappen to Facebook page',
+					'criteria_string' => array('Install page = 1')
+				),
+				'criteria' => array(
+					'action.5.count' => 1
+				),
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'app_install_id' => NULL,
+				'info' => array(
+					'name' => 'Page Admin Newbie', //Temp name
+					'description' => 'Install apps to SocialHappen page',
+					'criteria_string' => array('Install app to page = 1')
+				),
+				'criteria' => array(
+					'action.2.count' => 1
+				),
+				'score' => 0
+			),
+		);
+		foreach(array_merge($achievement_infos, $platform_achievements) as $achievement_info){
 			$this->achievement_lib->add_achievement_info(
 				$achievement_info['app_id'], $achievement_info['app_install_id'],
 				$achievement_info['info'], $achievement_info['criteria']);
 		}
-		echo 'Added '.count($achievement_infos).' achievement infos<br />';
+		echo 'Added '.count(array_merge($achievement_infos, $platform_achievements)).' achievement infos<br />';
 		echo 'MongoDB reset successfully';
 	}
 }
