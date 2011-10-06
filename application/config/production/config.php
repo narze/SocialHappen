@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://socialhappen.com/socialhappen/';
+$config['base_url']	= 'https://socialhappen.com/socialhappen/';
 
 /*
 |--------------------------------------------------------------------------

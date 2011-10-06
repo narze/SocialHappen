@@ -296,7 +296,7 @@ class Home extends CI_Controller {
 		$this->socialhappen->ajax_check();
 		$data = array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
-			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+			'facebook_default_scope' => $this->config->item('facebook_admin_scope'),
 			'next' => $this->input->get('next') ? $this->input->get('next') : ''
 		);
 		$this -> load -> view('home/facebook_connect', $data);
