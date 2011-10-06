@@ -60,6 +60,7 @@ var httpServer = http.createServer(function (req, res) {
 	  	res.end('Y U COME ?\n');
 	}
 });
+httpServer.listen(HTTP_PORT);
 
 var httpsServer = https.createServer(options, function (req, res) {
   res.writeHead(200);
