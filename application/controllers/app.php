@@ -329,7 +329,7 @@ class App extends CI_Controller {
 			} else {
 				log_message('error','install facebook app to page tab failed');
 				$result['status'] = 'ERROR';
-				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
+				$result['message'] = 'Please manually add Socialhappen facebook app by this <a href="https://www.facebook.com/add.php?api_key='.$facebook_app_id.'&pages=1&page='.$facebook_page_id.'">link</a>';
 			}
 		}
 		echo json_encode($result);
