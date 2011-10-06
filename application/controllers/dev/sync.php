@@ -1958,7 +1958,7 @@ class Sync extends CI_Controller {
 					'criteria_string' => array('Package Bought = Most Expensive')
 				),
 				'criteria' => array(
-					'action.6.count' => 65535 //@TODO : fix this criteria
+					'action.7.count' => 1
 				),
 				'score' => 0
 			),
