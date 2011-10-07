@@ -553,7 +553,7 @@ function show_available_page_in_company() {
 				$(".right-panel").find('.dragging-page').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 			},
 			success: function(json) {
-				var ul_element=$(".right-panel").find('.dragging-page').find('ul');
+				var ul_element=$(".right-panel").find('.dragging-page').find('ul').empty();
 				available_pages=new Array();
 				for(i in json) {
 					available_pages[''+json[i].id]=json[i];
