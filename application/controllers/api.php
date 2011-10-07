@@ -1448,11 +1448,6 @@ class Api extends CI_Controller {
 		echo '<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>';
 		echo '<link type="text/css" rel="stylesheet" href="'.$result['css'].'" />';
 		echo '<div style="width:800px;margin:0 auto;">'.$result['html'].'</div>';
-		?>
-		
-		
-		
-		<?
 	}
 
   function show_notification(){
