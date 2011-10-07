@@ -93,9 +93,9 @@ class Achievement_lib
 		if(empty($app_id) || empty($info) || empty($criteria) || empty($achievement_id))
 		  return FALSE;
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		echo '<pre>';
-		print_r($criteria);
-		echo '</pre>';
+		// echo '<pre>';
+		// print_r($criteria);
+		// echo '</pre>';
 		return $this->CI->achievement_info->set($achievement_id, $app_id,
 		 $app_install_id, $info, $criteria);
 	}
@@ -451,6 +451,8 @@ class Achievement_lib
 				
 				$this->CI->achievement_user->add($user_id, $achievement['_id'], 
 					$app_id, $info['app_install_id'], $achieved_info);
+				$this->CI->load->library('notification_lib');
+				$this->CI->notification_lib->add($user_id, 'You have unlocked new achievement.', '');
 				// echo 'user_id: '.$user_id.' got reward!';
 			}
 		}

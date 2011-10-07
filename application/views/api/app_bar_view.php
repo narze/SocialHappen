@@ -85,7 +85,7 @@
 	  
     </ul>
   </div>
-  <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
+  <script src="http://socialhappen.dyndns.org:8080/socket.io/socket.io.js"></script>
   <script>
     var session = 'SESSIONNAJA';
     var socket = io.connect('http://socialhappen.dyndns.org:8080');
