@@ -15,7 +15,9 @@ if(isset($_GET['next'])) {
 	$host = $_SERVER['HTTP_HOST'];
 	$self = $_SERVER['PHP_SELF'];
 	$query = !empty($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
-	$url = !empty($query) ? "http://$host$self?$query" : "http://$host$self";
+	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    
+	$url = !empty($query) ? "{$protocol}{$host}{$self}?{$query}" : "{$protocol}{$host}{$self}";
 	$url = str_replace("index.php/","",$url);
 }
 echo form_open($url);
