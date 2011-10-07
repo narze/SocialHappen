@@ -1,8 +1,8 @@
 {header}
 {company_image_and_name}
 {breadcrumb}
-<div id="popup-gotofacebook" style="display:none">
-	<div class="popup-gotofacebook">
+<div id="hidden-notice" style="display:none">
+	<div class="goto-facebook">
 		<h2 class="in-popup">Page installation : One step more</h2>
 		<p><b>Please, go to facebook to complete the action.</b></p>
 		<a class="bt-go-facebook">Go to facebook</a>

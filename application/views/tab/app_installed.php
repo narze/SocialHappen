@@ -2,7 +2,7 @@
     <h2>Install app successful</h2>
     <div>
       <div><img src="<?php echo base_url(); ?>assets/images/imagedisplay-427-128.jpg" alt="" /></div>
-      <div class="button">
+      <div class="buttons">
         <p class="right">
           <a class="bt-back_dashboard" target="_top" href="<?php echo base_url()."app/{$app_install_id}";?>"><span>Back to dashboard</span></a>
           <a class="bt-config" href="<?php echo base_url()."app/config/{$app_install_id}";?>"><span>Config</span></a>
