@@ -9,7 +9,7 @@
 		{ ?>
 			<div class="wrapper-details">
 				<div class="notice warning">				
-					<div class="popup-gotofacebook">
+					<div class="goto-facebook">
 						<h2 class="in-popup">Page installation : One step more</h2>
 						<p><b>Please, go to facebook to complete the action.</b></p>
 						<?php if($facebook_tab_url) : ?>
