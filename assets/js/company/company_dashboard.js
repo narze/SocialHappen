@@ -286,6 +286,8 @@ function show_installed_page_in_company() {
 									});
 									$(dragging_object).attr('onclick','view_page_app('+page_id+','+facebook_page_id+',"'+page_name+'")');
 									$(dragging_object).append('<input type="hidden" class="page_id" value="'+ page_id +'">');
+									$('.right-panel .dragging-page ul input.facebook_page_id[value="'+facebook_page_id+'"]').parents('li').remove();
+									
 								} else {
 									// show_installed_app_in_page(page_id,facebook_page_id); //no page_id
 									// show_available_app_in_page(page_id);
@@ -554,7 +556,7 @@ function show_available_page_in_company() {
 				$(".right-panel").find('.dragging-page').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 			},
 			success: function(json) {
-				var ul_element=$(".right-panel").find('.dragging-page').find('ul');
+				var ul_element=$(".right-panel").find('.dragging-page').find('ul').empty();
 				available_pages=new Array();
 				for(i in json) {
 					available_pages[''+json[i].id]=json[i];
