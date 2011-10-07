@@ -14,7 +14,7 @@ shregister = function(){
 	});
 }
 	
-function getScript(url, success) {
+getScript = function(url, success) {
 	var script     = document.createElement('script');
 		 script.src = url;
 	var head = document.getElementsByTagName('head')[0],
@@ -34,13 +34,13 @@ function getScript(url, success) {
 	head.appendChild(script);
 };
 
-getScript('http://code.jquery.com/jquery-latest.min.js', function(){ console.log('jquery loaded');
-	getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.pack.js', function(){console.log('fancybox loaded');
+loadChildScripts = function(){
+	getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', function(){console.log('fancybox loaded');
 		getScript(base_url+'assets/js/common/jquery.form.js', function(){ console.log('form loaded');
 			onLoad();
 		});
 	});
-});
+}
 
 onLoad = function(){
 	$(function(){
@@ -138,3 +138,11 @@ socialhappen_popup = function(){
 		}
 	}
  }
+ 
+ 
+
+if (typeof jQuery == 'undefined') {
+	getScript('http://code.jquery.com/jquery-latest.min.js', function(){loadChildScripts();});
+} else {
+	(function(){loadChildScripts();})();
+}

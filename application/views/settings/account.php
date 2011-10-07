@@ -38,17 +38,8 @@
                 </li>
                 <li><strong>First name :</strong><?php echo form_error('first_name'); ?><input id="first_name" type="text" name="first_name" maxlength="255" value="<?php echo set_value('first_name',$user['user_first_name']); ?>"  /></li>
                 <li><strong>Last name :</strong><?php echo form_error('last_name'); ?><input id="last_name" type="text" name="last_name" maxlength="255" value="<?php echo set_value('last_name',$user['user_last_name']); ?>"  /></li>
-                <li><strong>Gender :</strong>
-					<?php echo form_error('gender'); ?>
-					<input id="gender" name="gender" type="radio" class="" value="3" <?php echo $this->form_validation->set_radio('gender', 3 ,3 == $user['user_gender']); ?> />
-					<label for="gender" class="">Male</label>
-					<input id="gender" name="gender" type="radio" class="" value="2" <?php echo $this->form_validation->set_radio('gender', 2, 2 == $user['user_gender']); ?> />
-					<label for="gender" class="">Female</label>
-					<input id="gender" name="gender" type="radio" class="" value="1" <?php echo $this->form_validation->set_radio('gender', 1, 1 == $user['user_gender']); ?> />
-					<label for="gender" class="">Not sure</label>
-				</li>
-                <li><strong>Birth date :</strong><?php echo form_error('birth_date'); ?><input class="date" id="birth_date" type="text" name="birth_date" maxlength="255" value="<?php echo set_value('birth_date',$user['user_birth_date']); ?>"  /></li>
-                <li><strong>About me :</strong><?php echo form_error('about'); ?><?php echo form_textarea( array( 'name' => 'about', 'id' => 'about' , 'cols'=> 30 ,'value' => html_entity_decode(set_value('about',$user['user_about'])) ) ); ?></li>
+                <li><strong>Email :</strong><?php echo $user['user_email']; ?></li>
+				<li><strong>About me :</strong><?php echo form_error('about'); ?><?php echo form_textarea( array( 'name' => 'about', 'id' => 'about' , 'cols'=> 30 ,'value' => html_entity_decode(set_value('about',$user['user_about'])) ) ); ?></li>
                 <li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>
               </ul> 
             </div>

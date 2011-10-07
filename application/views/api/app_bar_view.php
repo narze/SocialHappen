@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css"  href="<?php echo base_url().'assets/css/common/fancybox/jquery.fancybox-1.3.4.css'; ?>" />
 
-<script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
 <script>
 	var base_url = "<?php echo base_url(); ?>";
 	<?php if(isset($vars)) :
@@ -9,6 +8,7 @@
 		endforeach; 
 	endif; ?>
 </script>
+<script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
 <div class="header">
     
 	<div class="name toggle">
@@ -33,7 +33,7 @@
 
 	  <?php if($view_as == 'guest') : ?>
 	  <li class="guest">
-		<a href="<?php echo $signup_link; ?>">Sign up SocialHappen</a>
+		<a href="<?php echo $signup_link; ?>" target="_top">Sign up SocialHappen</a>
 	  </li>
 	  <?php endif; ?>
 
@@ -42,7 +42,7 @@
     <li class="notification notificationtoggle">
       <a class="amount"><?php if( isset($notification_amount) && $notification_amount > 0 ) { ?><span><?php echo $notification_amount;?></span> <?php } ?></a>
       <ul class="notification_list_bar">
-        <li class="separator last-child"><a href="<?php echo base_url().'?logged_in=true'; ?>" target="_top">See All Notifications</a></li>
+        <li class="separator last-child"><a class="a-notification" href="<?php echo $all_notification_link; ?>" <?php echo $app_mode ? 'target="_top"' : ''; ?>>See All Notifications</a></li>
       </ul>
     </li>
 	  <li class="profile toggle">

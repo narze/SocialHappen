@@ -928,7 +928,55 @@ div#user-tabs div.user-info label {
 	position:absolute;
 	left:0;
 }
-div#user-tabs ul.activities {
-	margin:15px 0;
-	padding:0 15px;
+div#user-tabs div.activities-table {
+	position:relative;
+}
+div#user-tabs div.activities-table-head {
+	position:relative;
+	width:100%;
+	background-color:#383838;
+	height:30px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+div#user-tabs div.activities-table-footer {
+	position:relative;
+	top:-30px;
+	width:901px;
+	background-color:#e1e1e1;
+	height:30px;
+	border:1px solid #dcdcdc;
+	border-top:0;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+div#user-tabs div.activities-table table {
+	position:relative;
+	top:-30px;
+	width:100%;
+	margin:0;
+	border-collapse:collapse;
+	
+}
+div#user-tabs div.activities-table table tbody {
+	border:1px solid #dedede;
+}
+div#user-tabs div.activities-table table th {
+	color:#fff;
+	line-height:30px;
+	text-align:left;
+	padding:0 10px;
+}
+div#user-tabs div.activities-table table td {
+	line-height:30px;
+	padding:0 10px;
+	background-color:#fff;
 }

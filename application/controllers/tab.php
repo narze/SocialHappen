@@ -2,6 +2,8 @@
 class Tab extends CI_Controller {
 	var $signedRequest;
 	var $page;
+	var $app_data;
+	
 	function __construct(){
 		parent::__construct();
 		
@@ -14,6 +16,7 @@ class Tab extends CI_Controller {
 							'FB');
 		$this->signedRequest = $this->FB->getSignedRequest();
 		$this->page = $this->signedRequest['page'];
+		$this->app_data = isset($this->signedRequest['app_data']) ? json_decode(base64_decode($this->signedRequest['app_data']), TRUE) : NULL ;
 	}
 	
 	function index($page_id = NULL, $token = NULL){
@@ -70,6 +73,8 @@ class Tab extends CI_Controller {
 									'is_guest' => $user ? FALSE : TRUE,
 									'token' => base64_encode($token),
 									'per_page' => $per_page,
+									'view' => isset($this->app_data['view']) ? $this->app_data['view'] : '',
+									'return_url' => isset($this->app_data['return_url']) ? $this->app_data['return_url'] : ''
 					),
 					'script' => array(
 						'common/functions',
@@ -420,8 +425,22 @@ class Tab extends CI_Controller {
 	function leaderboard($page_id = NULL){}
 	
 	function favorites($user_id = NULL){}
+
+	function notifications($user_id = NULL) {
+
+		if($this->input->get('return_url')) $return_url = $this->input->get('return_url');
+		else $return_url = '';
+		
+		$this->load->library('notification_lib');
+		$this->load->vars(array(
+			'notifications' => $this->notification_lib->lists($user_id, $limit = NULL, $offset = 0),
+			'return_url' => $return_url
+			)
+		);
+		
+		$this->load->view('tab/notifications');
 	
-	function notifications($user_id = NULL){}
+	}
 	
 	function account($page_id = NULL, $user_id = NULL){
 		$this->load->model('page_model','pages');

@@ -19,6 +19,17 @@ class Page_model extends CI_Model {
 	
 	/**
 	 * Get page profile
+	 * @param $facebook_page_id
+	 * @return array
+	 * @author Manassarn M.
+	 */
+	function get_page_profile_by_facebook_page_id($facebook_page_id = NULL){
+		$result = $this->db->get_where('page', array('facebook_page_id' => $facebook_page_id))->result_array();
+		return $this->socialhappen->map_one_v($result[0], 'page_status');
+	}
+	
+	/**
+	 * Get page profile
 	 * @param $campaign_id
 	 * @return array
 	 * @author Manassarn M.
@@ -379,6 +390,24 @@ class Page_model extends CI_Model {
 			),
 		);
 		return $templates;
+	}
+	
+	/**
+	 * Update facebook_tab_url
+	 * @param $page_id
+	 * @param $facebook_tab_url
+	 */
+	function update_facebook_tab_url_by_page_id($page_id = NULL, $facebook_tab_url = NULL){
+		return $this->db->update('page', array('facebook_tab_url' => $facebook_tab_url), array('page_id'=>$page_id));
+	}
+	
+	/**
+	 * Update facebook_tab_url
+	 * @param $facebook_page_id
+	 * @param $facebook_tab_url
+	 */
+	function update_facebook_tab_url_by_facebook_page_id($facebook_page_id = NULL, $facebook_tab_url = NULL){
+		return $this->db->update('page', array('facebook_tab_url' => $facebook_tab_url), array('facebook_page_id'=>$facebook_page_id));
 	}
 }
 /* End of file page_model.php */

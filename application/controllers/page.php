@@ -60,6 +60,7 @@ class Page extends CI_Controller {
 					'page_installed' => $page['page_installed'],
 					'facebook_page_id' => $page['facebook_page_id'],
 					'app_facebook_api_key' => $this->config->item('facebook_app_id'),
+					'facebook_tab_url' => $page['facebook_tab_url'],
 					'header' => $this -> socialhappen -> get_header( 
 						array(
 							'company_id' => $company['company_id'],
@@ -325,15 +326,24 @@ class Page extends CI_Controller {
 	function json_add() {
 		$this->socialhappen->ajax_check();
 		$this -> load -> model('page_model', 'pages');
-		$post_data = array('facebook_page_id' => $this -> input -> post('facebook_page_id'), 'company_id' => $this -> input -> post('company_id'), 'page_name' => $this -> input -> post('page_name'), 'page_detail' => $this -> input -> post('page_detail'), 'page_all_member' => $this -> input -> post('page_all_member'), 'page_new_member' => $this -> input -> post('page_new_member'), 'page_image' => $this -> input -> post('page_image'));
-		if($page_id = $this -> pages -> add_page($post_data)) {
-			$result['status'] = 'OK';
-			$result['page_id'] = $page_id;
+		$post_data = array(
+			'facebook_page_id' => $this -> input -> post('facebook_page_id'), 
+			'company_id' => $this -> input -> post('company_id'), 
+			'page_name' => $this -> input -> post('page_name'), 
+			'page_detail' => $this -> input -> post('page_detail'), 
+			'page_all_member' => $this -> input -> post('page_all_member'), 
+			'page_new_member' => $this -> input -> post('page_new_member'), 
+			'page_image' => $this -> input -> post('page_image')
+		);
+		if($this->pages->get_page_id_by_facebook_page_id($post_data['facebook_page_id'])){
+			$result['status'] = 'ERROR';
+			$result['message'] = 'This page has already installed Socialhappen';
+		} else if($page_id = $this -> pages -> add_page($post_data)) {
 			$this->load->library('audit_lib');
 			$this->audit_lib->add_audit(
 				0,
 				(int)($this->session->userdata('user_id')),
-				5,
+				$this->socialhappen->get_k('audit_action','Install Page'),
 				'', 
 				'',
 				array(
@@ -349,8 +359,20 @@ class Page extends CI_Controller {
 				'user_role' => 1
 				)
 			);
+			$socialhappen_app_id = $this->config->item('facebook_app_id');
+			$facebook_page_id = $post_data['facebook_page_id'];
+			if($this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_app_id, $facebook_page_id)){
+				$result['status'] = 'OK';
+				$result['page_id'] = $page_id;
+				$result['page_tab_url'] = $this->facebook->get_facebook_tab_url($socialhappen_app_id, $facebook_page_id);
+				$this->pages->update_facebook_tab_url_by_facebook_page_id($facebook_page_id, $result['page_tab_url']);
+			} else {
+				$result['status'] = 'ERROR';
+				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
+			}
 		} else {
 			$result['status'] = 'ERROR';
+			$result['message'] = 'Cannot add page, please contact administrator';
 		}
 		echo json_encode($result);
 	}
@@ -362,24 +384,30 @@ class Page extends CI_Controller {
 	 */
 	function json_get_not_installed_facebook_pages($company_id, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$page_pics = json_decode($this->input->post('page_pics'), TRUE);
+		if(!$page_pics = json_decode($this->input->post('page_pics'), TRUE)){
+			echo json_encode(array());
+			return;
+		}
 		$this->load->model('page_model','page');
 		$pages = $this->page->get_company_pages_by_company_id($company_id, $limit, $offset);
 		$all_installed_fb_page_id=array();
 		foreach($pages as $page){
 			$all_installed_fb_page_id[]=$page['facebook_page_id'];
 		}
-		$not_installed_facebook_pages=array();
-		$facebook_pages=$this->facebook->get_user_pages();
 		$pics = array();
+		$has_added_app = array();
 		foreach($page_pics as $page_pic){
 			$pics[$page_pic['page_id']] = $page_pic['pic'];
+			$has_added_app[$page_pic['page_id']] = $page_pic['has_added_app'];
 		}
+		$not_installed_facebook_pages=array();
+		$facebook_pages=$this->facebook->get_user_pages();
 		if($facebook_pages!=NULL){
 			$facebook_pages=$facebook_pages['data'];
 			foreach($facebook_pages as $facebook_page){
 				if(!in_array($facebook_page['id'],$all_installed_fb_page_id)){
-					$facebook_page['page_info']['picture'] = $pics[$facebook_page['id']]; //It's slow, should use FQL
+					$facebook_page['page_info']['picture'] = $pics[$facebook_page['id']];
+					$facebook_page['has_added_app'] = $has_added_app[$facebook_page['id']];
 					$not_installed_facebook_pages[]=$facebook_page;
 				}
 			}
@@ -510,6 +538,27 @@ class Page extends CI_Controller {
 	function config($page_id){
 		redirect(base_url().'configs/'.$page_id);
 	}
+	
+	/**
+	 * Go to socialhappen facebook tab in specified page
+	 * @param $page_id
+	 * @param $force_update If true, page_tab_url will be forced to update
+	 * @author Manassarn M.
+	 */
+	function facebook_tab($page_id = NULL, $force_update = FALSE){
+		$this->load->model('page_model','page');
+		if(!$page = $this->page->get_page_profile_by_page_id($page_id)){
+			return FALSE;
+		}
+		$page_tab_url = $page['page_tab_url'];
+		if(!$page_tab_url || $force_update){
+			$page_tab_url = $this->facebook->get_facebook_tab_url($this->config->item('facebook_app_id'), $page['facebook_page_id']);
+			
+			$this->page->update_facebook_tab_url_by_page_id($page_id, $page_tab_url);
+		}
+		redirect($page_tab_url);
+	}
+
 }
 
 /* End of file page.php */

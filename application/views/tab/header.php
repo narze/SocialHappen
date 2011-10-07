@@ -44,6 +44,10 @@ endif;
 				  cookie : true, // enable cookies to allow the server to access the session
 				  xfbml  : true  // parse XFBML
 				});
+				
+				window.setTimeout(function () {
+					FB.Canvas.setAutoResize(); //Remove scrollbar
+				}, 250);
 			  };
 			  (function() {
 				var e = document.createElement('script');

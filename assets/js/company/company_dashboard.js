@@ -278,11 +278,10 @@ function show_installed_page_in_company() {
 								var page_id=json.page_id;
 								var app_api_key=sh_default_fb_app_api_key;
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
-									$(".bt-go-facebook").live('click',function(){
-										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
-									});
+									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+									popup.find(".bt-go-facebook").attr('href', json.page_tab_url);
 									$.fancybox({
-										content:$("#popup-gotofacebook").html()
+										content: popup
 									});
 									$(dragging_object).attr('onclick','view_page_app('+page_id+','+facebook_page_id+',"'+page_name+'")');
 									$(dragging_object).append('<input type="hidden" class="page_id" value="'+ page_id +'">');
@@ -351,7 +350,7 @@ function show_installed_app_in_company() {
 						.replace("{page_id}",0)+"&force=1";
 						jQuery.ajax({
 							async:true,
-							url: base_url+"app/curl",
+							url: base_url+"app/json_add",
 							dataType: "json",
 							type: "POST",
 							data: {
@@ -410,12 +409,13 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 	{
 		$('.head-box-app-list').hide();
 		$('div.dragging-app').hide();
-		$(".bt-go-facebook").attr('href', get_add_app_to_fb_page_link(sh_default_fb_app_api_key,facebook_page_id));
-		$(".notice").html( $('#popup-gotofacebook').html() );
+		popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+		popup.find(".bt-go-facebook").attr('href', get_add_app_to_fb_page_link(sh_default_fb_app_api_key,facebook_page_id));
+		$(".notice").html(popup);
 		$(".notice").addClass('warning').show(); 
 		return false;
 	}
-
+	set_loading();
 	//get installed pages
 	jQuery.ajax({
 		async:true,
@@ -470,11 +470,13 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 
 						jQuery.ajax({
 							async:true,
-							url: base_url+"app/curl",
+							url: base_url+"app/json_add_to_page",
 							dataType: "json",
 							type: "POST",
 							data: {
-								url:app_install_url
+								install_url:app_install_url,
+								facebook_page_id:facebook_page_id,
+								facebook_app_id:app_api_key
 							},
 							error: function(jqXHR, textStatus, errorThrown) {
 								show_installed_app_in_page(page_id,facebook_page_id);
@@ -498,11 +500,11 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 										$("#info-installed-app").html('<span>Installed Application</span>'+json.app_count);
 									});
 									update_app_order_in_dashboard();
-									$(".bt-go-facebook").live('click',function(){
-										window.parent.location.replace(get_add_app_to_fb_page_link(app_api_key,facebook_page_id));
-									});
+									
+									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+									popup.find(".bt-go-facebook").attr('href', json.page_tab_url);
 									$.fancybox({
-										content:$("#popup-gotofacebook").html()
+										content: popup
 									});
 								} else {
 									show_installed_page_in_company();
@@ -532,11 +534,11 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 
 //show company's available pages
 function show_available_page_in_company() {
-	
+
 	FB.api(
 	  {
 		method: 'fql.query',
-		query: "SELECT page_id, pic from page WHERE page_id IN (SELECT page_id from page_admin WHERE uid=me())"
+		query: "SELECT page_id, name, has_added_app, pic from page WHERE page_id IN (SELECT page_id from page_admin WHERE uid=me())"
 	  },
 	  function(page_pics) {
 		json_page_pics = JSON.stringify(page_pics);
@@ -557,7 +559,7 @@ function show_available_page_in_company() {
 					ul_element.append(
 					// "<li class='draggable'><p><img src='"
 					// +(json[i].page_info.picture==null?'http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yA/r/gPCjrIGykBe.gif':json[i].page_info.picture)
-					"<li class='draggable'><p><img class='page-image' src='"
+					"<li data-hasaddedapp='"+json[i].has_added_app+"' class='draggable'><p><img class='page-image' src='"
 					+json[i].page_info.picture
 					+"' alt='' width='80' height='80' /></p><p>"+json[i].name
 					+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/></li>"
@@ -567,12 +569,32 @@ function show_available_page_in_company() {
 				available_item_per_page=9;
 				last_page_of_available_item=Math.ceil(json.length/available_item_per_page);
 				refresh_available_item_panel();
-				ul_element.find('li').bind('mouseover', function() {
+				ul_element.find('li[data-hasaddedapp="false"]').bind('mouseover', function() {
 					$(this).addClass("dragging");
 				}).bind('mouseout', function() {
 					$(this).removeClass("dragging");
 				});
-				ul_element.find('li.draggable').draggable({
+				// //for real use : don't allow re-install
+				// ul_element.find('li.draggable[data-hasaddedapp="false"]').draggable({ 
+					// connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
+					// helper: "clone",
+					// revert: "invalid",
+					// drag: function() {
+						// $(".left-panel").find('.dragging-page div').addClass('in-action');
+						// $("div.dragging-page ul").css('height','auto');
+					// },
+					// stop: function() {
+						// $(".left-panel").find('.dragging-page div').removeClass('in-action');
+						// $("div.dragging-page ul").css('height','155px');
+					// }
+				// });
+				// ul_element.find('li.draggable[data-hasaddedapp="true"]').die().live('click',function(){
+					// $.fancybox({
+						// content: 'This page has already been added by other user. If this page is yours, please remove Socialhappen Application from this page first'
+					// });
+				// });
+				//for debug
+				ul_element.find('li.draggable').draggable({ 
 					connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
 					helper: "clone",
 					revert: "invalid",
@@ -585,6 +607,7 @@ function show_available_page_in_company() {
 						$("div.dragging-page ul").css('height','155px');
 					}
 				});
+				//end for debug
 				$(".right-panel").find('.loading').remove();
 			},
 		});

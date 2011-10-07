@@ -5,6 +5,8 @@ if (!defined('BASEPATH'))
 //phnx : 16-02-2011
 class Facebook {
 
+	protected $page_access_token;
+	
 	function __construct() {
 		$this -> _ci = &get_instance();
 	}
@@ -121,7 +123,7 @@ class Facebook {
 		//print_r($this->curl->info);
 	}
 
-	function getGraph($id) {
+	function getGraph($id = NULL) {
 		$this -> _ci -> load -> library('curl');
 		$url = "https://graph.facebook.com/" . $id;
 		$this -> _ci -> curl -> create($url);
@@ -150,7 +152,7 @@ class Facebook {
 	 * @author Prachya P.
 	 * @param $fb_page_id
 	 */
-	function get_page_info($fb_page_id) {
+	function get_page_info($fb_page_id = NULL) {
 		$cookie = $this -> get_facebook_cookie();
 		$page = file_get_contents('https://graph.facebook.com/' . $fb_page_id . '/?access_token=' . $cookie['access_token']);
 		// $page = '{"id":"135287989899131","name":"SHBeta","picture":"https:\/\/fbcdn-profile-a.akamaihd.net\/static-ak\/rsrc.php\/v1\/y0\/r\/XsEg9L6Ie5_.jpg","link":"http:\/\/www.facebook.com\/pages\/SHBeta\/135287989899131","likes":1,"category":"Community","has_added_app":true,"parking":{"street":0,"lot":0,"valet":0},"hours":{"mon_1_open":0,"mon_1_close":0,"tue_1_open":0,"tue_1_close":0,"wed_1_open":0,"wed_1_close":0,"thu_1_open":0,"thu_1_close":0,"fri_1_open":0,"fri_1_close":0,"sat_1_open":0,"sat_1_close":0,"sun_1_open":0,"sun_1_close":0,"mon_2_open":0,"mon_2_close":0,"tue_2_open":0,"tue_2_close":0,"wed_2_open":0,"wed_2_close":0,"thu_2_open":0,"thu_2_close":0,"fri_2_open":0,"fri_2_close":0,"sat_2_open":0,"sat_2_close":0,"sun_2_open":0,"sun_2_close":0},"payment_options":{"cash_only":0,"visa":0,"amex":0,"mastercard":0,"discover":0},"restaurant_services":{"reserve":0,"walkins":0,"groups":0,"kids":0,"takeout":0,"delivery":0,"catering":0,"waiter":0,"outdoor":0},"restaurant_specialties":{"breakfast":0,"lunch":0,"dinner":0,"coffee":0,"drinks":0},"can_post":true}';
@@ -164,8 +166,97 @@ class Facebook {
 	 * @author Manassarn M.
 	 * @param $facebook_user_id
 	 */
-	function get_profile_picture($facebook_user_id) {
+	function get_profile_picture($facebook_user_id = NULL) {
 		return "https://graph.facebook.com/{$facebook_user_id}/picture";
 	}
 
+	/**
+	 * Get page access token
+	 * @param $facebook_page_id
+	 * @author Manassarn M.
+	 */
+	function get_page_access_token_by_facebook_page_id($facebook_page_id = NULL){
+		if(isset($this->page_access_token[$facebook_page_id])) {
+			return $this->page_access_token[$facebook_page_id];
+		}
+		$cookie = $this -> get_facebook_cookie();
+		$page_access_token = NULL;
+		$accounts = json_decode(file_get_contents('https://graph.facebook.com/me/accounts?access_token=' . $cookie['access_token']),TRUE);
+		if(isset($accounts['data'])){
+			foreach($accounts['data'] as $account){
+				if(isset($account['id']) && isset($account['access_token'])){
+					$this->page_access_token[$account['id']] = $account['access_token'];
+					if($account['id'] == $facebook_page_id){
+						$page_access_token = $account['access_token'];
+					}
+				}
+			}
+		} 
+		return $page_access_token;
+	}
+	
+	/**
+	 * Get page tabs
+	 * @param $facebook_page_id
+	 * @author Manassarn M.
+	 */
+	function get_page_tabs_by_facebook_page_id($facebook_page_id = NULL){
+		$facebook_page_access_token = $this->get_page_access_token_by_facebook_page_id($facebook_page_id);
+		$tabs = json_decode(file_get_contents('https://graph.facebook.com/'.$facebook_page_id.'/tabs?access_token=' . $facebook_page_access_token),TRUE);
+		if(isset($tabs['data'])){
+			return $tabs['data'];
+		}
+		return array();
+	}
+	
+	/**
+	 * Check if app is installed in facebook page
+	 * @param $facebook_app_id
+	 * @param $facebook_page_id
+	 * @author Manassarn M.
+	 */
+	function is_facebook_app_installed_in_facebook_page($facebook_app_id = NULL, $facebook_page_id = NULL){
+		$page_tabs = $this->get_page_tabs_by_facebook_page_id($facebook_page_id);
+		if(is_array($page_tabs)){
+			foreach($page_tabs as $tab){
+				if(isset($tab['application']['id']) && $tab['application']['id'] == $facebook_app_id){
+					return TRUE;
+				}
+			}
+		}
+		return FALSE;
+	}
+	
+	/**
+	 * Install facebook app to page tab
+	 * @param $facebook_app_id
+	 * @param $facebook_page_id
+	 */
+	function install_facebook_app_to_facebook_page_tab($facebook_app_id = NULL, $facebook_page_id = NULL){
+		$page_access_token = $this->get_page_access_token_by_facebook_page_id($facebook_page_id);
+		$url = "https://graph.facebook.com/{$facebook_page_id}/tabs";
+		$post = array('app_id' => $facebook_app_id, 'access_token' => $page_access_token);
+		$this -> _ci -> load -> library('curl');
+		$this -> _ci -> curl -> create($url);
+		$this -> _ci -> curl -> post($post);
+		return $this -> _ci -> curl -> ssl(FALSE) -> execute();
+	}
+	
+	/**
+	 * Get facebook tab url
+	 * @param $facebook_app_id
+	 * @param $facebook_page_id
+	 * @author Manassarn M.
+	 */
+	function get_facebook_tab_url($facebook_app_id = NULL, $facebook_page_id = NULL){
+		$page_tabs = $this->get_page_tabs_by_facebook_page_id($facebook_page_id);
+		if(is_array($page_tabs)){
+			foreach($page_tabs as $tab){
+				if(isset($tab['application']['id']) && $tab['application']['id'] == $facebook_app_id){
+					return $tab['link'];
+				}
+			}
+		}
+		return FALSE;
+	}
 }

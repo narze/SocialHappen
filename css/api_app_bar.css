@@ -34,6 +34,7 @@ display:block;
 div.header div.name {
 float:left;
 height:35px;
+min-width: 10px;
 position:relative;
 background-image:url(../assets/images/bg_fb/bg_header.png);
 background-repeat:repeat-x;
@@ -548,10 +549,6 @@ z-index:999;
 -webkit-border-radius:0 0 5px 5px;
 -moz-border-radius:0 0 5px 5px;
 border-radius:0 0 5px 5px;
-}
-
-div.header ul.menu>li.notification:hover {
-background-position:right -38px;
 }
 
 div.header ul.menu > li.notification {
