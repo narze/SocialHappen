@@ -6,22 +6,13 @@ class Bar extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 	}
-	
-	/**
-	 * Create company
-	 * @author Manassarn M.
-	 */
-	function create_company(){
-		$this->socialhappen->check_logged_in();
-		$this->load->view('bar/create_company_view');
-	}
 
 	/**
 	 * Create company form
 	 * @author Manassarn M.
 	 * @todo views for created/error
 	 */
-	function create_company_form(){
+	function create_company(){
 		$this->socialhappen->check_logged_in();
 		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');
@@ -38,7 +29,7 @@ class Bar extends CI_Controller {
 		 	$company = array(
 					       	'company_name' => set_value('company_name'),
 					       	'company_detail' => set_value('company_detail'),
-					       	'company_image' => !$company_image ? base_url().'images/thumb80-80-3.jpg' : $company_image,
+					       	'company_image' => !$company_image ? base_url().'assets/images/default/company.png' : $company_image,
 					       	'creator_user_id' => $this->socialhappen->get_user_id()
 						);
 			//$company_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'company/json_add', $company), TRUE);

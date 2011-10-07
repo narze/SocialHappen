@@ -33,7 +33,7 @@
         <p><a href="#">Go to</a></p>
 		<div>
 			<?php if(isset($user_companies) && $user_companies) { ?><ul></ul> <?php } ?>
-			<?php if($user_can_create_company) { ?><p><a class="bt-create_company" href="#"><span>Create Company</span></a></p><?php } ?>
+			<?php if($user_can_create_company) { ?><p><a class="bt-create_company"><span>Create Company</span></a></p><?php } ?>
         </div>
 	</div>
 	<ul>

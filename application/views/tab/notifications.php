@@ -17,26 +17,25 @@
 		<ul><?php 
 			
 			//Test data
-			$notifications = array(
-				array(
+			$notifications[] = array(
 					'status'=>'unread',
 					'title'=>'SocialHappen', 
 					'desc'=>'Quisque iaculis, libero a pharetra euismod, orci sem aliquam turpis, nec rutrum est diam ac odio.',
 					'date'=>'15 June 2011'
-				),
-				array(
+				);
+			$notifications[] = array(
 					'status'=>'unread',
 					'title'=>'FeedVideo', 
 					'desc'=>'Quisque iaculis, libero a pharetra euismod, nec rutrum est diam ac odio.',
 					'date'=>'14 June 2011'
-				),
-				array(
+				);
+			$notifications[] = array(
 					'status'=>'read',
 					'title'=>'FeedVideo', 
 					'desc'=>'Quisque iaculis, libero a pharetra euismod, nec rutrum est diam ac odio.',
 					'date'=>'14 June 2011'
-				)
-			); 
+				);
+			 
 			//echo '<pre>'; print_r($notifications); echo '</pre>';
 			
 			if($notifications)

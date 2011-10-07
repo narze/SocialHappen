@@ -4,7 +4,7 @@
 <div id="create-company-form">
 	<?php
 		$attributes = array('class' => 'create-company-form', 'id' => '');
-		echo form_open('bar/create_company_form', $attributes); ?>
+		echo form_open('bar/create_company', $attributes); ?>
 		
 		<div class="form">
             <ul class="form">
@@ -18,7 +18,7 @@
 			  </li>
               <li class="pic">
 				<?php echo form_error('company_image'); ?>
-				<img src="<?php echo base_url(); ?>images/thumb80-80-3.jpg" alt="" />
+				<img src="<?php echo base_url(); ?>assets/images/default/company.png" width="80" height="80" />
 				<div class="upload-pic">
 					<span><a href="#">(Change)</a></span>
 					<input id="company_image" type="file" name="company_image" />
