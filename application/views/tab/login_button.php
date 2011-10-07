@@ -5,7 +5,7 @@
 			appId  : '<?php echo $facebook_app_id; ?>',
 			status : true,
 			cookie : true,
-			xfbml  : true,
+			xfbml  : true
 			//oauth : true
 		});
 	};	
