@@ -318,14 +318,19 @@ div.popup_payment-complete p.message {
 }
 
 /* Popup go to Facebook */
-div.popup-gotofacebook {
+#popup-goto-facebook { height: 472px; width: 650px; }
+#popup-goto-facebook div.wrapper { padding-left:412px; position:relative; }
+#popup-goto-facebook div.wrapper>img { position:absolute; left:0; }
+#popup-goto-facebook div.wrapper>p.title { font-weight:bold; font-size:15px; color:#65703f; }
+div.goto-facebook {
 	margin:15px 0;
 	min-width: 380px;
 }
-div.popup-gotofacebook p {
+div.goto-facebook p {
 	margin:15px 0;
+	line-height:20px;
 }
-div.popup-gotofacebook p a.bt-go-facebook {
+div.goto-facebook p a.bt-go-facebook {
 	margin-bottom:15px;
 }
 

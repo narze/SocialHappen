@@ -115,54 +115,6 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array['company_password'],'is_string','company_password');
 		$this->unit->run($array['company_image'],'is_string','company_image');
 	}
-
-	/**
-	 * Tests json_add()
-	 * @author Manassarn M.
-	 */
-	function json_add_test(){
-		$company = array(
-							'creator_user_id' => 1,
-							'company_name' => 'test',
-							'company_detail' => 'test',
-							'company_address' => 'test',
-							'company_email' => 'test@test.com',
-							'company_telephone' => '6543211',
-							'company_username' => 'test',
-							'company_password' => 'test',
-							'company_image' => 'test'
-						);
-		$content = $this->curl->ssl(FALSE)->simple_post('company/json_add', $company, array(CURLOPT_RETURNTRANSFER => 1));
-		$content = json_decode($content, TRUE);
-		$this->unit->run($content,'is_array', 'json_add()');
-		$this->unit->run($content['company_id'],'is_int','company_id');
-		$this->unit->run($content['status'] == 'OK','is_true', 'status');
-		$this->unit->run(count($content) == 2,'is_true','return count');
-	}
-
-function json_add_test_test(){
-	$company = array(
-							'creator_user_id' => 1,
-							'company_name' => 'test',
-							'company_detail' => 'test',
-							'company_address' => 'test',
-							'company_email' => 'test@test.com',
-							'company_telephone' => '6543211',
-							'company_username' => 'test',
-							'company_password' => 'test',
-							'company_image' => 'test'
-						);
-	 $ch = curl_init(base_url()."company/json_add");
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $company);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        $output = curl_exec($ch);       
-        curl_close($ch);
-        echo $output;
-}
 }
 
 /* End of file company_test.php */

@@ -240,8 +240,6 @@ class SocialHappen{
 			if($this->CI->input->get('logged_in') == TRUE){
 				if($data['user_companies']){
 					$data['vars']['popup_name'] = 'bar/select_company';
-				} else {
-					$data['vars']['popup_name'] = 'bar/splash';
 				}
 			}
 		}

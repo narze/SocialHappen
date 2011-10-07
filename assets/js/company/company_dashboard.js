@@ -278,10 +278,11 @@ function show_installed_page_in_company() {
 								var page_id=json.page_id;
 								var app_api_key=sh_default_fb_app_api_key;
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
-									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
-									popup.find(".bt-go-facebook").attr('href', json.facebook_tab_url);
 									$.fancybox({
-										content: popup
+										href: base_url+'company/page_installed',
+										onComplete: function () { 
+											$('#popup-goto-facebook').find(".bt-go-facebook").attr('href', json.facebook_tab_url); 
+										}
 									});
 									$(dragging_object).attr('onclick','view_page_app('+page_id+','+facebook_page_id+',"'+page_name+'")');
 									$(dragging_object).append('<input type="hidden" class="page_id" value="'+ page_id +'">');
@@ -410,7 +411,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 	{
 		$('.head-box-app-list').hide();
 		$('div.dragging-app').hide();
-		popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+		popup = $('#hidden-notice').find('.goto-facebook').clone();
 		popup.find(".bt-go-facebook").attr('href', base_url+'page/facebook_tab/'+page_id);
 		$(".notice").html(popup);
 		$(".notice").addClass('warning').show(); 
@@ -502,7 +503,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 									});
 									update_app_order_in_dashboard();
 									
-									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+									popup = $('#hidden-notice').find('.goto-facebook').clone();
 									popup.find(".bt-go-facebook").attr('href', json.facebook_tab_url);
 									$.fancybox({
 										content: popup

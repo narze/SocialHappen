@@ -32,7 +32,6 @@ class Bar extends CI_Controller {
 					       	'company_image' => !$company_image ? base_url().'assets/images/default/company.png' : $company_image,
 					       	'creator_user_id' => $this->socialhappen->get_user_id()
 						);
-			//$company_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'company/json_add', $company), TRUE);
 			$this->load->model('company_model', 'companies');
 			$company_id = $this->companies->add_company($company);
 			
@@ -45,8 +44,7 @@ class Bar extends CI_Controller {
 						'user_role' => 1 //Company Admin
 					);
 				if($result = $this->user_companies->add_user_company($user_company)){
-					echo "Company created<br />";  
-					echo anchor("company/{$company_id}", 'Go to company');
+					$this->load->view('common/redirect',array('redirect_parent'=>base_url().'company/'.$company_id));
 				} else {
 					echo "Error adding user company";
 				}
@@ -57,15 +55,6 @@ class Bar extends CI_Controller {
 				echo 'Error adding company';
 			}
 		}
-	}
-
-	/**
-	 * Splash page
-	 * @author Manassarn M.
-	 */
-	function splash(){
-		$this->socialhappen->check_logged_in();
-		$this->load->view('bar/splash_view');
 	}
 	
 	/**
