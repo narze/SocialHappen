@@ -130,12 +130,28 @@ class Home extends CI_Controller {
 			if ($user_id && $company_id)
 			{	
 				$this->load->model('user_companies_model','user_companies');
-				if(!$this->user_companies->add_user_company(array(
-					'user_id' => $user_id,
-					'company_id' => $company_id,
-					'user_role' => 1 //Company admin
-				))){
+        $add_user_company = $this->user_companies->add_user_company(array(
+          'user_id' => $user_id,
+          'company_id' => $company_id,
+          'user_role' => 1 //Company admin
+        ));
+        
+				if(!$add_user_company){
 					log_message('error','company_user add failed');
+				}else{
+				  $this->load->library('audit_lib');
+          $this->audit_lib->add_audit(
+                        0, // app_id 0 for platform
+                        $user_id,
+                        101, // Action ID: 101  User Register SocialHappen 
+                        '', 
+                        '',
+                        array(
+                            'app_install_id'=> 0, // app_install_id 0 for platform
+                            'company_id' => $company_id,
+                            'user_id' => $user_id
+                          )
+                      );
 				}
 				$this->socialhappen->login();
 				if($this->input->post('package_id')) 
