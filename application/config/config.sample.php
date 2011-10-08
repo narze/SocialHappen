@@ -17,9 +17,14 @@
 $config['base_url']	= 'https://socialhappen.dyndns.org/socialhappen/';
 
 /**
- * Node.js server base url
+ * Node.js server base https url
  */
-$config['node_base_url'] = 'http://socialhappen.dyndns.org:8080/';
+$config['node_base_url'] = 'https://socialhappen.dyndns.org:8081/';
+
+/**
+ * Node.js server base http url for notification library only
+ */
+$config['node_base_url_http'] = 'http://socialhappen.dyndns.org:8080/';
 
 
 /*

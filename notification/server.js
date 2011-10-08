@@ -1,6 +1,18 @@
 var http = require('http');
+var https = require('https');
 var HTTP_PORT = 8080;
+var HTTPS_PORT = 8081;
 var KEY = 'WOW';
+var crypto = require('crypto');
+var fs = require("fs");
+
+var privateKey = fs.readFileSync('./ssl/key/vhost1.key').toString();
+var certificate = fs.readFileSync('./ssl/crt/vhost1.crt').toString();
+
+var options = {
+	key : privateKey,
+	cert : certificate
+};
 
 var httpServer = http.createServer(function (req, res) {
 	var path = require('url').parse(req.url, true);
@@ -48,10 +60,16 @@ var httpServer = http.createServer(function (req, res) {
 	  	res.end('Y U COME ?\n');
 	}
 });
-httpServer.listen(HTTP_PORT);
+
+var httpsServer = https.createServer(options, function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+});
+httpsServer.listen(HTTPS_PORT);
+
 console.log('Server running at port: ' + HTTP_PORT);
 
-var io = require('socket.io').listen(httpServer);
+var io = require('socket.io').listen(httpsServer);
 io.configure(function () {
   io.set('transports', ['xhr-polling']);
   io.enable('browser client minification');

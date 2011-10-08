@@ -66,7 +66,7 @@ class Notification_lib
 			return FALSE;
 		}
     
-		$node_base_url = $this->CI->config->item('node_base_url');
+		$node_base_url = $this->CI->config->item('node_base_url_http');
 		if(empty($message) || empty($link)){
 		  $notification_amount = $this->count_unread($user_id);
 		  
