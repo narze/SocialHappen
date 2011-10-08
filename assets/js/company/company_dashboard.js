@@ -556,7 +556,7 @@ function show_available_page_in_company() {
 				$(".right-panel").find('.dragging-page').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 			},
 			success: function(json) {
-				var ul_element=$(".right-panel").find('.dragging-page').find('ul').empty();
+				var ul_element=$(".right-panel").disableSelection().find('.dragging-page').find('ul').empty();
 				available_pages=new Array();
 				for(i in json) {
 					available_pages[''+json[i].id]=json[i];
@@ -578,6 +578,7 @@ function show_available_page_in_company() {
 				}).bind('mouseout', function() {
 					$(this).removeClass("dragging");
 				});
+				ul_element.find('li[data-hasaddedapp="true"] img').after('<span class=\"button\"><a class=\"bt-installed-app\">Installed</a></span>');
 				// //for real use : don't allow re-install
 				// ul_element.find('li.draggable[data-hasaddedapp="false"]').draggable({ 
 					// connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
