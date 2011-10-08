@@ -85,6 +85,7 @@
 </div>
 <script src="<?php echo $node_base_url;?>socket.io/socket.io.js"></script>
 <script>
+	(function($){
 	var session = 'SESSIONNAJA';
 	var socket = io.connect('<?php echo $node_base_url;?>');
 
@@ -105,8 +106,9 @@
 			$('div.header ul.menu li.notification a.amount').append('<span>').children('span').remove();
 		}
 	});
-
+	
 	socket.on('newNotificationMessage', function (notification_message) {
 		console.log('notification_message: ' + JSON.stringify(notification_message));
 	});
+	})(jQuery);
 </script>

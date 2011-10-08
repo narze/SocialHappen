@@ -54,8 +54,9 @@ class Notification_lib
 		if(empty($user_id) || empty($message) || empty($link)){
 			return FALSE;
 		}
+		$result = $this->CI->notification->add((int)$user_id, $message, $link);
 		$this->_send_notification($user_id, $message, $link);
-		return $this->CI->notification->add((int)$user_id, $message, $link);
+		return $result;
 	}
 	
 	/**

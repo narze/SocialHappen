@@ -342,15 +342,18 @@ class Page extends CI_Controller {
 			$result['message'] = 'This page has already installed Socialhappen';
 		} else if($page_id = $this -> pages -> add_page($post_data)) {
 			$this->load->library('audit_lib');
+      $user_id = (int)($this->session->userdata('user_id'));
 			$this->audit_lib->add_audit(
 				0,
-				(int)($this->session->userdata('user_id')),
+				$user_id,
 				$this->socialhappen->get_k('audit_action','Install Page'),
 				'', 
 				'',
 				array(
 						'page_id'=> $page_id,
-						'company_id' => (int)($this -> input -> post('company_id'))
+						'company_id' => (int)($this -> input -> post('company_id')),
+						'app_install_id' => 0,
+						'user_id' => $user_id
 					)
 			);
 			$this -> load -> model('user_pages_model', 'user_pages');

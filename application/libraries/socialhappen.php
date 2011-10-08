@@ -136,8 +136,9 @@ class SocialHappen{
 		if($this->is_logged_in()){
 			return TRUE;
 		} else {
-			$protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') 
-                === FALSE ? 'http' : 'https';
+			// $protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') 
+                // === FALSE ? 'http' : 'https';
+				$protocol = 'https';
 			$url = "{$protocol}://{$_SERVER['SERVER_NAME']}{$_SERVER['REQUEST_URI']}";
 			redirect($redirect_url."?next=".urlencode($url));
 		}
