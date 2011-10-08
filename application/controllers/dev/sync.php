@@ -954,17 +954,17 @@ class Sync extends CI_Controller {
 								array(
 								    'user_id' => 3,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 4,
 								    'company_id' => 1,
-								    'user_role' => 2
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 5,
 								    'company_id' => 1,
-								    'user_role' => 3
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 6,
