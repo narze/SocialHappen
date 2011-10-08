@@ -667,6 +667,11 @@ class Audit_lib
 		return $result_stat;
 	}
 	
+  function list_audit_range($key = NULL, $criteria = array()){
+    $this->CI->load->model('audit_model', 'audit');
+    return $this->CI->audit->list_distinct_audit($key, $criteria);
+  }
+  
 	/**
 	 * count audit with distinct key for single day
 	 * 

@@ -1601,6 +1601,14 @@ class Api extends CI_Controller {
 
     	return $string;
 	}
+  
+  function list_audit(){
+    $this->load->library('audit_lib');
+    $app_list = $this->audit_lib->list_audit_range('app_id', array('user_id' => 5));
+    echo '<pre>';
+    print_r($app_list);
+    echo '</pre>';
+  }
 }
 
 /* End of file api.php */

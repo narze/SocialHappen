@@ -221,6 +221,54 @@ class Audit_model extends CI_Model {
 		 
 		return count($result[0]);
 	}
+  
+  
+  function list_distinct_audit($key = NULL, $criteria = NULL){
+    $check_args = isset($key) && isset($criteria);
+    if(!$check_args){
+      return NULL;
+    }
+    
+    $db_criteria = array();
+    if(isset($criteria['subject'])){
+      $db_criteria['subject'] = $criteria['subject'];
+    }
+    
+    if(isset($criteria['object'])){
+      $db_criteria['object'] = $criteria['object'];
+    }
+    
+    if(isset($criteria['objecti'])){
+      $db_criteria['objecti'] = $criteria['objecti'];
+    }
+    
+    if(isset($criteria['app_id'])){
+      $db_criteria['app_id'] = $criteria['app_id'];
+    }
+    if(isset($criteria['action_id'])){
+      $db_criteria['action_id'] = $criteria['action_id'];
+    }
+    if(isset($criteria['app_install_id'])){
+      $db_criteria['app_install_id'] = $criteria['app_install_id'];
+    }
+    if(isset($criteria['user_id'])){
+      $db_criteria['user_id'] = $criteria['user_id'];
+    }
+    if(isset($criteria['page_id'])){
+      $db_criteria['page_id'] = $criteria['page_id'];
+    }
+    if(isset($criteria['campaign_id'])){
+      $db_criteria['campaign_id'] = $criteria['campaign_id'];
+    }
+    
+    $cursor = $this->db->command(array('distinct' => 'audits', 'key' => $key, 'query' => $db_criteria));
+    $result = array();
+    foreach ($cursor as $audit) {
+      $result[] = $audit;
+    }
+    
+    return $result[0];
+  }
 	
 	/**
 	 * drop entire collection
