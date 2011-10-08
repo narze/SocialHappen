@@ -93,9 +93,7 @@ class Achievement_lib
 		if(empty($app_id) || empty($info) || empty($criteria) || empty($achievement_id))
 		  return FALSE;
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		// echo '<pre>';
-		// print_r($criteria);
-		// echo '</pre>';
+
 		return $this->CI->achievement_info->set($achievement_id, $app_id,
 		 $app_install_id, $info, $criteria);
 	}
