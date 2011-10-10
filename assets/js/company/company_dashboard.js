@@ -414,7 +414,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 		$('.head-box-app-list').hide();
 		$('div.dragging-app').hide();
 		popup = $('#hidden-notice').find('.goto-facebook').clone();
-		popup.find(".bt-go-facebook").attr('href', base_url+'page/facebook_tab/'+page_id);
+		popup.find(".bt-go-facebook").attr('href', base_url+'tab/facebook_page/'+page_id);
 		$(".notice").html(popup);
 		$(".notice").addClass('warning').show(); 
 		return false;

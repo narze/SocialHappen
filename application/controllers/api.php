@@ -1531,6 +1531,32 @@ class Api extends CI_Controller {
 		echo json_encode($response);
 	}
 	
+	/**
+	 * Request for socialhappen login
+	 * @author Manassarn M.
+	 */
+	function request_login(){
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+
+		if(!$user_facebook_id){
+			log_message('debug','Missing parameter (user_facebook_id)');
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: user_facebook_id)'));
+			return;
+		}
+		$this->load->model('User_model', 'User');
+		$user_id_check = $this->User->get_user_id($user_facebook_id);
+		
+		$user_id = $this->socialhappen->login();
+		if($user_id && $user_id == $user_id_check){
+			$response = array('status' => 'OK', 'user_id' => $user_id);
+		} else {
+			$response = array('status' => 'ERROR', 'message' => 'User not found');
+			$this->socialhappen->logout();
+		}
+		echo json_encode($response);
+	}
+	
 	function _authenticate_app($app_id, $app_secret_key){
 		// authenticate app with $app_id and $app_secret_key
 		$this->load->model('App_model', 'App');

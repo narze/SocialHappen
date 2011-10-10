@@ -338,7 +338,7 @@ class App extends CI_Controller {
 				$this->audit_lib->add_audit(
 							  0, // app_id 0 for platform
 							  $user_id,
-							  2, // Action ID: 2 Install App To Page
+							  $this->socialhappen->get_k('audit_action','Install App To Page'), // Action ID: 2 Install App To Page
 							  '', 
 							  '',
 							  array(
@@ -366,28 +366,6 @@ class App extends CI_Controller {
 		$url = $_POST['url'];
 		$result = json_decode($this->curl($url), TRUE);
 		echo $result;
-	}
-	
-	/**
-	 * Go to app's facebook tab
-	 * @param $app_install_id
-	 * @param $force_update If true, facebook_tab_url will be forced to update
-	 * @author Manassarn M.
-	 */
-	function facebook_tab($app_install_id = NULL, $force_update = FALSE){
-		$this->load->model('installed_apps_model','installed_app');
-		if(!$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id)){
-			return FALSE;
-		}
-		$facebook_tab_url = $app['facebook_tab_url'];
-		if(!$facebook_tab_url || $force_update){
-			$this->load->model('page_model','page');
-			$page = $this->page->get_page_profile_by_page_id($app['page_id']);
-			$facebook_tab_url = $this->facebook->get_facebook_tab_url($app['app_facebook_api_key'], $page['facebook_page_id']);
-			
-			$this->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
-		}
-		redirect($facebook_tab_url);
 	}
 }
 

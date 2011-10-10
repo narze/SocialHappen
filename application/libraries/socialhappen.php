@@ -132,7 +132,6 @@ class SocialHappen{
 	 * @author Manassarn M. 
 	 */
 	function check_logged_in($redirect_url = NULL){
-		$this->login();
 		if($this->is_logged_in()){
 			return TRUE;
 		} else {
@@ -235,7 +234,7 @@ class SocialHappen{
 		$data = array_merge_recursive($common,$data);
 		$data = array_unique_recursive($data);
 		
-		$this->login();
+		// $this->login(); Don't audologin
 		if($this->CI->session->userdata('logged_in') == TRUE){
 			$data['user_companies'] = isset($user_companies) ? $user_companies : NULL;
 			if($this->CI->input->get('logged_in') == TRUE){
@@ -314,6 +313,7 @@ class SocialHappen{
 		if($redirect_url){
 			redirect($redirect_url);
 		}
+		return issetor($user_id);
 	}
 	
 	/**
@@ -666,7 +666,7 @@ class SocialHappen{
 		
 		$menu = array();
 		//Right menu
-		if(!$user){
+		if(!$user || !$this->is_logged_in()){
 			$facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
 			$view_as = 'guest';
 			$signup_link = $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');

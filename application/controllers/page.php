@@ -553,27 +553,6 @@ class Page extends CI_Controller {
 	function config($page_id){
 		redirect(base_url().'configs/'.$page_id);
 	}
-	
-	/**
-	 * Go to socialhappen facebook tab in specified page
-	 * @param $page_id
-	 * @param $force_update If true, facebook_tab_url will be forced to update
-	 * @author Manassarn M.
-	 */
-	function facebook_tab($page_id = NULL, $force_update = FALSE){
-		$this->load->model('page_model','page');
-		if(!$page = $this->page->get_page_profile_by_page_id($page_id)){
-			return FALSE;
-		}
-		$facebook_tab_url = $page['facebook_tab_url'];
-		if(!$facebook_tab_url || $force_update){
-			$facebook_tab_url = $this->facebook->get_facebook_tab_url($this->config->item('facebook_app_id'), $page['facebook_page_id']);
-			
-			$this->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
-		}
-		redirect($facebook_tab_url);
-	}
-
 }
 
 /* End of file page.php */

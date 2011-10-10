@@ -517,49 +517,51 @@ class Tab extends CI_Controller {
 		//if is sh user redirect popup to "regged"
 		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
 			echo "You're already a Socialhappen user";
-			exit();
-		}
-		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
-		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
-		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
-		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
-			
-		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-	
-		if ($this->form_validation->run() == FALSE)
-		{
-			$this -> load -> view('tab/signup', 
-					array(
-						'facebook_user'=>$facebook_user,
-						'user_profile_picture'=>$user_facebook_image,
-						'page_id' => $page_id
-					)
-			);
-		}
-		else
-		{
-			if (!$user_image = $this->socialhappen->upload_image('user_image')){
-				$user_image = $user_facebook_image;
-			}
-			$user = array(
-					       	'user_first_name' => set_value('first_name'),
-					       	'user_last_name' => set_value('last_name'),
-					       	'user_email' => set_value('email'),
-					       	'user_image' => $user_image,
-					       	'user_facebook_id' => $facebook_user['id']
-						);
-					
-			$user_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'user/json_add', $user), TRUE);
-			
-			if ($user_add_result['status'] == 'OK')
+			$this->socialhappen->login();
+			$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
+		} else {
+			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
+			$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
+				
+			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+		
+			if ($this->form_validation->run() == FALSE)
 			{
-				$this->socialhappen->login();
-				redirect('tab/signup_page/'.$page_id);
+				$this -> load -> view('tab/signup', 
+						array(
+							'facebook_user'=>$facebook_user,
+							'user_profile_picture'=>$user_facebook_image,
+							'page_id' => $page_id
+						)
+				);
 			}
 			else
 			{
-				log_message('error','add user failed');
-				echo 'Error occured';
+				if (!$user_image = $this->socialhappen->upload_image('user_image')){
+					$user_image = $user_facebook_image;
+				}
+				$user = array(
+								'user_first_name' => set_value('first_name'),
+								'user_last_name' => set_value('last_name'),
+								'user_email' => set_value('email'),
+								'user_image' => $user_image,
+								'user_facebook_id' => $facebook_user['id']
+							);
+						
+				$user_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'user/json_add', $user), TRUE);
+				
+				if ($user_add_result['status'] == 'OK')
+				{
+					$this->socialhappen->login();
+					redirect('tab/signup_page/'.$page_id);
+				}
+				else
+				{
+					log_message('error','add user failed');
+					echo 'Error occured';
+				}
 			}
 		}
 	}
@@ -650,6 +652,56 @@ class Tab extends CI_Controller {
 			'page_id' => $page_id
 		));
 		$this->load->view('tab/login_button');
+	}
+	
+	/**
+	 * Go to socialhappen facebook tab in specified page
+	 * @param $page_id
+	 * @param $force_update If true, facebook_tab_url will be forced to update
+	 * @param $return If true, facebook_tab_url will be return instead of browser redirect
+	 * @author Manassarn M.
+	 */
+	function facebook_page($page_id = NULL, $force_update = FALSE, $return = FALSE){
+		$this->load->model('page_model','page');
+		if(!$page = $this->page->get_page_profile_by_page_id($page_id)){
+			return FALSE;
+		}
+		$facebook_tab_url = $page['facebook_tab_url'];
+		if(!$facebook_tab_url || $force_update){
+			$facebook_tab_url = $this->facebook->get_facebook_tab_url($this->config->item('facebook_app_id'), $page['facebook_page_id']);
+			
+			$this->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
+		}
+		if($return){
+			return $facebook_tab_url;
+		}
+		redirect($facebook_tab_url);
+	}
+	
+	/**
+	 * Go to app's facebook tab
+	 * @param $app_install_id
+	 * @param $force_update If true, facebook_tab_url will be forced to update
+	 * @param $return If true, facebook_tab_url will be return instead of browser redirect
+	 * @author Manassarn M.
+	 */
+	function facebook_app($app_install_id = NULL, $force_update = FALSE, $return = FALSE){
+		$this->load->model('installed_apps_model','installed_app');
+		if(!$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id)){
+			return FALSE;
+		}
+		$facebook_tab_url = $app['facebook_tab_url'];
+		if(!$facebook_tab_url || $force_update){
+			$this->load->model('page_model','page');
+			$page = $this->page->get_page_profile_by_page_id($app['page_id']);
+			$facebook_tab_url = $this->facebook->get_facebook_tab_url($app['app_facebook_api_key'], $page['facebook_page_id']);
+			
+			$this->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
+		}
+		if($return){
+			return $facebook_tab_url;
+		}
+		redirect($facebook_tab_url);
 	}
 }
 /* End of file tab.php */
