@@ -70,6 +70,10 @@ class Audit_model extends CI_Model {
 										 'campaign_id' => 1,
 										 'page_id' => 1,
 										 'company_id' => 1));
+		$this->audits->ensureIndex(array('timestamp' => -1,
+										 'app_id' => 1,
+										 'app_install_id' => 1,
+										 'user_id' => 1));
 	}
 	
 	/**
@@ -261,13 +265,56 @@ class Audit_model extends CI_Model {
       $db_criteria['campaign_id'] = $criteria['campaign_id'];
     }
     
-    $cursor = $this->db->command(array('distinct' => 'audits', 'key' => $key, 'query' => $db_criteria));
+    // construct map and reduce functions
+		$map = new MongoCode("function() { emit(this.".$key.",this.timestamp); }");
+		$reduce = new MongoCode("function(k, vals) { ".
+		    "var max = vals[0];".
+		    "for (var i in vals) {".
+		    	"if(vals[i] > max)".
+		      	"max = vals[i];".
+		      "}".
+		    "}".
+		    "return max; }");
+		
+		$cursor = $this->db->command(array(
+		    "mapreduce" => "audits", 
+		    "map" => $map,
+		    "reduce" => $reduce,
+		    "query" => count($db_criteria) == 0 ? NULL : $db_criteria,
+		    "out" => array("inline" => 1)));
+    
     $result = array();
     foreach ($cursor as $audit) {
       $result[] = $audit;
     }
     
-    return $result[0];
+		$out_array = $result[0];
+		
+		// if something wrong from database query, just return
+		if(!is_array($out_array)){
+			return array();
+		}
+		
+		/*
+		 * sort output by timestamp
+		 */
+		function cmp($a, $b) {
+	    if ($a['value'] == $b['value']) {
+	        return 0;
+	    }
+	    return ($a['value'] < $b['value']) ? 1 : -1;
+		}
+		uasort($out_array, 'cmp');
+		
+		/*
+		 * filter result array
+		 */
+    $out_array = array_map(function($a){ return $a['_id']; }, $out_array);
+		
+		/*
+		 * correct array keys
+		 */
+    return array_values($out_array);
   }
 	
 	/**
