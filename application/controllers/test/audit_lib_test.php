@@ -494,11 +494,11 @@ class audit_lib_test extends CI_Controller {
 	
 	function end_test(){
 		
-		$this->audit->drop_collection();
-		$this->audit_action->drop_collection();
-		$this->stat_page->drop_collection();
-		$this->stat_app->drop_collection();
-		$this->stat_campaign->drop_collection();
+		// $this->audit->drop_collection();
+		// $this->audit_action->drop_collection();
+		// $this->stat_page->drop_collection();
+		// $this->stat_app->drop_collection();
+		// $this->stat_campaign->drop_collection();
 		
 	}
 }

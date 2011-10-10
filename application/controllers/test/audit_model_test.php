@@ -50,28 +50,32 @@ class Audit_model_test extends CI_Controller {
 		$data = array('subject' => 'a',
 					  'action_id' => 0,
 					  'object' => 'b',
-					  'app_id' => 1);
+					  'app_id' => 1,
+            'user_id' => 5);
 		$result = $this->audit->add_audit($data);
 		$this->unit->run($result, 'is_true', 'add audit', print_r($data, TRUE));
 		
 		$data = array('subject' => 'a',
 					  'action_id' => 0,
 					  'object' => 'c',
-					  'app_id' => 1);
+					  'app_id' => 1,
+            'user_id' => 5);
 		$result = $this->audit->add_audit($data);
 		$this->unit->run($result, 'is_true', 'add audit', print_r($data, TRUE));
 		
 		$data = array('subject' => 'a',
 					  'action_id' => 1,
 					  'object' => 'b',
-					  'app_id' => 1);
+					  'app_id' => 1,
+            'user_id' => 6);
 		$result = $this->audit->add_audit($data);
 		$this->unit->run($result, 'is_true', 'add audit', print_r($data, TRUE));
 		
 		$data = array('subject' => 'a',
 					  'action_id' => 1,
 					  'object' => 'c',
-					  'app_id' => 2);
+					  'app_id' => 2,
+            'user_id' => 5);
 		$result = $this->audit->add_audit($data);
 		$this->unit->run($result, 'is_true', 'add audit', print_r($data, TRUE));
 		
@@ -137,7 +141,7 @@ class Audit_model_test extends CI_Controller {
 
 	
 	function end_test(){
-		$this->audit->drop_collection();
+		// $this->audit->drop_collection();
 	}
 }
 /* End of file audit_model_test.php */
