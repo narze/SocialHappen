@@ -666,7 +666,7 @@ class SocialHappen{
 		
 		$menu = array();
 		//Right menu
-		if(!$user || !$this->is_logged_in()){
+		if(!$user){ //@TODO : Check login session here
 			$facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
 			$view_as = 'guest';
 			$signup_link = $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
