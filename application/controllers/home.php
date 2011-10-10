@@ -20,14 +20,17 @@ class Home extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function signup(){
-		if($this->socialhappen->get_user()){
+		$facebook_user = $this->facebook->getUser();
+		if(!$facebook_user || $this->socialhappen->get_user()){
 			redirect();
 		}
 		
-		$facebook_user = $this->facebook->getUser();
+		
 		$this->load->model('user_model','users');
-		$is_registered = $this->users->get_user_id_by_user_facebook_id($facebook_user['id']) ? TRUE : FALSE ; 
-	
+		if($is_registered = $this->users->get_user_id_by_user_facebook_id($facebook_user['id']) ? TRUE : FALSE){
+			$this->socialhappen->login();
+		} 
+		
 		$data = array(
 			'header' => $this -> socialhappen -> get_header( 
 				array(
@@ -61,8 +64,9 @@ class Home extends CI_Controller {
 				),
 			TRUE),
 			'footer' => $this -> socialhappen -> get_footer(),
-			'is_registered' => $is_registered
-			);
+			'is_registered' => $is_registered,
+			'from' => $this->input->get('from')
+		);
 		
 		if(!$is_registered) 
 		{
@@ -332,8 +336,15 @@ class Home extends CI_Controller {
 		echo json_encode($json);
 	}
 	
-	function logout(){
-		$this->socialhappen->logout();
+	/**
+	 * Login SocialHappen, if cannot, go to signup
+	 */
+	function login($redirect_url = NULL){
+		if($this->socialhappen->login()){
+			redirect($redirect_url);
+		} else {
+			redirect('home/signup?from=login');
+		}
 	}
 }  
 
