@@ -14,24 +14,20 @@
 					<th>Date</th>
 				</tr>
 			</thead>
-			<tbody><?php
-				if($activities)
-				{
-					foreach ($activities as $activity) { ?>
-						<tr>
-							<td><?php echo issetor($activity['page_name'], '-'); ?></td>
-							<td><?php echo issetor($activity['app_name'], '-'); ?></td>
-							<td><?php echo issetor($activity['campaign_name'], '-'); ?></td>
-							<td><?php echo issetor($activity['activity_detail'], '-'); ?></td>
-							<td><?php echo date('d F Y', $activity['date']); ?></td>
-						</tr><?php
-					}
-				}
-				else { ?>
-					<tr><td colspan="5" align="center">There's no recent activity.</td></tr><?php
-				}
-			 ?>
+			<tbody>
 			</tbody>
+			<tfoot>
+				<tr class="hidden-template" style="display:none;">
+					<td class="page-name"></td>
+					<td class="app-name"></td>
+					<td class="campaign-name"></td>
+					<td class="activity-detail"></td>
+					<td class="date"></td>
+				</tr>
+				<tr class="no-activity" style="display:none;"><td colspan="5" align="center">There's no recent activity.</td></tr>
+			</tfoot>
 		</table>
-		<div class="activities-table-footer"> </div>
+		<div class="activities-table-footer strip">
+			<div class="pagination"></div>
+		</div>
 	</div>

@@ -568,7 +568,7 @@ function show_available_page_in_company() {
 					// +(json[i].page_info.picture==null?'http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yA/r/gPCjrIGykBe.gif':json[i].page_info.picture)
 					"<li data-hasaddedapp='"+json[i].has_added_app+"' class='draggable'><p><img class='page-image' src='"
 					+json[i].page_info.picture
-					+"' alt='' width='80' height='80' /></p><p>"+json[i].name
+					+"' alt='' width='80' height='80' /></p><p class='pagename'>"+json[i].name
 					+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/></li>"
 					);
 				}

@@ -13,7 +13,7 @@ $(function(){
 	
 	function get_page_users(page_index, jq){
 		set_loading();
-		$.getJSON(base_url+'page/json_get_users/'+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){ console.log(json);
+		$.getJSON(base_url+'page/json_get_users/'+page_id+'/'+per_page+'/'+(page_index * per_page),function(json){
 			$('.wrapper-details-member.users .details table tbody tr.hidden-template').siblings().addClass('old-result');
 			if(json.length == 0) {
 				$('.wrapper-details-member.users .details').html(
