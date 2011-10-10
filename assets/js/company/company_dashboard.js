@@ -480,7 +480,10 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 							data: {
 								install_url:app_install_url,
 								facebook_page_id:facebook_page_id,
-								facebook_app_id:app_api_key
+								facebook_app_id:app_api_key,
+								user_id:user_id,
+								page_id:page_id,
+								company_id:company_id
 							},
 							error: function(jqXHR, textStatus, errorThrown) {
 								show_installed_app_in_page(page_id,facebook_page_id);
@@ -556,7 +559,7 @@ function show_available_page_in_company() {
 				$(".right-panel").find('.dragging-page').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 			},
 			success: function(json) {
-				var ul_element=$(".right-panel").find('.dragging-page').find('ul').empty();
+				var ul_element=$(".right-panel").disableSelection().find('.dragging-page').find('ul').empty();
 				available_pages=new Array();
 				for(i in json) {
 					available_pages[''+json[i].id]=json[i];
@@ -565,7 +568,7 @@ function show_available_page_in_company() {
 					// +(json[i].page_info.picture==null?'http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yA/r/gPCjrIGykBe.gif':json[i].page_info.picture)
 					"<li data-hasaddedapp='"+json[i].has_added_app+"' class='draggable'><p><img class='page-image' src='"
 					+json[i].page_info.picture
-					+"' alt='' width='80' height='80' /></p><p>"+json[i].name
+					+"' alt='' width='80' height='80' /></p><p class='pagename'>"+json[i].name
 					+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/></li>"
 					);
 				}
@@ -578,6 +581,7 @@ function show_available_page_in_company() {
 				}).bind('mouseout', function() {
 					$(this).removeClass("dragging");
 				});
+				ul_element.find('li[data-hasaddedapp="true"] img').after('<span class=\"button\"><a class=\"bt-installed-app\">Installed</a></span>');
 				// //for real use : don't allow re-install
 				// ul_element.find('li.draggable[data-hasaddedapp="false"]').draggable({ 
 					// connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),

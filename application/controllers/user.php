@@ -33,7 +33,7 @@ class User extends CI_Controller {
 							'Member' => NULL
 						);
 						
-					$activity = $this->_get_user_activity_page($page_id, $user_id);
+					//$activity = $this->_get_user_activity_page($page_id, $user_id);
 					$recent_apps = $this->_get_user_activity_recent_apps($page_id, $user_id);
 					$recent_campaigns = $this->_get_user_activity_recent_campaigns($page_id, $user_id);
 					
@@ -74,12 +74,14 @@ class User extends CI_Controller {
 						'title' => $user['user_first_name'].' '.$user['user_last_name'],
 						'vars' => array('user_id' => $user_id,
 										'page_id' => issetor($page_id),
+										'activities_per_page' => 10,
 										'app_install_id' => issetor($app_install_id),
 										'campaign_id' => issetor($campaign_id)),
 						'script' => array(
 							'common/functions',
 							'common/jquery.form',
 							'common/bar',
+							'common/jquery.pagination',
 							'user/user_activities',
 							'user/user_tabs',
 							//stat
@@ -114,7 +116,7 @@ class User extends CI_Controller {
 					array(),
 				TRUE), 
 				'user_activities' => $this -> load -> view('user/user_activities', 
-					array('activities' => $activity),
+					array('activities' => isset($activity) ? $activity : NULL ),
 				TRUE), 
 				'user_info' => $this -> load -> view('user/user_info', 
 					array('user' => $user, 'user_data' => $user_with_signup_fields['user_data']),
@@ -127,9 +129,10 @@ class User extends CI_Controller {
 		}
 	}
 
-	function _get_user_activity_page($page_id, $user_id){
+	function _get_user_activity_page($page_id, $user_id, $limit = 100, $offset = 0){
 		date_default_timezone_set('Asia/Bangkok');
-		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'user_id' => (int)$user_id));
+		$this->load->library('audit_lib');
+		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'user_id' => (int)$user_id), $limit, $offset);
 		
 		$this->load->model('app_model', 'apps');
 		$this->load->model('page_model', 'pages');
@@ -141,9 +144,10 @@ class User extends CI_Controller {
 			$activity_list[] = array(
 				'page_name' => $page['page_name'],
 				'app_name' => $app['app_name'],
-				'campaign_name' => NULL,
+				'campaign_name' => '-',
 				'activity_detail' => $audit_action['description'],
-				'date' => $activity['timestamp']
+				'date' => date('d F Y', $activity['timestamp']),
+				'time' => date('H:i:s', $activity['timestamp'])
 			);
 		}
 		return $activity_list;
@@ -369,6 +373,30 @@ class User extends CI_Controller {
 					'ylabel' => 'Pageviews');
 		//echo json_encode($data);
 		echo $this->audit_lib->render_stat_graph($data_label, $data, $title, $div);
+	}
+	
+	/**
+	 * JSON : Get user activities
+	 * @param $user_id
+	 * @param $page_id
+	 * @param $limit
+	 * @param $offset
+	 * @author Weerapat P.
+	 */
+	function json_get_user_activities($page_id = NULL, $user_id = NULL, $limit = 10, $offset = 0){
+		$activities = $this->_get_user_activity_page($page_id, $user_id, $limit, $offset);
+		echo json_encode($activities);
+	}
+	
+	/**
+	 * JSON : Count user activities
+	 * @param $user_id
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_user_activities($page_id = NULL, $user_id = NULL){
+		$activities = $this->_get_user_activity_page($page_id, $user_id);
+		echo count($activities);
 	}
 }
 

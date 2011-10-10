@@ -954,17 +954,17 @@ class Sync extends CI_Controller {
 								array(
 								    'user_id' => 3,
 								    'company_id' => 1,
-								    'user_role' => 0
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 4,
 								    'company_id' => 1,
-								    'user_role' => 2
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 5,
 								    'company_id' => 1,
-								    'user_role' => 3
+								    'user_role' => 1
 								),
 								array(
 								    'user_id' => 6,
@@ -1470,13 +1470,23 @@ class Sync extends CI_Controller {
 			),
 			array(
 				'app_id' => 0,
+				'action_id' => 6,
+				'description' => 'Create Company',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has created company {company:company_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
 				'action_id' => 101,
 				'description' => 'User Register SocialHappen',
 				'stat_app' => TRUE,
 				'stat_page' => TRUE,
 				'stat_campaign' => TRUE,
 				'format_string' => 'User {user:user_id} has registered SocialHappen',
-				'score' => 0
+				'score' => 50
 			),
 			array(
 				'app_id' => 0,
@@ -1526,7 +1536,77 @@ class Sync extends CI_Controller {
 				'stat_page' => TRUE,
 				'stat_campaign' => TRUE,
 				'format_string' => 'User {user:user_id} registered {page:page_id}',
-				'score' => 0
+				'score' => 50
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 107,
+				'description' => 'User Share Profile',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} shared profile',
+				'score' => 5
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 108,
+				'description' => 'User Share For Star',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} shared',
+				'score' => 1
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 109,
+				'description' => 'User Login',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} logged in',
+				'score' => 5
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 110,
+				'description' => 'User Link to Twitter',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} linked with Twitter account',
+				'score' => 10
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 111,
+				'description' => 'User Link to Facebook',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} linked with Facebook account',
+				'score' => 10
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 112,
+				'description' => 'User Link to Foursquare',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} linked with Foursquare account',
+				'score' => 10
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 113,
+				'description' => 'User Invite Friend',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} invited a friend',
+				'score' => 1
 			),
 		);
 		
@@ -1597,7 +1677,7 @@ class Sync extends CI_Controller {
 				$audit_action['description'], $audit_action['stat_app'], $audit_action['stat_page'],
 				$audit_action['stat_campaign'], $audit_action['format_string'], $audit_action['score']);
 		}
-		echo 'Added '.count($audit_actions).' audit actions<br />';
+		echo 'Added '.count(array_merge($platform_audit_actions,$audit_actions)).' audit actions<br />';
 		
 		$achievement_infos = array(
 			array(

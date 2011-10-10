@@ -94,6 +94,7 @@ onLoad = function(){
 				  
 				  var unread = notification_list[i].read ? '' : 'unread';
 				  $('ul.notification_list_bar').prepend('<li class="separator '+unread+'"><a href="'+notification_list[i].link+'">'+notification_list[i].message+'</a></li>');
+				  if( $('ul.notification_list_bar li').length == 6 ) break; // Show only 5 latest notifications
 				}
 				
 				$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){

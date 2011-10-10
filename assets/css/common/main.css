@@ -53,10 +53,11 @@ input.form-error {
 .bt-go_page { width: 122px; height: 32px; background-position: 0 0; }
 .bt-add_app { width: 111px; height: 32px; background-position: 0 -42px; }
 
+
 /* New botton */
 .bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs,
 .bt-apply, .bt-apply-to-signup-form, .bt-add-field-from-list, .bt-create-own-field, .bt-remove-field,
-.bt-go-facebook, .bt-view-all-apps, .bt-learn-more-campaign, .bt-addnew_campaign {
+.bt-go-facebook, .bt-view-all-apps, .bt-learn-more-campaign, .bt-addnew_campaign, .bt-installed-app {
 	display: block;
 	background: url(../../images/bg/bg_button_2.png) no-repeat;
 	cursor: pointer;
@@ -77,6 +78,7 @@ input.form-error {
 .bt-add-field-from-list { width: 296px; height: 40px; background-position: 0 -277px; display:inline-block; } 
 .bt-create-own-field { width: 296px; height: 40px; background-position: 0 -318px; display:inline-block; }
 .bt-remove-field { width: 15px; height: 15px; background-position: -284px -1px; display:inline-block; }
+.bt-installed-app { width:60px; height:24px; background-position: -129px 0; display:inline-block;}
 
 .bt-go_user_profile, .bt-go_user_fb, .icon-star-white, .icon-happy-white, .icon-star-green, .icon-happy-green, .icon-user-card {
 	display: block;
@@ -514,6 +516,10 @@ div.dragging-app ul li p span.button a.bt-setting_app {
 	top: 20px;
 	position: absolute;
 	left: 6px;
+}
+div.dragging-page ul li p span.button a.bt-installed-app {
+	position:relative;
+	top:25px;
 }
 
 /* Go to bar */
@@ -970,7 +976,6 @@ div#user-tabs div.activities-table-footer {
 	top:-30px;
 	width:901px;
 	background-color:#e1e1e1;
-	height:30px;
 	border:1px solid #dcdcdc;
 	border-top:0;
 	-webkit-border-bottom-left-radius: 5px;
