@@ -13,7 +13,10 @@
     <div class="name toggle">
 		<?php if(in_array($view_as, array('admin','user'))) : ?>
 			<div>
-				<p class="pic"><img src="<?php echo $current_menu['icon_url'];?>" alt="<?php echo $current_menu['name'];?>" /><span></span></p>
+				<p class="pic">
+					<img src="<?php echo $current_menu['icon_url'];?>" alt="<?php echo $current_menu['name'];?>" />
+					<?php if(!$app_mode) { ?><span></span><?php } ?>
+				</p>
 				<p><?php echo $current_menu['name'];?></p>
 				<?php if($menu['left']) :?>
 					<div class="dropdown"><span></span></div>
@@ -23,7 +26,7 @@
 			<ul><?php $last = count($menu['left']) - 1;
 				foreach($menu['left'] as $key=>$item){
 					$class = ($key == $last) ? ' class="last-child" ' : '';
-					echo '<li'. $class .'><a target="'. issetor($item['target'], '_self') .'" href="'.$item['location'].'">'.$item['title'].'</a></li>';
+					echo '<li'. $class .'><img src="'.str_replace('_o', '_16', $item['icon_url']).'" /><a target="'. issetor($item['target'], '_self') .'" href="'.$item['location'].'">'.$item['title'].'</a></li>';
 				} ?>
 			</ul>
 			<?php endif; ?>

@@ -161,6 +161,19 @@ background:url(../assets/images/bg_fb/bg_listmenu.png) 5px 13px no-repeat;
 padding:5px 10px 5px 20px;
 }
 
+div.header div.name>ul>li img {
+width:16px;
+height:16px;
+position: absolute;
+top: 9px;
+left: 6px;
+}
+
+div.header div.name>ul>li a {
+background:none;
+padding-left: 26px;
+}
+
 div.header div.name>ul {
 width:100%;
 left:0;
@@ -176,6 +189,7 @@ font-size:11px;
 background-image:url(../assets/images/bg_fb/bg_linex03.png);
 background-repeat:repeat-x;
 background-position:top left;
+position:relative;
 }
 
 div.header div.name>ul>li:first-child {
