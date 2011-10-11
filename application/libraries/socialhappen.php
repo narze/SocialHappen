@@ -411,7 +411,7 @@ class SocialHappen{
 		//file_get_content is allowed (no user agent)
 		if( ! isset($_SERVER['HTTP_USER_AGENT']) ){
 		
-		} else if( empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'){
+		} else if(!$this->input->is_ajax_request()){
 			exit();
 		}
 	}
