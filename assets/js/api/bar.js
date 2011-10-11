@@ -85,18 +85,22 @@ onLoad = function(){
 			  var notification_list = result.notification_list;
 			  if(notification_list.length > 0){
 				var notification_id_list = [];
+				var template = $('ul.notification_list_bar li.template');
 				
 				$('ul.notification_list_bar li').not('li.last-child').remove();
+				$('ul.notification_list_bar').prepend(template)
 				for(var i = notification_list.length - 1; i >= 0; i--){
 				  if(!notification_list[i].read){
 					notification_id_list.push(notification_list[i]._id);
 				  }
-				  
-				  var unread = notification_list[i].read ? '' : 'unread';
-				  $('ul.notification_list_bar').prepend('<li class="separator '+unread+'"><a href="'+notification_list[i].link+'">'+notification_list[i].message+'</a></li>');
-				  if( $('ul.notification_list_bar li').length == 6 ) break; // Show only 5 latest notifications
+				  var li = template.clone().removeClass('template');
+				  notification_list[i].read ? '' : li.addClass('unread');
+				  li.find('a').attr('href', notification_list[i].link);
+				  li.find('p.message').html(notification_list[i].message);
+				  li.find('p.time').html('10 minutes ago');
+				  $('ul.notification_list_bar').prepend(li);
+				  if( $('ul.notification_list_bar li').not('li.last-child').not('li.template').length == 5 ) break; // Show only 5 latest notifications
 				}
-				
 				$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
 
 				}, 'json');

@@ -208,6 +208,12 @@ background:url(../assets/images/bg_fb/bg_liney01.gif) repeat-y 0 0;
 padding:0 0 0 2px;
 }
 
+div.header ul.menu > li > ul li.separator {
+background-image:url(../assets/images/bg_fb/bg_linex03.png);
+background-repeat:repeat-x;
+background-position:top left;
+}
+
 div.header ul.menu>li.guest a {
 color:#FFF;
 display:block;
@@ -331,12 +337,6 @@ top:35px;
 
 div.header ul.menu > li.setting > ul li {
 font-size:11px;
-}
-
-div.header ul.menu > li.setting > ul li.separator {
-background-image:url(../assets/images/bg_fb/bg_linex03.png);
-background-repeat:repeat-x;
-background-position:top left;
 }
 
 div.header ul.menu > li.setting a {
@@ -755,49 +755,6 @@ div.popup-fb-signup-page {
 .bt-done-inactive {width: 73px; height: 30px; background-position: -181px -76px; display: inline-block; cursor:default;}
 .bt-start {width: 153px; height: 32px; background-position: -176px -427px; display: inline-block;}
 
-div.header ul.menu>li.notification>ul {
-background-color:#292929;
-display:none;
-width:250px;
-overflow:hidden;
-border-top:1px solid #1C1C1C;
-position:absolute;
-top:35px;
-z-index:999;
--webkit-border-radius:0 0 5px 5px;
--moz-border-radius:0 0 5px 5px;
-border-radius:0 0 5px 5px;
-}
-
-div.header ul.menu > li.notification div:first-child {
-text-indent:-9000px;
-cursor:pointer;
-display:block;
-width:35px;
-height:35px;
-background:url(../assets/images/bg_fb/bg_main.png) no-repeat 7px -68px;
-}
-
-div.header ul.menu > li.notification > ul li {
-font-size:11px;
-}
-
-div.header ul.menu > li.notification > ul li.separator {
-background-image:url(../assets/images/bg_fb/bg_linex03.png);
-background-repeat:repeat-x;
-background-position:top left;
-}
-
-div.header ul.menu > li.notification a {
-display:block;
-width:auto;
-height:auto;
-text-decoration:none;
-color:#FFF;
-font-weight:bold;
-background:url(../assets/images/bg_fb/bg_listmenu.png) 5px 12px no-repeat;
-padding:5px 10px 5px 20px;
-}
 
 div.header ul.menu > li.notification a.amount {
 display:block;
@@ -819,10 +776,71 @@ right:5px;
 padding:1px 2px;
 }
 
+div.header ul.menu>li.notification>ul {
+background-color:#292929;
+display:none;
+width:250px;
+overflow:hidden;
+border-top:1px solid #1C1C1C;
+position:absolute;
+top:35px;
+z-index:999;
+-webkit-border-radius:0 0 5px 5px;
+-moz-border-radius:0 0 5px 5px;
+border-radius:0 0 5px 5px;
+}
+
+div.header ul.menu > li.notification > ul li {
+font-size:11px;
+padding: 0 5px;
+}
+div.header ul.menu > li.notification li a {
+position:relative;
+display:block;
+padding-left:60px;
+color:#FFF;
+text-decoration:none;
+color:#FFF;
+min-height: 60px;
+}
+div.header ul.menu > li.notification li a img {
+width:50px;
+height:50px;
+border:0;
+position:absolute;
+left:0;
+top:5px;
+}
+div.header ul.menu > li.notification li a p.message {
+line-height: 16px;
+padding-top: 5px;
+}
+div.header ul.menu > li.notification li a p.time {
+color:#d6ff90;
+}
+div.header ul.menu > li.notification li.template {
+display:none;
+}
 div.header ul.menu > li.notification li.unread{
 background-color:#3d3d3d;
 }
 
-div.header ul.menu > li.notification li.unread:hover{
+div.header ul.menu > li.notification li.unread:hover {
 background-color:#4e4e4e;
+}
+
+div.header ul.menu > li.notification li.last-child {
+
+background-color:#555353;
+}
+div.header ul.menu > li.notification li.last-child a {
+text-align: center;
+text-shadow: #000 1px 1px 3px;
+display: block;
+text-decoration: none;
+color: white;
+font-weight: bold;
+background: url(../assets/images/bg_fb/bg_listmenu.png) 5px 13px no-repeat;
+padding: 5px 10px 5px 0px;
+min-height: initial;
 }
