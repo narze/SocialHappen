@@ -45,11 +45,16 @@ div.header>div:after{
 div.header h1 {
 	float: left;
 	width: 125px;
-	height: 20px;
-	background: url(../../images/social-happen.png) no-repeat;
-	margin: 11px 0 0;
+	margin: 0;
 }
 div.header h1 span {display: none;}
+div.header h1 a {
+	display: block; 
+	width: 125px;
+	height: 18px;
+	background: url(../../images/social-happen.png) no-repeat;
+		margin: 11px 0 11px;
+	}
 div.header>div div.goto {
 	float: left;
 	height: 40px;
@@ -1970,7 +1975,7 @@ div.box-billing_info table a:hover { text-decoration: none;}
 
 /* register */
 div.wrapper-register {padding: 15px 20px; background: #494949;}
-div.wrapper-register>div {
+div.wrapper-register>div.register-content {
 	border: 1px solid #dcdcdc;
 	background: #fff url(../../images/bg/bg_line-gray.gif) 557px 0 repeat-y;
 	-webkit-border-radius: 10px;

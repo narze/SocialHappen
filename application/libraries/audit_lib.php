@@ -670,6 +670,19 @@ class Audit_lib
 	/**
 	 * count audit with distinct key for single day
 	 * 
+	 * @param key string to group (ex. app_id)
+	 * @param criteria array of criteria may contain ['app_install_id', 'subject', 'object', 'objecti', 'page_id', 'campaign_id']
+	 * 
+	 * @return array
+	 */
+  function list_audit_range($key = NULL, $criteria = array()){
+    $this->CI->load->model('audit_model', 'audit');
+    return $this->CI->audit->list_distinct_audit($key, $criteria);
+  }
+  
+	/**
+	 * count audit with distinct key for single day
+	 * 
 	 * @param key string to distinct (ex. subject)
 	 * @param app_id [optional]
 	 * @param action_id
