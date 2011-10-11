@@ -182,13 +182,13 @@ class Facebook {
 		if(isset($this->page_access_token[$facebook_page_id])) {
 			return $this->page_access_token[$facebook_page_id];
 		}
-		$cookie = $this -> get_facebook_cookie();
-		$data = json_decode(file_get_contents('https://graph.facebook.com/'.$facebook_page_id.'?fields=access_token&access_token=' . $cookie['access_token']),TRUE);
-		if(isset($data['access_token'])){
-			return $data['access_token'];
-		} else {
-			return NULL;
+		if($cookie = $this -> get_facebook_cookie()){
+			$data = json_decode(file_get_contents('https://graph.facebook.com/'.$facebook_page_id.'?fields=access_token&access_token=' . $cookie['access_token']),TRUE);
+			if(isset($data['access_token'])){
+				return $data['access_token'];
+			}	
 		}
+		return NULL;
 	}
 	
 	/**
