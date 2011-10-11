@@ -158,6 +158,7 @@ class Sync extends CI_Controller {
 							    'app_install_page_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_config_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_support_page_tab' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
+							    'app_icon' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'app_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'app_facebook_api_key' => field_option('VARCHAR', 32, $default, $null, $autoinc, $unsigned)
 							),
@@ -435,6 +436,7 @@ class Sync extends CI_Controller {
 				'app_install_page_url' => 'http://apps.socialhappen.com/fgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
 				'app_config_url' => 'http://apps.socialhappen.com/fgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_support_page_tab' => 1, 
+				'app_icon' =>  'http://apps.socialhappen.com/fgf/images/app_image_16.png',
 				'app_image' =>  'http://apps.socialhappen.com/fgf/images/app_image_o.png',
 				'app_facebook_api_key' => '202663143123531' 	
 			),
@@ -451,6 +453,7 @@ class Sync extends CI_Controller {
 				'app_install_page_url' => 'http://socialhappen.dyndns.org/fgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
 				'app_config_url' => 'http://socialhappen.dyndns.org/fgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_support_page_tab' => 1, 
+				'app_icon' =>  'http://socialhappen.dyndns.org/fgf/images/app_image_16.png',
 				'app_image' =>  'http://socialhappen.dyndns.org/fgf/images/app_image_o.png',
 				'app_facebook_api_key' => '154899207922915' 	
 			),
@@ -467,6 +470,7 @@ class Sync extends CI_Controller {
 				'app_install_page_url' => 'http://apps.socialhappen.com/mockapp/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
 				'app_config_url' => 'http://apps.socialhappen.com/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_support_page_tab' => 1, 
+				'app_icon' =>  'http://apps.socialhappen.com/mockapp/images/app_image_16.png',
 				'app_image' =>  'http://apps.socialhappen.com/mockapp/images/app_image_o.png',
 				'app_facebook_api_key' => '177890852283217' 	
 			),
@@ -483,6 +487,7 @@ class Sync extends CI_Controller {
 				'app_install_page_url' => 'http://socialhappen.dyndns.org/mockapp/port/install_to_page/?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
 				'app_config_url' => 'http://socialhappen.dyndns.org/mockapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_support_page_tab' => 1, 
+				'app_icon' =>  'http://socialhappen.dyndns.org/mockapp/images/app_image_16.png',
 				'app_image' =>  'http://socialhappen.dyndns.org/mockapp/images/app_image_o.png',
 				'app_facebook_api_key' => '204755022911798' 	
 			),			
@@ -499,6 +504,7 @@ class Sync extends CI_Controller {
 				'app_install_page_url' => 'http://apps.socialhappen.com/feedv/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
 				'app_config_url' => 'http://apps.socialhappen.com/feedv/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_support_page_tab' => 1, 
+				'app_icon' =>  'http://apps.socialhappen.com/feedv/images/app_image_16.png',
 				'app_image' =>  'http://apps.socialhappen.com/feedv/images/app_image_o.png',
 				'app_facebook_api_key' => '203741749684542' 	
 			),
@@ -515,6 +521,7 @@ class Sync extends CI_Controller {
 				'app_install_page_url' => 'http://socialhappen.dyndns.org/feedv/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
 				'app_config_url' => 'http://socialhappen.dyndns.org/feedv/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_support_page_tab' => 1, 
+				'app_icon' =>  'http://socialhappen.dyndns.org/feedv/images/app_image_16.png',
 				'app_image' =>  'http://socialhappen.dyndns.org/feedv/images/app_image_o.png',
 				'app_facebook_api_key' => '253512681338518' 	
 			),			
@@ -531,6 +538,7 @@ class Sync extends CI_Controller {
 				'app_install_page_url' => 'http://apps.socialhappen.com/feedr/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
 				'app_config_url' => 'http://apps.socialhappen.com/feedr/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_support_page_tab' => 1, 
+				'app_icon' =>  'http://apps.socialhappen.com/feedr/images/app_image_16.png',
 				'app_image' =>  'http://apps.socialhappen.com/feedr/images/app_image_o.png',
 				'app_facebook_api_key' => '249927805038578' 	
 			),
@@ -547,6 +555,7 @@ class Sync extends CI_Controller {
 				'app_install_page_url' => 'http://socialhappen.dyndns.org/feedr/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
 				'app_config_url' => 'http://socialhappen.dyndns.org/feedr/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_support_page_tab' => 1, 
+				'app_icon' =>  'http://socialhappen.dyndns.org/feedr/images/app_image_16.png',
 				'app_image' =>  'http://socialhappen.dyndns.org/feedr/images/app_image_o.png',
 				'app_facebook_api_key' => '123678481062231' 	
 			),

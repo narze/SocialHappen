@@ -44,6 +44,19 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 			</li>
 			
 			<li>
+				<?=form_label('App Icon', 'app_icon', array(
+				'class' => 'app_icon',
+				'style' => 'color: #000;',
+				));
+				if($app_icon) { ?>
+				<img src="<?php echo $app_icon; ?>" width="16" height="16" />
+				<?php } ?>
+				<input id="app_icon" type="file" name="app_icon" />
+				<input type="hidden" name="app_image_old" value="<?php echo $app_icon; ?>">
+				<?php echo form_error('app_icon'); ?>
+			</li>
+			
+			<li>
 				<?=form_label('App Image', 'app_image', array(
 				'class' => 'app_image',
 				'style' => 'color: #000;',

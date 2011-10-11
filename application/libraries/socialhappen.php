@@ -334,7 +334,7 @@ class SocialHappen{
 	 * @return $image_url
 	 * @author Manassarn M.
 	 */
-	function upload_image($name = NULL){
+	function upload_image($name = NULL, $resize = TRUE){
 		$config['upload_path'] = './uploads/images/';
 		$config['allowed_types'] = 'gif|jpg|png';
 		$config['max_size']	= '2048';
@@ -345,7 +345,11 @@ class SocialHappen{
 		$this->CI->load->library('upload', $config);
 		if ($this->CI->upload->do_upload($name)){
 			$image_data = $this->CI->upload->data();
-			$this->resize_image($image_data);
+			if($resize) { 
+				$this->resize_image($image_data); 
+			} else {
+				rename($image_data['full_path'],"{$image_data['file_path']}{$image_data['raw_name']}_o{$image_data['file_ext']}");
+			}
 			return base_url()."uploads/images/{$image_data['raw_name']}_o{$image_data['file_ext']}";
 		} else {
 			return FALSE; 
@@ -358,8 +362,8 @@ class SocialHappen{
 	 * @param $old_image
 	 * @author Manassarn M.
 	 */
-	function replace_image($new_image = NULL, $old_image = NULL){
-		if($new_image = $this->upload_image($new_image)){
+	function replace_image($new_image = NULL, $old_image = NULL, $resize = TRUE){
+		if($new_image = $this->upload_image($new_image, $resize)){
 			if(strpos($old_image, base_url()) === 0){
 				$dimensions = array('q','t','s','n','o');
 				$old_image = str_replace(base_url(), "./", $old_image); // "./uploads/images/[imagename]_o.[ext]", facebook image will not be removed
@@ -692,11 +696,11 @@ class SocialHappen{
 			$this->CI->load->library('app_url');
 			foreach($apps as $page_app){
 				if($page_app['app_install_id'] != $app_install_id){
-					$menu['left'][] = 
-					array('location' => 
-						$this->CI->app_url->translate_url($page_app['app_url'], 
-						$page_app['app_install_id']),
-								'title' => $page_app['app_name']);
+					$menu['left'][] = array(
+						'location' => $this->CI->app_url->translate_url($page_app['app_url'], $page_app['app_install_id']),
+						'title' => $page_app['app_name'],
+						'icon_url' => $page_app['app_icon']
+					);
 				}
 			}
 		}

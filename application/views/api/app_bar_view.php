@@ -26,7 +26,7 @@
 			<ul><?php $last = count($menu['left']) - 1;
 				foreach($menu['left'] as $key=>$item){
 					$class = ($key == $last) ? ' class="last-child" ' : '';
-					echo '<li'. $class .'><img src="'.str_replace('_o', '_16', $item['icon_url']).'" /><a target="'. issetor($item['target'], '_self') .'" href="'.$item['location'].'">'.$item['title'].'</a></li>';
+					echo '<li'. $class .'><img src="'.$item['icon_url'].'" /><a target="'. issetor($item['target'], '_self') .'" href="'.$item['location'].'">'.$item['title'].'</a></li>';
 				} ?>
 			</ul>
 			<?php endif; ?>

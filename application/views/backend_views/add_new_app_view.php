@@ -43,6 +43,15 @@ echo form_open_multipart('backend/add_new_app');
 				<?php echo form_error('app_type_id'); ?>
 			</li>
 			<li>
+				<?=form_label('App Icon', 'app_icon', array(
+				'class' => 'app_icon',
+				'style' => 'color: #000;',
+				));
+				?>
+				<input id="app_icon" type="file" name="app_icon" />
+				<?php echo form_error('app_icon'); ?>
+			</li>
+			<li>
 				<?=form_label('App Image', 'app_image', array(
 				'class' => 'app_image',
 				'style' => 'color: #000;',
