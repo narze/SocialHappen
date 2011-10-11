@@ -704,7 +704,7 @@ class Tab extends CI_Controller {
 			$page = $this->page->get_page_profile_by_page_id($app['page_id']);
 			$facebook_tab_url = $this->facebook->get_facebook_tab_url($app['app_facebook_api_key'], $page['facebook_page_id']);
 			
-			$this->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
+			$this->installed_app->update_facebook_tab_url_by_app_install_id($app_install_id, $facebook_tab_url);
 		}
 		if($return){
 			return $facebook_tab_url;
