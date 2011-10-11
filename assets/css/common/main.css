@@ -7,13 +7,16 @@ a {
 .clear {clear:both;}
 .txt-center {text-align:center;}
 .asterisk { color:red; }
+div.buttons p { position:relative; top:15px; text-align:center; }
+div.buttons p.left { text-align:left; }
+div.buttons p.right { text-align:right; }
 
 .hidden-template {
 	display: none;
 }
-
-input.form-error {
-	border: 1px solid red;
+textarea.form-error,
+input[type="text"].form-error {
+	border: 1px solid red!important;
 	padding: 1px;
 }
 
@@ -31,12 +34,12 @@ input.form-error {
 .notice ol li { list-style:decimal!important; }
 .notice a { text-decoration:underline; font-weight:bold; }
 .notice a.close{ background: url(../../images/bg/notice_close.png) no-repeat top left; width: 10px; height: 10px; display: block; position: absolute; top: 10px; right: 10px; cursor:pointer; text-indent:-9000px; }
-.success { background-color:#efffbd; border-color:#cbd7a8; }
-.success a { color:#444e26; }
-.error { background-color:#ffc7c1; border-color:#e4aaa5; }
-.error a { color:#7f2b2b; }
-.warning { background-color:#fff6a8; border-color:#d9ce6e; }
-.warning a { color:#6d6311; }
+.notice.success { background-color:#efffbd; border-color:#cbd7a8; }
+.notice.success a { color:#444e26; }
+.notice.error { background-color:#ffc7c1; border-color:#e4aaa5; }
+.notice.error a { color:#7f2b2b; }
+.notice.warning { background-color:#fff6a8; border-color:#d9ce6e; }
+.notice.warning a { color:#6d6311; }
 
 /* Button */
 .bt-go_dashboard {
@@ -57,7 +60,8 @@ input.form-error {
 /* New botton */
 .bt-pick, .bt-free-trial, .bt-choose-package, .bt-upgrade-package, .bt-package-setting, .bt-read-faqs,
 .bt-apply, .bt-apply-to-signup-form, .bt-add-field-from-list, .bt-create-own-field, .bt-remove-field,
-.bt-go-facebook, .bt-view-all-apps, .bt-learn-more-campaign, .bt-addnew_campaign, .bt-installed-app {
+.bt-go-facebook, .bt-view-all-apps, .bt-learn-more-campaign, .bt-addnew_campaign, .bt-installed-app,
+.bt-create-account {
 	display: block;
 	background: url(../../images/bg/bg_button_2.png) no-repeat;
 	cursor: pointer;
@@ -78,7 +82,8 @@ input.form-error {
 .bt-add-field-from-list { width: 296px; height: 40px; background-position: 0 -277px; display:inline-block; } 
 .bt-create-own-field { width: 296px; height: 40px; background-position: 0 -318px; display:inline-block; }
 .bt-remove-field { width: 15px; height: 15px; background-position: -284px -1px; display:inline-block; }
-.bt-installed-app { width:60px; height:24px; background-position: -129px 0; display:inline-block;}
+.bt-installed-app { width:60px; height:24px; background-position: -129px 0; display:inline-block; }
+.bt-create-account { width: 230px; height: 43px; background-position: 0 -478px; display: inline-block; }
 
 .bt-go_user_profile, .bt-go_user_fb, .icon-star-white, .icon-happy-white, .icon-star-green, .icon-happy-green, .icon-user-card {
 	display: block;
@@ -542,34 +547,6 @@ div.header > div > ul > li.fb {
 /* Company application */
 p.alert, div.strip {
 	clear:both;
-}
-
-/* Signup */
-div.wrapper-register > div > div ul > li.pic div.img-wrapper {
-	width:80px;
-	height:80px;
-	overflow:hidden;
-}
-div.wrapper-register > div > div ul > li.pic img {
-	width:80px;
-}
-div.wrapper-register > div > div h2 {
-	clear:both;
-}
-div.upload-pic {
-	width:80px;
-	height:20px; 
-	cursor: pointer; 
-	overflow: hidden; 
-	position: absolute;
-}
-div.upload-pic input {
-	filter: alpha(opacity = 0);
-	zoom:1;
-	opacity:0;
-	position:absolute;
-	top:0;
-	right:0;
 }
 
 /* Create company */

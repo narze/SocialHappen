@@ -745,7 +745,7 @@ div.dragging-page ul li {
 }
 div.dragging-page ul li:first-child { margin-left: 6px;}
 div.dragging-page ul li p {position: relative;}
-div.dragging-page ul li p:hover span.button { display: block;} 
+div.dragging-page ul li:hover p span.button { display: block;} 
 div.dragging-page ul li p span.button {
 	display: none;
 	width: 81px;
@@ -1977,70 +1977,186 @@ div.box-billing_info table a:hover { text-decoration: none;}
 div.wrapper-register {padding: 15px 20px; background: #494949;}
 div.wrapper-register>div.register-content {
 	border: 1px solid #dcdcdc;
-	background: #fff url(../../images/bg/bg_line-gray.gif) 557px 0 repeat-y;
+	background-color: #fff;
 	-webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-	padding: 10px 0;
+	padding: 0 15px;
 }
 div.wrapper-register>div:after{
     clear:both;
     content:" ";
     display:block;
 }
-div.wrapper-register>div>div:first-child {
+div.wrapper-register>div.register-content>div.slides {
 	float: left;
-	width: 527px;
-	padding: 0 15px;
+	width: 590px;
+	height:590px;
+	overflow:hidden;
+	position:relative;
 }
-div.wrapper-register>div>div:first-child+div {
-	float: right;
-	width: 320px;
-	padding: 0 15px;
+div.wrapper-register>div.register-content>div.slides div.slide-wrapper {
+	width: 5000px;
 }
-div.wrapper-register>div>div h2 {
-	font-size: 20px;
+div.wrapper-register>div.register-content>div.slides div.slide {
+	float:left;
+	width: 590px;
+}
+div.wrapper-register>div.register-content div.slides div.slide-ctrl {
+	text-align:center;
+	position:absolute;
+	top:560px;
+	width: 570px;
+}
+div.wrapper-register>div.register-content div.slides div.slide-ctrl ul {
+	display:inline-block;
+}
+div.wrapper-register>div.register-content>div.slides div.slide-ctrl ul li {
+	float:left;
+	padding-left:10px;
+}
+div.wrapper-register>div.register-content>div.slides div.slide-ctrl ul li:first-child {
+	float:left;
+	padding-left:0;
+}
+div.wrapper-register>div.register-content>div.slides div.slide-ctrl ul li a {
+	display: block;
+	text-indent: -9000px;
+	width: 15px;
+	height: 15px;
+	background-image: url(../../images/bg/bg_button_2.png);
+	background-position: -258px -3px;
+	cursor: pointer;
+}
+div.wrapper-register>div.register-content>div.slides div.slide-ctrl ul li.active a {
+	background-position: -234px -3px;
+}
+div.wrapper-register>div.register-content>div.form {
+	float: left;
+	width: 248px;
+	background-color:#f7f7f7;
+	padding: 0 20px;
+	margin-bottom: 15px;
+	-webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+div.wrapper-register>div.register-content>div.form input::-webkit-input-placeholder,
+div.wrapper-register>div.register-content>div.form input::-moz-placeholder,
+div.wrapper-register>div.register-content>div.form textarea::-webkit-input-placeholder,
+div.wrapper-register>div.register-content>div.form textarea::-moz-placeholder { 
+	font-family:Arial;
+	font-size:12px;
+	font-style:italic;
+}
+div.wrapper-register div.hello-user {
+	padding-left:60px;
+	position:relative;
+	margin:15px 0;
+	height:60px;
+	border-bottom:1px solid #ededed;
+}
+div.wrapper-register div.hello-user div.img-wrapper {
+	width:50px;
+	height:50px;
+	overflow:hidden;
+	position:absolute;
+	left:0;
+}
+div.wrapper-register div.hello-user img {
+	width:50px;
+}
+div.wrapper-register div.hello-user h3 {
+	font-size:18px;
+}
+div.wrapper-register div.hello-user p {
+	font-size:15px;
+}
+div.upload-pic {
+	width:80px;
+	height:20px; 
+	cursor: pointer; 
+	overflow: hidden; 
+	position: absolute;
+}
+div.upload-pic input {
+	filter: alpha(opacity = 0);
+	zoom:1;
+	opacity:0;
+	position:absolute;
+	top:0;
+	right:0;
+}
+
+
+div.wrapper-register>div>div.form h2 {
+	font-size: 19px;
 	font-weight: normal;
 	color: #424242;
 	border-bottom: 1px dotted #a6a6a6;
-	margin-bottom: 10px;
-	padding: 10px 0;
+	margin: 10px 0 20px 0;
+	line-height: 25px;
 }
-div.wrapper-register>div>div ul {
-	padding: 0 0 0 95px;
+div.wrapper-register>div>div.form ul {
+	padding: 0;
 	position: relative;
 }
-div.wrapper-register>div>div ul>li { padding: 0 0 10px; position: relative;}
-div.wrapper-register>div>div ul>li.pic {
-	position: absolute;
-	left: 0;
-	top: 0;
+div.wrapper-register>div>div.form ul>li { padding: 0 0 10px; position: relative;}
+div.wrapper-register>div>div.form ul>li.company-pic {
+	position: relative;
+	padding-left:70px;
+	height:60px;
 }
-div.wrapper-register>div>div ul>li.pic span {
+div.wrapper-register>div>div.form ul>li.company-pic img {
+	position:absolute;
+	left:0;
+	width:50px;
+	height:50px;
+	border:3px solid #e3e3e3;
+}
+div.wrapper-register>div>div.form ul>li.company-pic span {
 	display: block;
-	text-align: center;
 	padding: 2px 0 0;
 	font-size: 11px;
 	position: static;
 }
+div.wrapper-register>div>div.form div.agreement {
+	border-top:1px solid #e7e7e7;
+	border-bottom:1px solid #e7e7e7;
+	width: 288px;
+	left: -20px;
+	position: relative;
+}
+div.wrapper-register>div>div.form div.agreement p {
+	margin: 10px 0;
+	padding: 0 20px;
+	line-height:20px;
+}
+div.wrapper-register>div>div.form div.agreement a,
+div.wrapper-register>div>div div.agreement b {
+	color:#34400c;
+}
+div.wrapper-register>div>div.form div.agreement a { text-decoration:underline; }
+div.wrapper-register>div>div.form div.buttons { height:70px;}
 div.wrapper-register>div>div ul>li input[type="text"] {
-	width: 210px;
+	width: 225px;
 	border: 1px solid #c5c5c5;
 	padding: 0 5px;
 	height: 25px;
 }
 div.wrapper-register>div>div ul>li textarea {
-	width: 210px;
+	width: 225px;
 	height: 105px;
 	border: 1px solid #c5c5c5;
 	padding: 5px;
 }
-div.wrapper-register>div>div ul>li>span {
+div.wrapper-register>div>div ul>li span {
 	position: absolute;
 	top: -10px;
 	right: 2px;
 	color: #db3332;
 	font-size: 11px;
+	padding:0 3px;
 }
 div.wrapper-register>div>div ul>li a { color: #65781f; text-decoration: underline;}
 div.wrapper-register>div>div ul>li a:hover {text-decoration: none;}

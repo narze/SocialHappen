@@ -44,8 +44,8 @@ class Home extends CI_Controller {
 						'home/signup'
 					),
 					'style' => array(
-						'common/main',
 						'common/platform',
+						'common/main',
 						'common/fancybox/jquery.fancybox-1.3.4'
 					),
 					'user_companies' => FALSE
@@ -73,6 +73,7 @@ class Home extends CI_Controller {
 			$data['signup_form'] = $this -> load -> view('home/signup_form', 
 				array(
 					'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id']),
+					'facebook_user'=>$facebook_user
 				),
 			TRUE);
 		}
@@ -88,35 +89,27 @@ class Home extends CI_Controller {
 		$facebook_user = $this->facebook->getUser();
 		$this->load->model('user_model','users');
 		
-		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
 		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
 		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');
 			
-		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+		$this->form_validation->set_error_delimiters('', '');
 	
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this -> load -> view('home/signup_form', 
-					array(
-						'user_profile_picture'=>$user_facebook_image
-					)
-			);
+			$this -> load -> view('home/signup_form', array());
 		}
 		else
 		{
-			if (!$user_image = $this->socialhappen->upload_image('user_image')){
-				$user_image = $user_facebook_image;
-			}
 			$company_image = $this->socialhappen->upload_image('company_image');
 			
 			$user = array(
 					       	'user_first_name' => set_value('first_name'),
 					       	'user_last_name' => set_value('last_name'),
 					       	'user_email' => set_value('email'),
-					       	'user_image' => $user_image,
+					       	'user_image' => $this->facebook->get_profile_picture($facebook_user['id']),
 					       	'user_facebook_id' => $facebook_user['id']
 						);
 						

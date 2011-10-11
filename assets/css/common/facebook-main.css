@@ -20,11 +20,11 @@ div.header {
 .bt-remove { width: 15px; height: 15px; background-position: -284px -1px; display:inline-block; }
 
 /* Pagination */
-div.strip {padding: 10px 0;}
+div.strip {padding: 10px 0; text-align: center;}
 div.strip div.pagination {
     height: 10px;
     margin: 0 auto;
-    width: 100px;
+    display:inline-block;
 }
 div.strip div.pagination a , div.strip div.pagination span.current {
     float: left;
