@@ -1259,7 +1259,8 @@ class Api extends CI_Controller {
 	}
 	
 	/**
-	 * Request add user point
+	 * DEPRECATED
+	 * Request add user point 
 	 * @author Manassarn M.
 	 */
 	function request_add_user_point(){
@@ -1555,6 +1556,77 @@ class Api extends CI_Controller {
 			$this->socialhappen->logout();
 		}
 		echo json_encode($response);
+	}
+	
+	/**
+	 * Request for facebook tab url
+	 * @author Manassarn M.
+	 */
+	function request_facebook_tab_url(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$facebook_page_id = $this->input->get('facebook_page_id', TRUE); //Optional
+		$page_id = $this->input->get('page_id', TRUE); //Optional
+		
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
+			return;
+		}
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+			return;
+		}
+		
+		$response = array();
+		if(!$page_id && !$facebook_page_id){ //Request for facebook tab url for app
+			$this->load->model('installed_apps_model','installed_app');
+			if(!$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id)){
+				$response['message'] = 'App not found';
+			} else if (!$facebook_tab_url = $app['facebook_tab_url']){
+				$response['message'] = 'Facebook tab url not found in this app';
+			} else {
+				$response['facebook_tab_url'] = $facebook_tab_url;
+			}
+		} else { //Request for facebook tab url for page
+			$this->load->model('page_model','page');
+			if(!$page_id){
+				$page_id = $this->page->get_page_id_by_facebook_page_id($facebook_page_id);
+			}
+			if(!$page = $this->page->get_page_profile_by_page_id($page_id)){
+				$response['message'] = 'Page not found';
+			} else if(!$facebook_tab_url = $page['facebook_tab_url']){
+				$response['message'] = 'Facebook tab url not found in this page';
+			} else {
+				$response['facebook_tab_url'] = $facebook_tab_url;
+			}
+		}
+		if(isset($response['facebook_tab_url'])){
+			$response['status'] = 'OK';
+		} else {
+			$response['status'] = 'ERROR';
+		}
+		
+		echo json_encode($response);
+	}
+	
+	function test_tab_url_api(){
+		$result_page_url = json_decode(file_get_contents('https://127.0.0.1/socialhappen/api/request_facebook_tab_url?app_id=1&app_install_id=1&app_secret_key=ad3d4f609ce1c21261f45d0a09effba4&app_install_secret_key=457f81902f7b768c398543e473c47465&page_id=1'), true);
+		$result_app_url = json_decode(file_get_contents('https://127.0.0.1/socialhappen/api/request_facebook_tab_url?app_id=1&app_install_id=1&app_secret_key=ad3d4f609ce1c21261f45d0a09effba4&app_install_secret_key=457f81902f7b768c398543e473c47465'), true);
+		$result_error = json_decode(file_get_contents('https://127.0.0.1/socialhappen/api/request_facebook_tab_url?app_id=1&app_install_id=1&app_secret_key=ad3d4f609ce1c21261f45d0a09effba4&app_install_secret_key=457f81902f7b768c398543e473c47465&page_id=100'), true);
+		echo "<pre>";
+		var_export($result_page_url);
+		var_export($result_app_url);
+		var_export($result_error);
+		echo "</pre>";
 	}
 	
 	function _authenticate_app($app_id, $app_secret_key){

@@ -719,7 +719,7 @@ class Sync extends CI_Controller {
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
 								    'app_install_secret_key' => '457f81902f7b768c398543e473c47465',
-									'facebook_tab_url' => ''
+									'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_202663143123531'
 								),
 								array(
 								  	'app_install_id' => 2, 
@@ -729,7 +729,7 @@ class Sync extends CI_Controller {
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
 								    'app_install_secret_key' => 'b4504b54bb0c27a22fedba10cca4eb55',
-									'facebook_tab_url' => ''
+									'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_154899207922915'
 								),
 								array(
 								    'app_install_id' => 3, 
@@ -749,7 +749,7 @@ class Sync extends CI_Controller {
 								    'app_install_date' => '2011-05-18 18:37:01', 
 								    'page_id' => 1, 
 								    'app_install_secret_key' => '19323810aedbbc8384b383fa21904626',
-									'facebook_tab_url' => ''
+									'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_204755022911798'
 								)
 							);
 		$this->db->insert_batch('installed_apps', $installed_apps);
