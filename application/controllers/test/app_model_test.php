@@ -42,6 +42,7 @@ class App_model_test extends CI_Controller {
 		$this->unit->run($result[0]['app_install_url'],'is_string','app_install_url');
 		$this->unit->run($result[0]['app_config_url'],'is_string','app_config_url');
 		$this->unit->run($result[0]['app_support_page_tab'],'is_string','app_support_page_tab');
+		$this->unit->run($result[0]['app_icon'],'is_string','app_icon');
 		$this->unit->run($result[0]['app_image'],'is_string','app_image');
 		$this->unit->run($result[0]['app_facebook_api_key'],'is_string','app_facebook_api_key');
 	}
@@ -62,6 +63,7 @@ class App_model_test extends CI_Controller {
 							'app_install_url' => 'test',
 							'app_config_url' => 'test',
 							'app_support_page_tab' => '1',
+							'app_icon' => 'test_icon_16.png',
 							'app_image' => 'test.jpg'
 						);
 		$app_id = $this->apps->add_app($app);

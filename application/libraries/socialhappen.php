@@ -362,8 +362,8 @@ class SocialHappen{
 	 * @param $old_image
 	 * @author Manassarn M.
 	 */
-	function replace_image($new_image = NULL, $old_image = NULL){
-		if($new_image = $this->upload_image($new_image)){
+	function replace_image($new_image = NULL, $old_image = NULL, $resize = TRUE){
+		if($new_image = $this->upload_image($new_image, $resize)){
 			if(strpos($old_image, base_url()) === 0){
 				$dimensions = array('q','t','s','n','o');
 				$old_image = str_replace(base_url(), "./", $old_image); // "./uploads/images/[imagename]_o.[ext]", facebook image will not be removed
@@ -697,7 +697,7 @@ class SocialHappen{
 					$menu['left'][] = array(
 						'location' => $this->CI->app_url->translate_url($page_app['app_url'], $page_app['app_install_id']),
 						'title' => $page_app['app_name'],
-						'icon_url' => $page_app['app_image']
+						'icon_url' => $page_app['app_icon']
 					);
 				}
 			}
