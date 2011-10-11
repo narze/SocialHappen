@@ -12,7 +12,7 @@ sh_guest = function(){
 sh_register = function(){
 	(function($){
 		$.fancybox({
-		href: base_url+'tab/signup/'+page_id
+			href: base_url+'tab/signup/'+page_id+'/'+app_install_id
 		});
 		$('form.signup-form').die('submit');
 		$('form.signup-form').live('submit', function() {
@@ -137,6 +137,11 @@ onLoad = function(){
 				window.parent.location.reload(); //Error - Unsafe JavaScript attempt to access frame 
 			});
 			
+			$('a.a-logout').live('click', function(){
+				$.fancybox({
+					href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
+				});
+			});
 		});
 	})(jQuery);
 };

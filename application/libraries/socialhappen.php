@@ -665,12 +665,14 @@ class SocialHappen{
 		$this->CI->load->model('User_model', 'User');
 		$this->CI->load->model('user_pages_model','user_pages');
 		$this->CI->load->model('page_model','pages');
+		$this->CI->load->model('session_model','session_model');
 		$user = $user_id ? $this->CI->User->get_user_profile_by_user_id($user_id) : $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
-		
+
 		$menu = array();
-		//Right menu
-		if(!$user){ //@TODO : Check login session here
+		//Right menu			
+		//@TODO : This has problems with multiple login, cannot use user_agent to check due to blank user_agent when called via api
+		if(!$user || !$this->CI->session_model->get_session_id_by_user_id($user['user_id'])){ 
 			$facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
 			$view_as = 'guest';
 			$signup_link = $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
@@ -717,7 +719,9 @@ class SocialHappen{
 				'page_app_installed_id' => issetor($page['page_app_installed_id'],0),
 				'page_installed' => issetor($page['page_installed'],1),
 				'is_user_register_to_page' => $is_user_register_to_page ? TRUE : FALSE,
-				'user_id' => $user['user_id']
+				'user_id' => $user['user_id'],
+				'app_mode' => $app_mode,
+				'app_install_id' => $app_install_id
 			),
 			'view_as' => $view_as,
 			'app_install_id' => $app_install_id,
