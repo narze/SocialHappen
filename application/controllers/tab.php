@@ -113,11 +113,15 @@ class Tab extends CI_Controller {
 		$this->parser->parse('tab/tab_view', $data);
 	}
 	
-	function logout($redirect_url = NULL)
+	function logout($page_id = NULL, $app_install_id = NULL)
 	{
-		$redirect_url = $this->input->get('url');
+		echo "Logged out SocialHappen";
 		$this->socialhappen->logout();
-		$this->load->view('common/redirect', array('refresh'=>TRUE));
+		if($app_install_id){
+			$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
+		} else if ($page_id){
+			$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
+		}
 	}
 	
 	function dashboard($page_id = NULL){
@@ -509,7 +513,7 @@ class Tab extends CI_Controller {
 		$this->load->view('tab/guest', $data);
 	}
 	
-	function signup($page_id = NULL){
+	function signup($page_id = NULL, $app_install_id = NULL){
 		$this->load->library('form_validation');
 		$facebook_user = $this->facebook->getUser();
 		//$this->load->model('user_model','users');
@@ -518,7 +522,11 @@ class Tab extends CI_Controller {
 		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
 			echo "You're already a Socialhappen user";
 			$this->socialhappen->login();
-			$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
+			if($app_install_id){
+				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
+			} else if ($page_id){
+				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
+			}
 		} else {
 			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
 			$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
