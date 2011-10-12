@@ -183,9 +183,7 @@ class Page_model extends CI_Model {
 		$templates = $this->get_user_field_templates();
 		$update_fields = array();
 		foreach($fields as $field){
-			if(isset($field['template'])){
-				$field = array_merge($templates[$field['template']], $field);//TODO: Deprecated, not used
-			}
+
 			if(!issetor($field['name']) || !issetor($field['type']) || !issetor($field['label']) ||
 				!in_array($field['type'], array('text','textarea','checkbox','radio')) ||
 				(in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) || 
@@ -199,6 +197,17 @@ class Page_model extends CI_Model {
 			
 			if(!isset($field['required'])){ //if not specified
 				$field['required'] = FALSE;	
+			}
+			
+			if(isset($templates[$field['name']]['verify_message'])){
+				$field['verify_message'] = $templates[$field['name']]['verify_message'];
+			} else {
+				switch($field['type']){
+					case 'text' : $field['verify_message'] = 'Please enter your '. strtolower($field['label']) . '.'; break;
+					case 'textarea' : $field['verify_message'] = 'Please enter your '. strtolower($field['label']) . '.'; break;
+					case 'checkbox' : $field['verify_message'] = 'Please select at least one of your '. strtolower($field['label']) . '.'; break;
+					case 'radio' : $field['verify_message'] = 'Please select your '. strtolower($field['label']) . '.'; break;
+				}
 			}
 			
 			if($key = array_search($field['name'], $field_names)){ //If exists, update
@@ -232,6 +241,7 @@ class Page_model extends CI_Model {
 	}
 	
 	/**
+	 * DEPRECATED
 	 * Update page user fields
 	 * @param $page_id
 	 * @param array $fields
@@ -294,99 +304,119 @@ class Page_model extends CI_Model {
 			'id_card_number' => array(
 				'name' => 'id_card_number',
 				'label' => 'ID Card Number',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your ID card number.'
 			),
 			'gender' => array(
 				'name' => 'gender',
 				'label' => 'Gender',
 				'type' => 'radio',
-				'items' => array('Male','Female')
+				'items' => array('Male','Female','Not sure'),
+				'verify_message' => 'Please select your gender.'
 			),
 			'date_of_birth' => array(
 				'name' => 'date_of_birth',
 				'label' => 'Date of Birth',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please select your date of birth.',
+				'options' => array('calendar' => 'dd-mm-yyyy')
 			),
 			'education' => array(
 				'name' => 'education',
 				'label' => 'Education',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your education.'
 			),
 			'occupation' => array(
 				'name' => 'occupation',
 				'label' => 'Occupation',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your occupation.'
 			),
 			'income' => array(
 				'name' => 'income',
 				'label' => 'Income',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your monthly income.'
 			),
 			'marital_status' => array(
 				'name' => 'marital_status',
 				'label' => 'Marital Status',
 				'type' => 'radio',
-				'items' => array('Single', 'Engaged', 'Married', 'Widowed', 'Divorced')
+				'items' => array('Single', 'Engaged', 'Married', 'Widowed', 'Divorced'),
+				'verify_message' => 'Please select your marital status.'
 			),
 			'number_of_children' => array(
 				'name' => 'number_of_children',
 				'label' => 'Number of Children',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter number of children.'
 			),
 			'address_number' => array(
 				'name' => 'address_number',
 				'label' => 'Address Number',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your address.'
 			),
 			'street' => array(
 				'name' => 'street',
 				'label' => 'Street',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your street.'
 			),
 			'town' => array(
 				'name' => 'town',
 				'label' => 'Town',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your town.'
 			),
 			'city' => array(
 				'name' => 'city',
 				'label' => 'City',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your city.'
 			),
 			'zip_code' => array(
 				'name' => 'zip_code',
 				'label' => 'Zip Code',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your zip code.'
 			),
 			'country' => array(
 				'name' => 'country',
 				'label' => 'Country',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your country.'
 			),
 			'telephone' => array(
 				'name' => 'telephone',
 				'label' => 'Telephone',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your telephone number.'
 			),
 			'mobile_phone' => array(
 				'name' => 'mobile_phone',
 				'label' => 'Mobile Phone',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your mobile phone number.'
 			),
 			'website' => array(
 				'name' => 'website',
 				'label' => 'Website',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your website.'
 			),
 			'twitter' => array(
 				'name' => 'twitter',
 				'label' => 'Twitter',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your Twitter account name.'
 			),
 			'facebook' => array(
 				'name' => 'facebook',
 				'label' => 'Facebook',
-				'type' => 'text'
+				'type' => 'text',
+				'verify_message' => 'Please enter your Facebook url.'
 			),
 		);
 		return $templates;

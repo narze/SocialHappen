@@ -92,18 +92,19 @@ class Configs extends CI_Controller {
 			if(!$this->input->post('submit-form')){
 			
 			} else {
-				$fields = $this->input->post();
-				unset($fields['submit-form']);
+				$submitted_fields = $this->input->post();
+				
+				unset($submitted_fields['submit-form']);
 				//signup - fields = remove
 				//fields - signup = add
 				foreach($signup_fields as $key => $signup_field){
-					if(isset($fields[$signup_field['name']])){
+					if(isset($submitted_fields[$signup_field['name']])){
 						unset($signup_fields[$key]); //To remove
-						//unset($fields[$signup_field['name']]); //To add, unused because we need to update
+						//unset($submitted_fields[$signup_field['name']]); //To add, unused because we need to update
 					}
 				}
 				
-				$add_result = $this->page->add_page_user_fields_by_page_id($page_id,$fields);
+				$add_result = $this->page->add_page_user_fields_by_page_id($page_id,$submitted_fields);
 				
 				$remove_ids = array_keys($signup_fields);
 				$this->page->remove_page_user_fields_by_page_id($page_id,$remove_ids);
