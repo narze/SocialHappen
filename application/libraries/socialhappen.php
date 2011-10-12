@@ -411,7 +411,7 @@ class SocialHappen{
 		//file_get_content is allowed (no user agent)
 		if( ! isset($_SERVER['HTTP_USER_AGENT']) ){
 		
-		} else if(!$this->input->is_ajax_request()){
+		} else if(!$this->CI->input->is_ajax_request()){
 			exit();
 		}
 	}
