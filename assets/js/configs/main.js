@@ -177,9 +177,11 @@ $(function(){
 							}
 						break;
 						case 'textarea':
+							new_field.find('div.inputs').append('<textarea></textarea>');
+						break;
 						case 'text':
 						default:
-							new_field.find('div.inputs').append('<input type="'+new_fields_data[i].type+'"></input>');
+							new_field.find('div.inputs').append('<input type="text"></input>');
 						break;
 					}
 				}

@@ -210,6 +210,12 @@ class Page_model extends CI_Model {
 				}
 			}
 			
+			if(isset($templates[$field['name']]['options']) || is_array($templates[$field['name']]['options'])){
+				$field['options'] = $templates[$field['name']]['options'];
+			} else {
+				$field['options'] = NULL;
+			}
+			
 			if($key = array_search($field['name'], $field_names)){ //If exists, update
 				foreach($field as $field_key => $field_value){
 					$page_fields[$key][$field_key] = $field_value;
@@ -319,7 +325,7 @@ class Page_model extends CI_Model {
 				'label' => 'Date of Birth',
 				'type' => 'text',
 				'verify_message' => 'Please select your date of birth.',
-				'options' => array('calendar' => 'dd-mm-yyyy')
+				'options' => array('calendar' => 'dd-mm-yy')
 			),
 			'education' => array(
 				'name' => 'education',
@@ -352,9 +358,9 @@ class Page_model extends CI_Model {
 				'type' => 'text',
 				'verify_message' => 'Please enter number of children.'
 			),
-			'address_number' => array(
-				'name' => 'address_number',
-				'label' => 'Address Number',
+			'address' => array(
+				'name' => 'address',
+				'label' => 'Address',
 				'type' => 'text',
 				'verify_message' => 'Please enter your address.'
 			),

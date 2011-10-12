@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css"  href="<?php echo base_url().'assets/css/common/fancybox/jquery.fancybox-1.3.4.css'; ?>" />
+<link rel="stylesheet" type="text/css"  href="<?php echo base_url().'assets/css/common/smoothness/jquery-ui-1.8.9.custom.css'; ?>" />
 
 <script>
 	var base_url = "<?php echo base_url(); ?>";

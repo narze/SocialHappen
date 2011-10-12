@@ -61,9 +61,11 @@ getScript = function(url, checkName, success) {
 };
 
 loadChildScripts = function(){
-	getScript(base_url+'assets/js/common/jquery.form.js', 'jQuery.fn.ajaxForm', function(){
-		getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', 'jQuery.fancybox', function(){
-			onLoad();
+	getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js', 'jQuery.ui', function(){
+		getScript(base_url+'assets/js/common/jquery.form.js', 'jQuery.fn.ajaxForm', function(){
+			getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', 'jQuery.fancybox', function(){
+				onLoad();
+			});
 		});
 	});
 }
@@ -188,7 +190,29 @@ sh_popup = function(){
 				});
 			}
 		}
+		
 	})(jQuery);
-}
+};
  
+applyOptionsToPageSignup = function(){
+	(function($){
+		$('#signup-form form div.form li[data-field-options]').each(function(){
+			var textInput = $('div.inputs', this).find('input[type="text"], textarea'); //only texts & textareas
+			var fieldOptions = $(this).data('fieldOptions');
+			if(fieldOptions!=null){
+				$.each(fieldOptions, function(i, val){
+					console.log(i,val,textInput);
+					if(typeof(i)=='number'){ //index is number, check value
+						
+					} else { //index is string, check it
+						if(i=='calendar'){
+							textInput.datepicker({ dateFormat: val });
+						}
+					}
+				});
+			}
+		});
+	})(jQuery);
+};
+
 getScript('http://code.jquery.com/jquery-latest.min.js', 'jQuery', loadChildScripts);
