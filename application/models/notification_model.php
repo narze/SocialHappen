@@ -56,19 +56,26 @@ class Notification_model extends CI_Model {
 	 * @param user_id
 	 * @param message string
 	 * @param link string
+	 * @param image string url to image
+	 * @param timestamp int
 	 * 
 	 * @return result boolean
 	 * @author Metwara Narksook
 	 */
-	function add($user_id = NULL, $message = NULL, $link = NULL){
+	function add($user_id = NULL, $message = NULL, $link = NULL, $image = NULL, $timestamp = NULL){
 		if(empty($user_id) || empty($message) || empty($link)){
 			return FALSE;
 		}
 		
+		date_default_timezone_set('Asia/Bangkok');
+		$timestamp = isset($timestamp) ? (int)$timestamp : time();
+		
 		$notification = array('user_id' => (int) $user_id,
 													'message' => $message,
 													'link' => $link,
-													'read' => FALSE);
+													'read' => FALSE,
+													'image' => $image,
+													'timestamp' => $timestamp);
 		return $this->notification->insert($notification);
 	}
 	

@@ -46,23 +46,28 @@ class Notification_lib
 	 * @param user_id
 	 * @param message string
 	 * @param link string
+	 * @param image string url to image
 	 * 
 	 * @return result boolean
 	 * @author Metwara Narksook
 	 */
-	function add($user_id = NULL, $message = NULL, $link = NULL){
+	function add($user_id = NULL, $message = NULL, $link = NULL, $image = NULL){
 		if(empty($user_id) || empty($message) || empty($link)){
 			return FALSE;
 		}
-		$result = $this->CI->notification->add((int)$user_id, $message, $link);
-		$this->_send_notification($user_id, $message, $link);
+		date_default_timezone_set('Asia/Bangkok');
+		$timestamp = time();
+		$result = $this->CI->notification->add((int)$user_id, $message, $link,
+		 $image, $timestamp);
+		$this->_send_notification($user_id, $message, $link, $image, $timestamp);
 		return $result;
 	}
 	
 	/**
 	 * private function
 	 */
-	function _send_notification($user_id = NULL, $message = NULL, $link = NULL){
+	function _send_notification($user_id = NULL, $message = NULL, $link = NULL,
+	 $image = NULL, $timestamp = NULL){
 		if(empty($user_id)){
 			return FALSE;
 		}
@@ -76,10 +81,14 @@ class Notification_lib
 		  .'&notification_amount='.$notification_amount);
 		  
 		}else if(isset($message) && isset($link)){
-		  $notification_message = json_encode((object)array(
-			'message' => $message,
-			'link' => $link
-		  ));
+			$message_array = array(
+				'message' => $message,
+				'link' => $link,
+				'image' => $image,
+				'timestamp' => $timestamp
+		  );
+			
+		  $notification_message = json_encode((object)$message_array);
 		  
 		  $notification_amount = $this->count_unread($user_id);
 		  

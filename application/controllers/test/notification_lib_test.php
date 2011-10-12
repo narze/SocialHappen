@@ -65,7 +65,8 @@ class notification_lib_test extends CI_Controller {
 		$user_id = '4';
 		$message = 'noti1';
 		$link = 'http://1';
-		$result = $this->notification_lib->add($user_id, $message, $link);
+		$image = 'https://socialhappen.dyndns.org/socialhappen/assets/images/badges.png';
+		$result = $this->notification_lib->add($user_id, $message, $link, $image);
 		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 1, 'list', print_r(count($result), TRUE));
@@ -73,7 +74,7 @@ class notification_lib_test extends CI_Controller {
 		$user_id = '4';
 		$message = 'noti2';
 		$link = 'http://2';
-		$result = $this->notification_lib->add($user_id, $message, $link);
+		$result = $this->notification_lib->add($user_id, $message, $link, $image);
 		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 2, 'list', print_r($result, TRUE));
@@ -81,7 +82,7 @@ class notification_lib_test extends CI_Controller {
 		$user_id = '4';
 		$message = 'noti3';
 		$link = 'http://3';
-		$result = $this->notification_lib->add($user_id, $message, $link);
+		$result = $this->notification_lib->add($user_id, $message, $link, $image);
 		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 3, 'list', print_r($result, TRUE));
@@ -89,7 +90,7 @@ class notification_lib_test extends CI_Controller {
 		$user_id = '4';
 		$message = 'noti4';
 		$link = 'http://4';
-		$result = $this->notification_lib->add($user_id, $message, $link);
+		$result = $this->notification_lib->add($user_id, $message, $link, $image);
 		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 4, 'list', print_r($result, TRUE));
@@ -97,7 +98,7 @@ class notification_lib_test extends CI_Controller {
 		$user_id = '4';
 		$message = 'noti5';
 		$link = 'http://5';
-		$result = $this->notification_lib->add($user_id, $message, $link);
+		$result = $this->notification_lib->add($user_id, $message, $link, $image);
 		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 5, 'list', print_r($result, TRUE));
@@ -105,7 +106,7 @@ class notification_lib_test extends CI_Controller {
 		$user_id = '21';
 		$message = 'noti1';
 		$link = 'http://1';
-		$result = $this->notification_lib->add($user_id, $message, $link);
+		$result = $this->notification_lib->add($user_id, $message, $link, $image);
 		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
 		$result = $this->notification->lists();
 		$this->unit->run(count($result), 6, 'list', print_r($result, TRUE));

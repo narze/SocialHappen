@@ -64,7 +64,9 @@ loadChildScripts = function(){
 	getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js', 'jQuery.ui', function(){
 		getScript(base_url+'assets/js/common/jquery.form.js', 'jQuery.fn.ajaxForm', function(){
 			getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', 'jQuery.fancybox', function(){
-				onLoad();
+				getScript(base_url + 'assets/js/common/jquery.timeago.js', 'jQuery.timeago', function(){
+					onLoad();
+				});
 			});
 		});
 	});
@@ -97,7 +99,8 @@ onLoad = function(){
 				  notification_list[i].read ? '' : li.addClass('unread');
 				  li.find('a').attr('href', notification_list[i].link);
 				  li.find('p.message').html(notification_list[i].message);
-				  li.find('p.time').html('10 minutes ago');
+				  li.find('p.time').html($.timeago(new Date(parseInt(notification_list[i].timestamp, 10) * 1000)));
+				  li.find('img').attr('src', notification_list[i].image);
 				  $('ul.notification_list_bar').prepend(li);
 				  if( $('ul.notification_list_bar li').not('li.last-child').length == 5 ) break; // Show only 5 latest notifications
 				}
