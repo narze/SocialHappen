@@ -188,13 +188,51 @@ $(function(){
 	
 	function load_notification(){
 		set_loading();
-		
 		$('div#main').load(base_url+'tab/notifications/'+user_id+'?return_url='+return_url, function(){
 			$('a.back-to-app').attr('href', return_url);
+			
+			$.getJSON(base_url+"tab/json_count_user_notifications/"+user_id, function(count){
+				if(count <= notifications_per_page) {
+					get_user_notifications(0);
+				} else {
+					$('div.paging').pagination(count, {
+						items_per_page:notifications_per_page,
+						callback:get_user_notifications,
+						load_first_page:true,
+						next_text: '>',
+						prev_text: '<'
+					});
+				}
+			});
 		});
 		
 		$('li.notificationtoggle').find('ul').hide();
 		return false;
+	}
+	
+	function get_user_notifications(page_index) {
+		set_loading();
+		$.getJSON(base_url+'tab/json_get_notifications/'+user_id+'/'+notifications_per_page+'/'+(page_index * notifications_per_page), function(json){
+			if(json.length == 0) {
+				$('div.notifications-list ul').append('<li>No notifications</li>');
+			} else {
+				var old_li = $('div.notifications-list ul li'); //Prevent page auto scroll
+				var template = $('div.notifications-list ul li:first-child');
+				for(i in json) {
+					var li = template.clone();
+					li.find('img').attr('src', '#' );
+					li.find('p.title').text( 'SocialHappen' );
+					li.find('div.desc p').html( json[i].message );
+					li.find('div.date').text( '10 minutes ago' );
+					$('div.notifications-list ul').append(li);
+				}
+				old_li.remove(); //Prevent page auto scroll
+			}
+		});
+
+		if($('div.pagination').find('a').attr('href') == '#') {
+			$('div.pagination').find('a').removeAttr('href'); // Remove href="#"
+		}
 	}
 	
 	$('a.a-dashboard').live('click',function(){

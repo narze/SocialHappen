@@ -44,7 +44,7 @@
 			<li class="notification notificationtoggle">
 				<a class="amount"><?php if( isset($notification_amount) && $notification_amount > 0 ) { ?><span><?php echo $notification_amount;?></span> <?php } ?></a>
 				<ul class="notification_list_bar">
-					<li class="template separator">
+					<li class="separator">
 						<a>
 							<img src="" />
 							<p class="message"></p>

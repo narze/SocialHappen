@@ -46,6 +46,48 @@ div.strip div.pagination span.current {
 	text-indent:-900px;
 	overflow:hidden;
 }
+
+/* Pagination (number) */
+.paging {
+    font-size: 12px;
+    font-weight: bold;
+    position: relative;
+    text-align: right;
+	padding-right:13px;
+	padding-top:2px;
+}
+.paging a {
+	display: block;
+	background: url(../../images/bg/bg_main.png) no-repeat;
+	cursor: pointer;
+	float:left;
+	width:21px;
+	height:21px;
+	background-position:0 -250px;
+	text-align:center;
+	padding:3px 2px 0 2px;
+	color: #666;
+}
+.paging a:hover {
+	text-decoration:none;
+	color:#000;
+}
+.paging span{
+	color: #fff;
+}
+.paging span.current {
+	display: block;
+	background: url(../../images/bg/bg_main.png) no-repeat;
+	float:left;
+	width:21px;
+	height:21px;
+	text-align:center;
+	padding:3px 2px 0 2px;
+	background-position:-30px -250px;
+	color:fff;
+}
+
+
 .pagination-bar-top {
 	background: #e8e8e8;
 	padding: 0;
@@ -56,7 +98,7 @@ div.strip div.pagination span.current {
 	padding: 0;
 	height: 30px;
 }
-div.paging {
+div.pagination {
     font-size: 12px;
     font-weight: bold;
     position: relative;
@@ -65,10 +107,10 @@ div.paging {
     top:5px;
     float:right;
 }
-div.paging ul li {
+div.pagination ul li {
 	float:left;
 }
-div.paging a {
+div.pagination a {
     display: block;
     background: url(../../images/bg/bg_main.png) no-repeat;
     cursor: pointer;
@@ -80,14 +122,14 @@ div.paging a {
     padding:3px 2px 0 2px;
     color: #666;
 }
-div.paging a:hover {
+div.pagination a:hover {
     text-decoration:none;
     color:#000;
 }
-div.paging span{
+div.pagination span{
     color: #fff;
 }
-div.paging> a.active{
+div.pagination> a.active{
     width:21px;
     height:21px;
     background-position:-30px -250px;
@@ -129,12 +171,12 @@ div.main-wrapper {
 	width: 490px;
 	margin: 10px auto;
 }
-a.back-to-app {
+a.go-back {
 	color:#134856;
 	font-weight:bold;
 	font-size:14px;
 }
-a.back-to-app:hover {
+a.go-back:hover {
 	text-decoration:underline;
 }
 

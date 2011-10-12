@@ -232,6 +232,7 @@ class User extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_profile($user_id = NULL){
+		$this->socialhappen->ajax_check();
 		$this->load->model('user_model','users');
 		$profile = $this->users->get_user_profile_by_user_id($user_id);
 		echo json_encode($profile);
@@ -244,6 +245,7 @@ class User extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_apps($user_id = NULL, $limit = NULL, $offset = NULL){
+		$this->socialhappen->ajax_check();
 		$this->load->model('user_apps_model','user_apps');
 		$apps = $this->user_apps->get_user_apps_by_user_id($user_id, $limit, $offset);
 		echo json_encode($apps);
@@ -256,6 +258,7 @@ class User extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_campaigns($user_id = NULL, $limit = NULL, $offset = NULL){
+		$this->socialhappen->ajax_check();
 		$this->load->model('user_campaigns_model','users_campaigns');
 		$campaigns = $this->users_campaigns->get_user_campaigns_by_user_id($user_id, $limit, $offset);
 		echo json_encode($campaigns);
@@ -266,6 +269,7 @@ class User extends CI_Controller {
 	 * @author Prachya P.
 	 */
 	function json_get_facebook_pages_owned_by_user(){
+		$this->socialhappen->ajax_check();
 		echo json_encode($this->facebook->get_user_pages());
 	}
 	
@@ -274,6 +278,7 @@ class User extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_add(){
+		$this->socialhappen->ajax_check();
 		$this->load->model('user_model','users');
 		$post_data = array(
 							'user_first_name' => $this->input->post('user_first_name'),
@@ -298,6 +303,7 @@ class User extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_companies($user_id = NULL, $limit = NULL, $offset = NULL){
+		$this->socialhappen->ajax_check();
 		$this->load->model('user_companies_model','user_companies');
 		$companies = $this->user_companies->get_user_companies_by_user_id($user_id, $limit, $offset);
 		echo json_encode($companies);
@@ -378,6 +384,7 @@ class User extends CI_Controller {
 	 * @author Weerapat P.
 	 */
 	function json_get_user_activities($page_id = NULL, $user_id = NULL, $limit = 10, $offset = 0){
+		$this->socialhappen->ajax_check();
 		$activities = $this->_get_user_activity_page($page_id, $user_id, $limit, $offset);
 		echo json_encode($activities);
 	}
@@ -389,6 +396,7 @@ class User extends CI_Controller {
 	 * @author Weerapat P.
 	 */
 	function json_count_user_activities($page_id = NULL, $user_id = NULL){
+		$this->socialhappen->ajax_check();
 		$activities = $this->_get_user_activity_page($page_id, $user_id);
 		echo count($activities);
 	}

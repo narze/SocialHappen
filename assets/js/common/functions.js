@@ -66,7 +66,7 @@ if(!window.set_loading){
 			
 			
 			$(overlay).ajaxStart(function() {
-				$(this).fadeIn('fast');
+				$(this).show();
 			}).ajaxStop(function() {
 				$(this).fadeOut('fast',function(){$(this).remove()});
 			});

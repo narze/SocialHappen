@@ -73,6 +73,7 @@ class Tab extends CI_Controller {
 									'is_guest' => $user ? FALSE : TRUE,
 									'token' => base64_encode($token),
 									'per_page' => $per_page,
+									'notifications_per_page' => 5,
 									'view' => isset($this->app_data['view']) ? $this->app_data['view'] : '',
 									'return_url' => isset($this->app_data['return_url']) ? $this->app_data['return_url'] : ''
 					),
@@ -431,19 +432,34 @@ class Tab extends CI_Controller {
 	function favorites($user_id = NULL){}
 
 	function notifications($user_id = NULL) {
-
 		if($this->input->get('return_url')) $return_url = $this->input->get('return_url');
 		else $return_url = '';
-		
-		$this->load->library('notification_lib');
-		$this->load->vars(array(
-			'notifications' => $this->notification_lib->lists($user_id, $limit = NULL, $offset = 0),
-			'return_url' => $return_url
-			)
-		);
-		
+		$this->load->vars(array('return_url' => $return_url));
 		$this->load->view('tab/notifications');
+	}
 	
+	/**
+	 * JSON : Get notifications
+	 * @param $user_id
+	 * @param $limit
+	 * @param $offset
+	 * @author Weerapat P.
+	 */
+	function json_get_notifications($user_id = NULL, $limit = NULL, $offset = 0) {
+		$this->socialhappen->ajax_check();
+		$this->load->library('notification_lib');
+		echo json_encode($this->notification_lib->lists($user_id, $limit, $offset));
+	}
+	
+	/**
+	 * JSON : Count user notifications
+	 * @param $user_id
+	 * @author Weerapat P.
+	 */
+	function json_count_user_notifications($user_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('notification_model','notification');
+		echo $this->notification->count(array('user_id'=>(int)$user_id));
 	}
 	
 	function account($page_id = NULL, $user_id = NULL){

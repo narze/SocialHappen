@@ -817,9 +817,7 @@ padding-top: 5px;
 }
 div.header ul.menu > li.notification li a p.time {
 color:#d6ff90;
-}
-div.header ul.menu > li.notification li.template {
-display:none;
+line-height:16px;
 }
 div.header ul.menu > li.notification li.unread{
 background-color:#3d3d3d;
@@ -840,7 +838,6 @@ display: block;
 text-decoration: none;
 color: white;
 font-weight: bold;
-background: url(../assets/images/bg_fb/bg_listmenu.png) 5px 13px no-repeat;
 padding: 5px 10px 5px 0px;
 min-height: initial;
 }
