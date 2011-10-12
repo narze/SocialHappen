@@ -210,7 +210,7 @@ class Page_model extends CI_Model {
 				}
 			}
 			
-			if(isset($templates[$field['name']]['options']) || is_array($templates[$field['name']]['options'])){
+			if(isset($templates[$field['name']]['options']) && is_array($templates[$field['name']]['options'])){
 				$field['options'] = $templates[$field['name']]['options'];
 			} else {
 				$field['options'] = NULL;
