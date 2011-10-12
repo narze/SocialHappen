@@ -215,7 +215,7 @@ class Page_model_test extends CI_Controller {
 				'rules' => NULL,
 			),
 			array(
-				'name' => 'name3',
+				'name' => 'gender',
 				'required' => FALSE,
 				'type' => 'radio',
 				'label' => 'Name 3',
@@ -401,34 +401,6 @@ class Page_model_test extends CI_Controller {
 			)
 		));
 		$this->unit->run($result, 'is_false', 'Checkbox with blank item');
-		
-		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
-			array(
-				'template' => 'id_card_number'
-			)
-		));
-		$this->unit->run($result, 'is_array', 'Template : id_card_number');
-		$this->unit->run(count($result) == 1, 'is_true', 'Added 1 field');
-		$this->unit->run(in_array(7,$result), 'is_true', 'Added 1 field');
-		
-		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
-			array(
-				'template' => 'gender',
-				'required' => TRUE
-			)
-		));
-		$this->unit->run($result, 'is_array', 'Template : gender with required flag');
-		$this->unit->run(count($result) == 1, 'is_true', 'Added 1 field');
-		$this->unit->run(in_array(8,$result), 'is_true', 'Added 1 field');
-		
-		$result = $this->pages->add_page_user_fields_by_page_id(1, array(
-			array(
-				'template' => 'gender',
-				'name' => 'gender2',
-				'items' => array()
-			)
-		));
-		$this->unit->run($result, 'is_false', 'Template : gender with empty item');
 	}
 	
 	/**
@@ -443,16 +415,19 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[3]['type'], 'is_string', "result[3]['type'] = {$result[3]['type']}");
 		$this->unit->run($result[3]['label'], 'is_string', "result[3]['label'] = {$result[3]['label']}");
 		$this->unit->run($result[3]['order'], 'is_int', "result[3]['order'] = {$result[3]['order']}");
+		$this->unit->run($result[3]['verify_message'], 'Please enter your '.strtolower($result[3]['label']).'.', "result[3]['verify_message'] = {$result[3]['verify_message']}");
+		
+		$this->unit->run($result[5]['verify_message'], 'Please select your gender.', "result[5]['verify_message'] = {$result[5]['verify_message']}");
 		
 		$this->unit->run($result[6], 'is_array', 'id 6');
 		$this->unit->run($result[6]['required'], 'is_true', "required == true");
 		
-		$this->unit->run($result[7], 'is_array', 'id 7');
-		$this->unit->run($result[7]['type'], 'text', "id_card_number type = text");
+		// $this->unit->run($result[7], 'is_array', 'id 7');
+		// $this->unit->run($result[7]['type'], 'text', "id_card_number type = text");
 		
-		$this->unit->run($result[8], 'is_array', 'id 8');
-		$this->unit->run($result[8]['type'], 'radio', "gender type = radio");
-		$this->unit->run($result[8]['required'], 'is_true', "gender with required = true");
+		// $this->unit->run($result[8], 'is_array', 'id 8');
+		// $this->unit->run($result[8]['type'], 'radio', "gender type = radio");
+		// $this->unit->run($result[8]['required'], 'is_true', "gender with required = true");
 		
 		$result = $this->pages->get_page_user_fields_by_page_id(100);
 		$this->unit->run($result, 'is_false', 'get_page_user_fields_by_page_id(100)');
@@ -678,7 +653,7 @@ class Page_model_test extends CI_Controller {
 		$result = $this->pages->remove_page_user_fields_by_page_id(100, array(3,4));
 		$this->unit->run($result, 'is_false', 'Wrong page');
 		
-		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(3,4,7,8));
+		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(3,4));
 		$this->unit->run($result, 'is_true', 'Removed');
 		
 		$result = $this->pages->remove_page_user_fields_by_page_id(1, array(3,4));

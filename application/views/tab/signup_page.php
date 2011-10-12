@@ -1,5 +1,7 @@
 <div class="popup-fb signup-page">
-	
+	<script type="text/javascript">
+		applyOptionsToPageSignup();
+	</script>
 	<h2>Page Sign Up</h2>
 	
     <div class="step">
@@ -45,8 +47,10 @@
 					<input type="hidden" name="empty" value="0" /><?php 
 					foreach($page_user_fields as $user_fields) 
 					{ ?>
-						<li <?php echo form_error($user_fields['name']) ? 'class="error"' : '' ; ?>>
+						<li data-field-options=<?php echo json_encode($user_fields['options']);?> <?php echo form_error($user_fields['name']) ? 'class="error"' : '' ; ?>>
+							
 							<label class="title"><?php
+								echo form_error($user_fields['name']) ? $user_fields['verify_message'] : '' ;
 								if($user_fields['required']) { ?><span class="required">*</span> <?php }
 								echo $user_fields['label'].' :'; ?>
 							</label>
