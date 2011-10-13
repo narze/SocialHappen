@@ -1,6 +1,5 @@
 <?php if(!isset($partial) || $partial == 'facebook-page-information') : ?>
 <div id="facebook-page-information">
-<?php if(isset($success)) echo 'Updated'; ?>
 	<h2><span>Facebook page information</span></h2>
 	<div>
 	  <ul class="form01">
@@ -14,7 +13,9 @@
 
 <?php if(!isset($partial) || $partial == 'page-information') : ?>
 <div id="page-information"> 
-<?php if(isset($success)) echo 'Updated'; ?>
+	<?php if(issetor($success)) { ?>
+		<div class="notice success">Updated<a class="close"></a></div>
+	<?php } ?>
 	<h2><span>Page information</span></h2>
 		
 <?php // Change the css classes to suit your needs   
@@ -48,7 +49,9 @@
 
 <!--
 <div id="page-admin">
-	<?php if(isset($success)) echo 'Updated'; ?>
+	<?php if(issetor($success)) { ?>
+		<div class="notice success">Updated<a class="close"></a></div>
+	<?php } ?>
 	<h2><span>Page admins</span></h2>
 	<?php // Change the css classes to suit your needs   
 	$attributes = array('class' => 'page-admin', 'id' => '');
@@ -72,7 +75,9 @@
 -->
 <!--
 <div id="admin-admin">
-	<?php if(issetor($success)) echo 'Updated'; ?>
+	<?php if(issetor($success)) { ?>
+		<div class="notice success">Updated<a class="close"></a></div>
+	<?php } ?>
 	<h2><span>Page admins</span></h2>
 	<div class="admin-list">
 		<ul> 
@@ -105,7 +110,9 @@
 
 <?php if(!isset($partial) || $partial == 'page-application') : ?>
 <div id="page-application">
-<?php if(isset($success)) echo 'Updated'; ?>
+	<?php if(issetor($success)) { ?>
+		<div class="notice success">Updated<a class="close"></a></div>
+	<?php } ?>
 <h2><span>Page applications</span></h2>
    <div class="company-app">
 		<ul>

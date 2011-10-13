@@ -11,7 +11,7 @@
 </div>
 
 <div id="account-information"> 
-	<?php if(isset($success)) { ?>
+	<?php if(issetor($success)) { ?>
 	<div class="notice success">Updated<a class="close"></a></div>
 	<?php } ?>
 	<h2><span>Account information</span></h2>

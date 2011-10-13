@@ -477,9 +477,7 @@ class Tab extends CI_Controller {
 				
 				$this->load->library('form_validation');
 				$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
-				$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
-				$this->form_validation->set_rules('gender', 'Gender', 'required|xss_clean');
-				$this->form_validation->set_rules('birth_date', 'Birth date', 'trim|xss_clean');
+				$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');	
 				$this->form_validation->set_rules('about', 'About', 'trim|xss_clean');
 				$this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
 					
@@ -501,8 +499,6 @@ class Tab extends CI_Controller {
 					$user_update_data = array(
 									'user_first_name' => set_value('first_name'),
 									'user_last_name' => set_value('last_name'),
-									'user_gender' => set_value('gender'),
-									'user_birth_date' => set_value('birth_date'),
 									'user_about' => set_value('about'),
 									'user_image' => $user_image
 								);

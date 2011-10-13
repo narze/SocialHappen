@@ -349,9 +349,11 @@ class SocialHappen{
 		$config['max_width']  = '2048';
 		$config['max_height']  = '2048';
 		$config['encrypt_name'] = TRUE;
-
+		if(!isset($_FILES[$name]['error'])){
+			log_message('debug','Upload file error');
+		}
 		$this->CI->load->library('upload', $config);
-		if ($this->CI->upload->do_upload($name)){
+		if (!isset($_FILES[$name]['error']) && $this->CI->upload->do_upload($name)){
 			$image_data = $this->CI->upload->data();
 			if($resize) { 
 				$this->resize_image($image_data); 

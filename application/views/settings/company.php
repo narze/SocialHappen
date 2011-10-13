@@ -1,6 +1,8 @@
 
 <div id="company-information"> 
-	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
+	<?php if(issetor($success)) { ?>
+		<div class="notice success">Updated<a class="close"></a></div>
+	<?php } ?>
 	<h2><span>Company information</span></h2>
 		
 	<?php
@@ -55,8 +57,7 @@
 		</div>
 	</div>
 -->
-	<div id="company-application">
-	<?php if(issetor($success)==TRUE) echo 'Updated'; ?>
+<div id="company-application"> 
 	<h2><span>Company Applications</span></h2>
 		<div class="company-app">
 			<ul>

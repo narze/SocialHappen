@@ -3,7 +3,7 @@ $(function(){
 	$('.notificationtoggle').live('click', toggleNotification);
 	
 	$('.notice a.close').live('click', function() {
-		$(this).parent().toggle();
+		$(this).parent().hide();
 	});
 
 	for(i in user_companies){

@@ -19,7 +19,9 @@
 	<div class="box-setting">
 
 		<div id="account-information"> 
-			<?php if(isset($success)) echo 'Updated'; ?>
+			<?php if(issetor($success)) { ?>
+				<div class="notice success">Updated<a class="close"></a></div>
+			<?php } ?>
 			<h2><span>Account information</span></h2>
 				
 		<?php // Change the css classes to suit your needs   
