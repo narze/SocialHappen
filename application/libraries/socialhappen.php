@@ -208,10 +208,16 @@ class SocialHappen{
 				'user_can_create_company' => FALSE
 			);
 		} else {
+			$this->CI->load->library('notification_lib');
+			$user = $this->get_user();
 			$user_companies = $this->get_user_companies();
 			$common = array(
+				'vars' => array(
+					'user_id' => $user['user_id']
+				),
+				'node_base_url' => $this->CI->config->item('node_base_url'),
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
-				'user' => $this->get_user(),
+				'user' => $user,
 				'image_url' => base_url().'assets/images/',
 				'facebook_user' => $facebook_user,
 				'script' => array(
@@ -227,7 +233,9 @@ class SocialHappen{
 					'common/main',
 					'common/fancybox/jquery.fancybox-1.3.4'
 				),
-				'user_can_create_company' => !$user_companies ? TRUE : $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company') //Check user can create company
+				'user_can_create_company' => !$user_companies ? TRUE : $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company'), //Check user can create company
+				'notification_amount' => $this->CI->notification_lib->count_unread($user['user_id']),
+				'all_notification_link' => base_url().'temp'
 			);
 		}
 		
@@ -245,7 +253,7 @@ class SocialHappen{
 		}
 		
 		if( isset($data['vars']['popup_name']) && !isset($data['vars']['closeEnable']) ) $data['vars']['closeEnable'] = true;
-
+		
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	

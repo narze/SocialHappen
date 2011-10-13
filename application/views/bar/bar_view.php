@@ -36,7 +36,7 @@
 					<?php if($user_can_create_company) { ?><p><a class="bt-create_company"><span>Create Company</span></a></p><?php } ?>
 				</div>
 			</div>
-			<ul>
+			<ul class="menu">
 				<li class="name">
 					<img class="user-image" src="<?php echo imgsize(issetor($user['user_image']),'square');?>" alt="" />
 					<?php echo issetor($user['user_first_name']).' '.issetor($user['user_last_name']); ?>
@@ -45,7 +45,19 @@
 						<li><?php echo anchor('logout','&raquo Logout');?></li>
 					</ul>
 				</li>
-			</ul
+				<li class="notification notificationtoggle">
+				<a class="amount"><?php if( isset($notification_amount) && $notification_amount > 0 ) { ?><span><?php echo $notification_amount;?></span> <?php } ?></a>
+				<ul class="notification_list_bar">
+					<li class="separator">
+						<a>
+							<p class="message"></p>
+							<p class="time"></p>
+						</a>
+					</li>
+					<li class="separator last-child"><a class="a-notification" href="<?php echo $all_notification_link; ?>" >See all Notifications</a></li>
+				</ul>
+			</li>
+			</ul>
 		<?php else : ?>
 			<ul>
 				<li class="name">
@@ -60,3 +72,32 @@
 		<?php endif; ?>
 	<?php endif; ?>
 </div>
+<script src="<?php echo $node_base_url;?>socket.io/socket.io.js"></script>
+<script>
+	(function($){
+	var session = 'SESSIONNAJA';
+	var socket = io.connect('<?php echo $node_base_url;?>');
+
+	socket.on('connect', function(){
+		console.log('send subscribe');
+		socket.emit('subscribe', user_id, session);
+	});
+
+	socket.on('subscribeResult', function (data) {
+		console.log('got subscribe result: ' + JSON.stringify(data));
+	});
+
+	socket.on('newNotificationAmount', function (notification_amount) {
+		console.log('notification_amount: ' + notification_amount);
+		if(notification_amount > 0){
+			$('div.header ul.menu li.notification a.amount').html('').append('<span>').children('span').html(notification_amount);
+		}else{
+			$('div.header ul.menu li.notification a.amount').append('<span>').children('span').remove();
+		}
+	});
+	
+	socket.on('newNotificationMessage', function (notification_message) {
+		console.log('notification_message: ' + JSON.stringify(notification_message));
+	});
+	})(jQuery);
+</script>
