@@ -11,7 +11,7 @@ class Sync extends CI_Controller {
 	function __construct(){
 		if (defined('ENVIRONMENT'))
 		{
-			if (ENVIRONMENT == 'production')
+			if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
 			{
 				exit('For development & testing only.');
 			}

@@ -212,9 +212,6 @@ class SocialHappen{
 			$user = $this->get_user();
 			$user_companies = $this->get_user_companies();
 			$common = array(
-				'vars' => array(
-					'user_id' => $user['user_id']
-				),
 				'node_base_url' => $this->CI->config->item('node_base_url'),
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'user' => $user,
@@ -241,6 +238,11 @@ class SocialHappen{
 		
 		$data = array_merge_recursive($common,$data);
 		$data = array_unique_recursive($data);
+		
+		//Override, because array_merge_recursive cause merge(user_id, user_id) -> array(user_id,user_id)
+		if(isset($user['user_id'])){
+			$data['vars']['user_id'] = $user['user_id'];
+		}
 		
 		// $this->login(); Don't audologin
 		if($this->CI->session->userdata('logged_in') == TRUE){

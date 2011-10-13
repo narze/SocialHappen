@@ -1,4 +1,4 @@
-<div id="popup-goto-facebook" class="goto-facebook">
+<div id="popup-goto-facebook" class="goto-facebook page-installed">
 	<h2 class="in-popup">Social Happen Application Tab has been installed</h2>
 	<div class="wrapper">
 		<img src="<?php echo base_url(); ?>assets/images/page_installed.png" />

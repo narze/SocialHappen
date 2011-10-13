@@ -9,13 +9,13 @@
 		{ ?>
 			<div class="wrapper-details">
 				<div class="notice warning">				
-					<div class="goto-facebook">
+					<div class="goto-facebook page-installed">
 						<h2 class="in-popup">Page installation : One step more</h2>
 						<p><b>Please, go to facebook to complete the action.</b></p>
 						<?php if($facebook_tab_url) : ?>
-							<a class="bt-go-facebook" href="<?php echo $facebook_tab_url; ?>" >Go to facebook</a>
+							<a class="bt-go-facebook" target="_top" href="<?php echo $facebook_tab_url; ?>" >Go to facebook</a>
 						<?php else : ?>
-							<a class="bt-go-facebook" href="<?php echo base_url()."tab/facebook_page/{$page_id}"; ?>" >Go to facebook</a>
+							<a class="bt-go-facebook" target="_top" href="<?php echo base_url()."tab/facebook_page/{$page_id}"; ?>" >Go to facebook</a>
 						<?php endif; ?>
 					</div>
 				</div><br />

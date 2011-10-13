@@ -131,7 +131,10 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 							data: {
 								install_url:app_install_url,
 								facebook_page_id:facebook_page_id,
-								facebook_app_id:app_api_key
+								facebook_app_id:app_api_key,
+								user_id:user_id,
+								page_id:page_id,
+								company_id:company_id
 							},
 							error: function(jqXHR, textStatus, errorThrown) {
 								show_installed_app_in_page(page_id,facebook_page_id);
@@ -153,8 +156,9 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 										$(".app-installed-count").html("Application (" + json.app_count + ")");
 									});
 									update_app_order_in_dashboard();
-									popup = $('#popup-gotofacebook').find('.popup-gotofacebook').clone();
+									popup = $('#hidden-notice').find('.goto-facebook.app-installed').clone();
 									popup.find(".bt-go-facebook").attr('href', json.facebook_tab_url);
+									console.log(popup);
 									$.fancybox({
 										content: popup
 									});
@@ -162,7 +166,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 								else{
 									show_installed_app_in_page(page_id,facebook_page_id);
 									show_available_app_in_page(page_id);
-									alert("ERROR");
+									console.log("app/curl json mismatch 3 : " + json);
 								}
 							},
 						});

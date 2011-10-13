@@ -64,12 +64,12 @@ $(function(){
 			transitionIn: 'elastic',
 			transitionOut: 'elastic',
 			padding: 0,
-			width: 932,
-			height: 355,
+			width: 908,
+			height: 518,
 			autoDimensions: false,
-			scrolling: 'yes',
+			scrolling: 'no',
 			onStart: function() {
-				$("<style type='text/css'> #fancybox-wrap{ top:550px !important;} </style>").appendTo("head");
+				//$("<style type='text/css'> #fancybox-wrap{ top:550px !important;} </style>").appendTo("head");
 			}
 		});
 	});

@@ -408,12 +408,12 @@ function show_installed_app_in_company() {
 
 //show installed apps in page
 function show_installed_app_in_page(page_id,facebook_page_id) {
-	
+	//If page is not installed, don't show apps
 	if(get_page_installed(page_id)==0)
 	{
 		$('.head-box-app-list').hide();
 		$('div.dragging-app').hide();
-		popup = $('#hidden-notice').find('.goto-facebook').clone();
+		popup = $('#hidden-notice').find('.goto-facebook.page-installed').clone();
 		popup.find(".bt-go-facebook").attr('href', base_url+'tab/facebook_page/'+page_id);
 		$(".notice").html(popup);
 		$(".notice").addClass('warning').show(); 
@@ -471,7 +471,6 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 						app_install_url=app_install_url.replace("{company_id}",company_id)
 						.replace("{user_id}",user_id)
 						.replace("{page_id}",page_id)+"&force=1";
-
 						jQuery.ajax({
 							async:true,
 							url: base_url+"app/json_add_to_page",
@@ -488,8 +487,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 							error: function(jqXHR, textStatus, errorThrown) {
 								show_installed_app_in_page(page_id,facebook_page_id);
 								show_available_app_in_page(page_id);
-								alert(app_install_url + errorThrown);
-								console.log("app/curl failed 3");
+								console.log("app/curl failed 3 " + errorThrown);
 							},
 							success: function(json) {
 								if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {
@@ -508,7 +506,7 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 									});
 									update_app_order_in_dashboard();
 									
-									popup = $('#hidden-notice').find('.goto-facebook').clone();
+									popup = $('#hidden-notice').find('.goto-facebook.app-installed').clone();
 									popup.find(".bt-go-facebook").attr('href', json.facebook_tab_url);
 									$.fancybox({
 										content: popup
