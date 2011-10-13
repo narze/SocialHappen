@@ -19,7 +19,12 @@ $config['base_url']	= 'https://socialhappen.com/socialhappen/';
 /**
  * Node.js server base url
  */
-$config['node_base_url'] = 'http://socialhappen.com:8080/';
+$config['node_base_url'] = 'https://socialhappen.com:8081/';
+
+/**
+ * Node.js server base http url for notification library only
+ */
+$config['node_base_url_http'] = 'http://socialhappen.com:8080/';
 
 /*
 |--------------------------------------------------------------------------
