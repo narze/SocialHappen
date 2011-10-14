@@ -20,50 +20,6 @@ $(function(){
 				});
 			};
 			
-			// if(is_guest){
-				// $.fancybox({
-					// href: base_url+'tab/guest/'+page_id
-				// });
-				// $('a.bt-don-awesome').die('click');
-				// $('a.bt-don-awesome').live('click',function(){
-					// $.fancybox.close();
-				// });
-			// } else if(is_admin){
-				// if(page_app_installed_id!=0) {
-					// $.fancybox({
-						// href: base_url+'tab/app_installed/'+ page_app_installed_id
-					// });
-					// $('a.bt-stay_fb').die('click');
-					// $('a.bt-stay_fb').live('click',function(){
-						// $.fancybox.close();
-					// });
-					// page_app_installed_id=0;
-				// } else if(page_installed==0){
-					// $.fancybox({
-						// href: base_url+'tab/page_installed/'+ page_id
-					// });
-					// $('a.bt-stay_fb').die('click');
-					// $('a.bt-stay_fb').live('click',function(){
-						// $.fancybox.close();
-					// });
-					// page_installed=1;
-				// }
-			// } else {
-				// if(!is_user_register_to_page) {
-					// $.fancybox({
-						// href: base_url+'tab/signup_page/'+page_id,
-						// modal: true
-					// });
-					// $('a.bt-register-now').die('click');
-					// $('a.bt-register-now').live('click',function(){
-						// $('.signup-form').ajaxSubmit({
-							// target:'div.popup-fb-2col',
-							// replaceTarget: true
-						// });
-					// });
-				// }
-			// }
-			
 			var mode = '?';
 			function get_apps_campaigns(page_index,jq){
 				$('div.list_app-camp').load(base_url+'tab/apps_campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode + viewas,trigger_countdown);
@@ -206,7 +162,7 @@ $(function(){
 			});
 		});
 		
-		$('li.notificationtoggle').find('ul').hide();
+		$('.toggle').find('ul').hide();
 		return false;
 	}
 	
