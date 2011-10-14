@@ -127,9 +127,9 @@ onLoad = function(){
 				$.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
 					if(result.notification_list){
 						var notification_list = result.notification_list;
+						var template = $('ul.notification_list_bar li:first-child');
 						if(notification_list.length > 0){
 							var notification_id_list = [];
-							var template = $('ul.notification_list_bar li:first-child');
 							$('ul.notification_list_bar li').not('li.last-child').remove();
 							for(var i = notification_list.length - 1; i >= 0; i--){
 								if(!notification_list[i].read){
@@ -147,6 +147,8 @@ onLoad = function(){
 							$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
 								
 							}, 'json');
+						} else {
+							template.hide();
 						}
 					}
 				}, 'json');
