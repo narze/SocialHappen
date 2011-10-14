@@ -71,7 +71,7 @@ class Tab extends CI_Controller {
 									'page_id' => $page_id,
 									'user_id' => $user_id,
 									'is_guest' => $user ? FALSE : TRUE,
-									'token' => base64_encode($token),
+									'token' => urlencode($token),
 									'per_page' => $per_page,
 									'notifications_per_page' => 5,
 									'view' => isset($this->app_data['view']) ? $this->app_data['view'] : '',
@@ -165,7 +165,7 @@ class Tab extends CI_Controller {
 				
 				$response = $this->FB->api(array(
 					'method' => 'fql.query',
-					'access_token' => base64_decode($token),
+					'access_token' => urldecode($token),
 					'query' =>$fql,
 					));
 				

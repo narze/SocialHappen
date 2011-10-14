@@ -8,7 +8,7 @@ $(function(){
 		}
 		
 		set_loading();
-		$('div#main').load(base_url+'tab/dashboard/'+page_id+'/'+token,function(){
+		$('div#main').load(base_url+'tab/dashboard/'+page_id,function(){
 			trigger_countdown = function (){
 				$('.campaign-end-time').each(function(){
 					end_time = Date.createFromMysql($(this).text());
