@@ -45,7 +45,6 @@
 			<li class="notification toggle">
 				<a class="amount"><?php if( isset($notification_amount) && $notification_amount > 0 ) { ?><span><?php echo $notification_amount;?></span> <?php } ?></a>
 				<ul class="notification_list_bar">
-					<?php if( isset($notification_amount) && $notification_amount > 0 ) { ?>
 					<li class="separator">
 						<a>
 							<img src="" />
@@ -53,9 +52,7 @@
 							<p class="time"></p>
 						</a>
 					</li>
-					<?php } else { ?>
 					<li class="no-notification"><p>No notification.</p></li>
-					<?php } ?>
 					<li class="separator last-child"><a class="a-notification" href="<?php echo $all_notification_link; ?>" <?php echo $app_mode ? 'target="_top"' : ''; ?>>See all Notifications</a></li>
 				</ul>
 			</li>
