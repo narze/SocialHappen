@@ -169,11 +169,11 @@ $(function(){
 	function get_user_notifications(page_index) {
 		set_loading();
 		$.getJSON(base_url+'tab/json_get_notifications/'+user_id+'/'+notifications_per_page+'/'+(page_index * notifications_per_page), function(json){
+			var template = $('div.notifications-list ul li:first-child');
 			if(json.length == 0) {
-				$('div.notifications-list ul').append('<li>No notifications</li>');
+				template.remove();
 			} else {
 				var old_li = $('div.notifications-list ul li'); //Prevent page auto scroll
-				var template = $('div.notifications-list ul li:first-child');
 				for(i in json) {
 					var li = template.clone();
 					li.find('img').attr('src', json[i].image );

@@ -23,6 +23,7 @@
 					</div>
 				</div>
 			</li>
+			<li class="no-notification"><p>No notification.</p></li>
 		</ul>
 	</div>
 	

@@ -203,6 +203,11 @@ div.notifications-list ul li {
 	height:70px;
 	padding:0 10px;
 }
+div.notifications-list ul li.no-notification {
+text-align: center;
+line-height: 35px;
+height:auto;
+}
 div.notifications-list ul li.unread {
 	background-color:#ffffdd;
 }
