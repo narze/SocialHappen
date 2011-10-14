@@ -24,10 +24,10 @@ echo form_open($url);
 ?>
 		<ul>
 			<li>
-				<?=form_label('Y U NO PASS', 'test_mode_password', array(
+				<?php echo form_label('Y U NO PASS', 'test_mode_password', array(
 				'style' => 'color: #000;',
 				));?>
-				<?=form_password(array(
+				<?php echo form_password(array(
 						  'name'        => 'test_mode_password',
 						  'id'          => 'test_mode_password',
 						  'value'       => set_value('test_mode_password'),
@@ -47,7 +47,7 @@ echo form_open($url);
 							)); ?>
 		</p>
 		</div>
-		<?=form_close()?>
+		<?php echo form_close()?>
 		<?php die(); ?>
 </body>
 </html>
