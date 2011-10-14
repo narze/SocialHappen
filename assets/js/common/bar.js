@@ -5,6 +5,10 @@ $(function(){
 		$(this).toggleClass('active').find('ul').toggle();
 	});
 	
+	$('.toggle ul li a').live('click',function(){
+		$('.toggle ul').hide();
+	});
+	
 	$('li.notification').live('click', toggleNotification);
 	
 	var mouse_is_inside = false;
