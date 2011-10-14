@@ -29,38 +29,49 @@
 		</ul>
 	<?php elseif(issetor($facebook_user)) : ?>
 		<?php if(isset($user) && $user) : ?>
-			<div class="goto">
+			<div class="goto toggle">
 				<p><a href="#">Go to</a></p>
-				<div>
-					<?php if(isset($user_companies) && $user_companies) { ?><ul></ul> <?php } ?>
-					<?php if($user_can_create_company) { ?><p><a class="bt-create_company"><span>Create Company</span></a></p><?php } ?>
-				</div>
+				<ul>
+					<?php //if(isset($user_companies) && $user_companies) {  } ?>
+					<li>
+						<img class="company-image" src="" alt="">
+						<h2><a href="#"></a></h2>
+						<p class="pagename">&raquo; <a href="#"></a></p>
+						<p class="no-page">No page yet<br /><a href="#">+ add new page</a></p>
+					</li>
+					<?php if($user_can_create_company) { ?><li class="create-company"><a class="bt-create_company"><span>Create Company</span></a></li><?php } ?>
+				</ul>
 			</div>
 			<ul class="menu">
-				<li class="name">
+				<li class="name toggle">
 					<img class="user-image" src="<?php echo imgsize(issetor($user['user_image']),'square');?>" alt="" />
+					<div class="arrow"></div>
 					<?php echo issetor($user['user_first_name']).' '.issetor($user['user_last_name']); ?>
 					<ul>
 						<li><?php echo anchor("settings?s=account&id={$user['user_id']}",'&raquo Profile Setting');?></li>
 						<li><?php echo anchor('logout','&raquo Logout');?></li>
 					</ul>
 				</li>
-				<li class="notification notificationtoggle">
+				<li class="notification toggle">
 				<a class="amount"><?php if( isset($notification_amount) && $notification_amount > 0 ) { ?><span><?php echo $notification_amount;?></span> <?php } ?></a>
 				<ul class="notification_list_bar">
+					<?php if( isset($notification_amount) && $notification_amount > 0 ) { ?>
 					<li class="separator">
 						<a>
 							<p class="message"></p>
 							<p class="time"></p>
 						</a>
 					</li>
+					<?php } else { ?>
+					<li class="no-notification"><p>No notification.</p></li>
+					<?php } ?>
 					<li class="separator last-child"><a class="a-notification" href="<?php echo $all_notification_link; ?>" >See all Notifications</a></li>
 				</ul>
 			</li>
 			</ul>
 		<?php else : ?>
 			<ul>
-				<li class="name">
+				<li class="name toggle">
 					<img class="user-image" src="<?php echo imgsize("https://graph.facebook.com/{$facebook_user['id']}/picture",'square');?>" alt="" />
 					<?php echo issetor($facebook_user['name']); ?>
 					<ul>

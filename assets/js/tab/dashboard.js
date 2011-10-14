@@ -220,10 +220,10 @@ $(function(){
 				var template = $('div.notifications-list ul li:first-child');
 				for(i in json) {
 					var li = template.clone();
-					li.find('img').attr('src', '#' );
+					li.find('img').attr('src', json[i].image );
 					li.find('p.title').text( 'SocialHappen' );
 					li.find('div.desc p').html( json[i].message );
-					li.find('div.date').text( '10 minutes ago' );
+					li.find('div.date').text( $.timeago(new Date(parseInt(json[i].timestamp, 10) * 1000)) );
 					$('div.notifications-list ul').append(li);
 				}
 				old_li.remove(); //Prevent page auto scroll

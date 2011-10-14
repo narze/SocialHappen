@@ -59,10 +59,10 @@ div.header>div div.goto {
 	float: left;
 	height: 40px;
 	line-height: 40px;
-	background: #292929 url(../../images/bg/bg_liney01.gif) left repeat-y;
 	padding-left: 2px;
 	position: relative;
 	margin-left: 14px;
+	background: url(../../images/bg/bg_liney01.gif) left repeat-y;
 }
 div.header>div div.goto>p a {
 	display: block;
@@ -72,55 +72,57 @@ div.header>div div.goto>p a {
 	background: url(../../images/bg/bg_droptop.png) 90% 12px no-repeat;
 }
 div.header>div div.goto>p a:hover { text-decoration: none;}
-div.header>div div.goto>div {
+div.header>div div.goto>ul {
 	display: none;
-	width: 270px;	
-	background: #1a1a1a;
 	border-top: 1px solid #1c1c1c;
-	-webkit-border-radius: 0 0 5px 5px;
-    -moz-border-radius: 0 0 5px 5px;
-    border-radius: 0 0 5px 5px;
 	position: absolute;
 	line-height: normal;
 	color: #fff;
 	z-index: 999;
+	width: 250px;
 }
-div.header>div div.goto:hover>div {display: block;}
-div.header>div div.goto>div ul {
-	background: #292929 url(../../images/bg/bg_liney03.png) 68px 0 repeat-y;
-}
-div.header>div div.goto>div ul li {
+div.header>div div.goto> ul li {
 	padding: 6px 10px 6px 80px;
 	position: relative;
+	background: #292929 url(../../images/bg/bg_liney03.png) 68px 0 repeat-y;
+	min-height: 52px;
 }
-div.header>div div.goto>div ul li h2 {
+div.header>div div.goto>ul li h2 {
 	font-size: 14px;
 	padding-bottom: 5px;
 }
-div.header>div div.goto>div ul li p {padding-bottom: 5px;}
-div.header>div div.goto>div ul li p.thumb {
+div.header>div div.goto>ul li p {padding-bottom: 5px;}
+div.header>div div.goto>ul li img {
 	position: absolute;
 	top: 6px;
 	left: 9px;
-	z-index: 999;
+	width: 50px; height: 50px;
 }
-div.header>div div.goto>div ul li p.thumb img { width: 50px; height: 50px;}
-div.header>div div.goto>div ul li a {color: #cbed5b; text-decoration: none; font-weight: bold;}
-div.header>div div.goto>div ul li a:hover {text-decoration: underline;}
-div.header>div div.goto>div>p {
+div.header>div div.goto>ul li a {color: #fff; text-decoration: none; font-weight: bold;}
+div.header>div div.goto>ul li a:hover {text-decoration: underline;}
+div.header>div div.goto>ul li p.no-page a {color: #cbed5b;}
+
+div.header>div div.goto>ul li.create-company {
 	height: 40px;
-	background: url(../../images/bg/bg_linex04.gif) top repeat-x;
+	padding-top:0;
+	background: url(../../images/bg/bg_linex04.gif) top repeat-x #1a1a1a;
+}
+div.header>div div.goto>ul li.last-child {
+	-webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
 }
 
-div.header>div>ul { height: 40px; float: right;}
+div.header>div>ul { height: 40px; float: right; background: url(../../images/bg/bg_liney01.gif) left repeat-y;}
 div.header>div>ul:after{
     clear:both;
     content:" ";
     display:block;
 }
-div.header>div>ul>li {height: 40px; float: left; padding: 0 8px; font-size: 12px; color: #fff;}
+div.header>div>ul>li {height: 40px; float: left; padding: 0 8px; font-size: 12px; color: #fff; background: url(../../images/bg/bg_liney01.gif) right repeat-y;}
+div.header>div>ul>li:hover,
+div.header>div>ul>li.active, div.header>div div.goto.active { background-color: #292929}
 div.header>div>ul>li img {vertical-align: middle;}
-div.header>div>ul>li:first-child { background: url(../../images/bg/bg_liney01.gif) right repeat-y;}
 div.header>div>ul>li span {display:  none;}
 div.header>div>ul>li.profile>a {
 	display: block;
@@ -130,14 +132,15 @@ div.header>div>ul>li.profile>a {
 	background: url(../../images/bg/bg_main.png) 0 0 no-repeat;
 }
 div.header>div>ul>li.name {
+	position:relative;
 	width: 190px;
 	line-height: 40px;
 	padding-right: 30px;
-	background: url(../../images/bg/bg_droptop.png) 96% 12px no-repeat;
 	cursor: pointer;
 	position: relative;
 	z-index: 999;
 }
+div.header>div>ul>li.name div.arrow { position: absolute; right: 10px; width: 20px; height: 45px; background: url(../../images/bg/bg_droptop.png) 96% 12px no-repeat; }
 div.header>div>ul>li.name img { float: left; margin: 10px 10px 0 0; width: 20px; height: 20px;}
 div.header>div>ul>li.name ul {
 	display: none;
@@ -151,7 +154,6 @@ div.header>div>ul>li.name ul {
     -moz-border-radius: 0 0 5px 5px;
     border-radius: 0 0 5px 5px;
 }
-div.header>div>ul>li.name:hover ul {display: block;}
 div.header>div>ul>li.name ul li {
 	cursor: default;
 	height: 31px;

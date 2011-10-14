@@ -76,22 +76,21 @@ onLoad = function(){
 	(function($){
 		$(function(){
 			$('.toggle').live('click',function(){
-			  $('.notificationtoggle').not(this).find('ul').hide();
-				$('.toggle').not(this).find('ul').hide();
-				$(this).find('ul').toggle();
+				$('.toggle').not(this).removeClass('active').find('ul').hide();
+				$(this).toggleClass('active').find('ul').toggle();
 			});
 			
-			$('.notificationtoggle').live('click', toggleNotification);
+			$('li.notification').live('click', toggleNotification);
 				
 			var mouse_is_inside = false;
-			$('.toggle, .notificationtoggle').hover(function(){ 
+			$('.toggle').hover(function(){ 
 				mouse_is_inside=true;
 			}, function(){ 
 				mouse_is_inside=false;
 			});
 
 			$("body").mouseup(function(){
-				if(! mouse_is_inside) $('.toggle, .notificationtoggle').find('ul').hide();
+				if(! mouse_is_inside) $('.toggle').removeClass('active').find('ul').hide();
 			});
 			
 			sh_popup();
@@ -121,8 +120,6 @@ onLoad = function(){
 			});
 			
 			function toggleNotification(){
-				$('.notificationtoggle').not(this).find('ul').hide();
-				$('.toggle').not(this).find('ul').hide();
 				$.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
 					if(result.notification_list){
 						var notification_list = result.notification_list;
@@ -149,7 +146,6 @@ onLoad = function(){
 						}
 					}
 				}, 'json');
-				$(this).find('ul').toggle();
 			}
 		});
 	})(jQuery);

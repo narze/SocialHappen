@@ -986,12 +986,19 @@ div#user-tabs div.activities-table table td {
 }
 
 /* Noom : copied from api_app_bar.css */
-
+div.header ul.menu li ul li.last-child {
+-webkit-border-radius: 0 0 5px 5px;
+-moz-border-radius: 0 0 5px 5px;
+border-radius: 0 0 5px 5px;
+}
+div.header ul.menu {
+position:relative;
+}
 div.header ul.menu > li.notification a.amount {
 display:block;
 width:35px;
 height:35px;
-background:url(../../../assets/images/bg_fb/bg_main.png) no-repeat 7px -25px;
+background:url(../../../assets/images/bg/bg_main_2.png) no-repeat -225px 7px;
 text-decoration:none;
 position:relative;
 padding:0px 0px 0px 0px;
@@ -1014,7 +1021,8 @@ width:250px;
 overflow:hidden;
 border-top:1px solid #1C1C1C;
 position:absolute;
-top:35px;
+top:40px;
+right:0;
 z-index:999;
 -webkit-border-radius:0 0 5px 5px;
 -moz-border-radius:0 0 5px 5px;
@@ -1050,6 +1058,14 @@ div.header ul.menu > li.notification li a p.time {
 color:#d6ff90;
 line-height:16px;
 }
+div.header ul.menu > li.notification ul li.no-notification {
+color: #fff;
+text-align: center;
+line-height: 35px;
+}
+div.header ul.menu > li.notification ul li.no-notification:hover {
+background-color:transparent;
+}
 div.header ul.menu > li.notification li.unread{
 background-color:#3d3d3d;
 }
@@ -1071,4 +1087,5 @@ color: white;
 font-weight: bold;
 padding: 5px 10px 5px 0px;
 min-height: initial;
+line-height: 25px;
 }

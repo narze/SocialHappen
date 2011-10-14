@@ -1,31 +1,61 @@
 $(function(){
 	
-	$('.notificationtoggle').live('click', toggleNotification);
+	$('.toggle').live('click',function(){
+		$('.toggle').not(this).removeClass('active').find('ul').hide();
+		$(this).toggleClass('active').find('ul').toggle();
+	});
+	
+	$('li.notification').live('click', toggleNotification);
+	
+	var mouse_is_inside = false;
+	$('.toggle').hover(function(){ 
+		mouse_is_inside=true;
+	}, function(){ 
+		mouse_is_inside=false;
+	});
+
+	$("body").mouseup(function(){
+		if(! mouse_is_inside) $('.toggle').removeClass('active').find('ul').hide();
+	});
 	
 	$('.notice a.close').live('click', function() {
 		$(this).parent().hide();
 	});
 
+	var template = $('.goto ul li:first-child');
+	var create_company = $('.goto ul li.create-company');
+	$('.goto ul').empty();
 	for(i in user_companies){
 		$.ajax({
 			url: base_url+'company/json_get_profile/' + user_companies[i].company_id,
 			dataType: 'json',
 			async: false,
 			success: function(data){
-				var j = i;
-				$('.goto div ul').append('<li class="goto-list-company-'+user_companies[i].company_id+'"><p class="thumb"><img class="company-image"  src="'+imgsize(data.company_image,'square')+'" alt="" /></p><h2><a href="'+base_url+'company/'+data.company_id+'">'+data.company_name+'</a></h2></li>');
-				$.getJSON(base_url+'company/json_get_pages/' + user_companies[i].company_id, function(data) {
-					if(data.length>0) {
-						$.each(data, function(i,item){
-							$('.goto-list-company-'+ item.company_id).append('<p class="goto-list-company-page-'+item.page_id+'">&raquo; <a href="'+base_url+'page/'+item.page_id+'">'+item.page_name+'</a></p>');
+				var li = template.clone();
+				var page_template = li.find('p.pagename');
+				var no_page = li.find('p.no-page');
+				li.find('p').remove();
+				li.find('img').attr('src', imgsize(data.company_image,'square'));
+				li.find('h2 a').attr('href', base_url+'company/'+data.company_id).text(data.company_name);
+				$.getJSON(base_url+'company/json_get_pages/' + user_companies[i].company_id, function(pages) {
+					if(pages.length>0) {
+						$.each(pages, function(i,page){
+							var p = page_template.clone(); 
+							p.find('a').attr('href', base_url+'page/'+page.page_id);
+							p.find('a').text(page.page_name);
+							li.append(p);
 						});
 					} else {
-						$('.goto-list-company-'+ user_companies[j].company_id).append('<p>No page yet</p><p><a href="'+base_url+'company/'+user_companies[j].company_id+'">+ add new page</a></p>');
+						no_page.find('a').attr('href', base_url+'company/'+user_companies[i].company_id);
+						li.append( no_page );
 					}
 				});
+				$('.goto ul').append(li);
 			}
 		});
 	}
+	if(create_company.length > 0) $('.goto ul').append(create_company);
+	$('.goto ul li:last-child').addClass('last-child');
 	
 	var companyname;
 	var companydetail;
@@ -78,8 +108,6 @@ $(function(){
 	});
 	
 	function toggleNotification(){
-		$('.notificationtoggle').not(this).find('ul').hide();
-		$('.toggle').not(this).find('ul').hide();
 		$.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
 			if(result.notification_list){
 				var notification_list = result.notification_list;
@@ -106,6 +134,5 @@ $(function(){
 				}
 			}
 		}, 'json');
-		$(this).find('ul').toggle();
 	}
 });
