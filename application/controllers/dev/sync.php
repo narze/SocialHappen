@@ -1692,54 +1692,54 @@ class Sync extends CI_Controller {
 		echo 'Added '.count(array_merge($platform_audit_actions,$audit_actions)).' audit actions<br />';
 		
 		$achievement_infos = array(
-			array(
-				'app_id' => 5,
-				'app_install_id' => NULL,
-				'info' => array(
-					'name' => 'First share',
-					'description' => 'Shared video for the first time',
-					'criteria_string' => array('Share = 1')
-				),
-				'criteria' => array(
-					'action.1002.count' => 1
-				)
-			),
-			array(
-				'app_id' => 6,
-				'app_install_id' => NULL,
-				'info' => array(
-					'name' => 'First share',
-					'description' => 'Shared video for the first time',
-					'criteria_string' => array('Share = 1')
-				),
-				'criteria' => array(
-					'action.1002.count' => 1
-				)
-			),
-			array(
-				'app_id' => 7,
-				'app_install_id' => NULL,
-				'info' => array(
-					'name' => 'First share',
-					'description' => 'Shared feed for the first time',
-					'criteria_string' => array('Share = 1')
-				),
-				'criteria' => array(
-					'action.1001.count' => 1
-				)
-			),
-			array(
-				'app_id' => 8,
-				'app_install_id' => NULL,
-				'info' => array(
-					'name' => 'First share',
-					'description' => 'Shared feed for the first time',
-					'criteria_string' => array('Share = 1')
-				),
-				'criteria' => array(
-					'action.1001.count' => 1
-				)
-			),
+			// array(
+				// 'app_id' => 5,
+				// 'app_install_id' => NULL,
+				// 'info' => array(
+					// 'name' => 'First share',
+					// 'description' => 'Shared video for the first time',
+					// 'criteria_string' => array('Share = 1')
+				// ),
+				// 'criteria' => array(
+					// 'action.1002.count' => 1
+				// )
+			// ),
+			// array(
+				// 'app_id' => 6,
+				// 'app_install_id' => NULL,
+				// 'info' => array(
+					// 'name' => 'First share',
+					// 'description' => 'Shared video for the first time',
+					// 'criteria_string' => array('Share = 1')
+				// ),
+				// 'criteria' => array(
+					// 'action.1002.count' => 1
+				// )
+			// ),
+			// array(
+				// 'app_id' => 7,
+				// 'app_install_id' => NULL,
+				// 'info' => array(
+					// 'name' => 'First share',
+					// 'description' => 'Shared feed for the first time',
+					// 'criteria_string' => array('Share = 1')
+				// ),
+				// 'criteria' => array(
+					// 'action.1001.count' => 1
+				// )
+			// ),
+			// array(
+				// 'app_id' => 8,
+				// 'app_install_id' => NULL,
+				// 'info' => array(
+					// 'name' => 'First share',
+					// 'description' => 'Shared feed for the first time',
+					// 'criteria_string' => array('Share = 1')
+				// ),
+				// 'criteria' => array(
+					// 'action.1001.count' => 1
+				// )
+			// ),
 		);
 		$platform_achievements = array(
 			array(
