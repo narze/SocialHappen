@@ -575,7 +575,12 @@ class Tab extends CI_Controller {
 				if ($user_add_result['status'] == 'OK')
 				{
 					$this->socialhappen->login();
-					redirect('tab/signup_page/'.$page_id);
+          if(isset($app_install_id)){
+            redirect('tab/signup_page/'.$page_id.'/'.$app_install_id);
+          }else{
+            redirect('tab/signup_page/'.$page_id);
+          }
+					
 				}
 				else
 				{
@@ -586,7 +591,7 @@ class Tab extends CI_Controller {
 		}
 	}
 	
-	function signup_page($page_id = NULL){
+	function signup_page($page_id = NULL, $app_install_id = NULL){
 		$this->load->library('form_validation');
 		$facebook_user = $this->facebook->getUser();
 		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
@@ -641,13 +646,21 @@ class Tab extends CI_Controller {
 				'user_data' => $data
 			);
 			
+      if(!isset($app_install_id)){ // mode = page
+        $this->load->model('page_model','page');
+        $page = $this->page->get_page_profile_by_page_id($page_id);
+        $facebook_tab_url = $page['facebook_tab_url'];
+      }else{ // mode = app
+        $this->load->model('installed_apps_model','installed_app');
+        $app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
+        $facebook_tab_url = $app['facebook_tab_url'];
+      }
+      
 			if($this->page_users->add_page_user($data)){
-				$this->load->view('tab/signup_complete');
+				$this->load->view('tab/signup_complete', array('facebook_tab_url' => $facebook_tab_url));
 			} else {
 				$this->load->view('tab/signup_page', array('error'=>'Already register/cannot signup page'));
 			}
-			
-			
 		}
 	}
 	

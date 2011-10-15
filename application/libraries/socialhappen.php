@@ -733,7 +733,8 @@ class SocialHappen{
 				'is_user_register_to_page' => $is_user_register_to_page ? TRUE : FALSE,
 				'user_id' => $user['user_id'],
 				'app_mode' => $app_mode,
-				'app_install_id' => $app_install_id
+				'app_install_id' => $app_install_id,
+				'app_mode' => $app_mode
 			),
 			'view_as' => $view_as,
 			'app_install_id' => $app_install_id,

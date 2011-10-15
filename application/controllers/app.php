@@ -330,24 +330,6 @@ class App extends CI_Controller {
 				$result['facebook_tab_url'] = $this->facebook->get_facebook_tab_url($facebook_app_id, $facebook_page_id);
 				$this->load->model('installed_apps_model','installed_app');
 				$this->installed_app->update_facebook_tab_url_by_app_install_id($result['app_install_id'], $result['facebook_tab_url']);
-        
-				$app_install_id = $result['app_install_id'];
-        
-				// add audit
-				$this->load->library('audit_lib');
-				$this->audit_lib->add_audit(
-							  0, // app_id 0 for platform
-							  $user_id,
-							  $this->socialhappen->get_k('audit_action','Install App To Page'), // Action ID: 2 Install App To Page
-							  '', 
-							  '',
-							  array(
-								  'app_install_id'=> $app_install_id, // app_install_id 0 for platform
-								  'company_id' => $company_id,
-								  'user_id' => $user_id,
-								  'page_id' => $page_id
-								)
-							);
 			} else {
 				log_message('error','install facebook app to page tab failed');
 				$result['status'] = 'ERROR';
