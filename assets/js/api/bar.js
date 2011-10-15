@@ -159,18 +159,26 @@ onLoad = function(){
   							$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
   								
   							}, 'json');
+  							
+  							$('ul.notification_list_bar a').show();
   						} else {
   							template.hide();
   							if($('li.notification').hasClass('active')){
+  							  $('ul.notification_list_bar li').not('li.last-child').remove();
+  							  var li = template.clone();
+  							  li.find('a').attr('href', '');
+                  li.find('p.message').html('No notification.');
+                  li.find('p.time').html('');
+                  li.find('img').attr('src', '');
+                  li.show();
+                  $('ul.notification_list_bar').prepend(li);
                   $('ul.notification_list_bar').show();
-                  $('ul.notification_list_bar a').show();
                 }
   						}
 					}
 					if($('li.notification').hasClass('active')){
 					  $('ul.notification_list_bar').show();
   					$('ul.notification_list_bar li').show();
-  					$('ul.notification_list_bar a').show();
 					}
 					
 					fetching_notification = false;
