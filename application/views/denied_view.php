@@ -47,7 +47,7 @@ code {
 
 <h1>Social Happen - Access Denied</h1>
 <p>
-	<? echo $message; ?>
+	<?php echo $message; ?>
 </p>
 			
 </body>

@@ -55,11 +55,11 @@ code {
 		function fblogin() {
             FB.login(function(response) {
                 if (response.session) {
-                    window.location = '<? echo site_url('connect/collect_data').'/'.$redirect; ?>';
+                    window.location = '<?php echo site_url('connect/collect_data').'/'.$redirect; ?>';
                 } else {
                     
                 }
-            }, {perms:'<? echo $facebook_default_scope ; ?>'});
+            }, {perms:'<?php echo $facebook_default_scope ; ?>'});
         }
 				
 	</script>

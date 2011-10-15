@@ -11,7 +11,7 @@
 										window.location.replace(base_url+"home/signup");
 									} else {
 										<?php if(issetor($next)): ?>
-											window.location.replace('<? echo $next; ?>');
+											window.location.replace('<?php echo $next; ?>');
 										<?php else : ?>
 											window.location.replace(window.location.href+"?logged_in=true");
 										<?php endif; ?>

@@ -2,7 +2,7 @@
 <div class="popup_payment">
 <?php if(count($packages) == 0) { ?>
 	<p>You are already use a maximum package</p>
-<? } else { ?>
+<?php } else { ?>
 	<div id="payment-form">
 	<?php $attributes = array('class' => 'payment-form', 'id' => '');
 		echo form_open('payment/payment_form', $attributes); ?>
