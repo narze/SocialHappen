@@ -130,7 +130,6 @@ onLoad = function(){
 			  if(!fetching_notification && $('li.notification').hasClass('active')){
 			    fetching_notification = true;
   				$.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
-  				  console.log($('li.notification').hasClass('active'));
   					if(result.notification_list){
   						var notification_list = result.notification_list;
   						var template = $('ul.notification_list_bar li:first-child');
