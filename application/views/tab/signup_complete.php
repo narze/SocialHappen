@@ -20,7 +20,7 @@
     </div>
 	
 	<div class="buttons">
-		<p><a class="bt-start">Start</a></p>
+		<p><a class="bt-start" style="display:inline-block"></a></p>
 	</div>
 
 </div>

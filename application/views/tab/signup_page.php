@@ -51,7 +51,7 @@
 							
 							<label class="title"><?php
 								echo form_error($user_fields['name']) ? $user_fields['verify_message'] : '' ;
-								if($user_fields['required']) { ?><span class="required">*</span> <?php }
+								if($user_fields['required']) { ?><span class="required"> * </span> <?php }
 								echo $user_fields['label'].' :'; ?>
 							</label>
 							<div class="inputs"><?php

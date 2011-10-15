@@ -65,17 +65,14 @@ class Home extends CI_Controller {
 			TRUE),
 			'footer' => $this -> socialhappen -> get_footer(),
 			'is_registered' => $is_registered,
-			'from' => $this->input->get('from')
+			'from' => $this->input->get('from'),
+			'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id']),
+			'facebook_user'=>$facebook_user
 		);
 		
 		if(!$is_registered) 
 		{
-			$data['signup_form'] = $this -> load -> view('home/signup_form', 
-				array(
-					'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id']),
-					'facebook_user'=>$facebook_user
-				),
-			TRUE);
+			$data['signup_form'] = $this -> load -> view('home/signup_form', array(), TRUE);
 		}
 		$this -> parser -> parse('home/signup_view', $data);
 	}

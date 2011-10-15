@@ -1,4 +1,7 @@
 {header}
+<div class="title-name">
+	<h2><?php echo $title; ?></h2>
+</div>
 {breadcrumb}
 <div class="wrapper-content">
 	<div>
@@ -12,7 +15,7 @@
 					<?php echo form_error('user_image'); ?>
 					<div class="img-wrapper"><img src="<?php echo $user_profile_picture.'?type=normal';?>" /></div>
 					<h3>Hello, <span style="color:#3b5998"><?php echo $facebook_user['first_name'].' '.$facebook_user['last_name'];?></span></h3>
-					<p><span style="color:#6e8b19">Sign up</span> in a few steps to power up your business on <span style="color:#3b5998">Facebook</span></p>
+					<?php if(!$is_registered) { ?><p><span style="color:#6e8b19">Sign up</span> in a few steps to power up your business on <span style="color:#3b5998">Facebook</span></p> <?php } ?>
 				</div>
 				
 				<div class="slides">
@@ -34,7 +37,8 @@
 					if($is_registered) 
 					{ ?>
 						<h3 style="font-size:20px;margin:18px 0">You have already registered to SocialHappen</h3>
-						<a href="<?php echo base_url().'?logged_in=true'; ?>" class="bt-go_dashboard">Go to Dashboard</a><?php 
+						<a href="<?php echo base_url().'?logged_in=true'; ?>" class="bt-go_dashboard">Go to Dashboard</a>
+						<br /><?php 
 					} 
 					else 
 					{ ?>

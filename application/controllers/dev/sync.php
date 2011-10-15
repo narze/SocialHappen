@@ -1427,6 +1427,8 @@ class Sync extends CI_Controller {
 		$this->drop_mongo_collections('actions','audits');
 		$this->mongo_db->switch_db('stat');
 		$this->drop_mongo_collections('apps','campaigns','pages');
+		$this->mongo_db->switch_db('message');
+		$this->drop_mongo_collections('notification');
 		echo 'Dropped collections<br />';
 		
 		$platform_audit_actions = $audit_actions = array(

@@ -3,13 +3,13 @@
 		<fieldset>
 			<legend>Perosnal Information</legend>
 			<ul>
-				<li><label>Firstname :</label><?php echo $user['user_first_name']; ?></li>
-				<li><label>Lastname :</label><?php echo $user['user_last_name']; ?></li>
+				<li><label>Firstname :</label><?php echo issetor($user['user_first_name'], '-'); ?></li>
+				<li><label>Lastname :</label><?php echo issetor($user['user_last_name'], '-'); ?></li>
 				<li><label>Email :</label><?php echo issetor($user['user_email'], '-'); ?></li>
 			</ul>
 		</fieldset><?php
 			
-		if(isset($user_data))
+		if(isset($user_data) && count($user_data))
 		{ ?>
 			<fieldset>
 				<legend>Additional Information</legend>
@@ -19,7 +19,7 @@
 						if (is_array($field)) {
 							echo implode(', ', $field);
 						} else {
-							echo issetor(nl2br($field), '-');
+							echo isset($field) ? nl2br($field) : '-';
 						} ?>
 					</li><?php
 					} ?>

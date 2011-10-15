@@ -1,4 +1,7 @@
 {header}
+<div class="title-name">
+	<h2><?php echo $title; ?></h2>
+</div>
 {breadcrumb}
 <div class="wrapper-content">
 	<div>
