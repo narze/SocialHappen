@@ -20,7 +20,7 @@
     </div>
 	
 	<div class="buttons">
-		<p><a class="bt-start" style="display:inline-block"></a></p>
+		<p><a class="bt-start" href="<?php echo $facebook_tab_url; ?>" target="_top" style="display:inline-block">Start</a></p>
 	</div>
 
 </div>

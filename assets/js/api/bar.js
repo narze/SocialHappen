@@ -114,10 +114,16 @@ onLoad = function(){
 				});
 			});
 			
-			$('div.popup-fb a.bt-cancel, a.bt-start').live('click',function(){
+			$('div.popup-fb a.bt-start').live('click',function(){
 				$.fancybox.close();
-				window.parent.location.reload(); //Error - Unsafe JavaScript attempt to access frame 
+				// window.parent.location.reload(); //Error - Unsafe JavaScript attempt to access frame
+				// window.top.location.href = window.top.location.href;
+				// console.log(window.top.location.href);
 			});
+			
+			$('div.popup-fb a.bt-cancel').live('click',function(){
+        $.fancybox.close();
+      });
 			
 			$('a.a-logout').live('click', function(){
 				$.fancybox({
@@ -155,6 +161,10 @@ onLoad = function(){
   							}, 'json');
   						} else {
   							template.hide();
+  							if($('li.notification').hasClass('active')){
+                  $('ul.notification_list_bar').show();
+                  $('ul.notification_list_bar a').show();
+                }
   						}
 					}
 					if($('li.notification').hasClass('active')){
@@ -205,10 +215,17 @@ sh_popup = function(){
 			}
 		} else {
 			if(!is_user_register_to_page) {
-				$.fancybox({
-					href: base_url+'tab/signup_page/'+page_id,
-					modal: true
-				});
+			  if(app_mode){
+			    $.fancybox({
+            href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id,
+            modal: true
+          });
+			  }else{
+			    $.fancybox({
+            href: base_url+'tab/signup_page/'+page_id,
+            modal: true
+          });
+			  }
 			}
 		}
 		
