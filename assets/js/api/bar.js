@@ -83,7 +83,7 @@ onLoad = function(){
 			});
 			
 			$('.toggle ul li a').live('click',function(){
-				$('.toggle ul').hide();
+				$('.toggle').removeClass('active').find('ul').hide();
 			});
 			
 			$('li.notification').live('click', toggleNotification);

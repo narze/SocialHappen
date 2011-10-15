@@ -494,7 +494,6 @@ function show_installed_app_in_page(page_id,facebook_page_id) {
 									app_install_id=json.app_install_id;
 									dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
 									dragging_object.children('p:first').append('<span class="button">'
-									+'<a class="bt-update_app" href="'+base_url+'app/'+app_install_id+'"><span>Update</span></a>'
 									+'<a class="bt-setting_app" href="'+base_url+'app/config/'+app_install_id+'"><span>Setting</span></a>'
 									+'</span>');
 									refresh_installed_app_in_page_panel();

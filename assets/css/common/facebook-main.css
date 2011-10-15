@@ -5,6 +5,9 @@ div.header {
 	/*background: url(../../images/bg_fb/bg_header.png) no-repeat;*/
 	background-color:#FFF;
 }
+div#main { min-height: 500px; }
+div.wrapper-content {min-height: 478px;}
+div.list_app-camp {min-height: 130px;}
 
 /* Button */
 .bt-remove {
@@ -43,8 +46,9 @@ div.strip div.pagination span.current {
     display: block;
     height: 10px;
     width: 10px;
-	text-indent:-900px;
 	overflow:hidden;
+	color: transparent; /*for non-IE*/
+	font-size: 0; /*for IE*/
 }
 
 /* Pagination (number) */
@@ -194,6 +198,7 @@ div.notifications-list {
 	background: #fff;
 	border-top:1px solid #dedee0;
 	border-bottom:1px solid #dedee0;
+	min-height: 400px;
 }
 div.notifications-list ul {
 	margin-bottom: 20px;
