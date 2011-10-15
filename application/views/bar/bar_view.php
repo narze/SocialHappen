@@ -21,7 +21,7 @@
 						} else {
 							
 						}
-					}, {perms:'<? echo $facebook_default_scope ; ?>'});
+					}, {perms:'<?php echo $facebook_default_scope ; ?>'});
 				}
 		</script>
 		<ul>
