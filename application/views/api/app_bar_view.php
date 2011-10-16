@@ -42,17 +42,11 @@
 		<?php endif; ?>
 		<?php if(in_array($view_as, array('admin','user'))) : ?>
 			<!-- <li class="like"><a><span>like</span></a></li> -->
+			<li class="no-notification" style="display: none;"><p>No notification.</p></li>
 			<li class="notification toggle">
 				<a class="amount"><?php if( isset($notification_amount) && $notification_amount > 0 ) { ?><span><?php echo $notification_amount;?></span> <?php } ?></a>
 				<ul class="notification_list_bar" style="display: none;">
-					<li class="separator">
-						<a style="display: none;">
-							<img src="" />
-							<p class="message"></p>
-							<p class="time"></p>
-						</a>
-					</li>
-					<li class="no-notification" style="display: none;"><p>No notification.</p></li>
+					
 					<li class="separator last-child"><a class="a-notification" href="<?php echo $all_notification_link; ?>" <?php echo $app_mode ? 'target="_top"' : ''; ?>>See all Notifications</a></li>
 				</ul>
 			</li>
