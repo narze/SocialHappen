@@ -61,7 +61,7 @@ getScript = function(url, checkName, success) {
 };
 
 loadChildScripts = function(){
-	getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js', 'jQuery.ui', function(){
+	getScript(base_url+'assets/js/common/jquery-ui.min.js', 'jQuery.ui', function(){
 		getScript(base_url+'assets/js/common/jquery.form.js', 'jQuery.fn.ajaxForm', function(){
 			getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', 'jQuery.fancybox', function(){
 				getScript(base_url + 'assets/js/common/jquery.timeago.js', 'jQuery.timeago', function(){
@@ -116,9 +116,6 @@ onLoad = function(){
 			
 			$('div.popup-fb a.bt-start').live('click',function(){
 				$.fancybox.close();
-				// window.parent.location.reload(); //Error - Unsafe JavaScript attempt to access frame
-				// window.top.location.href = window.top.location.href;
-				// console.log(window.top.location.href);
 			});
 			
 			$('div.popup-fb a.bt-cancel').live('click',function(){
@@ -132,13 +129,20 @@ onLoad = function(){
 			});
 			
 			function toggleNotification(){
+				$('ul.notification_list_bar li').not('li.last-child').remove();
 			  // if hide, fetch data
 			  if(!fetching_notification && $('li.notification').hasClass('active')){
 			    fetching_notification = true;
   				$.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
   					if(result.notification_list){
   						var notification_list = result.notification_list;
-  						var template = $('ul.notification_list_bar li:first-child');
+  						var template = $('<li class="separator">'+
+																	'<a style="display: none;">'+
+																		'<img src="" />'+
+																		'<p class="message"></p>'+
+																		'<p class="time"></p>'+
+																	'</a>'+
+																'</li>');
   						if(notification_list.length > 0){
   							var notification_id_list = [];
   							$('ul.notification_list_bar li').not('li.last-child').remove();
@@ -165,20 +169,16 @@ onLoad = function(){
   							template.hide();
   							if($('li.notification').hasClass('active')){
   							  $('ul.notification_list_bar li').not('li.last-child').remove();
-  							  var li = template.clone();
-  							  li.find('a').attr('href', '');
-                  li.find('p.message').html('No notification.');
-                  li.find('p.time').html('');
-                  li.find('img').attr('src', '');
-                  li.show();
-                  $('ul.notification_list_bar').prepend(li);
+  							  var template = $('<li class="no-notification"><p>No notification.</p></li>');
+                  $('ul.notification_list_bar').prepend(template);
                   $('ul.notification_list_bar').show();
                 }
   						}
-					}
-					if($('li.notification').hasClass('active')){
-					  $('ul.notification_list_bar').show();
-  					$('ul.notification_list_bar li').show();
+  						
+  						if($('li.notification').hasClass('active')){
+							  $('ul.notification_list_bar').show();
+		  					$('ul.notification_list_bar li').show();
+							}
 					}
 					
 					fetching_notification = false;
@@ -261,4 +261,4 @@ applyOptionsToPageSignup = function(){
 	})(jQuery);
 };
 
-getScript('http://code.jquery.com/jquery-latest.min.js', 'jQuery', loadChildScripts);
+getScript(base_url + 'assets/js/common/jquery.min.js', 'jQuery', loadChildScripts);
