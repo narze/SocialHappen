@@ -80,7 +80,7 @@
 		<?php endif; ?>
 	<?php endif; ?>
 </div>
-<?php if(!issetor($facebook_user)) : ?>
+<?php if(issetor($facebook_user)) : ?>
 	<script src="<?php echo $node_base_url;?>socket.io/socket.io.js"></script>
 	<script>
 		(function($){
