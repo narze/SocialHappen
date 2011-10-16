@@ -772,7 +772,8 @@ class Sync extends CI_Controller {
 									'required' => FALSE,
 									'rules' => NULL,
 									'items' => array(1=>'S',2=>'M',3=>'L',4=>'XL'),
-									'order' => 1
+									'order' => 1,
+									'options' => NULL,
 									),
 								2 => array(
 									'name' => 'color',
@@ -781,7 +782,8 @@ class Sync extends CI_Controller {
 									'required' => FALSE,
 									'rules' => NULL,
 									'items' => NULL,
-									'order' => 2
+									'order' => 2,
+									'options' => NULL,
 								)
 							)),
 							'facebook_tab_url' => ''
@@ -804,7 +806,8 @@ class Sync extends CI_Controller {
 								'rules' => NULL,
 								'items' => array(1=>'S',2=>'M',3=>'L',4=>'XL'),
 								'order' => 1,
-								'verify_message' => '---'
+								'verify_message' => '---',
+								'options' => NULL,
 								),
 							2 => array(
 								'name' => 'color',
@@ -814,7 +817,8 @@ class Sync extends CI_Controller {
 								'rules' => NULL,
 								'items' => NULL,
 								'order' => 2,
-								'verify_message' => '---'
+								'verify_message' => '---',
+								'options' => NULL,
 							),
 							3 => array(
 								'name' => 'checkbox_name',
@@ -824,7 +828,8 @@ class Sync extends CI_Controller {
 								'rules' => NULL,
 								'items' => array('value1', 'value2', 'value3'),
 								'order' => 3,
-								'verify_message' => '---'
+								'verify_message' => '---',
+								'options' => NULL,
 							)	
 						)),
 						'facebook_tab_url' => ''

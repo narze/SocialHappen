@@ -11,7 +11,7 @@
 								window.location.replace(base_url+"home/signup?package_id=<?php echo $this->input->get('package_id'); ?>&payment=true");
 							} else { <?php 
 								if($next) { ?> window.location.replace('<?php echo $next; ?>'); <?php }
-								else { ?> window.location.replace(base_url+"home/package?package_id=<?php echo $this->input->get('package_id'); ?>&payment=true"); <?php }?>
+								else { ?> window.location.replace(base_url+"home/login"); <?php }?>
 							}
 						});
 					});
