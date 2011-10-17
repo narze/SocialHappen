@@ -19,7 +19,7 @@ class Api extends CI_Controller {
 	 * @author Wachiraph C. - revise May 2011
 	 */
 	function request_install_app(){
-
+		header("Access-Control-Allow-Origin: *");
 		$app_id = $this->input->get('app_id', TRUE); 
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$company_id = $this->input->get('company_id', TRUE);
