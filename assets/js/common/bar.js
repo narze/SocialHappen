@@ -1,4 +1,5 @@
 $(function(){
+	var fetching_notification = false;
 	
 	$('.toggle').live('click',function(){
 		$('.toggle').not(this).removeClass('active').find('ul').hide();
@@ -112,33 +113,61 @@ $(function(){
 	});
 	
 	function toggleNotification(){
-		$.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
-			if(result.notification_list){
-				var notification_list = result.notification_list;
-				var template = $('ul.notification_list_bar li:first-child');
-				if(notification_list.length > 0){
-					var notification_id_list = [];
-					$('ul.notification_list_bar li').not('li.last-child').remove();
-					for(var i = notification_list.length - 1; i >= 0; i--){
-						if(!notification_list[i].read){
-							notification_id_list.push(notification_list[i]._id);
-						}
-						var li = template.clone();
-						notification_list[i].read ? '' : li.addClass('unread');
-						li.find('a').attr('href', notification_list[i].link);
-						li.find('p.message').html(notification_list[i].message);
-						li.find('p.time').html($.timeago(new Date(parseInt(notification_list[i].timestamp, 10) * 1000)));
-						li.find('img').attr('src', notification_list[i].image);
-						$('ul.notification_list_bar').prepend(li);
-						if( $('ul.notification_list_bar li').not('li.last-child').length == 5 ) break; // Show only 5 latest notifications
+			$('ul.notification_list_bar li').not('li.last-child').remove();
+			  // if hide, fetch data
+			  if(!fetching_notification && $('li.notification').hasClass('active')){
+			    fetching_notification = true;
+  				$.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
+  					if(result.notification_list){
+  						var notification_list = result.notification_list;
+  						var template = $('<li class="separator">'+
+						'<a>'+
+							'<p class="message"></p>'+
+							'<p class="time"></p>'+
+						'</a>'+
+					'</li>');
+  						if(notification_list.length > 0){
+  							var notification_id_list = [];
+  							$('ul.notification_list_bar li').not('li.last-child').remove();
+  							for(var i = notification_list.length - 1; i >= 0; i--){
+  								if(!notification_list[i].read){
+  									notification_id_list.push(notification_list[i]._id);
+  								}
+  								var li = template.clone();
+  								notification_list[i].read ? '' : li.addClass('unread');
+  								li.find('a').attr('href', notification_list[i].link);
+  								li.find('p.message').html(notification_list[i].message);
+  								li.find('p.time').html($.timeago(new Date(parseInt(notification_list[i].timestamp, 10) * 1000)));
+  								li.find('img').attr('src', notification_list[i].image);
+  								li.show();
+  								$('ul.notification_list_bar').prepend(li);
+  								if( $('ul.notification_list_bar li').not('li.last-child').length == 5 ) break; // Show only 5 latest notifications
+  							}
+  							$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
+  								
+  							}, 'json');
+  							
+  							$('ul.notification_list_bar a').show();
+  						} else {
+  							template.hide();
+  							if($('li.notification').hasClass('active')){
+  							  $('ul.notification_list_bar li').not('li.last-child').remove();
+  							  var template = $('<li class="no-notification"><p>No notification.</p></li>');
+                  $('ul.notification_list_bar').prepend(template);
+                  $('ul.notification_list_bar').show();
+                }
+  						}
+  						
+  						if($('li.notification').hasClass('active')){
+							  $('ul.notification_list_bar').show();
+		  					$('ul.notification_list_bar li').show();
+							}
 					}
-					$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
-						
-					}, 'json');
-				} else {
-					template.hide();
+					
+					fetching_notification = false;
+				}, 'json');
+				}else{ // if showing, hide it
+				  $('ul.notification_list_bar').hide();
 				}
 			}
-		}, 'json');
-	}
 });
