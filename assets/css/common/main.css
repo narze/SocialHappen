@@ -905,6 +905,7 @@ div.white-box-01 p {
 }
 div#user-tabs div.user-info {
 	padding:0 30px;
+	min-height: 400px;
 }
 div#user-tabs div.user-info ul {
 	width:500px;

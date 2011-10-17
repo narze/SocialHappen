@@ -1613,6 +1613,7 @@ div.wrapper-setting>div:after{
 div.wrapper-setting>div>div:first-child {
 	float: left;
 	width: 265px;
+	min-height: 500px;
 }
 div.wrapper-setting>div>div:first-child+div {
 	float: right;
