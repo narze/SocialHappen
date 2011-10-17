@@ -5,6 +5,7 @@ class Tab extends CI_Controller {
 	var $app_data;
 	
 	function __construct(){
+		header("Access-Control-Allow-Origin: *");
 		parent::__construct();
 		
 		$this->load->library('fb_library/fb_library',
