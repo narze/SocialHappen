@@ -9,7 +9,11 @@
 				<li>Win leader board </li>
 				<li>....</li>
 			</ol>
-			<iframe frameborder="0" width="180" height="39" scrolling="no" marginheight="0" marginwidth="0" src="<?php echo base_url().'tab/login_button';?>"></iframe>
+			<iframe id="xd_fblogin" frameborder="0" width="180" height="39" scrolling="no" marginheight="0" marginwidth="0" src="<?php echo base_url().'tab/login_button';?>"></iframe>
+			<script>
+				src =  document.getElementById("xd_fblogin").src + '#' + encodeURIComponent(document.location.href);
+				document.getElementById("xd_fblogin").src = src;
+			</script>
 			<p><a class="bt-don-awesome"><span>I don't want awesome stuff</span></a></p>
         </div>
         

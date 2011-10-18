@@ -1,7 +1,4 @@
 <div class="popup-fb signup-page">
-	<script type="text/javascript">
-		applyOptionsToPageSignup();
-	</script>
 	<h2>Page Sign Up</h2>
 	
     <div class="step">

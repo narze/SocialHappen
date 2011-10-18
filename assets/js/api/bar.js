@@ -1,16 +1,3 @@
-function checkForClose()
-{
-    if(window.location.hash == "#close_child")
-    {
-console.log('called');    }
-    else
-    {
-		console.log('not called');  
-      setTimeout(checkForClose, 1000)
-    }
-}
-setTimeout(checkForClose, 1000);
-
 sh_guest = function(){
 	(function($){
 		$.fancybox({
@@ -20,18 +7,21 @@ sh_guest = function(){
 		$('a.bt-don-awesome').live('click',function(){
 			$.fancybox.close();
 		});
+
+
 	})(jQuery);
 }
-sh_register = function(){
+sh_register = function(fb_uid,fb_access_token){
 	(function($){
+		
 		$.fancybox({
-			href: base_url+'tab/signup/'+page_id+'/'+app_install_id
+			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_user_id='+fb_uid+'&facebook_access_token='+fb_access_token
 		});
-		$('form.signup-form').die('submit');
-		$('form.signup-form').live('submit', function() {
-			$(this).ajaxSubmit({target:'#signup-form'});
-			return false;
-		});
+		// $('form.signup-form').die('submit');
+		// $('form.signup-form').live('submit', function() {
+			// $(this).ajaxSubmit({target:'#signup-form'});
+			// return false;
+		// });
 		
 		$('div.popup-fb.signup').live('keyup mousemove', function(){
 			var complete = true;
@@ -43,9 +33,53 @@ sh_register = function(){
 		});
 		
 		$('a.bt-next').live('click', function(){
-			$('form.signup-form').ajaxSubmit({target:'.popup-fb.signup', replaceTarget:true});
-			return false;
+			// $('form.signup-form').ajaxSubmit({
+				// target:'.popup-fb.signup',
+				// replaceTarget:true,
+				// dataType: 'jsonp',
+				// success:function(response){
+					// console.log($(response));
+					// if($(response).is('.popup-fb.signup-page')){ //Success signup sh, going to signup-page
+						// applyOptionsToPageSignup();
+					// }
+				// }
+			// });
+			// return false;
+			
+			$('form.signup-form').unbind('submit').submit(function() {
+				  var url = $(this).attr('action');
+				  var params = $(this).serialize();
+				  $.getJSON(url + '?' + params + "&callback=?", function(data) {
+					console.log(data);
+					// success
+					if(data.status == 'error'){
+						console.log('error'); //TODO : display error message
+					} else if(data.status == 'ok'){
+						sh_signup_page();
+					}
+				  })
+				  return false
+			}).submit();
+			
 		});
+	})(jQuery);
+}
+
+sh_signup_page = function(){
+	(function($){
+		if(app_mode){
+			$.fancybox({
+				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id,
+				modal: true,
+				onComplete: applyOptionsToPageSignup
+			});
+		} else {
+			$.fancybox({
+				href: base_url+'tab/signup_page/'+page_id,
+				modal: true,
+				onComplete: applyOptionsToPageSignup
+			});
+		}
 	})(jQuery);
 }
 	
@@ -123,7 +157,8 @@ onLoad = function(){
 			$('div.popup-fb.signup-page a.bt-done').live('click',function(){
 				$('.signup-form').ajaxSubmit({
 					target:'div.popup-fb.signup-page',
-					replaceTarget: true
+					replaceTarget: true,
+					dataType: 'jsonp'
 				});
 			});
 			
@@ -207,13 +242,7 @@ onLoad = function(){
 sh_popup = function(){
 	(function($){
 		if(view_as == 'guest'){ //@TODO : User should not see view_as, let's decide it server-side
-			$.fancybox({
-				href: base_url+'tab/guest'
-			});
-			$('a.bt-don-awesome').die('click');
-			$('a.bt-don-awesome').live('click',function(){
-				$.fancybox.close();
-			});
+			sh_guest();
 		} else if(view_as == 'admin'){
 			if(page_app_installed_id!=0) {
 				$.fancybox({
@@ -236,24 +265,14 @@ sh_popup = function(){
 			}
 		} else {
 			if(!is_user_register_to_page) {
-			  if(app_mode){
-			    $.fancybox({
-            href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id,
-            modal: true
-          });
-			  }else{
-			    $.fancybox({
-            href: base_url+'tab/signup_page/'+page_id,
-            modal: true
-          });
-			  }
+				sh_signup_page();
 			}
 		}
 		
 	})(jQuery);
 };
  
-applyOptionsToPageSignup = function(){
+applyOptionsToPageSignup = function(){ console.log('applyOptionsToPageSignup invoked');
 	(function($){
 		$('#signup-form form div.form li[data-field-options]').each(function(){
 			var textInput = $('div.inputs', this).find('input[type="text"], textarea'); //only texts & textareas
@@ -275,3 +294,99 @@ applyOptionsToPageSignup = function(){
 };
 
 getScript(base_url + 'assets/js/common/jquery.min.js', 'jQuery', loadChildScripts);
+
+/* 
+ * a backwards compatable implementation of postMessage
+ * by Josh Fraser (joshfraser.com)
+ * released under the Apache 2.0 license.  
+ *
+ * this code was adapted from Ben Alman's jQuery postMessage code found at:
+ * http://benalman.com/projects/jquery-postmessage-plugin/
+ * 
+ * other inspiration was taken from Luke Shepard's code for Facebook Connect:
+ * http://github.com/facebook/connect-js/blob/master/src/core/xd.js
+ *
+ * the goal of this project was to make a backwards compatable version of postMessage
+ * without having any dependency on jQuery or the FB Connect libraries
+ *
+ * my goal was to keep this as terse as possible since my own purpose was to use this 
+ * as part of a distributed widget where filesize could be sensative.
+ * 
+ */
+
+// everything is wrapped in the XD function to reduce namespace collisions
+var XD = function(){
+  
+    var interval_id,
+    last_hash,
+    cache_bust = 1,
+    attached_callback,
+    window = this;
+    
+    return {
+        // postMessage : function(message, target_url, target) {
+            
+            // if (!target_url) { 
+                // return; 
+            // }
+    
+            // target = target || parent;  // default to parent
+    
+            // if (window['postMessage']) {
+                // the browser supports window.postMessage, so call it with a targetOrigin
+                // set appropriately, based on the target_url parameter.
+                // target['postMessage'](message, target_url.replace( /([^:]+:\/\/[^\/]+).*/, '$1'));
+
+            // } else if (target_url) {
+                // the browser does not support window.postMessage, so set the location
+                // of the target to target_url#message. A bit ugly, but it works! A cache
+                // bust parameter is added to ensure that repeat messages trigger the callback.
+                // target.location = target_url.replace(/#.*$/, '') + '#' + (+new Date) + (cache_bust++) + '&' + message;
+            // }
+        // },
+		
+  
+        receiveMessage : function(callback, source_origin) {
+            
+            // browser supports window.postMessage
+            if (window['postMessage']) {
+                // bind the callback to the actual event associated with window.postMessage
+                if (callback) {
+                    attached_callback = function(e) { console.log('source_origin',source_origin,'e.origin',e.origin);
+                        if ((typeof source_origin === 'string' && e.origin !== source_origin)
+                        || (Object.prototype.toString.call(source_origin) === "[object Function]" && source_origin(e.origin) === !1)) {
+                            return !1;
+                        }
+                        callback(e);
+                    };
+                }
+                if (window['addEventListener']) {
+                    window[callback ? 'addEventListener' : 'removeEventListener']('message', attached_callback, !1);
+                } else {
+                    window[callback ? 'attachEvent' : 'detachEvent']('onmessage', attached_callback);
+                }
+            } else {
+                // a polling loop is started & callback is called whenever the location.hash changes
+                interval_id && clearInterval(interval_id);
+                interval_id = null;
+
+                if (callback) {
+                    interval_id = setInterval(function(){
+                        var hash = document.location.hash,
+                        re = /^#?\d+&/;
+                        if (hash !== last_hash && re.test(hash)) {
+                            last_hash = hash;
+                            callback({data: hash.replace(re, '')});
+                        }
+                    }, 100);
+                }
+            }   
+        }
+    };
+}();
+
+XD.receiveMessage(function(message){ // Receives data from child iframe
+	if(message.data.sh_message == "logged in"){
+		sh_register(message.data.fb_uid, message.data.fb_access_token);
+	}
+}, sh_domain);

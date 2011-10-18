@@ -308,8 +308,8 @@ class SocialHappen{
 	 * @author Manassarn M.
 	 */
 	function login($redirect_url = NULL){
-		if($facebook_cookie = $this->CI->facebook->get_facebook_cookie()){
-			$user_facebook_id = $facebook_cookie['uid'];
+		if($user = $this->CI->facebook->getUser()){
+			$user_facebook_id = $user['id'];
 			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
 			if($user_id){
 				$userdata = array(
@@ -723,7 +723,10 @@ class SocialHappen{
 		$this->CI->load->library('notification_lib');
 		$notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
 		$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
-    
+		
+		$domain_fragments = parse_url(base_url());
+		$sh_domain = 'https://'.$domain_fragments['host']; //Use for cross-domain calling
+	
 		$this->CI->load->vars(array(
 			'vars' => array(
 				'view_as' => $view_as,
@@ -734,7 +737,7 @@ class SocialHappen{
 				'user_id' => $user['user_id'],
 				'app_mode' => $app_mode,
 				'app_install_id' => $app_install_id,
-				'app_mode' => $app_mode
+				'sh_domain' => $sh_domain
 			),
 			'view_as' => $view_as,
 			'app_install_id' => $app_install_id,

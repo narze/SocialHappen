@@ -527,8 +527,9 @@ class Tab extends CI_Controller {
 	}
 	
 	function signup($page_id = NULL, $app_install_id = NULL){
+		$facebook_access_token = $this->input->get('facebook_access_token');
 		$this->load->library('form_validation');
-		$facebook_user = $this->facebook->getUser();
+		$facebook_user = $this->facebook->getUser($facebook_access_token);
 		//$this->load->model('user_model','users');
 		$this->load->model('user_model','users');
 		//if is sh user redirect popup to "regged"
@@ -563,33 +564,44 @@ class Tab extends CI_Controller {
 				if (!$user_image = $this->socialhappen->upload_image('user_image')){
 					$user_image = $user_facebook_image;
 				}
-				$user = array(
-								'user_first_name' => set_value('first_name'),
-								'user_last_name' => set_value('last_name'),
-								'user_email' => set_value('email'),
-								'user_image' => $user_image,
-								'user_facebook_id' => $facebook_user['id']
-							);
-						
-				$user_add_result = json_decode($this->curl->ssl(FALSE)->simple_post(base_url().'user/json_add', $user), TRUE);
 				
-				if ($user_add_result['status'] == 'OK')
-				{
+				$this->load->model('user_model','users');
+				$post_data = array(
+					'user_first_name' => set_value('first_name'),
+					'user_last_name' => set_value('last_name'),
+					'user_email' => set_value('email'),
+					'user_image' => $user_image,
+					'user_facebook_id' => $facebook_user['id']
+				);
+				if($user_id = $this->users->add_user($post_data)){
 					$this->socialhappen->login();
-          if(isset($app_install_id)){
-            redirect('tab/signup_page/'.$page_id.'/'.$app_install_id);
-          }else{
-            redirect('tab/signup_page/'.$page_id);
-          }
-					
-				}
-				else
-				{
-					log_message('error','add user failed');
+					if(isset($app_install_id)){
+						redirect('tab/signup_page/'.$page_id.'/'.$app_install_id);
+					}else{
+						redirect('tab/signup_page/'.$page_id);
+					}
+				} else {
+					log_message('error','add user failed : '. print_r($user_add_result, TRUE));
+					log_message('error','$user : '. print_r($user, TRUE));
 					echo 'Error occured';
 				}
 			}
 		}
+	}
+	
+	function signup_submit(){
+		$data = array(
+			'first_name' => $this->input->get('first_name'),
+			'last_name' => $this->input->get('last_name'),
+			'email' => $this->input->get('email')
+		);
+		
+		if(isset($have_error)){ //TODO : error checking for first_name, last_name, email
+			$data['status'] = 'error';
+		} else {
+			$data['status'] = 'ok';
+		}
+		echo $this->input->get('callback').'('.json_encode($data).')';
 	}
 	
 	function signup_page($page_id = NULL, $app_install_id = NULL){
@@ -635,32 +647,31 @@ class Tab extends CI_Controller {
 			)
 		);
 		
-		if ($this->form_validation->run() == FALSE)
-		{
+		if ($this->form_validation->run() == FALSE){
 			$this->load->view('tab/signup_page');
 		} else {
 			
 			$this->load->model('page_user_data_model','page_users');
 			$data = array(
-				'user_id' => $this->socialhappen->get_user_id(),
+				'user_id' => $this->socialhappen->get_user_id(), //NULL when differect origin
 				'page_id' => $page_id,
 				'user_data' => $data
 			);
 			
-      if(!isset($app_install_id)){ // mode = page
-        $this->load->model('page_model','page');
-        $page = $this->page->get_page_profile_by_page_id($page_id);
-        $facebook_tab_url = $page['facebook_tab_url'];
-      }else{ // mode = app
-        $this->load->model('installed_apps_model','installed_app');
-        $app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
-        $facebook_tab_url = $app['facebook_tab_url'];
-      }
+			if(!isset($app_install_id)){ // mode = page
+				$this->load->model('page_model','page');
+				$page = $this->page->get_page_profile_by_page_id($page_id);
+				$facebook_tab_url = $page['facebook_tab_url'];
+			} else { // mode = app
+				$this->load->model('installed_apps_model','installed_app');
+				$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
+				$facebook_tab_url = $app['facebook_tab_url'];
+			}
       
 			if($this->page_users->add_page_user($data)){
 				$this->load->view('tab/signup_complete', array('facebook_tab_url' => $facebook_tab_url));
 			} else {
-				$this->load->view('tab/signup_page', array('error'=>'Already register/cannot signup page'));
+				$this->load->view('tab/signup_page', array('error'=>print_r($data,TRUE)));
 			}
 		}
 	}
