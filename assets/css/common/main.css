@@ -494,7 +494,7 @@ div.dragging-page ul li p
 div.dragging-page ul li p.pagename
 {
 	text-align: center;
-	padding: 0 0 7px 8px;
+	padding: 0 0 7px 0;
 	overflow: hidden;
 	width: 82px;
 	height: 17px;
@@ -514,9 +514,6 @@ div.dragging-app ul li p.appname {
 	line-height: 12px;
 	word-wrap: break-word;
 }
-div.dragging-page ul li p span.button {
-	left:8px;
-}
 div.dragging-app ul li p span.button a.bt-setting_app {
 	top: 20px;
 	position: absolute;
@@ -525,6 +522,7 @@ div.dragging-app ul li p span.button a.bt-setting_app {
 div.dragging-page ul li p span.button a.bt-installed-app {
 	position:relative;
 	top:25px;
+	left: 10px;
 }
 
 /* Go to bar */

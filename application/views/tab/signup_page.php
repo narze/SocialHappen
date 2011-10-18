@@ -42,7 +42,7 @@
 		else 
 		{ ?>
 			<div class="form">
-				<h2>Additional Information</h2>
+				<?php if(count($page_user_fields) > 0) { ?><h2>Additional Information</h2><?php } ?>
 				<ul>
 					<input type="hidden" name="empty" value="0" /><?php 
 					foreach($page_user_fields as $user_fields) 
