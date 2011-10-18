@@ -1,3 +1,16 @@
+function checkForClose()
+{
+    if(window.location.hash == "#close_child")
+    {
+console.log('called');    }
+    else
+    {
+		console.log('not called');  
+      setTimeout(checkForClose, 1000)
+    }
+}
+setTimeout(checkForClose, 1000);
+
 sh_guest = function(){
 	(function($){
 		$.fancybox({
