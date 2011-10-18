@@ -11,7 +11,7 @@
 	</div>
 	
 	<div id="signup-form">
-		<?php $attributes = array('class' => 'signup-form', 'id' => ''); echo form_open("tab/signup_page/{$page_id}", $attributes); ?>
+		<?php $attributes = array('class' => 'signup-form', 'id' => ''); echo form_open("tab/signup_page_submit/{$page_id}", $attributes); ?>
         <div class="connect">
 			
 			<div class="wrapper">

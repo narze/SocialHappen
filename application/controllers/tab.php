@@ -676,6 +676,21 @@ class Tab extends CI_Controller {
 		}
 	}
 	
+	function signup_page_submit(){
+		$data = array(
+			// 'first_name' => $this->input->get('first_name'),
+			// 'last_name' => $this->input->get('last_name'),
+			// 'email' => $this->input->get('email')
+		);
+		
+		if(isset($have_error)){ //TODO : error checking for first_name, last_name, email
+			$data['status'] = 'error';
+		} else {
+			$data['status'] = 'ok';
+		}
+		echo $this->input->get('callback').'('.json_encode($data).')';
+	}
+	
 	function page_installed($page_id = NULL){
 		$data = array('page_id' => $page_id);
 		$this->load->view('tab/page_installed', $data);

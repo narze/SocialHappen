@@ -24,8 +24,9 @@ sh_register = function(fb_uid,fb_access_token){
 		// });
 		
 		$('div.popup-fb.signup').live('keyup mousemove', function(){
+			var this_popup = $(this);
 			var complete = true;
-			$.each( $('form.signup-form input[type="text"]'), function () {
+			$.each( $('form.signup-form input[type="text"]', this_popup), function () {
 				if( $(this).val() == '') complete = false;
 			});
 			if(complete) $('a.bt-next-inactive').attr('class', 'bt-next');
@@ -66,7 +67,35 @@ sh_register = function(fb_uid,fb_access_token){
 }
 
 sh_signup_page = function(){
-	(function($){
+	(function($){			
+		$('div.popup-fb.signup-page #policy').die('click').live('click', function() {
+			if ( $('#policy:checked').length > 0 ) $('a.bt-done-inactive').attr('class', 'bt-done');
+			else $('a.bt-done').attr('class', 'bt-done-inactive');
+		});
+			
+		$('div.popup-fb.signup-page a.bt-done').die('click').live('click',function(){
+			// $('.signup-form').ajaxSubmit({
+				// target:'div.popup-fb.signup-page',
+				// replaceTarget: true,
+				// dataType: 'jsonp'
+			// });
+			
+			$('form.signup-form').unbind('submit').submit(function() {
+				  var url = $(this).attr('action');
+				  var params = $(this).serialize();
+				  $.getJSON(url + '?' + params + "&callback=?", function(data) {
+					console.log(data);
+					// success
+					if(data.status == 'error'){
+						console.log('error'); //TODO : display error message
+					} else if(data.status == 'ok'){
+						console.log('ok');
+					}
+				  })
+				  return false
+			}).submit();
+		});
+		
 		if(app_mode){
 			$.fancybox({
 				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id,
@@ -147,20 +176,6 @@ onLoad = function(){
 			});
 			
 			sh_popup();
-			
-			$('div.popup-fb.signup-page #policy').live('click', function() {
-				if ( $('#policy:checked').length > 0 ) $('a.bt-done-inactive').attr('class', 'bt-done');
-				else $('a.bt-done').attr('class', 'bt-done-inactive');
-			});
-				
-			$('div.popup-fb.signup-page a.bt-done').die('click');
-			$('div.popup-fb.signup-page a.bt-done').live('click',function(){
-				$('.signup-form').ajaxSubmit({
-					target:'div.popup-fb.signup-page',
-					replaceTarget: true,
-					dataType: 'jsonp'
-				});
-			});
 			
 			$('div.popup-fb a.bt-start').live('click',function(){
 				$.fancybox.close();
