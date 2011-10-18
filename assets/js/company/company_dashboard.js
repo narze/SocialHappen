@@ -223,7 +223,7 @@ function show_installed_page_in_company() {
 				//	ul_element.children('div:last').append(
 				ul_element.append(
 				'<li style="display:none;" onclick="view_page_app('+json[i].page_id+','+json[i].facebook_page_id+',\''+json[i].page_name+'\')">'
-				+'<p><img class="page-image" src="'+imgsize(json[i].page_image,'normal')+'" alt="" width="80" height="80" />'
+				+'<p class="page-image"><img src="'+imgsize(json[i].page_image,'normal')+'" alt="" />'
 				+'<span class="button">'
 				+'<a class="bt-manage_page" href="'+base_url+'page/'+json[i].page_id+'"><span>Manage</span></a>'
 				+'<a class="bt-setting_page" href="'+base_url+'settings?s=page&id='+json[i].page_id+'"><span>Setting</span></a>'
@@ -563,9 +563,9 @@ function show_available_page_in_company() {
 					ul_element.append(
 					// "<li class='draggable'><p><img src='"
 					// +(json[i].page_info.picture==null?'http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yA/r/gPCjrIGykBe.gif':json[i].page_info.picture)
-					"<li data-hasaddedapp='"+json[i].has_added_app+"' class='draggable'><p><img class='page-image' src='"
+					"<li data-hasaddedapp='"+json[i].has_added_app+"' class='draggable'><p class='page-image'><img src='"
 					+json[i].page_info.picture
-					+"' alt='' width='80' height='80' /></p><p class='pagename'>"+json[i].name
+					+"' alt='' /></p><p class='pagename'>"+json[i].name
 					+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/></li>"
 					);
 				}

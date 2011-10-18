@@ -412,15 +412,14 @@ class Tab extends CI_Controller {
 			{
 				if(isset($activity['user_id']))
 				{
-					$action = $this->audit_action->get_action($activity['app_id'],$activity['action_id']);
 					$user = $this->users->get_user_profile_by_user_id($activity['user_id']);
-					$activity['user_image'] = $user['user_image'];
-					
-					//$activity['activity_detail'] = $action[0]['description'];
-					//$activity['time_ago'] = '1 day ago';
-					//$activity['source'] = 'web';
-					//$activity['star_point'] = 5;
+					if(!$user) { unset($activity['user_id']); continue; }
 				}
+				$activity['user_image'] = $user['user_image'];
+				$activity['user_name'] = $user['user_first_name'].' '.$user['user_last_name'];
+				//$activity['time_ago'] = '1 day ago';
+				//$activity['source'] = 'web';
+				//$activity['star_point'] = 5;
 			}
 			unset($activity);
 		
