@@ -453,7 +453,7 @@ class Achievement_lib
 				$this->CI->load->library('notification_lib');
 				$message = 'You have unlocked a new achievement: ' . $achievement['info']['name'] . '.';
 				$link = '#';
-				$image = 'https://socialhappen.dyndns.org/socialhappen/assets/images/badges.png';
+				$image = base_url().'assets/images/badges.png';
 				$this->CI->notification_lib->add($user_id, $message, $link, $image);
 				// $this->CI->notification_lib->add($user_id, 'You have unlocked new achievement.', '');
 				// echo 'user_id: '.$user_id.' got reward!';

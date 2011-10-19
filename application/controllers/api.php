@@ -687,8 +687,8 @@ class Api extends CI_Controller {
 							
 		$loginUrl = $this->FB->getLoginUrl(
 									array(
-										'redirect_uri' => 'http://socialhappen.dyndns.org/socialhappen/signup',	// permission successful target
-										'next'=>'http://socialhappen.dyndns.org/signup',
+										'redirect_uri' => base_url().'home/signup',	// permission successful target
+										'next'=>base_url().'home/signup',
 										'req_perms'=>'offline_access,user_photos'
 									)
 								);
