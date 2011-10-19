@@ -9,7 +9,7 @@
 <div id="stats"><h1>Stats (soon)</h1></div>
 <div id="campaignUsers"><h1>Campaign user activities</h1></div>
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 <script>
 	$(function(){
 		function makeList(object){

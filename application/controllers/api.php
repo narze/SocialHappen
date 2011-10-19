@@ -1446,7 +1446,7 @@ class Api extends CI_Controller {
 
 	function test_bar_api(){
 		$result = json_decode(file_get_contents('http://127.0.0.1/socialhappen/api/bar?app_id=1&app_install_id=1&app_secret_key=ad3d4f609ce1c21261f45d0a09effba4&app_install_secret_key=457f81902f7b768c398543e473c47465&user_facebook_id=755758746'), true);
-		echo '<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>';
+		echo '<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>';
 		echo '<link type="text/css" rel="stylesheet" href="'.$result['css'].'" />';
 		echo '<div style="width:800px;margin:0 auto;">'.$result['html'].'</div>';
 	}

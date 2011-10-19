@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>Add new achievement</title>
 	<?php echo link_tag('css/style.css'); ?>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 	<script>
 		var criteriaStringNo = 0;
 		var criteriaNo = 0;

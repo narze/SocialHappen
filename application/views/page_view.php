@@ -11,7 +11,7 @@
 <div id="pageCampaigns"><h1>Page Campaigns</h1></div>
 <div id="pageUsers"><h1>Page user activities</h1></div>
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 <script>
 	$(function(){
 		function makeList(object){
