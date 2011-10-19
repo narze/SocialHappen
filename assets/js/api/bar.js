@@ -11,11 +11,11 @@ sh_guest = function(){
 
 	})(jQuery);
 }
-sh_register = function(fb_uid,fb_access_token){
+sh_register = function(fb_access_token){
 	(function($){
 		
 		$.fancybox({
-			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_user_id='+fb_uid+'&facebook_access_token='+fb_access_token
+			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token
 		});
 		// $('form.signup-form').die('submit');
 		// $('form.signup-form').live('submit', function() {
@@ -56,7 +56,7 @@ sh_register = function(fb_uid,fb_access_token){
 					if(data.status == 'error'){
 						console.log('error'); //TODO : display error message
 					} else if(data.status == 'ok'){
-						sh_signup_page();
+						sh_signup_page(fb_access_token);
 					}
 				  })
 				  return false
@@ -66,7 +66,7 @@ sh_register = function(fb_uid,fb_access_token){
 	})(jQuery);
 }
 
-sh_signup_page = function(){
+sh_signup_page = function(fb_access_token){
 	(function($){			
 		$('div.popup-fb.signup-page #policy').die('click').live('click', function() {
 			if ( $('#policy:checked').length > 0 ) $('a.bt-done-inactive').attr('class', 'bt-done');
@@ -98,13 +98,13 @@ sh_signup_page = function(){
 		
 		if(app_mode){
 			$.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id,
+				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token,
 				modal: true,
 				onComplete: applyOptionsToPageSignup
 			});
 		} else {
 			$.fancybox({
-				href: base_url+'tab/signup_page/'+page_id,
+				href: base_url+'tab/signup_page/'+page_id+'?facebook_access_token='+fb_access_token,
 				modal: true,
 				onComplete: applyOptionsToPageSignup
 			});
@@ -411,6 +411,6 @@ var XD = function(){
 
 XD.receiveMessage(function(message){ // Receives data from child iframe
 	if(message.data.sh_message == "logged in"){
-		sh_register(message.data.fb_uid, message.data.fb_access_token);
+		sh_register(message.data.fb_access_token);
 	}
 }, sh_domain);

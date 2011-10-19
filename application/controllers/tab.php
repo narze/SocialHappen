@@ -637,7 +637,8 @@ class Tab extends CI_Controller {
 	
 	function signup_page($page_id = NULL, $app_install_id = NULL){
 		$this->load->library('form_validation');
-		$facebook_user = $this->facebook->getUser();
+		$facebook_access_token = $this->input->get('facebook_access_token');
+		$facebook_user = $this->facebook->getUser($facebook_access_token);
 		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
 		
 		$this->load->model('page_model','pages');
@@ -667,9 +668,9 @@ class Tab extends CI_Controller {
 		// if(!$page_user_fields){
 			// $this->form_validation->set_rules('empty', 'Empty', 'required');
 		// }
-		
+		$this->load->model('user_model','user');
 		$this->load->vars(array(
-				'user' => $this->socialhappen->get_user(),
+				'user' => ($user = $this->socialhappen->get_user()) ? $user : $this->user->get_user_profile_by_user_facebook_id($facebook_user['id']),
 				'page_id' => $page_id,
 				'page' => $page,
 				'page_user_fields' => $page_user_fields,
