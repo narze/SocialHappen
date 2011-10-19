@@ -11,7 +11,14 @@
 	</div>
 	
 	<div id="signup-form">
-		<?php $attributes = array('class' => 'signup-form', 'id' => ''); echo form_open("tab/signup_page_submit/{$page_id}", $attributes); ?>
+		<?php 
+			$attributes = array('class' => 'signup-form', 'id' => ''); 
+			$url = "tab/signup_page_submit/{$page_id}/";
+			if($app_install_id){
+				$url .= $app_install_id;
+			}
+			echo form_open($url, $attributes); 
+		?>
         <div class="connect">
 			
 			<div class="wrapper">

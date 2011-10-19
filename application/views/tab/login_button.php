@@ -3,7 +3,7 @@
 
 	
 	var parent_url = decodeURIComponent(document.location.hash.replace(/^#/, ''));
-	console.log('parent_url:',parent_url);
+
 	function send(msg) {
         XD.postMessage(msg, parent_url, parent);
         return false;

@@ -527,7 +527,7 @@ class Tab extends CI_Controller {
 	
 	function signup($page_id = NULL, $app_install_id = NULL){
 		$facebook_access_token = $this->input->get('facebook_access_token');
-		$this->load->library('form_validation');
+		// $this->load->library('form_validation');
 		$facebook_user = $this->facebook->getUser($facebook_access_token);
 		//$this->load->model('user_model','users');
 		$this->load->model('user_model','users');
@@ -541,15 +541,16 @@ class Tab extends CI_Controller {
 				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
 			}
 		} else {
+			$this->load->helper('form');
 			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
-			$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
-			$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
-			$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
+			// $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
+			// $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
+			// $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
 				
-			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+			// $this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
-			if ($this->form_validation->run() == FALSE)
-			{
+			// if ($this->form_validation->run() == FALSE)
+			// {
 				$this -> load -> view('tab/signup', 
 						array(
 							'facebook_user'=>$facebook_user,
@@ -557,48 +558,79 @@ class Tab extends CI_Controller {
 							'page_id' => $page_id
 						)
 				);
-			}
-			else
-			{
-				if (!$user_image = $this->socialhappen->upload_image('user_image')){
-					$user_image = $user_facebook_image;
-				}
+			// }
+			// else
+			// {
+				// if (!$user_image = $this->socialhappen->upload_image('user_image')){
+					// $user_image = $user_facebook_image;
+				// }
 				
-				$this->load->model('user_model','users');
-				$post_data = array(
-					'user_first_name' => set_value('first_name'),
-					'user_last_name' => set_value('last_name'),
-					'user_email' => set_value('email'),
-					'user_image' => $user_image,
-					'user_facebook_id' => $facebook_user['id']
-				);
-				if($user_id = $this->users->add_user($post_data)){
-					$this->socialhappen->login();
-					if(isset($app_install_id)){
-						redirect('tab/signup_page/'.$page_id.'/'.$app_install_id);
-					}else{
-						redirect('tab/signup_page/'.$page_id);
-					}
-				} else {
-					log_message('error','add user failed : '. print_r($user_add_result, TRUE));
-					log_message('error','$user : '. print_r($user, TRUE));
-					echo 'Error occured';
-				}
-			}
+				// $this->load->model('user_model','users');
+				// $post_data = array(
+					// 'user_first_name' => set_value('first_name'),
+					// 'user_last_name' => set_value('last_name'),
+					// 'user_email' => set_value('email'),
+					// 'user_image' => $user_image,
+					// 'user_facebook_id' => $facebook_user['id']
+				// );
+				// if($user_id = $this->users->add_user($post_data)){
+					// $this->socialhappen->login();
+					// if(isset($app_install_id)){
+						// redirect('tab/signup_page/'.$page_id.'/'.$app_install_id);
+					// }else{
+						// redirect('tab/signup_page/'.$page_id);
+					// }
+				// } else {
+					// log_message('error','add user failed : '. print_r($user_add_result, TRUE));
+					// log_message('error','$user : '. print_r($user, TRUE));
+					// echo 'Error occured';
+				// }
+			// }
 		}
 	}
 	
-	function signup_submit(){
-		$data = array(
-			'first_name' => $this->input->get('first_name'),
-			'last_name' => $this->input->get('last_name'),
-			'email' => $this->input->get('email')
-		);
-		
-		if(isset($have_error)){ //TODO : error checking for first_name, last_name, email
-			$data['status'] = 'error';
+	function signup_submit($page_id = NULL, $app_install_id = NULL){
+		if(!$facebook_user = $this->facebook->getUser()){
+			$data = array(
+				'status' => 'error',
+				'error' => 'no_fb_user',
+			);
 		} else {
-			$data['status'] = 'ok';
+			$data = array(
+				'user_first_name' => $this->input->get('first_name'),
+				'user_last_name' => $this->input->get('last_name'),
+				'user_email' => $this->input->get('email')
+			);
+			
+			if(isset($have_error)){ //TODO : error checking for first_name, last_name, email
+				$data['status'] = 'error';
+				$data['error'] = 'verify';
+			} else {
+				// if (!$user_image = $this->socialhappen->upload_image('user_image')){
+					$user_image = $this->facebook->get_profile_picture($facebook_user['id']);;
+				// }
+				$this->load->model('user_model','users');
+				$post_data = array(
+					'user_first_name' => $data['user_first_name'],
+					'user_last_name' => $data['user_last_name'],
+					'user_email' => $data['user_email'],
+					'user_image' => $user_image,
+					'user_facebook_id' => $facebook_user['id']
+				);
+				
+				if(!$user_id = $this->users->add_user($post_data)){
+					//TODO : erase uploaded image
+					log_message('error','add user failed : '. print_r($user_add_result, TRUE));
+					log_message('error','$user : '. print_r($user, TRUE));
+					echo 'Error occured';
+					$data['status'] = 'error';
+					$data['error'] = 'add_user';
+				} else {
+					$this->socialhappen->login();
+					$data['status'] = 'ok';
+				}
+				
+			}
 		}
 		echo $this->input->get('callback').'('.json_encode($data).')';
 	}
@@ -613,28 +645,28 @@ class Tab extends CI_Controller {
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
 		$data = array();
-		foreach($page_user_fields as $user_fields){
-			$required = ($user_fields['required']) ? "|required" : "";
-			switch($user_fields['type']){
-				case 'radio':
-					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);	
-				break;
-				case 'checkbox':
-					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'xss_clean'.$required);
-				break;
-				case 'textarea':
-					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
-				break;					
-				case 'text':
-				default:
-					$this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
-			}
-			$data[$user_fields['name']] = $this->input->post($user_fields['name']);
-		}
+		// foreach($page_user_fields as $user_fields){
+			// $required = ($user_fields['required']) ? "|required" : "";
+			// switch($user_fields['type']){
+				// case 'radio':
+					// $this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);	
+				// break;
+				// case 'checkbox':
+					// $this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'xss_clean'.$required);
+				// break;
+				// case 'textarea':
+					// $this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
+				// break;					
+				// case 'text':
+				// default:
+					// $this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
+			// }
+			// $data[$user_fields['name']] = $this->input->post($user_fields['name']);
+		// }
 		
-		if(!$page_user_fields){
-			$this->form_validation->set_rules('empty', 'Empty', 'required');
-		}
+		// if(!$page_user_fields){
+			// $this->form_validation->set_rules('empty', 'Empty', 'required');
+		// }
 		
 		$this->load->vars(array(
 				'user' => $this->socialhappen->get_user(),
@@ -642,52 +674,93 @@ class Tab extends CI_Controller {
 				'page' => $page,
 				'page_user_fields' => $page_user_fields,
 				'facebook_user'=>$facebook_user,
-				'user_profile_picture'=>$user_facebook_image
+				'user_profile_picture'=>$user_facebook_image,
+				'app_install_id' => $app_install_id
 			)
 		);
 		
-		if ($this->form_validation->run() == FALSE){
+		// if ($this->form_validation->run() == FALSE){
 			$this->load->view('tab/signup_page');
-		} else {
+		// } else {
 			
-			$this->load->model('page_user_data_model','page_users');
-			$data = array(
-				'user_id' => $this->socialhappen->get_user_id(), //NULL when differect origin
-				'page_id' => $page_id,
-				'user_data' => $data
-			);
+			// $this->load->model('page_user_data_model','page_users');
+			// $data = array(
+				// 'user_id' => $this->socialhappen->get_user_id(), //NULL when differect origin
+				// 'page_id' => $page_id,
+				// 'user_data' => $data
+			// );
 			
-			if(!isset($app_install_id)){ // mode = page
-				$this->load->model('page_model','page');
-				$page = $this->page->get_page_profile_by_page_id($page_id);
-				$facebook_tab_url = $page['facebook_tab_url'];
-			} else { // mode = app
-				$this->load->model('installed_apps_model','installed_app');
-				$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
-				$facebook_tab_url = $app['facebook_tab_url'];
-			}
+			// if(!isset($app_install_id)){ // mode = page
+				// $this->load->model('page_model','page');
+				// $page = $this->page->get_page_profile_by_page_id($page_id);
+				// $facebook_tab_url = $page['facebook_tab_url'];
+			// } else { // mode = app
+				// $this->load->model('installed_apps_model','installed_app');
+				// $app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
+				// $facebook_tab_url = $app['facebook_tab_url'];
+			// }
       
-			if($this->page_users->add_page_user($data)){
-				$this->load->view('tab/signup_complete', array('facebook_tab_url' => $facebook_tab_url));
-			} else {
-				$this->load->view('tab/signup_page', array('error'=>print_r($data,TRUE)));
-			}
-		}
+			// if($this->page_users->add_page_user($data)){
+				// $this->load->view('tab/signup_complete', array('facebook_tab_url' => $facebook_tab_url));
+			// } else {
+				// $this->load->view('tab/signup_page', array('error'=>print_r($data,TRUE)));
+			// }
+		// }
 	}
 	
-	function signup_page_submit(){
-		$data = array(
-			// 'first_name' => $this->input->get('first_name'),
-			// 'last_name' => $this->input->get('last_name'),
-			// 'email' => $this->input->get('email')
-		);
-		
-		if(isset($have_error)){ //TODO : error checking for first_name, last_name, email
-			$data['status'] = 'error';
+	function signup_page_submit($page_id = NULL, $app_install_id = NULL){
+		if(!$user = $this->socialhappen->get_user()){
+			$data = array(
+				'status' => 'error',
+				'error' => 'no_user',
+				'message' => 'Cannot find user, please relogin.'
+			);
 		} else {
-			$data['status'] = 'ok';
+			$data = array();
+			$this->load->model('page_model','pages');
+			$page_user_fields = $this->pages->get_page_user_fields_by_page_id($page_id);
+			$page = $this->pages->get_page_profile_by_page_id($page_id);
+			
+			$post_data = array('user_data'=>array());
+			foreach($page_user_fields as $user_fields){
+				$post_data['user_data'][$user_fields['name']] = $this->input->get($user_fields['name']);
+			}
+			
+			if(isset($have_error)){ //TODO : error checking foreach $data['user_data']
+				$data['status'] = 'error';
+				$data['error'] = 'verify';
+			} else {
+				$post_data['user_id'] = $user['user_id'];
+				$post_data['page_id'] = $page_id;
+				
+				if(!isset($app_install_id)){ // mode = page
+					$this->load->model('page_model','page');
+					$page = $this->page->get_page_profile_by_page_id($page_id);
+					$facebook_tab_url = $page['facebook_tab_url'];
+				} else { // mode = app
+					$this->load->model('installed_apps_model','installed_app');
+					$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
+					$facebook_tab_url = $app['facebook_tab_url'];
+				}
+				
+				$this->load->model('page_user_data_model','page_users');
+				if(!$this->page_users->add_page_user($post_data)){
+					log_message('error','add page user failed');
+					log_message('error','$post_data : '. print_r($post_data, TRUE));
+					$data['status'] = 'error';
+					$data['error'] = 'add_page_user';
+				} else {
+					$data['status'] = 'ok';
+					$data['redirect_url'] = $facebook_tab_url;
+				}
+			}
 		}
 		echo $this->input->get('callback').'('.json_encode($data).')';
+	}
+	
+	function signup_complete(){
+		$redirect_url = $this->input->get('next');
+		$this->load->view('tab/signup_complete', array('redirect_url' => $redirect_url));
 	}
 	
 	function page_installed($page_id = NULL){

@@ -51,7 +51,7 @@ sh_register = function(fb_uid,fb_access_token){
 				  var url = $(this).attr('action');
 				  var params = $(this).serialize();
 				  $.getJSON(url + '?' + params + "&callback=?", function(data) {
-					console.log(data);
+					// console.log(data);
 					// success
 					if(data.status == 'error'){
 						console.log('error'); //TODO : display error message
@@ -84,12 +84,12 @@ sh_signup_page = function(){
 				  var url = $(this).attr('action');
 				  var params = $(this).serialize();
 				  $.getJSON(url + '?' + params + "&callback=?", function(data) {
-					console.log(data);
+					// console.log(data);
 					// success
 					if(data.status == 'error'){
 						console.log('error'); //TODO : display error message
 					} else if(data.status == 'ok'){
-						console.log('ok');
+						sh_signup_complete(data.redirect_url);
 					}
 				  })
 				  return false
@@ -109,6 +109,15 @@ sh_signup_page = function(){
 				onComplete: applyOptionsToPageSignup
 			});
 		}
+	})(jQuery);
+}
+
+sh_signup_complete = function(redirect_url){
+	(function($){
+		$.fancybox({
+			href: base_url+'tab/signup_complete?next=' + encodeURIComponent(redirect_url),
+			modal: true
+		});
 	})(jQuery);
 }
 	
@@ -287,7 +296,7 @@ sh_popup = function(){
 	})(jQuery);
 };
  
-applyOptionsToPageSignup = function(){ console.log('applyOptionsToPageSignup invoked');
+applyOptionsToPageSignup = function(){ //console.log('applyOptionsToPageSignup invoked');
 	(function($){
 		$('#signup-form form div.form li[data-field-options]').each(function(){
 			var textInput = $('div.inputs', this).find('input[type="text"], textarea'); //only texts & textareas
@@ -367,7 +376,7 @@ var XD = function(){
             if (window['postMessage']) {
                 // bind the callback to the actual event associated with window.postMessage
                 if (callback) {
-                    attached_callback = function(e) { console.log('source_origin',source_origin,'e.origin',e.origin);
+                    attached_callback = function(e) { //console.log('source_origin',source_origin,'e.origin',e.origin);
                         if ((typeof source_origin === 'string' && e.origin !== source_origin)
                         || (Object.prototype.toString.call(source_origin) === "[object Function]" && source_origin(e.origin) === !1)) {
                             return !1;

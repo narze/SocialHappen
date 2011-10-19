@@ -14,7 +14,7 @@
     <div><img src="<?php echo base_url(); ?>images/register-step-01.jpg" /></div>
 
 	<div id="signup-form">
-		<?php $attributes = array('class' => 'signup-form', 'id' => ''); echo form_open('tab/signup_submit/'.$page_id, $attributes); ?>
+		<?php $attributes = array('class' => 'signup-form', 'id' => ''); echo form_open_multipart('tab/signup_submit/'.$page_id, $attributes); ?>
         <div class="profile">
 			<img src="<?php echo $user_profile_picture;?>" />
 			<div class="upload-pic">
