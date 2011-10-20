@@ -156,13 +156,7 @@ function show_installed_app_in_page(page_id,facebook_page_id){
 										$(".app-installed-count").html("Application (" + json.app_count + ")");
 									});
 									update_app_order_in_dashboard();
-									notice = $('#hidden-notice').find('.goto-facebook.app-installed');
-									popup = notice.clone();
-									popup.find(".bt-go-facebook").attr('href', json.facebook_tab_url);
-									console.log('popup', popup);
-									console.log('notice', notice);
-									popup = $('<div>').append(popup.clone()).remove().html();
-									notice.closest('body').html(popup);
+									parent.add_app_complete(json.facebook_tab_url);
 								}
 								else{
 									show_installed_app_in_page(page_id,facebook_page_id);

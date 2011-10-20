@@ -1,3 +1,12 @@
+var add_app_complete = function(facebook_tab_url){
+	var notice = $('#hidden-notice').find('.goto-facebook.app-installed');
+	var popup = notice.clone();
+	popup.find(".bt-go-facebook").attr('href', facebook_tab_url);
+	$.fancybox({
+		content: popup
+	});
+}
+
 $(function(){
 	function get_page_apps(page_index, jq){
 		set_loading();
@@ -65,7 +74,7 @@ $(function(){
 			transitionOut: 'elastic',
 			padding: 0,
 			width: 908,
-			height: 518,
+			height: 518, //TODO : height = 100% of inner content
 			autoDimensions: false,
 			scrolling: 'no',
 			onStart: function() {

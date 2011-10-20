@@ -39,4 +39,11 @@
 	</div>
 	<?php } ?>
 	<br />
+	<div id="hidden-notice" style="display:none">
+		<div class="goto-facebook app-installed">
+			<h2 class="in-popup">App installed</h2>
+			<p><b>You can see your installed app in facebook</b></p>
+			<a class="bt-go-facebook" target="_top">Go to facebook</a>
+		</div>
+	</div>
 </div>
