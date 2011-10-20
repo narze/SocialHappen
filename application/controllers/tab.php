@@ -533,16 +533,13 @@ class Tab extends CI_Controller {
 		$this->load->model('user_model','users');
 		//if is sh user redirect popup to "regged"
 		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
-			//echo "You're already a Socialhappen user";
+			echo "You're already a Socialhappen user";
 			$this->socialhappen->login();
-			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
-			// if($app_install_id){
-				// $this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
-			// } else if ($page_id){
-				// $this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
-			// }
-			$this->signup_page($page_id, $app_install_id);
-			redirect('tab/signup_page/'.$page_id.'/'.($app_install_id ? $app_install_id : ''));
+			if($app_install_id){
+				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
+			} else if ($page_id){
+				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
+			}
 		} else {
 			$this->load->helper('form');
 			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);

@@ -321,6 +321,12 @@ applyOptionsToPageSignup = function(){ //console.log('applyOptionsToPageSignup i
 	})(jQuery);
 };
 
+close_popup = function(){
+	(function($){
+		$.fancybox.close();
+	})(jQuery);
+};
+
 getScript(base_url + 'assets/js/common/jquery.min.js', 'jQuery', loadChildScripts);
 
 /* 
@@ -415,10 +421,10 @@ var XD = function(){
 
 XD.receiveMessage(function(message){ // Receives data from child iframe
 	if(message.data.sh_message == "logged in"){
-		if(view_as == 'guest') {
+		if(view_as == 'guest' || is_user_register_to_page) {
 			sh_signup(message.data.fb_access_token);
 		} else {
 			sh_signup_page(message.data.fb_access_token);
-		}
+		} 
 	}
 }, sh_domain);
