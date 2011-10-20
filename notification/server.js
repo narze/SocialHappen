@@ -6,12 +6,14 @@ var KEY = 'WOW';
 var crypto = require('crypto');
 var fs = require("fs");
 
-var privateKey = fs.readFileSync('./ssl/key/vhost1.key').toString();
-var certificate = fs.readFileSync('./ssl/crt/vhost1.crt').toString();
+var privateKey = fs.readFileSync('/etc/apache2/ssl/socialhappen.com.key').toString();
+var certificate = fs.readFileSync('/etc/apache2/ssl/socialhappen.com.crt').toString();
+var ca = fs.readFileSync('/etc/apache2/ssl/PositiveSSLCA.crt').toString();
 
 var options = {
 	key : privateKey,
-	cert : certificate
+	cert : certificate,
+	ca : ca
 };
 
 var httpServer = http.createServer(function (req, res) {
