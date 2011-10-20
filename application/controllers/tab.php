@@ -472,7 +472,7 @@ class Tab extends CI_Controller {
 				echo 'error : id mismatch'; //DEBUG
 			} else {
 				$user = $this->socialhappen->get_user();
-				$user_facebook = $this->facebook->getUser($user['user_facebook_id']);
+				$user_facebook = $this->facebook->getUser();
 				
 				
 				$this->load->library('form_validation');
@@ -533,15 +533,18 @@ class Tab extends CI_Controller {
 		$this->load->model('user_model','users');
 		//if is sh user redirect popup to "regged"
 		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
-			echo "You're already a Socialhappen user";
+			//echo "You're already a Socialhappen user";
 			$this->socialhappen->login();
-			if($app_install_id){
-				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
-			} else if ($page_id){
-				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
-			}
+			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
+			// if($app_install_id){
+				// $this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
+			// } else if ($page_id){
+				// $this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
+			// }
+			$this->signup_page($page_id, $app_install_id);
+			redirect('tab/signup_page/'.$page_id.'/'.($app_install_id ? $app_install_id : ''));
 		} else {
-			$this->load->helper('form');
+			// $this->load->helper('form');
 			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
 			// $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			// $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
@@ -636,6 +639,7 @@ class Tab extends CI_Controller {
 	}
 	
 	function signup_page($page_id = NULL, $app_install_id = NULL){
+
 		$this->load->library('form_validation');
 		$facebook_access_token = $this->input->get('facebook_access_token');
 		$facebook_user = $this->facebook->getUser($facebook_access_token);
@@ -681,7 +685,7 @@ class Tab extends CI_Controller {
 		);
 		
 		// if ($this->form_validation->run() == FALSE){
-			$this->load->view('tab/signup_page');
+		$this->load->view('tab/signup_page');
 		// } else {
 			
 			// $this->load->model('page_user_data_model','page_users');
@@ -707,6 +711,7 @@ class Tab extends CI_Controller {
 				// $this->load->view('tab/signup_page', array('error'=>print_r($data,TRUE)));
 			// }
 		// }
+		$this->socialhappen->login();
 	}
 	
 	function signup_page_submit($page_id = NULL, $app_install_id = NULL){

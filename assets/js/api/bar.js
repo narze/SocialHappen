@@ -11,7 +11,7 @@ sh_guest = function(){
 
 	})(jQuery);
 }
-sh_register = function(fb_access_token){
+sh_signup = function(fb_access_token){
 	(function($){
 		
 		$.fancybox({
@@ -84,7 +84,7 @@ sh_signup_page = function(fb_access_token){
 				  var url = $(this).attr('action');
 				  var params = $(this).serialize();
 				  $.getJSON(url + '?' + params + "&callback=?", function(data) {
-					// console.log(data);
+					console.log(data);
 					// success
 					if(data.status == 'error'){
 						console.log('error'); //TODO : display error message
@@ -289,7 +289,7 @@ sh_popup = function(){
 			}
 		} else {
 			if(!is_user_register_to_page) {
-				sh_signup_page();
+				sh_guest();
 			}
 		}
 		
@@ -298,6 +298,10 @@ sh_popup = function(){
  
 applyOptionsToPageSignup = function(){ //console.log('applyOptionsToPageSignup invoked');
 	(function($){
+		if(view_as == 'user'){
+			$('div#signup-form').prepend('You\'re already a SocialHappen user, please signup to this page');
+		}
+		
 		$('#signup-form form div.form li[data-field-options]').each(function(){
 			var textInput = $('div.inputs', this).find('input[type="text"], textarea'); //only texts & textareas
 			var fieldOptions = $(this).data('fieldOptions');
@@ -411,6 +415,10 @@ var XD = function(){
 
 XD.receiveMessage(function(message){ // Receives data from child iframe
 	if(message.data.sh_message == "logged in"){
-		sh_register(message.data.fb_access_token);
+		if(view_as == 'guest') {
+			sh_signup(message.data.fb_access_token);
+		} else {
+			sh_signup_page(message.data.fb_access_token);
+		}
 	}
 }, sh_domain);
