@@ -544,7 +544,7 @@ class Tab extends CI_Controller {
 			$this->signup_page($page_id, $app_install_id);
 			redirect('tab/signup_page/'.$page_id.'/'.($app_install_id ? $app_install_id : ''));
 		} else {
-			// $this->load->helper('form');
+			$this->load->helper('form');
 			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
 			// $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			// $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
