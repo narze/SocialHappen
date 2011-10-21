@@ -4,11 +4,15 @@ var HTTP_PORT = 8080;
 var HTTPS_PORT = 8081;
 var KEY = 'WOW';
 var crypto = require('crypto');
-var fs = require("fs");
+var fs = require('fs');
+var config = require('./config').config;
+var ca;
 
-var privateKey = fs.readFileSync('/etc/apache2/ssl/socialhappen.com.key').toString();
-var certificate = fs.readFileSync('/etc/apache2/ssl/socialhappen.com.crt').toString();
-var ca = fs.readFileSync('/etc/apache2/ssl/PositiveSSLCA.crt').toString();
+var privateKey = fs.readFileSync(config.keyPath).toString();
+var certificate = fs.readFileSync(config.certPath).toString();
+if(config.caPath){
+	ca = fs.readFileSync(config.caPath).toString();
+}
 
 var options = {
 	key : privateKey,
