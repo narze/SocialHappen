@@ -65,7 +65,7 @@ class notification_lib_test extends CI_Controller {
 		$user_id = '4';
 		$message = 'noti1';
 		$link = 'http://1';
-		$image = 'https://socialhappen.dyndns.org/socialhappen/assets/images/badges.png';
+		$image = 'https://socialhappen.dyndns.org/socialhappen/assets/images/badges/default.png';
 		$result = $this->notification_lib->add($user_id, $message, $link, $image);
 		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
 		$result = $this->notification->lists();

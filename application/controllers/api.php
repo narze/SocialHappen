@@ -407,6 +407,25 @@ class Api extends CI_Controller {
 			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
 		}else if(!$this->User_apps->check_exist($user_id, $app_install_id)){ // if not exist user, create it
 			$this->User_apps->add_new($user_id, $app_install_id);
+			
+			$this->load->library('audit_lib');
+			$action_id = $this->socialhappen->get_k('audit_action','User Register App');
+			$this->audit_lib->add_audit(
+				0,
+				$user_id,
+				$action_id,
+				'', 
+				'',
+				array(
+					'app_id' => $app_id,
+					'app_install_id' => $app_install_id,
+					'user_id' => $user_id
+				)
+			);
+			
+			$this->load->library('achievement_lib');
+			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'app_id'=>$app_id);
+			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
 		}
 		
 		// update user last seen
@@ -532,36 +551,63 @@ class Api extends CI_Controller {
 		$this->load->model('User_model', 'User');
 		$user_id = $this->User->add_user($user_profile);
 		if($user_id){
+			$action_id = $this->socialhappen->get_k('audit_action','User Register App');
 			$this->load->library('audit_lib');
 			$this->audit_lib->add_audit(
-										$app_id,
-										$user_id,
-										$this->socialhappen->get_k('audit_action','User Register App'),
-										'', 
-										'',
-										array(
-												'app_install_id'=> $app_install_id,
-												'page_id' => $page_id
-											)
-									);
+				$app_id,
+				$user_id,
+				$action_id,
+				'', 
+				'',
+				array(
+						'app_install_id'=> $app_install_id,
+						'page_id' => $page_id
+					)
+			);
+			$this->load->library('achievement_lib');
+			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'page_id' => $page_id);
+			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+			
+			$action_id = $this->socialhappen->get_k('audit_action','User Register SocialHappen');
+			$this->audit_lib->add_audit(
+				0,
+				$user_id,
+				$action_id,
+				'', 
+				'',
+				array(
+					'page_id'=> $page_id,
+					'app_install_id' => 0,
+					'user_id' => $user_id
+				)
+			);
+			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
+			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+									
 			$response['user_id'] = $user_id;
 			$response['User'] = 'added';
 			$response['message'] = 'New user registered';
 		
 		} else {
+			$action_id = $this->socialhappen->get_k('audit_action','User Visit');
 			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
 			$this->load->library('audit_lib');
 			$this->audit_lib->add_audit(
-										$app_id,
-										$user_id,
-										$this->socialhappen->get_k('audit_action','User Visit'),
-										'', 
-										'',
-										array(
-												'app_install_id'=> $app_install_id,
-												'company_id' => $company_id
-											)
-									);
+				$app_id,
+				$user_id,
+				$action_id,
+				'', 
+				'',
+				array(
+					'app_id' => $app_id,
+					'app_install_id'=> $app_install_id,
+					'company_id' => $company_id
+				)
+			);
+			
+			$this->load->library('achievement_lib');
+			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'app_id'=>$app_id);
+			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
 			
 		}
 		
@@ -570,6 +616,25 @@ class Api extends CI_Controller {
 		if(!$this->User_apps->check_exist($user_id, $app_install_id)){
 			$this->User_apps->add_new($user_id, $app_install_id);
 			$response['User_apps'] = 'added';
+			
+			$this->load->library('audit_lib');
+			$action_id = $this->socialhappen->get_k('audit_action','User Register App');
+			$this->audit_lib->add_audit(
+				0,
+				$user_id,
+				$action_id,
+				'', 
+				'',
+				array(
+					'app_id' => $app_id,
+					'app_install_id' => $app_install_id,
+					'user_id' => $user_id
+				)
+			);
+			
+			$this->load->library('achievement_lib');
+			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'app_id'=>$app_id);
+			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
 		}
 		
 		
@@ -667,6 +732,25 @@ class Api extends CI_Controller {
 			// if not exist user, create it
 			if(!$this->User_apps->check_exist($user_id, $app_install_id)){
 				$this->User_apps->add_new($user_id, $app_install_id);
+				
+				$this->load->library('audit_lib');
+				$action_id = $this->socialhappen->get_k('audit_action','User Register App');
+				$this->audit_lib->add_audit(
+					0,
+					$user_id,
+					$action_id,
+					'', 
+					'',
+					array(
+						'app_id' => $app_id,
+						'app_install_id' => $app_install_id,
+						'user_id' => $user_id
+					)
+				);
+				
+				$this->load->library('achievement_lib');
+				$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'app_id'=>$app_id);
+				$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
 			}
 			
 			//[Deprecated] wait for external log request

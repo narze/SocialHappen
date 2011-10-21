@@ -335,31 +335,36 @@ class Page extends CI_Controller {
 			'page_new_member' => $this -> input -> post('page_new_member'), 
 			'page_image' => $this -> input -> post('page_image')
 		);
-		$this->db->trans_start();
+		// $this->db->trans_start();
 		if($this->pages->get_page_id_by_facebook_page_id($post_data['facebook_page_id'])){
 			log_message('error','Duplicated facebook page id');
 			$result['status'] = 'ERROR';
 			$result['message'] = 'This page has already installed Socialhappen';
 		} else if($page_id = $this -> pages -> add_page($post_data)) {
 			$this->load->library('audit_lib');
-      $user_id = (int)($this->session->userdata('user_id'));
+			$user_id = $this->session->userdata('user_id');
+			$action_id = $this->socialhappen->get_k('audit_action','Install Page');
 			$this->audit_lib->add_audit(
 				0,
 				$user_id,
-				$this->socialhappen->get_k('audit_action','Install Page'),
+				$action_id,
 				'', 
 				'',
 				array(
 						'page_id'=> $page_id,
-						'company_id' => (int)($this -> input -> post('company_id')),
+						'company_id' => ($this -> input -> post('company_id')),
 						'app_install_id' => 0,
 						'user_id' => $user_id
 					)
 			);
+			$this->load->library('achievement_lib');
+			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
+			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+			
 			$this -> load -> model('user_pages_model', 'user_pages');
 			$this -> user_pages -> add_user_page(
 				array(
-				'user_id' => (int)($this->session->userdata('user_id')),
+				'user_id' => $user_id,
 				'page_id' => $page_id,
 				'user_role' => 1
 				)
@@ -381,14 +386,14 @@ class Page extends CI_Controller {
 			$result['status'] = 'ERROR';
 			$result['message'] = 'Cannot add page, please contact administrator';
 		}
-		$this->db->trans_complete();
+		// $this->db->trans_complete();
 
-		if ($this->db->trans_status() === FALSE)
-		{
-			log_message('error','transaction error');
-			$result['status'] = 'ERROR';
-			$result['message'] = 'Transaction error';
-		}
+		// if ($this->db->trans_status() === FALSE)
+		// {
+			// log_message('error','transaction error');
+			// $result['status'] = 'ERROR';
+			// $result['message'] = 'Transaction error';
+		// }
 		echo json_encode($result);
 	}
 	

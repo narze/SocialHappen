@@ -290,6 +290,24 @@ class User extends CI_Controller {
 		if($user_id = $this->users->add_user($post_data)){
 			$result->status = 'OK';
 			$result->user_id = $user_id;
+			
+			$this->load->library('audit_lib');
+			$action_id = $this->socialhappen->get_k('audit_action','User Register SocialHappen');
+			$this->audit_lib->add_audit(
+				0,
+				$user_id,
+				$action_id,
+				'', 
+				'',
+				array(
+					'app_install_id' => 0,
+					'user_id' => $user_id
+				)
+			);
+			
+			$this->load->library('achievement_lib');
+			$info = array('action_id'=> $action_id, 'app_install_id'=>0);
+			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
 		} else {
 			log_message('error','add user failed');
 			$result->status = 'ERROR';

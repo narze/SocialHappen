@@ -103,6 +103,19 @@ class Package_model_test extends CI_Controller {
 		$result = $this->packages->is_upgradable(1);
 		$this->unit->run($result, 'is_true', 'is_upgradable(1)');
 	}
+	
+	/**
+	 * Tests is_the_most_expensive()
+	 * @author Manassarn M.
+	 */
+	function is_the_most_expensive_test(){
+		$result = $this->packages->is_the_most_expensive(1);
+		$this->unit->run($result, FALSE, 'is_the_most_expensive(1)');
+		$result = $this->packages->is_the_most_expensive(2);
+		$this->unit->run($result, FALSE, 'is_the_most_expensive(2)');
+		$result = $this->packages->is_the_most_expensive(3);
+		$this->unit->run($result, TRUE, 'is_the_most_expensive(3)');
+	}
 }
 /* End of file package_model_test.php */
 /* Location: ./application/controllers/test/package_model_test.php */

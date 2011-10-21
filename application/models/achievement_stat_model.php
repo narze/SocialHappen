@@ -68,7 +68,7 @@ class Achievement_stat_model extends CI_Model {
 		 $info = array(), $amount = 1){
 		
 		$check_args = (isset($app_id) && isset($user_id)) 
-			&& (empty($info['campaign_id']) || isset($info['app_install_id']));
+			&& ( empty($info['campaign_id']) || isset($info['app_install_id']) );
 		
 		if($check_args){
 			$criteria = array('app_id' => (int)$app_id, 'user_id' => (int)$user_id);
@@ -119,7 +119,7 @@ class Achievement_stat_model extends CI_Model {
 	 */
 	function set($app_id = NULL, $user_id = NULL, $info = array()){
 		$check_args = isset($app_id) && isset($user_id)
-									&& empty($info['action']) && empty($info['app_id'])
+									&& empty($info['action']) && isset($info['app_id'])
 									 && empty($info['user_id']);
 		
 		if($check_args){

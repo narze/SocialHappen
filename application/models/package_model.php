@@ -56,6 +56,13 @@ class Package_model extends CI_Model {
 		$current_package = $this->get_package_by_package_id($package_id);
 		return $current_package['package_price'] < $max_price;
 	}
+	
+	function is_the_most_expensive($package_id = NULL){
+		if(!isset($package_id)){
+			return FALSE;
+		}
+		return !$this->is_upgradable($package_id);
+	}
 }
 
 /* End of file package_model.php */

@@ -122,6 +122,7 @@ $(function(){
   						var notification_list = result.notification_list;
   						var template = $('<li class="separator">'+
 						'<a>'+
+							'<img src="" />'+
 							'<p class="message"></p>'+
 							'<p class="time"></p>'+
 						'</a>'+

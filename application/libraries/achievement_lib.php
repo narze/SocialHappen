@@ -90,7 +90,7 @@ class Achievement_lib
 	 */
 	function set_achievement_info($achievement_id = NULL, $app_id = NULL,
 			$app_install_id = NULL, $info = array(), $criteria = array()){
-		if(empty($app_id) || empty($info) || empty($criteria) || empty($achievement_id))
+		if(!isset($app_id) || empty($info) || empty($criteria) || empty($achievement_id))
 		  return FALSE;
 		$this->CI->load->model('achievement_info_model','achievement_info');
 
@@ -117,7 +117,7 @@ class Achievement_lib
 	 */
 	function list_achievement_info_by_app_id($app_id = NULL){
 		$this->CI->load->model('achievement_info_model','achievement_info');
-		if(empty($app_id)) return NULL;
+		if(!isset($app_id)) return NULL;
 		return $this->CI->achievement_info->list_info(array('app_id' => $app_id));
 	}
 	
@@ -192,7 +192,7 @@ class Achievement_lib
 	 */
 	function reward_user($user_id = NULL, $achievement_id = NULL, $app_id = NULL, 
 							$app_install_id = NULL, $info = array()){
-		if(empty($app_id) || empty($app_install_id)
+		if(!isset($app_id) || !isset($app_install_id)
 		 || empty($user_id) || empty($achievement_id))
 		  return FALSE;
 		
@@ -274,8 +274,8 @@ class Achievement_lib
 	 */
 	function set_achievement_stat(
 		$app_id = NULL, $user_id = NULL, $data = array(), $info = array()){
-		if(empty($user_id) || empty($app_id) || empty($data) || empty($info)||
-			 empty($info['app_install_id'])){ return FALSE; }
+		if(empty($user_id) || !isset($app_id) || empty($data) || empty($info)||
+			 !isset($info['app_install_id'])){ return FALSE; }
 		
 		$keys = array_keys($data);
 		$check_args = TRUE;
@@ -313,8 +313,8 @@ class Achievement_lib
 	function increment_achievement_stat($app_id = NULL, $user_id = NULL,
 		 $info = array(), $amount = 1){
 		
-		if(empty($user_id) || empty($app_id) || empty($info) ||
-			 empty($info['app_install_id'])) return FALSE;
+		if(empty($user_id) || !isset($app_id) || empty($info) ||
+			 !isset($info['app_install_id'])) return FALSE;
 		
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
 		
@@ -334,7 +334,7 @@ class Achievement_lib
 	
 	function _increment_platform_score($user_id = NULL, $app_id = NULL,
 		 $action_id = NULL, $amount = 0){
-		if(empty($user_id) || empty($app_id) || empty($action_id)
+		if(empty($user_id) || !isset($app_id) || empty($action_id)
 		 || empty($amount)) return FALSE;
 		
 		$this->CI->load->library('audit_lib');
@@ -453,7 +453,7 @@ class Achievement_lib
 				$this->CI->load->library('notification_lib');
 				$message = 'You have unlocked a new achievement: ' . $achievement['info']['name'] . '.';
 				$link = '#';
-				$image = base_url().'assets/images/badges.png';
+				$image = $achievement['info']['badge_image'];
 				$this->CI->notification_lib->add($user_id, $message, $link, $image);
 				// $this->CI->notification_lib->add($user_id, 'You have unlocked new achievement.', '');
 				// echo 'user_id: '.$user_id.' got reward!';
@@ -471,7 +471,7 @@ class Achievement_lib
 	 * @author Metwara Narksook
 	 */
 	function get_achievement_stat_of_user_in_app($app_id = NULL, $user_id = NULL){
-		if(empty($user_id) || empty($app_id)) return NULL;
+		if(empty($user_id) || !isset($app_id)) return NULL;
 		
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
 		

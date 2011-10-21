@@ -628,6 +628,25 @@ class Tab extends CI_Controller {
 				} else {
 					$this->socialhappen->login();
 					$data['status'] = 'ok';
+					
+					$this->load->library('audit_lib');
+					$action_id = $this->socialhappen->get_k('audit_action','User Register SocialHappen');
+					$this->audit_lib->add_audit(
+						0,
+						$user_id,
+						$action_id,
+						'', 
+						'',
+						array(
+							'app_install_id' => 0,
+							'user_id' => $user_id,
+							'page_id' => $page_id
+						)
+					);
+					
+					$this->load->library('achievement_lib');
+					$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id'=>$page_id);
+					$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
 				}
 				
 			}
@@ -739,11 +758,15 @@ class Tab extends CI_Controller {
 				if(!isset($app_install_id)){ // mode = page
 					$this->load->model('page_model','page');
 					$page = $this->page->get_page_profile_by_page_id($page_id);
-					$facebook_tab_url = $page['facebook_tab_url'];
+					if(!$facebook_tab_url = $page['facebook_tab_url']){
+						$facebook_tab_url = $this->facebook_page($page_id, TRUE, TRUE);
+					}
 				} else { // mode = app
 					$this->load->model('installed_apps_model','installed_app');
 					$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
-					$facebook_tab_url = $app['facebook_tab_url'];
+					if(!$facebook_tab_url = $app['facebook_tab_url']){
+						$facebook_tab_url = $this->facebook_app($page_id, TRUE, TRUE);
+					}
 				}
 				
 				$this->load->model('page_user_data_model','page_users');
@@ -755,6 +778,25 @@ class Tab extends CI_Controller {
 				} else {
 					$data['status'] = 'ok';
 					$data['redirect_url'] = $facebook_tab_url;
+					
+					$action_id = $this->socialhappen->get_k('audit_action','User Register Page');
+					$user_id = $user['user_id'];
+					$this->load->library('audit_lib');
+					$audit_info = array('page_id' => $page_id);
+					if(isset($app_install_id)){
+						$audit_info['app_install_id'] = $app_install_id;
+					}
+					$this->audit_lib->add_audit(
+						$user_id,
+						$action_id,
+						'', 
+						'',
+						$audit_info
+					);
+					
+					$this->load->library('achievement_lib');
+					$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'page_id'=>$page_id);
+					$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
 				}
 			}
 		}

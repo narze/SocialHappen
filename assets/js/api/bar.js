@@ -89,6 +89,7 @@ sh_signup_page = function(fb_access_token){
 					if(data.status == 'error'){
 						console.log('error'); //TODO : display error message
 					} else if(data.status == 'ok'){
+						console.log(data.redirect_url);
 						sh_signup_complete(data.redirect_url);
 					}
 				  })
@@ -114,6 +115,7 @@ sh_signup_page = function(fb_access_token){
 
 sh_signup_complete = function(redirect_url){
 	(function($){
+		console.log(encodeURIComponent(redirect_url));
 		$.fancybox({
 			href: base_url+'tab/signup_complete?next=' + encodeURIComponent(redirect_url),
 			modal: true
