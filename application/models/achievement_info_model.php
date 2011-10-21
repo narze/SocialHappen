@@ -74,7 +74,6 @@ class Achievement_info_model extends CI_Model {
 							, $criteria = array()){
 		$check_args = isset($app_id) && isset($info)
 							 && isset($info['name']) && isset($info['description'])
-							 && isset($info['badge_image'])
 							 && isset($info['criteria_string'])
 							 && count($info['criteria_string']) > 0
 							 && isset($criteria) && count($criteria) > 0;
@@ -103,7 +102,7 @@ class Achievement_info_model extends CI_Model {
 			$info_to_add['description'] = $info['description'];
 			$info_to_add['hidden'] = isset($info['hidden']) ? $info['hidden'] : FALSE;
 			$info_to_add['criteria_string'] = $info['criteria_string'];
-			$info_to_add['badge_image'] = $info['badge_image'];
+			$info_to_add['badge_image'] = isset($info['badge_image']) ? $info['badge_image'] : base_url().'assets/images/badges/default.png';
 			$achievement_info['info'] = $info_to_add;
 			
 			$achievement_info['criteria'] = $criteria;
@@ -140,8 +139,7 @@ class Achievement_info_model extends CI_Model {
 							 && isset($info['name']) && isset($info['description'])
 							 && isset($info['criteria_string'])
 							 && count($info['criteria_string']) > 0
-							 && isset($criteria) && count($criteria) > 0
-							 && isset($info['badge_image']);
+							 && isset($criteria) && count($criteria) > 0;
 		if($check_args){
 			$achievement_info = array();
 			
@@ -168,13 +166,13 @@ class Achievement_info_model extends CI_Model {
 			$info_to_add['description'] = $info['description'];
 			$info_to_add['hidden'] = isset($info['hidden']) ? $info['hidden'] : FALSE;
 			$info_to_add['criteria_string'] = $info['criteria_string'];
-			$info_to_add['badge_image'] = $info['badge_image'];
+			$info_to_add['badge_image'] = isset($info['badge_image']) ? $info['badge_image'] : base_url().'assets/images/badges/default.png';
 			$achievement_info['info'] = $info_to_add;
 			
 			$achievement_info['criteria'] = $criteria;
 			
 			return $this->achievement_info->update(array('_id' => new MongoId($achievement_id)),
-																													 $achievement_info);
+				$achievement_info);
 			
 		}else{
 			return FALSE;
