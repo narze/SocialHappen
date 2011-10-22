@@ -123,7 +123,6 @@ div.header>div>ul>li {height: 40px; float: left; padding: 0 8px; font-size: 12px
 div.header>div>ul>li:hover,
 div.header>div>ul>li.active, div.header>div div.goto.active { background-color: #292929}
 div.header>div>ul>li img {vertical-align: middle;}
-div.header>div>ul>li span {display:  none;}
 div.header>div>ul>li.profile>a {
 	display: block;
 	width: 20px;
