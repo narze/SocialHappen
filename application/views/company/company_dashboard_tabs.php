@@ -1,7 +1,7 @@
 <div>
 	<div class="tab-content">
 		<ul>
-			<li class="active page_tab">
+			<li class="active page_tab" id="pop1">
 				<a href="#" onclick="select_page_tab(); return false;">
 				<span class="page-installed-count">Page (0)</span>
 				</a>
