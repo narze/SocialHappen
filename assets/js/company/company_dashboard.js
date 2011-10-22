@@ -1,4 +1,5 @@
-var sorted=true;
+$(function(){ shDragging.init('company'); });
+/*var sorted=true;
 var all_app_install_statuses=new Array();
 var dragging_object;
 var available_pages=new Array();
@@ -782,3 +783,4 @@ $( function() {
 	$( "ul, li" ).disableSelection();
 	
 });
+*/

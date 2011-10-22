@@ -2,7 +2,7 @@
 	<div class="tab-content">
 		<ul>
 			<li class="active page_tab">
-				<a href="#" onclick="select_page_tab(); return false;">
+				<a href="#" onclick="shDragging.select_page_tab(); return false;">
 				<span class="page-installed-count">Page (0)</span>
 				</a>
 			</li><!-- 
@@ -35,10 +35,10 @@
 		<?php if($user_have_package) { ?>
 		<div class="box-page_list">
 			<div class="dragging-page">
-				<a class="back-inactive" href="javascript:previous_page('installed-page')">
+				<a class="back-inactive" href="javascript:shDragging.previous_page('installed-page')">
 				<span>back</span>
 				</a>
-				<a class="next" href="javascript:next_page('installed-page')">
+				<a class="next" href="javascript:shDragging.next_page('installed-page')">
 				<span>next</span>
 				</a>
 				<div>

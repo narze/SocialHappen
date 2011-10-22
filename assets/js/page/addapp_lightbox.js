@@ -1,3 +1,5 @@
+$(function(){ shDragging.init('page'); });
+/*
 var sorted=true;
 var all_app_install_statuses=new Array();
 var dragging_object;
@@ -229,3 +231,4 @@ $(function(){
 	
 	$( "ul, li" ).disableSelection();
 });
+*/

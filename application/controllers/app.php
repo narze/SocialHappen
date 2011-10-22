@@ -342,8 +342,8 @@ class App extends CI_Controller {
 				0,
 				$user_id,
 				$action_id,
-				'', 
-				'',
+				'', //TODO get app_id from app_install_id
+				$result['app_install_id'],
 				array(
 					'page_id'=> $page_id,
 					'company_id' => $company_id,

@@ -198,20 +198,7 @@ class Api extends CI_Controller {
 				//Update latest installed app install id in page
 				$this->Page->update_page_profile_by_page_id($page_id, array('page_app_installed_id' => $app_install_id));
 				
-				$this->load->library('audit_lib');
-				$this->audit_lib->add_audit(
-											$app_id,
-											$user_id,
-											$this->socialhappen->get_k('audit_action','Install App To Page'),
-											'', 
-											'',
-											array(
-													'page_id'=> $page_id,
-													'app_install_id'=>$app_install_id,
-													'company_id' => $company_id,
-													'user_id' => $user_id
-												)
-										);
+			
 										
 				$response = array(	'status' => 'OK',
 							'message' => 'page saved');

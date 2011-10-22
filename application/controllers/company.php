@@ -63,8 +63,8 @@ class Company extends CI_Controller {
 								'common/functions',
 								'common/jquery.form',
 								'common/bar',
-								'company/company_dashboard',
 								'company/shDragging',
+								'company/company_dashboard',
 								'common/fancybox/jquery.mousewheel-3.0.4.pack',
 								'common/fancybox/jquery.fancybox-1.3.4.pack',
 								'payment/payment'
