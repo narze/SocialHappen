@@ -781,4 +781,6 @@ $( function() {
 	});
 	$( "ul, li" ).disableSelection();
 	
+	$(this).joyride();
+	
 });

@@ -731,7 +731,7 @@ div.dragging-page div.in-action {
 	padding: 0;
 	margin-bottom: 15px;
 }
-div.dragging-page ul {width: 100%;height: 155px;}
+div.dragging-page ul {width: 100%;height: 155px; position: relative;}
 div.dragging-page ul:after{
     clear:both;
     content:" ";
@@ -767,9 +767,9 @@ div.dragging-page ul li:hover {background: url(../../images/bg/bg_ul-dragdrop02.
 div.box-drop_page div.dragging-page {padding: 15px 10px 10px; min-height: 345px;}
 div.box-drop_page div.dragging-page ul li {margin: 0 7px 5px;}
 
-div.wrapper-drag_drop>div:first-child+div div.dragging-page {padding: 15px 4px 0;}
+div.wrapper-drag_drop>div:first-child+div div.dragging-page {padding: 15px 4px 0 7px;}
 div.wrapper-drag_drop>div:first-child+div div.dragging-page ul { height: 435px; margin: 0 0 5px;}
-div.wrapper-drag_drop>div:first-child+div div.dragging-page ul li {margin: 5px 0; padding: 0 9px;}
+div.wrapper-drag_drop>div:first-child+div div.dragging-page ul li {margin: 5px 0; padding: 0 0 0 9px;}
 div.wrapper-drag_drop>div:first-child+div div.strip {padding: 5px 0 12px;}
 div.dragging-page a.back, div.dragging-page a.back-inactive, div.dragging-page a.next, div.dragging-page a.next-inactive {
 	width: 15px;

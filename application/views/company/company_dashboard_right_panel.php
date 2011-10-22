@@ -106,7 +106,7 @@
 	</div>
 </div>
 <div class="list-activity-log" style="display:none;">
-	<div class="activity-logs">
+	<div class="activity-logs" id="pop2">
 		<h2>Activity Logs</h2>
 		<ul>
 			<li>
