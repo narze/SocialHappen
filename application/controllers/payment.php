@@ -610,7 +610,7 @@ class Payment extends CI_Controller {
 				0,
 				$user_id,
 				$action_id,
-				'', 
+				$package_id, 
 				'',
 				array(
 					'app_install_id' => 0,

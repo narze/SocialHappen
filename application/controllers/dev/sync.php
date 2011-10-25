@@ -1500,6 +1500,26 @@ class Sync extends CI_Controller {
 			),
 			array(
 				'app_id' => 0,
+				'action_id' => 7,
+				'description' => 'Buy Package',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has bought package {package:object}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 8,
+				'description' => 'Buy Most Expensive Package',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} has bought the most expensive package {package:object}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
 				'action_id' => 101,
 				'description' => 'User Register SocialHappen',
 				'stat_app' => TRUE,
@@ -2068,7 +2088,7 @@ class Sync extends CI_Controller {
 					'badge_image' => BASE_URL.'assets/images/badges/default.png'
 				),
 				'criteria' => array(
-					'action.6.count' => 1
+					'action.7.count' => 1
 				),
 				'score' => 0
 			),
@@ -2082,7 +2102,7 @@ class Sync extends CI_Controller {
 					'badge_image' => BASE_URL.'assets/images/badges/default.png'
 				),
 				'criteria' => array(
-					'action.7.count' => 1
+					'action.8.count' => 1
 				),
 				'score' => 0
 			),

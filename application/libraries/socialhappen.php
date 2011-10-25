@@ -27,7 +27,7 @@ class SocialHappen{
 		'page_status' => array(1=>'Not Installed', 2=>'Installed'),
 		'user_gender' => array(1=>'Not sure', 2=>'Female', 3=>'Male'),
 		'audit_action' => array( //See actions in MongoDB
-			1 => 'Install App', 2 => 'Install App To Page', 3 => 'Remove App', 4 => 'Update Config', 5 => 'Install Page', 6 => 'Buy Package', 7 => 'Buy Most Expensive Package',
+			1 => 'Install App', 2 => 'Install App To Page', 3 => 'Remove App', 4 => 'Update Config', 5 => 'Install Page', 6 => 'Create Company', 7 => 'Buy Package', 8 => 'Buy Most Expensive Package',
 			101 => 'User Register SocialHappen',
 			102 => 'User Register App',
 			103 => 'User Visit',

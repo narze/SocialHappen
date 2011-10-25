@@ -403,6 +403,13 @@ class Audit_lib
 				$format_value = '<span class="type_company"><a href="'.base_url()
 						   		.'company/'.$value.'">'.$company_name.'</a></span>';
 				break;
+			case 'package':
+				$this->CI->load->model('Package_model','package');
+				$result = $this->CI->package->get_package_by_package_id($value);
+				$package_name = isset($result['package_name']) ? $result['package_name'] : $value;
+				$format_value = '<span class="type_package"><a href="'.base_url()
+						   		.'package/'.$value.'">'.$package_name.'</a></span>';
+				break;
 			case 'number':
 				$format_value = $value;
 				break;
