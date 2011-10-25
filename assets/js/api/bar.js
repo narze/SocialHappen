@@ -225,15 +225,16 @@ onLoad = function(){
   								if(!notification_list[i].read){
   									notification_id_list.push(notification_list[i]._id);
   								}
-  								if( $('ul.notification_list_bar li').not('li.last-child').length < 5 ) { // Show only 5 latest notifications
-									var li = template.clone();
-									notification_list[i].read ? '' : li.addClass('unread');
-									li.find('a').attr('href', notification_list[i].link);
-									li.find('p.message').html(notification_list[i].message);
-									li.find('p.time').html($.timeago(new Date(parseInt(notification_list[i].timestamp, 10) * 1000)));
-									li.find('img').attr('src', notification_list[i].image);
-									li.show();
-									$('ul.notification_list_bar').prepend(li);
+								var li = template.clone();
+								notification_list[i].read ? '' : li.addClass('unread');
+								li.find('a').attr('href', notification_list[i].link);
+								li.find('p.message').html(notification_list[i].message);
+								li.find('p.time').html($.timeago(new Date(parseInt(notification_list[i].timestamp, 10) * 1000)));
+								li.find('img').attr('src', notification_list[i].image);
+								li.show();
+								$('ul.notification_list_bar').prepend(li);
+								if( $('ul.notification_list_bar li').not('li.last-child').length > 5 ) { // Show only 5 latest notifications
+									$('ul.notification_list_bar li.last-child').prev().remove();
 								}
   							}
   							$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
