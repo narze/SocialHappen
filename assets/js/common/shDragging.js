@@ -171,6 +171,22 @@
 					}
 				}
 			},
+			crop_page_image : function(element) {
+				var cpyImg = new Image();
+				cpyImg.src = element.find('img').attr('src');
+				if(cpyImg.width > cpyImg.height) { 
+					var imgCurrentWidth =  Math.floor(cpyImg.width * 80 / cpyImg.height);
+					element.find('img').css({
+						'width' : 'auto',
+						'position' : 'relative',
+						'left' : '-' + ((imgCurrentWidth/2)-40) + 'px'//Center img
+					}); 
+				}
+				else if(cpyImg.width < cpyImg.height) { 
+					element.find('img').css('height', 'auto');
+				}
+				return element;
+			},
 			show_installed_page_in_company : function() {
 				if(mode == 'company'){
 					jQuery.ajax({
@@ -186,16 +202,17 @@
 							for(i in json) {
 								//	if(j%installed_page_per_row==0) ul_element.append('<div></div>');
 								//	ul_element.children('div:last').append(
-								ul_element.append(
-								'<li style="display:none;" onclick="shDragging.view_page_app('+json[i].page_id+','+json[i].facebook_page_id+',\''+json[i].page_name+'\')">'
+								var li = $('<li style="display:none;" onclick="shDragging.view_page_app('+json[i].page_id+','+json[i].facebook_page_id+',\''+json[i].page_name+'\')">'
 								+'<p class="page-image"><img src="'+imgsize(json[i].page_image,'normal')+'" alt="" />'
 								+'<span class="button">'
 								+'<a class="bt-manage_page" href="'+base_url+'page/'+json[i].page_id+'"><span>Manage</span></a>'
 								+'<a class="bt-setting_page" href="'+base_url+'settings?s=page&id='+json[i].page_id+'"><span>Setting</span></a>'
 								+'</span>'
 								+'</p><p class="pagename">'+json[i].page_name+'</p><input type="hidden" class="page_id" value="'+json[i].page_id+'" />'
-								+'</li>'
-								);
+								+'</li>');
+								
+								li = shDragging.crop_page_image(li);
+								ul_element.append(li);
 							}
 							showing_page_of_installed_page=1;
 							last_page_of_installed_page=Math.ceil(json.length/installed_page_per_row);
@@ -398,14 +415,15 @@
 								available_pages=new Array();
 								for(i in json) {
 									available_pages[''+json[i].id]=json[i];
-									ul_element.append(
 									// "<li class='draggable'><p><img src='"
 									// +(json[i].page_info.picture==null?'http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yA/r/gPCjrIGykBe.gif':json[i].page_info.picture)
-									"<li data-hasaddedapp='"+json[i].has_added_app+"' class='draggable'><p class='page-image'><img src='"
+									var li = $("<li data-hasaddedapp='"+json[i].has_added_app+"' class='draggable'><p class='page-image'><img src='"
 									+json[i].page_info.picture
 									+"' alt='' /></p><p class='pagename'>"+json[i].name
-									+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/></li>"
-									);
+									+"</p><input class='facebook_page_id' type='hidden' value='" + json[i].id + "'/></li>");
+
+									li = shDragging.crop_page_image(li);
+									ul_element.append(li);
 								}
 								showing_page_of_available_item=1;
 								available_item_per_page=9;

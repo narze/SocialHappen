@@ -758,7 +758,7 @@ div.dragging-page ul li p span.button {
 	cursor: default;
 }
 div.dragging-page ul li p.page-image { width: 80px; height: 80px; overflow:hidden; padding: 0; margin: 7px 0; border: 1px solid #c9c9c9; background-color:#fff; }
-div.dragging-page ul li img { width: 80px;}
+div.dragging-page ul li img { width: 80px; height: 80px;}
 div.dragging-page ul li.add {background: url(../../images/bg/bg_ul-dragdrop01.png) no-repeat;}
 div.dragging-page ul li.dragging {background: url(../../images/bg/bg_ul-dragdrop02.png) no-repeat; }
 div.dragging-page ul li.active, div.dragging-page ul li.active:hover {background: url(../../images/bg/bg_ul-dragdrop05.png) no-repeat;}
