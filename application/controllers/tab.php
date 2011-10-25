@@ -602,9 +602,24 @@ class Tab extends CI_Controller {
 				'user_email' => $this->input->get('email')
 			);
 			
-			if(isset($have_error)){ //TODO : error checking for first_name, last_name, email
+			$this->load->library('text_validate');
+			$validate_array = array(
+				'first_name' => array('label' => 'First name', 'rules' => 'required', 'input' => $data['user_first_name']),
+				'last_name' => array('label' => 'Last name', 'rules' => 'required', 'input' => $data['user_last_name']),
+				'email' => array('label' => 'Email', 'rules' => 'required|email', 'input' => $data['user_email'])
+			);
+			$validation_result = $this->text_validate->text_validate_array($validate_array);
+			
+			if(!$validation_result){
 				$data['status'] = 'error';
 				$data['error'] = 'verify';
+				$validate_errors = array();
+				foreach($validate_array as $key => $value){
+					if(!$value['passed']){
+						$validate_errors[$key] = $value['error_message'];
+					}
+				}
+				$data['error_messages'] = $validate_errors;
 			} else {
 				// if (!$user_image = $this->socialhappen->upload_image('user_image')){
 					$user_image = $this->facebook->get_profile_picture($facebook_user['id']);;
@@ -744,13 +759,36 @@ class Tab extends CI_Controller {
 			$page = $this->pages->get_page_profile_by_page_id($page_id);
 			
 			$post_data = array('user_data'=>array());
+			$validate_array = array();
 			foreach($page_user_fields as $user_fields){
-				$post_data['user_data'][$user_fields['name']] = $this->input->get($user_fields['name']);
+				$user_fields_name = $user_fields['name'];
+				$user_fields_data = $this->input->get($user_fields_name);
+				$post_data['user_data'][$user_fields_name] = $user_fields_data;
+				$validate_array[$user_fields_name] = array(
+					'label' => $user_fields['label'],
+					'rules' => $user_fields['required'] ? 'required' : '',
+					'input' => $user_fields_data,
+					'verify_message' => $user_fields['verify_message']
+				);
 			}
 			
-			if(isset($have_error)){ //TODO : error checking foreach $data['user_data']
+			// log_message('error', print_r($post_data['user_data'],TRUE));
+			// log_message('error', print_r($validate_array,TRUE));
+			
+			$this->load->library('text_validate');
+			$validation_result = $this->text_validate->text_validate_array($validate_array);
+			// log_message('error', print_r($validate_array,TRUE));
+			
+			if(!$validation_result){ //TODO : error checking foreach $data['user_data']
 				$data['status'] = 'error';
 				$data['error'] = 'verify';
+				$validate_errors = array();
+				foreach($validate_array as $key => $value){
+					if(!$value['passed']){
+						$validate_errors[$key] = $value['error_message'];
+					}
+				}
+				$data['error_messages'] = $validate_errors;
 			} else {
 				$post_data['user_id'] = $user['user_id'];
 				$post_data['page_id'] = $page_id;

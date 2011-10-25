@@ -54,7 +54,9 @@ sh_signup = function(fb_access_token){
 					// console.log(data);
 					// success
 					if(data.status == 'error'){
-						console.log('error'); //TODO : display error message
+						if(data.error == 'verify'){
+							sh_validate_error(data.error_messages);
+						}
 					} else if(data.status == 'ok'){
 						sh_signup_page(fb_access_token);
 					}
@@ -66,6 +68,13 @@ sh_signup = function(fb_access_token){
 	})(jQuery);
 }
 
+sh_validate_error = function(error_messages){
+	for(var field_name in error_messages){
+		console.log(field_name, error_messages[field_name]);
+		//TODO : attach error message into view [field_name]
+	}
+}
+
 sh_signup_page = function(fb_access_token){
 	(function($){			
 		$('div.popup-fb.signup-page #policy').die('click').live('click', function() {
@@ -74,12 +83,6 @@ sh_signup_page = function(fb_access_token){
 		});
 			
 		$('div.popup-fb.signup-page a.bt-done').die('click').live('click',function(){
-			// $('.signup-form').ajaxSubmit({
-				// target:'div.popup-fb.signup-page',
-				// replaceTarget: true,
-				// dataType: 'jsonp'
-			// });
-			
 			$('form.signup-form').unbind('submit').submit(function() {
 				  var url = $(this).attr('action');
 				  var params = $(this).serialize();
@@ -87,9 +90,10 @@ sh_signup_page = function(fb_access_token){
 					console.log(data);
 					// success
 					if(data.status == 'error'){
-						console.log('error'); //TODO : display error message
+						if(data.error == 'verify'){
+							sh_validate_error(data.error_messages);
+						}
 					} else if(data.status == 'ok'){
-						console.log(data.redirect_url);
 						sh_signup_complete(data.redirect_url);
 					}
 				  })
