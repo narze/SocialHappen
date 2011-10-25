@@ -119,7 +119,7 @@ class Achievement_stat_model extends CI_Model {
 	 */
 	function set($app_id = NULL, $user_id = NULL, $info = array()){
 		$check_args = isset($app_id) && isset($user_id)
-									&& empty($info['action']) && isset($info['app_id'])
+									&& empty($info['action']) && !isset($info['app_id'])
 									 && empty($info['user_id']);
 		
 		if($check_args){

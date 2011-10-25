@@ -894,7 +894,6 @@
 					}
 				});
 				$( "ul, li" ).disableSelection();
-				// $(this).joyride();
 			}
 		};
 		return shDragging;

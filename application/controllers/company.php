@@ -63,17 +63,19 @@ class Company extends CI_Controller {
 								'common/functions',
 								'common/jquery.form',
 								'common/bar',
-								'company/shDragging',
+								'common/shDragging',
 								'company/company_dashboard',
 								'common/fancybox/jquery.mousewheel-3.0.4.pack',
 								'common/fancybox/jquery.fancybox-1.3.4.pack',
-								'payment/payment'
+								'payment/payment',
+								'common/jquery.joyride'
 							),
 							'style' => array(
 								'common/main',
 								'common/platform',
 								'common/smoothness/jquery-ui-1.8.9.custom',
-								'common/fancybox/jquery.fancybox-1.3.4'
+								'common/fancybox/jquery.fancybox-1.3.4',
+								'common/joyride'
 							)
 						)
 					),

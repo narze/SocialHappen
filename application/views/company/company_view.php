@@ -23,4 +23,21 @@
 	</div>
 	<div class="bottom"><!--bottom--></div>
 </div>
+
+<!-- Tip Content -->
+<ol id="joyRideTipContent">
+	<li data-id="pop1" data-text="Next" class="custom">
+		<h2>Pop #1</h2>
+		<p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
+	</li>
+	<li data-id="pop2" data-text="Next">
+		<h2>Pop #2</h2>
+		<p>Get the details right by styling Joyride with a custom stylesheet!</p>
+	</li>
+	<li data-id="info-installed-page" data-text="Close">
+		<h2>Pop #3</h2>
+		<p>Now what are you waiting for? Add this to your projects and get the most out of your apps!</p>
+	</li>
+</ol>
 {footer}
+	

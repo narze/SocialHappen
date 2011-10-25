@@ -473,7 +473,7 @@ class Page extends CI_Controller {
 						),
 						'script' => array(
 							'common/functions',
-							'company/shDragging',
+							'common/shDragging',
 							'page/addapp_lightbox',
 							//for fancybox
 							'common/fancybox/jquery.mousewheel-3.0.4.pack',
