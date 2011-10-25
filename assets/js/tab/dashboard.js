@@ -177,14 +177,24 @@ $(function(){
 			if(json.length == 0) {
 				template.remove();
 			} else {
+				var notification_id_list = [];
 				var old_li = $('div.notifications-list ul li'); //Prevent page auto scroll
 				for(i in json) {
 					var li = template.clone();
+					if(json[i].read == false) { 
+						li.addClass('unread') 
+						notification_id_list.push( json[i]._id.$id );
+					}
 					li.find('img').attr('src', json[i].image );
 					li.find('p.title').text( 'SocialHappen' );
 					li.find('div.desc p').html( json[i].message );
 					li.find('div.date').text( $.timeago(new Date(parseInt(json[i].timestamp, 10) * 1000)) );
 					$('div.notifications-list ul').append(li);
+				}
+				if(notification_id_list.length > 0) {
+					$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
+						//mark as read
+					}, 'json');
 				}
 				old_li.remove(); //Prevent page auto scroll
 			}
