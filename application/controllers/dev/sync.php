@@ -1812,7 +1812,7 @@ class Sync extends CI_Controller {
 				'info' => array(
 					'name' => 'Crazy Reporter',
 					'description' => 'Share 50 times',
-					'criteria_string' => array('Share = 20'),
+					'criteria_string' => array('Share = 50'),
 					'badge_image' => BASE_URL.'assets/images/badges/default.png'
 				),
 				'criteria' => array(
@@ -1928,7 +1928,7 @@ class Sync extends CI_Controller {
 					'badge_image' => BASE_URL.'assets/images/badges/default.png'
 				),
 				'criteria' => array(
-					'action.109.count' => 1
+					'action.109.count' => 10
 				),
 				'score' => 50
 			),
@@ -1938,11 +1938,11 @@ class Sync extends CI_Controller {
 				'info' => array(
 					'name' => 'Loyal Friend',
 					'description' => 'Login 50 times',
-					'criteria_string' => array('Login Count = 10'),
+					'criteria_string' => array('Login Count = 50'),
 					'badge_image' => BASE_URL.'assets/images/badges/default.png'
 				),
 				'criteria' => array(
-					'action.109.count' => 1
+					'action.109.count' => 50
 				),
 				'score' => 100
 			),
