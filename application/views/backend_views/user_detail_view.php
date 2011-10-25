@@ -69,11 +69,11 @@
 
 <h1>Activities</h1>
 <ul>
-	<?php 
+	<?php
 		foreach($activity_list as $activity){
 			//var_dump($app);
 			//echo '<li>'.anchor('backend/page/'.$page['page_id'], $page['page_name'], 'title="view page detail"').'</li>';
-			echo '<li>'.$activity['message'].'</li>';
+			echo '<li>'.date('Y-m-d H:i:s', $activity['timestamp']).' - '.$activity['message'].'</li>';
 		}
 	?>
 </ul>

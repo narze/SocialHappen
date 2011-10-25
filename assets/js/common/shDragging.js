@@ -750,6 +750,7 @@
 										dataType: "json",
 										type: "POST",
 										data: {
+											app_id:app_id,
 											install_url:app_install_url,
 											facebook_page_id:facebook_page_id,
 											facebook_app_id:app_api_key,

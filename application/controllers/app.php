@@ -320,6 +320,7 @@ class App extends CI_Controller {
 		$url = $this->input->post('install_url');
 		$result = json_decode($this->curl($url), TRUE);
 		if(strtoupper($result['status']) == 'OK'){
+			$app_id = $this->input->post('app_id');
 			$facebook_page_id = $this->input->post('facebook_page_id');
 			$facebook_app_id = $this->input->post('facebook_app_id');
 			$user_id = $this->input->post('user_id');
@@ -342,7 +343,7 @@ class App extends CI_Controller {
 				0,
 				$user_id,
 				$action_id,
-				'', //TODO get app_id from app_install_id
+				$app_id,
 				$result['app_install_id'],
 				array(
 					'page_id'=> $page_id,

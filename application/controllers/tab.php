@@ -413,8 +413,8 @@ class Tab extends CI_Controller {
 				if(isset($activity['user_id']))
 				{
 					$user = $this->users->get_user_profile_by_user_id($activity['user_id']);
-					if(!$user) { unset($activity['user_id']); continue; }
 				}
+				if(!isset($user)) { unset($activity['user_id']); continue; }
 				$activity['user_image'] = $user['user_image'];
 				$activity['user_name'] = $user['user_first_name'].' '.$user['user_last_name'];
 				//$activity['time_ago'] = '1 day ago';

@@ -1455,7 +1455,7 @@ class Sync extends CI_Controller {
 				'stat_app' => FALSE,
 				'stat_page' => TRUE,
 				'stat_campaign' => FALSE,
-				'format_string' => 'User {user:user_id} has installed {app:app_id} in {page:page_id}',
+				'format_string' => 'User {user:user_id} has installed {app:object} in {page:page_id}',
 				'score' => 0
 			),
 			array(

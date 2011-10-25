@@ -138,6 +138,7 @@ class User extends CI_Controller {
 		$this->load->model('page_model', 'pages');
 		$activity_list = array();
 		foreach ($activity_db as $activity) {
+			$activity['app_id'] = $activity['app_id'] > 0 ? $activity['app_id'] : $activity['object'];
 			$app = $this->apps->get_app_by_app_id($activity['app_id']);
 			$page = $this->pages->get_page_profile_by_page_id($activity['page_id']);
 			$audit_action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
