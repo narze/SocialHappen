@@ -99,6 +99,10 @@ $(function(){
 					next_text:null,
 					prev_text:null
 				});
+				
+				$.each( $('span.timeago'), function(index, span) { 
+				  $('span.timeago').eq(index).text($.timeago(new Date(parseInt( $(span).text() , 10) * 1000)));
+				});
 			}
 			
 			$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id,function(){

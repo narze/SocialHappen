@@ -334,11 +334,7 @@ div.list_resent-activity>ul>li>div:first-child p.desc:hover {
 	background-color:#fff;
 }
 div.list_resent-activity>ul>li>div:first-child p.desc a {
-	text-decoration:none;
-	color: inherit;
-}
-div.list_resent-activity>ul>li>div:first-child p.desc a:hover {
-	text-decoration:underline;
+	color: #63791C;
 }
 div.list_resent-activity>ul>li>div:first-child p.desc span {
 	font-size: inherit;

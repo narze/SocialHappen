@@ -728,9 +728,10 @@ class SocialHappen{
 			foreach($apps as $page_app){
 				if($page_app['app_install_id'] != $app_install_id){
 					$menu['left'][] = array(
-						'location' => $this->CI->app_url->translate_url($page_app['app_url'], $page_app['app_install_id']),
+						'location' => $page_app['facebook_tab_url'],
 						'title' => $page_app['app_name'],
-						'icon_url' => $page_app['app_icon']
+						'icon_url' => $page_app['app_icon'],
+						'target' => '_top'
 					);
 				}
 			}
@@ -787,7 +788,6 @@ class SocialHappen{
 		$app = $this->CI->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		$this->CI->load->model('page_model', 'pages');
 		$page = $this->CI->pages->get_page_profile_by_page_id($app['page_id']);
-		$facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
-		return $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
+		return $page['facebook_tab_url'];
 	}
 }
