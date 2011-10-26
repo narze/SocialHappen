@@ -295,16 +295,17 @@ sh_popup = function(){
 					$.fancybox.close();
 				});
 				page_app_installed_id=0;
-			} else if(page_installed==0){
-				$.fancybox({
-					href: base_url+'tab/page_installed/'+ page_id
-				});
-				$('a.bt-stay_fb').die('click');
-				$('a.bt-stay_fb').live('click',function(){
-					$.fancybox.close();
-				});
-				page_installed=1;
-			}
+			} 
+			// else if(page_installed==0){
+				// $.fancybox({
+					// href: base_url+'tab/page_installed/'+ page_id
+				// });
+				// $('a.bt-stay_fb').die('click');
+				// $('a.bt-stay_fb').live('click',function(){
+					// $.fancybox.close();
+				// });
+				// page_installed=1;
+			// }
 		} else {
 			if(!is_user_register_to_page) {
 				sh_guest();
