@@ -161,19 +161,21 @@
 				}
 			},
 			crop_page_image : function(element) {
-				var cpyImg = new Image();
-				cpyImg.src = element.find('img').attr('src');
-				if(cpyImg.width > cpyImg.height) { 
-					var imgCurrentWidth =  Math.floor(cpyImg.width * 80 / cpyImg.height);
-					element.find('img').css({
-						'width' : 'auto',
-						'position' : 'relative',
-						'left' : '-' + ((imgCurrentWidth/2)-40) + 'px'//Center img
-					}); 
-				}
-				else if(cpyImg.width < cpyImg.height) { 
-					element.find('img').css('height', 'auto');
-				}
+				element.find('img').load(function () {
+					var cpyImg = new Image();
+					cpyImg.src = element.find('img').attr('src');
+					if(cpyImg.width > cpyImg.height) { 
+						var imgCurrentWidth =  Math.floor(cpyImg.width * 80 / cpyImg.height);
+						element.find('img').css({
+							'width' : 'auto',
+							'position' : 'relative',
+							'left' : '-' + ((imgCurrentWidth/2)-40) + 'px'//Center img
+						}); 
+					}
+					else if(cpyImg.width < cpyImg.height) { 
+						element.find('img').css('height', 'auto');
+					}
+				});
 				return element;
 			},
 			show_installed_page_in_company : function() {
