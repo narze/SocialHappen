@@ -24,18 +24,7 @@
 		//Page + App status
 		var page_installed=0;
 		var app_install_status=0;
-		// var company = {
-			// installed_page_per_row:4,
-			// showing_page_of_installed_page:1,
-			// last_page_of_installed_page:1,
-
-			// selected_page_id:null,
-
-			// page_installed:0,
-			// app_install_status:0
-
-		// };
-		// var page = {};
+		
 		shDragging = shDragging.prototype = {
 			company_mode: function(){
 				mode = 'company';
@@ -488,7 +477,7 @@
 							$(".right-panel").find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 						},
 						success: function(json) {
-							var ul_element=$(".right-panel").find('.dragging-app').find('ul');
+							var ul_element=$(".right-panel").find('.dragging-app').find('ul').empty();
 							for(i in json) {
 								if(json[i].app_type == 'Page Support' || json[i].app_type == 'Standalone'){
 									ul_element.append(
@@ -607,8 +596,7 @@
 				} else {
 					ul_element=$(".right-panel").find('.dragging-page ul');
 				}
-				var strip_element=$(".right-panel").find('.strip ul');
-				strip_element.html('');
+				var strip_element=$(".right-panel").find('.strip ul').empty();
 			
 				if(mode == 'company'){
 					for(var i=1; i<=last_page_of_available_item && last_page_of_available_item != 1 ;i++) {
@@ -634,8 +622,7 @@
 			},
 			refresh_installed_app_in_page_panel : function() {
 				var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
-				var strip_element=$(".left-panel").find('.strip ul');
-				strip_element.html('');
+				var strip_element=$(".left-panel").find('.strip ul').empty();
 				
 				if(mode == 'company'){
 					for(var i=1;i<=last_page_of_installed_app_in_page && last_page_of_installed_app_in_page != 1 ;i++){
@@ -692,7 +679,7 @@
 						var ul_element;
 						if(mode == 'company'){
 							$(".notice").hide();
-							ul_element=$(".left-panel").find('.dragging-app div').find('ul').css('min-height', '127px');
+							ul_element=$(".left-panel").find('.dragging-app div').find('ul').css('min-height', '127px').empty();
 							ul_element.append('<li class="add-app"></li>');
 							//Signup Form
 							ul_element.append('<li><p><img class="app-image" src="'+imgsize(base_url+'assets/images/apps/page-signup/app_image_s.png','normal')+'" />'
@@ -708,7 +695,7 @@
 								+'</p><p class="appname">'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 							}
 						} else if (mode == 'page'){
-							ul_element=$(".left-panel").find('.dragging-app div').find('ul').css('min-height', '127px');
+							ul_element=$(".left-panel").find('.dragging-app div').find('ul').css('min-height', '127px').empty();
 							for(i in json){
 								ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
 									+'<span class="button">'
