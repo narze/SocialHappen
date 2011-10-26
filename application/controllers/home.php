@@ -162,12 +162,13 @@ class Home extends CI_Controller {
 					//$redirect_path = base_url().'?logged_in=true';
 					$redirect_path = base_url().'home/package?payment=true';
 				}
+				$this -> load -> view('home/signup_form', array());
 				$this->load->view('common/redirect',array('redirect_parent'=>$redirect_path));
 			}
 			else
 			{
+				this -> load -> view('home/signup_form', array());
 				log_message('error','company,user add failed');
-				echo 'Error occured';
 			}
 		}
 	}
