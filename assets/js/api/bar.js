@@ -69,20 +69,19 @@ sh_signup = function(fb_access_token){
 }
 
 sh_validate_error = function(error_messages){
-	var form_fields = $('form div.form>ul>li').removeClass('error');
-	var form_labels = $('span.field-label', form_fields).show();
-	$('span.error', form_fields).remove();
-	for(var field_name in error_messages){
-		var this_field = form_fields.filter('li[data-field-name="'+field_name+'"]');
-		console.log(field_name, error_messages[field_name]);
-		$('span.field-label', this_field).hide();
-		//TODO : attach error message into view [field_name]
-		var field = this_field.addClass('error');
-		$('<span/>').addClass('error').html(error_messages[field_name]).prependTo($('label.title', field));
-		console.log(field);
-		
-		
-	}
+	(function($){	
+		var form_fields = $('form div.form>ul>li').removeClass('error');
+		var form_labels = $('span.field-label', form_fields).show();
+		$('span.error', form_fields).remove();
+		for(var field_name in error_messages){
+			var this_field = form_fields.filter('li[data-field-name="'+field_name+'"]');
+			// console.log(field_name, error_messages[field_name]);
+			$('span.field-label', this_field).hide();
+			var field = this_field.addClass('error');
+			$('<span/>').addClass('error').html(error_messages[field_name]).prependTo($('label.title', field));
+			// console.log(field);
+		}
+	})(jQuery);
 }
 
 sh_signup_page = function(fb_access_token){
