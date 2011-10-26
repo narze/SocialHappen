@@ -9,6 +9,19 @@ $(function(){
 		
 		set_loading();
 		$('div#main').load(base_url+'tab/dashboard/'+page_id,function(){
+			
+			if( $('#get-started').length > 0 ) {
+				console.log('have get started');
+				
+				$('div.icon-help').hover(function(){ 
+					$(this).siblings('.tips').show();
+				}, function(){ 
+					$(this).siblings('.tips').hide();
+				});
+				
+				return false;
+			}
+
 			trigger_countdown = function (){
 				$('.campaign-end-time').each(function(){
 					end_time = Date.createFromMysql($(this).text());
