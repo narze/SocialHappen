@@ -51,12 +51,12 @@
 					<input type="hidden" name="empty" value="0" /><?php 
 					foreach($page_user_fields as $user_fields) 
 					{ ?>
-						<li data-field-options=<?php echo json_encode($user_fields['options']);?> <?php echo form_error($user_fields['name']) ? 'class="error"' : '' ; ?>>
+						<li data-field-name=<?php echo json_encode($user_fields['name']);?> data-field-options=<?php echo json_encode($user_fields['options']);?>>
 							
 							<label class="title"><?php
-								echo form_error($user_fields['name']) ? $user_fields['verify_message'] : '' ;
+								echo '<span class="field-label">';
 								if($user_fields['required']) { ?><span class="required"> * </span> <?php }
-								echo $user_fields['label'].' :'; ?>
+								echo $user_fields['label'].'</span> :'; ?>
 							</label>
 							<div class="inputs"><?php
 								switch($user_fields['type'])

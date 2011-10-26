@@ -606,7 +606,7 @@ class Tab extends CI_Controller {
 			$validate_array = array(
 				'first_name' => array('label' => 'First name', 'rules' => 'required', 'input' => $data['user_first_name']),
 				'last_name' => array('label' => 'Last name', 'rules' => 'required', 'input' => $data['user_last_name']),
-				'email' => array('label' => 'Email', 'rules' => 'required|email', 'input' => $data['user_email'])
+				'email' => array('label' => 'Email', 'rules' => 'required|email', 'input' => $data['user_email'], 'verify_message' => 'Please enter a valid email.')
 			);
 			$validation_result = $this->text_validate->text_validate_array($validate_array);
 			
@@ -760,25 +760,29 @@ class Tab extends CI_Controller {
 			
 			$post_data = array('user_data'=>array());
 			$validate_array = array();
-			foreach($page_user_fields as $user_fields){
-				$user_fields_name = $user_fields['name'];
-				$user_fields_data = $this->input->get($user_fields_name);
-				$post_data['user_data'][$user_fields_name] = $user_fields_data;
-				$validate_array[$user_fields_name] = array(
-					'label' => $user_fields['label'],
-					'rules' => $user_fields['required'] ? 'required' : '',
-					'input' => $user_fields_data,
-					'verify_message' => $user_fields['verify_message']
-				);
+			if(!$page_user_fields){ //Empty field
+				$validation_result = TRUE;
+			} else {
+				foreach($page_user_fields as $user_fields){
+					$user_fields_name = $user_fields['name'];
+					$user_fields_data = $this->input->get($user_fields_name);
+					$post_data['user_data'][$user_fields_name] = $user_fields_data;
+					$validate_array[$user_fields_name] = array(
+						'label' => $user_fields['label'],
+						'rules' => $user_fields['required'] ? 'required' : '',
+						'input' => $user_fields_data,
+						'verify_message' => $user_fields['verify_message']
+					);
+				}
+				
+				// log_message('error', print_r($post_data['user_data'],TRUE));
+				// log_message('error', print_r($validate_array,TRUE));
+				
+				$this->load->library('text_validate');
+				$validation_result = $this->text_validate->text_validate_array($validate_array);
+				// log_message('error', print_r($validate_array,TRUE));
+			
 			}
-			
-			// log_message('error', print_r($post_data['user_data'],TRUE));
-			// log_message('error', print_r($validate_array,TRUE));
-			
-			$this->load->library('text_validate');
-			$validation_result = $this->text_validate->text_validate_array($validate_array);
-			// log_message('error', print_r($validate_array,TRUE));
-			
 			if(!$validation_result){ //TODO : error checking foreach $data['user_data']
 				$data['status'] = 'error';
 				$data['error'] = 'verify';

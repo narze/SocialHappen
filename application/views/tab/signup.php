@@ -26,9 +26,20 @@
         <div class="form">
 			<h2>Account information</h2>
 			<ul>
-				<li <?php echo form_error('first_name')? 'class="error" ':''; ?>><label>Firstname: </label><input id="first_name" type="text" name="first_name" maxlength="255" value="<?php echo set_value('first_name'); ?>" placeholder="Enter real firstname" /></li>
-				<li <?php echo form_error('last_name')? 'class="error" ':''; ?>><label>Lastname: </label><input id="last_name" type="text" name="last_name" maxlength="255" value="<?php echo set_value('last_name'); ?>" placeholder="Enter real lastname" /></li>
-				<li <?php echo form_error('email')? 'class="error" ':''; ?>><label>Email: </label>
+				<li data-field-name="first_name">
+					<label class="title">
+						<span class="field-label"><span class="required"> * </span>Firstname : </span>
+					</label>
+					<input id="first_name" type="text" name="first_name" maxlength="255" value="<?php echo set_value('first_name'); ?>" placeholder="Enter real firstname" />
+				</li>
+				<li data-field-name="last_name">
+					<label class="title">
+						<span class="field-label"><span class="required"> * </span>Lastname : </span>
+					</label><input id="last_name" type="text" name="last_name" maxlength="255" value="<?php echo set_value('last_name'); ?>" placeholder="Enter real lastname" /></li>
+				<li data-field-name="email">
+					<label class="title">
+						<span class="field-label"><span class="required"> * </span>Email : </span>
+					</label>
 					<input id="email" type="text" name="email" maxlength="255" value="<?php echo set_value('email'); ?>" placeholder="someone@example.com" />
 					<?php echo form_error('email')? '<p>Enter email in the format : someone@example.com.</p>':''; ?>
 				</li>
