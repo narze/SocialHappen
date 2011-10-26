@@ -637,8 +637,8 @@ class Tab extends CI_Controller {
 				
 				if(!$user_id = $this->users->add_user($post_data)){
 					//TODO : erase uploaded image
-					log_message('error','add user failed : '. print_r($user_add_result, TRUE));
-					log_message('error','$user : '. print_r($user, TRUE));
+					log_message('error','add user failed, $post_data : '. print_r($post_data, TRUE));
+					log_message('error','$user_id : '. print_r($user_id, TRUE));
 					echo 'Error occured';
 					$data['status'] = 'error';
 					$data['error'] = 'add_user';
