@@ -167,7 +167,7 @@ class Home extends CI_Controller {
 			}
 			else
 			{
-				this -> load -> view('home/signup_form', array());
+				$this -> load -> view('home/signup_form', array());
 				log_message('error','company,user add failed');
 			}
 		}
