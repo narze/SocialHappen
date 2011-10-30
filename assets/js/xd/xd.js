@@ -1,6 +1,5 @@
 var parent_url = decodeURIComponent(document.location.hash.replace(/^#/, ''));
 var parent_origin = parent_url.replace( /([^:]+:\/\/[^\/]+).*/, '$1');
-console.log(parent_url,parent_origin)
 
 function send(msg) {
 	XD.postMessage(msg, parent_url, parent);
@@ -83,14 +82,14 @@ XD.receiveMessage(function(message){ // Receives data from parent
 		jQuery('<iframe />', {
 			name: 'sh_frame_login',
 			id:   'sh_frame_login',
-			src: base_url+'home/login'
+			src: base_url+'xd/login'
 		}).appendTo('body');
 	} else if(message.data.sh_message == 'logout'){
 		// alert('logout');
 		jQuery('<iframe />', {
 			name: 'sh_frame_logout',
 			id:   'sh_frame_logout',
-			src: base_url+'logout'
+			src: base_url+'xd/logout'
 		}).appendTo('body');
 	} else if(message.data.sh_message === 'page_id'){
 		jQuery.getJSON(base_url+'xd/get_user/'+message.data.sh_page_id,function(json){

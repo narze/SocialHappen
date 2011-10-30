@@ -11,6 +11,14 @@ class XD extends CI_Controller {
 		$this->load->view('xd/xd_view');
 	}
 	
+	function login(){
+		$this->socialhappen->login();
+	}
+	
+	function logout(){
+		$this->socialhappen->logout();
+	}
+	
 	function get_user($page_id = NULL){
 		if($user = $this->socialhappen->get_user()){
 			$user['user_role'] = $this->get_role($user['user_id'], $page_id);
