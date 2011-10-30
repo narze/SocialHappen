@@ -703,23 +703,23 @@ class SocialHappen{
 		$menu = array();
 		//Right menu			
 		//@TODO : This has problems with multiple login, cannot use user_agent to check due to blank user_agent when called via api
-		if(!$user || !$this->CI->session_model->get_session_id_by_user_id($user['user_id'])){ 
-			$facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
-			$view_as = 'guest';
-			$signup_link = $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
-		} else if($this->CI->user_pages->is_page_admin($user['user_id'], $page_id)){			
-			$view_as = 'admin';
+		// if(!$this->is_logged_in()){ 
+			// $facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
+			// $view_as = 'guest';
+			// $signup_link = $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
+		// } else if($this->CI->user_pages->is_page_admin($user['user_id'], $page_id)){			
+			// $view_as = 'admin';
 			
-			$page_update = array();
-			if(!$page['page_installed']){
-				$page_update['page_installed'] = TRUE;
-			} else if($page['page_app_installed_id'] != 0){
-				$page_update['page_app_installed_id'] = 0;
-			}		
-			$this->CI->pages->update_page_profile_by_page_id($page_id, $page_update);
-		} else {
-			$view_as = 'user';
-		}
+			// $page_update = array();
+			// if(!$page['page_installed']){
+				// $page_update['page_installed'] = TRUE;
+			// } else if($page['page_app_installed_id'] != 0){
+				// $page_update['page_app_installed_id'] = 0;
+			// }		
+			// $this->CI->pages->update_page_profile_by_page_id($page_id, $page_update);
+		// } else {
+			// $view_as = 'user';
+		// }
 		
 		$menu['left'] = array();
 		if($page_id){
@@ -749,7 +749,7 @@ class SocialHappen{
 	
 		$this->CI->load->vars(array(
 			'vars' => array(
-				'view_as' => $view_as,
+				'view_as' => '',
 				'page_id' => $page_id,
 				'page_app_installed_id' => issetor($page['page_app_installed_id'],0),
 				'page_installed' => issetor($page['page_installed'],1),
@@ -757,23 +757,25 @@ class SocialHappen{
 				'user_id' => $user['user_id'],
 				'app_mode' => $app_mode,
 				'app_install_id' => $app_install_id,
-				'sh_domain' => $sh_domain
+				'sh_domain' => $sh_domain,
+				'node_base_url' => $this->CI->config->item('node_base_url')
 			),
-			'view_as' => $view_as,
-			'app_install_id' => $app_install_id,
-			'page_id' => $page_id,
-			'menu' => $menu,
-			'user' => $user,
-			'current_menu' => array(
-				'icon_url' => $app_mode ? $app['app_image'] : $page['page_image'],
-				'name' => $app_mode ? $app['app_name'] : $page['page_name']
-			),
-			'signup_link' =>issetor($signup_link, '#'),
-			'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
-			'notification_amount' => $notification_amount,
-			'all_notification_link' => $app_mode ? $this->get_tab_url_by_app_install_id($app_install_id).'&app_data='.base64_encode(json_encode($app_data)) : base_url().'tab/notifications/'.$user['user_id'],
-			'app_mode' => $app_mode,
-			'node_base_url' => $this->CI->config->item('node_base_url')
+			// 'view_as' => $view_as,
+			'node_base_url' => $this->CI->config->item('node_base_url'),
+			// 'app_install_id' => $app_install_id,
+			// 'page_id' => $page_id,
+			// 'menu' => $menu,
+			// 'user' => $user,
+			// 'current_menu' => array(
+				// 'icon_url' => $app_mode ? $app['app_image'] : $page['page_image'],
+				// 'name' => $app_mode ? $app['app_name'] : $page['page_name']
+			// ),
+			// 'signup_link' =>issetor($signup_link, '#'),
+			// 'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
+			// 'notification_amount' => $notification_amount,
+			// 'all_notification_link' => $app_mode ? $this->get_tab_url_by_app_install_id($app_install_id).'&app_data='.base64_encode(json_encode($app_data)) : base_url().'tab/notifications/'.$user['user_id'],
+			// 'app_mode' => $app_mode,
+			
 		));
 		return $this->CI->load->view('api/app_bar_view', array(), TRUE);
 	}

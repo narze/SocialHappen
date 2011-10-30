@@ -165,16 +165,48 @@ loadChildScripts = function(){
 		getScript(base_url+'assets/js/common/jquery.form.js', 'jQuery.fn.ajaxForm', function(){
 			getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', 'jQuery.fancybox', function(){
 				getScript(base_url + 'assets/js/common/jquery.timeago.js', 'jQuery.timeago', function(){
-					onLoad();
+					// onLoad();
 				});
 			});
 		});
 	});
 }
 
+loadNode = function(){
+	(function($){
+		$(function(){
+			var session = 'SESSIONNAJA';
+			var socket = io.connect(node_base_url);
+
+			socket.on('connect', function(){
+				console.log('send subscribe');
+				socket.emit('subscribe', user_id, session);
+			});
+
+			socket.on('subscribeResult', function (data) {
+				console.log('got subscribe result: ' + JSON.stringify(data));
+			});
+
+			socket.on('newNotificationAmount', function (notification_amount) {
+				console.log('notification_amount: ' + notification_amount);
+				if(notification_amount > 0){
+					$('div.header ul.menu li.notification a.amount').html('').append('<span>').children('span').html(notification_amount);
+				}else{
+					$('div.header ul.menu li.notification a.amount').append('<span>').children('span').remove();
+				}
+			});
+			
+			socket.on('newNotificationMessage', function (notification_message) {
+				console.log('notification_message: ' + JSON.stringify(notification_message));
+			});
+		});
+	})(jQuery);
+}
+
 onLoad = function(){
 	(function($){
 		$(function(){
+			loadNode();
 		  var fetching_notification = false;
 		  
 			$('.toggle').live('click',function(){
@@ -210,6 +242,7 @@ onLoad = function(){
       });
 			
 			$('a.a-logout').live('click', function(){
+				sh_logout();
 				$.fancybox({
 					href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
 				});
@@ -346,6 +379,22 @@ close_popup = function(){
 	})(jQuery);
 };
 
+sh_login = function(){
+	XD.postMessage({sh_message:'login'}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+}
+
+sh_logout = function(){
+	XD.postMessage({sh_message:'logout'}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+}
+
+sh_get_role = function(){
+	(function($){
+		$.getJSON(base_url+'xd/get_role', function(){
+			return
+		});
+	})(jQuery);
+}
+
 getScript(base_url + 'assets/js/common/jquery.min.js', 'jQuery', loadChildScripts);
 
 /* 
@@ -377,26 +426,26 @@ var XD = function(){
     window = this;
     
     return {
-        // postMessage : function(message, target_url, target) {
+        postMessage : function(message, target_url, target) {
             
-            // if (!target_url) { 
-                // return; 
-            // }
+            if (!target_url) { 
+                return; 
+            }
     
-            // target = target || parent;  // default to parent
+            target = target || parent;  // default to parent
     
-            // if (window['postMessage']) {
+            if (window['postMessage']) {
                 // the browser supports window.postMessage, so call it with a targetOrigin
                 // set appropriately, based on the target_url parameter.
-                // target['postMessage'](message, target_url.replace( /([^:]+:\/\/[^\/]+).*/, '$1'));
+                target['postMessage'](message, target_url.replace( /([^:]+:\/\/[^\/]+).*/, '$1'));
 
-            // } else if (target_url) {
+            } else if (target_url) {
                 // the browser does not support window.postMessage, so set the location
                 // of the target to target_url#message. A bit ugly, but it works! A cache
                 // bust parameter is added to ensure that repeat messages trigger the callback.
-                // target.location = target_url.replace(/#.*$/, '') + '#' + (+new Date) + (cache_bust++) + '&' + message;
-            // }
-        // },
+                target.location = target_url.replace(/#.*$/, '') + '#' + (+new Date) + (cache_bust++) + '&' + message;
+            }
+        },
 		
   
         receiveMessage : function(callback, source_origin) {
@@ -439,11 +488,23 @@ var XD = function(){
 }();
 
 XD.receiveMessage(function(message){ // Receives data from child iframe
-	if(message.data.sh_message == "logged in"){
-		if(view_as == 'guest' || is_user_register_to_page) {
+	// console.log('received : ', message.data.sh_message);
+	if(message.data.sh_message === "loaded"){
+		XD.postMessage({sh_message:'page_id',sh_page_id:page_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+	} else if(message.data.sh_message === 'status'){ 
+		view_as = message.data.sh_status;
+		onLoad();
+		jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
+			jQuery('div#sh-bar').html(data);
+		});
+	} else if(message.data.sh_message === "logged in"){
+		sh_login();
+		if(view_as === 'guest' || is_user_register_to_page) {
 			sh_signup(message.data.fb_access_token);
 		} else {
 			sh_signup_page(message.data.fb_access_token);
 		} 
 	}
 }, sh_domain);
+
+

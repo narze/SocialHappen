@@ -164,14 +164,18 @@ class Facebook {
 	/**
 	 * JSON : Get facebook page info
 	 * @author Prachya P.
+	 * @author Manassarn M.
 	 * @param $fb_page_id
 	 */
 	function get_page_info($fb_page_id = NULL) {
+		if(!$fb_page_id){
+			return FALSE;
+		}
 		$cookie = $this -> get_facebook_cookie();
 		$page = file_get_contents('https://graph.facebook.com/' . $fb_page_id . '/?access_token=' . $cookie['access_token']);
 		// $page = '{"id":"135287989899131","name":"SHBeta","picture":"https:\/\/fbcdn-profile-a.akamaihd.net\/static-ak\/rsrc.php\/v1\/y0\/r\/XsEg9L6Ie5_.jpg","link":"http:\/\/www.facebook.com\/pages\/SHBeta\/135287989899131","likes":1,"category":"Community","has_added_app":true,"parking":{"street":0,"lot":0,"valet":0},"hours":{"mon_1_open":0,"mon_1_close":0,"tue_1_open":0,"tue_1_close":0,"wed_1_open":0,"wed_1_close":0,"thu_1_open":0,"thu_1_close":0,"fri_1_open":0,"fri_1_close":0,"sat_1_open":0,"sat_1_close":0,"sun_1_open":0,"sun_1_close":0,"mon_2_open":0,"mon_2_close":0,"tue_2_open":0,"tue_2_close":0,"wed_2_open":0,"wed_2_close":0,"thu_2_open":0,"thu_2_close":0,"fri_2_open":0,"fri_2_close":0,"sat_2_open":0,"sat_2_close":0,"sun_2_open":0,"sun_2_close":0},"payment_options":{"cash_only":0,"visa":0,"amex":0,"mastercard":0,"discover":0},"restaurant_services":{"reserve":0,"walkins":0,"groups":0,"kids":0,"takeout":0,"delivery":0,"catering":0,"waiter":0,"outdoor":0},"restaurant_specialties":{"breakfast":0,"lunch":0,"dinner":0,"coffee":0,"drinks":0},"can_post":true}';
 		// echo "<pre>" . $page . "</pre>";
-		$page_info = json_decode($page, true);
+		$page_info = json_decode($page, TRUE);
 		return $page_info;
 	}
 

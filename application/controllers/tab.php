@@ -15,12 +15,14 @@ class Tab extends CI_Controller {
 							  'cookie' => true,
 							),
 							'FB');
-		$this->signedRequest = $this->FB->getSignedRequest();
-		$this->page = $this->signedRequest['page'];
-		$this->app_data = isset($this->signedRequest['app_data']) ? json_decode(base64_decode($this->signedRequest['app_data']), TRUE) : NULL ;
+	
 	}
 	
 	function index($page_id = NULL, $token = NULL){
+		$this->signedRequest = $this->FB->getSignedRequest();
+		$this->page = $this->signedRequest['page'];
+		$this->app_data = isset($this->signedRequest['app_data']) ? json_decode(base64_decode($this->signedRequest['app_data']), TRUE) : NULL ;
+		
 		$user_facebook_id = $this->FB->getUser();
 		
 		$this->load->model('User_model','User');
@@ -29,13 +31,9 @@ class Tab extends CI_Controller {
 		
 		$this->load->model('Page_model','Page');
 		if(!$page_id){
-			if(!$this->Page->get_page_id_by_facebook_page_id($this->page['id'])) 
-				exit(); //HARDCODE prevent redirect loop
-			//redirect("tab/".$this->Page->get_page_id_by_facebook_page_id($this->page['id']).'/'.$token);	
-
-			//passive assign page_id
-			$page_id = $this->Page->get_page_id_by_facebook_page_id($this->page['id']);
-			
+			if(!$page_id = $this->Page->get_page_id_by_facebook_page_id($this->page['id'])){ 
+				exit('Your facebook account is not verified, please contact administrator'); //TODO : Blame that your facebook user is not verified.
+			}
 		}
 		
 		$this->load->model('user_model','users');
