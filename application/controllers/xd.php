@@ -32,6 +32,8 @@ class XD extends CI_Controller {
 	
 	function get_role($user_id = NULL, $page_id = NULL){
 		$this->load->model('user_pages_model','user_page');
+		$this->load->model('page_model','page');
+		$page = $this->page->get_page_profile_by_page_id($page_id);
 		if($this->user_page->is_page_admin($user_id, $page_id)){			
 			$user_role = 'admin';
 			
@@ -41,7 +43,7 @@ class XD extends CI_Controller {
 			} else if($page['page_app_installed_id'] != 0){
 				$page_update['page_app_installed_id'] = 0;
 			}		
-			$this->load->model('page_model','page');
+			
 			$this->page->update_page_profile_by_page_id($page_id, $page_update);
 		} else {
 			$user_role = 'user';
