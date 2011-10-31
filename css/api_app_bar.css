@@ -41,6 +41,7 @@ background-image:url(../assets/images/bg_fb/bg_header.png);
 background-repeat:repeat-x;
 background-position:left top;
 background-color:#fff;
+cursor:pointer;
 }
 
 div.header div.name>div {
@@ -243,6 +244,7 @@ display:none;
 div.header ul.menu>li.profile>div {
 height:30px;
 padding:5px 0 0 40px;
+cursor:pointer;
 }
 
 div.header ul.menu>li.profile>div:after {
