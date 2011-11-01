@@ -427,4 +427,5 @@ bottom: none;
 #get-started div.steps ul li span.todo,
 #get-started div.steps ul li span.done { float:left; margin-top: 4px; display:block; width:24px; height:21px; background-image: url(../../images/bg_fb/bg_button_2.png); background-repeat:no-repeat; background-position:-298px -43px; }
 #get-started div.steps ul li span.done { background-position:-265px -43px;}
+
 #get-started div.note { margin-top: 5px; padding:0 15px; font-size:11px; color:#9a9a9a; font-weight: normal; line-height: 12px;}
