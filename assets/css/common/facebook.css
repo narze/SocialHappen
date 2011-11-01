@@ -54,59 +54,76 @@ div.account-data div.data {
 	float: right;
 	width: 365px;
 }
-div.account-data div.data h1 {font-size: 14px; color: #17418d; padding: 0 0 5px;}
+div.account-data div.data h1 {font-size: 16px; color: #17418d; padding: 0 0 5px;}
 div.account-data div.data p {padding: 0 0 5px;}
-div.account-data div.data ul {
+div.account-data div.data ul.counter {
 	width: 365px;
 	height: 31px;
 	background: url(../../images/bg_fb/bg_datalist.png) no-repeat;
+	position: relative;
+	top: 40px;
 }
 div.account-data div.data ul:after{
     clear:both;
     content:" ";
     display:block;
 }
-div.account-data div.data ul>li {
+div.account-data div.data ul.counter li {
 	float: left;
 	height: 31px;
 	line-height: 31px;
 	font-size: 11px;	
 }
-div.account-data div.data ul>li a {display: block; color: #333; text-decoration: none;}
-div.account-data div.data ul>li.fav {width: 111px;}
-div.account-data div.data ul>li.fav a {
+div.account-data div.data ul.counter li a {display: block; color: #333; text-decoration: none;}
+div.account-data div.data ul.counter li.fav {width: 111px;}
+div.account-data div.data ul.counter li.fav a {
 	padding: 0 0 0 40px;
 	height: 31px;
 	background: url(../../images/bg_fb/bg_main.png) no-repeat 6px -114px;
 }
-div.account-data div.data ul>li.fav:hover {background: url(../../images/bg_fb/bg_datalist-01.png) no-repeat;}
-div.account-data div.data ul>li.active:first-child {background: url(../../images/bg_fb/bg_datalist-01.png) no-repeat;}
-div.account-data div.data ul>li.member {width: 69px; margin-left: 1px;}
-div.account-data div.data ul>li.member a {
-	padding: 0 0 0 42px;
-	background: url(../../images/bg_fb/bg_main.png) no-repeat 6px -155px;
+div.account-data div.data ul.counter li:first-child:hover,
+div.account-data div.data ul.counter li.active:first-child {background: url(../../images/bg_fb/bg_datalist-01.png) no-repeat;}
+
+div.account-data div.data ul.counter li.activities a,
+div.account-data div.data ul.counter li.member a,
+div.account-data div.data ul.counter li.applications a,
+div.account-data div.data ul.counter li.campaigns a {
+	background-image: url(../../images/bg_fb/bg_main.png);
+	background-repeat:no-repeat;
+	padding-right:10px; 
+	text-align: right; 
 }
-div.account-data div.data ul>li:hover, div.account-data div.data ul>li.active {background: url(../../images/bg_fb/bg_datalist-02.png) repeat-x;}
-div.account-data div.data ul>li.badges {width: 75px; margin-left: 1px;}
-div.account-data div.data ul>li.badges a {
+div.account-data div.data ul.counter li.member {width: 98px; margin-left: 1px;}
+div.account-data div.data ul.counter li.member a  {background-position:6px -155px;}
+div.account-data div.data ul.counter li.activities {width: 99px; margin-left: 1px;}
+div.account-data div.data ul.counter li.activities a { background-position:6px -599px; }
+div.account-data div.data ul.counter li.applications {width: 80px; margin-left: 1px;}
+div.account-data div.data ul.counter li.applications a { background-position:6px -637px; }
+div.account-data div.data ul.counter li.campaigns {width: 83px; margin-left: 1px; }
+div.account-data div.data ul.counter li.campaigns:hover {background: url(../../images/bg_fb/bg_datalist-03.png) no-repeat right top;}
+div.account-data div.data ul.counter li.campaigns a { background-position:6px -364px; }
+
+div.account-data div.data ul.counter li:hover, div.account-data div.data ul.counter li.active {background: url(../../images/bg_fb/bg_datalist-02.png) repeat-x;}
+div.account-data div.data ul.counter li.badges {width: 75px; margin-left: 1px;}
+div.account-data div.data ul.counter li.badges a {
 	padding: 0 0 0 38px;
 	background: url(../../images/bg_fb/bg_main.png) no-repeat 6px -198px;
 }
-div.account-data div.data ul>li.point {width: 64px; margin-left: 1px;}
-div.account-data div.data ul>li.point a {
+div.account-data div.data ul.counter li.point {width: 64px; margin-left: 1px;}
+div.account-data div.data ul.counter li.point a {
 	padding: 0 0 0 32px;
 	background: url(../../images/bg_fb/bg_main.png) no-repeat 6px -238px;
 }
-div.account-data div.data ul>li.setting {width: 42px; margin-left: 1px;}
-div.account-data div.data ul>li.setting:hover {background: url(../../images/bg_fb/bg_datalist-03.png) no-repeat;}
-div.account-data div.data ul>li:first-child+li+li+li+li.active {background: url(../../images/bg_fb/bg_datalist-03.png) no-repeat;}
-div.account-data div.data ul>li.setting a {
+div.account-data div.data ul.counter li.setting {width: 42px; margin-left: 1px;}
+div.account-data div.data ul.counter li.setting:hover {background: url(../../images/bg_fb/bg_datalist-03.png) no-repeat;}
+div.account-data div.data ul.counter li:first-child+li+li+li+li.active {background: url(../../images/bg_fb/bg_datalist-03.png) no-repeat;}
+div.account-data div.data ul.counter li.setting a {
 	display: block;
 	width: 42px;
 	height: 35px;
 	background: url(../../images/bg_fb/bg_main.png) no-repeat 9px -280px;
 }
-div.account-data div.data ul>li.setting a span {display: none;}
+div.account-data div.data ul.counter li.setting a span {display: none;}
 
 div.account-data div.userview {
 	float: left;

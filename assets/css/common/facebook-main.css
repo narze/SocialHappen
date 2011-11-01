@@ -20,7 +20,19 @@ div.list_app-camp {min-height: 130px;}
 	overflow:hidden;
 	margin: 0;
 }
+.bt-dashboard, .bt-get-started {
+	display: block;
+	background: url(../../images/bg_fb/bg_button_2.png) no-repeat;
+	cursor: pointer;
+	border: none;
+	color: transparent !important;
+	text-indent: -9000px;
+	overflow:hidden;
+	margin: 0;
+}
 .bt-remove { width: 15px; height: 15px; background-position: -284px -1px; display:inline-block; }
+.bt-dashboard { width: 84px; height: 27px; background-position: -157px -116px; }
+.bt-get-started { width: 84px; height: 27px; background-position: -245px -116px; }
 
 /* Pagination */
 div.strip {padding: 10px 0; text-align: center;}
@@ -165,6 +177,115 @@ div.account-data div.friend ul > li a img {
 	width:30px;
 	height:30px;
 }
+div.account-data div.data { position:relative; }
+div.account-data div.buttons { position:absolute; top:0; right:0; }
+div.account-data div.buttons a { float:left; margin-left: 5px; }
+div.account-data ul.viewas { font-weight:bold; width:80px; cursor:pointer; position:absolute; top:25px; left:-7px; z-index:9;}
+div.account-data ul.viewas li { 
+	display:none; 
+	position:relative; 
+	padding:0 10px;
+	line-height:25px;
+	text-align:center;
+}
+div.account-data ul.viewas li:first-child { 
+	text-align:left;
+	border:none; 
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+div.account-data ul.viewas.active { color:#fff; }
+div.account-data ul.viewas.active li { 
+	display:block;
+	border-top:1px solid #d4d4d4; 
+	background-color:#3c3c3c; 
+}
+
+div.account-data ul.viewas.active li.last { 
+	-webkit-border-bottom-right-radius: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+div.account-data ul.viewas.active li:hover { background-color:#6a6a6a; }
+div.account-data ul.viewas li.active { display:block; }
+div.account-data ul li.active span.arrow { 
+	display: block;
+	position: absolute;
+	top: 10px;
+	right: 6px;
+	width: 0;
+	height: 0;
+	border: solid 5px;
+	border-top-color: #000;
+	border-left-color: transparent !important;
+	border-right-color: transparent !important;
+	border-bottom-color: transparent !important;
+	bottom: none;
+}
+div.account-data ul.active li.active span.arrow { border-top-color: #fff; }
+
+div.account-data ul.publish  { 
+	font-weight:bold; 
+	width:112px; 
+	cursor:pointer; 
+	position:absolute; 
+	top:25px; 
+	left:76px;
+	z-index:9;
+}
+div.account-data ul.publish li { 
+	display:none; 
+	position:relative; 
+	padding:0 10px 0 20px;
+	line-height:25px;
+}
+div.account-data ul.publish.active { color:#fff; }
+div.account-data ul.publish.active li {
+	color:#fff!important;
+	display:block;
+	border-top:1px solid #d4d4d4; 
+	background-color:#3c3c3c; 
+}
+div.account-data ul.publish.active li:hover { background-color:#6a6a6a; }
+div.account-data ul.publish li.active { display:block; }
+div.account-data ul.publish li#published {
+	position:relative;
+	color:#63791c;
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+div.account-data ul.publish li#unpublished {
+	position:relative;
+	color:red;
+	-webkit-border-bottom-right-radius: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+div.account-data ul.publish li span.light { 
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 13px;
+	height: 13px;
+	display: block;
+	background-image: url(../../images/bg_fb/bg_main.png);
+}
+div.account-data ul.publish li#published span.light { background-position:-20px -326px;}
+div.account-data ul.publish li#unpublished span.light { background-position:-20px -345px; }
 
 /* main-wrapper */
 div.main-wrapper {
@@ -275,11 +396,11 @@ div.notifications-list ul li div.action {
 .notice.warning a { color:#6d6311; }
 
 /* Get started */
-#get-started { font-size: 13px; font-weight: bold; color: #3C3C3C; line-height: 18px; }
+#get-started { font-size: 13px; font-weight: bold; color: #3C3C3C; line-height: 18px; width: 498px; overflow: hidden;}
 #get-started div.info { background-color:#f8ecd1; padding:0 15px; display:table; }
 #get-started div.info p { margin: 10px 0; }
 #get-started div.info a { color:#63791c; text-decoration:underline; }
-#get-started div.steps { margin-top: 15px; padding:0 15px; position:relative; }
+#get-started div.steps { margin-top: 15px; padding:0 15px; position:relative; width:468px; }
 #get-started div.steps hr { margin-top: 10px; height: 1px; background-color: #E1E1E1; color: #E1E1E1; border: 0; }
 #get-started div.steps .icon-help { display:block; cursor:help; position:absolute; right:10px; top:0; color:#fff; background-color:#575757; text-indent: 6px; overflow: hidden; width:20px; height:20px; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; }
 #get-started div.steps .tips { display:none; position:relative; left: 20px; top: 15px; z-index:120}
@@ -299,8 +420,11 @@ bottom: none;
 }
 #get-started div.steps .tips div { display:table; position: absolute; right:0; padding:0 10px; background-color:#63791c; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
 #get-started div.steps .tips p { font-size:11px; color:#ebebeb; font-weight: normal; margin: 6px 0; }
-#get-started div.steps ul li { color:#9a9a9a; line-height: 26px;}
-#get-started div.steps ul li a { color:#45bddb;}
+#get-started div.steps ul li { color:#9a9a9a; line-height: 32px;}
+#get-started div.steps ul li del { padding-left: 10px;}
+#get-started div.steps ul li a { color:#45bddb; padding-left: 10px;}
 #get-started div.steps ul li a:hover { text-decoration:underline; }
-#get-started div.steps ul li del { }
+#get-started div.steps ul li span.todo,
+#get-started div.steps ul li span.done { float:left; margin-top: 4px; display:block; width:24px; height:21px; background-image: url(../../images/bg_fb/bg_button_2.png); background-repeat:no-repeat; background-position:-298px -43px; }
+#get-started div.steps ul li span.done { background-position:-265px -43px;}
 #get-started div.note { margin-top: 5px; padding:0 15px; font-size:11px; color:#9a9a9a; font-weight: normal; line-height: 12px;}

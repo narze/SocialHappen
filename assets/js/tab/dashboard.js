@@ -1,4 +1,14 @@
 $(function(){
+
+	function load_get_started() {
+		set_loading();
+		$('div#main').load(base_url+'tab/get_started/'+page_id,function(){
+			$('div.icon-help').live("hover", function() {
+				$(this).siblings('.tips').toggle();
+			});
+		});
+	}
+	
 	function load_dashboard(){
 		var viewas = '';
 		if($(this).hasClass('view-as-user')){
@@ -9,18 +19,6 @@ $(function(){
 		
 		set_loading();
 		$('div#main').load(base_url+'tab/dashboard/'+page_id,function(){
-			
-			if( $('#get-started').length > 0 ) {
-				console.log('have get started');
-				
-				$('div.icon-help').hover(function(){ 
-					$(this).siblings('.tips').show();
-				}, function(){ 
-					$(this).siblings('.tips').hide();
-				});
-				
-				return false;
-			}
 
 			trigger_countdown = function (){
 				$('.campaign-end-time').each(function(){
@@ -218,8 +216,13 @@ $(function(){
 		}
 	}
 	
-	$('a.a-dashboard').live('click',function(){
+	$('a.a-dashboard, a.bt-dashboard').live('click',function(){
 		load_dashboard();
+		return false;
+	});
+	
+	$('a.bt-get-started').live('click',function(){
+		load_get_started();
 		return false;
 	});
 	
