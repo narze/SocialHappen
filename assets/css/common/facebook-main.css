@@ -396,7 +396,7 @@ div.notifications-list ul li div.action {
 .notice.warning a { color:#6d6311; }
 
 /* Get started */
-#get-started { font-size: 13px; font-weight: bold; color: #3C3C3C; line-height: 18px; width: 498px; overflow: hidden;}
+#get-started { font-size: 13px; font-weight: bold; color: #3C3C3C; line-height: 18px;}
 #get-started div.info { background-color:#f8ecd1; padding:0 15px; display:table; }
 #get-started div.info p { margin: 10px 0; }
 #get-started div.info a { color:#63791c; text-decoration:underline; }
