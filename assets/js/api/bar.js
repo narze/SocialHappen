@@ -254,7 +254,7 @@ onLoad = function(){
 			  // if hide, fetch data
 			  if(!fetching_notification && $('li.notification').hasClass('active')){
 			    fetching_notification = true;
-  				$.get(base_url + '/api/show_notification?user_id='+user_id, function(result){
+  				$.get(base_url + 'api/show_notification?user_id='+user_id, function(result){
   					if(result.notification_list){
   						var notification_list = result.notification_list;
   						var template = $('<li class="separator">'+
@@ -283,7 +283,7 @@ onLoad = function(){
 									$('ul.notification_list_bar li.last-child').prev().remove();
 								}
   							}
-  							$.get(base_url + '/api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
+  							$.get(base_url + 'api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
   								
   							}, 'json');
   							
