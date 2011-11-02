@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class User_class extends CI_Controller {
+class Page_signup_form extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
@@ -10,5 +10,5 @@ class User_class extends CI_Controller {
 
 	}
 }
-/* End of file user_class.php */
-/* Location: ./application/controllers/settings/page/user_class.php */
+/* End of file page_signup_form.php */
+/* Location: ./application/controllers/settings/page_signup_form.php */

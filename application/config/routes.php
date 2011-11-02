@@ -48,6 +48,21 @@ $route['campaign/(:num)'] = "campaign/index/$1";
 $route['tab/(:num)'] = "tab/index/$1";
 $route['facebook/(:num)'] = "tab/index/$1";
 $route['configs/(:num)'] = "configs/index/$1";
+$route['settings/account/(:num)'] = "settings/account/index/$1";
+$route['settings/campaign/(:num)'] = "settings/campaign/index/$1";
+$route['settings/company_pages/(:num)'] = "settings/company_pages/index/$1";
+$route['settings/company/(:num)'] = "settings/company/index/$1";
+$route['settings/page/(:num)'] = "settings/page/index/$1";
+$route['settings/page/signup_form/(:num)'] = "settings/page_signup_form/index/$1";
+$route['settings/page/signup_form/(:any)'] = "settings/page_signup_form/$1";
+$route['settings/page/user_class/(:num)'] = "settings/page_user_class/index/$1";
+$route['settings/page/user_class/(:any)'] = "settings/page_user_class/$1";
+$route['settings/app_component/homepage/(:num)'] = "settings/app_component_homepage/index/$1";
+$route['settings/app_component/homepage/(:any)'] = "settings/app_component_homepage/$1";
+$route['settings/app_component/invite/(:num)'] = "settings/app_component_invite/index/$1";
+$route['settings/app_component/invite/(:any)'] = "settings/app_component_invite/$1";
+$route['settings/app_component/sharebutton/(:num)'] = "settings/app_component_sharebutton/index/$1";
+$route['settings/app_component/sharebutton/(:any)'] = "settings/app_component_sharebutton/$1";
 
 
 /* End of file routes.php */

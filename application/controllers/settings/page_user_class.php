@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Invite extends CI_Controller {
+class Page_user_class extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
@@ -10,5 +10,5 @@ class Invite extends CI_Controller {
 
 	}
 }
-/* End of file invite.php */
-/* Location: ./application/controllers/settings/app/component/invite.php */
+/* End of file page_user_class.php */
+/* Location: ./application/controllers/settings/page_user_class.php */
