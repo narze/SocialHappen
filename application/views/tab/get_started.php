@@ -3,7 +3,7 @@
       <div class="pic"><img src="<?php echo imgsize($page['page_image'],'normal');?>" alt="" /><span></span></div>
 		<div class="data">
 			<h1><?php echo $page['page_name'];?></h1>
-			<?php if($is_admin) { ?>
+			<?php if($is_logged_in && $is_admin) { ?>
 			<ul class="viewas toggle">
 				<li class="active"><a>View as</a><span class="arrow"></span></li>
 				<li><a class="view-as-user">Member</a></li>
@@ -13,8 +13,8 @@
 				<li class="active" id="published"><a>Published</a><span class="arrow"></span><span class="light"></span></li>
 				<li id="unpublished"><a>Unpublished</a><span class="light"></span></li>
 			</ul>
-			<?php } ?>
 			<div class="buttons"><a class="bt-dashboard">Dashboard</a></div>
+			<?php } ?>
 			<ul class="counter">
 			  <li class="member"><a><?php echo issetor($page_user_count,'-');?></a></li>
 			  <li class="activities"><a><?php echo issetor($page_activities_count,'-');?></a></li>
