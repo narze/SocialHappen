@@ -90,7 +90,7 @@ class Company extends CI_Controller {
 								array( 
 									$company['company_name'] => base_url() . "company/{$company['company_id']}"
 								),
-							'settings_url' => base_url()."settings?s=company&id={$company['company_id']}"
+							'settings_url' => base_url()."o_setting?s=company&id={$company['company_id']}"
 						),
 					TRUE),
 					'company_profile' => $this -> load -> view('company/company_profile', 

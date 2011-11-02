@@ -66,13 +66,13 @@
 				<?php if($app_install_id) { ?>
 					<li><a href="<?php echo base_url().'app/config/'.$app_install_id?>">Config <?php echo $current_menu['name']; ?></a></li>
 					<li><a href="<?php echo base_url().'configs?c=app&p='.$page_id.'&id='.$app_install_id?>" target="_top" >App Settings</a></li>
-					<li class="separator"><a href="<?php echo base_url()."settings?s=page&id=".$page_id;?>" target="_top" >Page Settings</a></li>
+					<li class="separator"><a href="<?php echo base_url()."o_setting?s=page&id=".$page_id;?>" target="_top" >Page Settings</a></li>
 					<li class="separator last-child"><a href="<?php echo base_url()."page/".$page_id;?>" id="a-dashboard" target="_top">Go to Dashboard</a></li>
 				<?php } else { ?>
 					<li><a class="a-dashboard">View as Admin</a></li>
 					<li><a class="a-dashboard view-as-user">View as Member</a></li>
 					<li><a class="a-dashboard view-as-guest">View as Guest</a></li>
-					<li><a href="<?php echo base_url()."settings?s=page&id=".$page_id;?>" target="_top" >Page Settings</a></li>
+					<li><a href="<?php echo base_url()."o_setting?s=page&id=".$page_id;?>" target="_top" >Page Settings</a></li>
 					<li class="separator last-child"><a href="<?php echo base_url()."page/".$page_id;?>" id="a-dashboard" target="_top">Go to Dashboard</a></li>
 				<?php } ?>
 			</ul>
