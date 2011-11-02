@@ -47,7 +47,7 @@
 					<div class="arrow"></div>
 					<?php echo issetor($user['user_first_name']).' '.issetor($user['user_last_name']); ?>
 					<ul>
-						<li><?php echo anchor("settings?s=account&id={$user['user_id']}",'&raquo Profile Setting');?></li>
+						<li><?php echo anchor("o_setting?s=account&id={$user['user_id']}",'&raquo Profile Setting');?></li>
 						<li><?php echo anchor('logout','&raquo Logout');?></li>
 					</ul>
 				</li>

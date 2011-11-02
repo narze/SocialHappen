@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Settings extends CI_Controller {
+class O_setting extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
@@ -16,7 +16,7 @@ class Settings extends CI_Controller {
 		$setting_names_and_ids = array('account'=>'user_id','company_pages' => 'company_id', 'company'=>'company_id','page'=>'page_id','package'=>'user_id','reference'=>'user_id');
 		
 			if(!$setting_name || !array_key_exists($setting_name, $setting_names_and_ids)){
-				redirect("settings?s=account&id=".$this->socialhappen->get_user_id());
+				redirect("o_setting?s=account&id=".$this->socialhappen->get_user_id());
 			}
 			$user = $this->socialhappen->get_user();
 			if($user_companies = $this->socialhappen->get_user_companies()){
@@ -45,7 +45,7 @@ class Settings extends CI_Controller {
 							'common/functions',
 							'common/jquery.form',
 							'common/bar',
-							'settings/main',
+							'o_setting/main',
 							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
@@ -55,7 +55,7 @@ class Settings extends CI_Controller {
 						)
 					)
 				),
-				'go_back' => $this -> load -> view('settings/go_back', 
+				'go_back' => $this -> load -> view('o_setting/go_back', 
 					array(
 						'company' => $company
 					),
@@ -68,25 +68,25 @@ class Settings extends CI_Controller {
 				'breadcrumb' => $this -> load -> view('common/breadcrumb', 
 					array('breadcrumb' => 
 						array( 
-							'Settings' => base_url() . "settings"
+							'Settings' => base_url() . "o_setting"
 							)
 						)
 					,
 				TRUE),
-				'sidebar' => $this -> load -> view('settings/sidebar', 
+				'sidebar' => $this -> load -> view('o_setting/sidebar', 
 					array(
 						'company_pages' => issetor($company_pages),
 						'user_current_package_id' => $user_current_package_id
 					),
 				TRUE),
-				'main' => $this -> load -> view("settings/main", 
+				'main' => $this -> load -> view("o_setting/main", 
 					array(
 						
 					),
 				TRUE),
 				'footer' => $this -> socialhappen -> get_footer()
 				);
-			$this -> parser -> parse('settings/settings_view', $data);
+			$this -> parser -> parse('o_setting/o_setting_view', $data);
 		
 	}
 	
@@ -105,7 +105,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/account', array('user'=>$user,'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id'])));
+				$this->load->view('o_setting/account', array('user'=>$user,'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id'])));
 			}
 			else // passed validation proceed to post success logic
 			{
@@ -125,7 +125,7 @@ class Settings extends CI_Controller {
 				$this->load->model('user_model','users');
 				if ($this->users->update_user($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/account', array('user'=>array_merge($user,$user_update_data), 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
+					$this->load->view('o_setting/account', array('user'=>array_merge($user,$user_update_data), 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
 				}
 				else
 				{
@@ -145,7 +145,7 @@ class Settings extends CI_Controller {
 			foreach ($user_companies as $user_company){
 				$company_pages[$user_company['company_id']] = $this->pages->get_company_pages_by_company_id($user_company['company_id']);
 			}
-			$this->load->view('settings/companies_and_pages',array('company_pages' => $company_pages, 'user_companies' => $user_companies));
+			$this->load->view('o_setting/companies_and_pages',array('company_pages' => $company_pages, 'user_companies' => $user_companies));
 		}
 	}
 	
@@ -173,7 +173,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/company', array('company'=>$company, 'company_apps' => $company_apps, 'company_users' => $company_users, 'success'=>$this->input->get('success')));
+				$this->load->view('o_setting/company', array('company'=>$company, 'company_apps' => $company_apps, 'company_users' => $company_users, 'success'=>$this->input->get('success')));
 			}
 			else 
 			{
@@ -192,7 +192,7 @@ class Settings extends CI_Controller {
 			
 				if ($this->companies->update_company_profile_by_company_id($company_id, $company_update_data)) // the information has therefore been successfully saved in the db
 				{
-					$this->load->view('settings/company', array('company'=>array_merge($company,$company_update_data), 'company_apps' => $company_apps, 'company_users' => $company_users, 'success'=>TRUE));
+					$this->load->view('o_setting/company', array('company'=>array_merge($company,$company_update_data), 'company_apps' => $company_apps, 'company_users' => $company_users, 'success'=>TRUE));
 				}
 				else
 				{
@@ -213,7 +213,7 @@ class Settings extends CI_Controller {
 			
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				redirect("settings/company/{$company_id}");
+				redirect("o_setting/company/{$company_id}");
 			}
 			else 
 			{
@@ -226,11 +226,11 @@ class Settings extends CI_Controller {
 			
 					if ($this->user_companies->add_user_company($company_admin)) // the information has therefore been successfully saved in the db
 					{
-						redirect("settings/company/{$company_id}?success=1");
+						redirect("o_setting/company/{$company_id}?success=1");
 					}
 				}
 				log_message('error','check user_id failed');
-				redirect("settings/company/{$company_id}?error=1");
+				redirect("o_setting/company/{$company_id}?error=1");
 			}
 		}
 	}
@@ -283,7 +283,7 @@ class Settings extends CI_Controller {
 		
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
-				$this->load->view('settings/page', array('page'=>$page, 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'page_user_fields' => $page_user_fields));
+				$this->load->view('o_setting/page', array('page'=>$page, 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'page_user_fields' => $page_user_fields));
 			}
 			else 
 			{
@@ -301,7 +301,7 @@ class Settings extends CI_Controller {
 			
 				if ($this->pages->update_page_profile_by_page_id($page_id,$page_update_data))
 				{
-					$this->load->view('settings/page', array('page'=>array_merge($page,$page_update_data), 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'success'=>TRUE, 'page_user_fields' => $page_user_fields));
+					$this->load->view('o_setting/page', array('page'=>array_merge($page,$page_update_data), 'page_apps' => $page_apps, 'company_users' => $company_users, 'page_users' => $page_users, 'page_facebook' => $page_facebook, 'success'=>TRUE, 'page_user_fields' => $page_user_fields));
 				}
 				else
 				{
@@ -322,7 +322,7 @@ class Settings extends CI_Controller {
 			
 			if ($this->form_validation->run() == FALSE)
 			{
-				redirect("settings/page/{$page_id}");
+				redirect("o_setting/page/{$page_id}");
 			}
 			else 
 			{
@@ -344,7 +344,7 @@ class Settings extends CI_Controller {
 							);
 					$this->user_pages->add_user_page($page_admin);
 				}
-				redirect("settings/page/{$page_id}?success=1");
+				redirect("o_setting/page/{$page_id}?success=1");
 			}
 		}
 	}
@@ -430,9 +430,9 @@ class Settings extends CI_Controller {
 			}
 			
 			if($success) {
-				redirect("settings/page/{$page_id}?success=1");
+				redirect("o_setting/page/{$page_id}?success=1");
 			}
-			redirect("settings/page/{$page_id}");
+			redirect("o_setting/page/{$page_id}");
 		}
 	}
 	
@@ -484,7 +484,7 @@ class Settings extends CI_Controller {
 				'apps' => $apps,
 				'is_upgradable' => $is_upgradable
 			);
-			$this->load->view('settings/package',$data);
+			$this->load->view('o_setting/package',$data);
 		}
 	}
 	
@@ -492,5 +492,5 @@ class Settings extends CI_Controller {
 	
 	}
 }
-/* End of file settings.php */
-/* Location: ./application/controllers/settings.php */
+/* End of file o_setting.php */
+/* Location: ./application/controllers/o_setting.php */

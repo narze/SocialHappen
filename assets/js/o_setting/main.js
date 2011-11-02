@@ -9,7 +9,7 @@ $(function(){
 		id = get_query(url, 'id');
 		set_loading();
 		check_login(null,function(){
-			$('div#main').load(base_url+"settings/"+s+"/"+id);
+			$('div#main').load(base_url+"o_setting/"+s+"/"+id);
 			make_form(element);
 		});
 		return false;

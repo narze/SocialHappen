@@ -7,7 +7,7 @@
 		
 	<?php
 		$attributes = array('class' => 'company-information', 'id' => '');
-		echo form_open("settings/company/{$company['company_id']}", $attributes); ?>
+		echo form_open("o_setting/company/{$company['company_id']}", $attributes); ?>
 		 <div>
               <ul class="form01">
                 <li>
@@ -47,7 +47,7 @@
 		  <p class="popup">Add admin by user id
 			<?php
 				$attributes = array('class' => 'company-admin', 'id' => '');
-				echo form_open("settings/company_admin/{$company['company_id']}", $attributes); ?>
+				echo form_open("o_setting/company_admin/{$company['company_id']}", $attributes); ?>
 				 <ul class="form01">
 					<li><strong>User id :</strong><?php echo form_error('user_id'); ?><input id="user_id" type="text" name="user_id" maxlength="20" value="<?php echo set_value('user_id'); ?>"  /></li>
 					<li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>

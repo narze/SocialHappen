@@ -18,7 +18,7 @@
 		
 <?php // Change the css classes to suit your needs   
 		$attributes = array('class' => 'account-information', 'id' => '');
-		echo form_open_multipart("settings/account/{$user['user_id']}", $attributes); ?>
+		echo form_open_multipart("o_setting/account/{$user['user_id']}", $attributes); ?>
 		 <div>
               <ul class="form01">
                 <li>
