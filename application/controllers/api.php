@@ -7,6 +7,7 @@
 class Api extends CI_Controller {
 
 	function __construct(){
+		header("Access-Control-Allow-Origin: *");
 		parent::__construct();
 	}
 
@@ -1523,7 +1524,6 @@ class Api extends CI_Controller {
 	}
 
   function show_notification(){
-    header("Access-Control-Allow-Origin: *");
     $user_id = $this->input->get('user_id', TRUE);
     $limit = $this->input->get('limit', TRUE);
     
@@ -1544,7 +1544,6 @@ class Api extends CI_Controller {
   }
 
   function read_notification(){
-    header("Access-Control-Allow-Origin: *");
     $user_id = $this->input->get('user_id', TRUE);
     $notification_list = $this->input->get('notification_list', TRUE);
     $notification_list = !$notification_list ? array() :
