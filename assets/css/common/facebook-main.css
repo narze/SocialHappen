@@ -429,3 +429,16 @@ bottom: none;
 #get-started div.steps ul li span.done { background-position:-265px -43px;}
 
 #get-started div.note { margin-top: 5px; padding:0 15px; font-size:11px; color:#9a9a9a; font-weight: normal; line-height: 12px;}
+
+#under-construction { padding:0 15px; color:#6a6a6a; border-top:1px solid #dddfde; }
+#under-construction div.info { text-align:center; margin-top:15px;}
+#under-construction div.info p.note { font-size:11px; margin:15px 0 25px 0;}
+#under-construction h1 { color:#9e6d2b; font-size: 14px; margin: 5px 0;}
+#under-construction h2, #under-construction h3, #under-construction a { color:#63791c; }
+#under-construction h2 { margin:15px 0 }
+#under-construction h3 { margin:15px 0 7px 0 }
+#under-construction p { line-height:14px; }
+#under-construction a { text-decoration:underline; }
+#under-construction div.more-info { border-top:1px dotted #a6a6a6; }
+#under-construction div.more-info ul { margin:0.5em 1.5em 1.5em 1.5em;}
+#under-construction div.more-info ul li { list-style:disc; line-height:20px;}
