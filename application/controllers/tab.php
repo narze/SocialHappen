@@ -136,11 +136,13 @@ class Tab extends CI_Controller {
 		$company = $this->companies->get_company_profile_by_page_id($page_id);
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
-
+		$is_logged_in = $this->socialhappen->is_logged_in();
+		
 		$this->load->vars( array(
 			'page' => $page,
 			'is_liked' => $this->page['liked'],
-			'is_admin' => $is_admin
+			'is_admin' => $is_admin,
+			'is_logged_in' => $is_logged_in
 			)
 		);
 		
@@ -169,15 +171,26 @@ class Tab extends CI_Controller {
 		$company = $this->companies->get_company_profile_by_page_id($page_id);
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+		$is_logged_in = $this->socialhappen->is_logged_in();
 		
-		if($page){
-			
-			$data = array(
-							'page' => $page,
-							'is_liked' => $this->page['liked'],
-							'is_admin' => $is_admin
-			);
-			$this->load->view("tab/get_started",$data);
+		$this->load->vars( array(
+			'page' => $page,
+			'is_liked' => $this->page['liked'],
+			'is_admin' => $is_admin,
+			'is_logged_in' => $is_logged_in
+			)
+		);
+		
+		if($page)
+		{
+			if($page['page_installed'] == 0) 
+			{
+				$this->load->view("tab/page_under_construction");
+			}
+			else 
+			{
+				$this->load->view("tab/dashboard");
+			}
 		}
 	}
 	
