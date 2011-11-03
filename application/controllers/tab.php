@@ -189,7 +189,7 @@ class Tab extends CI_Controller {
 			}
 			else 
 			{
-				$this->load->view("tab/dashboard");
+				$this->load->view("tab/get_started");
 			}
 		}
 	}
