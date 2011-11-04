@@ -3,7 +3,7 @@ $(function(){
 	function load_get_started() {
 		set_loading();
 		$('div#main').load(base_url+'tab/get_started/'+page_id,function(){
-			$('div.icon-help').live("hover", function() {
+			$('div.icon-help').die('hover').live('hover', function() {
 				$(this).siblings('.tips').toggle();
 			});
 		});
