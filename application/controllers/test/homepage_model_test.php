@@ -16,7 +16,7 @@ class Homepage_model_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
-		$this->load->model('homepage_model','homepage');
+		$this->load->model('app_component/homepage_model','homepage');
 	}
 	
 	function __destruct(){

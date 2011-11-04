@@ -42,7 +42,7 @@ class Invite_model_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
-		$this->load->model('invite_model','invite');
+		$this->load->model('app_component/invite_model','invite');
 	}
 	
 	function __destruct(){

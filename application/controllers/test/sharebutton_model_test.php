@@ -36,7 +36,7 @@ class Sharebutton_model_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
-		$this->load->model('sharebutton_model','sharebutton');
+		$this->load->model('app_component/sharebutton_model','sharebutton');
 	}
 	
 	function __destruct(){
