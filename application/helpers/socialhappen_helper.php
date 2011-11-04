@@ -71,5 +71,30 @@ if(!function_exists('array_unique_value'))
     }
 }
 
+if(!function_exists('arenotempty'))
+{
+	function arenotempty($array,$check){
+		if(!is_array($array) || !is_array($check)){
+			return FALSE;
+		}
+		foreach ($check as $one){
+			if(empty($array[$one])){
+				return FALSE;
+			} 
+		}
+		return TRUE;
+    }
+}
+
+if(!function_exists('obj2array'))
+{
+	function obj2array($object){
+		if(!$object){
+			return FALSE;
+		}
+		return json_decode(json_encode($object), TRUE);
+	}
+}
+
 /* End of file socialhappen_helper.php */
 /* Location: ./system/helpers/socialhappen_helper.php */
