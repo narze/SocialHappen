@@ -52,6 +52,7 @@ $route['settings/account/(:num)'] = "settings/account/index/$1";
 $route['settings/campaign/(:num)'] = "settings/campaign/index/$1";
 $route['settings/company_pages/(:num)'] = "settings/company_pages/index/$1";
 $route['settings/company/(:num)'] = "settings/company/index/$1";
+$route['settings/package/(:num)'] = "settings/package/index/$1";
 $route['settings/page/(:num)'] = "settings/page/index/$1";
 $route['settings/page/signup_form/(:num)'] = "settings/page_signup_form/index/$1";
 $route['settings/page/signup_form/(:any)'] = "settings/page_signup_form/$1";

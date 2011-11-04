@@ -2,7 +2,7 @@
 	
 	<div class="wrapper-details">
 		<div class="packages-intro-text">
-			<?php if($user_current_package_id) { ?><a class="bt-package-setting fr" href="<?php echo base_url().'o_setting?s=package&id='.$user_id;?>">Package Setting</a><?php } ?>
+			<?php if($user_current_package_id) { ?><a class="bt-package-setting fr" href="<?php echo base_url().'settings/package/'.$user_id;?>">Package Setting</a><?php } ?>
 			<h2>Choose the package that's best for your needs</h2>
 			<p>You can updrade at any time.</p>
 		</div>

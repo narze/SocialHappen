@@ -197,7 +197,7 @@
 								+'<p class="page-image"><img src="'+imgsize(json[i].page_image,'normal')+'" alt="" />'
 								+'<span class="button">'
 								+'<a class="bt-manage_page" href="'+base_url+'page/'+json[i].page_id+'"><span>Manage</span></a>'
-								+'<a class="bt-setting_page" href="'+base_url+'o_setting?s=page&id='+json[i].page_id+'"><span>Setting</span></a>'
+								+'<a class="bt-setting_page" href="'+base_url+'settings/page/'+json[i].page_id+'"><span>Setting</span></a>'
 								+'</span>'
 								+'</p><p class="pagename">'+json[i].page_name+'</p><input type="hidden" class="page_id" value="'+json[i].page_id+'" />'
 								+'</li>');

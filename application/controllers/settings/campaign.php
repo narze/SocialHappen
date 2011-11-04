@@ -4,6 +4,7 @@ class Campaign extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		$this -> socialhappen -> check_logged_in();
 	}
 	
 	function index(){
