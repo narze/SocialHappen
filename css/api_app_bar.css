@@ -716,7 +716,8 @@ div.popup-fb-signup-page {
 
 /* Button Facebook */
 *.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome,
-.bt-next, .bt-next-inactive, .bt-cancel, .bt-done, .bt-done-inactive, .bt-start {
+.bt-next, .bt-next-inactive, .bt-cancel, .bt-done, .bt-done-inactive, .bt-start, 
+.bt-dashboard, .bt-get-started, .bt-configure, .bt-learn-more {
 	background: url(../assets/images/bg_fb/bg_button_2.png) no-repeat;
 	cursor: pointer;
 	border: none;
@@ -771,8 +772,11 @@ div.popup-fb-signup-page {
 .bt-cancel {width: 73px; height: 30px; background-position: -106px 0px; }
 .bt-done {width: 73px; height: 30px; background-position: -256px -76px; }
 .bt-done-inactive {width: 73px; height: 30px; background-position: -181px -76px; cursor:default;}
-.bt-start {width: 153px; height: 32px; background-position: -176px -427px;}
-
+.bt-start {width: 153px; height: 32px; background-position: -176px -427px;}	
+.bt-dashboard { width: 84px; height: 27px; background-position: -157px -116px; }
+.bt-get-started { width: 84px; height: 27px; background-position: -245px -116px; }
+.bt-configure { width: 84px; height: 31px; background-position: -148px -155px; }
+.bt-learn-more { width: 94px; height: 31px; background-position: -235px -155px; }
 
 div.header ul.menu > li.notification a.amount {
 display:block;
@@ -866,4 +870,228 @@ color: white;
 font-weight: bold;
 padding: 5px 10px 5px 0px;
 min-height: initial;
+}
+
+/* Setting wrapper */
+body.settings {
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+	background: #fff url(../assets/images/bg_fb/bg_body.png) repeat-x top;
+}
+div.account-data {
+	width: 475px;
+	margin: 0 auto 18px;
+}
+div.account-data:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.account-data div.pic {
+	float: left;
+	width: 96px;
+	height: 96px;
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+}
+div.account-data div.pic img {width: 95px;}
+div.account-data div.data {
+	position:relative;
+	float: right;
+	width: 365px;
+}
+div.account-data div.data h1 {font-size: 16px; color: #17418d; padding: 0 0 5px;}
+div.account-data div.data p {padding: 0 0 5px;}
+div.account-data div.data ul.counter {
+	width: 365px;
+	height: 31px;
+	background: url(../assets/images/bg_fb/bg_datalist.png) no-repeat;
+	position: relative;
+	top: 40px;
+}
+div.account-data div.data ul:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.account-data ul { margin: 0; padding: 0; }
+div.account-data ul li a { font-weight:bold!important; color: #333;}
+
+div.account-data div.buttons { position:absolute; top:0; right:0; }
+div.account-data div.buttons a { float:left; margin-left: 5px; }
+div.account-data ul.viewas { width:80px; cursor:pointer; position:absolute; top:25px; left:-7px; z-index:9;}
+div.account-data ul.viewas li { 
+	display:none; 
+	position:relative; 
+	padding:0 10px;
+	line-height:25px;
+	text-align:center;
+}
+div.account-data ul.viewas li:first-child { 
+	text-align:left;
+	border:none; 
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+div.account-data ul.viewas.active a { color:#fff; }
+div.account-data ul.viewas.active li { 
+	display:block;
+	border-top:1px solid #d4d4d4; 
+	background-color:#3c3c3c; 
+}
+
+div.account-data ul.viewas.active li.last { 
+	-webkit-border-bottom-right-radius: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+div.account-data ul.viewas.active li:hover { background-color:#6a6a6a; }
+div.account-data ul.viewas li.active { display:block; }
+div.account-data ul li.active span.arrow { 
+	display: block;
+	position: absolute;
+	top: 10px;
+	right: 6px;
+	width: 0;
+	height: 0;
+	border: solid 5px;
+	border-top-color: #000;
+	border-left-color: transparent !important;
+	border-right-color: transparent !important;
+	border-bottom-color: transparent !important;
+	bottom: none;
+}
+
+div.account-data ul.active li.active span.arrow { border-top-color: #fff; }
+
+div.account-data ul.publish  { 
+	width:112px; 
+	cursor:pointer; 
+	position:absolute; 
+	top:25px; 
+	left:76px;
+	z-index:9;
+}
+div.account-data ul.publish li { 
+	display:none; 
+	position:relative; 
+	padding:0 10px 0 20px;
+	line-height:25px;
+}
+div.account-data ul.publish.active { color:#fff; }
+div.account-data ul.publish.active li {
+	display:block;
+	border-top:1px solid #d4d4d4; 
+	background-color:#3c3c3c; 
+}
+div.account-data ul.publish.active li a { color:#fff!important; }
+div.account-data ul.publish.active li:hover { background-color:#6a6a6a; }
+div.account-data ul.publish li.active { display:block; }
+div.account-data ul.publish li#published {
+	position:relative;
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+div.account-data ul.publish li#published a { color:#63791c; }
+div.account-data ul.publish li#unpublished {
+	position:relative;
+	-webkit-border-bottom-right-radius: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+div.account-data ul.publish li#unpublished { color:red; }
+div.account-data ul.publish li span.light { 
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 13px;
+	height: 13px;
+	display: block;
+	background-image: url(../assets/images/bg_fb/bg_main.png);
+}
+div.account-data ul.publish li#published span.light { background-position:-20px -326px;}
+div.account-data ul.publish li#unpublished span.light { background-position:-20px -345px; }
+
+
+div.wrapper-content {
+	width: 498px;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	border: 1px solid #dddfe0;
+	background: #fff;
+	margin: 7px auto 0;
+	padding: 10px 0;
+}
+div.tab-head {
+	height: 33px;
+	background: url(../assets/images/bg_fb/bg_tabhead.png) repeat-x;
+}
+div.tab-head:after{
+    clear:both;
+    content:" ";
+    display:block;
+}
+div.tab-head>h2 {
+	float: left;
+	height: 33px;
+	line-height: 33px;
+	margin-left: 14px;
+	font-size: 13px;
+	color: #fff;
+}
+/* Get started */
+#get-started { font-size: 13px; color: #3C3C3C; line-height: 18px;}
+#get-started div.info { font-weight: bold; background-color:#f8ecd1; padding:0 15px; display:table; }
+#get-started div.info p { margin: 10px 0; }
+#get-started div.info a { color:#63791c; text-decoration:underline; }
+#get-started div.note { margin-top: 5px; padding:0 15px; font-size:11px; color:#9a9a9a; font-weight: normal; line-height: 12px;}
+#get-started hr { margin-top: 10px; height: 1px; background-color: #E1E1E1; color: #E1E1E1; border: 0; }
+
+#get-started div.more-info { padding:0 15px; }
+#get-started div.more-info h2 { font-size:16px; margin: 20px 0 5px 0;}
+
+/* tooltips */
+div.tooltips {
+	background-color: #2A2A2A;
+	color: white;
+	display: block;
+	font-size: 11px;
+	font-weight: bold;
+	padding: 0 9px;
+	position: absolute;
+	top: 35px;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+div.tooltips span { 
+	display: block;
+	position: absolute;
+	top: -10px;
+	left: 12px;
+	width: 0;
+	height: 0;
+	border: solid 5px;
+	border-top-color: transparent !important;
+	border-left-color: transparent !important;
+	border-right-color: transparent !important;
+	border-bottom-color: #2A2A2A;
+	bottom: none;
 }

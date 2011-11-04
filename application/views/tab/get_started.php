@@ -16,10 +16,10 @@
 			<div class="buttons"><a class="bt-dashboard">Dashboard</a></div>
 			<?php } ?>
 			<ul class="counter">
-			  <li class="member"><a><?php echo issetor($page_user_count,'-');?></a></li>
-			  <li class="activities"><a><?php echo issetor($page_activities_count,'-');?></a></li>
-			  <li class="applications"><a><?php echo issetor($page_apps_count,'-');?></a></li>
-			  <li class="campaigns"><a><?php echo issetor($page_campaigns_count,'-');?></a></li>
+			  <li class="member" alt="Member"><a><?php echo issetor($page_user_count,'-');?></a></li>
+			  <li class="activities" alt="Activities"><a><?php echo issetor($page_activities_count,'-');?></a></li>
+			  <li class="applications" alt="Applications"><a><?php echo issetor($page_apps_count,'-');?></a></li>
+			  <li class="campaigns" alt="Campaigns"><a><?php echo issetor($page_campaigns_count,'-');?></a></li>
 			</ul>
 		</div>
     </div>

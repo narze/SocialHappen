@@ -231,6 +231,19 @@ $(function(){
 		return false;
 	});
 	
+	$('ul.counter li').live('mouseover mouseout', function(event) {
+		if (event.type == 'mouseover') {
+			var tooltips = $('<div class="tooltips"><span></span></div>');
+			if( $(this).attr('alt').length > 0 )
+			{
+				tooltips.append( $(this).attr('alt') );
+				$(this).append(tooltips);
+			}
+		} else {
+			$(this).find('div.tooltips').remove();
+		}
+	});
+	
 	switch(view) {
 		case 'notification' : load_notification(); break;
 		default : load_dashboard();

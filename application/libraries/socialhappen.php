@@ -758,7 +758,11 @@ class SocialHappen{
 				'app_mode' => $app_mode,
 				'app_install_id' => $app_install_id,
 				'sh_domain' => $sh_domain,
-				'node_base_url' => $this->CI->config->item('node_base_url')
+				'node_base_url' => $this->CI->config->item('node_base_url'),
+				//for get started
+				'app_id' => $app['app_id'],
+				'app_secret_key' => $app['app_secret_key'],
+				'app_install_secret_key' => $app['app_install_secret_key']
 			),
 			// 'view_as' => $view_as,
 			'node_base_url' => $this->CI->config->item('node_base_url'),
@@ -778,6 +782,35 @@ class SocialHappen{
 			
 		));
 		return $this->CI->load->view('api/app_bar_view', array(), TRUE);
+	}
+	
+	/** 
+	 * Get app get-started
+	 * @param $data
+	 * @author Weerapat P.
+	 */
+	function get_get_started($data = array()){
+		$app_install_id = issetor($data['app_install_id']);
+		$page_id = issetor($data['page_id']);
+		$user_id = issetor($data['user_id']);
+		$user_facebook_id = issetor($data['user_facebook_id']);
+		
+		//app
+		$this->CI->load->model('Installed_apps_model', 'app');
+		$app = $this->CI->app->get_app_profile_by_app_install_id($app_install_id);
+		
+		//is_admin
+		$this->CI->load->model('company_model','companies');
+		$company = $this->CI->companies->get_company_profile_by_page_id($page_id);
+		$this->CI->load->model('user_companies_model','user_companies');
+		$is_admin = $this->CI->user_companies->is_company_admin($user_id, $company['company_id']);
+		
+		$this->CI->load->vars(array(
+			'app' => $app,
+			'is_logged_in' => true, //$this->is_logged_in(),
+			'is_admin' => true, //$is_admin
+		));
+		return $this->CI->load->view('api/app_get_started', array(), TRUE);
 	}
 	
 	/** 

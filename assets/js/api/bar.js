@@ -318,8 +318,9 @@ sh_popup = function(){
 	(function($){
 		if(view_as == 'guest'){ //@TODO : User should not see view_as, let's decide it server-side
 			sh_guest();
-		} else if(view_as == 'admin'){
+		} else if(view_as == 'admin'){ //page_app_installed_id = 1 //for test
 			if(page_app_installed_id!=0) {
+				/*
 				$.fancybox({
 					href: base_url+'tab/app_installed/'+ page_app_installed_id
 				});
@@ -327,6 +328,32 @@ sh_popup = function(){
 				$('a.bt-stay_fb').live('click',function(){
 					$.fancybox.close();
 				});
+				*/
+				jQuery.ajax({
+					async:false,
+					type: 'GET',
+					url: base_url+'api/get_started',
+					data: {
+						app_id : app_id,
+						app_secret_key : app_secret_key,
+						app_install_id : app_install_id,
+						app_install_secret_key : app_install_secret_key,
+						user_id : user_id
+					},
+					success: function(result) {
+						if(result.status == 'OK')
+						{
+							$('body').addClass('settings');
+							$('div.feed').replaceWith(result.html);
+						}
+						else
+						{
+							console.log( result.message );
+						}
+					},
+					dataType: 'json'
+				});
+
 				page_app_installed_id=0;
 			} 
 			// else if(page_installed==0){
