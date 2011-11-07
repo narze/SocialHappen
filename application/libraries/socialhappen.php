@@ -750,10 +750,11 @@ class SocialHappen{
 		$this->CI->load->vars(array(
 			'vars' => array(
 				'view_as' => '',
+				'user_image' => '',
 				'page_id' => $page_id,
 				'page_app_installed_id' => issetor($page['page_app_installed_id'],0),
 				'page_installed' => issetor($page['page_installed'],1),
-				'is_user_register_to_page' => $is_user_register_to_page ? TRUE : FALSE,
+				'is_user_register_to_page' => $is_user_register_to_page ? 1 : NULL,
 				'user_id' => $user['user_id'],
 				'app_mode' => $app_mode,
 				'app_install_id' => $app_install_id,

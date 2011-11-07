@@ -1,5 +1,6 @@
 <script type="text/javascript">
 	// window.onload = function(){
+	setTimeout( function(){
 		<?php if(isset($refresh_parent) && $refresh_parent) : ?>
 			window.parent.location.reload(); //Cannot use with facebook due site origin policy
 		<?php elseif(isset($refresh) && $refresh) : ?>
@@ -9,5 +10,6 @@
 		<?php elseif(isset($redirect)) : ?>
 			window.location.replace('<?php echo $redirect; ?>');
 		<?php endif; ?>	
+	}, 1000);
 	// };
 </script>
