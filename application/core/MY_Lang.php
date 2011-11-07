@@ -14,7 +14,8 @@ class MY_Lang extends CI_Lang {
 		// Because killer robots like unicorns!
 		if ($line === FALSE)
 		{
-			log_message('error', 'Could not find the language line "'.$input.'"');
+			//Changed error level to debug, test damn fast
+			log_message('debug', 'Could not find the language line "'.$input.'"');
 		}
 
 		return $line;
