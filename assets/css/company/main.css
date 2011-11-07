@@ -566,7 +566,15 @@ div.dragging-app ul li p span.button {
     -moz-border-radius: 9px;
     border-radius: 9px;
 }
-div.dragging-app ul li p {text-align: center; padding: 0 5px 7px;}
+div.dragging-app ul li p {text-align: center; padding: 0 5px 4px;}
+div.dragging-app ul li p.appname {
+	text-align: center;
+	padding: 0 0 7px 8px;
+	overflow: hidden;
+	width: 64px;
+	height: 17px;
+	line-height: 12px;
+	word-wrap: break-word;}
 div.dragging-app ul li.add-app {background: url(../../images/bg/bg_ul-dragdrop-app01.png) no-repeat !important;}
 div.dragging-app ul li.dragging {background: url(../../images/bg/bg_ul-dragdrop-app02.png) no-repeat; }
 div.dragging-app ul li:hover {background: url(../../images/bg/bg_ul-dragdrop-app02.png) no-repeat; cursor: pointer;}

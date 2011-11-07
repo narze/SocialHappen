@@ -577,7 +577,7 @@ class Tab extends CI_Controller {
 		//if is sh user redirect popup to "regged"
 		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
 			echo "You're already a Socialhappen user";
-			$this->socialhappen->login();
+			// $this->socialhappen->login(); // javascript already login, don't have to do again
 			if($app_install_id){
 				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
 			} else if ($page_id){
@@ -716,8 +716,11 @@ class Tab extends CI_Controller {
 
 		$this->load->library('form_validation');
 		$facebook_access_token = $this->input->get('facebook_access_token');
-		$facebook_user = $this->facebook->getUser($facebook_access_token);
-		$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
+		if(!$facebook_user = $this->facebook->getUser($facebook_access_token)){
+			$user_profile_image = $this->facebook->get_profile_picture($facebook_user['id']);
+		} else {
+			$user_profile_image = $this->input->get('user_image');
+		}
 		
 		$this->load->model('page_model','pages');
 		$page_user_fields = $this->pages->get_page_user_fields_by_page_id($page_id);
@@ -753,7 +756,7 @@ class Tab extends CI_Controller {
 				'page' => $page,
 				'page_user_fields' => $page_user_fields,
 				'facebook_user'=>$facebook_user,
-				'user_profile_picture'=>$user_facebook_image,
+				'user_profile_picture'=>$user_profile_image,
 				'app_install_id' => $app_install_id
 			)
 		);

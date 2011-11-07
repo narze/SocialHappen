@@ -112,13 +112,13 @@ sh_signup_page = function(fb_access_token){
 		
 		if(app_mode){
 			$.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token,
+				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token+'&user_image='+encodeURIComponent(user_image),
 				modal: true,
 				onComplete: applyOptionsToPageSignup
 			});
 		} else {
 			$.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'?facebook_access_token='+fb_access_token,
+				href: base_url+'tab/signup_page/'+page_id+'?facebook_access_token='+fb_access_token+'&user_image='+encodeURIComponent(user_image),
 				modal: true,
 				onComplete: applyOptionsToPageSignup
 			});
@@ -128,7 +128,6 @@ sh_signup_page = function(fb_access_token){
 
 sh_signup_complete = function(redirect_url){
 	(function($){
-		console.log(encodeURIComponent(redirect_url));
 		$.fancybox({
 			href: base_url+'tab/signup_complete?next=' + encodeURIComponent(redirect_url),
 			modal: true
@@ -226,9 +225,13 @@ onLoad = function(){
 			}, function(){ 
 				mouse_is_inside=false;
 			});
-
-			$("body").mouseup(function(){
-				if(! mouse_is_inside) $('.toggle').removeClass('active').find('ul').hide();
+	
+			$('body').hover(function(){ 
+				$(this).mouseup(function(){
+					if(! mouse_is_inside) $('.toggle').removeClass('active').find('ul').hide();
+				});
+			}, function(){ 
+				$('.toggle').removeClass('active').find('ul').slideUp();
 			});
 			
 			sh_popup();
@@ -368,7 +371,7 @@ sh_popup = function(){
 			// }
 		} else {
 			if(!is_user_register_to_page) {
-				sh_guest();
+				sh_signup_page('');
 			}
 		}
 		
@@ -520,6 +523,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		XD.postMessage({sh_message:'page_id',sh_page_id:page_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
 	} else if(message.data.sh_message === 'status'){ 
 		view_as = message.data.sh_status;
+		user_image = message.data.sh_user_image;
 		onLoad();
 		jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
 			jQuery('div#sh-bar').html(data);

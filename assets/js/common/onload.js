@@ -1,29 +1,19 @@
-$(function(){
-	function failsafeImg(){
-		for(var i=0;i<document.images.length;i++){
-			var cpyImg = new Image();
-			cpyImg.src = document.images[i].src;
-			if(!cpyImg.width){
-				className = document.images[i].getAttribute('class');
-				if(className == 'app-image'){
-					document.images[i].src = base_url + 'assets/images/default/app.png';
-				} else if(className == 'company-image'){
-					document.images[i].src = base_url + 'assets/images/default/company.png';
-				} else if(className == 'campaign-image'){
-					document.images[i].src = base_url + 'assets/images/default/campaign.png';
-				} else if(className == 'user-image'){
-					document.images[i].src = base_url + 'assets/images/default/user.png';
-				} else if(className == 'page-image'){
-					//do nothing
-				} else { 
-					// $.get(document.images[i].src).error(function(){console.log('ss');
-						// $(this).attr('src', cpyImg.src);
-					// });
-					//document.images[i].src = base_url +'assets/images/blank.png';
-				}
-			};
+
+	function failsafeImg(img) {
+		switch ( $(img).attr('class') ) {
+			case 'app-image' : $(img).attr('src', base_url + 'assets/images/default/app.png'); break;
+			case 'company-image' : $(img).attr('src', base_url + 'assets/images/default/company.png'); break;
+			case 'campaign-image' : $(img).attr('src', base_url + 'assets/images/default/campaign.png'); break;
+			case 'user-image' : $(img).attr('src', base_url + 'assets/images/default/user.png'); break;
+			case 'page-image' : break; //do nothing
+			default : break;
 		}
 	}
-	//failsafeImg();
-	$("*").ajaxStop(failsafeImg);
-});
+	
+	$(document).ready(function() {
+		var img = $(this).find('img.app-image, img.company-image, img.campaign-image, img.user-image, img.page-image').attr('onerror', 'failsafeImg(this)');
+		$("*").ajaxStop(function() {
+			$(this).find('img.app-image, img.company-image, img.campaign-image, img.user-image, img.page-image').attr('onerror', 'failsafeImg(this)');
+		});
+	});
+

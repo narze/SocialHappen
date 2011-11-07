@@ -94,7 +94,7 @@ XD.receiveMessage(function(message){ // Receives data from parent
 	} else if(message.data.sh_message === 'page_id'){
 		jQuery.getJSON(base_url+'xd/get_user/'+message.data.sh_page_id,function(json){
 			if(typeof json.user_id !== 'undefined'){
-				send({sh_message:'status',sh_status:json.user_role});
+				send({sh_message:'status',sh_status:json.user_role,sh_user_image:json.user_image});
 			}
 		
 		});
