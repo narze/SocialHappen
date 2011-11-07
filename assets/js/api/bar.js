@@ -226,9 +226,13 @@ onLoad = function(){
 			}, function(){ 
 				mouse_is_inside=false;
 			});
-
-			$("body").mouseup(function(){
-				if(! mouse_is_inside) $('.toggle').removeClass('active').find('ul').hide();
+	
+			$('body').hover(function(){ 
+				$(this).mouseup(function(){
+					if(! mouse_is_inside) $('.toggle').removeClass('active').find('ul').hide();
+				});
+			}, function(){ 
+				$('.toggle').removeClass('active').find('ul').slideUp();
 			});
 			
 			sh_popup();
