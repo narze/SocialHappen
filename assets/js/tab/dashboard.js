@@ -184,7 +184,7 @@ $(function(){
 	function get_user_notifications(page_index) {
 		set_loading();
 		$.getJSON(base_url+'tab/json_get_notifications/'+user_id+'/'+notifications_per_page+'/'+(page_index * notifications_per_page), function(json){
-			var template = $('div.notifications-list ul li:first-child');
+			var template = $('div.notifications-list ul li:first-child').removeClass('unread');
 			if(json.length == 0) {
 				template.remove();
 			} else {
