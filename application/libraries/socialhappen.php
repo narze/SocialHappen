@@ -786,15 +786,16 @@ class SocialHappen{
 	}
 	
 	/** 
-	 * Get app get-started
+	 * Get app setting template
 	 * @param $data
 	 * @author Weerapat P.
 	 */
-	function get_get_started($data = array()){
+	function get_setting_template($data = array()){
 		$app_install_id = issetor($data['app_install_id']);
 		$page_id = issetor($data['page_id']);
 		$user_id = issetor($data['user_id']);
 		$user_facebook_id = issetor($data['user_facebook_id']);
+		$view = issetor($data['view'], 'app_setting_template');
 		
 		//app
 		$this->CI->load->model('Installed_apps_model', 'app');
@@ -811,7 +812,7 @@ class SocialHappen{
 			'is_logged_in' => true, //$this->is_logged_in(),
 			'is_admin' => true, //$is_admin
 		));
-		return $this->CI->load->view('api/app_get_started', array(), TRUE);
+		return $this->CI->load->view('api/'.$view, array(), TRUE);
 	}
 	
 	/** 
