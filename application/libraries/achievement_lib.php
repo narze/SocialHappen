@@ -37,10 +37,12 @@ class Achievement_lib
 	function create_index(){
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
+    $this->CI->load->model('achievement_stat_page_model','achievement_stat_page');
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		
 		$this->CI->achievement_info->create_index();
 		$this->CI->achievement_stat->create_index();
+    $this->CI->achievement_stat_page->create_index();
 		$this->CI->achievement_user->create_index();
 	}
 	
@@ -313,14 +315,19 @@ class Achievement_lib
 	function increment_achievement_stat($app_id = NULL, $user_id = NULL,
 		 $info = array(), $amount = 1){
 		
-		if(empty($user_id) || !isset($app_id) || empty($info) ||
+		if(!isset($user_id) || !isset($app_id) || empty($info) ||
 			 !isset($info['app_install_id'])) return FALSE;
 		
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
 		
 		$increment_result = $this->CI->achievement_stat->increment($app_id, 
 			$user_id, $info, $amount);
-		
+    
+    if(isset($info['page_id'])){
+      $increment_page_result = $this->CI->achievement_stat_page->increment($info['page_id'], 
+        $user_id, $info, $amount);
+    }
+    
 		if($increment_result){
 			if(isset($info['action_id'])){
 				$this->_increment_platform_score($user_id, $app_id, $info['action_id'],

@@ -74,7 +74,7 @@ class Achievement_stat_page_model extends CI_Model {
         
       $inc = array();
       $result = TRUE;
-      if(isset($info['app_id']) && isset($info['action_id'])){
+      if(isset($info['action_id'])){
 
         $inc['action.' . $info['action_id'] . '.count'] = $amount;
 
