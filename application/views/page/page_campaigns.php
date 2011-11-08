@@ -33,7 +33,7 @@
 		<div class="blank-tab white-box-01" style="background-image: url(<?php echo base_url(); ?>assets/images/bg/blank_campaign.jpg);">
 			<h2>There's no campaign yet.</h2>
 			<p class="sub-title">What's campaign?</p>
-			<div class="new-item"><a class="bt-addnew_campaign" href="<?php echo base_url().'configs/'.$page_id; ?>"><span>Add new campaign</span></a></div>
+			<div class="new-item"><a class="bt-addnew_campaign" href="<?php echo base_url().'settings/page_apps/'.$page_id; ?>"><span>Add new campaign</span></a></div>
 			<hr />
 			<h3>Why do I have to create a campaign?</h3>
 			<ul>

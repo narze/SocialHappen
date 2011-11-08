@@ -129,6 +129,9 @@ class Page extends CI_Controller {
 		}
 	}
 	
+	/**
+	 * DEPRECATED
+	 */
 	function user_fields($page_id = NULL){
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access

@@ -557,7 +557,7 @@ class Page extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function config($page_id){
-		redirect(base_url().'configs/'.$page_id);
+		redirect(base_url().'settings/page_apps/'.$page_id);
 	}
 }
 

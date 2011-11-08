@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Configs extends CI_Controller {
+class Page_apps extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
@@ -17,7 +17,7 @@ class Configs extends CI_Controller {
 		$config_names_and_ids = array('signup_fields','badges','app');
 	
 		if(!in_array($config_name, $config_names_and_ids)){
-			redirect("configs?p={$page_id}&c=signup_fields");
+			redirect("settings/page_apps?p={$page_id}&c=signup_fields");
 		}
 		
 		$this->load->model('page_model','page');
@@ -134,8 +134,7 @@ class Configs extends CI_Controller {
 		} else {
 				
 		}
-	
 	}
 }
-/* End of file configs.php */
-/* Location: ./application/controllers/configs.php */
+/* End of file page_apps.php */
+/* Location: ./application/controllers/settings/page_apps.php */

@@ -5,7 +5,7 @@
 	  <ul class="form01">
 		<li><strong>Page URL:</strong><a href="<?php echo $page_facebook['link'];?>"><?php echo $page_facebook['name'];?></a></li>
 		<li><strong>Page status :</strong><?php echo $page['page_status'];?></li>
-		<li><strong>Config :</strong><a href="<?php echo base_url()."configs/{$page['page_id']}";?>">Config this page</a></li>
+		<li><strong>Config :</strong><a href="<?php echo base_url()."settings/page_apps/{$page['page_id']}";?>">Config this page</a></li>
 	  </ul>
 	</div>
 </div>

@@ -533,7 +533,7 @@ class Sync extends CI_Controller {
 				'app_maintainance' => 0, 
 				'app_show_in_list' => 1, 
 				'app_description' => 'RSS Feed', 
-				'app_secret_key' => '9c867d4b57a77c46a7e8ca3830d8fb8c ', 
+				'app_secret_key' => '9c867d4b57a77c46a7e8ca3830d8fb8c', 
 				'app_url' => 'https://apps.socialhappen.com/feedr?app_install_id={app_install_id}', 
 				'app_install_url' => 'https://apps.socialhappen.com/feedr/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
 				'app_install_page_url' => 'https://apps.socialhappen.com/feedr/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 

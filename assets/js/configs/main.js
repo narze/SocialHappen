@@ -236,7 +236,7 @@ $(function(){
 		config_name = get_query(url, 'c');
 		set_loading();
 		check_login(null,function(){
-			$('div#main').load(base_url+"configs/"+config_name+"/"+page_id,function(){
+			$('div#main').load(base_url+"settings/page_apps/"+config_name+"/"+page_id,function(){
 				if( config_name == 'signup_fields'){
 					signup_fields();
 				}
@@ -253,7 +253,7 @@ $(function(){
 		app_install_id = get_query(url, 'id');
 		set_loading();
 		check_login(null,function(){
-			$('div#main').load(base_url+"configs/app/"+app_install_id);
+			$('div#main').load(base_url+"settings/page_apps/app/"+app_install_id);
 			make_form(element);
 		});
 		return false;
