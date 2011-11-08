@@ -125,8 +125,21 @@ class Tab extends CI_Controller {
 	}
 	
 	function dashboard($page_id = NULL){
+		
+		if($page_id == NULL) 
+		{
+			$this->load->view("tab/page_under_construction");
+			return;
+		}
+		
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		
+		if( $page['page_installed'] == 0) 
+		{
+			$this->load->view("tab/page_under_construction", array('page' => $page));
+			return;
+		}
 		
 		//is_admin
 		$user_facebook_id = $this->FB->getUser();
@@ -148,20 +161,26 @@ class Tab extends CI_Controller {
 		
 		if($page)
 		{
-			if($page['page_installed'] == 0) 
-			{
-				$this->load->view("tab/page_under_construction");
-			}
-			else 
-			{
-				$this->load->view("tab/dashboard");
-			}
+			$this->load->view("tab/dashboard");
 		}
 	}
 	
 	function get_started($page_id = NULL){
+		
+		if($page_id == NULL) 
+		{
+			$this->load->view("tab/page_under_construction");
+			return;
+		}
+		
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		
+		if( $page['page_installed'] == 0) 
+		{
+			$this->load->view("tab/page_under_construction", array('page' => $page));
+			return;
+		}
 		
 		//is_admin
 		$user_facebook_id = $this->FB->getUser();
@@ -173,24 +192,28 @@ class Tab extends CI_Controller {
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
 		$is_logged_in = $this->socialhappen->is_logged_in();
 		
+		//get-started checklist
+		$checklist = array(
+			'config_page' => array(
+				array('done' => 1, 'link' => '#', 'name' => 'Configure Your Own Sign-Up Form'),
+				array('done' => 0, 'link' => '#', 'name' => 'View How Your Members See The Sign-Up Form')
+			),
+			'install_app' => '',
+			'tour' => ''
+		);
+		
 		$this->load->vars( array(
 			'page' => $page,
 			'is_liked' => $this->page['liked'],
 			'is_admin' => $is_admin,
-			'is_logged_in' => $is_logged_in
+			'is_logged_in' => $is_logged_in,
+			'checklist' => $checklist
 			)
 		);
 		
 		if($page)
 		{
-			if($page['page_installed'] == 0) 
-			{
-				$this->load->view("tab/page_under_construction");
-			}
-			else 
-			{
-				$this->load->view("tab/get_started");
-			}
+			$this->load->view("tab/get_started");
 		}
 	}
 	

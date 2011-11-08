@@ -1,9 +1,9 @@
 <div class="wrapper-content">	
 	<div class="account-data">
-      <div class="pic"><img src="<?php echo imgsize($page['page_image'],'normal');?>" alt="" /><span></span></div>
+      <div class="pic"><img src="<?php echo imgsize(issetor($page['page_image']),'normal');?>" alt="" /><span></span></div>
 		<div class="data">
-			<h1><?php echo $page['page_name'];?></h1>
-			<p><?php echo $page['page_detail'];?></p>
+			<h1><?php echo issetor($page['page_name'], 'Page not found');?></h1>
+			<p><?php echo issetor($page['page_detail']);?></p>
 		</div>
     </div>
 	<div id="under-construction">
