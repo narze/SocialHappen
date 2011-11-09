@@ -65,6 +65,7 @@ $route['settings/app_component/invite/(:any)'] = "settings/app_component_invite/
 $route['settings/app_component/sharebutton/(:num)'] = "settings/app_component_sharebutton/index/$1";
 $route['settings/app_component/sharebutton/(:any)'] = "settings/app_component_sharebutton/$1";
 $route['settings/page_apps/(:num)'] = "settings/page_apps/index/$1";
+$route['settings/page_signup_fields/(:num)'] = "settings/page_signup_fields/index/$1";
 
 
 /* End of file routes.php */

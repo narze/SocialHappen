@@ -684,7 +684,7 @@
 							//Signup Form
 							ul_element.append('<li><p><img class="app-image" src="'+imgsize(base_url+'assets/images/apps/page-signup/app_image_s.png','normal')+'" />'
 								+'<span class="button">'
-								+'<a class="bt-setting_app" href="'+base_url+'settings/page_apps?p='+page_id+'&c=signup_fields"><span>Setting</span></a>'
+								+'<a class="bt-setting_app" href="'+base_url+'settings/page_signup_fields/'+page_id+'"><span>Setting</span></a>'
 								+'</span>'
 								+'</p><p class="appname">'+ 'Page Signup Form' +'</p><input type="hidden" class="app_install_id" value="'+0+'" /></li>');
 							for(i in json) {

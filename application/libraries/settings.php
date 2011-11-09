@@ -98,4 +98,74 @@ class Settings{
 			$this->CI-> parser -> parse('settings/settings_view_a', $data);
 		
 	}
+
+	/**
+	 * Get page_app settings view
+	 *
+	 * @author Manassarn M.
+	 */
+	function view_page_app_settings($page_id = NULL, $config_name = NULL, $app_install_id = NULL){
+		if($page_id){
+			// if($this->CI->input->get('p')){
+			// 	$page_id = $this->CI->input->get('p');
+			// }
+			// $config_name = $this->CI->input->get('c');
+			// $app_install_id = $this->CI->input->get('id');
+			$config_names_and_ids = array('signup_fields','badges','app');
+		
+			if(!in_array($config_name, $config_names_and_ids)){
+				redirect("settings/page_apps/{$page_id}");
+			}
+			
+			$this->CI->load->model('page_model','page');
+			$this->CI->load->model('company_model','company');
+			$this->CI->load->model('installed_apps_model','installed_apps');
+			$page = $this->CI->page->get_page_profile_by_page_id($page_id);
+			$company = $this->CI-> company -> get_company_profile_by_company_id($page['company_id']);
+			$user = $this->CI->socialhappen->get_user();
+			$this->CI->load->vars(array(
+				'page' => $page,
+				'company' => $company,
+				'user' => $user,
+				'page_apps' => $this->CI->installed_apps->get_installed_apps_by_page_id($page_id)
+			));
+			$data = array(
+				'header' => $this->CI-> socialhappen -> get_header( 
+					array(
+						'title' => 'App configs',
+						'vars' => array('page_id'=>$page_id,
+										'config_name' => $config_name,
+										'app_install_id' => $app_install_id),
+						'script' => array(
+							'common/functions',
+							'common/jquery.form',
+							'common/bar',
+							'configs/main',
+							'common/fancybox/jquery.fancybox-1.3.4.pack'
+						),
+						'style' => array(
+							'common/main',
+							'common/platform',
+							'common/fancybox/jquery.fancybox-1.3.4'
+						)
+					)
+				),
+				'go_back' => $this->CI-> load -> view('configs/go_back', NULL, TRUE),
+				'company_image_and_name' => $this->CI-> load -> view('company/company_image_and_name', NULL, TRUE),
+				'breadcrumb' => $this->CI-> load -> view('common/breadcrumb', 
+					array('breadcrumb' => 
+						array( 
+							$page['page_name'] => base_url() . "page/{$page['page_id']}",
+							'Config' => NULL
+							)
+						)
+					,
+				TRUE),
+				'sidebar' => $this->CI-> load -> view('configs/sidebar', NULL, TRUE),
+				'main' => $this->CI-> load -> view("configs/main", NULL, TRUE),
+				'footer' => $this->CI-> socialhappen -> get_footer()
+				);
+			$this->CI-> parser -> parse('configs/configs_view', $data);
+		}
+	}
 }
