@@ -47,7 +47,6 @@ $route['app/(:num)'] = "app/index/$1";
 $route['campaign/(:num)'] = "campaign/index/$1";
 $route['tab/(:num)'] = "tab/index/$1";
 $route['facebook/(:num)'] = "tab/index/$1";
-$route['configs/(:num)'] = "configs/index/$1";
 $route['settings/account/(:num)'] = "settings/account/index/$1";
 $route['settings/campaign/(:num)'] = "settings/campaign/index/$1";
 $route['settings/company_pages/(:num)'] = "settings/company_pages/index/$1";
@@ -65,6 +64,7 @@ $route['settings/app_component/invite/(:any)'] = "settings/app_component_invite/
 $route['settings/app_component/sharebutton/(:num)'] = "settings/app_component_sharebutton/index/$1";
 $route['settings/app_component/sharebutton/(:any)'] = "settings/app_component_sharebutton/$1";
 $route['settings/page_apps/(:num)'] = "settings/page_apps/index/$1";
+$route['settings/page_signup_fields/(:num)'] = "settings/page_signup_fields/index/$1";
 
 
 /* End of file routes.php */

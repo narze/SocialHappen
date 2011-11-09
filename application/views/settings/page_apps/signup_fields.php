@@ -21,7 +21,7 @@
 		</li>
 	</ul>
 	<h2><span>Your Sign Up Form</span></h2>
-	<?php echo form_open("settings/page_apps/signup_fields/{$page['page_id']}", array('class' => 'signup-fields')); 
+	<?php echo form_open("settings/page_signup_fields/view/{$page['page_id']}", array('class' => 'signup-fields')); 
 	if($updated) echo 'Updated'; ?>
 	<input type="hidden" name="submit-form" value=1></input>
 	<ul class="submitting fields">

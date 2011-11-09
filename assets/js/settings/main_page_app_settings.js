@@ -228,17 +228,23 @@ $(function(){
 			}
 		}
 	}
+
+	function badges(){
+		console.log('badges');
+	}
 	
 	$('ul.platform-apps li a').live('click',function(){
 		element = $(this);			
 		url = element.attr('href');
-		page_id = get_query(url, 'p');
-		config_name = get_query(url, 'c');
+		// page_id = get_query(url, 'p');
+		// config_name = get_query(url, 'c');
 		set_loading();
 		check_login(null,function(){
-			$('div#main').load(base_url+"settings/page_apps/"+config_name+"/"+page_id,function(){
-				if( config_name == 'signup_fields'){
+			$('div#main').load(url,function(){
+				if( element.attr('id') == 'signup-fields'){
 					signup_fields();
+				} else if (element.attr('id') == 'badges'){
+					badges();
 				}
 			});
 			make_form(element);
@@ -250,10 +256,9 @@ $(function(){
 	$('ul.page-apps li a').live('click',function(){
 		element = $(this);			
 		url = element.attr('href');
-		app_install_id = get_query(url, 'id');
 		set_loading();
 		check_login(null,function(){
-			$('div#main').load(base_url+"settings/page_apps/app/"+app_install_id);
+			$('div#main').load(url);
 			make_form(element);
 		});
 		return false;
