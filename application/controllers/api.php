@@ -1562,10 +1562,57 @@ class Api extends CI_Controller {
 			'page_id' => $app['page_id'],
 			'user_id' => $user_id,
 			'user_facebook_id' => $user_facebook_id,
+			'view' => 'app_get_started'
 		);
 		
 		$response = array('status' => 'OK');
-		$response['html'] = $this->socialhappen->get_get_started($data);
+		$response['html'] = $this->socialhappen->get_setting_template($data);
+		echo json_encode($response);
+	}
+	
+	/**
+	 * Request app setting template
+	 * @author Weerapat P.
+	 */
+	function setting_template(){
+		
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$user_id = $this->input->get('user_id', TRUE);
+		
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_facebook_id && !$user_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)');
+			echo json_encode(array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
+			return;
+		}
+		
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
+			return;
+		}
+		
+		// authenticate app install with $app_install_id and $app_install_secret_key
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+			return;
+		}
+		
+		//get page_id
+		$this->load->model('Installed_apps_model', 'app');
+		$app = $this->app->get_app_profile_by_app_install_id($app_install_id);
+		
+		$data = array(
+			'app_install_id' => $app_install_id,
+			'page_id' => $app['page_id'],
+			'user_id' => $user_id,
+			'user_facebook_id' => $user_facebook_id
+		);
+		
+		$response = array('status' => 'OK');
+		$response['html'] = $this->socialhappen->get_setting_template($data);
 		echo json_encode($response);
 	}
 

@@ -6,12 +6,12 @@
 			<p>Sed ut perspiciatis unde omnis iste natus saer sit.</p>
 		</div>
 	
-		<ul class="apps" style="background:white url(../../images/bg/bg_line-gray.gif) 265px 0 repeat-y;position:relative"><?php
+		<ul class="apps" style="background-color:white;position:relative"><?php
 		foreach($apps as $app) 
 		{	?>
 			<li id="app-<?php echo $app['app_id']; ?>" class="app" style="display:inline-block;width:100px;height:100px;position:relative;overflow:hidden;padding:20px;text-align:center;">
 				<a href="apps/<?php echo $app['app_id']; ?>">
-					<img src="<?php echo $app['app_image']; ?>" title="<?php echo $app['app_name']; ?>" style="width:64px;height:64px;" />
+					<img src="<?php echo $app['app_image']; ?>" class="app-image" title="<?php echo $app['app_name']; ?>" style="width:64px;height:64px;" />
 				</a>
 				<p>
 					<a href="apps/<?php echo $app['app_id']; ?>" style="display:block;width:100px;height:18px;overflow:hidden;font-weight:bold;"><?php echo $app['app_name']; ?></a>

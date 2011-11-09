@@ -9,6 +9,7 @@ class achievement_lib_test extends CI_Controller {
 		$this->load->library('unit_test');
 		$this->load->model('achievement_info_model','achievement_info');
 		$this->load->model('achievement_stat_model','achievement_stat');
+    $this->load->model('achievement_stat_page_model','achievement_stat_page');
 		$this->load->model('achievement_user_model','achievement_user');
 		$this->load->library('achievement_lib');
 	}
@@ -30,6 +31,7 @@ class achievement_lib_test extends CI_Controller {
 	function start_test(){
 		$this->achievement_info->drop_collection();
 		$this->achievement_stat->drop_collection();
+    $this->achievement_stat_page->drop_collection();
 		$this->achievement_user->drop_collection();
 	}
 	

@@ -702,7 +702,7 @@
 									+'<a class="bt-update_app" href="'+base_url+'app/'+json[i].app_install_id+'"><span>Update</span></a>'
 									+'<a class="bt-setting_app" href="'+base_url+'o_setting/'+page_id+'/app/'+json[i].app_install_id+'"><span>Setting</span></a>'
 									+'</span>'
-									+'</p><p>'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
+									+'</p><p class="appname">'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 							}			
 						}
 						showing_page_of_installed_app_in_page=1;

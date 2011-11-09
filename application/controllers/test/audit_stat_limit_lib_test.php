@@ -263,7 +263,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 	}
 	
 	function drop_test(){
-		$this->stats->drop_collection();
+		//$this->stats->drop_collection();
 	}
 }
 
