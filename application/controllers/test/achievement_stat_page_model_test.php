@@ -247,11 +247,12 @@ class achievement_stat_page_model_test extends CI_Controller {
     // $this->unit->run($result['app']['9']['action']['9']['app_install']['7']['count'], 20, 'get', print_r($result, TRUE));
   }
 
-  function score_incremet_test(){
+  function score_increment_test(){
     $page_id = 1;
     $user_id = 2;
     $campaign_id = 10;
-    $info = array('campaign_score' => 'campaign_score',
+    $info = array('campaign_score' => 10,
+                  'page_score' => 10,
                   'campaign_id' => $campaign_id);
     $amount = 10;
     
@@ -262,7 +263,7 @@ class achievement_stat_page_model_test extends CI_Controller {
     $this->unit->run($result['page_score'], 10, 'get', print_r($result, TRUE));
     
     $amount = -5;
-    $info = array('page_score' => 'page_score');
+    $info = array('page_score' => -5);
                   
     $result = $this->achievement_stat_page->increment($page_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
