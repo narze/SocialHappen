@@ -132,7 +132,7 @@ class Settings{
 			$data = array(
 				'header' => $this->CI-> socialhappen -> get_header( 
 					array(
-						'title' => 'App configs',
+						'title' => 'App settings',
 						'vars' => array('page_id'=>$page_id,
 										'config_name' => $config_name,
 										'app_install_id' => $app_install_id),
@@ -140,7 +140,7 @@ class Settings{
 							'common/functions',
 							'common/jquery.form',
 							'common/bar',
-							'configs/main',
+							'settings/main_page_app_settings',
 							'common/fancybox/jquery.fancybox-1.3.4.pack'
 						),
 						'style' => array(
@@ -150,7 +150,7 @@ class Settings{
 						)
 					)
 				),
-				'go_back' => $this->CI-> load -> view('configs/go_back', NULL, TRUE),
+				'go_back' => $this->CI-> load -> view('settings/go_back', NULL, TRUE),
 				'company_image_and_name' => $this->CI-> load -> view('company/company_image_and_name', NULL, TRUE),
 				'breadcrumb' => $this->CI-> load -> view('common/breadcrumb', 
 					array('breadcrumb' => 
@@ -161,11 +161,11 @@ class Settings{
 						)
 					,
 				TRUE),
-				'sidebar' => $this->CI-> load -> view('configs/sidebar', NULL, TRUE),
-				'main' => $this->CI-> load -> view("configs/main", NULL, TRUE),
+				'sidebar' => $this->CI-> load -> view('settings/page_apps/sidebar', NULL, TRUE),
+				'main' => $this->CI-> load -> view("settings/page_apps/main", NULL, TRUE),
 				'footer' => $this->CI-> socialhappen -> get_footer()
 				);
-			$this->CI-> parser -> parse('configs/configs_view', $data);
+			$this->CI-> parser -> parse('settings/page_apps/page_apps_view', $data);
 		}
 	}
 }

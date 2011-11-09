@@ -47,7 +47,6 @@ $route['app/(:num)'] = "app/index/$1";
 $route['campaign/(:num)'] = "campaign/index/$1";
 $route['tab/(:num)'] = "tab/index/$1";
 $route['facebook/(:num)'] = "tab/index/$1";
-$route['configs/(:num)'] = "configs/index/$1";
 $route['settings/account/(:num)'] = "settings/account/index/$1";
 $route['settings/campaign/(:num)'] = "settings/campaign/index/$1";
 $route['settings/company_pages/(:num)'] = "settings/company_pages/index/$1";

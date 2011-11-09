@@ -59,7 +59,7 @@ class Page_signup_fields extends CI_Controller {
 				
 			}
 			
-			$this->load->view('configs/signup_fields');
+			$this->load->view('settings/page_apps/signup_fields');
 		}
 	}
 }
