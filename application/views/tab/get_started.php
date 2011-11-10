@@ -37,9 +37,21 @@
 			<h3>Configure Member System</h3>
 			<div class="icon-help">?</div>
 			<div class="tips"><div><span class="arrow top"></span><p>SocialHappen alllows you to have your own in-page Membership System which you can access all your members' profiles in one place. Every Apps you installed from SocialHappen share the same registration system. Configure your own sign up form as you wish !</p></div></div>
-			<ul>
-				<li><span class="todo"></span><a>Configure Your Own Sign-Up Form</a></li>
-				<li><span class="todo"></span><a>View How Your Members See The Sign-Up Form</a></li>
+			<ul><?php 
+				foreach($checklist['config_page'] as $list) 
+				{ ?>
+					<li>
+						<span class="<?php echo $list['done'] ? 'done' : 'todo'; ?>"></span><?php 
+						if($list['done']) 
+						{ ?>
+							<del><?php echo $list['name']; ?></del><?php 
+						} 
+						else 
+						{ ?>
+							<a href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
+						} ?>
+					</li><?php 
+				} ?>
 			</ul>
 			<hr />
 		</div>
