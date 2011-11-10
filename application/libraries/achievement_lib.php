@@ -12,6 +12,10 @@ class Achievement_lib
 	
 	private $CI;
 	
+  private $INVITE_ACTION_ID = 113;
+  
+  private $SHARE_ACTION_ID = 108;
+  
 	/**
 	 *	------------------------------------------------------------------------
 	 *	CONSTRUCTOR
@@ -323,9 +327,17 @@ class Achievement_lib
 		$increment_result = $this->CI->achievement_stat->increment($app_id, 
 			$user_id, $info, $amount);
     
-    if(isset($info['page_id'])){
-      $increment_page_result = $this->CI->achievement_stat_page->increment($info['page_id'], 
+    // increment page score if is SHARE or INVITE action
+    if($increment_result && isset($info['page_id'])
+     && ($info['action_id'] == $this->INVITE_ACTION_ID
+      || $info['action_id'] == $this->SHARE_ACTION_ID)){
+      
+      $increment_page_result = $this->CI->achievement_stat_page
+        ->increment($info['page_id'], 
         $user_id, $info, $amount);
+      if(isset($info['campaign_id'])){
+        $this->_increment_page_score($info['page_id'], $user_id, $info, $amount);
+      }
     }
     
 		if($increment_result){
@@ -339,6 +351,35 @@ class Achievement_lib
 		return $increment_result;
 	}
 	
+  function _increment_page_score($page_id, $user_id, $info, $amount){
+    $this->CI->load->model('app_component_model','app_component_model');
+    
+    $campaign = $this->CI->app_component_model
+      ->get_by_campaign_id($info['campaign_id']);
+    
+    if(isset($campaign)){
+      $page_score = 0;
+      $campaign_score = 0;
+      
+      if($info['action_id'] == $this->INVITE_ACTION_ID){
+        $page_score = $campaign['invite']['criteria']['score'];
+        $campaign_score = $campaign['invite']['criteria']['score'];
+      }else if($info['action_id'] == $this->SHARE_ACTION_ID){
+        $page_score = $campaign['sharebutton']['criteria']['score'];
+        $campaign_score = $campaign['sharebutton']['criteria']['score'];
+      }
+      
+      if($page_score > 0 || $campaign_score > 0){
+        $info = array('campaign_score' => $campaign_score,
+                      'page_score' => $page_score,
+                      'campaign_id' => $info['campaign_id']);
+        $increment_page_score_result = $this->CI->achievement_stat_page
+          ->increment($page_id, $user_id, $info, $amount);
+      }
+      
+    }
+  }
+  
 	function _increment_platform_score($user_id = NULL, $app_id = NULL,
 		 $action_id = NULL, $amount = 0){
 		if(empty($user_id) || !isset($app_id) || empty($action_id)

@@ -554,6 +554,90 @@ class achievement_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 1, 'increment', print_r($result, TRUE));
 	}
 
+  function increment_page_score_by_share_test(){
+    $app_id = 1;
+    $page_id = 6;
+    $user_id = 2;
+    $app_install_id = 3;
+    $campaign_id = 4;
+    $action_id = 108; // share
+    $info = array('app_install_id' => $app_install_id,
+                  'page_id' => $page_id,
+                  'campaign_id' => $campaign_id,
+                  'action_id' => $action_id);
+    $amount = 1;
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    
+    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $this->unit->run($result['campaign'][$campaign_id]['score'], 10, 'get', print_r($result, TRUE));
+    $this->unit->run($result['page_score'], 10, 'get', print_r($result, TRUE));
+    $this->unit->run($result['action'][$action_id]['count'], 1, 'get', print_r($result, TRUE));
+    
+    
+    $app_id = 2;
+    $page_id = 6;
+    $user_id = 2;
+    $app_install_id = 3;
+    $campaign_id = 4;
+    $action_id = 108; // share
+    $info = array('app_install_id' => $app_install_id,
+                  'page_id' => $page_id,
+                  'campaign_id' => $campaign_id,
+                  'action_id' => $action_id);
+    $amount = 1;
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    
+    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $this->unit->run($result['campaign'][$campaign_id]['score'], 20, 'get', print_r($result, TRUE));
+    $this->unit->run($result['page_score'], 20, 'get', print_r($result, TRUE));
+    $this->unit->run($result['action'][$action_id]['count'], 2, 'get', print_r($result, TRUE));
+
+  }
+
+  function increment_page_score_by_invite_test(){
+    $app_id = 1;
+    $page_id = 6;
+    $user_id = 2;
+    $app_install_id = 3;
+    $campaign_id = 4;
+    $action_id = 113; // invite
+    $info = array('app_install_id' => $app_install_id,
+                  'page_id' => $page_id,
+                  'campaign_id' => $campaign_id,
+                  'action_id' => $action_id);
+    $amount = 1;
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    
+    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $this->unit->run($result['campaign'][$campaign_id]['score'], 30, 'get', print_r($result, TRUE));
+    $this->unit->run($result['page_score'], 30, 'get', print_r($result, TRUE));
+    $this->unit->run($result['action'][$action_id]['count'], 1, 'get', print_r($result, TRUE));
+    
+  }
+  
+  function increment_page_score_by_invalid_test(){
+    $app_id = 1;
+    $page_id = 6;
+    $user_id = 2;
+    $app_install_id = 3;
+    $campaign_id = 4;
+    $action_id = 999999; // invalid
+    $info = array('app_install_id' => $app_install_id,
+                  'page_id' => $page_id,
+                  'campaign_id' => $campaign_id,
+                  'action_id' => $action_id);
+    $amount = 1;
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    
+    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $this->unit->run($result['campaign'][$campaign_id]['score'], 30, 'get', print_r($result, TRUE));
+    $this->unit->run($result['page_score'], 30, 'get', print_r($result, TRUE));
+  }
+
 	
 	function end_test(){
 		// $this->achievement_info->drop_collection();
