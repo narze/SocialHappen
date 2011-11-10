@@ -12,9 +12,9 @@ class Achievement_lib
 	
 	private $CI;
 	
-  private $INVITE_ACTION_ID = 113;
+	private $INVITE_ACTION_ID = 113;
   
-  private $SHARE_ACTION_ID = 108;
+	private $SHARE_ACTION_ID = 108;
   
 	/**
 	 *	------------------------------------------------------------------------
@@ -41,12 +41,12 @@ class Achievement_lib
 	function create_index(){
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
-    $this->CI->load->model('achievement_stat_page_model','achievement_stat_page');
+    	$this->CI->load->model('achievement_stat_page_model','achievement_stat_page');
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		
 		$this->CI->achievement_info->create_index();
 		$this->CI->achievement_stat->create_index();
-    $this->CI->achievement_stat_page->create_index();
+    	$this->CI->achievement_stat_page->create_index();
 		$this->CI->achievement_user->create_index();
 	}
 	
@@ -459,10 +459,26 @@ class Achievement_lib
 			$stat_criteria = array('app_id' => $app_id,
 														 'user_id' => $user_id);
 			$score = NULL;
+      
+      $stat_page_criteria = array();
+      
+      if(isset($info['page_id'])){
+        $stat_page_criteria = array('page_id' => $info['page_id'],
+                                    'user_id' => $user_id);
+      }
 			
 			foreach($achievement['criteria'] as $key => $value){
 				if($key != 'score'){
 					$stat_criteria[$key] = array('$gte' => $value);
+					
+          $explode = explode('.', $key, 2); // explode to array('page', 'action.10.count')
+          
+          $is_page = $explode[0] === 'page';
+          
+          if(isset($info['page_id']) && $is_page && count($explode) === 2){
+            $stat_page_criteria[$explode[1]] = array('$gte' => $value);
+          }
+          
 				}else{
 					$score = $value;
 				}
@@ -476,6 +492,13 @@ class Achievement_lib
 			$matched_achievement = 
 				$this->CI->achievement_stat->list_stat($stat_criteria);
 			
+      if(count($stat_page_criteria) > 2){
+        $matched_achievement_page = 
+          $this->CI->achievement_stat_page->list_stat($stat_page_criteria);
+      }
+      
+      
+      
 			if($score != NULL){
 				$matched_score = 
 					count($this->CI->achievement_stat->list_stat(
@@ -487,6 +510,11 @@ class Achievement_lib
 			
 			if(count($matched_achievement) > 0 && $matched_score){
 				
+        if(count($stat_page_criteria) > 2 
+          && !(count($matched_achievement_page) === 0)){
+            return NULL;
+          }
+        
 				$achieved_info = array();
 				if(isset($info['page_id'])){
 					$achieved_info['page_id'] = $info['page_id'];
