@@ -1,0 +1,1 @@
+<a class="a-campaign-settings" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Campaign settings</a>

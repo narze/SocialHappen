@@ -36,8 +36,8 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($array['campaign_status'] == "Inactive",'is_true','campaign_status == "Inactive"');
 		$this->unit->run($array['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($array['campaign_all_member'],'is_string','campaign_all_member');
-		$this->unit->run($array['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
-		$this->unit->run($array['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
+		$this->unit->run($array['campaign_start_date'],'is_string','campaign_start_date');
+		$this->unit->run($array['campaign_end_date'],'is_string','campaign_end_date');
 		
 		$this->unit->run($array['company_id'],'is_string','company_id');
 		$this->unit->run($array['app_id'],'is_string','app_id');

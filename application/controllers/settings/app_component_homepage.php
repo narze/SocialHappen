@@ -6,12 +6,43 @@ class App_component_homepage extends CI_Controller {
 		parent::__construct();
 	}
 	
-	function index($s,$r,$t){
-		echo $s.$r.$t;
-	}
+	function index($app_install_id = NULL, $campaign_id = NULL){
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('homepage_for_non_fans', 'Homepage for non-fans', 'trim|xss_clean');			
+		$this->form_validation->set_rules('graphic', 'Graphic', 'max_length[255]');			
+		$this->form_validation->set_rules('message', 'Message', 'required|trim|xss_clean');
+			
+		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 	
-	function test(){
-	echo 's';
+		$this->load->model('app_component_model','app_component');
+		if ($this->form_validation->run() == FALSE)
+		{
+			$homepage = $this->app_component->get_homepage_by_campaign_id($campaign_id);
+			$vars = array(
+				'campaign_id' => $campaign_id,
+				'app_install_id' => $app_install_id,
+				'homepage' => $homepage
+			);
+			$this->load->vars($vars);
+			$this->load->view('settings/app_component/homepage');
+		}
+		else 
+		{
+			$form_data = array(
+				'enable' => set_value('homepage_for_non_fans') == 1,
+				'image' => set_value('graphic'),
+				'message' => set_value('message')
+			);
+		
+			if ($this->app_component->update_homepage_by_campaign_id($campaign_id, $form_data) == TRUE)
+			{
+				redirect('settings/campaign/'.$app_install_id.'?homepage_settings_success=1');
+			}
+			else
+			{
+				log_message('error','An error occurred saving your information. Please try again later');
+			}
+		}
 	}
 }
 /* End of file app_component_homepage.php */

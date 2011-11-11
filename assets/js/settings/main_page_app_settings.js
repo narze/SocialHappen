@@ -258,7 +258,7 @@ $(function(){
 		url = element.attr('href');
 		set_loading();
 		check_login(null,function(){
-			$('div#main').load(url);
+			$('div#main').load(url, app_settings);
 			make_form(element);
 		});
 		return false;
@@ -287,4 +287,109 @@ $(function(){
 	}
 	
 
+
+
+	function app_settings(){
+		$('a.a-campaign-settings').click(app_campaign);
+
+		function app_campaign(){
+			url = $(this).attr('href');
+
+			$('div#main').load(url, function(){	
+				$(this).off('click')
+				.on('click', 'a.a-new-campaign', new_campaign)
+				.on('click', 'a.a-update-campaign', update_campaign)
+				.on('click', 'a.a-component-homepage',homepage_component)
+				.on('click', 'a.a-component-invite', invite_component)
+				.on('click', 'a.a-component-sharebutton', sharebutton_component)
+				.on('click', 'a.a-back-to-campaign-list', back_to_campaign_list)
+				.on('click', 'a.a-back-to-app-settings', back_to_app_settings);
+			});
+
+			function new_campaign(){
+				url = $(this).attr('href');
+				$('div#main').load(url, new_campaign_form);
+
+				function new_campaign_form(){
+					$('input#campaign_start_date, input#campaign_end_date').datepicker({"dateFormat": "yy-mm-dd"});
+					$('form.new-campaign-form').on('submit',function(e) {
+						e.stopPropagation();
+						$(this).ajaxSubmit({target:'#new-campaign-form',replaceTarget:true,success:new_campaign_form});
+						return false;
+					});
+				}
+				return false;
+			}
+
+			function update_campaign(){
+				url = $(this).attr('href');
+				$('div#main').load(url, update_campaign_form);
+
+				function update_campaign_form(){
+					$('input#campaign_start_date, input#campaign_end_date').datepicker({"dateFormat": "yy-mm-dd"});
+					$('form.update-campaign-form').on('submit', function(e) {
+						e.stopPropagation();
+						$(this).ajaxSubmit({target:'#update-campaign-form',replaceTarget:true,success:update_campaign_form});
+						return false;
+					});
+				}
+				return false;
+			}
+
+			function homepage_component(){
+				url = $(this).attr('href');
+				$('div#main').load(url, homepage_component_form);
+				
+				function homepage_component_form(){
+					$('form.component-homepage-form').on('submit', function(e) {
+						e.preventDefault();
+						$(this).ajaxSubmit({target:'#component-homepage-form',replaceTarget:true,success:homepage_component_form});
+						return false;
+					});
+				}
+				return false;
+			}
+
+			function invite_component(){
+				url = $(this).attr('href');
+				$('div#main').load(url, invite_component_form);
+				
+				function invite_component_form(){
+					$('form.component-invite-form').on('submit', function(e) {
+						e.preventDefault();
+						$(this).ajaxSubmit({target:'#component-invite-form',replaceTarget:true,success:invite_component_form});
+						return false;
+					});
+				}
+				return false;
+			}
+
+			function sharebutton_component(){
+				url = $(this).attr('href');
+				$('div#main').load(url, sharebutton_component_form);
+				
+				function sharebutton_component_form(){
+					$('form.component-sharebutton-form').on('submit', function(e) {
+						e.preventDefault();
+						$(this).ajaxSubmit({target:'#component-sharebutton-form',replaceTarget:true});
+						return false;
+					});
+				}
+				return false;
+			}
+			
+			function back_to_app_settings(){
+				app_install_id = $(this).data('appInstallId');
+				$('ul.page-apps li a.app[data-appinstallid="'+app_install_id+'"]').click();
+				return false;
+			}
+			
+			function back_to_campaign_list(){
+				url = $(this).attr('href');
+				$('div#main').load(url, app_campaign);
+				return false;
+			}
+			return false;
+		}
+	}
 });
