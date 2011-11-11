@@ -66,7 +66,12 @@
 					<img class="user-image" src="<?php echo imgsize("https://graph.facebook.com/{$facebook_user['id']}/picture",'square');?>" alt="" />
 					<?php echo issetor($facebook_user['name']); ?>
 					<ul>
-						<li><?php echo anchor("home/login",'&raquo Login');?></li>
+						<li><?php 
+							$next = NULL;
+							if(isset($_GET['next'])){
+								$next = '?next='.urlencode($_GET['next']);	
+							}
+							echo anchor("home/login".$next,'&raquo Login');?></li>
 						<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 					</ul>
 				</li>

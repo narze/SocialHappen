@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Home extends CI_Controller {
-
+	
 	function __construct(){
 		parent::__construct();
 		$this->load->library('form_validation');
@@ -339,6 +339,8 @@ class Home extends CI_Controller {
 		if($this->socialhappen->login()){
 			if(isset($redirect_url)){
 				redirect($redirect_url);
+			} else if($next = $this->input->get('next')){
+				redirect($next);
 			} else {
 				redirect('?logged_in=true');
 			}

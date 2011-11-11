@@ -183,9 +183,10 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => field_option('INT', 2, $default, $null, $autoinc, TRUE),
 							    'campaign_active_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
-							    'campaign_start_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-							    'campaign_end_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
+							    'campaign_start_date' => field_option('DATE', $constraint, $default , $null, $autoinc, $unsigned),
+							    'campaign_end_date' => field_option('DATE', $constraint, $default , $null, $autoinc, $unsigned),
 								'campaign_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'campaign_end_message' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned)
 							),
 							'company' => array(
 							    'company_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -616,9 +617,10 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => 1, 
 							    'campaign_active_member' => 2,
 							    'campaign_all_member' => 10, 
-							    'campaign_start_timestamp' => '2011-05-19 18:29:43',
-							    'campaign_end_timestamp' => '2012-05-18 00:00:00',
+							    'campaign_start_date' => '2011-05-19',
+							    'campaign_end_date' => '2012-05-18',
 								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_end_message' => 'It is ended'
 							),
 							array(
 							    'campaign_id' => 2, 
@@ -628,9 +630,10 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => 2, 
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
-							    'campaign_start_timestamp' => '2011-05-18 18:05:46', 
-							    'campaign_end_timestamp' => '2011-06-18 00:00:00',
+							    'campaign_start_date' => '2011-05-18', 
+							    'campaign_end_date' => '2011-06-18',
 								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_end_message' => 'It is ended'
 							)
 						);
 		$this->db->insert_batch('campaign', $campaign);
@@ -763,7 +766,8 @@ class Sync extends CI_Controller {
 						    'page_name' => 'SH Test', 
 						    'page_detail' => 'detail', 
 						    'page_all_member' => 22, 
-						    'page_new_member' => 222, 
+						    'page_new_member' => 222,
+							'page_installed' => 0, 
 						    'page_image' => base_url().'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 							'page_user_fields' => json_encode(array(
 								1 => array(
@@ -796,7 +800,8 @@ class Sync extends CI_Controller {
 						'page_name' => 'SH Beta', 
 						'page_detail' => 'detail', 
 						'page_all_member' => 10, 
-						'page_new_member' => 100, 
+						'page_new_member' => 100,
+						'page_installed' => 1, 
 						'page_image' => base_url().'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 						'page_user_fields' => json_encode(array(
 							1 => array(
@@ -842,7 +847,8 @@ class Sync extends CI_Controller {
 						'page_name' => 'SH Beta', 
 						'page_detail' => 'detail', 
 						'page_all_member' => 10, 
-						'page_new_member' => 100, 
+						'page_new_member' => 100,
+						'page_installed' => 0, 
 						'page_image' => base_url().'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 						'page_user_fields' => NULL,
 						'facebook_tab_url' => ''

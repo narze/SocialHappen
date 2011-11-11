@@ -148,7 +148,7 @@ class Campaign extends CI_Controller {
 							'campaign_status_id' => $this->input->post('campaign_status_id'),
 							'campaign_active_member' => $this->input->post('campaign_active_member'),
 							'campaign_all_member' => $this->input->post('campaign_all_member'),
-							'campaign_end_timestamp' => $this->input->post('campaign_end_timestamp')
+							'campaign_end_date' => $this->input->post('campaign_end_date')
 							);
 		if($campaign_id = $this->campaigns->add_campaign($post_data)){
 			$result['status'] = 'OK';
