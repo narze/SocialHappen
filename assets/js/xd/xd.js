@@ -77,21 +77,23 @@ var XD = function(){
 }();
 	
 XD.receiveMessage(function(message){ // Receives data from parent
-	if(message.data.sh_message == 'login'){
+	if(message.data.sh_message == 'login'){ //bar.js
 		// alert('login');
 		jQuery('<iframe />', {
 			name: 'sh_frame_login',
 			id:   'sh_frame_login',
 			src: base_url+'xd/login'
 		}).appendTo('body');
-	} else if(message.data.sh_message == 'logout'){
+        send({sh_message:'logged in'});
+	} else if(message.data.sh_message == 'logout'){ //bar.js
 		// alert('logout');
 		jQuery('<iframe />', {
 			name: 'sh_frame_logout',
 			id:   'sh_frame_logout',
 			src: base_url+'xd/logout'
 		}).appendTo('body');
-	} else if(message.data.sh_message === 'page_id'){
+        send({sh_message:'logged out'});
+	} else if(message.data.sh_message === 'page_id'){ //bar.js
 		jQuery.getJSON(base_url+'xd/get_user/'+message.data.sh_page_id,function(json){
 			if(typeof json.user_id !== 'undefined'){
 				send({sh_message:'status',sh_status:json.user_role,sh_user_image:json.user_image});
