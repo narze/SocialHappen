@@ -61,7 +61,8 @@ class App_component_invite extends CI_Controller {
 			}
 			else
 			{
-				log_message('error','An error occurred saving your information. Please try again later');
+				log_message('error','Error in update_invite_by_campaign_id '.print_r($form_data, TRUE));
+				redirect('settings/campaign/'.$app_install_id.'?error=1');
 			}
 		}
 	}

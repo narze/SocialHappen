@@ -41,7 +41,7 @@ echo form_open('settings/app_component/sharebutton/'.$app_install_id.'/'.$campai
 </p>
 
 <p>
-        <label for="share_description">Share Description</label>
+        <label for="share_description">Share Description <span class="required">*</span></label>
 	<?php echo form_error('share_description'); ?>
 	<br />
 							
