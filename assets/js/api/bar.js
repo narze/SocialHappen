@@ -1,5 +1,5 @@
 sh_guest = function(){
-	(function(jQuery){
+	(function($){
 		jQuery.fancybox({
 			href: base_url+'tab/guest',
 			onComplete: function (){
@@ -125,7 +125,7 @@ sh_signup_page = function(fb_access_token){
 			}
 			
 			$('#signup-form form div.form li[data-field-options]').each(function(){
-				var textInput = $('div.inputs', this).find('input[type="text"], textarea'); //only texts & textareas
+				var textInput = jQuery('div.inputs', this).find('input[type="text"], textarea'); //only texts & textareas
 				var fieldOptions = $(this).data('fieldOptions');
 				if(fieldOptions!=null){
 					$.each(fieldOptions, function(i, val){
@@ -360,7 +360,7 @@ sh_popup = function(){
 					jQuery.fancybox.close();
 				});
 				*/
-				sh_jq.ajax({
+				$.ajax({
 					async:false,
 					type: 'GET',
 					url: base_url+'api/get_started',
@@ -528,7 +528,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		view_as = message.data.sh_status;
 		user_image = message.data.sh_user_image;
 		onLoad();
-		sh_jq.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
+		jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
 			sh_jq('div#sh-bar').html(data);
 		});
 	} else if(message.data.sh_message === "logged in facebook"){ //login_button.php
@@ -540,7 +540,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			sh_signup_page(message.data.fb_access_token);
 		} 
 	} else if(message.data.sh_message === "logged out"){ //xd.js
-		sh_jq.fancybox({
+		jQuery.fancybox({
 			href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
 		});
 	}
