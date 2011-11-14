@@ -1512,7 +1512,7 @@ class Api extends CI_Controller {
 		
 		$response = array('status' => 'OK');
 		$response['html'] = $this->socialhappen->get_bar($data);
-		$response['css'] = base_url() . 'css/api_app_bar.css';
+		$response['css'] = base_url() . 'assets/css/common/api_app_bar.css';
 		echo json_encode($response);
 	}
 

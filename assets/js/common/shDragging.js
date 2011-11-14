@@ -88,14 +88,15 @@
 					shDragging.show_installed_app_in_page(page_id,facebook_page_id);
 					$(".head-box-app-list b").html(page_name);
 					
+					var right_panel = $('.right-panel');
 					if(page_installed == 0) //Page installation not complete
 					{
-						$(".right-panel .dragging-app").html('');
-						$(".right-panel p.alert").remove();
+						right_panel.find('.dragging-app').empty();
+						right_panel.find('p.alert').remove();
 						return false;
 					}
 					
-					$(".right-panel").html($(".dragging-event-right-app-list").html());
+					right_panel.html($(".dragging-event-right-app-list").html());
 					shDragging.show_available_app_in_page(page_id);
 				}
 			},
@@ -284,15 +285,16 @@
 			},
 			show_installed_app_in_company : function() {
 				if(mode == 'company'){
+					var left_panel = $(".left-panel");
 					jQuery.ajax({
 						async:true,
 						url: base_url + "company/json_get_installed_apps_not_in_page/" + company_id,
 						dataType: "json",
 						beforeSend: function() {
-							$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
+							left_panel.find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 						},
 						success: function(json) {
-							var ul_element=$(".left-panel").find('.dragging-app div').find('ul');
+							var ul_element=left_panel.find('.dragging-app div').find('ul');
 							ul_element.append('<li class="add-app"></li>');
 							for(i in json) {
 								ul_element.append(
@@ -378,12 +380,13 @@
 							});
 							$(".head-dragging-app strong").html(json.length+' Applications installed');
 							$(".head-dragging-app").show();
-							$(".left-panel").find('.loading').remove();
+							left_panel.find('.loading').remove();
 						},
 					});
 				}
 			},
 			show_available_page_in_company : function() {
+				var left_panel = $(".left-panel");
 				if(mode == 'company'){
 					FB.api(
 					  {
@@ -428,15 +431,15 @@
 								ul_element.find('li[data-hasaddedapp="true"] img').after('<span class=\"button\"><a class=\"bt-installed-app\">Installed</a></span>');
 								// //for real use : don't allow re-install
 								// ul_element.find('li.draggable[data-hasaddedapp="false"]').draggable({ 
-									// connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
+									// connectToSortable: left_panel.find('.dragging-page').find('ul'),
 									// helper: "clone",
 									// revert: "invalid",
 									// drag: function() {
-										// $(".left-panel").find('.dragging-page div').addClass('in-action');
+										// left_panel.find('.dragging-page div').addClass('in-action');
 										// $("div.dragging-page ul").css('height','auto');
 									// },
 									// stop: function() {
-										// $(".left-panel").find('.dragging-page div').removeClass('in-action');
+										// left_panel.find('.dragging-page div').removeClass('in-action');
 										// $("div.dragging-page ul").css('height','155px');
 									// }
 								// });
@@ -447,15 +450,15 @@
 								// });
 								//for debug
 								ul_element.find('li.draggable').draggable({ 
-									connectToSortable: $(".left-panel").find('.dragging-page').find('ul'),
+									connectToSortable: left_panel.find('.dragging-page').find('ul'),
 									helper: "clone",
 									revert: "invalid",
 									drag: function() {
-										$(".left-panel").find('.dragging-page div').addClass('in-action');
+										left_panel.find('.dragging-page div').addClass('in-action');
 										$("div.dragging-page ul").css('height','auto');
 									},
 									stop: function() {
-										$(".left-panel").find('.dragging-page div').removeClass('in-action');
+										left_panel.find('.dragging-page div').removeClass('in-action');
 										$("div.dragging-page ul").css('height','155px');
 									}
 								});
@@ -468,6 +471,7 @@
 				}
 			},
 			show_available_app_in_company : function() {
+				var left_panel = $(".left-panel");
 				if(mode == 'company'){
 					jQuery.ajax({
 						async:true,
@@ -495,15 +499,15 @@
 							last_page_of_available_item=Math.ceil(json.length/available_item_per_page);
 							shDragging.refresh_available_item_panel();
 							ul_element.find('li.draggable').draggable({
-								connectToSortable: $(".left-panel").find('.dragging-app div').find('ul'),
+								connectToSortable: left_panel.find('.dragging-app div').find('ul'),
 								helper: "clone",
 								revert: "invalid",
 								drag: function() {
-									$(".left-panel").find('.dragging-app div').addClass('in-action');
+									left_panel.find('.dragging-app div').addClass('in-action');
 									$("div.dragging-app ul").css('height','auto');
 								},
 								stop: function() {
-									$(".left-panel").find('.dragging-app div').removeClass('in-action');
+									left_panel.find('.dragging-app div').removeClass('in-action');
 									$("div.dragging-app ul").css('height','255px');
 								}
 							});
@@ -590,13 +594,14 @@
 			},
 			
 			refresh_available_item_panel : function() {
+				var right_panel = $(".right-panel");
 				var ul_element;
-				if($(".right-panel").find('.dragging-app').size()>0){
-					ul_element=$(".right-panel").find('.dragging-app ul');
+				if(right_panel.find('.dragging-app').size()>0){
+					ul_element=right_panel.find('.dragging-app ul');
 				} else {
-					ul_element=$(".right-panel").find('.dragging-page ul');
+					ul_element=right_panel.find('.dragging-page ul');
 				}
-				var strip_element=$(".right-panel").find('.strip ul').empty();
+				var strip_element=right_panel.find('.strip ul').empty();
 			
 				if(mode == 'company'){
 					for(var i=1; i<=last_page_of_available_item && last_page_of_available_item != 1 ;i++) {
@@ -649,6 +654,7 @@
 				}
 			},
 			show_installed_app_in_page : function(page_id,facebook_page_id) {
+				var left_panel = $(".left-panel");
 				if(mode == 'company'){	//If page is not installed, don't show apps
 					if(shDragging.get_page_installed(page_id)==0)
 					{
@@ -668,10 +674,10 @@
 					dataType: "json",
 					beforeSend: function() {
 						if(mode == 'company'){
-							$(".left-panel").find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
+							left_panel.find('.dragging-app div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 							$(".head-box-app-list").hide();
 						} else if (mode == 'page'){
-							$(".left-panel").find('.dragging-app div').html("<div class='loading'></div><ul></ul>");
+							left_panel.find('.dragging-app div').html("<div class='loading'></div><ul></ul>");
 							$(".head-dragging-app").hide();
 						}
 					},
@@ -679,7 +685,7 @@
 						var ul_element;
 						if(mode == 'company'){
 							$(".notice").hide();
-							ul_element=$(".left-panel").find('.dragging-app div').find('ul').css('min-height', '127px').empty();
+							ul_element=left_panel.find('.dragging-app div').find('ul').css('min-height', '127px').empty();
 							ul_element.append('<li class="add-app"></li>');
 							//Signup Form
 							ul_element.append('<li><p><img class="app-image" src="'+imgsize(base_url+'assets/images/apps/page-signup/app_image_s.png','normal')+'" />'
@@ -695,7 +701,7 @@
 								+'</p><p class="appname">'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 							}
 						} else if (mode == 'page'){
-							ul_element=$(".left-panel").find('.dragging-app div').find('ul').css('min-height', '127px').empty();
+							ul_element=left_panel.find('.dragging-app div').find('ul').css('min-height', '127px').empty();
 							for(i in json){
 								ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" />'
 									+'<span class="button">'
@@ -807,24 +813,26 @@
 						
 						$(".head-box-app-list strong").html(json.length+' Applications installed in');
 						$(".head-box-app-list").show();
-						$(".left-panel").find('.loading').remove();
+						left_panel.find('.loading').remove();
 					}
 				});
 			},
 			show_available_app_in_page : function(page_id) {
+				var left_panel = $(".left-panel");
+				var right_panel = $(".right-panel");
 				jQuery.ajax({
 					async:true,
 					url: base_url + "company/json_get_not_installed_apps/" + company_id + "/" + page_id,
 					dataType: "json",
 					beforeSend: function() {
 						if(mode == 'company'){
-							$(".right-panel").find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
+							right_panel.find('.dragging-app').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 						} else if (mode == 'page'){
-							$(".right-panel").find('.dragging-app').html("<div class='loading'></div><ul></ul>");
+							right_panel.find('.dragging-app').html("<div class='loading'></div><ul></ul>");
 						}
 					},
 					success: function(json) {
-						var ul_element=$(".right-panel").find('.dragging-app').find('ul');
+						var ul_element=right_panel.find('.dragging-app').find('ul');
 						for(i in json) {
 							ul_element.append(
 							'<li class="draggable"><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" alt="" width="64" height="64" /></p>'
@@ -842,27 +850,27 @@
 						ul_element.find('li.draggable').draggable({
 							connectToSortable: (function(){
 								if(mode == 'company'){
-									return $(".left-panel").find('.box-app-list').find('ul');
+									return left_panel.find('.box-app-list').find('ul');
 								} else if (mode == 'page'){
-									return $(".left-panel").find('.dragging-app div').find('ul');
+									return left_panel.find('.dragging-app div').find('ul');
 								}
 							})(),
 							helper: "clone",
 							revert: "invalid",
 							drag: function() {
-								$(".left-panel").find('.dragging-app div').addClass('in-action');
+								left_panel.find('.dragging-app div').addClass('in-action');
 								if(mode == 'company'){
 									$("div.dragging-app ul").css('height','auto');
 								}
 							},
 							stop: function() {
-								$(".left-panel").find('.dragging-app div').removeClass('in-action');
+								left_panel.find('.dragging-app div').removeClass('in-action');
 								if(mode == 'company'){
 									$("div.dragging-app ul").css('height','255px');
 								}
 							}
 						});
-						$(".right-panel").find('.loading').remove();
+						right_panel.find('.loading').remove();
 					}
 				});
 			},
