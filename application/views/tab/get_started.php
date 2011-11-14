@@ -38,11 +38,12 @@
 			<div class="icon-help">?</div>
 			<div class="tips"><div><span class="arrow top"></span><p>SocialHappen alllows you to have your own in-page Membership System which you can access all your members' profiles in one place. Every Apps you installed from SocialHappen share the same registration system. Configure your own sign up form as you wish !</p></div></div>
 			<ul><?php 
-				foreach($checklist['config_page'] as $list) 
+			if(isset($checklist['config_page'])) {
+				foreach($checklist['config_page'] as $list)
 				{ ?>
 					<li>
-						<span class="<?php echo $list['done'] ? 'done' : 'todo'; ?>"></span><?php 
-						if($list['done']) 
+						<span class="<?php echo $list['status'] ? 'done' : 'todo'; ?>"></span><?php 
+						if($list['status']) 
 						{ ?>
 							<del><?php echo $list['name']; ?></del><?php 
 						} 
@@ -51,7 +52,8 @@
 							<a href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
 						} ?>
 					</li><?php 
-				} ?>
+				} 
+			}?>
 			</ul>
 			<hr />
 		</div>
@@ -59,9 +61,23 @@
 			<h3>Install First Application To Your Page</h3>
 			<div class="icon-help">?</div>
 			<div class="tips"><div><span class="arrow top"></span><p>We design a platform that allows you to select what matches your business objectives. Each App has different purpose, so you can choose to install the one that fits. For example, Quiz App is for education and engagement purpose. Youtube App is for broadcasting your video channel on Facebook. Choose your first App from Application List.</p></div></div>
-			<ul>
-				<li><span class="todo"></span><a>Go To Application List</a></li>
-				<li><span class="todo"></span><a>See Where I Can Manage My Applications</a></li>
+			<ul><?php 
+			if(isset($checklist['install_app'])) {
+				foreach($checklist['install_app'] as $list) 
+				{ ?>
+					<li>
+						<span class="<?php echo $list['status'] ? 'done' : 'todo'; ?>"></span><?php 
+						if($list['status']) 
+						{ ?>
+							<del><?php echo $list['name']; ?></del><?php 
+						} 
+						else 
+						{ ?>
+							<a href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
+						} ?>
+					</li><?php 
+				} 
+			} ?>
 			</ul>
 			<hr />
 		</div>
@@ -69,12 +85,23 @@
 			<h3>Take A Tour</h3>
 			<div class="icon-help">?</div>
 			<div class="tips"><div><span class="arrow top"></span><p>See what else you can do with SocialHappen.</p></div></div>
-			<ul>
-				<li><span class="done"></span><del>Learn How to Manage Your Page and Applications</del></li>
-				<li><span class="todo"></span><a>Learn How Your Members See SocialHappen Tab</a></li>
-				<li><span class="todo"></span><a>Learn How Your Members Interact With Your Page</a></li>
-				<li><span class="todo"></span><a>Learn How to View Members' Profiles and Their Activities</a></li>
-				<li><span class="todo"></span><a>Learn How to Manage Campaign</a></li>
+			<ul><?php 
+			if(isset($checklist['tour'])) {
+				foreach($checklist['tour'] as $list) 
+				{ ?>
+					<li>
+						<span class="<?php echo $list['status'] ? 'done' : 'todo'; ?>"></span><?php 
+						if($list['status']) 
+						{ ?>
+							<del><?php echo $list['name']; ?></del><?php 
+						} 
+						else 
+						{ ?>
+							<a href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
+						} ?>
+					</li><?php 
+				} 
+			}?>
 			</ul>
 			<hr />
 		</div>
