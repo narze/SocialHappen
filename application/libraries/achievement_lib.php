@@ -439,8 +439,8 @@ class Achievement_lib
 		}
 		// echo "<br /><br />";
 		// echo json_encode($candidate_achievement_criteria);
-		
-		// echo '<br/>$candidate_achievement_criteria:<br/>';
+// 		
+		// echo '<br/><h1>$candidate_achievement_criteria:</h1><br/>';
 		// echo '<pre>';
 		// var_dump($candidate_achievement_criteria);
 		// echo '</pre>';
@@ -467,6 +467,9 @@ class Achievement_lib
                                     'user_id' => $user_id);
       }
 			
+      $page_criteria_couunt = 0;
+      $score_criteria_couunt = 0;
+      
 			foreach($achievement['criteria'] as $key => $value){
 				if($key != 'score'){
 					$stat_criteria[$key] = array('$gte' => $value);
@@ -477,27 +480,46 @@ class Achievement_lib
           
           if(isset($info['page_id']) && $is_page && count($explode) === 2){
             $stat_page_criteria[$explode[1]] = array('$gte' => $value);
+            $page_criteria_couunt++;
           }
           
 				}else{
 					$score = $value;
+          $score_criteria_couunt++;
 				}
 			}
+      
+      $page_achievement_only = count($achievement['criteria'])
+       == ($page_criteria_couunt + $score_criteria_couunt);
 
 			// echo '<br/>$stat_criteria:<br/>';
 			// echo '<pre>';
 			// var_dump($stat_criteria);
 			// echo '</pre>';
+//       
+      // echo "<br /><br />";
+      // echo json_encode($stat_page_criteria);
+      
+      // echo '<br/>$stat_page_criteria:<br/>';
+      // echo '<pre>';
+      // var_dump($stat_page_criteria);
+      // echo '</pre>';
 			
 			$matched_achievement = 
 				$this->CI->achievement_stat->list_stat($stat_criteria);
 			
+			// echo "<br /><br />";
+			// echo count($stat_page_criteria);
+      // echo "<br /><br />";
       if(count($stat_page_criteria) > 2){
         $matched_achievement_page = 
           $this->CI->achievement_stat_page->list_stat($stat_page_criteria);
       }
       
-      
+      // echo '<br/>$matched_achievement_page:<br/>';
+      // echo '<pre>';
+      // var_dump($matched_achievement_page);
+      // echo '</pre>';
       
 			if($score != NULL){
 				$matched_score = 
@@ -507,13 +529,24 @@ class Achievement_lib
 			}else{
 				$matched_score = TRUE;
 			}
-			
-			if(count($matched_achievement) > 0 && $matched_score){
+      
+			// echo '<br/>';
+      // echo 'X ' . count($matched_achievement) . ' '
+       // . $matched_score . ' ' . $page_achievement_only . ' ';
+      
+      
+      
+			if((count($matched_achievement) > 0 || $page_achievement_only)
+       && $matched_score){
 				
+        // echo 'Y';
+        
         if(count($stat_page_criteria) > 2 
-          && !(count($matched_achievement_page) === 0)){
-            return NULL;
+          && (count($matched_achievement_page) === 0)){
+            continue;
           }
+        
+        // echo 'Z';
         
 				$achieved_info = array();
 				if(isset($info['page_id'])){
