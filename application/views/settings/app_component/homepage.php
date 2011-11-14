@@ -13,7 +13,7 @@ echo form_open('settings/app_component/homepage/'.$app_install_id.'/'.$campaign_
 	<label for="homepage_for_non_fans">Homepage for non-fans</label>
 </p> 
 <p>
-        <label for="graphic">Graphic</label>
+        <label for="graphic">Graphic <span class="required">*</span></label>
         <?php echo form_error('graphic'); ?>
         <br /><input id="graphic" type="text" name="graphic" maxlength="255" value="<?php echo set_value('graphic', $homepage['image']); ?>"  />
 </p>

@@ -67,25 +67,17 @@ class Get_started_model extends CI_Model {
 	
 	/**
 	 * Add get_started_info
-	 * @param $lists_data = array(
-	 *			array('id'=>101, 'link' => '#', 'name' => 'Configure Your Own Sign-Up Form'),
-	 *			array(...)
-	 *		)
-	 * )
+	 * @param $item_data = [id, type, link, name]
 	 * @author Weerapat P.
 	 */
-	function add_get_started_info($items_data = array()){
-		if(count($items_data) < 1) return FALSE;
-		foreach($items_data as $item_id=>$item) {
-			$check_args = !empty($item['id']) && !empty($item['type']) && !empty($item['link']) && !empty($item['name']);
-			if(!$check_args){
-				return FALSE;
-			} else { 
-				$result = $this->get_started_info->insert($item);
-			}
-			if($result == FALSE) return FALSE;
+	function add_get_started_info($item_data = array()){
+		if(count($item_data) < 1) return FALSE;
+		$check_args = !empty($item_data['id']) && !empty($item_data['type']) && !empty($item_data['link']) && !empty($item_data['name']);
+		if(!$check_args){
+			return FALSE;
+		} else { 
+			return $this->get_started_info->insert($item_data);
 		}
-		return TRUE;
 	}
 
 	/**
@@ -99,19 +91,38 @@ class Get_started_model extends CI_Model {
 	 */
 	function add_get_started_stat($data = array()){
 		if(count($data['items']) < 1) return FALSE;
-		$result = $this->get_started_stat->findOne(array('id' => (int)$data['id'], 'type' => $data['type']));
-		if($result) return FALSE;
+		$data['id'] = (int)$data['id'];
+		$result = $this->get_started_stat->findOne(array('id' => $data['id'], 'type' => $data['type']));
 		sort($data['items']);
-		foreach($data['items'] as $item_id) {
-			$check_args = !empty($item_id);
-			if(!$check_args){
-				return FALSE;
-			} else { 
-				$result = $this->get_started_stat->insert($data);
-			}
-			if($result == FALSE) return FALSE;
+
+		if($result) { //Stat exist
+			return $this->update_get_started_stat_items($data['id'], $data['type'], $data['items']);
 		}
-		return TRUE;
+		return $this->get_started_stat->insert($data);
+	}
+
+	/**
+	 * Get all page get_started todo list
+	 * @author Weerapat P.
+	 */
+	function get_all_page_todo_list(){
+		$cursor = $this->get_started_info->find( array( 
+			'$or' => array( array('type' => 'page'), array('type' => 'all') )
+			) 
+		);
+		return iterator_to_array($cursor, false);
+	}
+
+	/**
+	 * Get all app get_started todo list
+	 * @author Weerapat P.
+	 */
+	function get_all_app_todo_list(){
+		$cursor = $this->get_started_info->find( array( 
+			'$or' => array( array('type' => 'app'), array('type' => 'all') )
+			) 
+		);
+		return iterator_to_array($cursor, false);
 	}
 
 	/**
@@ -119,20 +130,21 @@ class Get_started_model extends CI_Model {
 	 * @param $id
 	 * @author Weerapat P.
 	 */
-	function get_list_by_page_id($id = NULL){
+	function get_todo_list_by_page_id($id = NULL){
+		if(!$id) return FALSE;
+		$lists = $this->get_all_page_todo_list();
 		$result = $this->get_started_stat->findOne(array('id' => (int)$id, 'type' => 'page'));
 		$result = obj2array($result);
-		$items = array();
-		if(count($result['items'])) {
-			foreach($result['items'] as $item_id)
-			{
-				$info = $this->get_started_info->findOne(array('id' => (int)$item_id));
-				$info = obj2array($info);
-				unset($info['_id']);
-				$items[] = $info;
+		if(count($lists)) {
+			foreach($lists as &$item){
+				if( is_array($result['items']) && in_array($item['id'], $result['items']) ) {
+					$item['status'] = 1;
+				} else {
+					$item['status'] = 0;
+				}
 			}
-		}
-		return $items;
+		}	
+		return $lists;
 	}
 
 	/**
@@ -140,20 +152,21 @@ class Get_started_model extends CI_Model {
 	 * @param $id
 	 * @author Weerapat P.
 	 */
-	function get_list_by_app_id($id = NULL){
+	function get_todo_list_by_app_id($id = NULL){
 		$result = $this->get_started_stat->findOne(array('id' => (int)$id, 'type' => 'app'));
+		if(!$result) return FALSE;
 		$result = obj2array($result);
-		$items = array();
-		if(count($result['items'])) {
-			foreach($result['items'] as $item_id)
-			{
-				$info = $this->get_started_info->findOne(array('id' => (int)$item_id));
-				$info = obj2array($info);
-				unset($info['_id']);
-				$items[] = $info;
+		$lists = $this->get_all_app_todo_list();
+		if(count($lists)) {
+			foreach($lists as &$item){
+				if( is_array($result['items']) && in_array($item['id'], $result['items']) ) {
+					$item['status'] = 1;
+				} else {
+					$item['status'] = 0;
+				}
 			}
 		}
-		return $items;
+		return $lists;
 	}
 
 	/**
@@ -164,16 +177,25 @@ class Get_started_model extends CI_Model {
 	 * @author Weerapat P.
 	 */
 	function update_get_started_stat_items($id = NULL, $type = NULL, $items = array()){
+		
 		$check_args = !empty($id) && !empty($type) && count($items);
 		if(!$check_args){
 			return FALSE;
+
 		} else {
 			$result = $this->get_started_stat->findOne(array('id' => (int)$id, 'type' => $type));
 			$result = obj2array($result);
-			$items = array_merge($items, $result['items']);
+			if(count($result['items']) > 0 ) {
+				$items = array_merge($items, $result['items']);
+				$items = array_unique($items);
+				sort($result['items']);
+			}
 			sort($items);
+
+			if( $items == $result['items'] ) return TRUE; //if nothing change after merged, do nothing
+
 			return $this->get_started_stat->update(array('id'=>(int)$id, 'type'=>$type),
-				array('$set' => array( 'items'=>$items ) )
+				array('$set' => array( 'items'=> $items ) )
 			);
 		}
 	}

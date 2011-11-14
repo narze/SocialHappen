@@ -2,16 +2,16 @@
 
 class Get_started_model_test extends CI_Controller {
 	
-	var $all_get_started_data = array(
-		array('id'=>101, 'type' =>'page', 'link' => '#', 'name' => 'Configure Your Own Sign-Up Form'),
-		array('id'=>102, 'type' =>'page', 'link' => '#', 'name' => 'View How Your Members See The Sign-Up Form'),
-		array('id'=>103, 'type' =>'app', 'link' => '#', 'name' => 'Go To Application List'),
-		array('id'=>104, 'type' =>'app', 'link' => '#', 'name' => 'See Where I Can Manage My Applications'),
-		array('id'=>105, 'type' =>'all', 'link' => '#', 'name' => 'Learn How to Manage Your Page and Applications'),
-		array('id'=>106, 'type' =>'all', 'link' => '#', 'name' => 'Learn How Your Members See SocialHappen Tab'),
-		array('id'=>107, 'type' =>'all', 'link' => '#', 'name' => 'Learn How Your Members Interact With Your Page'),
-		array('id'=>108, 'type' =>'all', 'link' => '#', 'name' => 'Learn How to View Members Profiles and Their Activities'),
-		array('id'=>109, 'type' =>'all', 'link' => '#', 'name' => 'Learn How to Manage Campaign')
+	var $all_get_started_info = array(
+		array('id'=>101, 'type' =>'page', 'group' =>'config_page', 'link' => '#', 'name' => 'Configure Your Own Sign-Up Form'),
+		array('id'=>102, 'type' =>'page', 'group' =>'config_page', 'link' => '#', 'name' => 'View How Your Members See The Sign-Up Form'),
+		array('id'=>103, 'type' =>'all', 'group' =>'install_app', 'link' => '#', 'name' => 'Go To Application List'),
+		array('id'=>104, 'type' =>'all', 'group' =>'install_app', 'link' => '#', 'name' => 'See Where I Can Manage My Applications'),
+		array('id'=>105, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How to Manage Your Page and Applications'),
+		array('id'=>106, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How Your Members See SocialHappen Tab'),
+		array('id'=>107, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How Your Members Interact With Your Page'),
+		array('id'=>108, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How to View Members Profiles and Their Activities'),
+		array('id'=>109, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How to Manage Campaign')
 	);
 
 	var $done_list_data = array(
@@ -53,15 +53,18 @@ class Get_started_model_test extends CI_Controller {
 	 * Test add_get_started_info()
 	 */
 	function add_get_started_info_test(){
-		$data = $this->all_get_started_data;
-		$result = $this->get_started->add_get_started_info($data);
+		$all_get_started_info = $this->all_get_started_info;
+		$result = TRUE;
+		foreach($all_get_started_info as $data) {
+			if($this->get_started->add_get_started_info($data) == FALSE) { $result = FALSE; break; }
+		}
 		$this->unit->run($result, TRUE,'Add get_started with full data');
 		
-		$this->unit->run($this->get_started->count_all_info(), count($data), 'count all get_started_info');
+		$this->unit->run($this->get_started->count_all_info(), count($all_get_started_info), 'count all get_started_info');
 	}
 
 	function add_get_started_info_fail_test(){
-		$data = $this->all_get_started_data;
+		$data = $this->all_get_started_info;
 		unset($data[0]['id']);
 		$result = $this->get_started->add_get_started_info($data);
 		$this->unit->run($result, FALSE,'Add empty id to get_started info');
@@ -83,49 +86,79 @@ class Get_started_model_test extends CI_Controller {
 		$result = $this->get_started->add_get_started_stat($done_list_data);
 		$this->unit->run($result, TRUE,'Add get_started_stat');
 		$this->unit->run($this->get_started->count_all_stat(), 2, 'count all get_started_stat');
+
+		$done_list_data['id'] = 4;
+		$done_list_data['type'] = 'page';
+		$done_list_data['items'] = array(101,102);
+		unset($done_list_data['_id']);
+		$result = $this->get_started->add_get_started_stat($done_list_data);
+		$this->unit->run($result, TRUE,'Add get_started_stat');
+		$this->unit->run($this->get_started->count_all_stat(), 3, 'count all get_started_stat');
+
+		$done_list_data['id'] = 4;
+		$done_list_data['type'] = 'page';
+		$done_list_data['items'] = array(106);
+		unset($done_list_data['_id']);
+		$result = $this->get_started->add_get_started_stat($done_list_data);
+		$this->unit->run($result, TRUE,'Add get_started_stat');
+		$this->unit->run($this->get_started->count_all_stat(), 3, 'count all get_started_stat');
 	}
 
 	function add_get_started_stat_fail_test(){
 		$done_list_data = $this->done_list_data;
 		unset($done_list_data['_id']);
+		$done_list_data['id'] = 1;
 		$done_list_data['items'] = array(108);
 		$result = $this->get_started->add_get_started_stat($done_list_data);
-		$this->unit->run($result, FALSE,'Add more item(s) to get_started stat');
+		$this->unit->run($result, TRUE,'Add more item(s) to get_started stat');
 	}
 
-	function get_list_by_page_id_test(){
+	function get_all_page_todo_list_test() {
+		$result = $this->get_started->get_all_page_todo_list();
+		$this->unit->run(count($result), count($this->all_get_started_info), 'get all page todo list');
+	}
+
+	function get_all_app_todo_list_test() {
+		$result = $this->get_started->get_all_page_todo_list();
+		$this->unit->run(count($result), count($this->all_get_started_info), 'get all app todo list');
+	}
+
+	function get_todo_list_by_page_id_test(){
 		$done_list_data = $this->done_list_data;
-		//echo '<h2>ITEMS</h2><pre>'; print_r($this->all_get_started_data); echo '</pre>';
-		$items = $this->all_get_started_data;
-		$result = $this->get_started->get_list_by_page_id(1);
+		//echo '<h2>ITEMS</h2><pre>'; print_r($this->all_get_started_info); echo '</pre>';
+		$items = $this->all_get_started_info;
+		$result = $this->get_started->get_todo_list_by_page_id(1);
 		//echo '<h2>RESULT</h2><pre>'; print_r($result); echo '</pre>';
-		$this->unit->run(count($result), count($done_list_data['items']), 'get list by page_id');
+		$this->unit->run(count($result), count($this->all_get_started_info), 'get list by page_id');
 		
-		$result = $this->get_started->get_list_by_page_id('1');
-		$this->unit->run(count($result), count($done_list_data['items']), 'get list by page_id');
+		$result = $this->get_started->get_todo_list_by_page_id('1');
+		$this->unit->run(count($result), count($this->all_get_started_info), 'get list by page_id');
 		
-		$result = $this->get_started->get_list_by_page_id(3); 
-		$this->unit->run(count($result), 3, 'get list by page_id');
-		
-		$result = $this->get_started->get_list_by_page_id(5);
-		$this->unit->run(count($result), 0, 'get list by page_id');
+		$result = $this->get_started->get_todo_list_by_page_id(3); 
+		$this->unit->run($result['1']['status'], 1, 'get list by page_id');
 	}
 
-	function get_list_by_page_id_fail_test(){
-		$result = $this->get_started->get_list_by_page_id(0);
+	function get_todo_list_by_page_id_fail_test(){
+		$result = $this->get_started->get_todo_list_by_page_id(0);
 		$this->unit->run($result, FALSE, 'not found');
 		
-		$result = $this->get_started->get_list_by_page_id();
+		$result = $this->get_started->get_todo_list_by_page_id();
 		$this->unit->run($result, FALSE, 'not found');
 		
-		$result = $this->get_started->get_list_by_page_id(NULL);
+		$result = $this->get_started->get_todo_list_by_page_id(NULL);
+		$this->unit->run($result, FALSE, 'not found');
+
+		$result = $this->get_started->get_todo_list_by_page_id(5);
+		foreach($result as $item) {
+			if(!$item['status']) $result = FALSE;
+		}
 		$this->unit->run($result, FALSE, 'not found');
 	}
 
 	function update_get_started_stat_items_test(){
 		$result = $this->get_started->update_get_started_stat_items($id = 1, $type = 'page', $items = array(109));
 		$this->unit->run($result, TRUE,'Add get_started_stat');
-		$this->unit->run($this->get_started->count_all_stat(), 2, 'count all get_started_stat');
+		$this->unit->run($this->get_started->count_all_stat(), 3, 'count all get_started_stat');
 	}
 
 }

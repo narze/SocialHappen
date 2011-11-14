@@ -1441,6 +1441,8 @@ class Sync extends CI_Controller {
 		$this->drop_mongo_collections('apps','campaigns','pages');
 		$this->mongo_db->switch_db('message');
 		$this->drop_mongo_collections('notification');
+		$this->mongo_db->switch_db('get_started');
+		$this->drop_mongo_collections('get_started_info','get_started_stat');
 		echo 'Dropped collections<br />';
 		
 		$platform_audit_actions = array(
@@ -2147,6 +2149,38 @@ class Sync extends CI_Controller {
 				$achievement_info['info'], $achievement_info['criteria']);
 		}
 		echo 'Added '.count(array_merge($achievement_infos, $platform_achievements)).' achievement infos<br />';
+
+		$get_started_infos = array(
+			array('id'=>101, 'type' =>'page', 'group' =>'config_page', 'link' => '#', 'name' => 'Configure Your Own Sign-Up Form'),
+			array('id'=>102, 'type' =>'page', 'group' =>'config_page', 'link' => '#', 'name' => 'View How Your Members See The Sign-Up Form'),
+			array('id'=>103, 'type' =>'all', 'group' =>'install_app', 'link' => '#', 'name' => 'Go To Application List'),
+			array('id'=>104, 'type' =>'all', 'group' =>'install_app', 'link' => '#', 'name' => 'See Where I Can Manage My Applications'),
+			array('id'=>105, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How to Manage Your Page and Applications'),
+			array('id'=>106, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How Your Members See SocialHappen Tab'),
+			array('id'=>107, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How Your Members Interact With Your Page'),
+			array('id'=>108, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How to View Members Profiles and Their Activities'),
+			array('id'=>109, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How to Manage Campaign')
+		);
+
+		$this->load->model('get_started_model', 'get_started');
+		foreach($get_started_infos as $get_started_info){
+			$this->get_started->add_get_started_info($get_started_info);
+		}
+		echo 'Added '.count($get_started_infos).' get-started infos<br />';
+
+		/*
+		$get_started_stats = array(
+			array( 'id' => 1, 'type' => 'page', 'items' => array(101,102)),
+			array( 'id' => 2, 'type' => 'page', 'items' => array(102, 105)),
+			array( 'id' => 3, 'type' => 'page', 'items' => array(109))
+		);
+
+		foreach($get_started_stats as $get_started_stat){
+			$this->get_started->add_get_started_stat($get_started_stat);
+		}
+		echo 'Added '.count($get_started_stats).' get-started stats<br />';
+		*/
+		
 		echo 'MongoDB reset successfully';
 	}
 }

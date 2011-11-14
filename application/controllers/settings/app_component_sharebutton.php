@@ -13,7 +13,7 @@ class App_component_sharebutton extends CI_Controller {
 		$this->form_validation->set_rules('share_title', 'Share Title', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('share_caption', 'Share Caption', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('share_image', 'Share Image', 'required|trim|xss_clean');			
-		$this->form_validation->set_rules('share_description', 'Share Description', 'trim|xss_clean');			
+		$this->form_validation->set_rules('share_description', 'Share Description', 'required|trim|xss_clean');			
 		$this->form_validation->set_rules('share_score', 'Share Score', 'required|trim|xss_clean|is_numeric');			
 		$this->form_validation->set_rules('share_maximum', 'Share Maximum', 'required|trim|xss_clean|is_numeric');			
 		$this->form_validation->set_rules('share_cooldown', 'Share Cooldown', 'required|trim|xss_clean|is_numeric');
@@ -57,7 +57,8 @@ class App_component_sharebutton extends CI_Controller {
 			}
 			else
 			{
-				log_message('error','An error occurred saving your information. Please try again later');
+				log_message('error','Error in update_sharebutton_by_campaign_id '.print_r($form_data, TRUE));
+				redirect('settings/campaign/'.$app_install_id.'?error=1');
 			}
 		}
 	}

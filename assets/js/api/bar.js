@@ -1,71 +1,62 @@
 sh_guest = function(){
 	(function($){
-		$.fancybox({
-			href: base_url+'tab/guest'
+		jQuery.fancybox({
+			href: base_url+'tab/guest',
+			onComplete: function (){
+				$('a.bt-don-awesome').on('click', function(){
+					jQuery.fancybox.close();
+				});
+			}
 		});
-		$('a.bt-don-awesome').die('click');
-		$('a.bt-don-awesome').live('click',function(){
-			$.fancybox.close();
-		});
-
-
-	})(jQuery);
+	})(sh_jq);
 }
 sh_signup = function(fb_access_token){
 	(function($){
 		
-		$.fancybox({
-			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token
-		});
-		// $('form.signup-form').die('submit');
-		// $('form.signup-form').live('submit', function() {
-			// $(this).ajaxSubmit({target:'#signup-form'});
-			// return false;
-		// });
-		
-		$('div.popup-fb.signup').live('keyup mousemove', function(){
-			var this_popup = $(this);
-			var complete = true;
-			$.each( $('form.signup-form input[type="text"]', this_popup), function () {
-				if( $(this).val() == '') complete = false;
-			});
-			if(complete) $('a.bt-next-inactive').attr('class', 'bt-next');
-			else $('a.bt-next').attr('class', 'bt-next-inactive');
+		jQuery.fancybox({
+			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token,
+			onComplete: signup_form
 		});
 		
-		$('a.bt-next').live('click', function(){
-			// $('form.signup-form').ajaxSubmit({
-				// target:'.popup-fb.signup',
-				// replaceTarget:true,
-				// dataType: 'jsonp',
-				// success:function(response){
-					// console.log($(response));
-					// if($(response).is('.popup-fb.signup-page')){ //Success signup sh, going to signup-page
-						// applyOptionsToPageSignup();
-					// }
-				// }
-			// });
-			// return false;
-			
-			$('form.signup-form').unbind('submit').submit(function() {
-				  var url = $(this).attr('action');
-				  var params = $(this).serialize();
-				  $.getJSON(url + '?' + params + "&callback=?", function(data) {
-					// console.log(data);
-					// success
-					if(data.status == 'error'){
-						if(data.error == 'verify'){
-							sh_validate_error(data.error_messages);
-						}
-					} else if(data.status == 'ok'){
-						sh_signup_page(fb_access_token);
+		function signup_form() {
+			$('#fancybox-content').off()
+				.on('keyup mousemove', 'div.popup-fb.signup', check_form)
+				.on('click', 'a.bt-next', submit_form);
+
+			function check_form(){
+				var this_popup = $(this);
+				var complete = true;
+				$.each( $('form.signup-form input[type="text"]', this_popup), function () {
+					if( $(this).val() == '') {
+						complete = false;
 					}
-				  })
-				  return false
-			}).submit();
-			
-		});
-	})(jQuery);
+				});
+				if(complete) {
+					$('a.bt-next-inactive').attr('class', 'bt-next');
+				} else {
+					$('a.bt-next').attr('class', 'bt-next-inactive');
+				}
+			}
+
+			function submit_form(){
+				$('form.signup-form').unbind('submit').submit(function() {
+					  var url = $(this).attr('action');
+					  var params = $(this).serialize();
+					  $.getJSON(url + '?' + params + "&callback=?", function(data) {
+						if(data.status == 'error'){
+							if(data.error == 'verify'){
+								sh_validate_error(data.error_messages);
+							}
+						} else if(data.status == 'ok'){
+							sh_signup_page(fb_access_token);
+						}
+					  })
+					  return false
+				}).submit();
+			}
+		}
+		
+	})(sh_jq);
 }
 
 sh_validate_error = function(error_messages){
@@ -81,62 +72,88 @@ sh_validate_error = function(error_messages){
 			$('<span/>').addClass('error').html(error_messages[field_name]).prependTo($('label.title', field));
 			// console.log(field);
 		}
-	})(jQuery);
+	})(sh_jq);
 }
 
 sh_signup_page = function(fb_access_token){
 	(function($){			
-		$('div.popup-fb.signup-page #policy').die('click').live('click', function() {
-			if ( $('#policy:checked').length > 0 ) $('a.bt-done-inactive').attr('class', 'bt-done');
-			else $('a.bt-done').attr('class', 'bt-done-inactive');
-		});
-			
-		$('div.popup-fb.signup-page a.bt-done').die('click').live('click',function(){
-			$('form.signup-form').unbind('submit').submit(function() {
-				  var url = $(this).attr('action');
-				  var params = $(this).serialize();
-				  $.getJSON(url + '?' + params + "&callback=?", function(data) {
-					console.log(data);
-					// success
-					if(data.status == 'error'){
-						if(data.error == 'verify'){
-							sh_validate_error(data.error_messages);
-						}
-					} else if(data.status == 'ok'){
-						sh_signup_complete(data.redirect_url);
-					}
-				  })
-				  return false
-			}).submit();
-		});
-		
 		if(app_mode){
-			$.fancybox({
+			jQuery.fancybox({
 				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token+'&user_image='+encodeURIComponent(user_image),
 				modal: true,
-				onComplete: applyOptionsToPageSignup
+				onComplete: signup_page_form
 			});
 		} else {
-			$.fancybox({
+			jQuery.fancybox({
 				href: base_url+'tab/signup_page/'+page_id+'?facebook_access_token='+fb_access_token+'&user_image='+encodeURIComponent(user_image),
 				modal: true,
-				onComplete: applyOptionsToPageSignup
+				onComplete: signup_page_form
 			});
 		}
-	})(jQuery);
+
+		function signup_page_form() { //console.log('signup_page_form invoked');
+			$('#fancybox-content').off()
+			.on('click', 'div.popup-fb.signup-page #policy', check_policy)
+			.on('click', 'div.popup-fb.signup-page a.bt-done', submit_form);
+
+			function check_policy() {
+				if ( $('#policy:checked').length > 0 ) $('a.bt-done-inactive').attr('class', 'bt-done');
+				else $('a.bt-done').attr('class', 'bt-done-inactive');
+			}
+				
+			function submit_form(){
+				$('form.signup-form').unbind('submit').submit(function() {
+					  var url = $(this).attr('action');
+					  var params = $(this).serialize();
+					  $.getJSON(url + '?' + params + "&callback=?", function(data) {
+						// console.log(data);
+						// success
+						if(data.status == 'error'){
+							if(data.error == 'verify'){
+								sh_validate_error(data.error_messages);
+							}
+						} else if(data.status == 'ok'){
+							sh_signup_complete(data.redirect_url);
+						}
+					  })
+					  return false;
+				}).submit();
+			}
+
+			if(view_as == 'user'){
+				$('div#signup-form').prepend('You\'re already a SocialHappen user, please signup to this page');
+			}
+			
+			$('#signup-form form div.form li[data-field-options]').each(function(){
+				var textInput = jQuery('div.inputs', this).find('input[type="text"], textarea'); //only texts & textareas
+				var fieldOptions = $(this).data('fieldOptions');
+				if(fieldOptions!=null){
+					$.each(fieldOptions, function(i, val){
+						// console.log(i,val,textInput);
+						if(typeof(i)=='number'){ //index is number, check value
+							
+						} else { //index is string, check it
+							if(i=='calendar'){
+								textInput.datepicker({ dateFormat: val });
+							}
+						}
+					});
+				}
+			});
+		};
+	})(sh_jq);
 }
 
 sh_signup_complete = function(redirect_url){
 	(function($){
-		$.fancybox({
+		jQuery.fancybox({
 			href: base_url+'tab/signup_complete?next=' + encodeURIComponent(redirect_url),
 			modal: true
 		});
-	})(jQuery);
+	})(sh_jq);
 }
-	
 getScript = function(url, checkName, success) {
-	if(eval('typeof '+checkName+' == "function"') || eval('typeof '+checkName+' == "object"')) { //check if script is already loaded
+	if(checkName != 'jQuery' && (eval('typeof '+checkName+' == "function"') || eval('typeof '+checkName+' == "object"'))) { //check if script is already loaded
 		success(); //don't reload
 	} else {
 		var script     = document.createElement('script');
@@ -148,11 +165,17 @@ getScript = function(url, checkName, success) {
 		script.onload = script.onreadystatechange = function() {
 				if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
 				done = true;
+					
+						if(checkName == 'jQuery'){
+							
+						}
 						// callback function provided as param
 						success();
 
 						script.onload = script.onreadystatechange = null;
 						head.removeChild(script);
+
+
 				};
 		};
 		head.appendChild(script);
@@ -160,11 +183,12 @@ getScript = function(url, checkName, success) {
 };
 
 loadChildScripts = function(){
+	window.sh_jq = jQuery.noConflict(true); // jQuery -> old, sh_jq -> new
 	getScript(base_url+'assets/js/common/jquery-ui.min.js', 'jQuery.ui', function(){
 		getScript(base_url+'assets/js/common/jquery.form.js', 'jQuery.fn.ajaxForm', function(){
 			getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', 'jQuery.fancybox', function(){
 				getScript(base_url + 'assets/js/common/jquery.timeago.js', 'jQuery.timeago', function(){
-					// onLoad();
+
 				});
 			});
 		});
@@ -199,57 +223,61 @@ loadNode = function(){
 				console.log('notification_message: ' + JSON.stringify(notification_message));
 			});
 		});
-	})(jQuery);
+	})(sh_jq);
 }
 
 onLoad = function(){
 	(function($){
 		$(function(){
 			loadNode();
-		  var fetching_notification = false;
+		    var fetching_notification = false;
 		  
-			$('.toggle').live('click',function(){
+		  	$('#sh-bar').off()
+		  	.on('click','.toggle',function(){
 				$('.toggle').not(this).removeClass('active').find('ul').hide();
 				$(this).toggleClass('active').find('ul').toggle();
-			});
-			
-			$('.toggle ul li a').live('click',function(){
+			})
+			.on('click','.toggle ul li a',function(){
 				$('.toggle').removeClass('active').find('ul').hide();
-			});
+			})
+			.on('click','li.notification', toggleNotification)
+			.on('click','a.a-logout', sh_logout);
 			
-			$('li.notification').live('click', toggleNotification);
-				
-			var mouse_is_inside = false;
-			$('.toggle').hover(function(){ 
-				mouse_is_inside=true;
-			}, function(){ 
-				mouse_is_inside=false;
-			});
-	
-			$('body').hover(function(){ 
-				$(this).mouseup(function(){
-					if(! mouse_is_inside) $('.toggle').removeClass('active').find('ul').hide();
-				});
-			}, function(){ 
-				$('.toggle').removeClass('active').find('ul').slideUp();
-			});
-			
+			unhover_hide();
 			sh_popup();
 			
 			$('div.popup-fb a.bt-start').live('click',function(){
-				$.fancybox.close();
+				jQuery.fancybox.close();
 			});
 			
 			$('div.popup-fb a.bt-cancel').live('click',function(){
-        $.fancybox.close();
-      });
+		        jQuery.fancybox.close();
+		    });
 			
-			$('a.a-logout').live('click', function(){
-				sh_logout();
-				$.fancybox({
-					href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
+			// $().live('click', function(){
+			// 	sh_logout();
+			// 	jQuery.fancybox({
+			// 		href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
+			// 	});
+			// });
+
+				
+			function unhover_hide(){
+				var mouse_is_inside = false;
+				$('.toggle').hover(function(){ 
+					mouse_is_inside = true;
+				}, function(){ 
+					mouse_is_inside = false;
 				});
-			});
+		
+				$('body').hover(function(){ 
+					$(this).mouseup(function(){
+						if(! mouse_is_inside) $('.toggle').removeClass('active').find('ul').hide();
+					});
+				}, function(){ 
+					$('.toggle').removeClass('active').find('ul').slideUp();
+				});
+			}
 			
 			function toggleNotification(){
 				$('li.notification a.amount span').hide();
@@ -278,7 +306,7 @@ onLoad = function(){
 								notification_list[i].read ? '' : li.addClass('unread');
 								li.find('a').attr('href', notification_list[i].link);
 								li.find('p.message').html(notification_list[i].message);
-								li.find('p.time').html($.timeago(new Date(parseInt(notification_list[i].timestamp, 10) * 1000)));
+								li.find('p.time').html(jQuery.timeago(new Date(parseInt(notification_list[i].timestamp, 10) * 1000)));
 								li.find('img').attr('src', notification_list[i].image);
 								li.show();
 								$('ul.notification_list_bar').prepend(li);
@@ -314,7 +342,7 @@ onLoad = function(){
 				}
 			}
 		});
-	})(jQuery);
+	})(sh_jq);
 };
 
 sh_popup = function(){
@@ -324,15 +352,15 @@ sh_popup = function(){
 		} else if(view_as == 'admin'){ //page_app_installed_id = 1 //for test
 			if(page_app_installed_id!=0) {
 				/*
-				$.fancybox({
+				jQuery.fancybox({
 					href: base_url+'tab/app_installed/'+ page_app_installed_id
 				});
 				$('a.bt-stay_fb').die('click');
 				$('a.bt-stay_fb').live('click',function(){
-					$.fancybox.close();
+					jQuery.fancybox.close();
 				});
 				*/
-				jQuery.ajax({
+				$.ajax({
 					async:false,
 					type: 'GET',
 					url: base_url+'api/get_started',
@@ -360,12 +388,12 @@ sh_popup = function(){
 				page_app_installed_id=0;
 			} 
 			// else if(page_installed==0){
-				// $.fancybox({
+				// jQuery.fancybox({
 					// href: base_url+'tab/page_installed/'+ page_id
 				// });
 				// $('a.bt-stay_fb').die('click');
 				// $('a.bt-stay_fb').live('click',function(){
-					// $.fancybox.close();
+					// jQuery.fancybox.close();
 				// });
 				// page_installed=1;
 			// }
@@ -375,38 +403,13 @@ sh_popup = function(){
 			}
 		}
 		
-	})(jQuery);
-};
- 
-applyOptionsToPageSignup = function(){ //console.log('applyOptionsToPageSignup invoked');
-	(function($){
-		if(view_as == 'user'){
-			$('div#signup-form').prepend('You\'re already a SocialHappen user, please signup to this page');
-		}
-		
-		$('#signup-form form div.form li[data-field-options]').each(function(){
-			var textInput = $('div.inputs', this).find('input[type="text"], textarea'); //only texts & textareas
-			var fieldOptions = $(this).data('fieldOptions');
-			if(fieldOptions!=null){
-				$.each(fieldOptions, function(i, val){
-					console.log(i,val,textInput);
-					if(typeof(i)=='number'){ //index is number, check value
-						
-					} else { //index is string, check it
-						if(i=='calendar'){
-							textInput.datepicker({ dateFormat: val });
-						}
-					}
-				});
-			}
-		});
-	})(jQuery);
+	})(sh_jq);
 };
 
 close_popup = function(){
 	(function($){
-		$.fancybox.close();
-	})(jQuery);
+		jQuery.fancybox.close();
+	})(sh_jq);
 };
 
 sh_login = function(){
@@ -422,7 +425,7 @@ sh_get_role = function(){
 		$.getJSON(base_url+'xd/get_role', function(){
 			return
 		});
-	})(jQuery);
+	})(sh_jq);
 }
 
 getScript(base_url + 'assets/js/common/jquery.min.js', 'jQuery', loadChildScripts);
@@ -432,14 +435,14 @@ getScript(base_url + 'assets/js/common/jquery.min.js', 'jQuery', loadChildScript
  * by Josh Fraser (joshfraser.com)
  * released under the Apache 2.0 license.  
  *
- * this code was adapted from Ben Alman's jQuery postMessage code found at:
- * http://benalman.com/projects/jquery-postmessage-plugin/
+ * this code was adapted from Ben Alman's sh_jq postMessage code found at:
+ * http://benalman.com/projects/sh_jq-postmessage-plugin/
  * 
  * other inspiration was taken from Luke Shepard's code for Facebook Connect:
  * http://github.com/facebook/connect-js/blob/master/src/core/xd.js
  *
  * the goal of this project was to make a backwards compatable version of postMessage
- * without having any dependency on jQuery or the FB Connect libraries
+ * without having any dependency on sh_jq or the FB Connect libraries
  *
  * my goal was to keep this as terse as possible since my own purpose was to use this 
  * as part of a distributed widget where filesize could be sensative.
@@ -526,15 +529,20 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		user_image = message.data.sh_user_image;
 		onLoad();
 		jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
-			jQuery('div#sh-bar').html(data);
+			sh_jq('div#sh-bar').html(data);
 		});
-	} else if(message.data.sh_message === "logged in"){
+	} else if(message.data.sh_message === "logged in facebook"){ //login_button.php
 		sh_login();
+	} else if(message.data.sh_message === "logged in"){ //xd.js
 		if(view_as === 'guest' || is_user_register_to_page) {
 			sh_signup(message.data.fb_access_token);
 		} else {
 			sh_signup_page(message.data.fb_access_token);
 		} 
+	} else if(message.data.sh_message === "logged out"){ //xd.js
+		jQuery.fancybox({
+			href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
+		});
 	}
 }, sh_domain);
 

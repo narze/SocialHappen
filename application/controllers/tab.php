@@ -93,7 +93,7 @@ class Tab extends CI_Controller {
 						'common/facebook-main',
 						'common/jquery.countdown',
 						'common/fancybox/jquery.fancybox-1.3.4',
-						'../../css/api_app_bar'
+						'../../assets/css/common/api_app_bar'
 					)
 				),
 			TRUE),
@@ -193,14 +193,15 @@ class Tab extends CI_Controller {
 		$is_logged_in = $this->socialhappen->is_logged_in();
 		
 		//get-started checklist
-		$checklist = array(
-			'config_page' => array(
-				array('done' => 1, 'link' => '#', 'name' => 'Configure Your Own Sign-Up Form'),
-				array('done' => 0, 'link' => '#', 'name' => 'View How Your Members See The Sign-Up Form')
-			),
-			'install_app' => '',
-			'tour' => ''
-		);
+		$this->load->model('get_started_model', 'get_started');
+		$result = $this->get_started->get_todo_list_by_page_id($page_id); 
+		//echo '<h2>RESULT</h2><pre>'; print_r($result); echo '</pre>';
+		$checklist = array();
+		if($result) {
+			foreach($result as $item) {
+				$checklist[$item['group']][] = $item;
+			}
+		}
 		
 		$this->load->vars( array(
 			'page' => $page,

@@ -156,7 +156,7 @@ class Settings{
 					array('breadcrumb' => 
 						array( 
 							$page['page_name'] => base_url() . "page/{$page['page_id']}",
-							'Config' => NULL
+							'Settings' => NULL
 							)
 						)
 					,
