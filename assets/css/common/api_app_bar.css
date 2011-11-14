@@ -20,7 +20,7 @@ font-size:12px;
 font-family:Arial, Helvetica, sans-serif;
 width:100%;
 height:35px;
-background:url(../assets/images/bg_fb/bg_header.png) repeat-x right top #fff;
+background:url(../../images/bg_fb/bg_header.png) repeat-x right top #fff;
 margin:0 auto;
 padding:0 0 3px;
 position:relative;
@@ -37,7 +37,7 @@ float:left;
 height:35px;
 min-width: 10px;
 position:relative;
-background-image:url(../assets/images/bg_fb/bg_header.png);
+background-image:url(../../images/bg_fb/bg_header.png);
 background-repeat:repeat-x;
 background-position:left top;
 background-color:#fff;
@@ -46,7 +46,7 @@ cursor:pointer;
 
 div.header div.name>div {
 height:30px;
-background:url(../assets/images/bg_fb/bg_liney01.gif) repeat-y 100% 0;
+background:url(../../images/bg_fb/bg_liney01.gif) repeat-y 100% 0;
 max-width:140px;
 overflow:hidden;
 padding:5px 0 0 40px;
@@ -77,7 +77,7 @@ div.header div.name>div>p.pic>span {
 display:block;
 width:27px;
 height:27px;
-background:url(../assets/images/bg_fb/fill_top25-25.png) no-repeat;
+background:url(../../images/bg_fb/fill_top25-25.png) no-repeat;
 position:absolute;
 left:0;
 top:0;
@@ -96,7 +96,7 @@ white-space:nowrap;
 div.header div.name > div div.dropdown {
 width:15px;
 height:35px;
-background-image:url(../assets/images/bg_fb/bg_header.png);
+background-image:url(../../images/bg_fb/bg_header.png);
 background-position:-20px 0;
 position:absolute;
 right:5px;
@@ -110,7 +110,7 @@ background-position:-20px -38px;
 div.header div.name > div div.dropdown span {
 width:12px;
 height:25px;
-background:url(../assets/images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
+background:url(../../images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
 display:block;
 position:absolute;
 right:0;
@@ -136,12 +136,12 @@ div.header ul.menu>li ul { width:150px; }
 
 div.header ul.menu>li:hover,
 div.header ul.menu>li.active {
-background-image:url(../assets/images/bg_fb/bg_header.png);
+background-image:url(../../images/bg_fb/bg_header.png);
 background-position:-20px -38px;
 }
 div.header ul.menu>li.last-child:hover,
 div.header ul.menu>li.last-child.active {
-background-image: url(../assets/images/bg_fb/bg_header.png);
+background-image: url(../../images/bg_fb/bg_header.png);
 background-position:right -38px;
 }
 
@@ -164,7 +164,7 @@ display:block;
 text-decoration:none;
 color:#fff;
 font-weight:bold;
-background:url(../assets/images/bg_fb/bg_listmenu.png) 5px 13px no-repeat;
+background:url(../../images/bg_fb/bg_listmenu.png) 5px 13px no-repeat;
 padding:5px 10px 5px 20px;
 }
 
@@ -193,7 +193,7 @@ background-position:left -38px;
 div.header div.name>ul li {
 cursor:default;
 font-size:11px;
-background-image:url(../assets/images/bg_fb/bg_linex03.png);
+background-image:url(../../images/bg_fb/bg_linex03.png);
 background-repeat:repeat-x;
 background-position:top left;
 position:relative;
@@ -211,12 +211,12 @@ height:35px;
 div.header ul.menu>li {
 float:left;
 height:35px;
-background:url(../assets/images/bg_fb/bg_liney01.gif) repeat-y 0 0;
+background:url(../../images/bg_fb/bg_liney01.gif) repeat-y 0 0;
 padding:0 0 0 2px;
 }
 
 div.header ul.menu > li > ul li.separator {
-background-image:url(../assets/images/bg_fb/bg_linex03.png);
+background-image:url(../../images/bg_fb/bg_linex03.png);
 background-repeat:repeat-x;
 background-position:top left;
 }
@@ -234,7 +234,7 @@ div.header ul.menu>li.like a {
 display:block;
 width:33px;
 height:35px;
-background:url(../assets/images/bg_fb/bg_main.png) no-repeat 9px 10px;
+background:url(../../images/bg_fb/bg_main.png) no-repeat 9px 10px;
 }
 
 div.header ul.menu>li.like a span {
@@ -272,7 +272,7 @@ div.header ul.menu>li.profile>div>p.pic>span {
 display:block;
 width:27px;
 height:27px;
-background:url(../assets/images/bg_fb/fill_top25-25.png) no-repeat;
+background:url(../../images/bg_fb/fill_top25-25.png) no-repeat;
 position:absolute;
 left:0;
 top:0;
@@ -284,7 +284,7 @@ color:#fff;
 line-height:25px;
 padding-right:25px;
 min-width:120px;
-background:url(../assets/images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
+background:url(../../images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
 }
 
 
@@ -292,7 +292,7 @@ background:url(../assets/images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
 div.header ul.menu>li.profile>ul li {
 cursor:default;
 font-size:11px;
-background-image:url(../assets/images/bg_fb/bg_linex03.png);
+background-image:url(../../images/bg_fb/bg_linex03.png);
 background-repeat:repeat-x;
 background-position:top left;
 color:#FFF;
@@ -330,7 +330,7 @@ cursor:pointer;
 display:block;
 width:35px;
 height:35px;
-background:url(../assets/images/bg_fb/bg_main.png) no-repeat 7px -68px;
+background:url(../../images/bg_fb/bg_main.png) no-repeat 7px -68px;
 }
 
 div.header ul.menu > li.setting > ul {
@@ -350,7 +350,7 @@ height:auto;
 text-decoration:none;
 color:#FFF;
 font-weight:bold;
-background:url(../assets/images/bg_fb/bg_listmenu.png) 5px 12px no-repeat;
+background:url(../../images/bg_fb/bg_listmenu.png) 5px 12px no-repeat;
 padding:5px 10px 5px 20px;
 }
 
@@ -414,7 +414,7 @@ width:21px;
 height:20px;
 text-align:center;
 font-weight:bold;
-background-image: url(../assets/images/bg_fb/bg_button_2.png);
+background-image: url(../../images/bg_fb/bg_button_2.png);
 background-position:186px -41px;
 line-height: 20px;
 display: block;
@@ -529,7 +529,7 @@ word-wrap: break-word;
 line-height: 30px;
 }
 div.popup-fb.signup-page div.connect div.connect-arrow {
-background: url(../assets/images/bg_fb/bg_button_2.png) no-repeat -182px -38px;
+background: url(../../images/bg_fb/bg_button_2.png) no-repeat -182px -38px;
 display: block;
 width: 76px;
 height: 37px;
@@ -718,7 +718,7 @@ div.popup-fb-signup-page {
 *.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome,
 .bt-next, .bt-next-inactive, .bt-cancel, .bt-done, .bt-done-inactive, .bt-start, 
 .bt-dashboard, .bt-get-started, .bt-configure, .bt-learn-more {
-	background: url(../assets/images/bg_fb/bg_button_2.png) no-repeat;
+	background: url(../../images/bg_fb/bg_button_2.png) no-repeat;
 	cursor: pointer;
 	border: none;
 	color: transparent;
@@ -782,7 +782,7 @@ div.header ul.menu > li.notification a.amount {
 display:block;
 width:35px;
 height:35px;
-background:url(../assets/images/bg/bg_main_2.png) no-repeat -225px 6px;
+background:url(../../images/bg/bg_main_2.png) no-repeat -225px 6px;
 text-decoration:none;
 position:relative;
 padding:0px 0px 0px 0px;
@@ -877,7 +877,7 @@ body.settings {
     font-size: 12px;
     font-family: Arial, Helvetica, sans-serif;
     color: #333;
-	background: #fff url(../assets/images/bg_fb/bg_body.png) repeat-x top;
+	background: #fff url(../../images/bg_fb/bg_body.png) repeat-x top;
 }
 div.account-data {
 	width: 475px;
@@ -907,7 +907,7 @@ div.account-data div.data p {padding: 0 0 5px;}
 div.account-data div.data ul.counter {
 	width: 365px;
 	height: 31px;
-	background: url(../assets/images/bg_fb/bg_datalist.png) no-repeat;
+	background: url(../../images/bg_fb/bg_datalist.png) no-repeat;
 	position: relative;
 	top: 40px;
 }
@@ -1023,7 +1023,7 @@ div.account-data ul.publish li span.light {
 	width: 13px;
 	height: 13px;
 	display: block;
-	background-image: url(../assets/images/bg_fb/bg_main.png);
+	background-image: url(../../images/bg_fb/bg_main.png);
 }
 div.account-data ul.publish li#published span.light { background-position:-20px -326px;}
 div.account-data ul.publish li#unpublished span.light { background-position:-20px -345px; }
@@ -1041,7 +1041,7 @@ div.wrapper-content {
 }
 div.tab-head {
 	height: 33px;
-	background: url(../assets/images/bg_fb/bg_tabhead.png) repeat-x;
+	background: url(../../images/bg_fb/bg_tabhead.png) repeat-x;
 }
 div.tab-head:after{
     clear:both;
