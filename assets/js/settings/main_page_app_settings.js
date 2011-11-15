@@ -311,7 +311,7 @@ $(function(){
 				$('div#main').load(url, new_campaign_form);
 
 				function new_campaign_form(){
-					$('input#campaign_start_date, input#campaign_end_date').datepicker({"dateFormat": "yy-mm-dd"});
+					set_campaign_range();
 					$('form.new-campaign-form').on('submit',function(e) {
 						e.stopPropagation();
 						$(this).ajaxSubmit({target:'#new-campaign-form',replaceTarget:true,success:new_campaign_form});
@@ -326,7 +326,7 @@ $(function(){
 				$('div#main').load(url, update_campaign_form);
 
 				function update_campaign_form(){
-					$('input#campaign_start_date, input#campaign_end_date').datepicker({"dateFormat": "yy-mm-dd"});
+					set_campaign_range();
 					$('form.update-campaign-form').on('submit', function(e) {
 						e.stopPropagation();
 						$(this).ajaxSubmit({target:'#update-campaign-form',replaceTarget:true,success:update_campaign_form});
@@ -334,6 +334,23 @@ $(function(){
 					});
 				}
 				return false;
+			}
+
+			function set_campaign_range(){
+				var dates = $( "input#campaign_start_date, input#campaign_end_date" ).datepicker({
+					dateFormat: "yy-mm-dd",
+					changeMonth: true,
+					numberOfMonths: 1,
+					onSelect: function( selectedDate ) {
+						var option = this.id == "campaign_start_date" ? "minDate" : "maxDate",
+							instance = $( this ).data( "datepicker" ),
+							date = $.datepicker.parseDate(
+								instance.settings.dateFormat ||
+								$.datepicker._defaults.dateFormat,
+								selectedDate, instance.settings );
+						dates.not( this ).datepicker( "option", option, date );
+					}
+				});
 			}
 
 			function homepage_component(){
