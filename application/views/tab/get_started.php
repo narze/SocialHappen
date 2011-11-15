@@ -49,7 +49,7 @@
 						} 
 						else 
 						{ ?>
-							<a href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
+							<a target="_top" href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
 						} ?>
 					</li><?php 
 				} 
@@ -73,7 +73,7 @@
 						} 
 						else 
 						{ ?>
-							<a href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
+							<a target="_top" href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
 						} ?>
 					</li><?php 
 				} 
@@ -97,7 +97,7 @@
 						} 
 						else 
 						{ ?>
-							<a href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
+							<a target="_top" href="<?php echo $list['link']; ?>"><?php echo $list['name']; ?></a><?php 
 						} ?>
 					</li><?php 
 				} 

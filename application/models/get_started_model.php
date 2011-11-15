@@ -137,6 +137,8 @@ class Get_started_model extends CI_Model {
 		$result = obj2array($result);
 		if(count($lists)) {
 			foreach($lists as &$item){
+				$item['link'] = str_replace('{base_url}', base_url(), $item['link']);
+				$item['link'] = str_replace('{page_id}', $id, $item['link']);
 				if( is_array($result['items']) && in_array($item['id'], $result['items']) ) {
 					$item['status'] = 1;
 				} else {
@@ -159,6 +161,8 @@ class Get_started_model extends CI_Model {
 		$result = obj2array($result);
 		if(count($lists)) {
 			foreach($lists as &$item){
+				$item['link'] = str_replace('{base_url}', base_url(), $item['link']);
+				$item['link'] = str_replace('{app_id}', $id, $item['link']);
 				if( is_array($result['items']) && in_array($item['id'], $result['items']) ) {
 					$item['status'] = 1;
 				} else {

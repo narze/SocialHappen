@@ -3,9 +3,9 @@
 class Get_started_model_test extends CI_Controller {
 	
 	var $all_get_started_info = array(
-		array('id'=>101, 'type' =>'page', 'group' =>'config_page', 'link' => '#', 'name' => 'Configure Your Own Sign-Up Form'),
+		array('id'=>101, 'type' =>'page', 'group' =>'config_page', 'link' => '{base_url}settings/page_apps/{page_id}', 'name' => 'Configure Your Own Sign-Up Form'),
 		array('id'=>102, 'type' =>'page', 'group' =>'config_page', 'link' => '#', 'name' => 'View How Your Members See The Sign-Up Form'),
-		array('id'=>103, 'type' =>'all', 'group' =>'install_app', 'link' => '#', 'name' => 'Go To Application List'),
+		array('id'=>103, 'type' =>'all', 'group' =>'install_app', 'link' => '{base_url}home/apps?pid={page_id}', 'name' => 'Go To Application List'),
 		array('id'=>104, 'type' =>'all', 'group' =>'install_app', 'link' => '#', 'name' => 'See Where I Can Manage My Applications'),
 		array('id'=>105, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How to Manage Your Page and Applications'),
 		array('id'=>106, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How Your Members See SocialHappen Tab'),
