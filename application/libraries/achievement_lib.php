@@ -472,7 +472,7 @@ class Achievement_lib
       
 			foreach($achievement['criteria'] as $key => $value){
 				if($key != 'score'){
-					$stat_criteria[$key] = array('$gte' => $value);
+					
 					
           $explode = explode('.', $key, 2); // explode to array('page', 'action.10.count')
           
@@ -481,6 +481,8 @@ class Achievement_lib
           if(isset($info['page_id']) && $is_page && count($explode) === 2){
             $stat_page_criteria[$explode[1]] = array('$gte' => $value);
             $page_criteria_couunt++;
+          }else{
+            $stat_criteria[$key] = array('$gte' => $value);
           }
           
 				}else{
@@ -496,7 +498,7 @@ class Achievement_lib
 			// echo '<pre>';
 			// var_dump($stat_criteria);
 			// echo '</pre>';
-//       
+
       // echo "<br /><br />";
       // echo json_encode($stat_page_criteria);
       
@@ -531,8 +533,8 @@ class Achievement_lib
 			}
       
 			// echo '<br/>';
-      // echo 'X ' . count($matched_achievement) . ' '
-       // . $matched_score . ' ' . $page_achievement_only . ' ';
+      // echo 'X [' . count($matched_achievement) . '] ['
+       // . $matched_score . '] [' . $page_achievement_only . '] ';
       
       
       

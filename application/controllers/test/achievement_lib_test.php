@@ -779,16 +779,110 @@ class achievement_lib_test extends CI_Controller {
     $this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
     
     // increment again
-    echo '<b>';
+    // echo '<b>';
     $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-    echo '</b>';
+    // echo '</b>';
     
      // test must got achievement
     $result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
     $this->unit->run(count($result), 1, 'increment', print_r($achievement_id_ref, TRUE));
   }
 	
+  function got_reward_by_page_and_platform_score_achievement_and_action_mix_test(){
+    // add achievement
+    $app_id = 1000;
+    $app_install_id = 1;
+    $page_id = 1000;
+    $info = array('name' => 'class b',
+                  'description' => 'class b',
+                  'criteria_string' => array('page invite >= 2', 'page share >= 2', 'do something >= 1', 'score >= 1'),
+                  'page_id' => $page_id);
+    $criteria = array('page.action.113.count' => 2,
+                      'page.action.108.count' => 2,
+                      'action.100.count' => 1,
+                      'score' => 1);
+    
+    $result = $this->achievement_lib->add_achievement_info($app_id, $app_install_id, $info, $criteria);
+    $this->unit->run($result, 'is_true', 'add_test', print_r($result, TRUE));
+    $total = count($this->achievement_info->list_info());
+    $this->unit->run($total, 7, 'add_test', print_r($result, TRUE));
+    
+    // start increment
+    $app_id = 1000;
+    $user_id = 1000;
+    $app_install_id = 1;
+    $campaign_id = 1;
+    $action_id = 113; // invite
+    $info = array('app_install_id' => $app_install_id,
+                  'page_id' => $page_id,
+                  'campaign_id' => $campaign_id,
+                  'action_id' => $action_id);
+    $amount = 1;
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    
+    // test still not get achievement
+    $res = $this->achievement_info->list_info(array('app_id' => $app_id, 'app_install_id' => $app_install_id));
+    $achievement_id = $res[0]['_id'];
+    $achievement_id_ref = MongoDBRef::create("achievement_info", 
+                                                new MongoId($achievement_id));
+    $result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
+    $this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
+    
+    // increment again
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    
+    // increment again
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    
+    // test still not get achievement
+    $result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
+    $this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
+    
+    $action_id = 108; // share
+    $info = array('app_install_id' => $app_install_id,
+                  'page_id' => $page_id,
+                  'campaign_id' => $campaign_id,
+                  'action_id' => $action_id);
+    // increment again
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    
+    // test still not get achievement
+    $result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
+    $this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
+    
+    // increment again
+    // echo '<b>';
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    // echo '</b>';
+    
+    // test still not get achievement
+    $result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
+    $this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
+    
+    $action_id = 100; // something
+    $info = array('app_install_id' => $app_install_id,
+                  'page_id' => $page_id,
+                  'campaign_id' => $campaign_id,
+                  'action_id' => $action_id);
+    // increment again
+    echo '<b>';
+    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    echo '</b>';
+    
+    // test must got achievement
+    $result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
+    $this->unit->run(count($result), 1, 'increment', print_r($achievement_id_ref, TRUE));
+    
+  }
+  
+  
 	function end_test(){
 		// $this->achievement_info->drop_collection();
 		// $this->achievement_stat->drop_collection();
