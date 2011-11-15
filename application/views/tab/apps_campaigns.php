@@ -3,7 +3,7 @@
 		foreach($campaigns as $campaign): ?>
 		  <li>
             <div>
-              <p class="pic"><img src="<?php echo imgsize($campaign['campaign_image'],'normal');?>" alt="" /></p>
+              <p class="pic"><img class="campaign-image" src="<?php echo imgsize($campaign['campaign_image'],'normal');?>" alt="" /></p>
               <h2><?php echo $campaign['campaign_name'];?></h2>
               <p><?php echo $campaign['campaign_detail'];?></p>
               <p class="link"><a href="#">read more</a></p>
@@ -34,7 +34,7 @@
 		foreach($apps as $app): ?>
 		<li>
             <div>
-              <p class="pic"><img src="<?php echo imgsize($app['app_image'],'normal');?>" alt="" /></p>
+              <p class="pic"><img class="app-image" src="<?php echo imgsize($app['app_image'],'normal');?>" alt="" /></p>
               <h2><?php echo $app['app_name'];?></h2>
               <p><?php echo $app['app_description'];?></p>
               <p class="link"><a href="#">read more</a></p>

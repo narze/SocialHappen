@@ -300,6 +300,13 @@ class Home extends CI_Controller {
 				),
 			TRUE);
 		}
+
+		//add to get-started done list
+		$page_id = issetor($this->input->get('pid'),NULL);
+		if($page_id) {
+			$this->load->model('get_started_model', 'get_started');
+			$this->get_started->add_get_started_stat($page_id, 'page', array(103));
+		}
 		
 		$this -> parser -> parse('home/home_view', $data);
 	}

@@ -189,7 +189,7 @@
 							$(".left-panel").find('.dragging-page div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 						},
 						success: function(json) {
-							var ul_element=$(".left-panel").find('.dragging-page div').find('ul').css('max-height', '155px').css('overflow', 'hidden');
+							var ul_element=$(".left-panel").find('.dragging-page div').find('ul');
 							ul_element.append('<li class="add-page"></li>');
 							for(i in json) {
 								//	if(j%installed_page_per_row==0) ul_element.append('<div></div>');
@@ -436,11 +436,10 @@
 									// revert: "invalid",
 									// drag: function() {
 										// left_panel.find('.dragging-page div').addClass('in-action');
-										// $("div.dragging-page ul").css('height','auto');
+										// left_panel.find('.dragging-page ul').css('height','auto');
 									// },
 									// stop: function() {
 										// left_panel.find('.dragging-page div').removeClass('in-action');
-										// $("div.dragging-page ul").css('height','155px');
 									// }
 								// });
 								// ul_element.find('li.draggable[data-hasaddedapp="true"]').die().live('click',function(){
@@ -455,11 +454,10 @@
 									revert: "invalid",
 									drag: function() {
 										left_panel.find('.dragging-page div').addClass('in-action');
-										$("div.dragging-page ul").css('height','auto');
+										left_panel.find('.dragging-page ul').css('height','auto');
 									},
 									stop: function() {
 										left_panel.find('.dragging-page div').removeClass('in-action');
-										$("div.dragging-page ul").css('height','155px');
 									}
 								});
 								//end for debug
@@ -696,7 +694,7 @@
 							for(i in json) {
 								ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" />'
 								+'<span class="button">'
-								+'<a class="bt-setting_app" href="'+base_url+'app/config/'+json[i].app_install_id+'"><span>Setting</span></a>'
+								+'<a class="bt-setting_app" href="'+base_url+'settings/page_apps/app/'+page_id+'/'+json[i].app_install_id+'"><span>Setting</span></a>'
 								+'</span>'
 								+'</p><p class="appname">'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 							}
@@ -763,7 +761,7 @@
 												var app_install_id=json.app_install_id;
 												dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
 												dragging_object.children('p:first').append('<span class="button">'
-												+'<a class="bt-setting_app" href="'+base_url+'app/config/'+app_install_id+'"><span>Setting</span></a>'
+												+'<a class="bt-setting_app" href="'+base_url+'settings/page_apps/app/'+page_id+'/'+app_install_id+'"><span>Setting</span></a>'
 												+'</span>');
 												shDragging.refresh_installed_app_in_page_panel();
 												shDragging.show_available_app_in_page(page_id);

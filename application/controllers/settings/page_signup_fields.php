@@ -54,8 +54,7 @@ class Page_signup_fields extends CI_Controller {
 			
 				//add to get-started done list
 				$this->load->model('get_started_model', 'get_started');
-				$done_list_data = array( 'id' => $page_id,'type' => 'page','items' => array(101));
-				$this->get_started->add_get_started_stat($done_list_data);
+				$this->get_started->add_get_started_stat($page_id, 'page', array(101));
 
 				$this->load->vars(array(
 					'signup_fields' => $this->page->get_page_user_fields_by_page_id($page_id),

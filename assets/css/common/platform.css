@@ -719,7 +719,7 @@ div.box-drop_page p.install-page {
 }
 div.box-drop_page p.install-page span {display: none;}
 
-div.dragging-page {padding: 15px 25px 0; position: relative;}
+div.dragging-page {padding: 15px 25px 0 30px; position: relative;}
 div.dragging-page>div {padding: 1px;}
 div.dragging-page div.in-action {
 	background: #ebeced;
@@ -730,7 +730,8 @@ div.dragging-page div.in-action {
 	padding: 0;
 	margin-bottom: 15px;
 }
-div.dragging-page ul {width: 100%;height: 155px; position: relative;}
+div.dragging-page ul {width: 100%; margin-bottom: 5px; position: relative;}
+div.left-panel div.dragging-page ul { padding-left:6px; }
 div.dragging-page ul:after{
     clear:both;
     content:" ";
@@ -741,10 +742,10 @@ div.dragging-page ul li {
 	width: 92px;
 	height: 135px;
 	margin:  5px 0;
-	padding: 0 9px;
+	padding: 0 0 0 9px;
 	font-size: 11px;
 }
-div.dragging-page ul li:first-child { margin-left: 6px;}
+div.left-panel div.dragging-page ul li { width: 97px; }
 div.dragging-page ul li p {position: relative;}
 div.dragging-page ul li:hover p span.button { display: block;} 
 div.dragging-page ul li p span.button {

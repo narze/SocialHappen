@@ -157,6 +157,7 @@ div.list_app-camp>ul>li>div:first-child p.pic img {
 	top: -20px!important;
 	right: -20px!important;
 }
+#fancybox-wrap {top:10% !important;} 
 
 /* View my profile */
 div.account-data div.pic img {

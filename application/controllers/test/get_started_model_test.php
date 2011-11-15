@@ -3,9 +3,9 @@
 class Get_started_model_test extends CI_Controller {
 	
 	var $all_get_started_info = array(
-		array('id'=>101, 'type' =>'page', 'group' =>'config_page', 'link' => '#', 'name' => 'Configure Your Own Sign-Up Form'),
+		array('id'=>101, 'type' =>'page', 'group' =>'config_page', 'link' => '{base_url}settings/page_apps/{page_id}', 'name' => 'Configure Your Own Sign-Up Form'),
 		array('id'=>102, 'type' =>'page', 'group' =>'config_page', 'link' => '#', 'name' => 'View How Your Members See The Sign-Up Form'),
-		array('id'=>103, 'type' =>'all', 'group' =>'install_app', 'link' => '#', 'name' => 'Go To Application List'),
+		array('id'=>103, 'type' =>'all', 'group' =>'install_app', 'link' => '{base_url}home/apps?pid={page_id}', 'name' => 'Go To Application List'),
 		array('id'=>104, 'type' =>'all', 'group' =>'install_app', 'link' => '#', 'name' => 'See Where I Can Manage My Applications'),
 		array('id'=>105, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How to Manage Your Page and Applications'),
 		array('id'=>106, 'type' =>'all', 'group' =>'tour', 'link' => '#', 'name' => 'Learn How Your Members See SocialHappen Tab'),
@@ -75,7 +75,7 @@ class Get_started_model_test extends CI_Controller {
 	 */
 	function add_get_started_stat_test(){
 		$done_list_data = $this->done_list_data;
-		$result = $this->get_started->add_get_started_stat($done_list_data);
+		$result = $this->get_started->add_get_started_stat($done_list_data['id'], $done_list_data['type'], $done_list_data['items']);
 		$this->unit->run($result, TRUE,'Add get_started_stat');
 		$this->unit->run($this->get_started->count_all_stat(), 1, 'count all get_started_stat');
 
@@ -83,7 +83,7 @@ class Get_started_model_test extends CI_Controller {
 		$done_list_data['type'] = 'page';
 		$done_list_data['items'] = array(102, 105, 107);
 		unset($done_list_data['_id']);
-		$result = $this->get_started->add_get_started_stat($done_list_data);
+		$result = $this->get_started->add_get_started_stat($done_list_data['id'], $done_list_data['type'], $done_list_data['items']);
 		$this->unit->run($result, TRUE,'Add get_started_stat');
 		$this->unit->run($this->get_started->count_all_stat(), 2, 'count all get_started_stat');
 
@@ -91,7 +91,7 @@ class Get_started_model_test extends CI_Controller {
 		$done_list_data['type'] = 'page';
 		$done_list_data['items'] = array(101,102);
 		unset($done_list_data['_id']);
-		$result = $this->get_started->add_get_started_stat($done_list_data);
+		$result = $this->get_started->add_get_started_stat($done_list_data['id'], $done_list_data['type'], $done_list_data['items']);
 		$this->unit->run($result, TRUE,'Add get_started_stat');
 		$this->unit->run($this->get_started->count_all_stat(), 3, 'count all get_started_stat');
 
@@ -99,7 +99,7 @@ class Get_started_model_test extends CI_Controller {
 		$done_list_data['type'] = 'page';
 		$done_list_data['items'] = array(106);
 		unset($done_list_data['_id']);
-		$result = $this->get_started->add_get_started_stat($done_list_data);
+		$result = $this->get_started->add_get_started_stat($done_list_data['id'], $done_list_data['type'], $done_list_data['items']);
 		$this->unit->run($result, TRUE,'Add get_started_stat');
 		$this->unit->run($this->get_started->count_all_stat(), 3, 'count all get_started_stat');
 	}
@@ -109,7 +109,7 @@ class Get_started_model_test extends CI_Controller {
 		unset($done_list_data['_id']);
 		$done_list_data['id'] = 1;
 		$done_list_data['items'] = array(108);
-		$result = $this->get_started->add_get_started_stat($done_list_data);
+		$result = $this->get_started->add_get_started_stat($done_list_data['id'], $done_list_data['type'], $done_list_data['items']);
 		$this->unit->run($result, TRUE,'Add more item(s) to get_started stat');
 	}
 
@@ -159,6 +159,17 @@ class Get_started_model_test extends CI_Controller {
 		$result = $this->get_started->update_get_started_stat_items($id = 1, $type = 'page', $items = array(109));
 		$this->unit->run($result, TRUE,'Add get_started_stat');
 		$this->unit->run($this->get_started->count_all_stat(), 3, 'count all get_started_stat');
+	}
+
+	function is_completed_test(){
+		$id = 2;
+		$this->get_started->add_get_started_stat($id, 'page', array(102,103));
+		$result = $this->get_started->is_completed($id, $type = 'page');
+		$this->unit->run($result, FALSE,'Get-started not complete');
+
+		$this->get_started->update_get_started_stat_items($id, $type = 'page', $items = array(101,104,105,106,107,108,109));
+		$result = $this->get_started->is_completed($id, $type = 'page');
+		$this->unit->run($result, TRUE,'Get-started completed');
 	}
 
 }

@@ -89,16 +89,16 @@ class Get_started_model extends CI_Model {
 	 * )
 	 * @author Weerapat P.
 	 */
-	function add_get_started_stat($data = array()){
-		if(count($data['items']) < 1) return FALSE;
-		$data['id'] = (int)$data['id'];
-		$result = $this->get_started_stat->findOne(array('id' => $data['id'], 'type' => $data['type']));
-		sort($data['items']);
+	function add_get_started_stat($id = NULL, $type = NULL, $items = array()){
+		if(count($items) < 1) return FALSE;
+		$id = (int)$id;
+		$result = $this->get_started_stat->findOne(array('id' => $id, 'type' => $type));
+		sort($items);
 
 		if($result) { //Stat exist
-			return $this->update_get_started_stat_items($data['id'], $data['type'], $data['items']);
+			return $this->update_get_started_stat_items($id, $type, $items);
 		}
-		return $this->get_started_stat->insert($data);
+		return $this->get_started_stat->insert(array('id'=>$id, 'type'=>$type, 'items'=>$items));
 	}
 
 	/**
@@ -137,6 +137,8 @@ class Get_started_model extends CI_Model {
 		$result = obj2array($result);
 		if(count($lists)) {
 			foreach($lists as &$item){
+				$item['link'] = str_replace('{base_url}', base_url(), $item['link']);
+				$item['link'] = str_replace('{page_id}', $id, $item['link']);
 				if( is_array($result['items']) && in_array($item['id'], $result['items']) ) {
 					$item['status'] = 1;
 				} else {
@@ -153,20 +155,40 @@ class Get_started_model extends CI_Model {
 	 * @author Weerapat P.
 	 */
 	function get_todo_list_by_app_id($id = NULL){
-		$result = $this->get_started_stat->findOne(array('id' => (int)$id, 'type' => 'app'));
-		if(!$result) return FALSE;
-		$result = obj2array($result);
+		if(!$id) return FALSE;
 		$lists = $this->get_all_app_todo_list();
+		$result = $this->get_started_stat->findOne(array('id' => (int)$id, 'type' => 'app'));
+		$result = obj2array($result);
 		if(count($lists)) {
 			foreach($lists as &$item){
+				$item['link'] = str_replace('{base_url}', base_url(), $item['link']);
+				$item['link'] = str_replace('{app_id}', $id, $item['link']);
 				if( is_array($result['items']) && in_array($item['id'], $result['items']) ) {
 					$item['status'] = 1;
 				} else {
 					$item['status'] = 0;
 				}
 			}
-		}
+		}	
 		return $lists;
+	}
+
+	/**
+	 * Check is get_started list complete or not
+	 * @param $id
+	 * @author Weerapat P.
+	 */
+	function is_completed($id = NULL, $type = NULL){
+		if(!$id || !$type) return FALSE;
+		switch($type) {
+			case 'app' : $lists = $this->get_todo_list_by_app_id($id); break;
+			case 'page' : $lists = $this->get_todo_list_by_page_id($id); break;
+			default : break;
+		}
+		foreach($lists as $item) {
+			if($item['status'] == 0) return FALSE;
+		}
+		return TRUE;
 	}
 
 	/**
@@ -177,7 +199,6 @@ class Get_started_model extends CI_Model {
 	 * @author Weerapat P.
 	 */
 	function update_get_started_stat_items($id = NULL, $type = NULL, $items = array()){
-		
 		$check_args = !empty($id) && !empty($type) && count($items);
 		if(!$check_args){
 			return FALSE;
