@@ -694,7 +694,7 @@
 							for(i in json) {
 								ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" />'
 								+'<span class="button">'
-								+'<a class="bt-setting_app" href="'+base_url+'app/config/'+json[i].app_install_id+'"><span>Setting</span></a>'
+								+'<a class="bt-setting_app" href="'+base_url+'settings/page_apps/app/'+page_id+'/'+json[i].app_install_id+'"><span>Setting</span></a>'
 								+'</span>'
 								+'</p><p class="appname">'+ json[i].app_name +'</p><input type="hidden" class="app_install_id" value="'+json[i].app_install_id+'" /></li>');
 							}
@@ -761,7 +761,7 @@
 												var app_install_id=json.app_install_id;
 												dragging_object.append('<input type="hidden" value="'+app_install_id+'" class="app_install_id" />');
 												dragging_object.children('p:first').append('<span class="button">'
-												+'<a class="bt-setting_app" href="'+base_url+'app/config/'+app_install_id+'"><span>Setting</span></a>'
+												+'<a class="bt-setting_app" href="'+base_url+'settings/page_apps/app/'+page_id+'/'+app_install_id+'"><span>Setting</span></a>'
 												+'</span>');
 												shDragging.refresh_installed_app_in_page_panel();
 												shDragging.show_available_app_in_page(page_id);
