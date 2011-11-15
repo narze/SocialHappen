@@ -18,6 +18,7 @@ class Campaign extends CI_Controller {
 
 	function add($app_install_id = NULL){
 		//todo : check permission
+		$this->load->library('campaign_lib');
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('campaign_name', 'Campaign Name', 'required|trim|xss_clean|max_length[255]');
 		$this->form_validation->set_rules('campaign_start_date', 'Campaign Start Date', 'required|trim|xss_clean|max_length[10]');
@@ -30,7 +31,12 @@ class Campaign extends CI_Controller {
 			$this->load->vars($vars);
 			$this->load->view('settings/campaign/add');
 		}
-		else 
+		else if(!$this->campaign_lib->validate_date_range(set_value('campaign_start_date'), set_value('campaign_end_date'))){
+			$vars = array('app_install_id'=>$app_install_id, 'date_range_validation_error' => TRUE);
+			$this->load->vars($vars);
+			$this->load->view('settings/campaign/add');
+		} 
+		else
 		{
 			$form_data = array(
 				'app_install_id' => $app_install_id,
@@ -49,13 +55,15 @@ class Campaign extends CI_Controller {
 			}
 			else
 			{
-				echo 'An error occurred saving your information. Please try again later';
+				log_message('error','Error in add_campaign '.print_r($form_data, TRUE));
+				redirect('settings/campaign/'.$app_install_id.'?error=1');
 			}
 		}
 	}
 
 	function update($app_install_id = NULL, $campaign_id = NULL){
 		//todo : check permission
+		$this->load->library('campaign_lib');
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('campaign_name', 'Campaign Name', 'required|trim|xss_clean|max_length[255]');
 		$this->form_validation->set_rules('campaign_start_date', 'Campaign Start Date', 'required|trim|xss_clean|max_length[10]');
@@ -69,7 +77,13 @@ class Campaign extends CI_Controller {
 			$this->load->vars($vars);
 			$this->load->view('settings/campaign/update');
 		}
-		else 
+		else if(!$this->campaign_lib->validate_date_range(set_value('campaign_start_date'), set_value('campaign_end_date'))){
+			$campaign = $this->campaign->get_campaign_profile_by_campaign_id($campaign_id);
+			$vars = array('app_install_id'=>$app_install_id, 'campaign_id'=>$campaign_id,'campaign' => $campaign, 'date_range_validation_error' => TRUE);
+			$this->load->vars($vars);
+			$this->load->view('settings/campaign/update');
+		} 
+		else
 		{
 			$form_data = array(
 		       	'campaign_name' => set_value('campaign_name'),
@@ -84,7 +98,8 @@ class Campaign extends CI_Controller {
 			}
 			else
 			{
-				echo 'An error occurred saving your information. Please try again later';
+				log_message('error','Error in update_campaign_by_id '.print_r($form_data, TRUE));
+				redirect('settings/campaign/'.$app_install_id.'?error=1');
 			}
 		}
 	}

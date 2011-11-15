@@ -1,8 +1,11 @@
 <div id="new-campaign-form">
 <?php 
+if (issetor($date_range_validation_error)){
+        echo 'date range is not valid'  ;
+}
+
 $attributes = array('class' => 'new-campaign-form', 'id' => '');
 echo form_open('settings/campaign/add/'.$app_install_id, $attributes); ?>
-
 <p>
         <label for="campaign_name">Campaign Name <span class="required">*</span></label>
         <?php echo form_error('campaign_name'); ?>

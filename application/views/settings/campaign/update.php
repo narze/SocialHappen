@@ -1,6 +1,9 @@
 
 <div id="update-campaign-form">
 <?php 
+if (issetor($date_range_validation_error)){
+        echo 'date range is not valid'  ;
+}
 $attributes = array('class' => 'update-campaign-form', 'id' => '');
 echo form_open('settings/campaign/update/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
 
