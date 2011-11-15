@@ -2176,7 +2176,7 @@ class Sync extends CI_Controller {
 		);
 
 		foreach($get_started_stats as $get_started_stat){
-			$this->get_started->add_get_started_stat($get_started_stat);
+			$this->get_started->add_get_started_stat($get_started_stat['id'], $get_started_stat['type'], $get_started_stat['items']);
 		}
 		echo 'Added '.count($get_started_stats).' get-started stats<br />';
 		*/
