@@ -3,6 +3,20 @@
 class Campaign_lib_test extends CI_Controller {
 	private $dateStr1 = "2011/11/11";
 	private $dateStr2 = "2011/11/20";
+	private $dateStr3 = "2011/11/05";
+	private $dateStr4 = "2011/11/06";
+	private $dateStr5 = "2011/11/15";
+	private $dateStr6 = "2011/11/16";
+	private $dateStr7 = "2011/11/25";
+	private $dateStr8 = "2011/11/26";
+	private $dateStr9 = "2011/11/30";
+	private $dateStr10 = "2011/11/14";
+	private $dateStr11 = "2011/11/17";
+
+	private $campaigns = array(
+		array('campaign_id' => 1, 'campaign_start_date' => '2011/11/06', 'campaign_end_date' => '2011/11/15'),
+		array('campaign_id' => 2, 'campaign_start_date' => '2011/11/16', 'campaign_end_date' => '2011/11/25'),
+	);
 
 	function __construct(){
 		parent::__construct();
@@ -52,6 +66,43 @@ class Campaign_lib_test extends CI_Controller {
 
 		$result = $this->campaign_lib->validate_date_range($this->dateStr2, TRUE);
 		$this->unit->run($result, FALSE, '2011/11/11 - TRUE');
+	}
+
+	function validate_date_range_with_campaigns_test(){
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, $this->dateStr2, $this->campaigns);
+		$this->unit->run($result, FALSE, $this->dateStr1.'-'.$this->dateStr2);
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr3, $this->dateStr4, $this->campaigns);
+		$this->unit->run($result, FALSE, $this->dateStr3.'-'.$this->dateStr4);
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr4, $this->dateStr5, $this->campaigns);
+		$this->unit->run($result, FALSE, $this->dateStr4.'-'.$this->dateStr5);
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr5, $this->dateStr6, $this->campaigns);
+		$this->unit->run($result, FALSE, $this->dateStr5.'-'.$this->dateStr6);
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr6, $this->dateStr7, $this->campaigns);
+		$this->unit->run($result, FALSE, $this->dateStr6.'-'.$this->dateStr7);
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr7, $this->dateStr8, $this->campaigns);
+		$this->unit->run($result, FALSE, $this->dateStr7.'-'.$this->dateStr8);
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr8, $this->dateStr9, $this->campaigns);
+		$this->unit->run($result, TRUE, $this->dateStr8.'-'.$this->dateStr9);
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr10, $this->dateStr11, $this->campaigns);
+		$this->unit->run($result, FALSE, $this->dateStr10.'-'.$this->dateStr11);
+
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, $this->dateStr2, array());
+		$this->unit->run($result, TRUE, 'First campaign, no other campaign found');
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, $this->dateStr2, NULL);
+		$this->unit->run($result, TRUE, 'First campaign, no other campaign found');
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, $this->dateStr2, FALSE);
+		$this->unit->run($result, TRUE, 'First campaign, no other campaign found');
+	}
+
+	function validate_date_range_with_campaigns_fail_test(){
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, FALSE, $this->campaigns);
+		$this->unit->run($result, FALSE, 'error');
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, '', $this->campaigns);
+		$this->unit->run($result, FALSE, 'error');
+		$result = $this->campaign_lib->validate_date_range_with_campaigns(TRUE, $this->dateStr2, $this->campaigns);
+		$this->unit->run($result, FALSE, 'error');
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, $this->dateStr2, TRUE);
+		$this->unit->run($result, FALSE, 'error');
 	}
 }
 /* End of file campaign_lib_test.php */
