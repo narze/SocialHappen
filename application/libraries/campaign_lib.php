@@ -7,6 +7,7 @@
  */
 class Campaign_lib {
 	private $CI;
+    private $default_campaign_end_message = 'No campaign created';
 	function __construct() {
         $this->CI =& get_instance();
     }
@@ -61,4 +62,38 @@ class Campaign_lib {
         }
     }
 
+    /**
+     * API : Request current campaign
+     * @param array $campaigns
+     */
+    function api_request_current_campaign_in_campaigns($campaigns = NULL){
+        if(!is_array($campaigns)){
+            return FALSE;
+        } else {
+            $now = strtotime('now');
+            $recent_end_time = 0;
+            $recent_end_message = $this->default_campaign_end_message;
+            foreach($campaigns as $campaign){
+                if(isset($campaign['campaign_start_date']) && isset($campaign['campaign_end_date'])){
+                    $start_time = strtotime($campaign['campaign_start_date']);
+                    $end_time = strtotime($campaign['campaign_end_date']);
+                    if($start_time <= $now && $now <= $end_time){
+                        return array(
+                            'in_campaign' => TRUE,
+                            'campaign_id' => $campaign['campaign_id'],
+                            'campaign_end_message' => NULL
+                        );
+                    } else if ($recent_end_time < $end_time && $end_time < $now) {
+                        $recent_end_time = $end_time;
+                        $recent_end_message = $campaign['campaign_end_message'];
+                    }
+                }
+            }
+            return array(
+                'in_campaign' => FALSE,
+                'campaign_id' => NULL,
+                'campaign_end_message' => $recent_end_message
+            );
+        }
+    }
 }
