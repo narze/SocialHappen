@@ -78,6 +78,7 @@ class Tab extends CI_Controller {
 					),
 					'script' => array(
 						'common/functions',
+						'common/onload',
 						'tab/bar',
 						'tab/profile',
 						'tab/main',
