@@ -151,12 +151,17 @@ class Tab extends CI_Controller {
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
 		$is_logged_in = $this->socialhappen->is_logged_in();
+
+		//Is get-started completed?
+		$this->load->model('get_started_model', 'get_started');
+		$get_started_completed = $this->get_started->is_completed($page_id, 'page');
 		
 		$this->load->vars( array(
 			'page' => $page,
 			'is_liked' => $this->page['liked'],
 			'is_admin' => $is_admin,
-			'is_logged_in' => $is_logged_in
+			'is_logged_in' => $is_logged_in,
+			'get_started_completed' => $get_started_completed
 			)
 		);
 		
@@ -196,7 +201,6 @@ class Tab extends CI_Controller {
 		//get-started checklist
 		$this->load->model('get_started_model', 'get_started');
 		$result = $this->get_started->get_todo_list_by_page_id($page_id); 
-		//echo '<h2>RESULT</h2><pre>'; print_r($result); echo '</pre>';
 		$checklist = array();
 		if($result) {
 			foreach($result as $item) {

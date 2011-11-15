@@ -13,7 +13,9 @@
 				<li class="active" id="published"><a>Published</a><span class="arrow"></span><span class="light"></span></li>
 				<li id="unpublished"><a>Unpublished</a><span class="light"></span></li>
 			</ul>
-			<div class="buttons"><a class="bt-get-started">Get started</a></div>
+			<div class="buttons">
+        <?php if(!$get_started_completed) { ?><a class="bt-get-started">Get started</a><?php } ?>
+      </div>
 			<?php } ?>
 			<ul class="counter">
 			  <li class="member" alt="Member"><a><?php echo issetor($page_user_count,'-');?></a></li>
