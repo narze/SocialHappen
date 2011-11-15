@@ -243,6 +243,11 @@ onLoad = function(){
 			.on('click','li.notification', toggleNotification)
 			.on('click','a.a-logout', sh_logout);
 			
+			$('div.data ul.toggle').live('click', function(){
+				$('.toggle').not(this).removeClass('active');
+				$(this).addClass('active');
+			})
+
 			unhover_hide();
 			sh_popup();
 			
