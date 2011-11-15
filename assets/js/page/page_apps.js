@@ -30,7 +30,7 @@ $(function(){
 					row.find('td.status.app-member b').append(json[i].app_member);
 					row.find('td.status1.app-monthly-active b').append(json[i].app_monthly_active_member);
 					row.find('td.bt-icon a.bt-edit').attr('href', base_url+'app/'+ json[i].app_install_id);
-					row.find('td.bt-icon a.bt-setting').attr('href', base_url+'app/config/'+json[i].app_install_id);
+					row.find('td.bt-icon a.bt-setting').attr('href', base_url+'settings/page_apps/app/'+page_id+'/'+json[i].app_install_id);
 					//row.find('td.bt-icon a.bt-delete').attr('href', base_url+'path/to/delete/'+ json[i].app_install_id);
 					row.find('td.bt-icon a.bt-go').attr('href', json[i].app_url);
 				}

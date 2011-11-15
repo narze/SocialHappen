@@ -18,6 +18,39 @@ class Campaign_lib_test extends CI_Controller {
 		array('campaign_id' => 2, 'campaign_start_date' => '2011/11/16', 'campaign_end_date' => '2011/11/25'),
 	);
 
+	private $campaigns_api_data1 = array( // found current campaign : 2
+		array('campaign_id' => 1, 'campaign_start_date' => '2011/11/06', 'campaign_end_date' => '2011/11/14', 'campaign_end_message' => 'end campaign 1'),
+		array('campaign_id' => 2, 'campaign_start_date' => '2011/11/15', 'campaign_end_date' => '2033/11/25', 'campaign_end_message' => 'end campaign 2')
+	);
+
+	private $campaigns_api_data2 = array( // not found current campaign, have last campaign : 1
+		array('campaign_id' => 0, 'campaign_start_date' => '2011/10/06', 'campaign_end_date' => '2011/11/05', 'campaign_end_message' => 'end campaign 0'),
+		array('campaign_id' => 1, 'campaign_start_date' => '2011/11/06', 'campaign_end_date' => '2011/11/14', 'campaign_end_message' => 'end campaign 1'),
+		array('campaign_id' => 3, 'campaign_start_date' => '2011/09/15', 'campaign_end_date' => '2011/10/04', 'campaign_end_message' => 'end campaign 3'),
+		array('campaign_id' => 2, 'campaign_start_date' => '2031/11/15', 'campaign_end_date' => '2031/11/25', 'campaign_end_message' => 'end campaign 2')
+	);
+
+	private $campaigns_api_data3 = array( // not found current campaign, no last campaign
+		array('campaign_id' => 1, 'campaign_start_date' => '2031/11/06', 'campaign_end_date' => '2031/11/14', 'campaign_end_message' => 'end campaign 1'),
+		array('campaign_id' => 2, 'campaign_start_date' => '2031/11/15', 'campaign_end_date' => '2031/11/25', 'campaign_end_message' => 'end campaign 2')
+	);
+
+	private $api_request_campaign_expected1 = array(
+		'in_campaign' => TRUE,
+		'campaign_id' => 2,
+		'campaign_end_message' => NULL
+	);
+	private $api_request_campaign_expected2 = array(
+		'in_campaign' => FALSE,
+		'campaign_id' => NULL,
+		'campaign_end_message' => 'end campaign 1'
+	);
+	private $api_request_campaign_expected3 = array(
+		'in_campaign' => FALSE,
+		'campaign_id' => NULL,
+		'campaign_end_message' => 'No campaign created'
+	);
+	
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
@@ -103,6 +136,39 @@ class Campaign_lib_test extends CI_Controller {
 		$this->unit->run($result, FALSE, 'error');
 		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, $this->dateStr2, TRUE);
 		$this->unit->run($result, FALSE, 'error');
+	}
+
+	function api_request_current_campaign_in_campaigns_test(){
+		$expected = $this->api_request_campaign_expected1;
+		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns($this->campaigns_api_data1);
+		$this->unit->run($result, $expected);
+		
+		$expected = $this->api_request_campaign_expected2;
+		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns($this->campaigns_api_data2);
+		
+		$this->unit->run($result, $expected);
+		
+		$expected = $this->api_request_campaign_expected3;
+		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns($this->campaigns_api_data3);
+		
+		$this->unit->run($result, $expected);
+		
+		$expected = $this->api_request_campaign_expected3;
+		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns(array());
+		
+		$this->unit->run($result, $expected);
+	}
+
+	function api_request_current_campaign_in_campaigns_fail_test(){
+		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns(NULL);
+		$this->unit->run($result, FALSE);
+
+		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns(FALSE);
+		$this->unit->run($result, FALSE);
+
+		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns('string');
+		$this->unit->run($result, FALSE);
+
 	}
 }
 /* End of file campaign_lib_test.php */
