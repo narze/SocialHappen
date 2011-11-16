@@ -303,9 +303,16 @@ class Home extends CI_Controller {
 
 		//add to get-started done list
 		$page_id = issetor($this->input->get('pid'),NULL);
-		if($page_id) {
-			$this->load->model('get_started_model', 'get_started');
-			$this->get_started->add_get_started_stat($page_id, 'page', array(103));
+		if($page_id && $user_id = $this->socialhappen->get_user_id()) {
+				$this->load->model('company_model','companies');
+				$company = $this->companies->get_company_profile_by_page_id($page_id);
+				$this->load->model('user_companies_model','user_companies');
+				$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+
+				if($is_admin) {
+					$this->load->model('get_started_model', 'get_started');
+					$this->get_started->add_get_started_stat($page_id, 'page', array(103));
+				}
 		}
 		
 		$this -> parser -> parse('home/home_view', $data);
