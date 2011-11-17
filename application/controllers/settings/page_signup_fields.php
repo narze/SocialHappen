@@ -53,8 +53,10 @@ class Page_signup_fields extends CI_Controller {
 				$this->page->remove_page_user_fields_by_page_id($page_id,$remove_ids);
 			
 				//add to get-started done list
-				$this->load->model('get_started_model', 'get_started');
-				$this->get_started->add_get_started_stat($page_id, 'page', array(101));
+				if(count($submitted_fields) > 0 && count($remove_ids) == 0) {
+					$this->load->model('get_started_model', 'get_started');
+					$this->get_started->add_get_started_stat($page_id, 'page', array(101));
+				}
 
 				$this->load->vars(array(
 					'signup_fields' => $this->page->get_page_user_fields_by_page_id($page_id),
