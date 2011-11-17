@@ -41,7 +41,7 @@ class Achievement_lib
 	function create_index(){
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
-    	$this->CI->load->model('achievement_stat_page_model','achievement_stat_page');
+  	$this->CI->load->model('achievement_stat_page_model','achievement_stat_page');
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		
 		$this->CI->achievement_info->create_index();
