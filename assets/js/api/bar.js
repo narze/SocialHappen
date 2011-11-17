@@ -238,7 +238,7 @@ onLoad = function(){
 				$(this).toggleClass('active').find('ul').toggle();
 			})
 			.on('click','.toggle ul li a',function(){
-				$('.toggle').removeClass('active').find('ul').hide();
+				$(this).parents('.toggle').toggleClass('active').find('ul').toggle();
 			})
 			.on('click','li.notification', toggleNotification)
 			.on('click','a.a-logout', sh_logout);
