@@ -8,6 +8,7 @@ class XD extends CI_Controller {
 	}
 
 	function index(){
+		$this->load->vars(array('facebook_app_id' => $this->config->item('facebook_app_id')));
 		$this->load->view('xd/xd_view');
 	}
 	
@@ -136,6 +137,11 @@ class XD extends CI_Controller {
 			
 		));
 		$this->load->view('api/app_bar_content');
+	}
+
+	function homepage($app_install_id = NULL){
+		$this->load->library('homepage_lib');
+		$this->homepage_lib->view_homepage_for_unliked_users($app_install_id);
 	}
 }  
 

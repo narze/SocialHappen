@@ -215,8 +215,8 @@ class Page_model extends CI_Model {
 			} else {
 				$field['options'] = NULL;
 			}
-			
-			if($key = array_search($field['name'], $field_names)){ //If exists, update
+			$key = array_search($field['name'], $field_names);
+			if($key !== FALSE){ //If exists, update
 				foreach($field as $field_key => $field_value){
 					$page_fields[$key][$field_key] = $field_value;
 				}

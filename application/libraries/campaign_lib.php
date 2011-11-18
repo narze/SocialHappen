@@ -64,7 +64,11 @@ class Campaign_lib {
 
     /**
      * API : Request current campaign
+     * @return 1. FALSE if no campaign found,
+     *      2. if that app is in campaign : array('in_campaign' => TRUE, 'campaign_id' => [campaign_id], 'campaign_end_message' => NULL)
+     *      3. otherwise : array('in_campaign' => FALSE, 'campaign_id' => NULL, 'campaign_end_message' => [last campaign_end_message])
      * @param array $campaigns
+     * @author Manassarn M.
      */
     function api_request_current_campaign_in_campaigns($campaigns = NULL){
         if(!is_array($campaigns)){
@@ -95,5 +99,19 @@ class Campaign_lib {
                 'campaign_end_message' => $recent_end_message
             );
         }
+    }
+
+    /**
+     * Get current campaign by app_install_id
+     * @param $app_install_id
+     * @return 1. FALSE if no campaign found,
+     *      2. if that app is in campaign : array('in_campaign' => TRUE, 'campaign_id' => [campaign_id], 'campaign_end_message' => NULL)
+     *      3. otherwise : array('in_campaign' => FALSE, 'campaign_id' => NULL, 'campaign_end_message' => [last campaign_end_message])
+     * @author Manassarn M.
+     */
+    function get_current_campaign_by_app_install_id($app_install_id){
+        $this->CI->load->model('campaign_model','campaign');
+        $campaigns = $this->CI->campaign->get_app_campaigns_by_app_install_id_ordered($app_install_id, 'campaign_start_date desc');
+        return $this->api_request_current_campaign_in_campaigns($campaigns);
     }
 }
