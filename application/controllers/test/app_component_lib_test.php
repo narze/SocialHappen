@@ -10,6 +10,7 @@ class app_component_lib_test extends CI_Controller {
     $this->load->library('app_component_lib');
     $this->load->library('achievement_lib');
     $this->load->model('app_component_model','app_component');
+    $this->load->model('app_component_page_model','app_component_page');
     $this->load->model('achievement_info_model','achievement_info');
     $this->load->model('achievement_stat_model','achievement_stat');
     $this->load->model('achievement_stat_page_model','achievement_stat_page');
@@ -35,6 +36,7 @@ class app_component_lib_test extends CI_Controller {
     $this->achievement_stat_page->drop_collection();
     $this->achievement_user->drop_collection();
     $this->app_component->drop_collection();
+    $this->app_component_page->drop_collection();
   }
   
   function create_index_before_test(){
@@ -47,11 +49,6 @@ class app_component_lib_test extends CI_Controller {
     $app_id = 2;
     $app_install_id = 3;
     $page_id = 4;
-    $info = array(
-      'app_id' => $app_id,
-      'app_install_id' => $app_install_id,
-      'page_id' => $page_id
-    );
     $app_component_data = array(
       'campaign_id' => $campaign_id,
       'homepage' => array(
@@ -75,14 +72,6 @@ class app_component_lib_test extends CI_Controller {
           'title' => 'You are invited',
           'text' => 'Welcome to the campaign',
           'image' => 'https://localhost/assets/images/blank.png'
-        ),
-        'classes' => array(
-          array('name' => 'Founding',
-                       'invite_accepted' => 3),
-          array('name' => 'VIP',
-                       'invite_accepted' => 10),
-          array('name' => 'Prime',
-                       'invite_accepted' => 50)
         )
       ),
       'sharebutton' => array(
@@ -102,12 +91,40 @@ class app_component_lib_test extends CI_Controller {
       )
     );
     
-    $result = $this->app_component_lib->add_campaign($app_component_data, $info);
+    $result = $this->app_component_lib->add_campaign($app_component_data);
     $this->unit->run($result, TRUE,'Add app_component with full data', print_r($result, TRUE));
     $this->unit->run($this->app_component->count_all(), 1, 'count all app_component');
+  }
+
+  function add_page_test(){
+    $campaign_id = 1;
+    $app_id = 2;
+    $app_install_id = 3;
+    $page_id = 4;
+    $info = array(
+      'app_id' => $app_id,
+      'app_install_id' => $app_install_id,
+      'campaign_id' => $campaign_id
+    );
     
-    $campaign = $this->app_component_lib->get_campaign($campaign_id);
-    $classes = $campaign['invite']['classes'];
+    $app_component_page_data = array(
+      'page_id' => $page_id,
+      'classes' => array(
+        array('name' => 'Founding',
+              'invite_accepted' => 3),
+        array('name' => 'VIP',
+              'invite_accepted' => 10),
+        array('name' => 'Prime',
+              'invite_accepted' => 50)
+      )
+    );
+    
+    $result = $this->app_component_lib->add_page($app_component_page_data, $info);
+    $this->unit->run($result, TRUE,'Add app_component_page with full data', print_r($result, TRUE));
+    $this->unit->run($this->app_component_page->count_all(), 1, 'count all app_component_page');
+    
+    $page = $this->app_component_lib->get_page($page_id);
+    $classes = $page['classes'];
 
     $this->unit->run(count($classes), 3, 'count all classes');
     
