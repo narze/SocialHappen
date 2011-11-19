@@ -145,20 +145,6 @@ div.list_app-camp>ul>li>div:first-child p.pic img {
 	cursor:auto;
 }
 
-
-/* FancyBox Hack */
-#fancybox-outer {
-	border: 8px solid #B5CA6E!important;
-	-webkit-border-radius: 8px;
-	-moz-border-radius: 8px;
-	border-radius: 8px;
-}
-#fancybox-close {
-	top: -20px!important;
-	right: -20px!important;
-}
-#fancybox-wrap {top:10% !important;} 
-
 /* View my profile */
 div.account-data div.pic img {
 	width: 95px;
@@ -260,22 +246,6 @@ div.notifications-list ul li div.action {
 	top:0;
 	right:0;
 }
-
-/* Notification */
-.notice { line-height:30px; margin:5px auto; padding:0 10px!important; border:1px solid #999;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; position:relative; }
-.notice h2 { margin:10px 0 5px 0; }
-.notice p {  }
-.notice ul { padding-left: 18px; }
-.notice ul li { list-style:disc!important; }
-.notice ol li { list-style:decimal!important; }
-.notice a { text-decoration:underline; font-weight:bold; }
-.notice a.close{ background: url(../../images/bg/notice_close.png) no-repeat top left; width: 10px; height: 10px; display: block; position: absolute; top: 10px; right: 10px; cursor:pointer; text-indent:-9000px; }
-.notice.success { background-color:#efffbd; border-color:#cbd7a8; }
-.notice.success a { color:#444e26; }
-.notice.error { background-color:#ffc7c1; border-color:#e4aaa5; }
-.notice.error a { color:#7f2b2b; }
-.notice.warning { background-color:#fff6a8; border-color:#d9ce6e; }
-.notice.warning a { color:#6d6311; }
 
 /* Get started */
 #get-started { font-size: 13px; font-weight: bold; color: #3C3C3C; line-height: 18px;}

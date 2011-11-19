@@ -241,12 +241,54 @@ onLoad = function(){
 				$(this).parents('.toggle').toggleClass('active').find('ul').toggle();
 			})
 			.on('click','li.notification', toggleNotification)
-			.on('click','a.a-logout', sh_logout);
+			.on('click','a.a-logout', sh_logout)
+			.on('click','a.app-config', sh_app_component);
+
+			function sh_app_component() {
+				var app_config = $('a.app-config').attr('href');
+				//load template
+				$.ajax({
+					async:true,
+					type: 'GET',
+					url: base_url+'api/setting_template',
+					data: {
+						app_id : app_id,
+						app_secret_key : app_secret_key,
+						app_install_id : app_install_id,
+						app_install_secret_key : app_install_secret_key,
+						user_id : user_id
+					},
+					success: function(result) {
+						if(result.status == 'OK')
+						{
+							$('body>*').not(':has(#sh-bar)').remove();
+							$('body').addClass('settings').append(result.html);
+							//insert app config
+							$('#app-setting-menu li a.config').click();
+						}
+						else
+						{
+							console.log( 'error loading template' );
+						}
+					},
+					dataType: 'json'
+				});
+				return false;
+			}
 			
+			//App setting
 			$('div.data ul.toggle').live('click', function(){
 				$('.toggle').not(this).removeClass('active');
 				$(this).addClass('active');
 			})
+			$('#app-setting-menu li a').live('click', function(){
+				$(this).parents('ul').find('a').removeClass('active');
+				var iframe = $('<iframe src="'+$(this).attr('href')+'" allowtransparency="true" frameborder="0" sandbox="allow-same-origin allow-forms allow-scripts" style="width:100%;height:100%;min-height:600px;"></iframe>');
+				$('#app-content').html(iframe);
+				$('#app-content').prepend('<h2 class="setting-title"><span>'+ $(this).attr('title') +'</span></h2>');
+				$(this).addClass('active');
+				return false;
+			});
 
 			unhover_hide();
 			sh_popup();

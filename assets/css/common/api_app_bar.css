@@ -1,21 +1,21 @@
-div.header * {
+#sh-bar * {
 margin:0;
 padding:0;
 }
 
-div.header img,div.header fieldset {
+#sh-bar img,#sh-bar fieldset {
 border:0;
 }
 
-div.header li {
+#sh-bar li {
 list-style:none;
 }
 
-div.header a {
+#sh-bar a {
 cursor:pointer;
 }
 
-div.header {
+#sh-bar {
 font-size:12px;
 font-family:Arial, Helvetica, sans-serif;
 width:100%;
@@ -26,13 +26,13 @@ padding:0 0 3px;
 position:relative;
 }
 
-div.header:after {
+#sh-bar:after {
 clear:both;
 content:" ";
 display:block;
 }
 
-div.header div.name {
+#sh-bar div.name {
 float:left;
 height:35px;
 min-width: 10px;
@@ -44,7 +44,7 @@ background-color:#fff;
 cursor:pointer;
 }
 
-div.header div.name>div {
+#sh-bar div.name>div {
 height:30px;
 background:url(../../images/bg_fb/bg_liney01.gif) repeat-y 100% 0;
 max-width:140px;
@@ -52,13 +52,13 @@ overflow:hidden;
 padding:5px 0 0 40px;
 }
 
-div.header div.name>div:after {
+#sh-bar div.name>div:after {
 clear:both;
 content:" ";
 display:block;
 }
 
-div.header div.name>div>p.pic {
+#sh-bar div.name>div>p.pic {
 float:left;
 width:27px;
 height:26px;
@@ -68,12 +68,12 @@ position:relative;
 padding:1px 0 0;
 }
 
-div.header div.name>div>p.pic img {
+#sh-bar div.name>div>p.pic img {
 width:25px;
 height:25px;
 }
 
-div.header div.name>div>p.pic>span {
+#sh-bar div.name>div>p.pic>span {
 display:block;
 width:27px;
 height:27px;
@@ -83,7 +83,7 @@ left:0;
 top:0;
 }
 
-div.header div.name>div>p:first-child+p {
+#sh-bar div.name>div>p:first-child+p {
 font-weight:bold;
 color:#fff;
 line-height:25px;
@@ -93,7 +93,7 @@ background:none;
 white-space:nowrap;
 }
 
-div.header div.name > div div.dropdown {
+#sh-bar div.name > div div.dropdown {
 width:15px;
 height:35px;
 background-image:url(../../images/bg_fb/bg_header.png);
@@ -103,11 +103,11 @@ right:5px;
 top:0;
 }
 
-div.header div.name:hover > div div.dropdown {
+#sh-bar div.name:hover > div div.dropdown {
 background-position:-20px -38px;
 }
 
-div.header div.name > div div.dropdown span {
+#sh-bar div.name > div div.dropdown span {
 width:12px;
 height:25px;
 background:url(../../images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
@@ -117,8 +117,8 @@ right:0;
 top:5px;
 }
 
-div.header div.name>ul,
-div.header ul.menu>li ul {
+#sh-bar div.name>ul,
+#sh-bar ul.menu>li ul {
 position:absolute;
 top:35px;
 right:0;
@@ -132,34 +132,34 @@ z-index:999;
 border-radius:0 0 5px 5px;
 }
 
-div.header ul.menu>li ul { width:150px; }
+#sh-bar ul.menu>li ul { width:150px; }
 
-div.header ul.menu>li:hover,
-div.header ul.menu>li.active {
+#sh-bar ul.menu>li:hover,
+#sh-bar ul.menu>li.active {
 background-image:url(../../images/bg_fb/bg_header.png);
 background-position:-20px -38px;
 }
-div.header ul.menu>li.last-child:hover,
-div.header ul.menu>li.last-child.active {
+#sh-bar ul.menu>li.last-child:hover,
+#sh-bar ul.menu>li.last-child.active {
 background-image: url(../../images/bg_fb/bg_header.png);
 background-position:right -38px;
 }
 
-div.header ul.menu li ul li.last-child,div.header div.name>ul li.last-child {
+#sh-bar ul.menu li ul li.last-child,#sh-bar div.name>ul li.last-child {
 -webkit-border-radius:0 0 5px 5px;
 -moz-border-radius:0 0 5px 5px;
 border-radius:0 0 5px 5px;
 }
 
-div.header ul.menu > li ul li a,div.header div.name>ul li a {
+#sh-bar ul.menu > li ul li a,#sh-bar div.name>ul li a {
 line-height:25px;
 }
 
-div.header ul.menu > li ul li:hover,div.header div.name>ul li:hover {
+#sh-bar ul.menu > li ul li:hover,#sh-bar div.name>ul li:hover {
 background-color:#4e4e4e;
 }
 
-div.header div.name>ul>li a,div.header ul.menu>li.profile>ul>li a {
+#sh-bar div.name>ul>li a,#sh-bar ul.menu>li.profile>ul>li a {
 display:block;
 text-decoration:none;
 color:#fff;
@@ -168,7 +168,7 @@ background:url(../../images/bg_fb/bg_listmenu.png) 5px 13px no-repeat;
 padding:5px 10px 5px 20px;
 }
 
-div.header div.name>ul>li img {
+#sh-bar div.name>ul>li img {
 width:16px;
 height:16px;
 position: absolute;
@@ -176,21 +176,21 @@ top: 9px;
 left: 6px;
 }
 
-div.header div.name>ul>li a {
+#sh-bar div.name>ul>li a {
 background:none;
 padding-left: 26px;
 }
 
-div.header div.name>ul {
+#sh-bar div.name>ul {
 width:100%;
 left:0;
 }
 
-div.header div.name:hover {
+#sh-bar div.name:hover {
 background-position:left -38px;
 }
 
-div.header div.name>ul li {
+#sh-bar div.name>ul li {
 cursor:default;
 font-size:11px;
 background-image:url(../../images/bg_fb/bg_linex03.png);
@@ -199,29 +199,29 @@ background-position:top left;
 position:relative;
 }
 
-div.header div.name>ul>li:first-child {
+#sh-bar div.name>ul>li:first-child {
 background-image:none;
 }
 
-div.header ul.menu {
+#sh-bar ul.menu {
 float:right;
 height:35px;
 }
 
-div.header ul.menu>li {
+#sh-bar ul.menu>li {
 float:left;
 height:35px;
 background:url(../../images/bg_fb/bg_liney01.gif) repeat-y 0 0;
 padding:0 0 0 2px;
 }
 
-div.header ul.menu > li > ul li.separator {
+#sh-bar ul.menu > li > ul li.separator {
 background-image:url(../../images/bg_fb/bg_linex03.png);
 background-repeat:repeat-x;
 background-position:top left;
 }
 
-div.header ul.menu>li.guest a {
+#sh-bar ul.menu>li.guest a {
 color:#FFF;
 display:block;
 font-weight:bold;
@@ -230,30 +230,30 @@ text-decoration:none;
 padding:0 5px;
 }
 
-div.header ul.menu>li.like a {
+#sh-bar ul.menu>li.like a {
 display:block;
 width:33px;
 height:35px;
 background:url(../../images/bg_fb/bg_main.png) no-repeat 9px 10px;
 }
 
-div.header ul.menu>li.like a span {
+#sh-bar ul.menu>li.like a span {
 display:none;
 }
 
-div.header ul.menu>li.profile>div {
+#sh-bar ul.menu>li.profile>div {
 height:30px;
 padding:5px 0 0 40px;
 cursor:pointer;
 }
 
-div.header ul.menu>li.profile>div:after {
+#sh-bar ul.menu>li.profile>div:after {
 clear:both;
 content:" ";
 display:block;
 }
 
-div.header ul.menu>li.profile>div>p.pic {
+#sh-bar ul.menu>li.profile>div>p.pic {
 float:left;
 width:27px;
 height:26px;
@@ -263,12 +263,12 @@ position:relative;
 padding:1px 0 0;
 }
 
-div.header ul.menu>li.profile>div>p.pic img {
+#sh-bar ul.menu>li.profile>div>p.pic img {
 width:25px;
 height:25px;
 }
 
-div.header ul.menu>li.profile>div>p.pic>span {
+#sh-bar ul.menu>li.profile>div>p.pic>span {
 display:block;
 width:27px;
 height:27px;
@@ -278,7 +278,7 @@ left:0;
 top:0;
 }
 
-div.header ul.menu>li.profile>div>p:first-child+p {
+#sh-bar ul.menu>li.profile>div>p:first-child+p {
 font-weight:bold;
 color:#fff;
 line-height:25px;
@@ -289,7 +289,7 @@ background:url(../../images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
 
 
 
-div.header ul.menu>li.profile>ul li {
+#sh-bar ul.menu>li.profile>ul li {
 cursor:default;
 font-size:11px;
 background-image:url(../../images/bg_fb/bg_linex03.png);
@@ -299,20 +299,20 @@ color:#FFF;
 font-weight:bold;
 }
 
-div.header ul.menu>li.profile>ul>li:first-child {
+#sh-bar ul.menu>li.profile>ul>li:first-child {
 background:none;
 }
 
-div.header ul.menu > li.profile > ul > li.user-info {
+#sh-bar ul.menu > li.profile > ul > li.user-info {
 height:55px;
 }
 
-div.header ul.menu > li.profile > ul > li.user-info div {
+#sh-bar ul.menu > li.profile > ul > li.user-info div {
 padding-left:60px;
 margin-top:5px;
 }
 
-div.header ul.menu > li.profile > ul > li.user-info div img {
+#sh-bar ul.menu > li.profile > ul > li.user-info div img {
 width:50px;
 height:50px;
 position:absolute;
@@ -320,11 +320,11 @@ top:5px;
 left:5px;
 }
 
-div.header ul.menu > li.setting {
+#sh-bar ul.menu > li.setting {
 position:relative;
 }
 
-div.header ul.menu > li.setting div:first-child {
+#sh-bar ul.menu > li.setting div:first-child {
 text-indent:-9000px;
 cursor:pointer;
 display:block;
@@ -333,17 +333,17 @@ height:35px;
 background:url(../../images/bg_fb/bg_main.png) no-repeat 7px -68px;
 }
 
-div.header ul.menu > li.setting > ul {
+#sh-bar ul.menu > li.setting > ul {
 position:absolute;
 left:-113px;
 top:35px;
 }
 
-div.header ul.menu > li.setting > ul li {
+#sh-bar ul.menu > li.setting > ul li {
 font-size:11px;
 }
 
-div.header ul.menu > li.setting a {
+#sh-bar ul.menu > li.setting a {
 display:block;
 width:auto;
 height:auto;
@@ -389,12 +389,8 @@ position:relative;
 top:15px;
 text-align:center;
 }
-div.popup-fb div.buttons p.left {
-text-align:left;
-}
-div.popup-fb div.buttons p.right {
-text-align:right;
-}
+div.buttons p.left { text-align:left; }
+div.buttons p.right { text-align:right; }
 
 /* FB popup */
 div.popup-fb div.step {
@@ -425,6 +421,7 @@ div.popup-fb div.step span.connector { border-top:1px solid #d0d0d0; position:ab
 li.error>label {color:red;}
 li.error p {color:red; font-style:italic;}
 li.error input[type="text"],
+input[type="text"].error,
 li.error textarea { border:1px solid red!important; }
 span.required {color:red}
 
@@ -717,7 +714,8 @@ div.popup-fb-signup-page {
 /* Button Facebook */
 *.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome,
 .bt-next, .bt-next-inactive, .bt-cancel, .bt-done, .bt-done-inactive, .bt-start, 
-.bt-dashboard, .bt-get-started, .bt-configure, .bt-learn-more {
+.bt-dashboard, .bt-get-started, .bt-configure, .bt-learn-more,
+.bt-update, .bt-back, .bt-cancal-2, .checkbox_switch {
 	background: url(../../images/bg_fb/bg_button_2.png) no-repeat;
 	cursor: pointer;
 	border: none;
@@ -777,8 +775,14 @@ div.popup-fb-signup-page {
 .bt-get-started { width: 84px; height: 27px; background-position: -245px -116px; }
 .bt-configure { width: 84px; height: 31px; background-position: -148px -155px; }
 .bt-learn-more { width: 94px; height: 31px; background-position: -235px -155px; }
+.bt-update { width: 144px; height: 31px; background-position: 0 -155px; }
+.bt-back { width: 66px; height: 30px; background-position: -154px -196px;}
+.bt-cancel-2 { width: 66px; height: 30px; background-position: -236px -196px; }
+.checkbox_switch { width: 61px; height: 24px; background-position: 0 -281px; text-indent:0;}
+.checkbox_switch input { display:none;}
+.checkbox_switch.on { background-position: 0 -243px; }
 
-div.header ul.menu > li.notification a.amount {
+#sh-bar ul.menu > li.notification a.amount {
 display:block;
 width:35px;
 height:35px;
@@ -788,7 +792,7 @@ position:relative;
 padding:0px 0px 0px 0px;
 }
 
-div.header ul.menu > li.notification a.amount span {
+#sh-bar ul.menu > li.notification a.amount span {
 font-size:10px;
 background:rgba(201,25,28,0.7);
 color:#fff;
@@ -798,7 +802,7 @@ right:5px;
 padding:1px 2px;
 }
 
-div.header ul.menu>li.notification>ul {
+#sh-bar ul.menu>li.notification>ul {
 background-color:#292929;
 display:none;
 width:250px;
@@ -812,11 +816,11 @@ z-index:999;
 border-radius:0 0 5px 5px;
 }
 
-div.header ul.menu > li.notification ul li {
+#sh-bar ul.menu > li.notification ul li {
 font-size:11px;
 padding: 0 5px;
 }
-div.header ul.menu > li.notification ul li a {
+#sh-bar ul.menu > li.notification ul li a {
 position:relative;
 display:block;
 padding-left:60px;
@@ -825,7 +829,7 @@ text-decoration:none;
 color:#FFF;
 min-height: 60px;
 }
-div.header ul.menu > li.notification ul li a img {
+#sh-bar ul.menu > li.notification ul li a img {
 width:50px;
 height:50px;
 border:0;
@@ -833,35 +837,35 @@ position:absolute;
 left:0;
 top:5px;
 }
-div.header ul.menu > li.notification ul li a p.message {
+#sh-bar ul.menu > li.notification ul li a p.message {
 line-height: 16px;
 padding-top: 5px;
 }
-div.header ul.menu > li.notification ul li a p.time {
+#sh-bar ul.menu > li.notification ul li a p.time {
 color:#d6ff90;
 line-height:16px;
 }
-div.header ul.menu > li.notification ul li.no-notification {
+#sh-bar ul.menu > li.notification ul li.no-notification {
 color: #fff;
 text-align: center;
 line-height: 35px;
 }
-div.header ul.menu > li.notification ul li.no-notification:hover {
+#sh-bar ul.menu > li.notification ul li.no-notification:hover {
 background-color:transparent;
 }
-div.header ul.menu > li.notification ul li.unread{
+#sh-bar ul.menu > li.notification ul li.unread{
 background-color:#3d3d3d;
 }
 
-div.header ul.menu > li.notification ul li.unread:hover {
+#sh-bar ul.menu > li.notification ul li.unread:hover {
 background-color:#4e4e4e;
 }
 
-div.header ul.menu > li.notification ul li.last-child {
+#sh-bar ul.menu > li.notification ul li.last-child {
 
 background-color:#555353;
 }
-div.header ul.menu > li.notification ul li.last-child a {
+#sh-bar ul.menu > li.notification ul li.last-child a {
 text-align: center;
 text-shadow: #000 1px 1px 3px;
 display: block;
@@ -881,7 +885,7 @@ body.settings {
 }
 div.account-data {
 	width: 475px;
-	margin: 0 auto 18px;
+	margin: 0 auto 10px;
 }
 div.account-data:after{
     clear:both;
@@ -902,7 +906,7 @@ div.account-data div.data {
 	float: right;
 	width: 365px;
 }
-div.account-data div.data h1 {font-size: 16px; color: #17418d; padding: 0 0 5px;}
+div.account-data div.data h1 {font-size: 16px; color: #17418d; padding: 0 0 5px 2px;}
 div.account-data div.data p {padding: 0 0 5px;}
 div.account-data div.data ul.counter {
 	width: 365px;
@@ -1028,8 +1032,71 @@ div.account-data ul.publish li span.light {
 div.account-data ul.publish li#published span.light { background-position:-20px -326px;}
 div.account-data ul.publish li#unpublished span.light { background-position:-20px -345px; }
 
+#app-setting-menu { list-style: none; position: absolute; top: 63px;}
+#app-setting-menu li { float:left; }
+#app-setting-menu li a { display:block; background-image:url(../../images/bg_fb/bg_component_menu.png); background-repeat:no-repeat; }
+#app-setting-menu li a.config { width: 69px; height: 31px; }
+#app-setting-menu li a.campaign { width: 86px; height: 31px; background-position:-69px 0;}
+#app-setting-menu li a.invite { width: 68px; height: 31px; background-position:-155px 0;}
+#app-setting-menu li a.share { width: 65px; height: 31px; background-position:-223px 0;}
+#app-setting-menu li a.non-fan { width: 75px; height: 31px; background-position:-288px 0;}
+#app-setting-menu li a.active, #app-setting-menu li a:hover { background-position-y:-31px; }
 
-div.wrapper-content {
+#app-content h2.setting-title { 
+	height: 33px;
+	line-height: 33px;
+	padding: 0 10px;
+	font-size: 18px;
+	font-weight: normal;
+	color: #555;
+	background: url(../../images/bg/bg_setting-h2.gif) 0 15px repeat-x;
+	width: 450px;
+	position: relative;
+	left: 15px;
+	margin-bottom: 10px;
+}
+#app-content h2.setting-title span {
+	background: white;
+	padding: 0 8px;
+}
+
+.app-component-form {color:#333; font-size:12px; font-family: Arial, Helvetica, sans-serif;}
+.app-component-form ul { margin:0; padding:0; list-style:none;}
+.app-component-form ul li { position:relative; padding-left:147px;}
+.app-component-form ul li label { text-align: right;
+	display: inline-block;
+	width: 140px;
+	overflow: hidden;
+	position: absolute;
+	top: 4px;
+	left: 0px;
+	line-height:20px;
+}
+.app-component-form ul li div.inputs {
+	margin:7px 0;
+	line-height:20px;
+}
+.app-component-form ul li div.inputs input[type="text"] {padding:3px;}
+.app-component-form ul li.campaign-date { height: 40px; }
+.app-component-form ul li.campaign-date span.str {
+	position: absolute;
+	top: 25px;
+	left: 147px;
+	color: #63791C;
+	font-size: 80%;
+}
+.app-component-form ul li.campaign-date span.end {
+	position: absolute;
+	top: 25px;
+	left: 304px;
+	color: #63791C;
+	font-size: 80%;
+}
+.app-component-form div.buttons a { float:left; margin-right:5px;}
+
+#ui-datepicker-div { font-size:12px; }
+
+body.settings div.wrapper-content {
 	width: 498px;
 	-webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -1095,3 +1162,32 @@ div.tooltips span {
 	border-bottom-color: #2A2A2A;
 	bottom: none;
 }
+
+/* Notification */
+.notice { width: 93%; line-height:30px; margin:5px auto 10px; padding:0 10px!important; border:1px solid #999;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; position:relative; }
+.notice h2 { margin:10px 0 5px 0; }
+.notice p {  }
+.notice ul { padding-left: 18px; }
+.notice ul li { list-style:disc!important; }
+.notice ol li { list-style:decimal!important; }
+.notice a { text-decoration:underline; font-weight:bold; }
+.notice a.close{ background: url(../../images/bg/notice_close.png) no-repeat top left; width: 10px; height: 10px; display: block; position: absolute; top: 10px; right: 10px; cursor:pointer; text-indent:-9000px; }
+.notice.success { background-color:#efffbd; border-color:#cbd7a8; }
+.notice.success a { color:#444e26; }
+.notice.error { background-color:#ffc7c1; border-color:#e4aaa5; }
+.notice.error a { color:#7f2b2b; }
+.notice.warning { background-color:#fff6a8; border-color:#d9ce6e; }
+.notice.warning a { color:#6d6311; }
+
+/* FancyBox Hack */
+#fancybox-outer {
+	border: 8px solid #B5CA6E!important;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+#fancybox-close {
+	top: -20px!important;
+	right: -20px!important;
+}
+#fancybox-wrap {top:10% !important;} 
