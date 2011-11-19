@@ -189,7 +189,7 @@
 							$(".left-panel").find('.dragging-page div').html("<div class='loading' align='center'><img src='"+base_url+"assets/images/loading.gif' /><br />Loading</div><ul></ul>");
 						},
 						success: function(json) {
-							var ul_element=$(".left-panel").find('.dragging-page div').find('ul');
+							var ul_element=$(".left-panel").find('.dragging-page div').find('ul').css('max-height', '155px').css('overflow', 'hidden');
 							ul_element.append('<li class="add-page"></li>');
 							for(i in json) {
 								//	if(j%installed_page_per_row==0) ul_element.append('<div></div>');
@@ -436,10 +436,10 @@
 									// revert: "invalid",
 									// drag: function() {
 										// left_panel.find('.dragging-page div').addClass('in-action');
-										// left_panel.find('.dragging-page ul').css('height','auto');
 									// },
 									// stop: function() {
 										// left_panel.find('.dragging-page div').removeClass('in-action');
+										// left_panel.find('div.dragging-page ul').css('height','155px');
 									// }
 								// });
 								// ul_element.find('li.draggable[data-hasaddedapp="true"]').die().live('click',function(){
@@ -454,10 +454,10 @@
 									revert: "invalid",
 									drag: function() {
 										left_panel.find('.dragging-page div').addClass('in-action');
-										left_panel.find('.dragging-page ul').css('height','auto');
 									},
 									stop: function() {
 										left_panel.find('.dragging-page div').removeClass('in-action');
+										left_panel.find('div.dragging-page ul').css('height','155px');
 									}
 								});
 								//end for debug
