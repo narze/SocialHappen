@@ -44,6 +44,14 @@ class app_component_lib_test extends CI_Controller {
   
   function add_campaign_test(){
     $campaign_id = 1;
+    $app_id = 2;
+    $app_install_id = 3;
+    $page_id = 4;
+    $info = array(
+      'app_id' => $app_id,
+      'app_install_id' => $app_install_id,
+      'page_id' => $page_id
+    );
     $app_component_data = array(
       'campaign_id' => $campaign_id,
       'homepage' => array(
@@ -94,13 +102,13 @@ class app_component_lib_test extends CI_Controller {
       )
     );
     
-    $result = $this->app_component_lib->add_campaign($app_component_data);
-    $this->unit->run($result, TRUE,'Add app_component with full data');
+    $result = $this->app_component_lib->add_campaign($app_component_data, $info);
+    $this->unit->run($result, TRUE,'Add app_component with full data', print_r($result, TRUE));
     $this->unit->run($this->app_component->count_all(), 1, 'count all app_component');
     
-    $campaign = $this->app_component_lib->get_campaign($app_component_data);
+    $campaign = $this->app_component_lib->get_campaign($campaign_id);
     $classes = $campaign['invite']['classes'];
-    
+
     $this->unit->run(count($classes), 3, 'count all classes');
     
     
@@ -109,9 +117,10 @@ class app_component_lib_test extends CI_Controller {
     
     for($i = 0; $i < count($classes); $i++){
       $class = $classes[$i];
-      $this->unit->run($achievement['campaign_id'], $campaign_id, '');
+      
       $achievement = $this->achievement_lib->get_achievement_info($class['achievement_id']);
-      $this->unit->run($achievement['name'],
+      $this->unit->run($achievement['campaign_id'], $campaign_id, '');
+      $this->unit->run($achievement['info']['name'],
         $class['name'] , '');
       $this->unit->run($achievement['criteria']['page.action.113.count'],
         $class['invite_accepted'] , '');

@@ -503,6 +503,25 @@ class App_component_model extends CI_Model {
 			return $this->app_component->insert($app_component);
 		}
 	}
+  
+  /**
+   * delete app_component 
+   * @param campaign_id
+   * 
+   * @return result bolean
+   * 
+   * @author Metwara Narksook
+   */
+  function delete($campaign_id = NULL){
+    $check_args = isset($campaign_id);
+    if($check_args){
+      return $this->app_component
+                  ->remove(array("campaign_id" => $campaign_id), 
+                  array('$atomic' => TRUE));
+    }else{
+      return FALSE;
+    }
+  }
 }
 
 /* End of file app_component_model.php */

@@ -48,7 +48,7 @@ class achievement_lib_test extends CI_Controller {
 		$criteria = array('a' => 5, 'b' => 2);
 		
 		$result = $this->achievement_lib->add_achievement_info($app_id, $app_install_id, $info, $criteria);
-		$this->unit->run($result, 'is_true', 'add_test', print_r($result, TRUE));
+		$this->unit->run(isset($result), 'is_true', 'add_test', print_r($result, TRUE));
 		$total = count($this->achievement_info->list_info());
 		$this->unit->run($total, 1, 'add_test', print_r($result, TRUE));
 		
@@ -61,7 +61,7 @@ class achievement_lib_test extends CI_Controller {
 		$criteria = array('a' => 5, 'b' => 2);
 		
 		$result = $this->achievement_lib->add_achievement_info($app_id, $app_install_id, $info, $criteria);
-		$this->unit->run($result, 'is_true', 'add_test', print_r($result, TRUE));
+		$this->unit->run(isset($result), 'is_true', 'add_test', print_r($result, TRUE));
 		$total = count($this->achievement_info->list_info());
 		$this->unit->run($total, 2, 'add_test', print_r($result, TRUE));
 	}
@@ -650,7 +650,7 @@ class achievement_lib_test extends CI_Controller {
     $criteria = array('page.action.113.count' => 2, 'page.action.108.count' => 2);
     
     $result = $this->achievement_lib->add_achievement_info($app_id, $app_install_id, $info, $criteria);
-    $this->unit->run($result, 'is_true', 'add_test', print_r($result, TRUE));
+    $this->unit->run(isset($result), 'is_true', 'add_test', print_r($result, TRUE));
     $total = count($this->achievement_info->list_info());
     $this->unit->run($total, 5, 'add_test', print_r($result, TRUE));
     
@@ -727,7 +727,7 @@ class achievement_lib_test extends CI_Controller {
                       'score' => 1);
     
     $result = $this->achievement_lib->add_achievement_info($app_id, $app_install_id, $info, $criteria);
-    $this->unit->run($result, 'is_true', 'add_test', print_r($result, TRUE));
+    $this->unit->run(isset($result), 'is_true', 'add_test', print_r($result, TRUE));
     $total = count($this->achievement_info->list_info());
     $this->unit->run($total, 6, 'add_test', print_r($result, TRUE));
     
@@ -804,7 +804,7 @@ class achievement_lib_test extends CI_Controller {
                       'score' => 1);
     
     $result = $this->achievement_lib->add_achievement_info($app_id, $app_install_id, $info, $criteria);
-    $this->unit->run($result, 'is_true', 'add_test', print_r($result, TRUE));
+    $this->unit->run(isset($result), 'is_true', 'add_test', print_r($result, TRUE));
     $total = count($this->achievement_info->list_info());
     $this->unit->run($total, 7, 'add_test', print_r($result, TRUE));
     

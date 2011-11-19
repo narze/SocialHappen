@@ -107,7 +107,9 @@ class Achievement_info_model extends CI_Model {
 			
 			$achievement_info['criteria'] = $criteria;
 			
-			return $this->achievement_info->insert($achievement_info);
+			$result = $this->achievement_info->insert($achievement_info);
+      
+      return $result ? $achievement_info['_id'] : FALSE;
 			
 		}else{
 			return FALSE;

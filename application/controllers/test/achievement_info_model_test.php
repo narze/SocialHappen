@@ -79,7 +79,7 @@ class achievement_info_model_test extends CI_Controller {
 		$criteria = array('a' => 5, 'b' => 2);
 		
 		$result = $this->achievement_info->add($app_id, $app_install_id, $info, $criteria);
-		$this->unit->run($result, 'is_true', 'add_test', print_r($result, TRUE));
+		$this->unit->run(isset($result), 'is_true', 'add_test', print_r($result, TRUE));
 		$total = count($this->achievement_info->list_info());
 		$this->unit->run($total, 1, 'add_test', print_r($result, TRUE));
 		
@@ -92,7 +92,7 @@ class achievement_info_model_test extends CI_Controller {
 		$criteria = array('a' => 5, 'b' => 2);
 		
 		$result = $this->achievement_info->add($app_id, $app_install_id, $info, $criteria);
-		$this->unit->run($result, 'is_true', 'add_test', print_r($result, TRUE));
+		$this->unit->run(isset($result), 'is_true', 'add_test', print_r($result, TRUE));
 		$total = count($this->achievement_info->list_info());
 		$this->unit->run($total, 2, 'add_test', print_r($result, TRUE));
 	}
