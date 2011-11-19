@@ -700,27 +700,7 @@ class SocialHappen{
 		$user = $user_id ? $this->CI->User->get_user_profile_by_user_id($user_id) : $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
 
-		$menu = array();
-		//Right menu			
-		//@TODO : This has problems with multiple login, cannot use user_agent to check due to blank user_agent when called via api
-		// if(!$this->is_logged_in()){ 
-			// $facebook_page = $this->CI->facebook->get_page_info($page['facebook_page_id']);
-			// $view_as = 'guest';
-			// $signup_link = $facebook_page['link'].'?sk=app_'.$this->CI->config->item('facebook_app_id');
-		// } else if($this->CI->user_pages->is_page_admin($user['user_id'], $page_id)){			
-			// $view_as = 'admin';
-			
-			// $page_update = array();
-			// if(!$page['page_installed']){
-				// $page_update['page_installed'] = TRUE;
-			// } else if($page['page_app_installed_id'] != 0){
-				// $page_update['page_app_installed_id'] = 0;
-			// }		
-			// $this->CI->pages->update_page_profile_by_page_id($page_id, $page_update);
-		// } else {
-			// $view_as = 'user';
-		// }
-		
+		$menu = array();		
 		$menu['left'] = array();
 		if($page_id){
 			$apps = $this->CI->app->get_installed_apps_by_page_id($page_id);
@@ -763,23 +743,12 @@ class SocialHappen{
 				//for get started
 				'app_id' => $app['app_id'],
 				'app_secret_key' => $app['app_secret_key'],
-				'app_install_secret_key' => $app['app_install_secret_key']
+				'app_install_secret_key' => $app['app_install_secret_key'],
+				'facebook_page_id' => $page['facebook_page_id']
 			),
 			// 'view_as' => $view_as,
 			'node_base_url' => $this->CI->config->item('node_base_url'),
-			// 'app_install_id' => $app_install_id,
-			// 'page_id' => $page_id,
-			// 'menu' => $menu,
-			// 'user' => $user,
-			// 'current_menu' => array(
-				// 'icon_url' => $app_mode ? $app['app_image'] : $page['page_image'],
-				// 'name' => $app_mode ? $app['app_name'] : $page['page_name']
-			// ),
-			// 'signup_link' =>issetor($signup_link, '#'),
-			// 'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
-			// 'notification_amount' => $notification_amount,
-			// 'all_notification_link' => $app_mode ? $this->get_tab_url_by_app_install_id($app_install_id).'&app_data='.base64_encode(json_encode($app_data)) : base_url().'tab/notifications/'.$user['user_id'],
-			// 'app_mode' => $app_mode,
+			// 'test' => issetor($_REQUEST['signed_request'])
 			
 		));
 		return $this->CI->load->view('api/app_bar_view', array(), TRUE);

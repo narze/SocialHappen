@@ -11,7 +11,7 @@ class App_component_lib
 {
   
   private $CI;
-  
+  private $INVITE_ACCEPT_ACTION = 113;
   /**
    *  ------------------------------------------------------------------------
    *  CONSTRUCTOR
@@ -35,6 +35,8 @@ class App_component_lib
   function create_index(){
     $this->CI->load->model('app_component_model','app_component');
     $this->CI->app_component->create_index();
+    $this->CI->load->model('app_component_page_model','app_component_page');
+    $this->CI->app_component_page->create_index();
   }
   
   /**
@@ -49,24 +51,124 @@ class App_component_lib
    *  'app_id' =>
    *  'app_install_id' =>
    *  'page_id' =>
-   *   // need for achievement
+   *   // required for achievement
    * )
    * @author Metwara Narksook
    */
-  function add_campaign($app_component = array(), $info = array()){
-    $add_campaign_result = $this->CI->app_component->add($app_component);
+  function add_campaign($app_component = array()){
+    $this->CI->load->model('app_component_model','app_component');
+    $check_args = (isset($app_component['campaign_id']));
     
-    $add_achievement = FALSE;
-    if($add_campaign_result){
-      $this->CI->load->library('achievement_lib');
-      $add_achievement = TRUE;
+    if(!$check_args){
+      return FALSE;
     }
-    return $add_campaign_result && $add_achievement;
     
+    $add_campaign_result = $this->CI->app_component->add($app_component);
+    return $add_campaign_result;
   }
   
   function get_campaign($campaign_id = NULL){
-    return NULL;
+    return $this->CI->app_component->get_by_campaign_id($campaign_id);
+  }
+  
+  /**
+   * Add app_component_page
+   * @param $app_component = array(
+   *    'page_id' => [page_id] 
+   *    'classes' => array(
+   *      array(
+   *        "name" => "Founding",
+   *        "invite_accepted" => 3,
+   *        "achievement_id" => "4ec7507b6803fac21600000f" 
+   *      ),
+   *      array(
+   *        "name" => "VIP",
+   *        "invite_accepted" => 10,
+   *        "achievement_id" => "4ec7507b6803fac216000010" 
+   *      ),
+   *      array(
+   *        "name" => "Prime",
+   *        "invite_accepted" => 50,
+   *        "achievement_id" => "4ec7507b6803fac216000011" 
+   *      )
+   *    )
+   * )
+   * @param $info = array(
+   *  'app_id' =>
+   *  'app_install_id' =>
+   *  'campaign_id' => 
+   *   // required for achievement
+   * )
+   * @author Metwara Narksook
+   */
+  function add_page($app_component_page = array(), $info = array()){
+    $this->CI->load->model('app_component_page_model','app_component_page');
+    
+    $check_args = (isset($info['app_id']) && isset($info['app_install_id'])
+      && isset($info['campaign_id']) && isset($app_component_page['page_id']));
+    
+    if(!$check_args){
+      return FALSE;
+    }
+    
+    $add_page_result = $this->CI->app_component_page->add($app_component_page);
+    $app_id = $info['app_id'] = (int)$info['app_id'];
+    $app_install_id = $info['app_install_id'] = (int)$info['app_install_id'];
+    $page_id = $app_component_page['page_id'] = (int)$app_component_page['page_id'];
+    $campaign_id = $info['campaign_id'] = (int)$info['campaign_id'];
+    
+    $add_all_achievement = TRUE;
+    $added_achievement_id_list = array();
+    if($add_page_result){
+      $this->CI->load->library('achievement_lib');
+      
+      $classes = $app_component_page['classes'];
+      
+      for($i = 0; $i < count($classes); $i++){
+        $class = $classes[$i];
+        $info = array('name' => $class['name'],
+                      'description' => $class['name'],
+                      'criteria_string' => array('at least '
+                       . $class['invite_accepted'] . ' invite accepted'),
+                      'page_id' => $page_id,
+                      'campaign_id' => $campaign_id);
+        $criteria = array('page.action.' . $this->INVITE_ACCEPT_ACTION . '.count' => $class['invite_accepted']);
+        
+        $added_achievement_id = $this->CI->achievement_lib->
+          add_achievement_info($app_id, $app_install_id, $info, $criteria);
+
+        if(!isset($added_achievement_id)){
+          $add_all_achievement = FALSE;
+          break;
+        }else{
+          $app_component_page['classes'][$i]['achievement_id'] = 
+            '' . $added_achievement_id;
+          $added_achievement_id_list[] = '' . $added_achievement_id;
+        }
+      }
+      
+      $update_page = $this->CI->app_component_page->
+        update_classes_by_page_id($page_id, $app_component_page['classes']);
+    }
+    $result = $add_page_result && $add_all_achievement && $update_page;
+    
+    if(!$result){ // rollback
+      
+      foreach ($added_achievement_id_list as $achievement_id) {
+        $this->CI->achievement_lib->delete_achievement_info($achievement_id);
+      }
+      
+      $this->CI->app_component_page->delete($page_id);
+      
+      return FALSE;
+    }else{
+      return TRUE;
+    }
+  }
+  
+  function get_page($page_id = NULL){
+    $page_id = (int)$page_id;
+    return $this->CI->app_component_page->get_by_page_id($page_id);
   }
   
 }

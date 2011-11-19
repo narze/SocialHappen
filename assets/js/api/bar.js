@@ -568,9 +568,8 @@ var XD = function(){
 }();
 
 XD.receiveMessage(function(message){ // Receives data from child iframe
-	// console.log('received : ', message.data.sh_message);
 	if(message.data.sh_message === "loaded"){
-		XD.postMessage({sh_message:'page_id',sh_page_id:page_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+		XD.postMessage({sh_message:'page_id',sh_page_id:page_id,facebook_page_id:facebook_page_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
 	} else if(message.data.sh_message === 'status'){ 
 		view_as = message.data.sh_status;
 		user_image = message.data.sh_user_image;
@@ -590,6 +589,18 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		jQuery.fancybox({
 			href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
 		});
+	} else if(message.data.sh_message === "facebook page like"){ //xd.js
+		if(message.data.liked){
+			console.log('like');
+		} else {
+			console.log('unlike');
+			//call xd/homepage/app_install_id [if app_install_id is defined]
+			if(app_install_id){
+				jQuery.get(base_url+'xd/homepage/'+app_install_id, function(data){
+					console.log(data); // receive view from homepage_lib and display
+				});
+			}
+		}
 	}
 }, sh_domain);
 

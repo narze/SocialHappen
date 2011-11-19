@@ -6,7 +6,12 @@ function send(msg) {
 	return false;
 }
 
-	
+function doesUserLikeFacebookPage(facebook_page_id){
+    FB.api('/me/likes/'+facebook_page_id, function(response) {
+         send({sh_message:'facebook page like', liked: response.data.length != 0});
+    });
+}
+
 var XD = function(){
   
     var interval_id,
@@ -94,11 +99,14 @@ XD.receiveMessage(function(message){ // Receives data from parent
 		}).appendTo('body');
         send({sh_message:'logged out'});
 	} else if(message.data.sh_message === 'page_id'){ //bar.js
+        doesUserLikeFacebookPage(message.data.facebook_page_id);
 		jQuery.getJSON(base_url+'xd/get_user/'+message.data.sh_page_id,function(json){
 			if(typeof json.user_id !== 'undefined'){
 				send({sh_message:'status',sh_status:json.user_role,sh_user_image:json.user_image});
 			}
 		
 		});
-	}
+	} else if(message.data.sh_message === 'homepage'){ //bar.js
+         
+    }
 }, parent_origin);

@@ -137,10 +137,15 @@ class Facebook {
 		//print_r($this->curl->info);
 	}
 
-	function getGraph($id = NULL) {
-		$this -> _ci -> load -> library('curl');
-		$url = "https://graph.facebook.com/" . $id;
-		$this -> _ci -> curl -> create($url);
+	function getGraph($path = NULL) {
+		if ($cookie = $this -> get_facebook_cookie()) {
+			$access_token = '?access_token='.$cookie['access_token'];
+		} else {
+			$access_token = '';
+		}
+			$this -> _ci -> load -> library('curl');
+			$url = "https://graph.facebook.com/" . $path . $access_token;
+			$this -> _ci -> curl -> create($url);
 		return json_decode($this -> _ci -> curl -> ssl(FALSE) -> execute());
 	}
 
