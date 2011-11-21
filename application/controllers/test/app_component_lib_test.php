@@ -136,7 +136,6 @@ class app_component_lib_test extends CI_Controller {
       $class = $classes[$i];
       
       $achievement = $this->achievement_lib->get_achievement_info($class['achievement_id']);
-      // $this->unit->run($achievement['campaign_id'], $campaign_id, '');
       $this->unit->run($achievement['info']['name'],
         $class['name'] , '');
       $this->unit->run($achievement['criteria']['page.action.113.count'],
@@ -155,15 +154,35 @@ class app_component_lib_test extends CI_Controller {
     $page = $this->app_component_lib->get_page($page_id);
     $this->unit->run($page['page_id'], $page_id,'Add app_component_page with full data', print_r($page, TRUE));
     
-    $calsses = $page['classes'];
-    $calsses[0]['name'] = 'New Founder';
-    $calsses[0]['invite_accepted'] = 4;
+    $classes = $page['classes'];
+    $classes[0]['name'] = 'New Founder';
+    $classes[0]['invite_accepted'] = 4;
     
-    $calsses[2]['name'] = 'Super Prime';
-    $calsses[2]['invite_accepted'] = 54;
+    $classes[2]['name'] = 'Super Prime';
+    $classes[2]['invite_accepted'] = 54;
     
-    // $result = $this->app_component_lib->update_page_classes($page_id, $result);
-    // $this->unit->run($result, TRUE,'Add app_component_page with full data', print_r($result, TRUE));
+    $result = $this->app_component_lib->update_page_classes($page_id, $classes);
+    $this->unit->run($result, TRUE,'update_page_class_test', print_r($result, TRUE));
+    
+    $page = $this->app_component_lib->get_page($page_id);
+    $this->unit->run($page['classes'], $classes,'Add app_component_page with full data', print_r($page, TRUE));
+    
+    $this->unit->run(count($classes), 3, 'count all classes');
+    
+    $achievement_list = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
+    $this->unit->run(count($achievement_list), count($classes), 'count all achievement_list', print_r($achievement_list, TRUE));
+    
+    for($i = 0; $i < count($classes); $i++){
+      $class = $classes[$i];
+      
+      $achievement = $this->achievement_lib->get_achievement_info($class['achievement_id']);
+      $this->unit->run($achievement['info']['name'],
+        $class['name'] , '');
+      $this->unit->run($achievement['info']['class']['level'] , $i);
+      $this->unit->run($achievement['info']['enable'], TRUE);
+      $this->unit->run($achievement['criteria']['page.action.113.count'],
+        $class['invite_accepted'] , '');
+    }
   }
   
   function update_page_class_with_new_class_test(){
@@ -171,11 +190,35 @@ class app_component_lib_test extends CI_Controller {
     $page = $this->app_component_lib->get_page($page_id);
     $this->unit->run($page['page_id'], $page_id,'Add app_component_page with full data', print_r($page, TRUE));
     
-    $calsses = $page['classes'];   
-    $calsses[3]['name'] = 'Super Prime';
-    $calsses[3]['invite_accepted'] = 54;
+    $classes = $page['classes'];
+    $classes[3]['name'] = 'Super Prime X2';
+    $classes[3]['invite_accepted'] = 60;
+    
+    $result = $this->app_component_lib->update_page_classes($page_id, $classes);
+    $this->unit->run($result, TRUE,'update_page_class_test', print_r($result, TRUE));
+    
+    $page = $this->app_component_lib->get_page($page_id);
+    
+    $classes = $page['classes'];
+    
+    $this->unit->run(count($classes), 4, 'count all classes');
+    
+    $achievement_list = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
+    $this->unit->run(count($achievement_list), count($classes), 'count all achievement_list', '<pre>' . print_r($achievement_list, TRUE) . '</pre>');
     
     
+    
+    for($i = 0; $i < count($classes); $i++){
+      $class = $classes[$i];
+      
+      $achievement = $this->achievement_lib->get_achievement_info($class['achievement_id']);
+      $this->unit->run($achievement['info']['name'],
+        $class['name'] , '');
+      $this->unit->run($achievement['info']['class']['level'] , $i);
+      $this->unit->run($achievement['info']['enable'], TRUE);
+      $this->unit->run($achievement['criteria']['page.action.113.count'],
+        $class['invite_accepted'] , '');
+    }
   }
 
   function update_page_class_remove_test(){
@@ -184,9 +227,33 @@ class app_component_lib_test extends CI_Controller {
     $this->unit->run($page['page_id'], $page_id,'Add app_component_page with full data', print_r($page, TRUE));
     
     $classes = $page['classes'];
-    unset($classes[0]);
+    array_splice($classes, 0, 1);
+    
+    $result = $this->app_component_lib->update_page_classes($page_id, $classes);
+    $this->unit->run($result, TRUE,'update_page_class_test', print_r($result, TRUE));
+    
+    $page = $this->app_component_lib->get_page($page_id);
+    
+    $classes = $page['classes'];
+    
+    $this->unit->run(count($classes), 3, 'count all classes');
+    
+    $achievement_list = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
+    $this->unit->run(count($achievement_list), count($classes), 'count all achievement_list', '<pre>' . print_r($achievement_list, TRUE) . '</pre>');
     
     
+    
+    for($i = 0; $i < count($classes); $i++){
+      $class = $classes[$i];
+      
+      $achievement = $this->achievement_lib->get_achievement_info($class['achievement_id']);
+      $this->unit->run($achievement['info']['name'],
+        $class['name'] , '');
+      $this->unit->run($achievement['info']['class']['level'] , $i);
+      $this->unit->run($achievement['info']['enable'], TRUE);
+      $this->unit->run($achievement['criteria']['page.action.113.count'],
+        $class['invite_accepted'] , '');
+    }
   }
   
   function end_test(){

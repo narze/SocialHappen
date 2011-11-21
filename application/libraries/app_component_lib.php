@@ -96,11 +96,11 @@ class App_component_lib
    * @author Metwara Narksook
    */
   function add_page($app_component_page = array()){
-    $this->CI->load->model('app_component_page_model','app_component_page');
-    
     if(!isset($app_component_page['page_id'])){
       return FALSE;
     }
+    
+    $this->CI->load->model('app_component_page_model','app_component_page');
     
     $add_page_result = $this->CI->app_component_page->add($app_component_page);
     $app_id = $info['app_id'] = 0;
@@ -118,7 +118,7 @@ class App_component_lib
         $class = $classes[$i];
         
         $class_data = array(
-          'group' => 'pade_id',
+          'group' => 'page_id',
           'level' => $i
         );
         
@@ -188,11 +188,93 @@ class App_component_lib
    * )
    * @author Metwara Narksook
    */
-  function update_page_classes($page_id = NULL, $classes = array(),
-   $info = array()){
-     
+  function update_page_classes($page_id = NULL, $classes = array()){
+    if(!isset($page_id)){
+      return FALSE;
+    }
+    $this->CI->load->model('app_component_page_model','app_component_page');
+    $this->CI->load->library('achievement_lib');
+    
+    $old_page = $this->CI->app_component_page->get_by_page_id($page_id);
+    $old_classes = $old_page['classes'];
+    
+    $update_page_result = $this->CI->app_component_page->
+      update_classes_by_page_id($page_id, $classes);
+    
+    if($update_page_result){
+      foreach($old_classes as $class){ // iterate disable all old achievement
+        $achievement_info = $this->CI->achievement_lib->
+          get_achievement_info($class['achievement_id']);
+        
+        if(isset($achievement_info)){
+          $achievement_info['info']['enable'] = FALSE;
+          $this->CI->achievement_lib->set_achievement_info(
+          $class['achievement_id'], 
+          $achievement_info['app_id'],
+          NULL, 
+          $achievement_info['info'], 
+          $achievement_info['criteria']);
+        }
+      }
+      
+      for($i = 0; $i < count($classes); $i++){ // iterate in new classes
+        $class = $classes[$i];
+        if(isset($class['achievement_id'])){ // modify exists achievement
+          $achievement_info = $this->CI->achievement_lib->
+            get_achievement_info($class['achievement_id']);
+          
+          if(isset($achievement_info)){
+            $achievement_info['info']['page_id'] = $page_id;
+            $achievement_info['info']['name'] = $class['name'];
+            $achievement_info['info']['enable'] = TRUE;
+            $achievement_info['info']['class']['level'] = $i;
+            $achievement_info['info']['criteria_string']  = 
+              array('at least '. $class['invite_accepted'] . ' invite accepted');
+              
+            $criteria = array('page.action.' . 
+              $this->INVITE_ACCEPT_ACTION . '.count' => $class['invite_accepted']);
+            
+            $this->CI->achievement_lib->set_achievement_info(
+              $class['achievement_id'], 
+              $achievement_info['app_id'],
+              NULL, 
+              $achievement_info['info'], 
+              $criteria);
+            $classes[$i]['achievement_id'] = '' . $class['achievement_id'];
+          }else{
+            // bad case
+          }
+        }else{ // add new achievement
+          $app_id  = 0;
+          $app_install_id = 0;
+          
+          $class_data = array(
+            'group' => 'page_id',
+            'level' => $i
+          );
+          
+          $info = array('name' => $class['name'],
+                        'description' => $class['name'],
+                        'criteria_string' => array('at least '
+                         . $class['invite_accepted'] . ' invite accepted'),
+                        'page_id' => $page_id,
+                        'class' => $class_data);
+          $criteria = array('page.action.' . $this->INVITE_ACCEPT_ACTION . '.count' => $class['invite_accepted']);
+          
+          $added_achievement_id = $this->CI->achievement_lib->
+            add_achievement_info($app_id, $app_install_id, $info, $criteria);
+          $classes[$i]['achievement_id'] = '' . $added_achievement_id;
+        }
+      }
+
+      $update_page = $this->CI->app_component_page->
+        update_classes_by_page_id($page_id, $classes);
+      
+      return TRUE;
+    }else{
+      return FALSE;
+    }
   }
 }
 /* End of file app_component_lib.php */
 /* Location: ./application/libraries/app_component_lib.php */
-    
