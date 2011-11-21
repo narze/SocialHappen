@@ -24,7 +24,7 @@
 			<div class="wrapper">
 				<div class="profile">
 					<img src="<?php echo imgsize($user_profile_picture, 'square');?>" />
-					<p class="name"><?php echo $user['user_first_name'];?></p>
+					<p class="name"><?php echo $user_first_name;?></p>
 				</div>
 				
 				<div class="connect-arrow"></div>

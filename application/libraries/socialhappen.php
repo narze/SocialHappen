@@ -744,7 +744,8 @@ class SocialHappen{
 				'app_id' => $app['app_id'],
 				'app_secret_key' => $app['app_secret_key'],
 				'app_install_secret_key' => $app['app_install_secret_key'],
-				'facebook_page_id' => $page['facebook_page_id']
+				'facebook_page_id' => $page['facebook_page_id'],
+				'facebook_access_token' => ''
 			),
 			// 'view_as' => $view_as,
 			'node_base_url' => $this->CI->config->item('node_base_url'),

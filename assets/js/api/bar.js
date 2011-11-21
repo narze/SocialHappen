@@ -10,11 +10,11 @@ sh_guest = function(){
 		});
 	})(sh_jq);
 }
-sh_signup = function(fb_access_token){
+sh_signup = function(){
 	(function($){
 		
 		jQuery.fancybox({
-			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token,
+			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_access_token='+facebook_access_token,
 			onComplete: signup_form
 		});
 		
@@ -48,7 +48,7 @@ sh_signup = function(fb_access_token){
 								sh_validate_error(data.error_messages);
 							}
 						} else if(data.status == 'ok'){
-							sh_signup_page(fb_access_token);
+							sh_signup_page();
 						}
 					  })
 					  return false
@@ -75,17 +75,17 @@ sh_validate_error = function(error_messages){
 	})(sh_jq);
 }
 
-sh_signup_page = function(fb_access_token){
+sh_signup_page = function(){
 	(function($){			
 		if(app_mode){
 			jQuery.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?facebook_access_token='+fb_access_token+'&user_image='+encodeURIComponent(user_image),
+				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image),
 				modal: true,
 				onComplete: signup_page_form
 			});
 		} else {
 			jQuery.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'?facebook_access_token='+fb_access_token+'&user_image='+encodeURIComponent(user_image),
+				href: base_url+'tab/signup_page/'+page_id+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image),
 				modal: true,
 				onComplete: signup_page_form
 			});
@@ -404,7 +404,7 @@ sh_popup = function(){
 			// }
 		} else {
 			if(!is_user_register_to_page) {
-				sh_signup_page('');
+				sh_signup_page();
 			}
 		}
 		
@@ -531,6 +531,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 	} else if(message.data.sh_message === 'status'){ 
 		view_as = message.data.sh_status;
 		user_image = message.data.sh_user_image;
+		user_name = message.data.sh_user_name;
 		onLoad();
 		jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
 			sh_jq('div#sh-bar').html(data);
@@ -539,9 +540,9 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		sh_login();
 	} else if(message.data.sh_message === "logged in"){ //xd.js
 		if(view_as === 'guest' || is_user_register_to_page) {
-			sh_signup(message.data.fb_access_token);
+			sh_signup();
 		} else {
-			sh_signup_page(message.data.fb_access_token);
+			sh_signup_page();
 		} 
 	} else if(message.data.sh_message === "logged out"){ //xd.js
 		jQuery.fancybox({
