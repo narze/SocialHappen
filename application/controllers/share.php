@@ -48,7 +48,6 @@ class Share extends CI_Controller {
 			}
 			echo 'please login '.anchor('share/twitter_connect','click here');
 		}
-
 	}
 
 	function twitter_connect(){
@@ -86,7 +85,7 @@ class Share extends CI_Controller {
 		$this->session->unset_userdata('twitter'); //Not use anymore
 		  	redirect('share/twitter?success=1');
 		} else {
-		  	redirect('share/twitter?error=code_'.$this->twitter->http_code);
+		  	redirect('share/twitter?error=code_'.$this->twitter->http_code); //read : https://dev.twitter.com/docs/error-codes-responses
 		}
 	}
 
@@ -105,6 +104,30 @@ class Share extends CI_Controller {
 			if(isset($response->error)){
 				//Handle status posting error
 			}
+		}
+	}
+
+	function twitter_share($app_install_id = NULL){
+		$this->load->library('campaign_lib');
+		$campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
+		if($campaign === FALSE || $campaign['in_campaign'] === FALSE){ //No campaign, or campaign ended : just share, but don't know what to share :(
+			//$post_id = $this->sharebutton_lib->facebook_share($campaign_id);
+			echo 'no campaign, cannot post';
+		} else if($campaign['in_campaign']){
+			$campaign_id = $campaign['campaign_id'];
+			$this->load->model('app_component_model','app_component');
+			$sharebutton = $this->app_component->get_sharebutton_by_campaign_id($campaign_id);
+			$this->load->library('sharebutton_lib');
+			if(!$sharebutton || !issetor($sharebutton['twitter_button'])){
+				//Share with no criteria, no score
+				$post_id = $this->sharebutton_lib->twitter_share();
+				echo 'Post w/o campaign';
+			} else {
+				// Share and give score if not exceed maximum
+				$post_id = $this->sharebutton_lib->twitter_share($sharebutton);
+				'Post with campaign';
+			}
+			echo 'Posted on twitter with id : '.$post_id;
 		}
 	}
 }

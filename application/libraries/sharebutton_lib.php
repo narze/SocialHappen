@@ -49,4 +49,21 @@ class Sharebutton_lib {
       		return FALSE;
       	}
 	}
+
+	function twitter_share($sharebutton = NULL){
+		$this->CI->load->library('twitter_lib');
+		if($this->CI->twitter_lib->check_login_then_init()){
+			if($sharebutton){
+				$response = $this->CI->twitter->post('statuses/update',array('status'=> $sharebutton['message']['text']));
+			} else {
+				$response = $this->CI->twitter->post('statuses/update',array('status'=>'test tweet'));
+			}
+			echo '<pre>';
+			var_dump($response);
+			echo '</pre>';
+			if(isset($response->error)){
+				//Handle status posting error
+			}
+		}
+	}
 }
