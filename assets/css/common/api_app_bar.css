@@ -715,7 +715,7 @@ div.popup-fb-signup-page {
 *.bt-back_dashboard, *.bt-config, *.bt-stay_fb, *.bt-register-now, *.bt-join-social, *.bt-don-awesome,
 .bt-next, .bt-next-inactive, .bt-cancel, .bt-done, .bt-done-inactive, .bt-start, 
 .bt-dashboard, .bt-get-started, .bt-configure, .bt-learn-more,
-.bt-update, .bt-back, .bt-cancal-2, .checkbox_switch {
+.bt-update, .bt-back, .bt-cancal-2, .checkbox_switch, .bt-browse_pic {
 	background: url(../../images/bg_fb/bg_button_2.png) no-repeat;
 	cursor: pointer;
 	border: none;
@@ -790,6 +790,7 @@ div.popup-fb-signup-page {
 .checkbox_switch { width: 61px; height: 24px; background-position: 0 -281px; text-indent:0;}
 .checkbox_switch input { display:none;}
 .checkbox_switch.on { background-position: 0 -243px; }
+.bt-browse_pic { width: 114px; height: 27px; background-position: -80px -242px; }
 .bt-addnew_campaign { width: 175px; height: 32px; background-position: 0 -445px; }
 
 #sh-bar ul.menu > li.notification a.amount {

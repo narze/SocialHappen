@@ -18,8 +18,16 @@ echo form_open('settings/app_component_sharebutton/'.$app_install_id.'/'.$campai
 <ul>
 <li <?php echo form_error('share_image') ? 'class="error"' : ''; ?>>
         <label for="share_image">Picture : <span class="required">*</span></label>
-        <div class="inputs">
-                <input id="share_image" type="text" name="share_image"  value="<?php echo set_value('share_image',$sharebutton['message']['image']); ?>"  />
+        <div class="upload-pic">
+                <?php if($sharebutton['message']['image']) { ?>
+                <p class="pic">
+                        <img src="<?php echo $sharebutton['message']['image']; ?>" width="64" height="64" />
+                </p>
+                <?php } ?>
+                <p class="browse">
+                            <input id="share_image" type="file" name="share_image" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 114px; ">
+                            <a class="bt-browse_pic" href="#"><span>Browse picture</span></a>
+                </p>
         </div>
 </li>
 
@@ -56,7 +64,7 @@ echo form_open('settings/app_component_sharebutton/'.$app_install_id.'/'.$campai
 <li <?php echo form_error('share_cooldown') ? 'class="error"' : ''; ?>>
         <label for="share_cooldown">Share Cooldown : <span class="required">*</span></label>
         <input id="share_cooldown" type="text" name="share_cooldown"  value="<?php echo set_value('share_cooldown',$sharebutton['criteria']['cooldown']); ?>"  />
-        Min.
+        Hour(s)
 </li>
 
 <li <?php echo form_error('share_maximum') ? 'class="error"' : ''; ?>>

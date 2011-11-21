@@ -12,8 +12,16 @@ echo form_open('settings/app_component_homepage/'.$app_install_id.'/'.$campaign_
 </li> 
 <li <?php echo form_error('graphic') ? 'class="error"' : ''; ?>>
         <label for="graphic">Graphic : <span class="required">*</span></label>
-        <div class="inputs">
-                <input id="graphic" type="text" name="graphic" maxlength="255" value="<?php echo set_value('graphic', $homepage['image']); ?>"  />
+        <div class="upload-pic">
+                <?php if($homepage['image']) { ?>
+                <p class="pic">
+                        <img src="<?php echo $homepage['image']; ?>" width="64" height="64" />
+                </p>
+                <?php } ?>
+                <p class="browse">
+                            <input id="graphic" type="file" name="graphic" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 114px; ">
+                            <a class="bt-browse_pic" href="#"><span>Browse picture</span></a>
+                </p>
         </div>
 </li>
 
