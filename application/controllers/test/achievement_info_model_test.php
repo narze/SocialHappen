@@ -119,6 +119,7 @@ class achievement_info_model_test extends CI_Controller {
 		$info = array('name' => 'name',
 									'description' => 'game',
 									'hidden' => TRUE,
+									'enable' => FALSE,
 									'criteria_string' => array('a >= 5', 'b >=2'));
 		$criteria = array('s' => 6);
 		
@@ -134,6 +135,7 @@ class achievement_info_model_test extends CI_Controller {
 		$achievement_id = $added[0]['_id'];
 		$info = array('name' => 'name',
 									'hidden' => FALSE,
+									'enable' => TRUE,
 									'description' => 'game',
 									'criteria_string' => array('a >= 5', 'b >=2'),
                   'badge_image' => 'https://socialhappen.dyndns.org/socialhappen/assets/images/badges/default.png');
@@ -148,6 +150,7 @@ class achievement_info_model_test extends CI_Controller {
 		$info = array('name' => 'name',
 									'description' => 'game',
 									'hidden' => TRUE,
+									'enable' => FALSE,
 									'criteria_string' => array('a >= 5', 'b >=2'),
                   'badge_image' => 'https://socialhappen.dyndns.org/socialhappen/assets/images/badges/default.png');
 		$criteria = array('s' => 6);

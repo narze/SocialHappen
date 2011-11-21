@@ -101,8 +101,14 @@ class Achievement_info_model extends CI_Model {
 			$info_to_add['name'] = $info['name'];
 			$info_to_add['description'] = $info['description'];
 			$info_to_add['hidden'] = isset($info['hidden']) ? $info['hidden'] : FALSE;
+      $info_to_add['enable'] = isset($info['enable']) ? $info['enable'] : TRUE;
 			$info_to_add['criteria_string'] = $info['criteria_string'];
 			$info_to_add['badge_image'] = isset($info['badge_image']) ? $info['badge_image'] : base_url().'assets/images/badges/default.png';
+      
+      if(isset($info['class'])){
+        $info_to_add['class'] = $info['class'];
+      }
+      
 			$achievement_info['info'] = $info_to_add;
 			
 			$achievement_info['criteria'] = $criteria;
@@ -167,8 +173,14 @@ class Achievement_info_model extends CI_Model {
 			$info_to_add['name'] = $info['name'];
 			$info_to_add['description'] = $info['description'];
 			$info_to_add['hidden'] = isset($info['hidden']) ? $info['hidden'] : FALSE;
+      $info_to_add['enable'] = isset($info['enable']) ? $info['enable'] : TRUE;
 			$info_to_add['criteria_string'] = $info['criteria_string'];
 			$info_to_add['badge_image'] = isset($info['badge_image']) ? $info['badge_image'] : base_url().'assets/images/badges/default.png';
+			
+			if(isset($info['class'])){
+        $info_to_add['class'] = $info['class'];
+      }
+			
 			$achievement_info['info'] = $info_to_add;
 			
 			$achievement_info['criteria'] = $criteria;
