@@ -119,7 +119,7 @@ class app_component_lib_test extends CI_Controller {
       )
     );
     
-    $result = $this->app_component_lib->add_page($app_component_page_data, $info);
+    $result = $this->app_component_lib->add_page($app_component_page_data);
     $this->unit->run($result, TRUE,'Add app_component_page with full data', print_r($result, TRUE));
     $this->unit->run($this->app_component_page->count_all(), 1, 'count all app_component_page');
     
@@ -129,19 +129,64 @@ class app_component_lib_test extends CI_Controller {
     $this->unit->run(count($classes), 3, 'count all classes');
     
     
-    $achievement_list = $this->achievement_lib->list_achievement_info_by_campaign_id($campaign_id);
+    $achievement_list = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
     $this->unit->run(count($achievement_list), count($classes), 'count all achievement_list');
     
     for($i = 0; $i < count($classes); $i++){
       $class = $classes[$i];
       
       $achievement = $this->achievement_lib->get_achievement_info($class['achievement_id']);
-      $this->unit->run($achievement['campaign_id'], $campaign_id, '');
+      // $this->unit->run($achievement['campaign_id'], $campaign_id, '');
       $this->unit->run($achievement['info']['name'],
         $class['name'] , '');
       $this->unit->run($achievement['criteria']['page.action.113.count'],
         $class['invite_accepted'] , '');
     }
+  }
+
+  function get_page_test(){
+    $page_id = 4;
+    $result = $this->app_component_lib->get_page($page_id);
+    $this->unit->run($result['page_id'], $page_id,'Add app_component_page with full data', print_r($result, TRUE));
+  }
+  
+  function update_page_class_test(){
+    $page_id = 4;
+    $page = $this->app_component_lib->get_page($page_id);
+    $this->unit->run($page['page_id'], $page_id,'Add app_component_page with full data', print_r($page, TRUE));
+    
+    $calsses = $page['classes'];
+    $calsses[0]['name'] = 'New Founder';
+    $calsses[0]['invite_accepted'] = 4;
+    
+    $calsses[2]['name'] = 'Super Prime';
+    $calsses[2]['invite_accepted'] = 54;
+    
+    // $result = $this->app_component_lib->update_page_classes($page_id, $result);
+    // $this->unit->run($result, TRUE,'Add app_component_page with full data', print_r($result, TRUE));
+  }
+  
+  function update_page_class_with_new_class_test(){
+    $page_id = 4;
+    $page = $this->app_component_lib->get_page($page_id);
+    $this->unit->run($page['page_id'], $page_id,'Add app_component_page with full data', print_r($page, TRUE));
+    
+    $calsses = $page['classes'];   
+    $calsses[3]['name'] = 'Super Prime';
+    $calsses[3]['invite_accepted'] = 54;
+    
+    
+  }
+
+  function update_page_class_remove_test(){
+    $page_id = 4;
+    $page = $this->app_component_lib->get_page($page_id);
+    $this->unit->run($page['page_id'], $page_id,'Add app_component_page with full data', print_r($page, TRUE));
+    
+    $classes = $page['classes'];
+    unset($classes[0]);
+    
+    
   }
   
   function end_test(){

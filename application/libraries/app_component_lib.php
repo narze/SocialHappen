@@ -93,29 +93,19 @@ class App_component_lib
    *      )
    *    )
    * )
-   * @param $info = array(
-   *  'app_id' =>
-   *  'app_install_id' =>
-   *  'campaign_id' => 
-   *   // required for achievement
-   * )
    * @author Metwara Narksook
    */
-  function add_page($app_component_page = array(), $info = array()){
+  function add_page($app_component_page = array()){
     $this->CI->load->model('app_component_page_model','app_component_page');
     
-    $check_args = (isset($info['app_id']) && isset($info['app_install_id'])
-      && isset($info['campaign_id']) && isset($app_component_page['page_id']));
-    
-    if(!$check_args){
+    if(!isset($app_component_page['page_id'])){
       return FALSE;
     }
     
     $add_page_result = $this->CI->app_component_page->add($app_component_page);
-    $app_id = $info['app_id'] = (int)$info['app_id'];
-    $app_install_id = $info['app_install_id'] = (int)$info['app_install_id'];
+    $app_id = $info['app_id'] = 0;
+    $app_install_id = $info['app_install_id'] = 0;
     $page_id = $app_component_page['page_id'] = (int)$app_component_page['page_id'];
-    $campaign_id = $info['campaign_id'] = (int)$info['campaign_id'];
     
     $add_all_achievement = TRUE;
     $added_achievement_id_list = array();
@@ -126,12 +116,18 @@ class App_component_lib
       
       for($i = 0; $i < count($classes); $i++){
         $class = $classes[$i];
+        
+        $class_data = array(
+          'group' => 'pade_id',
+          'level' => $i
+        );
+        
         $info = array('name' => $class['name'],
                       'description' => $class['name'],
                       'criteria_string' => array('at least '
                        . $class['invite_accepted'] . ' invite accepted'),
                       'page_id' => $page_id,
-                      'campaign_id' => $campaign_id);
+                      'class' => $class_data);
         $criteria = array('page.action.' . $this->INVITE_ACCEPT_ACTION . '.count' => $class['invite_accepted']);
         
         $added_achievement_id = $this->CI->achievement_lib->
@@ -170,7 +166,32 @@ class App_component_lib
     $page_id = (int)$page_id;
     return $this->CI->app_component_page->get_by_page_id($page_id);
   }
-  
+  /**
+   * Add app_component_page
+   * @param $page_id
+   * @param $classes = array(
+   *      array(
+   *        "name" => "Founding",
+   *        "invite_accepted" => 3,
+   *        "achievement_id" => "4ec7507b6803fac21600000f" 
+   *      ),
+   *      array(
+   *        "name" => "VIP",
+   *        "invite_accepted" => 10,
+   *        "achievement_id" => "4ec7507b6803fac216000010" 
+   *      ),
+   *      array(
+   *        "name" => "Prime",
+   *        "invite_accepted" => 50,
+   *        "achievement_id" => "4ec7507b6803fac216000011" 
+   *      )
+   * )
+   * @author Metwara Narksook
+   */
+  function update_page_classes($page_id = NULL, $classes = array(),
+   $info = array()){
+     
+  }
 }
 /* End of file app_component_lib.php */
 /* Location: ./application/libraries/app_component_lib.php */
