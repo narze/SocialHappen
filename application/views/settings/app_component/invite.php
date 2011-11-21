@@ -1,80 +1,85 @@
-<div id="component-invite-form">
+<div id="component-invite-form" class="app-component-form">
 <?php // Change the css classes to suit your needs    
 
 $attributes = array('class' => 'component-invite-form', 'id' => '');
-echo form_open('settings/app_component/invite/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
+echo form_open('settings/app_component_invite/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
 
-<p>
-	
-        <?php echo form_error('facebook'); ?>
-        
-        <?php // Change the values/css classes to suit your needs ?>
-        <br /><input type="checkbox" id="facebook" name="facebook" value="1" class="" <?php echo set_checkbox('facebook', '1', $invite['facebook_invite']); ?>> 
-                   
-	<label for="facebook">Facebook</label>
-</p> 
-<p>
-	
-        <?php echo form_error('email'); ?>
-        
-        <?php // Change the values/css classes to suit your needs ?>
-        <br /><input type="checkbox" id="email" name="email" value="1" class="" <?php echo set_checkbox('email', '1', $invite['email_invite']); ?>> 
-                   
-	<label for="email">Email</label>
-</p> 
-<p>
-        <label for="invite_score">Invite score <span class="required">*</span></label>
-        <?php echo form_error('invite_score'); ?>
-        <br /><input id="invite_score" type="text" name="invite_score"  value="<?php echo set_value('invite_score',$invite['criteria']['score']); ?>"  />
-</p>
+<ul class="on-off">
+<li>
+	<label for="facebook">Facebook Invite :</label>
+        <input type="checkbox" id="facebook" name="facebook" value="1" class="" <?php echo set_checkbox('facebook', '1', $invite['facebook_invite']); ?>> 
+</li>
+<li>
+        <label for="email">Email Invite :</label>
+        <input type="checkbox" id="email" name="email" value="1" class="" <?php echo set_checkbox('email', '1', $invite['email_invite']); ?>>          
+</li>	
+</ul> 
 
-<p>
-        <label for="maximum_invite">Maximum invite <span class="required">*</span></label>
-        <?php echo form_error('maximum_invite'); ?>
-        <br /><input id="maximum_invite" type="text" name="maximum_invite"  value="<?php echo set_value('maximum_invite',$invite['criteria']['maximum']); ?>"  />
-</p>
+<h3>Invititation message</h3>
+<ul>
+<li <?php echo form_error('invite_image') ? 'class="error"' : ''; ?>>
+        <label for="invite_image">Picture : <span class="required">*</span></label>
+        <div class="inputs">
+                <input id="invite_image" type="text" name="invite_image" maxlength="255" value="<?php echo set_value('invite_image',$invite['message']['image']); ?>"  />
+        <div>
+</li>
 
-<p>
-        <label for="invite_cooldown">Invite cooldown <span class="required">*</span></label>
-        <?php echo form_error('invite_cooldown'); ?>
-        <br /><input id="invite_cooldown" type="text" name="invite_cooldown"  value="<?php echo set_value('invite_cooldown',$invite['criteria']['cooldown']); ?>"  />
-</p>
+<li <?php echo form_error('invite_title') ? 'class="error"' : ''; ?>>
+        <label for="invite_title">Title : <span class="required">*</span></label>
+        <div class="inputs">
+                <input style="width:300px;" id="invite_title" type="text" name="invite_title" maxlength="255" value="<?php echo set_value('invite_title',$invite['message']['title']); ?>"  />
+        </div>
+</li>
 
-<p>
-        <label for="page_acceptance_score">Page acceptance score <span class="required">*</span></label>
-        <?php echo form_error('page_acceptance_score'); ?>
-        <br /><input id="page_acceptance_score" type="text" name="page_acceptance_score"  value="<?php echo set_value('page_acceptance_score',$invite['criteria']['acceptance_score']['page']); ?>"  />
-</p>
+<li <?php echo form_error('invite_text') ? 'class="error"' : ''; ?>>
+        <label for="invite_text">Message : <span class="required">*</span></label>
+        <div class="inputs">
+                <?php echo form_textarea( array( 'name' => 'invite_text', 'id' => 'invite_text', 'style' => 'width:304px;height:100px;', 'value' => set_value('invite_text',$invite['message']['text']) ) )?>
+        </div>
+</li>
+</ul>
 
-<p>
-        <label for="app_acceptance_score">App acceptance score <span class="required">*</span></label>
-        <?php echo form_error('app_acceptance_score'); ?>
-        <br /><input id="app_acceptance_score" type="text" name="app_acceptance_score"  value="<?php echo set_value('app_acceptance_score',$invite['criteria']['acceptance_score']['campaign']); ?>"  />
-</p>
+<h3>Scoring Criteria</h3>
+<ul class="cols2">
+<li <?php echo form_error('invite_score') ? 'class="error"' : ''; ?>>
+        <label for="invite_score">Invite : <span class="required">*</span></label>
+        <input id="invite_score" type="text" name="invite_score"  value="<?php echo set_value('invite_score',$invite['criteria']['score']); ?>"  />
+        Points
+</li>
 
-<p>
-        <label for="invite_image">Invite image <span class="required">*</span></label>
-        <?php echo form_error('invite_image'); ?>
-        <br /><input id="invite_image" type="text" name="invite_image" maxlength="255" value="<?php echo set_value('invite_image',$invite['message']['image']); ?>"  />
-</p>
+<li <?php echo form_error('invite_cooldown') ? 'class="error"' : ''; ?>>
+        <label for="invite_cooldown">Invite cooldown : <span class="required">*</span></label>
+        <input id="invite_cooldown" type="text" name="invite_cooldown"  value="<?php echo set_value('invite_cooldown',$invite['criteria']['cooldown']); ?>"  />
+        Min.
+</li <?php echo form_error('invite_score') ? 'class="error"' : ''; ?>>
 
-<p>
-        <label for="invite_title">Invite title <span class="required">*</span></label>
-        <?php echo form_error('invite_title'); ?>
-        <br /><input id="invite_title" type="text" name="invite_title" maxlength="255" value="<?php echo set_value('invite_title',$invite['message']['title']); ?>"  />
-</p>
+<li <?php echo form_error('maximum_invite') ? 'class="error"' : ''; ?>>
+        <label for="maximum_invite">Max : <span class="required">*</span></label>
+        <input id="maximum_invite" type="text" name="maximum_invite"  value="<?php echo set_value('maximum_invite',$invite['criteria']['maximum']); ?>"  />
+        Times
+</li>
 
-<p>
-        <label for="invite_text">Invite text <span class="required">*</span></label>
-        <?php echo form_error('invite_text'); ?>
-        <br /><input id="invite_text" type="text" name="invite_text"  value="<?php echo set_value('invite_text',$invite['message']['text']); ?>"  />
-</p>
+<li <?php echo form_error('page_acceptance_score') ? 'class="error"' : ''; ?>>
+        <label for="page_acceptance_score">Page acceptance : <span class="required">*</span></label>
+        <input id="page_acceptance_score" type="text" name="page_acceptance_score"  value="<?php echo set_value('page_acceptance_score',$invite['criteria']['acceptance_score']['page']); ?>"  />
+        Points
+</li>
 
+<li <?php echo form_error('app_acceptance_score') ? 'class="error"' : ''; ?>>
+        <label for="app_acceptance_score">App acceptance : <span class="required">*</span></label>
+        <input id="app_acceptance_score" type="text" name="app_acceptance_score"  value="<?php echo set_value('app_acceptance_score',$invite['criteria']['acceptance_score']['campaign']); ?>"  />
+        Points
+</li>
+</ul>
 
-<p>
-        <?php echo form_submit( 'submit', 'Submit'); ?>
-</p>
+<ul>
+<li>
+        <div class="buttons">
+                <a class="a-back-to-campaign-list bt-back" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Back</a>
+                <?php echo form_submit( array('submit'=>'Submit', 'class'=>'bt-update')); ?>
+        </div>
+</li>
+</ul>
 
 <?php echo form_close(); ?>
-<a class="a-back-to-campaign-list" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Back</a>
 </div>

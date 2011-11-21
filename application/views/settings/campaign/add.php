@@ -1,41 +1,42 @@
-<div id="new-campaign-form">
+<div id="new-campaign-form" class="app-component-form">
 <?php 
-if (issetor($date_range_validation_error)){
-        echo 'date range is not valid'  ;
+if (issetor($date_range_validation_error)){ ?>
+        <div class="notice error">Date range is not valid.</div><?php
 }
-
 $attributes = array('class' => 'new-campaign-form', 'id' => '');
 echo form_open('settings/campaign/add/'.$app_install_id, $attributes); ?>
-<p>
-        <label for="campaign_name">Campaign Name <span class="required">*</span></label>
-        <?php echo form_error('campaign_name'); ?>
-        <br /><input id="campaign_name" type="text" name="campaign_name" maxlength="255" value="<?php echo set_value('campaign_name'); ?>"  />
-</p>
+<ul>
+<li <?php echo form_error('campaign_name') ? 'class="error"' : ''; ?>>
+        <label for="campaign_name"><span class="required">*</span>Campaign Name : </label>
+        <div class="inputs">
+                <input id="campaign_name" type="text" name="campaign_name" maxlength="255" value="<?php echo set_value('campaign_name'); ?>" style="width:300px;" />
+        </div>
+</li>
 
-<p>
-        <label for="campaign_start_date">Campaign Start Date <span class="required">*</span></label>
-        <?php echo form_error('campaign_start_date'); ?>
-        <br /><input id="campaign_start_date" type="text" name="campaign_start_date" maxlength="10" value="<?php echo set_value('campaign_start_date'); ?>"  />
-</p>
+<li class="campaign-date <?php echo (form_error('campaign_start_date') || form_error('campaign_end_date')) ? ' error' : ''; ?>">
+        <label for="campaign_start_date"><span class="required">*</span>Campaign Period : </label>
+        <div class="inputs">
+                <input <?php echo form_error('campaign_start_date') ? 'class="error"' : ''; ?> id="campaign_start_date" type="text" name="campaign_start_date" maxlength="10" style="width:140px;" value="<?php echo set_value('campaign_start_date'); ?>"  />
+                <span class="str">Start Date</span> - 
+                <input <?php echo form_error('campaign_end_date')? 'class="error"' : ''; ?> id="campaign_end_date" type="text" name="campaign_end_date" maxlength="10" style="width:140px;" value="<?php echo set_value('campaign_end_date'); ?>"  />
+                <span class="end">End Date</span>
+        </div>
+</li>
 
-<p>
-        <label for="campaign_end_date">Campaign End Date <span class="required">*</span></label>
-        <?php echo form_error('campaign_end_date'); ?>
-        <br /><input id="campaign_end_date" type="text" name="campaign_end_date" maxlength="10" value="<?php echo set_value('campaign_end_date'); ?>"  />
-</p>
+<li>
+        <label for="campaign_end_message">End Message : </label>
+	<div class="inputs">							
+	       <?php echo form_textarea( array( 'name' => 'campaign_end_message', 'style' => 'width:304px;height:100px;', 'value' => set_value('campaign_end_message') ) )?>
+        </div>
+</li>
 
-<p>
-        <label for="campaign_end_message">Campaign End Message</label>
-	<?php echo form_error('campaign_end_message'); ?>
-	<br />
-							
-	<?php echo form_textarea( array( 'name' => 'campaign_end_message', 'rows' => '5', 'cols' => '80', 'value' => set_value('campaign_end_message') ) )?>
-</p>
-
-<p>
-        <?php echo form_submit( 'submit', 'Submit'); ?>
-</p>
+<li>
+        <div class="buttons">
+                <a class="a-back-to-campaign-list bt-back" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Back</a>
+                <?php echo form_submit( array('submit'=>'Submit', 'class'=>'bt-update')); ?>
+        </div>
+</li>
+</ul>
 
 <?php echo form_close(); ?>
-<a class="a-back-to-campaign-list" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Back</a>
 </div>

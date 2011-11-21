@@ -4,6 +4,25 @@ class App_component_sharebutton extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+
+		if($this->input->get('tab') == TRUE) {
+			$this->load->view('tab/header', 
+				array(
+					'facebook_app_id' => $this->config->item('facebook_app_id'),
+					'script' => array(
+						'common/functions',
+						'common/onload',
+						'common/jquery.form',
+						'common/jquery-ui.min',
+						'settings/main_page_app_settings_facebook'
+					),
+					'style' => array(
+						'../../assets/css/common/api_app_bar',
+						'../../assets/css/common/smoothness/jquery-ui-1.8.9.custom'
+					)
+				),FALSE // FALSE = echo
+			);
+		}
 	}
 	
 	function index($app_install_id = NULL, $campaign_id = NULL){

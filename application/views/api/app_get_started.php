@@ -24,7 +24,7 @@
 		</div>
 		<div class="info">
 			<p>Yay! You've installed '<?php echo $app['app_name'];?>' to your page. You need a few more steps to configure this app before published to your page.</p>
-			<p><a class="bt-configure" href="<?php echo base_url(); ?>app/config/<?php echo $app['app_install_id']; ?>">Configure</a></p>
+			<p><a class="bt-configure app-config" href="<?php echo base_url(); ?>app/config/<?php echo $app['app_install_id']; ?>">Configure</a></p>
 		</div>
 		<div class="more-info">
 			<h2>Learn more about '<?php echo $app['app_name'];?>' app</h2>

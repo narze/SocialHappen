@@ -11,8 +11,10 @@
 		</li>
 			
 	<?php endforeach; ?>
-<div><a class="a-new-campaign" href="<?php echo base_url().'settings/campaign/add/'.$app_install_id;?>">create new campaign</a></div>
 <?php else :?>
-	<div> no campaign yet, please <a class="a-new-campaign" href="<?php echo base_url().'settings/campaign/add/'.$app_install_id;?>">create new campaign</a></div>
+	<div class="notice warning"> No campaign yet.</div>
 <?php endif; ?>
-<a class="a-back-to-app-settings" data-app-install-id="<?php echo $app_install_id;?>" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Back</a>
+<div><a class="a-new-campaign bt-addnew_campaign" style="margin: 10px 5px;" href="<?php echo base_url().'settings/campaign/add/'.$app_install_id; ?>">create new campaign</a></div>
+<?php if($this->input->get('tab') != TRUE) : ?>
+<a class="a-back-to-app-settings bt-back" data-app-install-id="<?php echo $app_install_id;?>" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Back</a>
+<?php endif; ?>

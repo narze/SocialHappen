@@ -283,7 +283,7 @@ onLoad = function(){
 			})
 			$('#app-setting-menu li a').live('click', function(){
 				$(this).parents('ul').find('a').removeClass('active');
-				var iframe = $('<iframe src="'+$(this).attr('href')+'" allowtransparency="true" frameborder="0" sandbox="allow-same-origin allow-forms allow-scripts" style="width:100%;height:100%;min-height:600px;"></iframe>');
+				var iframe = $('<iframe src="'+$(this).attr('href')+'/?tab=true'+'" allowtransparency="true" frameborder="0" sandbox="allow-same-origin allow-forms allow-scripts" style="width:100%;height:100%;min-height:600px;"></iframe>');
 				$('#app-content').html(iframe);
 				$('#app-content').prepend('<h2 class="setting-title"><span>'+ $(this).attr('title') +'</span></h2>');
 				$(this).addClass('active');
