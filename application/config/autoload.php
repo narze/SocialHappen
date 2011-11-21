@@ -80,7 +80,7 @@ $autoload['helper'] = array('url','html','socialhappen');
 |
 */
 
-$autoload['config'] = array('facebook');
+$autoload['config'] = array('facebook','twitter');
 
 
 /*
