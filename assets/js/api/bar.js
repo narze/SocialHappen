@@ -198,30 +198,32 @@ loadChildScripts = function(){
 loadNode = function(){
 	(function($){
 		$(function(){
-			var session = 'SESSIONNAJA';
-			var socket = io.connect(node_base_url);
+			if(typeof io != 'undefined'){
+				var session = 'SESSIONNAJA';
+				var socket = io.connect(node_base_url);
 
-			socket.on('connect', function(){
-				console.log('send subscribe');
-				socket.emit('subscribe', user_id, session);
-			});
+				socket.on('connect', function(){
+					console.log('send subscribe');
+					socket.emit('subscribe', user_id, session);
+				});
 
-			socket.on('subscribeResult', function (data) {
-				console.log('got subscribe result: ' + JSON.stringify(data));
-			});
+				socket.on('subscribeResult', function (data) {
+					console.log('got subscribe result: ' + JSON.stringify(data));
+				});
 
-			socket.on('newNotificationAmount', function (notification_amount) {
-				console.log('notification_amount: ' + notification_amount);
-				if(notification_amount > 0){
-					$('div.header ul.menu li.notification a.amount').html('').append('<span>').children('span').html(notification_amount);
-				}else{
-					$('div.header ul.menu li.notification a.amount').append('<span>').children('span').remove();
-				}
-			});
-			
-			socket.on('newNotificationMessage', function (notification_message) {
-				console.log('notification_message: ' + JSON.stringify(notification_message));
-			});
+				socket.on('newNotificationAmount', function (notification_amount) {
+					console.log('notification_amount: ' + notification_amount);
+					if(notification_amount > 0){
+						$('div.header ul.menu li.notification a.amount').html('').append('<span>').children('span').html(notification_amount);
+					}else{
+						$('div.header ul.menu li.notification a.amount').append('<span>').children('span').remove();
+					}
+				});
+				
+				socket.on('newNotificationMessage', function (notification_message) {
+					console.log('notification_message: ' + JSON.stringify(notification_message));
+				});
+			}
 		});
 	})(sh_jq);
 }
