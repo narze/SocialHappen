@@ -25,20 +25,21 @@ class App_component_homepage extends CI_Controller {
 		}
 	}
 	
-	function index($app_install_id = NULL, $campaign_id = NULL){
+	function index($app_install_id = NULL){
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('homepage_for_non_fans', 'Homepage for non-fans', 'trim|xss_clean');			
-		$this->form_validation->set_rules('graphic', 'Graphic', 'required|max_length[255]');			
+		$this->form_validation->set_rules('homepage_for_non_fans', 'Homepage for non-fans', 'trim|xss_clean');		
 		$this->form_validation->set_rules('message', 'Message', 'required|trim|xss_clean');
 			
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-	
-		$this->load->model('app_component_model','app_component');
+		
+		$do_update = FALSE;
+		$this->load->model('homepage_model','homepage');
+		if($homepage = $this->homepage->get_homepage_by_app_install_id($app_install_id)){
+			$do_update = TRUE;
+		}
 		if ($this->form_validation->run() == FALSE)
 		{
-			$homepage = $this->app_component->get_homepage_by_campaign_id($campaign_id);
 			$vars = array(
-				'campaign_id' => $campaign_id,
 				'app_install_id' => $app_install_id,
 				'homepage' => $homepage
 			);
@@ -47,21 +48,32 @@ class App_component_homepage extends CI_Controller {
 		}
 		else 
 		{
+			
 			$form_data = array(
+				'app_install_id' => $app_install_id,
 				'enable' => set_value('homepage_for_non_fans') == 1,
-				'image' => set_value('graphic'),
 				'message' => set_value('message')
 			);
-		
-			if ($this->app_component->update_homepage_by_campaign_id($campaign_id, $form_data) == TRUE)
-			{
-				redirect('settings/campaign/'.$app_install_id.'?homepage_settings_success=1');
+			if($do_update){
+				if(!$homepage_image = $this->socialhappen->replace_image('graphic', $homepage['image'])){
+					$homepage_image = $homepage['image'];
+				}
+				$form_data['image'] = $homepage_image;
+
+				if($this->homepage->update_homepage_by_app_install_id($app_install_id, $form_data) == TRUE){
+					redirect('settings/app_component/homepage/'.$app_install_id.'?homepage_settings_success=1');
+				}
+			} else {
+				$homepage_image = $this->socialhappen->upload_image('graphic');
+				$form_data['image'] = $homepage_image;
+
+				if ($this->homepage->add($form_data) == TRUE){
+				redirect('settings/app_component/homepage/'.$app_install_id.'?homepage_settings_success=1');
+				}
 			}
-			else
-			{
-				log_message('error','Error in update_homepage_by_campaign_id '.print_r($form_data, TRUE));
-				redirect('settings/campaign/'.$app_install_id.'?error=1');
-			}
+			//error
+			log_message('error','Error in add '.print_r($form_data, TRUE));
+			redirect('settings/app_component/homepage/'.$app_install_id.'?error=1');
 		}
 	}
 }

@@ -291,6 +291,7 @@ $(function(){
 
 	function app_settings(){
 		$('a.a-campaign-settings').click(app_campaign);
+		$('a.a-homepage-settings').click(app_homepage);
 
 		function app_campaign(){
 			url = $(this).attr('href');
@@ -353,20 +354,6 @@ $(function(){
 				});
 			}
 
-			function homepage_component(){
-				url = $(this).attr('href');
-				$('div#main').load(url, homepage_component_form);
-				
-				function homepage_component_form(){
-					$('form.component-homepage-form').on('submit', function(e) {
-						e.preventDefault();
-						$(this).ajaxSubmit({target:'#component-homepage-form',replaceTarget:true,success:homepage_component_form});
-						return false;
-					});
-				}
-				return false;
-			}
-
 			function invite_component(){
 				url = $(this).attr('href');
 				$('div#main').load(url, invite_component_form);
@@ -395,17 +382,33 @@ $(function(){
 				return false;
 			}
 			
-			function back_to_app_settings(){
-				app_install_id = $(this).data('appInstallId');
-				$('ul.page-apps li a.app[data-appinstallid="'+app_install_id+'"]').click();
-				return false;
-			}
-			
 			function back_to_campaign_list(){
 				url = $(this).attr('href');
 				$('div#main').load(url, app_campaign);
 				return false;
 			}
+			return false;
+		}
+
+
+		function app_homepage(){
+			url = $(this).attr('href');
+			$('div#main').load(url, homepage_component_form);
+			
+			function homepage_component_form(){
+				$(this).off('click').on('click', 'a.a-back-to-app-settings', back_to_app_settings);
+				$('form.component-homepage-form').on('submit', function(e) {
+					e.preventDefault();
+					$(this).ajaxSubmit({target:'#component-homepage-form',replaceTarget:true,success:homepage_component_form});
+					return false;
+				});
+			}
+			return false;
+		}
+
+		function back_to_app_settings(){
+			app_install_id = $(this).data('appInstallId');
+			$('ul.page-apps li a.app[data-appinstallid="'+app_install_id+'"]').click();
 			return false;
 		}
 	}

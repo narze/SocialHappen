@@ -363,18 +363,19 @@ class SocialHappen{
 	 * @return $image_url
 	 * @author Manassarn M.
 	 */
-	function upload_image($name = NULL, $resize = TRUE){
+	function upload_image($name = NULL, $resize = TRUE){ 
 		$config['upload_path'] = './uploads/images/';
 		$config['allowed_types'] = 'gif|jpg|png';
 		$config['max_size']	= '2048';
 		$config['max_width']  = '2048';
 		$config['max_height']  = '2048';
 		$config['encrypt_name'] = TRUE;
-		if(!isset($_FILES[$name]['error'])){
-			log_message('debug','Upload file error');
+		if($_FILES[$name]['error'] == 0){
+			log_message('debug','Upload file is not error');
 		}
 		$this->CI->load->library('upload', $config);
-		if (!isset($_FILES[$name]['error']) && $this->CI->upload->do_upload($name)){
+		if ($_FILES[$name]['error'] == 0 && $this->CI->upload->do_upload($name)){
+			log_message('error','uploaded');
 			$image_data = $this->CI->upload->data();
 			if($resize) { 
 				$this->resize_image($image_data); 

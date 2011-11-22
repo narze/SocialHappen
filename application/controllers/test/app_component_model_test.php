@@ -1,18 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class App_component_model_test extends CI_Controller {
-	public $homepage_data = array(
-		// 'campaign_id' => 1,
-		'enable' => TRUE,
-		'image' => 'https://localhost/assets/images/blank.png',
-		'message' => 'You are not this page\'s fan, please like this page first'
-	);
-	public $homepage_update_data = array(
-		// 'campaign_id' => 555, // should be ignored by update
-		'enable' => FALSE,
-		'image' => 'https://localhost/assets/images/blank.png',
-		'message' => 'You are not this page\'s fan, please like this page first, again'
-	);
 	
 	public $sharebutton_data = array(
 		// 'campaign_id' => 1,
@@ -88,11 +76,6 @@ class App_component_model_test extends CI_Controller {
 	
 	public $app_component_data = array(
 		'campaign_id' => 1,
-		'homepage' => array(
-			'enable' => TRUE,
-			'image' => 'https://localhost/assets/images/blank.png',
-			'message' => 'You are not this page\'s fan, please like this page first'
-		),
 		'invite' => array(
 			'facebook_invite' => TRUE,
 			'email_invite' => TRUE,
@@ -130,11 +113,6 @@ class App_component_model_test extends CI_Controller {
 	
 	public $app_component_update_data = array(
 		'campaign_id' => 1,
-		'homepage' => array(
-			'enable' => FALSE,
-			'image' => 'https://localhost/assets/images/blank.png',
-			'message' => 'You are not this page\'s fan, please like this page first, again'
-		),
 		'invite' => array(
 			'facebook_invite' => FALSE,
 			'email_invite' => FALSE,
@@ -210,7 +188,6 @@ class App_component_model_test extends CI_Controller {
 		
 		$app_component_data_2 = $this->app_component_data;
 		$app_component_data_2['campaign_id'] = 2;
-		unset($app_component_data_2['homepage']['enable']);
 		unset($app_component_data_2['invite']['facebook_invite']);
 		unset($app_component_data_2['sharebutton']['facebook_button']);
 		$result = $this->app_component->add($app_component_data_2);
@@ -238,129 +215,6 @@ class App_component_model_test extends CI_Controller {
 		$this->unit->run($result, TRUE, 'Add duplicated app_component'); //Somehow Mongo returns TRUE but document are not added
 		
 		$this->unit->run($this->app_component->count_all(), 4, 'count all app_component');
-	}
-	
-	//Homepage
-	
-	function get_homepage_by_campaign_id_test(){
-		$result = $this->app_component->get_homepage_by_campaign_id(1);
-		unset($result['_id']);
-		$this->unit->run($result, $this->homepage_data, 'get homepage by campaign_id');
-		
-		$result = $this->app_component->get_homepage_by_campaign_id('1');
-		unset($result['_id']);
-		$this->unit->run($result, $this->homepage_data, 'get homepage by string campaign_id');
-		
-		$result = $this->app_component->get_homepage_by_campaign_id(2);
-		$this->unit->run($result, 'is_array', 'get homepage by campaign_id');
-		$this->unit->run($result['enable'], FALSE, 'enable is FALSE by default');
-		
-		$result = $this->app_component->get_homepage_by_campaign_id(4);
-		$this->unit->run($result === NULL, TRUE, 'get homepage by campaign_id');
-	}
-	
-	function get_homepage_by_campaign_id_fail_test(){
-		$result = $this->app_component->get_homepage_by_campaign_id(0);
-		$this->unit->run($result, FALSE, 'not found');
-		
-		$result = $this->app_component->get_homepage_by_campaign_id();
-		$this->unit->run($result, FALSE, 'not found');
-		
-		$result = $this->app_component->get_homepage_by_campaign_id(NULL);
-		$this->unit->run($result, FALSE, 'not found');
-	}
-	
-	function update_homepage_by_campaign_id_test(){
-		$update_data = $this->homepage_update_data;
-		$result = $this->app_component->update_homepage_by_campaign_id(1,$update_data);
-		$this->unit->run($result, TRUE, 'update by campaign_id');
-		
-		$update_data['campaign_id'] = 1;
-		$get_result = $this->app_component->get_homepage_by_campaign_id(1);
-		$this->unit->run($result, $update_data, 'get updated homepage');
-		
-		$update_data = $this->homepage_update_data;
-		unset($update_data['enable']);
-		$result = $this->app_component->update_homepage_by_campaign_id(1,$update_data);
-		$this->unit->run($result, TRUE, 'update by campaign_id');
-		
-		$update_data['campaign_id'] = 1;
-		$get_result = $this->app_component->get_homepage_by_campaign_id(1);
-		$this->unit->run($result['enable'], FALSE, 'get updated homepage, enable is FALSE if not set on update');
-		
-		$update_data = $this->homepage_update_data;
-		$result = $this->app_component->update_homepage_by_campaign_id(4,$update_data);
-		$this->unit->run($result, TRUE, 'update by campaign_id');
-		
-		$update_data['campaign_id'] = 4;
-		$get_result = $this->app_component->get_homepage_by_campaign_id(4);
-		$this->unit->run($result, $update_data, 'get updated homepage, enable is FALSE if not set on update');
-	}
-	
-	function update_homepage_by_campaign_id_fail_test(){
-		$result = $this->app_component->update_homepage_by_campaign_id(0, $this->homepage_update_data);
-		$this->unit->run($result, FALSE, 'No campaign_id');
-		
-		$result = $this->app_component->update_homepage_by_campaign_id(NULL, $this->homepage_update_data);
-		$this->unit->run($result, FALSE, 'No campaign_id');
-		
-		$fail_update_data = $this->homepage_update_data;
-		unset($fail_update_data['image']);
-		$result = $this->app_component->update_homepage_by_campaign_id(1, $fail_update_data);
-		$this->unit->run($result, FALSE, 'No image');
-		
-		$fail_update_data = $this->homepage_update_data;
-		unset($fail_update_data['message']);
-		$result = $this->app_component->update_homepage_by_campaign_id(1, $fail_update_data);
-		$this->unit->run($result, FALSE, 'No message');
-		
-		$fail_update_data = $this->homepage_update_data;
-		$fail_update_data['image'] = '';
-		$result = $this->app_component->update_homepage_by_campaign_id(1, $fail_update_data);
-		$this->unit->run($result, FALSE, 'Empty image');
-		
-		$fail_update_data = $this->homepage_update_data;
-		$fail_update_data['message'] = '';
-		$result = $this->app_component->update_homepage_by_campaign_id(1, $fail_update_data);
-		$this->unit->run($result, FALSE, 'Empty message');
-	}
-	
-	function homepage_data_check_test(){
-		//TRUE
-		$result = $this->app_component->homepage_data_check($this->homepage_data);
-		$this->unit->run($result, TRUE, 'Check homepage data');
-		
-		$homepage2 = $this->homepage_data;
-		unset($homepage2['enable']);
-		$homepage2['campaign_id'] = 2;
-		$result = $this->app_component->homepage_data_check($homepage2);
-		$this->unit->run($result, TRUE, 'Check homepage data without setting enable');
-		
-		//FALSE
-		
-		// $result = $this->app_component->homepage_data_check($this->homepage_data);
-		// $this->unit->run($result, TRUE, 'Duplicated campaign_id');
-		
-		$homepage_fail = $this->homepage_data;
-		unset($homepage_fail['image']);
-		$result = $this->app_component->homepage_data_check($homepage_fail);
-		$this->unit->run($result, FALSE, 'No image');
-		
-		$homepage_fail = $this->homepage_data;
-		unset($homepage_fail['message']);
-		$result = $this->app_component->homepage_data_check($homepage_fail);
-		$this->unit->run($result, FALSE, 'No message');
-		
-		$homepage_fail = $this->homepage_data;
-		$homepage_fail['image'] = '';
-		$result = $this->app_component->homepage_data_check($homepage_fail);
-		$this->unit->run($result, FALSE, 'Empty image');
-		
-		$homepage_fail = $this->homepage_data;
-		$homepage_fail['message'] = '';
-		$result = $this->app_component->homepage_data_check($homepage_fail);
-		$this->unit->run($result, FALSE, 'Empty message');
-		
 	}
 	
 	//Invite//
@@ -974,23 +828,22 @@ class App_component_model_test extends CI_Controller {
 	function get_by_campaign_id_test(){
 		$result = $this->app_component->get_by_campaign_id(1);
 		unset($result['_id']);
-		$this->unit->run($result, $this->app_component_update_data, 'get homepage by campaign_id');
+		$this->unit->run($result, $this->app_component_update_data, 'get by campaign_id');
 		
 		$result = $this->app_component->get_by_campaign_id('1');
 		unset($result['_id']);
-		$this->unit->run($result, $this->app_component_update_data, 'get homepage by string campaign_id');
+		$this->unit->run($result, $this->app_component_update_data, 'get by string campaign_id');
 		
 		$result = $this->app_component->get_by_campaign_id(4);
 		unset($result['_id']);
-		$this->unit->run($result['homepage'], $this->homepage_update_data, 'get homepage by campaign_id');
-		$this->unit->run($result['invite'], $this->invite_update_data, 'get homepage by campaign_id');
-		$this->unit->run($result['sharebutton'], $this->sharebutton_update_data, 'get homepage by campaign_id');
+		$this->unit->run($result['invite'], $this->invite_update_data, 'get invite by campaign_id');
+		$this->unit->run($result['sharebutton'], $this->sharebutton_update_data, 'get sharebutton by campaign_id');
 		
 		$result = $this->app_component->get_by_campaign_id(2);
-		$this->unit->run($result, 'is_array', 'get homepage by campaign_id');
-		$this->unit->run(isset($result['homepage']), TRUE, 'found homepage');
+		$this->unit->run($result, 'is_array', 'get by campaign_id');
 		$this->unit->run(isset($result['invite']), TRUE, 'found invite');
 		$this->unit->run(isset($result['sharebutton']), TRUE, 'found sharebutton');
+		$this->unit->run(isset($result['homepage']), FALSE, 'homepage not found, moved');
 	}
 	
 	function get_by_campaign_id_fail_test(){
