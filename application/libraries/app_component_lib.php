@@ -226,6 +226,7 @@ class App_component_lib
           if(isset($achievement_info)){
             $achievement_info['info']['page_id'] = $page_id;
             $achievement_info['info']['name'] = $class['name'];
+            $achievement_info['info']['description'] = $class['name'];
             $achievement_info['info']['enable'] = TRUE;
             $achievement_info['info']['class']['level'] = $i;
             $achievement_info['info']['criteria_string']  = 

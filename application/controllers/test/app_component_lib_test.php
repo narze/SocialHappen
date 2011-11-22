@@ -51,11 +51,6 @@ class app_component_lib_test extends CI_Controller {
     $page_id = 4;
     $app_component_data = array(
       'campaign_id' => $campaign_id,
-      'homepage' => array(
-        'enable' => TRUE,
-        'image' => 'https://localhost/assets/images/blank.png',
-        'message' => 'You are not this page\'s fan, please like this page first'
-      ),
       'invite' => array(
         'facebook_invite' => TRUE,
         'email_invite' => TRUE,
@@ -228,6 +223,49 @@ class app_component_lib_test extends CI_Controller {
     
     $classes = $page['classes'];
     array_splice($classes, 0, 1);
+    
+    $result = $this->app_component_lib->update_page_classes($page_id, $classes);
+    $this->unit->run($result, TRUE,'update_page_class_test', print_r($result, TRUE));
+    
+    $page = $this->app_component_lib->get_page($page_id);
+    
+    $classes = $page['classes'];
+    
+    $this->unit->run(count($classes), 3, 'count all classes');
+    
+    $achievement_list = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
+    $this->unit->run(count($achievement_list), count($classes), 'count all achievement_list', '<pre>' . print_r($achievement_list, TRUE) . '</pre>');
+    
+    
+    
+    for($i = 0; $i < count($classes); $i++){
+      $class = $classes[$i];
+      
+      $achievement = $this->achievement_lib->get_achievement_info($class['achievement_id']);
+      $this->unit->run($achievement['info']['name'],
+        $class['name'] , '');
+      $this->unit->run($achievement['info']['class']['level'] , $i);
+      $this->unit->run($achievement['info']['enable'], TRUE);
+      $this->unit->run($achievement['criteria']['page.action.113.count'],
+        $class['invite_accepted'] , '');
+    }
+  }
+  
+  function update_page_class_mix_test(){
+    $page_id = 4;
+    $page = $this->app_component_lib->get_page($page_id);
+    $this->unit->run($page['page_id'], $page_id,'Add app_component_page with full data', print_r($page, TRUE));
+    
+    $classes = $page['classes'];
+    array_splice($classes, 0, 1);
+    
+    $classes[0]['name'] = 'Super Prime X1';
+    $classes[0]['invite_accepted'] = 54;
+    
+    $classes[] = array(
+      'name' => 'Super Prime X3',
+      'invite_accepted' => 70
+    );
     
     $result = $this->app_component_lib->update_page_classes($page_id, $classes);
     $this->unit->run($result, TRUE,'update_page_class_test', print_r($result, TRUE));
