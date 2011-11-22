@@ -422,7 +422,8 @@ class Achievement_lib
 				array('_id' => array('$nin' => $user_achieved_id_list),
 				 			'app_id' => $app_id);
 		}else{
-			$candidate_achievement_criteria = array('app_id' => $app_id);
+			$candidate_achievement_criteria = array('app_id' => $app_id,
+                                              'info.enable' => TRUE);
 		}
 		
 		$candidate_achievement_criteria['$and'] = array();
