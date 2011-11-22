@@ -29,7 +29,7 @@
 	function fblogin() {
 		FB.login(function(response) {
 			if (response.session) {
-				send({sh_message:'logged in facebook',fb_uid:response.session.uid});
+				send({sh_message:'logged in facebook',fb_uid:response.session.uid,fb_access_token:response.session.access_token});
 			}
 		}, {perms:'<?php echo $facebook_default_scope ; ?>'});
 	}

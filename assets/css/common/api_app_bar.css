@@ -1208,3 +1208,18 @@ div.tooltips span {
 	right: -20px!important;
 }
 #fancybox-wrap {top:10% !important;} 
+
+div.sh-sharebutton{
+	font-size: 11px;
+	width: 52px;
+	height: 27px;
+	background-image: url('../../images/temp/share_normal.png');
+	background-color: #F1F1F1;
+	float:right;
+}
+div.sh-sharebutton:hover{
+	background-image: url('../../images/temp/share_hover.png');
+}
+div.sh-sharebutton:active{
+	background-image: url('../../images/temp/share_active.png');
+}

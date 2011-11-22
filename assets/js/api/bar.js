@@ -232,6 +232,7 @@ onLoad = function(){
 	(function($){
 		$(function(){
 			loadNode();
+			
 		    var fetching_notification = false;
 		  
 		  	$('#sh-bar').off()
@@ -294,7 +295,8 @@ onLoad = function(){
 
 			unhover_hide();
 			sh_popup();
-			
+			sh_sharebutton();
+
 			$('div.popup-fb a.bt-start').live('click',function(){
 				jQuery.fancybox.close();
 			});
@@ -373,9 +375,9 @@ onLoad = function(){
   							if($('li.notification').hasClass('active')){
   							  $('ul.notification_list_bar li').not('li.last-child').remove();
   							  var template = $('<li class="no-notification"><p>No notification.</p></li>');
-                  $('ul.notification_list_bar').prepend(template);
-                  $('ul.notification_list_bar').show();
-                }
+			                  $('ul.notification_list_bar').prepend(template);
+			                  $('ul.notification_list_bar').show();
+			                }
   						}
   						
   						if($('li.notification').hasClass('active')){
@@ -388,6 +390,32 @@ onLoad = function(){
 				}, 'json');
 				}else{ // if showing, hide it
 				  $('ul.notification_list_bar').hide();
+				}
+			}
+
+			function sh_sharebutton(){console.log('sh_sharebutton');
+				$(document).on('click', 'div.sh-sharebutton', function(){
+					sh_sharebutton_menu();
+				});
+
+				//DEBUG : remove this after test
+				$('body').append('<div class="sh-sharebutton" />'); // for debug
+
+				function sh_sharebutton_menu(){
+					jQuery.fancybox({ // should use something better than fancybox?
+						href:base_url+'share',
+						type:'iframe',
+						transitionIn: 'elastic',
+						transitionOut: 'elastic',
+						padding: 0,
+						// width: 908,
+						// height: 518, //TODO : height = 100% of inner content
+						autoDimensions: false,
+						scrolling: 'no',
+						onStart: function() {
+							//$("<style type='text/css'> #fancybox-wrap{ top:550px !important;} </style>").appendTo("head");
+						}
+					});
 				}
 			}
 		});
@@ -574,6 +602,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		XD.postMessage({sh_message:'page_id',sh_page_id:page_id,facebook_page_id:facebook_page_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
 	} else if(message.data.sh_message === 'status'){ 
 		view_as = message.data.sh_status;
+		console.log('va',view_as);
 		user_image = message.data.sh_user_image;
 		user_name = message.data.sh_user_name;
 		onLoad();
@@ -581,8 +610,10 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			sh_jq('div#sh-bar').html(data);
 		});
 	} else if(message.data.sh_message === "logged in facebook"){ //login_button.php
+		facebook_access_token = message.data.fb_access_token;
 		sh_login();
-	} else if(message.data.sh_message === "logged in"){ //xd.js
+	} else if(message.data.sh_message === "logged in"){ //xd.js 
+		console.log(view_as, is_user_register_to_page);
 		if(view_as === 'guest' || is_user_register_to_page) {
 			sh_signup();
 		} else {
