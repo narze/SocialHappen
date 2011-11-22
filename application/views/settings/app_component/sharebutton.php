@@ -1,8 +1,11 @@
 <div id="component-sharebutton-form" class="app-component-form">
-<?php
-
+<?php if($this->input->get('sharebutton_settings_success')){ ?>
+        <div class="notice success">success</div><?php
+} else if ($this->input->get('error')){ ?>
+        <div class="notice success">error</div><?php
+}
 $attributes = array('class' => 'component-sharebutton-form', 'id' => '');
-echo form_open('settings/app_component_sharebutton/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
+echo form_open_multipart('settings/app_component/sharebutton/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
 <ul class="on-off">
 <li>
 	<label for="share_on_facebook">Facebook Share : </label>
@@ -21,7 +24,7 @@ echo form_open('settings/app_component_sharebutton/'.$app_install_id.'/'.$campai
         <div class="upload-pic">
                 <?php if($sharebutton['message']['image']) { ?>
                 <p class="pic">
-                        <img src="<?php echo $sharebutton['message']['image']; ?>" width="64" height="64" />
+                        <img src="<?php echo imgsize($sharebutton['message']['image'], 'large'); ?>" />
                 </p>
                 <?php } ?>
                 <p class="browse">

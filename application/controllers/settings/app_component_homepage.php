@@ -48,7 +48,7 @@ class App_component_homepage extends CI_Controller {
 		}
 		else 
 		{
-			
+			$tab = $this->input->get('tab') ? '&tab=true' : '';
 			$form_data = array(
 				'app_install_id' => $app_install_id,
 				'enable' => set_value('homepage_for_non_fans') == 1,
@@ -61,19 +61,19 @@ class App_component_homepage extends CI_Controller {
 				$form_data['image'] = $homepage_image;
 
 				if($this->homepage->update_homepage_by_app_install_id($app_install_id, $form_data) == TRUE){
-					redirect('settings/app_component/homepage/'.$app_install_id.'?homepage_settings_success=1');
+					redirect('settings/app_component/homepage/'.$app_install_id.'?homepage_settings_success=1'.$tab);
 				}
 			} else {
 				$homepage_image = $this->socialhappen->upload_image('graphic');
 				$form_data['image'] = $homepage_image;
 
 				if ($this->homepage->add($form_data) == TRUE){
-				redirect('settings/app_component/homepage/'.$app_install_id.'?homepage_settings_success=1');
+					redirect('settings/app_component/homepage/'.$app_install_id.'?homepage_settings_success=1'.$tab);
 				}
 			}
 			//error
 			log_message('error','Error in add '.print_r($form_data, TRUE));
-			redirect('settings/app_component/homepage/'.$app_install_id.'?error=1');
+			redirect('settings/app_component/homepage/'.$app_install_id.'?error=1'.$tab);
 		}
 	}
 }

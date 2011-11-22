@@ -1,8 +1,11 @@
 <div id="component-invite-form" class="app-component-form">
-<?php // Change the css classes to suit your needs    
-
+<?php if($this->input->get('invite_settings_success')){ ?>
+        <div class="notice success">success</div><?php
+} else if ($this->input->get('error')){ ?>
+        <div class="notice success">error</div><?php
+}
 $attributes = array('class' => 'component-invite-form', 'id' => '');
-echo form_open('settings/app_component_invite/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
+echo form_open_multipart('settings/app_component/invite/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
 
 <ul class="on-off">
 <li>
@@ -22,12 +25,12 @@ echo form_open('settings/app_component_invite/'.$app_install_id.'/'.$campaign_id
         <div class="upload-pic">
                 <?php if($invite['message']['image']) { ?>
                 <p class="pic">
-                        <img src="<?php echo $invite['message']['image']; ?>" width="64" height="64" />
+                        <img src="<?php echo imgsize($invite['message']['image'], 'large'); ?>" />
                 </p>
                 <?php } ?>
                 <p class="browse">
-                            <input id="invite_image" type="file" name="invite_image" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 114px; ">
-                            <a class="bt-browse_pic" href="#"><span>Browse picture</span></a>
+                        <input id="invite_image" type="file" name="invite_image" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 114px; ">
+                        <a class="bt-browse_pic" href="#"><span>Browse picture</span></a>
                 </p>
         </div>
 </li>

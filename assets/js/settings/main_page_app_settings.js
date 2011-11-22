@@ -300,7 +300,6 @@ $(function(){
 				$(this).off('click')
 				.on('click', 'a.a-new-campaign', new_campaign)
 				.on('click', 'a.a-update-campaign', update_campaign)
-				.on('click', 'a.a-component-homepage',homepage_component)
 				.on('click', 'a.a-component-invite', invite_component)
 				.on('click', 'a.a-component-sharebutton', sharebutton_component)
 				.on('click', 'a.a-back-to-campaign-list', back_to_campaign_list)
