@@ -80,7 +80,7 @@
 	<?php endif; ?>
 </div>
 <?php if(issetor($facebook_user) && issetor($user)) : ?>
-	<script src="<?php echo $node_base_url;?>socket.io/socket.io.js"></script>
+	<script src="<?php echo base_url().'assets/js/api/socket.io.min.js';?>"></script>
 	<script>
 		(function($){
 			if(typeof io != 'undefined'){
