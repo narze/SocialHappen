@@ -1,19 +1,23 @@
 <div id="component-homepage-form" class="app-component-form">
 <?php // Change the css classes to suit your needs    
-
+if($this->input->get('homepage_settings_success')){
+        echo 'success';
+} else if ($this->input->get('error')){
+        echo 'error';
+}
 $attributes = array('class' => 'component-homepage-form', 'id' => '');
-echo form_open('settings/app_component_homepage/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
+echo form_open_multipart('settings/app_component/homepage/'.$app_install_id, $attributes); ?>
 <ul>
 <li>
         <label for="homepage_for_non_fans">Homepage for non-fans :</label>
         <div class="inputs">
-                <input type="checkbox" id="homepage_for_non_fans" name="homepage_for_non_fans" value="1" class="" <?php echo set_checkbox('homepage_for_non_fans', '1', $homepage['enable']); ?>> 
+                <input type="checkbox" id="homepage_for_non_fans" name="homepage_for_non_fans" value="1" class="" <?php echo set_checkbox('homepage_for_non_fans', '1', issetor($homepage['enable'])); ?>> 
         </div>
 </li> 
 <li <?php echo form_error('graphic') ? 'class="error"' : ''; ?>>
         <label for="graphic">Graphic : <span class="required">*</span></label>
         <div class="upload-pic">
-                <?php if($homepage['image']) { ?>
+                <?php if(issetor($homepage['image'])) { ?>
                 <p class="pic">
                         <img src="<?php echo $homepage['image']; ?>" width="64" height="64" />
                 </p>
@@ -28,13 +32,13 @@ echo form_open('settings/app_component_homepage/'.$app_install_id.'/'.$campaign_
 <li <?php echo form_error('message') ? 'class="error"' : ''; ?>>
         <label for="message">Message : <span class="required">*</span></label>
 	<div class="inputs">						
-        	<?php echo form_textarea( array( 'name' => 'message', 'style' => 'width:300px;height:100px;', 'value' => set_value('message', $homepage['message']) ) )?>
+        	<?php echo form_textarea( array( 'name' => 'message', 'style' => 'width:300px;height:100px;', 'value' => set_value('message', issetor($homepage['message'])) ) )?>
         </div>
 </li>
 
 <li>
         <div class="buttons">
-                <a class="a-back-to-campaign-list bt-back" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Back</a>
+                <a class="a-back-to-app-settings bt-back" data-app-install-id="<?php echo $app_install_id;?>" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Back</a>
                 <?php echo form_submit( array('submit'=>'Submit', 'class'=>'bt-update')); ?>
         </div>
 </li>

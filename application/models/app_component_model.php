@@ -1,14 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Model for app_component : homepage, invite and sharebutton
+ * Model for app_component : invite and sharebutton
  * ex. array(
  * 		'campaign_id' => [campaign_id] (unique),
- * 		'homepage = array(
- *			'campaign_id' => [campaign_id],
- *			'enable' => [boolean, FALSE if not set],
- *			'image' => [image url],
- *			'message' => [text]
- * 		),
  * 		'invite' => array(
  *			'facebook_invite' => [boolean, FALSE if not set],
  *			'email_invite' => [boolean, FALSE if not set],
@@ -78,7 +72,7 @@ class App_component_model extends CI_Model {
 	}
 	
 	/** 
-	 * Drop homepage collection
+	 * Drop app_component collection
 	 * @author Manassarn M.
 	 */
 	function drop_collection(){
@@ -86,7 +80,7 @@ class App_component_model extends CI_Model {
 	}
 	
 	/**
-	 * Create index for homepage collection
+	 * Create index for app_component collection
 	 * @author Manassarn M.
 	 */
 	function create_index(){
@@ -94,106 +88,11 @@ class App_component_model extends CI_Model {
 	}
 	
 	/**
-	 * Count all homepage
+	 * Count all app_component
 	 * @author Manassarn M.
 	 */
 	function count_all(){
 		return $this->app_component->count();
-	}
-	
-	//Homepage
-	
-	/**
-	 * Add an homepage
-	 * @param $homepage = array(
-	 *		'campaign_id' => [campaign_id],
-	 *		'enable' => [boolean, FALSE if not set],
-	 *		'image' => [image url],
-	 *		'message' => [text]
-	 * 		)
-	 * @author Manassarn M.
-	 */
-	// function add_homepage($homepage = array()){
-		// $check_args = 
-		// if(!$check_args){
-			// return FALSE;
-		// } else {
-			// if(!isset($homepage['enable'])){
-				// $homepage['enable'] = '';
-			// }
-			// $homepage['campaign_id'] = (int) $homepage['campaign_id'];
-			// try {
-				// $this->app_component->update(array('campaign_id' => $campaign_id),
-					// array('$set' => array(
-						// 'invite' => $invite
-						// )
-					// )
-				// );
-			// }
-			// catch(MongoCursorException $e) {
-				// return FALSE;
-			// }
-		// }
-	// }
-	
-	/**
-	 * Check homepage data
-	 * @param $homepage
-	 * @author Manassarn M.
-	 */
-	function homepage_data_check($homepage = array()){
-		return arenotempty($homepage, array('image', 'message'));
-	}
-	
-	/**
-	 * Process homepage data
-	 * @param $homepage
-	 * @author Manassarn M.
-	 */
-	function homepage_data_process($homepage = array()){
-		if(!isset($homepage['enable'])){
-			$homepage['enable'] = FALSE;
-		}
-		return $homepage;
-	}
-	
-	/**
-	 * Get homepage by campaign_id
-	 * @param $campaign_id
-	 * @author Manassarn M.
-	 */
-	function get_homepage_by_campaign_id($campaign_id = NULL){
-		$result = $this->app_component
-			->findOne(array('campaign_id' => (int) $campaign_id));
-		
-		$result = obj2array($result);
-		return issetor($result['homepage'], NULL);
-	}
-	
-	/**
-	 * Update homepage by campaign_id
-	 * @param $campaign_id
-	 * @param $homepage = array(
-	 *		'enable' => [boolean, FALSE if not set],
-	 *		'image' => [image url],
-	 *		'message' => [text]'image' => [message image url]
-	 *		)
-	 * @author Manassarn M.
-	 */
-	function update_homepage_by_campaign_id($campaign_id = NULL, $homepage = NULL){
-		$check_args = !empty($campaign_id) && $this->homepage_data_check($homepage);
-		if(!$check_args){
-			return FALSE;
-		} else {
-			$campaign_id = (int) $campaign_id;
-			$homepage = $this->homepage_data_process($homepage);
-			return $this->app_component->update(array('campaign_id' => $campaign_id),
-				array('$set' => array(
-					'homepage' => $homepage
-					)
-				)
-			);
-		}
 	}
 	
 	//Invite

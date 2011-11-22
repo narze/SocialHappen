@@ -1,1 +1,2 @@
 <a class="a-campaign-settings" href="<?php echo base_url().'settings/campaign/'. $app_install_id;?>">Campaign settings</a>
+<a class="a-homepage-settings" href="<?php echo base_url().'settings/app_component/homepage/'.$app_install_id;?>">Homepage settings</a>
