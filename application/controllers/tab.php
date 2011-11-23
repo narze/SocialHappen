@@ -614,7 +614,7 @@ class Tab extends CI_Controller {
 			}
 		} else {
 			$this->load->helper('form');
-			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
+			$user_facebook_image = $facebook_user['id'] ? $this->facebook->get_profile_picture($facebook_user['id']) : base_url().'assets/images/default/user.png';
 			// $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			// $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
 			// $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
