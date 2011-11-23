@@ -207,13 +207,16 @@ class App_component_lib
           get_achievement_info($class['achievement_id']);
         
         if(isset($achievement_info)){
-          $achievement_info['info']['enable'] = FALSE;
+          
+          $achievement_info['info']['page_id'] = $page_id;
+          
+          $achievement_info['info']['enable'] = FALSE; // mark disable flag as FALSE
           $this->CI->achievement_lib->set_achievement_info(
-          $class['achievement_id'], 
-          $achievement_info['app_id'],
-          NULL, 
-          $achievement_info['info'], 
-          $achievement_info['criteria']);
+            $class['achievement_id'], 
+            $achievement_info['app_id'],
+            NULL, 
+            $achievement_info['info'], 
+            $achievement_info['criteria']);
         }
       }
       
@@ -223,7 +226,7 @@ class App_component_lib
           $achievement_info = $this->CI->achievement_lib->
             get_achievement_info($class['achievement_id']);
           
-          if(isset($achievement_info)){
+          if(isset($achievement_info) && $achievement_info['page_id'] === $page_id){
             $achievement_info['info']['page_id'] = $page_id;
             $achievement_info['info']['name'] = $class['name'];
             $achievement_info['info']['description'] = $class['name'];

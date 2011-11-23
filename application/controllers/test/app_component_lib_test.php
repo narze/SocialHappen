@@ -233,7 +233,7 @@ class app_component_lib_test extends CI_Controller {
     
     $this->unit->run(count($classes), 3, 'count all classes');
     
-    $achievement_list = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
+    $achievement_list = $this->achievement_info->list_info(array('page_id' => $page_id, 'info.enable' => TRUE));
     $this->unit->run(count($achievement_list), count($classes), 'count all achievement_list', '<pre>' . print_r($achievement_list, TRUE) . '</pre>');
     
     
@@ -276,7 +276,7 @@ class app_component_lib_test extends CI_Controller {
     
     $this->unit->run(count($classes), 3, 'count all classes');
     
-    $achievement_list = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
+    $achievement_list = $this->achievement_info->list_info(array('page_id' => $page_id, 'info.enable' => TRUE));
     $this->unit->run(count($achievement_list), count($classes), 'count all achievement_list', '<pre>' . print_r($achievement_list, TRUE) . '</pre>');
     
     
