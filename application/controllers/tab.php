@@ -135,13 +135,7 @@ class Tab extends CI_Controller {
 		
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
-		
-		if( $page['page_installed'] == 0) 
-		{
-			$this->load->view("tab/page_under_construction", array('page' => $page));
-			return;
-		}
-		
+
 		//is_admin
 		$user_facebook_id = $this->FB->getUser();
 		$this->load->model('User_model','User');
@@ -150,6 +144,13 @@ class Tab extends CI_Controller {
 		$company = $this->companies->get_company_profile_by_page_id($page_id);
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+
+		if( $page['page_installed'] == 0 && !$is_admin) 
+		{
+			$this->load->view("tab/page_under_construction", array('page' => $page));
+			return;
+		}
+		
 		$is_logged_in = $this->socialhappen->is_logged_in();
 
 		//Is get-started completed?
@@ -182,12 +183,6 @@ class Tab extends CI_Controller {
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
-		if( $page['page_installed'] == 0) 
-		{
-			$this->load->view("tab/page_under_construction", array('page' => $page));
-			return;
-		}
-		
 		//is_admin
 		$user_facebook_id = $this->FB->getUser();
 		$this->load->model('User_model','User');
@@ -196,6 +191,13 @@ class Tab extends CI_Controller {
 		$company = $this->companies->get_company_profile_by_page_id($page_id);
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+
+		if( $page['page_installed'] == 0 && !$is_admin) 
+		{
+			$this->load->view("tab/page_under_construction", array('page' => $page));
+			return;
+		}
+		
 		$is_logged_in = $this->socialhappen->is_logged_in();
 		
 		//get-started checklist
