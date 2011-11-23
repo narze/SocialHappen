@@ -13,8 +13,8 @@ class Homepage_lib {
         $campaign = $this->CI->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
         if($campaign['in_campaign']){
             $campaign_id = $campaign['campaign_id'];
-            $this->CI->load->model('app_component_model','app_component');
-            $homepage = $this->CI->app_component->get_homepage_by_campaign_id($campaign_id);
+            $this->CI->load->model('homepage_model','homepage');
+            $homepage = $this->CI->homepage->get_homepage_by_app_install_id($app_install_id);
             if($homepage && issetor($homepage['enable']) === TRUE && arenotempty($homepage, array('message','image'))){
                 var_dump($homepage);
                 //return view for non-fan homepage
