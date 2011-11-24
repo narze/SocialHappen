@@ -246,38 +246,6 @@ onLoad = function(){
 			.on('click','li.notification', toggleNotification)
 			.on('click','a.a-logout', sh_logout)
 			.on('click','a.app-config', sh_app_component);
-
-			function sh_app_component() {
-				var app_config = $('a.app-config').attr('href');
-				//load template
-				$.ajax({
-					async:true,
-					type: 'GET',
-					url: base_url+'api/setting_template',
-					data: {
-						app_id : app_id,
-						app_secret_key : app_secret_key,
-						app_install_id : app_install_id,
-						app_install_secret_key : app_install_secret_key,
-						user_id : user_id
-					},
-					success: function(result) {
-						if(result.status == 'OK')
-						{
-							$('body>*').not(':has(#sh-bar)').remove();
-							$('body').addClass('settings').append(result.html);
-							//insert app config
-							$('#app-setting-menu li a.config').click();
-						}
-						else
-						{
-							console.log( 'error loading template' );
-						}
-					},
-					dataType: 'json'
-				});
-				return false;
-			}
 			
 			//App setting
 			$('div.data ul.toggle').live('click', function(){
@@ -422,6 +390,40 @@ onLoad = function(){
 	})(sh_jq);
 };
 
+sh_app_component = function() {
+	(function($){
+		var app_config = $('a.app-config').attr('href');
+			//load template
+			$.ajax({
+				async:true,
+				type: 'GET',
+				url: base_url+'api/setting_template',
+				data: {
+					app_id : app_id,
+					app_secret_key : app_secret_key,
+					app_install_id : app_install_id,
+					app_install_secret_key : app_install_secret_key,
+					user_id : user_id
+				},
+				success: function(result) {
+					if(result.status == 'OK')
+					{
+						$('body>*').not(':has(#sh-bar)').remove();
+						$('body').addClass('settings').append(result.html);
+						//insert app config
+						$('#app-setting-menu li a.config').click();
+					}
+					else
+					{
+						console.log( 'error loading template' );
+					}
+				},
+				dataType: 'json'
+			});
+	})(sh_jq);
+	return false;
+};
+
 sh_popup = function(){
 	(function($){
 		if(view_as == 'guest'){ //@TODO : User should not see view_as, let's decide it server-side
@@ -451,8 +453,9 @@ sh_popup = function(){
 					success: function(result) {
 						if(result.status == 'OK')
 						{
-							$('body').addClass('settings');
-							$('div.feed').replaceWith(result.html);
+							$('body>*').not(':has(#sh-bar)').remove();
+							$('body').addClass('settings').append(result.html);
+							$('a.app-config').live('click', sh_app_component);
 						}
 						else
 						{

@@ -1071,6 +1071,12 @@ div.account-data ul.publish li#unpublished span.light { background-position:-20p
 	padding: 0 8px;
 }
 
+ul.campaigns-list { font-family:Arial; font-size:12px; margin:0; padding:0 7px; list-style:none;}
+ul.campaigns-list>li { position:relative; background-color:#F2F2F2; margin-bottom:10px; padding:10px; border-bottom: solid 1px #E2E2E2; border-right: solid 1px #E2E2E2; height:50px;}
+ul.campaigns-list li p { margin:0 0 10px 0; color:#999; position:absolute; top: 0; left: 0; background-color: #e4e4e4; width: 458px; padding: 5px;}
+ul.campaigns-list li ul { position:absolute; top: 30px; left: 0; }
+ul.campaigns-list li a { color:#63791C; text-decoration:none; font-weight:bold;}
+
 .app-component-form { width: 482px; overflow: hidden; color:#333; font-size:12px; font-family: Arial, Helvetica, sans-serif;}
 .app-component-form ul { margin:0; padding:0; list-style:none; clear:both;}
 .app-component-form ul li { position:relative; padding-left:147px;}
@@ -1083,6 +1089,8 @@ div.account-data ul.publish li#unpublished span.light { background-position:-20p
 	left: 0px;
 	line-height:20px;
 }
+.app-component-form ul li div.upload-pic img { width:114px; height:114px; }
+
 .app-component-form ul li div.inputs { margin:7px 0; line-height:20px; }
 .app-component-form ul li div.inputs input[type="text"] {padding:3px;}
 .app-component-form ul li.campaign-date { height: 40px; }

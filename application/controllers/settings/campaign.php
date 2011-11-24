@@ -60,6 +60,7 @@ class Campaign extends CI_Controller {
 			}
 			else
 			{
+				$tab = $this->input->get('tab') ? '&tab=true' : '';
 				$form_data = array(
 					'app_install_id' => $app_install_id,
 			       	'campaign_name' => set_value('campaign_name'),
@@ -73,12 +74,12 @@ class Campaign extends CI_Controller {
 					$this->load->model('app_component_model','app_component');
 					$this->app_component->add(array('campaign_id'=>$campaign_id));
 
-					redirect('settings/campaign/'.$app_install_id.'?success=1'); 
+					redirect('settings/campaign/'.$app_install_id.'?success=1'.$tab); 
 				}
 				else
 				{
 					log_message('error','Error in add_campaign '.print_r($form_data, TRUE));
-					redirect('settings/campaign/'.$app_install_id.'?error=1');
+					redirect('settings/campaign/'.$app_install_id.'?error=1'.$tab);
 				}
 			}
 		}
@@ -111,14 +112,15 @@ class Campaign extends CI_Controller {
 					}
 				}
 			}
+			$campaign = $this->campaign->get_campaign_profile_by_campaign_id($campaign_id);
 			if(!$this->campaign_lib->validate_date_range_with_campaigns(set_value('campaign_start_date'), set_value('campaign_end_date'), $campaigns)){
-				$campaign = $this->campaign->get_campaign_profile_by_campaign_id($campaign_id);
 				$vars = array('app_install_id'=>$app_install_id, 'campaign_id'=>$campaign_id,'campaign' => $campaign, 'date_range_validation_error' => TRUE);
 				$this->load->vars($vars);
 				$this->load->view('settings/campaign/update');
 			} 
 			else
 			{
+				$tab = $this->input->get('tab') ? '&tab=true' : '';
 				$form_data = array(
 			       	'campaign_name' => set_value('campaign_name'),
 			       	'campaign_start_date' => set_value('campaign_start_date'),
@@ -126,14 +128,22 @@ class Campaign extends CI_Controller {
 			       	'campaign_end_message' => set_value('campaign_end_message')
 				);
 
+				if(	$form_data['campaign_name'] == $campaign['campaign_name'] &&
+					$form_data['campaign_start_date'] == $campaign['campaign_start_date'] &&
+					$form_data['campaign_end_date'] == $campaign['campaign_end_date'] &&
+					$form_data['campaign_end_message'] == $campaign['campaign_end_message']	) 
+				{
+					redirect('settings/campaign/'.$app_install_id.'?update_success=1'.$tab);
+				}
+
 				if ($this->campaign->update_campaign_by_id($campaign_id, $form_data)) 
 				{
-					redirect('settings/campaign/'.$app_install_id.'?update_success=1'); 
+					redirect('settings/campaign/'.$app_install_id.'?update_success=1'.$tab); 
 				}
 				else
 				{
 					log_message('error','Error in update_campaign_by_id '.print_r($form_data, TRUE));
-					redirect('settings/campaign/'.$app_install_id.'?error=1');
+					redirect('settings/campaign/'.$app_install_id.'?error=1'.$tab);
 				}
 			}
 		}

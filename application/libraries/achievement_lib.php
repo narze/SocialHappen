@@ -16,6 +16,8 @@ class Achievement_lib
   
 	private $SHARE_ACTION_ID = 108;
   
+  private $INVITE_ACCEPT_ACTION_ID = 114;
+  
 	/**
 	 *	------------------------------------------------------------------------
 	 *	CONSTRUCTOR
@@ -367,6 +369,9 @@ class Achievement_lib
       }else if($info['action_id'] == $this->SHARE_ACTION_ID){
         $page_score = $campaign['sharebutton']['criteria']['score'];
         $campaign_score = $campaign['sharebutton']['criteria']['score'];
+      }else if($info['action_id'] == $this->INVITE_ACCEPT_ACTION_ID){
+        $page_score = $campaign['invite']['criteria']['acceptance_score']['page'];
+        $campaign_score = $campaign['invite']['criteria']['acceptance_score']['campaign'];
       }
       
       if($page_score > 0 || $campaign_score > 0){
@@ -422,7 +427,8 @@ class Achievement_lib
 				array('_id' => array('$nin' => $user_achieved_id_list),
 				 			'app_id' => $app_id);
 		}else{
-			$candidate_achievement_criteria = array('app_id' => $app_id);
+			$candidate_achievement_criteria = array('app_id' => $app_id,
+                                              'info.enable' => TRUE);
 		}
 		
 		$candidate_achievement_criteria['$and'] = array();

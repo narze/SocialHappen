@@ -135,13 +135,7 @@ class Tab extends CI_Controller {
 		
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
-		
-		if( $page['page_installed'] == 0) 
-		{
-			$this->load->view("tab/page_under_construction", array('page' => $page));
-			return;
-		}
-		
+
 		//is_admin
 		$user_facebook_id = $this->FB->getUser();
 		$this->load->model('User_model','User');
@@ -150,6 +144,13 @@ class Tab extends CI_Controller {
 		$company = $this->companies->get_company_profile_by_page_id($page_id);
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+
+		if( $page['page_installed'] == 0 && !$is_admin) 
+		{
+			$this->load->view("tab/page_under_construction", array('page' => $page));
+			return;
+		}
+		
 		$is_logged_in = $this->socialhappen->is_logged_in();
 
 		//Is get-started completed?
@@ -182,12 +183,6 @@ class Tab extends CI_Controller {
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
-		if( $page['page_installed'] == 0) 
-		{
-			$this->load->view("tab/page_under_construction", array('page' => $page));
-			return;
-		}
-		
 		//is_admin
 		$user_facebook_id = $this->FB->getUser();
 		$this->load->model('User_model','User');
@@ -196,6 +191,13 @@ class Tab extends CI_Controller {
 		$company = $this->companies->get_company_profile_by_page_id($page_id);
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+
+		if( $page['page_installed'] == 0 && !$is_admin) 
+		{
+			$this->load->view("tab/page_under_construction", array('page' => $page));
+			return;
+		}
+		
 		$is_logged_in = $this->socialhappen->is_logged_in();
 		
 		//get-started checklist
@@ -614,7 +616,7 @@ class Tab extends CI_Controller {
 			}
 		} else {
 			$this->load->helper('form');
-			$user_facebook_image = $this->facebook->get_profile_picture($facebook_user['id']);
+			$user_facebook_image = $facebook_user['id'] ? $this->facebook->get_profile_picture($facebook_user['id']) : base_url().'assets/images/default/user.png';
 			// $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			// $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
 			// $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');

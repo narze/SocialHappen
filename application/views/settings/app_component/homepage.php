@@ -1,9 +1,8 @@
 <div id="component-homepage-form" class="app-component-form">
-<?php // Change the css classes to suit your needs    
-if($this->input->get('homepage_settings_success')){
-        echo 'success';
-} else if ($this->input->get('error')){
-        echo 'error';
+<?php if($this->input->get('homepage_settings_success')){ ?>
+        <div class="notice success">success</div><?php
+} else if ($this->input->get('error')){ ?>
+        <div class="notice success">error</div><?php
 }
 $attributes = array('class' => 'component-homepage-form', 'id' => '');
 echo form_open_multipart('settings/app_component/homepage/'.$app_install_id, $attributes); ?>
@@ -19,7 +18,7 @@ echo form_open_multipart('settings/app_component/homepage/'.$app_install_id, $at
         <div class="upload-pic">
                 <?php if(issetor($homepage['image'])) { ?>
                 <p class="pic">
-                        <img src="<?php echo $homepage['image']; ?>" width="64" height="64" />
+                        <img src="<?php echo imgsize($homepage['image'], 'large'); ?>" />
                 </p>
                 <?php } ?>
                 <p class="browse">

@@ -20,5 +20,22 @@ $(function(){
 		$(this).attr('href', $(this).attr('href') + '?tab=true' );
 	});
 	
+	function set_campaign_range(){
+		var dates = $( "input#campaign_start_date, input#campaign_end_date" ).datepicker({
+			dateFormat: "yy-mm-dd",
+			changeMonth: true,
+			numberOfMonths: 1,
+			onSelect: function( selectedDate ) {
+				var option = this.id == "campaign_start_date" ? "minDate" : "maxDate",
+					instance = $( this ).data( "datepicker" ),
+					date = $.datepicker.parseDate(
+						instance.settings.dateFormat ||
+						$.datepicker._defaults.dateFormat,
+						selectedDate, instance.settings );
+				dates.not( this ).datepicker( "option", option, date );
+			}
+		});
+	}
+	set_campaign_range();
 
 });

@@ -31,18 +31,22 @@ class App_component_sharebutton extends CI_Controller {
 		$this->form_validation->set_rules('share_on_twitter', 'Share on Twitter', 'trim|xss_clean');			
 		$this->form_validation->set_rules('share_title', 'Share Title', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('share_caption', 'Share Caption', 'required|trim|xss_clean|max_length[255]');			
-		$this->form_validation->set_rules('share_image', 'Share Image', 'required|trim|xss_clean');			
 		$this->form_validation->set_rules('share_description', 'Share Description', 'required|trim|xss_clean');			
 		$this->form_validation->set_rules('share_score', 'Share Score', 'required|trim|xss_clean|is_numeric');			
 		$this->form_validation->set_rules('share_maximum', 'Share Maximum', 'required|trim|xss_clean|is_numeric');			
 		$this->form_validation->set_rules('share_cooldown', 'Share Cooldown', 'required|trim|xss_clean|is_numeric');
 			
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-	
+		
+		$do_update = FALSE;
 		$this->load->model('app_component_model','app_component');
+		$campaign = $this->app_component->get_by_campaign_id($campaign_id);
+		$sharebutton = issetor($campaign['sharebutton'], NULL);
+		if($campaign || $sharebutton){
+			$do_update = TRUE;
+		}
 		if ($this->form_validation->run() == FALSE)
 		{
-			$sharebutton = $this->app_component->get_sharebutton_by_campaign_id($campaign_id);
 			$vars = array(
 				'campaign_id' => $campaign_id,
 				'app_install_id' => $app_install_id,
@@ -53,7 +57,7 @@ class App_component_sharebutton extends CI_Controller {
 		}
 		else 
 		{
-			
+			$tab = $this->input->get('tab') ? '&tab=true' : '';
 			$form_data = array(
 				'facebook_button' => set_value('share_on_facebook') == 1,
 				'twitter_button' => set_value('share_on_twitter') == 1,
@@ -65,20 +69,32 @@ class App_component_sharebutton extends CI_Controller {
 				'message' => array(
 					'title' => set_value('share_title'),
 					'caption' => set_value('share_caption'),
-					'text' => set_value('share_description'),
-					'image' => set_value('share_image')
+					'text' => set_value('share_description')
 				)
 			);
-		
-			if ($this->app_component->update_sharebutton_by_campaign_id($campaign_id, $form_data) == TRUE)
-			{
-				redirect('settings/campaign/'.$app_install_id.'?sharebutton_settings_success=1');
+			if($do_update){
+				if(!$share_image = $this->socialhappen->replace_image('share_image', $sharebutton['message']['image'])){
+					$share_image = $sharebutton['message']['image'];
+				}
+				$form_data['message']['image'] = $share_image ? $share_image : base_url().'assets/images/default/campaign.png';
+
+				if ($this->app_component->update_sharebutton_by_campaign_id($campaign_id, $form_data) == TRUE)
+				{
+					redirect('settings/campaign/'.$app_install_id.'?sharebutton_settings_success=1'.$tab);
+				}
 			}
 			else
 			{
-				log_message('error','Error in update_sharebutton_by_campaign_id '.print_r($form_data, TRUE));
-				redirect('settings/campaign/'.$app_install_id.'?error=1');
+				$form_data['message']['image'] = $this->socialhappen->upload_image('share_image');
+
+				if ($this->app_component->add(array('campaign_id'=>$campaign_id, 'sharebutton'=>$form_data)) == TRUE)
+				{
+					redirect('settings/campaign/'.$app_install_id.'?sharebutton_settings_success=1'.$tab);
+				}
 			}
+			//error
+			log_message('error','Error in update_sharebutton_by_campaign_id '.print_r($form_data, TRUE));
+			redirect('settings/campaign/'.$app_install_id.'?error=1'.$tab);
 		}
 	}
 }
