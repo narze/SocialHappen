@@ -403,7 +403,7 @@ onLoad = function(){
 
 				function sh_sharebutton_menu(){
 					jQuery.fancybox({ // should use something better than fancybox?
-						href:base_url+'share',
+						href:base_url+'share/'+app_install_id,
 						type:'iframe',
 						transitionIn: 'elastic',
 						transitionOut: 'elastic',

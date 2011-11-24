@@ -6,9 +6,29 @@ class Share extends CI_Controller {
 		parent::__construct();
 	}
 	
-	function index(){
+	function index($app_install_id = NULL){
+		$share_message = '//default//';
+		if($app_install_id){
+			$this->load->library('campaign_lib');
+			$campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
+		
+			if(issetor($campaign['in_campaign'])){
+				$campaign_id = $campaign['campaign_id'];
+				$this->load->model('app_component_model','app_component');
+				$sharebutton = $this->app_component->get_sharebutton_by_campaign_id($campaign_id);
+				$this->load->library('sharebutton_lib');
+				if($sharebutton && isset($sharebutton['message']['text'])){
+					$share_message = $sharebutton['message']['text'];
+				}
+			}
+		}
+
+		$user = $this->socialhappen->get_user();
 		$this->load->vars(array(
-			
+			'user' => $user,
+			'twitter_checked' => !empty($user['user_twitter_access_token']),
+			'facebook_checked' => TRUE,
+			'share_message' => $share_message
 		));
 		$this->load->view('share/main');
 	}
@@ -70,6 +90,11 @@ class Share extends CI_Controller {
 	function twitter_callback(){
 		$oauth_token = $this->input->get('oauth_token');
 		$oauth_verifier = $this->input->get('oauth_verifier');
+		$user_id = $this->socialhappen->get_user_id();
+		if(!$user_id){
+			echo "Please login SocialHappen";
+			return;
+		}
 		if($oauth_token && $oauth_verifier){
 			$this->load->library('twitter_lib');
 			// if($this->twitter_lib->check_login_then_init()){
@@ -86,6 +111,8 @@ class Share extends CI_Controller {
 			$this->session->set_userdata('twitter_access_token', $access_token);
 
 			if (200 == $this->twitter->http_code) {
+				$this->load->model('user_model','user');
+				$this->user->update_user($user_id, array('user_twitter_access_token' => $access_token['oauth_token'], 'user_twitter_name' => $access_token['screen_name']));
 				$this->session->unset_userdata('twitter'); //Not use anymore
 			  	// redirect('share/twitter?success=1');
 			} else {
@@ -135,6 +162,18 @@ class Share extends CI_Controller {
 			}
 			echo 'Posted on twitter with id : '.$post_id;
 		}
+	}
+
+	function twitter_check_access_token($user_id = NULL){
+		$response = array();
+		$response['status'] = 0;
+		$this->load->model('user_model','user');
+		if($user = $this->user->get_user_profile_by_user_id($user_id)){
+			if(!empty($user['user_twitter_access_token'])){
+				$response['status'] = 1;
+			}
+		}
+		echo json_encode($response);
 	}
 }
 /* End of file share.php */
