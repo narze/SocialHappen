@@ -248,7 +248,8 @@ class Sync extends CI_Controller {
 								'user_about' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 								'user_point' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'user_twitter_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-								'user_twitter_access_token' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
+								'user_twitter_access_token' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'user_twitter_access_token_secret' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -869,7 +870,8 @@ class Sync extends CI_Controller {
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
-					    'user_twitter_access_token' => ''
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 						),
 					array(
 					    'user_id' => 2, 
@@ -881,7 +883,8 @@ class Sync extends CI_Controller {
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
-					    'user_twitter_access_token' => ''
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					),
 					array(
 					    'user_id' => 3, 
@@ -893,7 +896,8 @@ class Sync extends CI_Controller {
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
-					    'user_twitter_access_token' => ''
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					),
 					array(
 					    'user_id' => 4, 
@@ -905,7 +909,8 @@ class Sync extends CI_Controller {
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
-					    'user_twitter_access_token' => ''
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					),
 					array(
 					    'user_id' => 5, 
@@ -917,7 +922,8 @@ class Sync extends CI_Controller {
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
-					    'user_twitter_access_token' => ''
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					),
 					array(
 					    'user_id' => 6, 
@@ -929,7 +935,8 @@ class Sync extends CI_Controller {
 					    'user_register_date' => '2011-08-03 19:00:00',
 					    'user_last_seen' => '2011-08-18 09:27:04',
 					    'user_twitter_name' => '',
-					    'user_twitter_access_token' => ''
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					)
 				);
 		$this->db->insert_batch('user', $user);

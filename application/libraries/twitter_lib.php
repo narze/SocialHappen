@@ -40,8 +40,15 @@ class Twitter_lib{
     	if($access_token = $this->CI->session->userdata('twitter_access_token')){
 	    	$this->CI->twitter_lib->init($access_token);
 	    	return TRUE;
-	    } else {
-	    	return FALSE;
+	    } else if($user = $this->CI->socialhappen->get_user()){
+	    	if($user['user_twitter_access_token'] && $user['user_twitter_access_token_secret']){
+		    	$access_token = array('oauth_token' => $user['user_twitter_access_token'], 'oauth_token_secret' => $user['user_twitter_access_token_secret']);
+		    	$this->CI->session->set_userdata('twitter_access_token', $access_token);
+		    	$this->CI->twitter_lib->init($access_token);
+		    	return TRUE;
+		    } else {
+		    	return FALSE;
+		    }
 	    }
     }
 }

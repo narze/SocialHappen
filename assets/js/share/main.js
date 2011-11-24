@@ -1,6 +1,7 @@
 $(function(){
 	$('input.cb-share-twitter').change(share_twitter);
 	$('input.cb-share-facebook').change(share_facebook);
+	$('form').submit(submit_share);
 	var sh_twitter_popup;
 
 	function share_twitter(){
@@ -18,7 +19,10 @@ $(function(){
 	}
 
 	function submit_share(){
-		
+		if(!$('input.cb-share-twitter').attr('checked') && !$('input.cb-share-facebook').attr('checked')){
+			alert('please share something');
+			return false;
+		}
 	}
 
 	function twitter_no_access_token(callback){

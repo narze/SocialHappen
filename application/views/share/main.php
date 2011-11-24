@@ -5,9 +5,41 @@
 	var twitter_enable = '<?php echo $twitter_checked ? 1 : 0;?>';
 </script>
 <script type="text/javascript" src="<?php echo base_url().'assets/js/share/main.js';?>"></script>
-<input type="checkbox" class="cb-share-twitter" <?php echo $twitter_checked ? 'checked' : '';?>>Share this on twitter</input>
-<input type="checkbox" class="cb-share-facebook" <?php echo $facebook_checked ? 'checked' : '';?>>Share this on facebook</input>
-<textarea class="ta-share-message"><?php echo $share_message;?></textarea>
-<input type="button" class="bt-share-submit" value="Send" />
-<?php
+<body>
+<?php // Change the css classes to suit your needs    
+
+$attributes = array('class' => '', 'id' => '');
+echo form_open('share/share_submit/'.$app_install_id, $attributes); ?>
+
+<p>
 	
+        <?php echo form_error('twitter'); ?>
+        
+        <?php // Change the values/css classes to suit your needs ?>
+        <br /><input type="checkbox" id="twitter" name="twitter" value="1" class="cb-share-twitter" <?php echo set_checkbox('twitter', '1', $twitter_checked); ?>> 
+                   
+	<label for="twitter">Twitter</label>
+</p> 
+<p>
+	
+        <?php echo form_error('facebook'); ?>
+        
+        <?php // Change the values/css classes to suit your needs ?>
+        <br /><input type="checkbox" id="facebook" name="facebook" value="1" class="cb-share-facebook" <?php echo set_checkbox('facebook', '1', $facebook_checked); ?>> 
+                   
+	<label for="facebook">Facebook</label>
+</p> 
+<p>
+        <label for="message">Message <span class="required">*</span></label>
+	<?php echo form_error('message'); ?>
+	<br />
+							
+	<?php echo form_textarea( array( 'name' => 'message', 'rows' => '5', 'cols' => '80', 'value' => $share_message ) ); ?>
+</p>
+
+<p>
+        <?php echo form_submit( 'submit', 'Submit'); ?>
+</p>
+
+<?php echo form_close(); ?>
+</body>
