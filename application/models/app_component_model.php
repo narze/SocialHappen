@@ -101,7 +101,7 @@ class App_component_model extends CI_Model {
 	 * Add an invite
 	 * @param $invite = array(
 	 * 		'campaign_id' => [campaign_id],
-			'facebook_invite' => [boolean, FALSE if not set],
+	 *		'facebook_invite' => [boolean, FALSE if not set],
 	 *		'email_invite' => [boolean, FALSE if not set],
 	 *		'criteria' => array(
 	 *			'score' => [score for sending invite],

@@ -17,6 +17,7 @@
 			xfbml  : true
 			//oauth : true
 		});
+		send({sh_message:'loaded'});
 	};	
 	
 	(function() {
@@ -27,8 +28,3 @@
 	}());
 </script>
 <script src="<?php echo base_url().'assets/js/xd/xd.js'; ?>" type="text/javascript"></script>
-<script>
-	onload = function(){
-		send({sh_message:'loaded'});
-	};
-</script>
