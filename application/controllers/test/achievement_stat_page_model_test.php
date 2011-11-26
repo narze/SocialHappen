@@ -262,7 +262,7 @@ class achievement_stat_page_model_test extends CI_Controller {
     $this->unit->run($result['campaign'][$campaign_id]['score'], 10, 'get', print_r($result, TRUE));
     $this->unit->run($result['page_score'], 10, 'get', print_r($result, TRUE));
     
-    $amount = -5;
+    $amount = NULL;
     $info = array('page_score' => -5);
                   
     $result = $this->achievement_stat_page->increment($page_id, $user_id, $info, $amount);
