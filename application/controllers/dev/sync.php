@@ -781,6 +781,11 @@ class Sync extends CI_Controller {
 							    'app_id' => 11, 
 							    'available_date' => '2011-05-19 16:01:20'
 							)
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 12, 
+							    'available_date' => '2011-05-19 16:01:20'
+							)
 						);
 		$this->db->insert_batch('company_apps', $company_apps);
 		
@@ -1369,6 +1374,14 @@ class Sync extends CI_Controller {
 				'app_id' => 10
 			),
 			array(
+				'package_id' => 1,
+				'app_id' => 11
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 12
+			),
+			array(
 				'package_id' => 2,
 				'app_id' => 1
 			),
@@ -1409,6 +1422,14 @@ class Sync extends CI_Controller {
 				'app_id' => 10
 			),
 			array(
+				'package_id' => 2,
+				'app_id' => 11
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 12
+			),
+			array(
 				'package_id' => 3,
 				'app_id' => 1
 			),
@@ -1447,6 +1468,14 @@ class Sync extends CI_Controller {
 			array(
 				'package_id' => 3,
 				'app_id' => 10
+			),
+			array(
+				'package_id' => 3,
+				'app_id' => 11
+			),
+			array(
+				'package_id' => 3,
+				'app_id' => 12
 			)
 		);
 		$this->db->insert_batch('package_apps', $package_apps);
