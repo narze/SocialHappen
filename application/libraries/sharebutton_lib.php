@@ -11,6 +11,7 @@ class Sharebutton_lib {
         $this->CI =& get_instance();
     }
 
+    /*
 	function facebook_share($sharebutton = NULL){
 		$this->CI->load->library('fb_library/fb_library',
 			array(
@@ -63,6 +64,50 @@ class Sharebutton_lib {
 			echo '</pre>';
 			if(isset($response->error)){
 				//Handle status posting error
+			}
+		}
+	}
+	*/
+
+	function facebook_post($message = NULL){
+		$this->CI->load->library('fb_library/fb_library',
+			array(
+			  'appId'  => $this->CI->config->item('facebook_app_id'),
+			  'secret' => $this->CI->config->item('facebook_api_secret'),
+			  'cookie' => true,
+			),
+			'FB');
+		if($facebook_user = $this->CI->FB->getUser() && $this->CI->socialhappen->get_user()){  log_message('error', print_r($facebook_user,TRUE));
+			try {
+            	$post = $this->CI->FB->api('/me/feed', 'POST',
+                array(
+                  	'link' => 'www.example.com',
+                  	'message' => $message
+            	));
+	            
+		        return $post;
+
+	      	} catch(FacebookApiException $e) {
+		        log_message('error', $e->getType());
+		        log_message('error', $e->getMessage());
+		        return FALSE;
+	      	}   
+      	} else {
+      		//no fb || no sh user. please login again
+      		return FALSE;
+      	}
+	}
+
+	function twitter_post($message = NULL){
+		$this->CI->load->library('twitter_lib');
+		if($this->CI->twitter_lib->check_login_then_init()){
+			$response = $this->CI->twitter->post('statuses/update', array('status'=> $message));
+			
+			if(isset($response->error)){
+				log_message($response->error);
+				return FALSE;
+			} else {
+				return $response;
 			}
 		}
 	}

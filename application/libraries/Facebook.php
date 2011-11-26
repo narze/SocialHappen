@@ -114,7 +114,7 @@ class Facebook {
 		return $friends;
 	}
 
-	//phnx's modification
+	//DEPRECATED
 	function postWall($message = null) {
 
 		$this -> load -> library('curl');
@@ -277,5 +277,30 @@ class Facebook {
 			}
 		}
 		return FALSE;
+	}
+
+	function post_profile($message = null) {
+
+		$this -> _ci-> load -> library('curl');
+		$cookie = $this -> get_facebook_cookie();
+
+		$access_token_string = 'access_token=' . $cookie['access_token'];
+
+		$url = "https://graph.facebook.com/me/feed";
+		$this ->_ci-> curl -> create($url);
+
+		$post = array(
+			'access_token' => $cookie['access_token'], 
+			'message' => $message, 
+			// 'picture' => $settings['share_fb_picture'], 
+			'link' => 'www.example.com', 
+			// 'name' => $settings['share_fb_name'], 
+			// 'caption' => $settings['share_fb_caption'], 
+			// 'description' => $settings['share_fb_description']
+		);
+
+		$this ->_ci-> curl -> post($post);
+		$result = $this ->_ci-> curl -> ssl(FALSE) -> execute();
+		return $result;
 	}
 }

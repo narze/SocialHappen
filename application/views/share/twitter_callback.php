@@ -1,0 +1,1 @@
+<script type="text/javascript" src="<?php echo base_url().'assets/js/share/twitter_callback.js';?>"></script>

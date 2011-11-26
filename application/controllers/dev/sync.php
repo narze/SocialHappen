@@ -246,7 +246,10 @@ class Sync extends CI_Controller {
 								'user_gender_id' => field_option('INT', 1, 1, TRUE, $autoinc, TRUE),
 								'user_birth_date' => field_option('DATE', $constraint, $default, TRUE, $autoinc, $unsigned),
 								'user_about' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
-								'user_point' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE)
+								'user_point' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
+								'user_twitter_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'user_twitter_access_token' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+								'user_twitter_access_token_secret' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -899,7 +902,10 @@ class Sync extends CI_Controller {
 					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',					    
 					    'user_facebook_id' => 713558190, 
 					    'user_register_date' => '2011-05-09 17:36:14',
-					    'user_last_seen' => '2011-05-18 12:57:24'
+					    'user_last_seen' => '2011-05-18 12:57:24',
+					    'user_twitter_name' => '',
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 						),
 					array(
 					    'user_id' => 2, 
@@ -909,7 +915,10 @@ class Sync extends CI_Controller {
 					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',	
 					    'user_facebook_id' => 637741627, 
 					    'user_register_date' => '2011-05-09 17:36:14',
-					    'user_last_seen' => '2011-05-18 12:57:24'
+					    'user_last_seen' => '2011-05-18 12:57:24',
+					    'user_twitter_name' => '',
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					),
 					array(
 					    'user_id' => 3, 
@@ -919,7 +928,10 @@ class Sync extends CI_Controller {
 					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 631885465, 
 					    'user_register_date' => '2011-05-09 17:36:14',
-					    'user_last_seen' => '2011-05-18 12:57:24'
+					    'user_last_seen' => '2011-05-18 12:57:24',
+					    'user_twitter_name' => '',
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					),
 					array(
 					    'user_id' => 4, 
@@ -929,7 +941,10 @@ class Sync extends CI_Controller {
 					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 755758746, 
 					    'user_register_date' => '2011-05-09 17:36:14',
-					    'user_last_seen' => '2011-05-18 12:57:24'
+					    'user_last_seen' => '2011-05-18 12:57:24',
+					    'user_twitter_name' => '',
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					),
 					array(
 					    'user_id' => 5, 
@@ -939,7 +954,10 @@ class Sync extends CI_Controller {
 					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 508840994, 
 					    'user_register_date' => '2011-05-09 17:36:14',
-					    'user_last_seen' => '2011-05-18 12:57:24'
+					    'user_last_seen' => '2011-05-18 12:57:24',
+					    'user_twitter_name' => '',
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					),
 					array(
 					    'user_id' => 6, 
@@ -949,7 +967,10 @@ class Sync extends CI_Controller {
 					    'user_image' => 'https://graph.facebook.com/688700832/picture',		
 					    'user_facebook_id' => 688700832, 
 					    'user_register_date' => '2011-08-03 19:00:00',
-					    'user_last_seen' => '2011-08-18 09:27:04'
+					    'user_last_seen' => '2011-08-18 09:27:04',
+					    'user_twitter_name' => '',
+					    'user_twitter_access_token' => '',
+					    'user_twitter_access_token_secret' => ''
 					)
 				);
 		$this->db->insert_batch('user', $user);
