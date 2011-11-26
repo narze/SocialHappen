@@ -39,7 +39,7 @@ $(function(){
 	function twitter_login(){
 		$('.loading').remove();
 		$('body').append('<span class="loading">loading icon</span>');
-		sh_twitter_popup.location.replace('https://socialhappen.dyndns.org/socialhappen/share/twitter_connect');
+		sh_twitter_popup.location.replace(base_url+'share/twitter_connect');
 		window.setTimeout(wait_for_popup, 1000);
 
 		function wait_for_popup(){

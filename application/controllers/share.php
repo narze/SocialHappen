@@ -56,7 +56,12 @@ class Share extends CI_Controller {
 	function twitter_callback(){
 		$oauth_token = $this->input->get('oauth_token');
 		$oauth_verifier = $this->input->get('oauth_verifier');
+		$denied = $this->input->get('denied');
 		$user_id = $this->socialhappen->get_user_id();
+		if($denied){
+			echo 'denied access to twitter';
+			return;
+		}
 		if(!$user_id){
 			echo "Please login SocialHappen";
 			return;
