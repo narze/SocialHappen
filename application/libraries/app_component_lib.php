@@ -101,7 +101,7 @@ class App_component_lib
     }
     
     $this->CI->load->model('app_component_page_model','app_component_page');
-    
+    $this->CI->load->library('achievement_lib');
     $add_page_result = $this->CI->app_component_page->add($app_component_page);
     $app_id = $info['app_id'] = 0;
     $app_install_id = $info['app_install_id'] = 0;
@@ -277,6 +277,29 @@ class App_component_lib
       return TRUE;
     }else{
       return FALSE;
+    }
+  }
+  
+  /**
+   * redeem page score
+   * @param page_id
+   * @param user_id
+   * @param amount
+   * @return result
+   */
+  function redeem_page_score($page_id = NULL, $user_id = NULL, $amount = 0){
+    if(!isset($page_id) || !isset($user_id)){
+      return FALSE;
+    }
+    $amount = (int) $amount;
+    $amount = 0 - abs($amount);
+    $this->CI->load->library('achievement_lib');
+    $page_stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
+    $current_score = $page_stat['page_score'];
+    if(abs($amount) > $current_score){ // not enough page score to redeem
+      return FALSE;
+    }else{
+      return $this->CI->achievement_lib->increment_page_score($page_id, $user_id, $amount);
     }
   }
 }
