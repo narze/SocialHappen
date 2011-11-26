@@ -561,6 +561,40 @@ class Sync extends CI_Controller {
 				'app_image' =>  'https://apps.localhost.com/feedr/images/app_image_o.png',
 				'app_facebook_api_key' => '123678481062231' 	
 			),
+			array(
+				'app_id' => 9, 
+				'app_name' => 'CMS', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Support Page'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Content management system', 
+				'app_secret_key' => 'c861264d7f42636eed41612c58cc950f', 
+				'app_url' => 'https://apps.socialhappen.com/fbcms?app_install_id={app_install_id}', 
+				'app_install_url' => 'https://apps.socialhappen.com/fbcms/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'https://apps.socialhappen.com/fbcms/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'https://apps.socialhappen.com/fbcms/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_icon' =>  'https://apps.socialhappen.com/fbcms/images/app_image_16.png',
+				'app_image' =>  'https://apps.socialhappen.com/fbcms/images/app_image_o.png',
+				'app_facebook_api_key' => '133912883383693' 	
+			),
+			array(
+				'app_id' => 10, 
+				'app_name' => '[Local]CMS', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Support Page'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Content management system', 
+				'app_secret_key' => '655ab6dc53febea644ff59fb55695be5', 
+				'app_url' => 'https://apps.localhost.com/fbcms?app_install_id={app_install_id}', 
+				'app_install_url' => 'https://apps.localhost.com/fbcms/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'https://apps.localhost.com/fbcms/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'https://apps.localhost.com/fbcms/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_icon' =>  'https://apps.localhost.com/fbcms/images/app_image_16.png',
+				'app_image' =>  'https://apps.localhost.com/fbcms/images/app_image_o.png',
+				'app_facebook_api_key' => '297378976960614' 	
+			),
 		);
 		$this->db->insert_batch('app', $app);
 				
@@ -1273,6 +1307,14 @@ class Sync extends CI_Controller {
 				'app_id' => 8
 			),
 			array(
+				'package_id' => 1,
+				'app_id' => 9
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 10
+			),
+			array(
 				'package_id' => 2,
 				'app_id' => 1
 			),
@@ -1305,6 +1347,14 @@ class Sync extends CI_Controller {
 				'app_id' => 8
 			),
 			array(
+				'package_id' => 2,
+				'app_id' => 9
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 10
+			),
+			array(
 				'package_id' => 3,
 				'app_id' => 1
 			),
@@ -1335,6 +1385,14 @@ class Sync extends CI_Controller {
 			array(
 				'package_id' => 3,
 				'app_id' => 8
+			),
+			array(
+				'package_id' => 3,
+				'app_id' => 9
+			),
+			array(
+				'package_id' => 3,
+				'app_id' => 10
 			)
 		);
 		$this->db->insert_batch('package_apps', $package_apps);
