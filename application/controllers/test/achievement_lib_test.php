@@ -31,7 +31,7 @@ class achievement_lib_test extends CI_Controller {
 	function start_test(){
 		$this->achievement_info->drop_collection();
 		$this->achievement_stat->drop_collection();
-    	$this->achievement_stat_page->drop_collection();
+  	$this->achievement_stat_page->drop_collection();
 		$this->achievement_user->drop_collection();
 	}
 	
@@ -882,7 +882,31 @@ class achievement_lib_test extends CI_Controller {
     
   }
   
+  function decrement_page_score_test(){
+    $page_id = '1000';
+    $user_id = '1000';
+    $amount = '20';
+    $result = $this->achievement_lib->increment_page_score($page_id, $user_id, $amount);
+    $this->unit->run($result, TRUE, 'decrement', print_r($result, TRUE));
+    
+    $result = $this->achievement_stat_page->get((int)$page_id, (int)$user_id);
+    $this->unit->run($result['page_score'], 70, 'decrement');
+    
+    $amount = '-10';
+    $result = $this->achievement_lib->increment_page_score($page_id, $user_id, $amount);
+    $this->unit->run($result, TRUE, 'decrement');
+    
+    $result = $this->achievement_stat_page->get((int)$page_id, (int)$user_id);
+    $this->unit->run($result['page_score'], 60, 'decrement', print_r($result, TRUE));
+  }
   
+  function get_page_stat_test(){
+    $page_id = '1000';
+    $user_id = '1000';
+    
+    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
+    $this->unit->run($result['page_score'], 60, 'decrement');
+  }
 	function end_test(){
 		// $this->achievement_info->drop_collection();
 		// $this->achievement_stat->drop_collection();

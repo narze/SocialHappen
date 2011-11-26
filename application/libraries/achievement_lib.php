@@ -595,6 +595,40 @@ class Achievement_lib
 		return $this->CI->achievement_stat->get($app_id, $user_id);
 	}
 	
+  /**
+   * increment page score
+   * @param page_id
+   * @param user_id
+   * @param amount
+   * @return result
+   */
+  function increment_page_score($page_id = NULL, $user_id = NULL, $amount = 0){
+    if(!isset($page_id) || !isset($user_id)){
+      return FALSE;
+    }
+    $page_id = (int) $page_id;
+    $user_id = (int) $user_id;
+    $amount = (int) $amount;
+    $this->CI->load->model('achievement_stat_page_model', 'achievement_stat_page');
+    return $this->CI->achievement_stat_page->increment($page_id, 
+        $user_id, array('page_score' => $amount), $amount);
+  }
+  
+  /**
+   * get user stat page
+   * @param page_id
+   * @param user_id
+   * @return result
+   */
+  function get_page_stat($page_id = NULL, $user_id = NULL){
+    if(!isset($page_id) || !isset($user_id)){
+      return NULL;
+    }
+    $page_id = (int) $page_id;
+    $user_id = (int) $user_id;
+    $this->CI->load->model('achievement_stat_page_model', 'achievement_stat_page');
+    return $this->CI->achievement_stat_page->get($page_id, $user_id);
+  }
 	
 }
 /* End of file achievement_lib.php */

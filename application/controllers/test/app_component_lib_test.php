@@ -294,6 +294,66 @@ class app_component_lib_test extends CI_Controller {
     }
   }
   
+  function prepare_page_stat_test(){
+    $page_id = 1;
+    $user_id = 2;
+    $campaign_id = 10;
+    $info = array('campaign_score' => 10,
+                  'page_score' => 10,
+                  'campaign_id' => $campaign_id);
+    $amount = 10;
+    
+    $result = $this->achievement_stat_page->increment($page_id, $user_id, $info, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $this->unit->run($result['campaign'][$campaign_id]['score'], 10, 'get', print_r($result, TRUE));
+    $this->unit->run($result['page_score'], 10, 'get', print_r($result, TRUE));
+  }
+  
+  function redeem_page_score_invalid_test(){
+    $page_id = '1';
+    $user_id = '2';
+    $amount = '50'; // too much
+    $result = $this->app_component_lib->redeem_page_score(NULL, $user_id, $amount);
+    $this->unit->run($result, 'is_false', 'increment', print_r($result, TRUE));
+    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
+    $this->unit->run($result['page_score'], 10, 'decrement');
+    
+    $page_id = '1';
+    $user_id = '2';
+    $amount = '50'; // too much
+    $result = $this->app_component_lib->redeem_page_score($page_id, $user_id, $amount);
+    $this->unit->run($result, 'is_false', 'increment', print_r($result, TRUE));
+    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
+    $this->unit->run($result['page_score'], 10, 'decrement');
+    
+    $page_id = '1';
+    $user_id = '2';
+    $amount = 00;
+    $result = $this->app_component_lib->redeem_page_score($page_id, $user_id, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
+    $this->unit->run($result['page_score'], 10, 'decrement');
+  }
+  
+  function redeem_page_score_test(){
+    $page_id = '1';
+    $user_id = '2';
+    $amount = '1';
+    $result = $this->app_component_lib->redeem_page_score($page_id, $user_id, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
+    $this->unit->run($result['page_score'], 9, 'decrement');
+    
+    $page_id = 1;
+    $user_id = 2;
+    $amount = -1;
+    $result = $this->app_component_lib->redeem_page_score($page_id, $user_id, $amount);
+    $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
+    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
+    $this->unit->run($result['page_score'], 8, 'decrement');
+  }
+  
   function end_test(){
     // $this->achievement_info->drop_collection();
     // $this->achievement_stat->drop_collection();
