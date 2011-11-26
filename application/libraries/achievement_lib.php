@@ -16,7 +16,9 @@ class Achievement_lib
   
 	private $SHARE_ACTION_ID = 108;
   
-  private $INVITE_ACCEPT_ACTION_ID = 114;
+  private $PAGE_INVITE_ACCEPT_ACTION_ID = 114;
+  
+  private $CAMPAIGN_INVITE_ACCEPT_ACTION_ID = 115;
   
 	/**
 	 *	------------------------------------------------------------------------
@@ -369,8 +371,9 @@ class Achievement_lib
       }else if($info['action_id'] == $this->SHARE_ACTION_ID){
         $page_score = $campaign['sharebutton']['criteria']['score'];
         $campaign_score = $campaign['sharebutton']['criteria']['score'];
-      }else if($info['action_id'] == $this->INVITE_ACCEPT_ACTION_ID){
+      }else if($info['action_id'] == $this->PAGE_INVITE_ACCEPT_ACTION_ID){
         $page_score = $campaign['invite']['criteria']['acceptance_score']['page'];
+      }else if($info['action_id'] == $this->CAMPAIGN_INVITE_ACCEPT_ACTION_ID){
         $campaign_score = $campaign['invite']['criteria']['acceptance_score']['campaign'];
       }
       
