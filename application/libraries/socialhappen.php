@@ -727,7 +727,13 @@ class SocialHappen{
 		
 		$domain_fragments = parse_url(base_url());
 		$sh_domain = 'https://'.$domain_fragments['host']; //Use for cross-domain calling
-	
+
+		if($app_mode){
+			$facebook_tab_url = $app['facebook_tab_url'];
+		} else {
+			$facebook_tab_url = $page['facebook_tab_url'];
+		}
+
 		$this->CI->load->vars(array(
 			'vars' => array(
 				'view_as' => '',
@@ -746,7 +752,8 @@ class SocialHappen{
 				'app_secret_key' => $app['app_secret_key'],
 				'app_install_secret_key' => $app['app_install_secret_key'],
 				'facebook_page_id' => $page['facebook_page_id'],
-				'facebook_access_token' => ''
+				'facebook_access_token' => '',
+				'facebook_tab_url' => $facebook_tab_url
 			),
 			// 'view_as' => $view_as,
 			'node_base_url' => $this->CI->config->item('node_base_url'),

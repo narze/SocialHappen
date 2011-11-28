@@ -9,6 +9,7 @@ class Share extends CI_Controller {
 	function index($app_install_id = NULL){
 		$this->load->library('form_validation');
 		$share_message = '//default//';
+		$share_link = $this->input->get('link');
 		if($app_install_id){
 			$this->load->library('campaign_lib');
 			$campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
@@ -30,6 +31,7 @@ class Share extends CI_Controller {
 			'twitter_checked' => !empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret']),
 			'facebook_checked' => TRUE,
 			'share_message' => $share_message,
+			'share_link' => $share_link,
 			'app_install_id' => $app_install_id
 		));
 		$this->load->view('share/main');
@@ -149,18 +151,27 @@ class Share extends CI_Controller {
 			$message = $this->input->post('message');
 			$twitter_share = $this->input->post('twitter') == 1;
 			$facebook_share = $this->input->post('facebook') == 1;
+			$share_link = $this->input->post('share_link');
 
 			if($twitter_share){
-				if($result = $this->sharebutton_lib->twitter_post($message)){
+				if($result = $this->sharebutton_lib->twitter_post($message.' '.$share_link)){
 					echo '<div>Shared twitter</div>';
 				}
 			}
 
 			if($facebook_share){
+				$this->load->model('installed_apps_model','installed_apps');
+				$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+				$app_name = $app['app_name'];
 				$this->load->library('facebook');
-				if($result = $this->facebook->post_profile($message)){
+				if($result = $this->facebook->post_profile($message, $share_link, $app_name)){
 					echo '<div>Shared facebook</div>';
 				}
+			}
+
+			if(!$twitter_share && !$facebook_share){
+				echo 'Error occured, please share again';
+				return;
 			}
 
 			//TODO : Give score if available

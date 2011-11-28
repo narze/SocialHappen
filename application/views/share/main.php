@@ -6,11 +6,12 @@
 </script>
 <script type="text/javascript" src="<?php echo base_url().'assets/js/share/main.js';?>"></script>
 <body>
+<div class="sh-share-link">Link : <?php echo $share_link;?></div>
 <?php // Change the css classes to suit your needs    
 
 $attributes = array('class' => '', 'id' => '');
 echo form_open('share/share_submit/'.$app_install_id, $attributes); ?>
-
+<input type="hidden" id="share_link" name="share_link" value="<?php echo $share_link;?>" />
 <p>
 	
         <?php echo form_error('twitter'); ?>

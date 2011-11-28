@@ -279,7 +279,7 @@ class Facebook {
 		return FALSE;
 	}
 
-	function post_profile($message = null) {
+	function post_profile($message = NULL, $link = NULL, $name = NULL) {
 
 		$this -> _ci-> load -> library('curl');
 		$cookie = $this -> get_facebook_cookie();
@@ -288,15 +288,14 @@ class Facebook {
 
 		$url = "https://graph.facebook.com/me/feed";
 		$this ->_ci-> curl -> create($url);
-
 		$post = array(
 			'access_token' => $cookie['access_token'], 
 			'message' => $message, 
 			// 'picture' => $settings['share_fb_picture'], 
-			'link' => 'www.example.com', 
-			// 'name' => $settings['share_fb_name'], 
-			// 'caption' => $settings['share_fb_caption'], 
-			// 'description' => $settings['share_fb_description']
+			'link' => $link, 
+			'name' => $name ? $name : $link, 
+			// 'caption' => 'share_fb_caption', 
+			// 'description' => 'share_fb_description'
 		);
 
 		$this ->_ci-> curl -> post($post);

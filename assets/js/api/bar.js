@@ -363,15 +363,23 @@ onLoad = function(){
 
 			function sh_sharebutton(){console.log('sh_sharebutton');
 				$(document).on('click', 'div.sh-sharebutton', function(){
-					sh_sharebutton_menu();
+					sh_sharebutton_menu($(this));
 				});
 
 				//DEBUG : remove this after test
-				$('body').append('<div class="sh-sharebutton" />'); // for debug
+				$('body').append('<div class="sh-sharebutton" data-href="" />'); // for debug
 
-				function sh_sharebutton_menu(){
+				function sh_sharebutton_menu(elem){
+					var share_href = elem.data('href');
+
+					if(share_href){
+						share_href = encodeURIComponent(share_href);
+					} else {
+						share_href = encodeURIComponent(facebook_tab_url);
+					}
+
 					jQuery.fancybox({ // should use something better than fancybox?
-						href:base_url+'share/'+app_install_id,
+						href:base_url+'share/'+app_install_id+'?link='+share_href,
 						type:'iframe',
 						transitionIn: 'elastic',
 						transitionOut: 'elastic',
@@ -605,7 +613,6 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		XD.postMessage({sh_message:'page_id',sh_page_id:page_id,facebook_page_id:facebook_page_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
 	} else if(message.data.sh_message === 'status'){ 
 		view_as = message.data.sh_status;
-		console.log('va',view_as);
 		user_image = message.data.sh_user_image;
 		user_name = message.data.sh_user_name;
 		onLoad();
