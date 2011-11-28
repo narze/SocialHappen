@@ -564,7 +564,7 @@ class Sync extends CI_Controller {
 				'app_icon' =>  'https://apps.localhost.com/feedr/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/feedr/images/app_image_o.png',
 				'app_facebook_api_key' => '123678481062231' 	
-			),
+			),			
 			array(
 				'app_id' => 9, 
 				'app_name' => 'CMS', 
@@ -598,6 +598,39 @@ class Sync extends CI_Controller {
 				'app_icon' =>  'https://apps.localhost.com/fbcms/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/fbcms/images/app_image_o.png',
 				'app_facebook_api_key' => '297378976960614' 	
+			),array(
+				'app_id' => 11, 
+				'app_name' => 'ExclusiveClub', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Support Page'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Exclusive club', 
+				'app_secret_key' => '7d4b57e0d9c467a77ac88ca38368fb8c', 
+				'app_url' => 'https://apps.socialhappen.com/exclub?app_install_id={app_install_id}', 
+				'app_install_url' => 'https://apps.socialhappen.com/exclub/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'https://apps.socialhappen.com/exclub/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'https://apps.socialhappen.com/exclub/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_icon' =>  'https://apps.socialhappen.com/exclub/images/app_image_16.png',
+				'app_image' =>  'https://apps.socialhappen.com/exclub/images/app_image_o.png',
+				'app_facebook_api_key' => '232687860130389' 	
+			),
+			array(
+				'app_id' => 12, 
+				'app_name' => '[Local]ExclusiveClub', 
+				'app_type_id' => $this->socialhappen->get_k('app_type','Support Page'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Exclusive club', 
+				'app_secret_key' => 'ea7988ee810d77aec863a25a33675a86', 
+				'app_url' => 'https://apps.localhost.com/exclub?app_install_id={app_install_id}', 
+				'app_install_url' => 'https://apps.localhost.com/exclub/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'https://apps.localhost.com/exclub/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'https://apps.localhost.com/exclub/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_support_page_tab' => 1, 
+				'app_icon' =>  'https://apps.localhost.com/exclub/images/app_image_16.png',
+				'app_image' =>  'https://apps.localhost.com/exclub/images/app_image_o.png',
+				'app_facebook_api_key' => '302231066461728' 	
 			),
 		);
 		$this->db->insert_batch('app', $app);
@@ -747,6 +780,11 @@ class Sync extends CI_Controller {
 							array(
 							    'company_id' => 1, 
 							    'app_id' => 11, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 12, 
 							    'available_date' => '2011-05-19 16:01:20'
 							)
 						);
@@ -1340,6 +1378,14 @@ class Sync extends CI_Controller {
 				'app_id' => 10
 			),
 			array(
+				'package_id' => 1,
+				'app_id' => 11
+			),
+			array(
+				'package_id' => 1,
+				'app_id' => 12
+			),
+			array(
 				'package_id' => 2,
 				'app_id' => 1
 			),
@@ -1380,6 +1426,14 @@ class Sync extends CI_Controller {
 				'app_id' => 10
 			),
 			array(
+				'package_id' => 2,
+				'app_id' => 11
+			),
+			array(
+				'package_id' => 2,
+				'app_id' => 12
+			),
+			array(
 				'package_id' => 3,
 				'app_id' => 1
 			),
@@ -1418,6 +1472,14 @@ class Sync extends CI_Controller {
 			array(
 				'package_id' => 3,
 				'app_id' => 10
+			),
+			array(
+				'package_id' => 3,
+				'app_id' => 11
+			),
+			array(
+				'package_id' => 3,
+				'app_id' => 12
 			)
 		);
 		$this->db->insert_batch('package_apps', $package_apps);
