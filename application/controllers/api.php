@@ -100,10 +100,22 @@ class Api extends CI_Controller {
 												)
 										);
 				
+				//Add first 10-year campaign
+				$this->load->model('campaign_model','campaign');
+				$campaign = array(
+					'app_install_id' => $app_install_id,
+					'campaign_name' => 'Campaign',
+					'campaign_start_date' => date("Y-m-d"),
+					'campaign_end_date' => date("Y-m-d", mktime(0, 0, 0, date("m"),   date("d"),   date("Y")+10)),
+					'campaign_end_message' => 'Campaign Ended');
+				$campaign_id = $this->campaign->add_campaign($campaign);
+				//End : Add first 10-year campaign
+
 				// response
 				$response = array(	'status' => 'OK',
 									'app_install_id' => $app_install_id,
-									'app_install_secret_key' => $app_install_secret_key);
+									'app_install_secret_key' => $app_install_secret_key ,
+									'campaign_id' => $campaign_id);
 				echo json_encode($response);		
 				return;				
 			}
