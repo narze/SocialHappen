@@ -4,6 +4,7 @@
 			<li>Platform apps
 			<ul class="platform-apps">
 				<li><a id="signup-fields" href="<?php echo base_url()."settings/page_signup_fields/view/{$page['page_id']}";?>"><b>Signup Form</b></a></li>
+				<li><a id="timezone" href="<?php echo base_url()."settings/page_timezone/view/{$page['page_id']}";?>"><b>Timezone</b></a></li>
 				<li><a id="badges" href="<?php echo base_url()."settings/page_badges/view/{$page['page_id']}";?>"><b>Badges</b></a></li>
 			</ul>
 			</li>

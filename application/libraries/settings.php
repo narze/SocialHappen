@@ -106,12 +106,7 @@ class Settings{
 	 */
 	function view_page_app_settings($page_id = NULL, $config_name = NULL, $app_install_id = NULL){
 		if($page_id){
-			// if($this->CI->input->get('p')){
-			// 	$page_id = $this->CI->input->get('p');
-			// }
-			// $config_name = $this->CI->input->get('c');
-			// $app_install_id = $this->CI->input->get('id');
-			$config_names_and_ids = array('signup_fields','badges','app');
+			$config_names_and_ids = array('signup_fields','badges','app','timezone');
 		
 			if(!in_array($config_name, $config_names_and_ids)){
 				redirect("settings/page_apps/{$page_id}");

@@ -229,8 +229,12 @@ $(function(){
 		}
 	}
 
+	function timezone(){
+
+	}
+
 	function badges(){
-		console.log('badges');
+
 	}
 	
 	$('ul.platform-apps li a').live('click',function(){
@@ -243,6 +247,8 @@ $(function(){
 			$('div#main').load(url,function(){
 				if( element.attr('id') == 'signup-fields'){
 					signup_fields();
+				} else if (element.attr('id') == 'timezone'){
+					timezone();
 				} else if (element.attr('id') == 'badges'){
 					badges();
 				}
@@ -282,6 +288,8 @@ $(function(){
 		$('ul.platform-apps li a#signup-fields').click();
 	} else if(config_name == 'badges'){
 		$('ul.platform-apps li a#badges').click();
+	} else if(config_name == 'timezone'){
+		$('ul.platform-apps li a#timezone').click();
 	} else if(config_name == 'app'){
 		$('ul.page-apps li a.app[data-appinstallid="'+app_install_id+'"]').click();
 	}
