@@ -473,13 +473,13 @@ class Audit_lib
 	 * @author Metwara Narksook
 	 */
 	function _date(){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		return (int)Date('Ymd');
 	}
 	
 	function get_date_range($startDate, $endDate, $format="Ymd")
 	{
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 	    //Create output variable
 	    $datesArray = array();
 	    //Calculate number of days in the range
@@ -769,7 +769,7 @@ class Audit_lib
 		$y = substr($date, 0, 4);
 		$m = substr($date, 4, 2);
 		$d = substr($date, 6, 2);
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		return mktime(0, 0, 0, $m, $d, $y);
 	}
 	
@@ -803,7 +803,7 @@ foreach ($data as $line_key => $line_value) {
 	$point = array();
 	foreach($line_value as $point_key => $point_value){
 		$timestamp = $this->convert_statdate_to_date($point_key);
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$date = date('d', $timestamp) . '-' . date('M', $timestamp) . '-' . date('Y', $timestamp);
 		$point[] = '[\'' . $date . '\', '.$point_value.']';
 	}

@@ -86,7 +86,7 @@ class Audit_stat_limit_lib
 	 */
 	function count($user_id = NULL, $action_no = NULL, $app_install_id = NULL,
 	 $campaign_id = NULL, $back_time_interval = 3600){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$now = time();
 		$criteria = array();
 		if(isset($user_id)){
@@ -116,7 +116,7 @@ class Audit_stat_limit_lib
 	 * @author Metwara Narksook
 	 */
 	function prune($back_time_interval = 86400){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$now = time();
 		$criteria = array('timestamp' => 
 			array('$lte' => $now - $back_time_interval));

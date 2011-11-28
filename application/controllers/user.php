@@ -130,7 +130,7 @@ class User extends CI_Controller {
 	}
 
 	function _get_user_activity_page($page_id, $user_id, $limit = 100, $offset = 0){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$this->load->library('audit_lib');
 		$activity_db = $this->audit_lib->list_audit(array('page_id' => (int)$page_id, 'user_id' => (int)$user_id), $limit, $offset);
 		
@@ -155,7 +155,7 @@ class User extends CI_Controller {
 	}
 	
 	function _get_user_activity_recent_apps($page_id, $user_id){
-		date_default_timezone_set('Asia/Bangkok');		
+		date_default_timezone_set('UTC');		
 		$app_ids = $this->audit_lib->list_audit_range('app_id', array('page_id'=>(int)$page_id, 'user_id'=>(int)$user_id));
 		$app_ids = array_filter($app_ids); //Remove zero value
 		$app_list = array();
@@ -173,7 +173,7 @@ class User extends CI_Controller {
 	}
 	
 	function _get_user_activity_app($app_install_id, $user_id){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$activity_db = $this->audit_lib->list_audit(array('app_install_id' => (int)$app_install_id, 'user_id' => (int)$user_id));
 		$activity_list = array();
 		foreach ($activity_db as $activity) {
@@ -185,7 +185,7 @@ class User extends CI_Controller {
 	}
 	
 	function _get_user_activity_campaign($campaign_id, $user_id){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$activity_db = $this->audit_lib->list_audit(array('campaign_id' => (int)$campaign_id, 'user_id' => (int)$user_id));
 		$activity_list = array();
 		foreach ($activity_db as $activity) {
@@ -342,7 +342,7 @@ class User extends CI_Controller {
 				$end_date = $temp;
 			}
 		}else{
-			date_default_timezone_set('Asia/Bangkok');
+			date_default_timezone_set('UTC');
 			$end_date = $this->audit_lib->_date();
 			$start_date = date('Ymd', time() - 2592000);
 		}

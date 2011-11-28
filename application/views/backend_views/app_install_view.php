@@ -23,8 +23,8 @@
 			<br/><b>Detail:</b> '.$campaign['campaign_detail'].'
 			<br/><b>Status:</b> '.$campaign['campaign_status'].'
 			<br/><b>Members:</b> '.$campaign['campaign_all_member'].'
-			<br/><b>Start Date:</b> '.$campaign['campaign_start_date'].'
-			<br/><b>End Date:</b> '.$campaign['campaign_end_date'].'
+			<br/><b>Start Date:</b> '.$campaign['campaign_start_timestamp'].'
+			<br/><b>End Date:</b> '.$campaign['campaign_end_timestamp'].'
 			<br/><p><img src="'. $campaign['campaign_image'].'" /></p>
 			</li>';
 		}

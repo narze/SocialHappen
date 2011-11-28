@@ -183,8 +183,8 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => field_option('INT', 2, $default, $null, $autoinc, TRUE),
 							    'campaign_active_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
-							    'campaign_start_date' => field_option('DATE', $constraint, $default , $null, $autoinc, $unsigned),
-							    'campaign_end_date' => field_option('DATE', $constraint, $default , $null, $autoinc, $unsigned),
+							    'campaign_start_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
+							    'campaign_end_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
 								'campaign_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'campaign_end_message' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned)
 							),
@@ -688,8 +688,8 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => 1, 
 							    'campaign_active_member' => 2,
 							    'campaign_all_member' => 10, 
-							    'campaign_start_date' => '2011-05-19',
-							    'campaign_end_date' => '2012-05-18',
+							    'campaign_start_timestamp' => '2011-05-19',
+							    'campaign_end_timestamp' => '2012-05-18',
 								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							),
@@ -701,8 +701,8 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => 2, 
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
-							    'campaign_start_date' => '2011-05-18', 
-							    'campaign_end_date' => '2011-06-18',
+							    'campaign_start_timestamp' => '2011-05-18', 
+							    'campaign_end_timestamp' => '2011-06-18',
 								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							)

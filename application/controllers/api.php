@@ -102,11 +102,12 @@ class Api extends CI_Controller {
 				
 				//Add first 10-year campaign
 				$this->load->model('campaign_model','campaign');
+				date_default_timezone_set('UTC');
 				$campaign = array(
 					'app_install_id' => $app_install_id,
 					'campaign_name' => 'Campaign',
-					'campaign_start_date' => date("Y-m-d"),
-					'campaign_end_date' => date("Y-m-d", mktime(0, 0, 0, date("m"),   date("d"),   date("Y")+10)),
+					'campaign_start_timestamp' => date("y-m-d H:i:s"),
+					'campaign_end_timestamp' => date("y-m-d H:i:s", strtotime('+10 years')),
 					'campaign_end_message' => 'Campaign Ended');
 				$campaign_id = $this->campaign->add_campaign($campaign);
 				//End : Add first 10-year campaign
@@ -916,8 +917,8 @@ class Api extends CI_Controller {
 								'campaign_status_name' => $campaign['campaign_status'],
 								'campaign_active_member' => $campaign['campaign_active_member'],
 								'campaign_all_member' => $campaign['campaign_all_member'],
-								'campaign_start_date' => $campaign['campaign_start_date'],
-								'campaign_end_date' => $campaign['campaign_end_date']
+								'campaign_start_timestamp' => $campaign['campaign_start_timestamp'],
+								'campaign_end_timestamp' => $campaign['campaign_end_timestamp']
 							);
 				echo json_encode($response);
 			}
@@ -945,14 +946,14 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		$campaign_name = $this->input->get('campaign_name', TRUE);
 		$campaign_detail = $this->input->get('campaign_detail', TRUE);
-		$campaign_start_date = $this->input->get('campaign_start_date', TRUE);
-		$campaign_end_date = $this->input->get('campaign_end_date', TRUE);
+		$campaign_start_timestamp = $this->input->get('campaign_start_timestamp', TRUE);
+		$campaign_end_timestamp = $this->input->get('campaign_end_timestamp', TRUE);
 		$campaign_status_id = $this->input->get('campaign_status_id', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id) || !($campaign_name) || !($campaign_start_date) || !($campaign_end_date)){
-			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_name, campaign_start_date, campaign_end_date)');
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id) || !($campaign_name) || !($campaign_start_timestamp) || !($campaign_end_timestamp)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_name, campaign_start_timestamp, campaign_end_timestamp)');
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_name, campaign_start_date, campaign_end_date)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id, campaign_name, campaign_start_timestamp, campaign_end_timestamp)'));
 			return;
 		}
 		
@@ -1005,8 +1006,8 @@ class Api extends CI_Controller {
 										'app_install_id' => $app_install_id,
 										'campaign_name' => $campaign_name,
 										'campaign_detail' => $campaign_detail,
-										'campaign_start_date' => $campaign_start_date,
-										'campaign_end_date' => $campaign_end_date,
+										'campaign_start_timestamp' => $campaign_start_timestamp,
+										'campaign_end_timestamp' => $campaign_end_timestamp,
 										'campaign_status_id' => $campaign_status_id
 									));
 		
@@ -1039,8 +1040,8 @@ class Api extends CI_Controller {
 		$campaign_id = $this->input->get('campaign_id', TRUE);
 		$campaign_name = $this->input->get('campaign_name', TRUE);
 		$campaign_detail = $this->input->get('campaign_detail', TRUE);
-		$campaign_start_date = $this->input->get('campaign_start_date', TRUE);
-		$campaign_end_date = $this->input->get('campaign_end_date', TRUE);
+		$campaign_start_timestamp = $this->input->get('campaign_start_timestamp', TRUE);
+		$campaign_end_timestamp = $this->input->get('campaign_end_timestamp', TRUE);
 		$campaign_status_id = $this->input->get('campaign_status_id', TRUE);
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_id && !$user_facebook_id) || !($campaign_id)){
@@ -1102,10 +1103,10 @@ class Api extends CI_Controller {
 					$campaign_name = $campaign['campaign_name'];
 				if(!($campaign_detail))
 					$campaign_detail = $campaign['campaign_detail'];
-				if(!($campaign_start_date))
-					$campaign_start_date = $campaign['campaign_start_date'];
-				if(!($campaign_end_date))
-					$campaign_end_date = $campaign['campaign_end_date'];
+				if(!($campaign_start_timestamp))
+					$campaign_start_timestamp = $campaign['campaign_start_timestamp'];
+				if(!($campaign_end_timestamp))
+					$campaign_end_timestamp = $campaign['campaign_end_timestamp'];
 				if(!($campaign_status_id))
 					$campaign_status_id = $campaign['campaign_status_id'];
 					
@@ -1114,8 +1115,8 @@ class Api extends CI_Controller {
 											array(
 												'campaign_name' => $campaign_name,
 												'campaign_detail' => $campaign_detail,
-												'campaign_start_date' => $campaign_start_date,
-												'campaign_end_date' => $campaign_end_date,
+												'campaign_start_timestamp' => $campaign_start_timestamp,
+												'campaign_end_timestamp' => $campaign_end_timestamp,
 												'campaign_status_id' => $campaign_status_id
 											));
 				

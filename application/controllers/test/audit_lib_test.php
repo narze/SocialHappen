@@ -308,7 +308,7 @@ class audit_lib_test extends CI_Controller {
 	}
 	
 	function _date(){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		return Date('Ymd');
 	}
 	

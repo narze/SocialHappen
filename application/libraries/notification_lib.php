@@ -55,7 +55,7 @@ class Notification_lib
 		if(empty($user_id) || empty($message) || empty($link)){
 			return FALSE;
 		}
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$timestamp = time();
 		$result = $this->CI->notification->add((int)$user_id, $message, $link,
 		 $image, $timestamp);

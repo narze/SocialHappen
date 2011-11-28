@@ -259,7 +259,7 @@ class Page extends CI_Controller {
 		foreach($apps as $app){
 			$this->load->library('audit_lib');
 			$this->load->library('app_url');
-			date_default_timezone_set('Asia/Bangkok');
+			date_default_timezone_set('UTC');
 			$end_date = $this->audit_lib->_date();
 			$start_date = date('Ymd', time() - 2592000);
 			
@@ -504,7 +504,7 @@ class Page extends CI_Controller {
 				$end_date = $temp;
 			}
 		}else{
-			date_default_timezone_set('Asia/Bangkok');
+			date_default_timezone_set('UTC');
 			$end_date = $this->audit_lib->_date();
 			$start_date = date('Ymd', time() - 2592000);
 		}
