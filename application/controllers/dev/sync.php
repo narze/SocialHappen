@@ -250,7 +250,8 @@ class Sync extends CI_Controller {
 								'user_point' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'user_twitter_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'user_twitter_access_token' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-								'user_twitter_access_token_secret' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
+								'user_twitter_access_token_secret' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'user_timezone' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, $unsigned)
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),

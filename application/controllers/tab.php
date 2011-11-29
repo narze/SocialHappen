@@ -554,9 +554,14 @@ class Tab extends CI_Controller {
 				$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');	
 				$this->form_validation->set_rules('about', 'About', 'trim|xss_clean');
 				$this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
-					
+				$this->form_validation->set_rules('timezones', 'Timezone', 'trim|xss|clean');
+				
 				$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-			
+				
+				$this->load->helper('date');
+				$timezones = timezones();
+				$user['user_timezone'] = array_search($user['user_timezone'], $timezones);
+
 				if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 				{
 					$this->load->view('tab/account', array('page'=>$page,'user'=>$user,'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id'])));
@@ -569,17 +574,22 @@ class Tab extends CI_Controller {
 						$user_image = $user['user_image'];
 					}
 				
+					$hour_offset = $timezones[set_value('timezones')];
+
 					// build array for the model
 					$user_update_data = array(
 									'user_first_name' => set_value('first_name'),
 									'user_last_name' => set_value('last_name'),
 									'user_about' => set_value('about'),
-									'user_image' => $user_image
+									'user_image' => $user_image,
+									'user_timezone' => $hour_offset
 								);
 					$this->load->model('user_model','users');
 					if ($this->users->update_user($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
 					{
-						$this->load->view('tab/account', array('page'=>$page,'user'=>array_merge($user,$user_update_data), 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
+						$updated_user = array_merge($user,$user_update_data);
+						$updated_user['user_timezone'] = array_search($updated_user['user_timezone'], $timezones);
+						$this->load->view('tab/account', array('page'=>$page, 'user'=>$updated_user, 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
 					}
 					else
 					{

@@ -45,6 +45,7 @@
 						<li><strong>Last name :</strong><?php echo form_error('last_name'); ?><input id="last_name" type="text" name="last_name" maxlength="255" value="<?php echo set_value('last_name',$user['user_last_name']); ?>"  /></li>
 						<li><strong>Email :</strong><?php echo $user['user_email']; ?></li>
 						<li><strong>About me :</strong><?php echo form_error('about'); ?><?php echo form_textarea( array( 'name' => 'about', 'id' => 'about' , 'cols'=> 30 ,'value' => set_value('about',$user['user_about']) ) ); ?></li>
+						<li><strong>Timezone :</strong><?php echo timezone_menu($user['user_timezone']);?></li>
 						<li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></input></li>
 					  </ul> 
 					</div>
