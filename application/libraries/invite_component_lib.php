@@ -16,20 +16,35 @@ class Invite_component_lib {
 	 * Add new invite
 	 *
 	 */
-    public function add_invite($campaign_id = NULL, $app_install_id = NULL, $page_id = NULL
-							, $invite_type = NULL, $user_id = NULL, $target_id = NULL){
+    public function add_invite($campaign_id = NULL, $app_install_id = NULL, $facebook_page_id = NULL
+							, $invite_type = NULL, $user_facebook_id = NULL, $target_facebook_id = NULL){
 							
 		$this->CI->invite_model->create_index();
 		
 		$invite_key = $this->_generate_invite_key();
 		if($invite_type == 1)
-			$target_id = NULL;
+			$target_facebook_id = NULL;
 			
-		if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $page_id
-							, $invite_type, $user_id, $target_id
-							, $invite_key))
-			return $invite_key;
-	
+		//relation check
+		$this->CI->load->model('campaign_model');
+		$this->CI->load->model('page_model');
+		$this->CI->load->model('installed_apps_model');
+		
+		$campaign = $this->CI->campaign_model->get_campaign_profile_by_campaign_id($campaign_id);
+		$page = $this->CI->page_model->get_page_profile_by_facebook_page_id($facebook_page_id);
+		$app_install = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
+		
+		$check_args = ($campaign['app_install_id'] == $app_install_id) &&
+						($page['page_id'] == $app_install['page_id']);
+		
+		if($check_args){
+			if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
+								, $invite_type, $user_facebook_id, $target_facebook_id
+								, $invite_key)){
+				return $invite_key;
+			}
+		}
+		return FALSE;
     }
 	
 	/**
