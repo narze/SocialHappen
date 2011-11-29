@@ -353,6 +353,16 @@ class app_component_lib_test extends CI_Controller {
     $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
     $this->unit->run($result['page_score'], 8, 'decrement');
   }
+
+  function add_default_user_classes_test(){
+    $page_id = 5;
+    $result = $this->app_component_lib->add_default_user_classes($page_id);
+    $this->unit->run($result, 'is_true', 'Add default user classes', print_r($result, TRUE));
+
+    $result = $this->app_component_lib->get_page($page_id);
+    $this->unit->run($result['page_id'], $page_id,'get page', print_r($result, TRUE));
+    $this->unit->run(count($result['classes']), 3,'count page classes', print_r($result, TRUE));
+  }
   
   function end_test(){
     // $this->achievement_info->drop_collection();

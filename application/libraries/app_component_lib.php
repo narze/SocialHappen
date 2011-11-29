@@ -164,10 +164,11 @@ class App_component_lib
   
   function get_page($page_id = NULL){
     $page_id = (int)$page_id;
+    $this->CI->load->model('app_component_page_model','app_component_page');
     return $this->CI->app_component_page->get_by_page_id($page_id);
   }
   /**
-   * Add app_component_page
+   * Update page classes
    * @param $page_id
    * @param $classes = array(
    *      array(
@@ -301,6 +302,30 @@ class App_component_lib
     }else{
       return $this->CI->achievement_lib->increment_page_score($page_id, $user_id, $amount);
     }
+  }
+
+  /** 
+   * Add default user classes
+   * @param $page_id
+   * @author Manassarn M.
+   */
+  function add_default_user_classes($page_id = NULL){
+    if(!$page_id){
+      return FALSE;
+    }
+    $app_component_page_data = array(
+      'page_id' => $page_id,
+      'classes' => array(
+        array('name' => 'Founding',
+              'invite_accepted' => 3),
+        array('name' => 'VIP',
+              'invite_accepted' => 10),
+        array('name' => 'Prime',
+              'invite_accepted' => 50)
+        )
+      );
+    return $this->add_page($app_component_page_data);
+      
   }
 }
 /* End of file app_component_lib.php */

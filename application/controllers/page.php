@@ -335,7 +335,7 @@ class Page extends CI_Controller {
 			'page_new_member' => $this -> input -> post('page_new_member'), 
 			'page_image' => $this -> input -> post('page_image')
 		);
-		// $this->db->trans_start();
+		
 		if($this->pages->get_page_id_by_facebook_page_id($post_data['facebook_page_id'])){
 			log_message('error','Duplicated facebook page id');
 			$result['status'] = 'ERROR';
@@ -369,6 +369,14 @@ class Page extends CI_Controller {
 				'user_role' => 1
 				)
 			);
+
+			//Add Page user classes
+			$this->load->library('app_component_lib');
+			$add_user_classes_result = $this->app_component_lib->add_default_user_classes($page_id);
+			if(!$add_user_classes_result){
+		    	log_message('error','Add user classes failed , page_id : '.$page_id);
+		    }
+
 			$socialhappen_app_id = $this->config->item('facebook_app_id');
 			$facebook_page_id = $post_data['facebook_page_id'];
 			if($this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_app_id, $facebook_page_id)){
@@ -386,14 +394,7 @@ class Page extends CI_Controller {
 			$result['status'] = 'ERROR';
 			$result['message'] = 'Cannot add page, please contact administrator';
 		}
-		// $this->db->trans_complete();
-
-		// if ($this->db->trans_status() === FALSE)
-		// {
-			// log_message('error','transaction error');
-			// $result['status'] = 'ERROR';
-			// $result['message'] = 'Transaction error';
-		// }
+		
 		echo json_encode($result);
 	}
 	
