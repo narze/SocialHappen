@@ -698,6 +698,12 @@
 								+'<a class="bt-setting_app" href="'+base_url+'settings/page_timezone/'+page_id+'"><span>Setting</span></a>'
 								+'</span>'
 								+'</p><p class="appname">'+ 'Page Timezone' +'</p><input type="hidden" class="app_install_id" value="'+0+'" /></li>');
+								ul_element.append(
+								'<li><p><img class="app-image" src="'+imgsize(base_url+'assets/images/apps/page-signup/app_image_s.png','normal')+'" />'
+								+'<span class="button">'
+								+'<a class="bt-setting_app" href="'+base_url+'settings/page_user_class/'+page_id+'"><span>Setting</span></a>'
+								+'</span>'
+								+'</p><p class="appname">'+ 'Page User Class' +'</p><input type="hidden" class="app_install_id" value="'+0+'" /></li>');
 							for(i in json) {
 								ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" />'
 								+'<span class="button">'

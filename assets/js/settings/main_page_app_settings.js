@@ -290,6 +290,8 @@ $(function(){
 		$('ul.platform-apps li a#badges').click();
 	} else if(config_name == 'timezone'){
 		$('ul.platform-apps li a#timezone').click();
+	} else if(config_name == 'user_class'){
+		$('ul.platform-apps li a#user_class').click();
 	} else if(config_name == 'app'){
 		$('ul.page-apps li a.app[data-appinstallid="'+app_install_id+'"]').click();
 	}
