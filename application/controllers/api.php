@@ -1808,11 +1808,11 @@ class Api extends CI_Controller {
 		$facebook_page_id = $this->input->get('facebook_page_id', TRUE); //Optional
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) ||
-			!($user_facebook_id) || !($target_facebook_id) || !($campaign_id) || !($facebook_page_id)
+			!($user_facebook_id) || !($campaign_id) || !($facebook_page_id)
 		){
-			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id, target_facebook_id, campaign_id, invite_type, facebook_page_id)');
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id, campaign_id, invite_type, facebook_page_id)');
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id, target_facebook_id, campaign_id, invite_type, facebook_page_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_facebook_id, campaign_id, invite_type, facebook_page_id)'));
 			return;
 		}
 		

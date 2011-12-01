@@ -705,6 +705,19 @@ class Sync extends CI_Controller {
 							    'campaign_end_date' => '2011-06-18',
 								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
+							),
+							array(
+							    'campaign_id' => 4, 
+							    'app_install_id' => 8, 
+							    'campaign_name' => 'Campaign test 3',
+							    'campaign_detail' => 'Campaign test detail 3', 
+							    'campaign_status_id' => 2, 
+							    'campaign_active_member' => 3, 
+							    'campaign_all_member' => 5, 
+							    'campaign_start_date' => '2011-05-18', 
+							    'campaign_end_date' => '2011-12-31',
+								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_end_message' => 'It is ended'
 							)
 						);
 		$this->db->insert_batch('campaign', $campaign);
