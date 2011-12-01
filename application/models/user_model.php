@@ -1,9 +1,5 @@
 <?php
 class User_model extends CI_Model {
-	var $user_id = '';
-	var $user_facebook_id = '';
-	var $user_register_date = '';
-	var $user_last_seen = '';
 
 	function __construct() {
 		parent::__construct();

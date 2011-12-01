@@ -71,10 +71,10 @@ class Page_timezone extends CI_Controller {
 			if ($this->form_validation->run() == FALSE){
 				
 			} else {
-				$timezone = set_value('timezone_list');
-				if($this->page->update_page_timezone_by_page_id($page_id, $timezone)){
+				$timezone_offset_minute = set_value('timezone_list') * 60;
+				if($this->page->update_page_timezone_by_page_id($page_id, $timezone_offset_minute)){
 					$this->load->vars(array(
-						'timezone' => $timezone,
+						'timezone' => $timezone_offset_minute,
 						'updated' => TRUE
 					));
 				}

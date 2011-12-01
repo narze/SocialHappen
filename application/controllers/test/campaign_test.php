@@ -36,8 +36,8 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($array['campaign_status'] == "Inactive",'is_true','campaign_status == "Inactive"');
 		$this->unit->run($array['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($array['campaign_all_member'],'is_string','campaign_all_member');
-		$this->unit->run($array['campaign_start_date'],'is_string','campaign_start_date');
-		$this->unit->run($array['campaign_end_date'],'is_string','campaign_end_date');
+		$this->unit->run($array['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($array['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
 		$this->unit->run($array['company_id'],'is_string','company_id');
 		$this->unit->run($array['app_id'],'is_string','app_id');
@@ -66,27 +66,6 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($array[0]['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($array[0]['user_last_seen'],'is_string','user_last_seen');
 		$this->unit->run($array[0]['user_register_date'],'is_string','app_install_id');
-	}
-	
-	/**
-	 * Tests json_add()
-	 * @author Manassarn M.
-	 */
-	function json_add_test(){
-		$campaign = array(
-						'app_install_id' => 1,
-						'campaign_name' => 'test',
-						'campaign_detail' => 'test',
-						'campaign_status_id' => 1,
-						'campaign_active_member' => 1,
-						'campaign_all_member' => 1
-					);
-		$content = $this->curl->ssl(FALSE)->simple_post(base_url().'campaign/json_add', $campaign);
-		$content = json_decode($content, TRUE);
-		$this->unit->run($content,'is_array', 'json_add()');
-		$this->unit->run($content['campaign_id'],'is_int','campaign_id');
-		$this->unit->run($content['status'] == 'OK','is_true', 'status');
-		$this->unit->run(count($content) == 2,'is_true','return count');
 	}
 }
 

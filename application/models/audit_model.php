@@ -88,7 +88,7 @@ class Audit_model extends CI_Model {
 	function add_audit($data = array()){
 		$check_args = isset($data['action_id']);
 		if($check_args){
-			date_default_timezone_set('Asia/Bangkok');
+			date_default_timezone_set('UTC');
 			$time = isset($data['timestamp']) ? $data['timestamp'] : time();
 			$data_to_add = array('timestamp' => $time);
 			$data_to_add = array_merge($data_to_add, $data);
@@ -155,13 +155,13 @@ class Audit_model extends CI_Model {
 	}
 	
 	function _get_start_day_time($timestamp = NULL){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$start = mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp));
 		return $start;
 	}
 	
 	function _get_end_day_time($timestamp = NULL){
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$end = mktime(24, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp));
 		return $end;
 	}

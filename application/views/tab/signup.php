@@ -44,6 +44,10 @@
 					<?php echo form_error('email')? '<p>Enter email in the format : someone@example.com.</p>':''; ?>
 				</li>
 			</ul>
+
+			<script type="text/javascript" src="<?php echo base_url().'assets/js/common/jstz.min.js';?>"></script>
+			<input type="hidden" id="timezone" name="timezone" value="UTC" />
+			
 			<div class="buttons">
 				 <p class="right">
 					<a class="bt-cancel"><span>Cancel</span></a>

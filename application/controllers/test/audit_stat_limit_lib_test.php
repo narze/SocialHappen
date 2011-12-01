@@ -142,7 +142,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$action_no = 50;
 		$app_install_id = 60;
 		$campaign_id = 70;
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$timestamp = time() - 1000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
@@ -156,7 +156,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$action_no = 50;
 		$app_install_id = 60;
 		$campaign_id = 70;
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$timestamp = time() - 10000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
@@ -171,7 +171,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$action_no = 50;
 		$app_install_id = 60;
 		$campaign_id = 70;
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$timestamp = time() - 100000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
@@ -187,7 +187,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$action_no = 50;
 		$app_install_id = 60;
 		$campaign_id = NULL;
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$timestamp = time() - 1000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
@@ -201,7 +201,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$action_no = 50;
 		$app_install_id = 70;
 		$campaign_id = NULL;
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$timestamp = time() - 1000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,

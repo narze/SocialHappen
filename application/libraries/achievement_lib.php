@@ -523,6 +523,7 @@ class Achievement_lib
 			// echo count($stat_page_criteria);
       // echo "<br /><br />";
       if(count($stat_page_criteria) > 2){
+      	$this->CI->load->model('achievement_stat_page_model', 'achievement_stat_page');
         $matched_achievement_page = 
           $this->CI->achievement_stat_page->list_stat($stat_page_criteria);
       }

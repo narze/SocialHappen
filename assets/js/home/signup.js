@@ -1,6 +1,16 @@
 $(function(){
 	$('a.bt-create-account').live('click', function() {
-		$('#signup-form').ajaxSubmit({target:'div.form'});
+		var signup_form = $('#signup-form');
+
+		//fill user timezone into form
+			var user_timezone = 'UTC';
+			if(typeof jstz !== 'undefined'){
+				user_timezone = jstz.determine_timezone().name();
+			}
+			signup_form.find('input#timezone').val(user_timezone);
+		//end
+
+		signup_form.ajaxSubmit({target:'div.form'});
 		return false;
 	});
 	
