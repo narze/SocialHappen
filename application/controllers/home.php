@@ -39,6 +39,7 @@ class Home extends CI_Controller {
 						'common/functions',
 						'common/jquery.form',
 						'common/bar',
+						'common/jstz.min',
 						'common/fancybox/jquery.fancybox-1.3.4.pack',
 						'home/lightbox',
 						'home/signup'
@@ -102,12 +103,20 @@ class Home extends CI_Controller {
 		{
 			$company_image = $this->socialhappen->upload_image('company_image');
 			
+			$user_timezone = $this->input->post('timezone') ? $this->input->post('timezone') : 'UTC';
+
+			$this->load->library('timezone_lib');
+			if(!$minute_offset = $this->timezone_lib->get_minute_offset_from_timezone($user_timezone)){
+				$minute_offset = 0;
+			}
+
 			$user = array(
 					       	'user_first_name' => set_value('first_name'),
 					       	'user_last_name' => set_value('last_name'),
 					       	'user_email' => set_value('email'),
 					       	'user_image' => $this->facebook->get_profile_picture($facebook_user['id']),
-					       	'user_facebook_id' => $facebook_user['id']
+					       	'user_facebook_id' => $facebook_user['id'],
+					       	'user_timezone_offset' => $minute_offset
 						);
 						
 			$user_id = $this->users->add_user($user);

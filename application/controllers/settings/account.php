@@ -30,7 +30,7 @@ class Account extends CI_Controller {
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
 			$timezones = timezones();
-			$user['user_timezone'] = array_search($user['user_timezone'], $timezones);
+			$user['user_timezone'] = array_search($user['user_timezone_offset'] / 60, $timezones);
 
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 			{
@@ -44,7 +44,7 @@ class Account extends CI_Controller {
 					$user_image = $user['user_image'];
 				}
 			
-				$hour_offset = $timezones[set_value('timezones')];
+				$minute_offset = $timezones[set_value('timezones')] * 60;
 
 				// build array for the model
 				$user_update_data = array(
@@ -52,13 +52,13 @@ class Account extends CI_Controller {
 								'user_last_name' => set_value('last_name'),
 								'user_about' => set_value('about'),
 								'user_image' => $user_image,
-								'user_timezone' => $hour_offset
+								'user_timezone_offset' => $minute_offset
 							);
 				$this->load->model('user_model','users');
 				if ($this->users->update_user($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
 				{
 					$updated_user = array_merge($user,$user_update_data);
-					$updated_user['user_timezone'] = array_search($updated_user['user_timezone'], $timezones);
+					$updated_user['user_timezone'] = array_search($updated_user['user_timezone_offset'] / 60, $timezones);
 					$this->load->view('settings/account', array('user'=>$updated_user, 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
 				}
 				else

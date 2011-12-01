@@ -560,7 +560,7 @@ class Tab extends CI_Controller {
 				
 				$this->load->helper('date');
 				$timezones = timezones();
-				$user['user_timezone'] = array_search($user['user_timezone'], $timezones);
+				$user['user_timezone'] = array_search($user['user_timezone_offset'] / 60, $timezones);
 
 				if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 				{
@@ -574,7 +574,7 @@ class Tab extends CI_Controller {
 						$user_image = $user['user_image'];
 					}
 				
-					$hour_offset = $timezones[set_value('timezones')];
+					$minute_offset = $timezones[set_value('timezones')] * 60;
 
 					// build array for the model
 					$user_update_data = array(
@@ -582,13 +582,13 @@ class Tab extends CI_Controller {
 									'user_last_name' => set_value('last_name'),
 									'user_about' => set_value('about'),
 									'user_image' => $user_image,
-									'user_timezone' => $hour_offset
+									'user_timezone_offset' => $minute_offset
 								);
 					$this->load->model('user_model','users');
 					if ($this->users->update_user($user_id, $user_update_data)) // the information has therefore been successfully saved in the db
 					{
 						$updated_user = array_merge($user,$user_update_data);
-						$updated_user['user_timezone'] = array_search($updated_user['user_timezone'], $timezones);
+						$updated_user['user_timezone'] = array_search($updated_user['user_timezone_offset'] / 60, $timezones);
 						$this->load->view('tab/account', array('page'=>$page, 'user'=>$updated_user, 'user_facebook' => $user_facebook, 'user_profile_picture'=>$this->facebook->get_profile_picture($user['user_facebook_id']),'success' => TRUE));
 					}
 					else
@@ -708,13 +708,21 @@ class Tab extends CI_Controller {
 				// if (!$user_image = $this->socialhappen->upload_image('user_image')){
 					$user_image = $this->facebook->get_profile_picture($facebook_user['id']);;
 				// }
+
+				$user_timezone = $this->input->get('timezone') ? $this->input->get('timezone') : 'UTC';
+				$this->load->library('timezone_lib');
+				if(!$minute_offset = $this->timezone_lib->get_minute_offset_from_timezone($user_timezone)){
+					$minute_offset = 0;
+				}
+
 				$this->load->model('user_model','users');
 				$post_data = array(
 					'user_first_name' => $data['user_first_name'],
 					'user_last_name' => $data['user_last_name'],
 					'user_email' => $data['user_email'],
 					'user_image' => $user_image,
-					'user_facebook_id' => $facebook_user['id']
+					'user_facebook_id' => $facebook_user['id'],
+			       	'user_timezone_offset' => $minute_offset
 				);
 				
 				if(!$user_id = $this->users->add_user($post_data)){

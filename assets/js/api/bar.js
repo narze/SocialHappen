@@ -40,6 +40,14 @@ sh_signup = function(){
 
 			function submit_form(){
 				$('form.signup-form').unbind('submit').submit(function() {
+					//fill user timezone into form
+						var user_timezone = 'UTC';
+						if(typeof jstz !== 'undefined'){
+							user_timezone = jstz.determine_timezone().name();
+						}
+						$(this).find('input#timezone').val(user_timezone);
+					//end
+
 					  var url = $(this).attr('action');
 					  var params = $(this).serialize();
 					  $.getJSON(url + '?' + params + "&callback=?", function(data) {
@@ -188,7 +196,7 @@ loadChildScripts = function(){
 		getScript(base_url+'assets/js/common/jquery.form.js', 'jQuery.fn.ajaxForm', function(){
 			getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', 'jQuery.fancybox', function(){
 				getScript(base_url + 'assets/js/common/jquery.timeago.js', 'jQuery.timeago', function(){
-
+	
 				});
 			});
 		});
@@ -623,7 +631,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		facebook_access_token = message.data.fb_access_token;
 		sh_login();
 	} else if(message.data.sh_message === "logged in"){ //xd.js 
-		console.log(view_as, is_user_register_to_page);
+		// console.log(view_as, is_user_register_to_page);
 		if(view_as === 'guest' || is_user_register_to_page) {
 			sh_signup();
 		} else {

@@ -233,7 +233,7 @@ class Sync extends CI_Controller {
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 								'page_user_fields' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 							    'facebook_tab_url' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'page_timezone' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, $unsigned)
+							    'page_timezone' => field_option('INT', 10, 0, $null, $autoinc, $unsigned)
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -251,7 +251,7 @@ class Sync extends CI_Controller {
 								'user_twitter_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'user_twitter_access_token' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'user_twitter_access_token_secret' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'user_timezone' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, $unsigned)
+							    'user_timezone_offset' => field_option('INT', 10, 0, $null, $autoinc, $unsigned)
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -869,7 +869,7 @@ class Sync extends CI_Controller {
 								)
 							)),
 							'facebook_tab_url' => '',
-							'page_timezone' => 7
+							'page_timezone' => 7 * 3600
 					),
 					array(
 						'page_id' => 2, 
@@ -917,7 +917,7 @@ class Sync extends CI_Controller {
 							)	
 						)),
 						'facebook_tab_url' => '',
-						'page_timezone' => -10.5
+						'page_timezone' => -10.5 * 3600
 					),
 					array(
 						'page_id' => 3, 
