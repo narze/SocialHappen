@@ -12,14 +12,16 @@ class Campaign_lib_test extends CI_Controller {
 	private $dateStr9 = "2011/11/30";
 	private $dateStr10 = "2011/11/14";
 	private $dateStr11 = "2011/11/17";
-	private $datetimeStr1 =' 2011/11/11 13:50:00';
+	private $datetimeStr1 = '2011/11/11 13:50:00';
 	private $datetimeStr2 = '2011/11/20 12:34:00';
-	private $datetimeStr3 =' 2011/11/11 00:00:00';
+	private $datetimeStr3 = '2011/11/11 00:00:00';
 	private $datetimeStr4 = '2011/11/11 00:00:00';
-	private $datetimeStr5 =' 2011/11/20 20:00:00';
+	private $datetimeStr5 = '2011/11/20 20:00:00';
 	private $datetimeStr6 = '2011/11/11 12:00:00';
-	private $datetimeStr7 =' 2011/11/20 00:00:00';
+	private $datetimeStr7 = '2011/11/20 00:00:00';
 	private $datetimeStr8 = '2011/11/11 13:00:00';
+	private $datetimeSrt9 = '2011/11/05 00:00:00';
+
 	private $campaigns = array(
 		array('campaign_id' => 1, 'campaign_start_timestamp' => '2011/11/06', 'campaign_end_timestamp' => '2011/11/15'),
 		array('campaign_id' => 2, 'campaign_start_timestamp' => '2011/11/16', 'campaign_end_timestamp' => '2011/11/25'),
@@ -143,6 +145,9 @@ class Campaign_lib_test extends CI_Controller {
 		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr10, $this->dateStr11, $this->campaigns);
 		$this->unit->run($result, FALSE, $this->dateStr10.'-'.$this->dateStr11);
 
+		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr3, $this->dateStr8, $this->campaigns);
+		$this->unit->run($result, FALSE, 'special case',$this->dateStr3.'-'.$this->dateStr8);
+
 		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, $this->dateStr2, array());
 		$this->unit->run($result, TRUE, 'First campaign, no other campaign found');
 		$result = $this->campaign_lib->validate_date_range_with_campaigns($this->dateStr1, $this->dateStr2, NULL);
@@ -193,6 +198,66 @@ class Campaign_lib_test extends CI_Controller {
 		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns('string');
 		$this->unit->run($result, FALSE);
 
+	}
+
+	function convert_campaign_time_test(){
+		$campaign = array(
+			'campaign_start_timestamp' => '2000-10-10 12:00:00',
+			'campaign_end_timestamp' => '2000-10-13 23:00:00'
+		);
+
+		$expected_campaign_bangkok = array(
+			'campaign_start_timestamp' => '2000-10-10 19:00:00',
+			'campaign_end_timestamp' => '2000-10-14 06:00:00'
+		);
+		$minute_offset = 7*60;
+
+		$result = $this->campaign_lib->convert_campaign_time($campaign, $minute_offset);
+		$this->unit->run($result == $expected_campaign_bangkok, TRUE, 'convert_campaign_time', $result);
+	}
+
+	function convert_campaign_time_array_test(){
+		$campaigns = array(
+			array(
+				'campaign_start_timestamp' => '2000-10-10 12:00:00',
+				'campaign_end_timestamp' => '2000-10-13 23:00:00'
+			),
+			array(
+				'campaign_start_timestamp' => '2000-10-10 00:00:00',
+				'campaign_end_timestamp' => '2000-11-01 04:45:00'
+			)
+		);
+		$expected_campaigns = array(
+			array(
+				'campaign_start_timestamp' => '2000-10-10 01:30:00',
+				'campaign_end_timestamp' => '2000-10-13 12:30:00'
+			),
+			array(
+				'campaign_start_timestamp' => '2000-10-09 13:30:00',
+				'campaign_end_timestamp' => '2000-10-31 18:15:00'
+			)
+		);
+		$minute_offset = -10.5*60;
+
+		$result = $this->campaign_lib->convert_campaign_time_array($campaigns, $minute_offset);
+		$this->unit->run($result == $expected_campaigns, TRUE, 'convert_campaign_time_array', $result);
+
+		$campaigns = array(
+			array(
+				'campaign_start_timestamp' => '2000-10-10 01:00:00',
+				'campaign_end_timestamp' => '2000-01-01 04:45:00'
+			)
+		);
+		$expected_campaigns = array(
+			array(
+				'campaign_start_timestamp' => '2000-10-09 14:30:00',
+				'campaign_end_timestamp' => '1999-12-31 18:15:00'
+			)
+		);
+		$minute_offset = -10.5*60;
+
+		$result = $this->campaign_lib->convert_campaign_time_array($campaigns, $minute_offset);
+		$this->unit->run($result == $expected_campaigns, TRUE, 'convert_campaign_time_array', $result);
 	}
 }
 /* End of file campaign_lib_test.php */

@@ -785,7 +785,7 @@ class Api extends CI_Controller {
 		echo json_encode($response);
 	}
 	
-	/**
+	/** DEPRECATED
 	 * Request for campaign list
 	 * @author Wachiraph C.
 	 */
@@ -857,7 +857,7 @@ class Api extends CI_Controller {
 		
 	}
 
-	/**
+	/** DEPRECATED
 	 * Request for campaign information
 	 * @author Wachiraph C.
 	 */
@@ -933,7 +933,7 @@ class Api extends CI_Controller {
 		
 	}
 
-	/**
+	/** DEPRECATED
 	 * Request for campaign creation
 	 * @author Wachiraph C.
 	 */
@@ -1026,7 +1026,7 @@ class Api extends CI_Controller {
 		
 	}
 	
-	/**
+	/** DEPRECATED
 	 * Request for campaign information update
 	 * @author Wachiraph C. 
 	 */

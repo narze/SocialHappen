@@ -28,7 +28,10 @@ class Campaign extends CI_Controller {
 	}
 	
 	function index($app_install_id = NULL){
+		$user = $this->socialhappen->get_user();
 		$campaigns = $this->campaign->get_app_campaigns_by_app_install_id_ordered($app_install_id, 'campaign_start_timestamp desc');
+		$this->load->library('campaign_lib');
+		$campaigns = $this->campaign_lib->convert_campaign_time_array($campaigns, $user['user_timezone_offset']);
 		$vars = array('campaigns' => $campaigns,'app_install_id'=>$app_install_id);
 
 		$this->load->vars($vars);
@@ -37,6 +40,7 @@ class Campaign extends CI_Controller {
 
 	function add($app_install_id = NULL){
 		//todo : check permission
+		$user = $this->socialhappen->get_user();
 		$this->load->library('campaign_lib');
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('campaign_name', 'Campaign Name', 'required|trim|xss_clean|max_length[255]');
@@ -66,7 +70,12 @@ class Campaign extends CI_Controller {
 			$campaign_start_timestamp = $start_date.' '.$start_hour.':'.$start_min.':00';
 			$campaign_end_timestamp = $end_date.' '.$end_hour.':'.$end_min.':00';
 
+			$this->load->library('timezone_lib');
+			$campaign_start_timestamp = $this->timezone_lib->unconvert_time($campaign_start_timestamp, $user['user_timezone_offset']);
+			$campaign_end_timestamp = $this->timezone_lib->unconvert_time($campaign_end_timestamp, $user['user_timezone_offset']);
+
 			$campaigns = $this->campaign->get_app_campaigns_by_app_install_id($app_install_id);
+
 			if(!$this->campaign_lib->validate_date_range_with_campaigns($campaign_start_timestamp, $campaign_end_timestamp, $campaigns)){
 				$vars = array('app_install_id'=>$app_install_id, 'date_range_validation_error' => TRUE);
 				$this->load->vars($vars);
@@ -101,6 +110,7 @@ class Campaign extends CI_Controller {
 
 	function update($app_install_id = NULL, $campaign_id = NULL){
 		//todo : check permission
+		$user = $this->socialhappen->get_user();
 		$this->load->library('campaign_lib');
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('campaign_name', 'Campaign Name', 'required|trim|xss_clean|max_length[255]');
@@ -114,6 +124,7 @@ class Campaign extends CI_Controller {
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 
 		$campaign = $this->campaign->get_campaign_profile_by_campaign_id($campaign_id);
+		$campaign = $this->campaign_lib->convert_campaign_time($campaign, $user['user_timezone_offset']);
 		$campaign_datetime = $this->parse_campaign_datetime($campaign);
 		$vars = array('app_install_id' => $app_install_id , 'campaign_id'=>$campaign_id,'campaign' => $campaign, 'campaign_datetime'=>$campaign_datetime);
 			$this->load->vars($vars);
@@ -127,7 +138,9 @@ class Campaign extends CI_Controller {
 			if(is_array($campaigns)){ //Remove self from validating date range list
 				foreach($campaigns as $key => $campaign){
 					if($campaign['campaign_id'] == $campaign_id){
+						
 						unset($campaigns[$key]);
+						
 						break;
 					}
 				}
@@ -142,6 +155,10 @@ class Campaign extends CI_Controller {
 			$campaign_start_timestamp = $start_date.' '.$start_hour.':'.$start_min.':00';
 			$campaign_end_timestamp = $end_date.' '.$end_hour.':'.$end_min.':00';
 
+			$this->load->library('timezone_lib');
+			$campaign_start_timestamp = $this->timezone_lib->unconvert_time($campaign_start_timestamp, $user['user_timezone_offset']);
+			$campaign_end_timestamp = $this->timezone_lib->unconvert_time($campaign_end_timestamp, $user['user_timezone_offset']);
+			
 			if(!$this->campaign_lib->validate_date_range_with_campaigns($campaign_start_timestamp, $campaign_end_timestamp, $campaigns)){
 				$this->load->vars(array('date_range_validation_error' => TRUE));
 				$this->load->view('settings/campaign/update');

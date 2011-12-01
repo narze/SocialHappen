@@ -50,7 +50,7 @@ class Campaign_lib {
                     if(isset($campaign['campaign_start_timestamp']) && isset($campaign['campaign_end_timestamp'])){
                         $start_time = strtotime($campaign['campaign_start_timestamp']);
                         $end_time = strtotime($campaign['campaign_end_timestamp']);
-                        if(($start_time <= $from_time && $from_time <= $end_time) || ($start_time <= $to_time && $to_time <= $end_time)){
+                        if(($start_time <= $from_time && $from_time <= $end_time) || ($start_time <= $to_time && $to_time <= $end_time) || ($from_time <= $start_time && $end_time <= $to_time)){
                             return FALSE;
                         }
                     }
@@ -113,5 +113,34 @@ class Campaign_lib {
         $this->CI->load->model('campaign_model','campaign');
         $campaigns = $this->CI->campaign->get_app_campaigns_by_app_install_id_ordered($app_install_id, 'campaign_start_timestamp desc');
         return $this->api_request_current_campaign_in_campaigns($campaigns);
+    }
+
+    /**
+     * Convert campaign time
+     * @param array $campaign
+     * @param $minute_offset
+     * @author Manassarn M.
+     */
+    function convert_campaign_time($campaign = NULL, $minute_offset = NULL){
+        if(isset($campaign['campaign_start_timestamp']) && isset($campaign['campaign_end_timestamp'])){
+            $this->CI->load->library('timezone_lib');
+            $campaign['campaign_start_timestamp'] = $this->CI->timezone_lib->convert_time($campaign['campaign_start_timestamp'], $minute_offset);
+            $campaign['campaign_end_timestamp'] = $this->CI->timezone_lib->convert_time($campaign['campaign_end_timestamp'], $minute_offset);
+        }
+        return $campaign;
+    }
+
+    /** 
+     * Convert array of campaigns' time
+     * @param array $campaigns
+     * @param $minute_offset
+     * @author Manassarn M.
+     */
+    function convert_campaign_time_array($campaigns = array(), $minute_offset = NULL){
+        foreach($campaigns as &$campaign){
+            $campaign = $this->convert_campaign_time($campaign, $minute_offset);
+        }
+        unset($campaign);
+        return $campaigns;
     }
 }
