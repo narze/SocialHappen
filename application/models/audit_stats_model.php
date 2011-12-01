@@ -73,7 +73,7 @@ class Audit_stats_model extends CI_Model {
 		&& isset($data['app_install_id']);
 		
 		if($check_args){
-			date_default_timezone_set('Asia/Bangkok');
+			date_default_timezone_set('UTC');
 			$data_to_add = array('timestamp' => time());
 			$data_to_add = array_merge($data_to_add, $data);
 			// add new 

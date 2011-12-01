@@ -34,7 +34,7 @@ $(function(){
 					row.find('td.status2.campaign-visitor b').append(json[i].campaign_visitor);
 					row.find('td.status2.campaign-member b').append(json[i].campaign_users);
 					row.find('td.status2.remaining-days b').countdown({
-						until: Date.createFromMysql(json[i].campaign_end_date),
+						until: Date.createFromMysql(json[i].campaign_end_timestamp),
 						format: 'D',
 						layout: '{dn}'})
 					.removeClass('hasCountdown');

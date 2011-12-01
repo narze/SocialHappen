@@ -272,8 +272,8 @@ class Api_test extends CI_Controller {
 						'app_install_secret_key' => $this->app_install_secret_key,
 						'user_id' => USER_ID,
 						'campaign_name' => 'Test Campaign',
-						'campaign_start_date' => '2011-05-19 00:00:00',
-						'campaign_end_date' => '2012-05-19 00:00:00',
+						'campaign_start_timestamp' => '2011-05-19 00:00:00',
+						'campaign_end_timestamp' => '2012-05-19 00:00:00',
 						'campaign_detail' => 'Test Campaign Detail',
 						'campaign_status_id' => $this->socialhappen->get_k("campaign_status", "Inactive")
 					);

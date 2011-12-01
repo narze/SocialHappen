@@ -67,7 +67,7 @@ class Notification_model extends CI_Model {
 			return FALSE;
 		}
 		
-		date_default_timezone_set('Asia/Bangkok');
+		date_default_timezone_set('UTC');
 		$timestamp = isset($timestamp) ? (int)$timestamp : time();
 		
 		$notification = array('user_id' => (int) $user_id,

@@ -9,9 +9,9 @@
               <p class="link"><a href="#">read more</a></p>
             </div>
             <div><?php 
-					if (date('Y-m-d H:i:s') < $campaign['campaign_end_date'] ) : ?>
+					if (date('Y-m-d H:i:s') < $campaign['campaign_end_timestamp'] ) : ?>
 						<h2>Remaining Time</h2>
-						<div style="display: none;" class="campaign-end-time"><?php echo $campaign['campaign_end_date'];?></div><?php 
+						<div style="display: none;" class="campaign-end-time"><?php echo $campaign['campaign_end_timestamp'];?></div><?php 
 						if($is_user) : ?>
 							<p><a class="bt-join" href="#"><span>Join</span></a></p><?php 
 						endif;
@@ -42,8 +42,8 @@
             <?php if($is_admin) :?>			
 			<div class="clear">
               <ul>
-                <li><?php echo '[]';?><span>Today</span></li>
-                <li><?php echo '[]';?><span>All</span></li>
+                <li><?php echo '0';?><span>Today</span></li>
+                <li><?php echo '0';?><span>All</span></li>
               </ul>
             </div>
 			<?php endif; ?>   

@@ -183,8 +183,8 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => field_option('INT', 2, $default, $null, $autoinc, TRUE),
 							    'campaign_active_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
 							    'campaign_all_member' => field_option('INT', 11, $default, $null, $autoinc, TRUE),
-							    'campaign_start_date' => field_option('DATE', $constraint, $default , $null, $autoinc, $unsigned),
-							    'campaign_end_date' => field_option('DATE', $constraint, $default , $null, $autoinc, $unsigned),
+							    'campaign_start_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
+							    'campaign_end_timestamp' => field_option('TIMESTAMP', $constraint, $default , $null, $autoinc, $unsigned),
 								'campaign_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'campaign_end_message' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned)
 							),
@@ -233,7 +233,7 @@ class Sync extends CI_Controller {
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 								'page_user_fields' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 							    'facebook_tab_url' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'page_timezone' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, $unsigned)
+							    'page_timezone' => field_option('INT', 10, 0, $null, $autoinc, $unsigned)
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -250,7 +250,8 @@ class Sync extends CI_Controller {
 								'user_point' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'user_twitter_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'user_twitter_access_token' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-								'user_twitter_access_token_secret' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
+								'user_twitter_access_token_secret' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'user_timezone_offset' => field_option('INT', 10, 0, $null, $autoinc, $unsigned)
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -688,8 +689,8 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => 1, 
 							    'campaign_active_member' => 2,
 							    'campaign_all_member' => 10, 
-							    'campaign_start_date' => '2011-05-19',
-							    'campaign_end_date' => '2012-05-18',
+							    'campaign_start_timestamp' => '2011-05-19',
+							    'campaign_end_timestamp' => '2012-05-18',
 								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							),
@@ -701,8 +702,8 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => 2, 
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
-							    'campaign_start_date' => '2011-05-18', 
-							    'campaign_end_date' => '2011-06-18',
+							    'campaign_start_timestamp' => '2011-05-18', 
+							    'campaign_end_timestamp' => '2011-06-18',
 								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							)
@@ -868,7 +869,7 @@ class Sync extends CI_Controller {
 								)
 							)),
 							'facebook_tab_url' => '',
-							'page_timezone' => 7
+							'page_timezone' => 7 * 3600
 					),
 					array(
 						'page_id' => 2, 
@@ -916,7 +917,7 @@ class Sync extends CI_Controller {
 							)	
 						)),
 						'facebook_tab_url' => '',
-						'page_timezone' => -10.5
+						'page_timezone' => -10.5 * 3600
 					),
 					array(
 						'page_id' => 3, 

@@ -132,33 +132,6 @@ class Campaign extends CI_Controller {
 		$profile = $this->user_campaigns->get_campaign_users_by_campaign_id($campaign_id, $limit, $offset);
 		echo json_encode($profile);
 	}
-
-	
-	/**
-	 * JSON : Add campaign
-	 * @author Manassarn M.
-	 */
-	function json_add(){
-		$this->socialhappen->ajax_check();
-		$this->load->model('campaign_model','campaigns');
-		$post_data = array(
-							'app_install_id' => $this->input->post('app_install_id'),
-							'campaign_name' => $this->input->post('campaign_name'),
-							'campaign_detail' => $this->input->post('campaign_detail'),
-							'campaign_status_id' => $this->input->post('campaign_status_id'),
-							'campaign_active_member' => $this->input->post('campaign_active_member'),
-							'campaign_all_member' => $this->input->post('campaign_all_member'),
-							'campaign_end_date' => $this->input->post('campaign_end_date')
-							);
-		if($campaign_id = $this->campaigns->add_campaign($post_data)){
-			$result['status'] = 'OK';
-			$result['campaign_id'] = $campaign_id;
-		} else {
-			log_message('error','campaign add failed');
-			$result['status'] = 'ERROR';
-		}
-		echo json_encode($result);
-	}
 	
 	function get_stat_graph($campaign_id = NULL, $start_date = NULL, $end_date = NULL){
 		$this->load->library('audit_lib');
@@ -174,7 +147,7 @@ class Campaign extends CI_Controller {
 				$end_date = $temp;
 			}
 		}else{
-			date_default_timezone_set('Asia/Bangkok');
+			date_default_timezone_set('UTC');
 			$end_date = $this->audit_lib->_date();
 			$start_date = (int)date('Ymd', time() - 2592000);
 		}

@@ -92,7 +92,7 @@ class Achievement_user_model extends CI_Model {
 			$achievement_user['app_id'] = (int)$app_id;
 			$achievement_user['app_install_id'] = (int)$app_install_id;
 			
-			date_default_timezone_set('Asia/Bangkok');
+			date_default_timezone_set('UTC');
 			$achievement_user['timestamp'] = time();
 
 			if(isset($info['page_id'])){

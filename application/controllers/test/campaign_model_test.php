@@ -36,8 +36,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
-		$this->unit->run($result[0]['campaign_start_date'],'is_string','campaign_start_date');
-		$this->unit->run($result[0]['campaign_end_date'],'is_string','campaign_end_date');
+		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
@@ -63,8 +63,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
-		$this->unit->run($result[0]['campaign_start_date'],'is_string','campaign_start_date');
-		$this->unit->run($result[0]['campaign_end_date'],'is_string','campaign_end_date');
+		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
@@ -90,8 +90,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
 		$this->unit->run($result['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result['campaign_all_member'],'is_string','campaign_all_member');
-		$this->unit->run($result['campaign_start_date'],'is_string','campaign_start_date');
-		$this->unit->run($result['campaign_end_date'],'is_string','campaign_end_date');
+		$this->unit->run($result['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($result['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
 		$this->unit->run($result['company_id'],'is_string','company_id');
 		$this->unit->run($result['app_id'],'is_string','app_id');
@@ -118,8 +118,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status == 1');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
-		$this->unit->run($result[0]['campaign_start_date'],'is_string','campaign_start_date');
-		$this->unit->run($result[0]['campaign_end_date'],'is_string','campaign_end_date');
+		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
@@ -145,8 +145,8 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status == 1');
 		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
 		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
-		$this->unit->run($result[0]['campaign_start_date'],'is_string','campaign_start_date');
-		$this->unit->run($result[0]['campaign_end_date'],'is_string','campaign_end_date');
+		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
+		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
 		$this->unit->run($result[0]['company_id'],'is_string','company_id');
 		$this->unit->run($result[0]['app_id'],'is_string','app_id');
@@ -169,8 +169,8 @@ class Campaign_model_test extends CI_Controller {
 							'campaign_status_id' => '1',
 							'campaign_active_member' => '0',
 							'campaign_all_member' => '1',
-							'campaign_start_date' => NULL,
-							'campaign_end_date' => NULL
+							'campaign_start_timestamp' => NULL,
+							'campaign_end_timestamp' => NULL
 						);
 		$campaign_id = $this->campaigns->add_campaign($campaign);
 		$this->unit->run($campaign_id,'is_int','add_campaign()');

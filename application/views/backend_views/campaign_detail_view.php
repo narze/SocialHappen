@@ -12,8 +12,8 @@
 <p><b>Detail:</b> <?php echo $campaign['campaign_detail'];?></p>
 <p><b>Status:</b> <?php echo $campaign['campaign_status'];?></p>
 <p><b>Members:</b> <?php echo $campaign['campaign_all_member'];?></p>
-<p><b>Start Date:</b> <?php echo $campaign['campaign_start_date'];?></p>
-<p><b>End Date:</b> <?php echo $campaign['campaign_end_date'];?></p>
+<p><b>Start Date:</b> <?php echo $campaign['campaign_start_timestamp'];?></p>
+<p><b>End Date:</b> <?php echo $campaign['campaign_end_timestamp'];?></p>
 <p><img src="<?php echo $campaign['campaign_image'];?>" /></p>
 <h1>Users</h1>
 <p>total users: <?php echo $total_user; ?></p>

@@ -40,6 +40,8 @@
 				<input type="hidden" name="payment" value="<?php echo $this->input->get('payment'); ?>"/>
 				<p><a class="bt-create-account">Create account</a></p>
 			</div>
+
+			<input type="hidden" id="timezone" name="timezone" value="UTC" />
             <?php 
 			echo form_submit('signup-form', 'Submit', 'style="display:none"');
 			echo form_close(); ?>

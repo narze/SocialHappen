@@ -9,7 +9,7 @@ if($campaigns) : ?>
 		<li>
 			<p>
 				<?php echo '<a class="a-update-campaign" href="'.base_url().'settings/campaign/update/'.$app_install_id.'/'.$campaign['campaign_id'].'">'.$campaign['campaign_name'].'</a>'; ?>
-				<?php echo $campaign['campaign_start_date'].' to '.$campaign['campaign_end_date'];?>
+				<?php echo $campaign['campaign_start_timestamp'].' to '.$campaign['campaign_end_timestamp'];?>
 			</p>
 			<ul class="app-components">
 				<li><a class="a-component-invite" href="<?php echo base_url().'settings/app_component/invite/'.$app_install_id.'/'.$campaign['campaign_id'];?>">Invite</a></li>
