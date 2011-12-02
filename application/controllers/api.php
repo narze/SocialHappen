@@ -1498,10 +1498,10 @@ class Api extends CI_Controller {
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		$user_id = $this->input->get('user_id', TRUE);
 		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$user_facebook_id && !$user_id)){
-			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)');
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
 			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 			return;
 		}
 		
