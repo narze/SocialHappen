@@ -232,8 +232,7 @@ class Sync extends CI_Controller {
 								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 								'page_user_fields' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
-							    'facebook_tab_url' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'page_timezone' => field_option('INT', 10, 0, $null, $autoinc, $unsigned)
+							    'facebook_tab_url' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -868,8 +867,7 @@ class Sync extends CI_Controller {
 									'options' => NULL,
 								)
 							)),
-							'facebook_tab_url' => '',
-							'page_timezone' => 7 * 3600
+							'facebook_tab_url' => ''
 					),
 					array(
 						'page_id' => 2, 
@@ -916,8 +914,7 @@ class Sync extends CI_Controller {
 								'options' => NULL,
 							)	
 						)),
-						'facebook_tab_url' => '',
-						'page_timezone' => -10.5 * 3600
+						'facebook_tab_url' => ''
 					),
 					array(
 						'page_id' => 3, 
@@ -930,8 +927,7 @@ class Sync extends CI_Controller {
 						'page_installed' => 0, 
 						'page_image' => base_url().'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 						'page_user_fields' => NULL,
-						'facebook_tab_url' => '',
-						'page_timezone' => ''
+						'facebook_tab_url' => ''
 					),
 				);
 		$this->db->insert_batch('page', $page);

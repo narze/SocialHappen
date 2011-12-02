@@ -66,7 +66,6 @@ $route['settings/app_component/sharebutton/(:num)/(:num)'] = "settings/app_compo
 $route['settings/app_component/sharebutton/(:any)'] = "settings/app_component_sharebutton/$1";
 $route['settings/page_apps/(:num)'] = "settings/page_apps/index/$1";
 $route['settings/page_signup_fields/(:num)'] = "settings/page_signup_fields/index/$1";
-$route['settings/page_timezone/(:num)'] = "settings/page_timezone/index/$1";
 $route['settings/page_user_class/(:num)'] = "settings/page_user_class/index/$1";
 
 

@@ -686,32 +686,6 @@ class Page_model_test extends CI_Controller {
 		$result = $this->pages->update_facebook_tab_url_by_facebook_page_id('116586141725712', 'http://test.com/');
 		$this->unit->run($result, TRUE, 'update_facebook_tab_url_by_facebook_page_id()');
 	}
-
-	/** 
-	 * Test get_page_timezone_by_page_id()
-	 * @author Manassarn M.
-	 */
-	function get_page_timezone_by_page_id_test(){
-		$result = $this->pages->get_page_timezone_by_page_id(1);
-		$this->unit->run($result, 7, 'timezone : '.$result);
-		$result = $this->pages->get_page_timezone_by_page_id(2);
-		$this->unit->run($result, -3.5, 'timezone : '.$result);
-	}
-
-	/**
-	 * Test update_page_timezone_by_page_id()
-	 * @author Manassarn M.
-	 */
-	function update_page_timezone_by_page_id_test(){
-		$result = $this->pages->update_page_timezone_by_page_id(2, 9);
-		$this->unit->run($result, TRUE, 'update timezone');
-		$result = $this->pages->get_page_timezone_by_page_id(2);
-		$this->unit->run($result, 9, 'timezone : '.$result);
-		$result = $this->pages->update_page_timezone_by_page_id(2, -3.5);
-		$this->unit->run($result, TRUE, 'update timezone');
-		$result = $this->pages->get_page_timezone_by_page_id(2);
-		$this->unit->run($result, -3.5, 'timezone : '.$result);
-	}
 }
 /* End of file page_model_test.php */
 /* Location: ./application/controllers/test/page_model_test.php */

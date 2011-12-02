@@ -445,44 +445,6 @@ class Page_model extends CI_Model {
 	function update_facebook_tab_url_by_facebook_page_id($facebook_page_id = NULL, $facebook_tab_url = NULL){
 		return $this->db->update('page', array('facebook_tab_url' => $facebook_tab_url), array('facebook_page_id'=>$facebook_page_id));
 	}
-
-	/**
-	 * Get page timezone
-	 * @param $page_id
-	 * @author Manassarn M.
-	 */
-	function get_page_timezone_by_page_id($page_id = NULL){
-		$page = $this->get_page_profile_by_page_id($page_id);
-		return issetor($page['page_timezone'], 0);
-	}
-
-	/**
-	 * Get page timezone
-	 * @param $facebook_page_id
-	 * @author Manassarn M.
-	 */
-	function get_page_timezone_by_facebook_page_id($facebook_page_id = NULL){
-		$page = $this->get_page_profile_by_facebook_page_id($facebook_page_id);
-		return issetor($page['page_timezone'], 0);
-	}
-
-	/** Update page timezone
-	 * @param $page_id
-	 * @param $timezone
-	 * @author Manassarn M.
-	 */
-	function update_page_timezone_by_page_id($page_id = NULL, $timezone = 0){
-		return $this->db->update('page', array('page_timezone' => $timezone), array('page_id' => $page_id));
-	}
-
-	/** Update page timezone
-	 * @param $facebook_page_id
-	 * @param $timezone
-	 * @author Manassarn M.
-	 */
-	function update_page_timezone_by_facebook_page_id($facebook_page_id = NULL, $timezone = 0){
-		return $this->db->update('page', array('page_timezone' => $timezone), array('facebook_page_id' => $facebook_page_id));
-	}
 }
 /* End of file page_model.php */
 /* Location: ./application/models/page_model.php */
