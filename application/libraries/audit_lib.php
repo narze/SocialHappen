@@ -246,6 +246,7 @@ class Audit_lib
 		$check_args = isset($app_id) && isset($action_id);
 		if(!$check_args){
 			//show_error("Invalid or missing args", 500);
+			log_message('error','insuffient arguments');
 			return FALSE;
 		}
 		
@@ -260,6 +261,7 @@ class Audit_lib
 		}
 		
 		if(count($result_audit_action) == 0){
+			log_message('error','no audit action');
 			return FALSE;
 		}else{
 			$audit_action = $result_audit_action[0];

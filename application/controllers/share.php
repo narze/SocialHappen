@@ -174,7 +174,45 @@ class Share extends CI_Controller {
 				return;
 			}
 
-			//TODO : Give score if available
+			//Add share score TODO: check
+				$share_action = $this->socialhappen->get_k('audit_action','User Share');
+				$user_id = $this->socialhappen->get_user_id();
+				$this->load->library('audit_lib');
+				$audit_additional_data = array(
+					'user_id'=> $user_id
+				);
+				if($app_install_id){
+					$audit_additional_data['app_install_id'] = $app_install_id;
+				}
+
+				$audit_result = $this->audit_lib->add_audit(
+					issetor($app['app_id'],0),
+					$user_id,
+					$share_action,
+					NULL, 
+					NULL,
+					$audit_additional_data
+				);
+				if($audit_result){
+					echo 'audit added';
+				} else {
+					log_message('error','add_audit failed');
+					return;
+				}
+			
+				$this->load->library('achievement_lib');
+				$achievement_info = array('action_id'=> $share_action,'app_install_id'=>issetor($app_install_id, 0));
+
+				// if($campaign_id){
+				// 	$achievement_info['campaign_id'] = $campaign_id;
+				// }
+				$inc_result = $this->achievement_lib->increment_achievement_stat(issetor($app['app_id'],0), $user_id, $achievement_info, 1);
+				if($inc_result){
+					echo 'increment_achievement_stat complete';
+				} else {	
+					log_message('error','increment_achievement_stat failed');
+				}
+			//
 		}
 	}
 }
