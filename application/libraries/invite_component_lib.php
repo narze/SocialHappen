@@ -22,7 +22,7 @@ class Invite_component_lib {
 		$this->CI->invite_model->create_index();
 		
 		$invite_key = $this->_generate_invite_key();
-		if($invite_type == 1)
+		if($invite_type == 2)
 			$target_facebook_id = NULL;
 			
 		//relation check
@@ -38,8 +38,10 @@ class Invite_component_lib {
 						($page['page_id'] == $app_install['page_id']);
 		
 		if($check_args){
+		
+			$target_facebook_id_list = $this->_extract_target_id($target_facebook_id);
 			if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
-								, $invite_type, $user_facebook_id, $target_facebook_id
+								, $invite_type, $user_facebook_id, $target_facebook_id_list
 								, $invite_key)){
 				return $invite_key;
 			}
@@ -55,39 +57,46 @@ class Invite_component_lib {
 		
 		$exist_check = $this->get_invite_by_invite_key($invite_key);
 		
-		if($exist_check)
-			if($exist_check['invite_count'] > 0 && isset($exist_check['target_facebook_id'])){
-				return array('error' => 'invite is accepted before');
+		if($exist_check){
+			
+			$data = $exist_check;
+			$data['invite_count'] = $data['invite_count'] + 1;
+			
+			if($data['invite_type']==1){
+			//private
+			
+				if(!isset($data['accepted_target_facebook_id_list']))
+						$data['accepted_target_facebook_id_list'] = array();
 				
-			}else{
-				$data = $exist_check;
-				$data['invite_count'] = $data['invite_count'] + 1;
-				
-				if(!isset($data['target_facebook_id']) && $target_facebook_id != NULL){
-				//public
-					if(!isset($data['target_facebook_id_list']))
-							$data['target_facebook_id_list'] = array();
-							
-					if(in_array($target_facebook_id, $data['target_facebook_id_list'])){
-						return array('error' => 'you have accepted this invite before');
-					}else{
-						
-						array_push($data['target_facebook_id_list'], $target_facebook_id);
-					}
+				if(!in_array($target_facebook_id, $data['target_facebook_id_list'] ) ){
+					return array('error' => 'invalid target_facebook_id');
+				}else if (in_array($target_facebook_id, $data['accepted_target_facebook_id_list'])){
+					return array('error' => 'invite is accepted before');
 				}else{
-				//private
-					if($data['target_facebook_id'] != $target_facebook_id){
-						return array('error' => 'invalid target_facebook_id');
-					}
+					array_push($data['accepted_target_facebook_id_list'], $target_facebook_id);
 				}
 				
-				if($this->CI->invite_model->update_invite($invite_key, $data))
-					return $data;
-				else
-					return array('error' => 'accept invite failed');
 				
+			}else{
+			//public
+			
+				if(!isset($data['public_accepted_target_facebook_id']))
+						$data['public_accepted_target_facebook_id'] = array();
+						
+				if(in_array($target_facebook_id, $data['public_accepted_target_facebook_id'])){
+					return array('error' => 'you have accepted this invite before');
+				}else{
+					array_push($data['public_accepted_target_facebook_id'], $target_facebook_id);
+				}
 			}
-		else
+			
+			if($this->CI->invite_model->update_invite($invite_key, $data))
+				return $data;
+			else
+				return array('error' => 'accept invite failed');
+			
+		
+		}else
 			return array('error' => 'invite_key is incorrect');
 		
 	}
@@ -146,6 +155,17 @@ class Invite_component_lib {
 		//call platform Sharing component
 	
     }
+	
+	private function _extract_target_id($target_id = NULL){
+		$target_id_list = array();
+		
+		$tmp = explode(',', $target_id);
+		
+		foreach($tmp as $target_id_unit)
+			$target_id_list[] = trim($target_id_unit);
+		
+		return $target_id_list;
+	}
 	
 	private function _generate_invite_key($length = NULL){
 		if(!isset($length))
