@@ -692,6 +692,7 @@ class SocialHappen{
 		if($app && isset($app['page_id'])){
 			$app_mode = TRUE;
 			$page_id = $app['page_id'];
+			$sh_canvas_config = $app['app_config_facebook_canvas_path'] ? TRUE : FALSE;
 		}
 		
 		$this->CI->load->model('User_model', 'User');
@@ -756,7 +757,8 @@ class SocialHappen{
 				'app_install_secret_key' => $app['app_install_secret_key'],
 				'facebook_page_id' => $page['facebook_page_id'],
 				'facebook_access_token' => '',
-				'facebook_tab_url' => $facebook_tab_url
+				'facebook_tab_url' => $facebook_tab_url,
+				'sh_canvas_config' => issetor($sh_canvas_config)
 			),
 			// 'view_as' => $view_as,
 			'node_base_url' => $this->CI->config->item('node_base_url'),

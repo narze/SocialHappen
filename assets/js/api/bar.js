@@ -409,6 +409,9 @@ onLoad = function(){
 sh_app_component = function() {
 	(function($){
 		var app_config = $('a.app-config').attr('href');
+		if(sh_canvas_config){
+			top.location.href = app_config;
+		} else {
 			//load template
 			$.ajax({
 				async:true,
@@ -436,6 +439,7 @@ sh_app_component = function() {
 				},
 				dataType: 'json'
 			});
+		}
 	})(sh_jq);
 	return false;
 };

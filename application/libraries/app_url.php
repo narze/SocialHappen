@@ -32,6 +32,11 @@ class App_url
 		$replace_with = array($app_install_id, $user_id, $app_install_secret_key);
 		return str_replace($pattern, $replace_with, $app_config_url);
 	}
+
+	function translate_facebook_canvas_config_path($app_config_facebook_canvas_path, $app_install_id, $user_id, $app_install_secret_key, $facebook_app_id_or_namespace){
+		$config_path = $this->translate_config_url($app_config_facebook_canvas_path, $app_install_id, $user_id, $app_install_secret_key);
+		return $facebook_app_id_or_namespace.'/'.$config_path;
+	}
 }
 // END App_url Class
 

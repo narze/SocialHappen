@@ -120,11 +120,23 @@ class App extends CI_Controller {
 			if($app && isset($app['app_config_url'])){
 				$this->load->library('app_url');
 				$this->load->model('user_model','users');
-				$config_url = $this->app_url->translate_config_url(
-											$app['app_config_url'], 
-											$app['app_install_id'], 
-											$this->socialhappen->get_user_id(), 
-											$app['app_install_secret_key']);
+				if($app['app_config_facebook_canvas_path']){
+					$canvas_url = $this->config->item('facebook_app_canvas_url');
+					$config_path = $this->app_url->translate_facebook_canvas_config_path(
+						$app['app_config_facebook_canvas_path'], 
+						$app['app_install_id'], 
+						$this->socialhappen->get_user_id(), 
+						$app['app_install_secret_key'],
+						$app['app_facebook_api_key']);
+					$config_url = $canvas_url.$config_path;
+				} else {
+					$config_url = $this->app_url->translate_config_url(
+						$app['app_config_url'], 
+						$app['app_install_id'], 
+						$this->socialhappen->get_user_id(), 
+						$app['app_install_secret_key']);
+				
+				}
 				redirect($config_url);
 			}
 		}
