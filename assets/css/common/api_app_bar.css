@@ -894,27 +894,29 @@ body.settings {
     color: #333;
 	background: #fff url(../../images/bg_fb/bg_body.png) repeat-x top;
 }
-div.account-data {
-	width: 475px;
-	margin: 0 auto 10px;
+#app-setting-template, #app-setting-template-canvas {
+	font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    overflow:hidden;
+    margin-top:10px;
 }
-div.account-data:after{
-    clear:both;
-    content:" ";
-    display:block;
+div.account-data {
+	margin-bottom:10px;
+	padding-left:120px;
+	position:relative;
+	height: 100px;
 }
 div.account-data div.pic {
-	float: left;
-	width: 96px;
-	height: 96px;
-	text-align: center;
-	position: relative;
+	position:absolute;
+	left:10px;
+	top:0;
+	width: 95px;
+	height: 95px;
 	overflow: hidden;
 }
 div.account-data div.pic img {width: 95px;}
 div.account-data div.data {
-	position:relative;
-	float: right;
 	width: 365px;
 }
 div.account-data div.data h1 {font-size: 16px; color: #17418d; padding: 0 0 5px 2px;}
@@ -934,9 +936,9 @@ div.account-data div.data ul:after{
 div.account-data ul { margin: 0; padding: 0; }
 div.account-data ul li a { font-weight:bold!important; color: #333;}
 
-div.account-data div.buttons { position:absolute; top:0; right:0; }
+div.account-data div.buttons { position:absolute; top:0; right:10px; }
 div.account-data div.buttons a { float:left; margin-left: 5px; }
-div.account-data ul.viewas { width:80px; cursor:pointer; position:absolute; top:25px; left:-7px; z-index:9;}
+div.account-data ul.viewas { width:80px; cursor:pointer; position:absolute; top:20px; left:115px; z-index:9;}
 div.account-data ul.viewas li { 
 	display:none; 
 	position:relative; 
@@ -992,8 +994,8 @@ div.account-data ul.publish  {
 	width:112px; 
 	cursor:pointer; 
 	position:absolute; 
-	top:25px; 
-	left:76px;
+	top:20px; 
+	left:200px;
 	z-index:9;
 }
 div.account-data ul.publish li { 
@@ -1061,19 +1063,17 @@ div.account-data ul.publish li#unpublished span.light { background-position:-20p
 	font-weight: normal;
 	color: #555;
 	background: url(../../images/bg/bg_setting-h2.gif) 0 15px repeat-x;
-	width: 450px;
-	position: relative;
-	left: 15px;
 	margin-bottom: 10px;
 }
 #app-content h2.setting-title span {
 	background: white;
 	padding: 0 8px;
 }
+#app-component-config { padding:0 20px;}
 
 ul.campaigns-list { font-family:Arial; font-size:12px; margin:0; padding:0 7px; list-style:none;}
 ul.campaigns-list>li { position:relative; background-color:#F2F2F2; margin-bottom:10px; padding:10px; border-bottom: solid 1px #E2E2E2; border-right: solid 1px #E2E2E2; height:50px;}
-ul.campaigns-list li p { margin:0 0 10px 0; color:#999; position:absolute; top: 0; left: 0; background-color: #e4e4e4; width: 458px; padding: 5px;}
+ul.campaigns-list li p { margin:0 0 10px 0; color:#999; position:absolute; top: 0; left: 0; background-color: #e4e4e4; width:98.7%; padding: 5px;}
 ul.campaigns-list li ul { position:absolute; top: 30px; left: 0; }
 ul.campaigns-list li a { color:#63791C; text-decoration:none; font-weight:bold;}
 
@@ -1144,13 +1144,13 @@ div.tab-head>h2 {
 	float: left;
 	height: 33px;
 	line-height: 33px;
-	margin-left: 14px;
+	margin: 0 0 0 14px;
 	font-size: 13px;
 	color: #fff;
 }
 /* Get started */
 #get-started { font-size: 13px; color: #3C3C3C; line-height: 18px;}
-#get-started div.info { font-weight: bold; background-color:#f8ecd1; padding:0 15px; display:table; }
+#get-started div.info { font-weight: bold; background-color:#f8ecd1; padding:0 15px; display: block; border-top: 1px solid transparent; border-bottom: 1px solid transparent; }
 #get-started div.info p { margin: 10px 0; }
 #get-started div.info a { color:#63791c; text-decoration:underline; }
 #get-started div.note { margin-top: 5px; padding:0 15px; font-size:11px; color:#9a9a9a; font-weight: normal; line-height: 12px;}
