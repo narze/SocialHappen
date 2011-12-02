@@ -718,13 +718,16 @@ class SocialHappen{
 			}
 		}
 		
+		$is_user_register_to_page = FALSE;
 		$this->CI->load->model('page_user_data_model','page_user_data');
-		$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
+		if($user) {
+			$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
 		
-		$this->CI->load->library('notification_lib');
-		$notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
-		$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
-		
+			//$this->CI->load->library('notification_lib');
+			//$notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
+			//$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
+		}
+
 		$domain_fragments = parse_url(base_url());
 		$sh_domain = 'https://'.$domain_fragments['host']; //Use for cross-domain calling
 
