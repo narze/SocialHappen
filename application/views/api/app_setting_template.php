@@ -1,4 +1,4 @@
-<div class="wrapper-content">	
+<div class="wrapper-content" id="app-setting-template">	
 	<div class="account-data">
       <div class="pic"><img src="<?php echo imgsize($app['app_image'],'normal');?>" alt="" /></div>
 		<div class="data">
