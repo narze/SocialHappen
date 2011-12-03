@@ -727,8 +727,8 @@ class Sync extends CI_Controller {
 							    'campaign_status_id' => 2, 
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
-							    'campaign_start_date' => '2011-05-18', 
-							    'campaign_end_date' => '2011-12-31',
+							    'campaign_start_timestamp' => '2011-05-18', 
+							    'campaign_end_timestamp' => '2011-12-31',
 								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							)

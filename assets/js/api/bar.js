@@ -261,17 +261,33 @@ onLoad = function(){
 				$(this).addClass('active');
 			})
 			$('#app-setting-menu li a').live('click', function(){
-				$(this).parents('ul').find('a').removeClass('active');
-				var iframe = $('<iframe src="'+$(this).attr('href')+'/?tab=true'+'" allowtransparency="true" frameborder="0" sandbox="allow-same-origin allow-forms allow-scripts" style="width:100%;height:100%;min-height:600px;"></iframe>');
-				$('#app-content').html( '<div id="app-component-config"></div>' ).find('#app-component-config').append(iframe);
-				$('#app-component-config').prepend('<h2 class="setting-title"><span>'+ $(this).attr('title') +'</span></h2>');
-				$(this).addClass('active');
+				var elem = $(this);
+				if(!elem.hasClass('active')){
+					elem.parents('ul').find('a.active').removeClass('active');
+					if(sh_canvas_config){
+						if(elem.hasClass('config') && $('#app-config').length == 0){
+							$('#app-content').empty();
+							$('#app-config-temp').attr('id', 'app-config').appendTo('#app-content').show();					
+						} else {
+							$('#app-config').attr('id', 'app-config-temp').appendTo('body').hide();
+						}
+					} 
+					if(!sh_canvas_config || !elem.hasClass('config')){
+						var iframe = $('<iframe src="'+elem.attr('href')+'/?tab=true'+'" allowtransparency="true" frameborder="0" sandbox="allow-same-origin allow-forms allow-scripts" style="width:100%;height:100%;min-height:600px;"></iframe>');
+						$('#app-content').html( '<div id="app-component-config"></div>' ).find('#app-component-config').append(iframe);
+						$('#app-component-config').prepend('<h2 class="setting-title"><span>'+ elem.attr('title') +'</span></h2>');
+					}
+
+					elem.addClass('active');
+				}
 				return false;
 			});
 
+			$('#app-setting-template').show();
 			unhover_hide();
 			sh_popup();
 			sh_sharebutton();
+			sh_invitebutton();
 
 			$('div.popup-fb a.bt-start').live('click',function(){
 				jQuery.fancybox.close();
@@ -388,6 +404,33 @@ onLoad = function(){
 
 					jQuery.fancybox({ // should use something better than fancybox?
 						href:base_url+'share/'+app_install_id+'?link='+share_href,
+						type:'iframe',
+						transitionIn: 'elastic',
+						transitionOut: 'elastic',
+						padding: 0,
+						// width: 908,
+						// height: 518, //TODO : height = 100% of inner content
+						autoDimensions: false,
+						scrolling: 'no',
+						onStart: function() {
+							//$("<style type='text/css'> #fancybox-wrap{ top:550px !important;} </style>").appendTo("head");
+						}
+					});
+				}
+			}
+
+			function sh_invitebutton(){console.log('sh_invitebutton');
+				$(document).on('click', 'div.sh-invitebutton', function(){
+					sh_invitebutton_menu($(this));
+				});
+
+				//DEBUG : remove this after test
+				$('body').append('<div class="sh-invitebutton" data-href="" />'); // for debug
+
+				function sh_invitebutton_menu(elem){
+
+					jQuery.fancybox({ // should use something better than fancybox?
+						href:base_url+'invite/'+app_install_id+'?page_id='+page_id,
 						type:'iframe',
 						transitionIn: 'elastic',
 						transitionOut: 'elastic',
