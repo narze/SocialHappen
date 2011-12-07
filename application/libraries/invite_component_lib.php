@@ -34,7 +34,7 @@ class Invite_component_lib {
 		$page = $this->CI->page_model->get_page_profile_by_facebook_page_id($facebook_page_id);
 		$app_install = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
 	
-		$check_args = ($campaign['app_install_id'] == $app_install_id) &&
+		$check_args = //($campaign['app_install_id'] == $app_install_id) &&
 						($page['page_id'] == $app_install['page_id']);
 		
 		if($check_args){
@@ -181,6 +181,36 @@ class Invite_component_lib {
 		}
 		
 		return $result;
+	}
+
+	/**
+	 * Generate redirect url
+	 * @param $facebook_tab_url
+	 * @param $invite_key
+	 * @author Manassarn M.
+	 */
+	function generate_redirect_url($facebook_tab_url = NULL, $invite_key = NULL){
+		if(!$facebook_tab_url || !$invite_key){
+			return FALSE;
+		}
+		return $facebook_tab_url.'&app_data='.urlencode(json_encode(
+			array(
+				'sh_invite_key' => $invite_key
+			)
+		));
+	}
+
+	/**
+	 * Parse invite key from facebook's app_data
+	 * @param string $app_data
+	 * @author Manassarn M.
+	 */
+	function parse_invite_key_from_app_data($app_data_string = NULL){
+		if(!$app_data_string){
+			return FALSE;
+		}
+		$app_data = json_decode(urldecode($app_data_string));
+		return issetor($app_data->sh_invite_key);
 	}
 }
 
