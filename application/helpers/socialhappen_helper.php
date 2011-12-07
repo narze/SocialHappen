@@ -96,5 +96,35 @@ if(!function_exists('obj2array'))
 	}
 }
 
+if(!function_exists('filter_array'))
+{
+ 	function filter_array($data = array(), $filter = array(), $not_set_if_not_isset = FALSE){
+ 		$return = array();
+ 		if($not_set_if_not_isset){
+	 		foreach($filter as $key){
+	 			if(isset($data[$key])){
+	 				$return[$key] = $data[$key];
+	 			}
+	 		}
+	 	} else {
+	 		foreach($filter as $key){
+	 			$return[$key] = isset($data[$key]) ? $data[$key] : NULL;
+	 		}
+	 	}	 	
+ 		return $return;
+ 	}
+}
+
+if(!function_exists('get_mongo_id'))
+{
+ 	function get_mongo_id($mongo_object = NULL){
+ 		if(!isset($mongo_object['_id'])){
+	 		return FALSE;
+	 	}
+	 	$id = $mongo_object['_id'];
+		return $id->{'$id'};
+ 	}
+ }
+
 /* End of file socialhappen_helper.php */
 /* Location: ./system/helpers/socialhappen_helper.php */

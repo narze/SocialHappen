@@ -60,11 +60,11 @@ class Invite_model extends CI_Model {
 	 */
 	function add_invite($campaign_id = NULL, $app_install_id = NULL, $facebook_page_id = NULL
 							, $invite_type = NULL, $user_facebook_id = NULL, $target_facebook_id_list = array()
-							, $invite_key = NULL){
+							, $invite_key = NULL, $redirect_url = NULL){
 							
 		$check_args = issetor($app_install_id) && isset($facebook_page_id) && isset($campaign_id)
 							 && issetor($invite_type) && issetor($user_facebook_id) 
-							 && issetor($invite_key);
+							 && issetor($invite_key) && $redirect_url && !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
 							 
 		if($check_args){
 			$invite_record = array();
@@ -84,9 +84,12 @@ class Invite_model extends CI_Model {
 			$invite_record['user_facebook_id'] =  $user_facebook_id;					
 			if($target_facebook_id_list){
 				$invite_record['target_facebook_id_list'] =  $target_facebook_id_list;
+			} else if($invite_type == 1){
+				return FALSE;
 			}
 			$invite_record['invite_key'] = $invite_key;
 			$invite_record['invite_type'] = $invite_type;
+			$invite_record['redirect_url'] = $redirect_url;
 					
 			/**
 			 * info fields
@@ -105,50 +108,29 @@ class Invite_model extends CI_Model {
 	 *
 	 */
 	function update_invite($invite_key = NULL, $data = array()){
-							
-		$check_args = isset($invite_key) > 0 && sizeof($data) > 0;
+		$data = filter_array($data, array('app_install_id','facebook_page_id','campaign_id','target_facebook_id_list','invite_key','invite_type','invite_count','redirect_url'), TRUE);	
+		$check_args = $invite_key && sizeof($data) > 0;
 		
 		if($check_args){
-			$invite_record = array();
-			
+
 			/**
 			 * keys
 			 */
 			if(isset($data['app_install_id'])){
-				$invite_record['app_install_id'] = (int) $data['app_install_id'];
-			}			
-			if(isset($data['facebook_page_id'])){
-				$invite_record['facebook_page_id'] =  $data['facebook_page_id'];
+				$data['app_install_id'] = (int) $data['app_install_id'];
 			}
 			if(isset($data['campaign_id'])){
-				$invite_record['campaign_id'] = (int) $data['campaign_id'];
+				$data['campaign_id'] = (int) $data['campaign_id'];
 			}
-			if(isset($data['user_facebook_id'])){
-				$invite_record['user_facebook_id'] = $data['user_facebook_id'];
-			}
-			if(isset($data['target_facebook_id_list'])){
-				$invite_record['target_facebook_id_list'] = $data['target_facebook_id_list'];
-			}
-			$invite_record['invite_key'] = $data['invite_key'];
-			$invite_record['invite_type'] = $data['invite_type'];
-			
 			
 			/**
 			 * info fields
 			 */
 			if(isset($data['invite_count'])){
-				$invite_record['invite_count'] = (int) $data['invite_count'];
-			}
-			if(isset($data['public_accepted_target_facebook_id'])){
-				$invite_record['public_accepted_target_facebook_id'] = $data['public_accepted_target_facebook_id'];
-				
-			}
-			if(isset($data['accepted_target_facebook_id_list'])){
-				$invite_record['accepted_target_facebook_id_list'] = $data['accepted_target_facebook_id_list'];
-				
+				$data['invite_count'] = (int) $data['invite_count'];
 			}
 			
-			return $this->invite->update(array('invite_key' => $invite_key),	$invite_record);
+			return $this->invite->update(array('invite_key' => $invite_key), array('$set' => $data));
 			
 		}else{
 			return FALSE;
