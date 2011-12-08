@@ -132,7 +132,7 @@ class Invite_model extends CI_Model {
 			if(isset($data['invite_count'])){
 				$data['invite_count'] = (int) $data['invite_count'];
 
-				$invite_record['invite_count'] = (int) $data['invite_count'];
+				$data['invite_count'] = (int) $data['invite_count'];
 			}
 			if(isset($data['public_accepted_target_facebook_id'])){
 				$data['public_accepted_target_facebook_id'] = $data['public_accepted_target_facebook_id'];
