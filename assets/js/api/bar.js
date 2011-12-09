@@ -428,9 +428,8 @@ onLoad = function(){
 				$('body').append('<div class="sh-invitebutton" data-href="" />'); // for debug
 
 				function sh_invitebutton_menu(elem){
-
 					jQuery.fancybox({ // should use something better than fancybox?
-						href:base_url+'invite/'+app_install_id+'?page_id='+page_id,
+						href:base_url+'invite/'+app_install_id+'?facebook_page_id='+facebook_page_id,
 						type:'iframe',
 						transitionIn: 'elastic',
 						transitionOut: 'elastic',

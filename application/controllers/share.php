@@ -8,7 +8,6 @@ class Share extends CI_Controller {
 	
 	function index($app_install_id = NULL){
 		$this->load->library('form_validation');
-		$share_message = '//default//';
 		$share_link = $this->input->get('link');
 		if($app_install_id){
 			$this->load->library('campaign_lib');
@@ -21,20 +20,25 @@ class Share extends CI_Controller {
 				$this->load->library('sharebutton_lib');
 				if($sharebutton && isset($sharebutton['message']['text'])){
 					$share_message = $sharebutton['message']['text'];
+					$user = $this->socialhappen->get_user();
+					$this->load->vars(array(
+						'user' => $user,
+						'twitter_checked' => !empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret']),
+						'facebook_checked' => TRUE,
+						'share_message' => $share_message,
+						'share_link' => $share_link,
+						'app_install_id' => $app_install_id
+					));
+					$this->load->view('share/main');
+				} else {
+					echo 'cannot share, no share message';
 				}
+			} else {
+				echo 'cannot share, no campaign';
 			}
+		} else {
+			echo 'cannot share, not in app';
 		}
-
-		$user = $this->socialhappen->get_user();
-		$this->load->vars(array(
-			'user' => $user,
-			'twitter_checked' => !empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret']),
-			'facebook_checked' => TRUE,
-			'share_message' => $share_message,
-			'share_link' => $share_link,
-			'app_install_id' => $app_install_id
-		));
-		$this->load->view('share/main');
 	}
 
 	function twitter_connect(){

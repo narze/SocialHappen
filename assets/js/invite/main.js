@@ -1,10 +1,93 @@
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId  : facebook_app_id,
+			channelURL : channel_url, // Channel File
+			cookie: true,
+			xfbml: true,
+			oauth: true
+		});
+		
+		FB.getLoginStatus(function(response) {
+		  if (response.authResponse) {
+			console.log('resp',response);
+			friendSelectorInit();
+		  } else {
+			console.log('not permitted');
+			// load denied page
+			//jQuery('body').hide();
+			jQuery('.wrapper-content').html('please give me your permission');
+			//fire_login();
+			jQuery('#fblogin').show();
+			
+		  }
+		});
+		
+		FB.Canvas.setSize();
+
+	}
+					
+	function fire_login(response){
+		FB.login(function(response) {
+			if (response.authResponse) {
+				signedRequest = response.authResponse.signedRequest;
+				userID = response.authResponse.userID;
+				
+				console.log(signedRequest);
+				console.log(userID);
+				
+				//window.location.reload()
+			}
+		}, {scope:'user_about_me,email,publish_stream'}); 
+	}
+		
+	function friendSelectorInit() {
+	  FB.api('/me', function(response) {
+		 
+		  jQuery("#jfmfs-container").jfmfs({ 
+			  max_selected: 15, 
+			  max_selected_message: "{0} of {1} selected",
+			  friend_fields: "id,name,last_name",
+			  pre_selected_friends: [1014025367],
+			  exclude_friends: [1211122344, 610526078],
+			  sorter: function(a, b) {
+				var x = a.last_name.toLowerCase();
+				var y = b.last_name.toLowerCase();
+				return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+			  }
+		  });
+		  jQuery("#jfmfs-container").bind("jfmfs.friendload.finished", function() { 
+			  window.console && console.log("finished loading!");
+		  });
+		  jQuery("#jfmfs-container").bind("jfmfs.selection.changed", function(e, data) { 
+			//window.console && console.log("changed", data);
+			var target_list = '';
+
+			for(i in data){
+				target_list += data[i].id+',';
+			}
+
+			if(target_list.length > 0){
+				jQuery('#target_id').val(target_list.substring(0,target_list.length - 1 ));
+				console.log(target_list.substring(0,target_list.length - 1 ));
+			}
+		  });                     
+		  
+		  $("#logged-out-status").hide();
+
+	  });
+	  
+	
+
+	}              
+
 $(document).ready(function(){
 		
-	$(':radio').click(function(){
-		if($(':checked').val() != 0)
-			$('#target_id-row').hide('slow');
+	$('#private_invite:checkbox').click(function(){
+		var checkbox = $(this);
+		if(checkbox.is(':checked'))
+			$('#friend-list').show('slow');
 		else
-			$('#target_id-row').show('slow');
+			$('#friend-list').hide('slow');
 	});
 	
 	$('#invite-submit').click(function(){

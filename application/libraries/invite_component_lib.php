@@ -33,7 +33,8 @@ class Invite_component_lib {
 		$campaign = $this->CI->campaign_model->get_campaign_profile_by_campaign_id($campaign_id);
 		$page = $this->CI->page_model->get_page_profile_by_facebook_page_id($facebook_page_id);
 		$app_install = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
-	
+		$redirect_url = $app_install['facebook_tab_url'];
+		//$redirect_url = $this->generate_redirect_url($facebook_tab_url, $invite_key);
 		$check_args = //($campaign['app_install_id'] == $app_install_id) &&
 						($page['page_id'] == $app_install['page_id']);
 		
@@ -42,7 +43,7 @@ class Invite_component_lib {
 			$target_facebook_id_list = $this->_extract_target_id($target_facebook_id);
 			if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
 								, $invite_type, $user_facebook_id, $target_facebook_id_list
-								, $invite_key)){
+								, $invite_key, $redirect_url)){
 				return $invite_key;
 			}
 		}
@@ -184,6 +185,7 @@ class Invite_component_lib {
 	}
 
 	/**
+	 * DEPRECATED
 	 * Generate redirect url
 	 * @param $facebook_tab_url
 	 * @param $invite_key
@@ -201,6 +203,7 @@ class Invite_component_lib {
 	}
 
 	/**
+	 * DEPRECATED
 	 * Parse invite key from facebook's app_data
 	 * @param string $app_data
 	 * @author Manassarn M.

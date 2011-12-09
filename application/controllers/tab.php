@@ -776,28 +776,7 @@ class Tab extends CI_Controller {
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
 		$data = array();
-		// foreach($page_user_fields as $user_fields){
-			// $required = ($user_fields['required']) ? "|required" : "";
-			// switch($user_fields['type']){
-				// case 'radio':
-					// $this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);	
-				// break;
-				// case 'checkbox':
-					// $this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'xss_clean'.$required);
-				// break;
-				// case 'textarea':
-					// $this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
-				// break;					
-				// case 'text':
-				// default:
-					// $this->form_validation->set_rules($user_fields['name'], $user_fields['label'], 'trim|xss_clean'.$required);
-			// }
-			// $data[$user_fields['name']] = $this->input->post($user_fields['name']);
-		// }
 		
-		// if(!$page_user_fields){
-			// $this->form_validation->set_rules('empty', 'Empty', 'required');
-		// }
 		$this->load->model('user_model','user');
 		$this->load->vars(array(
 				'page_id' => $page_id,
@@ -810,33 +789,9 @@ class Tab extends CI_Controller {
 			)
 		);
 		
-		// if ($this->form_validation->run() == FALSE){
+		
 		$this->load->view('tab/signup_page');
-		// } else {
-			
-			// $this->load->model('page_user_data_model','page_users');
-			// $data = array(
-				// 'user_id' => $this->socialhappen->get_user_id(), //NULL when differect origin
-				// 'page_id' => $page_id,
-				// 'user_data' => $data
-			// );
-			
-			// if(!isset($app_install_id)){ // mode = page
-				// $this->load->model('page_model','page');
-				// $page = $this->page->get_page_profile_by_page_id($page_id);
-				// $facebook_tab_url = $page['facebook_tab_url'];
-			// } else { // mode = app
-				// $this->load->model('installed_apps_model','installed_app');
-				// $app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
-				// $facebook_tab_url = $app['facebook_tab_url'];
-			// }
-      
-			// if($this->page_users->add_page_user($data)){
-				// $this->load->view('tab/signup_complete', array('facebook_tab_url' => $facebook_tab_url));
-			// } else {
-				// $this->load->view('tab/signup_page', array('error'=>print_r($data,TRUE)));
-			// }
-		// }
+		
 		$this->socialhappen->login();
 	}
 	
@@ -934,6 +889,30 @@ class Tab extends CI_Controller {
 					$this->load->library('achievement_lib');
 					$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'page_id'=>$page_id);
 					$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+
+					//Begin : check pending invite
+						if(isset($app_install_id)){ // mode = app
+							$this->load->library('campaign_lib');
+							$current_campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
+							if($current_campaign['in_campaign'] == TRUE){
+								$campaign_id = $current_campaign['campaign_id'];
+								$user_facebook_id = $user['user_facebook_id'];
+								$this->load->model('invite_pending_model', 'invite_pending');
+								if($invite_key = $this->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id)){
+									$this->load->library('invite_component_lib');
+									$result = $this->invite_component_lib->accept_invite($invite_key, $user_facebook_id);
+									if(isset($result['error'])){
+										log_message('error','accept_invite error '.print_r($result,TRUE));
+									} else {
+										log_message('error', 'inviter got score!!!');
+										//TODO : give score to inviter
+									}
+								}
+							} else {
+								log_message('error', 'campaign ended');
+							}
+						}
+					//End
 				}
 			}
 		}

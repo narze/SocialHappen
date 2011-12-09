@@ -1231,3 +1231,17 @@ div.sh-sharebutton:hover{
 div.sh-sharebutton:active{
 	background-image: url('../../images/temp/share_active.png');
 }
+
+div.sh-invitebutton{
+	display: block;
+	background: url(../../images/temp/invite.png) no-repeat;
+	cursor: pointer;
+	border: none;
+	color: transparent !important;
+	text-indent: -9000px;
+	overflow:hidden;
+	margin: 0;
+	width: 174px; 
+	height: 31px;
+	background-position: -223px -144px;
+}
