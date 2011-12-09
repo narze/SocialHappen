@@ -95,6 +95,9 @@ class Invite_model extends CI_Model {
 			 * info fields
 			 */
 			$invite_record['invite_count'] = (int) 0;
+			
+			date_default_timezone_set('UTC');
+			$invite_record = array_merge($invite_record, array('timestamp' => time()));
 						
 			return $this->invite->insert($invite_record);
 			
@@ -128,7 +131,18 @@ class Invite_model extends CI_Model {
 			 */
 			if(isset($data['invite_count'])){
 				$data['invite_count'] = (int) $data['invite_count'];
+
+				$data['invite_count'] = (int) $data['invite_count'];
 			}
+			if(isset($data['public_accepted_target_facebook_id'])){
+				$data['public_accepted_target_facebook_id'] = $data['public_accepted_target_facebook_id'];
+				
+			}
+			if(isset($data['accepted_target_facebook_id_list'])){
+				$data['accepted_target_facebook_id_list'] = $data['accepted_target_facebook_id_list'];
+
+			}
+			$data['timestamp'] = $data['timestamp'];
 			
 			return $this->invite->update(array('invite_key' => $invite_key), array('$set' => $data));
 			

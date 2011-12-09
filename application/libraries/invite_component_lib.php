@@ -62,6 +62,7 @@ class Invite_component_lib {
 			
 			$data = $exist_check;
 			$data['invite_count'] = $data['invite_count'] + 1;
+			$data['timestamp'] = time();
 			
 			if($data['invite_type']==1){
 			//private
