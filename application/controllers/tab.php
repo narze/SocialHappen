@@ -900,7 +900,7 @@ class Tab extends CI_Controller {
 								$this->load->model('invite_pending_model', 'invite_pending');
 								if($invite_key = $this->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id)){
 									$this->load->library('invite_component_lib');
-									$result = $this->invite_component_lib->accept_invite($invite_key, $user_facebook_id);
+									$result = $this->invite_component_lib->accept_invite_page_level($invite_key, $user_facebook_id);
 									if(isset($result['error'])){
 										log_message('error','accept_invite error '.print_r($result,TRUE));
 									} else {

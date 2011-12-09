@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * Pending invitation
  * @author Manassarn M,
@@ -73,7 +73,7 @@ class Invite_pending_model extends CI_Model {
 			return FALSE;
 		}
 		return $this->pending
-	        ->remove(array("user_facebook_id" => $user_facebook_id,
+	        ->remove(array("user_facebook_id" => (string) $user_facebook_id,
 	        'campaign_id' => (int) $campaign_id), 
 	        array('$atomic' => TRUE));
 	}

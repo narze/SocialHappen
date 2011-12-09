@@ -120,22 +120,11 @@ class Invite extends CI_Controller {
 			echo '<a href="'.base_url().'invite/accept_facebook_connect?invite_key='.$invite_key.'">Redirect</a>';
 			return;
 		}
-		$user_facebook_id = $facebook_user['id'];
-		$invite = $this->invite->get_invite_by_invite_key($invite_key);
-		if(!$invite){
-			echo 'invite key invalid';
-		} else if($invite['invite_type'] == 2 || ($invite['invite_type'] == 1 && in_array($user_facebook_id, $invite['target_facebook_id_list']))){ // if key is public invite OR private and user is in the invitee list
-			$campaign_id = $invite['campaign_id']; //TODO : Check if this is current campaign_id
-			$this->load->model('invite_pending_model','invite_pending');
-			if($invite_key === $this->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id)){
-				redirect($invite['redirect_url']);
-			} else if($add_result = $this->invite_pending->add($user_facebook_id, $campaign_id, $invite_key)){
-				redirect($invite['redirect_url']);
-			} else {
-				echo 'exception, please try again';
-			}
+		if($this->invite->reserve_invite($invite_key, $facebook_user['id'])){
+			$invite = $this->invite->get_invite_by_invite_key($invite_key);
+			redirect($invite['redirect_url']);
 		} else {
-			echo 'You are not invited by this key';
+			echo 'This invite key is invalid';
 		}
 	}
 	

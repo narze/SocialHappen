@@ -38,7 +38,7 @@ class Invite_component_lib {
 		$check_args = //($campaign['app_install_id'] == $app_install_id) &&
 						($page['page_id'] == $app_install['page_id']);
 		
-		if($check_args){
+		// if($check_args){
 		
 			$target_facebook_id_list = $this->_extract_target_id($target_facebook_id);
 			if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
@@ -46,11 +46,13 @@ class Invite_component_lib {
 								, $invite_key, $redirect_url)){
 				return $invite_key;
 			}
-		}
+		// }
 		return FALSE;
     }
 	
 	/**
+	 * 
+	 * DEPRECATED : Separated into accept_invite_page_level and accept_invite_campaign_level
 	 * Accept invite and update invite status
 	 *
 	 */
@@ -115,8 +117,11 @@ class Invite_component_lib {
 				$criteria_arr[$criteria_key] = $criteria_item;
 		}
 		
-		if(sizeof($criteria_arr) > 0)
+		if(sizeof($criteria_arr) > 0){
 			return $this->CI->invite_model->list_invites($criteria_arr);
+		} else {
+			return FALSE;
+		}
     }
 	
 	/**
@@ -186,6 +191,41 @@ class Invite_component_lib {
 	}
 
 	/**
+	 * Reserve invite
+	 * @param $invite_key
+	 * @param $user_facebook_id
+	 * @author Manassarn M.
+	 */
+	function reserve_invite($invite_key = NULL, $user_facebook_id = NULL){
+		if(!$invite_key || !$user_facebook_id){
+			return FALSE;
+		}
+		
+		if(!$invite = $this->CI->invite->get_invite_by_invite_key($invite_key)){
+			// echo 'invite key invalid';
+			return FALSE;
+		} else if($invite['invite_type'] == 2 || ($invite['invite_type'] == 1 && in_array($user_facebook_id, $invite['target_facebook_id_list']))){ // if key is public invite OR private and user is in the invitee list
+			$campaign_id = $invite['campaign_id']; //TODO : Check if this is current campaign_id
+			$this->CI->load->model('invite_pending_model','invite_pending');
+			$pending_invite_key = $this->CI->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id);
+			if($pending_invite_key === $invite_key){// if already entered this key before
+				return TRUE;
+			} else if($pending_invite_key){
+				// echo 'You have already received another invite key';
+				return FALSE;
+			} else if($add_result = $this->CI->invite_pending->add($user_facebook_id, $campaign_id, $invite_key)){
+				return TRUE;
+			} else {
+				// echo 'exception, please try again';
+				return FALSE;
+			}
+		} else {
+			// echo 'You are not invited by this key';
+			return FALSE;
+		}
+	}
+
+	/**
 	 * DEPRECATED
 	 * Generate redirect url
 	 * @param $facebook_tab_url
@@ -216,6 +256,40 @@ class Invite_component_lib {
 		$app_data = json_decode(urldecode($app_data_string));
 		return issetor($app_data->sh_invite_key);
 	}
-}
 
-/* End of file InvireLib.php */
+	function _accept_invite_level($level = NULL, $invite_key = NULL, $user_facebook_id = NULL){
+		if(allnotempty(func_get_args())){
+			if($invite = $this->get_invite_by_invite_key($invite_key)){ //invite key validation
+				$this->CI->load->model('invite_pending_model','invite_pending');
+				$pending_invite_key = $this->CI->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $invite['campaign_id']);
+				if(!$pending_invite_key || ($pending_invite_key !== $invite_key)){ //pending invite key validation
+					return FALSE;
+				}
+				if($this->CI->invite_model->{'push_into_'.$level.'_accepted'}($invite_key, $user_facebook_id)){
+					return TRUE;
+				}
+			}
+		}
+		return FALSE;
+	}
+
+	function accept_invite_page_level($invite_key = NULL, $user_facebook_id = NULL){
+		return $this->_accept_invite_level('page', $invite_key, $user_facebook_id);
+	}
+
+	function accept_invite_campaign_level($invite_key = NULL, $user_facebook_id = NULL){
+		if($this->_accept_invite_level('campaign', $invite_key, $user_facebook_id)){
+			$invite = $this->get_invite_by_invite_key($invite_key);
+			if(!$this->CI->invite_pending_model->remove_by_user_facebook_id_and_campaign_id($user_facebook_id, $invite['campaign_id'])){
+				log_message('error', 'cannot remove pending invite');
+			}
+			if(!$increment_result = $this->CI->invite_model->increment_invite_count_by_invite_key($invite_key)){
+				log_message('error', 'cannot increment invite_count');
+			}
+			return TRUE;
+		}
+		return FALSE;
+	}
+}
+/* End of file invite_component_lib.php */
+/* Location: ./application/controllers/libraries/invite_component_lib.php */

@@ -124,7 +124,25 @@ if(!function_exists('get_mongo_id'))
 	 	$id = $mongo_object['_id'];
 		return $id->{'$id'};
  	}
- }
+}
+
+if(!function_exists('allnotempty'))
+{
+ 	function allnotempty($array = NULL){
+ 		if(!is_array($array)){
+ 			return isset($array);
+ 		} else {
+ 			$key = array_keys($array);
+ 			$size = sizeOf($key);
+    		for ($i=0; $i<$size; $i++){
+    			if(!$array[$key[$i]]){
+    				return FALSE;
+    			}
+    		}
+    		return TRUE;
+ 		}
+ 	}
+}
 
 /* End of file socialhappen_helper.php */
 /* Location: ./system/helpers/socialhappen_helper.php */
