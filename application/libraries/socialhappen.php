@@ -693,6 +693,12 @@ class SocialHappen{
 			$app_mode = TRUE;
 			$page_id = $app['page_id'];
 			$sh_canvas_config = $app['app_config_facebook_canvas_path'] ? TRUE : FALSE;
+
+			$this->CI->load->library('campaign_lib');
+			$campaign = $this->CI->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
+			if(issetor($campaign['in_campaign'])){
+				$campaign_id = $campaign['campaign_id'];
+			}
 		}
 		
 		$this->CI->load->model('User_model', 'User');
@@ -758,7 +764,8 @@ class SocialHappen{
 				'facebook_page_id' => $page['facebook_page_id'],
 				'facebook_access_token' => '',
 				'facebook_tab_url' => $facebook_tab_url,
-				'sh_canvas_config' => issetor($sh_canvas_config)
+				'sh_canvas_config' => issetor($sh_canvas_config),
+				'campaign_id' => issetor($campaign_id)
 			),
 			// 'view_as' => $view_as,
 			'node_base_url' => $this->CI->config->item('node_base_url'),
