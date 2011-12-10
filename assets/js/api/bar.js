@@ -160,6 +160,46 @@ sh_signup_complete = function(redirect_url){
 		});
 	})(sh_jq);
 }
+
+sh_signup_campaign = function(){
+	(function($){			
+		if(app_mode){
+			jQuery.fancybox({
+				href: base_url+'tab/signup_campaign/'+app_install_id+'/'+campaign_id,
+				onComplete: signup_campaign_form
+			});
+
+			function signup_campaign_form() { //console.log('signup_campaign_form invoked');
+				$('#fancybox-content').off()
+				.on('submit', 'div.popup-fb.signup-campaign form.signup-form', submit_form);
+
+				function submit_form(){console.log('submit');
+					$('form.signup-form').unbind('submit').submit(function() {
+						  var url = $(this).attr('action');
+						  var params = $(this).serialize();
+						  $.getJSON(url + '?' + params + "&callback=?", function(data) {
+							// console.log(data);
+							// success
+							// if(data.status == 'error'){
+							// 	if(data.error == 'verify'){
+							// 		sh_validate_error(data.error_messages);
+							// 	}
+							// } else if(data.status == 'ok'){
+							// 	sh_signup_complete(data.redirect_url);
+							// }
+							if(data.status == 'ok'){
+								jQuery.fancybox.close();
+							}
+						  });
+						  return false;
+					}).submit();
+					return false;
+				}
+			};
+		}		
+	})(sh_jq);
+}
+
 getScript = function(url, checkName, success) {
 	if(checkName != 'jQuery' && (eval('typeof '+checkName+' == "function"') || eval('typeof '+checkName+' == "object"'))) { //check if script is already loaded
 		success(); //don't reload
@@ -542,6 +582,8 @@ sh_popup = function(){
 		} else {
 			if(!is_user_register_to_page) {
 				sh_signup_page();
+			} else if(!is_user_register_to_campaign){
+				sh_signup_campaign();
 			}
 		}
 		
@@ -678,9 +720,11 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		sh_login();
 	} else if(message.data.sh_message === "logged in"){ //xd.js 
 		// console.log(view_as, is_user_register_to_page);
-		if(view_as === 'guest' || is_user_register_to_page) {
+		if(view_as === 'guest' || is_user_register_to_campaign) {
 			sh_signup();
-		} else {
+		} else if(!is_user_register_to_campaign){asdaasd
+			sh_signup_campaign();
+		}  else if(!is_user_register_to_page){
 			sh_signup_page();
 		} 
 	} else if(message.data.sh_message === "logged out"){ //xd.js
