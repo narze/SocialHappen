@@ -51,7 +51,20 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run($result, 'is_string', 'add_invite', $result);
 		$this->invite_key2 = $result;
 	}
+	
+	function add_duplicate_invite_test(){
+		$campaign_id = 1;
+		$app_install_id = 2;
+		$facebook_page_id = 3;
+		$invite_type = 1;
+		$user_facebook_id = 4;
+		$commasep_target_facebook_ids = '5,6,7'; // add three first target_ids to list
+		$result = $this->invite->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
+		$this->unit->run($result, 'is_string', 'add_duplicate_invite, with same key', $result);
+		$this->invite_key1 = $result;
 
+	}
+	
 	function accept_invite_test(){
 		
 	}
@@ -62,7 +75,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run($result, 'is_array', 'list_invite', print_r($result, TRUE));
 		$this->unit->run(count($result), 2, 'list_invite', count($result));
 
-		$criteria = array('user_facebook_id' => 4);
+		$criteria = array('user_facebook_id' => "4");
 		$result = $this->invite->list_invite($criteria);
 		$this->unit->run($result, 'is_array', 'list_invite', print_r($result, TRUE));
 		$this->unit->run(count($result), 2, 'list_invite', count($result));
@@ -73,7 +86,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$result = $this->invite->get_invite_by_invite_key($invite_key);
 		$this->unit->run($result, 'is_array', 'get_invite_by_invite_key', print_r($result, TRUE));
 		$this->unit->run($result['facebook_page_id'] === '3', TRUE, 'get_invite_by_invite_key', $result['facebook_page_id']);
-		$this->unit->run($result['target_facebook_id_list'] === array('1','2','3'), TRUE, 'get_invite_by_invite_key', $result['target_facebook_id_list']);
+		$this->unit->run($result['target_facebook_id_list'] === array('1','2','3','5','6','7'), TRUE, 'get_invite_by_invite_key', $result['target_facebook_id_list']);
 	}
 
 	function _extract_target_id_test(){
@@ -173,7 +186,6 @@ class Invite_component_lib_test extends CI_Controller {
 
 		$invite_key = $this->invite_key2;
 		$target_facebook_id = 3;
-
 		$invite = $this->invite_model->get_invite_by_criteria(array('invite_key'=>$invite_key));
 		$this->unit->run($invite['invite_count'] === 0, TRUE, 'invite_count', $invite['invite_count']);
 
@@ -199,6 +211,8 @@ class Invite_component_lib_test extends CI_Controller {
 		$result = $this->invite->accept_invite_campaign_level($invite_key, $target_facebook_id);
 		$this->unit->run($result, FALSE, 'accept_invite_campaign_level, already accept same campaign in same invite key', $result);
 	}
+	
+	
 }
 /* End of file invite_component_lib_test.php */
 /* Location: ./application/controllers/test/invite_component_lib_test.php */
