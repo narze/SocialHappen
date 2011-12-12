@@ -45,13 +45,10 @@ class Tab extends CI_Controller {
 		$this->load->model('user_companies_model','user_companies');
 		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
 		
-		//is user register to current page
-		$this->load->model('page_user_data_model','page_user_data');
-		$is_user_register_to_page = $this->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
+		//is user register to current page : moved to get_bar
+		// $this->load->model('page_user_data_model','page_user_data');
+		// $is_user_register_to_page = $this->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
 
-		$this->load->model('user_campaigns_model','campaign_user');
-		$user_campaigns = $this->campaign_user->get_by_user_id_and_campaign_id($user_id, $);
-		$is_user_register_to_campaign = isset($user_campaigns[''])
 
 		$this->config->load('pagination', TRUE);
 		$per_page = $this->config->item('per_page','pagination');
