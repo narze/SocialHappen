@@ -905,8 +905,29 @@ class Tab extends CI_Controller {
 									if(isset($result['error'])){
 										log_message('error','accept_invite error '.print_r($result,TRUE));
 									} else {
-										log_message('error', 'inviter got score!!!');
-										//TODO : give score to inviter
+										//Begin : Give score to inviter
+											$action_id = $this->socialhappen->get_k('audit_action','Invitee Accept Page Invite');
+											$audit_info = array(
+												'page_id' => $page_id,
+												'app_install_id' => $app_install_id,
+												'campaign_id' => $campaign_id
+											);
+											$this->audit_lib->add_audit(
+												$user_id,
+												$action_id,
+												'', 
+												'',
+												$audit_info
+											);
+
+											$achievement_info = array(
+												'action_id' => $action_id, 
+												'app_install_id'=>$app_install_id, 
+												'page_id'=>$page_id,
+												'campaign_id' => $campaign_id
+											);
+											$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $achievement_info, 1);
+										//End
 									}
 								}
 							} else {
