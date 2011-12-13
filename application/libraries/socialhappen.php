@@ -41,6 +41,8 @@ class SocialHappen{
 			111 => 'User Connect Facebook',
 			112 => 'User Connect Foursquare',
 			113 => 'User Invite',
+			114 => 'Invitee Accept Page Invite',
+			115 => 'Invitee Accept Campaign Invite'
 		)
 	);
 	
