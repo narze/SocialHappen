@@ -6,8 +6,13 @@
  */
 class MY_Unit_test extends CI_Unit_test {
 	
+	private $CI;
+
 	function __construct(){
 		parent::__construct();
+		$this->CI =& get_instance();
+		$this->CI->db = $this->CI->load->database('local_unit_test', TRUE);
+		echo 'Test with database : ' . $this->CI->db->database; 
 	}
 	
 	function report_with_counter(){
