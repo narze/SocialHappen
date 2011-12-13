@@ -81,6 +81,14 @@ class User_campaigns_model extends CI_Model {
 		$this->db->join('installed_apps','campaign.app_install_id=installed_apps.app_install_id');
 		$this -> db -> count_all_results('user_campaigns');
 	}
+
+	function is_user_in_campaign($user_id = NULL, $campaign_id = NULL){
+		if(!$user_id || !$campaign_id){
+			return FALSE;
+		}
+		$this->db->where(array('user_id' => $user_id, 'campaign_id' => $campaign_id));
+		return $this->db->count_all_results('user_campaigns') === 1;
+	}
 }
 
 /* End of file user_campaigns_model.php */

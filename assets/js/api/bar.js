@@ -56,6 +56,7 @@ sh_signup = function(){
 								sh_validate_error(data.error_messages);
 							}
 						} else if(data.status == 'ok'){
+							user_name = $('input#first_name').val();
 							sh_signup_page();
 						}
 					  })
@@ -84,16 +85,20 @@ sh_validate_error = function(error_messages){
 }
 
 sh_signup_page = function(){
-	(function($){			
-		if(app_mode){
+	(function($){
+		if(is_user_register_to_page){
 			jQuery.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image),
+				content: 'You have already registered to this page'
+			});
+		} else if(app_mode){
+			jQuery.fancybox({
+				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image)+'&facebook_access_token='+facebook_access_token,
 				modal: true,
 				onComplete: signup_page_form
 			});
 		} else {
 			jQuery.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image),
+				href: base_url+'tab/signup_page/'+page_id+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image)+'&facebook_access_token='+facebook_access_token,
 				modal: true,
 				onComplete: signup_page_form
 			});
@@ -121,6 +126,7 @@ sh_signup_page = function(){
 								sh_validate_error(data.error_messages);
 							}
 						} else if(data.status == 'ok'){
+							is_user_register_to_page = 1;
 							sh_signup_complete(data.redirect_url);
 						}
 					  })
@@ -160,6 +166,51 @@ sh_signup_complete = function(redirect_url){
 		});
 	})(sh_jq);
 }
+
+sh_signup_campaign = function(){
+	(function($){	
+		if(is_user_register_to_campaign){
+			jQuery.fancybox({
+				content: 'You have already registered to this campaign'
+			});
+		} else if(app_mode){
+			jQuery.fancybox({
+				href: base_url+'tab/signup_campaign/'+app_install_id+'/'+campaign_id,
+				onComplete: signup_campaign_form
+			});
+
+			function signup_campaign_form() { //console.log('signup_campaign_form invoked');
+				$('#fancybox-content').off()
+				.on('submit', 'div.popup-fb.signup-campaign form.signup-form', submit_form);
+
+				function submit_form(){console.log('submit');
+					$('form.signup-form').unbind('submit').submit(function() {
+						  var url = $(this).attr('action');
+						  var params = $(this).serialize();
+						  $.getJSON(url + '?' + params + "&callback=?", function(data) {
+							// console.log(data);
+							// success
+							// if(data.status == 'error'){
+							// 	if(data.error == 'verify'){
+							// 		sh_validate_error(data.error_messages);
+							// 	}
+							// } else if(data.status == 'ok'){
+							// 	sh_signup_complete(data.redirect_url);
+							// }
+							if(data.status == 'ok'){
+								is_user_register_to_campaign = 1;
+								jQuery.fancybox.close();
+							}
+						  });
+						  return false;
+					}).submit();
+					return false;
+				}
+			};
+		}		
+	})(sh_jq);
+}
+
 getScript = function(url, checkName, success) {
 	if(checkName != 'jQuery' && (eval('typeof '+checkName+' == "function"') || eval('typeof '+checkName+' == "object"'))) { //check if script is already loaded
 		success(); //don't reload
@@ -540,8 +591,11 @@ sh_popup = function(){
 				// page_installed=1;
 			// }
 		} else {
+			console.log('asdfs');
 			if(!is_user_register_to_page) {
 				sh_signup_page();
+			} else if(!is_user_register_to_campaign){
+				sh_signup_campaign();
 			}
 		}
 		
@@ -562,13 +616,13 @@ sh_logout = function(){
 	XD.postMessage({sh_message:'logout'}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
 }
 
-sh_get_role = function(){
-	(function($){
-		$.getJSON(base_url+'xd/get_role', function(){
-			return
-		});
-	})(sh_jq);
-}
+// sh_get_role = function(){
+// 	(function($){
+// 		$.getJSON(base_url+'xd/get_role', function(){
+// 			return
+// 		});
+// 	})(sh_jq);
+// }
 
 getScript(base_url + 'assets/js/common/jquery.min.js', 'jQuery', loadChildScripts);
 
@@ -677,7 +731,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		facebook_access_token = message.data.fb_access_token;
 		sh_login();
 	} else if(message.data.sh_message === "logged in"){ //xd.js 
-		// console.log(view_as, is_user_register_to_page);
+		console.log(view_as, is_user_register_to_page);
 		if(view_as === 'guest' || is_user_register_to_page) {
 			sh_signup();
 		} else {

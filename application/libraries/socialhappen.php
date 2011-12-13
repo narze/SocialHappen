@@ -686,6 +686,7 @@ class SocialHappen{
 		$user_id = issetor($data['user_id']);
 		$user_facebook_id = issetor($data['user_facebook_id']);
 		$app_mode = FALSE;
+		$campaign_id = NULL;
 		
 		$this->CI->load->model('Installed_apps_model', 'app');
 		$app = $this->CI->app->get_app_profile_by_app_install_id($app_install_id);
@@ -693,6 +694,12 @@ class SocialHappen{
 			$app_mode = TRUE;
 			$page_id = $app['page_id'];
 			$sh_canvas_config = $app['app_config_facebook_canvas_path'] ? TRUE : FALSE;
+
+			$this->CI->load->library('campaign_lib');
+			$campaign = $this->CI->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
+			if(issetor($campaign['in_campaign'])){
+				$campaign_id = $campaign['campaign_id'];
+			}
 		}
 		
 		$this->CI->load->model('User_model', 'User');
@@ -700,6 +707,7 @@ class SocialHappen{
 		$this->CI->load->model('page_model','pages');
 		$this->CI->load->model('session_model','session_model');
 		$user = $user_id ? $this->CI->User->get_user_profile_by_user_id($user_id) : $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
+		$user_id = $user['user_id'];
 		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
 
 		$menu = array();		
@@ -719,11 +727,14 @@ class SocialHappen{
 			}
 		}
 		
-		$is_user_register_to_page = FALSE;
+		$is_user_register_to_page = $is_user_register_to_campaign = FALSE;
 		$this->CI->load->model('page_user_data_model','page_user_data');
-		if($user) {
-			$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
+		if($user_id) {
+			$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
 		
+			$this->CI->load->model('user_campaigns_model','campaign_user');
+			$is_user_register_to_campaign = $this->CI->campaign_user->is_user_in_campaign($user_id, $campaign_id);
+			
 			//$this->CI->load->library('notification_lib');
 			//$notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
 			//$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
@@ -746,7 +757,8 @@ class SocialHappen{
 				'page_app_installed_id' => issetor($page['page_app_installed_id'],0),
 				'page_installed' => issetor($page['page_installed'],1),
 				'is_user_register_to_page' => $is_user_register_to_page ? 1 : NULL,
-				'user_id' => $user['user_id'],
+				'is_user_register_to_campaign' => $is_user_register_to_campaign ? 1 : NULL,
+				'user_id' => $user_id,
 				'app_mode' => $app_mode,
 				'app_install_id' => $app_install_id,
 				'sh_domain' => $sh_domain,
@@ -758,7 +770,8 @@ class SocialHappen{
 				'facebook_page_id' => $page['facebook_page_id'],
 				'facebook_access_token' => '',
 				'facebook_tab_url' => $facebook_tab_url,
-				'sh_canvas_config' => issetor($sh_canvas_config)
+				'sh_canvas_config' => issetor($sh_canvas_config),
+				'campaign_id' => issetor($campaign_id)
 			),
 			// 'view_as' => $view_as,
 			'node_base_url' => $this->CI->config->item('node_base_url'),

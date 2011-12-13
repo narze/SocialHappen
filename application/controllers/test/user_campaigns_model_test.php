@@ -82,6 +82,34 @@ class User_campaigns_model_test extends CI_Controller {
 		$removed_again = $this->user_campaigns->remove_user_campaign($user_id, $campaign_id);
 		$this->unit->run($removed_again == 0,'is_true','remove_user_campaign()');
 	}
+
+	/**
+	 * Test is_user_in_campaign()
+	 * @author Manassarn M.
+	 */
+	function is_user_in_campaign_test(){
+		$user_id = 1;
+		$campaign_id = 1;
+		$result = $this->user_campaigns->is_user_in_campaign($user_id, $campaign_id);
+		$this->unit->run($result, TRUE, 'is_user_in_campaign', $result);
+
+		
+		$user_id = 123231;
+		$campaign_id = 1;
+		$result = $this->user_campaigns->is_user_in_campaign($user_id, $campaign_id);
+		$this->unit->run($result, FALSE, 'is_user_in_campaign', $result);
+
+		
+		$user_id = 1;
+		$campaign_id = 1321;
+		$result = $this->user_campaigns->is_user_in_campaign($user_id, $campaign_id);
+		$this->unit->run($result, FALSE, 'is_user_in_campaign', $result);
+
+		$user_id = NULL;
+		$campaign_id = 1;
+		$result = $this->user_campaigns->is_user_in_campaign($user_id, $campaign_id);
+		$this->unit->run($result, FALSE, 'is_user_in_campaign', $result);
+	}
 }
 /* End of file user_campaigns_model_test.php */
 /* Location: ./application/controllers/test/user_campaigns_model_test.php */

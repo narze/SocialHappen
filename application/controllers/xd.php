@@ -111,8 +111,9 @@ class XD extends CI_Controller {
 			}
 		}
 		
-		$this->load->model('page_user_data_model','page_user_data');
-		$is_user_register_to_page = $this->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
+		// Moved to get_bar
+		// $this->load->model('page_user_data_model','page_user_data');
+		// $is_user_register_to_page = $this->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
 		
 		$this->load->library('notification_lib');
 		$notification_amount = $this->notification_lib->count_unread($user['user_id']);

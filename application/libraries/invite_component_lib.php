@@ -301,17 +301,23 @@ class Invite_component_lib {
 	}
 
 	function accept_invite_campaign_level($invite_key = NULL, $user_facebook_id = NULL){
-		if($this->_accept_invite_level('campaign', $invite_key, $user_facebook_id)){
-			$invite = $this->get_invite_by_invite_key($invite_key);
-			if(!$this->CI->invite_pending_model->remove_by_user_facebook_id_and_campaign_id($user_facebook_id, $invite['campaign_id'])){
-				log_message('error', 'cannot remove pending invite');
-			}
-			if(!$increment_result = $this->CI->invite_model->increment_invite_count_by_invite_key($invite_key)){
-				log_message('error', 'cannot increment invite_count');
-			}
-			return TRUE;
+		if(!$this->_accept_invite_level('campaign', $invite_key, $user_facebook_id)){
+			return FALSE;
 		}
-		return FALSE;
+		if(!$invite = $this->get_invite_by_invite_key($invite_key)){
+			return FALSE;
+		}
+		$this->CI->load->model('invite_pending_model','invite_pending');
+		if(!$this->CI->invite_pending->remove_by_user_facebook_id_and_campaign_id($user_facebook_id, $invite['campaign_id'])){
+			log_message('error', 'cannot remove pending invite');
+			return FALSE;
+		}
+		if(!$increment_result = $this->CI->invite_model->increment_invite_count_by_invite_key($invite_key)){
+			log_message('error', 'cannot increment invite_count');
+			return FALSE;
+		}
+		return TRUE;
+		
 	}
 }
 /* End of file invite_component_lib.php */
