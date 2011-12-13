@@ -1,5 +1,6 @@
 <div class="popup-fb signup-campaign">
 	<h2>Y U NO JOIN CAMPAIGN?</h2>
+	<pre><?php print_r($campaign);?></pre>
 	
 	<div id="signup-form">
 		<?php 

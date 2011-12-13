@@ -763,9 +763,9 @@ class Tab extends CI_Controller {
 	}
 	
 	function signup_page($page_id = NULL, $app_install_id = NULL){
-
+		$facebook_access_token = $this->input->get('facebook_access_token');
 		$this->load->library('form_validation');
-		if($facebook_user = $this->facebook->getUser()){
+		if($facebook_user = $this->facebook->getUser($facebook_access_token)){
 			$user_profile_image = $this->facebook->get_profile_picture($facebook_user['id']);
 		} else {
 			$user_profile_image = $this->input->get('user_image');
@@ -920,11 +920,19 @@ class Tab extends CI_Controller {
 		echo $this->input->get('callback').'('.json_encode($data).')';
 	}
 
+	function signup_complete(){
+		$redirect_url = $this->input->get('next');
+		$this->load->view('tab/signup_complete', array('redirect_url' => $redirect_url));
+	}
+
 	function signup_campaign($app_install_id = NULL, $campaign_id = NULL){
 		$this->load->helper('form_helper');
+		$this->load->model('campaign_model', 'campaign');
+		$campaign = $this->campaign->get_campaign_profile_by_campaign_id($campaign_id);
 		$this->load->vars(array(
 			'app_install_id' => $app_install_id,
-			'campaign_id' => $campaign_id
+			'campaign_id' => $campaign_id,
+			'campaign' => $campaign
 		));
 		
 		$this->load->view('tab/signup_campaign');
@@ -951,24 +959,42 @@ class Tab extends CI_Controller {
 					'user_id' => $user['user_id'],
 					'campaign_id' => $campaign_id
 				))){
-					$data = array(
-						'status' => 'ok',
-					);
+					$this->load->model('invite_pending_model', 'invite_pending');
+					if($invite_key = $this->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user['user_facebook_id'], $campaign_id)){
+						$this->load->library('invite_component_lib');
+						$result = $this->invite_component_lib->accept_invite_campaign_level($invite_key, $user['user_facebook_id']);
+						if(isset($result['error'])){
+							$data = array(
+								'status' => 'error',
+								'error' => 'accept_invite_error',
+								'message' => 'cannot accept invite'
+							);
+							log_message('error','accept_invite error '.print_r($result,TRUE));
+						} else {
+							$data = array(
+								'status' => 'ok'
+							);
+							//TODO : give score to inviter
+						}
+					} else {
+						$data = array(
+							'status' => 'error',
+							'error' => 'get_invite_key_error',
+							'message' => 'cannot pending invite_key'
+						);
+						log_message('error', 'cannot find pending invite_key');
+					}
 				} else {
 					$data = array(
 						'status' => 'error',
 						'error' => 'add_user_campaign error',
 						'message' => 'cannot add user campaign'
 					);
+						log_message('error', 'cannot add user campaign');
 				}
 			}
 		}
 		echo $this->input->get('callback').'('.json_encode($data).')';
-	}
-	
-	function signup_complete(){
-		$redirect_url = $this->input->get('next');
-		$this->load->view('tab/signup_complete', array('redirect_url' => $redirect_url));
 	}
 	
 	function page_installed($page_id = NULL){
