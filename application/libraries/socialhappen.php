@@ -732,8 +732,8 @@ class SocialHappen{
 		if($user_id) {
 			$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
 		
-				$this->CI->load->model('user_campaigns_model','campaign_user');
-				$is_user_register_to_campaign = $this->CI->campaign_user->is_user_in_campaign($user_id, $campaign_id);
+			$this->CI->load->model('user_campaigns_model','campaign_user');
+			$is_user_register_to_campaign = $this->CI->campaign_user->is_user_in_campaign($user_id, $campaign_id);
 			
 			//$this->CI->load->library('notification_lib');
 			//$notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
@@ -757,6 +757,7 @@ class SocialHappen{
 				'page_app_installed_id' => issetor($page['page_app_installed_id'],0),
 				'page_installed' => issetor($page['page_installed'],1),
 				'is_user_register_to_page' => $is_user_register_to_page ? 1 : NULL,
+				'is_user_register_to_campaign' => $is_user_register_to_campaign ? 1 : NULL,
 				'user_id' => $user_id,
 				'app_mode' => $app_mode,
 				'app_install_id' => $app_install_id,
