@@ -208,6 +208,14 @@ class Invite_component_lib {
 			$campaign_id = $invite['campaign_id']; //TODO : Check if this is current campaign_id
 			$this->CI->load->model('invite_pending_model','invite_pending');
 			$pending_invite_key = $this->CI->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id);
+			$this->CI->load->model('user_model', 'user');
+			if($user = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id)){
+				$this->CI->load->model('user_campaigns_model', 'user_campaign');
+				if($this->CI->user_campaign->is_user_in_campaign($user['user_id'], $campaign_id)){
+					//already in campaign
+					return FALSE;
+				}
+			}
 			if($pending_invite_key === $invite_key){// if already entered this key before
 				return TRUE;
 			} else if($pending_invite_key){
