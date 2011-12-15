@@ -60,11 +60,11 @@ class Invite_model extends CI_Model {
 	 */
 	function add_invite($campaign_id = NULL, $app_install_id = NULL, $facebook_page_id = NULL
 							, $invite_type = NULL, $user_facebook_id = NULL, $target_facebook_id_list = array()
-							, $invite_key = NULL, $redirect_url = NULL, $upsert_flag = NULL){
+							, $invite_key = NULL, $redirect_url = NULL){
 							
 		$check_args = issetor($app_install_id) && isset($facebook_page_id) && isset($campaign_id)
 							 && issetor($invite_type) && issetor($user_facebook_id) 
-							 && issetor($invite_key) && $redirect_url ;
+							 && issetor($invite_key) && $redirect_url && !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
 							 
 		if($check_args){
 			$invite_record = array();
@@ -82,7 +82,7 @@ class Invite_model extends CI_Model {
 			if($campaign_id){
 				$invite_record['campaign_id'] = (int) $campaign_id;
 			}
-			$invite_record['user_facebook_id'] =  (string)$user_facebook_id;					
+			$invite_record['user_facebook_id'] =  $user_facebook_id;					
 			if($invite_type == 1 && $target_facebook_id_list){
 				$invite_record['target_facebook_id_list'] =  $target_facebook_id_list;
 			} else if($invite_type == 2){
@@ -90,36 +90,20 @@ class Invite_model extends CI_Model {
 			} else {
 				return FALSE;
 			}
-			
 			$invite_record['invite_type'] = $invite_type;
 			$invite_record['redirect_url'] = $redirect_url;
-			
-			
-			if($upsert_flag){
-				$invite_record['campaign_accepted'] = array();
-				$invite_record['page_accepted'] = array();
-				$invite_record['invite_count'] = (int) 0;
-			}
+					
+			$invite_record['campaign_accepted'] = array();
+			$invite_record['page_accepted'] = array();
+			/**
+			 * info fields
+			 */
+			$invite_record['invite_count'] = (int) 0;
 			
 			date_default_timezone_set('UTC');
 			$invite_record['timestamp'] = time();
 						
-			try	{
-				if($upsert_flag){
-					$result = $this->invite->update(
-														array('invite_key' => $invite_key), 
-														$invite_record, 
-														array('safe' => TRUE)
-													);
-					
-				}else{
-					$result = $this->invite->insert($invite_record, array('safe' => TRUE));
-				}
-				return $result;
-			} catch(MongoCursorException $e){
-				log_message('error', 'Mongo error : '. $e);
-				return FALSE;
-			}
+			return $this->invite->insert($invite_record);
 			
 		}else{
 			return FALSE;
@@ -176,7 +160,6 @@ class Invite_model extends CI_Model {
 			foreach ($res as $stat) {
 				$result[] = $stat;
 			}
-			
 			return count($result) > 0 ? $result[0] : NULL;
 		}else{
 			return FALSE;

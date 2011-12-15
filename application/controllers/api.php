@@ -1876,12 +1876,16 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->library('invite_component_lib');
-	
-		$accept_result = $this->invite_component_lib->reserve_invite($invite_key, $target_facebook_id);
 		
 		$response = array();
 		
-		if($accept_result){
+		$accept_result = $this->invite_component_lib->accept_invite($invite_key, $target_facebook_id);
+		
+		if($accept_result){								
+			$response = $accept_result + $accept_result;
+		}
+		
+		if(isset($response['invite_key'])){
 			$response['status'] = 'OK';
 		} else {
 			$response['status'] = 'ERROR';
@@ -1947,51 +1951,7 @@ class Api extends CI_Controller {
 		
 	}
 	
-	/**
-	 * Request for current campaign of app_install_id
-	 * @author Wachiraphan C.
-	 */
-	function request_current_campaign(){
-		$app_id = $this->input->get('app_id', TRUE);
-		$app_secret_key = $this->input->get('app_secret_key', TRUE);
-		$app_install_id = $this->input->get('app_install_id', TRUE);
-		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
-		
-		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
-			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
-			echo json_encode(array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, facebook_page_id, user_facebook_id)'));
-			return;
-		}
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
-		}
-		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
-		}
-		
-		$this->load->library('campaign_lib');
-		
-		$response = array();
-		
-		$campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
-		
-		if(isset($campaign['campaign_id'])){
-		
-			$response['status'] = 'OK';
-			$response = $response + $campaign;
-			
-		} else {
-			$response['status'] = 'ERROR';
-		}
-		
-		echo json_encode($response);
-		
-	}
-		
+	
 	function test_tab_url_api(){
 		$result_page_url = json_decode(file_get_contents('https://127.0.0.1/socialhappen/api/request_facebook_tab_url?app_id=1&app_install_id=1&app_secret_key=ad3d4f609ce1c21261f45d0a09effba4&app_install_secret_key=457f81902f7b768c398543e473c47465&page_id=1'), true);
 		$result_app_url = json_decode(file_get_contents('https://127.0.0.1/socialhappen/api/request_facebook_tab_url?app_id=1&app_install_id=1&app_secret_key=ad3d4f609ce1c21261f45d0a09effba4&app_install_secret_key=457f81902f7b768c398543e473c47465'), true);
