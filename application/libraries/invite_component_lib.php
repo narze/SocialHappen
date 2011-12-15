@@ -206,6 +206,7 @@ class Invite_component_lib {
 			return FALSE;
 		} else if($invite['invite_type'] == 2 || ($invite['invite_type'] == 1 && in_array($user_facebook_id, $invite['target_facebook_id_list']))){ // if key is public invite OR private and user is in the invitee list
 			$campaign_id = $invite['campaign_id']; //TODO : Check if this is current campaign_id
+			$facebook_page_id = $invite['facebook_page_id'];
 			$this->CI->load->model('invite_pending_model','invite_pending');
 			$pending_invite_key = $this->CI->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id);
 			$this->CI->load->model('user_model', 'user');
@@ -221,7 +222,7 @@ class Invite_component_lib {
 			} else if($pending_invite_key){
 				// echo 'You have already received another invite key';
 				return FALSE;
-			} else if($add_result = $this->CI->invite_pending->add($user_facebook_id, $campaign_id, $invite_key)){
+			} else if($add_result = $this->CI->invite_pending->add($user_facebook_id, $campaign_id, $facebook_page_id, $invite_key)){
 				return TRUE;
 			} else {
 				// echo 'exception, please try again';
