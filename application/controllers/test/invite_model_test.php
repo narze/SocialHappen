@@ -337,6 +337,32 @@ class Invite_model_test extends CI_Controller {
 		$result = $this->invite->increment_invite_count_by_invite_key($invite_key);
 		$this->unit->run($result, FALSE, 'increment_invite_count_by_invite_key', $invite_key);
 	}
+
+	function add_into_target_facebook_id_list_test(){
+		$invite_key = 'asdfjkl;1';
+		$facebook_id_array = array(22,23,24,25);
+		$expected_target_facebook_id_list = array('21','22','23','24','25');
+		$result = $this->invite->add_into_target_facebook_id_list($invite_key, $facebook_id_array);
+		$this->unit->run($result, TRUE, 'add_into_target_facebook_id_list', $invite_key. ' : '. print_r($facebook_id_array, TRUE));
+
+		$result = $this->invite->get_invite_by_criteria(array('invite_key' => $invite_key));
+		$this->unit->run(count($result['target_facebook_id_list']), count($expected_target_facebook_id_list), 'count target_facebook_id_list', print_r($result['target_facebook_id_list'], TRUE));
+
+		$invite_key = 'asdfjkl;2'; //public invite
+		$facebook_id_array = array(22,23,24,25);
+		$expected_target_facebook_id_list = array('21','22','23','24','25');
+		$result = $this->invite->add_into_target_facebook_id_list($invite_key, $facebook_id_array);
+		$this->unit->run($result, FALSE, 'add_into_target_facebook_id_list with public invite', $invite_key);
+
+		$invite_key = 'asdfjkl;1';
+		$facebook_id_array = array(21,23,24);
+		$expected_target_facebook_id_list = array('21','22','23','24','25');
+		$result = $this->invite->add_into_target_facebook_id_list($invite_key, $facebook_id_array);
+		$this->unit->run($result, TRUE, 'add_into_target_facebook_id_list : all already in the list', $invite_key. ' : '. print_r($facebook_id_array, TRUE));
+
+		$result = $this->invite->get_invite_by_criteria(array('invite_key' => $invite_key));
+		$this->unit->run(count($result['target_facebook_id_list']), count($expected_target_facebook_id_list), 'count target_facebook_id_list');
+	}
 }
 /* End of file invite_model_test.php */
 /* Location: ./application/controllers/test/invite_model_test.php */

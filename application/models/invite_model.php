@@ -60,11 +60,11 @@ class Invite_model extends CI_Model {
 	 */
 	function add_invite($campaign_id = NULL, $app_install_id = NULL, $facebook_page_id = NULL
 							, $invite_type = NULL, $user_facebook_id = NULL, $target_facebook_id_list = array()
-							, $invite_key = NULL, $redirect_url = NULL, $upsert_flag = NULL){
+							, $invite_key = NULL, $redirect_url = NULL){
 							
 		$check_args = issetor($app_install_id) && isset($facebook_page_id) && isset($campaign_id)
 							 && issetor($invite_type) && issetor($user_facebook_id) 
-							 && issetor($invite_key) && $redirect_url ;
+							 && issetor($invite_key) && $redirect_url && !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
 							 
 		if($check_args){
 			$invite_record = array();
@@ -93,29 +93,15 @@ class Invite_model extends CI_Model {
 			
 			$invite_record['invite_type'] = $invite_type;
 			$invite_record['redirect_url'] = $redirect_url;
-			
-			
-			if($upsert_flag){
-				$invite_record['campaign_accepted'] = array();
-				$invite_record['page_accepted'] = array();
-				$invite_record['invite_count'] = (int) 0;
-			}
-			
+			$invite_record['campaign_accepted'] = array();
+			$invite_record['page_accepted'] = array();
+			$invite_record['invite_count'] = (int) 0;
+					
 			date_default_timezone_set('UTC');
 			$invite_record['timestamp'] = time();
 						
 			try	{
-				if($upsert_flag){
-					$result = $this->invite->update(
-														array('invite_key' => $invite_key), 
-														$invite_record, 
-														array('safe' => TRUE)
-													);
-					
-				}else{
-					$result = $this->invite->insert($invite_record, array('safe' => TRUE));
-				}
-				return $result;
+				return $this->invite->insert($invite_record, array('safe' => TRUE));
 			} catch(MongoCursorException $e){
 				log_message('error', 'Mongo error : '. $e);
 				return FALSE;
@@ -264,6 +250,28 @@ class Invite_model extends CI_Model {
 		    } else {
 		    	return FALSE;	
 		    }
+		}
+	}
+
+	/**
+	 * Add user_facebook_id (array) into target_facebook_id_list
+	 * @param $invite_key
+	 * @param array $user_facebook_id_array
+	 * @author Manassarn M.
+	 */
+	function add_into_target_facebook_id_list($invite_key = NULL, $user_facebook_id_array = NULL){
+		if(!allnotempty(func_get_args())){
+			return FALSE;
+		}
+		if((!$invite = $this->get_invite_by_criteria(array('invite_key' => $invite_key))) || ($invite['invite_type'] == 2)){ 
+			//Invalid invite or public invite : cannot push into list
+			return FALSE;
+		} else {
+			foreach($user_facebook_id_array as &$user_facebook_id){
+				$user_facebook_id = (string) $user_facebook_id;
+			}
+			unset($user_facebook_id);
+			return $this->invite->update(array('invite_key' => $invite_key), array('$addToSet' => array('target_facebook_id_list' => array('$each' => $user_facebook_id_array))));
 		}
 	}
 

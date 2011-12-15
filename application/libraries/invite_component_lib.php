@@ -43,7 +43,7 @@ class Invite_component_lib {
 		
 			$target_facebook_id_list = $this->_extract_target_id($target_facebook_id);
 			
-			$exist_invite = $this->CI->invite_model->get_invite_by_criteria(
+			$invite_exists = $this->CI->invite_model->get_invite_by_criteria(
 															array(
 																'campaign_id' => (int) $campaign_id,
 																'app_install_id' => (int) $app_install_id,
@@ -53,23 +53,22 @@ class Invite_component_lib {
 															)														
 														);
 		
-			$upsert_flag = FALSE;
-			if(issetor($exist_invite)){
-				$invite_key = $exist_invite['invite_key'];
-				if($invite_type==1){
-					$new_target_facebook_id = array_diff($target_facebook_id_list,$exist_invite['target_facebook_id_list']);
-					$target_facebook_id_list = array_merge($exist_invite['target_facebook_id_list'], $new_target_facebook_id);
+			if($invite_exists){
+				$invite_key = $invite_exists['invite_key'];
+				if($invite_type==2){
+					return $invite_key; //no update
+				} else if($invite_type==1 && $this->CI->invite_model->add_into_target_facebook_id_list($invite_key, $target_facebook_id_list)){
+					return $invite_key;
+				} else {
+				 	return FALSE;
 				}
-				$upsert_flag = TRUE;
+			} else {
+				if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
+									, $invite_type, $user_facebook_id, $target_facebook_id_list
+									, $invite_key, $redirect_url)){
+					return $invite_key;
+				}
 			}
-			
-			
-			if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
-								, $invite_type, $user_facebook_id, $target_facebook_id_list
-								, $invite_key, $redirect_url, $upsert_flag)){
-				return $invite_key;
-			}
-			
 		// }
 		return FALSE;
     }
