@@ -265,6 +265,41 @@ class Invite_model extends CI_Model {
 		}
 	}
 
+	/** 
+	 * Get invite by facebook_page_id, having user_facebook_id in target_facebook_id_list
+	 * @param $facebook_page_id
+	 * @param $user_facebook_id
+	 * @author Manassarn M.
+	 */
+	function get_by_facebook_page_id_having_user_facebook_id_in_target_facebook_id_list($facebook_page_id = NULL, $user_facebook_id = NULL){
+		if(!allnotempty(func_get_args())){
+			return FALSE;
+		}
+		$criteria = array(
+			'facebook_page_id' => (string) $facebook_page_id,
+			'target_facebook_id_list' => (string) $user_facebook_id
+			);
+		$cursor = $this->invite->find($criteria);
+		$result = array();
+		foreach($cursor as $value){
+			$result[] = $value;
+		}
+		return $result;
+	}
+
+	/**
+	 * Push user_facebook_id into all page_accepted with invite_key in specified list
+	 * @param $user_facebook_id
+	 * @param array $invite_key_array
+	 * @author Manassarn M.
+	 */
+	function push_into_all_page_accepted($user_facebook_id = NULL, $invite_key_array = NULL){
+		if(!allnotempty(func_get_args()) || !allnotempty($invite_key_array)){
+			return FALSE;
+		}
+		$result = $this->invite->update(array('invite_key' => array('$in' => $invite_key_array)), array('$addToSet' => array('page_accepted' => (string) $user_facebook_id)), array('multiple' => TRUE, 'safe' => TRUE));
+		return $result;
+	}
 }
 
 /* End of file invite_model.php */
