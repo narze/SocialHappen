@@ -118,7 +118,7 @@ class Invite_component_lib_test extends CI_Controller {
 
 		$result = $this->invite->reserve_invite($invite_key, $user_facebook_id);
 		$this->unit->run($result, TRUE, 'reserve_invite again', $invite_key.' '.$user_facebook_id);
-	
+
 		$invite_key = $this->invite_key2;
 		$user_facebook_id = '1';
 		$result = $this->invite->reserve_invite($invite_key, $user_facebook_id);
@@ -206,7 +206,6 @@ class Invite_component_lib_test extends CI_Controller {
 		$result = $this->invite->reserve_invite($invite_key, $user_facebook_id);
 		$this->unit->run($result, FALSE, 'reserve_invite : failed (user already in this campaign)', $invite_key.' - '.$user_facebook_id);
 	}
-
 }
 /* End of file invite_component_lib_test.php */
 /* Location: ./application/controllers/test/invite_component_lib_test.php */

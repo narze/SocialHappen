@@ -40,13 +40,13 @@ class Invite_pending_model extends CI_Model {
 		return $this->pending->drop();
 	}
 
-	function add($user_facebook_id = NULL, $campaign_id = NULL, $page_id = NULL, $invite_key = NULL){
+	function add($user_facebook_id = NULL, $campaign_id = NULL, $facebook_page_id = NULL, $invite_key = NULL){
 		if(!allnotempty(func_get_args())){
 			return FALSE;
 		}
 		$pending = array('user_facebook_id' => (string) $user_facebook_id,
 			'campaign_id' => (int) $campaign_id,
-			'page_id' => (int) $page_id,
+			'facebook_page_id' => (int) $facebook_page_id,
 			'invite_key' => $invite_key);
 		try	{
 	 		$result = $this->pending->insert($pending, array('safe' => TRUE));
@@ -79,13 +79,13 @@ class Invite_pending_model extends CI_Model {
 	        array('$atomic' => TRUE));
 	}
 
-	function get_by_user_facebook_id_and_page_id($user_facebook_id = NULL, $page_id = NULL){
+	function get_by_user_facebook_id_and_facebook_page_id($user_facebook_id = NULL, $facebook_page_id = NULL){
 		if(!allnotempty(func_get_args())){
 			return FALSE;
 		} else {
 			$result = array();
 			$cursor = $this->pending->find(array('user_facebook_id' => (string) $user_facebook_id,
-		      'page_id' => (int) $page_id));
+		      'facebook_page_id' => (int) $facebook_page_id));
 		    foreach($cursor as $value){
 		    	$result[] = $value;
 		    }
