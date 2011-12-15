@@ -41,10 +41,34 @@ class Invite_component_lib {
 		// if($check_args){
 		
 			$target_facebook_id_list = $this->_extract_target_id($target_facebook_id);
-			if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
-								, $invite_type, $user_facebook_id, $target_facebook_id_list
-								, $invite_key, $redirect_url)){
-				return $invite_key;
+			
+			$invite_exists = $this->CI->invite_model->get_invite_by_criteria(
+															array(
+																'campaign_id' => (int) $campaign_id,
+																'app_install_id' => (int) $app_install_id,
+																'facebook_page_id' =>(string) $facebook_page_id,
+																'user_facebook_id' => (string)$user_facebook_id,
+																'invite_type' => $invite_type,
+															)														
+															);
+		
+			if($invite_exists){
+				$invite_key = $invite_exists['invite_key'];
+				if($invite_type==2){
+					return $invite_key; //no update
+				} else if($invite_type==1 && $this->CI->invite_model->add_into_target_facebook_id_list($invite_key, $target_facebook_id_list)){
+					return $invite_key;
+				} else {
+				 	return FALSE;
+				}
+			} else {
+				if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
+									, $invite_type, $user_facebook_id, $target_facebook_id_list
+									, $invite_key, $redirect_url)){
+					return $invite_key;
+				} else {
+					return FALSE;
+				}
 			}
 		// }
 		return FALSE;
@@ -129,10 +153,7 @@ class Invite_component_lib {
 	 *
 	 */
     public function get_invite_by_invite_key($invite_key = NULL){
-		$invite_record = $this->CI->invite_model->get_invite_by_criteria(array('invite_key' => $invite_key));
-		
-		if($invite_record)	
-			return $invite_record;
+		return $this->CI->invite_model->get_invite_by_criteria(array('invite_key' => $invite_key));
 		
     }
 	
@@ -201,7 +222,7 @@ class Invite_component_lib {
 			return FALSE;
 		}
 		
-		if(!$invite = $this->CI->invite->get_invite_by_invite_key($invite_key)){
+		if(!$invite = $this->get_invite_by_invite_key($invite_key)){
 			// echo 'invite key invalid';
 			return FALSE;
 		} else if($invite['invite_type'] == 2 || ($invite['invite_type'] == 1 && in_array($user_facebook_id, $invite['target_facebook_id_list']))){ // if key is public invite OR private and user is in the invitee list

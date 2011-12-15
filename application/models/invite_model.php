@@ -62,27 +62,23 @@ class Invite_model extends CI_Model {
 							, $invite_type = NULL, $user_facebook_id = NULL, $target_facebook_id_list = array()
 							, $invite_key = NULL, $redirect_url = NULL){
 							
-		$check_args = issetor($app_install_id) && isset($facebook_page_id) && isset($campaign_id)
-							 && issetor($invite_type) && issetor($user_facebook_id) 
-							 && issetor($invite_key) && $redirect_url && !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
+		$check_args = allnotempty(func_get_args()) && !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
 							 
 		if($check_args){
 			$invite_record = array();
 			
-			/**
-			 * keys
-			 */
 			$invite_record['invite_key'] = $invite_key;
-			if($app_install_id){
-				$invite_record['app_install_id'] = (int) $app_install_id;
-			}			
-			if($facebook_page_id){
-				$invite_record['facebook_page_id'] = (string) $facebook_page_id;
-			}
-			if($campaign_id){
-				$invite_record['campaign_id'] = (int) $campaign_id;
-			}
-			$invite_record['user_facebook_id'] =  $user_facebook_id;					
+			$invite_record['app_install_id'] = (int) $app_install_id;
+			$invite_record['facebook_page_id'] = (string) $facebook_page_id;
+			$invite_record['campaign_id'] = (int) $campaign_id;
+			$invite_record['user_facebook_id'] =  (string) $user_facebook_id;	
+			$invite_record['invite_type'] = $invite_type;
+			$invite_record['redirect_url'] = $redirect_url;
+			$invite_record['campaign_accepted'] = array();
+			$invite_record['page_accepted'] = array();
+			$invite_record['invite_count'] = (int) 0;
+
+										
 			if($invite_type == 1 && $target_facebook_id_list){
 				$invite_record['target_facebook_id_list'] =  $target_facebook_id_list;
 			} else if($invite_type == 2){
@@ -90,20 +86,17 @@ class Invite_model extends CI_Model {
 			} else {
 				return FALSE;
 			}
-			$invite_record['invite_type'] = $invite_type;
-			$invite_record['redirect_url'] = $redirect_url;
-					
-			$invite_record['campaign_accepted'] = array();
-			$invite_record['page_accepted'] = array();
-			/**
-			 * info fields
-			 */
-			$invite_record['invite_count'] = (int) 0;
 			
+					
 			date_default_timezone_set('UTC');
 			$invite_record['timestamp'] = time();
 						
-			return $this->invite->insert($invite_record);
+			try	{
+				return $this->invite->insert($invite_record, array('safe' => TRUE));
+			} catch(MongoCursorException $e){
+				log_message('error', 'Mongo error : '. $e);
+				return FALSE;
+			}
 			
 		}else{
 			return FALSE;
@@ -247,6 +240,28 @@ class Invite_model extends CI_Model {
 		    } else {
 		    	return FALSE;	
 		    }
+		}
+	}
+
+	/**
+	 * Add user_facebook_id (array) into target_facebook_id_list
+	 * @param $invite_key
+	 * @param array $user_facebook_id_array
+	 * @author Manassarn M.
+	 */
+	function add_into_target_facebook_id_list($invite_key = NULL, $user_facebook_id_array = NULL){
+		if(!allnotempty(func_get_args())){
+			return FALSE;
+		}
+		if((!$invite = $this->get_invite_by_criteria(array('invite_key' => $invite_key))) || ($invite['invite_type'] == 2)){ 
+			//Invalid invite or public invite : cannot push into list
+			return FALSE;
+		} else {
+			foreach($user_facebook_id_array as &$user_facebook_id){
+				$user_facebook_id = (string) $user_facebook_id;
+			}
+			unset($user_facebook_id);
+			return $this->invite->update(array('invite_key' => $invite_key), array('$addToSet' => array('target_facebook_id_list' => array('$each' => $user_facebook_id_array))));
 		}
 	}
 
