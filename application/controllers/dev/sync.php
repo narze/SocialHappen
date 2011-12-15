@@ -1611,6 +1611,12 @@ class Sync extends CI_Controller {
 		$this->drop_mongo_collections('notification');
 		$this->mongo_db->switch_db('get_started');
 		$this->drop_mongo_collections('get_started_info','get_started_stat');
+		$this->mongo_db->switch_db('app_component');
+		$this->drop_mongo_collections('homepage');
+		$this->mongo_db->switch_db('campaign');
+		$this->drop_mongo_collections('app_component','app_component_page','homepage','invite','sharebutton');
+		$this->mongo_db->switch_db('invite');
+		$this->drop_mongo_collections('invites','pending');
 		echo 'Dropped collections<br />';
 		
 		$platform_audit_actions = array(
