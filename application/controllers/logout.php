@@ -34,7 +34,8 @@ class Logout extends CI_Controller {
 		$this->socialhappen->logout();
 		$this->load->view('logout_view',array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
-			'redirect_url' => $this->input->get('redirect')
+			'redirect_url' => $this->input->get('redirect'),
+			'facebook_channel_url' => $this->facebook->channel_url
 		));
 	}
 }  

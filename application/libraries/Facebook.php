@@ -3,48 +3,32 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 //original code from http://kentislearningcodeigniter.com/facebook_connect
 //phnx : 16-02-2011
+//Edit to match facebook PHP SDK V3.1.1 : Manassarn M.
 class Facebook {
 
 	protected $page_access_token;
+	public $channel_url;
 	
 	function __construct() {
 		$this -> _ci = &get_instance();
+		$this->_ci->load->library('fb_library/FB_library',
+							array(
+							  'appId'  => $this->_ci->config->item('facebook_app_id'),
+							  'secret' => $this->_ci->config->item('facebook_api_secret')
+							),
+							'FB');
+		$this->FB = $this->_ci->FB;
+		$this->channel_url = base_url().'assets/channel/fb.php';
 	}
 
-	function authentication($redirect = '') {
-		//echo implode('+',explode('/',$redirect))."       ";
-		if ($this -> getUser() == null)
-			redirect(('connect/redirect/') . implode('+', explode('/', $redirect)));
-	}
-
-	function is_authentication() {
-		if ($this -> getUser() == null)
-			return false;
-		return true;
-	}
 
 	function get_facebook_cookie() {
-		$app_id = $this -> _ci -> config -> item('facebook_app_id');
-		$application_secret = $this -> _ci -> config -> item('facebook_api_secret');
-
-		if (isset($_COOKIE['fbs_' . $app_id])) {
-
-			$args = array();
-			parse_str(trim($_COOKIE['fbs_' . $app_id], '\\"'), $args);
-			ksort($args);
-			$payload = '';
-			foreach ($args as $key => $value) {
-				if ($key != 'sig') {
-					$payload .= $key . '=' . $value;
-				}
-			}
-			if (md5($payload . $application_secret) != $args['sig']) {
-				return null;
-			}
-			return $args;
-		} else {
-			return null;
-		}
+		$DEPRECATED_facebook_cookie = array(
+			'access_token' => $this->FB->getAccessToken(),
+			'uid' => $this->FB->getUser()
+		);
+		return $DEPRECATED_facebook_cookie;
+	
 	}
 
 	function getUser($access_token = NULL) {

@@ -67,6 +67,7 @@ class Tab extends CI_Controller {
 			'header' => $this->load->view('tab/header', 
 				array(
 					'facebook_app_id' => $this->config->item('facebook_app_id'),
+					'facebook_channel_url' => $this->facebook->channel_url,
 					'vars' => array(
 									'page_id' => $page_id,
 									'user_id' => $user_id,
@@ -1036,6 +1037,7 @@ class Tab extends CI_Controller {
 		$this->load->vars(array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
 			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+			'facebook_channel_url' => $this->facebook->channel_url,
 			'page_id' => $page_id
 		));
 		$this->load->view('tab/login_button');

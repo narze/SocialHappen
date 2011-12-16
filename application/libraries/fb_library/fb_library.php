@@ -90,5 +90,4 @@ class FB_library extends BaseFacebook
                               $this->getAppId(),
                               $key));
   }
-  
 }

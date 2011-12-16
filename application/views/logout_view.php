@@ -9,7 +9,14 @@
 	<div id="fb-root"></div>
 	<script src="http://connect.facebook.net/en_US/all.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			FB.init({appId: '<?php echo $facebook_app_id; ?>', status: true, cookie: true, xfbml: true});
+			FB.init({
+				appId: '<?php echo $facebook_app_id; ?>', 
+				channelURL : '<?php echo $facebook_channel_url;?>',
+				status: true, 
+				cookie: true, 
+				xfbml: true, 
+				oauth: true
+			});
 			FB.logout(function(){
 				window.location.replace('<?php echo $redirect_url ? $redirect_url : base_url(); ?>');
 			});

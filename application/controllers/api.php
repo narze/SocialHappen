@@ -774,7 +774,7 @@ class Api extends CI_Controller {
 									array(
 										'redirect_uri' => base_url().'home/signup',	// permission successful target
 										'next'=>base_url().'home/signup',
-										'req_perms'=>'offline_access,user_photos'
+										'scope'=>'offline_access,user_photos'
 									)
 								);
 		
@@ -1721,7 +1721,7 @@ class Api extends CI_Controller {
 			return;
 		}
 		$this->load->model('User_model', 'User');
-		$user_id_check = $this->User->get_user_id($user_facebook_id);
+		$user_id_check = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
 		
 		$user_id = $this->socialhappen->login();
 		if($user_id && $user_id == $user_id_check){

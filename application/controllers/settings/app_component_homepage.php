@@ -9,6 +9,7 @@ class App_component_homepage extends CI_Controller {
 			$this->load->view('tab/header', 
 				array(
 					'facebook_app_id' => $this->config->item('facebook_app_id'),
+					'facebook_channel_url' => $this->facebook->channel_url,
 					'script' => array(
 						'common/functions',
 						'common/onload',

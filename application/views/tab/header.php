@@ -40,20 +40,24 @@ endif;
 			  window.fbAsyncInit = function() {
 				FB.init({
 				  appId  : '<?php echo $facebook_app_id; ?>',
+				  channelURL : '<?php echo $facebook_channel_url;?>',
 				  status : true, // check login status
 				  cookie : true, // enable cookies to allow the server to access the session
-				  xfbml  : true  // parse XFBML
+				  xfbml  : true,  // parse XFBML
+				  oauth  : true
 				});
 				
 				window.setTimeout(function () {
 					FB.Canvas.setAutoResize(); //Remove scrollbar
 				}, 250);
 			  };
-			  (function() {
-				var e = document.createElement('script');
-				e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-				e.async = true;
-				document.getElementById('fb-root').appendChild(e);
-			  }());
+			  
+			  // Load the SDK Asynchronously
+			  (function(d){
+			     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+			     js = d.createElement('script'); js.id = id; js.async = true;
+			     js.src = "//connect.facebook.net/en_US/all.js";
+			     d.getElementsByTagName('head')[0].appendChild(js);
+			   }(document));
 			</script>
 	<div class="socialhappen-fb">

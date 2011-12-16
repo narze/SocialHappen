@@ -8,7 +8,10 @@ class XD extends CI_Controller {
 	}
 
 	function index(){
-		$this->load->vars(array('facebook_app_id' => $this->config->item('facebook_app_id')));
+		$this->load->vars(array(
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_channel_url' => $this->facebook->channel_url
+		));
 		$this->load->view('xd/xd_view');
 	}
 	

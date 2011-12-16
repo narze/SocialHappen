@@ -4,24 +4,20 @@
 		<script>
 		function fblogin() {
 					FB.login(function(response) {
-						if (response.session) {
-							FB.api('/me', function(response) {
-								$.getJSON(base_url+"api/request_login?user_facebook_id=" + response.id , function(json){
-									if(json.status != 'OK'){
-										window.location.replace(base_url+"home/signup");
-									} else {
-										<?php if(issetor($next)): ?>
-											window.location.replace('<?php echo $next; ?>');
-										<?php else : ?>
-											window.location.replace(window.location.href+"?logged_in=true");
-										<?php endif; ?>
-									}
-								});
+						if (response.status === 'connected') {
+							$.getJSON(base_url+"api/request_login?user_facebook_id=" + response.authResponse.UserID , function(json){
+								if(json.status != 'OK'){
+									window.location.replace(base_url+"home/signup");
+								} else {
+									<?php if(issetor($next)): ?>
+										window.location.replace('<?php echo $next; ?>');
+									<?php else : ?>
+										window.location.replace(window.location.href+"?logged_in=true");
+									<?php endif; ?>
+								}
 							});
-						} else {
-							
 						}
-					}, {perms:'<?php echo $facebook_default_scope ; ?>'});
+					}, {scope:'<?php echo $facebook_default_scope ; ?>'});
 				}
 		</script>
 		<ul>
