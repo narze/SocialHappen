@@ -63,7 +63,9 @@ class Invite_model extends CI_Model {
 							, $invite_key = NULL, $redirect_url = NULL){
 							
 		$check_args = allnotempty(func_get_args()) && !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
-							 
+		echo allnotempty(func_get_args()) .' , '. !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
+		print_r(func_get_args());
+		
 		if($check_args){
 			$invite_record = array();
 			
