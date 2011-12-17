@@ -423,7 +423,6 @@ class Invite_model_test extends CI_Controller {
 		$user_facebook_id = 1236;
 		$result = $this->invite->push_into_all_page_accepted($user_facebook_id,$invite_keys);
 		$this->unit->run($result, FALSE, 'push_into_all_page_accepted');
-
 	}
 }
 /* End of file invite_model_test.php */

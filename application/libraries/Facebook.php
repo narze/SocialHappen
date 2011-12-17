@@ -32,7 +32,16 @@ class Facebook {
 	}
 
 	function getUser($access_token = NULL) {
-		if ($cookie = $this -> get_facebook_cookie()) { //2.Check facebook cookie
+		if ($access_token){ //Make new session with access_token if specified
+			$facebook_result = file_get_contents('https://graph.facebook.com/me?access_token=' . $access_token);
+			$facebook_result_array = json_decode($facebook_result, TRUE);
+			if(!isset($facebook_result_array['error']) && isset($facebook_result_array['id'])){
+				$this -> _ci -> session -> set_userdata(array('facebook_user' => base64_encode($facebook_result)));
+				return $facebook_result_array;
+			} else {
+				return FALSE;
+			}
+		} else if ($cookie = $this -> get_facebook_cookie()) { //Check facebook cookie
 			if ($facebook_user = $this -> _ci -> session -> userdata('facebook_user')) { //1.Check session
 				$facebook_user = json_decode(base64_decode($facebook_user), TRUE);
 				if($cookie['uid'] == $facebook_user['id']){
@@ -45,15 +54,6 @@ class Facebook {
 			$this -> _ci -> session -> set_userdata(array('facebook_user' => base64_encode($facebook_result)));
 			return json_decode($facebook_result, true);
 			
-		} else if ($access_token){ //3.Make new session with access_token if specified
-			$facebook_result = file_get_contents('https://graph.facebook.com/me?access_token=' . $access_token);
-			$facebook_result_array = json_decode($facebook_result, TRUE);
-			if(!isset($facebook_result_array['error']) && isset($facebook_result_array['id'])){
-				$this -> _ci -> session -> set_userdata(array('facebook_user' => base64_encode($facebook_result)));
-				return $facebook_result_array;
-			} else {
-				return FALSE;
-			}
 		} else {
 			return FALSE;
 		}

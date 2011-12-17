@@ -199,7 +199,7 @@ class Invite_model extends CI_Model {
 			return FALSE;
 		} else if($invite['invite_type'] == 1 && !in_array($user_facebook_id, $invite['target_facebook_id_list'])){ //Private invite : user is not in target list
 			return FALSE;
-		} else if(in_array($user_facebook_id, $invite[$mode . '_accepted'])){
+		} else if(in_array($user_facebook_id, $invite[$mode . '_accepted'])){ //Already accepted
 			return FALSE;
 		} else {
 			return $this->invite->update(array('invite_key' => $invite_key), array('$push' => array($mode . '_accepted' => (string) $user_facebook_id)));
@@ -291,14 +291,20 @@ class Invite_model extends CI_Model {
 	 * Push user_facebook_id into all page_accepted with invite_key in specified list
 	 * @param $user_facebook_id
 	 * @param array $invite_key_array
+	 * @return FALSE if exception, otherwise TRUE
 	 * @author Manassarn M.
 	 */
 	function push_into_all_page_accepted($user_facebook_id = NULL, $invite_key_array = NULL){
 		if(!allnotempty(func_get_args()) || !allnotempty($invite_key_array)){
 			return FALSE;
 		}
-		$result = $this->invite->update(array('invite_key' => array('$in' => $invite_key_array)), array('$addToSet' => array('page_accepted' => (string) $user_facebook_id)), array('multiple' => TRUE, 'safe' => TRUE));
-		return $result;
+		try {
+			//
+			return $this->invite->update(array('invite_key' => array('$in' => $invite_key_array)), array('$addToSet' => array('page_accepted' => (string) $user_facebook_id)), array('multiple' => TRUE, 'safe' => TRUE));
+		} catch(MongoCursorException $e){
+			log_message('error', 'Mongo error : '. $e);
+			return FALSE;
+		}
 	}
 }
 

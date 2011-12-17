@@ -881,6 +881,7 @@ class Tab extends CI_Controller {
 						$audit_info['app_install_id'] = $app_install_id;
 					}
 					$this->audit_lib->add_audit(
+						0,
 						$user_id,
 						$action_id,
 						'', 
@@ -902,37 +903,28 @@ class Tab extends CI_Controller {
 								$this->load->model('invite_pending_model', 'invite_pending');
 								if($invite_key = $this->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id)){
 									$this->load->library('invite_component_lib');
-									$result = $this->invite_component_lib->accept_invite_page_level($invite_key, $user_facebook_id);
-									if(isset($result['error'])){
-										log_message('error','accept_invite error '.print_r($result,TRUE));
-									} else {
-										//Begin : Give score to inviter
-											$action_id = $this->socialhappen->get_k('audit_action','Invitee Accept Page Invite');
-											$audit_info = array(
-												'page_id' => $page_id,
-												'app_install_id' => $app_install_id,
-												'campaign_id' => $campaign_id
-											);
-											$this->audit_lib->add_audit(
-												$user_id,
-												$action_id,
-												'', 
-												'',
-												$audit_info
-											);
-
-											$achievement_info = array(
-												'action_id' => $action_id, 
-												'app_install_id'=>$app_install_id, 
-												'page_id'=>$page_id,
-												'campaign_id' => $campaign_id
-											);
-											$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $achievement_info, 1);
-										//End
+									$accept_and_give_score_result = $this->invite_component_lib->accept_all_invite_page_level($invite_key, $user_facebook_id);
+									if(!$accept_and_give_score_result){
+										log_message('error','accept_invite error '.print_r($accept_and_give_score_result,TRUE));
 									}
+								} else {
+									log_message('error', 'not found invite_key');
 								}
 							} else {
 								log_message('error', 'campaign ended');
+							}
+						} else { //mode = page
+							$this->load->model('invite_pending_model', 'invite_pending');
+							$user_facebook_id = $user['user_facebook_id'];
+							if($pending_invites = $this->invite_pending->get_by_user_facebook_id_and_facebook_page_id($user_facebook_id, $page['facebook_page_id'])){
+								$invite_key = $pending_invites[0]['invite_key'];
+								$this->load->library('invite_component_lib');
+								$accept_and_give_score_result = $this->invite_component_lib->accept_all_invite_page_level($invite_key, $user_facebook_id);
+								if(!$accept_and_give_score_result){
+									log_message('error','accept_invite error '.print_r($accept_and_give_score_result,TRUE));
+								}
+							} else {
+								log_message('error', 'not found invite_keys');
 							}
 						}
 					//End
