@@ -17,6 +17,9 @@ class Sync extends CI_Controller {
 			}
 		}
 		parent::__construct();
+		if($this->input->get('unit_test')){
+			$this->db = $this->load->database('local_unit_test', TRUE);
+		}
 		$this->preload();
 		$this->load->dbforge();
 		$this->output->enable_profiler(FALSE);

@@ -27,7 +27,9 @@ class Campaign_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_page_campaigns_by_page_id_and_campaign_status_id($page_id = NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this->db->where('page_id',$page_id);
 		if(isset($campaign_status_id)){
 			$this->db->where('campaign_status_id',$campaign_status_id);
@@ -64,7 +66,9 @@ class Campaign_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_app_campaigns_by_app_install_id_and_campaign_status_id($app_install_id = NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this->db->where('campaign.app_install_id',$app_install_id);
 		if(isset($campaign_status_id)){
 			$this->db->where('campaign_status_id',$campaign_status_id);

@@ -35,7 +35,9 @@ class User_companies_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_user_companies_by_user_id($user_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this->db->join('company','user_companies.company_id=company.company_id');
 		return $this->db->get_where('user_companies', array('user_id' => $user_id))->result_array();
 	}
@@ -46,7 +48,9 @@ class User_companies_model extends CI_Model {
 	 * @author Wachiraph C.
 	 */
 	function get_user_companies_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		return $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
 	}
 	
@@ -56,7 +60,9 @@ class User_companies_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_company_users_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this->db->join('user', 'user_companies.user_id = user.user_id');
 		$this->db->join('user_role', 'user_companies.user_role = user_role.user_role_id','left');
 		$result = $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
