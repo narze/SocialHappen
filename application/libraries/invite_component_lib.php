@@ -41,10 +41,34 @@ class Invite_component_lib {
 		// if($check_args){
 		
 			$target_facebook_id_list = $this->_extract_target_id($target_facebook_id);
-			if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
-								, $invite_type, $user_facebook_id, $target_facebook_id_list
-								, $invite_key, $redirect_url)){
-				return $invite_key;
+			
+			$invite_exists = $this->CI->invite_model->get_invite_by_criteria(
+															array(
+																'campaign_id' => (int) $campaign_id,
+																'app_install_id' => (int) $app_install_id,
+																'facebook_page_id' =>(string) $facebook_page_id,
+																'user_facebook_id' => (string)$user_facebook_id,
+																'invite_type' => $invite_type,
+															)														
+															);
+		
+			if($invite_exists){
+				$invite_key = $invite_exists['invite_key'];
+				if($invite_type==2){
+					return $invite_key; //no update
+				} else if($invite_type==1 && $this->CI->invite_model->add_into_target_facebook_id_list($invite_key, $target_facebook_id_list)){
+					return $invite_key;
+				} else {
+				 	return FALSE;
+				}
+			} else {
+				if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
+									, $invite_type, $user_facebook_id, $target_facebook_id_list
+									, $invite_key, $redirect_url)){
+					return $invite_key;
+				} else {
+					return FALSE;
+				}
 			}
 		// }
 		return FALSE;
@@ -129,10 +153,7 @@ class Invite_component_lib {
 	 *
 	 */
     public function get_invite_by_invite_key($invite_key = NULL){
-		$invite_record = $this->CI->invite_model->get_invite_by_criteria(array('invite_key' => $invite_key));
-		
-		if($invite_record)	
-			return $invite_record;
+		return $this->CI->invite_model->get_invite_by_criteria(array('invite_key' => $invite_key));
 		
     }
 	
@@ -201,11 +222,12 @@ class Invite_component_lib {
 			return FALSE;
 		}
 		
-		if(!$invite = $this->CI->invite->get_invite_by_invite_key($invite_key)){
+		if(!$invite = $this->get_invite_by_invite_key($invite_key)){
 			// echo 'invite key invalid';
 			return FALSE;
 		} else if($invite['invite_type'] == 2 || ($invite['invite_type'] == 1 && in_array($user_facebook_id, $invite['target_facebook_id_list']))){ // if key is public invite OR private and user is in the invitee list
 			$campaign_id = $invite['campaign_id']; //TODO : Check if this is current campaign_id
+			$facebook_page_id = $invite['facebook_page_id'];
 			$this->CI->load->model('invite_pending_model','invite_pending');
 			$pending_invite_key = $this->CI->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id);
 			$this->CI->load->model('user_model', 'user');
@@ -221,7 +243,7 @@ class Invite_component_lib {
 			} else if($pending_invite_key){
 				// echo 'You have already received another invite key';
 				return FALSE;
-			} else if($add_result = $this->CI->invite_pending->add($user_facebook_id, $campaign_id, $invite_key)){
+			} else if($add_result = $this->CI->invite_pending->add($user_facebook_id, $campaign_id, $facebook_page_id, $invite_key)){
 				return TRUE;
 			} else {
 				// echo 'exception, please try again';
@@ -276,7 +298,10 @@ class Invite_component_lib {
 				if($this->CI->invite_model->{'push_into_'.$level.'_accepted'}($invite_key, $user_facebook_id)){
 					return TRUE;
 				}
+
 			}
+
+			log_message('error', $invite_key);
 		}
 		return FALSE;
 	}
@@ -303,6 +328,75 @@ class Invite_component_lib {
 		}
 		return TRUE;
 		
+	}
+
+	function accept_all_invite_page_level($invite_key = NULL, $user_facebook_id = NULL){
+		if(!allnotempty(func_get_args())){
+			return FALSE;
+		}
+		if(!$this->_accept_invite_level('page', $invite_key, $user_facebook_id)){ //Check if already accepted by itself or by other invite with same page id
+			return FALSE; 
+		}
+		//Get facebook_page_id from master invite_key
+		$master_invite = $this->get_invite_by_invite_key($invite_key);
+		$facebook_page_id = $master_invite['facebook_page_id'];
+
+		//Find all invite with same facebook_page_id that user_facebook_id is in target list
+		if(!$invites = $this->CI->invite_model->get_by_facebook_page_id_having_user_facebook_id_in_target_facebook_id_list($facebook_page_id, $user_facebook_id)){
+			return FALSE;
+		}
+		$invite_keys = $inviters = array();
+		foreach($invites as $invite){
+			$invite_keys[] = $invite['invite_key'];
+			$inviters[] = $invite['user_facebook_id'];
+		}
+
+		if(!$push_all_result = $this->CI->invite_model->push_into_all_page_accepted($user_facebook_id, $invite_keys)){
+			return FALSE;
+		}
+		return $give_page_score_result = $this->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
+	}
+
+	function _give_page_score_to_all_inviters($facebook_page_id = NULL, $inviters = NULL){
+		if(!allnotempty(func_get_args()) || !allnotempty($inviters)){
+			return FALSE;
+		}
+		$this->CI->load->model('page_model');
+		$this->CI->load->model('user_model');
+		if(!$page_id = $this->CI->page_model->get_page_id_by_facebook_page_id($facebook_page_id)){
+			log_message('error', 'no page');return FALSE;
+		}
+		foreach($inviters as $inviter_facebook_id){
+			if(!$inviter_user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($inviter_facebook_id)){log_message('error', 'no inviter id');
+				return FALSE;
+			}
+			$action_id = $this->CI->socialhappen->get_k('audit_action','Invitee Accept Page Invite');
+			$audit_info = array(
+				'page_id' => $page_id
+			);
+			$this->CI->load->library('audit_lib');
+			if(!$this->CI->audit_lib->add_audit(
+				0,
+				$inviter_user_id,
+				$action_id,
+				'', 
+				'',
+				$audit_info
+			)){log_message('error', 'no audit ');
+				return FALSE;
+			}
+
+			$achievement_info = array(
+				'action_id' => $action_id, 
+				'page_id' => $page_id,
+				'app_install_id' => 0
+			);
+			$this->CI->load->library('achievement_lib');
+			if(!$this->CI->achievement_lib->increment_achievement_stat(0, $inviter_user_id, $achievement_info, 1)){log_message('error', 'no inc');
+				return FALSE;
+			}
+		}
+		return TRUE;
 	}
 }
 /* End of file invite_component_lib.php */

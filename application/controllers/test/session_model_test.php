@@ -6,7 +6,7 @@ class Session_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('session_model','sessions');
-		echo "This model test should fail when test sessions expired</br>";
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
@@ -27,7 +27,7 @@ class Session_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function get_session_id_by_user_id_test(){
-		$result = $this->sessions->get_session_id_by_user_id(0);
+		$result = $this->sessions->get_session_id_by_user_id(55555);
 		$this->unit->run($result, 'is_string', 'get_session_id_by_user_id()');
 		$this->unit->run($result == '1111','is_true','$result == 1111');
 	}	
@@ -39,7 +39,7 @@ class Session_model_test extends CI_Controller {
 	function get_user_id_by_session_id_test(){
 		$result = $this->sessions->get_user_id_by_session_id(1111);
 		$this->unit->run($result, 'is_string', 'get_user_id_by_session_id()');
-		$this->unit->run($result == '0','is_true','$result == 0');
+		$this->unit->run($result == '55555','is_true','$result == 55555');
 	}
 
 }

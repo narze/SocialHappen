@@ -10,6 +10,7 @@ class achievement_info_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('achievement_info_model','achievement_info');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){

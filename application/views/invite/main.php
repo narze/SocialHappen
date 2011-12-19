@@ -13,7 +13,7 @@
 		var facebook_app_id = '<?php echo $facebook_app_id; ?>';
 		var app_install_id = '<?php echo $app_install_id; ?>';
 		var campaign_id = '<?php echo $campaign_id; ?>';
-		var channel_url = '<?php echo base_url();?>assets/channel/fb.html';
+		var channel_url = '<?php echo $facebook_channel_url;?>';
 	</script>
 	<script type="text/javascript" src="<?php echo base_url().'assets/js/invite/main.js';?>"></script>	
 	<script src="https://connect.facebook.net/en_US/all.js#xfbml=1"></script>

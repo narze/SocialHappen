@@ -6,6 +6,7 @@ class Order_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('order_model','orders');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
@@ -132,7 +133,7 @@ class Order_model_test extends CI_Controller {
 	 * @author Weerapat P.
 	 */
 	function get_latest_ordered_by_user_id_and_item_type_id_test(){
-		$result = $this->orders->get_latest_ordered_by_user_id_and_item_type_id(6, 1);
+		$result = $this->orders->get_latest_ordered_by_user_id_and_item_type_id(1, 1);
 		$this->unit->run($result,'is_array', 'get_latest_ordered_by_user_id_and_item_type_id()');
 		
 		$this->unit->run($result['order_id'],'is_string','order_id');
@@ -159,10 +160,26 @@ class Order_model_test extends CI_Controller {
 	 * @author Weerapat P.
 	 */
 	function get_latest_paypal_profile_id_by_user_id_test(){
-		$result = $this->orders->get_latest_paypal_profile_id_by_user_id(7);
-		$this->unit->run($result,'is_string', 'get_latest_paypal_profile_id_by_user_id()');
+		
 	}
 	
+	function get_orders_by_month_test(){
+		
+	}
+
+	function remove_order_test(){
+		
+	}
+
+	function add_order_test(){
+		
+	}
+
+	function get_order_by_txn_id_test(){
+		
+	}
+
+
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */

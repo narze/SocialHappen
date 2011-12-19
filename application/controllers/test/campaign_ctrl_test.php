@@ -1,9 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Campaign_test extends CI_Controller {
+class Campaign_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
+		$this->load->library('controller/campaign_ctrl');
+		$this->unit->reset_dbs();
 	}
 	
 	function __destruct(){
@@ -24,7 +26,8 @@ class Campaign_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_profile_test(){
-		$content = file_get_contents(base_url().'campaign/json_get_profile/1');
+		$campaign_id = 1;
+		$content = $this->campaign_ctrl->json_get_profile($campaign_id);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_profile()');
 		$this->unit->run($array,'is_array', 'First row');
@@ -53,7 +56,10 @@ class Campaign_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_users_test(){
-		$content = file_get_contents(base_url().'campaign/json_get_users/1');
+		$campaign_id = 1;
+		$limit = NULL;
+		$offset = NULL;
+		$content = $this->campaign_ctrl->json_get_users($campaign_id, $limit, $offset);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_users()');
 		$this->unit->run($array[0],'is_array', 'First row');
@@ -67,7 +73,15 @@ class Campaign_test extends CI_Controller {
 		$this->unit->run($array[0]['user_last_seen'],'is_string','user_last_seen');
 		$this->unit->run($array[0]['user_register_date'],'is_string','app_install_id');
 	}
+
+	function index_test(){
+		
+	}
+
+	function get_stat_graph(){
+		
+	}
 }
 
-/* End of file campaign_test.php */
-/* Location: ./application/controllers/test/campaign_test.php */
+/* End of file campaign_ctrl_test.php */
+/* Location: ./application/controllers/test/campaign_ctrl_test.php */

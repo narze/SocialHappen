@@ -4,8 +4,9 @@ class Campaign extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		// $this->socialhappen->check_logged_in();
 		$this->load->library('pagination');
-		$this->socialhappen->check_logged_in();
+		$this->load->library('controller/campaign_ctrl');
 	}
 
 	function index($campaign_id = NULL){
@@ -116,9 +117,8 @@ class Campaign extends CI_Controller {
 	 */
 	function json_get_profile($campaign_id = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('campaign_model','campaigns');
-		$profile = $this->campaigns->get_campaign_profile_by_campaign_id($campaign_id);
-		echo json_encode($profile);
+		$profile = $this->campaign_ctrl->json_get_profile($campaign_id);
+		echo $profile;
 	}
 	
 	/**
@@ -128,9 +128,8 @@ class Campaign extends CI_Controller {
 	 */
 	function json_get_users($campaign_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('user_campaigns_model','user_campaigns');
-		$profile = $this->user_campaigns->get_campaign_users_by_campaign_id($campaign_id, $limit, $offset);
-		echo json_encode($profile);
+		$profile = $this->campaign_ctrl->json_get_users($campaign_id, $limit, $offset);
+		echo $profile;
 	}
 	
 	function get_stat_graph($campaign_id = NULL, $start_date = NULL, $end_date = NULL){

@@ -30,7 +30,8 @@ class Invite extends CI_Controller {
 						'invite_message' => $invite_message,
 						'campaign_id' => $campaign_id,
 						'facebook_page_id' => $facebook_page_id,
-						'facebook_app_id' => $this->config->item('facebook_app_id')
+						'facebook_app_id' => $this->config->item('facebook_app_id'),
+						'facebook_channel_url' => $this->facebook->channel_url
 					));
 					$this->load->view('invite/main');
 				} else {

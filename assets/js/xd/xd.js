@@ -8,7 +8,11 @@ function send(msg) {
 
 function doesUserLikeFacebookPage(facebook_page_id){
     FB.api('/me/likes/'+facebook_page_id, function(response) {
-         send({sh_message:'facebook page like', liked: response.data.length != 0});
+        if(!response.error){
+            send({sh_message:'facebook page like', liked: response.data.length != 0});
+        } else {
+            console.log('cannot get user likes');
+        }
     });
 }
 

@@ -9,6 +9,7 @@ class Company extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this -> socialhappen -> check_logged_in();
+		$this->load->library('controller/company_ctrl');
 	}
 
 	function index($company_id = NULL){
@@ -147,9 +148,8 @@ class Company extends CI_Controller {
 	 */
 	function json_get_pages($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('page_model','page');
-		$pages = $this->page->get_company_pages_by_company_id($company_id, $limit, $offset);
-		echo json_encode($pages);
+		$pages = $this->company_ctrl->json_get_pages($company_id, $limit, $offset);
+		echo $pages;
 	}
 	
 	/**
@@ -211,9 +211,8 @@ class Company extends CI_Controller {
 	 */
 	function json_get_apps($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('company_apps_model','company_apps');
-		$apps = $this->company_apps->get_company_apps_by_company_id($company_id, $limit, $offset);
-		echo json_encode($apps);
+		$apps = $this->company_ctrl->json_get_apps($company_id, $limit, $offset);
+		echo $apps;
 	}
 
 	/**
@@ -234,9 +233,8 @@ class Company extends CI_Controller {
 	 */
 	function json_get_installed_apps($company_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('installed_apps_model','installed_apps');
-		$apps = $this->installed_apps->get_installed_apps_by_company_id($company_id, $limit, $offset);
-		echo json_encode($apps);
+		$apps = $this->company_ctrl->json_get_installed_apps($company_id, $limit, $offset);
+		echo $apps;
 	}
 	
 	/**
@@ -271,9 +269,8 @@ class Company extends CI_Controller {
 	 */
 	function json_get_profile($company_id = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('company_model','companies');
-		$profile = $this->companies->get_company_profile_by_company_id($company_id);
-		echo json_encode($profile);
+		$profile = $this->company_ctrl->json_get_profile($company_id);
+		echo $profile;
 	}
 
 }

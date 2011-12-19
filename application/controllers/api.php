@@ -110,6 +110,45 @@ class Api extends CI_Controller {
 					'campaign_end_timestamp' => date("y-m-d H:i:s", strtotime('+10 years')),
 					'campaign_end_message' => 'Campaign Ended');
 				$campaign_id = $this->campaign->add_campaign($campaign);
+
+				$this->load->library('app_component_lib');
+				$default_app_component = array(
+			 		'campaign_id' => $campaign_id,
+			 		'invite' => array(
+						'facebook_invite' => TRUE,
+						'email_invite' => TRUE,
+						'criteria' => array(
+							'score' => 1,
+							'maximum' => 5,
+							'cooldown' => 4,
+							'acceptance_score' => array(
+								'page' => 10,
+								'campaign' => 3
+							)
+						),
+						'message' => array(
+							'title' => 'Invite title',
+							'text' => 'Invite text',
+							'image' => 'https://localhost/assets/images/blank.png'
+						)
+			 		),
+			 		'sharebutton' => array(
+						'facebook_button' => TRUE,
+						'twitter_button' => TRUE,
+						'criteria' => array(
+							'score' => 1,
+							'maximum' => 5,
+							'cooldown' => 4
+						),
+						'message' => array(
+							'title' => 'Share title',
+							'text' => 'Share text',
+							'caption' => 'Share caption',
+							'image' => 'https://localhost/assets/images/blank.png',
+						)
+					)
+				);
+				$this->app_component_lib->add_campaign($default_app_component);
 				//End : Add first 10-year campaign
 
 				// response
@@ -774,7 +813,7 @@ class Api extends CI_Controller {
 									array(
 										'redirect_uri' => base_url().'home/signup',	// permission successful target
 										'next'=>base_url().'home/signup',
-										'req_perms'=>'offline_access,user_photos'
+										'scope'=>'offline_access,user_photos'
 									)
 								);
 		
@@ -1721,7 +1760,7 @@ class Api extends CI_Controller {
 			return;
 		}
 		$this->load->model('User_model', 'User');
-		$user_id_check = $this->User->get_user_id($user_facebook_id);
+		$user_id_check = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
 		
 		$user_id = $this->socialhappen->login();
 		if($user_id && $user_id == $user_id_check){

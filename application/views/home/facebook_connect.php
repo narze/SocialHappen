@@ -4,7 +4,7 @@
 	<script type="text/javascript">
 		function fblogin() {
 			FB.login(function(response) {
-				if (response.session) {
+				if (response.authResponse) {
 					FB.api('/me', function(response) {
 						$.getJSON(base_url+"api/request_user_id?user_facebook_id=" + response.id , function(json){
 							if(json.status != 'OK'){
@@ -18,7 +18,7 @@
 				} else {
 					
 				}
-			}, {perms:'<?php echo $facebook_default_scope ; ?>'});
+			}, {scope:'<?php echo $facebook_default_scope ; ?>'});
 		}
 	</script>
 

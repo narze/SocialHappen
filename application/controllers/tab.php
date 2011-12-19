@@ -67,6 +67,7 @@ class Tab extends CI_Controller {
 			'header' => $this->load->view('tab/header', 
 				array(
 					'facebook_app_id' => $this->config->item('facebook_app_id'),
+					'facebook_channel_url' => $this->facebook->channel_url,
 					'vars' => array(
 									'page_id' => $page_id,
 									'user_id' => $user_id,
@@ -880,6 +881,7 @@ class Tab extends CI_Controller {
 						$audit_info['app_install_id'] = $app_install_id;
 					}
 					$this->audit_lib->add_audit(
+						0,
 						$user_id,
 						$action_id,
 						'', 
@@ -901,16 +903,28 @@ class Tab extends CI_Controller {
 								$this->load->model('invite_pending_model', 'invite_pending');
 								if($invite_key = $this->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id)){
 									$this->load->library('invite_component_lib');
-									$result = $this->invite_component_lib->accept_invite_page_level($invite_key, $user_facebook_id);
-									if(isset($result['error'])){
-										log_message('error','accept_invite error '.print_r($result,TRUE));
-									} else {
-										log_message('error', 'inviter got score!!!');
-										//TODO : give score to inviter
+									$accept_and_give_score_result = $this->invite_component_lib->accept_all_invite_page_level($invite_key, $user_facebook_id);
+									if(!$accept_and_give_score_result){
+										log_message('error','accept_invite error '.print_r($accept_and_give_score_result,TRUE));
 									}
+								} else {
+									log_message('error', 'not found invite_key');
 								}
 							} else {
 								log_message('error', 'campaign ended');
+							}
+						} else { //mode = page
+							$this->load->model('invite_pending_model', 'invite_pending');
+							$user_facebook_id = $user['user_facebook_id'];
+							if($pending_invites = $this->invite_pending->get_by_user_facebook_id_and_facebook_page_id($user_facebook_id, $page['facebook_page_id'])){
+								$invite_key = $pending_invites[0]['invite_key'];
+								$this->load->library('invite_component_lib');
+								$accept_and_give_score_result = $this->invite_component_lib->accept_all_invite_page_level($invite_key, $user_facebook_id);
+								if(!$accept_and_give_score_result){
+									log_message('error','accept_invite error '.print_r($accept_and_give_score_result,TRUE));
+								}
+							} else {
+								log_message('error', 'not found invite_keys');
 							}
 						}
 					//End
@@ -1015,6 +1029,7 @@ class Tab extends CI_Controller {
 		$this->load->vars(array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
 			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+			'facebook_channel_url' => $this->facebook->channel_url,
 			'page_id' => $page_id
 		));
 		$this->load->view('tab/login_button');

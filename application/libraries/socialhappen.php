@@ -41,6 +41,8 @@ class SocialHappen{
 			111 => 'User Connect Facebook',
 			112 => 'User Connect Foursquare',
 			113 => 'User Invite',
+			114 => 'Invitee Accept Page Invite',
+			115 => 'Invitee Accept Campaign Invite'
 		)
 	);
 	
@@ -205,7 +207,8 @@ class SocialHappen{
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'facebook_default_scope' => $this->CI->config->item('facebook_admin_scope'),
 				'next' => $this->CI->input->get('next'),
-				'user_can_create_company' => FALSE
+				'user_can_create_company' => FALSE,
+				'facebook_channel_url' => $this->CI->facebook->channel_url
 			);
 		} else {
 			$this->CI->load->library('notification_lib');
@@ -232,7 +235,8 @@ class SocialHappen{
 				),
 				'user_can_create_company' => !$user_companies ? TRUE : $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company'), //Check user can create company
 				'notification_amount' => $this->CI->notification_lib->count_unread($user['user_id']),
-				'all_notification_link' => base_url().'temp'
+				'all_notification_link' => base_url().'temp',
+				'facebook_channel_url' => base_url().'assets/channel/fb.php'
 			);
 		}
 		

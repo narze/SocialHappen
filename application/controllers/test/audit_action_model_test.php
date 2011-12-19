@@ -8,15 +8,15 @@ class Audit_action_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('audit_action_model','audit_action');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
-		echo $this->unit->report();
+		echo $this->unit->report_with_counter();
 	}
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->audit_action))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
@@ -38,7 +38,8 @@ class Audit_action_model_test extends CI_Controller {
 							  'description' => 'test audit action',
 							  'stat_app' => TRUE,
 							  'stat_page' => TRUE,
-							  'stat_campaign' => TRUE);
+							  'stat_campaign' => TRUE,
+							  'format_string' => 'string');
 		$result = $this->audit_action->add_action($audit_action);
 		$this->unit->run($result, 'is_true', 'add audit action full parameter 1', '');
 		
@@ -47,7 +48,8 @@ class Audit_action_model_test extends CI_Controller {
 							  'description' => 'test audit action',
 							  'stat_app' => TRUE,
 							  'stat_page' => TRUE,
-							  'stat_campaign' => TRUE);
+							  'stat_campaign' => TRUE,
+							  'format_string' => 'string');
 		$result = $this->audit_action->add_action($audit_action);
 		$this->unit->run($result, 'is_true', 'add audit action full parameter 2', '');
 		
@@ -56,13 +58,15 @@ class Audit_action_model_test extends CI_Controller {
 							  'description' => 'test audit action',
 							  'stat_app' => TRUE,
 							  'stat_page' => TRUE,
-							  'stat_campaign' => TRUE);
+							  'stat_campaign' => TRUE,
+							  'format_string' => 'string');
 		$result = $this->audit_action->add_action($audit_action);
 		$this->unit->run($result, 'is_true', 'add audit action full parameter 3', '');
 		
 		$audit_action = array('app_id' => 0,
 							  'action_id' => 2,
-							  'description' => 'test audit action');
+							  'description' => 'test audit action',
+							  'format_string' => 'string');
 		$result = $this->audit_action->add_action($audit_action);
 		$this->unit->run($result, 'is_true', 'add audit action', '');
 		
@@ -70,14 +74,16 @@ class Audit_action_model_test extends CI_Controller {
 							  'description' => 'test audit action',
 							  'stat_app' => TRUE,
 							  'stat_page' => TRUE,
-							  'stat_campaign' => TRUE);
+							  'stat_campaign' => TRUE,
+							  'format_string' => 'string');
 		$result = $this->audit_action->add_action($audit_action);
 		$this->unit->run($result, 'is_false', 'add audit action invalid parameter 1', '');
 		
 		$audit_action = array('app_id' => 0,
 							  'action_id' => 1,
 							  'stat_page' => TRUE,
-							  'stat_campaign' => TRUE);
+							  'stat_campaign' => TRUE,
+							  'format_string' => 'string');
 		$result = $this->audit_action->add_action($audit_action);
 		$this->unit->run($result, 'is_false', 'add audit action invalid parameter 2', '');
 	}
