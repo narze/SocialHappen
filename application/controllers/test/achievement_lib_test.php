@@ -7,11 +7,13 @@ class achievement_lib_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
+    $this->load->model('app_component_model','app_component');
 		$this->load->model('achievement_info_model','achievement_info');
 		$this->load->model('achievement_stat_model','achievement_stat');
     $this->load->model('achievement_stat_page_model','achievement_stat_page');
 		$this->load->model('achievement_user_model','achievement_user');
 		$this->load->library('achievement_lib');
+    $this->load->library('audit_lib');
 	}
 
 	function __destruct(){
@@ -33,6 +35,7 @@ class achievement_lib_test extends CI_Controller {
 		$this->achievement_stat->drop_collection();
   	$this->achievement_stat_page->drop_collection();
 		$this->achievement_user->drop_collection();
+    $this->app_component->drop_collection();
 	}
 	
 	function create_index_test(){
@@ -354,6 +357,82 @@ class achievement_lib_test extends CI_Controller {
 									'campaign_id' => 5);
 		
 		$result = $this->achievement_user->add($user_id, $achievement_id, $app_id, $app_install_id, $info);
+    
+    /**
+     * prepare action
+     */
+    $this->audit_lib->edit_audit_action(0, 102, array('score' => 2));
+    $this->audit_lib->edit_audit_action(0, 103, array('score' => 1));
+    /**
+     * prepare component
+     */
+    
+    $app_component_data = array(
+      'campaign_id' => 1,
+      'invite' => array(
+        'facebook_invite' => FALSE,
+        'email_invite' => FALSE,
+        'criteria' => array(
+          'score' => 10,
+          'maximum' => 50,
+          'cooldown' => 3000,
+          'acceptance_score' => array(
+            'page' => 1000,
+            'campaign' => 200
+          )
+        ),
+        'message' => array(
+          'title' => 'You are invited, again',
+          'text' => 'Welcome to the campaign, again',
+          'image' => 'https://localhost/assets/images/blank2.png'
+        )
+      ),
+      'sharebutton' => array(
+        'facebook_button' => FALSE,
+        'twitter_button' => FALSE,
+        'criteria' => array(
+          'score' => 10,
+          'maximum' => 50,
+          'cooldown' => 3000
+        ),
+        'message' => array(
+          'title' => 'Join the campaign by this link, again',
+          'caption' => 'This is caption, again',
+          'text' => 'this is long description, again',
+          'image' => 'https://localhost/assets/images/blank2.png'
+        )
+      )
+    );
+    
+    $result = $this->app_component->add($app_component_data);
+    $this->unit->run($result, TRUE,'Add app_component with full data');
+    
+    $this->unit->run($this->app_component->count_all(), 1, 'count all app_component');
+    
+    $app_component_data_2 = $app_component_data;
+    $app_component_data_2['campaign_id'] = 2;
+    unset($app_component_data_2['invite']['facebook_invite']);
+    unset($app_component_data_2['sharebutton']['facebook_button']);
+    $result = $this->app_component->add($app_component_data_2);
+    $this->unit->run($result, TRUE,'Add app_component');
+    
+    $this->unit->run($this->app_component->count_all(), 2, 'count all app_component');
+    
+    $app_component_data_3 = $app_component_data;
+    $app_component_data_3['campaign_id'] = 3;
+    unset($app_component_data_3['invite']['email_invite']);
+    unset($app_component_data_3['sharebutton']['twitter_button']);
+    $result = $this->app_component->add($app_component_data_3);
+    $this->unit->run($result, TRUE,'Add app_component');
+    
+    $this->unit->run($this->app_component->count_all(), 3, 'count all app_component');
+    
+    $app_component_data_4 = $app_component_data;
+    $app_component_data_4['campaign_id'] = 4;
+    $result = $this->app_component->add($app_component_data_4);
+    $this->unit->run($result, TRUE, 'Add app_component'); //Somehow Mongo returns TRUE but document are not added
+    
+    $this->unit->run($this->app_component->count_all(), 4, 'count all app_component');
 	}
 	
 	function increment_achievement_stat_duplicate_test(){

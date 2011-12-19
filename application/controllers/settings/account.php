@@ -19,7 +19,7 @@ class Account extends CI_Controller {
 		$this->load->helper('date');
 		if($user_id && $user_id == $this->socialhappen->get_user_id()){
 			$user = $this->socialhappen->get_user();
-			$user_facebook = $this->facebook->getUser($user['user_facebook_id']);
+			$user_facebook = $this->facebook->getUser();
 		
 			$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			

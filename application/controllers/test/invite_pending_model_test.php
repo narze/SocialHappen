@@ -125,12 +125,12 @@ class Invite_pending_model_test extends CI_Controller {
 		$campaign_id = '1';
 		$result = $this->invite_pending->get_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id);
 		$this->unit->run($result['invite_key'], 'abc', 'get_by_user_facebook_id_and_campaign_id_test', $result['invite_key']);
-		$this->unit->run($result['facebook_page_id'], 1, 'get_by_user_facebook_id_and_campaign_id_test', $result['facebook_page_id']);
+		$this->unit->run($result['facebook_page_id'] === '1', TRUE, 'get_by_user_facebook_id_and_campaign_id_test', $result['facebook_page_id']);
 		$user_facebook_id = '456';
 		$campaign_id = 1;
 		$result = $this->invite_pending->get_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id);
 		$this->unit->run($result['invite_key'], 'def', 'get_by_user_facebook_id_and_campaign_id_test', $result['invite_key']);
-		$this->unit->run($result['facebook_page_id'], 1, 'get_by_user_facebook_id_and_campaign_id_test', $result['facebook_page_id']);
+		$this->unit->run($result['facebook_page_id'] === '1', TRUE, 'get_by_user_facebook_id_and_campaign_id_test', $result['facebook_page_id']);
 	}
 
 	function get_by_user_facebook_id_and_campaign_id_fail_test(){

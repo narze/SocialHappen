@@ -1830,6 +1830,26 @@ class Sync extends CI_Controller {
 				'format_string' => 'User {user:user_id} invited a friend',
 				'score' => 1
 			),
+			array(
+				'app_id' => 0,
+				'action_id' => 114,
+				'description' => 'Invitee Accept Page Invite',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} accepted page invite',
+				'score' => 1
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 115,
+				'description' => 'Invitee Accept Campaign Invite',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} accepted campaign invite',
+				'score' => 1
+			),
 		);
 		
 		$audit_actions = array(

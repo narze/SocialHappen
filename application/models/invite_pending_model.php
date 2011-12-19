@@ -46,7 +46,7 @@ class Invite_pending_model extends CI_Model {
 		}
 		$pending = array('user_facebook_id' => (string) $user_facebook_id,
 			'campaign_id' => (int) $campaign_id,
-			'facebook_page_id' => (int) $facebook_page_id,
+			'facebook_page_id' => (string) $facebook_page_id,
 			'invite_key' => $invite_key);
 		try	{
 	 		$result = $this->pending->insert($pending, array('safe' => TRUE));
@@ -85,7 +85,7 @@ class Invite_pending_model extends CI_Model {
 		} else {
 			$result = array();
 			$cursor = $this->pending->find(array('user_facebook_id' => (string) $user_facebook_id,
-		      'facebook_page_id' => (int) $facebook_page_id));
+		      'facebook_page_id' => (string) $facebook_page_id));
 		    foreach($cursor as $value){
 		    	$result[] = $value;
 		    }
