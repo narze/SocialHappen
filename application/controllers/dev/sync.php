@@ -58,11 +58,11 @@ class Sync extends CI_Controller {
 			if (!mysql_query("CREATE TABLE IF NOT EXISTS {$database}.{$prefix}{$session_table} (
 							session_id varchar(40) DEFAULT '0' NOT NULL,
 							ip_address varchar(16) DEFAULT '0' NOT NULL,
-							user_agent varchar(50) NOT NULL,
+							user_agent varchar(120) NOT NULL,
 							last_activity int(10) unsigned DEFAULT 0 NOT NULL,
 							session_data text default '' not null,
 							PRIMARY KEY (session_id)
-							); 
+							);
 						",$con)){
 				echo "Error creating session table: " . mysql_error();
 			}
@@ -271,7 +271,7 @@ class Sync extends CI_Controller {
 							'sessions' =>array(
 								'session_id' => field_option('VARCHAR', 40, '0', $null, $autoinc, $unsigned),
 								'ip_address' => field_option('VARCHAR', 16, '0', $null, $autoinc, $unsigned),
-								'user_agent' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
+								'user_agent' => field_option('VARCHAR', 120, $default, $null, $autoinc, $unsigned),
 								'last_activity' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 								'user_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
@@ -426,6 +426,7 @@ class Sync extends CI_Controller {
 
 	function special_cases_after_create(){
 		$this->db->query("CREATE UNIQUE INDEX user_facebook_id ON ".$this->db->dbprefix('user')." (user_facebook_id)");
+		$this->db->query("CREATE INDEX last_activity_idx ON ".$this->db->dbprefix('sessions')." (last_activity)");
 	}
 	
 	function insert_test_data(){
