@@ -47,9 +47,9 @@ class Package_apps_model extends CI_Model {
 	 * @param $app_id
 	 * @author Manassarn M.
 	 */
-	function remove_package_app_by_app_id($app_id = NULL){
-		$this->db->delete('package_apps', array('app_id' => $app_id));
-		return $this->db->affected_rows() == 1;
+	function remove_package_app_by_package_id_and_app_id($package_id = NULL, $app_id = NULL){
+		$this->db->delete('package_apps', array('package_id' => $package_id, 'app_id' => $app_id));
+		return $this->db->affected_rows() === 1;
 	}
 	
 	/**
@@ -59,7 +59,7 @@ class Package_apps_model extends CI_Model {
 	 */
 	function remove_all_package_apps_by_package_id($package_id = NULL){
 		$this->db->delete('package_apps', array('package_id' => $package_id));
-		return $this->db->affected_rows() == 1;
+		return $this->db->affected_rows() > 0;
 	}
 }
 /* End of file package_apps_model.php */

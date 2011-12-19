@@ -8,15 +8,15 @@ class Audit_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('audit_model','audit');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
-		echo $this->unit->report();
+		echo $this->unit->report_with_counter();
 	}
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->audit))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();

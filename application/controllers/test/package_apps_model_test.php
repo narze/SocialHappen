@@ -6,6 +6,7 @@ class Package_apps_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('package_apps_model','package_apps');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
@@ -45,7 +46,7 @@ class Package_apps_model_test extends CI_Controller {
 		$result = $this->package_apps->get_apps_by_package_id(10);
 		$this->unit->run($result, 'is_array', 'get_apps_by_package_id');
 		$this->unit->run($result[0], 'is_array', 'first element');
-		$this->unit->run($result[0]['app_name'], 'is_string', 'app_name');
+		$this->unit->run($result[0]['app_id'], 1, 'app_name');
 		
 		$result = $this->package_apps->get_apps_by_package_id(20);
 		$this->unit->run($result, 'is_array', 'get_apps_by_package_id');
@@ -53,16 +54,25 @@ class Package_apps_model_test extends CI_Controller {
 	}
 	
 	/**
-	 * Tests remove_package_app_by_app_id()
+	 * Tests remove_package_app_by_package_id_and_app_id()
 	 * @author Manassarn M.
 	 */
-	function remove_package_app_by_app_id_test(){
-		$result = $this->package_apps->remove_package_app_by_app_id(1);
-		$this->unit->run($result, 'is_true', 'remove_package_app_by_app_id(1)');
+	function remove_package_app_by_package_id_and_app_id_test(){
+		$result = $this->package_apps->remove_package_app_by_package_id_and_app_id(10,1);
+		$this->unit->run($result, 'is_true', 'remove_package_app_by_package_id_and_app_id(10,1)');
 		
-		$result = $this->package_apps->remove_package_app_by_app_id(1);
-		$this->unit->run($result, 'is_false', 'remove_package_app_by_app_id(1)');
+		$result = $this->package_apps->remove_package_app_by_package_id_and_app_id(10,1);
+		$this->unit->run($result, 'is_false', 'remove_package_app_by_package_id_and_app_id(10,1)');
 	}
+
+	function get_package_apps_by_package_id_test(){
+		
+	}
+	
+	function remove_all_package_apps_by_package_id_test(){
+		
+	}
+	
 }
 /* End of file package_apps_model_test.php */
 /* Location: ./application/controllers/test/package_apps_model_test.php */

@@ -7,13 +7,14 @@ class achievement_lib_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
-    $this->load->model('app_component_model','app_component');
+  	  	$this->load->model('app_component_model','app_component');
 		$this->load->model('achievement_info_model','achievement_info');
 		$this->load->model('achievement_stat_model','achievement_stat');
-    $this->load->model('achievement_stat_page_model','achievement_stat_page');
+    	$this->load->model('achievement_stat_page_model','achievement_stat_page');
 		$this->load->model('achievement_user_model','achievement_user');
 		$this->load->library('achievement_lib');
-    $this->load->library('audit_lib');
+    	$this->load->library('audit_lib');
+    	$this->unit->reset_dbs();
 	}
 
 	function __destruct(){

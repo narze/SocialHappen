@@ -10,6 +10,12 @@ class MY_Unit_test extends CI_Unit_test {
 		parent::__construct();
 	}
 	
+	function reset_dbs(){
+		$this->db_reset_result = file_get_contents(base_url().'dev/sync/db_reset');
+		$this->mongodb_reset_result = file_get_contents(base_url().'dev/sync/mongodb_reset');
+		echo "Resetted DBs<br />";
+	}
+
 	function report_with_counter(){
 		$fail_count = 0;
 		$failed_string = '';
@@ -27,6 +33,15 @@ class MY_Unit_test extends CI_Unit_test {
 			echo "<h1 style='color:#008000'>ALL PASSED: ".count($result)."</h1>";
 		}
 		echo $this->report();
+	}
+
+	function __destruct(){
+		if(isset($this->db_reset_result)){
+			echo $this->db_reset_result;
+		}
+		if(isset($this->mongodb_reset_result)){
+			echo $this->mongodb_reset_result;
+		}
 	}
 }
 /* End of file MY_Unit_test.php */

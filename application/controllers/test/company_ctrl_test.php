@@ -1,9 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Company_test extends CI_Controller {
+class Company_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
+		$this->load->library('controller/company_ctrl');
+		$this->unit->reset_dbs();
 	}
 	
 	function __destruct(){
@@ -24,7 +26,8 @@ class Company_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_pages_test(){
-		$content = file_get_contents(base_url().'company/json_get_pages/1');
+		$company_id = 1;
+		$content = $this->company_ctrl->json_get_pages($company_id);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_pages()');
 		$this->unit->run($array[0],'is_array', 'First row');
@@ -43,7 +46,8 @@ class Company_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_apps_test(){
-		$content = file_get_contents(base_url().'company/json_get_apps/1');
+		$company_id = 1;
+		$content = $this->company_ctrl->json_get_apps($company_id);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_apps()');
 		$this->unit->run($array[0],'is_array', 'First row');
@@ -69,7 +73,8 @@ class Company_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_installed_apps_test(){
-		$content = file_get_contents(base_url().'company/json_get_installed_apps/1');
+		$company_id = 1;
+		$content = $this->company_ctrl->json_get_installed_apps($company_id);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_installed_apps()');
 		$this->unit->run($array[0]['app_install_id'],'is_string','app_install_id');
@@ -100,7 +105,8 @@ class Company_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_profile_test(){
-		$content = file_get_contents(base_url().'company/json_get_profile/1');
+		$company_id = 1;
+		$content = $this->company_ctrl->json_get_profile($company_id);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_profile()');
 		$this->unit->run($array['company_id'],'is_string','company_id');
@@ -115,7 +121,53 @@ class Company_test extends CI_Controller {
 		$this->unit->run($array['company_password'],'is_string','company_password');
 		$this->unit->run($array['company_image'],'is_string','company_image');
 	}
+
+
+	function index_test(){
+		
+	}
+
+	function company_package_limited_test(){
+		
+	}
+
+	function page_installed_test(){
+		
+	}
+
+	function json_get_user_companies_test(){
+		
+	}
+
+	function json_get_pages_count_test(){
+		
+	}
+
+	function json_get_installed_apps_count_test(){
+		
+	}
+
+	function json_get_campaigns_count_test(){
+		
+	}
+
+	function json_get_installed_apps_count_not_in_page_test(){
+		
+	}
+
+	function json_get_all_apps_test(){
+	
+	}	
+
+	function json_get_installed_apps_not_in_page_test(){
+		
+	}
+
+	function json_get_not_installed_apps_test(){
+		
+	}
+
 }
 
-/* End of file company_test.php */
-/* Location: ./application/controllers/test/company_test.php */
+/* End of file company_ctrl_test.php */
+/* Location: ./application/controllers/test/company_ctrl_test.php */

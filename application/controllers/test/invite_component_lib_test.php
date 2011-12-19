@@ -12,6 +12,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->load->library('invite_component_lib');
 		$this->load->model('user_model');
 		$this->load->model('page_model');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){

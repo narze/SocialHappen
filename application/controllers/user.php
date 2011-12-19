@@ -5,6 +5,7 @@ class User extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('facebook');
+		$this->load->library('controller/user_ctrl');
 	}
 	
 	function index(){
@@ -234,9 +235,8 @@ class User extends CI_Controller {
 	 */
 	function json_get_profile($user_id = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('user_model','users');
-		$profile = $this->users->get_user_profile_by_user_id($user_id);
-		echo json_encode($profile);
+		$profile = $this->user_ctrl->get_user_profile_by_user_id($user_id);
+		echo $profile;
 	}
 	
 	/** 
@@ -247,9 +247,8 @@ class User extends CI_Controller {
 	 */
 	function json_get_apps($user_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('user_apps_model','user_apps');
-		$apps = $this->user_apps->get_user_apps_by_user_id($user_id, $limit, $offset);
-		echo json_encode($apps);
+		$apps = $this->user_ctrl->json_get_apps($user_id, $limit, $offset);
+		echo $apps;
 	}
 	
 	/** 
@@ -280,40 +279,8 @@ class User extends CI_Controller {
 	 */
 	function json_add(){
 		$this->socialhappen->ajax_check();
-		$this->load->model('user_model','users');
-		$post_data = array(
-							'user_first_name' => $this->input->post('user_first_name'),
-							'user_last_name' => $this->input->post('user_last_name'),
-							'user_email' => $this->input->post('user_email'),
-							'user_image' => $this->input->post('user_image'),
-							'user_facebook_id' => $this->input->post('user_facebook_id')
-						);
-		if($user_id = $this->users->add_user($post_data)){
-			$result->status = 'OK';
-			$result->user_id = $user_id;
-			
-			$this->load->library('audit_lib');
-			$action_id = $this->socialhappen->get_k('audit_action','User Register SocialHappen');
-			$this->audit_lib->add_audit(
-				0,
-				$user_id,
-				$action_id,
-				'', 
-				'',
-				array(
-					'app_install_id' => 0,
-					'user_id' => $user_id
-				)
-			);
-			
-			$this->load->library('achievement_lib');
-			$info = array('action_id'=> $action_id, 'app_install_id'=>0);
-			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
-		} else {
-			log_message('error','add user failed');
-			$result->status = 'ERROR';
-		}
-		echo json_encode($result);
+		$result = $this->user_ctrl->json_add();
+		echo $result;
 	}
 	
 	/**
@@ -323,9 +290,8 @@ class User extends CI_Controller {
 	 */
 	function json_get_companies($user_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('user_companies_model','user_companies');
-		$companies = $this->user_companies->get_user_companies_by_user_id($user_id, $limit, $offset);
-		echo json_encode($companies);
+		$companies = $this->user_ctrl->json_get_companies($user_id, $limit, $offset);
+		echo $companies;
 	}
 	
 	function get_stat_graph($mode = NULL, $id = NULL, $user_id = NULL, $start_date = NULL, $end_date = NULL){

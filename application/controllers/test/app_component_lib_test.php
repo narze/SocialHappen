@@ -15,6 +15,7 @@ class app_component_lib_test extends CI_Controller {
     $this->load->model('achievement_stat_model','achievement_stat');
     $this->load->model('achievement_stat_page_model','achievement_stat_page');
     $this->load->model('achievement_user_model','achievement_user');
+    $this->unit->reset_dbs();
   }
 
   function __destruct(){

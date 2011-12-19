@@ -11,6 +11,7 @@ class notification_lib_test extends CI_Controller {
 		$this->load->library('unit_test');
 		$this->load->model('notification_model','notification');
 		$this->load->library('notification_lib');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
@@ -19,7 +20,6 @@ class notification_lib_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->notification_lib))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();

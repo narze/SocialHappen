@@ -6,6 +6,7 @@ class Invite_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('invite_model', 'invite');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){

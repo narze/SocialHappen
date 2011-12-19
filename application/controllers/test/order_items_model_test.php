@@ -6,6 +6,7 @@ class Order_items_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('order_items_model','order_items');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
@@ -30,6 +31,7 @@ class Order_items_model_test extends CI_Controller {
 		$this->unit->run($result,'is_array', 'get_order_items_by_order_id()');
 		$this->unit->run($result[0]['order_id'],'is_string','order_id');
 		$this->unit->run($result[0]['item_id'],'is_string','item_id');
+		$this->unit->run($result[0]['item_type_id'],'is_string','item_type_id');
 		$this->unit->run($result[0]['item_type'],'is_string','item_type');
 		$this->unit->run($result[0]['item_name'],'is_string','item_name');
 		$this->unit->run($result[0]['item_description'],'is_string','item_description');
@@ -37,7 +39,6 @@ class Order_items_model_test extends CI_Controller {
 		$this->unit->run($result[0]['item_unit'],'is_string','item_unit');
 		$this->unit->run($result[0]['item_discount'],'is_string','item_discount');
 
-		$this->unit->run(count($result[0]) == 8,'is_true', 'number of column');
 	}
 	
 	/**
@@ -49,7 +50,7 @@ class Order_items_model_test extends CI_Controller {
 			array(
 				'order_id' => 3,
 				'item_id' => 2,
-				'item_type' => 1,
+				'item_type_id' => 1,
 				'item_name' => 'Enterprise package',
 				'item_description' => 'For enterprise',
 				'item_price' => 999,
@@ -59,7 +60,7 @@ class Order_items_model_test extends CI_Controller {
 			array(
 				'order_id' => 3,
 				'item_id' => 3,
-				'item_type' => 2,
+				'item_type_id' => 2,
 				'item_name' => 'Enterprise package',
 				'item_description' => 'For enterprise',
 				'item_price' => 999,

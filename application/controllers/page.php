@@ -6,6 +6,7 @@ class Page extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 		$this -> socialhappen -> check_logged_in();
+		$this->load->library('controller/page_ctrl');
 	}
 	
 	function index($page_id =NULL) {
@@ -235,9 +236,8 @@ class Page extends CI_Controller {
 	 */
 	function json_get_profile($page_id =NULL) {
 		$this->socialhappen->ajax_check();
-		$this -> load -> model('page_model', 'pages');
-		$profile = $this -> pages -> get_page_profile_by_page_id($page_id);
-		echo json_encode($profile);
+		$profile = $this -> page_ctrl -> json_get_profile($page_id);
+		echo $profile;
 	}
 
 	/**
@@ -247,38 +247,8 @@ class Page extends CI_Controller {
 	 */
 	function json_get_installed_apps($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this -> load -> model('installed_apps_model', 'installed_apps');
-		$this -> load -> model('user_model', 'user');
-		
-		$apps = $this -> installed_apps -> get_installed_apps_by_page_id($page_id, $limit, $offset);
-		//echo '<pre>';
-		//var_dump($apps);
-		//echo '</pre>';
-		$json_out = array();
-		
-		foreach($apps as $app){
-			$this->load->library('audit_lib');
-			$this->load->library('app_url');
-			date_default_timezone_set('UTC');
-			$end_date = $this->audit_lib->_date();
-			$start_date = date('Ymd', time() - 2592000);
-			
-			$active_user = $this->audit_lib->count_audit_range('subject', NULL, 103,
-			 array('page_id' => (int)$page_id, 'app_install_id' => (int)$app['app_install_id']),
-			  $start_date, $end_date);
-			
-			$a = array('app_image' => $app['app_image'],
-						'app_install_id' => $app['app_install_id'],
-						'app_name' => $app['app_name'],
-						'app_description' => $app['app_description'],
-						'app_install_status' => $app['app_install_status'],
-						'app_url' => $this->app_url->translate_url($app['app_url'], $app['app_install_id']),
-						'app_member' => $this->user->count_users_by_app_install_id($app['app_install_id']),
-						'app_monthly_active_member' => $active_user
-						);
-			$json_out[] = $a;
-		}
-		echo json_encode($json_out);
+		$json_out = $this->page_ctrl->json_get_installed_apps($page_id, $limit, $offset);
+		echo $json_out;
 	}
 
 	/**
@@ -288,9 +258,8 @@ class Page extends CI_Controller {
 	 */
 	function json_get_campaigns($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this -> load -> model('campaign_model', 'campaigns');
-		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id($page_id, $limit, $offset);
-		echo json_encode($campaigns);
+		$campaigns = $this->page_ctrl->json_get_campaigns($page_id, $limit, $offset);
+		echo $campaigns;
 	}
 	
 	/**
@@ -301,9 +270,8 @@ class Page extends CI_Controller {
 	 */
 	function json_get_campaigns_using_status($page_id =NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this -> load -> model('campaign_model', 'campaigns');
-		$campaigns = $this -> campaigns -> get_page_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id, $limit, $offset);
-		echo json_encode($campaigns);
+		$campaigns = $this->page_ctrl->json_get_campaigns_using_status($page_id, $campaign_status_id, $limit, $offset);
+		echo $campaigns;
 	}
 
 	/**
@@ -313,9 +281,8 @@ class Page extends CI_Controller {
 	 */
 	function json_get_users($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this -> load -> model('page_user_data_model', 'page_user');
-		$users = $this -> page_user -> get_page_users_by_page_id($page_id, $limit, $offset);
-		echo json_encode($users);
+		$users = $this->page_ctrl->json_get_users($page_id, $limit, $offset);
+		echo $users;
 	}
 
 	/**

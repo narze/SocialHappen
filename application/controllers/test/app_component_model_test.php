@@ -152,6 +152,7 @@ class App_component_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('app_component_model','app_component');
+		$this->unit->reset_dbs();
 	}
 	
 	function __destruct(){

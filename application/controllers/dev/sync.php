@@ -19,7 +19,7 @@ class Sync extends CI_Controller {
 		parent::__construct();
 		$this->preload();
 		$this->load->dbforge();
-		$this->output->enable_profiler(TRUE);
+		$this->output->enable_profiler(FALSE);
 		define('BASE_URL', base_url());
 	}
 	
@@ -738,7 +738,7 @@ class Sync extends CI_Controller {
 		$company = array(
 						array(
 							    'company_id' => 1, 
-							    'creator_user_id' => 0, 
+							    'creator_user_id' => 1, 
 							    'company_name' => 'Company test 1', 
 							    'company_detail' => 'detail test',
 							    'company_address' => '', 
@@ -1118,14 +1118,14 @@ class Sync extends CI_Controller {
 							);
 		$this->db->insert_batch('user_companies', $user_companies);
 		
-		$sessions = array(
+		$sessions = array( //for testing only
 						array(
 							'session_id' => 1111,
 							'ip_address' => 0,
 							'user_agent' => 0,
 							'last_activity' => 0,
-							'user_data' => 'a:3:{s:7:"user_id";s:1:"0";s:16:"user_facebook_id";s:9:"713558190";s:9:"logged_in";b:1;}',
-							'user_id' => 0
+							'user_data' => 'a:3:{s:7:"user_id";s:5:"55555";s:16:"user_facebook_id";s:9:"713558190";s:9:"logged_in";b:1;}',
+							'user_id' => 55555
 							)
 						);
 		$this->db->insert_batch('sessions', $sessions);

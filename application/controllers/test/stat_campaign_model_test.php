@@ -8,6 +8,7 @@ class stat_campaign_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('stat_campaign_model','stat_campaign');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
@@ -16,7 +17,6 @@ class stat_campaign_model_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->stat_campaign))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();

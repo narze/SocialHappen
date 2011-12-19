@@ -6,6 +6,7 @@ class Package_users_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('package_users_model','package_users');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
