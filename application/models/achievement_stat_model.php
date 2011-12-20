@@ -15,28 +15,11 @@ class Achievement_stat_model extends CI_Model {
 	 */
 	function __construct() {
 		parent::__construct();
-		
-		$this->config->load('mongo_db');
-		$mongo_user = $this->config->item('mongo_user');
-		$mongo_pass = $this->config->item('mongo_pass');
-		$mongo_host = $this->config->item('mongo_host');
-		$mongo_port = $this->config->item('mongo_port');
-		$mongo_db = $this->config->item('mongo_db');
-		
-		try{
-			// connect to database
-			$this->connection = new Mongo("mongodb://".$mongo_user.":"
-			.$mongo_pass
-			."@".$mongo_host.":".$mongo_port);
-			
-			// select database
-			$this->db = $this->connection->achievement;
-			
-			// select collection
-			$this->achievement_stat = $this->db->achievement_stat;
-		}catch(Exception $e){
-			show_error('Cannot connect to database');
-		}
+		$this->load->helper('mongodb');
+		$this->achievement_stat = sh_mongodb_load( array(
+			'database' => 'achievement',
+			'collection' => 'achievement_stat'
+		));
 	}
 		
 	/**
@@ -151,8 +134,7 @@ class Achievement_stat_model extends CI_Model {
 			
 			
 			$res = $this->achievement_stat->find(array('app_id' => (int)$app_id,
-																								 'user_id' => (int)$user_id))
-																		->limit(1);
+				 'user_id' => (int)$user_id))->limit(1);
 			$result = array();
 			foreach ($res as $stat) {
 				$result[] = $stat;

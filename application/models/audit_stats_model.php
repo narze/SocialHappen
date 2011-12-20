@@ -20,31 +20,12 @@ class Audit_stats_model extends CI_Model {
 	 */
 	function __construct() {
 		parent::__construct();
-		
-		// initialize value
 		$this->DEFAULT_LIMIT = 0;
-		
-		$this->config->load('mongo_db');
-		$mongo_user = $this->config->item('mongo_user');
-		$mongo_pass = $this->config->item('mongo_pass');
-		$mongo_host = $this->config->item('mongo_host');
-		$mongo_port = $this->config->item('mongo_port');
-		$mongo_db = $this->config->item('mongo_db');
-		
-		try{
-			// connect to database
-			$this->connection = new Mongo("mongodb://".$mongo_user.":"
-			.$mongo_pass
-			."@".$mongo_host.":".$mongo_port);//."/".$mongo_db);
-			
-			// select audit database
-			$this->db = $this->connection->$mongo_db;
-			
-			// select audit collection
-			$this->stats = $this->db->stats;
-		}catch(Exception $e){
-			show_error('Cannot connect to database');
-		}
+		$this->load->helper('mongodb');
+		$this->stats = sh_mongodb_load( array(
+			'database' => 'audit',
+			'collection' => 'stats'
+		));
 	}
 	
 	/**

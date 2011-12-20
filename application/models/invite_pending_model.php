@@ -7,29 +7,11 @@ class Invite_pending_model extends CI_Model {
 	
 	function __construct() {
 		parent::__construct();
-		
-		$this->config->load('mongo_db');
-		$mongo_user = $this->config->item('mongo_user');
-		$mongo_pass = $this->config->item('mongo_pass');
-		$mongo_host = $this->config->item('mongo_host');
-		$mongo_port = $this->config->item('mongo_port');
-		$mongo_db = $this->config->item('mongo_db');
-		
-		try{
-			// connect to database
-			$this->connection = new Mongo("mongodb://".$mongo_user.":"
-			.$mongo_pass
-			."@".$mongo_host.":".$mongo_port);
-			
-			// select database
-			$this->db = $this->connection->invite;
-			
-			// select collection
-			$this->pending = $this->db->pending;
-			
-		}catch(Exception $e){
-			show_error('Cannot connect to database');
-		}
+		$this->load->helper('mongodb');
+		$this->pending = sh_mongodb_load( array(
+			'database' => 'invite',
+			'collection' => 'pending'
+		));
 	}
 		
 	function create_index(){

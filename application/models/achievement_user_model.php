@@ -17,28 +17,11 @@ class Achievement_user_model extends CI_Model {
 	 */
 	function __construct() {
 		parent::__construct();
-		
-		$this->config->load('mongo_db');
-		$mongo_user = $this->config->item('mongo_user');
-		$mongo_pass = $this->config->item('mongo_pass');
-		$mongo_host = $this->config->item('mongo_host');
-		$mongo_port = $this->config->item('mongo_port');
-		$mongo_db = $this->config->item('mongo_db');
-		
-		try{
-			// connect to database
-			$this->connection = new Mongo("mongodb://".$mongo_user.":"
-			.$mongo_pass
-			."@".$mongo_host.":".$mongo_port);
-			
-			// select database
-			$this->db = $this->connection->achievement;
-			
-			// select collection
-			$this->achievement_user = $this->db->achievement_user;
-		}catch(Exception $e){
-			show_error('Cannot connect to database');
-		}
+		$this->load->helper('mongodb');
+		$this->achievement_user = sh_mongodb_load( array(
+			'database' => 'achievement',
+			'collection' => 'achievement_user'
+		));
 	}
 		
 	/**
@@ -122,7 +105,7 @@ class Achievement_user_model extends CI_Model {
 		
 		$result = array();
 		foreach ($res as $stat) {
-			$stat['achievement_info'] = $this->db->getDBRef($stat['achievement_id']);
+			$stat['achievement_info'] = $this->mongo_db->getDBRef($stat['achievement_id']);
 			$result[] = $stat;
 		}
 		return $result;

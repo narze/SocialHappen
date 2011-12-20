@@ -12,16 +12,23 @@ class MY_Unit_test extends CI_Unit_test {
 		parent::__construct();
 		$this->CI =& get_instance();
 		$this->CI->db = $this->CI->load->database('local_unit_test', TRUE);
-		echo 'Test with database : ' . $this->CI->db->database; 
+		echo '[mysql] Test with database : ' . $this->CI->db->database . '<br />'; 
+
+		//forces mongodb to use testmode
+		$this->CI->config->load('mongo_db');
+		$this->CI->config->set_item('mongo_testmode', TRUE);
 	}
 	
 	function reset_dbs(){
-		$this->db_reset_result = file_get_contents(base_url().'dev/sync/db_reset');
-		$this->mongodb_reset_result = file_get_contents(base_url().'dev/sync/mongodb_reset');
-		echo "Resetted DBs<br />";
+		$this->db_reset_result = file_get_contents(base_url().'dev/sync/db_reset?unit_test=1');
+		$this->mongodb_reset_result = file_get_contents(base_url().'dev/sync/mongodb_reset?unit_test=1');
+		echo "Resetted unit test DBs<br />";
 	}
 
 	function report_with_counter(){
+		if(isset($this->CI->mongo_db)){
+			echo '[mongodb] Test with database : ' . $this->CI->mongo_db->__toString() . '<br />';
+		}
 		$fail_count = 0;
 		$failed_string = '';
 		foreach($result = $this->result() as $test){

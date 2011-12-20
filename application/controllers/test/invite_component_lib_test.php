@@ -6,6 +6,9 @@ class Invite_component_lib_test extends CI_Controller {
 	private $invite_key1 = NULL;
 	private $invite_key2 = NULL;
 	private $invite_key3 = NULL;
+
+	private $FBPAGEID1 = '135287989899131';
+	private $FBPAGEID2 = '116586141725712';
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
@@ -37,10 +40,10 @@ class Invite_component_lib_test extends CI_Controller {
 
 	function add_invite_test(){
 		$campaign_id = 1;
-		$app_install_id = 2;
-		$facebook_page_id = 3;
+		$app_install_id = 1;
+		$facebook_page_id = $this->FBPAGEID1;
 		$invite_type = 1;
-		$user_facebook_id = 4;
+		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '1,2,3';
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
 		$this->unit->run($result, 'is_string', 'add_invite', $result);
@@ -51,10 +54,10 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 1, 'list_invite', count($result));
 
 		$campaign_id = 1;
-		$app_install_id = 2;
-		$facebook_page_id = 3;
+		$app_install_id = 1;
+		$facebook_page_id = $this->FBPAGEID1;
 		$invite_type = 2;
-		$user_facebook_id = 4;
+		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7'; //will not be added
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
 		$this->unit->run($result, 'is_string', 'add_invite', $result);
@@ -67,10 +70,10 @@ class Invite_component_lib_test extends CI_Controller {
 	
 	function add_duplicate_invite_test(){
 		$campaign_id = 1;
-		$app_install_id = 2;
-		$facebook_page_id = 3;
+		$app_install_id = 1;
+		$facebook_page_id = $this->FBPAGEID1;
 		$invite_type = 1;
-		$user_facebook_id = 4;
+		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7'; // add three first target_ids to list
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
 		$this->unit->run($result, 'is_string', 'add_duplicate_invite, with same key', $result);
@@ -81,10 +84,10 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 2, 'list_invite', count($result));
 
 		$campaign_id = 1;
-		$app_install_id = 2;
-		$facebook_page_id = 3;
+		$app_install_id = 1;
+		$facebook_page_id = $this->FBPAGEID1;
 		$invite_type = 1;
-		$user_facebook_id = 4;
+		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7,9'; // add only 9 to list
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
 		$this->unit->run($result, 'is_string', 'add_duplicate_invite, with same key', $result);
@@ -95,10 +98,10 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 2, 'list_invite', count($result));
 
 		$campaign_id = 1;
-		$app_install_id = 2;
-		$facebook_page_id = 3;
+		$app_install_id = 1;
+		$facebook_page_id = $this->FBPAGEID1;
 		$invite_type = 2;
-		$user_facebook_id = 4;
+		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7,8,9'; //will not be added
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
 		$this->unit->run($result, 'is_string', 'add_invite', $result);
@@ -115,7 +118,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run($result, 'is_array', 'list_invite', print_r($result, TRUE));
 		$this->unit->run(count($result), 2, 'list_invite', count($result));
 
-		$criteria = array('user_facebook_id' => "4");
+		$criteria = array('user_facebook_id' => '713558190');
 		$result = $this->invite_component_lib->list_invite($criteria);
 		$this->unit->run($result, 'is_array', 'list_invite', print_r($result, TRUE));
 		$this->unit->run(count($result), 2, 'list_invite', count($result));
@@ -125,7 +128,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$invite_key = $this->invite_key1;
 		$result = $this->invite_component_lib->get_invite_by_invite_key($invite_key);
 		$this->unit->run($result, 'is_array', 'get_invite_by_invite_key', print_r($result, TRUE));
-		$this->unit->run($result['facebook_page_id'] === '3', TRUE, 'get_invite_by_invite_key', $result['facebook_page_id']);
+		$this->unit->run($result['facebook_page_id'] === $this->FBPAGEID1, TRUE, 'get_invite_by_invite_key', $result['facebook_page_id']);
 		$this->unit->run($result['target_facebook_id_list'] === array('1','2','3','5','6','7','9'), TRUE, 'get_invite_by_invite_key', $result['target_facebook_id_list']);
 	}
 
@@ -211,10 +214,10 @@ class Invite_component_lib_test extends CI_Controller {
 
 		//Add another invite with another campaign id in the same page
 		$campaign_id = 4;
-		$app_install_id = 2;
-		$facebook_page_id = 3;
+		$app_install_id = 1;
+		$facebook_page_id = $this->FBPAGEID1;
 		$invite_type = 1;
-		$user_facebook_id = 4;
+		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '1,2,3';
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
 		$this->unit->run($result, 'is_string', 'add_invite', $result);
@@ -238,14 +241,24 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 1, 'list_invite', count($result));
 		
 		//Mock inside _give_page_score_to_all_inviters to return TRUE
-		$this->page_model = m::mock('page_model');
-		$this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->andReturn('3');
-		$this->user_model = m::mock('user_model');
-		$this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->andReturn(1);
-		$this->audit_lib = m::mock('audit_lib');
-		$this->audit_lib->shouldReceive('add_audit')->andReturn(TRUE);
-		$this->achievement_lib = m::mock('achievement_lib');
-		$this->achievement_lib->shouldReceive('increment_achievement_stat')->andReturn(TRUE);
+		// $this->page_model = m::mock('page_model');
+		// $this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->andReturn('3');
+		// $this->user_model = m::mock('user_model');
+		// $this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->andReturn(1);
+		// $this->audit_lib = m::mock('audit_lib');
+		// $this->audit_lib->shouldReceive('add_audit')->andReturn(TRUE);
+		// $this->audit_lib->shouldReceive('get_audit_action')->andReturn(array(
+		// 		'app_id' => 0,
+		// 		'action_id' => 114,
+		// 		'description' => 'Invitee Accept Page Invite',
+		// 		'stat_app' => FALSE,
+		// 		'stat_page' => TRUE,
+		// 		'stat_campaign' => FALSE,
+		// 		'format_string' => 'User {user:user_id} accepted page invite',
+		// 		'score' => 1
+		// 	));
+		// $this->achievement_lib = m::mock('achievement_lib');
+		// $this->achievement_lib->shouldReceive('increment_achievement_stat')->andReturn(TRUE);
 
 		//When accept invite 3, will automatically accept invite 1 (same facebook_page_id), whether having pending or not
 		$invite_key = $this->invite_key3;
@@ -275,7 +288,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$result = $this->invite_component_lib->accept_all_invite_page_level($invite_key, $target_facebook_id);
 		$this->unit->run($result, FALSE, 'accept_all_invite_page_level', $result);
 
-		m::close();
+		// m::close();
 	}
 
 	function accept_all_invite_page_level_level_fail_test(){
@@ -339,17 +352,27 @@ class Invite_component_lib_test extends CI_Controller {
 	}
 
 	function _give_page_score_to_all_inviters_test(){
-		$this->page_model = m::mock('page_model');
-		$this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn('3');
-		$this->user_model = m::mock('user_model');
-		$this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
-		$this->audit_lib = m::mock('audit_lib');
-		$this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
-		$this->achievement_lib = m::mock('achievement_lib');
-		$this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		// $this->page_model = m::mock('page_model');
+		// $this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn('3');
+		// $this->user_model = m::mock('user_model');
+		// $this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
+		// $this->audit_lib = m::mock('audit_lib');
+		// $this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		// $this->audit_lib->shouldReceive('get_audit_action')->andReturn(array(
+		// 		'app_id' => 0,
+		// 		'action_id' => 114,
+		// 		'description' => 'Invitee Accept Page Invite',
+		// 		'stat_app' => FALSE,
+		// 		'stat_page' => TRUE,
+		// 		'stat_campaign' => FALSE,
+		// 		'format_string' => 'User {user:user_id} accepted page invite',
+		// 		'score' => 1
+		// 	));
+		// $this->achievement_lib = m::mock('achievement_lib');
+		// $this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
 
-		$facebook_page_id = 1;
-		$inviters = array('a','b','c');
+		$facebook_page_id = $this->FBPAGEID1;
+		$inviters = array(713558190,'637741627',631885465);
 		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
 		$this->unit->run($result, TRUE, '_give_page_score_to_all_inviters', $result);
 	}
@@ -362,47 +385,47 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 		
 		//no inviters
-		$facebook_page_id = '1';
+		$facebook_page_id = $this->FBPAGEID2;
 		$inviters = NULL;
 		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 
 		//cannot find page_id
-		$this->page_model = m::mock('page_model');
-		$this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1234)->once()->andReturn(FALSE);
-		$this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
-		$this->audit_lib = m::mock('audit_lib');
-		$this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
-		$this->achievement_lib = m::mock('achievement_lib');
-		$this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
-		$facebook_page_id = 1234;
+		// $this->page_model = m::mock('page_model');
+		// $this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1234)->once()->andReturn(FALSE);
+		// $this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
+		// $this->audit_lib = m::mock('audit_lib');
+		// $this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		// $this->achievement_lib = m::mock('achievement_lib');
+		// $this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		$facebook_page_id = 1234; //you can't find me
 		$inviters = array('a','b','c');
 		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 
 		//cannot find a user_id from inviter_facebook_id
-		$this->page_model = m::mock('page_model');
-		$this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn(1234);
-		$this->user_model = m::mock('user_model');
-		$this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,FALSE);
-		$this->audit_lib = m::mock('audit_lib');
-		$this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
-		$this->achievement_lib = m::mock('achievement_lib');
-		$this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
-		$facebook_page_id = 1;
+		// $this->page_model = m::mock('page_model');
+		// $this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn(1234);
+		// $this->user_model = m::mock('user_model');
+		// $this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,FALSE);
+		// $this->audit_lib = m::mock('audit_lib');
+		// $this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		// $this->achievement_lib = m::mock('achievement_lib');
+		// $this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		$facebook_page_id = $this->FBPAGEID2;
 		$inviters = array('a','b','c');
 		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 
 		//cannot add_audit once
-		$this->page_model = m::mock('page_model');
-		$this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn('3');
-		$this->user_model = m::mock('user_model');
-		$this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
-		$this->audit_lib = m::mock('audit_lib');
-		$this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, FALSE, TRUE);
-		$this->achievement_lib = m::mock('achievement_lib');
-		$this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		// $this->page_model = m::mock('page_model');
+		// $this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn('3');
+		// $this->user_model = m::mock('user_model');
+		// $this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
+		// $this->audit_lib = m::mock('audit_lib');
+		// $this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, FALSE, TRUE);
+		// $this->achievement_lib = m::mock('achievement_lib');
+		// $this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
 
 		$facebook_page_id = 1;
 		$inviters = array('a','b','c');
@@ -411,14 +434,14 @@ class Invite_component_lib_test extends CI_Controller {
 
 		//cannot increment_achievement_stat once
 
-		$this->page_model = m::mock('page_model');
-		$this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn('3');
-		$this->user_model = m::mock('user_model');
-		$this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
-		$this->audit_lib = m::mock('audit_lib');
-		$this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
-		$this->achievement_lib = m::mock('achievement_lib');
-		$this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, FALSE);
+		// $this->page_model = m::mock('page_model');
+		// $this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn('3');
+		// $this->user_model = m::mock('user_model');
+		// $this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
+		// $this->audit_lib = m::mock('audit_lib');
+		// $this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		// $this->achievement_lib = m::mock('achievement_lib');
+		// $this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, FALSE);
 
 		$facebook_page_id = 1;
 		$inviters = array('a','b','c');

@@ -29,31 +29,12 @@ class Audit_model extends CI_Model {
 	 */
 	function __construct() {
 		parent::__construct();
-		
-		// initialize value
 		$this->DEFAULT_LIMIT = 0;
-		
-		$this->config->load('mongo_db');
-		$mongo_user = $this->config->item('mongo_user');
-		$mongo_pass = $this->config->item('mongo_pass');
-		$mongo_host = $this->config->item('mongo_host');
-		$mongo_port = $this->config->item('mongo_port');
-		$mongo_db = $this->config->item('mongo_db');
-		
-		try{
-			// connect to database
-			$this->connection = new Mongo("mongodb://".$mongo_user.":"
-			.$mongo_pass
-			."@".$mongo_host.":".$mongo_port);//."/".$mongo_db);
-			
-			// select audit database
-			$this->db = $this->connection->$mongo_db;
-			
-			// select audit collection
-			$this->audits = $this->db->audits;
-		}catch(Exception $e){
-			show_error('Cannot connect to database');
-		}
+		$this->load->helper('mongodb');
+		$this->audits = sh_mongodb_load( array(
+			'database' => 'audit',
+			'collection' => 'audits'
+		));
 	}
 	
 	/**
@@ -217,7 +198,7 @@ class Audit_model extends CI_Model {
 		//echo '</pre>';
 		
 		
-		$cursor = $this->db->command(array('distinct' => 'audits', 'key' => $key, 'query' => $db_criteria));
+		$cursor = $this->mongo_db->command(array('distinct' => 'audits', 'key' => $key, 'query' => $db_criteria));
 		$result = array();
 		foreach ($cursor as $audit) {
 			$result[] = $audit;
@@ -276,7 +257,7 @@ class Audit_model extends CI_Model {
 		    "}".
 		    "return max; }");
 		
-		$cursor = $this->db->command(array(
+		$cursor = $this->mongo_db->command(array(
 		    "mapreduce" => "audits", 
 		    "map" => $map,
 		    "reduce" => $reduce,

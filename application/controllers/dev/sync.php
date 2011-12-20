@@ -19,6 +19,8 @@ class Sync extends CI_Controller {
 		parent::__construct();
 		if($this->input->get('unit_test')){
 			$this->db = $this->load->database('local_unit_test', TRUE);
+			$this->config->set_item('mongo_testmode', TRUE);
+			$this->mongo_test_mode = TRUE;
 		}
 		$this->preload();
 		$this->load->dbforge();
@@ -27,9 +29,11 @@ class Sync extends CI_Controller {
 	}
 	
 	function index(){
-		echo '<a href="'.base_url().'dev/sync/mongodb_reset">MongoDB reset</a><br />';
+		echo '<a href="'.base_url().'dev/sync/db_reset">[Production] Mysql reset</a><br />';
+		echo '<a href="'.base_url().'dev/sync/mongodb_reset">[Production] MongoDB reset</a><br />';
+		echo '<a href="'.base_url().'dev/sync/db_reset?unit_test=1">[Unit test] Mysql reset<br />';
+		echo '<a href="'.base_url().'dev/sync/mongodb_reset?unit_test=1">[Unit test] MongoDB reset</a><br />';
 		echo '<a href="'.base_url().'dev/sync/remove_users">Remove users</a><br />';
-		echo '<a href="'.base_url().'dev/sync/db_reset">RESET (drop -> create -> insert data)</a><br />';
 		echo '<a href="'.base_url().'dev/sync/generate_field_code">Generate field PHP code</a><br />';
 		echo '<a href="'.base_url().'dev/sync/create_database">Create datebase "socialhappen"</a>';
 	}
@@ -1596,32 +1600,37 @@ class Sync extends CI_Controller {
 	
 	function drop_mongo_collections(){
 		foreach(func_get_args() as $collection){
-			echo $this->mongo_db->drop_collection($collection) ? "Dropped {$collection}<br />" : "Cannot drop {$collection}<br />";
+			echo $this->mongodb->drop_collection($collection) ? "Dropped {$collection}<br />" : "Cannot drop {$collection}<br />";
 		}
 	}
 	
 	function mongodb_reset(){
-		
-		$this->load->library('mongo_db');
-		$this->load->library('audit_lib');
-		$this->load->library('achievement_lib');
-		$this->mongo_db->switch_db('achievement');
+		$mongo_db_prefix = NULL;
+		$this->load->config('mongo_db');
+		if($this->config->item('mongo_testmode') == TRUE){
+			$mongo_db_prefix = $this->config->item('mongo_testmode_prefix');
+		}
+		$this->load->library('mongo_db', NULL, 'mongodb');
+		$this->mongodb->switch_db($mongo_db_prefix.'achievement');
 		$this->drop_mongo_collections('achievement_info','achievement_stat','achievement_user');
-		$this->mongo_db->switch_db('audit');
+		$this->mongodb->switch_db($mongo_db_prefix.'audit');
 		$this->drop_mongo_collections('actions','audits');
-		$this->mongo_db->switch_db('stat');
+		$this->mongodb->switch_db($mongo_db_prefix.'stat');
 		$this->drop_mongo_collections('apps','campaigns','pages');
-		$this->mongo_db->switch_db('message');
+		$this->mongodb->switch_db($mongo_db_prefix.'message');
 		$this->drop_mongo_collections('notification');
-		$this->mongo_db->switch_db('get_started');
+		$this->mongodb->switch_db($mongo_db_prefix.'get_started');
 		$this->drop_mongo_collections('get_started_info','get_started_stat');
-		$this->mongo_db->switch_db('app_component');
+		$this->mongodb->switch_db($mongo_db_prefix.'app_component');
 		$this->drop_mongo_collections('homepage');
-		$this->mongo_db->switch_db('campaign');
+		$this->mongodb->switch_db($mongo_db_prefix.'campaign');
 		$this->drop_mongo_collections('app_component','app_component_page','homepage','invite','sharebutton');
-		$this->mongo_db->switch_db('invite');
+		$this->mongodb->switch_db($mongo_db_prefix.'invite');
 		$this->drop_mongo_collections('invites','pending');
 		echo 'Dropped collections<br />';
+
+		$this->load->library('audit_lib');
+		$this->load->library('achievement_lib');
 		
 		$platform_audit_actions = array(
 			array(
