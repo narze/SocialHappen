@@ -6,7 +6,7 @@ class Page_user_data_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('page_user_data_model','page_users');
-		$this->unit->reset_dbs();
+		$this->unit->reset_mysql();
 	}
 
 	function __destruct(){

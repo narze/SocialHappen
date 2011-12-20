@@ -10,7 +10,7 @@ class notification_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('notification_model','notification');
-		$this->unit->reset_dbs();
+		$this->unit->reset_mongodb();
 	}
 
 	function __destruct(){

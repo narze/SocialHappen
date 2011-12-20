@@ -8,7 +8,7 @@ class achievement_stat_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('achievement_stat_model','achievement_stat');
-		$this->unit->reset_dbs();
+		$this->unit->reset_mongodb();
 	}
 
 	function __destruct(){

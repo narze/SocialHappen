@@ -20,9 +20,18 @@ class MY_Unit_test extends CI_Unit_test {
 	}
 	
 	function reset_dbs(){
-		$this->db_reset_result = file_get_contents(base_url().'dev/sync/db_reset?unit_test=1');
+		$this->reset_mysql();
+		$this->reset_mongodb();
+	}
+	
+	function reset_mysql(){
+		file_get_contents(base_url().'dev/sync/db_reset?unit_test=1');
+		echo "Reset mysql test db<br />";
+	}
+
+	function reset_mongodb(){
 		$this->mongodb_reset_result = file_get_contents(base_url().'dev/sync/mongodb_reset?unit_test=1');
-		echo "Resetted unit test DBs<br />";
+		echo "Reset mongo test db<br />";
 	}
 
 	function report_with_counter(){

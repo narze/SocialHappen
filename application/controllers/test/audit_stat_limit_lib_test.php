@@ -9,7 +9,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$this->load->library('unit_test');
 		$this->load->model('audit_stats_model','stats');
 		$this->load->library('audit_stat_limit_lib');
-		$this->unit->reset_dbs();
+		$this->unit->reset_mongodb();
 	}
 	
 	function index(){

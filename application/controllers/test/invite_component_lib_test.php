@@ -90,8 +90,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7,9'; // add only 9 to list
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
-		$this->unit->run($result, 'is_string', 'add_duplicate_invite, with same key', $result);
-		$this->invite_key1 = $result;
+		$this->unit->run($result, $this->invite_key1, 'add_duplicate_invite, with same key', $result);
 
 		$criteria = array('campaign_id' => '1');
 		$result = $this->invite_component_lib->list_invite($criteria);
@@ -104,8 +103,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7,8,9'; //will not be added
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
-		$this->unit->run($result, 'is_string', 'add_invite', $result);
-		$this->invite_key2 = $result;
+		$this->unit->run($result, $this->invite_key2, 'add_invite', $result);
 
 		$criteria = array('campaign_id' => '1');
 		$result = $this->invite_component_lib->list_invite($criteria);
@@ -184,6 +182,11 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '3';
 		$result = $this->invite_component_lib->reserve_invite($invite_key, $user_facebook_id);
 		$this->unit->run($result, TRUE, 'reserve_invite', $invite_key.' '.$user_facebook_id);
+
+		//user_facebook_id added in target_facebook_id_list (public invite)
+		$invite = $this->invite_component_lib->get_invite_by_invite_key($this->invite_key2);
+		$this->unit->run(count($invite['target_facebook_id_list']),1 ,'count target_facebook_id_list', count($invite['target_facebook_id_list']));
+		$this->unit->run(in_array($user_facebook_id,$invite['target_facebook_id_list']), TRUE,'target_facebook_id_list', print_r($invite['target_facebook_id_list'],TRUE));
 	}
 
 	function accept_invite_page_level_test(){

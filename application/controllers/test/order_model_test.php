@@ -6,7 +6,7 @@ class Order_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('order_model','orders');
-		$this->unit->reset_dbs();
+		$this->unit->reset_mysql();
 	}
 
 	function __destruct(){

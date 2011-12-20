@@ -6,7 +6,7 @@ class Invite_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('invite_model', 'invite');
-		$this->unit->reset_dbs();
+		$this->unit->reset_mongodb();
 	}
 
 	function __destruct(){
@@ -350,10 +350,12 @@ class Invite_model_test extends CI_Controller {
 		$this->unit->run(count($result['target_facebook_id_list']), count($expected_target_facebook_id_list), 'count target_facebook_id_list', print_r($result['target_facebook_id_list'], TRUE));
 
 		$invite_key = 'asdfjkl;2'; //public invite
-		$facebook_id_array = array(22,23,24,25);
-		$expected_target_facebook_id_list = array('21','22','23','24','25');
+		$facebook_id_array = array(23,24,25);
+		$expected_target_facebook_id_list = array('23','24','25');
 		$result = $this->invite->add_into_target_facebook_id_list($invite_key, $facebook_id_array);
-		$this->unit->run($result, FALSE, 'add_into_target_facebook_id_list with public invite', $invite_key);
+		$this->unit->run($result, TRUE, 'add_into_target_facebook_id_list with public invite', $invite_key);
+		$result = $this->invite->get_invite_by_criteria(array('invite_key' => $invite_key));
+		$this->unit->run(count($result['target_facebook_id_list']), count($expected_target_facebook_id_list), 'count target_facebook_id_list', print_r($result['target_facebook_id_list'], TRUE));
 
 		$invite_key = 'asdfjkl;1';
 		$facebook_id_array = array(21,23,24);

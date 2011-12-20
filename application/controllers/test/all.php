@@ -6,20 +6,23 @@ class All extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this -> load -> library('unit_test');
-		$this -> load -> model('user_model', 'users');
-	}
-
-	function __destruct() {
-		echo $this -> unit -> report();
 	}
 
 	function index() {
+		$all_pass = TRUE;
 		foreach(glob(__DIR__."/*_test.php") as $filename) {
 			$url = base_url().'test/'.basename($filename,'.php');
 			$class_name = basename($filename,"_test.php");
-			echo '<h1>Class : <a href="'.$url.'">'.$class_name.'</a></h1>';
-			echo file_get_contents($url);
+			$result = '<h1>Class : <a href="'.$url.'">'.$class_name.'</a></h1>';
+			$result .= file_get_contents($url);
+			echo $result;
+			if($all_pass == TRUE && strpos($result, 'TEST FAILED') !== FALSE){
+				$all_pass = FALSE;
+				echo '<script language="javascript">document.bgColor = "#FF6666";</script>';
+			}
+		}
+		if($all_pass === TRUE){
+			echo '<script language="javascript">document.bgColor = "#66FF66";</script>';
 		}
 	}
 

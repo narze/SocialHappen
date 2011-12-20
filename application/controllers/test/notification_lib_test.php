@@ -11,7 +11,7 @@ class notification_lib_test extends CI_Controller {
 		$this->load->library('unit_test');
 		$this->load->model('notification_model','notification');
 		$this->load->library('notification_lib');
-		$this->unit->reset_dbs();
+		$this->unit->reset_mongodb();
 	}
 
 	function __destruct(){

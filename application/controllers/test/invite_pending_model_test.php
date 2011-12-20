@@ -6,7 +6,7 @@ class Invite_pending_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('invite_pending_model', 'invite_pending');
-		$this->unit->reset_dbs();
+		$this->unit->reset_mongodb();
 	}
 
 	function __destruct(){
