@@ -10,7 +10,7 @@ GOTO END
 
 :Normal
 echo Loading dump file...
-mysql -u root socialhappen < mysql_dump/sh.sql
+mysql -u root socialhappen < mysql_dump.sql
 echo Dump file loaded
 GOTO END
 
