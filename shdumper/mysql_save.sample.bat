@@ -9,7 +9,7 @@ echo Please add your/mysql_path/bin into %PATH%
 GOTO END
 
 :Normal
-mysqldump -u root --add-drop-table -v socialhappen > mysql_dump/sh.sql
+mysqldump -u root --add-drop-table -v socialhappen > mysql_dump.sql
 echo Dump file saved
 GOTO END
 
