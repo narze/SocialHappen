@@ -52,6 +52,7 @@ class Invite_component_lib {
 																'invite_type' => $invite_type,
 															)														
 															);
+															
 			if($invite_exists){
 				$invite_key = $invite_exists['invite_key'];
 				if($invite_type==2){
@@ -65,6 +66,7 @@ class Invite_component_lib {
 				if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
 									, $invite_type, $user_facebook_id, $target_facebook_id_list
 									, $invite_key, $redirect_url)){
+			
 					return $invite_key;
 				} else {
 					return FALSE;
@@ -224,7 +226,9 @@ class Invite_component_lib {
 		
 		if(!$invite = $this->get_invite_by_invite_key($invite_key)){
 			// echo 'invite key invalid';
-			return FALSE;
+			//return FALSE;
+			return array('error' => 'invite_key is incorrect');
+			
 		} else if($invite['invite_type'] == 2 || ($invite['invite_type'] == 1 && in_array($user_facebook_id, $invite['target_facebook_id_list']))){ // if key is public invite OR private and user is in the invitee list
 			$campaign_id = $invite['campaign_id']; //TODO : Check if this is current campaign_id
 			$facebook_page_id = $invite['facebook_page_id'];
@@ -235,23 +239,27 @@ class Invite_component_lib {
 				$this->CI->load->model('user_campaigns_model', 'user_campaign');
 				if($this->CI->user_campaign->is_user_in_campaign($user['user_id'], $campaign_id)){
 					//already in campaign
-					return FALSE;
+					//return FALSE;
+					return array('error' => 'You are already in campaign');
 				}
 			}
 			if($pending_invite_key === $invite_key){// if already entered this key before
 				return TRUE;
 			} else if($pending_invite_key){
 				// echo 'You have already received another invite key';
-				return FALSE;
+				//return FALSE;
+				return array('error' => 'You have already received another invite key');
 			} else if($add_result = $this->CI->invite_pending->add($user_facebook_id, $campaign_id, $facebook_page_id, $invite_key)){
 				return TRUE;
 			} else {
 				// echo 'exception, please try again';
-				return FALSE;
+				//return FALSE;
+				return array('error' => 'Accept invite failed, please try again');
 			}
 		} else {
 			// echo 'You are not invited by this key';
-			return FALSE;
+			//return FALSE;
+			return array('error' => 'You are not invited by this key');
 		}
 	}
 
