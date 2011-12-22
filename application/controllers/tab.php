@@ -614,13 +614,12 @@ class Tab extends CI_Controller {
 	function signup($page_id = NULL, $app_install_id = NULL){
 		$facebook_access_token = $this->input->get('facebook_access_token');
 		// $this->load->library('form_validation');
-		$facebook_user = $this->facebook->getUser($facebook_access_token);
+		$facebook_user = $this->facebook->getUser();
 		//$this->load->model('user_model','users');
 		$this->load->model('user_model','users');
 		//if is sh user redirect popup to "regged"
 		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
 			echo "You're already a Socialhappen user";
-			// $this->socialhappen->login(); // javascript already login, don't have to do again
 			if($app_install_id){
 				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
 			} else if ($page_id){
@@ -628,50 +627,14 @@ class Tab extends CI_Controller {
 			}
 		} else {
 			$this->load->helper('form');
-			$user_facebook_image = $facebook_user['id'] ? $this->facebook->get_profile_picture($facebook_user['id']) : base_url().'assets/images/default/user.png';
-			// $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
-			// $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
-			// $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
-				
-			// $this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-		
-			// if ($this->form_validation->run() == FALSE)
-			// {
-				$this -> load -> view('tab/signup', 
-						array(
-							'facebook_user'=>$facebook_user,
-							'user_profile_picture'=>$user_facebook_image,
-							'page_id' => $page_id
-						)
-				);
-			// }
-			// else
-			// {
-				// if (!$user_image = $this->socialhappen->upload_image('user_image')){
-					// $user_image = $user_facebook_image;
-				// }
-				
-				// $this->load->model('user_model','users');
-				// $post_data = array(
-					// 'user_first_name' => set_value('first_name'),
-					// 'user_last_name' => set_value('last_name'),
-					// 'user_email' => set_value('email'),
-					// 'user_image' => $user_image,
-					// 'user_facebook_id' => $facebook_user['id']
-				// );
-				// if($user_id = $this->users->add_user($post_data)){
-					// $this->socialhappen->login();
-					// if(isset($app_install_id)){
-						// redirect('tab/signup_page/'.$page_id.'/'.$app_install_id);
-					// }else{
-						// redirect('tab/signup_page/'.$page_id);
-					// }
-				// } else {
-					// log_message('error','add user failed : '. print_r($user_add_result, TRUE));
-					// log_message('error','$user : '. print_r($user, TRUE));
-					// echo 'Error occured';
-				// }
-			// }
+			$user_profile_picture = $facebook_user['id'] ? $this->facebook->get_profile_picture($facebook_user['id']) : base_url().'assets/images/default/user.png';
+			$this -> load -> view('tab/signup', 
+				array(
+					'facebook_user' => $facebook_user,
+					'user_profile_picture' => $user_profile_picture,
+					'page_id' => $page_id
+				)
+			);
 		}
 	}
 	
@@ -766,9 +729,9 @@ class Tab extends CI_Controller {
 	function signup_page($page_id = NULL, $app_install_id = NULL){
 		$facebook_access_token = $this->input->get('facebook_access_token');
 		$this->load->library('form_validation');
-		if($facebook_user = $this->facebook->getUser($facebook_access_token)){
-			$user_profile_image = $this->facebook->get_profile_picture($facebook_user['id']);
-		} else {
+		if($facebook_user_id = $this->FB->getUser()){
+			$user_profile_image = $this->facebook->get_profile_picture($facebook_user_id);
+		} else { //Only from signup popup->signup_page popup (in non-sh tabs)
 			$user_profile_image = $this->input->get('user_image');
 		}
 		$user_first_name = $this->input->get('user_first_name');
@@ -777,24 +740,17 @@ class Tab extends CI_Controller {
 		$page_user_fields = $this->pages->get_page_user_fields_by_page_id($page_id);
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		
-		$data = array();
-		
 		$this->load->model('user_model','user');
 		$this->load->vars(array(
-				'page_id' => $page_id,
-				'page' => $page,
-				'page_user_fields' => $page_user_fields,
-				'facebook_user'=>$facebook_user,
-				'user_profile_picture'=>$user_profile_image,
-				'user_first_name' => $user_first_name,
-				'app_install_id' => $app_install_id
-			)
-		);
-		
+			'page_id' => $page_id,
+			'page' => $page,
+			'page_user_fields' => $page_user_fields,
+			'user_profile_picture'=>$user_profile_image,
+			'user_first_name' => $user_first_name,
+			'app_install_id' => $app_install_id
+		));
 		
 		$this->load->view('tab/signup_page');
-		
-		$this->socialhappen->login();
 	}
 	
 	function signup_page_submit($page_id = NULL, $app_install_id = NULL){
@@ -908,10 +864,10 @@ class Tab extends CI_Controller {
 										log_message('error','accept_invite error '.print_r($accept_and_give_score_result,TRUE));
 									}
 								} else {
-									log_message('error', 'not found invite_key');
+									log_message('debug', 'not found invite_key');
 								}
 							} else {
-								log_message('error', 'campaign ended');
+								log_message('debug', 'campaign ended');
 							}
 						} else { //mode = page
 							$this->load->model('invite_pending_model', 'invite_pending');
@@ -921,10 +877,10 @@ class Tab extends CI_Controller {
 								$this->load->library('invite_component_lib');
 								$accept_and_give_score_result = $this->invite_component_lib->accept_all_invite_page_level($invite_key, $user_facebook_id);
 								if(!$accept_and_give_score_result){
-									log_message('error','accept_invite error '.print_r($accept_and_give_score_result,TRUE));
+									log_message('debug','accept_invite debug '.print_r($accept_and_give_score_result,TRUE));
 								}
 							} else {
-								log_message('error', 'not found invite_keys');
+								log_message('debug', 'not found invite_keys');
 							}
 						}
 					//End
@@ -992,11 +948,8 @@ class Tab extends CI_Controller {
 						}
 					} else {
 						$data = array(
-							'status' => 'error',
-							'error' => 'get_invite_key_error',
-							'message' => 'cannot pending invite_key'
+							'status' => 'ok'
 						);
-						log_message('error', 'cannot find pending invite_key');
 					}
 				} else {
 					$data = array(

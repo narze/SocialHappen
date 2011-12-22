@@ -235,8 +235,8 @@ class Invite_model extends CI_Model {
 		if(!allnotempty(func_get_args())){
 			return FALSE;
 		}
-		if((!$invite = $this->get_invite_by_criteria(array('invite_key' => $invite_key))) || ($invite['invite_type'] == 2)){ 
-			//Invalid invite or public invite : cannot push into list
+		if(!$invite = $this->get_invite_by_criteria(array('invite_key' => $invite_key))){ 
+			//Invalid invite : cannot push into list
 			return FALSE;
 		} else {
 			foreach($user_facebook_id_array as &$user_facebook_id){

@@ -56,7 +56,7 @@ class Campaign_model extends CI_Model {
 	 */
 	function get_app_campaigns_by_app_install_id_ordered($app_install_id =NULL, $order_by = NULL, $limit = NULL, $offset = NULL){
 		$this->db->order_by($order_by);
-		return $this -> get_app_campaigns_by_app_install_id_and_campaign_status_id($app_install_id, NULL, $order_by, $limit, $offset);
+		return $this -> get_app_campaigns_by_app_install_id_and_campaign_status_id($app_install_id, NULL, $limit, $offset);
 	}
 		
 	/**

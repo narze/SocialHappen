@@ -244,6 +244,9 @@ class Invite_component_lib {
 				// echo 'You have already received another invite key';
 				return FALSE;
 			} else if($add_result = $this->CI->invite_pending->add($user_facebook_id, $campaign_id, $facebook_page_id, $invite_key)){
+				if($invite['invite_type'] == 2){
+					return $this->CI->invite_model->add_into_target_facebook_id_list($invite_key, array($user_facebook_id));
+				}
 				return TRUE;
 			} else {
 				// echo 'exception, please try again';

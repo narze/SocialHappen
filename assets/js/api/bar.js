@@ -12,7 +12,6 @@ sh_guest = function(){
 }
 sh_signup = function(){
 	(function($){
-		
 		jQuery.fancybox({
 			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_access_token='+facebook_access_token,
 			onComplete: signup_form
@@ -57,6 +56,7 @@ sh_signup = function(){
 							}
 						} else if(data.status == 'ok'){
 							user_name = $('input#first_name').val();
+							user_image = $('div.profile img.profile').attr('src');
 							sh_signup_page();
 						}
 					  })
@@ -436,7 +436,7 @@ onLoad = function(){
 				}
 			}
 
-			function sh_sharebutton(){console.log('sh_sharebutton');
+			function sh_sharebutton(){
 				$(document).on('click', 'div.sh-sharebutton', function(){
 					sh_sharebutton_menu($(this));
 				});
@@ -470,7 +470,7 @@ onLoad = function(){
 				}
 			}
 
-			function sh_invitebutton(){console.log('sh_invitebutton');
+			function sh_invitebutton(){
 				$(document).on('click', 'div.sh-invitebutton', function(){
 					sh_invitebutton_menu($(this));
 				});
@@ -591,11 +591,10 @@ sh_popup = function(){
 				// page_installed=1;
 			// }
 		} else {
-			console.log('asdfs');
 			if(!is_user_register_to_page) {
 				sh_signup_page();
 			} else if(!is_user_register_to_campaign){
-				sh_signup_campaign();
+				sh_signup_campaign(); 
 			}
 		}
 		
@@ -731,7 +730,6 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		facebook_access_token = message.data.fb_access_token;
 		sh_login();
 	} else if(message.data.sh_message === "logged in"){ //xd.js 
-		console.log(view_as, is_user_register_to_page);
 		if(view_as === 'guest' || is_user_register_to_page) {
 			sh_signup();
 		} else {
