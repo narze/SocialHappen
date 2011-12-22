@@ -198,7 +198,7 @@ class audit_lib_test extends CI_Controller {
 		
 		$app_id = 3;
 		$result = $this->audit_lib->list_audit_action($app_id);
-		$this->unit->run(count($result), 0, 'list audit action - 3', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		$this->unit->run(count($result), 2, 'list audit action - 3', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
 		
 		$app_id = 1;
 		$result = $this->audit_lib->list_audit_action($app_id);
@@ -219,9 +219,10 @@ class audit_lib_test extends CI_Controller {
 		$app_id = 2;
 		$action_id = 4;
 		$result = $this->audit_lib->get_audit_action($app_id, $action_id);
-		$match = $result['app_id'] == 2 && $result['action_id'] == 4
-		&& $result['stat_app'] == TRUE && $result['stat_page'] == FALSE
-		&& $result['stat_campaign'] == TRUE	&& $result['description'] == 'app id 2, action id 4 modded';
+    // action id < 1000, chang to platform with app_id = 0
+		$match = $result['app_id'] == 0 && $result['action_id'] == 4
+		&& $result['stat_app'] == FALSE && $result['stat_page'] == FALSE
+		&& $result['stat_campaign'] == TRUE	&& $result['description'] == 'app id 0, action id 4';
 		$this->unit->run($match, 'is_true', 'get_audit_action - 2 - 4', '<pre>' . print_r($result, TRUE) . '</pre>');
 		//this get action from platform app_id : 0
 	}
@@ -348,7 +349,7 @@ class audit_lib_test extends CI_Controller {
 		$start_date = NULL;
 		$end_date = NULL;
 		$result = $this->audit_lib->list_stat_app($app_install_id);
-		$this->unit->run(count($result), 3, 'list stat app $app_install_id = 1', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		$this->unit->run(count($result), 2, 'list stat app $app_install_id = 1', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
 		
 		$app_install_id = NULL;
 		$action_id = 2;
@@ -377,7 +378,7 @@ class audit_lib_test extends CI_Controller {
 		$start_date = $today;
 		$end_date = NULL;
 		$result = $this->audit_lib->list_stat_app($app_install_id, $action_id, $start_date, $end_date);
-		$this->unit->run(count($result), 3, 'list stat app $app_install_id = 1 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		$this->unit->run(count($result), 2, 'list stat app $app_install_id = 1 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
 		
 		$app_install_id = 1;
 		$action_id = NULL;
@@ -391,7 +392,7 @@ class audit_lib_test extends CI_Controller {
 		$start_date = $today -11;
 		$end_date = $today + 140;
 		$result = $this->audit_lib->list_stat_app($app_install_id, $action_id, $start_date, $end_date);
-		$this->unit->run(count($result), 3, 'list stat app $app_install_id = 1 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		$this->unit->run(count($result), 2, 'list stat app $app_install_id = 1 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
 	}
 	
 	function list_stat_page_test(){
