@@ -17,7 +17,9 @@ class User_apps_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_app_users_by_app_install_id($app_install_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this->db->join('user','user.user_id=user_apps.user_id');
 		$result = $this->db->get_where('user_apps',array('app_install_id'=>$app_install_id))->result_array();
 		return $this->socialhappen->map_v($result, 'user_gender');
@@ -30,7 +32,9 @@ class User_apps_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_user_apps_by_user_id($user_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this->db->join('user','user.user_id=user_apps.user_id');
 		$this->db->join('installed_apps','user_apps.app_install_id=installed_apps.app_install_id');
 		$this->db->join('app','installed_apps.app_id=app.app_id');

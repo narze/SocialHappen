@@ -30,7 +30,9 @@ class Company_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function get_company_profile($limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$result = $this->db->get_where('company',array())->result_array();
 		return issetor($result, NULL);
 	}

@@ -26,7 +26,6 @@ class XD extends CI_Controller {
 	function get_user($page_id = NULL){
 		if($user = $this->socialhappen->get_user()){
 			$user['user_role'] = $this->get_role($user['user_id'], $page_id);
-			
 		} else {
 			$user = array('user_id' => '', 'user_role' => 'guest');
 		}

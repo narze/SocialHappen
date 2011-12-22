@@ -6,10 +6,11 @@ class Audit_action_type_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('Audit_action_type_model','audit_action_types');
+		$this->unit->reset_dbs();
 	}
 
 	function __destruct(){
-		echo $this->unit->report();
+		echo $this->unit->report_with_counter();
 	}
 
 	function index(){
@@ -68,7 +69,7 @@ class Audit_action_type_test extends CI_Controller {
 					'audit_action_active' => rand(0,1)
 				);
 		$result = $this->audit_action_types->update_audit_action_type_by_id(1, $data);
-		print_r($result);
+		// print_r($result);
 		$this->unit->run($result,'is_true', 'update_audit_action_type_by_id()');	
 	}
 	

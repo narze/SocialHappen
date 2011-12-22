@@ -49,7 +49,9 @@ class Page_user_data_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_page_users_by_page_id($page_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this->db->join('user','user.user_id=page_user_data.user_id');
 		$page_users = $this -> db -> get_where('page_user_data', array('page_id' => $page_id)) -> result_array();
 		$page_users = $this->socialhappen->map_v($page_users, 'user_gender');

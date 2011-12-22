@@ -6,6 +6,7 @@ class User_apps_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('user_apps_model','user_apps');
+		$this->unit->reset_mysql();
 	}
 
 	function __destruct(){

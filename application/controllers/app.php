@@ -5,6 +5,7 @@ class App extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->socialhappen->check_logged_in();
+		$this->load->library('controller/app_ctrl');
 	}
 	
 	function index($app_install_id = NULL){
@@ -192,9 +193,8 @@ class App extends CI_Controller {
 	 */
 	function json_get_profile($app_install_id = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('installed_apps_model','installed_apps');
-		$profile = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
-		echo json_encode($profile);
+		$profile = $this->app_ctrl->json_get_profile($app_install_id);
+		echo $profile;
 	}
 	
 	/**
@@ -204,9 +204,8 @@ class App extends CI_Controller {
 	 */
 	function json_get_campaigns($app_install_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('campaign_model','campaigns');
-		$campaigns = $this->campaigns->get_app_campaigns_by_app_install_id($app_install_id, $limit, $offset);
-		echo json_encode($campaigns);
+		$campaigns = $this->app_ctrl->json_get_campaigns($app_install_id, $limit, $offset);
+		echo $campaigns;
 	}
 	
 	/**
@@ -217,9 +216,8 @@ class App extends CI_Controller {
 	 */
 	function json_get_campaigns_using_status($app_install_id =NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this -> load -> model('campaign_model', 'campaigns');
-		$campaigns = $this -> campaigns -> get_app_campaigns_by_app_install_id_and_campaign_status_id($app_install_id, $campaign_status_id, $limit, $offset);
-		echo json_encode($campaigns);
+		$campaigns = $this -> app_ctrl -> json_get_campaigns_using_status($app_install_id, $campaign_status_id, $limit, $offset);
+		echo $campaigns;
 	}
 	
 	/**
@@ -229,9 +227,8 @@ class App extends CI_Controller {
 	 */
 	function json_get_users($app_install_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('user_apps_model','user_apps');
-		$users = $this->user_apps->get_app_users_by_app_install_id($app_install_id, $limit, $offset);
-		echo json_encode($users);
+		$users = $this->app_ctrl->json_get_users($app_install_id, $limit, $offset);
+		echo $users;
 	}
 	
 	/**
@@ -241,9 +238,8 @@ class App extends CI_Controller {
 	 */
 	function json_get_pages($app_install_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$this->load->model('page_model','pages');
-		$pages = $this->pages->get_app_pages_by_app_install_id($app_install_id, $limit, $offset);
-		echo json_encode($pages);
+		$pages = $this->app_ctrl->json_get_pages($app_install_id, $limit, $offset);
+		echo $pages;
 	}
 	
 	/**
@@ -253,7 +249,7 @@ class App extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_app_install_status($status_name = NULL){	
-		//$this->socialhappen->ajax_check();
+		$this->socialhappen->ajax_check();
 		$this->load->model('app_model','app');
 		$app_install_status = array();
 		if($app_install_status_id = $this->socialhappen->get_k('app_install_status', $status_name)){
@@ -269,7 +265,7 @@ class App extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_all_app_install_status(){
-		//$this->socialhappen->ajax_check();
+		$this->socialhappen->ajax_check();
 		$app_install_statuses = array();
 		foreach($this->socialhappen->get_global('app_install_status') as $key => $value){
 			$app_install_statuses[$key]['app_install_status_id'] = $key;
@@ -278,17 +274,17 @@ class App extends CI_Controller {
 		echo json_encode(array_values($app_install_statuses));
 	}
 	
-	/**
+	/** DEPRECATED
 	 * JSON : application profile by fb_app_api_key
 	 * @param $fb_app_api_key
 	 * @author Prachya P.
 	 */
-	function json_get_app_by_api_key($fb_app_api_key){
-		$this->socialhappen->ajax_check();
-		$this->load->model('app_model','app');
-		$app = $this->app->get_app_by_api_key($fb_app_api_key);
-		echo json_encode($app);
-	}
+	// function json_get_app_by_api_key($fb_app_api_key){
+	// 	$this->socialhappen->ajax_check();
+	// 	$this->load->model('app_model','app');
+	// 	$app = $this->app->get_app_by_api_key($fb_app_api_key);
+	// 	echo json_encode($app);
+	// }
 	
 	/**
 	 * JSON : update app order in dashboard

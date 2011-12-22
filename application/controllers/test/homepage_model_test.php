@@ -24,6 +24,7 @@ class Homepage_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('homepage_model','homepage');
+		$this->unit->reset_mongodb();
 	}
 	
 	function __destruct(){

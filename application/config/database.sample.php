@@ -38,24 +38,41 @@
 | the active record class
 */
 
+$active_group = 'local';
+$active_record = TRUE;
 
-$active_group = 'default';
+$db['local']['hostname'] = 'localhost';
+$db['local']['username'] = 'root';
+$db['local']['password'] = '';
+$db['local']['database'] = 'socialhappen';
+$db['local']['dbdriver'] = 'mysql';
+$db['local']['dbprefix'] = 'sh_';
+$db['local']['pconnect'] = TRUE;
+$db['local']['db_debug'] = TRUE;
+$db['local']['cache_on'] = FALSE;
+$db['local']['cachedir'] = '';
+$db['local']['char_set'] = 'utf8';
+$db['local']['dbcollat'] = 'utf8_general_ci';
+$db['local']['swap_pre'] = '';
+$db['local']['autoinit'] = TRUE;
+$db['local']['stricton'] = FALSE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'socialhappen';
-$db['default']['dbdriver'] = 'mysql';
-$db['default']['dbprefix'] = 'sh_';
-$db['default']['pconnect'] = TRUE;
-$db['default']['db_debug'] = TRUE;
-$db['default']['cache_on'] = FALSE;
-$db['default']['cachedir'] = '';
-$db['default']['char_set'] = 'utf8';
-$db['default']['dbcollat'] = 'utf8_general_ci';
-$db['default']['swap_pre'] = '';
-$db['default']['autoinit'] = TRUE;
-$db['default']['stricton'] = FALSE;
+$db['local_unit_test']['hostname'] = 'localhost';
+$db['local_unit_test']['username'] = 'root';
+$db['local_unit_test']['password'] = '';
+$db['local_unit_test']['database'] = 'socialhappen_test';
+$db['local_unit_test']['dbdriver'] = 'mysql';
+$db['local_unit_test']['dbprefix'] = 'sh_';
+$db['local_unit_test']['pconnect'] = TRUE;
+$db['local_unit_test']['db_debug'] = TRUE;
+$db['local_unit_test']['cache_on'] = FALSE;
+$db['local_unit_test']['cachedir'] = '';
+$db['local_unit_test']['char_set'] = 'utf8';
+$db['local_unit_test']['dbcollat'] = 'utf8_general_ci';
+$db['local_unit_test']['swap_pre'] = '';
+$db['local_unit_test']['autoinit'] = TRUE;
+$db['local_unit_test']['stricton'] = FALSE;
+
 
 
 /* End of file database.php */

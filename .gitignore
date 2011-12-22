@@ -8,4 +8,9 @@ index.php
 .project
 uploads
 notification/config.js
-
+shdumper/mysql_load.bat
+shdumper/mysql_save.bat
+shdumper/mongodb_load.bat
+shdumper/mongodb_save.bat
+shdumper/mongodb_dump
+shdumper/mysql_dump.sql

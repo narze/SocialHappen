@@ -6,6 +6,7 @@ class User_campaigns_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('user_campaigns_model','user_campaigns');
+		$this->unit->reset_mysql();
 	}
 
 	function __destruct(){

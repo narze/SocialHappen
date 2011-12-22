@@ -13,7 +13,9 @@ class User_campaigns_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_campaign_users_by_campaign_id($campaign_id =NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
 		$result = $this -> db -> get_where('user_campaigns', array('campaign_id' => $campaign_id)) -> result_array();
 		return $this->socialhappen->map_v($result, 'user_gender');
@@ -36,7 +38,9 @@ class User_campaigns_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_user_campaigns_by_user_id($user_id =NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
 		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
 		$result = $this -> db -> get_where('user_campaigns', array('user.user_id' => $user_id)) -> result_array();

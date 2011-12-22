@@ -17,56 +17,24 @@ class Sync extends CI_Controller {
 			}
 		}
 		parent::__construct();
-		$this->preload();
-		$this->load->dbforge();
-		$this->output->enable_profiler(TRUE);
+		$this->config->set_item('sess_use_database', FALSE);
+		if($this->input->get('unit_test')){
+			$this->db = $this->load->database('local_unit_test', TRUE);
+			$this->config->set_item('mongo_testmode', TRUE);
+			$this->mongo_test_mode = TRUE;
+		}
+		
+		$this->output->enable_profiler(FALSE);
 		define('BASE_URL', base_url());
 	}
 	
 	function index(){
-		echo '<a href="'.base_url().'dev/sync/mongodb_reset">MongoDB reset</a><br />';
-		echo '<a href="'.base_url().'dev/sync/remove_users">Remove users</a><br />';
-		echo '<a href="'.base_url().'dev/sync/db_reset">RESET (drop -> create -> insert data)</a><br />';
-		echo '<a href="'.base_url().'dev/sync/generate_field_code">Generate field PHP code</a><br />';
-		echo '<a href="'.base_url().'dev/sync/create_database">Create datebase "socialhappen"</a>';
-	}
-	
-	/**
-	 * Create database and session table in pure PHP
-	 * @author Manassarn M.
-	 */
-	function preload(){
-		$host = $this->db->hostname;
-		$username = $this->db->username;
-		$password = $this->db->password;
-		$database = $this->db->database;
-		$prefix = $this->db->dbprefix;
-		$session_table = SESSION_TABLE_NAME;
-		if(isset($_GET['u']) && isset($_GET['p'])){
-			$username = $_GET['u'];
-			$password = $_GET['p'];
-		}
-		$con = mysql_connect($host,$username,$password);
-		if (!$con)
-		    {
-				die('Could not connect to mysql: ' . mysql_error());
- 		    }
-		if (!mysql_query("CREATE DATABASE IF NOT EXISTS {$database}",$con)){
-			echo "Error creating database '{$database}': " . mysql_error()."<h3>Try dev/sync?u=username&p=password</h3>";
-		}
-		if($this->config->item('sess_use_database')) {
-			if (!mysql_query("CREATE TABLE IF NOT EXISTS {$database}.{$prefix}{$session_table} (
-							session_id varchar(40) DEFAULT '0' NOT NULL,
-							ip_address varchar(16) DEFAULT '0' NOT NULL,
-							user_agent varchar(50) NOT NULL,
-							last_activity int(10) unsigned DEFAULT 0 NOT NULL,
-							session_data text default '' not null,
-							PRIMARY KEY (session_id)
-							); 
-						",$con)){
-				echo "Error creating session table: " . mysql_error();
-			}
-		}
+		echo '<a target="_blank" href="'.BASE_URL.'dev/sync/db_reset">[Production] Mysql reset</a><br />';
+		echo '<a target="_blank" href="'.BASE_URL.'dev/sync/mongodb_reset">[Production] MongoDB reset</a><br />';
+		echo '<a target="_blank" href="'.BASE_URL.'dev/sync/db_reset?unit_test=1">[Unit test] Mysql reset<br />';
+		echo '<a target="_blank" href="'.BASE_URL.'dev/sync/mongodb_reset?unit_test=1">[Unit test] MongoDB reset</a><br />';
+		echo '<a target="_blank" href="'.BASE_URL.'dev/sync/remove_users">Remove users</a><br />';
+		echo '<a target="_blank" href="'.BASE_URL.'dev/sync/generate_field_code">Generate field PHP code</a><br />';
 	}
 	
 	function remove_users(){
@@ -80,6 +48,7 @@ class Sync extends CI_Controller {
 	}
 	
 	function db_reset(){
+		$this->load->dbforge();
 		$this->drop_tables();
 		$this->create_tables();
 		$this->special_cases_after_create();
@@ -109,10 +78,6 @@ class Sync extends CI_Controller {
 				}
 			}
 		}
-	}
-	
-	function create_database(){
-		$this->dbforge->create_database($this->db->database);
 	}
 	
 	function create_tables(){
@@ -271,7 +236,7 @@ class Sync extends CI_Controller {
 							'sessions' =>array(
 								'session_id' => field_option('VARCHAR', 40, '0', $null, $autoinc, $unsigned),
 								'ip_address' => field_option('VARCHAR', 16, '0', $null, $autoinc, $unsigned),
-								'user_agent' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
+								'user_agent' => field_option('VARCHAR', 120, $default, $null, $autoinc, $unsigned),
 								'last_activity' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 								'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 								'user_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
@@ -426,6 +391,7 @@ class Sync extends CI_Controller {
 
 	function special_cases_after_create(){
 		$this->db->query("CREATE UNIQUE INDEX user_facebook_id ON ".$this->db->dbprefix('user')." (user_facebook_id)");
+		$this->db->query("CREATE INDEX last_activity_idx ON ".$this->db->dbprefix('sessions')." (last_activity)");
 	}
 	
 	function insert_test_data(){
@@ -703,7 +669,7 @@ class Sync extends CI_Controller {
 							    'campaign_all_member' => 10, 
 							    'campaign_start_timestamp' => '2011-05-19',
 							    'campaign_end_timestamp' => '2012-05-18',
-								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							),
 							array(
@@ -716,7 +682,7 @@ class Sync extends CI_Controller {
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18', 
 							    'campaign_end_timestamp' => '2011-06-18',
-								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							),
 							array(
@@ -729,7 +695,7 @@ class Sync extends CI_Controller {
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18', 
 							    'campaign_end_timestamp' => '2011-12-31',
-								'campaign_image' => base_url().'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							)
 						);
@@ -738,7 +704,7 @@ class Sync extends CI_Controller {
 		$company = array(
 						array(
 							    'company_id' => 1, 
-							    'creator_user_id' => 0, 
+							    'creator_user_id' => 1, 
 							    'company_name' => 'Company test 1', 
 							    'company_detail' => 'detail test',
 							    'company_address' => '', 
@@ -747,7 +713,7 @@ class Sync extends CI_Controller {
 							    'company_register_date' => '2011-05-09 17:52:17', 
 							    'company_username' => '', 
 							    'company_password' => '',
-							    'company_image' => base_url().'uploads/images/32b299d9fb8a6e61784646ac80631153_o.png'
+							    'company_image' => BASE_URL.'uploads/images/32b299d9fb8a6e61784646ac80631153_o.png'
 							)
 						);
 		$this->db->insert_batch('company', $company);
@@ -870,7 +836,7 @@ class Sync extends CI_Controller {
 						    'page_all_member' => 22, 
 						    'page_new_member' => 222,
 							'page_installed' => 0, 
-						    'page_image' => base_url().'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						    'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 							'page_user_fields' => json_encode(array(
 								1 => array(
 									'name' => 'size',
@@ -904,7 +870,7 @@ class Sync extends CI_Controller {
 						'page_all_member' => 10, 
 						'page_new_member' => 100,
 						'page_installed' => 1, 
-						'page_image' => base_url().'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 						'page_user_fields' => json_encode(array(
 							1 => array(
 								'name' => 'size',
@@ -951,7 +917,7 @@ class Sync extends CI_Controller {
 						'page_all_member' => 10, 
 						'page_new_member' => 100,
 						'page_installed' => 0, 
-						'page_image' => base_url().'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 						'page_user_fields' => NULL,
 						'facebook_tab_url' => ''
 					),
@@ -964,7 +930,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',					    
+					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',					    
 					    'user_facebook_id' => 713558190, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -977,7 +943,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',	
+					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',	
 					    'user_facebook_id' => 637741627, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -990,7 +956,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 631885465, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -1003,7 +969,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 755758746, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -1016,7 +982,7 @@ class Sync extends CI_Controller {
 					    'user_first_name' => 'test',
 					    'user_last_name' => 'test',
 					    'user_email' => 'tes@test.com',
-					    'user_image' => base_url().'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
 					    'user_facebook_id' => 508840994, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -1118,14 +1084,14 @@ class Sync extends CI_Controller {
 							);
 		$this->db->insert_batch('user_companies', $user_companies);
 		
-		$sessions = array(
+		$sessions = array( //for testing only
 						array(
 							'session_id' => 1111,
 							'ip_address' => 0,
 							'user_agent' => 0,
 							'last_activity' => 0,
-							'user_data' => 'a:3:{s:7:"user_id";s:1:"0";s:16:"user_facebook_id";s:9:"713558190";s:9:"logged_in";b:1;}',
-							'user_id' => 0
+							'user_data' => 'a:3:{s:7:"user_id";s:5:"55555";s:16:"user_facebook_id";s:9:"713558190";s:9:"logged_in";b:1;}',
+							'user_id' => 55555
 							)
 						);
 		$this->db->insert_batch('sessions', $sessions);
@@ -1292,7 +1258,7 @@ class Sync extends CI_Controller {
 			array(
 				'package_name' => 'Normal package',
 				'package_detail' => 'For normal user',
-				'package_image' => base_url().'images/package_icon_free.png',
+				'package_image' => BASE_URL.'images/package_icon_free.png',
 				'package_max_companies' => 1,
 				'package_max_pages' => 3,
 				'package_max_users' => 10000,
@@ -1303,7 +1269,7 @@ class Sync extends CI_Controller {
 			array(
 				'package_name' => 'Standard package',
 				'package_detail' => 'For SMEs',
-				'package_image' => base_url().'images/package_icon_standard.png',
+				'package_image' => BASE_URL.'images/package_icon_standard.png',
 				'package_max_companies' => 3,
 				'package_max_pages' => 7,
 				'package_max_users' => 50000,
@@ -1314,7 +1280,7 @@ class Sync extends CI_Controller {
 			array(
 				'package_name' => 'Enterprise package',
 				'package_detail' => 'For Enterprise',
-				'package_image' => base_url().'images/package_icon_enterprise.png',
+				'package_image' => BASE_URL.'images/package_icon_enterprise.png',
 				'package_max_companies' => 3,
 				'package_max_pages' => 10,
 				'package_max_users' => 100000,
@@ -1592,32 +1558,37 @@ class Sync extends CI_Controller {
 	
 	function drop_mongo_collections(){
 		foreach(func_get_args() as $collection){
-			echo $this->mongo_db->drop_collection($collection) ? "Dropped {$collection}<br />" : "Cannot drop {$collection}<br />";
+			echo $this->mongodb->drop_collection($collection) ? "Dropped {$collection}<br />" : "Cannot drop {$collection}<br />";
 		}
 	}
 	
 	function mongodb_reset(){
-		
-		$this->load->library('mongo_db');
-		$this->load->library('audit_lib');
-		$this->load->library('achievement_lib');
-		$this->mongo_db->switch_db('achievement');
+		$mongo_db_prefix = NULL;
+		$this->load->config('mongo_db');
+		if($this->config->item('mongo_testmode') == TRUE){
+			$mongo_db_prefix = $this->config->item('mongo_testmode_prefix');
+		}
+		$this->load->library('mongo_db', NULL, 'mongodb');
+		$this->mongodb->switch_db($mongo_db_prefix.'achievement');
 		$this->drop_mongo_collections('achievement_info','achievement_stat','achievement_user');
-		$this->mongo_db->switch_db('audit');
+		$this->mongodb->switch_db($mongo_db_prefix.'audit');
 		$this->drop_mongo_collections('actions','audits');
-		$this->mongo_db->switch_db('stat');
+		$this->mongodb->switch_db($mongo_db_prefix.'stat');
 		$this->drop_mongo_collections('apps','campaigns','pages');
-		$this->mongo_db->switch_db('message');
+		$this->mongodb->switch_db($mongo_db_prefix.'message');
 		$this->drop_mongo_collections('notification');
-		$this->mongo_db->switch_db('get_started');
+		$this->mongodb->switch_db($mongo_db_prefix.'get_started');
 		$this->drop_mongo_collections('get_started_info','get_started_stat');
-		$this->mongo_db->switch_db('app_component');
+		$this->mongodb->switch_db($mongo_db_prefix.'app_component');
 		$this->drop_mongo_collections('homepage');
-		$this->mongo_db->switch_db('campaign');
+		$this->mongodb->switch_db($mongo_db_prefix.'campaign');
 		$this->drop_mongo_collections('app_component','app_component_page','homepage','invite','sharebutton');
-		$this->mongo_db->switch_db('invite');
+		$this->mongodb->switch_db($mongo_db_prefix.'invite');
 		$this->drop_mongo_collections('invites','pending');
 		echo 'Dropped collections<br />';
+
+		$this->load->library('audit_lib');
+		$this->load->library('achievement_lib');
 		
 		$platform_audit_actions = array(
 			array(
@@ -1828,6 +1799,26 @@ class Sync extends CI_Controller {
 				'stat_page' => FALSE,
 				'stat_campaign' => FALSE,
 				'format_string' => 'User {user:user_id} invited a friend',
+				'score' => 1
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 114,
+				'description' => 'Invitee Accept Page Invite',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} accepted page invite',
+				'score' => 1
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 115,
+				'description' => 'Invitee Accept Campaign Invite',
+				'stat_app' => FALSE,
+				'stat_page' => FALSE,
+				'stat_campaign' => TRUE,
+				'format_string' => 'User {user:user_id} accepted campaign invite',
 				'score' => 1
 			),
 		);

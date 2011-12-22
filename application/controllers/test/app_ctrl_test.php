@@ -1,9 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class App_test extends CI_Controller {
+class App_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
+		$this->load->library('controller/app_ctrl');
+		$this->unit->reset_dbs();
 	}
 	
 	function index(){
@@ -16,12 +18,57 @@ class App_test extends CI_Controller {
 		$this->unit->report_with_counter();
 	}
 	
+	function index_test(){
+		
+	}
+
+	function config_test(){
+		
+	}
+
+	function go_test(){
+		
+	}
+
+	function json_count_campaigns_test(){
+		
+	}
+
+	function json_count_users_test(){
+		
+	}
+
+	function json_get_app_install_status_test(){
+		
+	}
+
+	function json_get_all_app_install_status_test(){
+		
+	}
+
+	// function json_get_app_by_api_key_test(){
+		
+	// }
+
+	function json_update_app_order_in_dashboard_test(){
+		
+	}
+
+	function curl_test(){
+		
+	}
+
+	function json_add_to_page_test(){
+		
+	}
+
 	/**
 	 * Tests json_get_profile()
 	 * @author Manassarn M.
 	 */
 	function json_get_profile_test(){
-		$content = file_get_contents(base_url().'app/json_get_profile/1');
+		$app_install_id = 1;
+		$content = $this->app_ctrl->json_get_profile($app_install_id);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array, 'is_array', 'json_get_profile()');
 		$this->unit->run($array['app_install_id'],'is_string','app_install_id');
@@ -52,7 +99,10 @@ class App_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_campaigns_test(){
-		$content = file_get_contents(base_url().'app/json_get_campaigns/1');
+		$app_install_id = 1;
+		$limit = NULL;
+		$offset = NULL;
+		$content = $this->app_ctrl->json_get_campaigns($app_install_id, $limit, $offset);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array, 'is_array', 'json_get_campaigns()');
 		$this->unit->run($array[0], 'is_array', 'First row');
@@ -81,7 +131,11 @@ class App_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_campaigns_using_status_test(){
-		$content = file_get_contents(base_url().'app/json_get_campaigns_using_status/1/1');
+		$app_install_id = 1;
+		$campaign_status_id = 1;
+		$limit = NULL;
+		$offset = NULL;
+		$content = $this->app_ctrl->json_get_campaigns_using_status($app_install_id, $campaign_status_id, $limit, $offset);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_campaigns_using_status()');
 		$this->unit->run($array[0],'is_array', 'First row');
@@ -110,7 +164,10 @@ class App_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_users_test(){
-		$content = file_get_contents(base_url().'app/json_get_users/1');
+		$app_install_id = 1;
+		$limit = NULL;
+		$offset = NULL;
+		$content = $this->app_ctrl->json_get_users($app_install_id, $limit, $offset);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array, 'is_array', 'json_get_users()');
 		$this->unit->run($array[0], 'is_array', 'First row');
@@ -132,7 +189,10 @@ class App_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_get_pages_test(){
-		$content = file_get_contents(base_url().'app/json_get_pages/1');
+		$app_install_id = 1;
+		$limit = NULL;
+		$offset = NULL;
+		$content = $this->app_ctrl->json_get_pages($app_install_id, $limit, $offset);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array, 'is_array', 'json_get_pages()');
 		$this->unit->run($array[0]['app_install_id'],'is_string','app_install_id');
@@ -151,23 +211,8 @@ class App_test extends CI_Controller {
 		$this->unit->run($array[0]['page_image'],'is_string','page_image');
 	}
 	
-	/**
-	 * Tests json_add()
-	 * @author Manassarn M.
-	 */
 	function json_add_test(){
-		$app = array(
-						'company_id' => 1,
-						'app_id' => 1,
-						'app_install_status_id' => $this->socialhappen->get_k('app_install_status', 'installed'),
-						'page_id' => 1,
-						'app_install_secret_key' => rand(1,10000000)
-					);
-		$content = $this->curl->ssl(FALSE)->simple_post(base_url().'app/json_add', $app);
-		$content = json_decode($content, TRUE);
-		$this->unit->run($content, 'is_array', 'json_add()');
-		$this->unit->run($content['app_install_id'],'is_int','app_install_id');
-		$this->unit->run($content['status'] == 'OK','is_true', 'status');
+		
 	}
 }
 

@@ -24,6 +24,7 @@ class Get_started_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('get_started_model','get_started');
+		$this->unit->reset_mongodb();
 	}
 	
 	function __destruct(){

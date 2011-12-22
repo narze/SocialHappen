@@ -6,6 +6,7 @@ class User_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('user_model','users');
+		$this->unit->reset_mysql();
 	}
 
 	function __destruct(){
@@ -36,7 +37,6 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result['user_last_seen'],'is_string','user_last_seen');
-		$this->unit->run(count($result) == 8,'is_true', 'number of column');
 	}
 
 	/**
@@ -89,7 +89,6 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result['user_last_seen'],'is_string','user_last_seen');
-		$this->unit->run(count($result) == 8,'is_true', 'number of column');
 	}
 	
 	/**
@@ -98,7 +97,7 @@ class User_model_test extends CI_Controller {
 	 */
 	function count_users_by_app_install_id_test(){
 		$result = $this->users->count_users_by_app_install_id(1);
-		$this->unit->run($result,'is_string', 'count_users_by_app_install_id()');
+		$this->unit->run($result,'is_int', 'count_users_by_app_install_id()');
 	}
 	
 	/**
@@ -107,7 +106,7 @@ class User_model_test extends CI_Controller {
 	 */
 	function count_users_by_campaign_id_test(){
 		$result = $this->users->count_users_by_campaign_id(1);
-		$this->unit->run($result,'is_string', 'count_users_by_campaign_id()');
+		$this->unit->run($result,'is_int', 'count_users_by_campaign_id()');
 	}
 	
 	/**

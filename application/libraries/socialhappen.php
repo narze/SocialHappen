@@ -150,7 +150,7 @@ class SocialHappen{
 	 * @author Manassarn M. 
 	 */
 	function is_logged_in(){
-		return ($this->CI->session->userdata('logged_in') && $this->CI->facebook->get_facebook_cookie());
+		return ($this->CI->session->userdata('logged_in') && $this->CI->facebook->getUser());
 	}
 	
 	/**

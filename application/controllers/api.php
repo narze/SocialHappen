@@ -31,6 +31,7 @@ class Api extends CI_Controller {
 		$response = $this->api_lib->request_install_app($app_id, $app_secret_key, $company_id, $user_id, $user_facebook_id);
 		
 		$this->_print_api_result($response);
+
 				
 	}
 

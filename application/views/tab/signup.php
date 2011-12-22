@@ -16,7 +16,7 @@
 	<div id="signup-form">
 		<?php $attributes = array('class' => 'signup-form', 'id' => ''); echo form_open_multipart('tab/signup_submit/'.$page_id, $attributes); ?>
         <div class="profile">
-			<img src="<?php echo $user_profile_picture;?>" />
+			<img class="profile" src="<?php echo $user_profile_picture;?>" />
 			<div class="upload-pic">
 				<span><a href="#">(Change)</a></span>
 				<input id="user_image" type="file" name="user_image">

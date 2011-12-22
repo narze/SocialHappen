@@ -8,29 +8,15 @@ class Get_started_model extends CI_Model {
 	 */
 	function __construct(){
 		parent::__construct();
-		
-		$this->config->load('mongo_db');
-		$mongo_user = $this->config->item('mongo_user');
-		$mongo_pass = $this->config->item('mongo_pass');
-		$mongo_host = $this->config->item('mongo_host');
-		$mongo_port = $this->config->item('mongo_port');
-		$mongo_db = $this->config->item('mongo_db');
-		
-		try{
-			// connect to database
-			$this->connection = new Mongo("mongodb://".$mongo_user.":"
-			.$mongo_pass
-			."@".$mongo_host.":".$mongo_port);
-			
-			// select database
-			$this->db = $this->connection->get_started;
-			
-			// select collection
-			$this->get_started_info = $this->db->get_started_info;
-			$this->get_started_stat = $this->db->get_started_stat;
-		}catch(Exception $e){
-			show_error('Cannot connect to database');
-		}
+		$this->load->helper('mongodb');
+		$this->get_started_info = sh_mongodb_load( array(
+			'database' => 'get_started',
+			'collection' => 'get_started_info'
+		));
+		$this->get_started_stat = sh_mongodb_load( array(
+			'database' => 'get_started',
+			'collection' => 'get_started_stat'
+		));
 	}
 	
 	/** 

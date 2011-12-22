@@ -6,6 +6,7 @@ class Campaign_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('campaign_model','campaigns');
+		$this->unit->reset_mysql();
 	}
 
 	function __destruct(){
@@ -199,6 +200,68 @@ class Campaign_model_test extends CI_Controller {
 		$result = $this->campaigns->count_campaigns_by_app_install_id(1);
 		$this->unit->run($result,'is_int', 'count_campaigns_by_app_install_id()');
 	}
+
+	function get_app_campaigns_by_app_install_id_ordered_test(){
+		$campaign1 = array(
+							'app_install_id' => 1,
+							'campaign_name' => 'test1',
+							'campaign_detail' => 'test2',
+							'campaign_status_id' => '1',
+							'campaign_active_member' => '0',
+							'campaign_all_member' => '1',
+							'campaign_start_timestamp' => '2011-11-11 11:11:11',
+							'campaign_end_timestamp' => '2011-11-11 11:11:11'
+						);
+		$campaign_id1 = $this->campaigns->add_campaign($campaign1);
+		$this->unit->run($campaign_id1,'is_int','add_campaign()');
+
+		$campaign2 = array(
+							'app_install_id' => 1,
+							'campaign_name' => 'test2',
+							'campaign_detail' => 'test2',
+							'campaign_status_id' => '1',
+							'campaign_active_member' => '0',
+							'campaign_all_member' => '1',
+							'campaign_start_timestamp' => '2011-11-11 11:11:12',
+							'campaign_end_timestamp' => '2011-11-11 11:11:12'
+						);
+		$campaign_id2 = $this->campaigns->add_campaign($campaign2);
+		$this->unit->run($campaign_id2,'is_int','add_campaign()');
+
+		$result = $this->campaigns->get_app_campaigns_by_app_install_id_ordered(1, 'campaign_start_timestamp desc');
+		$this->unit->run($result[0]['campaign_name'] === 'test2', TRUE, 'get_app_campaigns_by_app_install_id_ordered' );
+		$this->unit->run($result[1]['campaign_name'] === 'test1', TRUE, 'get_app_campaigns_by_app_install_id_ordered' );
+
+		$result = $this->campaigns->get_app_campaigns_by_app_install_id_ordered(1, 'campaign_end_timestamp asc');
+		$this->unit->run($result[0]['campaign_name'] === 'test1', TRUE, 'get_app_campaigns_by_app_install_id_ordered' );
+		$this->unit->run($result[1]['campaign_name'] === 'test2', TRUE, 'get_app_campaigns_by_app_install_id_ordered' );
+
+	}
+
+	function get_app_campaigns_by_app_install_id_test(){
+		
+	}
+
+	function update_campaign_by_id_test(){
+		
+	}
+
+	function count_campaigns_by_page_id_and_campaign_status_id_test(){
+		
+	}
+
+	function count_campaigns_by_app_install_id_and_campaign_status_id_test(){
+		
+	}
+
+	function count_campaigns_by_company_id_test(){
+		
+	}
+
+	function count_campaigns_by_company_id_and_campaign_status_id_test(){
+		
+	}
+
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */

@@ -52,13 +52,17 @@ class Order_model extends CI_Model {
 	}
 	
 	function get_all_orders($limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$result = $this->db->get_where('order',array())->result_array();
 		return issetor($result, NULL);
 	}
 	
 	function get_orders_by_user_id($user_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		return $this->db->get_where('order', array('user_id' => $user_id))->result_array();
 	}
 	

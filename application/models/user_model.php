@@ -11,7 +11,9 @@ class User_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_user_profile_by_user_id($user_id =NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$profiles = $this -> db -> get_where('user', array('user_id' => $user_id)) -> result_array();
 		return $this->socialhappen->map_one_v($profiles[0], 'user_gender');
 	}
@@ -109,7 +111,9 @@ class User_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function get_all_user_profile($limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$result = $this->db->get_where('user',array())->result_array();
 		return $this->socialhappen->map_v($result, 'user_gender');
 	}

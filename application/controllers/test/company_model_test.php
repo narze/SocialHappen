@@ -6,6 +6,7 @@ class Company_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('company_model','companies');
+		$this->unit->reset_mysql();
 	}
 	
 	function __destruct(){
@@ -39,7 +40,6 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_username'],'is_string','company_username');
 		$this->unit->run($result['company_password'],'is_string','company_password');
 		$this->unit->run($result['company_image'],'is_string','company_image');
-		$this->unit->run(count($result) == 11,'is_true', 'number of column');
 	}
 
 	/**

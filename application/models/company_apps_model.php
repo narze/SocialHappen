@@ -15,7 +15,9 @@ class Company_apps_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_company_apps_by_company_id($company_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$this->db->join('app','company_apps.app_id=app.app_id');
 		$result = $this->db->get_where('company_apps',array('company_id'=>$company_id))->result_array();
 		return $this->socialhappen->map_v($result, array('app_type'));
@@ -40,7 +42,9 @@ class Company_apps_model extends CI_Model {
 	 * @author Prachya P.
 	 */
 	function get_company_not_installed_apps($company_id = NULL,$page_id = NULL, $limit = NULL, $offset = NULL){
-		$this->db->limit($limit, $offset);
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		$installed_app_id=array();
 		if($page_id!=NULL)
 			$result = $this->db->get_where('installed_apps',array('company_id' => $company_id,'page_id' => $page_id))->result_array();

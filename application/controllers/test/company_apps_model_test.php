@@ -6,6 +6,7 @@ class Company_apps_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('company_apps_model','company_apps');
+		$this->unit->reset_mysql();
 	}
 
 	function __destruct(){
@@ -14,7 +15,6 @@ class Company_apps_model_test extends CI_Controller {
 	
 	function index(){
 		$class_methods = get_class_methods($this);
-		echo 'Functions : '.(count(get_class_methods($this->company_apps))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
     		if(preg_match("/(_test)$/",$method)){
     			$this->$method();
