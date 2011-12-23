@@ -320,6 +320,9 @@ class Invite_component_lib {
 		if(!$invite = $this->get_invite_by_invite_key($invite_key)){
 			return FALSE;
 		}
+		if(!$this->_give_campaign_score_to_inviter($invite)){
+			return FALSE;
+		}
 		$this->CI->load->model('invite_pending_model','invite_pending');
 		if(!$this->CI->invite_pending->remove_by_user_facebook_id_and_campaign_id($user_facebook_id, $invite['campaign_id'])){
 			// log_message('error', 'cannot remove pending invite');
@@ -338,14 +341,14 @@ class Invite_component_lib {
 			return FALSE;
 		}
 		if(!$this->_accept_invite_level('page', $invite_key, $user_facebook_id)){ //Check if already accepted by itself or by other invite with same page id
-			return FALSE; echo 1;
+			return FALSE;
 		}
 		//Get facebook_page_id from master invite_key
 		$master_invite = $this->get_invite_by_invite_key($invite_key);
 		$facebook_page_id = $master_invite['facebook_page_id'];
 
 		//Find all invite with same facebook_page_id that user_facebook_id is in target list
-		if(!$invites = $this->CI->invite_model->get_by_facebook_page_id_having_user_facebook_id_in_target_facebook_id_list($facebook_page_id, $user_facebook_id)){echo 2;
+		if(!$invites = $this->CI->invite_model->get_by_facebook_page_id_having_user_facebook_id_in_target_facebook_id_list($facebook_page_id, $user_facebook_id)){
 			return FALSE;
 		}
 		$invite_keys = $inviters = array();
@@ -354,7 +357,7 @@ class Invite_component_lib {
 			$inviters[] = $invite['user_facebook_id'];
 		}
 
-		if(!$push_all_result = $this->CI->invite_model->push_into_all_page_accepted($user_facebook_id, $invite_keys)){echo 3;
+		if(!$push_all_result = $this->CI->invite_model->push_into_all_page_accepted($user_facebook_id, $invite_keys)){
 			return FALSE;
 		}
 		return $give_page_score_result = $this->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
@@ -369,6 +372,9 @@ class Invite_component_lib {
 		if(!$page_id = $this->CI->page_model->get_page_id_by_facebook_page_id($facebook_page_id)){
 			log_message('error', '_give_page_score_to_all_inviters : no page');return FALSE;
 		}
+
+		$this->CI->load->library('audit_lib');
+		$this->CI->load->library('achievement_lib');
 		foreach($inviters as $inviter_facebook_id){
 			if(!$inviter_user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($inviter_facebook_id)){
 				log_message('error', '_give_page_score_to_all_inviters : no inviter id');
@@ -378,7 +384,6 @@ class Invite_component_lib {
 			$audit_info = array(
 				'page_id' => $page_id
 			);
-			$this->CI->load->library('audit_lib');
 			if(!$this->CI->audit_lib->add_audit(
 				0,
 				$inviter_user_id,
@@ -396,13 +401,58 @@ class Invite_component_lib {
 				'page_id' => $page_id,
 				'app_install_id' => 0
 			);
-			$this->CI->load->library('achievement_lib');
 			if(!$this->CI->achievement_lib->increment_achievement_stat(0, $inviter_user_id, $achievement_info, 1)){
 				// log_message('error', 'no inc');
 				return FALSE;
 			}
 		}
 		return TRUE;
+	}
+
+	function _give_campaign_score_to_inviter($invite = NULL){
+		if(!is_array($invite) || (!$inviter_facebook_id = issetor($invite['user_facebook_id'])) || (!$campaign_id = issetor($invite['campaign_id']))){
+			return FALSE;
+		}
+		$this->CI->load->model('app_component_model', 'app_component');
+		if(!$campaign_invite = $this->CI->app_component->get_invite_by_campaign_id($campaign_id)){
+			return FALSE; //cannot find invite for that campaign in app component
+		}
+
+		$this->CI->load->model('user_model');
+		if(!$inviter_user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($inviter_facebook_id)){
+			log_message('error', '_give_campaign_score_to_inviter : no inviter id');
+			return FALSE;
+		}
+		$this->CI->load->library('audit_lib');
+		$this->CI->load->library('achievement_lib');
+
+		$action_id = $this->CI->socialhappen->get_k('audit_action','Invitee Accept Campaign Invite');
+		$audit_info = array(
+			'campaign_id' => $campaign_id
+		);
+		if(!$this->CI->audit_lib->add_audit(
+			0,
+			$inviter_user_id,
+			$action_id,
+			'', 
+			'',
+			$audit_info
+		)){
+			// log_message('error', 'no audit ');
+			return FALSE;
+		}
+
+		$achievement_info = array(
+			'action_id' => $action_id, 
+			'campaign_id' => $campaign_id,
+			'app_install_id' => 0
+		);
+		if(!$this->CI->achievement_lib->increment_achievement_stat(0, $inviter_user_id, $achievement_info, 1)){
+			// log_message('error', 'no inc');
+			return FALSE;
+		}
+		return TRUE;
+
 	}
 }
 /* End of file invite_component_lib.php */

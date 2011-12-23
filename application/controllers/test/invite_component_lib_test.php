@@ -13,6 +13,7 @@ class Invite_component_lib_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->library('invite_component_lib');
+		$this->load->library('app_component_lib');
 		$this->load->model('user_model');
 		$this->load->model('page_model');
 		$this->unit->reset_dbs();
@@ -36,6 +37,53 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->invite_model->drop_collection();
 		$this->load->model('invite_pending_model');
 		$this->invite_pending_model->drop_collection();
+	}
+
+	function add_invite_component_before_test(){
+		//Add app component (campaign_id = 1)
+		$campaign_id = 1;
+	    $app_id = 1;
+	    $app_install_id = 1;
+	    $page_id = 1;
+	    $app_component_data = array(
+	      'campaign_id' => $campaign_id,
+	      'invite' => array(
+	        'facebook_invite' => TRUE,
+	        'email_invite' => TRUE,
+	        'criteria' => array(
+	          'score' => 1,
+	          'maximum' => 5,
+	          'cooldown' => 300,
+	          'acceptance_score' => array(
+	            'page' => 100,
+	            'campaign' => 20
+	          )
+	        ),
+	        'message' => array(
+	          'title' => 'You are invited',
+	          'text' => 'Welcome to the campaign',
+	          'image' => 'https://localhost/assets/images/blank.png'
+	        )
+	      ),
+	      'sharebutton' => array(
+	        'facebook_button' => TRUE,
+	        'twitter_button' => TRUE,
+	        'criteria' => array(
+	          'score' => 1,
+	          'maximum' => 5,
+	          'cooldown' => 300
+	        ),
+	        'message' => array(
+	          'title' => 'Join the campaign by this link',
+	          'caption' => 'This is caption',
+	          'text' => 'this is long description',
+	          'image' => 'https://localhost/assets/images/blank.png',
+	        )
+	      )
+	    );
+
+	    $result = $this->app_component_lib->add_campaign($app_component_data);
+	    $this->unit->run($result, TRUE,'Add app_component with full data', print_r($result, TRUE));
 	}
 
 	function add_invite_test(){
@@ -302,6 +350,13 @@ class Invite_component_lib_test extends CI_Controller {
 	}
 
 	function accept_invite_campaign_level_test(){
+		//Count campaign score : before giving score
+		$app_id = 0; //platform
+		$user_id = 1; //713558190
+		$this->load->model('achievement_stat_model','achievement_stat');
+		$user_stat = $this->achievement_stat->get($app_id, $user_id);
+		$this->unit->run(isset($user_stat['action']['115']), FALSE, 'check action 115');
+
 		$invite_key = $this->invite_key1;
 		$target_facebook_id = 1;
 
@@ -317,6 +372,14 @@ class Invite_component_lib_test extends CI_Controller {
 
 		$invite = $this->invite_model->get_invite_by_criteria(array('invite_key'=>$invite_key));
 		$this->unit->run($invite['invite_count'] === 1, TRUE, 'invite_count', $invite['invite_count']);
+
+		//Count campaign score : after giving score
+		$app_id = 0; //platform
+		$user_id = 1; //713558190
+		$this->load->model('achievement_stat_model','achievement_stat');
+		$user_stat = $this->achievement_stat->get($app_id, $user_id);
+		$this->unit->run(isset($user_stat['action']['115']), TRUE, 'check action 115');
+		$this->unit->run(isset($user_stat['action']['115']['count']), 1, 'check action 115');
 
 		$invite_key = $this->invite_key2;
 		$target_facebook_id = 3;
@@ -450,6 +513,36 @@ class Invite_component_lib_test extends CI_Controller {
 		$inviters = array('a','b','c');
 		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
+	}
+
+	function _give_campaign_score_to_inviter_test(){
+		//Count campaign score : before giving score
+		$app_id = 0; //platform
+		$user_id = 1; //713558190
+		$this->load->model('achievement_stat_model','achievement_stat');
+		$user_stat = $this->achievement_stat->get($app_id, $user_id);
+		$this->unit->run(isset($user_stat['action']['115']['count']), 1, 'check action 115');
+
+ 		$invite_key = $this->invite_key1;
+		$invite = $this->invite_component_lib->get_invite_by_invite_key($invite_key);
+		$result = $this->invite_component_lib->_give_campaign_score_to_inviter($invite);
+		$this->unit->run($result, TRUE, '_give_campaign_score_to_inviter');
+
+		//Count campaign score : after giving score
+		$app_id = 0; //platform
+		$user_id = 1; //713558190
+		$this->load->model('achievement_stat_model','achievement_stat');
+		$user_stat = $this->achievement_stat->get($app_id, $user_id);
+		$this->unit->run(isset($user_stat['action']['115']['count']), 2, 'check action 115');
+	}
+
+
+	function _give_campaign_score_to_inviter_fail_test(){
+		$invite_key = $this->invite_key3; //campaign_id 4
+		$invite = $this->invite_component_lib->get_invite_by_invite_key($invite_key);
+		$result = $this->invite_component_lib->_give_campaign_score_to_inviter($invite);
+		$this->unit->run($result, FALSE, '_give_campaign_score_to_inviter : no app_component with campaign_id = 4');
+
 	}
 }
 /* End of file invite_component_lib_test.php */

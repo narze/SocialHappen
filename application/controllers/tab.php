@@ -944,7 +944,6 @@ class Tab extends CI_Controller {
 							$data = array(
 								'status' => 'ok'
 							);
-							//TODO : give score to inviter
 						}
 					} else {
 						$data = array(
