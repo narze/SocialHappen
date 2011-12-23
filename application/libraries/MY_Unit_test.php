@@ -11,26 +11,33 @@ class MY_Unit_test extends CI_Unit_test {
 	function __construct(){
 		parent::__construct();
 		$this->CI =& get_instance();
-		$this->CI->db = $this->CI->load->database('local_unit_test', TRUE);
+		$this->CI->load->library('db_sync');
+		$this->CI->db_sync->use_test_db(TRUE);
 		echo '[mysql] Test with database : ' . $this->CI->db->database . '<br />'; 
-
-		//forces mongodb to use testmode
-		$this->CI->config->load('mongo_db');
-		$this->CI->config->set_item('mongo_testmode', TRUE);
 	}
 	
-	function reset_dbs(){
-		$this->reset_mysql();
-		$this->reset_mongodb();
+	function reset_dbs($silent = TRUE){
+		$this->reset_mysql($silent);
+		$this->reset_mongodb($silent);
 	}
 	
-	function reset_mysql(){
-		file_get_contents(base_url().'dev/sync/db_reset?unit_test=1');
+	function reset_mysql($silent = TRUE){
+		ob_start();
+		$this->CI->db_sync->mysql_reset();
+		if($silent){
+			$this->mysql_reset_result = ob_get_contents();
+		}
+		ob_end_clean();
 		echo "Reset mysql test db<br />";
 	}
 
-	function reset_mongodb(){
-		$this->mongodb_reset_result = file_get_contents(base_url().'dev/sync/mongodb_reset?unit_test=1');
+	function reset_mongodb($silent = TRUE){
+		ob_start();
+		$this->CI->db_sync->mongodb_reset();
+		if($silent){
+			$this->mongodb_reset_result = ob_get_contents();
+		}
+		ob_end_clean();
 		echo "Reset mongo test db<br />";
 	}
 
@@ -56,9 +63,9 @@ class MY_Unit_test extends CI_Unit_test {
 		echo $this->report();
 	}
 
-	function __destruct(){
-		if(isset($this->db_reset_result)){
-			echo $this->db_reset_result;
+	function __destruct(){ //Print reset result if $silent == FALSE
+		if(isset($this->mysql_reset_result)){
+			echo $this->mysql_reset_result;
 		}
 		if(isset($this->mongodb_reset_result)){
 			echo $this->mongodb_reset_result;

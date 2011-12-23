@@ -10,11 +10,14 @@ class All extends CI_Controller {
 
 	function index() {
 		$all_pass = TRUE;
+		$this->links();
+		echo '<hr />';
 		foreach(glob(__DIR__."/*_test.php") as $filename) {
 			$url = base_url().'test/'.basename($filename,'.php');
+			$fetch_url = 'https://localhost'.parse_url($url, PHP_URL_PATH);
 			$class_name = basename($filename,"_test.php");
 			$result = '<h1>Class : <a href="'.$url.'">'.$class_name.'</a></h1>';
-			$result .= file_get_contents($url);
+			$result .= file_get_contents($fetch_url);
 			echo $result;
 			if($all_pass == TRUE && strpos($result, 'TEST FAILED') !== FALSE){
 				$all_pass = FALSE;
@@ -26,6 +29,13 @@ class All extends CI_Controller {
 		}
 	}
 
+	function links(){
+		foreach(glob(__DIR__."/*_test.php") as $filename) {
+			$url = base_url().'test/'.basename($filename,'.php');
+			$class_name = basename($filename,"_test.php");
+			echo '<a target="_blank" href="'.$url.'">'.$class_name.'</a> | ';
+		}
+	}
 }
 
 /* End of file all.php */
