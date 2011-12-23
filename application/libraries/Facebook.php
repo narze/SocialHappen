@@ -49,13 +49,14 @@ class Facebook {
 			} else {
 				return FALSE;
 			}
-		} else {
+		} else if ($fb_get_user = $this->FB->getUser()) {
 			if ($facebook_user = $this -> CI -> session -> userdata('facebook_user')) { //1.Check session
 				$facebook_user = json_decode(base64_decode($facebook_user), TRUE);
-				if($this->FB->getUser() == $facebook_user['id']){
+				if($fb_get_user == $facebook_user['id']){
 					return $facebook_user;
 				}
 			}
+			
 			$facebook_result_array = $this->FB->api('/me');
 			if(!isset($facebook_result_array['error']) && isset($facebook_result_array['id'])){
 				$facebook_result = json_encode($facebook_result_array);
@@ -66,6 +67,8 @@ class Facebook {
 			} else {
 				return FALSE;
 			}
+		} else {
+			return FALSE;
 		}
 	}
 
