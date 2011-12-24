@@ -46,6 +46,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '1,2,3';
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
+
 		$this->unit->run($result, 'is_string', 'add_invite', $result);
 		$this->invite_key1 = $result;
 
@@ -175,8 +176,13 @@ class Invite_component_lib_test extends CI_Controller {
 
 		$invite_key = $this->invite_key2;
 		$user_facebook_id = '1';
+		$result_status = TRUE;
 		$result = $this->invite_component_lib->reserve_invite($invite_key, $user_facebook_id);
-		$this->unit->run($result, FALSE, 'reserve_invite, already accepted on another invite_key (same campaign)', $invite_key.' '.$user_facebook_id);
+		
+		$result_status = TRUE;
+		if(isset($result['error']))
+			$result_status = FALSE;
+		$this->unit->run($result_status, FALSE, 'reserve_invite, already accepted on another invite_key (same campaign)', $invite_key.' '.$user_facebook_id);
 
 		$invite_key = $this->invite_key2;
 		$user_facebook_id = '3';
@@ -351,7 +357,11 @@ class Invite_component_lib_test extends CI_Controller {
 		$invite_key = $this->invite_key2; //campaign_id 1
 		$user_facebook_id = '713558190'; //user 1 is already in campaign 1
 		$result = $this->invite_component_lib->reserve_invite($invite_key, $user_facebook_id);
-		$this->unit->run($result, FALSE, 'reserve_invite : failed (user already in this campaign)', $invite_key.' - '.$user_facebook_id);
+		$result_status = TRUE;
+		if(isset($result['error']))
+			$result_status = FALSE;
+			
+		$this->unit->run($result_status, FALSE, 'reserve_invite : failed (user already in this campaign)', $invite_key.' - '.$user_facebook_id);
 	}
 
 	function _give_page_score_to_all_inviters_test(){

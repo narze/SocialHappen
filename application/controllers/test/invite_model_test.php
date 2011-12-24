@@ -222,7 +222,7 @@ class Invite_model_test extends CI_Controller {
 		$this->unit->run($result['target_facebook_id_list'] == array(
 				'21','22','23'
 			), TRUE, 'get_invite_by_criteria', $result);
-		$this->unit->run($result['redirect_url'] == 'https://facebook.com', TRUE, 'get_invite_by_criteria', $result);
+		
 	}
 
 

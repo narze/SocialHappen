@@ -15,6 +15,7 @@ class Api extends CI_Controller {
 
 	function index(){
 		echo json_encode(array('status' => 'OK'));
+		
 	}
 	
 	/**

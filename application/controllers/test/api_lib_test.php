@@ -60,14 +60,15 @@ class Api_lib_test extends CI_Controller {
 	}
 	
 	function prepare_data_test(){
-		//mock facebook_tab_url for page_id 1, to ensure testing method
+		/* //mock facebook_tab_url for page_id 1, to ensure testing method
 		$this->load->model('page_model');
 		$page_profile = $this->page_model->get_page_profile_by_page_id(PAGE_ID);
 		$this->prev_facebook_tab_url = $page_profile['facebook_tab_url'];
 		
 		$result = $this->page_model->update_page_profile_by_page_id(PAGE_ID, array('facebook_tab_url' => 'http://mock-url.com'));
 		
-		$this->unit->run($result, 'is_true', 'prepare_data_test - facebook_tab_url', print_r($result, TRUE));
+		$ this->unit->run($result, 'is_true', 'prepare_data_test - facebook_tab_url', print_r($result, TRUE));
+		*/
 	}
 	
 	function request_install_app_test(){
@@ -266,6 +267,9 @@ class Api_lib_test extends CI_Controller {
 
 	function request_add_limit_service_test(){
 		$this->load->library('audit_stat_limit_lib');
+		$this->load->model('audit_stats_model');
+		$this->audit_stats_model->drop_collection();
+		
 		$limit_count = $this->audit_stat_limit_lib->count(USER_ID, 
 										1,
 										$this->app_install_id,
@@ -310,7 +314,6 @@ class Api_lib_test extends CI_Controller {
 		$this->unit->run($status, 'OK', 'status', $status);
 		
 		$valid_limit_diff = $limit_count == $count;
-	
 		$this->unit->run($valid_limit_diff, 'is_true', 'limit_diff', $limit_count);
 		
 	}
@@ -588,9 +591,10 @@ class Api_lib_test extends CI_Controller {
 
 	function clear_data_test(){
 				
-		$result = $this->page_model->update_page_profile_by_page_id(PAGE_ID, array('facebook_tab_url' => $this->prev_facebook_tab_url));
+		/* $result = $this->page_model->update_page_profile_by_page_id(PAGE_ID, array('facebook_tab_url' => $this->prev_facebook_tab_url));
 		
-		$this->unit->run($result, 'is_true', 'clear_data_test - facebook_tab_url', print_r($result, TRUE));
+		$this->unit->run($result, 'is_true', 'clear_data_test - facebook_tab_url', print_r($result, TRUE)); 
+		*/
 	}
 }
 

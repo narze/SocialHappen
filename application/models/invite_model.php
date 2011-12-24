@@ -42,7 +42,7 @@ class Invite_model extends CI_Model {
 	 */
 	function add_invite($campaign_id = NULL, $app_install_id = NULL, $facebook_page_id = NULL
 							, $invite_type = NULL, $user_facebook_id = NULL, $target_facebook_id_list = array()
-							, $invite_key = NULL, $redirect_url = NULL){
+							, $invite_key = NULL){
 							
 		$check_args = allnotempty(func_get_args()) && !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
 		//echo allnotempty(func_get_args()) .' , '. !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
@@ -57,7 +57,6 @@ class Invite_model extends CI_Model {
 			$invite_record['campaign_id'] = (int) $campaign_id;
 			$invite_record['user_facebook_id'] =  (string) $user_facebook_id;	
 			$invite_record['invite_type'] = $invite_type;
-			$invite_record['redirect_url'] = $redirect_url;
 			$invite_record['campaign_accepted'] = array();
 			$invite_record['page_accepted'] = array();
 			$invite_record['invite_count'] = (int) 0;
@@ -92,7 +91,7 @@ class Invite_model extends CI_Model {
 	 *
 	 */
 	function update_invite($invite_key = NULL, $data = array()){
-		$data = filter_array($data, array('app_install_id','facebook_page_id','campaign_id','target_facebook_id_list','invite_key','invite_type','invite_count','redirect_url'), TRUE);	
+		$data = filter_array($data, array('app_install_id','facebook_page_id','campaign_id','target_facebook_id_list','invite_key','invite_type','invite_count'), TRUE);	
 		$check_args = $invite_key && sizeof($data) > 0;
 		
 		if($check_args){

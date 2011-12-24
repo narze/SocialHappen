@@ -123,7 +123,7 @@ class Invite extends CI_Controller {
 		}
 		$reserve_invite = $this->invite->reserve_invite($invite_key, $facebook_user['id']);
 		
-		if(is_array($reserve_invite) && $reserve_invite['status'] == 'OK'){
+		if(!isset($reserve_invite['error'])){
 			$invite = $this->invite->get_invite_by_invite_key($invite_key);
 			redirect($invite['redirect_url']);
 		} else {
