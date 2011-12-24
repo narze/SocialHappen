@@ -478,7 +478,7 @@ class Achievement_lib
 			
       $page_criteria_couunt = 0;
       $score_criteria_couunt = 0;
-      
+	  
 			foreach($achievement['criteria'] as $key => $value){
 				if($key != 'score'){
 					

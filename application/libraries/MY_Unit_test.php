@@ -13,7 +13,7 @@ class MY_Unit_test extends CI_Unit_test {
 		$this->CI =& get_instance();
 		$this->CI->db = $this->CI->load->database('local_unit_test', TRUE);
 		echo '[mysql] Test with database : ' . $this->CI->db->database . '<br />'; 
-
+		//$this->CI->output->enable_profiler(TRUE);
 		//forces mongodb to use testmode
 		$this->CI->config->load('mongo_db');
 		$this->CI->config->set_item('mongo_testmode', TRUE);

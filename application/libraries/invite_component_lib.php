@@ -52,7 +52,7 @@ class Invite_component_lib {
 																'invite_type' => $invite_type,
 															)														
 															);
-															
+		
 			if($invite_exists){
 				$invite_key = $invite_exists['invite_key'];
 				if($invite_type==2){
@@ -66,7 +66,7 @@ class Invite_component_lib {
 				if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
 									, $invite_type, $user_facebook_id, $target_facebook_id_list
 									, $invite_key, $redirect_url)){
-			
+					
 					return $invite_key;
 				} else {
 					return FALSE;

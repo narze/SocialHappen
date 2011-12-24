@@ -37,10 +37,11 @@ class Api_Lib {
 			$this->load->model('user_model','user');
 			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
-		
+				
 		$this->CI->load->model('Session_model','Session');
 		if(!$this->CI->Session->get_session_id_by_user_id($user_id)){
 			log_message('error',"User #{$user_id} has no session");
+			
 			return (array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
 			
@@ -99,7 +100,7 @@ class Api_Lib {
 					'campaign_end_message' => 'Campaign Ended');
 				$campaign_id = $this->CI->campaign->add_campaign($campaign);
 				
-				$this->load->library('app_component_lib');
+				$this->CI->load->library('app_component_lib');
 				$default_app_component = array(
 			 		'campaign_id' => $campaign_id,
 			 		'invite' => array(
@@ -136,7 +137,7 @@ class Api_Lib {
 						)
 					)
 				);
-				$this->app_component_lib->add_campaign($default_app_component);
+				$this->CI->app_component_lib->add_campaign($default_app_component);
 				//End : Add first 10-year campaign
 
 				// response
@@ -1255,11 +1256,9 @@ class Api_Lib {
 		
 		$invite_key = $this->CI->invite_component_lib->add_invite($campaign_id,$app_install_id,$facebook_page_id,
 												$invite_type,$user_facebook_id,$target_facebook_id);
-		if($invite_key){								
-			$response['invite_key'] = $invite_key;
-		}
 		
-		if(isset($response['invite_key'])){
+		if($invite_key){				
+			$response['invite_key'] = $invite_key;
 			$response['status'] = 'OK';
 		} else {
 			$response['status'] = 'ERROR';

@@ -24,6 +24,8 @@ class Api_lib_test extends CI_Controller {
 	private $public_invite_key;
 	private $private_invite_key;
 	
+	private $prev_facebook_tab_url;
+	
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
@@ -53,7 +55,19 @@ class Api_lib_test extends CI_Controller {
 					'user_facebook_id' => USER_FACEBOOK_ID,
 					'logged_in' => TRUE
 				);
+			
 		$this->session->set_userdata($userdata);
+	}
+	
+	function prepare_data_test(){
+		//mock facebook_tab_url for page_id 1, to ensure testing method
+		$this->load->model('page_model');
+		$page_profile = $this->page_model->get_page_profile_by_page_id(PAGE_ID);
+		$this->prev_facebook_tab_url = $page_profile['facebook_tab_url'];
+		
+		$result = $this->page_model->update_page_profile_by_page_id(PAGE_ID, array('facebook_tab_url' => 'http://mock-url.com'));
+		
+		$this->unit->run($result, 'is_true', 'prepare_data_test - facebook_tab_url', print_r($result, TRUE));
 	}
 	
 	function request_install_app_test(){
@@ -296,7 +310,7 @@ class Api_lib_test extends CI_Controller {
 		$this->unit->run($status, 'OK', 'status', $status);
 		
 		$valid_limit_diff = $limit_count == $count;
-		
+	
 		$this->unit->run($valid_limit_diff, 'is_true', 'limit_diff', $limit_count);
 		
 	}
@@ -389,7 +403,7 @@ class Api_lib_test extends CI_Controller {
 																'criteria_string' => array('Share = 10'),
 															),
 											'criteria' =>
-												'action.1002.app_install.'.$this->app_install_id.'.count": 10'
+												array('a' => 5, 'b' => 2)
 										)
 									)
 								)
@@ -441,14 +455,24 @@ class Api_lib_test extends CI_Controller {
 												$this->app_install_secret_key, FACEBOOK_PAGE_ID);
 		$result2 = $this->api_lib->request_facebook_tab_url(APP_ID,APP_SECRET_KEY,$this->app_install_id,
 												$this->app_install_secret_key, NULL, PAGE_ID);
-			
+		
 		$this->unit->run($result1, 'is_array', 'request_facebook_tab_url(facebook_page_id)', print_r($result1, TRUE));
-		$this->unit->run($result1['status'], 'OK', 'status', $result1['status']);
-		$this->unit->run($result1['facebook_tab_url'], $tab_url, 'facebook_tab_url', $result1['facebook_tab_url']);
+		if($result1['status']=='OK')
+			$this->unit->run($result1['status'], 'OK', 'status', $result1['status']);
+		else
+			$this->unit->run($result1['status'], 'ERROR', 'status', $result1['status']);
+		
+		if(issetor($result1['facebook_tab_url']))
+			$this->unit->run($result1['facebook_tab_url'], $tab_url, 'facebook_tab_url', $result1['facebook_tab_url']);
 		
 		$this->unit->run($result2, 'is_array', 'request_facebook_tab_url(page_id)', print_r($result2, TRUE));
-		$this->unit->run($result2['status'], 'OK', 'status', $result2['status']);
-		$this->unit->run($result2['facebook_tab_url'], $tab_url, 'facebook_tab_url', $result2['facebook_tab_url']);
+		if($result2['status']=='OK')
+			$this->unit->run($result2['status'], 'OK', 'status', $result2['status']);
+		else
+			$this->unit->run($result2['status'], 'ERROR', 'status', $result2['status']);
+		
+		if(issetor($result2['facebook_tab_url']))
+			$this->unit->run($result2['facebook_tab_url'], $tab_url, 'facebook_tab_url', $result2['facebook_tab_url']);
 		
 		
 		
@@ -461,7 +485,6 @@ class Api_lib_test extends CI_Controller {
 												$this->app_install_secret_key, USER_FACEBOOK_ID,
 												NULL, CAMPAIGN_ID, 2, FACEBOOK_PAGE_ID);
 		
-			
 		$this->unit->run($result_public, 'is_array', 'request_create_invite() - public', print_r($result_public, TRUE));
 		$this->unit->run($result_public['status'], 'OK', 'status', $result_public['status']);
 		$this->unit->run($result_public['invite_key'], 'is_string', 'invite_key', $result_public['invite_key']);
@@ -482,6 +505,8 @@ class Api_lib_test extends CI_Controller {
 		$private_invite = $this->invite_component_lib->get_invite_by_invite_key($result_private['invite_key']);
 		$this->unit->run($private_invite, 'is_array', 'private_invite', print_r($private_invite, TRUE));
 		$this->private_invite_key = $result_private['invite_key'];
+		
+		
 		
 	}
 
@@ -561,6 +586,12 @@ class Api_lib_test extends CI_Controller {
 		
 	}
 
+	function clear_data_test(){
+				
+		$result = $this->page_model->update_page_profile_by_page_id(PAGE_ID, array('facebook_tab_url' => $this->prev_facebook_tab_url));
+		
+		$this->unit->run($result, 'is_true', 'clear_data_test - facebook_tab_url', print_r($result, TRUE));
+	}
 }
 
 /* End of file api_lib_test.php */
