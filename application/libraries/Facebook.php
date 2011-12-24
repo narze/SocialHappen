@@ -41,7 +41,11 @@ class Facebook {
 
 	function getUser() {
 		if ($this->facebook_access_token){ //Make new session with access_token if specified
-			$facebook_result_array = $this->FB->api('/me');
+			try {
+				$facebook_result_array = $this->FB->api('me');
+			} catch (FacebookApiException $e) {
+		    	return FALSE;
+		    }
 			if(!isset($facebook_result_array['error']) && isset($facebook_result_array['id'])){
 				$this -> CI -> session -> set_userdata(array('facebook_user' => base64_encode(json_encode($facebook_result_array))));
 
@@ -56,8 +60,11 @@ class Facebook {
 					return $facebook_user;
 				}
 			}
-			
-			$facebook_result_array = $this->FB->api('/me');
+			try {
+				$facebook_result_array = $this->FB->api('me');
+			} catch (FacebookApiException $e) {
+		    	return FALSE;
+		    }
 			if(!isset($facebook_result_array['error']) && isset($facebook_result_array['id'])){
 				$facebook_result = json_encode($facebook_result_array);
 				// $facebook_result = '{"id":"755758746","name":"Metwara Narksook","first_name":"Metwara","last_name":"Narksook","link":"http:\/\/www.facebook.com\/hybridknight","username":"hybridknight","bio":"127.0.0.1\r\n\r\nComputer Engineering Student, \r\nChulalongkorn University","gender":"male","email":"book2k\u0040hotmail.com","timezone":7,"locale":"en_US","verified":true,"updated_time":"2011-08-04T14:13:34+0000"}';
@@ -77,7 +84,11 @@ class Facebook {
 	 * @author Prachya P.
 	 */
 	function get_user_pages() {
-		return $this->FB->api('/me/accounts/page');
+		try {
+			return $this->FB->api('me/accounts/page');
+		} catch (FacebookApiException $e) {
+		   	return FALSE;
+		}
 	}
 
 	/**
@@ -90,7 +101,11 @@ class Facebook {
 		if(!$fb_page_id){
 			return FALSE;
 		} else {
-			return $this->FB->api($fb_page_id);
+			try {
+				return $this->FB->api($fb_page_id);
+			} catch (FacebookApiException $e) {
+		    	return FALSE;
+		    }
 		}
 	}
 
@@ -116,7 +131,12 @@ class Facebook {
 		if(!$facebook_page_id) {
 			return FALSE;
 		}
-		$data = $this->FB->api($facebook_page_id, 'GET', array('fields' => 'access_token'));
+		try {
+			$data = $this->FB->api($facebook_page_id, 'GET', array('fields' => 'access_token'));
+		} catch (FacebookApiException $e) {
+	    	return FALSE;
+	    }
+
 		if(isset($data['access_token'])){
 			return $data['access_token'];
 		} else {
@@ -127,14 +147,18 @@ class Facebook {
 	/**
 	 * Get page tabs
 	 * @param $facebook_page_id
-	 * @author Manassarn M.
+	 * @author Manassarn M.q
 	 */
 	function get_page_tabs_by_facebook_page_id($facebook_page_id = NULL){
 		if(!$facebook_page_id) {
 			return FALSE;
 		}
 		$facebook_page_access_token = $this->get_page_access_token_by_facebook_page_id($facebook_page_id);
-		$tabs = $this->FB->api($facebook_page_id.'/tabs', 'GET', array('access_token' => $facebook_page_access_token));
+		try{
+			$tabs = $this->FB->api($facebook_page_id.'/tabs', 'GET', array('access_token' => $facebook_page_access_token));
+		} catch (FacebookApiException $e) {
+	    	return FALSE;
+	    }
 		if(isset($tabs['data'])){
 			return $tabs['data'];
 		}
@@ -172,7 +196,11 @@ class Facebook {
 			'app_id' => $facebook_app_id, 
 			'access_token' => $page_access_token
 		);
-		return $this->FB->api($facebook_page_id.'/tabs', 'POST', $post);
+		try {
+			return $this->FB->api($facebook_page_id.'/tabs', 'POST', $post);
+		} catch (FacebookApiException $e) {
+	    	return FALSE;
+	    }
 	}
 	
 	/**
@@ -202,8 +230,10 @@ class Facebook {
 			// 'caption' => 'share_fb_caption', 
 			// 'description' => 'share_fb_description'
 		);
-
-		$result = $this->FB->api('me/feed', 'POST', $post);
-		return $result;
+		try {
+			return $this->FB->api('me/feed', 'POST', $post);
+		} catch (FacebookApiException $e) {
+	    	return FALSE;
+	    }
 	}
 }
