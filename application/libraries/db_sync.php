@@ -1567,7 +1567,7 @@ class DB_Sync {
 		$this->CI->mongodb->switch_db($mongo_db_prefix.'achievement');
 		$this->drop_mongo_collections('achievement_info','achievement_stat','achievement_user');
 		$this->CI->mongodb->switch_db($mongo_db_prefix.'audit');
-		$this->drop_mongo_collections('actions','audits');
+		$this->drop_mongo_collections('actions','audits','stats');
 		$this->CI->mongodb->switch_db($mongo_db_prefix.'stat');
 		$this->drop_mongo_collections('apps','campaigns','pages');
 		$this->CI->mongodb->switch_db($mongo_db_prefix.'message');
