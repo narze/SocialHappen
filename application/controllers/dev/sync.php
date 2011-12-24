@@ -17,7 +17,7 @@ class Sync extends CI_Controller {
 		parent::__construct();
 		$this->output->enable_profiler(FALSE);
 		
-		$this->load->libraru('db_sync');
+		$this->load->library('db_sync');
 		if($this->input->get('unit_test')){
 			$this->db_sync->use_test_db();
 		}
@@ -41,6 +41,10 @@ class Sync extends CI_Controller {
 		$this->db_sync->mysql_reset();
 	}
 	
+	function mongodb_reset(){
+		$this->db_sync->mongodb_reset();
+	}
+	
 	function generate_field_code(){
 		$tables = $this->db->list_tables();
 		foreach ($tables as $table){
@@ -52,7 +56,7 @@ class Sync extends CI_Controller {
 			echo "),<br />";
 		}
 	}
-	
+		
 }
 /* End of file sync.php */
 /* Location: ./application/controllers/dev/sync.php */
