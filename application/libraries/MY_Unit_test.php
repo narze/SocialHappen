@@ -14,6 +14,7 @@ class MY_Unit_test extends CI_Unit_test {
 		$this->CI->load->library('db_sync');
 		$this->CI->db_sync->use_test_db(TRUE);
 		echo '[mysql] Test with database : ' . $this->CI->db->database . '<br />'; 
+
 	}
 	
 	function reset_dbs($silent = TRUE){

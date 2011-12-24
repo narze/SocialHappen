@@ -60,11 +60,13 @@ class Facebook {
 					return $facebook_user;
 				}
 			}
+
 			try {
 				$facebook_result_array = $this->FB->api('me');
 			} catch (FacebookApiException $e) {
 		    	return FALSE;
 		    }
+
 			if(!isset($facebook_result_array['error']) && isset($facebook_result_array['id'])){
 				$facebook_result = json_encode($facebook_result_array);
 				// $facebook_result = '{"id":"755758746","name":"Metwara Narksook","first_name":"Metwara","last_name":"Narksook","link":"http:\/\/www.facebook.com\/hybridknight","username":"hybridknight","bio":"127.0.0.1\r\n\r\nComputer Engineering Student, \r\nChulalongkorn University","gender":"male","email":"book2k\u0040hotmail.com","timezone":7,"locale":"en_US","verified":true,"updated_time":"2011-08-04T14:13:34+0000"}';

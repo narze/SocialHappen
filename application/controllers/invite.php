@@ -121,9 +121,16 @@ class Invite extends CI_Controller {
 			echo '<a href="'.base_url().'invite/accept_facebook_connect?invite_key='.$invite_key.'">Redirect</a>';
 			return;
 		}
-		if($this->invite->reserve_invite($invite_key, $facebook_user['id'])){
+		$reserve_invite = $this->invite->reserve_invite($invite_key, $facebook_user['id']);
+		
+		if(!isset($reserve_invite['error'])){
 			$invite = $this->invite->get_invite_by_invite_key($invite_key);
-			redirect($invite['redirect_url']);
+			$this->load->model('page_model');
+			if(($page = $this->page_model->get_page_profile_by_facebook_page_id($invite['facebook_page_id'])) && issetor($page['facebook_tab_url'])){
+				redirect($page['facebook_tab_url']);
+			} else {
+				echo 'No facebook url to redirect';
+			}
 		} else {
 			echo 'This invite key is invalid';
 		}
