@@ -52,6 +52,7 @@ class Invite extends CI_Controller {
 		$facebook_page_id = $this->input->post('facebook_page_id');
 		$invite_type = $this->input->post('private_invite') == 1 ? 1 : 2;
 		$target_facebook_id = $this->input->post('target_id');
+		$invite_message = $this->input->post('invite_message');
 		
 		if($app_install_id){
 			$user = $this->socialhappen->get_user();
@@ -61,8 +62,12 @@ class Invite extends CI_Controller {
 			if(issetor($campaign['in_campaign'])){
 				if($campaign['campaign_id'] == $campaign_id){
 					if($invite_key = $this->invite->add_invite($campaign_id,$app_install_id,$facebook_page_id,$invite_type,$user_facebook_id,$target_facebook_id)){
+						$this->load->helper('form');
 						$this->load->vars(array(
-							'invite_link' => base_url().'invite/accept?invite_key='.$invite_key
+							'invite_link' => base_url().'invite/accept?invite_key='.$invite_key,
+							'invite_message' => $invite_message,
+							'public_invite' => $invite_type === 1 ? FALSE : TRUE,
+							'app_install_id' => $app_install_id
 						));
 						$this->load->view('invite/send');
 					} else {
@@ -79,7 +84,71 @@ class Invite extends CI_Controller {
 		}
 	}
 
-	function invite_share(){
+	function invite_share($app_install_id = NULL){
+		$share_message = $this->input->post('invite_message');
+		$invite_link = $this->input->post('invite_link');
+		if($user = $this->socialhappen->get_user()){
+			$this->load->vars(array(
+				'user' => $user,
+				'twitter_checked' => !empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret']),
+				'facebook_checked' => TRUE,
+				'share_message' => $share_message,
+				'share_link' => $invite_link,
+				'app_install_id' => $app_install_id 
+			));
+			$this->load->helper('form');
+			$this->load->view('invite/share');
+		} else {
+			echo 'Please login socialhappen';
+		}
+	}
+
+	function invite_share_submit($app_install_id = NULL){
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('twitter', 'Twitter', '');			
+		$this->form_validation->set_rules('facebook', 'Facebook', '');			
+		$this->form_validation->set_rules('message', 'Message', 'required|trim|xss_clean');
+			
+		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+	
+		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+		{
+			$this->index($app_install_id);
+			return;
+		}
+		else
+		{
+		 	$this->load->library('sharebutton_lib');
+			$message = $this->input->post('message');
+			$twitter_share = $this->input->post('twitter') == 1;
+			$facebook_share = $this->input->post('facebook') == 1;
+			$share_link = $this->input->post('share_link');
+
+			if($twitter_share){
+				if($result = $this->sharebutton_lib->twitter_post($message.' '.$share_link)){
+					echo '<div>Shared twitter</div>';
+				}
+			}
+
+			if($facebook_share){
+				$this->load->model('installed_apps_model','installed_apps');
+				$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+				$app_name = $app['app_name'];
+				$this->load->library('facebook');
+				if($result = $this->facebook->post_profile($message, $share_link, $app_name)){
+					echo '<div>Shared facebook</div>';
+				}
+			}
+
+			if(!$twitter_share && !$facebook_share){
+				echo 'Error occured, please share again';
+				return;
+			}
+		}
+	}
+
+	// Sends private invite
+	function invite_send(){
 		
 	}
 

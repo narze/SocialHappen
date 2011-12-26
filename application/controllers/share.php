@@ -42,61 +42,17 @@ class Share extends CI_Controller {
 	}
 
 	function twitter_connect(){
-		$this->load->library('twitter_lib');
-		$this->twitter_lib->init();
-		$request_token = $this->twitter->getRequestToken($this->config->item('twitter_callback_url'));
-		$this->session->unset_userdata('twitter_access_token'); //Erase old access_token
-			
-		$this->twitter_lib->store_request_token($request_token);
-
-		switch ($this->twitter->http_code) {
-		  	case 200:
-			    $url = $this->twitter->getAuthorizeURL($request_token);
-			    redirect($url); 
-			    break;
-		  	default:
-		    	echo 'Could not connect to Twitter. Refresh the page or try again later.';
-		}
+		$this->load->library('sharebutton_lib');
+		$this->sharebutton_lib->twitter_connect();
 	}
 
 	function twitter_callback(){
 		$oauth_token = $this->input->get('oauth_token');
 		$oauth_verifier = $this->input->get('oauth_verifier');
 		$denied = $this->input->get('denied');
-		$user_id = $this->socialhappen->get_user_id();
-		if($denied){
-			echo 'denied access to twitter';
-			return;
-		}
-		if(!$user_id){
-			echo "Please login SocialHappen";
-			return;
-		}
-		if($oauth_token && $oauth_verifier){
-			$this->load->library('twitter_lib');
-			// if($this->twitter_lib->check_login_then_init()){
-			// 	redirect('share/twitter');
-			// }
-			$twitter_request_token = $this->session->userdata('twitter');
-			if($oauth_token && $twitter_request_token['oauth_token'] !== $this->input->get('oauth_token')){
-				//redirect('share/twitter_connect?error=token_mismatch');
-				echo 'Twitter token mismatch, please try again';
-			}
-
-			$this->twitter_lib->init($twitter_request_token);
-			$access_token = $this->twitter->getAccessToken($oauth_verifier);
-			$this->session->set_userdata('twitter_access_token', $access_token);
-
-			if (200 == $this->twitter->http_code) {
-				$this->load->model('user_model','user');
-				$this->user->update_user($user_id, array('user_twitter_access_token' => $access_token['oauth_token'], 'user_twitter_name' => $access_token['screen_name'],'user_twitter_access_token_secret' => $access_token['oauth_token_secret']));
-				$this->session->unset_userdata('twitter'); //Not use anymore
-			  	// redirect('share/twitter?success=1');
-			} else {
-			  	log_message('error','twitter error code : '.$this->twitter->http_code); //read : https://dev.twitter.com/docs/error-codes-responses
-			}
-		}
-		$this->load->view('share/twitter_callback');
+		
+		$this->load->library('sharebutton_lib');
+		$this->sharebutton_lib->twitter_callback($oauth_token, $oauth_verifier, $denied);
 	}
 
 /*
@@ -125,14 +81,8 @@ class Share extends CI_Controller {
 	}*/
 
 	function twitter_check_access_token($user_id = NULL){
-		$response = array();
-		$response['status'] = 0;
-		$this->load->model('user_model','user');
-		if($user = $this->user->get_user_profile_by_user_id($user_id)){
-			if(!empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret'])){
-				$response['status'] = 1;
-			}
-		}
+		$this->load->library('sharebutton_lib');
+		$response = $this->sharebutton_lib->twitter_check_access_token($user_id);
 		echo json_encode($response);
 	}
 
