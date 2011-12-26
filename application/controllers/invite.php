@@ -125,8 +125,8 @@ class Invite extends CI_Controller {
 		
 		if(!isset($reserve_invite['error'])){
 			$invite = $this->invite->get_invite_by_invite_key($invite_key);
-			$this->load->model('page_model');
-			if(($page = $this->page_model->get_page_profile_by_facebook_page_id($invite['facebook_page_id'])) && issetor($page['facebook_tab_url'])){
+			$this->load->model('installed_apps_model');
+			if(($page = $this->installed_apps_model->get_app_profile_by_app_install_id($invite['app_install_id'])) && issetor($page['facebook_tab_url'])){
 				redirect($page['facebook_tab_url']);
 			} else {
 				echo 'No facebook url to redirect';
