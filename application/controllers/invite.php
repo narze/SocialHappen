@@ -210,9 +210,11 @@ class Invite extends CI_Controller {
 		$data = array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
 			'facebook_default_scope' => $this->config->item('facebook_admin_scope'),
+			'facebook_channel_url' => $this->facebook->channel_url,
 			'next' => base_url().'invite/accept?invite_key='.$invite_key
 		);
-		$this -> load -> view('home/facebook_connect', $data);
+		$this -> load -> view('common/fb-root', $data);
+		$this -> load -> view('invite/facebook_connect', $data);
 	}
 
 	function accept_invite_fetch(){
