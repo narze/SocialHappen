@@ -338,6 +338,7 @@ class Achievement_lib
       || $info['action_id'] == $this->PAGE_INVITE_ACCEPT_ACTION_ID
       || $info['action_id'] == $this->CAMPAIGN_INVITE_ACCEPT_ACTION_ID)){
       
+      $this->CI->load->model('achievement_stat_page_model', 'achievement_stat_page');
       $increment_page_result = $this->CI->achievement_stat_page
         ->increment($info['page_id'], 
         $user_id, $info, $amount);

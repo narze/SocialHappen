@@ -1565,7 +1565,7 @@ class DB_Sync {
 		}
 		$this->CI->load->library('mongo_db', NULL, 'mongodb');
 		$this->CI->mongodb->switch_db($mongo_db_prefix.'achievement');
-		$this->drop_mongo_collections('achievement_info','achievement_stat','achievement_user');
+		$this->drop_mongo_collections('achievement_info','achievement_stat','achievement_user','achievement_stat_page');
 		$this->CI->mongodb->switch_db($mongo_db_prefix.'audit');
 		$this->drop_mongo_collections('actions','audits','stats');
 		$this->CI->mongodb->switch_db($mongo_db_prefix.'stat');

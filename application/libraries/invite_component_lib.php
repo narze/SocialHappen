@@ -381,6 +381,8 @@ class Invite_component_lib {
 
 		$this->CI->load->library('audit_lib');
 		$this->CI->load->library('achievement_lib');
+
+		$inviters = array_unique($inviters); //Score should be given once per facebook_user_id
 		foreach($inviters as $inviter_facebook_id){
 			if(!$inviter_user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($inviter_facebook_id)){
 				log_message('error', '_give_page_score_to_all_inviters : no inviter id');

@@ -428,29 +428,32 @@ class Invite_component_lib_test extends CI_Controller {
 	}
 
 	function _give_page_score_to_all_inviters_test(){
-		// $this->page_model = m::mock('page_model');
-		// $this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->with(1)->once()->andReturn('3');
-		// $this->user_model = m::mock('user_model');
-		// $this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->times(3)->andReturn(1,2,3);
-		// $this->audit_lib = m::mock('audit_lib');
-		// $this->audit_lib->shouldReceive('add_audit')->times(3)->andReturn(TRUE, TRUE, TRUE);
-		// $this->audit_lib->shouldReceive('get_audit_action')->andReturn(array(
-		// 		'app_id' => 0,
-		// 		'action_id' => 114,
-		// 		'description' => 'Invitee Accept Page Invite',
-		// 		'stat_app' => FALSE,
-		// 		'stat_page' => TRUE,
-		// 		'stat_campaign' => FALSE,
-		// 		'format_string' => 'User {user:user_id} accepted page invite',
-		// 		'score' => 1
-		// 	));
-		// $this->achievement_lib = m::mock('achievement_lib');
-		// $this->achievement_lib->shouldReceive('increment_achievement_stat')->times(3)->andReturn(TRUE, TRUE, TRUE);
+		$user_facebook_id = '713558190';
+		$facebook_page_id = $this->FBPAGEID1;
+		$this->load->model('audit_model');
+		$this->load->model('achievement_stat_page_model');
+		$audit_count_before = count($this->audit_model->list_audit());
+		$this->load->model('user_model');
+		$user_id = $this->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
+		$this->load->model('page_model');
+		$page_id = $this->page_model->get_page_id_by_facebook_page_id($facebook_page_id);
+		$stat_before = $this->achievement_stat_page_model->list_stat(array(
+			'user_id' => (int) $user_id,
+			'page_id' => (int) $page_id
+		));
+
+		$this->unit->run($stat_before_count = $stat_before[0]['action'][114]['count'], 'is_int','count $stat_before', $stat_before[0]['action'][114]['count']);
 
 		$facebook_page_id = $this->FBPAGEID1;
-		$inviters = array(713558190,'637741627',631885465);
+		$inviters = array(713558190, '637741627', 631885465, 713558190, '713558190'); //713558190 should be given one time only
 		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
 		$this->unit->run($result, TRUE, '_give_page_score_to_all_inviters', $result);
+
+		$stat_after = $this->achievement_stat_page_model->list_stat(array(
+			'user_id' => (int) $user_id,
+			'page_id' => (int) $page_id
+		));
+		$this->unit->run($stat_after[0]['action'][114]['count'], $stat_before_count + 1, 'count $stat_after idempotent test', $stat_after[0]['action'][114]['count']);
 	}
 
 	function _give_page_score_to_all_inviters_fail_test(){
