@@ -6,16 +6,6 @@ function send(msg) {
 	return false;
 }
 
-function doesUserLikeFacebookPage(facebook_page_id){
-    FB.api('/me/likes/'+facebook_page_id, function(response) {
-        if(!response.error){
-            send({sh_message:'facebook page like', liked: response.data.length != 0});
-        } else {
-            console.log('cannot get user likes');
-        }
-    });
-}
-
 var XD = function(){
   
     var interval_id,
@@ -118,3 +108,13 @@ XD.receiveMessage(function(message){ // Receives data from parent
          
     }
 }, parent_origin);
+
+function doesUserLikeFacebookPage(facebook_page_id){
+    jQuery.getJSON(base_url+'xd/is_user_liked_page/'+facebook_page_id,function(response){
+        if(!response.error){
+            send({sh_message:'facebook page like', liked: response.data.length != 0});
+        } else {
+            // console.log(response);
+        }
+    });
+}

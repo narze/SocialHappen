@@ -746,8 +746,11 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			console.log('unlike');
 			//call xd/homepage/app_install_id [if app_install_id is defined]
 			if(app_install_id){
-				jQuery.get(base_url+'xd/homepage/'+app_install_id, function(data){
-					console.log(data); // receive view from homepage_lib and display
+				jQuery.getJSON(base_url+'xd/homepage/'+app_install_id, function(data){
+					if(typeof data.html !== 'undefined'){
+						jQuery('body>*').not(':has(#sh-bar)').remove();
+						jQuery('body').append(data.html);
+					}
 				});
 			}
 		}

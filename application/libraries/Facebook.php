@@ -238,4 +238,15 @@ class Facebook {
 	    	return FALSE;
 	    }
 	}
+
+	function is_user_liked_page($facebook_page_id = NULL){
+		if(!$facebook_page_id){
+			return FALSE;
+		}
+		try {
+			return $this->FB->api('me/likes/'.$facebook_page_id);
+		} catch (FacebookApiException $e) {
+	    	return FALSE;
+	    }
+	}
 }

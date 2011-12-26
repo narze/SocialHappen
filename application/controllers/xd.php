@@ -144,7 +144,15 @@ class XD extends CI_Controller {
 
 	function homepage($app_install_id = NULL){
 		$this->load->library('homepage_lib');
-		$this->homepage_lib->view_homepage_for_unliked_users($app_install_id);
+		$homepage = $this->homepage_lib->get_homepage_for_unliked_users($app_install_id);
+		$result = array(
+            'html' => '<p>'.$homepage['message'].'</p><p><img src="'.$homepage['image'].'"</img></p>'
+            );
+        echo json_encode($result);
+	}
+
+	function is_user_liked_page($facebook_page_id = NULL){
+		echo json_encode($this->facebook->is_user_liked_page($facebook_page_id));
 	}
 }  
 
