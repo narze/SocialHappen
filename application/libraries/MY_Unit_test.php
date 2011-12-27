@@ -72,6 +72,17 @@ class MY_Unit_test extends CI_Unit_test {
 			echo $this->mongodb_reset_result;
 		}
 	}
+
+	function mock_login(){
+
+		$userdata = array(
+			'user_id' => 1,
+			'user_facebook_id' => '713558190',
+			'logged_in' => TRUE
+		);
+	
+		$this->CI->session->set_userdata($userdata);
+	}
 }
 /* End of file MY_Unit_test.php */
 /* Location: ./application/libraries/MY_Unit_test.php */
