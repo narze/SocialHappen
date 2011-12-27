@@ -34,28 +34,33 @@ class Invite_component_lib {
 		$page = $this->CI->page_model->get_page_profile_by_facebook_page_id($facebook_page_id);
 		$app_install = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
 			
-		$check_args = //($campaign['app_install_id'] == $app_install_id) &&
-						($page['page_id'] == $app_install['page_id']);
+		// $check_args = //($campaign['app_install_id'] == $app_install_id) &&
+						// ($page['page_id'] == $app_install['page_id']);
 		
 		// if($check_args){
-		
+		$this->CI->load->model('user_model');
+		$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
+		$invite_limit_criteria = compact('user_id', 'app_install_id', 'campaign_id');
+		if(!$this->_check_invite_limit($invite_limit_criteria)){
 			$target_facebook_id_list = $this->_extract_target_id($target_facebook_id);
 			
 			$invite_exists = $this->CI->invite_model->get_invite_by_criteria(
-															array(
-																'campaign_id' => (int) $campaign_id,
-																'app_install_id' => (int) $app_install_id,
-																'facebook_page_id' =>(string) $facebook_page_id,
-																'user_facebook_id' => (string)$user_facebook_id,
-																'invite_type' => $invite_type,
-															)														
-															);
+				array(
+					'campaign_id' => (int) $campaign_id,
+					'app_install_id' => (int) $app_install_id,
+					'facebook_page_id' =>(string) $facebook_page_id,
+					'user_facebook_id' => (string)$user_facebook_id,
+					'invite_type' => $invite_type,
+				)														
+			);
 		
 			if($invite_exists){
 				$invite_key = $invite_exists['invite_key'];
 				if($invite_type==2){
+					$this->_increment_invite_limit($invite_limit_criteria);
 					return $invite_key; //no update
 				} else if($invite_type==1 && $this->CI->invite_model->add_into_target_facebook_id_list($invite_key, $target_facebook_id_list)){
+					$this->_increment_invite_limit($invite_limit_criteria);
 					return $invite_key;
 				} else {
 				 	return FALSE;
@@ -64,12 +69,15 @@ class Invite_component_lib {
 				if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
 									, $invite_type, $user_facebook_id, $target_facebook_id_list
 									, $invite_key)){
-					
+					$this->_increment_invite_limit($invite_limit_criteria);
 					return $invite_key;
 				} else {
 					return FALSE;
 				}
 			}
+		} else {
+			// echo 'Invite reached maximum';
+		}
 		// }
 		return FALSE;
     }
@@ -233,9 +241,9 @@ class Invite_component_lib {
 			$this->CI->load->model('invite_pending_model','invite_pending');
 			$pending_invite_key = $this->CI->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id);
 			$this->CI->load->model('user_model', 'user');
-			if($user = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id)){
+			if($user_id = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id)){
 				$this->CI->load->model('user_campaigns_model', 'user_campaign');
-				if($this->CI->user_campaign->is_user_in_campaign($user['user_id'], $campaign_id)){
+				if($this->CI->user_campaign->is_user_in_campaign($user_id, $campaign_id)){
 					//already in campaign
 					//return FALSE;
 					return array('error' => 'You are already in campaign');
@@ -460,7 +468,42 @@ class Invite_component_lib {
 			return FALSE;
 		}
 		return TRUE;
+	}
 
+	function _increment_invite_limit($input = array()){
+		$user_id = issetor($input['user_id']);
+		$app_install_id = issetor($input['app_install_id']);
+		$campaign_id = issetor($input['campaign_id']);
+
+		$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Invite');
+		$this->CI->load->library('audit_stat_limit_lib');
+		return $this->CI->audit_stat_limit_lib->add($user_id, $action_id, $app_install_id, $campaign_id);
+	}
+
+	function _check_invite_limit($input = array()){
+		$user_id = issetor($input['user_id']);
+		$app_install_id = issetor($input['app_install_id']);
+		$campaign_id = issetor($input['campaign_id']);
+		$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Invite');
+
+		$this->CI->load->model('app_component_model');
+		if(!$invite_component = $this->CI->app_component_model->get_invite_by_campaign_id($campaign_id)){
+			return FALSE;
+		} 
+		if(!isset($invite_component['criteria']['maximum']) || !isset($invite_component['criteria']['cooldown'])){
+			return FALSE;
+		}
+		$invite_cooldown = $invite_component['criteria']['cooldown'] * 60;
+		$invite_limit = $invite_component['criteria']['maximum'];
+
+		$this->CI->load->library('audit_stat_limit_lib');
+		$invite_count = $this->CI->audit_stat_limit_lib->count($user_id, $action_id, $app_install_id, $campaign_id, $invite_cooldown);
+
+		if($invite_count >= $invite_limit){
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 }
 /* End of file invite_component_lib.php */

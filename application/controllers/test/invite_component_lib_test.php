@@ -52,7 +52,7 @@ class Invite_component_lib_test extends CI_Controller {
 	        'email_invite' => TRUE,
 	        'criteria' => array(
 	          'score' => 1,
-	          'maximum' => 5,
+	          'maximum' => 7,
 	          'cooldown' => 300,
 	          'acceptance_score' => array(
 	            'page' => 100,
@@ -556,6 +556,78 @@ class Invite_component_lib_test extends CI_Controller {
 		$result = $this->invite_component_lib->_give_campaign_score_to_inviter($invite);
 		$this->unit->run($result, FALSE, '_give_campaign_score_to_inviter : no app_component with campaign_id = 4');
 
+	}
+
+	function _increment_invite_limit_test(){
+		$user_id = 1;
+		$app_install_id = 1;
+		$campaign_id = 1;
+		$input = compact('user_id', 'app_install_id', 'campaign_id');
+
+		// 5 invite out of 7 : from add_invite above
+		$result = $this->invite_component_lib->_increment_invite_limit($input);
+		$this->unit->run($result, TRUE, '_increment_invite_limit', $result);
+		// 6 invite out of 7 : can invite for one more time
+	}
+
+	function _check_invite_limit_test(){
+		//cooldown
+		$invite_key = $this->invite_key1;
+		$user_id = 1;
+		$app_install_id = 1;
+		$campaign_id = 1;
+		$action_no = $this->socialhappen->get_k('audit_action', 'User Invite');
+
+		$input = compact('user_id', 'app_install_id', 'campaign_id');
+		$result = $this->invite_component_lib->_check_invite_limit($input);
+		$this->unit->run($result, FALSE, '_check_invite_limit', $result);
+
+		$this->load->model('audit_stats_model', 'stats');
+
+		$data = array(
+			'user_id' => $user_id,
+			'action_no' => $action_no,
+			'app_install_id' => $app_install_id,
+			'campaign_id' => $campaign_id,
+			'timestamp' => time()-301*60
+		);
+		$result = $this->stats->add_stat($data); //out of cooldown time
+		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
+
+		$result = $this->invite_component_lib->_check_invite_limit($input);
+		$this->unit->run($result, FALSE, '_check_invite_limit', $result);
+
+		$data = array(
+			'user_id' => $user_id,
+			'action_no' => $action_no,
+			'app_install_id' => $app_install_id,
+			'campaign_id' => $campaign_id,
+			'timestamp' => time()-301*60
+		);
+		$result = $this->stats->add_stat($data); //out of cooldown time
+		$this->unit->run($result, 'is_true', 'add', print_r($result, TRUE));
+
+		$result = $this->invite_component_lib->_check_invite_limit($input);
+		$this->unit->run($result, FALSE, '_check_invite_limit', $result);
+
+		$result = $this->invite_component_lib->_increment_invite_limit($input); //in cooldown time, no invite left (7 of 7)
+		$this->unit->run($result, TRUE, '_increment_invite_limit', $result);
+
+		$result = $this->invite_component_lib->_check_invite_limit($input);
+		$this->unit->run($result, TRUE, '_check_invite_limit (reached limit)', $result);
+
+	}
+
+	function try_invite_after_reached_limit_test(){
+		$campaign_id = 1;
+		$app_install_id = 1;
+		$facebook_page_id = $this->FBPAGEID1;
+		$invite_type = 1;
+		$user_facebook_id = '713558190';
+		$commasep_target_facebook_ids = '1,2,3,10,11';
+		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
+
+		$this->unit->run($result, FALSE, 'add_invite', $result);
 	}
 }
 /* End of file invite_component_lib_test.php */
