@@ -19,7 +19,7 @@ class DB_Sync {
 		define('BASE_URL', base_url());
     }
 
-    function use_test_db($use = FALSE){
+    function use_test_db($use = TRUE){
 		if($use){
 			$this->CI->db = $this->CI->load->database('local_unit_test', TRUE);
 			$this->CI->config->load('mongo_db');

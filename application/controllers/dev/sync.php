@@ -19,7 +19,7 @@ class Sync extends CI_Controller {
 		
 		$this->load->library('db_sync');
 		if($this->input->get('unit_test')){
-			$this->db_sync->use_test_db();
+			$this->db_sync->use_test_db(TRUE);
 		}
 
 	}
