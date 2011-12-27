@@ -1434,6 +1434,40 @@ class Api_Lib {
 		return ($response);
 		
 	}
+
+	function request_user_classes($app_id = NULL, $app_secret_key = NULL, 
+		$app_install_id = NULL, $app_install_secret_key = NULL, $page_id = NULL, $facebook_page_id = NULL){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$page_id && !$facebook_page_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
+			return (array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, facebook_page_id)'));
+
+		}
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
+			return;
+		}
+		
+		//authenticate app install with $app_install_id and $app_install_secret_key
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+			return;
+		}
+	
+		if(!$page_id){
+			$page_id = $this->CI->Page->get_page_id_by_facebook_page_id($facebook_page_id);
+		}
+
+		$this->CI->load->model('app_component_page_model');
+
+		if($user_classes = $this->CI->app_component_page_model->get_classes_by_page_id($page_id)){
+			$response['status'] = 'OK';
+			$response['data'] = $user_classes;
+			
+		} else {
+			$response['status'] = 'ERROR';
+		}
+		return $response;
+	}
 	
 	function _generate_app_install_secret_key($company_id, $app_id){
 		return md5($this->_generate_random_string());

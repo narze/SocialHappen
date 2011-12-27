@@ -452,6 +452,23 @@ class Api extends CI_Controller {
 		var_export($result_error);
 		echo "</pre>";
 	}
+
+	/**
+	 * Request page user classes
+	 * @author Manassarn M.
+	 */
+	function request_user_classes(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$page_id = $this->input->get('page_id', TRUE);
+		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
+
+		$response = $this->api_lib->request_user_classes($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, $facebook_page_id);
+
+		$this->_print_api_result($response);
+	}
 	
 	function _authenticate_app($app_id, $app_secret_key){
 		// authenticate app with $app_id and $app_secret_key
