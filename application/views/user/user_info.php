@@ -9,7 +9,7 @@
 			</ul>
 		</fieldset><?php
 			
-		if(isset($user_data) && count($user_data))
+		if(isset($user_data) && is_array($user_data))
 		{ ?>
 			<fieldset>
 				<legend>Additional Information</legend>
