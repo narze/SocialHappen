@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define('Page_id', 1);
+define('Facebook_page_id', '116586141725712');
 class Page_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
@@ -21,8 +23,41 @@ class Page_ctrl_test extends CI_Controller {
 		}
 	}
 
-	function index_test(){
-		
+	function main_fail_test(){
+		$page_id = Page_id;
+		$result = $this->page_ctrl->main($page_id);
+		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'User is not admin', 'main fail test', $result['success']);
+
+		$this->unit->mock_login();
+
+		$page_id = NULL;
+		$result = $this->page_ctrl->main($page_id);
+		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'Page not found', 'main fail test', $result['success']);
+	}
+
+	function main_test(){
+		$page_id = Page_id;
+		$facebook_page_id = Facebook_page_id;
+		$result = $this->page_ctrl->main($page_id);
+		$this->unit->run($result['success'], TRUE, 'main test', $result['success']);
+		$data = $result['data'];
+		$this->unit->run($data['page_id'], $page_id, '$page_id', $data['page_id']);
+		$this->unit->run(isset($data['page_installed']), TRUE, 'page_installed', htmlspecialchars($data['page_installed']));
+		$this->unit->run($data['facebook_page_id'], $facebook_page_id, '$facebook_page_id', $data['facebook_page_id']);
+		$this->unit->run(issetor($data['app_facebook_api_key']) != FALSE, TRUE , 'app_facebook_api_key', htmlspecialchars($data['app_facebook_api_key']));
+		$this->unit->run(isset($data['facebook_tab_url']), TRUE , 'facebook_tab_url', htmlspecialchars($data['facebook_tab_url']));
+		$this->unit->run(issetor($data['header']) != FALSE, TRUE , 'header', htmlspecialchars($data['header']));
+		$this->unit->run(issetor($data['company_image_and_name']) != FALSE, TRUE , 'company_image_and_name', htmlspecialchars($data['company_image_and_name']));
+		$this->unit->run(issetor($data['breadcrumb']) != FALSE, TRUE , 'breadcrumb', htmlspecialchars($data['breadcrumb']));
+		$this->unit->run(issetor($data['page_profile']) != FALSE, TRUE , 'page_profile', htmlspecialchars($data['page_profile']));
+		$this->unit->run(issetor($data['page_tabs']) != FALSE, TRUE , 'page_tabs', htmlspecialchars($data['page_tabs']));
+		$this->unit->run(issetor($data['page_apps']) != FALSE, TRUE , 'page_apps', htmlspecialchars($data['page_apps']));
+		$this->unit->run(issetor($data['page_campaigns']) != FALSE, TRUE , 'page_campaigns', htmlspecialchars($data['page_campaigns']));
+		$this->unit->run(issetor($data['page_users']) != FALSE, TRUE , 'page_users', htmlspecialchars($data['page_users']));
+		$this->unit->run(issetor($data['page_report']) != FALSE, TRUE , 'page_report', htmlspecialchars($data['page_report']));
+		$this->unit->run(issetor($data['footer']) != FALSE, TRUE , 'footer', htmlspecialchars($data['footer']));
 	}
 
 	function json_count_apps_test(){
