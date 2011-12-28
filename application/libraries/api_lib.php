@@ -190,6 +190,7 @@ class Api_Lib {
 		
 		$this->CI->load->model('Session_model','Session');
 		if(!$this->CI->Session->get_session_id_by_user_id($user_id)){
+			
 			log_message('error',"User #{$user_id} has no session");
 			return (array( 'error' => '300',
 									'message' => 'user session error, please login through platform'));
@@ -1454,12 +1455,14 @@ class Api_Lib {
 		}
 	
 		if(!$page_id){
+			$this->CI->load->model('Page_model','Page');
 			$page_id = $this->CI->Page->get_page_id_by_facebook_page_id($facebook_page_id);
 		}
 
 		$this->CI->load->model('app_component_page_model');
-
-		if($user_classes = $this->CI->app_component_page_model->get_classes_by_page_id($page_id)){
+		$user_classes = $this->CI->app_component_page_model->get_classes_by_page_id($page_id);
+		
+		if($user_classes){
 			$response['status'] = 'OK';
 			$response['data'] = $user_classes;
 			
@@ -1510,6 +1513,7 @@ class Api_Lib {
 		$this->CI->load->model('User_companies_model', 'User_companies');
 		$company_admin_list_query = $this->CI->User_companies->get_user_companies_by_company_id($company_id, 1000, 0);
 		$company_admin_list = array();
+		
 		foreach ($company_admin_list_query as $admin) {
 			$company_admin_list[] = $admin['user_id'];
 		}

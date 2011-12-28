@@ -24,6 +24,7 @@ class Page_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_page_profile_by_facebook_page_id($facebook_page_id = NULL){
+	
 		$result = $this->db->get_where('page', array('facebook_page_id' => $facebook_page_id))->result_array();
 		return $this->socialhappen->map_one_v($result[0], 'page_status');
 	}
@@ -76,7 +77,9 @@ class Page_model extends CI_Model {
 	function get_page_id_by_facebook_page_id($facebook_page_id =NULL) {
 		if(!$facebook_page_id)
 			return NULL;
+			
 		$result = $this -> db ->select('page_id') -> get_where('page', array('facebook_page_id' => $facebook_page_id))-> result_array();
+		
 		return issetor($result[0]['page_id']);
 	}
 	

@@ -69,6 +69,7 @@ class App_component_page_model extends CI_Model {
    * @author Metwara Narksook
    */
   function get_classes_by_page_id($page_id = NULL){
+  
     $result = $this->app_component_page
       ->findOne(array('page_id' => (int) $page_id));
     
