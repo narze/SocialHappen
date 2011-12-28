@@ -592,7 +592,7 @@ class Api_lib_test extends CI_Controller {
 		$campaign_id = 1;
 	    $app_id = 2;
 	    $app_install_id = 3;
-	    $page_id = 4;
+	    $page_id = PAGE_ID;
 	    $info = array(
 	      'app_id' => $app_id,
 	      'app_install_id' => $app_install_id,
@@ -620,7 +620,7 @@ class Api_lib_test extends CI_Controller {
 	    $app_secret_key = APP_SECRET_KEY;
 		$app_install_id = $this->app_install_id;
 		$app_install_secret_key = $this->app_install_secret_key;
-		$page_id = 4;
+		$page_id = PAGE_ID;
 		$facebook_page_id = FACEBOOK_PAGE_ID;
 
 	    $result1 = $this->api_lib->request_user_classes($app_id, $app_secret_key, 
@@ -637,13 +637,13 @@ class Api_lib_test extends CI_Controller {
 		
 		$this->unit->run($result1['data'] == $app_component_page_data['classes'], TRUE, 'request_user_classes test', print_r($result1['data'], TRUE));
 
-		$result = $this->app_component_lib->add_page($app_component_page_data);
-	    $this->unit->run($result, TRUE,'Add app_component_page with full data', print_r($result, TRUE));
-	    $this->unit->run($this->app_component_page->count_all(), 2, 'count all app_component_page');
+		// $result = $this->app_component_lib->add_page($app_component_page_data);
+	 //    $this->unit->run($result, TRUE,'Add app_component_page with full data', print_r($result, TRUE));
+	 //    $this->unit->run($this->app_component_page->count_all(), 2, 'count all app_component_page');
 	    
 		
 		$result2 = $this->api_lib->request_user_classes($app_id, $app_secret_key, 
-		$app_install_id, $app_install_secret_key, NULL, $facebook_page_id);
+			$app_install_id, $app_install_secret_key, NULL, $facebook_page_id);
 		$this->unit->run($result2['status'], 'OK', 'request_user_classes test', $result2['status']);
 		$this->unit->run($result2['data'], 'is_array', 'request_user_classes test', print_r($result2['data'], TRUE));
 		$this->unit->run(count($result2['data']) == 3, TRUE, 'request_user_classes test', count($result2['data']));
