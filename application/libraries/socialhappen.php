@@ -492,13 +492,15 @@ class SocialHappen{
 			return FALSE;
 		}
 		
-		function in_each_array($needle_key, $needle_value, $haystack_array = array()){
-			foreach($haystack_array as $haystack){
-				if(isset($haystack[$needle_key]) && $haystack[$needle_key] == $needle_value){
-					return TRUE;
+		if ( ! function_exists('in_each_array')){
+			function in_each_array($needle_key, $needle_value, $haystack_array = array()){
+				foreach($haystack_array as $haystack){
+					if(isset($haystack[$needle_key]) && $haystack[$needle_key] == $needle_value){
+						return TRUE;
+					}
 				}
+				return FALSE;
 			}
-			return FALSE;
 		}
 		
 		if(isset($data['company_id'])){
