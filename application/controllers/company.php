@@ -13,101 +13,12 @@ class Company extends CI_Controller {
 	}
 
 	function index($company_id = NULL){
-		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array())){
-			//no access
+		$result = $this->company_ctrl->main($company_id);
+		if($result['success']){
+			$data = $result['data'];
+			$this -> parser -> parse('company/company_view', $data);
 		} else {
-			if($company_id){
-
-				$this -> load -> model('company_model', 'companies');
-				$this -> load -> model('package_users_model', 'package_users');
-				$company = $this -> companies -> get_company_profile_by_company_id($company_id);
-				
-				$user_id = $this->socialhappen->get_user_id();
-				$user_have_package = false;
-				$is_package_over_the_limit = false;
-				$popup_name = '';
-				$closeEnable = true;
-				
-				if($this->package_users->get_package_by_user_id($user_id)) //If user have package
-				{
-					$user_have_package = true;
-					//Noom : change user_id to check to get_user_id() for the time being
-					$is_package_over_the_limit = $this->socialhappen->check_package_over_the_limit_by_user_id($user_id);
-				}
-				
-				if($user_have_package == false)
-				{
-					$popup_name = 'payment/payment_form';
-					$closeEnable = false;
-				} 
-				else if($this->input->get('popup') == 'thanks') //Thanks msg after sign up
-				{
-					$popup_name = 'home/signup_complete/';
-				}
-				else if($is_package_over_the_limit)
-				{
-					$popup_name = 'company/company_package_limited';
-				}
-				
-				$data = array(
-					'company_id' => $company_id,
-					'header' => $this -> socialhappen -> get_header( 
-						array(
-							'title' => $company['company_name'],
-							'vars' => array('company_id'=>$company_id,
-											'sh_default_fb_app_api_key'=>$this->config->item('facebook_app_id'),
-											'user_id'=>$user_id,
-											'popup_name'=>$popup_name,
-											'closeEnable'=>$closeEnable
-											),
-							'script' => array(
-								'common/functions',
-								'common/jquery.form',
-								'common/bar',
-								'common/shDragging',
-								'company/company_dashboard',
-								'common/fancybox/jquery.mousewheel-3.0.4.pack',
-								'common/fancybox/jquery.fancybox-1.3.4.pack',
-								'payment/payment',
-								'common/jquery.joyride'
-							),
-							'style' => array(
-								'common/main',
-								'common/platform',
-								'common/smoothness/jquery-ui-1.8.9.custom',
-								'common/fancybox/jquery.fancybox-1.3.4',
-								'common/joyride'
-							)
-						)
-					),
-					'company_image_and_name' => $this -> load -> view('company/company_image_and_name', 
-						array(
-							'company' => $company
-						),
-					TRUE),
-					'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-						array(
-							'breadcrumb' => 
-								array( 
-									$company['company_name'] => base_url() . "company/{$company['company_id']}"
-								),
-							'settings_url' => base_url()."settings/company/{$company['company_id']}"
-						),
-					TRUE),
-					'company_profile' => $this -> load -> view('company/company_profile', 
-						array('company_profile' => $company),
-					TRUE),
-					'company_dashboard_tabs' => $this -> load -> view('company/company_dashboard_tabs', 
-						array('user_have_package'=>$user_have_package),
-					TRUE),
-					'company_dashboard_right_panel' => $this -> load -> view('company/company_dashboard_right_panel', 
-						array(),
-					TRUE),
-					'footer' => $this -> socialhappen -> get_footer()
-				);
-
-				$this->parser->parse('company/company_view', $data);
-			}
+			echo $result['error'];
 		}
 	}
 	

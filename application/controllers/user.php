@@ -11,123 +11,18 @@ class User extends CI_Controller {
 	function index(){
 		$this -> socialhappen -> check_logged_in();
 		$user_id = $this->input->get('uid');
-		if($user_id){
-			$page_id = $this->input->get('pid');
-			$app_install_id = $this->input->get('aid');
-			$campaign_id = $this->input->get('cid');
-			if(!$page_id && !$app_install_id && !$campaign_id){
-				//no id specified
-			} else {
-				$this->load->library('audit_lib');
-				$this -> load -> model('company_model', 'companies');
-				$this -> load -> model('user_model','users');
-				$user = $this -> users -> get_user_profile_by_user_id($user_id);
-				$breadcrumb = array();
-				if($page_id){
-					$this -> load -> model('page_model', 'pages');
-					$company = $this -> companies -> get_company_profile_by_page_id($page_id);
-					$page = $this -> pages -> get_page_profile_by_page_id($page_id);
-					$breadcrumb = 
-						array( 
-							$company['company_name'] => base_url() . "company/{$company['company_id']}",
-							$page['page_name'] => base_url() . "page/{$page['page_id']}",
-							'Member' => NULL
-						);
-						
-					//$activity = $this->_get_user_activity_page($page_id, $user_id);
-					$recent_apps = $this->_get_user_activity_recent_apps($page_id, $user_id);
-					$recent_campaigns = $this->_get_user_activity_recent_campaigns($page_id, $user_id);
-					
-					$this->load->model('page_user_data_model', 'page_user_data');
-					$user_with_signup_fields = $this->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
-					
-				} else if ($app_install_id){
-					$this -> load -> model('installed_apps_model', 'installed_apps');
-					$company = $this -> companies -> get_company_profile_by_app_install_id($app_install_id);
-					$app = $this -> installed_apps -> get_app_profile_by_app_install_id($app_install_id);
-					$breadcrumb = 
-						array( 
-							$company['company_name'] => base_url() . "company/{$company['company_id']}",
-							$app['app_name'] => base_url() . "app/{$app['app_install_id']}",
-							'Member' => NULL
-						);
-					$activity = $this->_get_user_activity_app($app_install_id, $user_id);
-				} else if ($campaign_id){
-					$this -> load -> model('campaign_model', 'campaigns');
-					$company = $this -> companies -> get_company_profile_by_campaign_id($campaign_id);
-					$campaign = $this -> campaigns -> get_campaign_profile_by_campaign_id($campaign_id);
-					$breadcrumb = 
-						array( 
-							$company['company_name'] => base_url() . "company/{$company['company_id']}",
-							$campaign['campaign_name'] => base_url() . "campaign/{$campaign['campaign_id']}",
-							'Member' => NULL
-						);
-					$activity = $this->_get_user_activity_campaign($campaign_id, $user_id);
-				}
-				
-				$data = array(
-				'user_id' => $user_id,
-				'page_id' => issetor($page_id),
-				'app_install_id' => issetor($app_install_id),
-				'campaign_id' => issetor($campaign_id),
-				'header' => $this -> socialhappen -> get_header( 
-					array(
-						'title' => $user['user_first_name'].' '.$user['user_last_name'],
-						'vars' => array('user_id' => $user_id,
-										'page_id' => issetor($page_id),
-										'activities_per_page' => 10,
-										'app_install_id' => issetor($app_install_id),
-										'campaign_id' => issetor($campaign_id)),
-						'script' => array(
-							'common/functions',
-							'common/jquery.form',
-							'common/bar',
-							'common/jquery.pagination',
-							'user/user_activities',
-							'user/user_tabs',
-							//stat
-		    				'stat/excanvas.min',
-		    				'stat/jquery.jqplot.min',
-			 				'stat/jqplot.highlighter.min',
-			 				'stat/jqplot.cursor.min',
-			 				'stat/jqplot.dateAxisRenderer.min',
-			 				'stat/jqplot.canvasTextRenderer.min',
-			 				'stat/jqplot.canvasAxisTickRenderer.min',
-			 				'stat/jqplot.pointLabels.min',
-							'common/fancybox/jquery.fancybox-1.3.4.pack'
-						),
-						'style' => array(
-							'common/main',
-							'common/platform',
-							'common/fancybox/jquery.fancybox-1.3.4',
-							'stat/jquery.jqplot.min'
-						)
-					)
-				),
-				'company_image_and_name' => $this -> load -> view('company/company_image_and_name', 
-					array(
-						'company' => $company
-					),
-				TRUE),
-				'breadcrumb' => $this -> load -> view('common/breadcrumb', array('breadcrumb' => $breadcrumb),	TRUE),
-				'user_profile' => $this -> load -> view('user/user_profile', 
-					array('user_profile' => $user, 'recent_apps' => $recent_apps, 'recent_campaigns' => $recent_campaigns),
-				TRUE),
-				'user_tabs' => $this -> load -> view('user/user_tabs', 
-					array(),
-				TRUE), 
-				'user_activities' => $this -> load -> view('user/user_activities', 
-					array('activities' => isset($activity) ? $activity : NULL ),
-				TRUE), 
-				'user_info' => $this -> load -> view('user/user_info', 
-					array('user' => $user, 'user_data' => $user_with_signup_fields['user_data']),
-				TRUE),
-				'footer' => $this -> socialhappen -> get_footer()
-				);
-				$this -> parser -> parse('user/user_view', $data);
-			}
-			
+		$page_id = $this->input->get('pid');
+		$app_install_id = $this->input->get('aid');
+		$campaign_id = $this->input->get('cid');
+		$input = compact('user_id', 'page_id', 'app_install_id', 'campaign_id');
+		$result = $this->user_ctrl->main($input);
+		if($result['success']){
+			$data = $result['data'];
+			$this -> parser -> parse('user/user_view', $data);
+		} else {
+			echo $result['error'];
 		}
+		
 	}
 
 	function _get_user_activity_page($page_id, $user_id, $limit = 100, $offset = 0){
@@ -151,48 +46,6 @@ class User extends CI_Controller {
 				'date' => date('d F Y', $activity['timestamp']),
 				'time' => date('H:i:s', $activity['timestamp'])
 			);
-		}
-		return $activity_list;
-	}
-	
-	function _get_user_activity_recent_apps($page_id, $user_id){
-		date_default_timezone_set('UTC');		
-		$app_ids = $this->audit_lib->list_audit_range('app_id', array('page_id'=>(int)$page_id, 'user_id'=>(int)$user_id));
-		$app_ids = array_filter($app_ids); //Remove zero value
-		$app_list = array();
-		$this->load->model('app_model', 'app');
-		foreach($app_ids as $app_id)
-		{
-			$app_list[] = $this->app->get_app_by_app_id($app_id);
-			if(isset($app_list[5])) break; //limit 6 apps
-		}
-		return $app_list;
-	}
-	
-	function _get_user_activity_recent_campaigns($page_id, $user_id){
-		return $campaign_list = array(); //Test view
-	}
-	
-	function _get_user_activity_app($app_install_id, $user_id){
-		date_default_timezone_set('UTC');
-		$activity_db = $this->audit_lib->list_audit(array('app_install_id' => (int)$app_install_id, 'user_id' => (int)$user_id));
-		$activity_list = array();
-		foreach ($activity_db as $activity) {
-			//$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
-			//$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
-			$activity_list[] = $activity['message'];
-		}
-		return $activity_list;
-	}
-	
-	function _get_user_activity_campaign($campaign_id, $user_id){
-		date_default_timezone_set('UTC');
-		$activity_db = $this->audit_lib->list_audit(array('campaign_id' => (int)$campaign_id, 'user_id' => (int)$user_id));
-		$activity_list = array();
-		foreach ($activity_db as $activity) {
-			//$action = $this->audit_lib->get_audit_action($activity['app_id'], $activity['action_id']);
-			//$activity_list[] = date(DATE_RFC822, $activity['timestamp']) . ' : ' . $action['description'];
-			$activity_list[] = $activity['message'];
 		}
 		return $activity_list;
 	}
@@ -370,7 +223,7 @@ class User extends CI_Controller {
 	 */
 	function json_get_user_activities($page_id = NULL, $user_id = NULL, $limit = 10, $offset = 0){
 		$this->socialhappen->ajax_check();
-		$activities = $this->_get_user_activity_page($page_id, $user_id, $limit, $offset);
+		$activities = $this->user_ctrl->_get_user_activity_page($page_id, $user_id, $limit, $offset);
 		echo json_encode($activities);
 	}
 	
@@ -382,7 +235,7 @@ class User extends CI_Controller {
 	 */
 	function json_count_user_activities($page_id = NULL, $user_id = NULL){
 		$this->socialhappen->ajax_check();
-		$activities = $this->_get_user_activity_page($page_id, $user_id);
+		$activities = $this->user_ctrl->_get_user_activity_page($page_id, $user_id);
 		echo count($activities);
 	}
 }

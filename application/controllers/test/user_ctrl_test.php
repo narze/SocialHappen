@@ -1,5 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define('User_id', 1);
+define('Page_id', 1);
+define('App_install_id', 1);
+define('Campaign_id', 1);
 class User_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
@@ -19,6 +23,80 @@ class User_ctrl_test extends CI_Controller {
     			$this->$method();
     		}
 		}
+	}
+
+	function main_fail_test(){
+		$user_id = User_id;
+		$input = compact('user_id');
+		$result = $this->user_ctrl->main($input);
+		$this->unit->run($result['success'], FALSE, 'main fail test : no id specified');
+		$this->unit->run($result['error'] == 'No id specified', TRUE, 'main fail test : no id specified');
+
+		$page_id = Page_id;
+		$input = compact('page_id');
+		$result = $this->user_ctrl->main($input);
+		$this->unit->run($result['success'], FALSE, 'main fail test : no user id specified');
+		$this->unit->run($result['error'] == 'No user_id specified', TRUE, 'main fail test : no user id specified');
+	}
+
+	function main_test(){
+		$user_id = User_id;
+		$page_id = Page_id;
+		$app_install_id = App_install_id;
+		$campaign_id = Campaign_id;
+		$input1 = compact('user_id', 'page_id');
+		$result1 = $this->user_ctrl->main($input1);
+		$input2 = compact('user_id', 'app_install_id');
+		$result2 = $this->user_ctrl->main($input2);
+		$input3 = compact('user_id', 'campaign_id');
+		$result3 = $this->user_ctrl->main($input3);
+
+		$this->unit->run($result1['success'], TRUE, 'main test with page_id');
+		$this->unit->run($result2['success'], TRUE, 'main test with app_install_id');
+		$this->unit->run($result3['success'], TRUE, 'main test with campaign_id');
+
+		$data1 = $result1['data'];
+		$data2 = $result2['data'];
+		$data3 = $result3['data'];
+
+		$this->unit->run($data1['user_id'], $user_id, 'main test $data');
+		$this->unit->run($data1['page_id'], $page_id, 'main test $data');
+		$this->unit->run($data1['app_install_id'], FALSE, 'main test $data');
+		$this->unit->run($data1['campaign_id'], FALSE, 'main test $data');
+		$this->unit->run(issetor($data1['header']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data1['company_image_and_name']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data1['breadcrumb']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data1['user_profile']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data1['user_tabs']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data1['user_activities']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data1['user_info']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data1['footer']) != FALSE, TRUE, 'main test $data');
+
+		$this->unit->run($data2['user_id'], $user_id, 'main test $data');
+		$this->unit->run($data2['page_id'], FALSE, 'main test $data');
+		$this->unit->run($data2['app_install_id'], $app_install_id, 'main test $data');
+		$this->unit->run($data2['campaign_id'], FALSE, 'main test $data');
+		$this->unit->run(issetor($data2['header']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data2['company_image_and_name']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data2['breadcrumb']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data2['user_profile']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data2['user_tabs']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data2['user_activities']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data2['user_info']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data2['footer']) != FALSE, TRUE, 'main test $data');
+
+		$this->unit->run($data3['user_id'], $user_id, 'main test $data');
+		$this->unit->run($data3['page_id'], FALSE, 'main test $data');
+		$this->unit->run($data3['app_install_id'], FALSE, 'main test $data');
+		$this->unit->run($data3['campaign_id'], $campaign_id, 'main test $data');
+		$this->unit->run(issetor($data3['header']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data3['company_image_and_name']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data3['breadcrumb']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data3['user_profile']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data3['user_tabs']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data3['user_activities']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data3['user_info']) != FALSE, TRUE, 'main test $data');
+		$this->unit->run(issetor($data3['footer']) != FALSE, TRUE, 'main test $data');
 	}
 	
 	/**

@@ -6,6 +6,8 @@
  */
 class MY_Session extends CI_Session {
 	
+	private $test_database_group = 'local_unit_test';
+	
 	/**
 	 * Update $user_id
 	 * @author Manassarn M.
@@ -31,6 +33,9 @@ class MY_Session extends CI_Session {
 	 * @author Manassarn M.
 	 */
 	function sess_create(){
+		if($this->CI->uri->segment(1) === 'test' && $this->CI->db->database !== $this->test_database_group){
+			$this->CI->db = $this->CI->load->database($this->test_database_group, TRUE);
+		}
 		parent::sess_create();
 		$this->update_user_id();
 	}
@@ -42,6 +47,13 @@ class MY_Session extends CI_Session {
 	function sess_update(){
 		parent::sess_update();
 		$this->update_user_id();
+	}
+
+	function sess_read(){
+		if($this->CI->uri->segment(1) === 'test' && $this->CI->db->database !== $this->test_database_group){
+			$this->CI->db = $this->CI->load->database($this->test_database_group, TRUE);
+		}
+		parent::sess_read();
 	}
 }
 /* End of file MY_Session.php */
