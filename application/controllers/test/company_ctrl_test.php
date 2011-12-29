@@ -1,5 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define('Company_id', 1);
 class Company_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
@@ -19,6 +20,34 @@ class Company_ctrl_test extends CI_Controller {
     			$this->$method();
     		}
 		}
+	}
+
+	function main_fail_test(){
+		$company_id = Company_id;
+		$data = $this->company_ctrl->main($company_id);
+		$this->unit->run($data['success'], FALSE, 'main test without session');
+		$this->unit->run($data['error'], 'User is not admin', 'main test without session');
+
+		$company_id = NULL;
+		$result = $this->company_ctrl->main($company_id);
+		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'Company id not specified', 'main fail test', $result['success']);
+	}
+
+	function main_test(){
+		$company_id = Company_id;
+		$this->unit->mock_login();
+		$result = $this->company_ctrl->main($company_id);
+		$this->unit->run($result['success'], TRUE, 'main test with session');
+		$data = $result['data'];
+		$this->unit->run(issetor($data['company_id']), $company_id, '$data');
+		$this->unit->run(issetor($data['header']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['company_image_and_name']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['breadcrumb']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['company_profile']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['company_dashboard_tabs']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['company_dashboard_right_panel']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['footer']) != FALSE, TRUE, '$data');
 	}
 	
 	/**

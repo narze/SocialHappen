@@ -1,5 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define('App_install_id','1');
 class App_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
@@ -18,8 +19,28 @@ class App_ctrl_test extends CI_Controller {
 		$this->unit->report_with_counter();
 	}
 	
-	function index_test(){
-		
+	function main_fail_test(){
+		$app_install_id = App_install_id;
+		$data = $this->app_ctrl->main($app_install_id);
+		$this->unit->run($data['success'], FALSE, 'main test without session');
+		$this->unit->run($data['error'], 'User is not admin', 'main test without session');
+	}
+
+	function main_test(){
+		$app_install_id = App_install_id;
+		$this->unit->mock_login();
+		$result = $this->app_ctrl->main($app_install_id);
+		$this->unit->run($result['success'], TRUE, 'main test with session');
+		$data = $result['data'];
+		$this->unit->run(issetor($data['app_install_id']), $app_install_id, '$data');
+		$this->unit->run(issetor($data['header']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['company_image_and_name']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['breadcrumb']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['app_profile']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['app_tabs']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['app_campaigns']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['app_users']) != FALSE, TRUE, '$data');
+		$this->unit->run(issetor($data['footer']) != FALSE, TRUE, '$data');
 	}
 
 	function config_test(){

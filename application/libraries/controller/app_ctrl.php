@@ -7,6 +7,111 @@ class App_ctrl {
 	function __construct() {
         $this->CI =& get_instance();
     }
+
+    function main($app_install_id = NULL){
+    	$result = array(
+	    	'success' => FALSE
+	    );
+    	if(!$this->CI->socialhappen->check_admin(array('app_install_id' => $app_install_id),array())){
+			$result['error'] = 'User is not admin';
+		} else {
+			$this ->CI-> load -> model('installed_apps_model', 'installed_apps');
+			$app = $this->CI->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+			if(!$app) {
+				$result['error'] = 'App not found'; // This case is hard to reach
+			} else {
+				$this ->CI-> load -> model('company_model', 'companies');
+				$company = $this ->CI-> companies -> get_company_profile_by_app_install_id($app_install_id);
+				$this->CI->load->model('page_model','pages');
+				$page = $this->CI->pages->get_page_profile_by_app_install_id($app_install_id);
+				$this ->CI-> load -> model('campaign_model', 'campaigns');
+				$campaigns = $this ->CI-> campaigns -> get_campaigns_by_app_install_id($app_install_id);
+
+				$campaign_count = $this->CI->campaigns->count_campaigns_by_app_install_id($app_install_id);
+				$user_count = $this->CI->users->count_users_by_app_install_id($app_install_id);
+				$this->CI->config->load('pagination', TRUE);
+				$per_page = $this->CI->config->item('per_page','pagination');
+				
+				$this->CI->load->library('audit_lib');
+				$new_users = $this->CI->audit_lib->list_stat_app((int)$app_install_id, 102, $this->CI->audit_lib->_date());
+				$new_users = count($new_users) == 0 ? 0 : $new_users[0]['count'];
+				
+				$this ->CI-> load -> model('user_model', 'user');
+				$all_users = $this->CI->user->count_users_by_app_install_id($app_install_id);
+				
+				$result['data'] = array(
+					'app_install_id' => $app_install_id,
+					'header' => $this ->CI-> socialhappen -> get_header( 
+						array(
+							'company_id' => $company['company_id'],
+							'title' => $app['app_name'],
+							'vars' => array(
+								'app_install_id'=>$app_install_id,
+								'per_page' => $per_page,
+								'page_id' => $page['page_id']
+							),
+							'script' => array(
+								'common/functions',
+								'common/jquery.form',
+								'common/bar',
+								'common/jquery.pagination',
+								'common/jquery.countdown.min',
+								//'app/app_stat',
+								'app/app_users',
+								'app/app_campaigns',
+								'app/app_tabs',
+								'app/main',
+								'common/fancybox/jquery.fancybox-1.3.4.pack'
+							),
+							'style' => array(
+								'common/main',
+								'common/platform',
+								'common/fancybox/jquery.fancybox-1.3.4',
+								'common/jquery.countdown'
+							)
+						)
+					),
+					'company_image_and_name' => $this ->CI-> load -> view('company/company_image_and_name', 
+						array(
+							'company' => $company
+						),
+					TRUE),
+					'breadcrumb' => $this ->CI-> load -> view('common/breadcrumb', 
+						array('breadcrumb' => 
+							array(
+								$company['company_name'] => base_url() . "company/{$company['company_id']}",
+								$page['page_name'] => base_url() . "page/{$page['page_id']}",
+								$app['app_name'] => base_url() . "app/{$app['app_install_id']}"
+								)
+							)
+						,
+					TRUE),
+					'app_profile' => $this ->CI-> load -> view('app/app_profile', 
+						array('app_profile' => $app,
+							'new_users' => $new_users,
+							'all_users' => $all_users,
+							'count_installed_on' => $this->CI->pages->count_pages_by_app_id($app['app_id']),
+							'company_id' => $company['company_id']),
+					TRUE),
+					'app_tabs' => $this ->CI-> load -> view('app/app_tabs', 
+						array(
+							'campaign_count' => $campaign_count,
+							'user_count' => $user_count
+							),
+					TRUE), 
+					'app_campaigns' => $this ->CI-> load -> view('app/app_campaigns', 
+						array(),
+					TRUE),
+					'app_users' => $this ->CI-> load -> view('app/app_users', 
+						array(),
+					TRUE),
+					'footer' => $this ->CI-> socialhappen -> get_footer()
+				);
+				$result['success'] = TRUE;
+			}
+		}
+		return $result;
+    }
 	
 	/** 
 	 * JSON : Gets app profile
