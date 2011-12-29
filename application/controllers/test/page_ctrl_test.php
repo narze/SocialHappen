@@ -27,14 +27,14 @@ class Page_ctrl_test extends CI_Controller {
 		$page_id = Page_id;
 		$result = $this->page_ctrl->main($page_id);
 		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
-		$this->unit->run($result['error'], 'User is not admin', 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'User is not admin', 'main fail test', $result['error']);
 
 		$this->unit->mock_login();
 
 		$page_id = NULL;
 		$result = $this->page_ctrl->main($page_id);
 		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
-		$this->unit->run($result['error'], 'Page not found', 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'Page not found', 'main fail test', $result['error']);
 	}
 
 	function main_test(){
