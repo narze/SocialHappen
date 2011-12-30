@@ -5,6 +5,7 @@ class Home extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('form_validation');
+		$this->load->library('controller/home_ctrl');
 	}
 	
 	/**
@@ -25,57 +26,22 @@ class Home extends CI_Controller {
 			redirect();
 		}
 		
-		
+		$from =  $this->input->get('from');
+		$facebook_user_id = $facebook_user['id'];
+
 		$this->load->model('user_model','users');
 		if($is_registered = $this->users->get_user_id_by_user_facebook_id($facebook_user['id']) ? TRUE : FALSE){
 			$this->socialhappen->login();
 		} 
-		
-		$data = array(
-			'header' => $this -> socialhappen -> get_header( 
-				array(
-					'title' => 'Signup',
-					'script' => array(
-						'common/functions',
-						'common/jquery.form',
-						'common/bar',
-						'common/jstz.min',
-						'common/fancybox/jquery.fancybox-1.3.4.pack',
-						'home/lightbox',
-						'home/signup'
-					),
-					'style' => array(
-						'common/platform',
-						'common/main',
-						'common/fancybox/jquery.fancybox-1.3.4'
-					),
-					'user_companies' => FALSE
-				)
-			),
-			'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-				array(
-					'breadcrumb' => array( 
-						'Signup' => NULL
-					)
-				),
-			TRUE),
-			'tutorial' => $this -> load -> view('home/tutorial', 
-				array(
-					
-				),
-			TRUE),
-			'footer' => $this -> socialhappen -> get_footer(),
-			'is_registered' => $is_registered,
-			'from' => $this->input->get('from'),
-			'user_profile_picture'=>$this->facebook->get_profile_picture($facebook_user['id']),
-			'facebook_user'=>$facebook_user
-		);
-		
-		if(!$is_registered) 
-		{
-			$data['signup_form'] = $this -> load -> view('home/signup_form', array(), TRUE);
+
+		$input = compact('is_registered','from','facebook_user_id','facebook_user');
+		$result = $this->home_ctrl->signup($input);
+		if($result['success']){
+			$data = $result['data'];
+			$this -> parser -> parse('home/signup_view', $data);
+		} else {
+			log_message('error', $result['error']);
 		}
-		$this -> parser -> parse('home/signup_view', $data);
 	}
 	
 	/**
@@ -97,87 +63,31 @@ class Home extends CI_Controller {
 	
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this -> load -> view('home/signup_form', array());
+			$this -> load -> view('home/signup_form');
 		}
 		else
 		{
 			$company_image = $this->socialhappen->upload_image('company_image');
 			
 			$user_timezone = $this->input->post('timezone') ? $this->input->post('timezone') : 'UTC';
-
-			$this->load->library('timezone_lib');
-			if(!$minute_offset = $this->timezone_lib->get_minute_offset_from_timezone($user_timezone)){
-				$minute_offset = 0;
-			}
-
-			$user = array(
-					       	'user_first_name' => set_value('first_name'),
-					       	'user_last_name' => set_value('last_name'),
-					       	'user_email' => set_value('email'),
-					       	'user_image' => $this->facebook->get_profile_picture($facebook_user['id']),
-					       	'user_facebook_id' => $facebook_user['id'],
-					       	'user_timezone_offset' => $minute_offset
-						);
-						
-			$user_id = $this->users->add_user($user);
 			
-			$company = array(
-					       	'company_name' => set_value('company_name'),
-					       	'company_detail' => set_value('company_detail'),
-					       	'company_image' => $company_image ? $company_image : $this->socialhappen->get_default_url('company_image'),
-							'creator_user_id' => $user_id
-						);
-			$this->load->model('company_model','company');
-			$company_id = $this->company->add_company($company);
+			$first_name = set_value('first_name');
+			$last_name = set_value('last_name');
+			$email = set_value('email');
+			$facebook_user_id = $facebook_user['id'];
+			$company_name =	set_value('company_name');
+			$company_detail = set_value('company_detail');
+			$package_id = $this->input->post('package_id');
 			
-			if ($user_id && $company_id)
-			{	
-				$this->load->model('user_companies_model','user_companies');
-				$add_user_company = $this->user_companies->add_user_company(array(
-				  'user_id' => $user_id,
-				  'company_id' => $company_id,
-				  'user_role' => 1 //Company admin
-				));
-        
-				if(!$add_user_company){
-					log_message('error','company_user add failed');
-				}else{
-					$this->load->library('audit_lib');
-					$action_id = $this->socialhappen->get_k('audit_action','User Register SocialHappen');
-					$this->audit_lib->add_audit(
-						0,
-						$user_id,
-						$action_id,
-						'', 
-						'',
-						array(
-							'app_install_id' => 0,
-							'company_id' => $company_id,
-							'user_id' => $user_id
-						)
-					);
-					
-					$this->load->library('achievement_lib');
-					$info = array('action_id'=> $action_id, 'app_install_id'=>0);
-					$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
-				}
+			$input = compact('user_timezone','first_name','last_name','email','facebook_user_id','company_name','company_detail','company_image','package_id');
+			$result = $this->home_ctrl->signup_form($input);
+
+			$this -> load -> view('home/signup_form');
+			if($result['success']){
 				$this->socialhappen->login();
-				if($this->input->post('package_id')) 
-				{
-					$redirect_path = base_url().'home/package?package_id='. $this->input->post('package_id') .'&payment=true';
-				}
-				else
-				{
-					//$redirect_path = base_url().'?logged_in=true';
-					$redirect_path = base_url().'home/package?payment=true';
-				}
-				$this -> load -> view('home/signup_form', array());
-				$this->load->view('common/redirect',array('redirect_parent'=>$redirect_path));
-			}
-			else
-			{
-				$this -> load -> view('home/signup_form', array());
-				log_message('error','company,user add failed');
+				$this->load->view('common/redirect',array('redirect_parent'=>$result['data']['redirect_url']));
+			} else {
+				log_message('error', $result['error']);
 			}
 		}
 	}
