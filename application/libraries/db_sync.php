@@ -906,7 +906,7 @@ class DB_Sync {
 					),
 				);
 		$this->CI->db->insert_batch('page', $page);
-		
+				
 		$user = array(
 					array(
 					    'user_id' => 1, 
@@ -1583,7 +1583,7 @@ class DB_Sync {
 		echo 'Dropped collections<br />';
 
 		$this->CI->load->library('audit_lib');
-		$this->CI->load->library('achievement_lib');
+		$this->CI->load->library('achievement_lib');		
 		
 		$platform_audit_actions = array(
 			array(
@@ -2340,6 +2340,48 @@ class DB_Sync {
 		}
 		echo 'Added '.count($get_started_stats).' get-started stats<br />';
 		*/
+		
+		$app_component_page_data = array(
+			array(
+			  'page_id' => 1,
+			  'classes' => array(
+				array('name' => 'Founding',
+					  'invite_accepted' => 3),
+				array('name' => 'VIP',
+					  'invite_accepted' => 10),
+				array('name' => 'Prime',
+					  'invite_accepted' => 50)
+				)
+			), 
+			array(
+			  'page_id' => 2,
+			  'classes' => array(
+				array('name' => 'Founding',
+					  'invite_accepted' => 3),
+				array('name' => 'VIP',
+					  'invite_accepted' => 10),
+				array('name' => 'Prime',
+					  'invite_accepted' => 50)
+				)
+			),
+			array(
+			  'page_id' => 3,
+			  'classes' => array(
+				array('name' => 'Founding',
+					  'invite_accepted' => 3),
+				array('name' => 'VIP',
+					  'invite_accepted' => 10),
+				array('name' => 'Prime',
+					  'invite_accepted' => 50)
+				)
+			  )
+		);
+		
+		$this->CI->load->model('App_component_page_model', 'app_component_page');
+		foreach($app_component_page_data as $app_component_page){
+			$this->CI->app_component_page->add($app_component_page);
+		}
+		
 		
 		echo 'MongoDB reset successfully';
 	}

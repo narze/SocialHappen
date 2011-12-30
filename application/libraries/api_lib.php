@@ -1387,15 +1387,15 @@ class Api_Lib {
 	}
 	
 	/**
-	 * Request for 
+	 * Request for current campaign
 	 *
 	 *	@param app_id int id of an app
 	 *	@param app_secret_key string secret key of app
 	 *	@param app_install_id int install id of an app
 	 *	@param app_install_secret_key string install secret key of an app
 	 *
-	 *	@return array of 
-	 *	@author  
+	 *	@return array of last campaign
+	 *	@author  Wachiraph C.
 	 *
 	 */
 	function request_current_campaign($app_id = NULL, $app_secret_key = NULL, 
@@ -1436,6 +1436,20 @@ class Api_Lib {
 		
 	}
 
+	/**
+	 * Request for user classes
+	 *
+	 *	@param app_id int id of an app
+	 *	@param app_secret_key string secret key of app
+	 *	@param app_install_id int install id of an app
+	 *	@param app_install_secret_key string install secret key of an app
+	 *	@param page_id
+	 *	@param facebook_page_id
+	 *
+	 *	@return array of user class in a page
+	 *	@author  Manassarm M.
+	 *
+	 */
 	function request_user_classes($app_id = NULL, $app_secret_key = NULL, 
 		$app_install_id = NULL, $app_install_secret_key = NULL, $page_id = NULL, $facebook_page_id = NULL){
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || (!$page_id && !$facebook_page_id)){
@@ -1462,7 +1476,22 @@ class Api_Lib {
 		$this->CI->load->model('app_component_page_model');
 		$user_classes = $this->CI->app_component_page_model->get_classes_by_page_id($page_id);
 		
+			
 		if($user_classes){
+			//sort like a boss
+			$sorted_user_classes = array();
+			
+			usort($user_classes, 
+					function ($a, $b){
+							if($a['invite_accepted'] > $b['invite_accepted'])
+								return 1;
+							else if($a['invite_accepted'] < $b['invite_accepted'])
+								return -1;
+								
+							return 0;
+					}
+				);
+			
 			$response['status'] = 'OK';
 			$response['data'] = $user_classes;
 			
@@ -1471,6 +1500,9 @@ class Api_Lib {
 		}
 		return $response;
 	}
+	
+	
+		private	
 	
 	function _generate_app_install_secret_key($company_id, $app_id){
 		return md5($this->_generate_random_string());

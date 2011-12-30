@@ -610,8 +610,10 @@ class Api_lib_test extends CI_Controller {
 	              'invite_accepted' => 50)
 	      )
 	    );
-	    
+		
+	    $this->app_component_page->drop_collection();
 	    $result = $this->app_component_lib->add_page($app_component_page_data);
+		
 	    $this->unit->run($result, TRUE,'Add app_component_page with full data', print_r($result, TRUE));
 	    $this->unit->run($this->app_component_page->count_all(), 1, 'count all app_component_page');
 	    
