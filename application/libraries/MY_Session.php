@@ -53,7 +53,7 @@ class MY_Session extends CI_Session {
 		if($this->CI->uri->segment(1) === 'test' && $this->CI->db->database !== $this->test_database_group){
 			$this->CI->db = $this->CI->load->database($this->test_database_group, TRUE);
 		}
-		parent::sess_read();
+		return parent::sess_read();
 	}
 }
 /* End of file MY_Session.php */
