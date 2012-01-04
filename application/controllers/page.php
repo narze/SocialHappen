@@ -148,63 +148,21 @@ class Page extends CI_Controller {
 	 */
 	function json_add() {
 		$this->socialhappen->ajax_check();
-		$this -> load -> model('page_model', 'pages');
-		$post_data = array(
-			'facebook_page_id' => $this -> input -> post('facebook_page_id'), 
-			'company_id' => $this -> input -> post('company_id'), 
-			'page_name' => $this -> input -> post('page_name'), 
-			'page_detail' => $this -> input -> post('page_detail'), 
-			'page_all_member' => $this -> input -> post('page_all_member'), 
-			'page_new_member' => $this -> input -> post('page_new_member'), 
-			'page_image' => $this -> input -> post('page_image')
-		);
-		
-		if($this->pages->get_page_id_by_facebook_page_id($post_data['facebook_page_id'])){
-			log_message('error','Duplicated facebook page id');
-			$result['status'] = 'ERROR';
-			$result['message'] = 'This page has already installed Socialhappen';
-		} else if($page_id = $this -> pages -> add_page($post_data)) {
-			$this->load->library('audit_lib');
-			$user_id = $this->session->userdata('user_id');
-			$action_id = $this->socialhappen->get_k('audit_action','Install Page');
-			$this->audit_lib->add_audit(
-				0,
-				$user_id,
-				$action_id,
-				'', 
-				'',
-				array(
-						'page_id'=> $page_id,
-						'company_id' => ($this -> input -> post('company_id')),
-						'app_install_id' => 0,
-						'user_id' => $user_id
-					)
-			);
-			$this->load->library('achievement_lib');
-			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
-			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
-			
-			$this -> load -> model('user_pages_model', 'user_pages');
-			$this -> user_pages -> add_user_page(
-				array(
-				'user_id' => $user_id,
-				'page_id' => $page_id,
-				'user_role' => 1
-				)
-			);
 
-			//Add Page user classes
-			$this->load->library('app_component_lib');
-			$add_user_classes_result = $this->app_component_lib->add_default_user_classes($page_id);
-			if(!$add_user_classes_result){
-		    	log_message('error','Add user classes failed , page_id : '.$page_id);
-		    }
+		$facebook_page_id = $this -> input -> post('facebook_page_id'); 
+		$company_id = $this -> input -> post('company_id'); 
+		$page_name = $this -> input -> post('page_name'); 
+		$page_detail = $this -> input -> post('page_detail'); 
+		$page_all_member = $this -> input -> post('page_all_member'); 
+		$page_new_member = $this -> input -> post('page_new_member'); 
+		$page_image = $this -> input -> post('page_image');
+		$json_add_result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_all_member,$page_new_member,$page_image);
 
+		if($json_add_result['success']){
 			$socialhappen_app_id = $this->config->item('facebook_app_id');
-			$facebook_page_id = $post_data['facebook_page_id'];
 			if($this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_app_id, $facebook_page_id)){
 				$result['status'] = 'OK';
-				$result['page_id'] = $page_id;
+				$result['page_id'] = $json_add_result['data']['page_id'];
 				$result['facebook_tab_url'] = $this->facebook->get_facebook_tab_url($socialhappen_app_id, $facebook_page_id);
 				$this->pages->update_facebook_tab_url_by_facebook_page_id($facebook_page_id, $result['facebook_tab_url']);
 			} else {
@@ -213,9 +171,9 @@ class Page extends CI_Controller {
 				$result['message'] = 'Please manually add Socialhappen facebook app by this <link>';
 			}
 		} else {
-			log_message('error','page add failed');
+			log_message('error','json_add failed');
 			$result['status'] = 'ERROR';
-			$result['message'] = 'Cannot add page, please contact administrator';
+			$result['message'] = $json_add_result['error'];
 		}
 		
 		echo json_encode($result);

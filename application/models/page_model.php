@@ -100,10 +100,10 @@ class Page_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function add_page($data = array()){
-		$this->db->where(array('facebook_page_id' => $data['facebook_page_id']));
-		if($this -> db ->count_all_results('page')>0) {
-			return FALSE;
-		}
+		// $this->db->where(array('facebook_page_id' => $data['facebook_page_id']));
+		// if($this -> db ->count_all_results('page')>0) {
+		// 	return FALSE;
+		// }
 		$this -> db -> insert('page', $data);
 		return $this->db->insert_id();
 	}
