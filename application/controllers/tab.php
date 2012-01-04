@@ -15,7 +15,7 @@ class Tab extends CI_Controller {
 							  'cookie' => true,
 							),
 							'FB');
-	
+		$this->load->library('controller/tab_ctrl');
 	}
 	
 	function index($page_id = NULL, $token = NULL){
@@ -25,95 +25,19 @@ class Tab extends CI_Controller {
 		
 		$user_facebook_id = $this->FB->getUser();
 		
-		$this->load->model('User_model','User');
-		$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
 		$token = issetor($this->signedRequest['oauth_token']);
 		
 		$this->load->model('Page_model','Page');
-		if(!$page_id){
-			if(!$page_id = $this->Page->get_page_id_by_facebook_page_id($this->page['id'])){ 
-				exit('Your facebook account is not verified, please contact administrator'); //TODO : Blame that your facebook user is not verified.
-			}
+		if(!$page_id && (!$facebook_page_id = issetor($this->page['id']))){ 
+			exit('Your facebook account is not verified, please contact administrator'); //TODO : Blame that your facebook user is not verified.
 		}
-		
-		$this->load->model('user_model','users');
-		$user = $this->users->get_user_profile_by_user_id($user_id);
-		$this->load->model('page_model','pages');
-		$page = $this->pages->get_page_profile_by_page_id($page_id);
-		$this->load->model('company_model','companies');
-		$company = $this->companies->get_company_profile_by_page_id($page_id);
-		$this->load->model('user_companies_model','user_companies');
-		$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
-		
-		//is user register to current page : moved to get_bar
-		// $this->load->model('page_user_data_model','page_user_data');
-		// $is_user_register_to_page = $this->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
-
-
-		$this->config->load('pagination', TRUE);
-		$per_page = $this->config->item('per_page','pagination');
-
-		
-		// if($is_admin){
-			// $page_update = array();
-			// if(!$page['page_installed']){
-				// $page_update['page_installed'] = TRUE;
-			// } else if($page['page_app_installed_id'] != 0){
-				// $page_update['page_app_installed_id'] = 0;
-			// }		
-			// $this->pages->update_page_profile_by_page_id($page_id, $page_update);
-		// }
-		$data = array(
-			'header' => $this->load->view('tab/header', 
-				array(
-					'facebook_app_id' => $this->config->item('facebook_app_id'),
-					'facebook_channel_url' => $this->facebook->channel_url,
-					'vars' => array(
-									'page_id' => $page_id,
-									'user_id' => $user_id,
-									'is_guest' => $user ? FALSE : TRUE,
-									'token' => urlencode($token),
-									'per_page' => $per_page,
-									'notifications_per_page' => 5,
-									'view' => isset($this->app_data['view']) ? $this->app_data['view'] : '',
-									'return_url' => isset($this->app_data['return_url']) ? $this->app_data['return_url'] : ''
-					),
-					'script' => array(
-						'common/functions',
-						'common/onload',
-						'tab/bar',
-						'tab/profile',
-						'tab/main',
-						'tab/account',
-						'tab/dashboard',
-						'common/jquery.pagination',
-						'common/jquery.form',
-						'common/jquery.countdown.min',
-						'common/fancybox/jquery.fancybox-1.3.4.pack'
-					),
-					'style' => array(
-						'common/facebook',
-						'common/facebook-main',
-						'common/jquery.countdown',
-						'common/fancybox/jquery.fancybox-1.3.4',
-						'../../assets/css/common/api_app_bar'
-					)
-				),
-			TRUE),
-			'bar' => 
-			$this->socialhappen->get_bar(
-				array(
-					'user_id' => $user_id,
-					'user_facebook_id' => $user_facebook_id,
-					'page_id' => $page_id
-				)
-			),
-			'main' => $this->load->view('tab/main',array(),
-			TRUE),
-			'footer' => $this->load->view('tab/footer',array(),
-			TRUE)
-		);
-		$this->parser->parse('tab/tab_view', $data);
+		$result = $this->tab_ctrl->main($user_facebook_id, $page_id, $facebook_page_id, $token);
+		if($result['success']){
+			$data = $result['data'];
+			$this->parser->parse('tab/tab_view', $data);
+		} else {
+			echo $result['error'];
+		}
 	}
 	
 	function logout($page_id = NULL, $app_install_id = NULL)
@@ -645,82 +569,16 @@ class Tab extends CI_Controller {
 				'error' => 'no_fb_user',
 			);
 		} else {
-			$data = array(
-				'user_first_name' => $this->input->get('first_name'),
-				'user_last_name' => $this->input->get('last_name'),
-				'user_email' => $this->input->get('email')
-			);
-			
-			$this->load->library('text_validate');
-			$validate_array = array(
-				'first_name' => array('label' => 'First name', 'rules' => 'required', 'input' => $data['user_first_name']),
-				'last_name' => array('label' => 'Last name', 'rules' => 'required', 'input' => $data['user_last_name']),
-				'email' => array('label' => 'Email', 'rules' => 'required|email', 'input' => $data['user_email'], 'verify_message' => 'Please enter a valid email.')
-			);
-			$validation_result = $this->text_validate->text_validate_array($validate_array);
-			
-			if(!$validation_result){
-				$data['status'] = 'error';
-				$data['error'] = 'verify';
-				$validate_errors = array();
-				foreach($validate_array as $key => $value){
-					if(!$value['passed']){
-						$validate_errors[$key] = $value['error_message'];
-					}
-				}
-				$data['error_messages'] = $validate_errors;
+			$user_facebook_id = $facebook_user['id'];
+			$first_name = $this->input->get('first_name');
+			$last_name = $this->input->get('last_name');
+			$email = $this->input->get('email');
+			$timezone = $this->input->get('timezone');
+			$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id);
+			if($result['success']){
+				$data = array('status' => 'ok');
 			} else {
-				// if (!$user_image = $this->socialhappen->upload_image('user_image')){
-					$user_image = $this->facebook->get_profile_picture($facebook_user['id']);;
-				// }
-
-				$user_timezone = $this->input->get('timezone') ? $this->input->get('timezone') : 'UTC';
-				$this->load->library('timezone_lib');
-				if(!$minute_offset = $this->timezone_lib->get_minute_offset_from_timezone($user_timezone)){
-					$minute_offset = 0;
-				}
-
-				$this->load->model('user_model','users');
-				$post_data = array(
-					'user_first_name' => $data['user_first_name'],
-					'user_last_name' => $data['user_last_name'],
-					'user_email' => $data['user_email'],
-					'user_image' => $user_image,
-					'user_facebook_id' => $facebook_user['id'],
-			       	'user_timezone_offset' => $minute_offset
-				);
-				
-				if(!$user_id = $this->users->add_user($post_data)){
-					//TODO : erase uploaded image
-					log_message('error','add user failed, $post_data : '. print_r($post_data, TRUE));
-					log_message('error','$user_id : '. print_r($user_id, TRUE));
-					echo 'Error occured';
-					$data['status'] = 'error';
-					$data['error'] = 'add_user';
-				} else {
-					$this->socialhappen->login();
-					$data['status'] = 'ok';
-					
-					$this->load->library('audit_lib');
-					$action_id = $this->socialhappen->get_k('audit_action','User Register SocialHappen');
-					$this->audit_lib->add_audit(
-						0,
-						$user_id,
-						$action_id,
-						'', 
-						'',
-						array(
-							'app_install_id' => 0,
-							'user_id' => $user_id,
-							'page_id' => $page_id
-						)
-					);
-					
-					$this->load->library('achievement_lib');
-					$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id'=>$page_id);
-					$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
-				}
-				
+				$data = $result['error'];
 			}
 		}
 		echo $this->input->get('callback').'('.json_encode($data).')';
@@ -766,7 +624,7 @@ class Tab extends CI_Controller {
 			$page_user_fields = $this->pages->get_page_user_fields_by_page_id($page_id);
 			$page = $this->pages->get_page_profile_by_page_id($page_id);
 			
-			$post_data = array('user_data'=>array());
+			$user_data = array();
 			$validate_array = array();
 			if(!$page_user_fields){ //Empty field
 				$validation_result = TRUE;
@@ -774,7 +632,7 @@ class Tab extends CI_Controller {
 				foreach($page_user_fields as $user_fields){
 					$user_fields_name = $user_fields['name'];
 					$user_fields_data = $this->input->get($user_fields_name);
-					$post_data['user_data'][$user_fields_name] = $user_fields_data;
+					$user_data[$user_fields_name] = $user_fields_data;
 					$validate_array[$user_fields_name] = array(
 						'label' => $user_fields['label'],
 						'rules' => $user_fields['required'] ? 'required' : '',
@@ -783,7 +641,7 @@ class Tab extends CI_Controller {
 					);
 				}
 				
-				// log_message('error', print_r($post_data['user_data'],TRUE));
+				// log_message('error', print_r($user_data,TRUE));
 				// log_message('error', print_r($validate_array,TRUE));
 				
 				$this->load->library('text_validate');
@@ -802,88 +660,14 @@ class Tab extends CI_Controller {
 				}
 				$data['error_messages'] = $validate_errors;
 			} else {
-				$post_data['user_id'] = $user['user_id'];
-				$post_data['page_id'] = $page_id;
+				$user_id = $user['user_id'];
+				$user_facebook_id = $user['user_facebook_id'];
+				$result = $this->tab_ctrl->signup_page_submit($user_id, $user_facebook_id, $app_install_id, $page_id, $user_data);
 				
-				if(!isset($app_install_id)){ // mode = page
-					$this->load->model('page_model','page');
-					$page = $this->page->get_page_profile_by_page_id($page_id);
-					if(!$facebook_tab_url = $page['facebook_tab_url']){
-						$facebook_tab_url = $this->facebook_page($page_id, TRUE, TRUE);
-					}
-				} else { // mode = app
-					$this->load->model('installed_apps_model','installed_app');
-					$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id);
-					if(!$facebook_tab_url = $app['facebook_tab_url']){
-						$facebook_tab_url = $this->facebook_app($page_id, TRUE, TRUE);
-					}
-				}
-				
-				$this->load->model('page_user_data_model','page_users');
-				if(!$this->page_users->add_page_user($post_data)){
-					log_message('error','add page user failed');
-					log_message('error','$post_data : '. print_r($post_data, TRUE));
-					$data['status'] = 'error';
-					$data['error'] = 'add_page_user';
+				if($result['success']){
+					$data = $result['data'];
 				} else {
-					$data['status'] = 'ok';
-					$data['redirect_url'] = $facebook_tab_url;
-					
-					$action_id = $this->socialhappen->get_k('audit_action','User Register Page');
-					$user_id = $user['user_id'];
-					$this->load->library('audit_lib');
-					$audit_info = array('page_id' => $page_id);
-					if(isset($app_install_id)){
-						$audit_info['app_install_id'] = $app_install_id;
-					}
-					$this->audit_lib->add_audit(
-						0,
-						$user_id,
-						$action_id,
-						'', 
-						'',
-						$audit_info
-					);
-					
-					$this->load->library('achievement_lib');
-					$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'page_id'=>$page_id);
-					$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
-
-					//Begin : check pending invite
-						if(isset($app_install_id)){ // mode = app
-							$this->load->library('campaign_lib');
-							$current_campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
-							if($current_campaign['in_campaign'] == TRUE){
-								$campaign_id = $current_campaign['campaign_id'];
-								$user_facebook_id = $user['user_facebook_id'];
-								$this->load->model('invite_pending_model', 'invite_pending');
-								if($invite_key = $this->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id)){
-									$this->load->library('invite_component_lib');
-									$accept_and_give_score_result = $this->invite_component_lib->accept_all_invite_page_level($invite_key, $user_facebook_id);
-									if(!$accept_and_give_score_result){
-										log_message('error','accept_invite error '.print_r($accept_and_give_score_result,TRUE));
-									}
-								} else {
-									log_message('debug', 'not found invite_key');
-								}
-							} else {
-								log_message('debug', 'campaign ended');
-							}
-						} else { //mode = page
-							$this->load->model('invite_pending_model', 'invite_pending');
-							$user_facebook_id = $user['user_facebook_id'];
-							if($pending_invites = $this->invite_pending->get_by_user_facebook_id_and_facebook_page_id($user_facebook_id, $page['facebook_page_id'])){
-								$invite_key = $pending_invites[0]['invite_key'];
-								$this->load->library('invite_component_lib');
-								$accept_and_give_score_result = $this->invite_component_lib->accept_all_invite_page_level($invite_key, $user_facebook_id);
-								if(!$accept_and_give_score_result){
-									log_message('debug','accept_invite debug '.print_r($accept_and_give_score_result,TRUE));
-								}
-							} else {
-								log_message('debug', 'not found invite_keys');
-							}
-						}
-					//End
+					$data = $result['error'];
 				}
 			}
 		}
@@ -908,7 +692,7 @@ class Tab extends CI_Controller {
 		$this->load->view('tab/signup_campaign');
 	}
 	
-	function signup_campaign_submit($campaign_id = NULL, $app_install_id = NULL){
+	function signup_campaign_submit($app_install_id = NULL, $campaign_id = NULL){
 		
 		if(!$user = $this->socialhappen->get_user()){
 			$data = array(
@@ -924,39 +708,14 @@ class Tab extends CI_Controller {
 					'message' => 'Please submit'
 				);
 			} else {
-				$this->load->model('user_campaigns_model','user_campaigns');
-				if($this->user_campaigns->add_user_campaign(array(
-					'user_id' => $user['user_id'],
-					'campaign_id' => $campaign_id
-				))){
-					$this->load->model('invite_pending_model', 'invite_pending');
-					if($invite_key = $this->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user['user_facebook_id'], $campaign_id)){
-						$this->load->library('invite_component_lib');
-						$result = $this->invite_component_lib->accept_invite_campaign_level($invite_key, $user['user_facebook_id']);
-						if(isset($result['error'])){
-							$data = array(
-								'status' => 'error',
-								'error' => 'accept_invite_error',
-								'message' => 'cannot accept invite'
-							);
-							log_message('error','accept_invite error '.print_r($result,TRUE));
-						} else {
-							$data = array(
-								'status' => 'ok'
-							);
-						}
-					} else {
-						$data = array(
-							'status' => 'ok'
-						);
-					}
+				$user_id = $user['user_id'];
+				$user_facebook_id = $user['user_facebook_id'];
+				$result = $this->tab_ctrl->signup_campaign_submit($user_id, $user_facebook_id, $campaign_id);
+
+				if($result['success']){
+					$data = $result['data'];
 				} else {
-					$data = array(
-						'status' => 'error',
-						'error' => 'add_user_campaign error',
-						'message' => 'cannot add user campaign'
-					);
-						log_message('error', 'cannot add user campaign');
+					$data = $result['error'];
 				}
 			}
 		}

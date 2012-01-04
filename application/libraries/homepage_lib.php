@@ -18,9 +18,11 @@ class Homepage_lib {
             if($homepage && issetor($homepage['enable']) === TRUE && arenotempty($homepage, array('message','image'))){
                 return $homepage;
             } else {
+                return FALSE;
                 //No homepage or homepage[enable] is false, do nothing
             }
         } else {
+            return FALSE;
             //Campaign Ended 
             //$campaign_end_message = $campaign['campaign_end_message'];
         }

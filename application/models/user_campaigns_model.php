@@ -54,6 +54,12 @@ class User_campaigns_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function add_user_campaign($data = array()){
+		if(!isset($data['user_id']) || !isset($data['campaign_id'])){
+			return FALSE;
+		}
+		if($this->is_user_in_campaign($data['user_id'],$data['campaign_id'])){
+			return FALSE;
+		}
 		return $this -> db -> insert('user_campaigns', $data);
 	}
 	
