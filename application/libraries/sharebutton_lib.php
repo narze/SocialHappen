@@ -46,7 +46,7 @@ class Sharebutton_lib {
 			$response = $this->CI->twitter->post('statuses/update', array('status'=> $message));
 			
 			if(isset($response->error)){
-				log_message($response->error);
+				log_message('error',$response->error);
 				return FALSE;
 			} else {
 				return $response;
