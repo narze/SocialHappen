@@ -202,7 +202,7 @@ class Api extends CI_Controller {
 		$app_id = $this->input->get('app_id', TRUE);
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
-		$app_install_secret_keyapp_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		//$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		//$page_id = $this->input->get('page_id', TRUE);
 		
