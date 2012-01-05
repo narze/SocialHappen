@@ -2,6 +2,7 @@
 		FB.init({
 			appId  : facebook_app_id,
 			channelURL : channel_url, // Channel File
+			status : true,
 			cookie: true,
 			xfbml: true,
 			oauth: true

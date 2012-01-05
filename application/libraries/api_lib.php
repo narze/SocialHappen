@@ -1121,7 +1121,7 @@ class Api_Lib {
 	 *	@author  Manassarn M.
 	 *
 	 */
-	function request_login($user_facebook_id = NULL){
+	function request_login($user_facebook_id = NULL, $access_token = NULL){
 	
 		if(!$user_facebook_id){
 			log_message('debug','Missing parameter (user_facebook_id)');
@@ -1131,7 +1131,9 @@ class Api_Lib {
 		}
 		$this->CI->load->model('User_model', 'User');
 		$user_id_check = $this->CI->User->get_user_id_by_user_facebook_id($user_facebook_id);
-		
+		log_message('debug','accesstoken'.$access_token);
+		$this->CI->FB->setAccessToken($access_token);
+
 		$user_id = $this->CI->socialhappen->login();
 		if($user_id && $user_id == $user_id_check){
 			$response = array('status' => 'OK', 'user_id' => $user_id);
