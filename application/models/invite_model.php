@@ -289,6 +289,25 @@ class Invite_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	// function find_nth_invite($criteria = NULL, $nth = 1){
+	// 	$check_args = sizeof($criteria) > 0;
+	// 	if(isset($criteria['user_facebook_id'])){
+	// 		$criteria['user_facebook_id'] = (string) $criteria['user_facebook_id'];
+	// 	}
+	// 	if($check_args){
+	// 		$res = $this->invite->find($criteria)->sort(array('timestamp' => -1))->limit($nth);
+							
+	// 		$result = array();
+	// 		foreach ($res as $stat) {
+	// 			$result[] = $stat;
+	// 		}
+	// 		$nth_or_last = count($result);
+	// 		return $nth_or_last ? $result[$nth_or_last-1] : NULL;
+	// 	}else{
+	// 		return FALSE;
+	// 	}
+	// }
 }
 
 /* End of file invite_model.php */

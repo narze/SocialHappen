@@ -18,7 +18,7 @@ class Invite_component_lib {
 	 */
     public function add_invite($campaign_id = NULL, $app_install_id = NULL, $facebook_page_id = NULL
 							, $invite_type = NULL, $user_facebook_id = NULL, $target_facebook_id = NULL){
-							
+		$result = array('success' => FALSE);
 		$this->CI->invite_model->create_index();
 		
 		$invite_key = $this->_generate_invite_key();
@@ -40,8 +40,8 @@ class Invite_component_lib {
 		// if($check_args){
 		$this->CI->load->model('user_model');
 		$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
-		$invite_limit_criteria = compact('user_id', 'app_install_id', 'campaign_id');
-		if(!$this->_check_invite_limit($invite_limit_criteria)){
+		$invite_limit_criteria = compact('user_id', 'app_install_id', 'campaign_id', 'user_facebook_id');
+		if(!$cooled_down_timestamp = $this->_check_invite_limit($invite_limit_criteria)){
 			$target_facebook_id_list = $this->_extract_target_id($target_facebook_id);
 			
 			$invite_exists = $this->CI->invite_model->get_invite_by_criteria(
@@ -58,28 +58,32 @@ class Invite_component_lib {
 				$invite_key = $invite_exists['invite_key'];
 				if($invite_type==2){
 					$this->_increment_invite_limit($invite_limit_criteria);
-					return $invite_key; //no update
+					$result['data'] = array('invite_key' => $invite_key); //no update
+					$result['success'] = TRUE;
 				} else if($invite_type==1 && $this->CI->invite_model->add_into_target_facebook_id_list($invite_key, $target_facebook_id_list)){
 					$this->_increment_invite_limit($invite_limit_criteria);
-					return $invite_key;
+					$result['data'] = array('invite_key' => $invite_key);
+					$result['success'] = TRUE;
 				} else {
-				 	return FALSE;
+				 	$result['error'] = 'Invalid invite type';
 				}
 			} else {
 				if($this->CI->invite_model->add_invite($campaign_id, $app_install_id, $facebook_page_id
 									, $invite_type, $user_facebook_id, $target_facebook_id_list
 									, $invite_key)){
 					$this->_increment_invite_limit($invite_limit_criteria);
-					return $invite_key;
+					$result['data'] = array('invite_key' => $invite_key);
+					$result['success'] = TRUE;
 				} else {
-					return FALSE;
+					$result['error'] = 'Cannot add invite';
 				}
 			}
 		} else {
-			// echo 'Invite reached maximum';
+			$result['error'] = 'Invite limited';
+			$result['timestamp'] = $cooled_down_timestamp;
 		}
 		// }
-		return FALSE;
+		return $result;
     }
 	
 	/**
@@ -482,6 +486,7 @@ class Invite_component_lib {
 
 	function _check_invite_limit($input = array()){
 		$user_id = issetor($input['user_id']);
+		$user_facebook_id = issetor($input['user_facebook_id']);
 		$app_install_id = issetor($input['app_install_id']);
 		$campaign_id = issetor($input['campaign_id']);
 		$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Invite');
@@ -500,7 +505,8 @@ class Invite_component_lib {
 		$invite_count = $this->CI->audit_stat_limit_lib->count($user_id, $action_id, $app_install_id, $campaign_id, $invite_cooldown);
 
 		if($invite_count >= $invite_limit){
-			return TRUE;
+			$first_invite_timestamp = $this->CI->audit_stat_limit_lib->find_nth_timestamp($user_id, $action_id, $app_install_id, $campaign_id, $invite_limit);
+			return $first_invite_timestamp + $invite_cooldown;
 		} else {
 			return FALSE;
 		}
