@@ -345,13 +345,17 @@ font-size:11px;
 
 #sh-bar ul.menu > li.setting a {
 display:block;
-width:auto;
 height:auto;
 text-decoration:none;
 color:#FFF;
 font-weight:bold;
 background:url(../../images/bg_fb/bg_listmenu.png) 5px 12px no-repeat;
-padding:5px 10px 5px 20px;
+line-height: 35px;
+padding: 0 0 0 20px;
+text-overflow: ellipsis;
+white-space: nowrap;
+width: 130px;
+overflow: hidden;
 }
 
 /* Popup Facebook */
