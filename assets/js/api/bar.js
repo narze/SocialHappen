@@ -334,7 +334,6 @@ onLoad = function(){
 				return false;
 			});
 
-			$('#app-setting-template').show();
 			unhover_hide();
 			sh_popup();
 			sh_sharebutton();
@@ -524,6 +523,7 @@ sh_app_component = function() {
 						$('body').addClass('settings').append(result.html);
 						//insert app config
 						$('#app-setting-menu li a.config').click();
+						$('#app-setting-template').show();
 					}
 					else
 					{
