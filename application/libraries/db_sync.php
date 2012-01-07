@@ -2345,6 +2345,8 @@ class DB_Sync {
 			array(
 			  'page_id' => 1,
 			  'classes' => array(
+				array('name' => 'New Comer',
+					  'invite_accepted' => 0),
 				array('name' => 'Founding',
 					  'invite_accepted' => 3),
 				array('name' => 'VIP',
@@ -2356,6 +2358,8 @@ class DB_Sync {
 			array(
 			  'page_id' => 2,
 			  'classes' => array(
+				array('name' => 'New Comer',
+					  'invite_accepted' => 0),
 				array('name' => 'Founding',
 					  'invite_accepted' => 3),
 				array('name' => 'VIP',
@@ -2367,6 +2371,8 @@ class DB_Sync {
 			array(
 			  'page_id' => 3,
 			  'classes' => array(
+				array('name' => 'New Comer',
+					  'invite_accepted' => 0),
 				array('name' => 'Founding',
 					  'invite_accepted' => 3),
 				array('name' => 'VIP',

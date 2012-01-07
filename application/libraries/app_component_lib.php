@@ -316,6 +316,8 @@ class App_component_lib
     $app_component_page_data = array(
       'page_id' => $page_id,
       'classes' => array(
+        array('name' => 'New Comer',
+              'invite_accepted' => 0),
         array('name' => 'Founding',
               'invite_accepted' => 3),
         array('name' => 'VIP',

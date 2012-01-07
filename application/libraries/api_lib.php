@@ -1260,11 +1260,15 @@ class Api_Lib {
 		$add_invite_result = $this->CI->invite_component_lib->add_invite($campaign_id,$app_install_id,$facebook_page_id,
 												$invite_type,$user_facebook_id,$target_facebook_id);
 		$invite_key = issetor($add_invite_result['data']['invite_key']);
+		
 		if($invite_key){				
 			$response['invite_key'] = $invite_key;
 			$response['status'] = 'OK';
 		} else {
 			$response['status'] = 'ERROR';
+			$error_message = issetor($add_invite_result['error']);
+			if($error_message)
+				$response['message'] = $error_message;
 		}
 		
 		return ($response);
