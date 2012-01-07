@@ -165,27 +165,27 @@ class Page_ctrl {
 	    return $result;
     }
 
-	function json_count_apps_test(){
+	function json_count_apps(){
 		
 	}
 
-	function json_count_campaigns_test(){
+	function json_count_campaigns(){
 		
 	}
 
-	function json_count_user_apps_test(){
+	function json_count_user_apps(){
 		
 	}
 
-	function json_count_user_campaigns_test(){
+	function json_count_user_campaigns(){
 		
 	}
 
-	function json_count_users_test(){
+	function json_count_users(){
 		
 	}
 
-/**
+	/**
 	 * JSON : Get page profile
 	 * @param $page_id
 	 * @author Manassarn M.
@@ -195,7 +195,8 @@ class Page_ctrl {
 		$profile = $this -> CI -> pages -> get_page_profile_by_page_id($page_id);
 		return json_encode($profile);
 	}
-/**
+
+	/**
 	 * JSON : Get install apps
 	 * @param $page_id
 	 * @author Manassarn M.
@@ -267,31 +268,91 @@ class Page_ctrl {
 		return json_encode($users);
 	}
 
-	function json_add_test(){
+	function json_add($facebook_page_id = NULL ,$company_id = NULL ,$page_name = NULL ,$page_detail = NULL ,$page_all_member = NULL ,$page_new_member = NULL ,$page_image = NULL){
+		$result = array('success' => FALSE);
+		$this->CI-> load -> model('page_model', 'pages');
+		$post_data = array(
+			'facebook_page_id' => $facebook_page_id,
+			'company_id' => $company_id,
+			'page_name' => $page_name,
+			'page_detail' => $page_detail,
+			'page_all_member' => $page_all_member,
+			'page_new_member' => $page_new_member,
+			'page_image' => $page_image
+		);
+		
+		if($this->CI->pages->get_page_id_by_facebook_page_id($post_data['facebook_page_id'])){
+			log_message('error','Duplicated facebook page id');
+			$result['error'] = 'This page has already installed Socialhappen';
+		} else if($page_id = $this->CI-> pages -> add_page($post_data)) {
+			$this->CI->load->library('audit_lib');
+			$user_id = $this->CI->session->userdata('user_id');
+			$action_id = $this->CI->socialhappen->get_k('audit_action','Install Page');
+			$this->CI->audit_lib->add_audit(
+				0,
+				$user_id,
+				$action_id,
+				'', 
+				'',
+				array(
+						'page_id'=> $page_id,
+						'company_id' => ($this->CI-> input -> post('company_id')),
+						'app_install_id' => 0,
+						'user_id' => $user_id
+					)
+			);
+			$this->CI->load->library('achievement_lib');
+			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
+			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+			
+			$this->CI-> load -> model('user_pages_model', 'user_pages');
+			$this->CI-> user_pages -> add_user_page(
+				array(
+				'user_id' => $user_id,
+				'page_id' => $page_id,
+				'user_role' => 1
+				)
+			);
+
+			//Add Page user classes
+			$this->CI->load->library('app_component_lib');
+			$add_user_classes_result = $this->CI->app_component_lib->add_default_user_classes($page_id);
+			if(!$add_user_classes_result){
+		    	log_message('error','Add user classes failed , page_id : '.$page_id);
+		    }
+
+		    $result['success'] = TRUE;
+		    $result['data'] = array(
+			    'page_id' => $page_id
+			);
+		} else {
+			log_message('error','page add failed');
+			$result['error'] = 'Cannot add page, please contact administrator';
+		}
+		return $result;
+	}
+
+	function json_get_not_installed_facebook_pages(){
 		
 	}
 
-	function json_get_not_installed_facebook_pages_test(){
+	function json_update_page_order_in_dashboard(){
 		
 	}
 
-	function json_update_page_order_in_dashboard_test(){
+	function addapp_lightbox(){
 		
 	}
 
-	function addapp_lightbox_test(){
+	function get_stat_graph(){
 		
 	}
 
-	function get_stat_graph_test(){
+	function json_get_page_user_data(){
 		
 	}
 
-	function json_get_page_user_data_test(){
-		
-	}
-
-	function config_test(){
+	function config(){
 		
 	}
 

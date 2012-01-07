@@ -427,6 +427,26 @@ class Invite_model_test extends CI_Controller {
 		$result = $this->invite->push_into_all_page_accepted($user_facebook_id,$invite_keys);
 		$this->unit->run($result, FALSE, 'push_into_all_page_accepted');
 	}
+
+	// function find_nth_invite_test(){
+	// 	$user_facebook_id = '4';
+	// 	$campaign_id = 1;
+	// 	$app_install_id = 2;
+	// 	$nth = 1; //first invite
+	// 	$criteria = compact('user_facebook_id', 'campaign_id', 'app_install_id');
+	// 	$result = $this->invite->find_nth_invite($criteria, $nth);
+	// 	$this->unit->run($result, 'is_array', "\$result", $result);
+	// 	$this->unit->run($result['invite_key'], 'asdfjkl;2', "\$result['invite_key']", $result['invite_key']);
+
+	// 	$user_facebook_id = '4';
+	// 	$campaign_id = 1;
+	// 	$app_install_id = 2;
+	// 	$nth = 2; //2nd invite
+	// 	$criteria = compact('user_facebook_id', 'campaign_id', 'app_install_id');
+	// 	$result = $this->invite->find_nth_invite($criteria, $nth);
+	// 	$this->unit->run($result, 'is_array', "\$result", $result);
+	// 	$this->unit->run($result['invite_key'], 'asdfjkl;1', "\$result['invite_key']", $result['invite_key']);
+	// }
 }
 /* End of file invite_model_test.php */
 /* Location: ./application/controllers/test/invite_model_test.php */

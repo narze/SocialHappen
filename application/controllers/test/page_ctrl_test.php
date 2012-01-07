@@ -2,6 +2,7 @@
 
 define('Page_id', 1);
 define('Facebook_page_id', '116586141725712');
+define('Company_id', 1);
 class Page_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
@@ -27,14 +28,14 @@ class Page_ctrl_test extends CI_Controller {
 		$page_id = Page_id;
 		$result = $this->page_ctrl->main($page_id);
 		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
-		$this->unit->run($result['error'], 'User is not admin', 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'User is not admin', 'main fail test', $result['error']);
 
 		$this->unit->mock_login();
 
 		$page_id = NULL;
 		$result = $this->page_ctrl->main($page_id);
 		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
-		$this->unit->run($result['error'], 'Page not found', 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'Page not found', 'main fail test', $result['error']);
 	}
 
 	function main_test(){
@@ -222,8 +223,36 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['user_last_seen'],'is_string','user_last_seen');
 	}
 
+	function remove_page_before_add_test(){
+		$this->load->model('page_model');
+		$result = $this->page_model->remove_page(Page_id);
+		$this->unit->run($result, 1, "result", $result);
+	}
+
 	function json_add_test(){
-		
+		$facebook_page_id = Facebook_page_id;
+		$company_id = Company_id;
+		$page_name = 'TestPageName';
+		$page_detail = 'TestPageDetail';
+		$page_all_member = 0;
+		$page_new_member = 0;
+		$page_image = 'https://localhost/assets/images/blank2.png';
+		$result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_all_member,$page_new_member,$page_image);
+		$this->unit->run($result['success'], TRUE, "result['success']", $result['success']);
+		$this->unit->run($result['data']['page_id'], 'is_int', "result['data']['page_id']", $result['data']['page_id']);
+	}
+
+	function json_add_fail_dup_test(){
+		$facebook_page_id = Facebook_page_id;
+		$company_id = Company_id;
+		$page_name = 'TestPageName';
+		$page_detail = 'TestPageDetail';
+		$page_all_member = 0;
+		$page_new_member = 0;
+		$page_image = 'https://localhost/assets/images/blank2.png';
+		$result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_all_member,$page_new_member,$page_image);
+		$this->unit->run($result['success'], FALSE, "result['success']", $result['success']);
+		$this->unit->run($result['error'], 'This page has already installed Socialhappen', "result['error']", $result['error']);
 	}
 
 	function json_get_not_installed_facebook_pages_test(){

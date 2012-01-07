@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define('Campaign_id', 1);
+
 class Campaign_ctrl_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
@@ -19,6 +21,39 @@ class Campaign_ctrl_test extends CI_Controller {
     			$this->$method();
     		}
 		}
+	}
+
+	function main_fail_test()
+	{
+		$campaign_id = Campaign_id;
+		$result = $this->campaign_ctrl->main($campaign_id);
+		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'User is not admin', 'main fail test', $result['error']);
+
+		$this->unit->mock_login();
+
+		$campaign_id = NULL;
+		$result = $this->campaign_ctrl->main($campaign_id);
+		$this->unit->run($result['success'], FALSE, 'main fail test', $result['success']);
+		$this->unit->run($result['error'], 'Campaign not found', 'main fail test', $result['error']);
+	}
+
+	function main_test()
+	{
+		$campaign_id = Campaign_id;
+		$result = $this->campaign_ctrl->main($campaign_id);
+		$this->unit->run($result['success'], TRUE, 'main test', $result['success']);
+		$data = $result['data'];
+		$this->unit->run($data['campaign_id'], $campaign_id, '$data[campaign_id]', $data['campaign_id']);
+		$this->unit->run(isset($data['header']), TRUE, '$data[header]', htmlspecialchars($data['header']));
+		$this->unit->run(isset($data['company_image_and_name']), TRUE, '$data[company_image_and_name]', htmlspecialchars($data['company_image_and_name']));
+		$this->unit->run(isset($data['breadcrumb']), TRUE, '$data[breadcrumb]', htmlspecialchars($data['breadcrumb']));
+		$this->unit->run(isset($data['campaign_profile']), TRUE, '$data[campaign_profile]', htmlspecialchars($data['campaign_profile']));
+		$this->unit->run(isset($data['campaign_tabs']), TRUE, '$data[campaign_tabs]', htmlspecialchars($data['campaign_tabs']));
+		$this->unit->run(isset($data['campaign_stat']), TRUE, '$data[campaign_stat]', htmlspecialchars($data['campaign_stat']));
+		$this->unit->run(isset($data['campaign_users']), TRUE, '$data[campaign_users]', htmlspecialchars($data['campaign_users']));
+		$this->unit->run(isset($data['footer']), TRUE, '$data[footer]', htmlspecialchars($data['footer']));
+
 	}
 	
 	/**

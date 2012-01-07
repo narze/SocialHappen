@@ -143,7 +143,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$app_install_id = 60;
 		$campaign_id = 70;
 		date_default_timezone_set('UTC');
-		$timestamp = time() - 1000;
+		$this->timestamp1000 = $timestamp = time() - 1000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
 									'app_install_id' => $app_install_id,
@@ -157,7 +157,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$app_install_id = 60;
 		$campaign_id = 70;
 		date_default_timezone_set('UTC');
-		$timestamp = time() - 10000;
+		$this->timestamp10000 = $timestamp = time() - 10000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
 									'app_install_id' => $app_install_id,
@@ -172,7 +172,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$app_install_id = 60;
 		$campaign_id = 70;
 		date_default_timezone_set('UTC');
-		$timestamp = time() - 100000;
+		$this->timestamp100000 = $timestamp = time() - 100000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
 									'app_install_id' => $app_install_id,
@@ -188,7 +188,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$app_install_id = 60;
 		$campaign_id = NULL;
 		date_default_timezone_set('UTC');
-		$timestamp = time() - 1000;
+		$this->timestamp1000= $timestamp = time() - 1000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
 									'app_install_id' => $app_install_id,
@@ -202,7 +202,7 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$app_install_id = 70;
 		$campaign_id = NULL;
 		date_default_timezone_set('UTC');
-		$timestamp = time() - 1000;
+		$this->timestamp1000 = $timestamp = time() - 1000;
 		$data = array('user_id' => $user_id,
 									'action_no' => $action_no,
 									'app_install_id' => $app_install_id,
@@ -245,6 +245,27 @@ class Audit_stat_limit_lib_test extends CI_Controller {
 		$campaign_id = NULL;
 		$result = $this->audit_stat_limit_lib->count($user_id, $action_no, $app_install_id, $campaign_id, 1001);
 		$this->unit->run($result, 2, 'count', print_r($result, TRUE));
+	}
+
+	function find_nth_timestamp_test(){
+		$user_id = 100;
+		$action_no = 50;
+		$app_install_id = 60;
+		$campaign_id = 70;
+		$result = $this->audit_stat_limit_lib->find_nth_timestamp($user_id, $action_no, $app_install_id, $campaign_id, 1);
+		$this->unit->run($result, $this->timestamp1000, "\$result", $result);
+		$result = $this->audit_stat_limit_lib->find_nth_timestamp($user_id, $action_no, $app_install_id, $campaign_id, 2);
+		$this->unit->run($result, $this->timestamp10000, "\$result", $result);
+		$result = $this->audit_stat_limit_lib->find_nth_timestamp($user_id, $action_no, $app_install_id, $campaign_id, 3);
+		$this->unit->run($result, $this->timestamp10000, "\$result", $result);
+		$result = $this->audit_stat_limit_lib->find_nth_timestamp($user_id, $action_no, $app_install_id, $campaign_id, 4);
+		$this->unit->run($result, $this->timestamp100000, "\$result", $result);
+		$result = $this->audit_stat_limit_lib->find_nth_timestamp($user_id, $action_no, $app_install_id, $campaign_id, 5);
+		$this->unit->run($result, $this->timestamp100000, "\$result", $result);
+		$result = $this->audit_stat_limit_lib->find_nth_timestamp($user_id, $action_no, $app_install_id, $campaign_id, 6);
+		$this->unit->run($result, $this->timestamp100000, "\$result", $result);
+		$result = $this->audit_stat_limit_lib->find_nth_timestamp($user_id, $action_no, $app_install_id, $campaign_id, 7);
+		$this->unit->run($result === NULL, TRUE, "\$result", $result);
 	}
 	
 	function prune_test(){

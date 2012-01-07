@@ -144,7 +144,9 @@ class XD extends CI_Controller {
 
 	function homepage($app_install_id = NULL){
 		$this->load->library('homepage_lib');
-		$homepage = $this->homepage_lib->get_homepage_for_unliked_users($app_install_id);
+		if(!$homepage = $this->homepage_lib->get_homepage_for_unliked_users($app_install_id)){
+			echo json_encode(FALSE);
+		}
 		$result = array(
             'html' => '<p>'.$homepage['message'].'</p><p><img src="'.$homepage['image'].'"</img></p>'
             );

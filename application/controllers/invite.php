@@ -42,6 +42,12 @@ class Invite extends CI_Controller {
 			$this->load->view('invite/send');
 		} else {
 			echo $data['error'];
+			if(isset($data['timestamp'])){
+				$this->load->library('timezone_lib');
+				$user = $this->socialhappen->get_user();
+				$cooldowned_time = $this->timezone_lib->convert_time(date("Y-m-d H:i:s", $data['timestamp']), $user['user_timezone_offset']);
+				echo '<br />You can invite again at '.$cooldowned_time;
+			}
 		}
 	}
 

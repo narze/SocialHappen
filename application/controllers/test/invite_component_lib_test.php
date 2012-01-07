@@ -95,12 +95,17 @@ class Invite_component_lib_test extends CI_Controller {
 		$commasep_target_facebook_ids = '1,2,3';
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
 
-		$this->unit->run($result, 'is_string', 'add_invite', $result);
-		$this->invite_key1 = $result;
+		$this->unit->run($result, 'is_array', 'add_invite', $result);
+		$this->unit->run($result['success'], TRUE, 'add_invite', $result['success']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['data']['invite_key'], 'is_string', "\$result['data']['invite_key']", $result['data']['invite_key']);
+		$this->invite_key1 = $result['data']['invite_key'];
 
 		$criteria = array('campaign_id' => '1');
 		$result = $this->invite_component_lib->list_invite($criteria);
 		$this->unit->run(count($result), 1, 'list_invite', count($result));
+		$this->unit->run($result[0]['timestamp'] > 0, TRUE, "\$result[0]['timestamp']", $result[0]['timestamp']);
+		$this->timestamp = $result[0]['timestamp'];
 
 		$campaign_id = 1;
 		$app_install_id = 1;
@@ -109,8 +114,11 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7'; //will not be added
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
-		$this->unit->run($result, 'is_string', 'add_invite', $result);
-		$this->invite_key2 = $result;
+		$this->unit->run($result, 'is_array', 'add_invite', $result);
+		$this->unit->run($result['success'], TRUE, 'add_invite', $result['success']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['data']['invite_key'], 'is_string', "\$result['data']['invite_key']", $result['data']['invite_key']);
+		$this->invite_key2 = $result['data']['invite_key'];
 
 		$criteria = array('campaign_id' => '1');
 		$result = $this->invite_component_lib->list_invite($criteria);
@@ -125,8 +133,11 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7'; // add three first target_ids to list
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
-		$this->unit->run($result, 'is_string', 'add_duplicate_invite, with same key', $result);
-		$this->invite_key1 = $result;
+		$this->unit->run($result, 'is_array', 'add_invite (duplicated)', $result);
+		$this->unit->run($result['success'], TRUE, 'add_invite', $result['success']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['data']['invite_key'], $this->invite_key1, "\$result['data']['invite_key']", $result['data']['invite_key']);
+		$this->invite_key1 = $result['data']['invite_key'];
 
 		$criteria = array('campaign_id' => '1');
 		$result = $this->invite_component_lib->list_invite($criteria);
@@ -139,8 +150,11 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7,9'; // add only 9 to list
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
-		$this->unit->run($result, $this->invite_key1, 'add_duplicate_invite, with same key', $result);
-
+		$this->unit->run($result, 'is_array', 'add_invite', $result);
+		$this->unit->run($result['success'], TRUE, 'add_invite', $result['success']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['data']['invite_key'], $this->invite_key1, "\$result['data']['invite_key']", $result['data']['invite_key']);
+		$this->invite_key1 = $result['data']['invite_key'];
 		$criteria = array('campaign_id' => '1');
 		$result = $this->invite_component_lib->list_invite($criteria);
 		$this->unit->run(count($result), 2, 'list_invite', count($result));
@@ -152,7 +166,10 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '5,6,7,8,9'; //will not be added
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
-		$this->unit->run($result, $this->invite_key2, 'add_invite', $result);
+		$this->unit->run($result, 'is_array', 'add_invite', $result);
+		$this->unit->run($result['success'], TRUE, 'add_invite', $result['success']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['data']['invite_key'], $this->invite_key2, "\$result['data']['invite_key']", $result['data']['invite_key']);
 
 		$criteria = array('campaign_id' => '1');
 		$result = $this->invite_component_lib->list_invite($criteria);
@@ -277,8 +294,11 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '713558190';
 		$commasep_target_facebook_ids = '1,2,3';
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
-		$this->unit->run($result, 'is_string', 'add_invite', $result);
-		$this->invite_key3 = $result;
+		$this->unit->run($result, 'is_array', 'add_invite', $result);
+		$this->unit->run($result['success'], TRUE, 'add_invite', $result['success']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['data']['invite_key'], 'is_string', "\$result['data']['invite_key']", $result['data']['invite_key']);
+		$this->invite_key3 = $result['data']['invite_key'];
 
 		//Check invite 1
 		$result = $this->invite_component_lib->get_invite_by_invite_key($this->invite_key1);
@@ -576,9 +596,10 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_id = 1;
 		$app_install_id = 1;
 		$campaign_id = 1;
+		$user_facebook_id = '713558190';
 		$action_no = $this->socialhappen->get_k('audit_action', 'User Invite');
 
-		$input = compact('user_id', 'app_install_id', 'campaign_id');
+		$input = compact('user_id', 'app_install_id', 'campaign_id','user_facebook_id');
 		$result = $this->invite_component_lib->_check_invite_limit($input);
 		$this->unit->run($result, FALSE, '_check_invite_limit', $result);
 
@@ -614,8 +635,8 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->unit->run($result, TRUE, '_increment_invite_limit', $result);
 
 		$result = $this->invite_component_lib->_check_invite_limit($input);
-		$this->unit->run($result, TRUE, '_check_invite_limit (reached limit)', $result);
-
+		$this->unit->run($result != FALSE, TRUE, '_check_invite_limit (reached limit)', $result);
+		$this->unit->run($result, $this->timestamp+60*300, "\$result", $result.' == '.$this->timestamp+60*300);
 	}
 
 	function try_invite_after_reached_limit_test(){
@@ -627,7 +648,9 @@ class Invite_component_lib_test extends CI_Controller {
 		$commasep_target_facebook_ids = '1,2,3,10,11';
 		$result = $this->invite_component_lib->add_invite($campaign_id, $app_install_id, $facebook_page_id, $invite_type, $user_facebook_id, $commasep_target_facebook_ids);
 
-		$this->unit->run($result, FALSE, 'add_invite', $result);
+		$this->unit->run($result['success'], FALSE, 'add_invite', $result);
+		$this->unit->run($result['error'], TRUE, "\$result['error']", $result['error']);
+		$this->unit->run($result['timestamp'], $this->timestamp+60*300, "\$result['timestamp']", $result['timestamp']);
 	}
 }
 /* End of file invite_component_lib_test.php */

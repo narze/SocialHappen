@@ -123,6 +123,28 @@ class Audit_stat_limit_lib
 		
 		return $this->CI->stats->remove($criteria);
 	}
+
+	function find_nth_timestamp($user_id = NULL, $action_no = NULL, $app_install_id = NULL,
+	 $campaign_id = NULL, $nth = 1){
+	 	if(isset($user_id)){
+			$criteria['user_id'] = (int)$user_id;
+		}
+		if(isset($action_no)){
+			$criteria['action_no'] = (int)$action_no;
+		}
+		if(isset($app_install_id)){
+			$criteria['app_install_id'] = (int)$app_install_id;
+		}
+		if(isset($campaign_id)){
+			$criteria['campaign_id'] = (int)$campaign_id;
+		}
+		$result = $this->CI->stats->list_stat($criteria, 1,$nth-1); //Pick only nth
+		if(isset($result[0]['timestamp'])){
+			return $result[0]['timestamp'];
+		} else {
+			return NULL;
+		}
+	 }
 }
 /* End of file audit_stat_limit_lib.php */
 /* Location: ./application/libraries/audit_stat_limit_lib.php */

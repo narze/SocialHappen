@@ -66,17 +66,19 @@ class Invite_ctrl {
 			$this->CI->load->library('campaign_lib');
 			$campaign = $this->CI->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
 			if(issetor($campaign['in_campaign'])){
-				if($invite_key = $this->CI->invite->add_invite($campaign_id,$app_install_id,$facebook_page_id,$invite_type,$user_facebook_id,$target_facebook_id)){
+				$add_invite_result = $this->CI->invite->add_invite($campaign_id,$app_install_id,$facebook_page_id,$invite_type,$user_facebook_id,$target_facebook_id);
+				if($add_invite_result['success']){
 					$this->CI->load->helper('form');
 					return array(
 						'success' => TRUE,
-						'invite_link' => base_url().'invite/accept?invite_key='.$invite_key,
+						'invite_link' => base_url().'invite/accept?invite_key='.$add_invite_result['data']['invite_key'],
 						'invite_message' => $invite_message,
 						'public_invite' => $invite_type === 1 ? FALSE : TRUE,
 						'app_install_id' => $app_install_id
 					);
 				} else {
-					$error_status['error'] = 'failed creating invite';
+					$error_status['error'] = $add_invite_result['error'];
+					$error_status['timestamp'] = issetor($add_invite_result['timestamp'], NULL);
 				}
 			} else {
 				$error_status['error'] = 'not in campaign';

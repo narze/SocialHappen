@@ -284,7 +284,7 @@ class Invite_ctrl_test extends CI_Controller {
 		$result = $this->invite_ctrl->create_invite($input);
 
 		$result1 = $result['success'] === FALSE;
-		$result2 = $result['error'] === 'failed creating invite';
+		$result2 = $result['error'] === 'Cannot add invite';
 
 		$this->unit->run($result1, TRUE, 'create_invite fail test', $result['success']);
 		$this->unit->run($result2, TRUE, 'create_invite fail test', $result['error']);

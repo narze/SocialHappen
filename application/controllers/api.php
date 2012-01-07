@@ -202,7 +202,7 @@ class Api extends CI_Controller {
 		$app_id = $this->input->get('app_id', TRUE);
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
-		$app_install_secret_keyapp_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
 		//$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
 		//$page_id = $this->input->get('page_id', TRUE);
 		
@@ -345,8 +345,9 @@ class Api extends CI_Controller {
 	 */
 	function request_login(){
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$access_token = $this->input->get('access_token', TRUE);
 
-		$response = $this->api_lib->request_login($user_facebook_id);
+		$response = $this->api_lib->request_login($user_facebook_id, $access_token);
 		
 		$this->_print_api_result($response);
 	}
