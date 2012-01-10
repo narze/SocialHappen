@@ -687,6 +687,11 @@ class Page_model_test extends CI_Controller {
 		$result = $this->pages->update_facebook_tab_url_by_facebook_page_id('116586141725712', 'http://test.com/');
 		$this->unit->run($result, TRUE, 'update_facebook_tab_url_by_facebook_page_id()');
 	}
+
+	function get_page_id_by_facebook_page_id_test(){
+		$result = $this->pages->get_page_id_by_facebook_page_id('116586141725712');
+		$this->unit->run($result == 1, TRUE, 'get_page_id_by_facebook_page_id');
+	}
 }
 /* End of file page_model_test.php */
 /* Location: ./application/controllers/test/page_model_test.php */
