@@ -24,7 +24,7 @@ div.socialhappen-fb {
 }
 
 div.account-data {
-	width: 475px;
+	width: 368px;
 	margin: 0 auto 18px;
 }
 div.account-data:after{
@@ -135,7 +135,6 @@ div.account-data div.userview>h1 {
 	padding: 0 0 5px;
 }
 div.account-data div.friend {
-	float: right;
 	width: 175px;
 	background: #f2f2f2;
 	border: 1px solid #ebebeb;
@@ -143,6 +142,9 @@ div.account-data div.friend {
     -moz-border-radius: 5px;
     border-radius: 5px;
 	padding: 7px 5px 0;
+	position: absolute;
+	top: 0;
+	right:5px;
 }
 div.account-data div.friend ul { width: 100%; overflow: hidden; margin: 0 0 5px -2px;}
 div.account-data div.friend ul>li {float:left; margin-left: 5px;}
@@ -470,7 +472,8 @@ ul.form01>li textarea {
 	height: 153px;
 	padding: 0 5px;
 	border: 1px solid #e1e1e1;
-}	
+}
+ul.form01>li select {width: 312px;}
 ul.form01>li label {padding-right: 25px;}
 ul.form01>li.border {
 	border-bottom: 1px solid #e1e1e1;
