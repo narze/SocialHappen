@@ -27,7 +27,7 @@
 
 	}
 					
-	function fire_login(response){
+	function fire_login(response){ //deprecated
 		FB.login(function(response) {
 			if (response.authResponse) {
 				signedRequest = response.authResponse.signedRequest;
@@ -38,7 +38,7 @@
 				
 				//window.location.reload()
 			}
-		}, {scope:'user_about_me,email,publish_stream'}); 
+		}, {scope:'user_about_me,email,publish_stream,user_likes,offline_access'}); 
 	}
 		
 	function friendSelectorInit() {
