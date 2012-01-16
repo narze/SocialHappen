@@ -1122,7 +1122,7 @@ class Api_Lib {
 	 *	@author  Manassarn M.
 	 *
 	 */
-	function request_login($user_facebook_id = NULL, $access_token = NULL){
+	function request_login($user_facebook_id = NULL){
 	
 		if(!$user_facebook_id){
 			log_message('debug','Missing parameter (user_facebook_id)');
@@ -1131,16 +1131,20 @@ class Api_Lib {
 
 		}
 		$this->CI->load->model('User_model', 'User');
-		$user_id_check = $this->CI->User->get_user_id_by_user_facebook_id($user_facebook_id);
-		log_message('debug','accesstoken'.$access_token);
-		$this->CI->FB->setAccessToken($access_token);
-
-		$user_id = $this->CI->socialhappen->login();
-		if($user_id && $user_id == $user_id_check){
-			$response = array('status' => 'OK', 'user_id' => $user_id);
+		$user = $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
+		$user_id_check = $user['user_id'];
+		if(issetor($user['user_facebook_access_token'])){
+			$access_token = $user['user_facebook_access_token'];
+			$this->CI->FB->setAccessToken($access_token);
+			$user_id = $this->CI->socialhappen->login();
+			if($user_id && $user_id == $user_id_check){
+				$response = array('status' => 'OK', 'user_id' => $user_id);
+			} else {
+				$response = array('status' => 'ERROR', 'message' => 'User not found');
+				$this->CI->socialhappen->logout();
+			}
 		} else {
-			$response = array('status' => 'ERROR', 'message' => 'User not found');
-			$this->CI->socialhappen->logout();
+			$response = array('status' => 'ERROR', 'message' => 'Not connected with facebook');
 		}
 		return ($response);
 		

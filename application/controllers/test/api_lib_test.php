@@ -432,18 +432,27 @@ class Api_lib_test extends CI_Controller {
 	
 	function request_login_test(){
 		
-		$result = $this->api_lib->request_login(USER_FACEBOOK_ID);
-		
+		$result = $this->api_lib->request_login(USER_FACEBOOK_ID); // no facebook_access_token yet
 		
 		$this->unit->run($result, 'is_array', 'request_login()', print_r($result, TRUE));
 		$status = $result['status'];
 		
-		if($status == 'OK'){
-			$this->unit->run($status, 'OK', 'status', $status);
-		}else{
-			$this->unit->run($status, 'ERROR', 'status', $status);
-		}
+		$this->unit->run($status, 'ERROR', 'status', $status);
+		$this->unit->run($result['message'], 'Not connected with facebook', "\$result['message']", $result['message']);
+
+		//add sample facebook_access_token
+		$this->load->model('user_model');
+		$this->user_model->update_user(USER_ID, array('user_facebook_access_token' => 'SampleAccessToken'));
+
+		$result = $this->api_lib->request_login(USER_FACEBOOK_ID); // no facebook_access_token yet
 		
+		$this->unit->run($result, 'is_array', 'request_login()', print_r($result, TRUE));
+		$status = $result['status'];
+		
+		$this->unit->run($status, 'ERROR', 'status', $result);
+		$this->unit->run($result['message'], 'User not found', "\$result['message']", $result['message']);		
+
+		//TODO test 'OK' status with mocking facebook server
 	}
 
 	function request_facebook_tab_url_test(){

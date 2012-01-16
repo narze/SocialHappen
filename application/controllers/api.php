@@ -345,9 +345,9 @@ class Api extends CI_Controller {
 	 */
 	function request_login(){
 		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
-		$access_token = $this->input->get('access_token', TRUE);
+		// $access_token = $this->input->get('access_token', TRUE);
 
-		$response = $this->api_lib->request_login($user_facebook_id, $access_token);
+		$response = $this->api_lib->request_login($user_facebook_id);
 		
 		$this->_print_api_result($response);
 	}
