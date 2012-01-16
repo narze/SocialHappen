@@ -188,6 +188,7 @@ class DB_Sync {
 							    'user_email' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'user_image' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'user_facebook_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
+								'user_facebook_access_token' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 							    'user_register_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 							    'user_last_seen' => field_option('TIMESTAMP', $constraint, $default, $null, $autoinc, $unsigned),
 								'user_gender_id' => field_option('INT', 1, 1, TRUE, $autoinc, TRUE),
