@@ -94,7 +94,7 @@ class Tab_ctrl {
     	return $result;
     }
 
-    function signup_submit($first_name = NULL, $last_name = NULL, $email = NULL, $user_facebook_id = NULL, $timezone = NULL, $page_id = NULL, $app_install_id = NULL){
+    function signup_submit($first_name = NULL, $last_name = NULL, $email = NULL, $user_facebook_id = NULL, $timezone = NULL, $page_id = NULL, $app_install_id = NULL, $user_facebook_access_token = NULL){
 
 		$result = array('success'=>FALSE);
 		$error = array();
@@ -135,7 +135,8 @@ class Tab_ctrl {
 				'user_email' => $email,
 				'user_image' => $user_image,
 				'user_facebook_id' => $user_facebook_id,
-		       	'user_timezone_offset' => $minute_offset
+		       	'user_timezone_offset' => $minute_offset,
+		       	'user_facebook_access_token' => $user_facebook_access_token
 			);
 			
 			if(!$user_id = $this->CI->users->add_user($post_data)){
@@ -149,6 +150,7 @@ class Tab_ctrl {
 			} else {
 				$this->CI->socialhappen->login();
 				$result['success'] = TRUE;
+				$result['data']['user_id'] = $user_id;
 				
 				$this->CI->load->library('audit_lib');
 				$action_id = $this->CI->socialhappen->get_k('audit_action','User Register SocialHappen');

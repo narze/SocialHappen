@@ -50,8 +50,6 @@ class Home extends CI_Controller {
 	 */
 	function signup_form()
 	{
-		$facebook_user = $this->facebook->getUser();
-		$this->load->model('user_model','users');
 		
 		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
 		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
@@ -67,6 +65,9 @@ class Home extends CI_Controller {
 		}
 		else
 		{
+
+			$facebook_user = $this->facebook->getUser();
+			$facebook_access_token = $this->FB->getAccessToken();
 			$company_image = $this->socialhappen->upload_image('company_image');
 			
 			$user_timezone = $this->input->post('timezone') ? $this->input->post('timezone') : 'UTC';
@@ -79,7 +80,7 @@ class Home extends CI_Controller {
 			$company_detail = set_value('company_detail');
 			$package_id = $this->input->post('package_id');
 			
-			$input = compact('user_timezone','first_name','last_name','email','facebook_user_id','company_name','company_detail','company_image','package_id');
+			$input = compact('user_timezone','first_name','last_name','email','facebook_user_id','company_name','company_detail','company_image','package_id', 'facebook_access_token');
 			$result = $this->home_ctrl->signup_form($input);
 
 			$this -> load -> view('home/signup_form');

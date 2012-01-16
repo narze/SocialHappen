@@ -73,7 +73,7 @@ class Home_ctrl {
 		$company_name = issetor($input['company_name']);
 		$company_detail = issetor($input['company_detail']);
 		$company_image = issetor($input['company_image']);
-
+		$facebook_access_token = issetor($input['facebook_access_token']);
 		$result = array('success'=>FALSE);
 
 		$this->CI->load->library('timezone_lib');
@@ -87,7 +87,8 @@ class Home_ctrl {
 					       	'user_email' => $email,
 					       	'user_image' => $this->CI->facebook->get_profile_picture($facebook_user_id),
 					       	'user_facebook_id' => $facebook_user_id,
-					       	'user_timezone_offset' => $minute_offset
+					       	'user_timezone_offset' => $minute_offset,
+					       	'user_facebook_access_token' => $facebook_access_token
 						);
 						
 			$user_id = $this->CI->users->add_user($user);

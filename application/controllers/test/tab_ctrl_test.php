@@ -129,7 +129,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$timezone = 'Asia/Bangkok';
 		$page_id = Page_id;
 		$app_install_id = App_install_id;
-		$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id);
+		$facebook_access_token = NULL;
+		$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id, $facebook_access_token);
 		$this->unit->run($result['success'], FALSE, "result['success']", $result['success']);
 		$this->unit->run($result['error']['error'], 'verify', "result['error']['error']", $result['error']['error']);
 		$this->unit->run($result['error']['error_messages'], 'is_array', "result['error']['error_messages']", $result['error']['error_messages']);
@@ -143,7 +144,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$timezone = 'Asia/Bangkok';
 		$page_id = Page_id;
 		$app_install_id = App_install_id;
-		$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id);
+		$facebook_access_token = NULL;
+		$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id, $facebook_access_token);
 		$this->unit->run($result['success'], FALSE, "result['success']", $result['success']);
 		$this->unit->run($result['error']['error'], 'add_user', "result['error']['error']", $result['error']['error']);
 	}
@@ -156,8 +158,17 @@ class Tab_ctrl_test extends CI_Controller {
 		$timezone = 'Asia/Bangkok';
 		$page_id = Page_id;
 		$app_install_id = App_install_id;
-		$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id);
+		$facebook_access_token = 'sampleaccesstoken';
+		$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id, $facebook_access_token);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+
+		$this->load->model('user_model');
+		$user = $this->user_model->get_user_profile_by_user_id($result['data']['user_id']);
+		$this->unit->run($user['user_first_name'], $first_name, 'first_name', $user['user_first_name']);
+		$this->unit->run($user['user_last_name'], $last_name, 'last_name', $user['user_last_name']);
+		$this->unit->run($user['user_email'], $email, 'email', $user['user_email']);
+		$this->unit->run($user['user_facebook_access_token'], $facebook_access_token, 'facebook_access_token', $user['user_facebook_access_token']);
+		$this->unit->run($user['user_facebook_id'], $user_facebook_id, 'user_facebook_id', $user['user_facebook_id']);
 	}
 
 	function signup_page_test(){

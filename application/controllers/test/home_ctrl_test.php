@@ -58,7 +58,8 @@ class Home_ctrl_test extends CI_Controller {
 		$company_detail = 'compDetail';
 		$company_image = 'http://compImg.com/img.png';
 		$package_id = 1;
-		$input = compact('user_timezone','first_name','last_name','email','facebook_user_id','company_name','company_detail','company_image','package_id');
+		$facebook_access_token = 'samplefacebookaccesstoken';
+		$input = compact('user_timezone','first_name','last_name','email','facebook_user_id','company_name','company_detail','company_image','package_id','facebook_access_token');
 		$result = $this->home_ctrl->signup_form($input);
 		$this->unit->run($result['success'], TRUE, 'signup form', $result['success']);
 		$data = $result['data'];
@@ -75,6 +76,7 @@ class Home_ctrl_test extends CI_Controller {
 		$this->unit->run($user['user_first_name'], $first_name, 'first_name', $user['user_first_name']);
 		$this->unit->run($user['user_last_name'], $last_name, 'last_name', $user['user_last_name']);
 		$this->unit->run($user['user_email'], $email, 'email', $user['user_email']);
+		$this->unit->run($user['user_facebook_access_token'], $facebook_access_token, 'facebook_access_token', $user['user_facebook_access_token']);
 		$this->unit->run($user['user_facebook_id'], $facebook_user_id, 'facebook_user_id', $user['user_facebook_id']);
 
 		$this->unit->run($company['company_name'], $company_name, 'company_name', $company['company_name']);

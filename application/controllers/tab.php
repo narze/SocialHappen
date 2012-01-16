@@ -574,7 +574,8 @@ class Tab extends CI_Controller {
 			$last_name = $this->input->get('last_name');
 			$email = $this->input->get('email');
 			$timezone = $this->input->get('timezone');
-			$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id);
+			$facebook_access_token = $this->FB->getAccessToken();
+			$result = $this->tab_ctrl->signup_submit($first_name, $last_name, $email, $user_facebook_id, $timezone, $page_id, $app_install_id, $facebook_access_token);
 			if($result['success']){
 				$data = array('status' => 'ok');
 			} else {

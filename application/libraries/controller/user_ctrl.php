@@ -255,6 +255,7 @@ class User_ctrl {
 	}
 
 	/**
+	 * DEPRECATED
 	 * JSON : Add user
 	 * @author Manassarn M.
 	 */
