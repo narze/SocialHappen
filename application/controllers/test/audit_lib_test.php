@@ -515,6 +515,114 @@ class audit_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 2, 'list stat campaign $campaign_id = 2 and $start_date = ' . $start_date, 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
 	}
 	
+	//test audit_add()
+	function audit_add_test(){
+		$input = array();
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_false', 'audit add - fail', '');
+		
+		$input = NULL;
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_false', 'audit add - fail', '');
+		
+		$input = 'string';
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_false', 'audit add - fail', '');
+
+		$app_id = NULL;
+		$subject = NULL;
+		$action_id = NULL;
+		$object = NULL;
+		$objecti = NULL;
+		$input = compact('app_id', 'subject', 'action_id', 'object', 'objecti');
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_false', 'audit add - fail', '');
+		
+		for ($i=0; $i < 5; $i++) { 
+			
+			$app_id = 0;
+			$action_id = 2;
+			$subject = 'A';
+			$object = 'B';
+			$objecti = 'C';
+			$app_install_id = 1;
+			$campaign_id = 2;
+			$company_id = 3;
+			$page_id = 4;
+			$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id', 'campaign_id', 'company_id','page_id');
+			$result = $this->audit_lib->audit_add($input);
+			$this->unit->run($result, 'is_true', 'audit add - 0 - 2', '');
+		}
+
+		for ($i=0; $i < 3; $i++) { 
+			
+			$app_id = 0;
+			$action_id = 1;
+			$subject = 'A';
+			$object = 'B';
+			$objecti = 'C';
+			$app_install_id = 1;
+			$campaign_id = 2;
+			$company_id = 3;
+			$page_id = 4;
+			$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id', 'campaign_id', 'company_id','page_id');
+			$result = $this->audit_lib->audit_add($input);
+			$this->unit->run($result, 'is_true', 'audit add - 0 - 1', '');
+		}
+		
+		for ($i=0; $i < 3; $i++) { 
+			
+			$app_id = 2;
+			$action_id = 4;
+			$subject = 'A';
+			$object = 'B';
+			$objecti = 'C';
+			$app_install_id = 1;
+			$campaign_id = 2;
+			$company_id = 3;
+			$page_id = 4;
+			$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id', 'campaign_id', 'company_id','page_id');
+			$result = $this->audit_lib->audit_add($input);
+			$this->unit->run($result, 'is_true', 'audit add - 2 - 4', '');
+		}
+	}
+
+	function list_audit_2_test(){
+		$criteria = array();
+		$limit = 100;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit();
+		$this->unit->run(count($result), 11*2, 'list audit no criteria', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$criteria = array();
+		$limit = 2;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit($criteria, $limit, $offset);
+		$this->unit->run(count($result), 2, 'list audit no criteria, limit 2', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$criteria = array('subject' => 'A', 'app_id' => 0);
+		$limit = 0;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit($criteria, $limit, $offset);
+		$this->unit->run(count($result), 8*2, 'list audit criteria \'subject\' => \'A\' , \'app_id\' => 0', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+		
+		$criteria = array('subject' => 'A', 'app_id' => 999);
+		$limit = 0;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit($criteria, $limit, $offset);
+		$this->unit->run(count($result), 0, 'list audit criteria \'subject\' => \'A\' , \'app_id\' => 999', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+	}
+	
+	function list_recent_audit_2_test(){
+		$limit = 0;
+		$result = $this->audit_lib->list_recent_audit();
+		$this->unit->run(count($result), 11*2, 'list recent audit no criteria', 'count: ' . count($result) . '<pre>' /*. print_r($result, TRUE)*/ . '</pre>');
+		
+		$limit = 5;
+		$result = $this->audit_lib->list_recent_audit($limit);
+		$this->unit->run(count($result), 5, 'list recent audit no criteria', 'count: ' . count($result) . '<pre>' /*. print_r($result, TRUE)*/ . '</pre>');
+	}
+
 	function end_test(){
 		
 		// $this->audit->drop_collection();

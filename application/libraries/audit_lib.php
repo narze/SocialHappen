@@ -886,7 +886,7 @@ foreach ($data as $line_key => $line_value) {
 	}
 	
 	/*
-	 * // optional date
+	 * // optional data
 	var $app_id = '';
 	var $app_install_id = '';
 	var $campaign_id = '';
@@ -899,6 +899,39 @@ foreach ($data as $line_key => $line_value) {
 	var $object = '';
 	var $objecti = '';
 	 * */
+
+	/**
+	 * Add_audit simplified by using associative array as input
+	 * @author Manassarn M.
+	 */
+	function audit_add($input = NULL){
+		if(!is_array($input) || !$input){
+			return FALSE;
+		} else {
+			$app_id = issetor($input['app_id'], NULL);
+			$subject = issetor($input['subject'], NULL);
+			$action_id = issetor($input['action_id'], NULL);
+			$object = issetor($input['object'], NULL);
+			$objecti = issetor($input['objecti'], NULL);
+			$additional_data = array();
+			if(isset($input['app_install_id'])){
+				$additional_data['app_install_id'] = $input['app_install_id'];
+			}
+			if(isset($input['user_id'])){
+				$additional_data['user_id'] = $input['user_id'];
+			}
+			if(isset($input['campaign_id'])){
+				$additional_data['campaign_id'] = $input['campaign_id'];
+			}
+			if(isset($input['company_id'])){
+				$additional_data['company_id'] = $input['company_id'];
+			}
+			if(isset($input['page_id'])){
+				$additional_data['page_id'] = $input['page_id'];
+			}
+			return $this->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
+		}
+	}
 }
 
 /* End of file audit_lib.php */

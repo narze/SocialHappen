@@ -23,7 +23,7 @@ class Sharebutton_lib {
 			try {
             	$post = $this->CI->FB->api('/me/feed', 'POST',
                 array(
-                  	'link' => 'www.example.com',
+                  	'link' => 'www.example.com', // TODO change link
                   	'message' => $message
             	));
 	            
