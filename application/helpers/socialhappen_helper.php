@@ -144,5 +144,13 @@ if(!function_exists('allnotempty'))
  	}
 }
 
+if(!function_exists('var_dump_pre'))
+{
+	function var_dump_pre($input = NULL){
+		echo '<pre>';
+		var_dump($input);
+		echo '</pre>';
+	}
+}
 /* End of file socialhappen_helper.php */
 /* Location: ./system/helpers/socialhappen_helper.php */

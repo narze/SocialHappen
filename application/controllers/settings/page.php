@@ -219,6 +219,40 @@ class Page extends CI_Controller {
 			redirect("settings/page/view/{$page_id}");
 		}
 	}
+
+	function disable_facebook_tab($page_id = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			//no access
+		} else {
+			$this->load->model('page_model');
+			$result = $this->page_model->update_page_profile_by_page_id($page_id, array('enable_facebook_page_tab' => 0));
+			$this->load->vars(array(
+				'partial' => 'facebook-page-information',
+				'page' => $page = $this->page_model->get_page_profile_by_page_id($page_id),
+				'page_facebook' => $this->facebook->get_page_info($page['facebook_page_id'])
+			));
+			$socialhappen_facebook_app_id = $this->config->item('facebook_app_id');
+			$remove_facebook_tab_result = $this->facebook->remove_facebook_page_tab($socialhappen_facebook_app_id, $page['facebook_page_id']);
+			$this->load->view('settings/page');
+		}
+	}
+
+	function enable_facebook_tab($page_id = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			//no access
+		} else {
+			$this->load->model('page_model');
+			$result = $this->page_model->update_page_profile_by_page_id($page_id, array('enable_facebook_page_tab' => 1));
+			$this->load->vars(array(
+				'partial' => 'facebook-page-information',
+				'page' => $page = $this->page_model->get_page_profile_by_page_id($page_id),
+				'page_facebook' => $this->facebook->get_page_info($page['facebook_page_id'])
+			));
+			$socialhappen_facebook_app_id = $this->config->item('facebook_app_id');
+			$install_facebook_tab_result = $this->facebook->install_facebook_app_to_facebook_page_tab($socialhappen_facebook_app_id, $page['facebook_page_id']);
+			$this->load->view('settings/page');
+		}
+	}
 }
 /* End of file page.php */
 /* Location: ./application/controllers/settings/page.php */

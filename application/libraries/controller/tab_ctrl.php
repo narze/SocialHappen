@@ -29,6 +29,10 @@ class Tab_ctrl {
 			 $result['error'] = 'No page_id specified';
 			 return $result;
 		}
+		if(!$page['enable_facebook_page_tab']){
+			$result['error'] = 'Facebook app tab is not enabled';
+			return $result;
+		}
 		$page_id = $page['page_id'];
 
 		$this->CI->load->model('company_model','companies');

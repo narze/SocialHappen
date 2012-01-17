@@ -249,4 +249,33 @@ class Facebook {
 	    	return FALSE;
 	    }
 	}
+
+	function remove_facebook_page_tab($facebook_app_id = NULL, $facebook_page_id = NULL){
+		if(!$facebook_page_id || !$facebook_app_id) {
+			log_message('error', 'vars not found');
+			return FALSE;
+		}
+		if(!$facebook_page_access_token = $this->get_page_access_token_by_facebook_page_id($facebook_page_id)){
+			log_message('error','no access token');
+			return FALSE;
+		}
+		if(!$page_tabs = $this->get_page_tabs_by_facebook_page_id($facebook_page_id)){
+			log_message('error', 'cannot get tabs');
+	    	return FALSE;
+	    }
+	    
+		foreach($page_tabs as $tab){
+			if(isset($tab['application']['id']) && $tab['application']['id'] == $facebook_app_id){
+				$facebook_tab_id = $tab['id'];
+				try{
+					return $this->FB->api($facebook_tab_id, 'DELETE', array('access_token' => $facebook_page_access_token));
+				} catch (FacebookApiException $e) {
+					log_message('error', 'cannot detele tab');
+			    	return FALSE;
+			    }
+			}
+		}
+		log_message('error', 'not found tab');
+		return FALSE;
+	}
 }

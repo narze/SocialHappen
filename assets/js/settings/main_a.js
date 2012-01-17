@@ -40,7 +40,12 @@ $(function(){
 		} else if(element.hasClass("user-company-setting")){
 	
 		} else if(element.hasClass("company-page-setting")){
-	
+			$('body').on('click','.enable-tab, .disable-tab', function(){
+				var src = $(this).attr('href');
+				set_loading();
+				$('#facebook-page-information').load(src + ' #facebook-page-information');
+				return false;
+			});
 		} 
 	}
 	

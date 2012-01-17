@@ -2,11 +2,16 @@
 <div id="facebook-page-information">
 	<h2><span>Facebook page information</span></h2>
 	<div>
-	  <ul class="form01">
-		<li><strong>Page URL:</strong><a href="<?php echo $page_facebook['link'];?>"><?php echo $page_facebook['name'];?></a></li>
-		<li><strong>Page status :</strong><?php echo $page['page_installed'] ? 'Installed' : 'Not Installed';?></li>
-		<li><strong>Config :</strong><a href="<?php echo base_url()."settings/page_apps/{$page['page_id']}";?>">Config this page</a></li>
-	  </ul>
+		<ul class="form01">
+			<li><strong>Page URL:</strong><a href="<?php echo $page_facebook['link'];?>"><?php echo $page_facebook['name'];?></a></li>
+			<li><strong>Page status :</strong><?php echo $page['page_installed'] ? 'Installed' : 'Not Installed';?></li>
+			<li><strong>Config :</strong><a href="<?php echo base_url()."settings/page_apps/{$page['page_id']}";?>">Config this page</a></li>
+		</ul>
+	  	<?php if($page['enable_facebook_page_tab']) : ?>
+			Socialhappen tab is enabled | <a class="disable-tab" href="<?php echo base_url().'settings/page/disable_facebook_tab/'.$page['page_id'];?>">Disable SocialHappen tab</a>
+		<?php else : ?>
+			Socialhappen tab is disabled | <a class="enable-tab" href="<?php echo base_url().'settings/page/enable_facebook_tab/'.$page['page_id'];?>">Enable SocialHappen tab</a>
+		<?php endif; ?>
 	</div>
 </div>
 <?php endif; ?>
@@ -47,66 +52,70 @@
 </div>
 <?php endif; ?>
 
-<!--
-<div id="page-admin">
-	<?php if(issetor($success)) { ?>
-		<div class="notice success">Updated<a class="close"></a></div>
-	<?php } ?>
-	<h2><span>Page admins</span></h2>
-	<?php // Change the css classes to suit your needs   
-	$attributes = array('class' => 'page-admin', 'id' => '');
-	echo form_open("settings/page/admin/{$page['page_id']}", $attributes); ?>
-	<div class="admin-list">
-		<ul>
-			<?php foreach($company_users as $user): 
-				$role = issetor($user['page_user_role_name']);?>
-				<li class="<?php echo strtolower($role);?>">
-				  <p><img class="user-image" class="user-image" src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /><a></a></p>
-				  <p>
-					<input type="checkbox" name="page_admin[]" class="page_admin" value=<?php echo $user['user_id'];?> <?php echo set_checkbox('page_admin', $user['user_id'], issetor($user['page_user_role_id'])!=''); ?> />
-				  </p>
-				</li>
-			<?php endforeach; ?>
-		</ul>
-		<div><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></div>
+
+<?php if (FALSE) : //if(!isset($partial) || $partial == 'page-admin') : ?>
+	<div id="page-admin">
+		<?php if(issetor($success)) { ?>
+			<div class="notice success">Updated<a class="close"></a></div>
+		<?php } ?>
+		<h2><span>Page admins</span></h2>
+		<?php // Change the css classes to suit your needs   
+		$attributes = array('class' => 'page-admin', 'id' => '');
+		echo form_open("settings/page/admin/{$page['page_id']}", $attributes); ?>
+		<div class="admin-list">
+			<ul>
+				<?php foreach($company_users as $user): 
+					$role = issetor($user['page_user_role_name']);?>
+					<li class="<?php echo strtolower($role);?>">
+					  <p><img class="user-image" class="user-image" src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /><a></a></p>
+					  <p>
+						<input type="checkbox" name="page_admin[]" class="page_admin" value=<?php echo $user['user_id'];?> <?php echo set_checkbox('page_admin', $user['user_id'], issetor($user['page_user_role_id'])!=''); ?> />
+					  </p>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+			<div><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></div>
+		</div>
+		<?php echo form_close(); ?>
 	</div>
-	<?php echo form_close(); ?>
-</div>
--->
-<!--
-<div id="admin-admin">
-	<?php if(issetor($success)) { ?>
-		<div class="notice success">Updated<a class="close"></a></div>
-	<?php } ?>
-	<h2><span>Page admins</span></h2>
-	<div class="admin-list">
-		<ul> 
-			<?php foreach($company_users as $user): ?>
-				<li class="<?php echo strtolower($user['user_role_name']);?>">
-				  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
-				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
-				</li>
-			<?php endforeach; ?>
-			<?php foreach($page_users as $user): ?>
-				<li class="<?php echo strtolower($user['user_role_name']);?>">
-				  <p><img class="user-image" src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
-				  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
-				</li>
-			<?php endforeach; ?>
-		  </ul>
-		  <p class="popup">Add admin by user id
-			<?php
-				$attributes = array('class' => 'page-admin', 'id' => '');
-				echo form_open("settings/page/admin/{$page['page_id']}", $attributes); ?>
-				 <ul class="form01">
-					<li><strong>User id :</strong><?php echo form_error('user_id'); ?><input id="user_id" type="text" name="user_id" maxlength="20" value="<?php echo set_value('user_id'); ?>"  /></li>
-					<li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>
-				</ul> 
-				<?php echo form_close(); ?>
-		  </p>
+<?php endif;?>
+
+
+<?php if (FALSE) : //if(!isset($partial) || $partial == 'admin-admin') : ?>
+	<div id="admin-admin">
+		<?php if(issetor($success)) { ?>
+			<div class="notice success">Updated<a class="close"></a></div>
+		<?php } ?>
+		<h2><span>Page admins</span></h2>
+		<div class="admin-list">
+			<ul> 
+				<?php foreach($company_users as $user): ?>
+					<li class="<?php echo strtolower($user['user_role_name']);?>">
+					  <p><img src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
+					  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
+					</li>
+				<?php endforeach; ?>
+				<?php foreach($page_users as $user): ?>
+					<li class="<?php echo strtolower($user['user_role_name']);?>">
+					  <p><img class="user-image" src="<?php echo imgsize($user['user_image'],'normal');?>" alt="" /></p>
+					  <p><b><?php echo $user['user_first_name']; ?></b><span><?php if($role = issetor($user['user_role_name'])) echo "({$role})";?></span></p>
+					</li>
+				<?php endforeach; ?>
+			  </ul>
+			  <p class="popup">Add admin by user id
+				<?php
+					$attributes = array('class' => 'page-admin', 'id' => '');
+					echo form_open("settings/page/admin/{$page['page_id']}", $attributes); ?>
+					 <ul class="form01">
+						<li><strong>User id :</strong><?php echo form_error('user_id'); ?><input id="user_id" type="text" name="user_id" maxlength="20" value="<?php echo set_value('user_id'); ?>"  /></li>
+						<li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>
+					</ul> 
+					<?php echo form_close(); ?>
+			  </p>
+			</div>
 		</div>
 	</div>
--->
+<?php endif; ?>
 
 <?php if(!isset($partial) || $partial == 'page-application') : ?>
 <div id="page-application">
@@ -131,13 +140,14 @@
 	</div>
 </div>
 <?php endif; ?>
-<!--
-<div id="delete-page" class="style01">
-	<h2><span>Delete Page</span></h2>
-	<div>
-		  <p>Text tell user what happen when delete page</p>
-		  <p>and if user have a problem he can contact our support or see FAQs</p>
-		  <p><a class="bt-delete_page"><span>Delete page</span></a></p>
-	</div>
-</div>
--->
+
+<?php 
+// <div id="delete-page" class="style01">
+// 	<h2><span>Delete Page</span></h2>
+// 	<div>
+// 		  <p>Text tell user what happen when delete page</p>
+// 		  <p>and if user have a problem he can contact our support or see FAQs</p>
+// 		  <p><a class="bt-delete_page"><span>Delete page</span></a></p>
+// 	</div>
+// </div>
+?>

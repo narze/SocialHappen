@@ -27,7 +27,6 @@ class Tab extends CI_Controller {
 		
 		$token = issetor($this->signedRequest['oauth_token']);
 		
-		$this->load->model('Page_model','Page');
 		if(!$page_id && (!$facebook_page_id = issetor($this->page['id']))){ 
 			exit('Your facebook account is not verified, please contact administrator'); //TODO : Blame that your facebook user is not verified.
 		}
