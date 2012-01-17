@@ -38,7 +38,8 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result['page_image'],'is_string','page_image');
 		$this->unit->run($result['page_status_id'] == 1,'is_true','page_status_id == 1');		
-		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');		
+		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');	
+		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);	
 	}
 	
 	/**
@@ -57,7 +58,8 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result['page_image'],'is_string','page_image');
 		$this->unit->run($result['page_status_id'] == 1,'is_true','page_status_id == 1');		
-		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');		
+		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');	
+		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 	}
 	
 	/** 
@@ -75,6 +77,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[0]['page_all_member'],'is_string','page_all_member');
 		$this->unit->run($result[0]['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result[0]['page_image'],'is_string','page_image');
+		$this->unit->run($result[0]['enable_facebook_page_tab'], 1, "\$result[0]['enable_facebook_page_tab']", $result[0]['enable_facebook_page_tab']);
 	}
 	
 	/**
@@ -122,6 +125,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[0]['page_all_member'],'is_string','page_all_member');
 		$this->unit->run($result[0]['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result[0]['page_image'],'is_string','page_image');
+		$this->unit->run($result[0]['enable_facebook_page_tab'], 1, "\$result[0]['enable_facebook_page_tab']", $result[0]['enable_facebook_page_tab']);
 	}
 	
 	/**
@@ -141,6 +145,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_image'],'is_string','page_image');
 		$this->unit->run($result['page_status_id'] == 1,'is_true','page_status_id == 1');		
 		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');
+		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 	}
 	
 	/**
@@ -158,6 +163,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_all_member'],'is_string','page_all_member');
 		$this->unit->run($result['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($result['page_image'],'is_string','page_image');
+		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 	}
 	
 	/**

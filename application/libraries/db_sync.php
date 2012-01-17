@@ -179,7 +179,8 @@ class DB_Sync {
 								'page_app_installed_id' => field_option('BIGINT', 20, 0, $null, $autoinc, TRUE),
 								'page_installed' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 								'page_user_fields' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
-							    'facebook_tab_url' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
+							    'facebook_tab_url' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
+							    'enable_facebook_page_tab' => field_option('BOOLEAN', $constraint, 1, $null, $autoinc, $unsigned)
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
