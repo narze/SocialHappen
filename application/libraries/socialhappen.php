@@ -709,9 +709,14 @@ class SocialHappen{
 		$this->CI->load->model('user_pages_model','user_pages');
 		$this->CI->load->model('page_model','pages');
 		$this->CI->load->model('session_model','session_model');
+		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
+
+		if(!$page['enable_facebook_tab_bar']) {
+			return NULL;
+		}
+		
 		$user = $user_id ? $this->CI->User->get_user_profile_by_user_id($user_id) : $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		$user_id = $user['user_id'];
-		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
 
 		$menu = array();		
 		$menu['left'] = array();
