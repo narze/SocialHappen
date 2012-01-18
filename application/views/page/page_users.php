@@ -1,6 +1,17 @@
 <div class="wrapper-details-member users">
-        <h2 class="member"><span>Member</span></h2>
-		<?php if($user_count > 0) { ?>
+    <h2 class="member"><span>Member</span></h2>
+		<?php if($user_exceed_limit) { ?>
+      <div class="blank-tab white-box-01" style="background-image: url('<?php echo base_url(); ?>assets/images/bg/blank_member.jpg');">
+      <h2>This page member has exceed the limit.</h2>
+      <p class="sub-title">Pay me :)</p>
+      <hr />
+      <h3>Why do I have to pay?</h3>
+      <ul>
+        <li>Don't ask me now</li>
+      </ul>
+      <br />
+    </div>
+    <?php } else if($user_count > 0){ ?>
 		<div class="option">
           <form>
 			<p class="search"><input name="" type="text" value="search" /><input class="bt-search" type="submit" /></p>

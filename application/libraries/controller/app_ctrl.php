@@ -38,6 +38,13 @@ class App_ctrl {
 				
 				$this ->CI-> load -> model('user_model', 'user');
 				$all_users = $this->CI->user->count_users_by_app_install_id($app_install_id);
+
+				$input = array('app_install_id' => $app_install_id);
+				$common = array(
+					'user_count' => $user_count,
+					'user_exceed_limit' => !$this->CI->socialhappen->is_developer_or_member_under_limit($input)
+				);
+				$this->CI->load->vars($common);
 				
 				$result['data'] = array(
 					'app_install_id' => $app_install_id,

@@ -846,6 +846,11 @@ class SocialHappen{
 		return issetor($user['user_is_developer']) ? TRUE : FALSE;
 	}
 
+	/** 
+	 * Developer + socialhappen features check
+	 * @param array $input [campaign_id,app_install_id,page_id]
+	 * @author Manassarn M.
+	 */
 	function is_developer_or_features_enabled($input = NULL){
 		if($this->is_developer()){
 			return TRUE;
@@ -871,6 +876,47 @@ class SocialHappen{
 			$this->CI->load->model('page_model');
 			$page = $this->CI->page_model->get_page_profile_by_page_id($input['page_id']);
 			if($page['enable_socialhappen_features']){
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Developer + member limit check
+	 * @param array $input [campaign_id,app_install_id,page_id]
+	 * @author Manassarn M.
+	 */
+	function is_developer_or_member_under_limit($input = NULL){
+		if($this->is_developer()){
+			return TRUE;
+		}
+		if(!$input){
+			return FALSE;
+		}
+		if(isset($input['campaign_id'])){
+			$this->CI->load->model('campaign_model');
+			if(!$campaign = $this->CI->campaign_model->get_campaign_profile_by_campaign_id($input['campaign_id'])){
+				return FALSE;
+			}
+			$input['app_install_id'] = $campaign['app_install_id'];
+		}
+		if(isset($input['app_install_id'])){
+			$this->CI->load->model('installed_apps_model');
+			if(!$app = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($input['app_install_id'])){
+				return FALSE;
+			}
+			$input['page_id'] = $app['page_id'];
+		}
+		if(isset($input['page_id'])){
+			$this->CI->load->model('page_model');
+			$page = $this->CI->page_model->get_page_profile_by_page_id($input['page_id']);
+			if($page['page_member_limit'] == 0){
+				return TRUE; //Unlimited
+			}
+			$this->CI->load->model('page_user_data_model');
+			$page_members = $this->CI->page_user_data_model->count_page_users_by_page_id($input['page_id']);
+			if($page_members <= $page['page_member_limit']){
 				return TRUE;
 			}
 		}

@@ -58,6 +58,12 @@ class Page_ctrl {
 						}
 					}
 				}
+
+				$input = array('page_id' => $page_id);
+				$common = array(
+					'user_exceed_limit' => !$this->CI->socialhappen->is_developer_or_member_under_limit($input)
+				);
+				$this->CI->load->vars($common);
 				
 				$result['data'] = array(
 					'page_id' => $page_id,
