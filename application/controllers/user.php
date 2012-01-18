@@ -15,7 +15,7 @@ class User extends CI_Controller {
 		$app_install_id = $this->input->get('aid');
 		$campaign_id = $this->input->get('cid');
 		$input = compact('user_id', 'page_id', 'app_install_id', 'campaign_id');
-		if(!$this->socialhappen->is_developer_or_features_enabled($input){
+		if(!$this->socialhappen->is_developer_or_features_enabled($input)){
 			redirect_back();
 		}
 		$result = $this->user_ctrl->main($input);

@@ -61,8 +61,13 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run(issetor($data['footer']) != FALSE, TRUE, '$data');
 
 		$this->load->model('page_model');
+
 		$result = $this->page_model->update_page_profile_by_page_id(Page_id, array('enable_facebook_page_tab' => 0));
 		$this->unit->run($result, TRUE, "disable facebook page tab", $result);
+
+		$this->load->model('user_model');
+		$result = $this->user_model->update_user(User_id, array('user_is_developer'=>0)); //Revoke developer permission
+
 		$result = $this->tab_ctrl->main($user_facebook_id, $page_id, $facebook_page_id, $token);
 		$this->unit->run($result['success'], FALSE, "result['success']", $result['success']);
 		$this->unit->run($result['error'], 'Facebook app tab is not enabled', "result['error']", $result['error']);
