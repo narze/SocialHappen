@@ -710,13 +710,12 @@ class SocialHappen{
 		$this->CI->load->model('page_model','pages');
 		$this->CI->load->model('session_model','session_model');
 		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
-
-		if(!$page['enable_facebook_tab_bar']) {
-			return NULL;
-		}
-		
 		$user = $user_id ? $this->CI->User->get_user_profile_by_user_id($user_id) : $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		$user_id = $user['user_id'];
+
+		if(!$page['enable_facebook_tab_bar'] && !$user['user_is_developer']) {
+			return NULL;
+		}
 
 		$menu = array();		
 		$menu['left'] = array();
@@ -834,10 +833,15 @@ class SocialHappen{
 
 	/**
 	 * Developer check
+	 * @param $user_id : if not specified, will check current user
 	 * @author Manassarn M.
 	 */
-	function is_developer(){
-		$user = $this->get_user();
+	function is_developer($user_id = NULL){
+		if(!$user_id) {
+			$user = $this->get_user();
+		} else {
+			$user = $this->user_model->get_user_profile_by_user_id($user_id);
+		}
 		return issetor($user['user_is_developer']) ? TRUE : FALSE;
 	}
 }

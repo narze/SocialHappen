@@ -29,7 +29,7 @@ class Tab_ctrl {
 			 $result['error'] = 'No page_id specified';
 			 return $result;
 		}
-		if(!$page['enable_facebook_page_tab']){
+		if(!$page['enable_facebook_page_tab'] && !$user['user_is_developer']){
 			$result['error'] = 'Facebook app tab is not enabled';
 			return $result;
 		}
