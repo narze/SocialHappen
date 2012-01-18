@@ -831,4 +831,13 @@ class SocialHappen{
 		$page = $this->CI->pages->get_page_profile_by_page_id($app['page_id']);
 		return $page['facebook_tab_url'];
 	}
+
+	/**
+	 * Developer check
+	 * @author Manassarn M.
+	 */
+	function is_developer(){
+		$user = $this->get_user();
+		return issetor($user['user_is_developer']) ? TRUE : FALSE;
+	}
 }

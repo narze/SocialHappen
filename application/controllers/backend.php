@@ -4,7 +4,9 @@ class Backend extends CI_Controller {
 	
 	function __construct(){
 		parent::__construct();
-		$this->load->library('session');
+		if(!$this->socialhappen->is_developer()){
+			redirect();
+		}
 	}
 	
 	/**
@@ -1369,6 +1371,25 @@ class Backend extends CI_Controller {
 		echo '</pre>';
 	}
 	
+	function grant_developer_permission($user_id = NULL){
+		$this->load->model('user_model');
+		$result = $this->user_model->update_user($user_id, array('user_is_developer' => 1));
+		if($result){
+			redirect('backend/users#success');
+		} else {
+			redirect('backend/users#fail');
+		}
+	}
+	
+	function revoke_developer_permission($user_id = NULL){
+		$this->load->model('user_model');
+		$result = $this->user_model->update_user($user_id, array('user_is_developer' => 0));
+		if($result){
+			redirect('backend/users#success');
+		} else {
+			redirect('backend/users#fail');
+		}
+	}
 }
 
 /* End of file backend.php */

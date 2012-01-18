@@ -16,8 +16,17 @@
 		foreach($user_list as $user){
 			//var_dump($campaign);
 			echo '<li><b>'.anchor('backend/user/'.$user['user_id'], $user['user_first_name'].' '.$user['user_last_name'], 'title="view user detail"').'</b>
-			<br/><b>User ID:</b> '. $user['user_id'].'
-			</li>';
+			<br/><b>User ID:</b> '. $user['user_id'];
+			if($user['user_id'] != $this->socialhappen->get_user_id()){
+				if(!$user['user_is_developer']) {
+					echo '<br/>'.anchor('backend/grant_developer_permission/'
+					.$user['user_id'], 'Grant developer permission');
+				} else {
+					echo '<br/>'.anchor('backend/revoke_developer_permission/'
+					.$user['user_id'], 'Revoke developer permission');
+				}
+			}
+			echo '</li>';
 		}
 	?>
 	

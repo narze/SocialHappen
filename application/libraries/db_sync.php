@@ -200,7 +200,8 @@ class DB_Sync {
 								'user_twitter_name' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'user_twitter_access_token' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
 								'user_twitter_access_token_secret' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned),
-							    'user_timezone_offset' => field_option('INT', 10, 0, $null, $autoinc, $unsigned)
+							    'user_timezone_offset' => field_option('INT', 10, 0, $null, $autoinc, $unsigned),
+							    'user_is_developer' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned)
 							),
 							'user_apps' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -922,7 +923,8 @@ class DB_Sync {
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
-					    'user_twitter_access_token_secret' => ''
+					    'user_twitter_access_token_secret' => '',
+					    'user_is_developer' => 1
 						),
 					array(
 					    'user_id' => 2, 
@@ -935,7 +937,8 @@ class DB_Sync {
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
-					    'user_twitter_access_token_secret' => ''
+					    'user_twitter_access_token_secret' => '',
+					    'user_is_developer' => 1
 					),
 					array(
 					    'user_id' => 3, 
@@ -948,7 +951,8 @@ class DB_Sync {
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
-					    'user_twitter_access_token_secret' => ''
+					    'user_twitter_access_token_secret' => '',
+					    'user_is_developer' => 1
 					),
 					array(
 					    'user_id' => 4, 
@@ -961,7 +965,8 @@ class DB_Sync {
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
-					    'user_twitter_access_token_secret' => ''
+					    'user_twitter_access_token_secret' => '',
+					    'user_is_developer' => 1
 					),
 					array(
 					    'user_id' => 5, 
@@ -974,7 +979,8 @@ class DB_Sync {
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
-					    'user_twitter_access_token_secret' => ''
+					    'user_twitter_access_token_secret' => '',
+					    'user_is_developer' => 1
 					),
 					array(
 					    'user_id' => 6, 
@@ -987,7 +993,8 @@ class DB_Sync {
 					    'user_last_seen' => '2011-08-18 09:27:04',
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
-					    'user_twitter_access_token_secret' => ''
+					    'user_twitter_access_token_secret' => '',
+					    'user_is_developer' => 1
 					)
 				);
 		$this->CI->db->insert_batch('user', $user);
