@@ -7,17 +7,19 @@
 			<li><strong>Page status :</strong><?php echo $page['page_installed'] ? 'Installed' : 'Not Installed';?></li>
 			<li><strong>Config :</strong><a href="<?php echo base_url()."settings/page_apps/{$page['page_id']}";?>">Config this page</a></li>
 		</ul>
-	  	<?php if($page['enable_facebook_page_tab']) : ?>
-			Socialhappen tab is enabled | <a class="disable-tab" href="<?php echo base_url().'settings/page/disable_facebook_tab/'.$page['page_id'];?>">Disable SocialHappen tab</a>
-		<?php else : ?>
-			Socialhappen tab is disabled | <a class="enable-tab" href="<?php echo base_url().'settings/page/enable_facebook_tab/'.$page['page_id'];?>">Enable SocialHappen tab</a>
-		<?php endif; ?>
-		<br />
-	  	<?php if($page['enable_facebook_tab_bar']) : ?>
-			Socialhappen bar is enabled | <a class="disable-bar" href="<?php echo base_url().'settings/page/disable_facebook_bar/'.$page['page_id'];?>">Disable SocialHappen bar</a>
-		<?php else : ?>
-			Socialhappen bar is disabled | <a class="enable-bar" href="<?php echo base_url().'settings/page/enable_facebook_bar/'.$page['page_id'];?>">Enable SocialHappen bar</a>
-		<?php endif; ?>
+	  	<?php if($this->socialhappen->is_developer()) :
+		  		if($page['enable_facebook_page_tab']) : ?>
+				Socialhappen tab is enabled | <a class="disable-tab" href="<?php echo base_url().'settings/page/disable_facebook_tab/'.$page['page_id'];?>">Disable SocialHappen tab</a>
+			<?php else : ?>
+				Socialhappen tab is disabled | <a class="enable-tab" href="<?php echo base_url().'settings/page/enable_facebook_tab/'.$page['page_id'];?>">Enable SocialHappen tab</a>
+			<?php endif; ?>
+			<br />
+		  	<?php if($page['enable_facebook_tab_bar']) : ?>
+				Socialhappen bar is enabled | <a class="disable-bar" href="<?php echo base_url().'settings/page/disable_facebook_bar/'.$page['page_id'];?>">Disable SocialHappen bar</a>
+			<?php else : ?>
+				Socialhappen bar is disabled | <a class="enable-bar" href="<?php echo base_url().'settings/page/enable_facebook_bar/'.$page['page_id'];?>">Enable SocialHappen bar</a>
+			<?php endif; 
+		endif; ?>
 	</div>
 </div>
 <?php endif; ?>
