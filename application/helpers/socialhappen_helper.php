@@ -152,5 +152,17 @@ if(!function_exists('var_dump_pre'))
 		echo '</pre>';
 	}
 }
+
+if(!function_exists('redirect_back'))
+{
+	function redirect_back(){
+		if(isset($_SERVER['HTTP_REFERER'])){
+			redirect($_SERVER['HTTP_REFERER']);
+		} else {
+			redirect();
+		}
+		return;
+	}
+}
 /* End of file socialhappen_helper.php */
 /* Location: ./system/helpers/socialhappen_helper.php */

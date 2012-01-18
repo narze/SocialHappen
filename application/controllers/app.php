@@ -9,6 +9,9 @@ class App extends CI_Controller {
 	}
 	
 	function index($app_install_id = NULL){
+		if(!$this->socialhappen->is_developer_or_features_enabled(array('app_install_id'=>$app_install_id))){
+			redirect_back();
+		}
 		$result = $this->app_ctrl->main($app_install_id);
 		if($result['success']){
 			$data = $result['data'];

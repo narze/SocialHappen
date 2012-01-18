@@ -18,6 +18,12 @@
 				Socialhappen bar is enabled | <a class="disable-bar" href="<?php echo base_url().'settings/page/disable_facebook_bar/'.$page['page_id'];?>">Disable SocialHappen bar</a>
 			<?php else : ?>
 				Socialhappen bar is disabled | <a class="enable-bar" href="<?php echo base_url().'settings/page/enable_facebook_bar/'.$page['page_id'];?>">Enable SocialHappen bar</a>
+			<?php endif; ?>
+			<br />
+		  	<?php if($page['enable_socialhappen_features']) : ?>
+				Socialhappen bar is enabled | <a class="disable-features" href="<?php echo base_url().'settings/page/disable_socialhappen_features/'.$page['page_id'];?>">Disable SocialHappen features</a>
+			<?php else : ?>
+				Socialhappen bar is disabled | <a class="enable-features" href="<?php echo base_url().'settings/page/enable_socialhappen_features/'.$page['page_id'];?>">Enable SocialHappen features</a>
 			<?php endif; 
 		endif; ?>
 	</div>

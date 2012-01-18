@@ -40,7 +40,8 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_status_id'] == 1,'is_true','page_status_id == 1');		
 		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');	
 		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
-		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);	
+		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);
+		$this->unit->run($result['enable_socialhappen_features'], 1, "\$result['enable_socialhappen_features']", $result['enable_socialhappen_features']);	
 	}
 	
 	/**
@@ -62,6 +63,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');	
 		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);
+		$this->unit->run($result['enable_socialhappen_features'], 1, "\$result['enable_socialhappen_features']", $result['enable_socialhappen_features']);
 	}
 	
 	/** 
@@ -151,6 +153,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_status'] == "Not Installed",'is_true','page_status_id == "Not Installed"');
 		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);
+		$this->unit->run($result['enable_socialhappen_features'], 1, "\$result['enable_socialhappen_features']", $result['enable_socialhappen_features']);
 	}
 	
 	/**
@@ -170,6 +173,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['page_image'],'is_string','page_image');
 		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);
+		$this->unit->run($result['enable_socialhappen_features'], 1, "\$result['enable_socialhappen_features']", $result['enable_socialhappen_features']);
 	}
 	
 	/**

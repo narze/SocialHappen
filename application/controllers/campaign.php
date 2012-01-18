@@ -10,6 +10,9 @@ class Campaign extends CI_Controller {
 	}
 
 	function index($campaign_id = NULL){
+		if(!$this->socialhappen->is_developer_or_features_enabled(array('campaign_id'=>$campaign_id))){
+			redirect_back();
+		}
 		$result = $this->campaign_ctrl->main($campaign_id);
 		if($result['success']){
 			$data = $result['data'];

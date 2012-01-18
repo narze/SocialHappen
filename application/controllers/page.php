@@ -10,6 +10,9 @@ class Page extends CI_Controller {
 	}
 	
 	function index($page_id = NULL) {
+		if(!$this->socialhappen->is_developer_or_features_enabled(array('page_id'=>$page_id))){
+			redirect_back();
+		}
 		$result = $this->page_ctrl->main($page_id);
 		if($result['success']){
 			$data = $result['data'];

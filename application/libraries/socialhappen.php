@@ -840,8 +840,40 @@ class SocialHappen{
 		if(!$user_id) {
 			$user = $this->get_user();
 		} else {
-			$user = $this->user_model->get_user_profile_by_user_id($user_id);
+			$this->CI->load->model('user_model');
+			$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
 		}
 		return issetor($user['user_is_developer']) ? TRUE : FALSE;
+	}
+
+	function is_developer_or_features_enabled($input = NULL){
+		if($this->is_developer()){
+			return TRUE;
+		}
+		if(!$input){
+			return FALSE;
+		}
+		if(isset($input['campaign_id'])){
+			$this->CI->load->model('campaign_model');
+			if(!$campaign = $this->CI->campaign_model->get_campaign_profile_by_campaign_id($input['campaign_id'])){
+				return FALSE;
+			}
+			$input['app_install_id'] = $campaign['app_install_id'];
+		}
+		if(isset($input['app_install_id'])){
+			$this->CI->load->model('installed_apps_model');
+			if(!$app = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($input['app_install_id'])){
+				return FALSE;
+			}
+			$input['page_id'] = $app['page_id'];
+		}
+		if(isset($input['page_id'])){
+			$this->CI->load->model('page_model');
+			$page = $this->CI->page_model->get_page_profile_by_page_id($input['page_id']);
+			if($page['enable_socialhappen_features']){
+				return TRUE;
+			}
+		}
+		return FALSE;
 	}
 }
