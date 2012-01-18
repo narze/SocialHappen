@@ -12,6 +12,12 @@
 		<?php else : ?>
 			Socialhappen tab is disabled | <a class="enable-tab" href="<?php echo base_url().'settings/page/enable_facebook_tab/'.$page['page_id'];?>">Enable SocialHappen tab</a>
 		<?php endif; ?>
+		<br />
+	  	<?php if($page['enable_facebook_tab_bar']) : ?>
+			Socialhappen bar is enabled | <a class="disable-bar" href="<?php echo base_url().'settings/page/disable_facebook_bar/'.$page['page_id'];?>">Disable SocialHappen bar</a>
+		<?php else : ?>
+			Socialhappen bar is disabled | <a class="enable-bar" href="<?php echo base_url().'settings/page/enable_facebook_bar/'.$page['page_id'];?>">Enable SocialHappen bar</a>
+		<?php endif; ?>
 	</div>
 </div>
 <?php endif; ?>
