@@ -381,14 +381,15 @@ class Invite_component_lib {
 		return $give_page_score_result = $this->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
 	}
 
-	function _give_page_score_to_all_inviters($facebook_page_id = NULL, $inviters = NULL){
+	function _give_page_score_to_all_inviters($facebook_page_id = NULL, $inviters = NULL, $campaign_id = NULL){
 		if(!allnotempty(func_get_args()) || !allnotempty($inviters)){
 			return FALSE;
 		}
 		$this->CI->load->model('page_model');
 		$this->CI->load->model('user_model');
 		if(!$page_id = $this->CI->page_model->get_page_id_by_facebook_page_id($facebook_page_id)){
-			log_message('error', '_give_page_score_to_all_inviters : no page');return FALSE;
+			log_message('error', '_give_page_score_to_all_inviters : no page');
+			return FALSE;
 		}
 
 		$this->CI->load->library('audit_lib');
@@ -402,7 +403,8 @@ class Invite_component_lib {
 			}
 			$action_id = $this->CI->socialhappen->get_k('audit_action','Invitee Accept Page Invite');
 			$audit_info = array(
-				'page_id' => $page_id
+				'page_id' => $page_id,
+				'campaign_id' => $campaign_id
 			);
 			if(!$this->CI->audit_lib->add_audit(
 				0,
@@ -419,7 +421,8 @@ class Invite_component_lib {
 			$achievement_info = array(
 				'action_id' => $action_id, 
 				'page_id' => $page_id,
-				'app_install_id' => 0
+				'app_install_id' => 0,
+				'campaign_id' => $campaign_id
 			);
 			if(!$this->CI->achievement_lib->increment_achievement_stat(0, $inviter_user_id, $achievement_info, 1)){
 				// log_message('error', 'no inc');

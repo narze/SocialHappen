@@ -795,6 +795,27 @@ class Tab extends CI_Controller {
 		}
 		redirect($facebook_tab_url);
 	}
+
+	/**
+	 * Show user's page score
+	 * @param $page_id
+	 * @author Manassarn M.
+	 */
+	function my_page_score($page_id = NULL){
+		$user_facebook_id = $this->FB->getUser();
+		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id);
+		echo "Your page score is ".$page_score;
+	}
+
+	function page_leaderboard($page_id = NULL){
+		$page_user_scores = $this->tab_ctrl->page_leaderboard($page_id);
+		if($page_user_scores['success']){ //TODO sort
+			foreach($page_user_scores['data'] as $user_score){
+				echo "user id ".$user_score['user_id'].' got '.$user_score['page_score'].' points in page id '.$page_id;
+				echo '<br />';
+			}
+		}
+	}
 }
 /* End of file tab.php */
 /* Location: ./application/controllers/tab.php */

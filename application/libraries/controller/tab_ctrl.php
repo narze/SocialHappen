@@ -318,6 +318,40 @@ class Tab_ctrl {
 		}
 		return $result;
     }
+
+    function get_page_score($user_facebook_id = NULL, $page_id = NULL, $user_id = NULL){
+    	$this->CI->load->model('user_model');
+    	$this->CI->load->model('page_model');
+    	if(!$user_id) {
+	    	$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
+	    }
+    	$this->CI->load->model('achievement_stat_page_model');
+    	$stat = $this->CI->achievement_stat_page_model->get($page_id, $user_id);
+    	return issetor($stat['page_score'], 0);
+    }
+
+    function page_leaderboard($page_id = NULL){
+    	$result = array('success' => FALSE);
+    	$this->CI->load->model('page_model');
+    	if(!$page = $this->CI->page_model->get_page_profile_by_page_id($page_id)){
+	    	$result['error'] = 'Page not found';
+	    } else {
+	    	$this->CI->load->model('page_user_data_model');
+	    	$user_page_scores = array();
+	    	$page_users = $this->CI->page_user_data_model->get_page_users_by_page_id($page_id);
+	    	foreach($page_users as $user){
+	    		$page_user_id = $user['user_id'];
+	    		$user_page_scores[] = array(
+		    		'user_id' => $page_user_id,
+	    			'page_score' => $this->get_page_score(NULL, $page_id, $page_user_id)
+	    		);
+	    	}
+	    	$result['data'] = $user_page_scores;
+	    	$result['count'] = count($page_users);
+	    	$result['success'] = TRUE;
+	    }
+	    return $result;
+    }
 }
 
 /* End of file tab_ctrl.php */
