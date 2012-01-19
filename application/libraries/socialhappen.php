@@ -799,6 +799,17 @@ class SocialHappen{
 		$user_id = issetor($data['user_id']);
 		$user_facebook_id = issetor($data['user_facebook_id']);
 		$view = issetor($data['view'], 'app_setting_template');
+
+		$this->CI->load->model('User_model', 'User');
+		$this->CI->load->model('user_pages_model','user_pages');
+		$this->CI->load->model('page_model','pages');
+		$this->CI->load->model('session_model','session_model');
+		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
+		$user = $user_id ? $this->CI->User->get_user_profile_by_user_id($user_id) : $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
+
+		if(!$page['enable_facebook_tab_bar'] && !$user['user_is_developer']) {
+			return NULL;
+		}
 		
 		//app
 		$this->CI->load->model('Installed_apps_model', 'app');
