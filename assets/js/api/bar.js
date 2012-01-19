@@ -437,7 +437,11 @@ onLoad = function(){
 
 			function sh_sharebutton(){
 				$(document).on('click', 'div.sh-sharebutton', function(){
-					sh_sharebutton_menu($(this));
+					if(view_as == 'guest'){
+						sh_guest();
+					} else {
+						sh_sharebutton_menu($(this));
+					}
 				});
 
 				//DEBUG : remove this after test
@@ -471,7 +475,11 @@ onLoad = function(){
 
 			function sh_invitebutton(){
 				$(document).on('click', 'div.sh-invitebutton', function(){
-					sh_invitebutton_menu($(this));
+					if(view_as == 'guest'){
+						sh_guest();
+					} else {
+						sh_invitebutton_menu($(this));
+					}
 				});
 
 				//DEBUG : remove this after test
@@ -540,7 +548,7 @@ sh_app_component = function() {
 sh_popup = function(){
 	(function($){
 		if(view_as == 'guest'){ //@TODO : User should not see view_as, let's decide it server-side
-			sh_guest();
+			//sh_guest();
 		} else if(view_as == 'admin'){ //page_app_installed_id = 1 //for test
 			if(page_app_installed_id!=0) {
 				/*
