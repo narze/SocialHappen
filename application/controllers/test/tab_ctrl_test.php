@@ -395,7 +395,7 @@ class Tab_ctrl_test extends CI_Controller {
 		$page_id = Page_id;
 		$campaign_id = Campaign_id;
 		$result = $this->tab_ctrl->get_campaign_score($user_facebook_id, $page_id, $campaign_id);
-		$this->unit->run($result === 0, TRUE, "\$result", $result);
+		$this->unit->run($result === 100, TRUE, "\$result", $result);
 
 		$result = $this->tab_ctrl->get_campaign_score($user_facebook_id+1, $page_id, $campaign_id);
 		$this->unit->run($result === FALSE, TRUE, "\$result", $result); //not found
@@ -411,8 +411,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result['data'][0]['user_id'], 1, "\$result['data'][0]['user_id']", $result['data'][0]['user_id']);
 		$this->unit->run($result['data'][1]['user_id'], 3, "\$result['data'][1]['user_id']", $result['data'][1]['user_id']);
 		$this->unit->run($result['data'][2]['user_id'], 6, "\$result['data'][2]['user_id']", $result['data'][2]['user_id']);	
-		$this->unit->run($result['data'][0]['campaign_score'] === 0,TRUE, "\$result['data'][0]['campaign_score']", $result['data'][0]['campaign_score']);
-		$this->unit->run($result['data'][1]['campaign_score'] === 0,TRUE, "\$result['data'][1]['campaign_score']", $result['data'][1]['campaign_score']);
+		$this->unit->run($result['data'][0]['campaign_score'] === 100,TRUE, "\$result['data'][0]['campaign_score']", $result['data'][0]['campaign_score']);
+		$this->unit->run($result['data'][1]['campaign_score'] === 100,TRUE, "\$result['data'][1]['campaign_score']", $result['data'][1]['campaign_score']);
 		$this->unit->run($result['data'][2]['campaign_score'] === FALSE,TRUE, "\$result['data'][2]['campaign_score']", $result['data'][2]['campaign_score']);	
 	}
 
@@ -421,7 +421,7 @@ class Tab_ctrl_test extends CI_Controller {
 		$page_id = Page_id;
 		$app_install_id = App_install_id;
 		$result = $this->tab_ctrl->get_app_score($user_facebook_id, $page_id, $app_install_id);
-		$this->unit->run($result === 0, TRUE, "\$result", $result);
+		$this->unit->run($result === 100, TRUE, "\$result", $result);
 		$result = $this->tab_ctrl->get_app_score($user_facebook_id+1, $page_id, $app_install_id);
 		$this->unit->run($result === FALSE, TRUE, "\$result", $result);
 	}
@@ -436,8 +436,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result['data'][1]['user_id'], 1, "\$result['data'][1]['user_id']", $result['data'][1]['user_id']);
 		$this->unit->run($result['data'][3]['user_id'], 3, "\$result['data'][3]['user_id']", $result['data'][3]['user_id']);
 		$this->unit->run($result['data'][6]['user_id'], 6, "\$result['data'][6]['user_id']", $result['data'][6]['user_id']);	
-		$this->unit->run($result['data'][1]['app_score'] === 0,TRUE, "\$result['data'][1]['app_score']", $result['data'][1]['app_score']);
-		$this->unit->run($result['data'][3]['app_score'] === 0,TRUE, "\$result['data'][3]['app_score']", $result['data'][3]['app_score']);
+		$this->unit->run($result['data'][1]['app_score'] === 100,TRUE, "\$result['data'][1]['app_score']", $result['data'][1]['app_score']);
+		$this->unit->run($result['data'][3]['app_score'] === 100,TRUE, "\$result['data'][3]['app_score']", $result['data'][3]['app_score']);
 		$this->unit->run($result['data'][6]['app_score'] === FALSE,TRUE, "\$result['data'][6]['app_score']", $result['data'][6]['app_score']);	
 	}
 
