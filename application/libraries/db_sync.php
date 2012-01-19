@@ -183,6 +183,7 @@ class DB_Sync {
 							    'enable_facebook_page_tab' => field_option('BOOLEAN', $constraint, 1, $null, $autoinc, $unsigned),
 							    'enable_facebook_tab_bar' => field_option('BOOLEAN', $constraint, 1, $null, $autoinc, $unsigned),
 							    'enable_socialhappen_features' => field_option('BOOLEAN', $constraint, 1, $null, $autoinc, $unsigned),
+							    'page_member_limit' => field_option('INT', 11, 0, $null, $autoinc, TRUE),
 							),
 							'user' => array(
 							    'user_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),

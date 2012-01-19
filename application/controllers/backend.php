@@ -1390,6 +1390,26 @@ class Backend extends CI_Controller {
 			redirect('backend/users#fail');
 		}
 	}
+
+	//TODO : prettify
+	function change_page_member_limit($page_id = NULL, $member_limit = NULL){
+		if(!isset($member_limit)){
+			echo 'please specify member limit behind page_id in url';
+			return;
+		} else if(!is_numeric($member_limit)){
+			echo 'please input integer';
+			return;
+		} else if($page_id){
+			$this->load->model('page_model');
+			if($result = $this->page_model->update_page_profile_by_page_id($page_id, array('page_member_limit' => (int) $member_limit))){
+				redirect('backend/page/'.$page_id.'#success');
+			} else {
+				redirect('backend/page/'.$page_id.'#failed');
+			}
+		} else {
+			redirect('backend/company');
+		}
+	}
 }
 
 /* End of file backend.php */

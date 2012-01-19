@@ -12,7 +12,8 @@
 <p><b>Detail:</b> <?php echo $page['page_detail'];?></p>
 <p><b>Members:</b> <?php echo $page['page_all_member'];?></p>
 <p><b>Status:</b> <?php echo $page['page_status'];?></p>
-<p><b>Facebook:</b> <a href="#"<?php echo $page['facebook_page_id'];?>"><?php echo $page['facebook_page_id'];?></a></p>
+<p><b>Facebook:</b> <a href="#<?php echo $page['facebook_page_id'];?>"><?php echo $page['facebook_page_id'];?></a></p>
+<p><b>Member limit:</b> <?php echo $page['page_member_limit'] == 0 ? 'Unlimited' : $page['page_member_limit'];?> <?php echo anchor_popup('backend/change_page_member_limit/'.$page['page_id'].'/', 'Change member limit'); ?> </p>
 <p><img src="<?php echo $page['page_image'];?>" /></p>
 <h1>App</h1>
 <p>total apps: <?php echo $total_app; ?></p>

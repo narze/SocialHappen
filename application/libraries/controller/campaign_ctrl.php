@@ -34,7 +34,13 @@ class Campaign_ctrl {
 				
 				$this->CI-> load -> model('user_model', 'user');
 				$campaign_total_users = $this->CI->user->count_users_by_campaign_id($campaign_id);
-				
+
+				$input = array('campaign_id' => $campaign_id);
+				$common = array(
+					'user_count' => $user_count,
+					'user_exceed_limit' => !$this->CI->socialhappen->is_developer_or_member_under_limit($input)
+				);
+				$this->CI->load->vars($common);
 				
 				$result['data'] = array(
 					'campaign_id' => $campaign_id,

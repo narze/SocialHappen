@@ -42,6 +42,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);
 		$this->unit->run($result['enable_socialhappen_features'], 1, "\$result['enable_socialhappen_features']", $result['enable_socialhappen_features']);	
+		$this->unit->run($result['page_member_limit'], 0, "\$result['page_member_limit']", $result['page_member_limit']);	
 	}
 	
 	/**
@@ -64,6 +65,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);
 		$this->unit->run($result['enable_socialhappen_features'], 1, "\$result['enable_socialhappen_features']", $result['enable_socialhappen_features']);
+		$this->unit->run($result['page_member_limit'], 0, "\$result['page_member_limit']", $result['page_member_limit']);
 	}
 	
 	/** 
@@ -83,6 +85,8 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[0]['page_image'],'is_string','page_image');
 		$this->unit->run($result[0]['enable_facebook_page_tab'], 1, "\$result[0]['enable_facebook_page_tab']", $result[0]['enable_facebook_page_tab']);
 		$this->unit->run($result[0]['enable_facebook_tab_bar'], 1, "\$result[0]['enable_facebook_tab_bar']", $result[0]['enable_facebook_tab_bar']);
+		$this->unit->run($result[0]['enable_socialhappen_features'], 1, "\$result[0]['enable_socialhappen_features']", $result[0]['enable_socialhappen_features']);
+		$this->unit->run($result[0]['page_member_limit'], 0, "\$result[0]['page_member_limit']", $result[0]['page_member_limit']);
 	}
 	
 	/**
@@ -132,6 +136,8 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result[0]['page_image'],'is_string','page_image');
 		$this->unit->run($result[0]['enable_facebook_page_tab'], 1, "\$result[0]['enable_facebook_page_tab']", $result[0]['enable_facebook_page_tab']);
 		$this->unit->run($result[0]['enable_facebook_tab_bar'], 1, "\$result[0]['enable_facebook_tab_bar']", $result[0]['enable_facebook_tab_bar']);
+		$this->unit->run($result[0]['enable_socialhappen_features'], 1, "\$result[0]['enable_socialhappen_features']", $result[0]['enable_socialhappen_features']);
+		$this->unit->run($result[0]['page_member_limit'], 0, "\$result[0]['page_member_limit']", $result[0]['page_member_limit']);
 	}
 	
 	/**
@@ -154,6 +160,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);
 		$this->unit->run($result['enable_socialhappen_features'], 1, "\$result['enable_socialhappen_features']", $result['enable_socialhappen_features']);
+		$this->unit->run($result['page_member_limit'], 0, "\$result['page_member_limit']", $result['page_member_limit']);
 	}
 	
 	/**
@@ -174,6 +181,7 @@ class Page_model_test extends CI_Controller {
 		$this->unit->run($result['enable_facebook_page_tab'], 1, "\$result['enable_facebook_page_tab']", $result['enable_facebook_page_tab']);
 		$this->unit->run($result['enable_facebook_tab_bar'], 1, "\$result['enable_facebook_tab_bar']", $result['enable_facebook_tab_bar']);
 		$this->unit->run($result['enable_socialhappen_features'], 1, "\$result['enable_socialhappen_features']", $result['enable_socialhappen_features']);
+		$this->unit->run($result['page_member_limit'], 0, "\$result['page_member_limit']", $result['page_member_limit']);
 	}
 	
 	/**

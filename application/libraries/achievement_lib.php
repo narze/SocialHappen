@@ -376,7 +376,9 @@ class Achievement_lib
         $campaign_score = $campaign['sharebutton']['criteria']['score'];
       }else if($info['action_id'] == $this->PAGE_INVITE_ACCEPT_ACTION_ID){
         $page_score = $campaign['invite']['criteria']['acceptance_score']['page'];
+        $campaign_score = $campaign['invite']['criteria']['acceptance_score']['page'];
       }else if($info['action_id'] == $this->CAMPAIGN_INVITE_ACCEPT_ACTION_ID){
+        $page_score = $campaign['invite']['criteria']['acceptance_score']['campaign'];
         $campaign_score = $campaign['invite']['criteria']['acceptance_score']['campaign'];
       }
       
