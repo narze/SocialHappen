@@ -416,6 +416,31 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result['data'][2]['campaign_score'] === FALSE,TRUE, "\$result['data'][2]['campaign_score']", $result['data'][2]['campaign_score']);	
 	}
 
+	function get_app_score_test(){
+		$user_facebook_id = User_facebook_id;
+		$page_id = Page_id;
+		$app_install_id = App_install_id;
+		$result = $this->tab_ctrl->get_app_score($user_facebook_id, $page_id, $app_install_id);
+		$this->unit->run($result === 0, TRUE, "\$result", $result);
+		$result = $this->tab_ctrl->get_app_score($user_facebook_id+1, $page_id, $app_install_id);
+		$this->unit->run($result === FALSE, TRUE, "\$result", $result);
+	}
+
+	function app_leaderboard_test(){
+		$app_install_id = App_install_id;
+		$page_id = Page_id;
+		$result = $this->tab_ctrl->app_leaderboard($app_install_id, $page_id);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['count'], 3, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['data'][1]['user_id'], 1, "\$result['data'][1]['user_id']", $result['data'][1]['user_id']);
+		$this->unit->run($result['data'][3]['user_id'], 3, "\$result['data'][3]['user_id']", $result['data'][3]['user_id']);
+		$this->unit->run($result['data'][6]['user_id'], 6, "\$result['data'][6]['user_id']", $result['data'][6]['user_id']);	
+		$this->unit->run($result['data'][1]['app_score'] === 0,TRUE, "\$result['data'][1]['app_score']", $result['data'][1]['app_score']);
+		$this->unit->run($result['data'][3]['app_score'] === 0,TRUE, "\$result['data'][3]['app_score']", $result['data'][3]['app_score']);
+		$this->unit->run($result['data'][6]['app_score'] === FALSE,TRUE, "\$result['data'][6]['app_score']", $result['data'][6]['app_score']);	
+	}
+
 }
 
 /* End of file tab_ctrl_test.php */

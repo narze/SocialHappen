@@ -832,6 +832,22 @@ class Tab extends CI_Controller {
 			}
 		}
 	}
+
+	function my_app_score($app_install_id = NULL, $page_id = NULL){
+		$user_facebook_id = $this->FB->getUser();
+		$app_score = $this->tab_ctrl->get_app_score($user_facebook_id, $page_id, $app_install_id);
+		echo "Your app score is ". ($app_score ? $app_score : 0);
+	}
+
+	function app_leaderboard($app_install_id = NULL, $page_id = NULL){
+		$app_user_scores = $this->tab_ctrl->app_leaderboard($app_install_id, $page_id);
+		if($app_user_scores['success']){ //TODO sort
+			foreach($app_user_scores['data'] as $user_score){
+				echo "user id ".$user_score['user_id'].' got '.($user_score['app_score'] | 0).' points in app id '.$app_install_id;
+				echo '<br />';
+			}
+		}
+	}
 }
 /* End of file tab.php */
 /* Location: ./application/controllers/tab.php */

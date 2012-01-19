@@ -331,13 +331,31 @@ class Tab_ctrl {
 
     function get_campaign_score($user_facebook_id = NULL, $page_id = NULL, $campaign_id = NULL, $user_id = NULL){
     	$this->CI->load->model('user_model');
-    	$this->CI->load->model('campaign_model');
     	if(!$user_id) {
 	    	$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
 	    }
     	$this->CI->load->library('achievement_lib');
     	$stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
     	return issetor($stat['campaign'][$campaign_id]['score'], FALSE);
+    }
+
+    function get_app_score($user_facebook_id = NULL, $page_id = NULL, $app_install_id = NULL, $user_id = NULL){
+    	$this->CI->load->model('user_model');
+    	$this->CI->load->model('campaign_model');
+    	if(!$user_id) {
+	    	$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
+	    }
+	    $this->CI->load->library('achievement_lib');
+    	$stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
+    	$score = FALSE;
+	    $campaigns = $this->CI->campaign_model->get_app_campaigns_by_app_install_id($app_install_id);
+	    foreach($campaigns as $campaign){
+	    	$campaign_id = $campaign['campaign_id'];
+	    	if(isset($stat['campaign'][$campaign_id]['score'])){
+	    		$score = $stat['campaign'][$campaign_id]['score'] + $score;
+	    	}
+	    }
+    	return $score;	
     }
 
     function page_leaderboard($page_id = NULL){
@@ -381,6 +399,48 @@ class Tab_ctrl {
 	    	}
 	    	$result['data'] = $user_campaign_scores;
 	    	$result['count'] = count($campaign_users);
+	    	$result['success'] = TRUE;
+	    }
+	    return $result;
+    }
+
+    function app_leaderboard($app_install_id = NULL, $page_id = NULL){
+    	$result = array('success' => FALSE);
+    	$this->CI->load->model('page_model');
+    	if(!$page = $this->CI->page_model->get_page_profile_by_page_id($page_id)){
+	    	$result['error'] = 'Page not found';
+	    } else {
+    	$this->CI->load->model('campaign_model');
+		    $campaigns = $this->CI->campaign_model->get_app_campaigns_by_app_install_id($app_install_id);
+		    $this->CI->load->model('user_campaigns_model');
+		    $app_scores = array(); // app_scores[$user_id]['app_score'] = score
+		    foreach($campaigns as $campaign){
+		    	$campaign_id = $campaign['campaign_id'];
+		    	
+		    	$user_campaign_scores = array();
+		    	$campaign_users = $this->CI->user_campaigns_model->get_campaign_users_by_campaign_id($campaign_id);
+		    	foreach($campaign_users as $user){
+		    		$campaign_user_id = $user['user_id'];
+		    		if(!isset($user[$campaign_user_id])){
+		    			$user[$campaign_user_id] = array();
+		    		}
+		    		if(isset($app_scores[$campaign_user_id]['app_score'])){
+		    			$app_scores[$campaign_user_id]['app_score'] += $this->get_campaign_score(NULL, $page_id, $campaign_id, $campaign_user_id);
+		    		} else { //once
+		    			$app_scores[$campaign_user_id]['app_score'] = $this->get_campaign_score(NULL, $page_id, $campaign_id, $campaign_user_id);
+		    			$app_scores[$campaign_user_id]['user_id'] = $campaign_user_id;
+		    		}
+		    	}
+		    }
+		    foreach($app_scores as &$user_app_score){
+		    	if(!isset($user_app_score['app_score'])){
+		    		$user_app_score['app_score'] = FALSE;
+		    	}
+		    }
+		    unset($user_app_score);
+	    	
+	    	$result['data'] = $app_scores;
+	    	$result['count'] = count($app_scores);
 	    	$result['success'] = TRUE;
 	    }
 	    return $result;
