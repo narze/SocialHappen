@@ -321,13 +321,23 @@ class Tab_ctrl {
 
     function get_page_score($user_facebook_id = NULL, $page_id = NULL, $user_id = NULL){
     	$this->CI->load->model('user_model');
-    	$this->CI->load->model('page_model');
     	if(!$user_id) {
 	    	$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
 	    }
-    	$this->CI->load->model('achievement_stat_page_model');
-    	$stat = $this->CI->achievement_stat_page_model->get($page_id, $user_id);
-    	return issetor($stat['page_score'], 0);
+    	$this->CI->load->library('achievement_lib');
+    	$stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
+    	return issetor($stat['page_score'], FALSE);
+    }
+
+    function get_campaign_score($user_facebook_id = NULL, $page_id = NULL, $campaign_id = NULL, $user_id = NULL){
+    	$this->CI->load->model('user_model');
+    	$this->CI->load->model('campaign_model');
+    	if(!$user_id) {
+	    	$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
+	    }
+    	$this->CI->load->library('achievement_lib');
+    	$stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
+    	return issetor($stat['campaign'][$campaign_id]['score'], FALSE);
     }
 
     function page_leaderboard($page_id = NULL){
@@ -348,6 +358,29 @@ class Tab_ctrl {
 	    	}
 	    	$result['data'] = $user_page_scores;
 	    	$result['count'] = count($page_users);
+	    	$result['success'] = TRUE;
+	    }
+	    return $result;
+    }
+
+    function campaign_leaderboard($campaign_id = NULL, $page_id = NULL){
+    	$result = array('success' => FALSE);
+    	$this->CI->load->model('page_model');
+    	if(!$page = $this->CI->page_model->get_page_profile_by_page_id($page_id)){
+	    	$result['error'] = 'Page not found';
+	    } else {
+	    	$this->CI->load->model('user_campaigns_model');
+	    	$user_campaign_scores = array();
+	    	$campaign_users = $this->CI->user_campaigns_model->get_campaign_users_by_campaign_id($campaign_id);
+	    	foreach($campaign_users as $user){
+	    		$campaign_user_id = $user['user_id'];
+	    		$user_campaign_scores[] = array(
+		    		'user_id' => $campaign_user_id,
+	    			'campaign_score' => $this->get_campaign_score(NULL, $page_id, $campaign_id, $campaign_user_id)
+	    		);
+	    	}
+	    	$result['data'] = $user_campaign_scores;
+	    	$result['count'] = count($campaign_users);
 	    	$result['success'] = TRUE;
 	    }
 	    return $result;

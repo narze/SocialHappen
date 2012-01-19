@@ -282,7 +282,7 @@ class Tab_ctrl_test extends CI_Controller {
 		$user_facebook_id = User_facebook_id;
 		$page_id = Page_id;
 		$result = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id);
-		$this->unit->run($result === 0, TRUE, "\$result", $result);
+		$this->unit->run($result === FALSE, TRUE, "\$result", $result);
 	}
 
 	function _add_invite_component_before_test(){
@@ -379,15 +379,41 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result['data'][0]['page_score'], 100, "\$result['data'][0]['page_score']", $result['data'][0]['page_score']);
 		$this->unit->run($result['data'][1]['page_score'], 100, "\$result['data'][1]['page_score']", $result['data'][1]['page_score']);
 		$this->unit->run($result['data'][2]['page_score'], 100, "\$result['data'][2]['page_score']", $result['data'][2]['page_score']);	
-		$this->unit->run($result['data'][3]['page_score'], 0, "\$result['data'][3]['page_score']", $result['data'][3]['page_score']);
-		$this->unit->run($result['data'][4]['page_score'], 0, "\$result['data'][4]['page_score']", $result['data'][4]['page_score']);
-		$this->unit->run($result['data'][5]['page_score'], 0, "\$result['data'][5]['page_score']", $result['data'][5]['page_score']);
+		$this->unit->run($result['data'][3]['page_score'] === FALSE, TRUE, "\$result['data'][3]['page_score']", $result['data'][3]['page_score']);
+		$this->unit->run($result['data'][4]['page_score'] === FALSE, TRUE, "\$result['data'][4]['page_score']", $result['data'][4]['page_score']);
+		$this->unit->run($result['data'][5]['page_score'] === FALSE, TRUE, "\$result['data'][5]['page_score']", $result['data'][5]['page_score']);
 	}
 
 	function page_leaderboard_fail_test(){
 		$result = $this->tab_ctrl->page_leaderboard(1234);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
 		$this->unit->run($result['error'], 'Page not found', "\$result['error']", $result['error']);
+	}
+
+	function get_campaign_score_test(){
+		$user_facebook_id = User_facebook_id;
+		$page_id = Page_id;
+		$campaign_id = Campaign_id;
+		$result = $this->tab_ctrl->get_campaign_score($user_facebook_id, $page_id, $campaign_id);
+		$this->unit->run($result === 0, TRUE, "\$result", $result);
+
+		$result = $this->tab_ctrl->get_campaign_score($user_facebook_id+1, $page_id, $campaign_id);
+		$this->unit->run($result === FALSE, TRUE, "\$result", $result); //not found
+	}
+
+	function campaign_leaderboard_test(){
+		$campaign_id = Campaign_id;
+		$page_id = Page_id;
+		$result = $this->tab_ctrl->campaign_leaderboard($campaign_id, $page_id);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['count'], 3, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['data'][0]['user_id'], 1, "\$result['data'][0]['user_id']", $result['data'][0]['user_id']);
+		$this->unit->run($result['data'][1]['user_id'], 3, "\$result['data'][1]['user_id']", $result['data'][1]['user_id']);
+		$this->unit->run($result['data'][2]['user_id'], 6, "\$result['data'][2]['user_id']", $result['data'][2]['user_id']);	
+		$this->unit->run($result['data'][0]['campaign_score'] === 0,TRUE, "\$result['data'][0]['campaign_score']", $result['data'][0]['campaign_score']);
+		$this->unit->run($result['data'][1]['campaign_score'] === 0,TRUE, "\$result['data'][1]['campaign_score']", $result['data'][1]['campaign_score']);
+		$this->unit->run($result['data'][2]['campaign_score'] === FALSE,TRUE, "\$result['data'][2]['campaign_score']", $result['data'][2]['campaign_score']);	
 	}
 
 }

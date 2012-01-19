@@ -811,7 +811,23 @@ class Tab extends CI_Controller {
 		$page_user_scores = $this->tab_ctrl->page_leaderboard($page_id);
 		if($page_user_scores['success']){ //TODO sort
 			foreach($page_user_scores['data'] as $user_score){
-				echo "user id ".$user_score['user_id'].' got '.$user_score['page_score'].' points in page id '.$page_id;
+				echo "user id ".$user_score['user_id'].' got '.($user_score['page_score'] | 0).' points in page id '.$page_id;
+				echo '<br />';
+			}
+		}
+	}
+
+	function my_campaign_score($campaign_id = NULL, $page_id = NULL){
+		$user_facebook_id = $this->FB->getUser();
+		$campaign_score = $this->tab_ctrl->get_campaign_score($user_facebook_id, $page_id, $campaign_id);
+		echo "Your campaign score is ". ($campaign_score ? $campaign_score : 0);
+	}
+
+	function campaign_leaderboard($campaign_id = NULL, $page_id = NULL){
+		$campaign_user_scores = $this->tab_ctrl->campaign_leaderboard($campaign_id, $page_id);
+		if($campaign_user_scores['success']){ //TODO sort
+			foreach($campaign_user_scores['data'] as $user_score){
+				echo "user id ".$user_score['user_id'].' got '.($user_score['campaign_score'] | 0).' points in campaign id '.$campaign_id;
 				echo '<br />';
 			}
 		}
