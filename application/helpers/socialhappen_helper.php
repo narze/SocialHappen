@@ -96,6 +96,20 @@ if(!function_exists('obj2array'))
 	}
 }
 
+if(!function_exists('cursor2array'))
+{
+	function cursor2array($cursor){
+		if(!$cursor){
+			return FALSE;
+		}
+		$array = array();
+		foreach($cursor as $one){
+			$array[] = $one;
+		}
+		return $array;
+	}
+}
+
 if(!function_exists('filter_array'))
 {
  	function filter_array($data = array(), $filter = array(), $not_set_if_not_isset = FALSE){
