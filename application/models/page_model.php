@@ -13,8 +13,11 @@ class Page_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_page_profile_by_page_id($page_id = NULL){
-		$result = $this->db->get_where('page', array('page_id' => $page_id))->result_array();
-		return $this->socialhappen->map_one_v($result[0], 'page_status');
+	  if(!$page_id) {
+	    return FALSE;
+	  }
+		$result = $this->db->get_where('page', array('page_id' => $page_id))->row_array();
+		return $this->socialhappen->map_one_v($result, 'page_status');
 	}
 	
 	/**
@@ -24,9 +27,11 @@ class Page_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_page_profile_by_facebook_page_id($facebook_page_id = NULL){
-	
-		$result = $this->db->get_where('page', array('facebook_page_id' => $facebook_page_id))->result_array();
-		return $this->socialhappen->map_one_v($result[0], 'page_status');
+	  if(!$facebook_page_id) {
+      return FALSE;
+    }
+		$result = $this->db->get_where('page', array('facebook_page_id' => $facebook_page_id))->row_array();
+		return $this->socialhappen->map_one_v($result, 'page_status');
 	}
 	
 	/**
@@ -36,10 +41,13 @@ class Page_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_page_profile_by_campaign_id($campaign_id = NULL){
+    if(!$campaign_id) {
+      return FALSE;
+    }
 		$this->db->join('installed_apps','installed_apps.page_id=page.page_id');
 		$this->db->join('campaign','campaign.app_install_id=installed_apps.app_install_id');
-		$result = $this->db->get_where('page', array('campaign_id' => $campaign_id))->result_array();
-		return $this->socialhappen->map_one_v($result[0], 'page_status');
+		$result = $this->db->get_where('page', array('campaign_id' => $campaign_id))->row_array();
+		return $this->socialhappen->map_one_v($result, 'page_status');
 	}
 	
 	/**
@@ -49,9 +57,12 @@ class Page_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_page_profile_by_app_install_id($app_install_id = NULL){
+    if(!$app_install_id) {
+      return FALSE;
+    }
 		$this->db->join('installed_apps','installed_apps.page_id=page.page_id');
-		$result = $this->db->get_where('page', array('app_install_id' => $app_install_id))->result_array();
-		return issetor($result[0]);
+		$result = $this->db->get_where('page', array('app_install_id' => $app_install_id))->row_array();
+		return issetor($result);
 	}
 	
 	/** 

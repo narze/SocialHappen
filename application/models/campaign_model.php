@@ -84,9 +84,12 @@ class Campaign_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_campaign_profile_by_campaign_id($campaign_id =NULL) {
+	  if(!$campaign_id){
+	    return FALSE;
+	  }
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
-		$result = $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> result_array();
-		return $this->socialhappen->map_one_v($result[0], array('app_install_status', 'campaign_status'));
+		$result = $this -> db -> get_where('campaign', array('campaign_id' => $campaign_id)) -> row_array();
+		return $this->socialhappen->map_one_v($result, array('app_install_status', 'campaign_status'));
 	}
 
 	/**
@@ -95,6 +98,9 @@ class Campaign_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_campaigns_by_app_install_id($app_install_id =NULL) {
+    if(!$app_install_id){
+      return FALSE;
+    }
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
 		$result = $this -> db -> get_where('campaign', array('campaign.app_install_id' => $app_install_id)) -> result_array();
 		return $this->socialhappen->map_v($result, array('app_install_status', 'campaign_status'));
