@@ -1592,6 +1592,8 @@ class DB_Sync {
 		$this->drop_mongo_collections('app_component','app_component_page','homepage','invite','sharebutton');
 		$this->CI->mongodb->switch_db($mongo_db_prefix.'invite');
 		$this->drop_mongo_collections('invites','pending');
+		$this->CI->mongodb->switch_db($mongo_db_prefix.'socialhappen');
+		$this->drop_mongo_collections('reward','reward_item');
 		echo 'Dropped collections<br />';
 
 		$this->CI->load->library('audit_lib');
