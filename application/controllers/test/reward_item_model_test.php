@@ -289,30 +289,30 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result[0]['name'], 'new_name', "\$result[0]['name']", $result[0]['name']);
 	}
 
-	// function remove_test(){
-	// 	$result = $this->reward_item->remove('icannotfindyou'); // record to delete
-	// 	$this->unit->run($result, FALSE, "\$result", $result);
-	// 	$count = $this->reward_item->count_all();
-	// 	$this->unit->run($count, 3, 'count', $count);
+	function remove_test(){
+		$result = $this->reward_item->remove('icannotfindyou'); // record to delete
+		$this->unit->run($result, FALSE, "\$result", $result);
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 3, 'count', $count);
 
-	// 	$result = $this->reward_item->remove($this->reward_item_1);
-	// 	$this->unit->run($result, TRUE, "\$result", $result);
-	// 	$count = $this->reward_item->count_all();
-	// 	$this->unit->run($count, 2, 'count', $count);
-	// 	$result = $this->reward_item->remove($this->reward_item_2);
-	// 	$this->unit->run($result, TRUE, "\$result", $result);
-	// 	$count = $this->reward_item->count_all();
-	// 	$this->unit->run($count, 1, 'count', $count);
-	// 	$result = $this->reward_item->remove($this->reward_item_3);
-	// 	$this->unit->run($result, TRUE, "\$result", $result);
-	// 	$count = $this->reward_item->count_all();
-	// 	$this->unit->run($count, 0, 'count', $count);
+		$result = $this->reward_item->remove($this->reward_item_1);
+		$this->unit->run($result, TRUE, "\$result", $result);
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 2, 'count', $count);
+		$result = $this->reward_item->remove($this->reward_item_2);
+		$this->unit->run($result, TRUE, "\$result", $result);
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 1, 'count', $count);
+		$result = $this->reward_item->remove($this->reward_item_3);
+		$this->unit->run($result, TRUE, "\$result", $result);
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 0, 'count', $count);
 
-	// 	$result = $this->reward_item->remove($this->reward_item_3); //already deleted
-	// 	$this->unit->run($result, FALSE, "\$result", $result);
-	// 	$count = $this->reward_item->count_all();
-	// 	$this->unit->run($count, 0, 'count', $count);
-	// }
+		$result = $this->reward_item->remove($this->reward_item_3); //already deleted
+		$this->unit->run($result, FALSE, "\$result", $result);
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 0, 'count', $count);
+	}
 }
 /* End of file reward_item_model_test.php */
 /* Location: ./application/controllers/test/reward_item_model_test.php */
