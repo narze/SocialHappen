@@ -68,9 +68,23 @@
 	 * @param $campaign_id
 	 * @author Manassarn M.
 	 */
-	function get($reward_item_id = NULL){
+	function get_by_reward_item_id($reward_item_id = NULL){
 		$result = $this->reward_item->findOne(array('_id' => new MongoId($reward_item_id)));
 		$result = obj2array($result);
+		return $result;
+	}
+	
+	/**
+	 * Get reward item
+	 * @param $criteria
+	 * @author Manassarn M.
+	 */
+	function get($criteria = NULL){
+		if(isset($criteria['criteria_id'])){
+			$criteria['criteria_id'] = (int) $criteria['criteria_id'];
+		}
+		$result = $this->reward_item->find($criteria);
+		$result = cursor2array($result);
 		return $result;
 	}
 	

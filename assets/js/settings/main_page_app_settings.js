@@ -229,8 +229,16 @@ $(function(){
 		}
 	}
 
-	function timezone(){
-
+	function reward(){
+		function add_reward(){
+			
+		}
+		function edit_reward(){
+			
+		}
+		function remove_reward(){
+			
+		}
 	}
 
 	function badges(){
@@ -247,8 +255,8 @@ $(function(){
 			$('div#main').load(url,function(){
 				if( element.attr('id') == 'signup-fields'){
 					signup_fields();
-				} else if (element.attr('id') == 'timezone'){
-					timezone();
+				} else if (element.attr('id') == 'reward'){
+					reward();
 				} else if (element.attr('id') == 'badges'){
 					badges();
 				}
@@ -288,8 +296,8 @@ $(function(){
 		$('ul.platform-apps li a#signup-fields').click();
 	} else if(config_name == 'badges'){
 		$('ul.platform-apps li a#badges').click();
-	} else if(config_name == 'timezone'){
-		$('ul.platform-apps li a#timezone').click();
+	} else if(config_name == 'reward'){
+		$('ul.platform-apps li a#reward').click();
 	} else if(config_name == 'user_class'){
 		$('ul.platform-apps li a#user_class').click();
 	} else if(config_name == 'app'){

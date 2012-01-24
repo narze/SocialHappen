@@ -106,7 +106,7 @@ class Settings{
 	 */
 	function view_page_app_settings($page_id = NULL, $config_name = NULL, $app_install_id = NULL){
 		if($page_id){
-			$config_names_and_ids = array('signup_fields','badges','app','timezone','user_class');
+			$config_names_and_ids = array('signup_fields','badges','app','timezone','user_class','reward');
 		
 			if(!in_array($config_name, $config_names_and_ids)){
 				redirect("settings/page_apps/{$page_id}");

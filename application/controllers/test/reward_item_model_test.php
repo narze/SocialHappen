@@ -224,8 +224,8 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($count, 3, 'count', $count);
 	}
 
-	function get_test(){
-		$result = $this->reward_item->get($this->reward_item_1);
+	function get_by_reward_item_id_test(){
+		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run($result['user_list'], 'is_array', "\$result['user_list']", $result['user_list']);
 		$this->unit->run($result['redeem']['amount_remain'], $result['redeem']['amount'], "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']);
@@ -236,10 +236,10 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result['criteria_id']===1, TRUE, "\$result['criteria_id']", $result['criteria_id']);
 		$this->unit->run(isset($result['reward_id']), FALSE, "\$result['reward_id']", isset($result['reward_id']));
 
-		$result = $this->reward_item->get($this->reward_item_2);
+		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_2);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run($result['user_list'], 'is_array', "\$result['user_list']", $result['user_list']);
-		$result = $this->reward_item->get($this->reward_item_3);
+		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_3);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run($result['user_list'], 'is_array', "\$result['user_list']", $result['user_list']);
 	}
@@ -262,7 +262,7 @@ class Reward_item_model_test extends CI_Controller {
 		$result = $this->reward_item->update($this->reward_item_1, $input);
 		$this->unit->run($result, TRUE, "\$result", $result);
 
-		$result = $this->reward_item->get($this->reward_item_1);
+		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run($result['name'], $new_name, "\$result['name']", $result['name']);
 		$this->unit->run($result['status'], $new_status, "\$result['status']", $result['status']);
@@ -280,30 +280,39 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result, FALSE, "\$result", $result);
 	}
 
-	function remove_test(){
-		$result = $this->reward_item->remove('icannotfindyou'); // record to delete
-		$this->unit->run($result, FALSE, "\$result", $result);
-		$count = $this->reward_item->count_all();
-		$this->unit->run($count, 3, 'count', $count);
-
-		$result = $this->reward_item->remove($this->reward_item_1);
-		$this->unit->run($result, TRUE, "\$result", $result);
-		$count = $this->reward_item->count_all();
-		$this->unit->run($count, 2, 'count', $count);
-		$result = $this->reward_item->remove($this->reward_item_2);
-		$this->unit->run($result, TRUE, "\$result", $result);
-		$count = $this->reward_item->count_all();
-		$this->unit->run($count, 1, 'count', $count);
-		$result = $this->reward_item->remove($this->reward_item_3);
-		$this->unit->run($result, TRUE, "\$result", $result);
-		$count = $this->reward_item->count_all();
-		$this->unit->run($count, 0, 'count', $count);
-
-		$result = $this->reward_item->remove($this->reward_item_3); //already deleted
-		$this->unit->run($result, FALSE, "\$result", $result);
-		$count = $this->reward_item->count_all();
-		$this->unit->run($count, 0, 'count', $count);
+	function get_test(){
+		$criteria = array(
+			'criteria_type' => 'campaign',
+			'criteria_id' => '2');
+		$result = $this->reward_item->get($criteria);
+		$this->unit->run(count($result), 1, "\count($result)", count($result));
+		$this->unit->run($result[0]['name'], 'new_name', "\$result[0]['name']", $result[0]['name']);
 	}
+
+	// function remove_test(){
+	// 	$result = $this->reward_item->remove('icannotfindyou'); // record to delete
+	// 	$this->unit->run($result, FALSE, "\$result", $result);
+	// 	$count = $this->reward_item->count_all();
+	// 	$this->unit->run($count, 3, 'count', $count);
+
+	// 	$result = $this->reward_item->remove($this->reward_item_1);
+	// 	$this->unit->run($result, TRUE, "\$result", $result);
+	// 	$count = $this->reward_item->count_all();
+	// 	$this->unit->run($count, 2, 'count', $count);
+	// 	$result = $this->reward_item->remove($this->reward_item_2);
+	// 	$this->unit->run($result, TRUE, "\$result", $result);
+	// 	$count = $this->reward_item->count_all();
+	// 	$this->unit->run($count, 1, 'count', $count);
+	// 	$result = $this->reward_item->remove($this->reward_item_3);
+	// 	$this->unit->run($result, TRUE, "\$result", $result);
+	// 	$count = $this->reward_item->count_all();
+	// 	$this->unit->run($count, 0, 'count', $count);
+
+	// 	$result = $this->reward_item->remove($this->reward_item_3); //already deleted
+	// 	$this->unit->run($result, FALSE, "\$result", $result);
+	// 	$count = $this->reward_item->count_all();
+	// 	$this->unit->run($count, 0, 'count', $count);
+	// }
 }
 /* End of file reward_item_model_test.php */
 /* Location: ./application/controllers/test/reward_item_model_test.php */
