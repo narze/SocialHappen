@@ -4,8 +4,10 @@
  * [
  *   {
  *  	name : <item name>,
- *  	enable : <boolean>,
+ *  	status : <draft/published/cancelled>,
  *  	type : <redeem OR random OR top_score>,
+ *		start_timestamp : <timestamp to show this item>,
+ *		end_timestamp : <item's expiry date>,
  *   	redeem : {
  *   		point : <point used to redeem this item,
  *   		amount : <item amount>,
@@ -18,8 +20,7 @@
  *   		first_place : <first place to get this item [1+]>,
  *   		last_place : <last place to get this item [>= first_place] >
  *   	},
- *   	user_list : [array of user_ids who got this item],
- *		reward_id : [reward_id which owns this item]
+ *   	user_list : [array of user_ids who got this item]
  *   }
  * ]
  */
@@ -74,21 +75,10 @@
 	}
 	
 	/**
-	 * Get reward items by reward_id
-	 * @param $campaign_id
-	 * @author Manassarn M.
-	 */
-	function get_reward_items_by_reward_id($reward_id = NULL){
-		$result = $this->reward_item->find(array('reward_id' => $reward_id));
-		$result = cursor2array($result);
-		return $result;
-	}
-	
-	/**
 	 * Add reward by campaign_id
 	 * @param $reward_item = array(
 	 *		'name' => <name>,
-	 *		'enable' => boolean,
+	 *		'status' => <draft/published/cancelled>,
 	 *		'type' => <redeem OR random OR top_score>
 	 *		'redeem' => array(
 	 *	 		'point' => <point required to redeem this item>,
@@ -105,12 +95,21 @@
 	 * @author Manasssarn M.
 	 */
 	function add($input = array()){
-		if(!issetor($input['name']) || !issetor($input['type']) || !issetor($input['reward_id'])){
+		if(!issetor($input['name']) || !issetor($input['type']) || !issetor($input['start_timestamp']) || !issetor($input['end_timestamp'])|| !issetor($input['criteria_type']) || !issetor($input['criteria_id'])){
 			return FALSE;
 		}
 		$input_type = $input['type'];
 		$check_args = in_array($input_type, array('redeem', 'random', 'top_score'));
 		if(!$check_args || !isset($input[$input_type])){
+			return FALSE;
+		}
+		if(!in_array($input['status'], array('draft', 'published', 'cancelled'))){
+			return FALSE;
+		}
+		if(!in_array($input['criteria_type'], array('page', 'app', 'campaign'))){
+			return FALSE;
+		}
+		if($input['start_timestamp'] > $input['end_timestamp'] || $input['start_timestamp'] < time()){
 			return FALSE;
 		}
 		if($input_type === 'redeem'){
@@ -127,7 +126,7 @@
 				return FALSE;
 			}
 		}
-		$input['enable'] = issetor($input['enable']);
+		$input['criteria_id'] = (int) $input['criteria_id'];
 		$input['user_list'] = array();
 		
 		try	{
@@ -147,8 +146,30 @@
 		if(isset($input['name'])){
 			$update['$set']['name'] = $input['name'];
 		}
-		if(isset($input['enable'])){
-			$update['$set']['enable'] = $input['enable'] ? TRUE : FALSE;
+		if(isset($input['status'])){
+			if(!in_array($input['status'], array('draft', 'published', 'cancelled'))){
+				return FALSE;
+			}
+			$update['$set']['status'] = $input['status'];
+		}
+		if(isset($input['criteria_type'])){
+			if(!in_array($input['criteria_type'], array('page', 'app', 'campaign'))){
+				return FALSE;
+			}
+			$update['$set']['criteria_type'] = $input['criteria_type'];
+		}
+		if(isset($input['criteria_id'])){
+			if(!issetor($input['criteria_id'])){
+				return FALSE;
+			}
+			$update['$set']['criteria_id'] = (int) $input['criteria_id'];
+		}
+		if(isset($input['start_timestamp']) && isset($input['end_timestamp'])){
+			if($input['end_timestamp'] < time() || ($input['start_timestamp'] > $input['end_timestamp'])){
+				return FALSE;
+			}
+			$update['$set']['start_timestamp'] = $input['start_timestamp'];
+			$update['$set']['end_timestamp'] = $input['end_timestamp'];
 		}
 		if(isset($input['type'])){
 			$type = $input['type'];
@@ -176,9 +197,6 @@
 				$update['$unset'] = array('random' => 1, 'redeem' => 1);
 			}
 		}
-		if(isset($input['reward_id'])){
-			$update['$set']['reward_id'] = $input['reward_id'];
-		}
 		try	{
 			return $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
 				$update, array('safe' => TRUE));
@@ -205,35 +223,6 @@
                   array('$atomic' => TRUE, 'safe' => TRUE));
             if($result['n'] != 0 || $result['err']){
             	return TRUE;
-            } else {
-            	return FALSE;
-            }
-		} catch(MongoCursorException $e){
-			log_message('error', 'Mongo error : '. $e);
-			return FALSE;
-		}
-    } else {
-      return FALSE;
-    }
-  }
-
-  /**
-   * Remove all reward item in a reward
-   * @param reward_id
-   * 
-   * @return result items removed
-   * 
-   * @author Metwara Narksook
-   */
-  function remove_by_reward_id($reward_id = NULL){
-    $check_args = isset($reward_id);
-    if($check_args){
-    	try	{
-			$result = $this->reward_item
-                  ->remove(array('reward_id' => $reward_id), 
-                  array('safe' => TRUE));
-            if($result['n'] != 0 || $result['err']){
-            	return $result['n'];
             } else {
             	return FALSE;
             }
