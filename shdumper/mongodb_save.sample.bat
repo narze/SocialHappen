@@ -17,6 +17,7 @@ mongodump --db get_started --out mongodb_dump
 mongodump --db invite --out mongodb_dump 
 mongodump --db message --out mongodb_dump 
 mongodump --db stat --out mongodb_dump
+mongodump --db socialhappen --out mongodb_dump
 echo Dump file saved
 GOTO END
 

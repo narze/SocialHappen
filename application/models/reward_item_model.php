@@ -123,7 +123,7 @@
 		if(!in_array($input['criteria_type'], array('page', 'app', 'campaign'))){
 			return FALSE;
 		}
-		if($input['start_timestamp'] > $input['end_timestamp'] || $input['start_timestamp'] < time()){
+		if($input['start_timestamp'] > $input['end_timestamp'] || $input['end_timestamp'] < time()){
 			return FALSE;
 		}
 		if($input_type === 'redeem'){
@@ -189,12 +189,18 @@
 			$type = $input['type'];
 			$update['$set'][$type] = array();
 			if($type === 'redeem'){
-				if(!isset($input[$type]['point']) || !isset($input[$type]['amount']) || !isset($input[$type]['amount_remain'])){
+				if(!isset($input[$type]['point']) || !isset($input[$type]['amount'])){
 					return FALSE;
 				}
-				$update['$set'][$type]['point'] = $input[$type]['point'];
-				$update['$set'][$type]['amount'] = $input[$type]['amount'];
-				$update['$set'][$type]['amount_remain'] = $input[$type]['amount_remain'];
+				if(isset($input[$type]['point'])){
+					$update['$set'][$type]['point'] = $input[$type]['point'];
+				}
+				if(isset($input[$type]['amount'])){
+					$update['$set'][$type]['amount'] = $input[$type]['amount'];
+				}
+				if(isset($input[$type]['amount_remain'])){
+					$update['$set'][$type]['amount_remain'] = $input[$type]['amount_remain'];
+				}
 				$update['$unset'] = array('random' => 1, 'top_score' => 1);
 			} else if ($type === 'random'){
 				if(!isset($input['random']['amount'])){

@@ -52,6 +52,109 @@ class Page_reward extends CI_Controller {
 			$this->load->view('settings/page_apps/reward');
 		}
 	}
+
+	function add_item($page_id = NULL, $update = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			$return = array(
+				'success' => FALSE,
+				'error' => 'You are not admin'
+			);
+			echo json_encode($return);
+		} else {
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('point', 'Point', 'required|trim|xss_clean|is_numeric|max_length[10]');			
+			$this->form_validation->set_rules('amount', 'Amount', 'required|trim|xss_clean|is_numeric|max_length[10]');
+			$this->form_validation->set_rules('name', 'Name', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('start_date', 'Start date', 'required|trim|xss_clean|max_length[20]');			
+			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');			
+			$this->form_validation->set_rules('status', 'Status', 'required|trim|xss_clean|max_length[10]');			
+			// $this->form_validation->set_rules('type', 'Type', 'required|trim|xss_clean|max_length[10]');
+				
+			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+		
+			$this->load->vars(array(
+				'page_id' => $page_id
+			));
+			if ($this->form_validation->run() == FALSE)
+			{	
+				if($update){
+					if($this->input->post('reward_item_id')){
+						$reward_item_id = $this->input->post('reward_item_id');
+					}
+					if($this->input->get('reward_item_id')){
+						$reward_item_id = $this->input->get('reward_item_id');
+					}
+					$this->load->model('reward_item_model');
+					$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
+					$reward_item['start_date'] = date('Y-m-d', $reward_item['start_timestamp']);
+					$reward_item['end_date'] = date('Y-m-d', $reward_item['end_timestamp']);
+					$this->load->vars(array(
+						'reward_item' => $reward_item,
+						'reward_item_id' => $reward_item_id,
+						'update' => TRUE
+					));
+				}
+				$this->load->view('settings/page_apps/reward_item_form');
+			}
+			else
+			{
+				$this->load->model('reward_item_model');
+				$input = array(
+			       	'name' => set_value('name'),
+			       	'start_timestamp' => strtotime(set_value('start_date')),
+			       	'end_timestamp' => strtotime(set_value('end_date')),
+			       	'status' => set_value('status'),
+			       	'type' => 'redeem', //set_value('type'),
+			       	'criteria_type' => 'page',
+			       	'criteria_id' => $page_id,
+			       	'redeem' => array(
+				       	'point' => set_value('point'),
+					    'amount' => set_value('amount')
+				    )
+				);
+				if($update){
+					$reward_item_id = $this->input->post('reward_item_id');
+					$update_result = $this->reward_item_model->update($reward_item_id, $input);
+				} else {		
+					$reward_item_id = $this->reward_item_model->add($input);
+				}
+			
+				if ($reward_item_id)
+				{
+					if($update){
+						//update success
+					}
+					$this->load->vars(array('reward_item'=>$input, 'reward_item_id'=>$reward_item_id));
+					$this->load->view('settings/page_apps/reward_item');
+				}
+				else
+				{
+					echo 'An error occurred saving your information. Please try again later';
+				}
+			}
+		}
+	}
+
+	function remove_item($page_id = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			$return = array(
+				'success' => FALSE,
+				'error' => 'You are not admin'
+			);
+		} else {
+			$reward_item_id = $this->input->get('reward_item_id');
+			$this->load->model('reward_item_model');
+			$result = $this->reward_item_model->remove($reward_item_id);
+			$return = array(
+				'success' => $result
+			);
+		}
+		echo json_encode($return);
+	}
+
+	function update_item($page_id = NULL){
+		$this->add_item($page_id, TRUE);
+	}
 }
 /* End of file page_reward.php */
 /* Location: ./application/controllers/settings/page_reward.php */
