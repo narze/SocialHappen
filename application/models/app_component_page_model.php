@@ -20,6 +20,9 @@
  *        "invite_accepted" => 50,
  *        "achievement_id" => "4ec7507b6803fac216000011" 
  *      )
+ *    ),
+ *    'reward' => array(
+ *      'terms_and_conditions' => [text]
  *    )
  *  )
  * @author Metwara Narksook
@@ -34,7 +37,7 @@ class App_component_page_model extends CI_Model {
     parent::__construct();
     $this->load->helper('mongodb');
     $this->app_component_page = sh_mongodb_load( array(
-      'database' => 'campaign',
+      'database' => 'socialhappen',
       'collection' => 'app_component_page'
     ));
   }
@@ -182,6 +185,36 @@ class App_component_page_model extends CI_Model {
     }else{
       return FALSE;
     }
+  }
+
+  /** 
+   * Update
+   * @param $page_id
+   * @author Manassarn M.
+   */
+  function _update($page_id = NULL, $input = NULL){
+    if(!$page_id || !$input){
+      return FALSE;
+    }
+    try {
+      return $this->app_component_page->update(array('page_id'=> (int) $page_id),
+        $input, array('safe'=>TRUE));
+
+    } catch(MongoCursorException $e){
+      log_message('error', 'Mongo error : '. $e);
+      return FALSE;
+    }
+  }
+
+  /**
+   * Set page reward terms & conditions
+   * @param $page_id
+   * @param $terms_and_conditions
+   * @author Manassarn M.
+   */
+  function set_terms_and_conditions($page_id = NULL, $terms_and_conditions = NULL){
+    $input = array('$set' => array('reward'=>array('terms_and_conditions' => $terms_and_conditions)));
+    return $this->_update($page_id, $input);
   }
 }
 

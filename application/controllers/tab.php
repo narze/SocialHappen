@@ -848,6 +848,56 @@ class Tab extends CI_Controller {
 			}
 		}
 	}
+
+	function redeem_list($page_id = NULL){
+		$user_facebook_id = $this->FB->getUser();
+		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+		$redeem_item_list = $this->tab_ctrl->redeem_list($page_id);
+		echo "Your page score is ".$page_score;
+		foreach($redeem_item_list as $redeem_item){
+			$this->load->view('tab/redeem_reward_item', array(
+				'page_id' => $page_id,
+				'page_score' => $page_score,
+				'reward_item' => $redeem_item,
+				'redeem_button' => ($page_score >= $redeem_item['redeem']['point']) 
+					? TRUE : FALSE
+			));
+		}
+	}
+
+	function redeem_reward($page_id = NULL, $reward_item_id = NULL){		
+		$user_facebook_id = $this->FB->getUser();
+		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+
+		$this->load->model('reward_item_model');
+		$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
+
+		$this->load->library('app_component_lib');
+		$page_component = $this->app_component_lib->get_page($page_id);
+		$terms_and_conditions = $page_component['reward']['terms_and_conditions'];
+
+		$this->load->vars(array(
+			'page_id' => $page_id,
+			'reward_item_id' => $reward_item_id,
+			'reward_item' => $reward_item,
+			'page_score' => $page_score,
+			'reward_item_point' => $reward_item['redeem']['point'],
+			'reward_item_point_remain' =>  $page_score - $reward_item['redeem']['point'],
+			'terms_and_conditions' => $terms_and_conditions
+		));
+		$this->load->view('tab/redeem_reward');
+	}
+
+	function redeem_reward_confirm($page_id = NULL, $reward_item_id = NULL){
+		$user_facebook_id = $this->FB->getUser();
+		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		
+		$this->load->vars(array(
+			'success' => $result
+		));
+		$this->load->view('tab/redeem_reward_confirm');
+	}
 }
 /* End of file tab.php */
 /* Location: ./application/controllers/tab.php */

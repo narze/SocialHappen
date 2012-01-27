@@ -229,8 +229,89 @@ $(function(){
 		}
 	}
 
-	function timezone(){
+	function reward(){
+		$('body').off()
+			.on('click','.add-reward-item',add_reward)
+			.on('click','.remove-reward-item',remove_reward)
+			.on('click','.edit-reward-item',edit_reward);
+		function add_reward(){
+			if($('.reward-item-add-form').length > 0) {
+				return false;
+			}
+			$.get(base_url+'settings/page_reward/add_item/'+page_id, function(data){
+				var form_div = $(data).prependTo('.reward-item-list').removeClass('reward-item-template')
+				.addClass('reward-item-add-form');
+				// var form = 
+				form_events();
+				function form_events(){
+					$('.start-date, .end-date').datepicker({
+						dateFormat: "yy-mm-dd"});
+					form_div.find('form').submit(function(){
+						$(this).ajaxSubmit({
+							target:'.reward-item-add-form form',
+							replaceTarget:true,
+							success: form_events
+						});
+						return false;
+					});
+				}
+			});
+			
 
+
+		}
+
+		function edit_reward(){
+			var item = $(this).parent('.reward-item');
+			var item_id = item.data('itemId');
+			$.get(base_url+'settings/page_reward/update_item/'+page_id, 
+				{
+					reward_item_id: item_id
+				},
+				function(data){
+					var form_div = $(data).insertBefore(item).removeClass('reward-item-template')
+					.addClass('reward-item-edit-form');
+					var cancel = $('<a class="cancel">Cancel</a>').appendTo(form_div).bind('click', cancel);
+					item.hide();
+					// var form = 
+					form_events();
+					function form_events(){
+						if(form_div.find('form').length == 0){
+							cancel.remove();
+							return false;
+						}
+						$('.start-date, .end-date').datepicker({
+							dateFormat: "yy-mm-dd"});
+						form_div.find('form').submit(function(){
+							$(this).ajaxSubmit({
+								target:'.reward-item-edit-form form',
+								replaceTarget:true,
+								success: form_events
+							});
+							return false;
+						});
+					}
+					function cancel(){
+						form_div.remove();
+						item.show();
+					}	
+				}
+			);	
+		}
+
+		function remove_reward(){
+			var item = $(this).parent('.reward-item');
+			var item_id = item.data('itemId');
+			$.getJSON(
+				base_url+'settings/page_reward/remove_item/'+page_id,
+				{reward_item_id : item_id},
+				function(data){
+					if(data.success==true){
+						item.remove();
+					}
+				}
+			);
+		}
 	}
 
 	function badges(){
@@ -247,8 +328,8 @@ $(function(){
 			$('div#main').load(url,function(){
 				if( element.attr('id') == 'signup-fields'){
 					signup_fields();
-				} else if (element.attr('id') == 'timezone'){
-					timezone();
+				} else if (element.attr('id') == 'reward'){
+					reward();
 				} else if (element.attr('id') == 'badges'){
 					badges();
 				}
@@ -288,8 +369,8 @@ $(function(){
 		$('ul.platform-apps li a#signup-fields').click();
 	} else if(config_name == 'badges'){
 		$('ul.platform-apps li a#badges').click();
-	} else if(config_name == 'timezone'){
-		$('ul.platform-apps li a#timezone').click();
+	} else if(config_name == 'reward'){
+		$('ul.platform-apps li a#reward').click();
 	} else if(config_name == 'user_class'){
 		$('ul.platform-apps li a#user_class').click();
 	} else if(config_name == 'app'){

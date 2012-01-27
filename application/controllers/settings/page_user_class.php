@@ -42,7 +42,7 @@ class Page_user_class extends CI_Controller {
 			
 		
 			if ($this->form_validation->run() == FALSE){
-				$this->load->vars(array('test'=>print_r($page_user_class,true)));
+				//$this->load->vars(array('test'=>print_r($page_user_class,true)));
 			} else {
 				//$enable = set_value('enable') == 1;
 				$achievement_ids = $this->input->post('aid');

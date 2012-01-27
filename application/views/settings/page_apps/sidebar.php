@@ -6,6 +6,7 @@
 				<li><a id="signup-fields" href="<?php echo base_url()."settings/page_signup_fields/view/{$page['page_id']}";?>"><b>Signup Form</b></a></li>
 				<li><a id="user_class" href="<?php echo base_url()."settings/page_user_class/view/{$page['page_id']}";?>"><b>User Class</b></a></li>
 				<li><a id="badges" href="<?php echo base_url()."settings/page_badges/view/{$page['page_id']}";?>"><b>Badges</b></a></li>
+				<li><a id="reward" href="<?php echo base_url()."settings/page_reward/view/{$page['page_id']}";?>"><b>Reward</b></a></li>
 			</ul>
 			</li>
 			<li>Page apps

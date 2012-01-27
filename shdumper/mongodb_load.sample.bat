@@ -25,6 +25,8 @@ mongo --eval "connect('localhost/message').dropDatabase();"
 mongorestore --db message --drop mongodb_dump/message
 mongo --eval "connect('localhost/stat').dropDatabase();"
 mongorestore --db stat --drop mongodb_dump/stat
+mongo --eval "connect('localhost/socialhappen').dropDatabase();"
+mongorestore --db socialhappen --drop mongodb_dump/socialhappen
 echo Dump file loaded
 GOTO END
 
