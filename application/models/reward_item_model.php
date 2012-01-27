@@ -5,6 +5,8 @@
  *   {
  *  	name : <item name>,
  *  	status : <draft/published/cancelled>,
+ *		criteria_type : <page/app/campaign>,
+ * 		criteria_id : <page_id/app_install_id/campaign_id>,
  *  	type : <redeem OR random OR top_score>,
  *		start_timestamp : <timestamp to show this item>,
  *		end_timestamp : <item's expiry date>,
@@ -52,7 +54,7 @@
 	 * @author Manassarn M.
 	 */
 	function create_index(){
-		return $this->reward_item->ensureIndex(array('reward'=>1));
+		return $this->reward_item->ensureIndex(array('criteria_type'=>1, 'criteria_id'=>1));
 	}
 	
 	/**
@@ -217,9 +219,20 @@
 				$update['$unset'] = array('random' => 1, 'redeem' => 1);
 			}
 		}
+		if(isset($input['user'])){
+			$update['$push']['user_list'] = $input['user'];
+		}
+		if(!$update['$set']){
+			unset($update['$set']);
+		}
 		try	{
-			return $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
-				$update, array('safe' => TRUE));
+			$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
+			$update, array('safe' => TRUE));
+			if($result['n'] != 0 || $result['err']){
+            	return TRUE;
+            } else {
+            	return FALSE;
+            }
 		} catch(MongoCursorException $e){
 			log_message('error', 'Mongo error : '. $e);
 			return FALSE;

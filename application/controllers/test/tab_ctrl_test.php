@@ -441,6 +441,145 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result['data'][6]['app_score'] === FALSE,TRUE, "\$result['data'][6]['app_score']", $result['data'][6]['app_score']);	
 	}
 
+	function _add_reward_test(){
+		define('name', "Foot massage ");
+		$this->load->model('reward_item_model','reward_item');
+		$name = name . '1';
+		$status = 'published';
+		$type = 'redeem';
+		$redeem = array(
+			'point' => 20,
+			'amount' => 3
+		);
+		$start_timestamp = time() + 3600;
+		$end_timestamp = time() + 7200;
+		$criteria_type = 'page';
+		$criteria_id = 1;
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		
+		$this->reward_item_1 = $result = $this->reward_item->add($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 1, 'count', $count);
+		
+		$name = name . '2';
+		$status = 'published';
+		$type = 'redeem';
+		$redeem = array(
+			'point' => 20,
+			'amount' => 5
+		);
+		$start_timestamp = time() + 3600;
+		$end_timestamp = time() + 7200;
+		$criteria_type = 'page';
+		$criteria_id = '1';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		
+		$this->reward_item_2 = $result = $this->reward_item->add($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 2, 'count', $count);
+		
+		$name = name . '3';
+		$status = 'cancelled';
+		$type = 'top_score';
+		$top_score = array(
+			'first_place' => 1,
+			'last_place' => 4
+		);
+		$start_timestamp = time() + 3600;
+		$end_timestamp = time() + 7200;
+		$criteria_type = 'page';
+		$criteria_id = '1';
+		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		
+		$this->reward_item_3 = $result = $this->reward_item->add($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 3, 'count', $count);
+		
+		$name = name . '4';
+		$status = 'draft';
+		$type = 'redeem';
+		$redeem = array(
+			'point' => 20,
+			'amount' => 5
+		);
+		$start_timestamp = time() + 3600;
+		$end_timestamp = time() + 7200;
+		$criteria_type = 'page';
+		$criteria_id = '1';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		
+		$this->reward_item_4 = $result = $this->reward_item->add($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 4, 'count', $count);
+		
+		$name = name . '5';
+		$status = 'cancelled';
+		$type = 'redeem';
+		$redeem = array(
+			'point' => 20,
+			'amount' => 5
+		);
+		$start_timestamp = time() + 3600;
+		$end_timestamp = time() + 7200;
+		$criteria_type = 'page';
+		$criteria_id = '1';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		
+		$this->reward_item_5 = $result = $this->reward_item->add($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 5, 'count', $count);
+	}
+
+	function redeem_list_test(){
+		$page_id = Page_id;
+		$result = $this->tab_ctrl->redeem_list($page_id);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run(count($result), 2, "\$result", count($result)); //redeem only
+		$this->unit->run($result[0]['name'], name.'1', "\$result[0]['name']", $result[0]['name']);
+		$this->unit->run($result[1]['name'], name.'2', "\$result[1]['name']", $result[1]['name']);
+	}
+
+	function redeem_reward_confirm_test(){
+		$page_id = Page_id;
+		$reward_item_id = $this->reward_item_1;
+		$user_facebook_id = User_facebook_id;
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$this->unit->run($result, TRUE, "\$result", $result); //100-20
+
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$this->unit->run($result, TRUE, "\$result", $result); //80-20
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$this->unit->run($result, TRUE, "\$result", $result); //60-20
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$this->unit->run($result, FALSE, "\$result", $result); //no amount left
+		log_message('error',print_r($result, true));
+		$reward_item_id = $this->reward_item_2;
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$this->unit->run($result, TRUE, "\$result", $result); //40-20
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$this->unit->run($result, TRUE, "\$result", $result); //20-20
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$this->unit->run($result, FALSE, "\$result", $result); //no point left
+
+	}
+
+	function _get_by_reward_item_id_test(){
+		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run($result['user_list'], 'is_array', "\$result['user_list']", $result['user_list']);
+		$this->unit->run(count($result['user_list']), 3, "count(\$result['user_list'])",($result['user_list']));
+		$this->unit->run($result['redeem']['amount_remain'], 0, "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']);
+	}
 }
 
 /* End of file tab_ctrl_test.php */

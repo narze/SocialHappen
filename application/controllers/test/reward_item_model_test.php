@@ -257,7 +257,8 @@ class Reward_item_model_test extends CI_Controller {
 			'start_timestamp' => time()-3600,
 			'end_timestamp' => time()+3600,
 			'criteria_type' => 'campaign',
-			'criteria_id' => '2'
+			'criteria_id' => '2',
+			'user' => array('user_id'=>1,'user_facebook_id'=>1234,'user_image'=>'test','user_name'=>'UserName')
 		);
 		$result = $this->reward_item->update($this->reward_item_1, $input);
 		$this->unit->run($result, TRUE, "\$result", $result);
@@ -272,6 +273,7 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result['end_timestamp'], time() + 3600, "\$result['end_timestamp']", $result['end_timestamp']);
 		$this->unit->run($result['criteria_type'], 'campaign', "\$result['criteria_type']", $result['criteria_type']);
 		$this->unit->run($result['criteria_id']===2, TRUE, "\$result['criteria_id']", $result['criteria_id']);
+		$this->unit->run($result['user_list'][0]['user_id'], 1, "\$result['user_list'][0]['user_id']", $result['user_list'][0]['user_id']);
 
 
 		//FAIL tests
