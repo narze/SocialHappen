@@ -75,12 +75,15 @@ class XD extends CI_Controller {
 		$user = $this->User->get_user_profile_by_user_id($user_id);
 		// $user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		if(!$page) {
+			return;
+		}
 
 		$menu = array();
 		//Right menu			
 		//@TODO : This has problems with multiple login, cannot use user_agent to check due to blank user_agent when called via api
 		if($view_as === 'guest'){ 
-			$facebook_page = $this->facebook->get_page_info($page['facebook_page_id']);
+			$facebook_page = $this->facebook->get_page_info(issetor($page['facebook_page_id']));
 			
 			$signup_link = $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id');
 		} else if($view_as === 'admin' && $this->user_pages->is_page_admin($user['user_id'], $page_id)){			
@@ -129,8 +132,8 @@ class XD extends CI_Controller {
 			'menu' => $menu,
 			'user' => $user,
 			'current_menu' => array(
-				'icon_url' => $app_mode ? $app['app_image'] : $page['page_image'],
-				'name' => $app_mode ? $app['app_name'] : $page['page_name']
+				'icon_url' => $app_mode ? issetor($app['app_image']) : issetor($page['page_image']),
+				'name' => $app_mode ? issetor($app['app_name']) : issetor($page['page_name'])
 			),
 			'signup_link' =>issetor($signup_link, '#'),
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
