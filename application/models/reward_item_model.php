@@ -111,7 +111,7 @@
 	 * @author Manasssarn M.
 	 */
 	function add($input = array()){
-		if(!issetor($input['name']) || !issetor($input['type']) || !issetor($input['start_timestamp']) || !issetor($input['end_timestamp'])|| !issetor($input['criteria_type']) || !issetor($input['criteria_id'])){
+		if(!issetor($input['name']) || !issetor($input['type']) || !issetor($input['start_timestamp']) || !issetor($input['end_timestamp'])|| !issetor($input['criteria_type']) || !issetor($input['criteria_id']) || !issetor($input['image'])){
 			return FALSE;
 		}
 		$input_type = $input['type'];
@@ -175,7 +175,7 @@
 			$update['$set']['criteria_type'] = $input['criteria_type'];
 		}
 		if(isset($input['criteria_id'])){
-			if(!issetor($input['criteria_id'])){
+			if(!$input['criteria_id']){
 				return FALSE;
 			}
 			$update['$set']['criteria_id'] = (int) $input['criteria_id'];
@@ -221,6 +221,12 @@
 		}
 		if(isset($input['user'])){
 			$update['$push']['user_list'] = $input['user'];
+		}
+		if(isset($input['image'])){
+			if(!$input['image']){
+				return FALSE;
+			}
+			$update['$set']['image'] = $input['image'];
 		}
 		if(!$update['$set']){
 			unset($update['$set']);

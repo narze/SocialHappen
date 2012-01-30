@@ -455,7 +455,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/logo.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$this->reward_item_1 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -474,7 +475,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = '1';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/logo.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$this->reward_item_2 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -493,7 +495,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = '1';
-		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/logo.png';
+		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$this->reward_item_3 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -512,7 +515,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = '1';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/logo.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$this->reward_item_4 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -531,7 +535,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = '1';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/logo.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$this->reward_item_5 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);

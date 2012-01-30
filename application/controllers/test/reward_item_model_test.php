@@ -45,7 +45,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$this->reward_item_1 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -63,7 +64,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'app';
 		$criteria_id = '2';
-		$input = compact('name', 'status', 'type', 'random', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'random', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$this->reward_item_2 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -82,7 +84,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'campaign';
 		$criteria_id = '3';
-		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$this->reward_item_3 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -103,7 +106,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //type mismatch with data
@@ -119,7 +123,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //first_place < 1
@@ -135,7 +140,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //first_place < last_place
@@ -151,7 +157,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 1000;
 		$criteria_type = 'page';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //start_timestamp > end_timestamp
@@ -167,7 +174,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() - 1;
 		$criteria_type = 'page';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //end_timestamp < time()
@@ -183,7 +191,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); // bad status
@@ -199,7 +208,8 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'badtype';
 		$criteria_id = 1;
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); // bad criteria_type
@@ -215,10 +225,31 @@ class Reward_item_model_test extends CI_Controller {
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'page';
 		$criteria_id = NULL;
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id');
+		$image = base_url().'assets/images/cam-icon.png';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); // bad criteria_id
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 3, 'count', $count);
+
+		$name = name . '1';
+		$status = 'draft';
+		$type = redeem;
+		$redeem = array(
+			'point' => 20,
+			'amount' => 5
+		);
+		$start_timestamp = time() + 3600;
+		$end_timestamp = time() + 7200;
+		$criteria_type = 'page';
+		$criteria_id = 1;
+		$image = NULL;
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
+		
+		$result = $this->reward_item->add($input);
+		$this->unit->run($result, FALSE, "\$result", $result); // bad image
 
 		$count = $this->reward_item->count_all();
 		$this->unit->run($count, 3, 'count', $count);
@@ -235,6 +266,7 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result['criteria_type'], 'page', "\$result['criteria_type']", $result['criteria_type']);
 		$this->unit->run($result['criteria_id']===1, TRUE, "\$result['criteria_id']", $result['criteria_id']);
 		$this->unit->run(isset($result['reward_id']), FALSE, "\$result['reward_id']", isset($result['reward_id']));
+		$this->unit->run($result['image'], base_url().'assets/images/cam-icon.png', "\$result['image']", $result['image']);
 
 		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_2);
 		$this->unit->run($result, 'is_array', "\$result", $result);
@@ -258,7 +290,8 @@ class Reward_item_model_test extends CI_Controller {
 			'end_timestamp' => time()+3600,
 			'criteria_type' => 'campaign',
 			'criteria_id' => '2',
-			'user' => array('user_id'=>1,'user_facebook_id'=>1234,'user_image'=>'test','user_name'=>'UserName')
+			'user' => array('user_id'=>1,'user_facebook_id'=>1234,'user_image'=>'test','user_name'=>'UserName'),
+			'image' => base_url().'assets/images/logo.png'
 		);
 		$result = $this->reward_item->update($this->reward_item_1, $input);
 		$this->unit->run($result, TRUE, "\$result", $result);
@@ -274,6 +307,7 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result['criteria_type'], 'campaign', "\$result['criteria_type']", $result['criteria_type']);
 		$this->unit->run($result['criteria_id']===2, TRUE, "\$result['criteria_id']", $result['criteria_id']);
 		$this->unit->run($result['user_list'][0]['user_id'], 1, "\$result['user_list'][0]['user_id']", $result['user_list'][0]['user_id']);
+		$this->unit->run($result['image'], base_url().'assets/images/logo.png', "\$result['image']", $result['image']);
 
 
 		//FAIL tests

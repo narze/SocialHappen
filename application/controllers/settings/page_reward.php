@@ -24,7 +24,7 @@ class Page_reward extends CI_Controller {
 			$page = $this->page->get_page_profile_by_page_id($page_id);
 			$page_component = $this->app_component_lib->get_page($page_id);
 			log_message('error', print_r($page_component, true));
-			$terms_and_conditions = $page_component['reward']['terms_and_conditions'];
+			$terms_and_conditions = issetor($page_component['reward']['terms_and_conditions']);
 			$this->load->model('reward_item_model', 'reward_item');
 			$criteria = array(
 				'criteria_type' => 'page',
@@ -69,6 +69,8 @@ class Page_reward extends CI_Controller {
 			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');			
 			$this->form_validation->set_rules('status', 'Status', 'required|trim|xss_clean|max_length[10]');			
 			// $this->form_validation->set_rules('type', 'Type', 'required|trim|xss_clean|max_length[10]');
+
+			$this->form_validation->set_rules('image', 'Image', 'required|trim|xss_clean|max_length[255]');
 				
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
@@ -110,7 +112,8 @@ class Page_reward extends CI_Controller {
 			       	'redeem' => array(
 				       	'point' => set_value('point'),
 					    'amount' => set_value('amount')
-				    )
+				    ),
+				    'image' => set_value('image')
 				);
 				if($update){
 					$reward_item_id = $this->input->post('reward_item_id');

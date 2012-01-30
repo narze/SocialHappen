@@ -16,6 +16,12 @@
 		</p>
 
 		<p>
+		        <label for="name">Image <span class="required">*</span></label>
+		        <?php echo form_error('name'); ?>
+		        <br /><input class="image" type="text" name="image" maxlength="255" value="<?php echo set_value('image', issetor($reward_item['image'])); ?>"  />
+		</p>
+
+		<p>
 		        <label for="start_date">Start date <span class="required">*</span></label>
 		        <?php echo form_error('start_date'); ?>
 		        <br /><input class="start-date" type="text" name="start_date" maxlength="20" value="<?php echo set_value('start_date', issetor($reward_item['start_date'])); ?>"  />

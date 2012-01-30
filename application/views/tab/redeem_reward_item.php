@@ -2,6 +2,7 @@
 	$id = $reward_item['_id']; $reward_item_id = $id->{'$id'};
 }?>
 <div class="reward-item" data-item-id="<?php echo $reward_item_id;?>">
+	<div><img src="<?php echo $reward_item['image'];?>" /></div>
 	<div>Name : <span><?php echo $reward_item['name']?></span></div>
 	<div>Status : <span><?php echo $reward_item['status']?></span></div>
 	<div>Point required : <span><?php echo $reward_item['redeem']['point']?></span></div>
