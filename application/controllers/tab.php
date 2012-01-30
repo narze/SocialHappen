@@ -861,7 +861,7 @@ class Tab extends CI_Controller {
 	function redeem_list($page_id = NULL){
 		$user_facebook_id = $this->FB->getUser();
 		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
-		$redeem_item_list = $this->tab_ctrl->redeem_list($page_id);
+		$redeem_item_list = $this->tab_ctrl->redeem_list($page_id, $user_facebook_id);
 		echo "Your page score is ".$page_score;
 		foreach($redeem_item_list as $redeem_item){
 			$this->load->view('tab/redeem_reward_item', array(

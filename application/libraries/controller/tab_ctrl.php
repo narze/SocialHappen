@@ -445,7 +445,7 @@ class Tab_ctrl {
 	    return $result;
     }
 
-    function redeem_list($page_id = NULL){
+    function redeem_list($page_id = NULL, $user_facebook_id = NULL){
     	$this->CI->load->model('reward_item_model');
     	$criteria = array(
 	    	'criteria_type' => 'page',
@@ -455,6 +455,9 @@ class Tab_ctrl {
 	    );
     	$reward_items = $this->CI->reward_item_model->get($criteria);
     	$now = time();
+
+    	$this->CI->load->model('user_model');
+    	$user = $this->CI->user_model->get_user_profile_by_user_facebook_id($user_facebook_id);
     	foreach($reward_items as &$reward_item){
     		$start_time = $reward_item['start_timestamp'];
     		$end_time = $reward_item['end_timestamp'];
@@ -462,12 +465,16 @@ class Tab_ctrl {
     			$reward_status = 'soon';
     		} else if ($now > $end_time){
     			$reward_status = 'expired';
-    		} else if (!issetor($reward_item['redeem']['amount_remain'])){
+    		} else if ($reward_item['redeem']['amount_remain'] == 0){
     			$reward_status = 'no_more';
     		} else {
     			$reward_status = 'active';
     		}
     		$reward_item['reward_status'] = $reward_status;
+
+	    	$this->CI->load->library('timezone_lib');
+    		$reward_item['start_timestamp_local'] = $this->CI->timezone_lib->convert_time(date('Y-m-d H:i:s',$reward_item['start_timestamp']), $user['user_timezone_offset']);
+    		$reward_item['end_timestamp_local'] = $this->CI->timezone_lib->convert_time(date('Y-m-d H:i:s',$reward_item['end_timestamp']), $user['user_timezone_offset']);
     	}
     	return $reward_items;
     }

@@ -309,9 +309,34 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result['user_list'][0]['user_id'], 1, "\$result['user_list'][0]['user_id']", $result['user_list'][0]['user_id']);
 		$this->unit->run($result['image'], base_url().'assets/images/logo.png', "\$result['image']", $result['image']);
 
+		$input = array(
+			'type' => redeem,
+			'redeem' => array(
+				'amount' => 10,
+				'point' => 30,
+				'amount_remain' => 9
+			)
+		);
+		$result = $this->reward_item->update($this->reward_item_1, $input);
+		$this->unit->run($result, TRUE, "\$result", $result);
+		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
+		$this->unit->run($result['redeem']['amount_remain'], 9, "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']); //redeem.amount_remain not specified -> use amount
+
+		$input = array(
+			'type' => redeem,
+			'redeem' => array(
+				'amount' => 5,
+				'point' => 30,
+				'amount_remain' => 9
+			)
+		);
+		$result = $this->reward_item->update($this->reward_item_1, $input);
+		$this->unit->run($result, TRUE, "\$result", $result);
+		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
+		$this->unit->run($result['redeem']['amount_remain'], 5, "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']); //redeem.amount_remain > amount -> set to amount
 
 		//FAIL tests
-		$input['type'] = redeem; //no redeem options specified
+		$input['type'] = top_score; //no top_score options specified
 		$result = $this->reward_item->update($this->reward_item_1, $input);
 		$this->unit->run($result, FALSE, "\$result", $result);
 	}

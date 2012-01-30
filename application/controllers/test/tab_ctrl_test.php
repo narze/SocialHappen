@@ -562,8 +562,9 @@ class Tab_ctrl_test extends CI_Controller {
 	}
 
 	function redeem_list_test(){
+		$user_facebook_id = User_facebook_id;
 		$page_id = Page_id;
-		$result = $this->tab_ctrl->redeem_list($page_id);
+		$result = $this->tab_ctrl->redeem_list($page_id, $user_facebook_id);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run(count($result), 3, "\$result", count($result)); //redeem only
 		$this->unit->run($result[0]['name'], name.'1', "\$result[0]['name']", $result[0]['name']);
@@ -572,6 +573,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result[0]['reward_status'], 'soon', "\$result[0]['reward_status']", $result[0]['reward_status']);
 		$this->unit->run($result[1]['reward_status'], 'expired', "\$result[1]['reward_status']", $result[1]['reward_status']);
 		$this->unit->run($result[2]['reward_status'], 'active', "\$result[2]['reward_status']", $result[2]['reward_status']);
+		$this->unit->run($result[0]['start_timestamp_local'], date('Y-m-d H:i:s', time() + 3600 + 420*60), "\$result[0]['start_timestamp_local']", $result[0]['start_timestamp_local']);
+		$this->unit->run($result[0]['end_timestamp_local'], date('Y-m-d H:i:s', time() + 7200 + 420*60), "\$result[0]['end_timestamp_local']", $result[0]['end_timestamp_local']); echo date('Y-m-d H:i:s', time() + 7200 + 420*60);
 	}
 
 	function _update_reward_2_test(){
@@ -599,8 +602,9 @@ class Tab_ctrl_test extends CI_Controller {
 	}
 
 	function redeem_list_2_test(){
+		$user_facebook_id = User_facebook_id;
 		$page_id = Page_id;
-		$result = $this->tab_ctrl->redeem_list($page_id);
+		$result = $this->tab_ctrl->redeem_list($page_id, $user_facebook_id);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run(count($result), 3, "\$result", count($result)); //redeem only
 		$this->unit->run($result[0]['name'], name.'1', "\$result[0]['name']", $result[0]['name']);

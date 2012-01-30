@@ -926,6 +926,7 @@ class DB_Sync {
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
 					    'user_twitter_access_token_secret' => '',
+					    'user_timezone_offset' => 420,
 					    'user_is_developer' => 1
 						),
 					array(
@@ -940,6 +941,7 @@ class DB_Sync {
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
 					    'user_twitter_access_token_secret' => '',
+					    'user_timezone_offset' => 420,
 					    'user_is_developer' => 1
 					),
 					array(
@@ -954,6 +956,7 @@ class DB_Sync {
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
 					    'user_twitter_access_token_secret' => '',
+					    'user_timezone_offset' => 420,
 					    'user_is_developer' => 1
 					),
 					array(
@@ -968,6 +971,7 @@ class DB_Sync {
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
 					    'user_twitter_access_token_secret' => '',
+					    'user_timezone_offset' => 420,
 					    'user_is_developer' => 1
 					),
 					array(
@@ -982,6 +986,7 @@ class DB_Sync {
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
 					    'user_twitter_access_token_secret' => '',
+					    'user_timezone_offset' => 420,
 					    'user_is_developer' => 1
 					),
 					array(
@@ -996,6 +1001,7 @@ class DB_Sync {
 					    'user_twitter_name' => '',
 					    'user_twitter_access_token' => '',
 					    'user_twitter_access_token_secret' => '',
+					    'user_timezone_offset' => 420,
 					    'user_is_developer' => 1
 					)
 				);

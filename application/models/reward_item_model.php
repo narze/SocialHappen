@@ -191,18 +191,15 @@
 			$type = $input['type'];
 			$update['$set'][$type] = array();
 			if($type === 'redeem'){
-				if(!isset($input[$type]['point']) || !isset($input[$type]['amount'])){
+				if(!isset($input[$type]['point']) || !isset($input[$type]['amount']) || !isset($input[$type]['amount_remain'])){
 					return FALSE;
 				}
 				$update['$set'][$type]['point'] = $input[$type]['point'];
 				$update['$set'][$type]['amount'] = $input[$type]['amount'];
-				
-				if(isset($input[$type]['amount_remain'])){
-					if($input[$type]['amount_remain'] > $input[$type]['point']){
-						$input[$type]['amount_remain'] = $input[$type]['point'];
-					}
-					$update['$set'][$type]['amount_remain'] = $input[$type]['amount_remain'];
+				if($input[$type]['amount_remain'] > $input[$type]['amount']){
+					$input[$type]['amount_remain'] = $input[$type]['amount'];
 				}
+				$update['$set'][$type]['amount_remain'] = $input[$type]['amount_remain'];
 				$update['$unset'] = array('random' => 1, 'top_score' => 1);
 			} else if ($type === 'random'){
 				if(!isset($input['random']['amount'])){

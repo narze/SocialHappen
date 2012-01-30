@@ -77,19 +77,28 @@ class Page_reward extends CI_Controller {
 			$this->load->vars(array(
 				'page_id' => $page_id
 			));
+			if($update){
+				if($this->input->post('reward_item_id')){
+					$reward_item_id = $this->input->post('reward_item_id');
+				}
+				if($this->input->get('reward_item_id')){
+					$reward_item_id = $this->input->get('reward_item_id');
+				}
+				$this->load->model('reward_item_model');
+				$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
+			}
+
 			if ($this->form_validation->run() == FALSE)
 			{	
 				if($update){
-					if($this->input->post('reward_item_id')){
-						$reward_item_id = $this->input->post('reward_item_id');
-					}
-					if($this->input->get('reward_item_id')){
-						$reward_item_id = $this->input->get('reward_item_id');
-					}
-					$this->load->model('reward_item_model');
-					$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
-					$reward_item['start_date'] = date('Y-m-d', $reward_item['start_timestamp']);
-					$reward_item['end_date'] = date('Y-m-d', $reward_item['end_timestamp']);
+
+					$user = $this->socialhappen->get_user();
+					$this->load->library('timezone_lib');
+					$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $user['user_timezone_offset']);
+					$end_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $user['user_timezone_offset']);
+
+					$reward_item['start_date'] = $start_time;
+					$reward_item['end_date'] = $end_time;
 					$this->load->vars(array(
 						'reward_item' => $reward_item,
 						'reward_item_id' => $reward_item_id,
@@ -100,11 +109,17 @@ class Page_reward extends CI_Controller {
 			}
 			else
 			{
+				$user = $this->socialhappen->get_user();
+				$this->load->library('timezone_lib');
+				$start_timestamp = $this->timezone_lib->unconvert_time(set_value('start_date'), $user['user_timezone_offset']);
+				$end_timestamp = $this->timezone_lib->unconvert_time(set_value('end_date'), $user['user_timezone_offset']);
+	
+
 				$this->load->model('reward_item_model');
 				$input = array(
 			       	'name' => set_value('name'),
-			       	'start_timestamp' => strtotime(set_value('start_date')),
-			       	'end_timestamp' => strtotime(set_value('end_date')),
+			       	'start_timestamp' => strtotime($start_timestamp),
+			       	'end_timestamp' => strtotime($end_timestamp),
 			       	'status' => set_value('status'),
 			       	'type' => 'redeem', //set_value('type'),
 			       	'criteria_type' => 'page',
@@ -116,9 +131,10 @@ class Page_reward extends CI_Controller {
 				    'image' => set_value('image')
 				);
 				if($update){
+					$input['redeem']['amount_remain'] = issetor($reward_item['redeem']['amount_remain'], $reward_item['redeem']['amount']);
 					$reward_item_id = $this->input->post('reward_item_id');
 					$update_result = $this->reward_item_model->update($reward_item_id, $input);
-				} else {		
+				} else {
 					$reward_item_id = $this->reward_item_model->add($input);
 				}
 			
