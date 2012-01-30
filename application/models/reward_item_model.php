@@ -181,7 +181,7 @@
 			$update['$set']['criteria_id'] = (int) $input['criteria_id'];
 		}
 		if(isset($input['start_timestamp']) && isset($input['end_timestamp'])){
-			if($input['end_timestamp'] < time() || ($input['start_timestamp'] > $input['end_timestamp'])){
+			if($input['start_timestamp'] > $input['end_timestamp']){
 				return FALSE;
 			}
 			$update['$set']['start_timestamp'] = $input['start_timestamp'];
@@ -194,13 +194,13 @@
 				if(!isset($input[$type]['point']) || !isset($input[$type]['amount'])){
 					return FALSE;
 				}
-				if(isset($input[$type]['point'])){
-					$update['$set'][$type]['point'] = $input[$type]['point'];
-				}
-				if(isset($input[$type]['amount'])){
-					$update['$set'][$type]['amount'] = $input[$type]['amount'];
-				}
+				$update['$set'][$type]['point'] = $input[$type]['point'];
+				$update['$set'][$type]['amount'] = $input[$type]['amount'];
+				
 				if(isset($input[$type]['amount_remain'])){
+					if($input[$type]['amount_remain'] > $input[$type]['point']){
+						$input[$type]['amount_remain'] = $input[$type]['point'];
+					}
 					$update['$set'][$type]['amount_remain'] = $input[$type]['amount_remain'];
 				}
 				$update['$unset'] = array('random' => 1, 'top_score' => 1);

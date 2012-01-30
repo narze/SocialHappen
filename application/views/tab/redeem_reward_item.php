@@ -4,7 +4,7 @@
 <div class="reward-item" data-item-id="<?php echo $reward_item_id;?>">
 	<div><img src="<?php echo $reward_item['image'];?>" /></div>
 	<div>Name : <span><?php echo $reward_item['name']?></span></div>
-	<div>Status : <span><?php echo $reward_item['status']?></span></div>
+	<div>Item status : <span><?php echo $reward_item['reward_status']?></span></div>
 	<div>Point required : <span><?php echo $reward_item['redeem']['point']?></span></div>
 	<div>Amount : <span><?php echo $reward_item['redeem']['amount']?></span></div>
 	<div>Who have got this item? 
@@ -19,10 +19,8 @@
 			No one have got this item, be the first one!
 			<?php endif; ?>
 	</div>
-				
-					 
 
-	<?php if($redeem_button) : ?>
+	<?php if($redeem_button && $reward_item['reward_status'] == 'active') : ?>
 		<a href="<?php echo base_url().'tab/redeem_reward/'.$page_id.'/'.$id;?>">Redeem</a>
 	<?php endif; ?>
 </div>

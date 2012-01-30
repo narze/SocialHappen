@@ -244,16 +244,20 @@ $(function(){
 				// var form = 
 				form_events();
 				function form_events(){
-					$('.start-date, .end-date').datepicker({
+					if(form_div.find('form').length > 0){
+						$('.start-date, .end-date').datepicker({
 						dateFormat: "yy-mm-dd"});
-					form_div.find('form').submit(function(){
-						$(this).ajaxSubmit({
-							target:'.reward-item-add-form form',
-							replaceTarget:true,
-							success: form_events
+						form_div.find('form').submit(function(){
+							$(this).ajaxSubmit({
+								target:'.reward-item-add-form form',
+								replaceTarget:true,
+								success: form_events
+							});
+							return false;
 						});
-						return false;
-					});
+					} else {
+						form_div.removeClass('reward-item-add-form');
+					}
 				}
 			});
 			

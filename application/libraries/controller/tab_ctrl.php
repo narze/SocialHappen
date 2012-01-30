@@ -453,7 +453,23 @@ class Tab_ctrl {
 	    	'type' => 'redeem',
 	    	'status' => 'published'
 	    );
-    	return $this->CI->reward_item_model->get($criteria);
+    	$reward_items = $this->CI->reward_item_model->get($criteria);
+    	$now = time();
+    	foreach($reward_items as &$reward_item){
+    		$start_time = $reward_item['start_timestamp'];
+    		$end_time = $reward_item['end_timestamp'];
+    		if($now < $start_time){
+    			$reward_status = 'soon';
+    		} else if ($now > $end_time){
+    			$reward_status = 'expired';
+    		} else if (!issetor($reward_item['redeem']['amount_remain'])){
+    			$reward_status = 'no_more';
+    		} else {
+    			$reward_status = 'active';
+    		}
+    		$reward_item['reward_status'] = $reward_status;
+    	}
+    	return $reward_items;
     }
 
     function redeem_reward_confirm($page_id = NULL, $reward_item_id = NULL, $user_facebook_id = NULL){

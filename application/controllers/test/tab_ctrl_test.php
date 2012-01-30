@@ -545,14 +545,85 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($count, 5, 'count', $count);
 	}
 
+	function _update_reward_test(){
+		$input = array(
+			'start_timestamp' => time() - 100,
+			'end_timestamp' => time() - 50
+			);
+		$result = $this->reward_item->update($this->reward_item_2, $input); // expired
+		$this->unit->run($result, TRUE, "\$result", $result);
+		$input = array(
+			'status' => 'published',
+			'start_timestamp' => time() - 100,
+			'end_timestamp' => time() + 100
+			);
+		$result = $this->reward_item->update($this->reward_item_5, $input); // active
+		$this->unit->run($result, TRUE, "\$result", $result);
+	}
+
 	function redeem_list_test(){
 		$page_id = Page_id;
 		$result = $this->tab_ctrl->redeem_list($page_id);
 		$this->unit->run($result, 'is_array', "\$result", $result);
-		$this->unit->run(count($result), 2, "\$result", count($result)); //redeem only
+		$this->unit->run(count($result), 3, "\$result", count($result)); //redeem only
 		$this->unit->run($result[0]['name'], name.'1', "\$result[0]['name']", $result[0]['name']);
 		$this->unit->run($result[1]['name'], name.'2', "\$result[1]['name']", $result[1]['name']);
+		$this->unit->run($result[2]['name'], name.'5', "\$result[2]['name']", $result[2]['name']);
+		$this->unit->run($result[0]['reward_status'], 'soon', "\$result[0]['reward_status']", $result[0]['reward_status']);
+		$this->unit->run($result[1]['reward_status'], 'expired', "\$result[1]['reward_status']", $result[1]['reward_status']);
+		$this->unit->run($result[2]['reward_status'], 'active', "\$result[2]['reward_status']", $result[2]['reward_status']);
 	}
+
+	function _update_reward_2_test(){
+		$input = array(
+			'type' => 'redeem',
+			'redeem' => array(
+				'point' =>3,
+				'amount' =>4,
+				'amount_remain' =>0,
+			)
+		);
+		$result = $this->reward_item->update($this->reward_item_2, $input); // expired & no_more = expired
+		$this->unit->run($result, TRUE, "\$result", $result);
+
+		$input = array(
+			'type' => 'redeem',
+			'redeem' => array(
+				'point' =>3,
+				'amount' =>4,
+				'amount_remain' =>0,
+			)
+			);
+		$result = $this->reward_item->update($this->reward_item_5, $input); // no_more
+		$this->unit->run($result, TRUE, "\$result", $result);
+	}
+
+	function redeem_list_2_test(){
+		$page_id = Page_id;
+		$result = $this->tab_ctrl->redeem_list($page_id);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run(count($result), 3, "\$result", count($result)); //redeem only
+		$this->unit->run($result[0]['name'], name.'1', "\$result[0]['name']", $result[0]['name']);
+		$this->unit->run($result[1]['name'], name.'2', "\$result[1]['name']", $result[1]['name']);
+		$this->unit->run($result[2]['name'], name.'5', "\$result[2]['name']", $result[2]['name']);
+		$this->unit->run($result[0]['reward_status'], 'soon', "\$result[0]['reward_status']", $result[0]['reward_status']);
+		$this->unit->run($result[1]['reward_status'], 'expired', "\$result[1]['reward_status']", $result[1]['reward_status']);
+		$this->unit->run($result[2]['reward_status'], 'no_more', "\$result[2]['reward_status']", $result[2]['reward_status']);
+	}
+
+	function _update_reward_3_test(){
+		$input = array(
+			'type' => 'redeem',
+			'redeem' => array(
+				'point' =>20,
+				'amount' => 5,
+				'amount_remain' =>5,
+			)
+		);
+		$result = $this->reward_item->update($this->reward_item_2, $input); // expired & no_more = expired
+		$this->unit->run($result, TRUE, "\$result", $result);
+	}
+
 
 	function redeem_reward_confirm_test(){
 		$page_id = Page_id;
