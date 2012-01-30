@@ -338,6 +338,7 @@ onLoad = function(){
 			sh_popup();
 			sh_sharebutton();
 			sh_invitebutton();
+			sh_test();
 
 			$('div.popup-fb a.bt-start').live('click',function(){
 				jQuery.fancybox.close();
@@ -500,6 +501,31 @@ onLoad = function(){
 							//$("<style type='text/css'> #fancybox-wrap{ top:550px !important;} </style>").appendTo("head");
 						}
 					});
+				}
+			}
+
+			function sh_test(){ //this function is to test only, will be removed on production
+				$('<div><a id="page_score" href="'+base_url+'tab/my_page_score/'+page_id+'">My Score</a></div>').appendTo('body');
+				$('<div><a id="page_leaderboard" href="'+base_url+'tab/page_leaderboard/'+page_id+'">Page Leaderboard</a></div>').appendTo('body');
+				$('<div><a id="page_reward" href="'+base_url+'tab/redeem_list/'+page_id+'">Redeem Reward</a></div>').appendTo('body');
+				var page_score = $('#page_score');
+				var page_leaderboard = $('#page_leaderboard');
+				var page_reward = $('#page_reward');
+				page_score.click(check_guest);
+				page_leaderboard.click(check_guest);
+				page_reward.click(check_guest);
+				function check_guest(){
+					if(view_as == 'guest'){
+						sh_guest();
+					} else {
+						jQuery.fancybox({
+							href:$(this).attr('href'),
+							type:'iframe',
+							transitionIn: 'elastic',
+							transitionOut: 'elastic',
+						});
+					}
+					return false;
 				}
 			}
 		});
@@ -749,9 +775,9 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		});
 	} else if(message.data.sh_message === "facebook page like"){ //xd.js
 		if(message.data.liked){
-			console.log('like');
+			// console.log('like');
 		} else {
-			console.log('unlike');
+			// console.log('unlike');
 			//call xd/homepage/app_install_id [if app_install_id is defined]
 			if(app_install_id){
 				jQuery.getJSON(base_url+'xd/homepage/'+app_install_id, function(data){

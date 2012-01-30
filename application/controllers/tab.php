@@ -802,18 +802,27 @@ class Tab extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function my_page_score($page_id = NULL){
-		$user_facebook_id = $this->FB->getUser();
-		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id);
-		echo "Your page score is ".$page_score;
+		if($user_facebook_id = $this->FB->getUser()){
+			$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+			echo "Your page score is ".$page_score;	
+		} else {
+			echo 'Please login first';
+		}
 	}
 
 	function page_leaderboard($page_id = NULL){
 		$page_user_scores = $this->tab_ctrl->page_leaderboard($page_id);
 		if($page_user_scores['success']){ //TODO sort
-			foreach($page_user_scores['data'] as $user_score){
-				echo "user id ".$user_score['user_id'].' got '.($user_score['page_score'] | 0).' points in page id '.$page_id;
-				echo '<br />';
+			if(count($page_user_scores['data']) > 0){
+				foreach($page_user_scores['data'] as $user_score){
+					echo "user id ".$user_score['user_id'].' got '.($user_score['page_score'] | 0).' points in page id '.$page_id;
+					echo '<br />';
+				}
+			} else {
+				echo 'No page users';
 			}
+		} else {
+			echo $page_user_scores['error'];
 		}
 	}
 
