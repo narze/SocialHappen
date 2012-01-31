@@ -7,6 +7,7 @@
 				<li><a id="user_class" href="<?php echo base_url()."settings/page_user_class/view/{$page['page_id']}";?>"><b>User Class</b></a></li>
 				<li><a id="badges" href="<?php echo base_url()."settings/page_badges/view/{$page['page_id']}";?>"><b>Badges</b></a></li>
 				<li><a id="reward" href="<?php echo base_url()."settings/page_reward/view/{$page['page_id']}";?>"><b>Reward</b></a></li>
+				<li><a id="reward-terms-and-conditions" href="<?php echo base_url()."settings/page_reward/terms_and_conditions/{$page['page_id']}";?>">- Terms and Conditions</a></li>
 			</ul>
 			</li>
 			<li>Page apps

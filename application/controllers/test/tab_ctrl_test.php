@@ -456,7 +456,9 @@ class Tab_ctrl_test extends CI_Controller {
 		$criteria_type = 'page';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/logo.png';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
+		$value = '200THB';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 		
 		$this->reward_item_1 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -476,7 +478,9 @@ class Tab_ctrl_test extends CI_Controller {
 		$criteria_type = 'page';
 		$criteria_id = '1';
 		$image = base_url().'assets/images/logo.png';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
+		$value = '200THB';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 		
 		$this->reward_item_2 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -496,7 +500,9 @@ class Tab_ctrl_test extends CI_Controller {
 		$criteria_type = 'page';
 		$criteria_id = '1';
 		$image = base_url().'assets/images/logo.png';
-		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
+		$value = '200THB';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 		
 		$this->reward_item_3 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -516,7 +522,9 @@ class Tab_ctrl_test extends CI_Controller {
 		$criteria_type = 'page';
 		$criteria_id = '1';
 		$image = base_url().'assets/images/logo.png';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
+		$value = '200THB';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 		
 		$this->reward_item_4 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -536,7 +544,9 @@ class Tab_ctrl_test extends CI_Controller {
 		$criteria_type = 'page';
 		$criteria_id = '1';
 		$image = base_url().'assets/images/logo.png';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image');
+		$value = '200THB';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 		
 		$this->reward_item_5 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);

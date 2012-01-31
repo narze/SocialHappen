@@ -5,6 +5,8 @@
 	<div><img src="<?php echo $reward_item['image'];?>" /></div>
 	<div>Name : <span><?php echo $reward_item['name']?></span></div>
 	<div>Item status : <span><?php echo $reward_item['reward_status']?></span></div>
+	<div>Value : <span><?php echo $reward_item['value']?></span></div>
+	<div>Description : <span><?php echo $reward_item['description']?></span></div>
 	<div>Start time : <span><?php echo $reward_item['start_timestamp_local']?></span></div>
 	<div>End time : <span><?php echo $reward_item['end_timestamp_local']?></span></div>
 	<div>Point required : <span><?php echo $reward_item['redeem']['point']?></span></div>

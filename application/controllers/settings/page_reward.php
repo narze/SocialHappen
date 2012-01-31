@@ -17,14 +17,6 @@ class Page_reward extends CI_Controller {
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
-			$this->load->library('form_validation');
-			$this->load->library('app_component_lib');
-			$this->load->model('page_model','page');
-			$this->load->model('app_component_page_model','app_component_page');
-			$page = $this->page->get_page_profile_by_page_id($page_id);
-			$page_component = $this->app_component_lib->get_page($page_id);
-			log_message('error', print_r($page_component, true));
-			$terms_and_conditions = issetor($page_component['reward']['terms_and_conditions']);
 			$this->load->model('reward_item_model', 'reward_item');
 			$criteria = array(
 				'criteria_type' => 'page',
@@ -34,7 +26,30 @@ class Page_reward extends CI_Controller {
 
 			$this->load->vars(array(
 				'page_id' => $page_id,
-				'reward_items' => $reward_items,
+				'reward_items' => $reward_items
+			));
+			$this->load->view('settings/page_apps/reward');
+		}
+	}
+
+	function terms_and_conditions($page_id = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			//no access
+		} else {
+			$this->load->library('form_validation');
+			$this->load->library('app_component_lib');
+			$this->load->model('page_model','page');
+			$this->load->model('app_component_page_model','app_component_page');
+			$page = $this->page->get_page_profile_by_page_id($page_id);
+			$page_component = $this->app_component_lib->get_page($page_id);
+			$terms_and_conditions = issetor($page_component['reward']['terms_and_conditions']);
+			$criteria = array(
+				'criteria_type' => 'page',
+				'criteria_id' => $page_id
+			);
+
+			$this->load->vars(array(
+				'page_id' => $page_id,
 				'terms_and_conditions' => $terms_and_conditions,
 				'updated' => FALSE
 			));
@@ -46,10 +61,11 @@ class Page_reward extends CI_Controller {
 			
 			} else {
 				$terms_and_conditions = set_value('terms_and_conditions');
-				$result = $this->app_component_page->set_terms_and_conditions($page_id, $terms_and_conditions);
-				// $this->load->vars(array('terms_and_conditions' => $terms_and_conditions));
+				if($result = $this->app_component_page->set_terms_and_conditions($page_id, $terms_and_conditions)){
+					$this->load->vars(array('updated'=>TRUE));
+				}
 			}
-			$this->load->view('settings/page_apps/reward');
+			$this->load->view('settings/page_apps/reward_terms_and_conditions');
 		}
 	}
 
@@ -71,6 +87,10 @@ class Page_reward extends CI_Controller {
 			// $this->form_validation->set_rules('type', 'Type', 'required|trim|xss_clean|max_length[10]');
 
 			$this->form_validation->set_rules('image', 'Image', 'required|trim|xss_clean|max_length[255]');
+
+			$this->form_validation->set_rules('value', 'Value', 'required|trim|xss_clean|max_length[30]');
+
+			$this->form_validation->set_rules('description', 'Description', 'trim|xss_clean');
 				
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
@@ -128,7 +148,9 @@ class Page_reward extends CI_Controller {
 				       	'point' => set_value('point'),
 					    'amount' => set_value('amount')
 				    ),
-				    'image' => set_value('image')
+				    'image' => set_value('image'),
+				    'value' => set_value('value'),
+				    'description' => set_value('description')
 				);
 				if($update){
 					$input['redeem']['amount_remain'] = issetor($reward_item['redeem']['amount_remain'], $reward_item['redeem']['amount']);

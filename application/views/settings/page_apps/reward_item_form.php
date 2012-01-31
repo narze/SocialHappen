@@ -19,7 +19,7 @@
 				</li>
 				<li>
 					<label for="value">Value: <span class="required">*</span></label>
-					<input id="value" type="text" name="value" maxlength="10" value="<?php echo set_value('value', issetor($reward_item['redeem']['value'])); ?>" <?php echo form_error('value') ? 'class="form-error"': ''; ?> />
+					<input id="value" type="text" name="value" maxlength="10" value="<?php echo set_value('value', issetor($reward_item['value'])); ?>" <?php echo form_error('value') ? 'class="form-error"': ''; ?> />
 				</li>
 				<li>
 					<label for="point">Point: <span class="required">*</span></label>
@@ -33,8 +33,8 @@
 				<input class="name bold<?php echo form_error('name') ? ' form-error': ''; ?>" type="text" name="name" maxlength="255" value="<?php echo set_value('name', issetor($reward_item['name'])); ?>" style="width:309px" />
 			</div>
 			<div class="line">
-				<label for="desc">Reward Description: <span class="required">*</span></label>
-				<?php echo form_textarea( array( 'name' => 'desc', 'value' => set_value('desc', issetor($reward_item['desc'])), 'style'=>'width:309px' ) )?>
+				<label for="description">Reward Description: <span class="required">*</span></label>
+				<?php echo form_textarea( array( 'name' => 'descsription', 'value' => set_value('descsription', issetor($reward_item['descsription'])), 'style'=>'width:309px' ) )?>
 			</div>
 		</div>
 		<div class="section">
@@ -71,6 +71,5 @@
 			<a class="btn grey cancel"><span>Cancel</span></a>
 			<a class="btn green fr save"><span>Save</span></a>
 		</div>
-
 		<?php echo form_close(); ?>
 </div>
