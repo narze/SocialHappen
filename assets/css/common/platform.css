@@ -1671,7 +1671,6 @@ div.menuleft>ul>li>ul>li>ul>li>a img {margin: 0 8px; border: 1px solid #d2d2d2; 
 div.wrapper-setting>div>div:first-child+div>div {
 	width: 600px;
 	margin: 0 auto;
-	border-bottom: 1px dotted #a6a6a6;
 	margin-bottom: 15px;
 }
 div.wrapper-setting>div>div:first-child+div>div.style01 {
@@ -1681,7 +1680,7 @@ div.wrapper-setting>div>div:first-child+div>div.style01 {
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
-div.wrapper-setting>div>div:first-child+div>div>div { padding: 10px 35px;}
+div.wrapper-setting>div>div:first-child+div>div>div { }
 div.wrapper-setting>div>div:first-child+div>div.style01>h2 span{ background: #f3f3f3 !important;}
 div.wrapper-setting>div>div:first-child+div>div.style01>h2 {background: url(../../images/bg/bg_setting-h2_01.png) 0 15px repeat-x;}
 

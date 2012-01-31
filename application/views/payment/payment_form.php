@@ -49,7 +49,7 @@
             </ul>
 			</div>
 
-			<p class="clear txt-center">
+			<p class="clear ta-center">
 				<a class="bt-continue"><span>Continue</span></a>
 				<?php echo form_submit( 'submit-form', 'Submit', 'style="display:none"'); ?> 
 			</p>
