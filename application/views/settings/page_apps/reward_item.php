@@ -15,7 +15,7 @@
 			</li>
 			<li class="ta-center">
 				<div class="tc-green6 bold">Remaining Time</div>
-				<div class="remaining-time bold fs16 tc-grey5"><?php echo $reward_item['end_timestamp']; ?></div>
+				<div class="end-time-countdown bold fs16 tc-grey5"><?php echo $reward_item['end_date']; ?></div>
 				<div class="fs11">(<?php echo date('j M Y', $reward_item['start_timestamp']) .' - '. date('j M Y', $reward_item['end_timestamp']); ?>)</div>
 			</li>
 		</ul>

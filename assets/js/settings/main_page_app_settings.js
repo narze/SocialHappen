@@ -374,6 +374,17 @@ $(function(){
 		}
 	}
 
+	function terms_and_conditions(){
+		$('.terms-and-conditions .btn.save').click(function(){
+			$(this).parents('form').ajaxSubmit({
+				target:'#main #reward-terms-and-conditions',
+				replaceTarget:true,
+				success:terms_and_conditions
+			});
+			return false;
+		});
+	}
+
 	function badges(){
 
 	}
@@ -392,6 +403,8 @@ $(function(){
 					reward();
 				} else if (element.attr('id') == 'badges'){
 					badges();
+				} else if (element.attr('id') == 'reward-terms-and-conditions'){
+					terms_and_conditions();
 				}
 			});
 			make_form(element);
