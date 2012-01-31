@@ -34,7 +34,7 @@
 			</div>
 			<div class="line">
 				<label for="description">Reward Description: <span class="required">*</span></label>
-				<?php echo form_textarea( array( 'name' => 'descsription', 'value' => set_value('descsription', issetor($reward_item['descsription'])), 'style'=>'width:309px' ) )?>
+				<?php echo form_textarea( array( 'name' => 'description', 'value' => set_value('description', issetor($reward_item['description'])), 'style'=>'width:309px' ) )?>
 			</div>
 		</div>
 		<div class="section">
