@@ -36,8 +36,18 @@ class Page_reward extends CI_Controller {
 			} else if($sort == 'status'){
 				//TODO 
 			}
-			$reward_items = $this->reward_item->get($criteria, $sort_criteria);
 
+			$user = $this->socialhappen->get_user();
+			$this->load->library('timezone_lib');
+			$reward_items = $this->reward_item->get($criteria, $sort_criteria);
+			foreach($reward_items as &$reward_item){
+				
+				$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $user['user_timezone_offset']);
+				$end_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $user['user_timezone_offset']);
+
+				$reward_item['start_date'] = $start_time;
+				$reward_item['end_date'] = $end_time;
+			} unset($reward_item);
 			$this->load->vars(array(
 				'page_id' => $page_id,
 				'reward_items' => $reward_items

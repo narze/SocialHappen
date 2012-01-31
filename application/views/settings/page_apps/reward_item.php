@@ -3,7 +3,8 @@
 }?>
 <div class="reward-item" data-item-id="<?php echo $reward_item_id;?>">
 	<div>Image : <img src="<?php echo $reward_item['image'];?>" /></div>
-	<div>Start time [debug] : <span><?php echo date('Y-m-d H:i:s', $reward_item['start_timestamp']+7*60*60);?></span></div>
+	<div>Start date : <span><?php echo $reward_item['start_date'];?></span></div>
+	<div>End date : <span class="end-time-countdown"><?php echo $reward_item['end_date'];?></span></div>
 	<div>Name : <span><?php echo $reward_item['name']?></span></div>
 	<div>Status : <span><?php echo $reward_item['status']?></span></div>
 	<div>Point required : <span><?php echo $reward_item['redeem']['point']?></span></div>
