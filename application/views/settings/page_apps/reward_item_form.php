@@ -46,6 +46,18 @@
 		</p>
 
 		<p>
+		        <label for="value">Value <span class="required">*</span></label>
+		        <?php echo form_error('value'); ?>
+		        <br /><input id="value" type="text" name="value" maxlength="10" value="<?php echo set_value('value', issetor($reward_item['value'])); ?>"  />
+		</p>
+
+		<p>
+		        <label for="description">Description</label>
+		        <?php echo form_error('description'); ?>
+		        <br /><input id="description" type="text" name="description" maxlength="10" value="<?php echo set_value('description', issetor($reward_item['description'])); ?>"  />
+		</p>
+
+		<p>
 		        <label for="status">Status <span class="required">*</span></label>
 		        <?php echo form_error('status'); ?>
 		        

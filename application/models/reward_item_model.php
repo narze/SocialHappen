@@ -111,7 +111,7 @@
 	 * @author Manasssarn M.
 	 */
 	function add($input = array()){
-		if(!issetor($input['name']) || !issetor($input['type']) || !issetor($input['start_timestamp']) || !issetor($input['end_timestamp'])|| !issetor($input['criteria_type']) || !issetor($input['criteria_id']) || !issetor($input['image'])){
+		if(!issetor($input['name']) || !issetor($input['type']) || !issetor($input['start_timestamp']) || !issetor($input['end_timestamp'])|| !issetor($input['criteria_type']) || !issetor($input['criteria_id']) || !issetor($input['image']) || !issetor($input['value'])){
 			return FALSE;
 		}
 		$input_type = $input['type'];
@@ -144,7 +144,7 @@
 		}
 		$input['criteria_id'] = (int) $input['criteria_id'];
 		$input['user_list'] = array();
-		
+		$input['description'] = issetor($input['description']);
 		try	{
 			$this->reward_item->insert($input, array('safe' => TRUE));
 			return get_mongo_id($input);
@@ -224,6 +224,15 @@
 				return FALSE;
 			}
 			$update['$set']['image'] = $input['image'];
+		}
+		if(isset($input['value'])){
+			if(!$input['value']){
+				return FALSE;
+			}
+			$update['$set']['value'] = $input['value'];
+		}
+		if(isset($input['description'])){
+			$update['$set']['description'] = $input['description'];
 		}
 		if(!$update['$set']){
 			unset($update['$set']);

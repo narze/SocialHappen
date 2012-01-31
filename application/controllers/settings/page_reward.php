@@ -71,6 +71,10 @@ class Page_reward extends CI_Controller {
 			// $this->form_validation->set_rules('type', 'Type', 'required|trim|xss_clean|max_length[10]');
 
 			$this->form_validation->set_rules('image', 'Image', 'required|trim|xss_clean|max_length[255]');
+
+			$this->form_validation->set_rules('value', 'Value', 'required|trim|xss_clean|max_length[30]');
+
+			$this->form_validation->set_rules('description', 'Description', 'trim|xss_clean');
 				
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 		
@@ -128,7 +132,9 @@ class Page_reward extends CI_Controller {
 				       	'point' => set_value('point'),
 					    'amount' => set_value('amount')
 				    ),
-				    'image' => set_value('image')
+				    'image' => set_value('image'),
+				    'value' => set_value('value'),
+				    'description' => set_value('description')
 				);
 				if($update){
 					$input['redeem']['amount_remain'] = issetor($reward_item['redeem']['amount_remain'], $reward_item['redeem']['amount']);

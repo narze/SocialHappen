@@ -7,6 +7,8 @@
 	<div>Status : <span><?php echo $reward_item['status']?></span></div>
 	<div>Point required : <span><?php echo $reward_item['redeem']['point']?></span></div>
 	<div>Amount : <span><?php echo $reward_item['redeem']['amount']?></span></div>
+	<div>Value : <span><?php echo $reward_item['value']?></span></div>
+	<div>Description : <span><?php echo $reward_item['description']?></span></div>
 	<a class="remove-reward-item">Remove</a>
 	<a class="edit-reward-item">Edit</a>
 </div>
