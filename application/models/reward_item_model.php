@@ -81,11 +81,14 @@
 	 * @param $criteria
 	 * @author Manassarn M.
 	 */
-	function get($criteria = NULL){
+	function get($criteria = NULL, $sort = NULL){
 		if(isset($criteria['criteria_id'])){
 			$criteria['criteria_id'] = (int) $criteria['criteria_id'];
 		}
 		$result = $this->reward_item->find($criteria);
+		if(is_array($sort)){
+			$result = $result->sort($sort);
+		} 
 		$result = cursor2array($result);
 		return $result;
 	}

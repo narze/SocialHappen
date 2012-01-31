@@ -445,7 +445,7 @@ class Tab_ctrl {
 	    return $result;
     }
 
-    function redeem_list($page_id = NULL, $user_facebook_id = NULL){
+    function redeem_list($page_id = NULL, $user_facebook_id = NULL, $sort = NULL, $order = NULL){
     	$this->CI->load->model('reward_item_model');
     	$criteria = array(
 	    	'criteria_type' => 'page',
@@ -453,7 +453,20 @@ class Tab_ctrl {
 	    	'type' => 'redeem',
 	    	'status' => 'published'
 	    );
-    	$reward_items = $this->CI->reward_item_model->get($criteria);
+	    $sort_criteria = array('start_timestamp' => -1);
+		if($sort && $order){
+			if($order == 'desc'){
+				$order = -1;
+			} else { //asc
+				$order = 1;
+			}
+			$sort_criteria = array(
+				$sort => $order
+			);
+		} else if($sort == 'status'){
+			//TODO 
+		}
+		$reward_items = $this->CI->reward_item_model->get($criteria, $sort_criteria);
     	$now = time();
 
     	$this->CI->load->model('user_model');

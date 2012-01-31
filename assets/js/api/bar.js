@@ -507,10 +507,13 @@ onLoad = function(){
 			function sh_test(){ //this function is to test only, will be removed on production
 				$('<div><a id="page_score" href="'+base_url+'tab/my_page_score/'+page_id+'">My Score</a></div>').appendTo('body');
 				$('<div><a id="page_leaderboard" href="'+base_url+'tab/page_leaderboard/'+page_id+'">Page Leaderboard</a></div>').appendTo('body');
-				$('<div><a id="page_reward" href="'+base_url+'tab/redeem_list/'+page_id+'">Redeem Reward</a></div>').appendTo('body');
+				$('<div><a id="page_reward" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=start_timestamp&order=desc">Redeem Reward (Sort by start time)</a></div>').appendTo('body');
+				$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=value&order=desc">Redeem Reward (Sort by value)</a></div>').appendTo('body');
+				$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=status">Redeem Reward (Sort by status)</a></div>').appendTo('body');
+				$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=redeem.point&order=desc">Redeem Reward (Sort by point)</a></div>').appendTo('body');
 				var page_score = $('#page_score');
 				var page_leaderboard = $('#page_leaderboard');
-				var page_reward = $('#page_reward');
+				var page_reward = $('#page_reward, .page_reward_debug');
 				page_score.click(check_guest);
 				page_leaderboard.click(check_guest);
 				page_reward.click(check_guest);

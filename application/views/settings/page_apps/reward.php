@@ -2,10 +2,10 @@
 		<h2><span>Reward List Setting</span></h2>
 		<div class="tab-head">
 			Sort by :
-			<a class="tab active">Date Added</a>
-			<a class="tab">Value</a>
-			<a class="tab">Status</a>
-			<a class="tab">Point</a>
+			<a class="tab sort active" data-sort="date">Date Added</a>
+			<a class="tab sort" data-sort="value">Value</a>
+			<a class="tab sort" data-sort="status">Status</a>
+			<a class="tab sort" data-sort="point">Point</a>
 			<a class="add-reward-item btn green fr"><span>+ Add new reward</span></a>
 		</div>
 		<div class="reward-item-list">

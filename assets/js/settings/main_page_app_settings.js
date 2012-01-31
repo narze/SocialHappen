@@ -234,6 +234,7 @@ $(function(){
 			.on('click','.add-reward-item',add_reward)
 			.on('click','.remove-reward-item',remove_reward)
 			.on('click','.edit-reward-item',edit_reward);
+		$('.tab.sort').unbind('click').click(sort_reward);
 		function add_reward(){
 			if($('.reward-item-add-form').length > 0) {
 				return false;
@@ -331,6 +332,26 @@ $(function(){
 					}
 				}
 			);
+		}
+
+		function sort_reward(){
+			var sort = $(this).data('sort');
+			if(!sort){ return false; }
+			else {
+				var query;
+				switch(sort){
+					case "value" : query = '?sort=value&order=desc';
+					break;
+					case "status" : query = '?sort=status';
+					break;
+					case "point" : query = '?sort=redeem.point&order=desc';
+					break;
+					case "date" : 
+					default : query = '?sort=start_timestamp&order=desc';
+					break;
+				}
+				$('.reward-item-list').load(base_url+'settings/page_reward/view/'+page_id+query+' .reward-item-list>*');
+			}
 		}
 	}
 
