@@ -400,6 +400,40 @@ class Reward_item_model_test extends CI_Controller {
 		$result = $this->reward_item->get($criteria);
 		$this->unit->run(count($result), 1, "\count($result)", count($result));
 		$this->unit->run($result[0]['name'], 'new_name', "\$result[0]['name']", $result[0]['name']);
+
+		$criteria = array();
+		$result = $this->reward_item->get($criteria);
+		$this->unit->run(count($result), 3, "\count($result)", count($result));
+		$this->unit->run($result[0]['name'], name.'2', "\$result[0]['name']", $result[0]['name']);
+		$this->unit->run($result[1]['name'], name.'3', "\$result[1]['name']", $result[1]['name']);
+		$this->unit->run($result[2]['name'], 'new_name', "\$result[2]['name']", $result[2]['name']);
+
+		$criteria = array();
+		$sort = array(
+			'name' => 1); //ascending
+		$result = $this->reward_item->get($criteria, $sort);
+		$this->unit->run(count($result), 3, "\count($result)", count($result));
+		$this->unit->run($result[0]['name'], name.'2', "\$result[0]['name']", $result[0]['name']);
+		$this->unit->run($result[1]['name'], name.'3', "\$result[1]['name']", $result[1]['name']);
+		$this->unit->run($result[2]['name'], 'new_name', "\$result[2]['name']", $result[2]['name']);
+
+		$criteria = array();
+		$sort = array(
+			'name' => -1); //descending
+		$result = $this->reward_item->get($criteria, $sort);
+		$this->unit->run(count($result), 3, "\count($result)", count($result));
+		$this->unit->run($result[0]['name'], 'new_name', "\$result[0]['name']", $result[0]['name']);
+		$this->unit->run($result[1]['name'], name.'3', "\$result[1]['name']", $result[1]['name']);
+		$this->unit->run($result[2]['name'], name.'2', "\$result[2]['name']", $result[2]['name']);
+
+		$criteria = array();
+		$sort = array(
+			'youcantfindme' => -1); //false == ascending
+		$result = $this->reward_item->get($criteria, $sort);
+		$this->unit->run(count($result), 3, "\count($result)", count($result));
+		$this->unit->run($result[0]['name'], name.'2', "\$result[0]['name']", $result[0]['name']);
+		$this->unit->run($result[1]['name'], name.'3', "\$result[1]['name']", $result[1]['name']);
+		$this->unit->run($result[2]['name'], 'new_name', "\$result[2]['name']", $result[2]['name']);
 	}
 
 	function remove_test(){

@@ -1,5 +1,13 @@
 $(function(){
-	
+	Date.createFromMysql = function(mysql_string){ 
+	   if(typeof mysql_string === 'string')
+	   {
+		  var t = mysql_string.split(/[- :]/);
+		  return new Date(t[0], t[1] - 1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);          
+	   }
+	   return null;   
+	};
+
 	function signup_fields(){
 		$('form.signup-fields ul li a.bt-remove-field').die().live('click', function(){
 			$(this).parents('form ul li').appendTo('div#no-submit ul');
@@ -234,6 +242,20 @@ $(function(){
 			.on('click','.add-reward-item',add_reward)
 			.on('click','.remove-reward-item',remove_reward)
 			.on('click','.edit-reward-item',edit_reward);
+		$('.tab.sort').unbind('click').click(sort_reward);
+		trigger_countdown();
+
+		function trigger_countdown(){
+			$('.end-time-countdown').each(function(){
+				end_time = Date.createFromMysql($(this).text());
+				$(this).replaceWith($("<span></span>").countdown({
+					until: end_time,
+					format: 'DHMS',
+					layout: '<strong>{dn}days {hnn}h {sep} {mnn}m {sep} {snn}s</strong>'})
+				.removeClass('hasCountdown'));
+			});
+		};
+		
 		function add_reward(){
 			if($('.reward-item-form').length > 0) {
 				return false;
@@ -329,6 +351,26 @@ $(function(){
 					}
 				}
 			);
+		}
+
+		function sort_reward(){
+			var sort = $(this).data('sort');
+			if(!sort){ return false; }
+			else {
+				var query;
+				switch(sort){
+					case "value" : query = '?sort=value&order=desc';
+					break;
+					case "status" : query = '?sort=status';
+					break;
+					case "point" : query = '?sort=redeem.point&order=desc';
+					break;
+					case "date" : 
+					default : query = '?sort=start_timestamp&order=desc';
+					break;
+				}
+				$('.reward-item-list').load(base_url+'settings/page_reward/view/'+page_id+query+' .reward-item-list>*');
+			}
 		}
 	}
 

@@ -17,13 +17,37 @@ class Page_reward extends CI_Controller {
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
+			
 			$this->load->model('reward_item_model', 'reward_item');
 			$criteria = array(
 				'criteria_type' => 'page',
 				'criteria_id' => $page_id
 			);
-			$reward_items = $this->reward_item->get($criteria);
+			$sort_criteria = array('start_timestamp' => -1);
+			if(($sort = $this->input->get('sort')) && ($order = $this->input->get('order'))){
+				if($order == 'desc'){
+					$order = -1;
+				} else { //asc
+					$order = 1;
+				}
+				$sort_criteria = array(
+					$sort => $order
+				);
+			} else if($sort == 'status'){
+				//TODO 
+			}
 
+			$user = $this->socialhappen->get_user();
+			$this->load->library('timezone_lib');
+			$reward_items = $this->reward_item->get($criteria, $sort_criteria);
+			foreach($reward_items as &$reward_item){
+				
+				$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $user['user_timezone_offset']);
+				$end_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $user['user_timezone_offset']);
+
+				$reward_item['start_date'] = $start_time;
+				$reward_item['end_date'] = $end_time;
+			} unset($reward_item);
 			$this->load->vars(array(
 				'page_id' => $page_id,
 				'reward_items' => $reward_items

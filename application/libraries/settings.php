@@ -136,12 +136,14 @@ class Settings{
 							'common/jquery.form',
 							'common/bar',
 							'settings/main_page_app_settings',
-							'common/fancybox/jquery.fancybox-1.3.4.pack'
+							'common/fancybox/jquery.fancybox-1.3.4.pack',
+							'common/jquery.countdown.min'
 						),
 						'style' => array(
 							'common/main',
 							'common/platform',
-							'common/fancybox/jquery.fancybox-1.3.4'
+							'common/fancybox/jquery.fancybox-1.3.4',
+							'common/jquery.countdown'
 						)
 					)
 				),
