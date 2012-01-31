@@ -235,12 +235,13 @@ $(function(){
 			.on('click','.remove-reward-item',remove_reward)
 			.on('click','.edit-reward-item',edit_reward);
 		function add_reward(){
-			if($('.reward-item-add-form').length > 0) {
+			if($('.reward-item-form').length > 0) {
 				return false;
 			}
 			$.get(base_url+'settings/page_reward/add_item/'+page_id, function(data){
+				console.log(data);
 				var form_div = $(data).prependTo('.reward-item-list').removeClass('reward-item-template')
-				.addClass('reward-item-add-form');
+				.addClass('reward-item-form');
 				
 				// var form = 
 				form_events();
@@ -252,37 +253,29 @@ $(function(){
 					if(form_div.find('form').length > 0){
 						$('.start-date, .end-date').datepicker({
 						dateFormat: "yy-mm-dd"});
-						form_div.find('form').submit(function(){
-							$(this).ajaxSubmit({
-								//target:'.reward-item-add-form form',
-								//replaceTarget:true,
-								success: function (result) {
-									$('.reward-item-add-form').html($(result).find('form'));
-									form_events();
-								}
-							});
-							return false;
-						});
 						form_div.find('.btn.save').click(function(){
 							$(this).parents('form').ajaxSubmit({
-								//target:'.reward-item-add-form',
-								//replaceTarget:true,
 								success: function (result) {
-									$('.reward-item-add-form').html($(result).find('form'));
-									form_events();
+									result = $(result);
+									if(result.find('form').length == 0) {
+										$('.reward-item-form').replaceWith(result);
+									} else {
+										$('.reward-item-form').html(result.find('form'));
+										form_events();
+									}
 								}
 							});
 							return false;
 						});
 					} else {
-						form_div.removeClass('reward-item-add-form');
+						form_div.removeClass('reward-item-form');
 					}
 				}	
 			});
 		}
 
 		function edit_reward(){
-			var item = $(this).parent('.reward-item');
+			var item = $(this).parents('.reward-item').hide();
 			var item_id = item.data('itemId');
 			$.get(base_url+'settings/page_reward/update_item/'+page_id, 
 				{
@@ -290,37 +283,42 @@ $(function(){
 				},
 				function(data){
 					var form_div = $(data).insertBefore(item).removeClass('reward-item-template')
-					.addClass('reward-item-edit-form');
-					var cancel = $('<a class="cancel">Cancel</a>').appendTo(form_div).bind('click', cancel);
-					item.hide();
+					.addClass('reward-item-form');
 					// var form = 
 					form_events();
 					function form_events(){
+						var cancel = $('.btn.cancel').bind('click', cancel);
+						function cancel(){
+							form_div.remove();
+							item.show();
+						}
 						if(form_div.find('form').length == 0){
-							cancel.remove();
 							return false;
 						}
 						$('.start-date, .end-date').datepicker({
 							dateFormat: "yy-mm-dd"});
-						form_div.find('form').submit(function(){
-							$(this).ajaxSubmit({
-								target:'.reward-item-edit-form form',
-								replaceTarget:true,
-								success: form_events
+						form_div.find('.btn.save').click(function(){
+							$(this).parents('form').ajaxSubmit({
+								success: function (result) {
+									result = $(result);
+									if(result.find('form').length == 0) {
+										$('.reward-item-form').replaceWith(result);
+										item.remove();
+									} else {
+										$('.reward-item-form').html(result.find('form'));
+										form_events();
+									}
+								}
 							});
 							return false;
 						});
 					}
-					function cancel(){
-						form_div.remove();
-						item.show();
-					}	
 				}
 			);	
 		}
 
 		function remove_reward(){
-			var item = $(this).parent('.reward-item');
+			var item = $(this).parents('.reward-item');
 			var item_id = item.data('itemId');
 			$.getJSON(
 				base_url+'settings/page_reward/remove_item/'+page_id,

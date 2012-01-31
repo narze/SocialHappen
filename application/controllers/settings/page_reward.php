@@ -79,8 +79,8 @@ class Page_reward extends CI_Controller {
 		} else {
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('point', 'Point', 'required|trim|xss_clean|is_numeric|max_length[10]');			
-			$this->form_validation->set_rules('amount', 'Amount', 'required|trim|xss_clean|is_numeric|max_length[10]');
-			$this->form_validation->set_rules('name', 'Name', 'required|trim|xss_clean|max_length[255]');			
+			$this->form_validation->set_rules('amount', 'Quanity', 'required|trim|xss_clean|is_numeric|max_length[10]');
+			$this->form_validation->set_rules('name', 'Reward Name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('start_date', 'Start date', 'required|trim|xss_clean|max_length[20]');			
 			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');			
 			$this->form_validation->set_rules('status', 'Status', 'required|trim|xss_clean|max_length[10]');			
@@ -90,9 +90,9 @@ class Page_reward extends CI_Controller {
 
 			$this->form_validation->set_rules('value', 'Value', 'required|trim|xss_clean|max_length[30]');
 
-			$this->form_validation->set_rules('description', 'Description', 'trim|xss_clean');
+			$this->form_validation->set_rules('description', 'Reward Description', 'trim|xss_clean');
 				
-			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+			$this->form_validation->set_error_delimiters('<li class="error">', '</li>');
 		
 			$this->load->vars(array(
 				'page_id' => $page_id

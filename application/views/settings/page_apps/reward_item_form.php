@@ -1,28 +1,46 @@
 <div class="reward-item">
-<?php // Change the css classes to suit your needs    
-
+<?php
 		$attributes = array('class' => '', 'id' => '');
 		if(issetor($update)){
 			echo form_open(base_url().'/settings/page_reward/update_item/'.$page_id, $attributes);
 			echo '<input type="hidden" name="reward_item_id" value="'.set_value('reward_item_id', $reward_item_id).'" />';
 		} else {
 			echo form_open(base_url().'/settings/page_reward/add_item/'.$page_id, $attributes);
+		}
+
+		$error = array();
+		if(form_error('image')) $error[] = form_error('image');
+		if(form_error('amount')) $error[] = form_error('amount');
+		if(form_error('value')) $error[] = form_error('value');
+		if(form_error('point')) $error[] = form_error('point');
+		if(form_error('name')) $error[] = form_error('name');
+		if(form_error('description')) $error[] = form_error('description');
+		if(form_error('start_date')) $error[] = form_error('start_date');
+		if(form_error('end_date')) $error[] = form_error('end_date');
+		if(form_error('status')) $error[] = form_error('status');
+		if(count($error)>0) { ?>
+		<div class="notice error">
+			<ul>
+			<?php foreach($error as $msg) {echo $msg;} ?>
+			</ul>
+		</div><?php
 		} ?>
-		<div class="section">
-			<div class="item-image" style="background-image:url(<?php echo issetor($reward_item['image']); ?>);">
+
+		<div class="section first">
+			<div class="item-image<?php echo form_error('image') ? ' error' : ''; ?>" style="background-image:url(<?php echo isset($reward_item['image']) && $reward_item['image'] ? $reward_item['image'] : base_url().'assets/images/default/reward.png'; ?>);">
 				<input class="image" type="text" name="image" maxlength="255" value="<?php echo set_value('image', issetor($reward_item['image'])); ?>"  />
 			</div>
 			<ul class="item-info">
 				<li>
-					<label for="amount">Quanity: <span class="required">*</span></label>
+					<label for="amount" class="green" >Quanity: <span class="required">*</span></label>
 					<input id="amount" type="text" name="amount" maxlength="10" value="<?php echo set_value('amount', issetor($reward_item['redeem']['amount'])); ?>" <?php echo form_error('amount') ? 'class="form-error"': ''; ?> />
 				</li>
 				<li>
-					<label for="value">Value: <span class="required">*</span></label>
+					<label for="value" class="green" >Value: <span class="required">*</span></label>
 					<input id="value" type="text" name="value" maxlength="10" value="<?php echo set_value('value', issetor($reward_item['value'])); ?>" <?php echo form_error('value') ? 'class="form-error"': ''; ?> />
 				</li>
 				<li>
-					<label for="point">Point: <span class="required">*</span></label>
+					<label for="point" class="green" >Point: <span class="required">*</span></label>
 					<input id="point" type="text" name="point" maxlength="10" value="<?php echo set_value('point', issetor($reward_item['redeem']['point'])); ?>" <?php echo form_error('point') ? 'class="form-error"': ''; ?> />
 				</li>
 			</ul>
