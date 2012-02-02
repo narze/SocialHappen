@@ -1136,23 +1136,7 @@ body.settings div.wrapper-content {
 	margin: 7px auto 0;
 	padding: 10px 0;
 }
-div.tab-head {
-	height: 33px;
-	background: url(../../images/bg_fb/bg_tabhead.png) repeat-x;
-}
-div.tab-head:after{
-    clear:both;
-    content:" ";
-    display:block;
-}
-div.tab-head>h2 {
-	float: left;
-	height: 33px;
-	line-height: 33px;
-	margin: 0 0 0 14px;
-	font-size: 13px;
-	color: #fff;
-}
+
 /* Get started */
 #get-started { font-size: 13px; color: #3C3C3C; line-height: 18px;}
 #get-started div.info { font-weight: bold; background-color:#f8ecd1; padding:0 15px; display: block; border-top: 1px solid transparent; border-bottom: 1px solid transparent; }

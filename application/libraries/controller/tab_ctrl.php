@@ -72,6 +72,7 @@ class Tab_ctrl {
 						'common/fancybox/jquery.fancybox-1.3.4.pack'
 					),
 					'style' => array(
+						'common/common',
 						'common/facebook',
 						'common/facebook-main',
 						'common/jquery.countdown',

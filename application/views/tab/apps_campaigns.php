@@ -11,7 +11,7 @@
             <div><?php 
 					if (date('Y-m-d H:i:s') < $campaign['campaign_end_timestamp'] ) : ?>
 						<h2>Remaining Time</h2>
-						<div style="display: none;" class="campaign-end-time"><?php echo $campaign['campaign_end_timestamp'];?></div><?php 
+						<div style="display: none;" class="end-time-countdown bold"><?php echo $campaign['campaign_end_timestamp'];?></div><?php 
 						if($is_user) : ?>
 							<p><a class="bt-join" href="#"><span>Join</span></a></p><?php 
 						endif;

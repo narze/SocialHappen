@@ -33,35 +33,31 @@
     </div>
 	
     <div>
-      <div class="tab-head campaign">
-        <h2>Campaign</h2>
-        <div>
-          <p>Display:</p>
-          <ul>
-            <li><a class="active" data-filter="">All</a></li>
-            <li><a data-filter="active">Active</a></li>
-            <li><a data-filter="expired">Expired</a></li>
-          </ul>
-        </div>
+      <div class="tab-head slim campaign">
+        <p class="tab-name">Campaign</p>
+        <span class="fr">
+            <a class="tab active" data-filter="">All</a>
+            <a class="tab" data-filter="active">Active</a>
+            <a class="tab" data-filter="expired">Expired</a>
+        </span>
+        <p class="fr p10">Display:</p>
       </div>
       <div class="list_app-camp"></div>
       <div class="pagination-app-campaign strip"></div>
     </div>
 
     <div>
-      <div class="tab-head">
-        <h2>Applications</h2>
-        <div>
-          <a class="view-all apps">View all</a>
-        </div>
+      <div class="tab-head slim applications">
+        <p class="tab-name">Applications</p>
+        <a class="view-all-apps fr underline">View all</a>
       </div>
       <div class="app-icon-list<?php echo $apps ? '' : ' no-app'; ?>"><?php
           if($apps)
           {
             foreach($apps as $app)
             { ?> <div class="app-container">
-                <a class="app-icon" href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img class="app-image" width="64" height="64" src="<?php echo $app['app_image']; ?>" onerror="failsafeImg(this)" /></a>
-                <a class="app-name" href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a>
+                <a class="app-icon" href="<?php echo '#'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img class="app-image" width="64" height="64" src="<?php echo $app['app_image']; ?>" onerror="failsafeImg(this)" /></a>
+                <a class="app-name" href="<?php echo '#'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a>
               </div><?php
             }
           }
@@ -73,34 +69,32 @@
     </div>
 
     <div>
-      <div class="tab-head">
-        <h2>Reward</h2>
-        <div>
-          <p>Display:</p>
-          <ul>
-            <li><a class="active a-app-campaign">All</a></li>
-            <li><a class="a-app">Active</a></li>
-            <li><a class="a-campaign">Expired</a></li>
-          </ul>
-        </div>
+      <div class="tab-head slim reward">
+        <p class="tab-name">Reward</p>
+        <span class="fr">
+            <a class="tab active" data-filter="">All</a>
+            <a class="tab" data-filter="active">Active</a>
+            <a class="tab" data-filter="expired">Expired</a>
+        </span>
+        <p class="fr p10">Display:</p>
       </div>
-      <div class="list_reward"></div>
-      <div class="pagination-reward strip"></div>
+
+      <div class="list_reward p25"></div>
+      <div class="pagination-reward strip mt5 mb5"></div>
     </div>
 	
     <div>
-      <div class="tab-head">
-        <h2>Recent Activity</h2>
-        <div>
-          <p>Display:</p>
-          <ul>
-            <li><a class="active a-activity-app-campaign">All</a></li>
-            <li><a class="a-activity-app">Applicaton</a></li>
-            <li><a class="a-activity-campaign">Campaign</a></li>
-            <li><a class="a-activity-me">Me</a></li>
-          </ul>
-        </div>
+      <div class="tab-head slim activity">
+        <p class="tab-name">Recent Activity</p>
+        <span class="fr">
+            <a class="tab active" data-filter="">All</a>
+            <a class="tab" data-filter="app">Application</a>
+            <a class="tab" data-filter="campaign">Campaign</a>
+            <a class="tab" data-filter="me">Me</a>
+        </span>
+        <p class="fr p10">Display:</p>
       </div>
+
       <div class="list_resent-activity"></div>
       <div class="pagination-activity strip"></div>
     </div>

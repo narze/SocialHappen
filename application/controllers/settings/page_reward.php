@@ -200,6 +200,10 @@ class Page_reward extends CI_Controller {
 					if($update){
 						//update success
 					}
+					
+					$input['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $input['start_timestamp']), $user['user_timezone_offset']);
+					$input['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $input['end_timestamp']), $user['user_timezone_offset']);
+					
 					$this->load->vars(array('reward_item'=>$input, 'reward_item_id'=>$reward_item_id));
 					$this->load->view('settings/page_apps/reward_item');
 				}

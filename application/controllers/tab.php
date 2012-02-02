@@ -85,6 +85,42 @@ class Tab extends CI_Controller {
 		//Install apps
 		$this->load->model('installed_apps_model', 'installed_apps');
 		$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id, 6);
+
+		//Reward
+		$current_user = $this->socialhappen->get_user();
+		$this->load->library('timezone_lib');
+		$this->load->model('reward_item_model', 'reward_item');
+		$criteria = array(
+			'criteria_type' => 'page',
+			'criteria_id' => $page_id
+		);
+		$sort_criteria = array('start_timestamp' => -1);
+		$reward_items = $this->reward_item->get($criteria, $sort_criteria);
+		$user_id_list = array();
+		foreach($reward_items as &$reward_item){
+			//Time
+			if($current_user) {
+				$reward_item['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $current_user['user_timezone_offset']);
+				$reward_item['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $current_user['user_timezone_offset']);
+			} else {
+				$reward_item['start_date'] = date('Y-m-d H:i:s', $reward_item['start_timestamp']);
+				$reward_item['end_date'] = date('Y-m-d H:i:s', $reward_item['end_timestamp']);
+			}
+			//User who get this reward
+			if(count($reward_item['user_list'])>0)
+			{
+				$user_id_list = array_values(array_merge($user_id_list, $reward_item['user_list']));
+			}
+		} unset($reward_item);
+
+		//User who get reward (all reward)
+		$user_list = array();
+		if(count($user_id_list)>0)
+		{
+			foreach($user_id_list as $user_id) {
+				$user_list[$user_id] = $this->socialhappen->get_user($user_id);
+			}
+		}
 		
 		$this->load->vars( array(
 			'page' => $page,
@@ -92,7 +128,9 @@ class Tab extends CI_Controller {
 			'is_admin' => $is_admin,
 			'is_logged_in' => $is_logged_in,
 			'get_started_completed' => $get_started_completed,
-			'apps'=>$apps
+			'apps'=>$apps,
+			'reward_items'=>$reward_items,
+			'user_list'=>$user_list
 			)
 		);
 		
@@ -166,6 +204,9 @@ class Tab extends CI_Controller {
 				echo 'You are guest';
 			} else {
 				$user_id = $user['user_id'];
+
+				/*
+				//Facebook friends
 				$fql = 'SELECT uid FROM page_fan WHERE page_id = '.$page['facebook_page_id'].' and uid IN (SELECT uid2 FROM friend WHERE uid1 = '.$user_facebook_id.')';
 				
 				$response = $this->FB->api(array(
@@ -183,8 +224,7 @@ class Tab extends CI_Controller {
 										'image' => 'http://graph.facebook.com/'.$friend['uid'].'/picture'
 									);
 				}
-				
-				$app_campaign_filter = $this->input->get('filter');
+				*/
 				
 				//user apps
 				$this->load->model('user_apps_model','user_apps');
@@ -193,12 +233,16 @@ class Tab extends CI_Controller {
 				//user campaigns
 				$this->load->model('user_campaigns_model','user_campaigns');
 				$user_campaigns = $this->user_campaigns->get_user_campaigns_by_user_id($user_id);
+
+				//Reward
+				$wishlist_items = NULL; //TODO get user wishlist
 				
 				$data = array(
 					'user' => $user,
-					'friends' => $friends,
-					'user_apps' => ($app_campaign_filter != 'campaign') ? $user_apps : NULL,
-					'user_campaigns' => ($app_campaign_filter != 'app') ? $user_campaigns : NULL
+					//'friends' => $friends,
+					'user_apps' => $user_apps,
+					'user_campaigns' => $user_campaigns,
+					'wishlist_items' => $wishlist_items
 				);
 				$this->load->view('tab/profile', $data);
 			}
@@ -316,6 +360,7 @@ class Tab extends CI_Controller {
 				}
 			}
 
+			//Campaign
 			$this->load->model('campaign_model','campaigns');
 			$campaign_status_id = $this->input->get('filter') ? $this->socialhappen->get_k('campaign_status', $this->input->get('filter')) : NULL;
 			$campaigns = $this->campaigns->get_page_campaigns_by_page_id_and_campaign_status_id($page_id,$campaign_status_id,$limit,$offset);
@@ -403,6 +448,104 @@ class Tab extends CI_Controller {
 		}
 	}
 	
+	function reward($page_id = NULL){
+		$this->load->model('page_model','pages');
+		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		if($page){
+			$user_facebook_id = $this->FB->getUser();
+		
+			$this->load->model('User_model','User');
+			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		
+			$this->load->model('user_model','users');
+			$user = $this->users->get_user_profile_by_user_id($user_id);
+			
+			$this->load->model('company_model','companies');
+			$company = $this->companies->get_company_profile_by_page_id($page_id);
+			
+			$this->load->model('user_companies_model','user_companies');
+			$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+			$is_user = $is_guest = FALSE;
+			if(!$user_id) {
+				$user_id = 0;
+				$is_guest = TRUE;
+			} else {
+				$is_user = TRUE;
+			}
+			
+			if($is_admin) {
+				$view_as = $this->input->get('viewas');
+				if($view_as == 'guest'){
+					$is_guest = TRUE;
+					$is_user = FALSE;
+					$is_admin = FALSE;
+				} else if($view_as == 'user'){
+					$is_guest = FALSE;
+					$is_user = TRUE;
+					$is_admin = FALSE;
+				} else {
+					$is_guest = FALSE;
+					$is_user = FALSE;				
+				}
+			}
+
+			//Reward
+			$this->load->library('Reward_lib');
+			$this->load->library('timezone_lib');
+			$current_user = $this->socialhappen->get_user();
+			switch($this->input->get('filter')) {
+				case 'active' : $reward_items = $this->reward_lib->get_active_redeem_items($page_id); break;
+				case 'expired' : $reward_items = $this->reward_lib->get_expired_redeem_items($page_id); break;
+				default : 
+					$this->load->model('reward_item_model', 'reward_item');
+					$criteria = array(
+						'criteria_type' => 'page',
+						'criteria_id' => $page_id
+					);
+					$sort_criteria = array('start_timestamp' => -1);
+					$reward_items = $this->reward_item->get($criteria, $sort_criteria);
+					break;
+			}
+			
+			$user_id_list = array();
+			foreach($reward_items as &$reward_item){
+				//Time
+				if($current_user) {
+					$reward_item['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $current_user['user_timezone_offset']);
+					$reward_item['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $current_user['user_timezone_offset']);
+				} else {
+					$reward_item['start_date'] = date('Y-m-d H:i:s', $reward_item['start_timestamp']);
+					$reward_item['end_date'] = date('Y-m-d H:i:s', $reward_item['end_timestamp']);
+				}
+				//User who get this reward
+				if(count($reward_item['user_list'])>0)
+				{
+					$user_id_list = array_values(array_merge($user_id_list, $reward_item['user_list']));
+				}
+			} unset($reward_item);
+
+			//User who get reward (all reward)
+			$user_list = array();
+			if(count($user_id_list)>0)
+			{
+				foreach($user_id_list as $user_id) {
+					$user_list[$user_id] = $this->socialhappen->get_user($user_id);
+				}
+			}
+
+			$data = array('user'=>$user,
+							'page' => $page,
+							'is_admin' => $is_admin,
+							'is_user' => $is_user,
+							'is_guest' => $is_guest,
+							'is_liked' => $this->page['liked'],
+							'reward_items' => $reward_items,
+							'user_list'=>$user_list
+			);
+			$this->load->view('tab/reward_items', $data);
+		}
+	}
+
 	function activities($page_id = NULL){
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);

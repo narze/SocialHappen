@@ -26,18 +26,29 @@ $(function(){
 			});
 
 			trigger_countdown = function (){
-				$('.campaign-end-time').each(function(){
+				$('.end-time-countdown').each(function(){
 					end_time = Date.createFromMysql($(this).text());
-					$(this).replaceWith($("<p></p>").countdown({
+					$(this).countdown({
 						until: end_time,
 						format: 'DHMS',
-						layout: '<strong>{dn}days {hnn}h {sep} {mnn}m {sep} {snn}s</strong>'})
-					.removeClass('hasCountdown'));
+						layout: '{dn}days {hnn}h {sep} {mnn}m {sep} {snn}s'});
 				});
 			};
+
+			campaign = function () {
+				$('div.list_app-camp').load(base_url+'tab/campaigns/'+page_id+'/'+per_page,function(){
+					$('.tab-head.campaign a').click(function(){
+						mode = '?filter='+$(this).attr('data-filter')+'&';
+						campaign_pagination();
+						$(this).addClass('active').siblings().removeClass('active');
+						trigger_countdown();
+					});
+					$('.tab-head.campaign a.active').click();
+				});
+			}
 			
 			var mode = '?';
-			function get_apps_campaigns(page_index,jq){
+			filter_campaigns = function (page_index,jq){
 				$('div.list_app-camp').load(base_url+'tab/campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode + viewas,trigger_countdown);
 				/*
 				$.get(base_url+'tab/campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode + viewas, function(result) {
@@ -51,28 +62,30 @@ $(function(){
 				}
 			}
 
-			function campaign_pagination(){
+			campaign_pagination = function (){
 				$.getJSON(base_url+"page/json_count_campaigns/"+page_id,function(campaign_count){
 					$('.pagination-app-campaign').pagination(campaign_count, {
 						items_per_page:per_page,
-						callback:get_apps_campaigns,
+						callback:filter_campaigns,
 						load_first_page:true,
 						next_text:null,
 						prev_text:null
 					});
 				});
 			}
-			
-			$('div.list_app-camp').load(base_url+'tab/campaigns/'+page_id+'/'+per_page,function(){
-				$('.tab-head.campaign a').click(function(){
-					mode = '?filter='+$(this).attr('data-filter')+'&';
-					campaign_pagination();
-					$(this).addClass('active').parent().siblings().find('a').removeClass('active');
+
+			activity = function () {
+				$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id,function(){
+					$('.tab-head.activity .tab').click(function(){
+						var filter = '?filter='+ $(this).attr('data-filter');
+						$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id+filter, activitiy_pagination);
+						$(this).addClass('active').siblings().removeClass('active');
+					});
+					$('.tab-head.activity .tab').eq(0).click();
 				});
-				$('.tab-head.campaign a.active').click();
-			});
+			}
 			
-			function filter_activities(page_index,jq){
+			filter_activities = function (page_index,jq){
 				$('div.list_resent-activity').children('ul').children('li').hide();
 				for(i=0;i<per_page;i++){
 					$('div.list_resent-activity').children('ul').children('li:eq('+((page_index * per_page)+i)+')').show();
@@ -87,7 +100,7 @@ $(function(){
 				}
 			}
 			
-			function activitiy_pagination(){
+			activitiy_pagination = function (){
 				count = $(this).children('ul').children('li').length;
 				$('.pagination-activity').pagination(count, {
 					items_per_page:per_page,
@@ -102,34 +115,46 @@ $(function(){
 				});
 			}
 			
-			$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id,function(){
-				$('a.a-activity-app-campaign').click(function(){
-					$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id,activitiy_pagination);
-					$(this).parent('li').parent('ul').find('li a').removeClass('active');
-					$(this).addClass('active');
+			
+
+			reward = function () {
+				$('div.list_reward').load(base_url+'tab/reward/'+page_id,function(){
+					$('.tab-head.reward .tab').click(function(){
+						var filter = '?filter='+ $(this).attr('data-filter');
+						$('div.list_reward').load(base_url+'tab/reward/'+page_id+'/'+filter, reward_pagination);
+						$(this).addClass('active').siblings().removeClass('active');
+					});
+					$('.tab-head.reward .tab').eq(0).click();
 				});
+			}
+
+			filter_reward = function (page_index,jq){
+				trigger_countdown();
+				$('div.list_reward').find('.reward-item').hide().eq(page_index).show();
 				
-				$('a.a-activity-app').click(function(){
-					$(this).parent('li').parent('ul').find('li a').removeClass('active');
-					$(this).addClass('active');
-					$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id+'?filter=app',activitiy_pagination);
+				if($('div.pagination-reward').find('a').attr('href') == '#') { 
+					$('div.pagination-reward').find('a').removeAttr('href'); // Remove href="#"
+				}
+				
+				if($('div.pagination-reward').find('a').length == 0) {
+					$('div.pagination-reward').find('div.pagination').remove();
+				}
+			}
+
+			reward_pagination = function (){
+				count = $(this).find('.reward-item').length;
+				$('.pagination-reward').pagination(count, {
+					items_per_page:1,
+					callback:filter_reward,
+					load_first_page:true,
+					next_text:null,
+					prev_text:null
 				});
-				
-				$('a.a-activity-campaign').click(function(){
-					$(this).parent('li').parent('ul').find('li a').removeClass('active');
-					$(this).addClass('active');
-					$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id+'?filter=campaign',activitiy_pagination);
-				});
-				
-				$('a.a-activity-me').click(function(){
-					$(this).parent('li').parent('ul').find('li a').removeClass('active');
-					$(this).addClass('active');
-					$('div.list_resent-activity').load(base_url+'tab/activities/'+page_id+'?filter=me',activitiy_pagination);
-				});
-				$('a.a-activity-app-campaign').click();
-				
-				
-			});
+			}
+
+			campaign();
+			reward();
+			activity();
 		});
 	}
 	

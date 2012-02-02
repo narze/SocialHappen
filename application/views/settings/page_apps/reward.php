@@ -1,6 +1,6 @@
 	<div id="reward">
 		<h2><span>Reward List Setting</span></h2>
-		<div class="tab-head">
+		<div class="tab-head round4">
 			Sort by :
 			<a class="tab sort active" data-sort="date">Date Added</a>
 			<a class="tab sort" data-sort="value">Value</a>

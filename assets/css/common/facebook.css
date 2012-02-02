@@ -50,19 +50,9 @@ div.account-data div.pic span {
 	left: 0;
 	top: 0;
 }
-div.account-data div.data {
-	float: right;
-	width: 365px;
-}
 div.account-data div.data h1 {font-size: 16px; color: #17418d; padding: 0 0 5px;}
 div.account-data div.data p {padding: 0 0 5px;}
-div.account-data div.data ul.counter {
-	width: 365px;
-	height: 31px;
-	background: url(../../images/bg_fb/bg_datalist.png) no-repeat;
-	position: relative;
-	top: 40px;
-}
+
 div.account-data div.data ul:after{
     clear:both;
     content:" ";
@@ -125,63 +115,6 @@ div.account-data div.data ul.counter li.setting a {
 }
 div.account-data div.data ul.counter li.setting a span {display: none;}
 
-div.account-data div.userview {
-	float: left;
-	width: 170px;
-	margin-left: 12px;
-}
-div.account-data div.userview>h1 {
-	font-size: 14px;
-	padding: 0 0 5px;
-}
-div.account-data div.friend {
-	width: 175px;
-	background: #f2f2f2;
-	border: 1px solid #ebebeb;
-	-webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-	padding: 7px 5px 0;
-	position: absolute;
-	top: 0;
-	right:5px;
-}
-div.account-data div.friend ul { width: 100%; overflow: hidden; margin: 0 0 5px -2px;}
-div.account-data div.friend ul>li {float:left; margin-left: 5px;}
-div.account-data div.friend p {margin-bottom: 5px; font-size: 11px;}
-div.account-data div.friend p a {
-	display: block;
-	height: 20px;
-	padding: 0 0 0 28px;
-	line-height: 20px;
-	color: #14495b;
-}
-div.account-data div.friend p a:hover {text-decoration: none;}
-div.account-data div.friend a.link-friendsjoin { background: url(../../images/bg_fb/bg_main.png) no-repeat 0 -530px;}
-div.account-data div.friend a.link-invite_friend {background: url(../../images/bg_fb/bg_main.png) no-repeat 2px -557px;}
-div.account-data div.userview ul {
-	width: 156px;
-	height: 48px;
-	background: url(../../images/bg_fb/bg_datalist2.png) no-repeat;
-}
-div.account-data div.userview ul>li {
-	float: left;
-	height: 48px;
-	text-align: right;
-	line-height: 48px;
-	font-weight: bold;
-	font-size: 14px;
-}
-div.account-data div.userview ul>li:first-child {
-	width: 54px;	
-	padding: 0 5px 0 30px;
-}
-div.account-data div.userview ul>li:first-child+li {
-	width: 35px;
-	padding: 0 5px 0 25px;
-}
-
-
 
 div.wrapper-content {
 	width: 498px;
@@ -193,65 +126,6 @@ div.wrapper-content {
 	margin: 7px auto 0;
 	padding: 10px 0;
 }
-div.tab-head {
-	height: 33px;
-	background: url(../../images/bg_fb/bg_tabhead.png) repeat-x;
-}
-div.tab-head:after{
-    clear:both;
-    content:" ";
-    display:block;
-}
-div.tab-head>h2 {
-	float: left;
-	height: 33px;
-	line-height: 33px;
-	margin-left: 14px;
-	font-size: 13px;
-	color: #fff;
-}
-div.tab-head>div {
-	float: right;
-	height: 33px;
-	color: #fff;
-}
-div.tab-head>div:after{
-    clear:both;
-    content:" ";
-    display:block;
-}
-div.tab-head>div>p {
-	float: left;
-	height: 33px;
-	line-height: 33px;
-}
-div.tab-head>div>ul {float: right;}
-div.tab-head>div>ul>li {
-	float: left;
-	height: 28px;
-	background: url(../../images/bg_fb/bg_tabhead-menu.png) no-repeat 0 0;
-	padding: 5px 4px 0;
-	
-}
-div.tab-head>div>ul>li:first-child {background: none;}
-div.tab-head>div>ul>li a {
-	display: block;
-	height: 23px;
-	line-height: 23px;
-	padding: 0 10px;
-	-webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-	color: #fff;
-	text-decoration: none;
-}
-div.tab-head>div>ul>li a.active {
-	background: #343434;
-	-moz-box-shadow:inset 0 0 10px #1f1f1f;
-	-webkit-box-shadow:inset 0 0 10px #1f1f1f;
-	box-shadow:inset 0 0 10px #1f1f1f;
-}
-div.tab-head .view-all {line-height:33px; padding-right:15px; text-decoration:underline;}
 div.list_app-camp {
 	width: 475px;
 	margin: 0 auto;

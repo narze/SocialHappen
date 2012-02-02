@@ -229,6 +229,7 @@ class SocialHappen{
 					'home/lightbox',
 				),
 				'style' => array(
+					'common/common',
 					'common/platform',
 					'common/main',
 					'common/fancybox/jquery.fancybox-1.3.4'
