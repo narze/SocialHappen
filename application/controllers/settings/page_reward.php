@@ -24,7 +24,19 @@ class Page_reward extends CI_Controller {
 				'criteria_id' => $page_id
 			);
 			$sort_criteria = array('start_timestamp' => -1);
-			if(($sort = $this->input->get('sort')) && ($order = $this->input->get('order'))){
+			$user = $this->socialhappen->get_user();
+			$this->load->library('timezone_lib');
+			$now = time();
+			
+			if(($sort = $this->input->get('sort')) && $sort === 'status'){
+				$reward_item_active = $this->reward_item->get(array(
+					'start_timestamp' => array('$lte'=>$now), 'end_timestamp'=> array('$gte'=>$now)),array('start_timestamp' => 1));
+				$reward_item_incoming = $this->reward_item->get(array(
+					'start_timestamp' => array('$gt'=>$now)),array('start_timestamp' => 1));
+				$reward_item_expired = $this->reward_item->get(array(
+					'end_timestamp'=> array('$lt'=>$now)),array('start_timestamp' => 1));
+				$reward_items = array_merge($reward_item_active, $reward_item_incoming, $reward_item_expired);
+			} else if($sort && ($order = $this->input->get('order'))){
 				if($order == 'desc'){
 					$order = -1;
 				} else { //asc
@@ -33,13 +45,11 @@ class Page_reward extends CI_Controller {
 				$sort_criteria = array(
 					$sort => $order
 				);
-			} else if($sort == 'status'){
-				//TODO 
+				$reward_items = $this->reward_item->get($criteria, $sort_criteria);
+			} else {
+				$reward_items = $this->reward_item->get($criteria, $sort_criteria);
 			}
 
-			$user = $this->socialhappen->get_user();
-			$this->load->library('timezone_lib');
-			$reward_items = $this->reward_item->get($criteria, $sort_criteria);
 			foreach($reward_items as &$reward_item){
 				
 				$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $user['user_timezone_offset']);
