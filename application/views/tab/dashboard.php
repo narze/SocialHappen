@@ -1,5 +1,5 @@
 <div class="wrapper-content">	
-	<div class="account-data">
+  <div class="account-data">
       <div class="pic"><img src="<?php echo imgsize($page['page_image'],'normal');?>" alt="" /><span></span></div>
 		<div class="data">
 			<h1><?php echo $page['page_name'];?></h1>
@@ -25,21 +25,67 @@
 			</ul>
 		</div>
     </div>
+
+    <div class="main-memu tab-white mb15">
+      <div class="tab active">Dashboard</div>
+      <div class="tab">Reward</div>
+      <div class="tab">Activities</div>
+    </div>
 	
     <div>
-      <div class="tab-head">
-        <h2>Application and Campaign</h2>
+      <div class="tab-head campaign">
+        <h2>Campaign</h2>
         <div>
           <p>Display:</p>
           <ul>
-            <li><a class="active a-app-campaign">All</a></li>
-            <li><a class="a-app">Applicaton</a></li>
-            <li><a class="a-campaign">Campaign</a></li>
+            <li><a class="active" data-filter="">All</a></li>
+            <li><a data-filter="active">Active</a></li>
+            <li><a data-filter="expired">Expired</a></li>
           </ul>
         </div>
       </div>
       <div class="list_app-camp"></div>
       <div class="pagination-app-campaign strip"></div>
+    </div>
+
+    <div>
+      <div class="tab-head">
+        <h2>Applications</h2>
+        <div>
+          <a class="view-all apps">View all</a>
+        </div>
+      </div>
+      <div class="app-icon-list<?php echo $apps ? '' : ' no-app'; ?>"><?php
+          if($apps)
+          {
+            foreach($apps as $app)
+            { ?> <div class="app-container">
+                <a class="app-icon" href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img class="app-image" width="64" height="64" src="<?php echo $app['app_image']; ?>" onerror="failsafeImg(this)" /></a>
+                <a class="app-name" href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a>
+              </div><?php
+            }
+          }
+          else
+          { ?>
+            <li class="app-container">No application.</li><?php
+          } ?>
+      </div>
+    </div>
+
+    <div>
+      <div class="tab-head">
+        <h2>Reward</h2>
+        <div>
+          <p>Display:</p>
+          <ul>
+            <li><a class="active a-app-campaign">All</a></li>
+            <li><a class="a-app">Active</a></li>
+            <li><a class="a-campaign">Expired</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="list_reward"></div>
+      <div class="pagination-reward strip"></div>
     </div>
 	
     <div>

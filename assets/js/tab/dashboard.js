@@ -18,7 +18,12 @@ $(function(){
 		}
 		
 		set_loading();
+
 		$('div#main').load(base_url+'tab/dashboard/'+page_id,function(){
+
+			$('.main-memu .tab').click(function(){
+				$(this).addClass('active').siblings().removeClass('active');
+			});
 
 			trigger_countdown = function (){
 				$('.campaign-end-time').each(function(){
@@ -33,67 +38,38 @@ $(function(){
 			
 			var mode = '?';
 			function get_apps_campaigns(page_index,jq){
-				$('div.list_app-camp').load(base_url+'tab/apps_campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode + viewas,trigger_countdown);
+				$('div.list_app-camp').load(base_url+'tab/campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode + viewas,trigger_countdown);
+				/*
+				$.get(base_url+'tab/campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + mode + viewas, function(result) {
+					trigger_countdown();
+					console.log(result);
+					$('div.list_app-camp').html(result);
+				});
+				*/
 				if($('div.pagination-app-campaign').find('a').length == 0) {
 					$('div.pagination-app-campaign').find('div.pagination').remove();
 				}
 			}
+
+			function campaign_pagination(){
+				$.getJSON(base_url+"page/json_count_campaigns/"+page_id,function(campaign_count){
+					$('.pagination-app-campaign').pagination(campaign_count, {
+						items_per_page:per_page,
+						callback:get_apps_campaigns,
+						load_first_page:true,
+						next_text:null,
+						prev_text:null
+					});
+				});
+			}
 			
-			$('div.list_app-camp').load(base_url+'tab/apps_campaigns/'+page_id+'/'+per_page,function(){
-				$('a.a-app-campaign').click(function(){
-					$.getJSON(base_url+"page/json_count_apps/"+page_id,function(app_count){
-						$.getJSON(base_url+"page/json_count_campaigns/"+page_id,function(campaign_count){
-							count = app_count+campaign_count;
-							mode = '?';
-							$('.pagination-app-campaign').pagination(count, {
-								items_per_page:per_page,
-								callback:get_apps_campaigns,
-								load_first_page:true,
-								next_text:null,
-								prev_text:null
-							});
-						});
-					});
-					$(this).parent('li').parent('ul').find('li a').removeClass('active');
-					$(this).addClass('active');
+			$('div.list_app-camp').load(base_url+'tab/campaigns/'+page_id+'/'+per_page,function(){
+				$('.tab-head.campaign a').click(function(){
+					mode = '?filter='+$(this).attr('data-filter')+'&';
+					campaign_pagination();
+					$(this).addClass('active').parent().siblings().find('a').removeClass('active');
 				});
-				
-				$('a.a-app').click(function(){
-					$.getJSON(base_url+"page/json_count_apps/"+page_id,function(app_count){
-					
-						count = app_count;
-						mode = '?filter=app&';
-						$('.pagination-app-campaign').pagination(count, {
-							items_per_page:per_page,
-							callback:get_apps_campaigns,
-							load_first_page:true,
-							next_text:null,
-							prev_text:null
-						});
-					
-					});
-					$(this).parent('li').parent('ul').find('li a').removeClass('active');
-					$(this).addClass('active');
-				});
-				
-				$('a.a-campaign').click(function(){
-					
-						$.getJSON(base_url+"page/json_count_campaigns/"+page_id,function(campaign_count){
-							count = campaign_count;
-							mode = '?filter=campaign&';
-							$('.pagination-app-campaign').pagination(count, {
-								items_per_page:per_page,
-								callback:get_apps_campaigns,
-								load_first_page:true,
-								next_text:null,
-								prev_text:null
-							});
-						});
-					
-					$(this).parent('li').parent('ul').find('li a').removeClass('active');
-					$(this).addClass('active');
-				});
-				$('a.a-app-campaign').click();
+				$('.tab-head.campaign a.active').click();
 			});
 			
 			function filter_activities(page_index,jq){

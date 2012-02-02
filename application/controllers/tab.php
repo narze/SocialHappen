@@ -81,13 +81,18 @@ class Tab extends CI_Controller {
 		//Is get-started completed?
 		$this->load->model('get_started_model', 'get_started');
 		$get_started_completed = $this->get_started->is_completed($page_id, 'page');
+
+		//Install apps
+		$this->load->model('installed_apps_model', 'installed_apps');
+		$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id, 6);
 		
 		$this->load->vars( array(
 			'page' => $page,
 			'is_liked' => $this->page['liked'],
 			'is_admin' => $is_admin,
 			'is_logged_in' => $is_logged_in,
-			'get_started_completed' => $get_started_completed
+			'get_started_completed' => $get_started_completed,
+			'apps'=>$apps
 			)
 		);
 		
@@ -200,6 +205,7 @@ class Tab extends CI_Controller {
 		}
 	}
 	
+	/** DEPRECATED
 	function apps_campaigns($page_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
@@ -263,6 +269,64 @@ class Tab extends CI_Controller {
 							'is_liked' => $this->page['liked'],
 							'campaigns' => ($app_campaign_filter != 'app') ? $campaigns : NULL,
 							'apps' => ($app_campaign_filter != 'campaign') ? $apps : NULL
+			);
+			$this->load->view('tab/apps_campaigns', $data);
+		}
+	}
+	*/
+
+	function campaigns($page_id = NULL, $limit = NULL, $offset = NULL){
+		$this->load->model('page_model','pages');
+		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		if($page){
+			$user_facebook_id = $this->FB->getUser();
+		
+			$this->load->model('User_model','User');
+			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		
+			$this->load->model('user_model','users');
+			$user = $this->users->get_user_profile_by_user_id($user_id);
+			
+			$this->load->model('company_model','companies');
+			$company = $this->companies->get_company_profile_by_page_id($page_id);
+			
+			$this->load->model('user_companies_model','user_companies');
+			$is_admin = $this->user_companies->is_company_admin($user_id, $company['company_id']);
+			$is_user = $is_guest = FALSE;
+			if(!$user_id) {
+				$user_id = 0;
+				$is_guest = TRUE;
+			} else {
+				$is_user = TRUE;
+			}
+			
+			if($is_admin) {
+				$view_as = $this->input->get('viewas');
+				if($view_as == 'guest'){
+					$is_guest = TRUE;
+					$is_user = FALSE;
+					$is_admin = FALSE;
+				} else if($view_as == 'user'){
+					$is_guest = FALSE;
+					$is_user = TRUE;
+					$is_admin = FALSE;
+				} else {
+					$is_guest = FALSE;
+					$is_user = FALSE;				
+				}
+			}
+
+			$this->load->model('campaign_model','campaigns');
+			$campaign_status_id = $this->input->get('filter') ? $this->socialhappen->get_k('campaign_status', $this->input->get('filter')) : NULL;
+			$campaigns = $this->campaigns->get_page_campaigns_by_page_id_and_campaign_status_id($page_id,$campaign_status_id,$limit,$offset);
+
+			$data = array('user'=>$user,
+							'page' => $page,
+							'is_admin' => $is_admin,
+							'is_user' => $is_user,
+							'is_guest' => $is_guest,
+							'is_liked' => $this->page['liked'],
+							'campaigns' => $campaigns
 			);
 			$this->load->view('tab/apps_campaigns', $data);
 		}

@@ -12,23 +12,23 @@
 		  <div class="recent-app">
 			<fieldset>
 				<legend>Recent Application</legend>
-				<ul <?php echo $recent_apps ? '' : 'class="no-app"'; ?>><?php
-					if($recent_apps)
-					{
-						foreach($recent_apps as $app)
-						{ ?>
-							<li>
-								<a href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img src="<?php echo $app['app_image']; ?>" /></a>
-								<p><a href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a><p>
-							</li><?php
-						}
-					}
-					else
-					{ ?>
-						<li>This user did not use any applications.</li><?php
-					} ?>
-				</ul><br />
 			</fieldset>
+			<ul class="app-icon-list<?php echo $recent_apps ? '' : ' no-app'; ?>"><?php
+				if($recent_apps)
+				{
+					foreach($recent_apps as $app)
+					{ ?>
+						<li class="app-container">
+							<a class="app-icon" href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img class="app-image" width="64" height="64" src="<?php echo $app['app_image']; ?>" /></a>
+							<a class="app-name" href="<?php echo base_url().'app/'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a>
+						</li><?php
+					}
+				}
+				else
+				{ ?>
+					<li class="app-container">This user did not use any applications.</li><?php
+				} ?>
+			</ul>
 		  </div>
 		  </div>
 		  
