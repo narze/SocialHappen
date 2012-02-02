@@ -34,10 +34,12 @@ class Bar extends CI_Controller {
 			$result = $this->bar_ctrl->create_company($input);
 
 			if($result['success']){
+				$this->load->view('bar/create_company_view');
 				$company_id = $result['data']['company_id'];
 				$this->load->view('common/redirect',array('redirect_parent'=>base_url().'company/'.$company_id));
 			} else {
 				echo $result['error'];
+				$this->load->view('bar/create_company_view');
 			}
 		}
 	}
