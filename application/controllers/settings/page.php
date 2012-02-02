@@ -4,10 +4,13 @@ class Page extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this -> socialhappen -> check_logged_in();
+		$this->socialhappen->check_logged_in();
 	}
 	
 	function index($page_id = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			exit('You are not admin');
+		}
 		$this->load->library('settings');
 		$setting_name = 'company';
 		$this->settings->view_settings($setting_name, $page_id, NULL);
@@ -92,7 +95,6 @@ class Page extends CI_Controller {
 	}
 	
 	function admin($page_id = NULL){
-		//$this->socialhappen->ajax_check();
 		$this->load->library('form_validation');
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access

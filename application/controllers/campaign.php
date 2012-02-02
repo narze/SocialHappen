@@ -4,7 +4,7 @@ class Campaign extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		// $this->socialhappen->check_logged_in();
+		$this->socialhappen->check_logged_in();
 		$this->load->library('pagination');
 		$this->load->library('controller/campaign_ctrl');
 	}
@@ -12,6 +12,9 @@ class Campaign extends CI_Controller {
 	function index($campaign_id = NULL){
 		if(!$this->socialhappen->is_developer_or_features_enabled(array('campaign_id'=>$campaign_id))){
 			redirect_back();
+		}
+		if(!$this->CI->socialhappen->check_admin(array('campaign_id' => $campaign_id),array())){
+			exit('You are not admin');
 		}
 		$result = $this->campaign_ctrl->main($campaign_id);
 		if($result['success']){
@@ -45,6 +48,9 @@ class Campaign extends CI_Controller {
 	}
 	
 	function get_stat_graph($campaign_id = NULL, $start_date = NULL, $end_date = NULL){
+		if(!$this->CI->socialhappen->check_admin(array('campaign_id' => $campaign_id),array())){
+			exit('You are not admin');
+		}
 		$this->load->library('audit_lib');
 		
 		if(empty($campaign_id)){

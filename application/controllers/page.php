@@ -5,7 +5,7 @@ if(!defined('BASEPATH'))
 class Page extends CI_Controller {
 	function __construct() {
 		parent::__construct();
-		$this -> socialhappen -> check_logged_in();
+		$this->socialhappen->check_logged_in();
 		$this->load->library('controller/page_ctrl');
 	}
 	
@@ -239,8 +239,10 @@ class Page extends CI_Controller {
 	 * fancybox for adding app 
 	 * @author Prachya P.
 	 */
-	function addapp_lightbox($page_id){
-
+	function addapp_lightbox($page_id = NULL) {
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			exit('You are not admin');
+		}
 		if($page_id){			
 			$this -> load -> model('company_model', 'companies');
 			$company = $this -> companies -> get_company_profile_by_page_id($page_id);
@@ -342,7 +344,7 @@ class Page extends CI_Controller {
 	 * Redirect to page config
 	 * @author Manassarn M.
 	 */
-	function config($page_id){
+	function config($page_id = NULL){
 		redirect(base_url().'settings/page_apps/'.$page_id);
 	}
 }

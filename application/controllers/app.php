@@ -29,7 +29,7 @@ class App extends CI_Controller {
 	 */
 	function config($app_install_id = NULL){
 		if(!$this->socialhappen->check_admin(array('app_install_id'=>$app_install_id),array('role_all_company_apps_edit','role_app_edit'))){
-			
+			exit('You are not admin');
 		} else {
 			$this->load->model('installed_apps_model','installed_apps');
 			$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);

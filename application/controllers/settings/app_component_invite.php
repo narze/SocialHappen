@@ -4,7 +4,7 @@ class App_component_invite extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-
+		$this->socialhappen->check_logged_in();
 		if($this->input->get('tab') == TRUE) {
 			$this->load->view('tab/header', 
 				array(
@@ -27,6 +27,9 @@ class App_component_invite extends CI_Controller {
 	}
 	
 	function index($app_install_id = NULL, $campaign_id = NULL){
+		if(!$this->socialhappen->check_admin(array('app_install_id'=>$app_install_id),array('role_all_company_apps_edit','role_app_edit'))){
+			exit('You are not admin');
+		}
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('facebook', 'Facebook', '');			
 		$this->form_validation->set_rules('email', 'Email', '');			

@@ -49,7 +49,7 @@ class Bar extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function select_company(){
-		$this -> socialhappen -> check_logged_in();
+		$this->socialhappen->check_logged_in();
 		$user_id = $this->socialhappen->get_user_id();
 		
 		$result = $this->bar_ctrl->select_company($user_id);

@@ -8,7 +8,7 @@ class Company extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this -> socialhappen -> check_logged_in();
+		$this->socialhappen->check_logged_in();
 		$this->load->library('controller/company_ctrl');
 	}
 

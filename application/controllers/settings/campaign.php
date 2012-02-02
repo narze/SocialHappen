@@ -4,7 +4,7 @@ class Campaign extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this -> socialhappen -> check_logged_in();
+		$this->socialhappen->check_logged_in();
 		$this->load->model('campaign_model','campaign');
 
 		if($this->input->get('tab') == TRUE) {
@@ -29,6 +29,9 @@ class Campaign extends CI_Controller {
 	}
 	
 	function index($app_install_id = NULL){
+		if(!$this->socialhappen->check_admin(array('app_install_id'=>$app_install_id),array('role_all_company_apps_edit','role_app_edit'))){
+			exit('You are not admin');
+		}
 		$user = $this->socialhappen->get_user();
 		$campaigns = $this->campaign->get_app_campaigns_by_app_install_id_ordered($app_install_id, 'campaign_start_timestamp desc');
 		$this->load->library('campaign_lib');
@@ -40,7 +43,9 @@ class Campaign extends CI_Controller {
 	}
 
 	function add($app_install_id = NULL){
-		//todo : check permission
+		if(!$this->socialhappen->check_admin(array('app_install_id'=>$app_install_id),array('role_all_company_apps_edit','role_app_edit'))){
+			exit('You are not admin');
+		}
 		$user = $this->socialhappen->get_user();
 		$this->load->library('campaign_lib');
 		$this->load->library('form_validation');
@@ -110,7 +115,9 @@ class Campaign extends CI_Controller {
 	}
 
 	function update($app_install_id = NULL, $campaign_id = NULL){
-		//todo : check permission
+		if(!$this->socialhappen->check_admin(array('app_install_id'=>$app_install_id),array('role_all_company_apps_edit','role_app_edit'))){
+			exit('You are not admin');
+		}
 		$user = $this->socialhappen->get_user();
 		$this->load->library('campaign_lib');
 		$this->load->library('form_validation');

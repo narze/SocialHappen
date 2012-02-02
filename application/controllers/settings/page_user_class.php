@@ -4,17 +4,19 @@ class Page_user_class extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this -> socialhappen -> check_logged_in();
+		$this->socialhappen->check_logged_in();
 	}
 	
 	function index($page_id = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			exit('You are not admin');
+		}
 		$this->load->library('settings');
 		$config_name = 'user_class';
 		$this->settings->view_page_app_settings($page_id, $config_name);
 	}
 
 	function view($page_id = NULL){
-
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
@@ -67,6 +69,9 @@ class Page_user_class extends CI_Controller {
 	}
 
 	function add_default_classes($page_id = NULL){
+		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
+			exit('You are not admin');
+		}
 		$this->load->library('app_component_lib');
 		$page_component = $this->app_component_lib->get_page($page_id);
 		if(!$page_component || !isset($page_component['classes']) || count($page_component['classes']) != 3){

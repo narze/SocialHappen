@@ -4,10 +4,13 @@ class Company extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this -> socialhappen -> check_logged_in();
+		$this->socialhappen->check_logged_in();
 	}
 	
 	function index($company_id = NULL){
+		if(!$this->socialhappen->check_admin(array('company_id' => $company_id),array('role_company_edit'))){
+			exit('You are not admin');
+		}
 		$this->load->library('settings');
 		$setting_name = 'company';
 		$this->settings->view_settings($setting_name, $company_id, $company_id);

@@ -9,7 +9,7 @@ class User extends CI_Controller {
 	}
 	
 	function index(){
-		$this -> socialhappen -> check_logged_in();
+		$this->socialhappen->check_logged_in();
 		$user_id = $this->input->get('uid');
 		$page_id = $this->input->get('pid');
 		$app_install_id = $this->input->get('aid');

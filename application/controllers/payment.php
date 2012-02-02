@@ -429,7 +429,7 @@ class Payment extends CI_Controller {
 	 * @author Weerapat P.
 	 * Redirect from paypal site
 	 */
-	function payment_complete($package_id)
+	function payment_complete($package_id = NULL)
 	{
 		$this->socialhappen->ajax_check();
 		$this->load->model('package_model','packages');
@@ -474,7 +474,7 @@ class Payment extends CI_Controller {
 	 * Cancel package
 	 * @author Weerapat P.
 	 */
-	function cancel_package($user_id)
+	function cancel_package($user_id = NULL)
 	{
 		$this->load->model('order_model','orders');
 		$this->load->model('package_model','package');
@@ -577,7 +577,7 @@ class Payment extends CI_Controller {
 		}
 	}
 	
-	function _add_package_user($user_id, $package_id)
+	function _add_package_user($user_id = NULL, $package_id = NULL)
 	{		
 		$this->load->model('package_model','packages');
 		$this->load->model('package_users_model','package_users');
@@ -625,7 +625,7 @@ class Payment extends CI_Controller {
 		return $result;
 	}
 	
-	function _add_company_app($user_id, $package_id)
+	function _add_company_app($user_id = NULL, $package_id = NULL)
 	{
 		/* 1.Find companies that user is admin
 		*  2.For each company remove old company apps
@@ -665,7 +665,7 @@ class Payment extends CI_Controller {
 	 * @param $data
 	 * Called by payment_form()
 	 */
-	function _set_express_checkout($data)
+	function _set_express_checkout($data = NULL)
 	{
 		$user = $data['user'];
 		$order = $data['order'];
@@ -876,7 +876,7 @@ class Payment extends CI_Controller {
 	 * @param $data
 	 * Called by payment_summary_paypal()
 	 */
-	function _do_express_checkout_payment($data)
+	function _do_express_checkout_payment($data = NULL)
 	{
 		$user = $data['user'];
 		$order = $data['order'];
@@ -1007,7 +1007,7 @@ class Payment extends CI_Controller {
 		}
 	}
 	
-	function _create_recurring_payments_profile($data)
+	function _create_recurring_payments_profile($data = NULL)
 	{		
 		$user = $data['user'];
 		$order = $data['order'];
@@ -1125,7 +1125,7 @@ class Payment extends CI_Controller {
 		}	
 	}
 	
-	function _manage_recurring_payments_profile_status($data)
+	function _manage_recurring_payments_profile_status($data = NULL)
 	{
 		$MRPPSFields = array(
 						'profileid' => $data['profileid'], 	// Required. Recurring payments profile ID returned from CreateRecurring...
@@ -1151,7 +1151,7 @@ class Payment extends CI_Controller {
 		}		
 	}
 	
-	function _get_recurring_payments_profile_details($profileid)
+	function _get_recurring_payments_profile_details($profileid = NULL)
 	{
 		$GRPPDFields = array(
 					   'profileid' => $profileid	// Profile ID of the profile you want to get details for.
