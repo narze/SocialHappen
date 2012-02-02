@@ -9,7 +9,6 @@ class Reward_item_model_test extends CI_Controller {
 		parent::__construct();
 		$this->load->library('unit_test');
 		$this->load->model('reward_item_model', 'reward_item');
-		$this->unit->reset_mongodb();
 	}
 
 	function __destruct(){
@@ -19,10 +18,14 @@ class Reward_item_model_test extends CI_Controller {
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
-    		if(preg_match("/(_test)$/",$method)){
+    		if(preg_match("/(_test)/",$method)){
     			$this->$method();
     		}
 		}
+	}
+
+	function setup_before_test(){
+		$this->unit->reset_mongodb();
 	}
 	
 	function start_test(){
@@ -33,7 +36,7 @@ class Reward_item_model_test extends CI_Controller {
 		$this->reward_item->create_index();
 	}
 
-	function add_test(){
+	function add_test_1(){
 		$name = name . '1';
 		$status = 'draft';
 		$type = redeem;
@@ -53,16 +56,18 @@ class Reward_item_model_test extends CI_Controller {
 		$this->reward_item_1 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 
-		$count = $this->reward_item->count_all();
-		$this->unit->run($count, 1, 'count', $count);
-		
+		// $count = $this->reward_item->count_all();
+		// $this->unit->run($count, 1, 'count', $count);
+	}
+
+	function add_test_2(){
 		$name = name . '2';
 		$status = 'published';
 		$type = random;
 		$random = array(
 			'amount' => 3
 		);
-		$start_timestamp = time() + 3600;
+		$start_timestamp = time() - 3600;
 		$end_timestamp = time() + 7200;
 		$criteria_type = 'app';
 		$criteria_id = '2';
@@ -76,7 +81,9 @@ class Reward_item_model_test extends CI_Controller {
 
 		$count = $this->reward_item->count_all();
 		$this->unit->run($count, 2, 'count', $count);
-		
+	}
+
+	function add_test_3(){
 		$name = name . '3';
 		$status = 'cancelled';
 		$type = top_score;
@@ -84,8 +91,8 @@ class Reward_item_model_test extends CI_Controller {
 			'first_place' => 1,
 			'last_place' => 4
 		);
-		$start_timestamp = time() + 3600;
-		$end_timestamp = time() + 7200;
+		$start_timestamp = time() - 7200;
+		$end_timestamp = time() - 3600;
 		$criteria_type = 'campaign';
 		$criteria_id = '3';
 		$image = base_url().'assets/images/cam-icon.png';
@@ -176,25 +183,6 @@ class Reward_item_model_test extends CI_Controller {
 		
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //start_timestamp > end_timestamp
-
-		$name = name . '1';
-		$status = 'draft';
-		$type = top_score;
-		$top_score = array(
-			'first_place' => 3,
-			'last_place' => 5
-		);
-		$start_timestamp = time() - 2;
-		$end_timestamp = time() - 1;
-		$criteria_type = 'page';
-		$criteria_id = 1;
-		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
-		$description = 'This is pasta!!!';
-		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
-		$result = $this->reward_item->add($input);
-		$this->unit->run($result, FALSE, "\$result", $result); //end_timestamp < time()
 
 		$name = name . '1';
 		$status = 'badstatus';

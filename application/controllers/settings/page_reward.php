@@ -32,12 +32,10 @@ class Page_reward extends CI_Controller {
 			$now = time();
 			
 			if(($sort = $this->input->get('sort')) && $sort === 'status'){
-				$reward_item_active = $this->reward_item->get(array(
-					'start_timestamp' => array('$lte'=>$now), 'end_timestamp'=> array('$gte'=>$now)),array('start_timestamp' => 1));
-				$reward_item_incoming = $this->reward_item->get(array(
-					'start_timestamp' => array('$gt'=>$now)),array('start_timestamp' => 1));
-				$reward_item_expired = $this->reward_item->get(array(
-					'end_timestamp'=> array('$lt'=>$now)),array('start_timestamp' => 1));
+				$this->load->library('reward_lib');
+				$reward_item_active = $this->reward_lib->get_active_redeem_items($page_id);
+				$reward_item_incoming = $this->reward_lib->get_incoming_redeem_items($page_id);
+				$reward_item_expired = $this->reward_lib->get_expired_redeem_items($page_id);
 				$reward_items = array_merge($reward_item_active, $reward_item_incoming, $reward_item_expired);
 			} else if($sort && ($order = $this->input->get('order'))){
 				if($order == 'desc'){

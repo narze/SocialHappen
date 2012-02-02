@@ -128,7 +128,7 @@
 		if(!in_array($input['criteria_type'], array('page', 'app', 'campaign'))){
 			return FALSE;
 		}
-		if($input['start_timestamp'] > $input['end_timestamp'] || $input['end_timestamp'] < time()){
+		if($input['start_timestamp'] > $input['end_timestamp']){
 			return FALSE;
 		}
 		if($input_type === 'redeem'){
