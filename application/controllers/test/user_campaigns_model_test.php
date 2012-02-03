@@ -111,6 +111,60 @@ class User_campaigns_model_test extends CI_Controller {
 		$result = $this->user_campaigns->is_user_in_campaign($user_id, $campaign_id);
 		$this->unit->run($result, FALSE, 'is_user_in_campaign', $result);
 	}
+
+	function get_incoming_user_campaigns_test(){
+		$user_id = 1;
+		$result = $this->user_campaigns->get_incoming_user_campaigns($user_id);
+		$this->unit->run($result, array(), "\$result", $result);
+		$user_id = 2;
+		$result = $this->user_campaigns->get_incoming_user_campaigns($user_id);
+		$this->unit->run($result, array(), "\$result", $result);
+	}
+
+	function get_active_user_campaigns_test(){
+		$user_id = 1;
+		$result = $this->user_campaigns->get_active_user_campaigns($user_id);
+		$this->unit->run($result, array(), "\$result", $result);
+		$user_id = 2;
+		$result = $this->user_campaigns->get_active_user_campaigns($user_id);
+		$this->unit->run($result[0]['campaign_id'], 2, "\$result[0]['campaign_id']", $result[0]['campaign_id']);
+	}
+
+	function get_expired_user_campaigns_test(){
+		$user_id = 1;
+		$result = $this->user_campaigns->get_expired_user_campaigns($user_id);
+		$this->unit->run($result, array(), "\$result", $result);
+		$user_id = 2;
+		$result = $this->user_campaigns->get_expired_user_campaigns($user_id);
+		$this->unit->run($result, array(), "\$result", $result);
+	}
+
+	function count_incoming_user_campaigns_test(){
+		$user_id = 1;
+		$result = $this->user_campaigns->count_incoming_user_campaigns($user_id);
+		$this->unit->run($result, 0, "\$result", $result);
+		$user_id = 2;
+		$result = $this->user_campaigns->count_incoming_user_campaigns($user_id);
+		$this->unit->run($result, 0, "\$result", $result);
+	}
+
+	function count_active_user_campaigns_test(){
+		$user_id = 1;
+		$result = $this->user_campaigns->count_active_user_campaigns($user_id);
+		$this->unit->run($result, 0, "\$result", $result);
+		$user_id = 2;
+		$result = $this->user_campaigns->count_active_user_campaigns($user_id);
+		$this->unit->run($result, 1, "\$result", $result);
+	}
+
+	function count_expired_user_campaigns_test(){
+		$user_id = 1;
+		$result = $this->user_campaigns->count_expired_user_campaigns($user_id);
+		$this->unit->run($result, 0, "\$result", $result);
+		$user_id = 2;
+		$result = $this->user_campaigns->count_expired_user_campaigns($user_id);
+		$this->unit->run($result, 0, "\$result", $result);
+	}
 }
 /* End of file user_campaigns_model_test.php */
 /* Location: ./application/controllers/test/user_campaigns_model_test.php */

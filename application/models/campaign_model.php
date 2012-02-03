@@ -210,6 +210,71 @@ class Campaign_model extends CI_Model {
 		$this -> db -> join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
 		return $this->db->count_all_results('campaign');
 	}
+
+	function get_incoming_campaigns_by_page_id($page_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('page_id',$page_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_start_timestamp) > CURRENT_TIMESTAMP()');
+		$this->db->order_by('campaign_start_timestamp', 'desc');
+		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		$result = $this->db->get('campaign')->result_array();
+		return $this->socialhappen->map_v($result, array('app_install_status', 'campaign_status'));
+	}
+
+	function get_active_campaigns_by_page_id($page_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('page_id',$page_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_start_timestamp) <= CURRENT_TIMESTAMP()');
+		$this->db->where('TIMESTAMP(campaign_end_timestamp) >= CURRENT_TIMESTAMP()');
+		$this->db->order_by('campaign_start_timestamp', 'desc');
+		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		$result = $this->db->get('campaign')->result_array();
+		return $this->socialhappen->map_v($result, array('app_install_status', 'campaign_status'));
+	}
+
+	function get_expired_campaigns_by_page_id($page_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('page_id',$page_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_end_timestamp) < CURRENT_TIMESTAMP()');
+		$this->db->order_by('campaign_start_timestamp', 'desc');
+		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		$result = $this->db->get('campaign')->result_array();
+		return $this->socialhappen->map_v($result, array('app_install_status', 'campaign_status'));
+	}
+
+	function count_incoming_campaigns_by_page_id($page_id = NULL){
+		$this->db->where('page_id',$page_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_start_timestamp) > CURRENT_TIMESTAMP()');
+		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this->db->count_all_results('campaign');
+	}
+
+	function count_active_campaigns_by_page_id($page_id = NULL){
+		$this->db->where('page_id',$page_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_start_timestamp) <= CURRENT_TIMESTAMP()');
+		$this->db->where('TIMESTAMP(campaign_end_timestamp) >= CURRENT_TIMESTAMP()');
+		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this->db->count_all_results('campaign');
+	}
+
+	function count_expired_campaigns_by_page_id($page_id = NULL){
+		$this->db->where('page_id',$page_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_end_timestamp) < CURRENT_TIMESTAMP()');
+		$this->db->join('installed_apps', 'campaign.app_install_id=installed_apps.app_install_id');
+		return $this->db->count_all_results('campaign');
+	}
 }
 
 /* End of file campaign_model.php */

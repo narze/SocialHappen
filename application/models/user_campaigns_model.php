@@ -12,7 +12,7 @@ class User_campaigns_model extends CI_Model {
 	 * @return array
 	 * @author Manassarn M.
 	 */
-	function get_campaign_users_by_campaign_id($campaign_id =NULL, $limit = NULL, $offset = NULL){
+	function get_campaign_users_by_campaign_id($campaign_id = NULL, $limit = NULL, $offset = NULL){
 		if($limit){
 			$this->db->limit($limit, $offset);
 		}
@@ -27,7 +27,7 @@ class User_campaigns_model extends CI_Model {
 	 * @return array
 	 * @author Manassarn M.
 	 */
-	function count_campaign_users_by_campaign_id($campaign_id =NULL){
+	function count_campaign_users_by_campaign_id($campaign_id = NULL){
 		return $this -> db -> where(array('campaign_id' => $campaign_id)) -> count_all_results('user_campaigns');
 	}
 
@@ -37,7 +37,7 @@ class User_campaigns_model extends CI_Model {
 	 * @return array
 	 * @author Manassarn M.
 	 */
-	function get_user_campaigns_by_user_id($user_id =NULL, $limit = NULL, $offset = NULL){
+	function get_user_campaigns_by_user_id($user_id = NULL, $limit = NULL, $offset = NULL){
 		if($limit){
 			$this->db->limit($limit, $offset);
 		}
@@ -98,6 +98,86 @@ class User_campaigns_model extends CI_Model {
 		}
 		$this->db->where(array('user_id' => $user_id, 'campaign_id' => $campaign_id));
 		return $this->db->count_all_results('user_campaigns') === 1;
+	}
+
+	function get_incoming_user_campaigns($user_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('user.user_id',$user_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_start_timestamp) > CURRENT_TIMESTAMP()');
+		$this->db->order_by('campaign_start_timestamp', 'desc');
+		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
+		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
+		$result = $this -> db -> get_where('user_campaigns') -> result_array();
+		return $this->socialhappen->map_v($result, array('campaign_status', 'user_gender'));
+	}
+
+	function get_active_user_campaigns($user_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('user.user_id',$user_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_start_timestamp) <= CURRENT_TIMESTAMP()');
+		$this->db->where('TIMESTAMP(campaign_end_timestamp) >= CURRENT_TIMESTAMP()');
+		$this->db->order_by('campaign_start_timestamp', 'desc');
+		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
+		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
+		$result = $this -> db -> get_where('user_campaigns') -> result_array();
+		return $this->socialhappen->map_v($result, array('campaign_status', 'user_gender'));
+	}
+
+	function get_expired_user_campaigns($user_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('user.user_id',$user_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_end_timestamp) < CURRENT_TIMESTAMP()');
+		$this->db->order_by('campaign_start_timestamp', 'desc');
+		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
+		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
+		$result = $this -> db -> get_where('user_campaigns') -> result_array();
+		return $this->socialhappen->map_v($result, array('campaign_status', 'user_gender'));
+	}
+
+	function count_incoming_user_campaigns($user_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('user.user_id',$user_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_start_timestamp) > CURRENT_TIMESTAMP()');
+		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
+		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
+		return $this->db->count_all_results('user_campaigns');
+	}
+
+	function count_active_user_campaigns($user_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('user.user_id',$user_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_start_timestamp) <= CURRENT_TIMESTAMP()');
+		$this->db->where('TIMESTAMP(campaign_end_timestamp) >= CURRENT_TIMESTAMP()');
+		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
+		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
+		return $this->db->count_all_results('user_campaigns');
+	}
+
+	function count_expired_user_campaigns($user_id = NULL, $limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
+		$this->db->where('user.user_id',$user_id);
+		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('TIMESTAMP(campaign_end_timestamp) < CURRENT_TIMESTAMP()');
+		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
+		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
+		return $this->db->count_all_results('user_campaigns');
 	}
 }
 

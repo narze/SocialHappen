@@ -262,6 +262,59 @@ class Campaign_model_test extends CI_Controller {
 		
 	}
 
+	function add_incoming_and_expired_campaign_for_test(){
+		date_default_timezone_set('Asia/Bangkok');
+		$campaign = array(
+			'app_install_id' => 1,
+			'campaign_name' => 'incoming',
+			'campaign_detail' => 'incoming',
+			'campaign_status_id' => '2',
+			'campaign_active_member' => '0',
+			'campaign_all_member' => '1',
+			'campaign_start_timestamp' => date('Y-m-d H:i:s', time()+1),
+			'campaign_end_timestamp' => date('Y-m-d H:i:s', time()+2)
+		);
+		$campaign_id = $this->campaigns->add_campaign($campaign);
+		$this->unit->run($campaign_id,'is_int','add_campaign()');
+	}
+
+	function get_incoming_campaigns_by_page_id_test(){
+		$page_id = 1;
+		$result = $this->campaigns->get_incoming_campaigns_by_page_id($page_id); //8
+		$this->unit->run($result[0]['campaign_name'], 'incoming', "\$result[0]['campaign_name']", $result[0]['campaign_name']);
+	}
+
+	function get_active_campaigns_by_page_id_test(){
+		$page_id = 1;
+		$result = $this->campaigns->get_active_campaigns_by_page_id($page_id); //2
+		$this->unit->run($result[0]['campaign_name'], 'Campaign test 2', "\$result[0]['campaign_name']", $result[0]['campaign_name']);
+		$this->unit->run(count($result), 1, "\count($result)", count($result));
+	}
+
+	function get_expired_campaigns_by_page_id_test(){
+		$page_id = 1;
+		$result = $this->campaigns->get_expired_campaigns_by_page_id($page_id); //4
+		$this->unit->run($result[0]['campaign_name'], 'Campaign test 3', "\$result[0]['campaign_name']", $result[0]['campaign_name']);
+	}
+
+	function count_incoming_campaigns_by_page_id_test(){
+		$page_id = 1;
+		$result = $this->campaigns->count_incoming_campaigns_by_page_id($page_id);
+		$this->unit->run($result, 1, "\$result", $result);
+	}
+
+	function count_active_campaigns_by_page_id_test(){
+		$page_id = 1;
+		$result = $this->campaigns->count_active_campaigns_by_page_id($page_id);
+		$this->unit->run($result, 1, "\$result", $result);
+	}
+
+	function count_expired_campaigns_by_page_id_test(){
+		$page_id = 1;
+		$result = $this->campaigns->count_expired_campaigns_by_page_id($page_id);
+		$this->unit->run($result, 1, "\$result", $result);
+	}
+
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */
