@@ -657,7 +657,7 @@ class DB_Sync {
 							    'campaign_active_member' => 2,
 							    'campaign_all_member' => 10, 
 							    'campaign_start_timestamp' => '2011-05-19',
-							    'campaign_end_timestamp' => '2012-05-18',
+							    'campaign_end_timestamp' => '2021-05-18',
 								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							),
@@ -670,13 +670,13 @@ class DB_Sync {
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18', 
-							    'campaign_end_timestamp' => '2011-06-18',
+							    'campaign_end_timestamp' => '2021-06-18',
 								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
 								'campaign_end_message' => 'It is ended'
 							),
 							array(
 							    'campaign_id' => 4, 
-							    'app_install_id' => 8, 
+							    'app_install_id' => 2, 
 							    'campaign_name' => 'Campaign test 3',
 							    'campaign_detail' => 'Campaign test detail 3', 
 							    'campaign_status_id' => 2, 
