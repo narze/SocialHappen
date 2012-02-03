@@ -89,13 +89,17 @@ class Tab_ctrl_test extends CI_Controller {
 		
 	}
 
+	/** DEPRECATED
 	function apps_campaigns_test(){
 		
 	}
+	*/
 
+	/** DEPRECATED
 	function user_apps_campaigns_test(){
 		
 	}
+	*/
 
 	function activities_test(){
 		

@@ -46,6 +46,30 @@ class Page extends CI_Controller {
 		$count = $this->campaigns->count_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id);
 		echo json_encode($count);
 	}
+
+	/**
+	 * JSON : Count active campaigns
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_active_campaigns($page_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_active_campaigns_by_page_id($page_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count expired campaigns
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_expired_campaigns($page_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_expired_campaigns_by_page_id($page_id);
+		echo json_encode($count);
+	}
 	
 	
 	/**
@@ -72,6 +96,32 @@ class Page extends CI_Controller {
 		$this->socialhappen->ajax_check();
 		$this->load->model('user_campaigns_model','user_campaigns');
 		$count = $this->user_campaigns->count_user_campaigns_by_user_id_and_page_id_and_campaign_status_id($user_id, $page_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count active user campaigns
+	 * @param $user_id
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_active_user_campaigns($user_id = NULL, $page_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('user_campaigns_model','user_campaigns');
+		$count = $this->user_campaigns->count_active_user_campaigns($user_id); //TODO: put $page_id or not?
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count expired user campaigns
+	 * @param $user_id
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function count_expired_user_campaigns($user_id = NULL, $page_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('user_campaigns_model','user_campaigns');
+		$count = $this->user_campaigns->count_active_user_campaigns($user_id); //TODO: put $page_id or not?
 		echo json_encode($count);
 	}
 		

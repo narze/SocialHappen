@@ -26,77 +26,78 @@
 		</div>
     </div>
 
-    <div class="main-memu tab-white mb15">
-      <div class="tab active">Dashboard</div>
-      <div class="tab">Reward</div>
-      <div class="tab">Activities</div>
+    <div class="main-menu tab-white mb15">
+      <div class="tab active" data-href="page-dashboard">Dashboard</div>
+      <div class="tab" data-href="page-reward">Reward</div>
+      <div class="tab" data-href="page-activities">Activities</div>
     </div>
-	
-    <div>
-      <div class="tab-head slim campaign">
-        <p class="tab-name">Campaign</p>
-        <span class="fr">
-            <a class="tab active" data-filter="">All</a>
-            <a class="tab" data-filter="active">Active</a>
-            <a class="tab" data-filter="expired">Expired</a>
-        </span>
-        <p class="fr p10">Display:</p>
+	   
+    <div class="main-content">
+      <div class="campaign-box">
+        <div class="tab-head slim">
+          <p class="tab-name">Campaign</p>
+          <span class="fr">
+              <a class="tab active" data-filter="">All</a>
+              <a class="tab" data-filter="active">Active</a>
+              <a class="tab" data-filter="expired">Expired</a>
+          </span>
+          <p class="fr p10">Display:</p>
+        </div>
+        <div class="list-campaign"></div>
+        <div class="pagination-campaign strip"></div>
       </div>
-      <div class="list_app-camp"></div>
-      <div class="pagination-app-campaign strip"></div>
-    </div>
 
-    <div>
-      <div class="tab-head slim applications">
-        <p class="tab-name">Applications</p>
-        <a class="view-all-apps fr underline">View all</a>
-      </div>
-      <div class="app-icon-list<?php echo $apps ? '' : ' no-app'; ?>"><?php
-          if($apps)
-          {
-            foreach($apps as $app)
-            { ?> <div class="app-container">
-                <a class="app-icon" href="<?php echo '#'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img class="app-image" width="64" height="64" src="<?php echo $app['app_image']; ?>" onerror="failsafeImg(this)" /></a>
-                <a class="app-name" href="<?php echo '#'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a>
-              </div><?php
+      <div class="applications-box">
+        <div class="tab-head slim">
+          <p class="tab-name">Applications</p>
+          <a class="view-all-apps fr underline">View all</a>
+        </div>
+        <div class="app-icon-list<?php echo $apps ? '' : ' no-app'; ?>"><?php
+            if($apps)
+            {
+              foreach($apps as $app)
+              { ?> <div class="app-container">
+                  <a class="app-icon" href="<?php echo '#'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img class="app-image" width="64" height="64" src="<?php echo $app['app_image']; ?>" onerror="failsafeImg(this)" /></a>
+                  <a class="app-name" href="<?php echo '#'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a>
+                </div><?php
+              }
             }
-          }
-          else
-          { ?>
-            <li class="app-container">No application.</li><?php
-          } ?>
-      </div>
-    </div>
-
-    <div>
-      <div class="tab-head slim reward">
-        <p class="tab-name">Reward</p>
-        <span class="fr">
-            <a class="tab active" data-filter="">All</a>
-            <a class="tab" data-filter="active">Active</a>
-            <a class="tab" data-filter="expired">Expired</a>
-        </span>
-        <p class="fr p10">Display:</p>
+            else
+            { ?>
+              <li class="app-container">No application.</li><?php
+            } ?>
+        </div>
       </div>
 
-      <div class="list_reward p25"></div>
-      <div class="pagination-reward strip mt5 mb5"></div>
-    </div>
-	
-    <div>
-      <div class="tab-head slim activity">
-        <p class="tab-name">Recent Activity</p>
-        <span class="fr">
-            <a class="tab active" data-filter="">All</a>
-            <a class="tab" data-filter="app">Application</a>
-            <a class="tab" data-filter="campaign">Campaign</a>
-            <a class="tab" data-filter="me">Me</a>
-        </span>
-        <p class="fr p10">Display:</p>
-      </div>
+      <div class="reward-box">
+        <div class="tab-head slim">
+          <p class="tab-name">Reward</p>
+          <span class="fr">
+              <a class="tab active" data-filter="">All</a>
+              <a class="tab" data-filter="active">Active</a>
+              <a class="tab" data-filter="expired">Expired</a>
+          </span>
+          <p class="fr p10">Display:</p>
+        </div>
 
-      <div class="list_resent-activity"></div>
-      <div class="pagination-activity strip"></div>
+        <div class="list-reward p25"></div>
+        <div class="pagination-reward strip mt5 mb5"></div>
+      </div>
+  	
+      <div class="activity-box">
+        <div class="tab-head slim">
+          <p class="tab-name">Recent Activity</p>
+          <span class="fr">
+              <a class="tab active" data-filter="">All</a>
+              <a class="tab" data-filter="app">Application</a>
+              <a class="tab" data-filter="campaign">Campaign</a>
+              <a class="tab" data-filter="me">Me</a>
+          </span>
+          <p class="fr p10">Display:</p>
+        </div>
+
+        <div class="list-recent-activity"></div>
+        <div class="pagination-activity strip"></div>
+      </div>
     </div>
-	
   </div>

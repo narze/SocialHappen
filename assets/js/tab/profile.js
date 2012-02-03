@@ -1,4 +1,5 @@
 $(function(){
+	/*
 	$('a.a-profile').live('click',function(){
 		set_loading();
 		
@@ -129,4 +130,5 @@ $(function(){
 		});
 		return false;
 	});
+	*/
 });

@@ -362,8 +362,28 @@ class Tab extends CI_Controller {
 
 			//Campaign
 			$this->load->model('campaign_model','campaigns');
-			$campaign_status_id = $this->input->get('filter') ? $this->socialhappen->get_k('campaign_status', $this->input->get('filter')) : NULL;
-			$campaigns = $this->campaigns->get_page_campaigns_by_page_id_and_campaign_status_id($page_id,$campaign_status_id,$limit,$offset);
+			$this->load->model('user_campaigns_model','user_campaigns');
+			$filter = $this->input->get('filter');
+			switch($filter) {
+				case 'me':
+					$campaigns = $this->user_campaigns->get_user_campaigns_by_user_id($user_id,$limit,$offset);
+					break;
+				case 'me-active':
+					$campaigns = $this->user_campaigns->get_active_user_campaigns($user_id,$limit,$offset);
+					break;
+				case 'me-expired':
+					$campaigns = $this->user_campaigns->get_expired_user_campaigns($user_id,$limit,$offset);
+					break;
+				case 'active':
+					$campaigns = $this->campaigns->get_active_campaigns_by_page_id($page_id,$limit,$offset);
+					break;
+				case 'expired':
+					$campaigns = $this->campaigns->get_expired_campaigns_by_page_id($page_id,$limit,$offset);
+					break;
+				default : 
+					$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id,$limit,$offset);
+					break;
+			}
 
 			$data = array('user'=>$user,
 							'page' => $page,
@@ -377,6 +397,7 @@ class Tab extends CI_Controller {
 		}
 	}
 	
+	/** DEPRECATED
 	function user_apps_campaigns($page_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
@@ -447,6 +468,7 @@ class Tab extends CI_Controller {
 			$this->load->view('tab/apps_campaigns', $data);
 		}
 	}
+	*/
 	
 	function reward($page_id = NULL){
 		$this->load->model('page_model','pages');
@@ -540,7 +562,8 @@ class Tab extends CI_Controller {
 							'is_guest' => $is_guest,
 							'is_liked' => $this->page['liked'],
 							'reward_items' => $reward_items,
-							'user_list'=>$user_list
+							'user_list'=>$user_list,
+							'tab_head'=>$this->input->get('tabhead')
 			);
 			$this->load->view('tab/reward_items', $data);
 		}

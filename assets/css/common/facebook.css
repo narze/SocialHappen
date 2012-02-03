@@ -126,85 +126,90 @@ div.wrapper-content {
 	margin: 7px auto 0;
 	padding: 10px 0;
 }
-div.list_app-camp {
+div.list-campaign {
 	width: 475px;
 	margin: 0 auto;
 }
-div.list_app-camp>ul>li {
+div.list-campaign>ul>li {
 	width: 100%;
 	padding: 12px 0;
 	border-bottom: 1px solid #e1e1e1;
 }
-div.list_app-camp>ul>li:after{
+div.list-campaign>ul>li:after{
     clear:both;
     content:" ";
     display:block;
 }
-div.list_app-camp>ul>li>div:first-child {
+div.list-campaign>ul>li>div:first-child {
 	float: left;
 	width: 230px;
 	min-height: 75px;
 	padding: 5px 0 0 90px;
 	position: relative;
 }
-div.list_app-camp>ul>li>div:first-child p.pic {
+div.list-campaign>ul>li>div:first-child p.pic {
 	position: absolute;
 	left: 0;
 	top: 0;
 }
-div.list_app-camp>ul>li>div:first-child h2 { font-size: 12px; color: #63791c; padding-bottom: 5px;}
-div.list_app-camp>ul>li>div:first-child p {padding-bottom: 5px;}
-div.list_app-camp>ul>li>div:first-child p a { color: #63791c; font-weight: bold; text-decoration: underline;}
-div.list_app-camp>ul>li>div:first-child p a:hover {text-decoration: none;}
-div.list_app-camp>ul>li>div:first-child p.link {position: absolute; left: 90px; bottom: 0; padding: 0;}
-div.list_app-camp>ul>li>div:first-child p.link>a+a {
+div.list-campaign>ul>li>div:first-child p.pic img {width:80px; height:80px;}
+div.list-campaign>ul>li>div:first-child h2 { font-size: 12px; color: #63791c; padding-bottom: 5px;}
+div.list-campaign>ul>li>div:first-child p {padding-bottom: 5px;}
+div.list-campaign>ul>li>div:first-child p a { color: #63791c; font-weight: bold; text-decoration: underline;}
+div.list-campaign>ul>li>div:first-child p a:hover {text-decoration: none;}
+div.list-campaign>ul>li>div:first-child p.link {position: absolute; left: 90px; bottom: 0; padding: 0;}
+div.list-campaign>ul>li>div:first-child p.link>a+a {
 	margin-left: 5px;
 	padding-left: 11px;
 	background:url(../../images/bg_fb/bg_main.png) 0 -580px;
 }
-div.list_app-camp>ul>li>div:first-child+div {
+div.list-campaign>ul>li>div:first-child+div {
 	float: right;
 	width: 148px;
-	background: #f2f2f2;
-	border: 1px solid #ebebeb;
+	padding: 7px 0;
+	text-align: center;
+	background-color: #f2f2f2;
+	border-top: 1px solid #e0e0e0;
+	border-right: 1px solid #ebebeb;
+	border-bottom: 1px solid #f2f2f2;
+	border-left: 1px solid #ebebeb;
 	-webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-	padding: 7px 0 0;
-	text-align: center;
+	-webkit-box-shadow:inset 0 1px 1px #ebebeb;
+    -moz-box-shadow:inset 0 1px 1px #ebebeb;
+    box-shadow:inset 0 1px 1px #ebebeb;
 }
-div.list_app-camp>ul>li>div:first-child+div>h2 { font-size: 12px; color: #144957; padding-bottom: 5px;}
-div.list_app-camp>ul>li>div:first-child+div>p {padding: 0 0 5px;}
-div.list_app-camp>ul>li>div:first-child+div>p stromg { font-size: 16px;}
-div.list_app-camp>ul>li>div:first-child+div>ul {width: 100%; overflow: hidden; padding: 5px 0; background: #f9f9f9; border-top: 1px solid #e1e1e1;}
-div.list_app-camp>ul>li>div:first-child+div>ul>li { float: left; width: 50%; text-align: center; font-weight: bold;}
-div.list_app-camp>ul>li>div:first-child+div>ul>li>span {display: block; color: #65781c; font-size: 11px; font-weight: normal;}
-div.list_app-camp>ul>li>div:first-child+div.clear { background: #f9f9f9;}
-div.list_app-camp>ul>li>div:first-child+div.clear>ul {border: none;}
+div.list-campaign>ul>li>div:first-child+div>h2 { font-size: 12px; color: #144957; padding-bottom: 5px;}
+div.list-campaign>ul>li>div:first-child+div>ul {width: 100%; overflow: hidden; padding-top: 5px; border-top: 1px solid #e1e1e1;}
+div.list-campaign>ul>li>div:first-child+div>ul>li { float: left; width: 50%; text-align: center; font-weight: bold;}
+div.list-campaign>ul>li>div:first-child+div>ul>li>span {display: block; color: #65781c; font-size: 11px; font-weight: normal;}
+div.list-campaign>ul>li>div:first-child+div.clear { background: #f9f9f9;}
+div.list-campaign>ul>li>div:first-child+div.clear>ul {border: none;}
 
-div.list_resent-activity {
+div.list-recent-activity {
 	width: 475px;
 	margin: 0 auto;
 }
-div.list_resent-activity>ul>li {
+div.list-recent-activity>ul>li {
 	width: 100%;
 	min-height: 50px;
 	padding: 10px 0;
 	border-bottom: 1px solid #e1e1e1;
 }
-div.list_resent-activity>ul>li:after{
+div.list-recent-activity>ul>li:after{
     clear:both;
     content:" ";
     display:block;
 }
-div.list_resent-activity>ul>li>div:first-child {
+div.list-recent-activity>ul>li>div:first-child {
 	float: left;
 	width: 310px;
 	padding: 3px 0 0 60px;
 	font-size: 12px;
 	position: relative;
 }
-div.list_resent-activity>ul>li>div:first-child p.pic {
+div.list-recent-activity>ul>li>div:first-child p.pic {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -212,37 +217,37 @@ div.list_resent-activity>ul>li>div:first-child p.pic {
 	height: 50px;
 	overflow: hidden;
 }
-div.list_resent-activity>ul>li>div:first-child p.pic img {
+div.list-recent-activity>ul>li>div:first-child p.pic img {
 	width:50px;
 }
-div.list_resent-activity>ul>li>div:first-child p.desc {
+div.list-recent-activity>ul>li>div:first-child p.desc {
 	width: 310px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 	max-height: 28px;
 }
-div.list_resent-activity>ul>li>div:first-child p.desc:hover {
+div.list-recent-activity>ul>li>div:first-child p.desc:hover {
 	text-overflow: initial;
 	overflow: initial;
 	background-color:#fff;
 }
-div.list_resent-activity>ul>li>div:first-child p.desc a {
+div.list-recent-activity>ul>li>div:first-child p.desc a {
 	color: #63791C;
 }
-div.list_resent-activity>ul>li>div:first-child p.desc span {
+div.list-recent-activity>ul>li>div:first-child p.desc span {
 	font-size: inherit;
 color: inherit;
 padding: 0;
 }
-div.list_resent-activity>ul>li>div:first-child>h2 { font-size: 13px; color: #395a9d;}
-div.list_resent-activity>ul>li>div:first-child>p span { font-size: 11px; color: #9a9a9a; padding: 4px 0 0;}
-div.list_resent-activity>ul>li>div:first-child+div {
+div.list-recent-activity>ul>li>div:first-child>h2 { font-size: 13px; color: #395a9d;}
+div.list-recent-activity>ul>li>div:first-child>p span { font-size: 11px; color: #9a9a9a; padding: 4px 0 0;}
+div.list-recent-activity>ul>li>div:first-child+div {
 	float: right;
 	width: 80px;
 }
-div.list_resent-activity>ul>li>div:first-child+div {}
-div.list_resent-activity>ul>li>div:first-child+div p.star {
+div.list-recent-activity>ul>li>div:first-child+div {}
+div.list-recent-activity>ul>li>div:first-child+div p.star {
 	display: block;
 	height: 20px;
 	line-height: 20px;

@@ -30,18 +30,18 @@
     </div><!-- end account-data-->
 
     <div class="main-memu tab-white mb15">
-      <div class="tab active">Dashboard</div>
-      <div class="tab">Badges</div>
-      <div class="tab">Activities</div>
+      <div class="tab active" data-href="user-dashboard">Dashboard</div>
+      <div class="tab" data-href="user-badges">Badges</div>
+      <div class="tab" data-href="user-activities">Activities</div>
     </div>
 	
-    <div>
-      <div class="tab-head slim campaign">
+    <div class="campaign-box">
+      <div class="tab-head slim">
         <p class="tab-name">My Campaign</p>
         <span class="fr">
-            <a class="tab active" data-filter="">All</a>
-            <a class="tab" data-filter="active">Active</a>
-            <a class="tab" data-filter="expired">Expired</a>
+            <a class="tab active" data-filter="me">All</a>
+            <a class="tab" data-filter="me-active">Active</a>
+            <a class="tab" data-filter="me-expired">Expired</a>
         </span>
         <p class="fr p10">Display:</p>
       </div>
@@ -49,8 +49,8 @@
       <div class="pagination-app-campaign strip"></div>
     </div>
 
-    <div>
-      <div class="tab-head slim applications">
+    <div class="applications-box">
+      <div class="tab-head slim">
         <p class="tab-name">My Applications</p>
         <a class="view-all-apps fr underline">View all</a>
       </div>
@@ -71,8 +71,8 @@
       </div>
     </div>
 
-    <div>
-      <div class="tab-head slim reward">
+    <div class="reward-box">
+      <div class="tab-head slim">
         <p class="tab-name">Wishlist</p>
         <span class="fr">
             <a class="tab active" data-filter="">All</a>
@@ -82,62 +82,23 @@
         <p class="fr p10">Display:</p>
       </div>
 
-      <div class="list_reward p25">
-
-      <?php if($wishlist_items)
-      {
-        foreach ($wishlist_items as $reward_item) 
-        { ?>      
-          <div class="reward-item" data-item-id="<?php echo $reward_item['_id'];?>">
-            <div class="section first">
-              <div class="item-image" style="background-image:url(<?php echo $reward_item['image'] ? $reward_item['image'] : base_url().'assets/images/default/reward.png'; ?>);">
-                <div class="remaining-time abs-b bold tc-blue1">Remaining Time <span class="end-time-countdown bold tc-grey5 fr"><?php echo $reward_item['end_date']; ?></span></div>
-              </div>
-              <ul class="item-info">
-                <li class="box">
-                  <span class="tc-green6 bold">User who get this reward : </span><?php 
-                  if (count($reward_item['user_list'])>0) {
-                    foreach ($reward_item['user_list'] as $user_id) { ?>
-                      <a href="#<?php echo $user_id; ?>" title="<?php echo $user_list[$user_id]['user_first_name'].' '.$user_list[$user_id]['user_last_name']; ?>" class="user-thumb s25 inline-block mb10" style="background-image:url(<?php echo $user_list[$user_id]['user_image'] ? $user_list[$user_id]['user_image'] : base_url().'assets/images/default/user.png'; ?>);"></a><?php
-                    }
-                  } else { ?>
-                    <p>Be the first to got this reward.</p>
-                  <?php } ?>
-                </li>
-                <li class="box">
-                  <p><span class="tc-green6 bold">Quanity: </span><?php echo $reward_item['redeem']['amount']?></p>
-                  <p><span class="tc-green6 bold">Value: </span><?php echo $reward_item['value']?></p>
-                  <p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo $reward_item['redeem']['point']?></span></p>
-                </li>
-                <li><a href="" class="btn green w100 large"><span>View this reward</span></a></li>
-              </ul>
-            </div>
-            <div class="section bd0 p15 mb10">
-              <div class="tc-green6 fs16 bold"><?php echo $reward_item['name']?></div>
-              <div class="description"><?php echo nl2br($reward_item['description']);?></div>
-            </div>
-          </div><?php 
-        }
-      } else { ?>
-        <div class="no-item">No wishlist.</div><?php
-      } ?>
-      </div>
-      <div class="pagination-reward strip"></div>
+      <div class="list-reward p25"></div>
+      <div class="pagination-reward strip mt5 mb5"></div>
     </div>
 
-    <div>
-      <div class="tab-head slim activity">
+    <div class="activity-box">
+      <div class="tab-head slim">
         <p class="tab-name">Recent Activity</p>
         <span class="fr">
-            <a class="tab active" data-filter="">All</a>
-            <a class="tab" data-filter="app">Application</a>
-            <a class="tab" data-filter="campaign">Campaign</a>
-            <a class="tab" data-filter="me">Me</a>
+            <a class="tab" data-filter="">All</a>
+            <a class="tab" data-filter="me_app">Application</a>
+            <a class="tab" data-filter="me_campaign">Campaign</a>
+            <a class="tab active" data-filter="me">Me</a>
         </span>
         <p class="fr p10">Display:</p>
       </div>
 
-      <div class="list_resent-activity"></div>
+      <div class="list-recent-activity"></div>
       <div class="pagination-activity strip"></div>
     </div>
   </div>

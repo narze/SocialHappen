@@ -1,5 +1,15 @@
       <?php if($reward_items)
       {
+        if($tab_head) { ?>
+          <h2 class="h-strip ml15 mr15 mb10"><span>Reward List</span></h2>
+          <div class="tab-head round4" style="width:440px; margin:0 auto">
+            Sort by :
+            <a class="tab sort active" data-sort="date">Date Added</a>
+            <a class="tab sort" data-sort="value">Value</a>
+            <a class="tab sort" data-sort="status">Status</a>
+            <a class="tab sort" data-sort="point">Point</a>
+          </div><?php
+        }
         foreach ($reward_items as $reward_item) 
         { ?>      
           <div class="reward-item" data-item-id="<?php echo $reward_item['_id'];?>">

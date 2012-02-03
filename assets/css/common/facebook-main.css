@@ -356,16 +356,21 @@ bottom: none;
 	zoom: 1;
 }
 
-.list_reward .reward-item {
+.list-reward .reward-item {
 	display:none;
 	width:450px;
 	margin:5px 0 0 0!important;
 	border-bottom:1px solid #e1e1e1;
 }
-.list_reward .reward-item.active {display:block;}
+.list-reward .reward-item.active {display:block;}
 .reward-item .item-image {height: 204px;}
 .reward-item .section {padding:15px 0 0 0;}
 .reward-item .description {
 	overflow: hidden;
-	height:47px;
+	max-height:47px;
+}
+.main-content .reward-item {
+	width:450px;
+	margin:0 20px 20px 20px;
+	border-bottom:1px solid #e1e1e1;
 }
