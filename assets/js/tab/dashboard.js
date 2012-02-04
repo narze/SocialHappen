@@ -21,7 +21,7 @@ $(function(){
 
 	load_page_reward = function () {
 		set_loading();
-		$('.main-content').load(base_url+'tab/reward/'+page_id+'?tabhead=true',function(){
+		$('.main-content').load(base_url+'tab/redeem_list/'+page_id+'?tabhead=true',function(){
 			reward_box();
 		});
 	}
@@ -181,14 +181,49 @@ $(function(){
 			$('div.list-reward').find('.reward-item').hide().eq(page_index).show();
 			check_pagination('.pagination-reward');
 			trigger_countdown();
+			get_reward();
+		}
+
+		get_reward = function () {
+			$('.get-this-reward').click(function() {
+				$.fancybox({
+					href: $(this).attr('href'),
+					onComplete: confirm_redeem
+				});
+				return false;
+			});
+		}
+
+		confirm_redeem = function () {
+			$('.confirm-get-this-reward').click(function() {
+				$.fancybox({
+					href: $(this).attr('href'),
+					onComplete: redeem_success
+				});
+				return false;	
+			});
+			$('.btn.cancel').click(function(){
+				$.fancybox.close();
+			});
+		}
+
+		redeem_success = function () {
+			$('.btn.share-to-fb').click(function(){
+				//$.fancybox.close();
+			});
+			$('.btn.close').click(function(){
+				$.fancybox.close();
+			});
 		}
 
 		$('.reward-box .tab').click(function(){
 			var filter = '?filter='+ $(this).attr('data-filter');
-			$('.list-reward').load(base_url+'tab/reward/'+page_id+'/'+filter, reward_pagination);
+			$('.list-reward').load(base_url+'tab/redeem_list/'+page_id+'/'+filter, reward_pagination);
 			$(this).addClass('active').siblings().removeClass('active');
 		}).eq(0).click();
 
+		if($('.get-this-reward').length>0) get_reward();
+		
 		trigger_countdown();
 	}
 
