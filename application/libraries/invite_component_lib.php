@@ -338,7 +338,7 @@ class Invite_component_lib {
 		if(!$invite = $this->get_invite_by_invite_key($invite_key)){
 			return FALSE;
 		}
-		if(!$this->_give_campaign_score_to_inviter($invite)){
+		if(!$this->_give_campaign_score_to_inviter($invite, $user_facebook_id)){
 			return FALSE;
 		}
 		$this->CI->load->model('invite_pending_model','invite_pending');
@@ -364,6 +364,7 @@ class Invite_component_lib {
 		//Get facebook_page_id from master invite_key
 		$master_invite = $this->get_invite_by_invite_key($invite_key);
 		$facebook_page_id = $master_invite['facebook_page_id'];
+		$campaign_id = $master_invite['campaign_id'];
 
 		//Find all invite with same facebook_page_id that user_facebook_id is in target list
 		if(!$invites = $this->CI->invite_model->get_by_facebook_page_id_having_user_facebook_id_in_target_facebook_id_list($facebook_page_id, $user_facebook_id)){
@@ -378,10 +379,10 @@ class Invite_component_lib {
 		if(!$push_all_result = $this->CI->invite_model->push_into_all_page_accepted($user_facebook_id, $invite_keys)){
 			return FALSE;
 		}
-		return $give_page_score_result = $this->_give_page_score_to_all_inviters($facebook_page_id, $inviters);
+		return  $this->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id, $user_facebook_id);
 	}
 
-	function _give_page_score_to_all_inviters($facebook_page_id = NULL, $inviters = NULL, $campaign_id = NULL){
+	function _give_page_score_to_all_inviters($facebook_page_id = NULL, $inviters = NULL, $campaign_id = NULL, $invitee_facebook_id = NULL){
 		if(!allnotempty(func_get_args()) || !allnotempty($inviters)){
 			return FALSE;
 		}
@@ -394,7 +395,8 @@ class Invite_component_lib {
 
 		$this->CI->load->library('audit_lib');
 		$this->CI->load->library('achievement_lib');
-
+		$invitee_user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($invitee_facebook_id);
+		$user_id = $invitee_user_id;
 		$inviters = array_unique($inviters); //Score should be given once per facebook_user_id
 		foreach($inviters as $inviter_facebook_id){
 			if(!$inviter_user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($inviter_facebook_id)){
@@ -402,18 +404,11 @@ class Invite_component_lib {
 				return FALSE;
 			}
 			$action_id = $this->CI->socialhappen->get_k('audit_action','Invitee Accept Page Invite');
-			$audit_info = array(
-				'page_id' => $page_id,
-				'campaign_id' => $campaign_id
-			);
-			if(!$this->CI->audit_lib->add_audit(
-				0,
-				$inviter_user_id,
-				$action_id,
-				'', 
-				'',
-				$audit_info
-			)){
+			$app_id = 0;
+			$subject = $inviter_user_id;
+			$audit_info = compact('app_id','subject','action_id','user_id','campaign_id','page_id');
+
+			if(!$this->CI->audit_lib->audit_add($audit_info)){
 				// log_message('error', 'no audit ');
 				return FALSE;
 			}
@@ -432,7 +427,7 @@ class Invite_component_lib {
 		return TRUE;
 	}
 
-	function _give_campaign_score_to_inviter($invite = NULL){
+	function _give_campaign_score_to_inviter($invite = NULL, $user_facebook_id = NULL){
 		if(!is_array($invite) || (!$inviter_facebook_id = issetor($invite['user_facebook_id'])) || (!$campaign_id = issetor($invite['campaign_id']))){
 			return FALSE;
 		}
@@ -449,18 +444,13 @@ class Invite_component_lib {
 		$this->CI->load->library('audit_lib');
 		$this->CI->load->library('achievement_lib');
 
-		$action_id = $this->CI->socialhappen->get_k('audit_action','Invitee Accept Campaign Invite');
-		$audit_info = array(
-			'campaign_id' => $campaign_id
-		);
-		if(!$this->CI->audit_lib->add_audit(
-			0,
-			$inviter_user_id,
-			$action_id,
-			'', 
-			'',
-			$audit_info
-		)){
+		$action_id = $this->CI->socialhappen->get_k('audit_action','Invitee Accept Campaign Invite');	
+		$app_id = 0;
+		$subject = $inviter_user_id;
+		$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
+		$audit_info = compact('app_id','subject','action_id','user_id','campaign_id');
+
+		if(!$this->CI->audit_lib->audit_add($audit_info)){
 			// log_message('error', 'no audit ');
 			return FALSE;
 		}
