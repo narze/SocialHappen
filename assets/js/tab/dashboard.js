@@ -124,6 +124,7 @@ $(function(){
 		}
 
 		$('.campaign-box .tab').click(function(){
+			set_loading();
 			$(this).addClass('active').siblings().removeClass('active');
 			campaign_pagination();
 		}).eq(0).click();
@@ -157,6 +158,7 @@ $(function(){
 		var url = base_url+'tab/activities/'+page_id+filter;
 
 		$('.activity-box .tab').click(function(){
+			set_loading();
 			$('.list-recent-activity').load(url, activitiy_pagination);
 			$(this).addClass('active').siblings().removeClass('active');
 		});
@@ -195,6 +197,7 @@ $(function(){
 		}
 
 		confirm_redeem = function () {
+			trigger_countdown();
 			$('.confirm-get-this-reward').click(function() {
 				$.fancybox({
 					href: $(this).attr('href'),
@@ -204,19 +207,39 @@ $(function(){
 			});
 			$('.btn.cancel').click(function(){
 				$.fancybox.close();
+				return false;
 			});
 		}
 
 		redeem_success = function () {
 			$('.btn.share-to-fb').click(function(){
-				//$.fancybox.close();
+				FB.ui(
+					{
+						method: 'feed',
+						name: $(this).attr('data-name'),
+						link: $(this).attr('href'),
+						picture: $(this).attr('data-picture'),
+						caption: $(this).attr('data-caption'),
+						description: $(this).attr('data-description')
+					},
+					function(response) {
+						if (response && response.post_id) {
+							$.fancybox.close();
+						} else {
+							console.log('Post was not published.');
+						}
+					}
+				);
+				return false;
 			});
 			$('.btn.close').click(function(){
 				$.fancybox.close();
+				return false;
 			});
 		}
 
 		$('.reward-box .tab').click(function(){
+			set_loading();
 			var filter = '?filter='+ $(this).attr('data-filter');
 			$('.list-reward').load(base_url+'tab/redeem_list/'+page_id+'/'+filter, reward_pagination);
 			$(this).addClass('active').siblings().removeClass('active');

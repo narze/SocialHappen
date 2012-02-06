@@ -7,17 +7,14 @@
 			</div>
 			<ul class="item-info">
 				<li class="box">
-					<p><span class="tc-green6 bold">Quanity: </span><?php echo $reward_item['redeem']['amount_remain'].'/'.$reward_item['redeem']['amount']?></p>
+					<p><span class="tc-green6 bold">Quanity: </span><?php echo number_format($reward_item['redeem']['amount_remain']).'/'.number_format($reward_item['redeem']['amount']);?></p>
 					<p><span class="tc-green6 bold">Value: </span><?php echo $reward_item['value']?></p>
 				</li>
 				<li class="box">
-					
-					<p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo $reward_item['redeem']['point']?></span></p>
-					<p><span class="tc-green6 bold">Your point: </span><span class="point fs14"><?php echo $page_score; ?></span></p>
+					<p class="<?php echo $reward_item_point > $page_score ? 'tc-red' : 'tc-green6'; ?>"><span class="bold">Required point: </span><span class="point fs14"><?php echo number_format($reward_item_point); ?></span></p>
+					<p><span class="tc-green6 bold">Your point: </span><span class="point fs14"><?php echo number_format($page_score); ?></span></p>
 					<?php if($reward_item_point_remain >= 0) : ?>
-						<p><span class="tc-green6 bold">Remaining point: </span><span class="point fs14"><?php echo $page_score - $reward_item_point;?></span></p>
-					<?php else : ?>
-						<p><span class="tc-green6 bold">Need more: </span><span class="point fs14"><?php echo $reward_item_point - $page_score;?></span></p>
+						<p><span class="tc-green6 bold">Remaining point: </span><span class="point fs14"><?php echo number_format($reward_item_point_remain);?></span></p>
 					<?php endif; ?>
 				</li>
 			</ul>
@@ -28,10 +25,19 @@
 		</div>
 	</div>
 
-	<?php if($terms_and_conditions) : ;?>
-		<div>Terms &amp; Conditions</div>
-		<div><?php echo $terms_and_conditions;?></div>
-	<?php endif; ?>
+	<div class="hr mb20"></div>
+
+	<?php if($terms_and_conditions) { ?>
+		<div class="terms-and-conditions-box round6 p20 mb20">
+			<h3 class="mt20">Terms &amp; Conditions</h3>
+			<div class="mt20 mb20">
+				<?php echo $terms_and_conditions;?>
+				<div class="mt20 bold ta-center">
+					<label><input type="checkbox" name="agree-term" class="mr5"> Accept this terms ans conditions</label>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
 	
 	<div class="ta-center">
 		<a href="<?php echo base_url().'tab/redeem_reward_confirm/'.$page_id.'/'.$reward_item_id;?>" class="btn green large confirm-get-this-reward"><span>Get this reward</span></a>

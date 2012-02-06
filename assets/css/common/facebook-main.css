@@ -391,3 +391,8 @@ bottom: none;
 #fancybox-content .reward-item .section.first {
 	padding:0;
 }
+
+.terms-and-conditions-box {
+	background-color:#fff7c6;
+	border:1px solid transparent;
+}

@@ -20,6 +20,7 @@ class Tab extends CI_Controller {
 	
 	function index($page_id = NULL, $token = NULL){
 		$this->signedRequest = $this->FB->getSignedRequest();
+		if(!isset($this->signedRequest['page'])) return false;
 		$this->page = $this->signedRequest['page'];
 		$this->app_data = isset($this->signedRequest['app_data']) ? json_decode(base64_decode($this->signedRequest['app_data']), TRUE) : NULL ;
 		
@@ -85,42 +86,6 @@ class Tab extends CI_Controller {
 		//Install apps
 		$this->load->model('installed_apps_model', 'installed_apps');
 		$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id, 6);
-
-		//Reward
-		$current_user = $this->socialhappen->get_user();
-		$this->load->library('timezone_lib');
-		$this->load->model('reward_item_model', 'reward_item');
-		$criteria = array(
-			'criteria_type' => 'page',
-			'criteria_id' => $page_id
-		);
-		$sort_criteria = array('start_timestamp' => -1);
-		$reward_items = $this->reward_item->get($criteria, $sort_criteria);
-		$user_id_list = array();
-		foreach($reward_items as &$reward_item){
-			//Time
-			if($current_user) {
-				$reward_item['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $current_user['user_timezone_offset']);
-				$reward_item['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $current_user['user_timezone_offset']);
-			} else {
-				$reward_item['start_date'] = date('Y-m-d H:i:s', $reward_item['start_timestamp']);
-				$reward_item['end_date'] = date('Y-m-d H:i:s', $reward_item['end_timestamp']);
-			}
-			//User who get this reward
-			if(count($reward_item['user_list'])>0)
-			{
-				$user_id_list = array_values(array_merge($user_id_list, $reward_item['user_list']));
-			}
-		} unset($reward_item);
-
-		//User who get reward (all reward)
-		$user_list = array();
-		if(count($user_id_list)>0)
-		{
-			foreach($user_id_list as $user_id) {
-				$user_list[$user_id] = $this->socialhappen->get_user($user_id);
-			}
-		}
 		
 		$this->load->vars( array(
 			'page' => $page,
@@ -128,9 +93,7 @@ class Tab extends CI_Controller {
 			'is_admin' => $is_admin,
 			'is_logged_in' => $is_logged_in,
 			'get_started_completed' => $get_started_completed,
-			'apps'=>$apps,
-			'reward_items'=>$reward_items,
-			'user_list'=>$user_list
+			'apps'=>$apps
 			)
 		);
 		
@@ -1055,11 +1018,15 @@ class Tab extends CI_Controller {
 		if($result) {
 			$this->load->model('reward_item_model');
 			$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
+			$this->load->model('page_model');
+			$page = $this->page_model->get_page_profile_by_page_id($page_id);
 		}
 
 		$this->load->vars(array(
 			'success' => $result,
-			'reward_item' => issetor($reward_item)
+			'reward_item' => issetor($reward_item),
+			'page_name'=>issetor($page['page_name']),
+			'facebook_tab_url'=>issetor($page['facebook_tab_url'])
 		));
 		$this->load->view('tab/redeem_reward_confirm');
 	}

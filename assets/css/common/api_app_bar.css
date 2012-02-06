@@ -370,7 +370,7 @@ background:#fff;
 padding:15px 15px 5px;
 }
 div.popup-fb ul, div.popup-fb li, div.popup-fb label { margin: 0; padding: 0; }
-div.popup-fb input { height:auto; padding:0; margin: 0; }
+div.popup-fb input { height:auto; }
 div.popup-fb li { list-style: none; }
 div.popup-fb img { max-width:390px; }
 div.popup-fb p { margin: 0; }
@@ -382,6 +382,10 @@ font-weight: normal;
 padding: 0 0 5px;
 border-bottom: 1px dotted #a6a6a6;
 margin: 0 0 15px;
+}
+.popup-fb .hr {
+	height:1px;
+	background-color: #dfdfdf;
 }
 
 div.popup-fb div.buttons {
@@ -429,6 +433,7 @@ li.error input[type="text"],
 input[type="text"].error,
 li.error textarea { border:1px solid red!important; }
 span.required {color:red}
+
 
 /* Popup Signup SH */
 div.popup-fb.signup div.profile { 
