@@ -281,6 +281,7 @@ $(function(){
 									result = $(result);
 									if(result.find('form').length == 0) {
 										$('.reward-item-form').replaceWith(result);
+										trigger_countdown();
 									} else {
 										$('.reward-item-form').html(result.find('form'));
 										form_events();
@@ -354,6 +355,7 @@ $(function(){
 		}
 
 		function sort_reward(){
+			$(this).addClass('active').siblings('.tab').removeClass('active');
 			var sort = $(this).data('sort');
 			if(!sort){ return false; }
 			else {
@@ -371,6 +373,7 @@ $(function(){
 				}
 				$('.reward-item-list').load(base_url+'settings/page_reward/view/'+page_id+query+' .reward-item-list>*');
 			}
+			return false;
 		}
 	}
 
