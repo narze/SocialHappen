@@ -467,7 +467,7 @@ class Invite_component_lib_test extends CI_Controller {
 
 		$facebook_page_id = $this->FBPAGEID1;
 		$inviters = array(713558190, '637741627', 631885465, 713558190, '713558190'); //713558190 should be given one time only
-		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id);
+		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, TRUE, '_give_page_score_to_all_inviters', $result);
 
 		$stat_after = $this->achievement_stat_page_model->list_stat(array(
@@ -486,25 +486,26 @@ class Invite_component_lib_test extends CI_Controller {
 	}
 
 	function _give_page_score_to_all_inviters_fail_test(){
+		$user_facebook_id = '713558190';
 		//no campaign_id
 		$facebook_page_id = $this->FBPAGEID1;
 		$inviters = array('a','b','c');
 		$campaign_id = NULL;
-		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id);
+		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 
 		//no facebook_page_id
 		$facebook_page_id = '';
 		$inviters = array('a','b','c');
 		$campaign_id = 1;
-		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id);
+		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 		
 		//no inviters
 		$facebook_page_id = $this->FBPAGEID2;
 		$inviters = NULL;
 		$campaign_id = 1;
-		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id);
+		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 
 		//cannot find page_id
@@ -518,7 +519,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$facebook_page_id = 1234; //you can't find me
 		$inviters = array('a','b','c');
 		$campaign_id = 1;
-		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id);
+		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 
 		//cannot find a user_id from inviter_facebook_id
@@ -533,7 +534,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$facebook_page_id = $this->FBPAGEID2;
 		$inviters = array('a','b','c');
 		$campaign_id = 1;
-		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id);
+		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 
 		//cannot add_audit once
@@ -549,7 +550,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$facebook_page_id = 1;
 		$inviters = array('a','b','c');
 		$campaign_id = 1;
-		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id);
+		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 
 		//cannot increment_achievement_stat once
@@ -566,11 +567,12 @@ class Invite_component_lib_test extends CI_Controller {
 		$facebook_page_id = 1;
 		$inviters = array('a','b','c');
 		$campaign_id = 1;
-		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id);
+		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
 	}
 
 	function _give_campaign_score_to_inviter_test(){
+		$user_facebook_id = '713558190';
 		//Count campaign score : before giving score
 		$app_id = 0; //platform
 		$user_id = 1; //713558190
@@ -580,7 +582,7 @@ class Invite_component_lib_test extends CI_Controller {
 
  		$invite_key = $this->invite_key1;
 		$invite = $this->invite_component_lib->get_invite_by_invite_key($invite_key);
-		$result = $this->invite_component_lib->_give_campaign_score_to_inviter($invite);
+		$result = $this->invite_component_lib->_give_campaign_score_to_inviter($invite, $user_facebook_id);
 		$this->unit->run($result, TRUE, '_give_campaign_score_to_inviter');
 
 		//Count campaign score : after giving score
@@ -593,9 +595,10 @@ class Invite_component_lib_test extends CI_Controller {
 
 
 	function _give_campaign_score_to_inviter_fail_test(){
+		$user_facebook_id = '713558190';
 		$invite_key = $this->invite_key3; //campaign_id 4
 		$invite = $this->invite_component_lib->get_invite_by_invite_key($invite_key);
-		$result = $this->invite_component_lib->_give_campaign_score_to_inviter($invite);
+		$result = $this->invite_component_lib->_give_campaign_score_to_inviter($invite, $user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_campaign_score_to_inviter : no app_component with campaign_id = 4');
 
 	}
