@@ -287,14 +287,14 @@ class Campaign_model_test extends CI_Controller {
 	function get_active_campaigns_by_page_id_test(){
 		$page_id = 1;
 		$result = $this->campaigns->get_active_campaigns_by_page_id($page_id); //2
-		$this->unit->run($result[0]['campaign_name'], 'Campaign test 2', "\$result[0]['campaign_name']", $result[0]['campaign_name']);
+		$this->unit->run($result[0]['campaign_name'], '2nd campaign', "\$result[0]['campaign_name']", $result[0]['campaign_name']);
 		$this->unit->run(count($result), 1, "\count($result)", count($result));
 	}
 
 	function get_expired_campaigns_by_page_id_test(){
 		$page_id = 1;
 		$result = $this->campaigns->get_expired_campaigns_by_page_id($page_id); //4
-		$this->unit->run($result[0]['campaign_name'], 'Campaign test 3', "\$result[0]['campaign_name']", $result[0]['campaign_name']);
+		$this->unit->run($result[0]['campaign_name'], '3rd campaign', "\$result[0]['campaign_name']", $result[0]['campaign_name']);
 	}
 
 	function count_incoming_campaigns_by_page_id_test(){

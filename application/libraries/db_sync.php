@@ -651,41 +651,41 @@ class DB_Sync {
 							array(
 							    'campaign_id' => 1,
 							    'app_install_id' =>  1, 
-							    'campaign_name' => 'Campaign test 1',
-							    'campaign_detail' => 'Campaign test detail 1',
+							    'campaign_name' => '1st campaign',
+							    'campaign_detail' => 'This is the first campaign',
 							    'campaign_status_id' => 1, 
 							    'campaign_active_member' => 2,
 							    'campaign_all_member' => 10, 
 							    'campaign_start_timestamp' => '2011-05-19',
 							    'campaign_end_timestamp' => '2021-05-18',
 								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
-								'campaign_end_message' => 'It is ended'
+								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							),
 							array(
 							    'campaign_id' => 2, 
 							    'app_install_id' => 2, 
-							    'campaign_name' => 'Campaign test 2',
-							    'campaign_detail' => 'Campaign test detail 2', 
+							    'campaign_name' => '2nd campaign',
+							    'campaign_detail' => 'This is the 2nd campaign', 
 							    'campaign_status_id' => 2, 
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18', 
 							    'campaign_end_timestamp' => '2021-06-18',
 								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
-								'campaign_end_message' => 'It is ended'
+								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							),
 							array(
 							    'campaign_id' => 4, 
 							    'app_install_id' => 2, 
-							    'campaign_name' => 'Campaign test 3',
-							    'campaign_detail' => 'Campaign test detail 3', 
+							    'campaign_name' => '3rd campaign',
+							    'campaign_detail' => 'This is the 3rd campaign', 
 							    'campaign_status_id' => 2, 
 							    'campaign_active_member' => 3, 
 							    'campaign_all_member' => 5, 
 							    'campaign_start_timestamp' => '2011-05-18', 
 							    'campaign_end_timestamp' => '2011-12-31',
 								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
-								'campaign_end_message' => 'It is ended'
+								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							)
 						);
 		$this->CI->db->insert_batch('campaign', $campaign);
@@ -694,11 +694,11 @@ class DB_Sync {
 						array(
 							    'company_id' => 1, 
 							    'creator_user_id' => 1, 
-							    'company_name' => 'Company test 1', 
-							    'company_detail' => 'detail test',
-							    'company_address' => '', 
-							    'company_email' => 'test1@figabyte.com', 
-							    'company_telephone' => '022485555', 
+							    'company_name' => 'Figabyte Co., Ltd.', 
+							    'company_detail' => 'a social media agency and award-winning technology firm',
+							    'company_address' => '71 G.P. House Building 3rd-floor, Sab Road, Si Phraya Road, Bangrak, Bangkok 10500', 
+							    'company_email' => 'contact@figabyte.com', 
+							    'company_telephone' => '026370286', 
 							    'company_register_date' => '2011-05-09 17:52:17', 
 							    'company_username' => '', 
 							    'company_password' => '',
@@ -820,10 +820,10 @@ class DB_Sync {
 						    'page_id' => 1, 
 						    'facebook_page_id' => '116586141725712', 
 						    'company_id' => 1, 
-						    'page_name' => 'SH Test', 
-						    'page_detail' => 'detail', 
-						    'page_all_member' => 22, 
-						    'page_new_member' => 222,
+						    'page_name' => 'SocialHappen Test', 
+						    'page_detail' => 'This is socialhappen test page', 
+						    'page_all_member' => 3, 
+						    'page_new_member' => 1,
 							'page_installed' => 0, 
 						    'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
 							'page_user_fields' => json_encode(array(
@@ -855,8 +855,8 @@ class DB_Sync {
 						'facebook_page_id' => '135287989899131', 
 						'company_id' => 1, 
 						'page_name' => 'SH Beta', 
-						'page_detail' => 'detail', 
-						'page_all_member' => 10, 
+						'page_detail' => 'This is socialhappen beta page', 
+						'page_all_member' => 1000, 
 						'page_new_member' => 100,
 						'page_installed' => 1, 
 						'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
@@ -1763,7 +1763,7 @@ class DB_Sync {
 				'stat_app' => TRUE,
 				'stat_page' => TRUE,
 				'stat_campaign' => TRUE,
-				'format_string' => 'User {user:user_id} shared',
+				'format_string' => 'User {user:user_id} shared on {app_install:app_install_id}',
 				'score' => 1
 			),
 			array(
@@ -1823,7 +1823,7 @@ class DB_Sync {
 				'stat_app' => FALSE,
 				'stat_page' => TRUE,
 				'stat_campaign' => FALSE,
-				'format_string' => 'User {user:user_id} accepted page invite',
+				'format_string' => 'User {user:user_id} accepted page invite from {subject:user_id}',
 				'score' => 1
 			),
 			array(
@@ -1833,7 +1833,7 @@ class DB_Sync {
 				'stat_app' => FALSE,
 				'stat_page' => FALSE,
 				'stat_campaign' => TRUE,
-				'format_string' => 'User {user:user_id} accepted campaign invite',
+				'format_string' => 'User {user:user_id} accepted campaign invite from {subject:user_id}',
 				'score' => 1
 			),
 		);
