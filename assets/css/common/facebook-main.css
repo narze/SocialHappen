@@ -7,7 +7,6 @@ div.header {
 }
 div#main { min-height: 500px; }
 div.wrapper-content {min-height: 478px;}
-div.list_app-camp {min-height: 130px;}
 
 /* Button */
 .bt-remove {
@@ -138,9 +137,6 @@ div.pagination> a.active{
 }
 
 /* Dashboard */
-div.list_app-camp>ul>li>div:first-child p.pic img {
-	width:80px;
-}
 .bt-time_up {
 	cursor:auto;
 }
@@ -356,6 +352,7 @@ bottom: none;
 	zoom: 1;
 }
 
+.list-campaign {min-height: 116px;}
 .list-reward .reward-item {
 	display:none;
 	width:450px;

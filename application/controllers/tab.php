@@ -535,30 +535,6 @@ class Tab extends CI_Controller {
 		$this->load->view('tab/notifications');
 	}
 	
-	/**
-	 * JSON : Get notifications
-	 * @param $user_id
-	 * @param $limit
-	 * @param $offset
-	 * @author Weerapat P.
-	 */
-	function json_get_notifications($user_id = NULL, $limit = NULL, $offset = 0) {
-		$this->socialhappen->ajax_check();
-		$this->load->library('notification_lib');
-		echo json_encode($this->notification_lib->lists($user_id, $limit, $offset));
-	}
-	
-	/**
-	 * JSON : Count user notifications
-	 * @param $user_id
-	 * @author Weerapat P.
-	 */
-	function json_count_user_notifications($user_id = NULL){
-		$this->socialhappen->ajax_check();
-		$this->load->model('notification_model','notification');
-		echo $this->notification->count(array('user_id'=>(int)$user_id));
-	}
-	
 	function account($page_id = NULL, $user_id = NULL){
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
@@ -1033,6 +1009,67 @@ class Tab extends CI_Controller {
 			'facebook_tab_url'=>issetor($page['facebook_tab_url'])
 		));
 		$this->load->view('tab/redeem_reward_confirm');
+	}
+
+	/**
+	 * JSON : Get notifications
+	 * @param $user_id
+	 * @param $limit
+	 * @param $offset
+	 * @author Weerapat P.
+	 */
+	function json_get_notifications($user_id = NULL, $limit = NULL, $offset = 0) {
+		$this->socialhappen->ajax_check();
+		$this->load->library('notification_lib');
+		echo json_encode($this->notification_lib->lists($user_id, $limit, $offset));
+	}
+	
+	/**
+	 * JSON : Count user notifications
+	 * @param $user_id
+	 * @author Weerapat P.
+	 */
+	function json_count_user_notifications($user_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('notification_model','notification');
+		echo $this->notification->count(array('user_id'=>(int)$user_id));
+	}
+
+	/**
+	 * JSON : Count campaigns (copy from page controller)
+	 * @param $page_id
+	 * @param $campaign_status_id
+	 * @author Manassarn M.
+	 */
+	function json_count_campaigns($page_id = NULL, $campaign_status_id = NULL){
+		//$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count active campaigns
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_active_campaigns($page_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_active_campaigns_by_page_id($page_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count expired campaigns
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_expired_campaigns($page_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_expired_campaigns_by_page_id($page_id);
+		echo json_encode($count);
 	}
 }
 /* End of file tab.php */

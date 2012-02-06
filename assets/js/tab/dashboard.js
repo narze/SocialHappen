@@ -101,9 +101,9 @@ $(function(){
 				case 'me' : url_count = base_url+"page/json_count_user_campaigns/"+user_id+'/'+page_id; break;
 				case 'me-active' : url_count = base_url+"page/json_count_active_user_campaigns/"+user_id+'/'+page_id; break;
 				case 'me-expired' : url_count = base_url+"page/json_count_expired_user_campaigns/"+user_id+'/'+page_id; break;
-				case 'active' : url_count = base_url+"page/json_count_active_campaigns/"+page_id; break;
-				case 'expired' : url_count = base_url+"page/json_count_expired_campaigns/"+page_id; break;
-				default : url_count = base_url+"page/json_count_campaigns/"+page_id; break;
+				case 'active' : url_count = base_url+"tab/json_count_active_campaigns/"+page_id; break;
+				case 'expired' : url_count = base_url+"tab/json_count_expired_campaigns/"+page_id; break;
+				default : url_count = base_url+"tab/json_count_campaigns/"+page_id; break;
 			}
 			$.getJSON(url_count,function(campaign_count){
 				$('.pagination-campaign').pagination(campaign_count, {
