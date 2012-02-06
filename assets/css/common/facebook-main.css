@@ -396,3 +396,16 @@ bottom: none;
 	background-color:#fff7c6;
 	border:1px solid transparent;
 }
+
+.my-point {
+	line-height:30px;
+	color: #DCBB26;
+	font-weight: bold;
+	padding: 0 10px 0 30px;
+	background-color: #f8f6f7;
+	background-image: url(../../images/bg_fb/bg_main.png);
+	background-position: 9px -254px;
+	background-size: 232px;
+	background-repeat: no-repeat;
+	border-radius:15px;
+}

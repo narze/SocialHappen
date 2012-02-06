@@ -23,7 +23,7 @@ height:35px;
 background:url(../../images/bg_fb/bg_header.png) repeat-x right top #fff;
 margin:0 auto;
 position:relative;
-z-index:1;
+z-index:100;
 box-shadow:0 1px 4px #555;
 }
 
@@ -94,24 +94,25 @@ background:none;
 white-space:nowrap;
 }
 
-#sh-bar div.name > div div.dropdown {
-width:15px;
+#sh-bar .name .dropdown {
+width:18px;
 height:35px;
 background-image:url(../../images/bg_fb/bg_header.png);
 background-position:-20px 0;
 position:absolute;
-right:5px;
+right:2px;
 top:0;
 }
 
-#sh-bar div.name:hover > div div.dropdown {
+#sh-bar .name:hover .dropdown {
 background-position:-20px -38px;
 }
 
-#sh-bar div.name > div div.dropdown span {
-width:12px;
+#sh-bar .name .dropdown::after {
+content:"";
+width:18px;
 height:25px;
-background:url(../../images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
+background:url(../../images/bg_fb/bg_droptop.png) center 7px no-repeat;
 display:block;
 position:absolute;
 right:0;
@@ -241,35 +242,27 @@ background:url(../../images/bg_fb/bg_main.png) no-repeat 9px 10px;
 #sh-bar ul.menu>li.like a span {
 display:none;
 }
-
-#sh-bar ul.menu>li.profile>div {
-height:30px;
-padding:5px 0 0 40px;
+#sh-bar .profile {
+position: relative;
+max-width: 150px;
+}
+#sh-bar .profile>div {
 cursor:pointer;
+padding-left: 35px;
+background:url(../../images/bg_fb/bg_droptop.png) 98% 7px no-repeat;
+}
+#sh-bar .user-pic {
+width: 27px;
+height: 26px;
+text-align: center;
+padding-top: 1px;
+position: absolute;
+top: 4px;
+left: 5px;
 }
 
-#sh-bar ul.menu>li.profile>div:after {
-clear:both;
-content:" ";
-display:block;
-}
-
-#sh-bar ul.menu>li.profile>div>p.pic {
-float:left;
-width:27px;
-height:26px;
-margin-left:-34px;
-text-align:center;
-position:relative;
-padding:1px 0 0;
-}
-
-#sh-bar ul.menu>li.profile>div>p.pic img {
-width:25px;
-height:25px;
-}
-
-#sh-bar ul.menu>li.profile>div>p.pic>span {
+#sh-bar .user-pic::after {
+content:"";
 display:block;
 width:27px;
 height:27px;
@@ -279,16 +272,29 @@ left:0;
 top:0;
 }
 
-#sh-bar ul.menu>li.profile>div>p:first-child+p {
-font-weight:bold;
-color:#fff;
-line-height:25px;
-padding-right:25px;
-min-width:120px;
-background:url(../../images/bg_fb/bg_droptop.png) 90% 7px no-repeat;
+#sh-bar .user-pic img {
+width:25px;
+height:25px;
 }
 
+#sh-bar .user-name {
+font-weight: bold;
+color: #FFF;
+min-width: 120px;
+font-size: 10px;
+margin-top: 4px;
+}
 
+#sh-bar .user-point {
+line-height: 14px;
+color: #DCBB26;
+font-weight: bold;
+padding: 0 10px 0 17px;
+background-image: url(../../images/bg_fb/bg_main.png);
+background-position: 0 -246px;
+background-size: 220px;
+background-repeat: no-repeat;
+}
 
 #sh-bar ul.menu>li.profile>ul li {
 cursor:default;

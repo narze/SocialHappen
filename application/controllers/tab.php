@@ -188,6 +188,9 @@ class Tab extends CI_Controller {
 									);
 				}
 				*/
+
+				//User point
+				$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
 				
 				//user apps
 				$this->load->model('user_apps_model','user_apps');
@@ -203,6 +206,7 @@ class Tab extends CI_Controller {
 				$data = array(
 					'user' => $user,
 					//'friends' => $friends,
+					'page_score' => $page_score,
 					'user_apps' => $user_apps,
 					'user_campaigns' => $user_campaigns,
 					'wishlist_items' => $wishlist_items

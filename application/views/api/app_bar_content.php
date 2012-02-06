@@ -7,7 +7,7 @@
 			</p>
 			<p><?php echo $current_menu['name'];?></p>
 			<?php if($menu['left']) :?>
-				<div class="dropdown"><span></span></div>
+				<span class="dropdown"></span>
 			<?php endif; ?>
 		</div>
 		<?php if($menu['left']) :?>
@@ -39,10 +39,12 @@
 		</li>
 		<li class="profile toggle<?php echo $view_as!='admin' ? ' last-child' : ''; ?>">
 			<div>
-				<p class="pic">
+				<p class="user-pic">
 					<img src="<?php echo $user['user_image']; ?>" alt="<?php echo $user['user_first_name']. ' '. $user['user_last_name'];?>" />
 					<span></span>
 				</p>
+				<p class="user-name"><?php echo $user['user_first_name']. ' '. $user['user_last_name'];?></p>
+				<p class="user-point"><?php echo number_format($page_score);?></p>
 			</div>
 			<ul>
 				<li class="user-info">

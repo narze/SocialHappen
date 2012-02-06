@@ -124,11 +124,16 @@ class XD extends CI_Controller {
 		$notification_amount = $this->notification_lib->count_unread($user['user_id']);
 		$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
 
+		//User point
+		$this->load->library('controller/tab_ctrl');
+		$page_score = $this->tab_ctrl->get_page_score($user['user_facebook_id'], $page_id) | 0;
+
 		$this->load->vars(array(
 			'node_base_url' => $this->config->item('node_base_url'),
 			'view_as' => $view_as,
 			'app_install_id' => $app_install_id,
 			'page_id' => $page_id,
+			'page_score' => $page_score,
 			'menu' => $menu,
 			'user' => $user,
 			'current_menu' => array(

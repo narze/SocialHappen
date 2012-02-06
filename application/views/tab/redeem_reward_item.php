@@ -20,7 +20,7 @@
 			<li class="box">
 				<p><span class="tc-green6 bold">Quanity: </span><?php echo $reward_item['redeem']['amount_remain'].'/'.$reward_item['redeem']['amount']?></p>
 				<p><span class="tc-green6 bold">Value: </span><?php echo $reward_item['value']?></p>
-				<p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo $reward_item['redeem']['point']?></span></p>
+				<p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo number_format($reward_item['redeem']['point']); ?></span></p>
 			</li>
 			<?php if($redeem_button && $reward_item['reward_status'] == 'active') { ?>
 			<li>
