@@ -65,16 +65,16 @@ class Achievement_stat_page_model extends CI_Model {
           array('$inc' => $inc), TRUE);
       }else if(isset($info['campaign_score']) && isset($info['campaign_id'])){
         
-        $inc['campaign.' . $info['campaign_id'] . '.score'] = $info['campaign_score'];
+        $inc['campaign.' . $info['campaign_id'] . '.score'] = (int) $info['campaign_score'];
         
         if(isset($info['page_score'])){
-          $inc['page_score'] = $info['page_score'];
+          $inc['page_score'] = (int) $info['page_score'];
         }
         
         $result = $this->achievement_stat_page->update($criteria,
           array('$inc' => $inc), TRUE);
       }else if(isset($info['page_score'])){
-        $inc['page_score'] = $info['page_score'];
+        $inc['page_score'] = (int) $info['page_score'];
         $result = $this->achievement_stat_page->update($criteria,
           array('$inc' => $inc), TRUE);
       }

@@ -463,6 +463,13 @@ class Page_model extends CI_Model {
 	function update_facebook_tab_url_by_facebook_page_id($facebook_page_id = NULL, $facebook_tab_url = NULL){
 		return $this->db->update('page', array('facebook_tab_url' => $facebook_tab_url), array('facebook_page_id'=>$facebook_page_id));
 	}
+
+	/**
+	 * Get all pages
+	 */
+	function get_all(){
+		return $this->db->get('page')->result_array();
+	}
 }
 /* End of file page_model.php */
 /* Location: ./application/models/page_model.php */

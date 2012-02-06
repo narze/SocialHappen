@@ -13,7 +13,7 @@ class Campaign extends CI_Controller {
 		if(!$this->socialhappen->is_developer_or_features_enabled(array('campaign_id'=>$campaign_id))){
 			redirect_back();
 		}
-		if(!$this->CI->socialhappen->check_admin(array('campaign_id' => $campaign_id),array())){
+		if(!$this->socialhappen->check_admin(array('campaign_id' => $campaign_id),array())){
 			exit('You are not admin');
 		}
 		$result = $this->campaign_ctrl->main($campaign_id);
@@ -48,7 +48,7 @@ class Campaign extends CI_Controller {
 	}
 	
 	function get_stat_graph($campaign_id = NULL, $start_date = NULL, $end_date = NULL){
-		if(!$this->CI->socialhappen->check_admin(array('campaign_id' => $campaign_id),array())){
+		if(!$this->socialhappen->check_admin(array('campaign_id' => $campaign_id),array())){
 			exit('You are not admin');
 		}
 		$this->load->library('audit_lib');
