@@ -374,3 +374,20 @@ bottom: none;
 	margin:0 20px 20px 20px;
 	border-bottom:1px solid #e1e1e1;
 }
+
+#fancybox-content .reward-item {
+	width:auto;
+	margin-top: 0;
+}
+#fancybox-content .reward-item .item-image {
+	width: 189px;
+	height: 152px;
+}
+#fancybox-content .reward-item .remaining-time {
+	width: 173px;
+	height:auto;
+	line-height:20px;
+}
+#fancybox-content .reward-item .section.first {
+	padding:0;
+}

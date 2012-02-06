@@ -33,11 +33,15 @@
 .mb10 {margin-bottom:10px;}
 .mb15 {margin-bottom:15px;}
 .mb20 {margin-bottom:20px;}
+.ml5 {margin-left:5px;}
+.ml10 {margin-left:10px;}
 .ml15 {margin-left:15px;}
 .ml20 {margin-left:20px;}
+.mr5 {margin-right:5px;}
+.mr10 {margin-right:10px;}
 .mr15 {margin-right:15px;}
 .mr20 {margin-right:20px;}
-.mr5 {margin-right:5px;}
+
 .p10 {padding:0 10px}
 .p15 {padding:0 15px!important}
 .p20 {padding:0 20px}
@@ -385,7 +389,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f9f7', end
 }
 .reward-item .item-info {
 	width:191px;
-	height:211px;
 	line-height:28px;
 	margin-left:5px;
 	display:-moz-inline-stack;
