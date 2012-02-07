@@ -219,9 +219,6 @@
 				$update['$unset'] = array('random' => 1, 'redeem' => 1);
 			}
 		}
-		if(isset($input['user'])){
-			$update['$push']['user_list'] = $input['user'];
-		}
 		if(isset($input['image'])){
 			if(!$input['image']){
 				return FALSE;
@@ -239,6 +236,24 @@
 		}
 		if(!$update['$set']){
 			unset($update['$set']);
+		}
+		if(isset($input['user'])){ //pull old user data out and push the new one with more count
+			$pull = array(
+				'$pull' => array('user_list' => array('user_id'=>$input['user']['user_id']))
+			);
+			try	{
+				$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
+				$pull, array('safe' => TRUE));
+				if($result['n'] != 0 || $result['err']){
+	            	
+	            } else {
+	            	return FALSE;
+	            }
+			} catch(MongoCursorException $e){
+				log_message('error', 'Mongo error : '. $e);
+				return FALSE;
+			}
+			$update['$push']['user_list'] = $input['user'];
 		}
 		try	{
 			$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),

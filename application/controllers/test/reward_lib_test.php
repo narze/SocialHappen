@@ -88,6 +88,10 @@ class Reward_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 1, "count(\$result)", count($result));
 		$this->unit->run($result[0]['name'], 'incoming', "\$result[0]['name']", $result[0]['name']);
 	}
+
+	function redeem_reward_test(){
+		//now test is in tab_ctrl_test
+	}
 }
 /* End of file reward_lib_test.php */
 /* Location: ./application/controllers/test/reward_lib_test.php */
