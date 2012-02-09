@@ -50,7 +50,9 @@ class Campaign_lib {
                     if(isset($campaign['campaign_start_timestamp']) && isset($campaign['campaign_end_timestamp'])){
                         $start_time = strtotime($campaign['campaign_start_timestamp']);
                         $end_time = strtotime($campaign['campaign_end_timestamp']);
-                        if(($start_time <= $from_time && $from_time <= $end_time) || ($start_time <= $to_time && $to_time <= $end_time) || ($from_time <= $start_time && $end_time <= $to_time)){
+                        if(($start_time <= $from_time && $from_time <= $end_time) || 
+                            ($start_time <= $to_time && $to_time <= $end_time) || 
+                            ($from_time <= $start_time && $end_time <= $to_time)){
                             return FALSE;
                         }
                     }
@@ -58,6 +60,34 @@ class Campaign_lib {
                 return TRUE;
             } else {
                 return FALSE;
+            }
+        }
+    }
+
+    function find_conflicted_campaigns($from, $to, $campaigns){
+        $from_time = strtotime($from);
+        $to_time = strtotime($to);
+        if($from_time === FALSE || $to_time === FALSE || $from_time > $to_time){
+            return NULL;
+        } else {
+            if(!$campaigns){
+                return NULL;
+            } else if(is_array($campaigns)){
+                $conflicted_campaigns = array();
+                foreach($campaigns as $campaign){
+                    if(isset($campaign['campaign_start_timestamp']) && isset($campaign['campaign_end_timestamp'])){
+                        $start_time = strtotime($campaign['campaign_start_timestamp']);
+                        $end_time = strtotime($campaign['campaign_end_timestamp']);
+                        if(($start_time <= $from_time && $from_time <= $end_time) || 
+                            ($start_time <= $to_time && $to_time <= $end_time) || 
+                            ($from_time <= $start_time && $end_time <= $to_time)){
+                            $conflicted_campaigns[] = $campaign;
+                        }
+                    }
+                }
+                return $conflicted_campaigns;
+            } else {
+                return NULL;
             }
         }
     }

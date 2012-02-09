@@ -470,6 +470,28 @@ class Api extends CI_Controller {
 
 		$this->_print_api_result($response);
 	}
+
+	/**
+	 * Request add campaign
+	 * @author Manassarn M.
+	 */
+	function request_add_campaign(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$page_id = $this->input->get('page_id', TRUE);
+		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
+		$campaign_start_timestamp = $this->input->get('campaign_start_timestamp_utc_unix', TRUE);
+		$campaign_end_timestamp = $this->input->get('campaign_start_timestamp_utc_unix', TRUE);
+
+		$campaign_start_timestamp_utc_unix = date('Y-m-d H:i:s', $campaign_start_timestamp);
+		$campaign_end_timestamp_utc_unix = date('Y-m-d H:i:s', $campaign_end_timestamp);
+		
+		$response = $this->api_lib->request_add_campaign($app_id, $app_secret_key, $app_install_id, 
+			$app_install_secret_key, $page_id, $facebook_page_id, $campaign_start_timestamp_utc_unix, $campaign_end_timestamp_utc_unix);
+		$this->_print_api_result($response);
+	}
 	
 	function _authenticate_app($app_id, $app_secret_key){
 		// authenticate app with $app_id and $app_secret_key

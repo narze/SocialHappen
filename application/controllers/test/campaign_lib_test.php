@@ -168,6 +168,13 @@ class Campaign_lib_test extends CI_Controller {
 		$this->unit->run($result, FALSE, 'error');
 	}
 
+	function find_conflicted_campaigns_test(){
+		$result = $this->campaign_lib->find_conflicted_campaigns($this->dateStr3, $this->dateStr5, $this->campaigns_api_data2);
+		$this->unit->run(count($result), 2, "count(\$result)", count($result));
+		$this->unit->run($result[0]['campaign_id'], 0, "\$result[0]['campaign_id']", $result[0]['campaign_id']);
+		$this->unit->run($result[1]['campaign_id'], 1, "\$result[1]['campaign_id']", $result[1]['campaign_id']);
+	}
+
 	function api_request_current_campaign_in_campaigns_test(){
 		$expected = $this->api_request_campaign_expected1;
 		$result = $this->campaign_lib->api_request_current_campaign_in_campaigns($this->campaigns_api_data1);

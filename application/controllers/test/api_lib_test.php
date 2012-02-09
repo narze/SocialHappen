@@ -667,12 +667,63 @@ class Api_lib_test extends CI_Controller {
 
 	}
 
-	function clear_data_test(){
-				
-		/* $result = $this->page_model->update_page_profile_by_page_id(PAGE_ID, array('facebook_tab_url' => $this->prev_facebook_tab_url));
-		
-		$this->unit->run($result, 'is_true', 'clear_data_test - facebook_tab_url', print_r($result, TRUE)); 
-		*/
+	function request_add_campaign_test(){
+		$app_id = APP_ID;
+		$app_secret_key = APP_SECRET_KEY;
+		$app_install_id = $this->app_install_id;
+		$app_install_secret_key = $this->app_install_secret_key;
+		$page_id = PAGE_ID;
+		$facebook_page_id = FACEBOOK_PAGE_ID;
+		$campaign_start_timestamp = date('Y-m-d H:i:s', strtotime('+11 years'));
+		$campaign_end_timestamp = date('Y-m-d H:i:s', strtotime('+12 years'));
+		$result = $this->api_lib->request_add_campaign($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, NULL,
+			$campaign_start_timestamp, $campaign_end_timestamp);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['data']['campaign_id'], 'is_int', "\$result['data']['campaign_id']",$result['data']['campaign_id']);
+		$campaign_id_1 = $campaign_id = $result['data']['campaign_id'];
+
+		$this->load->model('campaign_model');
+		$result = $this->campaign_model->get_campaign_profile_by_campaign_id($campaign_id);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run($result['campaign_id'], $campaign_id, "\$result['campaign_id']", $result['campaign_id']);
+
+		$this->load->model('app_component_model');
+		$result = $this->app_component_model->get_by_campaign_id($campaign_id);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run($result['campaign_id'], $campaign_id, "\$result['campaign_id']", $result['campaign_id']);
+
+		$campaign_start_timestamp = date('Y-m-d H:i:s', strtotime('+13 years'));
+		$campaign_end_timestamp = date('Y-m-d H:i:s', strtotime('+14 years'));
+		$result = $this->api_lib->request_add_campaign($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, NULL, $facebook_page_id,
+			$campaign_start_timestamp, $campaign_end_timestamp);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['data']['campaign_id'], 'is_int', "\$result['data']['campaign_id']",$result['data']['campaign_id']);
+		$campaign_id_2 = $campaign_id = $result['data']['campaign_id'];
+
+		$this->load->model('campaign_model');
+		$result = $this->campaign_model->get_campaign_profile_by_campaign_id($campaign_id);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run($result['campaign_id'], $campaign_id, "\$result['campaign_id']", $result['campaign_id']);
+
+		$this->load->model('app_component_model');
+		$result = $this->app_component_model->get_by_campaign_id($campaign_id);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run($result['campaign_id'], $campaign_id, "\$result['campaign_id']", $result['campaign_id']);
+
+		$campaign_start_timestamp = date('Y-m-d H:i:s', strtotime('+11 years'));
+		$campaign_end_timestamp = date('Y-m-d H:i:s', strtotime('+13 years'));
+		$result = $this->api_lib->request_add_campaign($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, NULL, $facebook_page_id,
+			$campaign_start_timestamp, $campaign_end_timestamp);
+		$this->unit->run($result['status'], 'ERROR', "\$result['status']", $result['status']);
+		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		$this->unit->run(isset($result['data']['campaign_id']), FALSE, "isset(\$result['data']['campaign_id'])",isset($result['data']['campaign_id']));
+		$this->unit->run($result['error'], 'conflicted_campaigns', "\$result['error']", $result['error']);
+		$this->unit->run(count($result['conflicted_campaigns']), 2, "count(\$result['conflicted_campaigns'])", count($result['conflicted_campaigns']));
+		$this->unit->run(in_array($result['conflicted_campaigns'][0]['campaign_id'], array($campaign_id_1,$campaign_id_2)), TRUE, 
+			"in_array(\$result['conflicted_campaigns'][0]['campaign_id'], array(\$campaign_id_1,\$campaign_id_2)", 
+			in_array($result['conflicted_campaigns'][0]['campaign_id'], array($campaign_id_1,$campaign_id_2)));
 	}
 }
 

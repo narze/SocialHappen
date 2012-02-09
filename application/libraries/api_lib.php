@@ -1510,11 +1510,137 @@ class Api_Lib {
 		}
 		return $response;
 	}
-	
-	
-		private	
-	
-	function _generate_app_install_secret_key($company_id, $app_id){
+
+	/**
+	 * Request for adding new campaign
+	 *	@param app_id int id of an app
+	 *	@param app_secret_key string secret key of app
+	 *	@param app_install_id int install id of an app
+	 *	@param app_install_secret_key string install secret key of an app
+	 *	@param page_id
+	 *	@param facebook_page_id
+	 *  @param campaign_start_timestamp_utc [Y-m-d H:i:s]
+	 *  @param campaign_end_timestamp_utc [Y-m-d H:i:s]
+	 *  @return [success] : array(
+	 *		status : 'OK',
+	 *		success : TRUE,
+	 *		data : { campaign_id : campaign_id }
+	 *	)
+	 *		[conflicted] : array(
+	 *		status : 'ERROR',
+	 *		success : FALSE,
+	 *		error : 'conflicted_campaigns',
+	 *		conflicted_campaigns : [array of conflicted campaigns]
+	 *	)
+	 *  @author Manassarn M.
+	 */
+	function request_add_campaign($app_id = NULL, $app_secret_key = NULL, 
+		$app_install_id = NULL, $app_install_secret_key = NULL, $page_id = NULL, $facebook_page_id = NULL,
+		$campaign_start_timestamp_utc = NULL, $campaign_end_timestamp_utc = NULL){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || 
+			(!$page_id && !$facebook_page_id) || !$campaign_start_timestamp_utc || !$campaign_end_timestamp_utc){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key,
+			 campaign_start_timestamp_utc, campaign_end_timestamp_utc)');
+			return (array( 'error' => '100',
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, 
+										app_install_id, app_install_secret_key, facebook_page_id, campaign_start_timestamp_utc,
+				campaign_end_timestamp_utc)'));
+
+		}
+
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
+			return FALSE;
+		}
+		
+		//authenticate app install with $app_install_id and $app_install_secret_key
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+			return FALSE;
+		}
+		if(!$page_id){
+			$this->CI->load->model('Page_model','Page');
+			$page_id = $this->CI->Page->get_page_id_by_facebook_page_id($facebook_page_id);
+		}
+
+		//check if campaign conflicts with other campaigns in this app
+		$this->CI->load->model('campaign_model','campaign');
+		$campaigns = $this->CI->campaign->get_app_campaigns_by_app_install_id($app_install_id);
+		$this->CI->load->library('campaign_lib');
+		$conflicted_campaigns = $this->CI->campaign_lib->find_conflicted_campaigns($campaign_start_timestamp_utc, 
+			$campaign_end_timestamp_utc, $campaigns);
+		if($conflicted_campaigns){
+			return array(
+				'status' => 'ERROR',
+				'success' => FALSE,
+				'error' => 'conflicted_campaigns',
+				'conflicted_campaigns' => $conflicted_campaigns
+			);
+		}
+
+		$campaign = array(
+			'app_install_id' => $app_install_id,
+			'campaign_name' => 'Campaign',
+			'campaign_start_timestamp' => $campaign_start_timestamp_utc,
+			'campaign_end_timestamp' => $campaign_end_timestamp_utc,
+			'campaign_end_message' => 'Campaign Ended');
+		$campaign_id = $this->CI->campaign->add_campaign($campaign);
+		
+		$this->CI->load->library('app_component_lib');
+		$default_app_component = array(
+	 		'campaign_id' => $campaign_id,
+	 		'invite' => array(
+				'facebook_invite' => TRUE,
+				'email_invite' => TRUE,
+				'criteria' => array(
+					'score' => 1,
+					'maximum' => 5,
+					'cooldown' => 4,
+					'acceptance_score' => array(
+						'page' => 10,
+						'campaign' => 3
+					)
+				),
+				'message' => array(
+					'title' => 'Invite title',
+					'text' => 'Invite text',
+					'image' => 'https://localhost/assets/images/blank.png'
+				)
+	 		),
+	 		'sharebutton' => array(
+				'facebook_button' => TRUE,
+				'twitter_button' => TRUE,
+				'criteria' => array(
+					'score' => 1,
+					'maximum' => 5,
+					'cooldown' => 4
+				),
+				'message' => array(
+					'title' => 'Share title',
+					'text' => 'Share text',
+					'caption' => 'Share caption',
+					'image' => 'https://localhost/assets/images/blank.png',
+				)
+			)
+		);
+		$add_default_app_component_result = $this->CI->app_component_lib->add_campaign($default_app_component);
+		if($campaign_id && $add_default_app_component_result){
+			$response = array(
+				'status' => 'OK',
+				'success' => TRUE,
+				'data' => array(
+					'campaign_id' => $campaign_id
+				)
+			);
+		} else {
+			$response = array(
+				'status' => 'ERROR',
+				'success' => FALSE,
+				'error' => 'Cannot add campaign'
+			);
+		}
+		return $response;
+	}
+
+	private	function _generate_app_install_secret_key($company_id, $app_id){
 		return md5($this->_generate_random_string());
 	}
 	
@@ -1585,7 +1711,6 @@ class Api_Lib {
 
     	return $string;
 	}
-	
 }
 /* End of file api_lib.php */
 /* Location: ./application/libraries/api_lib.php */
