@@ -26,14 +26,14 @@
 		</div>
     </div>
 
-    <div class="main-menu tab-white mb15">
+    <div class="main-menu tab-white">
       <div class="tab active" data-href="page-dashboard">Dashboard</div>
       <div class="tab" data-href="page-reward">Reward</div>
       <div class="tab" data-href="page-activities">Activities</div>
     </div>
 	   
     <div class="main-content">
-      <div class="campaign-box">
+      <div class="campaign-box mt15">
         <div class="tab-head slim">
           <p class="tab-name">Campaign</p>
           <span class="fr">
@@ -57,8 +57,8 @@
             {
               foreach($apps as $app)
               { ?> <div class="app-container">
-                  <a class="app-icon" href="<?php echo '#'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><img class="app-image" width="64" height="64" src="<?php echo $app['app_image']; ?>" onerror="failsafeImg(this)" /></a>
-                  <a class="app-name" href="<?php echo '#'.$app['app_id']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a>
+                  <a class="app-icon" target="_top" href="<?php echo $app['facebook_tab_url']; ?>" title="<?php echo $app['app_name']; ?>" ><img class="app-image" width="64" height="64" src="<?php echo $app['app_image']; ?>" onerror="failsafeImg(this)" /></a>
+                  <a class="app-name" target="_top" href="<?php echo $app['facebook_tab_url']; ?>" title="<?php echo $app['app_name']; ?>" ><?php echo $app['app_name']; ?></a>
                 </div><?php
               }
             }

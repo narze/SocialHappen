@@ -166,6 +166,12 @@ class achievement_info_model_test extends CI_Controller {
 		$this->unit->run($result, 'is_null', 'get', print_r($result, TRUE));
 	}
 
+	function get_limit_test(){
+		$limit = 2;
+		$total = count($this->achievement_info->list_info(array(), $limit, 0));
+		$this->unit->run($total<=$limit, true, 'get limit', print_r($total, TRUE));
+	}
+
 	function delete_test(){
 		$added = $this->achievement_info->list_info();
 		$achievement_id = $added[0]['_id'];

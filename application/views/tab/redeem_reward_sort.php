@@ -1,4 +1,4 @@
-<h2 class="h-strip ml15 mr15 mb10"><span>Reward List</span></h2>
+<h2 class="h-strip mt15 mr15 mb10 ml15"><span>Reward List</span></h2>
 	<div class="tab-head round4" style="width:440px; margin:0 auto">
     	Sort by :
     	<a class="tab sort active" data-sort="date">Date Added</a>

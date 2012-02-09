@@ -153,10 +153,11 @@ class Achievement_lib
 	 * 
 	 * @return result array
 	 */
-	function list_achievement_info_by_page_id($page_id = NULL){
+	function list_achievement_info_by_page_id($page_id = NULL, $limit = 0, $offset = 0){
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		if(empty($page_id)) return NULL;
-		return $this->CI->achievement_info->list_info(array('page_id' => $page_id));
+		$criteria = array('page_id' => (int) $page_id);
+		return $this->CI->achievement_info->list_info($criteria, $limit, $offset);
 	}
 	
 	/**
@@ -223,7 +224,7 @@ class Achievement_lib
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		if(empty($user_id)) return NULL;
-		return $this->CI->achievement_user->list_user(array('user_id' => (int)$user_id));
+		return $this->CI->achievement_user->list_user(array('user_id' => (int) $user_id));
 	}
 	
 	/**
@@ -237,12 +238,12 @@ class Achievement_lib
 	function list_user_achieved_in_page($user_id = NULL, $page_id = NULL){
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		if(empty($user_id) || empty($page_id)) return NULL;
-		return $this->CI->achievement_user->list_user(array('user_id' => $user_id
-			,'page_id' => $page_id));
+		return $this->CI->achievement_user->list_user(array('user_id' => (int) $user_id
+			,'page_id' => (int) $page_id));
 	}
 	
 	/**
-	 * list user achieved in page_id
+	 * list user achieved in campaign_id
 	 * 
 	 * @param user_id
 	 * @param campaign_id
@@ -252,8 +253,49 @@ class Achievement_lib
 	function list_user_achieved_in_campaign($user_id = NULL, $campaign_id = NULL){
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		if(empty($user_id) || empty($campaign_id)) return NULL;
-		return $this->CI->achievement_user->list_user(array('user_id' => $user_id
-			,'campaign_id' => $campaign_id));
+		return $this->CI->achievement_user->list_user(array('user_id' => (int) $user_id
+			,'campaign_id' => (int) $campaign_id));
+	}
+
+	/**
+	 * Count achievement info by page_id
+	 * 
+	 * @param page_id
+	 * 
+	 * @author Weerapat P.
+	 */
+	function count_achievement_info_by_page_id($page_id){
+		if(empty($page_id)) return NULL;
+		$this->CI->load->model('achievement_info_model','achievement_info');
+		return $this->CI->achievement_info->count(array('page_id' => (int) $page_id));
+	}
+
+	/**
+	 * Count all user achieved
+	 * 
+	 * @param user_id
+	 * 
+	 * @author Weerapat P.
+	 */
+	function count_user_achieved_by_user_id($user_id){
+		if(empty($user_id)) return NULL;
+		$this->CI->load->model('achievement_user_model');
+		return $this->CI->achievement_user_model->count(array('user_id' => (int) $user_id));
+	}
+
+	/**
+	 * Count user achieved in page_id
+	 * 
+	 * @param user_id
+	 * @param page_id
+	 * 
+	 * @author Weerapat P.
+	 */
+	function count_user_achieved_in_page($user_id = NULL, $page_id = NULL){
+		if(empty($user_id)) return NULL;
+		$this->CI->load->model('achievement_user_model','achievement_info');
+		return $this->CI->achievement_user_model->count(array('user_id' => (int) $user_id
+			,'page_id' => (int) $page_id));
 	}
 	
 	/**

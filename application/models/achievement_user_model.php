@@ -110,6 +110,21 @@ class Achievement_user_model extends CI_Model {
 		}
 		return $result;
 	}
+
+	/**
+	 * Count achievement user
+	 * 
+	 * @param criteria array of criteria
+	 * 
+	 * @author Weerapat P.
+	 */
+	function count($criteria = array()){
+		if($criteria) {
+			return $this->achievement_user->find($criteria)->count();	
+		} else {
+			return $this->achievement_user->count();
+		}
+	}
 	
 	/**
 	 * delete achievement info

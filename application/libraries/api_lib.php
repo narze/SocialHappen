@@ -1080,6 +1080,7 @@ class Api_Lib {
 	 *
 	 *	@return ok if sucessfully added
 	 *	@author  Manassarn M.
+	 *	@author Weerapat P. - Add page_id in achievement_info
 	 *
 	 */
 	function request_add_achievement_infos($app_id = NULL, $app_secret_key = NULL, 
@@ -1103,8 +1104,19 @@ class Api_Lib {
 		
 		$response = array('status' => 'OK');
 		$achievement_infos = json_decode(base64_decode($achievement_infos), TRUE);
+
+		//get page_id
+		$this->CI->load->model('page_model');
+		$page = $this->CI->page_model->get_page_profile_by_app_install_id($app_install_id);
+
 		$this->CI->load->library('achievement_lib');
-		foreach($achievement_infos as $achievement_info){
+		foreach($achievement_infos as $achievement_info)
+		{
+			//Add page_id
+			if(isset($page['page_id'])) {
+				$achievement_info['info']['page_id'] = $page['page_id'];
+			}
+
 			$this->CI->achievement_lib->add_achievement_info(
 				$app_id, $app_install_id,
 				$achievement_info['info'], $achievement_info['criteria']);
