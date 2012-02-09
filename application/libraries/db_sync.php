@@ -1836,6 +1836,16 @@ class DB_Sync {
 				'format_string' => 'User {user:user_id} accepted campaign invite from {subject:user_id}',
 				'score' => 1
 			),
+			array(
+				'app_id' => 0,
+				'action_id' => 116,
+				'description' => 'User Redeem Reward',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} redeemed {string:object} from page {page:page_id}',
+				'score' => 0
+			),
 		);
 		
 		$audit_actions = array(

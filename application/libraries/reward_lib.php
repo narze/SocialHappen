@@ -94,6 +94,15 @@ class Reward_lib
 	    		'count' => 1
 	    	);
     	}
+    	$this->CI->load->library('audit_lib');
+    	$audit_add_result = $this->CI->audit_lib->audit_add(array(
+    		'app_id' => 0,
+    		'action_id' => $this->CI->socialhappen->get_k('audit_action', 'User Redeem Reward'),
+    		'object' => $reward_item['name'],
+    		'objecti' => $reward_item_id,
+    		'user_id' => $user['user_id'],
+    		'page_id' => $page_id
+    	));
     	return $this->CI->reward_item_model->update($reward_item_id, $input);
 	}
 }
