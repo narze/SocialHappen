@@ -45,6 +45,18 @@ class User_pages_model extends CI_Model {
 		$result = $this->db->get_where('user_pages', array('user_id' => $user_id))->result_array();
 		return $this->socialhappen->map_v($result, array('page_status'));
 	}
+
+	/**
+	 * Count user pages
+	 * @param $user_id
+	 * @return int
+	 * @author Weerapat P.
+	 */
+	function count_user_pages_by_user_id($user_id = NULL){
+		$this->db->from('user_pages');
+		$this->db->where('user_id', $user_id);
+		return $this->db->count_all_results();
+	}
 	
 	/**
 	 * Get page users

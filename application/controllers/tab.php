@@ -523,6 +523,99 @@ class Tab extends CI_Controller {
 			$this->load->view('tab/activities',$data);
 		}
 	}
+
+	function user_badges($limit = NULL, $offset = NULL){
+
+		$user_facebook_id = $this->FB->getUser();
+		
+		$this->load->model('User_model','User');
+		$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		
+		//$this->load->model('user_model','users');
+		//$user = $this->users->get_user_profile_by_user_id($user_id);
+
+		//Achieved Badge
+		$this->load->library('Achievement_lib');
+		$achieved_badges = $this->achievement_lib->list_user_achieved_by_user_id($user_id);
+		$achieved_badge_ids = array();
+		foreach ($achieved_badges as $badge) {
+			$achieved_badge_ids[] = $badge['achievement_id']['$id']->{'$id'};
+		}
+
+		//Get badges from all user pages
+		$this->load->model('user_pages_model');
+		$pages = $this->user_pages_model->get_user_pages_by_user_id($user_id, $limit, $offset);
+
+		foreach($pages as &$page)
+		{
+			//Check achieved badge
+			$page['achieved_badges'] = 0;
+			if(isset($page['page_id']))
+			{
+				$page['badges'] = $this->achievement_lib->list_achievement_info_by_page_id($page['page_id'], 10, 0);
+				foreach ($page['badges'] as &$available_badge) {
+					if(in_array($available_badge['_id']->{'$id'}, $achieved_badge_ids))
+					{
+						$available_badge['info']['achieved'] = true;
+						$page['achieved_badges'] += 1;
+					} else {
+						$available_badge['info']['achieved'] = false;
+					}
+				}
+			}
+		}
+
+		$data = array(
+			'pages' => $pages
+		);
+		$this->load->view('tab/user_badges', $data);
+	}
+
+	function page_badges($page_id = NULL, $limit = NULL, $offset = NULL){
+		$this->load->model('page_model','pages');
+		$page = $this->pages->get_page_profile_by_page_id($page_id);
+		if($page){
+			$user_facebook_id = $this->FB->getUser();
+		
+			$this->load->model('User_model','User');
+			$user_id = $this->User->get_user_id_by_user_facebook_id($user_facebook_id);
+		
+			//$this->load->model('user_model','users');
+			//$user = $this->users->get_user_profile_by_user_id($user_id);
+
+			//Available Badges
+			$this->load->library('Achievement_lib');
+			$page['badges'] = $this->achievement_lib->list_achievement_info_by_page_id($page_id, $limit, $offset);
+
+			//Achieved Badge
+			$achieved_badges = $this->achievement_lib->list_user_achieved_by_user_id($user_id);
+			$achieved_badge_ids = array();
+			foreach ($achieved_badges as $badge) {
+				$achieved_badge_ids[] = $badge['achievement_id']['$id']->{'$id'};
+			}
+
+			//Check achieved badge
+			$page['achieved_badges'] = 0;
+			if(count($page['badges'])>0)
+			{
+				foreach ($page['badges'] as &$available_badge) {
+					if(in_array($available_badge['_id']->{'$id'}, $achieved_badge_ids))
+					{
+						$available_badge['info']['achieved'] = true;
+						$page['achieved_badges'] += 1;
+					} else {
+						$available_badge['info']['achieved'] = false;
+					}
+				}
+			}
+
+			$data = array(
+				'page' => $page,
+				'header' => $this->input->get('header')
+			);
+			$this->load->view('tab/page_badges', $data);
+		}
+	}
 	
 	function leaderboard($page_id = NULL){}
 	
@@ -1023,6 +1116,19 @@ class Tab extends CI_Controller {
 		$this->load->library('notification_lib');
 		echo json_encode($this->notification_lib->lists($user_id, $limit, $offset));
 	}
+
+	/**
+	 * JSON : Get list of user badges in page
+	 * @param $user_id
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_user_achieved_in_page($user_id = NULL, $page_id = NULL) {
+		$this->socialhappen->ajax_check();
+		$this->load->library('Achievement_lib');
+		$count = $this->achievement_lib->count_user_achieved_in_page($user_id, $page_id);
+		echo count($count);
+	}
 	
 	/**
 	 * JSON : Count user notifications
@@ -1042,7 +1148,7 @@ class Tab extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function json_count_campaigns($page_id = NULL, $campaign_status_id = NULL){
-		//$this->socialhappen->ajax_check();
+		$this->socialhappen->ajax_check();
 		$this->load->model('campaign_model','campaigns');
 		$count = $this->campaigns->count_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id);
 		echo json_encode($count);
@@ -1069,6 +1175,32 @@ class Tab extends CI_Controller {
 		$this->socialhappen->ajax_check();
 		$this->load->model('campaign_model','campaigns');
 		$count = $this->campaigns->count_expired_campaigns_by_page_id($page_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count user pages
+	 * @param $user_id
+	 * @author Weerapat P.
+	 */
+	function json_count_user_pages($user_id = NULL){
+		$this->socialhappen->check_logged_in();
+		$this->socialhappen->ajax_check();
+		$this->load->model('user_pages_model');
+		$count = $this->user_pages_model->count_user_pages_by_user_id($user_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count page badges
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_page_badges($page_id = NULL){
+		$this->socialhappen->check_logged_in();
+		$this->socialhappen->ajax_check();
+		$this->load->library('achievement_lib');
+		$count = $this->achievement_lib->count_achievement_info_by_page_id($page_id);
 		echo json_encode($count);
 	}
 }

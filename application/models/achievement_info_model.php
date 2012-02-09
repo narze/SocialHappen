@@ -208,19 +208,39 @@ class Achievement_info_model extends CI_Model {
 	 * list achievement info
 	 * 
 	 * @param criteria array of criteria
+	 * @param limit int number of results
+	 * @param offset int offset number
 	 * 
 	 * @return result array
 	 * 
 	 * @author Metwara Narksook
+	 * @author Weerapat P. - Add limit and offset
 	 */
-	function list_info($criteria = array()){
-		$res = $this->achievement_info->find($criteria);
+	function list_info($criteria = array(), $limit = 0, $offset = 0){
+		
+		if($limit) $res = $this->achievement_info->find($criteria)->skip($offset)->limit($limit);
+		else $res = $this->achievement_info->find($criteria);
 		
 		$result = array();
 		foreach ($res as $stat) {
 			$result[] = $stat;
 		}
 		return $result;
+	}
+
+	/**
+	 * Count achievement info
+	 * 
+	 * @param criteria array of criteria
+	 * 
+	 * @author Weerapat P.
+	 */
+	function count($criteria = array()){
+		if($criteria) {
+			return $this->achievement_info->find($criteria)->count();	
+		} else {
+			return $this->achievement_info->count();
+		}
 	}
 	
 	/**

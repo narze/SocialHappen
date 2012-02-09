@@ -115,6 +115,11 @@ class achievement_lib_test extends CI_Controller {
 		$result = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
 		$total = count($this->achievement_info->list_info(array('page_id' => $page_id)));
 		$this->unit->run($total, 1, 'list_test', print_r($result, TRUE));
+
+		$limit = 2;
+		$result = $this->achievement_lib->list_achievement_info_by_page_id($page_id, $limit, 0);
+		$total = count($this->achievement_info->list_info(array('page_id' => $page_id), $limit, 0));
+		$this->unit->run($total<=$limit, true, 'list_limit_test', print_r($total, TRUE));
 	}
 	
 	function list_achievement_info_by_campaign_id_test(){
@@ -987,6 +992,29 @@ class achievement_lib_test extends CI_Controller {
     $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
     $this->unit->run($result['page_score'], 60, 'decrement');
   }
+
+  function count_achievement_info_by_page_id_test()
+  {
+  	$page_id = 6;
+  	$count = $this->achievement_lib->count_achievement_info_by_page_id($page_id);
+  	$this->unit->run($count, 2, 'count_achievement_info_by_page_id_test', print_r($count, TRUE));
+  }
+
+  function count_user_achieved_by_user_id_test()
+  {
+    $user_id = 2;
+  	$count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
+  	$this->unit->run($count, 4, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+  }
+
+  function count_user_achieved_in_page_test()
+  {
+    $user_id = 2;
+    $page_id = 6;
+  	$count = $this->achievement_lib->count_user_achieved_in_page($user_id, $page_id);
+  	$this->unit->run($count, 2, 'count_user_achieved_in_page_test', print_r($count, TRUE));
+  }
+
 	function end_test(){
 		// $this->achievement_info->drop_collection();
 		// $this->achievement_stat->drop_collection();

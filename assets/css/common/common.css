@@ -15,6 +15,7 @@
 .tc-grey5 {color:#555;}
 .tc-green6 {color:#637C16;}
 .tc-blue1 {color:#144853;}
+.tc-blue3 {color:#3a5999;}
 .tc-red {color:red;}
 .ta-left {text-align:left;}
 .ta-center {text-align:center;}
@@ -28,12 +29,15 @@
 .mt10 {margin-top:10px;}
 .mt15 {margin-top:15px;}
 .mt20 {margin-top:20px;}
+.mt25 {margin-top:25px;}
 .mt30 {margin-top:30px;}
 .mb0 {margin-bottom:0;}
 .mb5 {margin-bottom:5px;}
 .mb10 {margin-bottom:10px;}
 .mb15 {margin-bottom:15px;}
 .mb20 {margin-bottom:20px;}
+.mb25 {margin-bottom:25px;}
+.mb30 {margin-bottom:30px;}
 .ml5 {margin-left:5px;}
 .ml10 {margin-left:10px;}
 .ml15 {margin-left:15px;}
@@ -112,6 +116,16 @@ input[type="text"].form-error {
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	border-radius: 6px;
+}
+
+/* column */
+.left-col, .right-col {
+	display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;
+	vertical-align: top;
+	width: 49.5%;
 }
 
 /* buttons */

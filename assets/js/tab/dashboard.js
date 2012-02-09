@@ -8,11 +8,27 @@ $(function(){
 			});
 		});
 	}
+
+	main_menu = function () {
+		$('.main-menu .tab').click(function(){
+			$(this).addClass('active').siblings().removeClass('active');
+			switch($(this).attr('data-href')) 
+			{
+				case 'user-activities' : load_my_activities(); break;
+				case 'user-badges' : load_my_badges(); break;
+				case 'user-dashboard' : load_my_dashboard(); break;
+				case 'page-reward' : load_page_reward(); break;
+				case 'page-activities' : load_page_activities(); break;
+				case 'page-dashboard' :
+				default : load_page_dashboard();
+			}
+		});
+	}
 	
 	load_page_dashboard = function (){
 		set_loading();
 		$('div#main').load(base_url+'tab/dashboard/'+page_id,function(){
-			main_memu();
+			main_menu();
 			campaign_box();
 			reward_box();
 			activity_box();
@@ -37,34 +53,95 @@ $(function(){
 	load_my_dashboard = function (){
 		set_loading();
 		$('div#main').load(base_url+'tab/profile/'+page_id+'/'+token,function(){
-			main_memu();
+			main_menu();
 			campaign_box();
-			//reward_box();
+			//reward_box(); //wishlish
 			activity_box();
+			$.getJSON(base_url+'tab/json_count_user_achieved_in_page/'+user_id+'/'+page_id,function(badges_count){
+				if(badges_count != $('.badges-count').text() )$('.badges-count').text(badges_count);
+			});
 		});
 	}
 
 	load_my_activities = function () {
 		set_loading();
+		$('.main-content').html('<div class="list-recent-activity"></div><div class="pagination-activity strip"></div>')
+		$('.list-recent-activity').load(base_url+'tab/activities/'+page_id,function(){
+			activity_box();
+		});
 	}
 
 	load_my_badges = function () {
-		set_loading();
+		
+		var pages_per_page = 7;
+
+		badge_pagination = function (){
+			$('.main-content').html('<div class="pagination-badge strip"></div>');
+			$.get(base_url+'tab/json_count_user_pages/'+user_id, function(user_pages_count) {
+				$('.pagination-badge').pagination(user_pages_count, {
+					items_per_page:pages_per_page,
+					callback:get_user_badges,
+					load_first_page:true,
+					next_text:null,
+					prev_text:null
+				});
+			});
+			
+			
+		}
+
+		get_user_badges = function (page_index,jq){
+			set_loading();
+			var url = base_url+'tab/user_badges/'+pages_per_page+'/'+(page_index * pages_per_page);
+			$.get(url, function(result) {
+				if($('.user-badges-list').length > 0)
+				{
+					$('.user-badges-list').replaceWith(result);
+				} else {
+					$('.main-content').prepend(result);
+				}
+				$('.next').click(load_page_badges);
+			});
+			check_pagination('.pagination-badge');
+		}
+
+		badge_pagination();
 	}
 
-	main_memu = function () {
-		$('.main-menu .tab').click(function(){
-			$(this).addClass('active').siblings().removeClass('active');
-			switch($(this).attr('data-href')) 
-			{
-				case 'user-activities' : load_my_activities(); break;
-				case 'user-badges' : load_my_badges(); break;
-				case 'user-dashboard' : load_my_dashboard(); break;
-				case 'page-reward' : load_page_reward(); break;
-				case 'page-activities' : load_page_activities(); break;
-				case 'page-dashboard' :
-				default : load_page_dashboard();
-			}
+	load_page_badges = function () {
+		var page_id = $(this).attr('data-page-id');
+		var badges_per_page = 7;
+		$('.user-badges-list').empty().attr('class', 'page-badges-list');
+
+		badge_pagination = function (){
+			$.get(base_url+'tab/json_count_page_badges/'+page_id, function(page_badges_count) {
+				$('.pagination-badge').pagination(page_badges_count, {
+					items_per_page:badges_per_page,
+					callback:get_page_badges,
+					load_first_page:true,
+					next_text:null,
+					prev_text:null
+				});
+			});
+		}
+
+		get_page_badges = function (page_index,jq){
+			set_loading();
+			var url = base_url+'tab/page_badges/'+page_id+'/'+badges_per_page+'/'+(page_index * badges_per_page);
+			if($('.page-badges-header').length == 0) url += '?header=true';
+			$.get(url, function(result) {
+				$('.page-badges-list').replaceWith(result);
+				$('.back-to-user-badges').click(load_my_badges);
+			});
+			check_pagination('.pagination-badge');
+		}
+
+		badge_pagination();
+	}
+
+	trigger_timeago = function (argument) {
+		$.each( $('.timeago'), function(index, span) { 
+			$('.timeago').eq(index).text($.timeago(new Date(parseInt( $(span).text() , 10) * 1000)));
 		});
 	}
 
@@ -131,6 +208,7 @@ $(function(){
 	}
 
 	activity_box = function () {
+
 		activitiy_pagination = function (){
 			count = $(this).children('ul').children('li').length;
 			$('.pagination-activity').pagination(count, {
@@ -141,9 +219,7 @@ $(function(){
 				prev_text:null
 			});
 				
-			$.each( $('.timeago'), function(index, span) { 
-			  $('.timeago').eq(index).text($.timeago(new Date(parseInt( $(span).text() , 10) * 1000)));
-			});
+			trigger_timeago();
 		}
 
 		filter_activities = function (page_index,jq){
@@ -164,6 +240,8 @@ $(function(){
 		});
 
 		$('.activity-box .tab.active').click();
+
+		if($('.timeago').length>0) trigger_timeago();
 	}
 
 	reward_box = function () {

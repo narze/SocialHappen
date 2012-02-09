@@ -406,3 +406,110 @@ bottom: none;
 	background-repeat: no-repeat;
 	border-radius:15px;
 }
+
+.user-badges-list .page {
+	padding-left:100px;
+	position: relative;
+	min-height:100px;
+	border-bottom:1px solid #e1e1e1;
+	border-top:1px solid transparent;
+}
+.user-badges-list .page:first-child {
+	border-top:1px solid #fff;
+}
+.user-badges-list .page:hover{
+	background-color: #f0fbd1;
+}
+.user-badges-list .page-image {
+	position: absolute;
+	top:10px;
+	left:10px;
+	display: block;
+	width:78px; 
+	height:78px;
+	border:1px solid #eeeef0;
+	background-color: #fff;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.user-badges-list .page-name {
+	margin:10px 0 5px 0;
+}
+.user-badges-list .badge-icon {
+	width:30px;
+	height:30px;
+	opacity: 0.2;
+	-moz-opacity: 0.2;
+	filter:alpha(opacity=2);
+}
+.user-badges-list .badge-icon.achieved {
+	opacity: 1;
+	-moz-opacity: 1;
+	filter:alpha(opacity=10);
+}
+.user-badges-list .icon.next {
+	background-image:url(../../images/bg/bg_button.png);
+	background-repeat:no-repeat;
+	background-position:0 -250px;
+	width:33px;
+	height:33px;
+	top:30px;
+	right:10px;
+}
+
+.page-badges-header {
+	padding-left: 77px;
+	position: relative;
+	height: 67px;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid #f2f2f2;
+	background-color: #fcfcfc;
+}
+.page-badges-header .page-image {
+	position: absolute;
+	top:10px;
+	left:15px;
+	display: block;
+	width:45px; 
+	height:45px;
+	border:1px solid #eeeef0;
+	background-color: #fff;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.page-badges-list .badge {
+	padding-left:100px;
+	position: relative;
+	min-height:100px;
+	border-bottom:1px solid #e1e1e1;
+	border-top:1px solid transparent;
+}
+.page-badges-list .left-col {
+	border-right:1px solid #e0e0e0;
+	width:40%;
+}
+.page-badges-list .right-col {
+	width:54%;
+}
+.page-badges-list .badge-icon {
+	position: absolute;
+	top:10px;
+	left:10px;
+	display: block;
+	width:80px; 
+	height:80px;
+	background-color: #fff;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
+	opacity: 0.2;
+	-moz-opacity: 0.2;
+	filter:alpha(opacity=2);
+}
+.page-badges-list .badge-icon.achieved {
+	opacity: 1;
+	-moz-opacity: 1;
+	filter:alpha(opacity=10);
+}
