@@ -170,8 +170,8 @@ class User extends CI_Controller {
 		}
 		
 		$dateRange = $this->audit_lib->get_date_range($start_date, $end_date);
-		
-		$action_id = 103;
+
+		$action_id = $this->socialhappen->get_k('audit_action', 'User Visit');
 
 		$stat_page_visit = array();
 		
@@ -198,9 +198,9 @@ class User extends CI_Controller {
 				return FALSE;
 			break;
 		}
-		
+
+		$action_id = $this->socialhappen->get_k('audit_action', 'User Visit');
 		foreach ($dateRange as $date) {
-			$action_id = 103;
 			$stat_page_visit[$date] = $this->audit_lib->count_audit('_id', NULL, $action_id, $criteria, $date);
 		}
 		

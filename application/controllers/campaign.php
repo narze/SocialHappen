@@ -72,14 +72,14 @@ class Campaign extends CI_Controller {
 		$dateRange = $this->audit_lib->get_date_range($start_date, $end_date);
 		
 		//print_r($dateRange);
-		$action_id = 102;
-		$res = $this->audit_lib->list_stat_campaign((int)$campaign_id, $action_id, (int)$start_date, $end_date);
+		$action_id = $this->socialhappen->get_k('audit_action', 'User Register App');
+		$res = $this->audit_lib->list_stat_campaign($campaign_id, $action_id, $start_date, $end_date);
 		$stat_campaign_visit_db = array();
 		foreach($res as $item){
 			$stat_campaign_register_db[$item['date']] = $item['count'];
 		}
-		$action_id = 103;
-		$res = $this->audit_lib->list_stat_campaign((int)$campaign_id, $action_id, (int)$start_date, $end_date);
+		$action_id = $this->socialhappen->get_k('audit_action', 'User Visit');
+		$res = $this->audit_lib->list_stat_campaign($campaign_id, $action_id, $start_date, $end_date);
 		$stat_campaign_visit_db = array();
 		foreach($res as $item){
 			$stat_campaign_visit_db[$item['date']] = $item['count'];
