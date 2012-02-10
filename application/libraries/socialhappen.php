@@ -705,6 +705,11 @@ class SocialHappen{
 			if(issetor($campaign['in_campaign'])){
 				$campaign_id = $campaign['campaign_id'];
 			}
+
+			$this->CI->load->library('homepage_lib');
+			if($sh_non_fan_homepage = $this->CI->homepage_lib->get_homepage_for_unliked_users($app_install_id)){
+				$sh_non_fan_homepage_content = '<p>'.$sh_non_fan_homepage['message'].'</p><p><img src="'.$sh_non_fan_homepage['image'].'"</img></p>';
+			}
 		}
 		
 		$this->CI->load->model('User_model', 'User');
@@ -767,7 +772,7 @@ class SocialHappen{
 				'page_installed' => issetor($page['page_installed'],1),
 				'is_user_register_to_page' => $is_user_register_to_page ? 1 : NULL,
 				'is_user_register_to_campaign' => $is_user_register_to_campaign ? 1 : NULL,
-				'user_id' => $user_id,
+				'user_id' => issetor($user_id,0),
 				'app_mode' => $app_mode,
 				'app_install_id' => $app_install_id,
 				'sh_domain' => $sh_domain,
@@ -780,7 +785,9 @@ class SocialHappen{
 				'facebook_access_token' => '',
 				'facebook_tab_url' => $facebook_tab_url,
 				'sh_canvas_config' => issetor($sh_canvas_config),
-				'campaign_id' => issetor($campaign_id)
+				'campaign_id' => issetor($campaign_id),
+				'sh_non_fan_homepage' => issetor($sh_non_fan_homepage),
+				'sh_non_fan_homepage_content' => issetor($sh_non_fan_homepage_content),
 			),
 			// 'view_as' => $view_as,
 			'node_base_url' => $this->CI->config->item('node_base_url'),

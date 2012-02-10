@@ -10,8 +10,10 @@ class XD extends CI_Controller {
 	function index(){
 		$this->load->vars(array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
-			'facebook_channel_url' => $this->facebook->channel_url
+			'facebook_channel_url' => $this->facebook->channel_url,
+			'sh_user_logged_in' => json_encode($this->socialhappen->is_logged_in())
 		));
+
 		$this->load->view('xd/xd_view');
 	}
 	
@@ -163,6 +165,10 @@ class XD extends CI_Controller {
 
 	function is_user_liked_page($facebook_page_id = NULL){
 		echo json_encode($this->facebook->is_user_liked_page($facebook_page_id));
+	}
+
+	function get_login_status(){
+		echo json_encode($this->socialhappen->is_logged_in());
 	}
 }  
 

@@ -76,7 +76,30 @@ var XD = function(){
 }();
 	
 XD.receiveMessage(function(message){ // Receives data from parent
-	if(message.data.sh_message == 'login'){ //bar.js
+    if(message.data.sh_message == 'login'){ //bar.js
+        // alert('login');
+        jQuery('<iframe />', {
+            name: 'sh_frame_login',
+            id:   'sh_frame_login',
+            src: base_url+'xd/login'
+        }).appendTo('body');
+        send({sh_message:'logged in'});
+    } else if(message.data.sh_message == 'logout'){ //bar.js
+        // alert('logout');
+        jQuery('<iframe />', {
+            name: 'sh_frame_logout',
+            id:   'sh_frame_logout',
+            src: base_url+'xd/logout'
+        }).appendTo('body');
+        send({sh_message:'logged out'});
+    } else if(message.data.sh_message === 'is_user_liked_page'){ //bar.js
+        doesUserLikeFacebookPage(message.data.facebook_page_id);
+        
+    } else if(message.data.sh_message === 'homepage'){ //bar.js
+         
+    }	
+return;
+    if(message.data.sh_message == 'login'){ //bar.js
 		// alert('login');
 		jQuery('<iframe />', {
 			name: 'sh_frame_login',
@@ -92,7 +115,7 @@ XD.receiveMessage(function(message){ // Receives data from parent
 			src: base_url+'xd/logout'
 		}).appendTo('body');
         send({sh_message:'logged out'});
-	} else if(message.data.sh_message === 'page_id'){ //bar.js
+	} else if(message.data.sh_message === 'get_user_role'){ //bar.js
         doesUserLikeFacebookPage(message.data.facebook_page_id);
 		jQuery.getJSON(base_url+'xd/get_user/'+message.data.sh_page_id,function(json){
 			if(typeof json.user_id !== 'undefined'){
@@ -112,7 +135,7 @@ XD.receiveMessage(function(message){ // Receives data from parent
 function doesUserLikeFacebookPage(facebook_page_id){
     jQuery.getJSON(base_url+'xd/is_user_liked_page/'+facebook_page_id,function(response){
         if(!response.error){
-            send({sh_message:'facebook page like', liked: response.data.length != 0});
+            send({sh_message:'sh_user_liked_page', liked: response.data.length != 0});
         } else {
             // console.log(response);
         }

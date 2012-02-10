@@ -19,7 +19,27 @@
 			xfbml  : true,
 			oauth : true
 		});
-		send({sh_message:'loaded'});
+		// send({sh_message:'loaded'});
+		FB.getLoginStatus(function(response) {
+		  var fb_login_status = false;
+		  if (response.status === 'connected') {
+		  	fb_login_status = true;
+		  } else if (response.status === 'not_authorized') {
+		    // the user is logged in to Facebook, 
+		    //but not connected to the app
+		  } else {
+		    // the user isn't even logged in to Facebook.
+		  }
+		  send({
+		  		sh_message:'facebook_login_status',
+		  		facebook_login_status : fb_login_status,
+		  		facebook_user_id : response.authResponse.userID,
+				facebook_access_token : response.authResponse.accessToken,
+				sh_login_status : <?php echo $sh_user_logged_in;?>
+		  	});
+		 });
+		// fb_uid:response.authResponse.userID,
+		// fb_access_token:response.authResponse.accessToken
 	};	
 	
 	(function(d){

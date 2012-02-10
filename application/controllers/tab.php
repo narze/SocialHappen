@@ -709,12 +709,12 @@ class Tab extends CI_Controller {
 		$this->load->model('user_model','users');
 		//if is sh user redirect popup to "regged"
 		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
-			echo "You're already a Socialhappen user";
-			if($app_install_id){
-				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
-			} else if ($page_id){
-				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
-			}
+			echo "Logged in Socialhappen";
+			// if($app_install_id){
+			// 	$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
+			// } else if ($page_id){
+			// 	$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
+			// }
 		} else {
 			$this->load->helper('form');
 			$user_profile_picture = $facebook_user['id'] ? $this->facebook->get_profile_picture($facebook_user['id']) : base_url().'assets/images/default/user.png';
@@ -1202,6 +1202,41 @@ class Tab extends CI_Controller {
 		$this->load->library('achievement_lib');
 		$count = $this->achievement_lib->count_achievement_info_by_page_id($page_id);
 		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Check if facebook user is socialhappen user
+	 * @param $facebook_user_id
+	 * @author Manassarn M.
+	 */
+	function json_facebook_user_check($facebook_user_id = NULL, $page_id = NULL){
+		$return = array();
+		$this->load->model('user_model');
+		if(!$user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user_id)){
+			$return['role'] = 'guest';
+		} else {
+			$user_id = $user['user_id'];
+			$return['user_id'] = $user_id;
+			$return['user_name'] = $user['user_first_name'].' '.$user['user_last_name'];
+			//$return['user_image'] = $user['user_image'];
+			$this->load->model('user_pages_model','user_page');
+			if($this->user_page->is_page_admin($user_id, $page_id)){	
+				$this->load->model('page_model','page');
+				$page = $this->page->get_page_profile_by_page_id($page_id);		
+				$return['role'] = 'admin';
+				
+				$page_update = array();
+				if(!$page['page_installed']){
+					$page_update['page_installed'] = TRUE;
+				} else if($page['page_app_installed_id'] != 0){
+					$page_update['page_app_installed_id'] = 0;
+				}		
+				$this->page->update_page_profile_by_page_id($page_id, $page_update);
+			} else {
+				$return['role'] = 'user';
+			}
+		}
+		echo json_encode($return);
 	}
 }
 /* End of file tab.php */
