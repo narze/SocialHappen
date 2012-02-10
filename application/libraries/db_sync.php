@@ -1713,7 +1713,7 @@ class DB_Sync {
 				'stat_app' => TRUE,
 				'stat_page' => TRUE,
 				'stat_campaign' => TRUE,
-				'format_string' => 'User {user:user_id} visited {app:app_id} in {page:page_id}',
+				'format_string' => 'User {user:user_id} visited {app_install:app_install_id} in {page:page_id}',
 				'score' => 0
 			),
 			array(
@@ -1835,6 +1835,16 @@ class DB_Sync {
 				'stat_campaign' => TRUE,
 				'format_string' => 'User {user:user_id} accepted campaign invite from {subject:user_id}',
 				'score' => 1
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 116,
+				'description' => 'User Redeem Reward',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} redeemed {string:object} from page {page:page_id}',
+				'score' => 0
 			),
 		);
 		

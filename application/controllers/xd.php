@@ -10,8 +10,10 @@ class XD extends CI_Controller {
 	function index(){
 		$this->load->vars(array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
-			'facebook_channel_url' => $this->facebook->channel_url
+			'facebook_channel_url' => $this->facebook->channel_url,
+			'sh_user_logged_in' => json_encode($this->socialhappen->is_logged_in())
 		));
+
 		$this->load->view('xd/xd_view');
 	}
 	
@@ -163,6 +165,27 @@ class XD extends CI_Controller {
 
 	function is_user_liked_page($facebook_page_id = NULL){
 		echo json_encode($this->facebook->is_user_liked_page($facebook_page_id));
+	}
+
+	function get_login_status(){
+		echo json_encode($this->socialhappen->is_logged_in());
+	}
+
+	function visit($page_id = NULL, $app_install_id = NULL, $app_id = NULL){
+		if(!$page_id || !$app_install_id){
+			echo json_encode(array('success'=>FALSE));
+			return;
+		}
+		$this->load->library('audit_lib');
+		$this->audit_lib->audit_add(array(
+			'app_id' => $app_id,
+			'app_install_id' => $app_install_id,
+			'user_id' => $this->socialhappen->get_user_id(),
+			'action_id' => $this->socialhappen->get_k('audit_action', 'User Visit'),
+			'page_id' => $page_id,
+			'app_install_id' => $app_install_id
+		));
+		echo json_encode(array('success' => TRUE));
 	}
 }  
 

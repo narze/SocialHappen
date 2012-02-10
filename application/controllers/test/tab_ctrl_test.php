@@ -665,6 +665,43 @@ class Tab_ctrl_test extends CI_Controller {
 		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, FALSE, "\$result", $result); //no point left
 
+		//get action test
+		$this->load->model('audit_model');
+		$recent_audit = $this->audit_model->list_recent_audit(5);
+		$this->unit->run($recent_audit[0]['app_id'], 0, "\$recent_audit[0]['app_id']", $recent_audit[0]['app_id']);
+		$this->unit->run($recent_audit[0]['page_id'], $page_id, "\$recent_audit[0]['page_id']", $recent_audit[0]['page_id']);
+		$this->unit->run($recent_audit[0]['action_id'], 116, "\$recent_audit[0]['action_id']", $recent_audit[0]['action_id']);
+		$this->unit->run($recent_audit[0]['user_id'], User_id, "\$recent_audit[0]['user_id']", $recent_audit[0]['user_id']);
+		$this->unit->run($recent_audit[0]['object'], name.'2', "\$recent_audit[0]['object']", $recent_audit[0]['object']);
+		$this->unit->run($recent_audit[0]['objecti'], $this->reward_item_2, "\$recent_audit[0]['objecti']", $recent_audit[0]['objecti']);
+	
+		$this->unit->run($recent_audit[1]['app_id'], 0, "\$recent_audit[1]['app_id']", $recent_audit[1]['app_id']);
+		$this->unit->run($recent_audit[1]['page_id'], $page_id, "\$recent_audit[1]['page_id']", $recent_audit[1]['page_id']);
+		$this->unit->run($recent_audit[1]['action_id'], 116, "\$recent_audit[1]['action_id']", $recent_audit[1]['action_id']);
+		$this->unit->run($recent_audit[1]['user_id'], User_id, "\$recent_audit[1]['user_id']", $recent_audit[1]['user_id']);
+		$this->unit->run($recent_audit[1]['object'], name.'2', "\$recent_audit[1]['object']", $recent_audit[1]['object']);
+		$this->unit->run($recent_audit[1]['objecti'], $this->reward_item_2, "\$recent_audit[1]['objecti']", $recent_audit[1]['objecti']);
+	
+		$this->unit->run($recent_audit[2]['app_id'], 0, "\$recent_audit[2]['app_id']", $recent_audit[2]['app_id']);
+		$this->unit->run($recent_audit[2]['page_id'], $page_id, "\$recent_audit[2]['page_id']", $recent_audit[2]['page_id']);
+		$this->unit->run($recent_audit[2]['action_id'], 116, "\$recent_audit[2]['action_id']", $recent_audit[2]['action_id']);
+		$this->unit->run($recent_audit[2]['user_id'], User_id, "\$recent_audit[2]['user_id']", $recent_audit[2]['user_id']);
+		$this->unit->run($recent_audit[2]['object'], name.'1', "\$recent_audit[2]['object']", $recent_audit[2]['object']);
+		$this->unit->run($recent_audit[2]['objecti'], $this->reward_item_1, "\$recent_audit[2]['objecti']", $recent_audit[2]['objecti']);
+	
+		$this->unit->run($recent_audit[3]['app_id'], 0, "\$recent_audit[3]['app_id']", $recent_audit[3]['app_id']);
+		$this->unit->run($recent_audit[3]['page_id'], $page_id, "\$recent_audit[3]['page_id']", $recent_audit[3]['page_id']);
+		$this->unit->run($recent_audit[3]['action_id'], 116, "\$recent_audit[3]['action_id']", $recent_audit[3]['action_id']);
+		$this->unit->run($recent_audit[3]['user_id'], User_id, "\$recent_audit[3]['user_id']", $recent_audit[3]['user_id']);
+		$this->unit->run($recent_audit[3]['object'], name.'1', "\$recent_audit[3]['object']", $recent_audit[3]['object']);
+		$this->unit->run($recent_audit[3]['objecti'], $this->reward_item_1, "\$recent_audit[3]['objecti']", $recent_audit[3]['objecti']);
+	
+		$this->unit->run($recent_audit[4]['app_id'], 0, "\$recent_audit[4]['app_id']", $recent_audit[4]['app_id']);
+		$this->unit->run($recent_audit[4]['page_id'], $page_id, "\$recent_audit[4]['page_id']", $recent_audit[4]['page_id']);
+		$this->unit->run($recent_audit[4]['action_id'], 116, "\$recent_audit[4]['action_id']", $recent_audit[4]['action_id']);
+		$this->unit->run($recent_audit[4]['user_id'], User_id, "\$recent_audit[4]['user_id']", $recent_audit[4]['user_id']);
+		$this->unit->run($recent_audit[4]['object'], name.'1', "\$recent_audit[4]['object']", $recent_audit[4]['object']);
+		$this->unit->run($recent_audit[4]['objecti'], $this->reward_item_1, "\$recent_audit[4]['objecti']", $recent_audit[4]['objecti']);
 	}
 
 	function _get_by_reward_item_id_test(){

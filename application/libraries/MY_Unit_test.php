@@ -49,7 +49,7 @@ class MY_Unit_test extends CI_Unit_test {
 		$fail_count = 0;
 		$failed_string = '';
 		foreach($result = $this->result() as $test){
-			if($test["Result"] == "Failed"){
+			if($test["Result"] == "Failed"){var_dump($test);
 				$fail_count++;
 				$notes = is_array($test['Notes']) ? print_r($test['Notes'], TRUE) : $test['Notes'];
 				$failed_string .= "<div style='color:#C11B17'>{$test['Line Number']} : {$test['Test Name']} : {$notes}</div>\n";

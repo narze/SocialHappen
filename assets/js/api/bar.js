@@ -1,4 +1,4 @@
-sh_guest = function(){
+ sh_guest = function(){
 	(function($){
 		jQuery.fancybox({
 			href: base_url+'tab/guest',
@@ -652,6 +652,17 @@ sh_logout = function(){
 	XD.postMessage({sh_message:'logout'}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
 }
 
+sh_load_bar = function(){
+	onLoad();
+	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
+		sh_jq('div#sh-bar').html(data);
+	});
+}
+
+sh_visit = function(){
+	XD.postMessage({sh_message:'visit',sh_page_id:page_id,sh_app_install_id:app_install_id,sh_app_id:app_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+}
+
 // sh_get_role = function(){
 // 	(function($){
 // 		$.getJSON(base_url+'xd/get_role', function(){
@@ -753,45 +764,124 @@ var XD = function(){
 }();
 
 XD.receiveMessage(function(message){ // Receives data from child iframe
-	if(message.data.sh_message === "loaded"){
-		XD.postMessage({sh_message:'page_id',sh_page_id:page_id,facebook_page_id:facebook_page_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
-	} else if(message.data.sh_message === 'status'){ 
-		view_as = message.data.sh_status;
-		user_image = message.data.sh_user_image;
-		user_name = message.data.sh_user_name;
-		onLoad();
-		jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
-			sh_jq('div#sh-bar').html(data);
-		});
-	} else if(message.data.sh_message === "logged in facebook"){ //login_button.php
-		facebook_access_token = message.data.fb_access_token;
+	var data = message.data;
+	var message = data.sh_message;
+	var sh_login_status;
+	// console.log(data);
+	if(message === 'facebook_login_status'){ //from xd_view
+
+		if(data.facebook_login_status){
+			//check sh user
+			facebook_access_token = data.facebook_access_token;
+			facebook_user_id = data.facebook_user_id;
+			sh_login_status = data.sh_login_status;
+			jQuery.getJSON(base_url+'tab/json_facebook_user_check/'+facebook_user_id+'/'+page_id,
+				function(response){ 
+				if(response.user_id){
+					view_as = response.role;
+					user_name = response.user_name;
+					user_image = response.user_image;
+					sh_load_bar();
+					if(!sh_login_status){
+						sh_login();
+					}
+					sh_visit();
+				} else {
+					view_as = response.role;
+					sh_load_bar();
+				}
+			});
+		} else {
+			view_as = 'guest';
+			sh_load_bar();
+		}
+		if(sh_non_fan_homepage){
+			XD.postMessage({
+				sh_message:'is_user_liked_page',
+				facebook_page_id:facebook_page_id
+			}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+		}
+
+	// } else if(message === 'sh_page_campaign_user_check'){
+	// 	if(!data.sh_page_user){
+	// 		//register page
+	// 	} else if(!data.sh_campaign_user){
+	// 		//register campaign
+	// 	}
+	} else if(message === 'sh_user_liked_page'){
+		if(data.liked){
+
+		} else {
+			//show like button
+			//replace content
+			jQuery('body>*').not(':has(#sh-bar)').remove();
+			jQuery('body').append(sh_non_fan_homepage_content);
+		}
+	} else if(message === "logged in facebook"){ //login_button.php
+		facebook_access_token = data.fb_access_token;
 		sh_login();
-	} else if(message.data.sh_message === "logged in"){ //xd.js 
+	} else if(message === "logged in"){ //xd.js 
 		if(view_as === 'guest' || is_user_register_to_page) {
 			sh_signup();
 		} else {
 			sh_signup_page();
 		} 
-	} else if(message.data.sh_message === "logged out"){ //xd.js
+	} else if(message === "logged out"){ //xd.js
 		jQuery.fancybox({
 			href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
 		});
-	} else if(message.data.sh_message === "facebook page like"){ //xd.js
-		if(message.data.liked){
-			// console.log('like');
-		} else {
-			// console.log('unlike');
-			//call xd/homepage/app_install_id [if app_install_id is defined]
-			if(app_install_id){
-				jQuery.getJSON(base_url+'xd/homepage/'+app_install_id, function(data){
-					if(typeof data.html !== 'undefined'){
-						jQuery('body>*').not(':has(#sh-bar)').remove();
-						jQuery('body').append(data.html);
-					}
-				});
-			}
-		}
-	}
+	} 
+	// old flows // don't delete yet
+	// if(message.data.sh_message === "loaded"){ //xd_view
+	// 	XD.postMessage({
+	// 		sh_message:'get_user_role',
+	// 		sh_page_id:page_id,
+	// 		facebook_page_id:facebook_page_id
+	// 	}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+	// } else if(message.data.sh_message === 'status'){ 
+	// 	view_as = message.data.sh_status;
+	// 	user_image = message.data.sh_user_image;
+	// 	user_name = message.data.sh_user_name;
+	// 	onLoad();
+	// 	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
+	// 		sh_jq('div#sh-bar').html(data);
+	// 	});
+	// } else if(message.data.sh_message === "logged in facebook"){ //login_button.php
+	// 	facebook_access_token = message.data.fb_access_token;
+	// 	sh_login();
+	// } else if(message.data.sh_message === "logged in"){ //xd.js 
+	// 	if(view_as === 'guest' || is_user_register_to_page) {
+	// 		sh_signup();
+	// 	} else {
+	// 		sh_signup_page();
+	// 	} 
+	// } else if(message.data.sh_message === "logged out"){ //xd.js
+	// 	jQuery.fancybox({
+	// 		href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
+	// 	});
+	// } else if(message.data.sh_message === "facebook page like"){ //xd.js
+	// 	if(message.data.liked){
+	// 		// console.log('like');
+	// 	} else {
+	// 		// console.log('unlike');
+	// 		//call xd/homepage/app_install_id [if app_install_id is defined]
+	// 		if(app_install_id){
+	// 			jQuery.getJSON(base_url+'xd/homepage/'+app_install_id, function(data){
+	// 				if(typeof data.html !== 'undefined'){
+	// 					jQuery('body>*').not(':has(#sh-bar)').remove();
+	// 					jQuery('body').append(data.html);
+	// 				}
+	// 			});
+	// 		}
+	// 	}
+	// } else if (message.data.sh_message === "autologin"){ //xd_view
+	// 	onLoad();
+	// 	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
+	// 		sh_jq('div#sh-bar').html(data);
+	// 	});
+	// 	facebook_access_token = message.data.fb_access_token;
+	// 	sh_login();
+	// }
 }, sh_domain);
 
 
