@@ -21,18 +21,14 @@ class Page_reward extends CI_Controller {
 			//no access
 		} else {
 			
-			$this->load->model('reward_item_model', 'reward_item');
-			$criteria = array(
-				'criteria_type' => 'page',
-				'criteria_id' => $page_id
-			);
 			$sort_criteria = array('start_timestamp' => -1);
 			$user = $this->socialhappen->get_user();
 			$this->load->library('timezone_lib');
+			$this->load->library('reward_lib');
 			$now = time();
 			
 			if(($sort = $this->input->get('sort')) && $sort === 'status'){
-				$this->load->library('reward_lib');
+				
 				$reward_item_active = $this->reward_lib->get_active_redeem_items($page_id);
 				$reward_item_incoming = $this->reward_lib->get_incoming_redeem_items($page_id);
 				$reward_item_expired = $this->reward_lib->get_expired_redeem_items($page_id);
@@ -46,9 +42,9 @@ class Page_reward extends CI_Controller {
 				$sort_criteria = array(
 					$sort => $order
 				);
-				$reward_items = $this->reward_item->get($criteria, $sort_criteria);
+				$reward_items = $this->reward_lib->get_reward_items($page_id, $sort_criteria);
 			} else {
-				$reward_items = $this->reward_item->get($criteria, $sort_criteria);
+				$reward_items = $this->reward_lib->get_reward_items($page_id, $sort_criteria);
 			}
 
 			foreach($reward_items as &$reward_item){
@@ -113,8 +109,8 @@ class Page_reward extends CI_Controller {
 			echo json_encode($return);
 		} else {
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('point', 'Point', 'required|trim|xss_clean|is_numeric|max_length[10]');			
-			$this->form_validation->set_rules('amount', 'Quanity', 'required|trim|xss_clean|is_numeric|max_length[10]');
+			$this->form_validation->set_rules('point', 'Required Point', 'required|trim|xss_clean|is_numeric|max_length[10]');			
+			$this->form_validation->set_rules('amount', 'Quantity', 'required|trim|xss_clean|is_numeric|max_length[10]');
 			$this->form_validation->set_rules('name', 'Reward Name', 'required|trim|xss_clean|max_length[255]');			
 			$this->form_validation->set_rules('start_date', 'Start date', 'required|trim|xss_clean|max_length[20]');			
 			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');			
@@ -200,11 +196,14 @@ class Page_reward extends CI_Controller {
 					if($update){
 						//update success
 					}
+
+					$this->load->library('reward_lib');
+					$reward_item = $this->reward_lib->get_reward_item($reward_item_id);
 					
-					$input['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $input['start_timestamp']), $user['user_timezone_offset']);
-					$input['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $input['end_timestamp']), $user['user_timezone_offset']);
+					$reward_item['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $user['user_timezone_offset']);
+					$reward_item['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $user['user_timezone_offset']);
 					
-					$this->load->vars(array('reward_item'=>$input, 'reward_item_id'=>$reward_item_id));
+					$this->load->vars(array('reward_item'=>$reward_item, 'reward_item_id'=>$reward_item_id));
 					$this->load->view('settings/page_apps/reward_item');
 				}
 				else

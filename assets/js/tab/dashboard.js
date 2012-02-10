@@ -57,9 +57,6 @@ $(function(){
 			campaign_box();
 			//reward_box(); //wishlish
 			activity_box();
-			$.getJSON(base_url+'tab/json_count_user_achieved_in_page/'+user_id+'/'+page_id,function(badges_count){
-				if(badges_count != $('.badges-count').text() )$('.badges-count').text(badges_count);
-			});
 		});
 	}
 
@@ -258,14 +255,14 @@ $(function(){
 		}
 
 		filter_reward = function (page_index,jq){
-			$('div.list-reward').find('.reward-item').hide().eq(page_index).show();
+			$('.list-reward').find('.reward-item').hide().eq(page_index).show();
 			check_pagination('.pagination-reward');
 			trigger_countdown();
-			get_reward();
+			view_reward();
 		}
 
-		get_reward = function () {
-			$('.get-this-reward').click(function() {
+		view_reward = function () {
+			$('.view-reward-detail').click(function() {
 				$.fancybox({
 					href: $(this).attr('href'),
 					onComplete: confirm_redeem
@@ -276,12 +273,23 @@ $(function(){
 
 		confirm_redeem = function () {
 			trigger_countdown();
+			$('.get-this-reward').click(function() {
+				$('.point-cal').hide();
+				$('.terms-and-conditions-box').show();
+				$('input[name="agree-term"]').click(function () {
+					if ( $(this).is(':checked') ) $('.confirm-get-this-reward').removeClass('inactive').addClass('green');
+					else $('.confirm-get-this-reward').removeClass('green').addClass('inactive');
+				});
+				return false;	
+			});
+			
 			$('.confirm-get-this-reward').click(function() {
+				if($(this).hasClass('inactive')) return false;
 				$.fancybox({
 					href: $(this).attr('href'),
 					onComplete: redeem_success
 				});
-				return false;	
+				return false;
 			});
 			$('.btn.cancel').click(function(){
 				$.fancybox.close();

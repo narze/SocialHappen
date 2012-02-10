@@ -248,11 +248,10 @@ $(function(){
 		function trigger_countdown(){
 			$('.end-time-countdown').each(function(){
 				end_time = Date.createFromMysql($(this).text());
-				$(this).replaceWith($("<span></span>").countdown({
+				$(this).countdown({
 					until: end_time,
 					format: 'DHMS',
-					layout: '<strong>{dn}days {hnn}h {sep} {mnn}m {sep} {snn}s</strong>'})
-				.removeClass('hasCountdown'));
+					layout: '{dn}days {hnn}h {sep} {mnn}m {sep} {snn}s'});
 			});
 		};
 		
@@ -371,7 +370,7 @@ $(function(){
 					default : query = '?sort=start_timestamp&order=desc';
 					break;
 				}
-				$('.reward-item-list').load(base_url+'settings/page_reward/view/'+page_id+query+' .reward-item-list>*');
+				$('.reward-item-list').load(base_url+'settings/page_reward/view/'+page_id+query+' .reward-item-list>*', trigger_countdown);
 			}
 			return false;
 		}

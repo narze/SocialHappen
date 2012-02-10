@@ -1043,12 +1043,21 @@ line-height: 25px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 }
+.reward-item.draft {
+	background-color: #f1f1f1;
+}
+.reward-item .section.first {
+	border-top:1px solid #fff;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
 .reward-item .buttons {visibility:hidden;}
 .reward-item:hover .buttons {visibility: visible;}
 
-.reward-item-form .item-info {padding:0 10px; width:169px;}
-.reward-item-form .item-info>*{margin:10px 0; padding:0; background:none;}
-.reward-item-form .item-info>*:first-child{margin-top:10px;}
+.reward-item-form .item-info {line-height:18px;padding:0 10px; width:164px;}
+
+.reward-item-form .item-info>*:first-child{margin-top:7px;}
 .reward-item-form input,
 .reward-item-form textarea {
 	color:#454545;
@@ -1063,8 +1072,7 @@ line-height: 25px;
 .reward-item-form select {
 	height:26px;
 }
-.reward-item-form label {
-	color:#454545;
+.reward-item-form .black-label {
 	font-weight:bold;
 	display:-moz-inline-stack;
 	display:inline-block;
@@ -1072,13 +1080,16 @@ line-height: 25px;
 	*display:inline;
 	vertical-align: top;
 	width:125px;
-	line-height: 26px;
+	line-height: 18px;
+	margin-top: 4px;
 }
 .reward-item-form .item-info input {
-	width:157px;
+	width:152px;
+	margin-bottom:6px;
 }
 .reward-item-form input[name="point"] {
 	width:132px;
+	margin-bottom:10px;
 	display: inline-block;
 	color:#dcbb26;
 	font-weight:bold;

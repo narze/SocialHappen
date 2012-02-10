@@ -8,6 +8,12 @@
 .fs16 {font-size:16px;}
 .fs17 {font-size:17px;}
 .fs18 {font-size:18px;}
+.lh15 {line-height:15px;}
+.lh16 {line-height:16px;}
+.lh17 {line-height:17px;}
+.lh18 {line-height:18px;}
+.lh19 {line-height:19px;}
+.lh20 {line-height:20px;}
 .bold {font-weight:700;}
 .underline {text-decoration:underline;}
 .tc-orange {color:#E29104;}
@@ -16,7 +22,8 @@
 .tc-green6 {color:#637C16;}
 .tc-blue1 {color:#144853;}
 .tc-blue3 {color:#3a5999;}
-.tc-red {color:red;}
+.tc-blue4 {color:#4199af;}
+.tc-red {color:#cc1d1d;}
 .ta-left {text-align:left;}
 .ta-center {text-align:center;}
 .ta-right {text-align:right;}
@@ -26,6 +33,7 @@
 .m0 {margin:0;}
 .mt0 {margin-top:0!important;}
 .mt5 {margin-top:5px;}
+.mt7 {margin-top:7px;}
 .mt10 {margin-top:10px;}
 .mt15 {margin-top:15px;}
 .mt20 {margin-top:20px;}
@@ -33,6 +41,7 @@
 .mt30 {margin-top:30px;}
 .mb0 {margin-bottom:0;}
 .mb5 {margin-bottom:5px;}
+.mb7 {margin-bottom:7px;}
 .mb10 {margin-bottom:10px;}
 .mb15 {margin-bottom:15px;}
 .mb20 {margin-bottom:20px;}
@@ -163,6 +172,9 @@ input[type="text"].form-error {
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 }
+.btn.inactive {
+	cursor: default;
+}
 .btn.large span {line-height:33px;}
 .btn:hover {
 	text-decoration:none;
@@ -273,6 +285,42 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d5193', end
 	height:25px;
 	overflow:hidden;
 }
+
+/* Icon */
+.icon {
+	cursor:pointer;
+	display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;
+	vertical-align: top;
+}
+
+.icon.white {
+	background-image: url(../../images/bg/bg_icon_white.png);
+	background-repeat: no-repeat;
+}
+.icon.white.share {
+	width: 20px;
+	height: 20px;
+	background-position: -3px -9px;
+}
+.icon.white.star {
+	width: 20px;
+	height: 20px;
+	background-position: -4px -45px;
+}
+.icon.gray.help {
+	cursor: help;
+	width: 19px;
+	height: 19px;
+	line-height:19px;
+	border-radius:10px;
+	text-align:center;
+	font-weight:bold;
+	background-color: #575757;
+}
+
 
 /* app icon list */
 .app-icon-list.no-app {
@@ -392,6 +440,28 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d5193', end
 }
 .tab-head .add-reward-item {margin-top: 6px;}
 
+/* Blue tab */
+.tab-blue {
+	height:auto;
+	line-height: 33px;
+	padding:0 10px;
+	margin-top:7px;
+	color: #fff;
+	background: #5cc2db;
+	background: -moz-linear-gradient(top,  #5cc2db 50%, #4bb6d3 51%, #4bb6d3 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,#5cc2db), color-stop(51%,#4bb6d3), color-stop(100%,#4bb6d3));
+	background: -webkit-linear-gradient(top,  #5cc2db 50%,#4bb6d3 51%,#4bb6d3 100%);
+	background: -o-linear-gradient(top,  #5cc2db 50%,#4bb6d3 51%,#4bb6d3 100%);
+	background: -ms-linear-gradient(top,  #5cc2db 50%,#4bb6d3 51%,#4bb6d3 100%);
+	background: linear-gradient(top,  #5cc2db 50%,#4bb6d3 51%,#4bb6d3 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5cc2db', endColorstr='#4bb6d3',GradientType=0 );
+}
+.tab-blue .icon {
+	position:relative; 
+	top:6px;
+	cursor: default;
+}
+
 /* Reward */
 .reward-item {
 	width: 480px;
@@ -401,6 +471,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d5193', end
 .reward-item:first-child {margin-top:20px;}
 .reward-item-list .reward-item:hover, .reward-item-form {
 	background-color:#fef9cf;
+	-moz-box-shadow: 1px 1px 4px #D7D7D7;
+	-webkit-box-shadow: 1px 1px 4px #D7D7D7;
+	box-shadow: 1px 1px 4px #D7D7D7;
 }
 .reward-item .notice {
 	width: 430px;
@@ -432,37 +505,42 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d5193', end
 	*display:inline;
 	vertical-align: top;
 }
+.reward-item .item-image::before {
+	content:"";
+	position: relative;
+	display: block;
+	top:-6px;
+	left:-6px;
+	width:118px;
+	height:57px;
+	z-index: 1;
+}
+.reward-item .expired::before {background-image:url(../../images/bg/reward_expired.png);}
+.reward-item .soon::before {background-image:url(../../images/bg/reward_coming_soon.png);}
+.reward-item .no_more::before {background-image:url(../../images/bg/reward_out_of_stock.png);}
 .reward-item .item-image.error {
 	border-color:red;
 }
 .reward-item .item-info {
-	width:191px;
-	line-height:28px;
-	margin-left:5px;
+	width:186px;
+	margin-left:10px;
 	display:-moz-inline-stack;
 	display:inline-block;
 	zoom:1;
 	*display:inline;
 	vertical-align: top;
 }
-.reward-item .item-info>*{
-	margin-top:10px;
-}
 .reward-item .item-info .box {
-	padding:0 9px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	background-color:#f9f9f9;
+	margin-top:10px;
+	line-height:18px;
 }
-.reward-item .item-info>*:first-child{margin-top:0;}
 .reward-item .point {
 	display: inline-block;
 	color: #DCBB26;
 	font-weight: bold;
 	padding-left: 25px!important;
 	background-image: url(../../images/bg_fb/bg_main.png);
-	background-position: 5px -254px;
+	background-position: 5px -260px;
 	background-size: 232px;
 	background-repeat: no-repeat;
 }
@@ -472,4 +550,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d5193', end
 	height:30px;
 	width:232px;
 	line-height:30px;
+}
+.reward-item .description {
+	overflow: hidden;
+	max-height:47px;
 }

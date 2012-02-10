@@ -32,37 +32,49 @@
 			</div>
 			<ul class="item-info">
 				<li>
-					<label for="amount" class="green" >Quanity: <span class="required">*</span></label>
+					<label for="name" class="tc-green6 bold" >Reward Name: </label>
+					<input type="text" name="name" maxlength="255" value="<?php echo set_value('name', issetor($reward_item['name'])); ?>" <?php echo form_error('name') ? 'class="form-error"': ''; ?> />
+				</li>
+				<li>
+					<label for="amount" class="tc-green6 bold" >Quantity: </label>
 					<input id="amount" type="text" name="amount" maxlength="10" value="<?php echo set_value('amount', issetor($reward_item['redeem']['amount'])); ?>" <?php echo form_error('amount') ? 'class="form-error"': ''; ?> />
 				</li>
 				<li>
-					<label for="value" class="green" >Value: <span class="required">*</span></label>
+					<label for="value" class="tc-green6 bold" >Value: </label>
 					<input id="value" type="text" name="value" maxlength="10" value="<?php echo set_value('value', issetor($reward_item['value'])); ?>" <?php echo form_error('value') ? 'class="form-error"': ''; ?> />
 				</li>
 				<li>
-					<label for="point" class="green" >Point: <span class="required">*</span></label>
+					<label for="point" class="tc-green6 bold" >Required Point: </label>
 					<input id="point" type="text" name="point" maxlength="10" value="<?php echo set_value('point', issetor($reward_item['redeem']['point'])); ?>" <?php echo form_error('point') ? 'class="form-error"': ''; ?> />
 				</li>
 			</ul>
 		</div>
 		<div class="section">
 			<div class="line">
-				<label for="name">Reward Name: <span class="required">*</span></label>
-				<input class="name bold<?php echo form_error('name') ? ' form-error': ''; ?>" type="text" name="name" maxlength="255" value="<?php echo set_value('name', issetor($reward_item['name'])); ?>" style="width:309px" />
-			</div>
-			<div class="line">
-				<label for="description">Reward Description: <span class="required">*</span></label>
+				<label for="description" class="black-label">Reward<br />Description: </label>
 				<?php echo form_textarea( array( 'name' => 'description', 'value' => set_value('description', issetor($reward_item['description'])), 'style'=>'width:309px' ) )?>
 			</div>
 		</div>
 		<div class="section">
-			<label>Duration: <span class="required">*</span></label>
+			<label class="black-label">Duration: </label>
 			<input class="start-date ta-center<?php echo form_error('start_date') ? ' form-error': ''; ?>" type="text" name="start_date" maxlength="20" value="<?php echo set_value('start_date', issetor($reward_item['start_date'])); ?>" style="width:135px; margin-right:5px" />
 			to
 			<input class="end-date ta-center<?php echo form_error('end_date') ? ' form-error': ''; ?>" type="text" name="end_date" maxlength="20" value="<?php echo set_value('end_date', issetor($reward_item['end_date'])); ?>" style="width:135px; margin-left:5px" />
 		</div>
 		<div class="section">
-			<label for="status">Status <span class="required">*</span></label>
+			<label for="condition" class="black-label">Other<br />Condition: </label>
+			<div class="right-col"><?php $class = form_error('condition') ? 'class="form-error"' : ''; ?>
+			<?php $options = array(
+				'' => 'Select',
+				'share' => 'Share page on user\'s wall',
+				'xxx' => 'Xxx'
+			); ?>
+			<?php echo form_dropdown('condition', $options, set_value('condition', issetor($reward_item['condition'])), $class)?>
+			<p class="mt10"><a href="#" class="tc-green6 bold underline">+ Add new</a></p>
+			</div>
+		</div>
+		<div class="section">
+			<label for="status" class="black-label">Status: </label>
 			<?php $class = form_error('status') ? 'class="form-error"' : ''; ?>
 			<?php $options = array(
 				'' => 'Select',

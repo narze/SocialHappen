@@ -32,7 +32,7 @@
 
 		<div class="main-menu tab-white">
 			<div class="tab active" data-href="user-dashboard">Dashboard</div>
-			<div class="tab" data-href="user-badges">My Badges (<span class="badges-count"></span>)</div>
+			<div class="tab" data-href="user-badges">My Badges (<?php echo $user['total_achieved_badges']; ?>)</div>
 			<div class="tab" data-href="user-activities">Activities</div>
 		</div>
 		 

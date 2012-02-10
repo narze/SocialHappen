@@ -361,11 +361,25 @@ bottom: none;
 }
 .list-reward .reward-item.active {display:block;}
 .reward-item .item-image {height: 204px;}
-.reward-item .section {padding:15px 0 0 0;}
-.reward-item .description {
-	overflow: hidden;
-	max-height:47px;
+.reward-item .item-overlay {
+	display:none;
+	height:100%;
+	width:100%;
+	position:absolute;
+	top:0;
+	left:0;
+	background-color: transparent;
+	background-color: rgba(0, 0, 0, 0.5);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000,endColorstr=#7F000000);
+	zoom: 1;
 }
+.reward-item .item-overlay .btn{
+	margin-top: 70px;
+}
+.reward-item .item-image:hover .item-overlay {
+	display: block;
+}
+.reward-item .section {padding:15px 0 0 0;}
 .main-content .reward-item {
 	width:450px;
 	margin:0 20px 20px 20px;
@@ -388,10 +402,10 @@ bottom: none;
 #fancybox-content .reward-item .section.first {
 	padding:0;
 }
-
-.terms-and-conditions-box {
-	background-color:#fff7c6;
+.point-cal .point-summary {
+	background-color: #f7f7f7;
 	border:1px solid transparent;
+	padding:20px;
 }
 
 .my-point {

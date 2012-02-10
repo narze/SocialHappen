@@ -202,6 +202,11 @@ class Tab extends CI_Controller {
 
 				//Reward
 				$wishlist_items = NULL; //TODO get user wishlist
+
+				//User achieved badges
+				$this->load->library('Achievement_lib');
+				$user['total_achieved_badges'] = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
+				//$user['total_achieved_badges'] = $this->achievement_lib->count_user_achieved_in_page($user_id, $page_id);
 				
 				$data = array(
 					'user' => $user,
@@ -1040,9 +1045,7 @@ class Tab extends CI_Controller {
 			$this->load->view('tab/redeem_reward_item', array(
 				'page_id' => $page_id,
 				'page_score' => $page_score,
-				'reward_item' => $redeem_item,
-				'redeem_button' => ($page_score >= $redeem_item['redeem']['point']) 
-					? TRUE : FALSE
+				'reward_item' => $redeem_item
 			));
 		}
 	}
@@ -1051,8 +1054,8 @@ class Tab extends CI_Controller {
 		$user_facebook_id = $this->FB->getUser();
 		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
 
-		$this->load->model('reward_item_model');
-		$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
+		$this->load->library('reward_lib');
+		$reward_item = $this->reward_lib->get_reward_item($reward_item_id);
 
 		//Convert time
 		$this->load->model('user_model');
@@ -1077,7 +1080,9 @@ class Tab extends CI_Controller {
 			'page_score' => $page_score,
 			'reward_item_point' => $reward_item['redeem']['point'],
 			'reward_item_point_remain' =>  $page_score - $reward_item['redeem']['point'],
-			'terms_and_conditions' => $terms_and_conditions
+			'terms_and_conditions' => $terms_and_conditions,
+			'redeem_button' => ($page_score >= $reward_item['redeem']['point']) 
+					? TRUE : FALSE
 		));
 		$this->load->view('tab/redeem_reward');
 	}
@@ -1115,19 +1120,6 @@ class Tab extends CI_Controller {
 		$this->socialhappen->ajax_check();
 		$this->load->library('notification_lib');
 		echo json_encode($this->notification_lib->lists($user_id, $limit, $offset));
-	}
-
-	/**
-	 * JSON : Get list of user badges in page
-	 * @param $user_id
-	 * @param $page_id
-	 * @author Weerapat P.
-	 */
-	function json_count_user_achieved_in_page($user_id = NULL, $page_id = NULL) {
-		$this->socialhappen->ajax_check();
-		$this->load->library('Achievement_lib');
-		$count = $this->achievement_lib->count_user_achieved_in_page($user_id, $page_id);
-		echo count($count);
 	}
 	
 	/**

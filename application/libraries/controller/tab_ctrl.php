@@ -468,35 +468,12 @@ class Tab_ctrl {
     		case 'expired': $reward_items = $this->CI->reward_lib->get_expired_redeem_items($page_id, $sort_criteria); break;
     		case 'no_more': break;
     		case 'active': $reward_items = $this->CI->reward_lib->get_active_redeem_items($page_id, $sort_criteria); break;
-    		default :
-    			$this->CI->load->model('reward_item_model');
-		    	$criteria = array(
-					'criteria_type' => 'page',
-					'criteria_id' => $page_id,
-					'type' => 'redeem',
-					'status' => 'published'
-			    );
-			    $reward_items = $this->CI->reward_item_model->get($criteria, $sort_criteria);
-    			break;
+    		default : $reward_items = $this->CI->reward_lib->get_published_redeem_items($page_id, $sort_criteria); break;
     	}
 
-    	$now = time();
     	$this->CI->load->model('user_model');
     	$user = $this->CI->user_model->get_user_profile_by_user_facebook_id($user_facebook_id);
     	foreach($reward_items as &$reward_item){
-    		$start_time = $reward_item['start_timestamp'];
-    		$end_time = $reward_item['end_timestamp'];
-    		if($now < $start_time){
-    			$reward_status = 'soon';
-    		} else if ($now > $end_time){
-    			$reward_status = 'expired';
-    		} else if ($reward_item['redeem']['amount_remain'] == 0){
-    			$reward_status = 'no_more';
-    		} else {
-    			$reward_status = 'active';
-    		}
-    		$reward_item['reward_status'] = $reward_status;
-
 	    	$this->CI->load->library('timezone_lib');
 	    	if($user){
 	    		$reward_item['start_timestamp_local'] = $this->CI->timezone_lib->convert_time(date('Y-m-d H:i:s',$reward_item['start_timestamp']), $user['user_timezone_offset']);
@@ -505,7 +482,6 @@ class Tab_ctrl {
 	    		$reward_item['start_timestamp_local'] = date('Y-m-d H:i:s', $reward_item['start_timestamp']);
 				$reward_item['end_timestamp_local'] = date('Y-m-d H:i:s', $reward_item['end_timestamp']);
 	    	}
-    		
     	}
     	return $reward_items;
     }
