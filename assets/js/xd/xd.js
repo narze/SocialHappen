@@ -95,9 +95,12 @@ XD.receiveMessage(function(message){ // Receives data from parent
     } else if(message.data.sh_message === 'is_user_liked_page'){ //bar.js
         doesUserLikeFacebookPage(message.data.facebook_page_id);
         
-    } else if(message.data.sh_message === 'homepage'){ //bar.js
-         
-    }	
+    } else if(message.data.sh_message === 'visit'){ //bar.js
+        jQuery.getJSON(base_url+'xd/visit/'+message.data.sh_page_id+'/'
+            +message.data.sh_app_install_id+'/'+message.data.sh_app_id,function(json){
+            console.log(json);
+        });
+    }
 return;
     if(message.data.sh_message == 'login'){ //bar.js
 		// alert('login');
@@ -125,7 +128,6 @@ return;
                     sh_user_name:json.user_first_name
                 });
 			}
-		
 		});
 	} else if(message.data.sh_message === 'homepage'){ //bar.js
          

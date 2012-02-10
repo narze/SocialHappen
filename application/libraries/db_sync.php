@@ -1713,7 +1713,7 @@ class DB_Sync {
 				'stat_app' => TRUE,
 				'stat_page' => TRUE,
 				'stat_campaign' => TRUE,
-				'format_string' => 'User {user:user_id} visited {app:app_id} in {page:page_id}',
+				'format_string' => 'User {user:user_id} visited {app_install:app_install_id} in {page:page_id}',
 				'score' => 0
 			),
 			array(

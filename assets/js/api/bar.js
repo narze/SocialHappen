@@ -659,6 +659,10 @@ sh_load_bar = function(){
 	});
 }
 
+sh_visit = function(){
+	XD.postMessage({sh_message:'visit',sh_page_id:page_id,sh_app_install_id:app_install_id,sh_app_id:app_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+}
+
 // sh_get_role = function(){
 // 	(function($){
 // 		$.getJSON(base_url+'xd/get_role', function(){
@@ -781,6 +785,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 					if(!sh_login_status){
 						sh_login();
 					}
+					sh_visit();
 				} else {
 					view_as = response.role;
 					sh_load_bar();
