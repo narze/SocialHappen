@@ -55,7 +55,7 @@
 				</li>
 				<li><a class="a-profile">View my profile</a></li>
 				<li><a class="a-account">Account Settings</a></li>
-				<li class="last-child"><a class="a-logout">Sign out</a></li>
+				<!--<li class="last-child"><a class="a-logout">Sign out</a></li>-->
 			</ul>
 		</li>
 	<?php endif; ?>
@@ -74,8 +74,10 @@
 					<li><a class="a-dashboard">View as Admin</a></li>
 					<li><a class="a-dashboard view-as-user">View as Member</a></li>
 					<li><a class="a-dashboard view-as-guest">View as Guest</a></li>
-					<li><a href="<?php echo base_url()."settings/page/".$page_id;?>" target="_top" >Page Settings</a></li>
-					<li class="separator last-child"><a href="<?php echo base_url()."page/".$page_id;?>" id="a-dashboard" target="_top">Go to Dashboard</a></li>
+					<?php if($socialhappen_features) :?>
+						<li><a href="<?php echo base_url()."settings/page/".$page_id;?>" target="_top" >Page Settings</a></li>
+						<li class="separator last-child"><a href="<?php echo base_url()."page/".$page_id;?>" id="a-dashboard" target="_top">Go to Dashboard</a></li>
+					<?php endif; ?>
 				<?php } ?>
 			</ul>
 		</li>

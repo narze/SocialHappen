@@ -98,7 +98,7 @@ XD.receiveMessage(function(message){ // Receives data from parent
     } else if(message.data.sh_message === 'visit'){ //bar.js
         jQuery.getJSON(base_url+'xd/visit/'+message.data.sh_page_id+'/'
             +message.data.sh_app_install_id+'/'+message.data.sh_app_id,function(json){
-            console.log(json);
+            // console.log(json);
         });
     }
 return;

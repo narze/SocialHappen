@@ -30,7 +30,7 @@ class Campaign_ctrl {
 				$per_page = $this->CI->config->item('per_page','pagination');
 				
 				$this->CI->load->library('audit_lib');
-				$action_id = $this->socialhappen->get_k('audit_action', 'User Register App');
+				$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Register App');
 				$campaign_daily_active = $this->CI->audit_lib->count_audit('subject', NULL, $action_id, array('campaign_id' => (int)$campaign_id), $this->CI->audit_lib->_date());
 				
 				$this->CI-> load -> model('user_model', 'user');

@@ -46,7 +46,7 @@ class Page_ctrl {
 				
 				$this->CI->load->library('audit_lib');
 				//var_dump($page_id);
-				$action_id = $this->socialhappen->get_k('audit_action', 'User Register App');
+				$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Register App');
 				$list_stat_page = $this->CI->audit_lib->list_stat_page((int)$page_id, $action_id, $this->CI->audit_lib->_date());
 				//var_dump($list_stat_page);
 				if(count($list_stat_page) == 0){
@@ -218,7 +218,7 @@ class Page_ctrl {
 		//echo '</pre>';
 		$json_out = array();
 		
-		$action_id = $this->socialhappen->get_k('audit_action', 'User Visit');	
+		$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Visit');	
 		foreach($apps as $app){
 			$this -> CI->load->library('audit_lib');
 			$this -> CI->load->library('app_url');

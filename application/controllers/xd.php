@@ -57,10 +57,6 @@ class XD extends CI_Controller {
 	}
 	
 	function get_bar_content($view_as = NULL, $user_id = NULL, $page_id = NULL, $app_install_id = NULL){
-		// $app_install_id = issetor($data['app_install_id']);
-		// $page_id = issetor($data['page_id']);
-		// $user_id = issetor($data['user_id']);
-		// $user_facebook_id = issetor($data['user_facebook_id']);
 		$app_mode = FALSE;
 		
 		$this->load->model('Installed_apps_model', 'app');
@@ -118,10 +114,6 @@ class XD extends CI_Controller {
 			}
 		}
 		
-		// Moved to get_bar
-		// $this->load->model('page_user_data_model','page_user_data');
-		// $is_user_register_to_page = $this->page_user_data->get_page_user_by_user_id_and_page_id($user['user_id'], $page_id);
-		
 		$this->load->library('notification_lib');
 		$notification_amount = $this->notification_lib->count_unread($user['user_id']);
 		$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
@@ -129,6 +121,9 @@ class XD extends CI_Controller {
 		//User point
 		$this->load->library('controller/tab_ctrl');
 		$page_score = $this->tab_ctrl->get_page_score($user['user_facebook_id'], $page_id) | 0;
+
+		$input = compact('user_id', 'page_id');
+		$socialhappen_features = $this->socialhappen->is_developer_or_features_enabled($input);
 
 		$this->load->vars(array(
 			'node_base_url' => $this->config->item('node_base_url'),
@@ -147,7 +142,7 @@ class XD extends CI_Controller {
 			'notification_amount' => $notification_amount,
 			'all_notification_link' => $app_mode ? $this->socialhappen->get_tab_url_by_app_install_id($app_install_id).'&app_data='.base64_encode(json_encode($app_data)) : base_url().'tab/notifications/'.$user['user_id'],
 			'app_mode' => $app_mode,
-			
+			'socialhappen_features' => $socialhappen_features
 		));
 		$this->load->view('api/app_bar_content');
 	}

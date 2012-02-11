@@ -33,7 +33,7 @@ class App_ctrl {
 				$per_page = $this->CI->config->item('per_page','pagination');
 				
 				$this->CI->load->library('audit_lib');
-				$action_id = $this->socialhappen->get_k('audit_action', 'User Register App');
+				$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Register App');
 				$new_users = $this->CI->audit_lib->list_stat_app((int)$app_install_id, $action_id, $this->CI->audit_lib->_date());
 				$new_users = count($new_users) == 0 ? 0 : $new_users[0]['count'];
 				
