@@ -36,10 +36,48 @@ $(function(){
 	}
 
 	load_page_reward = function () {
-		set_loading();
-		$('.main-content').load(base_url+'tab/redeem_list/'+page_id+'?tabhead=true',function(){
-			reward_box();
-		});
+		
+		var query = '?';
+
+		sort_reward = function () {
+			$(this).addClass('active').siblings('.tab').removeClass('active');
+			var sort = $(this).data('sort');
+			if(!sort){ return false; }
+			else {
+				switch(sort){
+					case "value" : query = '?sort=value&order=desc';
+					break;
+					case "status" : query = '?sort=status';
+					break;
+					case "point" : query = '?sort=redeem.point&order=desc';
+					break;
+					case "date" : 
+					default : query = '?sort=start_timestamp&order=desc';
+					break;
+				}
+				//$('.reward-item-list').load(base_url+'settings/page_reward/view/'+page_id+query+' .reward-item-list>*', trigger_countdown);
+				get_reward_list();
+			}
+			return false;
+		}
+		
+		get_reward_list = function() {
+			set_loading();
+			var tabhead = '';
+			var element = $('.reward-item-list');
+			if($('.tab-head').length == 0) {
+				element = $('.main-content');
+				tabhead = '&tabhead=true';
+				console.log('firs time');
+			}
+			element.load(base_url+'tab/redeem_list/'+page_id+query+tabhead,function(){
+				$('.tab.sort').unbind('click').click(sort_reward);
+				view_reward();
+			});
+		}
+
+		$('.main-content').empty();
+		get_reward_list();
 	}
 
 	load_page_activities = function () {
@@ -261,15 +299,26 @@ $(function(){
 			view_reward();
 		}
 
-		view_reward = function () {
-			$('.view-reward-detail').click(function() {
-				$.fancybox({
-					href: $(this).attr('href'),
-					onComplete: confirm_redeem
-				});
-				return false;
+		$('.reward-box .tab').click(function(){
+			set_loading();
+			var filter = '?filter='+ $(this).attr('data-filter');
+			$('.list-reward').load(base_url+'tab/redeem_list/'+page_id+'/'+filter, reward_pagination);
+			$(this).addClass('active').siblings().removeClass('active');
+		}).eq(0).click();
+
+		//if($('.get-this-reward').length>0) get_reward();
+		
+		trigger_countdown();
+	}
+
+	view_reward = function () {
+		$('.view-reward-detail').click(function() {
+			$.fancybox({
+				href: $(this).attr('href'),
+				onComplete: confirm_redeem
 			});
-		}
+			return false;
+		});
 
 		confirm_redeem = function () {
 			trigger_countdown();
@@ -282,7 +331,7 @@ $(function(){
 				});
 				return false;	
 			});
-			
+				
 			$('.confirm-get-this-reward').click(function() {
 				if($(this).hasClass('inactive')) return false;
 				$.fancybox({
@@ -323,17 +372,6 @@ $(function(){
 				return false;
 			});
 		}
-
-		$('.reward-box .tab').click(function(){
-			set_loading();
-			var filter = '?filter='+ $(this).attr('data-filter');
-			$('.list-reward').load(base_url+'tab/redeem_list/'+page_id+'/'+filter, reward_pagination);
-			$(this).addClass('active').siblings().removeClass('active');
-		}).eq(0).click();
-
-		if($('.get-this-reward').length>0) get_reward();
-		
-		trigger_countdown();
 	}
 
 	load_notification = function (){

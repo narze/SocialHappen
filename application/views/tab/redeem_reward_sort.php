@@ -6,3 +6,4 @@
     	<a class="tab sort" data-sort="status">Status</a>
     	<a class="tab sort" data-sort="point">Point</a>
     </div>
+    <div class="reward-item-list">{reward_items}</div>

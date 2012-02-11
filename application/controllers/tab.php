@@ -1038,15 +1038,22 @@ class Tab extends CI_Controller {
 		$order = $this->input->get('order');
 		$redeem_item_list = $this->tab_ctrl->redeem_list($page_id, $user_facebook_id, $status, $sort, $order);
 		//echo "Your page score is ".$page_score;
-		if($this->input->get('tabhead')) {
-			$this->load->view('tab/redeem_reward_sort');
-		}
+
+		$items = '';
 		foreach($redeem_item_list as $redeem_item){
-			$this->load->view('tab/redeem_reward_item', array(
+			$items .= $this->load->view('tab/redeem_reward_item', array(
 				'page_id' => $page_id,
 				'page_score' => $page_score,
 				'reward_item' => $redeem_item
+			), TRUE);
+		}
+
+		if($this->input->get('tabhead')) {
+			$this->parser->parse('tab/redeem_reward_sort', array(
+				'reward_items' => $items
 			));
+		} else {
+			echo $items;
 		}
 	}
 
