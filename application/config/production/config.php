@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'https://socialhappen.com/socialhappen/';
+$config['base_url']	= 'https://socialhappen.com/';
 
 /**
  * Node.js server base url
