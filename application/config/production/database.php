@@ -42,9 +42,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = '';
-$db['default']['password'] = '';
-$db['default']['database'] = '';
+$db['default']['username'] = 'soha';
+$db['default']['password'] = 'figyfigy';
+$db['default']['database'] = 'soha_www';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = 'sh_';
 $db['default']['pconnect'] = TRUE;
