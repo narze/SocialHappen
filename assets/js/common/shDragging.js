@@ -244,8 +244,6 @@
 												facebook_page_id : facebook_page_id,
 												page_name : page_name,
 												page_detail : "",
-												page_all_member : 0,
-												page_new_member : 0 ,
 												page_image : page_image
 											}),
 											success: function(json) {

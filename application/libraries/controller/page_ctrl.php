@@ -276,7 +276,7 @@ class Page_ctrl {
 		return json_encode($users);
 	}
 
-	function json_add($facebook_page_id = NULL ,$company_id = NULL ,$page_name = NULL ,$page_detail = NULL ,$page_all_member = NULL ,$page_new_member = NULL ,$page_image = NULL){
+	function json_add($facebook_page_id = NULL ,$company_id = NULL ,$page_name = NULL ,$page_detail = NULL ,$page_image = NULL){
 		$result = array('success' => FALSE);
 		$this->CI-> load -> model('page_model', 'pages');
 		$post_data = array(
@@ -284,8 +284,6 @@ class Page_ctrl {
 			'company_id' => $company_id,
 			'page_name' => $page_name,
 			'page_detail' => $page_detail,
-			'page_all_member' => $page_all_member,
-			'page_new_member' => $page_new_member,
 			'page_image' => $page_image
 		);
 		

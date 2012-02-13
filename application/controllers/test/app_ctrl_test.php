@@ -221,8 +221,6 @@ class App_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['facebook_page_id'],'is_string','facebook_page_id');
 		$this->unit->run($array[0]['page_name'],'is_string','page_name');
 		$this->unit->run($array[0]['page_detail'],'is_string','page_detail');
-		$this->unit->run($array[0]['page_all_member'],'is_string','page_all_member');
-		$this->unit->run($array[0]['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($array[0]['page_image'],'is_string','page_image');
 	}
 	
