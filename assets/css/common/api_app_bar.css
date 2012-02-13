@@ -365,6 +365,17 @@ width: 130px;
 overflow: hidden;
 }
 
+.loading-icon {
+	background:url(../../images/loading.gif) no-repeat 0 0;
+	width:36px;
+	height:36px;
+	display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;
+	vertical-align: top;
+}
+
 /* Popup Facebook */
 div.popup-fb { /* Reset */
 font-family: Arial, Helvetica, sans-serif;
@@ -398,11 +409,12 @@ div.popup-fb div.buttons {
 position:relative;
 min-height:50px;
 border-top: 1px dotted #a6a6a6;
+border-bottom: 1px dotted transparent;
 }
 div.popup-fb div.buttons p {
 position:relative;
-top:15px;
-text-align:center;
+margin-top:15px;
+margin-bottom:15px;
 }
 div.buttons p.left { text-align:left; }
 div.buttons p.right { text-align:right; }
@@ -1093,7 +1105,7 @@ ul.campaigns-list li p { margin:0 0 10px 0; color:#999; position:absolute; top: 
 ul.campaigns-list li ul { position:absolute; top: 30px; left: 0; }
 ul.campaigns-list li a { color:#63791C; text-decoration:none; font-weight:bold;}
 
-.app-component-form { width: 482px; overflow: hidden; color:#333; font-size:12px; font-family: Arial, Helvetica, sans-serif;}
+.app-component-form { width: 442px; overflow: hidden;color:#333; font-size:12px; font-family: Arial, Helvetica, sans-serif;}
 .app-component-form ul { margin:0; padding:0; list-style:none; clear:both;}
 .app-component-form ul li { position:relative; padding-left:147px;}
 .app-component-form ul li label { text-align: right;
@@ -1125,9 +1137,9 @@ ul.campaigns-list li a { color:#63791C; text-decoration:none; font-weight:bold;}
 	font-size: 80%;
 }
 .app-component-form div.buttons a { float:left; margin-right:5px;}
-.app-component-form h3 { clear:both; color:#5f5f5f; border-bottom:1px solid #f3f3f3; width: 430px; position: relative; left: 25px; height: 20px;}
+.app-component-form h3 { clear:both; color:#5f5f5f; border-bottom:1px solid #f3f3f3; position: relative; height: 20px;}
 
-.app-component-form ul.on-off { margin-bottom: 15px; min-height: 36px; position: relative; left: 25px;}
+.app-component-form ul.on-off { margin-bottom: 15px; min-height: 36px; position: relative;}
 .app-component-form ul.on-off li { width:64px; height: 36px; float:left; padding-left:124px;}
 .app-component-form ul.on-off li label { width:109px;}
 
@@ -1244,6 +1256,7 @@ div.sh-sharebutton{
 	background-image: url('../../images/temp/share_normal.png');
 	background-color: #F1F1F1;
 	float:right;
+	cursor:pointer;
 }
 div.sh-sharebutton:hover{
 	background-image: url('../../images/temp/share_hover.png');
