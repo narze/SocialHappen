@@ -52,6 +52,7 @@ class SocialHappen{
 	 */
 	var $default_urls = array(
 		'app_image' => 'assets/images/default/app.png',
+		'app_icon' => 'assets/images/default/app_icon.png',
 		'campaign_image' => 'assets/images/default/campaign.png',
 		'company_image' => 'assets/images/default/company.png',
 		'user_image' => 'assets/images/default/user.png'
