@@ -96,8 +96,8 @@ class DB_Sync {
 							    'app_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'app_name' => field_option('VARCHAR', 50, $default, $null, $autoinc, $unsigned),
 							    'app_type_id' => field_option('INT', 1, $default, $null, $autoinc, TRUE),
-							    'app_maintainance' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
-							    'app_show_in_list' => field_option('INT', 1, $default, $null, $autoinc, $unsigned),
+							    'app_maintainance' => field_option('INT', 1, 0, $null, $autoinc, $unsigned),
+							    'app_show_in_list' => field_option('INT', 1, 1, $null, $autoinc, $unsigned),
 							    'app_description' => field_option('TEXT', $constraint, $default, TRUE, $autoinc, $unsigned),
 							    'app_secret_key' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 							    'app_url' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
@@ -116,12 +116,6 @@ class DB_Sync {
 							    'job_id' => field_option('BIGINT', 20, $default, $null, $autoinc, $unsigned),
 							    'active_user' => field_option('BIGINT', 20, $default, $null, $autoinc, $unsigned),
 							),*/
-							'audit_action_type' => array(
-							    'audit_action_id' => field_option('INT', 5, $default, $null, $autoinc, TRUE),
-							    'audit_action_name' => field_option('VARCHAR', 100, $default, $null, $autoinc, $unsigned),
-							    'audit_action_active' => field_option('INT', 1, 1, $null, $autoinc, $unsigned),
-								'audit_action_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-							),
 							'campaign' => array(
 							    'campaign_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
 							    'app_install_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -313,7 +307,6 @@ class DB_Sync {
 		$keys = array(
 						'app' => array('app_id'),
 						//'app_statistic' => array('app_install_id','job_time'),
-						'audit_action_type' => array('audit_action_id'),
 						'campaign' => array('campaign_id'),
 						'company' => array('company_id'),
 						'company_apps' => array('company_id', 'app_id'),
@@ -339,7 +332,6 @@ class DB_Sync {
 		$tables = array(
 							'app',
 							//'app_statistic',
-							'audit_action_type',
 							'campaign',
 							'company',
 							'company_apps',
@@ -602,50 +594,6 @@ class DB_Sync {
 			),
 		);
 		$this->CI->db->insert_batch('app', $app);
-				
-		$audit_action_type = array(
-								array(
-									'audit_action_id' => 1,
-									'audit_action_name' =>  'install app',
-								),
-								array(
-									'audit_action_id' => 2,
-									'audit_action_name' =>  'install app to page',
-								),
-								array(
-									'audit_action_id' => 3,
-									'audit_action_name' =>  'remove app',
-								),
-								array(
-									'audit_action_id' => 4,
-									'audit_action_name' =>  'save config',
-								),
-								array(
-									'audit_action_id' => 5,
-									'audit_action_name' =>  'install page',
-								),
-								array(
-									'audit_action_id' => 101,
-									'audit_action_name' =>  'user register to platform',
-								),
-								array(
-									'audit_action_id' => 102,
-									'audit_action_name' =>  'user register to app',
-								),
-								array(
-									'audit_action_id' => 103,
-									'audit_action_name' =>  'user visit',
-								),
-								array(
-									'audit_action_id' => 104,
-									'audit_action_name' =>  'user action',
-								),
-								array(
-									'audit_action_id' => 105,
-									'audit_action_name' =>  'user join campaign',
-								)
-							);
-		$this->CI->db->insert_batch('audit_action_type', $audit_action_type);
 		
 		$campaign = array(
 							array(
