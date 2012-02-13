@@ -154,8 +154,6 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($array[0]['campaign_status_id'],'is_string','campaign_status_id');
 		$this->unit->run($array[0]['campaign_status'],'is_string','campaign_status');
-		$this->unit->run($array[0]['campaign_active_member'],'is_string','campaign_active_member'); 
-		$this->unit->run($array[0]['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($array[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($array[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
@@ -187,8 +185,6 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($array[0]['campaign_status_id'],'is_string','campaign_status_id');
 		$this->unit->run($array[0]['campaign_status'],'is_string','campaign_status');
-		$this->unit->run($array[0]['campaign_active_member'],'is_string','campaign_active_member');
-		$this->unit->run($array[0]['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($array[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($array[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		

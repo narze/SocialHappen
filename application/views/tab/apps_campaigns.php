@@ -21,8 +21,8 @@
 					
 					if ($is_admin) :?>			
 						<ul>
-						<li><?php echo $campaign['campaign_active_member'];?><span>Today</span></li>
-						<li><?php echo $campaign['campaign_all_member']; ?><span>All</span></li>
+						<li><?php echo //$campaign['campaign_active_member'];?><span>Today</span></li>
+						<li><?php echo //$campaign['campaign_all_member']; ?><span>All</span></li>
 						</ul><?php 
 					endif; ?>	
 			</div>			
