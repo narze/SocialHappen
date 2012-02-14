@@ -167,7 +167,7 @@ class XD extends CI_Controller {
 	}
 
 	function visit($page_id = NULL, $app_install_id = NULL, $app_id = NULL){
-		if(!$page_id || !$app_install_id){
+		if(!$page_id || !$app_install_id || (!$user_id = $this->socialhappen->get_user_id())){
 			echo json_encode(array('success'=>FALSE));
 			return;
 		}
@@ -175,7 +175,7 @@ class XD extends CI_Controller {
 		$this->audit_lib->audit_add(array(
 			'app_id' => $app_id,
 			'app_install_id' => $app_install_id,
-			'user_id' => $this->socialhappen->get_user_id(),
+			'user_id' => $user_id,
 			'action_id' => $this->socialhappen->get_k('audit_action', 'User Visit'),
 			'page_id' => $page_id,
 			'app_install_id' => $app_install_id

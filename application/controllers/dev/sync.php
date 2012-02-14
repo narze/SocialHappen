@@ -38,10 +38,20 @@ class Sync extends CI_Controller {
 	}
 	
 	function db_reset(){
-		$this->db_sync->mysql_reset();
+		$this->load->dbutil();
+		$backup = $this->dbutil->backup(array(
+			'format' => 'txt')); 
+		$this->load->helper('file');
+		if(write_file(APPPATH.'backup/backup_'.date('Ymd_H-i-s').'_sync.sql', $backup)){
+			$this->db_sync->mysql_reset();
+		} else {
+			echo 'Please make backup folder writable';
+		}
+
 	}
 	
 	function mongodb_reset(){
+		//TODO backup mongodb first
 		$this->db_sync->mongodb_reset();
 	}
 	

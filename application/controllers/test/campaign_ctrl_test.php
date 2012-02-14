@@ -72,8 +72,6 @@ class Campaign_ctrl_test extends CI_Controller {
 		$this->unit->run($array['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($array['campaign_status_id'] == 1,'is_true','campaign_status_id == 1');
 		$this->unit->run($array['campaign_status'] == "Inactive",'is_true','campaign_status == "Inactive"');
-		$this->unit->run($array['campaign_active_member'],'is_string','campaign_active_member');
-		$this->unit->run($array['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($array['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($array['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		

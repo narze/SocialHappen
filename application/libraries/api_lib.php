@@ -444,9 +444,7 @@ class Api_Lib {
 		$this->CI->load->model('installed_apps_model','installed_apps');
 		$app = $this->CI->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 		$company_id = $app['company_id'];
-		$this->CI->load->model('Audit_action_type_model', 'Audit_action_type');
-		$audit_auction_type = $this->CI->Audit_action_type->get_audit_action_by_type_id($action);
-		$action_text = $audit_auction_type['audit_action_name'];
+		$action_text = $this->CI->socialhappen->get_v('audit_action', $action);
 		$this->CI->load->library('audit_lib');
 		
 		$result = $this->CI->audit_lib->add_audit(

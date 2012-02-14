@@ -96,8 +96,6 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array['company_id'],'is_string','company_id');
 		$this->unit->run($array['page_name'],'is_string','page_name');
 		$this->unit->run($array['page_detail'],'is_string','page_detail');
-		$this->unit->run($array['page_all_member'],'is_string','page_all_member');
-		$this->unit->run($array['page_new_member'],'is_string','page_new_member');
 		$this->unit->run($array['page_image'],'is_string','page_image');
 	}
 	
@@ -154,8 +152,6 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($array[0]['campaign_status_id'],'is_string','campaign_status_id');
 		$this->unit->run($array[0]['campaign_status'],'is_string','campaign_status');
-		$this->unit->run($array[0]['campaign_active_member'],'is_string','campaign_active_member'); 
-		$this->unit->run($array[0]['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($array[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($array[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
@@ -187,8 +183,6 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($array[0]['campaign_status_id'],'is_string','campaign_status_id');
 		$this->unit->run($array[0]['campaign_status'],'is_string','campaign_status');
-		$this->unit->run($array[0]['campaign_active_member'],'is_string','campaign_active_member');
-		$this->unit->run($array[0]['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($array[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($array[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
@@ -234,10 +228,8 @@ class Page_ctrl_test extends CI_Controller {
 		$company_id = Company_id;
 		$page_name = 'TestPageName';
 		$page_detail = 'TestPageDetail';
-		$page_all_member = 0;
-		$page_new_member = 0;
 		$page_image = 'https://localhost/assets/images/blank2.png';
-		$result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_all_member,$page_new_member,$page_image);
+		$result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_image);
 		$this->unit->run($result['success'], TRUE, "result['success']", $result['success']);
 		$this->unit->run($result['data']['page_id'], 'is_int', "result['data']['page_id']", $result['data']['page_id']);
 	}
@@ -247,10 +239,8 @@ class Page_ctrl_test extends CI_Controller {
 		$company_id = Company_id;
 		$page_name = 'TestPageName';
 		$page_detail = 'TestPageDetail';
-		$page_all_member = 0;
-		$page_new_member = 0;
 		$page_image = 'https://localhost/assets/images/blank2.png';
-		$result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_all_member,$page_new_member,$page_image);
+		$result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_image);
 		$this->unit->run($result['success'], FALSE, "result['success']", $result['success']);
 		$this->unit->run($result['error'], 'This page has already installed Socialhappen', "result['error']", $result['error']);
 	}
