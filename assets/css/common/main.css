@@ -784,20 +784,20 @@ p.apply a.bt-apply-to-signup-form { margin-top:12px; }
 	float:left;
 	background: url(../../images/bg/bg_linex01.gif) bottom repeat-x;
 }
-#page-dashboard .blank-tab {
+.wrapper-content .blank-tab {
 	background-position: right bottom;
 	background-repeat: no-repeat;
 	padding:0 25px;
 	position:relative;
 	min-height: 370px;
 }
-#page-dashboard .blank-tab h2 { font-size: 24px; font-family: Myriad Pro; font-weight: normal; padding: 0 0 5px; margin: 15px 0 0; }
-#page-dashboard .blank-tab p.sub-title { color:#63791c; line-height: 15px; margin: 0; }
-#page-dashboard .blank-tab div.new-item { display:block; position: absolute; top: 15px; right: 15px; }
-#page-dashboard .blank-tab hr { border:0; color: #dcdcdc; background-color: #dcdcdc; height: 1px; width: 900px; position: relative; left: -25px; top:10px; }
-#page-dashboard .blank-tab h3 { font-size: 14px; padding: 0 0 5px; margin: 30px 0 0; color:#63791c; }
-#page-dashboard .blank-tab ul { margin:10px 0 25px 0; padding:0 20px; width:350px; }
-#page-dashboard .blank-tab ul li { list-style:disc; margin:10px 0; }
+.wrapper-content .blank-tab h2 { font-size: 24px; font-family: Myriad Pro; font-weight: normal; padding: 0 0 5px; margin: 15px 0 0; }
+.wrapper-content .blank-tab p.sub-title { color:#63791c; line-height: 15px; margin: 0; }
+.wrapper-content .blank-tab div.new-item { display:block; position: absolute; top: 15px; right: 15px; }
+.wrapper-content .blank-tab hr { border:0; color: #dcdcdc; background-color: #dcdcdc; height: 1px; width: 900px; position: relative; left: -25px; top:10px; }
+.wrapper-content .blank-tab h3 { font-size: 14px; padding: 0 0 5px; margin: 30px 0 0; color:#63791c; }
+.wrapper-content .blank-tab ul { margin:10px 0 25px 0; padding:0 20px; width:350px; }
+.wrapper-content .blank-tab ul li { list-style:disc; margin:10px 0; }
 
 /* User landing page */ 
 div.box-information div.info {

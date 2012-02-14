@@ -26,7 +26,7 @@ $(function(){
 					.appendTo('.wrapper-details.campaigns .details.campaigns table');
 
 					var campaign_list = row.find('td.app-list div');
-					campaign_list.find('p.thumb img').attr('src', imgsize(json[i].campaign_image,'normal')).addClass('campaign-image');
+					if(json[i].campaign_image) campaign_list.find('p.thumb img').attr('src', imgsize(json[i].campaign_image,'normal'));
 					campaign_list.find('h2').append('<a href="'+base_url+'campaign/'+json[i].campaign_id+'">'+json[i].campaign_name+'</a>');
 					campaign_list.find('p.description').append(json[i].campaign_description);
 					
@@ -53,8 +53,7 @@ $(function(){
 	}
 	
 	$('.tab-content ul li.campaigns a,.campaign-filter').live('click',function(){
-		$(this).siblings().removeClass('active');
-		$(this).addClass('active');
+		$(this).addClass('active').siblings().removeClass('active');
 		
 		if($(this).hasClass('inactive-campaign')){
 			filtered = true;

@@ -5,12 +5,12 @@
           </div>
           <h2><?php echo issetor($page_profile['page_name']); ?></h2>
           <?php echo $page_profile['page_detail'] ? '<p>'.$page_profile['page_detail'].'</p>' : ''; ?>
-		  <p>
-			<a class="bt-go_page" href="<?php echo $facebook['link'];?>"><span>Goto Page</span></a>
-			<?php if($page_profile['page_installed'] == 1) { ?>
-			<a class="bt-add_app"><span>Add App</span></a>
-			<?php } ?>
-		  </p>
+    		  <p>
+    			<a class="bt-go_page mt10" href="<?php echo $facebook['link'];?>"><span>Goto Page</span></a>
+    			<?php if($page_profile['page_installed'] == 1) { ?>
+    			<a class="bt-add_app"><span>Add App</span></a>
+    			<?php } ?>
+    		  </p>
         </div>
         <div class="information">
           <h2>Information</h2>
@@ -19,7 +19,7 @@
             <li><span>All Member</span><?php echo $user_count;?></li>
             <li><span>Like</span><?php echo $facebook['likes'];?></li>
           </ul>
-		  <ul style="position:relative; left:20px;">
+		      <ul style="position:relative; left:20px;">
             <li><span>Application</span><?php echo $app_count;?></li>
             <li><span>Campaign</span><?php echo $campaign_count;?></li>
           </ul>
