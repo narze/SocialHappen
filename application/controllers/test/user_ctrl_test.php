@@ -162,20 +162,20 @@ class User_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['user_last_seen'],'is_string','user_last_seen');
 	}
 
-	/**
-	 * Tests json_add()
-	 * @author Manassarn M.
-	 */
-	function json_add_test(){
-		$user = array(
-						'user_facebook_id' => rand(1, 10000000),
-						);
-		$content = $this->curl->ssl(FALSE)->simple_post(base_url().'user/json_add', $user);
-		$content = json_decode($content, TRUE);
-		$this->unit->run($content,'is_array', 'json_add()');
-		$this->unit->run($content['user_id'],'is_int','user_id');
-		$this->unit->run($content['status'] == 'OK','is_true', 'status');
-	}
+	// /** DEPRECATED
+	//  * Tests json_add()
+	//  * @author Manassarn M.
+	//  */
+	// function json_add_test(){
+	// 	$user = array(
+	// 					'user_facebook_id' => rand(1, 10000000),
+	// 					);
+	// 	$content = $this->curl->ssl(FALSE)->simple_post(base_url().'user/json_add', $user);
+	// 	$content = json_decode($content, TRUE);
+	// 	$this->unit->run($content,'is_array', 'json_add()');
+	// 	$this->unit->run($content['user_id'],'is_int','user_id');
+	// 	$this->unit->run($content['status'] == 'OK','is_true', 'status');
+	// }
 	
 	/**
 	 * Tests json_get_companies()
