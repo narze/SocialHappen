@@ -15,15 +15,15 @@ class Migrate extends CI_Controller {
 		$this->migrate_lib->index();
 	}
 
-	function latest(){
-		$this->migrate_lib->latest();
+	function latest($backup = 1){
+		$this->migrate_lib->latest($backup);
 	}
 
-	function version($target_version){
-		$this->migrate_lib->version($target_version);
+	function version($target_version,$backup = 1){
+		$this->migrate_lib->version($target_version,$backup);
 	}
 
-	function current(){
-		$this->migrate_lib->current();
+	function current($backup = 1){
+		$this->migrate_lib->current($backup);
 	}
 }

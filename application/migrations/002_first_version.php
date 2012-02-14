@@ -291,7 +291,26 @@ class Migration_First_version extends CI_Migration {
 				echo "Created table : {$table}<br />";	
 			}
 		}
-		echo 'Upgraded to 1<br />';
+
+		if ( ! $this->db->table_exists('sessions'))
+		{
+			$this->dbforge->add_field(array(
+				'session_id' => field_option('VARCHAR', 40, '0', $null, $autoinc, $unsigned),
+				'ip_address' => field_option('VARCHAR', 16, '0', $null, $autoinc, $unsigned),
+				'user_agent' => field_option('VARCHAR', 120, $default, $null, $autoinc, $unsigned),
+				'last_activity' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
+				'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
+				'user_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
+			
+			));
+
+			$this->dbforge->create_table('sessions', TRUE);
+			$this->db->query("CREATE INDEX last_activity_idx ON ".$this->db->dbprefix('sessions')." (last_activity)");
+
+		}
+		$this->db->query("CREATE UNIQUE INDEX user_facebook_id ON ".$this->db->dbprefix('user')." (user_facebook_id)");
+		
+		echo 'Upgraded to 2<br />';
 	}
 
 	public function down()
@@ -305,8 +324,6 @@ class Migration_First_version extends CI_Migration {
 				echo "Dropped table : {$table}<br />";	
 			}
 		}
-		echo 'Downgraded to 0<br />';
+		echo 'Downgraded to 1<br />';
 	}
-
-	
 }

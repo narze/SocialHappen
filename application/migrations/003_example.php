@@ -1,8 +1,16 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Test_add extends CI_Migration {
-
+class Migration_Example extends CI_Migration {
 	public function up(){
+		
+	}
+
+	public function down()
+	{
+		
+	}
+
+	public function up_example(){
 		$this->dbforge->add_key('blog_id', TRUE);
 		$this->dbforge->add_field(array(
 			'blog_id' => array(
@@ -22,18 +30,12 @@ class Migration_Test_add extends CI_Migration {
 		));
 		
 		$this->dbforge->create_table('test');
-		echo 'Upgraded to 2<br />';
+		echo 'Upgraded to 3<br />';
 	}
 
-	public function down()
+	public function down_example()
 	{
-		
-			
-			
-			$this->dbforge->drop_table('test');
-			echo 'Downgraded to 1<br />';
-		
+		$this->dbforge->drop_table('test');
+		echo 'Downgraded to 2<br />';
 	}
-
-	
 }

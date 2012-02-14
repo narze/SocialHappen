@@ -22,43 +22,47 @@ class Migrate_lib {
 		
 	}
 
-	function latest(){
+	function latest($backup = TRUE){
 		$this->CI->config->load('migration');
 		if($migrations = $this->_find_migrations()){
 			$last_migration = basename(end($migrations));
 			$target_version = (int) substr($last_migration, 0, 3);
-			$this->CI->version($target_version);
+			return $this->version($target_version, $backup);
 		} else {
 			show_error($this->CI->lang->line('migration_none_found'));
 		}
 	}
 
-	function version($target_version){
-		if($this->_backup_mysql($target_version)){
-			if (!$result = $this->CI->migration->version($target_version)) {
-				show_error($this->CI->migration->error_string());
-			} else { 
-				if($result === TRUE){
-					echo 'No version to upgrade<br />';
-				} else {
-					echo 'Migrated successful to version '.$result.'<br />';
-				}
-			}
-		} else {
-			log_message('debug', 'Cannot backup, migration cancelled');
-			echo 'Migration failed<br />';
-		}
-		$this->CI->index();
-	}
-
-	function current(){
+	function current($backup = TRUE){
 		$this->CI->config->load('migration');
 		$target_version = $this->CI->config->item('migration_version');
-		$this->CI->version($target_version);
+		return $this->version($target_version, $backup);
 	}
 
-	function _backup_mysql($target_version){
-		$this->CI->load->dbutil();
+	function version($target_version, $backup = TRUE){
+		if($backup){
+			if($this->_backup_current_version($target_version)){
+				echo 'Backed up version '.$target_version.'<br />';
+			} else {
+				log_message('debug', 'Cannot backup, migration cancelled');
+				echo 'Migration failed<br />';
+				return FALSE;
+			}
+		}
+
+		if (!$result = $this->CI->migration->version($target_version)) {
+			show_error($this->CI->migration->error_string());
+		} else { 
+			if($result === TRUE){
+				echo 'No version to upgrade<br />';
+			} else {
+				echo 'Migrated successful to version '.$result.'<br />';
+			}
+			return $result;
+		}
+	}
+
+	function _backup_current_version($target_version){
 		if($this->CI->db->table_exists('migrations')){
 			$row = $this->CI->db->get('migrations')->row();
 			$current_version = $row ? $row->version : 0;
@@ -70,7 +74,9 @@ class Migrate_lib {
 			return FALSE;
 		}
 		// Backup your entire database and assign it to a variable
-		$backup =& $this->CI->dbutil->backup(); 
+		$this->CI->load->dbutil();
+		$backup = $this->CI->dbutil->backup(array(
+			'format' => 'txt')); 
 
 		// Load the file helper and write the file to your server
 		$this->CI->load->helper('file');
