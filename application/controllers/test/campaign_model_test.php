@@ -35,8 +35,7 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
 		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
-		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
-		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
+
 		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
@@ -62,8 +61,7 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
 		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
-		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
-		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
+
 		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
@@ -89,8 +87,6 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($result['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
 		$this->unit->run($result['campaign_status_id'] == 1,'is_true', 'campaign_status_id == 1');
-		$this->unit->run($result['campaign_active_member'],'is_string','campaign_active_member');
-		$this->unit->run($result['campaign_all_member'],'is_string','campaign_all_member');
 		$this->unit->run($result['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($result['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
@@ -117,8 +113,7 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
 		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status == 1');
-		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
-		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
+
 		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
@@ -144,8 +139,7 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_detail'],'is_string','campaign_detail');
 		$this->unit->run($result[0]['campaign_status'] == 'Inactive','is_true', 'campaign_status == "Inactive"');
 		$this->unit->run($result[0]['campaign_status_id'] == 1,'is_true', 'campaign_status == 1');
-		$this->unit->run($result[0]['campaign_active_member'],'is_string','campaign_active_member');
-		$this->unit->run($result[0]['campaign_all_member'],'is_string','campaign_all_member');
+
 		$this->unit->run($result[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($result[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
 		
@@ -168,8 +162,6 @@ class Campaign_model_test extends CI_Controller {
 							'campaign_name' => 'test',
 							'campaign_detail' => 'test',
 							'campaign_status_id' => '1',
-							'campaign_active_member' => '0',
-							'campaign_all_member' => '1',
 							'campaign_start_timestamp' => NULL,
 							'campaign_end_timestamp' => NULL
 						);
@@ -207,8 +199,6 @@ class Campaign_model_test extends CI_Controller {
 							'campaign_name' => 'test1',
 							'campaign_detail' => 'test2',
 							'campaign_status_id' => '1',
-							'campaign_active_member' => '0',
-							'campaign_all_member' => '1',
 							'campaign_start_timestamp' => '2011-11-11 11:11:11',
 							'campaign_end_timestamp' => '2011-11-11 11:11:11'
 						);
@@ -220,8 +210,6 @@ class Campaign_model_test extends CI_Controller {
 							'campaign_name' => 'test2',
 							'campaign_detail' => 'test2',
 							'campaign_status_id' => '1',
-							'campaign_active_member' => '0',
-							'campaign_all_member' => '1',
 							'campaign_start_timestamp' => '2011-11-11 11:11:12',
 							'campaign_end_timestamp' => '2011-11-11 11:11:12'
 						);
@@ -269,8 +257,6 @@ class Campaign_model_test extends CI_Controller {
 			'campaign_name' => 'incoming',
 			'campaign_detail' => 'incoming',
 			'campaign_status_id' => '2',
-			'campaign_active_member' => '0',
-			'campaign_all_member' => '1',
 			'campaign_start_timestamp' => date('Y-m-d H:i:s', time()+1),
 			'campaign_end_timestamp' => date('Y-m-d H:i:s', time()+2)
 		);

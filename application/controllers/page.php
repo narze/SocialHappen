@@ -206,10 +206,8 @@ class Page extends CI_Controller {
 		$company_id = $this -> input -> post('company_id'); 
 		$page_name = $this -> input -> post('page_name'); 
 		$page_detail = $this -> input -> post('page_detail'); 
-		$page_all_member = $this -> input -> post('page_all_member'); 
-		$page_new_member = $this -> input -> post('page_new_member'); 
 		$page_image = $this -> input -> post('page_image');
-		$json_add_result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_all_member,$page_new_member,$page_image);
+		$json_add_result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_image);
 
 		if($json_add_result['success']){
 			$socialhappen_app_id = $this->config->item('facebook_app_id');

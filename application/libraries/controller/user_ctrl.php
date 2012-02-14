@@ -254,47 +254,47 @@ class User_ctrl {
 		
 	}
 
-	/**
-	 * DEPRECATED
-	 * JSON : Add user
-	 * @author Manassarn M.
-	 */
-	function json_add(){
-		$this->CI->load->model('user_model','users');
-		$post_data = array(
-							'user_first_name' => $this->CI->input->post('user_first_name'),
-							'user_last_name' => $this->CI->input->post('user_last_name'),
-							'user_email' => $this->CI->input->post('user_email'),
-							'user_image' => $this->CI->input->post('user_image'),
-							'user_facebook_id' => $this->CI->input->post('user_facebook_id')
-						);
-		if($user_id = $this->CI->users->add_user($post_data)){
-			$result->status = 'OK';
-			$result->user_id = $user_id;
+	// /**
+	//  * DEPRECATED
+	//  * JSON : Add user
+	//  * @author Manassarn M.
+	//  */
+	// function json_add(){
+	// 	$this->CI->load->model('user_model','users');
+	// 	$post_data = array(
+	// 						'user_first_name' => $this->CI->input->post('user_first_name'),
+	// 						'user_last_name' => $this->CI->input->post('user_last_name'),
+	// 						'user_email' => $this->CI->input->post('user_email'),
+	// 						'user_image' => $this->CI->input->post('user_image'),
+	// 						'user_facebook_id' => $this->CI->input->post('user_facebook_id')
+	// 					);
+	// 	if($user_id = $this->CI->users->add_user($post_data)){
+	// 		$result->status = 'OK';
+	// 		$result->user_id = $user_id;
 			
-			$this->CI->load->library('audit_lib');
-			$action_id = $this->CI->socialhappen->get_k('audit_action','User Register SocialHappen');
-			$this->CI->audit_lib->add_audit(
-				0,
-				$user_id,
-				$action_id,
-				'', 
-				'',
-				array(
-					'app_install_id' => 0,
-					'user_id' => $user_id
-				)
-			);
+	// 		$this->CI->load->library('audit_lib');
+	// 		$action_id = $this->CI->socialhappen->get_k('audit_action','User Register SocialHappen');
+	// 		$this->CI->audit_lib->add_audit(
+	// 			0,
+	// 			$user_id,
+	// 			$action_id,
+	// 			'', 
+	// 			'',
+	// 			array(
+	// 				'app_install_id' => 0,
+	// 				'user_id' => $user_id
+	// 			)
+	// 		);
 			
-			$this->CI->load->library('achievement_lib');
-			$info = array('action_id'=> $action_id, 'app_install_id'=>0);
-			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
-		} else {
-			log_message('error','add user failed');
-			$result->status = 'ERROR';
-		}
-		return json_encode($result);
-	}
+	// 		$this->CI->load->library('achievement_lib');
+	// 		$info = array('action_id'=> $action_id, 'app_install_id'=>0);
+	// 		$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+	// 	} else {
+	// 		log_message('error','add user failed');
+	// 		$result->status = 'ERROR';
+	// 	}
+	// 	return json_encode($result);
+	// }
 	
 	/**
 	 * JSON : Get user companies
