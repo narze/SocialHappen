@@ -10,7 +10,7 @@ class Migrate_lib {
 		$this->CI->load->library('migration');
 	}
 	
-	function index(){
+	function main(){
 		$this->CI->config->load('migration');
 		if($this->CI->db->table_exists('migrations')){
 			$row = $this->CI->db->get('migrations')->row();
@@ -45,7 +45,7 @@ class Migrate_lib {
 				echo 'Backed up version '.$target_version.'<br />';
 			} else {
 				log_message('debug', 'Cannot backup, migration cancelled');
-				echo 'Migration failed<br />';
+				echo 'Cannot backup, migration failed<br />';
 				return FALSE;
 			}
 		}
@@ -55,10 +55,11 @@ class Migrate_lib {
 		} else { 
 			if($result === TRUE){
 				echo 'No version to upgrade<br />';
+				return FALSE;
 			} else {
 				echo 'Migrated successful to version '.$result.'<br />';
+				return $result;
 			}
-			return $result;
 		}
 	}
 
@@ -70,7 +71,7 @@ class Migrate_lib {
 			$current_version = 0;
 		}
 		if($current_version == $target_version){
-			echo 'Same version<br />';
+			echo 'Same version';
 			return FALSE;
 		}
 		// Backup your entire database and assign it to a variable
@@ -80,8 +81,13 @@ class Migrate_lib {
 
 		// Load the file helper and write the file to your server
 		$this->CI->load->helper('file');
-		return write_file(APPPATH.'migrations/backup_'.date('Ymd_H-i-s').
-			'_v['.$current_version.'-'.$target_version.'].sql', $backup); 
+		if(write_file(APPPATH.'backup/backup_'.date('Ymd_H-i-s').
+			'_v['.$current_version.'-'.$target_version.'].sql', $backup)){
+			return TRUE;
+		} else {
+			echo 'Please make backup folder writable';
+			return FALSE;
+		}
 	}
 
 	/**

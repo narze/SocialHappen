@@ -2,12 +2,12 @@
 
 class Migration_Example extends CI_Migration {
 	public function up(){
-		
+		echo 'Upgraded to version 3<br />';
 	}
 
 	public function down()
 	{
-		
+		echo 'Downgraded to version 2<br />';
 	}
 
 	public function up_example(){
