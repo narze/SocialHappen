@@ -85,7 +85,8 @@ class Api_Lib {
 											'',
 											array(
 													'app_install_id'=> $app_install_id,
-													'company_id' => $company_id
+													'company_id' => $company_id,
+													'user_id' => $user_id
 												)
 										);
 				
