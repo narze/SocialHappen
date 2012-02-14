@@ -14,3 +14,4 @@ shdumper/mongodb_load.bat
 shdumper/mongodb_save.bat
 shdumper/mongodb_dump
 shdumper/mysql_dump.sql
+application/migrations/backup*
