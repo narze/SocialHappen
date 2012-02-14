@@ -7,9 +7,9 @@ class Share extends CI_Controller {
 		$this->socialhappen->check_logged_in();
 	}
 	
-	function index($app_install_id = NULL){
+	function index($app_install_id = NULL, $share_link = NULL){
 		$this->load->library('form_validation');
-		$share_link = $this->input->get('link');
+		$share_link = $share_link ? $share_link : $this->input->get('link');
 		if($app_install_id){
 			$this->load->library('campaign_lib');
 			$campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
@@ -68,11 +68,13 @@ class Share extends CI_Controller {
 		$this->form_validation->set_rules('facebook', 'Facebook', '');			
 		$this->form_validation->set_rules('message', 'Message', 'required|trim|xss_clean');
 			
-		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+		$this->form_validation->set_error_delimiters('<div class="notice error">', '</div>');
+
+		$share_link = $this->input->post('share_link');
 	
 		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 		{
-			$this->index($app_install_id);
+			$this->index($app_install_id, $share_link);
 			return;
 		}
 		else
@@ -81,11 +83,12 @@ class Share extends CI_Controller {
 			$message = $this->input->post('message');
 			$twitter_share = $this->input->post('twitter') == 1;
 			$facebook_share = $this->input->post('facebook') == 1;
-			$share_link = $this->input->post('share_link');
+
+			$result = array();
 
 			if($twitter_share){
 				if($result = $this->sharebutton_lib->twitter_post($message.' '.$share_link)){
-					echo '<div>Shared twitter</div>';
+					$share_result['twitter'] = TRUE;
 				}
 			}
 
@@ -95,14 +98,19 @@ class Share extends CI_Controller {
 				$app_name = $app['app_name'];
 				$this->load->library('facebook');
 				if($result = $this->facebook->post_profile($message, $share_link, $app_name)){
-					echo '<div>Shared facebook</div>';
+					$share_result['facebook'] = TRUE;
 				}
 			}
 
 			if(!$twitter_share && !$facebook_share){
-				echo 'Error occured, please share again';
+				$share_result['error'] = 'Error occured, please share again';
 				return;
 			}
+
+			$this->load->vars(array(
+				'share_result' => $share_result
+			));
+			$this->load->view('share/main');
 
 			//Add share score TODO: check
 				$share_action = $this->socialhappen->get_k('audit_action','User Share');
@@ -124,7 +132,7 @@ class Share extends CI_Controller {
 					$audit_additional_data
 				);
 				if($audit_result){
-					echo 'audit added';
+					//echo 'audit added';
 				} else {
 					log_message('error','add_audit failed');
 					return;
@@ -138,7 +146,7 @@ class Share extends CI_Controller {
 				// }
 				$inc_result = $this->achievement_lib->increment_achievement_stat(issetor($app['app_id'],0), $user_id, $achievement_info, 1);
 				if($inc_result){
-					echo 'increment_achievement_stat complete';
+					//echo ' increment_achievement_stat complete';
 				} else {	
 					log_message('error','increment_achievement_stat failed');
 				}

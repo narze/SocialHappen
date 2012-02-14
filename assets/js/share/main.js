@@ -1,7 +1,8 @@
 $(function(){
 	$('input.cb-share-twitter').change(share_twitter);
 	$('input.cb-share-facebook').change(share_facebook);
-	$('form').submit(submit_share);
+	$('.sh-sharebutton.submit').click(submit_share);
+
 	var sh_twitter_popup;
 
 	function share_twitter(){
@@ -20,9 +21,10 @@ $(function(){
 
 	function submit_share(){
 		if(!$('input.cb-share-twitter').attr('checked') && !$('input.cb-share-facebook').attr('checked')){
-			alert('please share something');
+			alert('Please share something');
 			return false;
 		}
+		$('#share-submit').submit();
 	}
 
 	function twitter_no_access_token(callback){
@@ -37,8 +39,8 @@ $(function(){
 	}
 
 	function twitter_login(){
-		$('.loading').remove();
-		$('body').append('<span class="loading">loading icon</span>');
+		$('.loading-icon').remove();
+		$('body').append('<span class="loading-icon"></span>');
 		sh_twitter_popup.location.replace(base_url+'share/twitter_connect');
 		window.setTimeout(wait_for_popup, 1000);
 
@@ -47,6 +49,7 @@ $(function(){
 				window.setTimeout(wait_for_popup, 1000);
 			} else {
 				twitter_no_access_token(twitter_uncheck);
+				$('.loading-icon').remove();
 			}
 		}
 	}

@@ -352,14 +352,20 @@ bottom: none;
 	zoom: 1;
 }
 
-.list-campaign {min-height: 116px;}
-.list-reward .reward-item {
+.campaign-box .list-campaign {min-height: 116px;}
+.reward-box .reward-item.active {display:block;}
+.reward-box .reward-item {
 	display:none;
 	width:450px;
 	margin:5px 0 0 0!important;
-	border-bottom:1px solid #e1e1e1;
 }
-.list-reward .reward-item.active {display:block;}
+
+.reward-item-list .reward-item:hover {
+	background-color:transparent;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
 .reward-item .item-image {height: 204px;}
 .reward-item .item-overlay {
 	display:none;
@@ -380,12 +386,11 @@ bottom: none;
 	display: block;
 }
 .reward-item .section {padding:15px 0 0 0;}
-.main-content .reward-item {
+.reward-item-list .reward-item {
 	width:450px;
-	margin:0 20px 20px 20px;
+	margin:0 25px 20px 25px;
 	border-bottom:1px solid #e1e1e1;
 }
-
 #fancybox-content .reward-item {
 	width:auto;
 	margin-top: 0;

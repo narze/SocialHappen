@@ -38,14 +38,14 @@ echo form_open_multipart('settings/app_component/invite/'.$app_install_id.'/'.$c
 <li <?php echo form_error('invite_title') ? 'class="error"' : ''; ?>>
         <label for="invite_title">Title : <span class="required">*</span></label>
         <div class="inputs">
-                <input style="width:300px;" id="invite_title" type="text" name="invite_title" maxlength="255" value="<?php echo set_value('invite_title',$invite['message']['title']); ?>"  />
+                <input style="width:250px;" id="invite_title" type="text" name="invite_title" maxlength="255" value="<?php echo set_value('invite_title',$invite['message']['title']); ?>"  />
         </div>
 </li>
 
 <li <?php echo form_error('invite_text') ? 'class="error"' : ''; ?>>
         <label for="invite_text">Message : <span class="required">*</span></label>
         <div class="inputs">
-                <?php echo form_textarea( array( 'name' => 'invite_text', 'id' => 'invite_text', 'style' => 'width:304px;height:100px;', 'value' => set_value('invite_text',$invite['message']['text']) ) )?>
+                <?php echo form_textarea( array( 'name' => 'invite_text', 'id' => 'invite_text', 'style' => 'width:254px;height:100px;', 'value' => set_value('invite_text',$invite['message']['text']) ) )?>
         </div>
 </li>
 </ul>

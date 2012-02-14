@@ -252,6 +252,7 @@ div.wrapper-content>div {
 	width: 950px;
 	padding: 0 6px;
 	background: url(../../images/bg/bg_wrapper-content.png) repeat-y;
+	border-bottom: 1px solid transparent;
 }
 div.wrapper-content>div.bottom {
 	width: 962px;

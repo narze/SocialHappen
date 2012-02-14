@@ -37,21 +37,21 @@ echo form_open_multipart('settings/app_component/sharebutton/'.$app_install_id.'
 <li <?php echo form_error('share_title') ? 'class="error"' : ''; ?>>
         <label for="share_title">Title : <span class="required">*</span></label>
         <div class="inputs">
-                <input id="share_title" style="width:300px;" type="text" name="share_title"  value="<?php echo set_value('share_title',$sharebutton['message']['title']); ?>"  />
+                <input id="share_title" style="width:250px;" type="text" name="share_title"  value="<?php echo set_value('share_title',$sharebutton['message']['title']); ?>"  />
         </div>
 </li>
 
 <li <?php echo form_error('share_caption') ? 'class="error"' : ''; ?>>
         <label for="share_caption">Caption : <span class="required">*</span></label>
         <div class="inputs">
-                <input id="share_caption" style="width:300px;" type="text" name="share_caption"  value="<?php echo set_value('share_caption',$sharebutton['message']['caption']); ?>"  />
+                <input id="share_caption" style="width:250px;" type="text" name="share_caption"  value="<?php echo set_value('share_caption',$sharebutton['message']['caption']); ?>"  />
         </div>
 </li>
 
 <li <?php echo form_error('share_description') ? 'class="error"' : ''; ?>>
         <label for="share_description">Message : <span class="required">*</span></label>
         <div class="inputs">						
-	<?php echo form_textarea( array( 'name' => 'share_description', 'style' => 'width:304px;height:100px;', 'value' => set_value('share_description',$sharebutton['message']['text']) ) )?>
+	<?php echo form_textarea( array( 'name' => 'share_description', 'style' => 'width:254px;height:100px;', 'value' => set_value('share_description',$sharebutton['message']['text']) ) )?>
         </div>
 </li>
 </ul>
