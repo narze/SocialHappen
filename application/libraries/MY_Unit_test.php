@@ -59,10 +59,10 @@ class MY_Unit_test extends CI_Unit_test {
 			echo "<body bgcolor='white'><h1><span style='color:#C11B17'>TEST FAILED: {$fail_count}</span><span style='color:#C0C0C0'>, PASS: ".(count($result) - $fail_count).", FROM TOTAL: ".count($result)."</span></h1>";
 			echo $failed_string;
 			echo "</body>";
+			echo $this->report();
 		} else {
 			echo "<h1 style='color:#008000'>ALL PASSED: ".count($result)."</h1>";
 		}
-		echo $this->report();
 	}
 
 	function __destruct(){ //Print reset result if $silent == FALSE
