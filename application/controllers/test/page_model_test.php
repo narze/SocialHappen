@@ -175,7 +175,7 @@ class Page_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function update_page_profile_by_page_id_test(){
-		$new_page_name = rand(1,10000);
+		$new_page_name = 'New Page name';
 		$data = array(
 			'page_name' => $new_page_name
 		);

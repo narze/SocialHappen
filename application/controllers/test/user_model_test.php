@@ -118,7 +118,7 @@ class User_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function update_user_test(){
-		$new_first_name = rand(1,10000);
+		$new_first_name = 'New Firstname;
 		$data = array(
 			'user_first_name' => $new_first_name
 		);

@@ -1410,6 +1410,35 @@ class Backend extends CI_Controller {
 			redirect('backend/company');
 		}
 	}
+
+	function user_roles(){
+		$this->backend_session_verify(TRUE);
+		$this->load->model('user_role_model');
+		$user_roles = $this->user_role_model->get_all_user_role();
+		$this->load->vars(array(
+			'user_roles' => $user_roles
+		));
+		$this->load->view('backend_views/user_roles');
+	}
+
+	function user_role($user_role_id){
+		$this->backend_session_verify(TRUE);
+		$this->load->model('user_role_model');
+		$user_role = $this->user_role_model->get_user_role_by_user_role_id($user_role_id);
+		$this->load->vars(array(
+			'user_role' => $user_role
+		));
+		$this->load->view('backend_views/user_role');
+	}
+
+	function add_new_user_role(){
+		$this->load->library('form_validation');
+		$this->load->view('backend_views/add_new_user_role');
+	}
+
+	function edit_user_role(){
+
+	}
 }
 
 /* End of file backend.php */
