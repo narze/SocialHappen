@@ -102,7 +102,26 @@ class Tab_ctrl_test extends CI_Controller {
 	*/
 
 	function activities_test(){
-		
+		$page_id = 1;
+		$filter = '';
+		$limit = 100;
+		$offset = NULL;
+
+		$this->load->model('audit_model','audit');
+		for ($i=0; $i < 5; $i++) { 	
+			$data = array('subject' => 'a',
+					  'action_id' => 0,
+					  'object' => 'b',
+					  'app_id' => 1,
+					  'user_id' => 5,
+					  'page_id' => $page_id
+					  );
+			$this->audit->add_audit($data);
+		}
+
+		$activities = $this->tab_ctrl->activities($page_id, $filter, $limit, $offset);
+		$total = count($activities);
+		$this->unit->run($total, 5, "activities_test", $total);
 	}
 
 	function leaderboard_test(){
