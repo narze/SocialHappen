@@ -1432,12 +1432,134 @@ class Backend extends CI_Controller {
 	}
 
 	function add_new_user_role(){
+		$this->backend_session_verify(TRUE);
 		$this->load->library('form_validation');
-		$this->load->view('backend_views/add_new_user_role');
+		$this->load->model('user_role_model');
+		$fields = $this->db->list_fields('user_role');
+		$labels = array();
+		foreach($fields as $id => $field) {
+			$words = explode('_', strtolower($field));
+			$label = '';
+            foreach ($words as $word) {
+                $label .= ucfirst($word).' ';
+			}
+			$labels[] = $label = rtrim($label);
+
+			if($field === 'user_role_id' || $field === 'user_role_name') {
+				continue;
+			} else {
+				$this->form_validation->set_rules($field, $label, 'trim|xss_clean|max_length[1]');
+			}
+		}
+			
+		$this->form_validation->set_rules('user_role_name', 'User Role Name', 'required|trim|xss_clean|max_length[255]');
+  				
+		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+	
+		$this->load->vars(array(
+			'fields' => $fields,
+			'labels' => $labels
+		));
+
+		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+		{
+			$this->load->view('backend_views/add_new_user_role');
+		}
+		else // passed validation proceed to post success logic
+		{
+		 	$form_data = array();
+		 	// build array for the model
+			foreach($fields as $field){
+				if($field === 'user_role_id'){
+					continue;
+				} else {
+					$form_data[$field] = set_value($field);
+				}
+			}
+					
+			// run insert model to write data to db
+		
+			if ($user_role_id = $this->user_role_model->add_user_role($form_data)) // the information has therefore been successfully saved in the db
+			{
+				redirect('backend/user_roles');   // or whatever logic needs to occur
+			}
+			else
+			{
+				echo 'An error occurred saving your information. Please try again later';
+			// Or whatever error handling is necessary
+			}
+		}
+		
 	}
 
-	function edit_user_role(){
+	function edit_user_role($user_role_id){
+		$this->backend_session_verify(TRUE);
+		$this->load->library('form_validation');
+		$this->load->model('user_role_model');
+		$user_role = $this->user_role_model->get_user_role_by_user_role_id($user_role_id);
+		$fields = $this->db->list_fields('user_role');
+		$labels = array();
+		foreach($fields as $id => $field) {
+			$words = explode('_', strtolower($field));
+			$label = '';
+            foreach ($words as $word) {
+                $label .= ucfirst($word).' ';
+			}
+			$labels[] = $label = rtrim($label);
 
+			if($field === 'user_role_id' || $field === 'user_role_name') {
+				continue;
+			} else {
+				$this->form_validation->set_rules($field, $label, 'trim|xss_clean|max_length[1]');
+			}
+		}
+		
+		$this->form_validation->set_rules('user_role_name', 'User Role Name', 'required|trim|xss_clean|max_length[255]');
+  				
+		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+	
+		$this->load->vars(array(
+			'fields' => $fields,
+			'labels' => $labels,
+			'user_role' => $user_role,
+			'user_role_id' => $user_role_id
+		));
+
+		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+		{
+			$this->load->view('backend_views/edit_user_role');
+		}
+		else // passed validation proceed to post success logic
+		{
+		 	$form_data = array();
+		 	// build array for the model
+			foreach($fields as $field){
+				if($field === 'user_role_id'){
+					continue;
+				} else {
+					$form_data[$field] = set_value($field);
+				}
+			}
+					
+			// run insert model to write data to db
+		
+			if ($user_role_id = $this->user_role_model->update_user_role($user_role_id, $form_data)) // the information has therefore been successfully saved in the db
+			{
+				redirect('backend/user_roles');   // or whatever logic needs to occur
+			}
+			else
+			{
+				echo 'An error occurred saving your information. Please try again later';
+			// Or whatever error handling is necessary
+			}
+		}
+
+	}
+
+	function delete_user_role($user_role_id){
+		$this->load->model('user_role_model');
+		$this->user_role_model->remove_user_role($user_role_id);
+		redirect('backend/user_roles');
 	}
 }
 
