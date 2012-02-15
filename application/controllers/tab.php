@@ -442,91 +442,21 @@ class Tab extends CI_Controller {
 	}
 	*/
 
-	function activities($page_id = NULL){
+	function activities($page_id = NULL, $limit = NULL, $offset = NULL){
 		$this->load->model('page_model','pages');
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		if($page){
-			$activity_filter = $this->input->get('filter'); //(all) app campaign me
-
-			$this->load->library('audit_lib');
-			$this->load->model('audit_action_model','audit_action');
-			$this->load->model('campaign_model','campaigns');
-			$this->load->model('installed_apps_model','installed_apps');
-			
-			$data = array();
-			$data['activities'] = array();
-			if($activity_filter == 'app'){
-				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
-				foreach($apps as $app){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('app_install_id'=>$app['app_install_id'])));
-				}				
-			} else if ($activity_filter == 'campaign'){
-				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
-				foreach($campaigns as $campaign){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('campaign_id'=>$campaign['campaign_id'])));
-				}
-			} else if ($activity_filter == 'me'){
-				$user_facebook_id = $this->FB->getUser();
-				$this->load->model('User_model','users');
-				$user_id = $this->users->get_user_id_by_user_facebook_id($user_facebook_id);
-			
-				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
-				foreach($campaigns as $campaign){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('user_id'=>$user_id, 'campaign_id'=>$campaign['campaign_id'])));
-				}
-				
-				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
-				foreach($apps as $app){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('user_id'=>$user_id, 'app_install_id'=>$app['app_install_id'])));
-				}
-			} else if ($activity_filter == 'me_app'){
-				$user_facebook_id = $this->FB->getUser();
-				$this->load->model('User_model','users');
-				$user_id = $this->users->get_user_id_by_user_facebook_id($user_facebook_id);
-				
-				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
-				foreach($apps as $app){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('user_id'=>$user_id, 'app_install_id'=>$app['app_install_id'])));
-				}				
-			} else if ($activity_filter == 'me_campaign'){
-				$user_facebook_id = $this->FB->getUser();
-				$this->load->model('User_model','users');
-				$user_id = $this->users->get_user_id_by_user_facebook_id($user_facebook_id);
-				
-				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
-				foreach($campaigns as $campaign){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('user_id'=>$user_id, 'campaign_id'=>$campaign['campaign_id'])));
-				}
-			} else {
-				$campaigns = $this->campaigns->get_page_campaigns_by_page_id($page_id);
-				foreach($campaigns as $campaign){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('campaign_id'=>$campaign['campaign_id'])));
-				}
-				
-				$apps = $this->installed_apps->get_installed_apps_by_page_id($page_id);
-				foreach($apps as $app){
-					$data['activities'] = array_merge($data['activities'],$this->audit_lib->list_audit(array('app_install_id'=>$app['app_install_id'])));
-				}
-			}
-			
-			$this->load->model('user_model','users');
-			foreach($data['activities'] as &$activity)
-			{
-				if(isset($activity['user_id']))
-				{
-					$user = $this->users->get_user_profile_by_user_id($activity['user_id']);
-				}
-				if(!isset($user)) { unset($activity['user_id']); continue; }
-				$activity['user_image'] = $user['user_image'];
-				$activity['user_name'] = $user['user_first_name'].' '.$user['user_last_name'];
-				//$activity['time_ago'] = '1 day ago';
-				//$activity['source'] = 'web';
-				//$activity['star_point'] = 5;
-			}
-			unset($activity);
-		
+			$filter = $this->input->get('filter'); //(all) app campaign me
+			$data['activities'] = $this->tab_ctrl->activities($page_id, $filter, $limit, $offset);
 			$this->load->view('tab/activities',$data);
 		}
+	}
+
+	function json_count_page_activities($page_id)
+	{
+		$filter = $this->input->get('filter');
+		$activities = $this->tab_ctrl->activities($page_id, $filter);
+		echo count($activities);
 	}
 
 	function user_badges($limit = NULL, $offset = NULL){

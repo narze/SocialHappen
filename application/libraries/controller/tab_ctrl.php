@@ -500,6 +500,121 @@ class Tab_ctrl {
 		$this->CI->load->library('reward_lib');
 		return $this->CI->reward_lib->redeem_reward($page_id, $reward_item_id, $user_facebook_id);
 	}
+
+	function activities($page_id = NULL, $filter = NULL, $limit = NULL, $offset = NULL){
+		$this->CI->load->library('audit_lib');
+		$this->CI->load->model('audit_action_model','audit_action');
+		$this->CI->load->model('campaign_model','campaigns');
+		$this->CI->load->model('installed_apps_model','installed_apps');
+			
+		$data = array();
+		$app_install_ids = array();
+		$campaign_ids = array();
+
+		if($filter == 'app'){
+			$apps = $this->CI->installed_apps->get_installed_apps_by_page_id($page_id);
+			foreach($apps as $app){
+				$app_install_ids[] = (int) $app['app_install_id'];
+			}
+			$criteria = array(
+				'user_id' => array('$gt'=>0),
+				'app_install_id' => array('$gt'=>0),
+				'app_install_id' => array('$in'=>$app_install_ids)
+			);
+		} else if ($filter == 'campaign'){
+			$campaigns = $this->CI->campaigns->get_page_campaigns_by_page_id($page_id);
+			foreach($campaigns as $campaign){
+				$campaign_ids[] = (int) $campaign['campaign_id'];
+			}
+			$criteria = array(
+				'user_id' => array('$gt'=>0),
+				'campaign_id' => array('$in'=>$campaign_ids)
+			);
+		} else if ($filter == 'me'){
+			$user_facebook_id = $this->CI->FB->getUser();
+			$this->CI->load->model('User_model','users');
+			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
+		
+			$campaigns = $this->CI->campaigns->get_page_campaigns_by_page_id($page_id);
+			foreach($campaigns as $campaign){
+				$campaign_ids[] = (int) $campaign['campaign_id'];
+			}
+			
+			$apps = $this->CI->installed_apps->get_installed_apps_by_page_id($page_id);
+			foreach($apps as $app){
+				$app_install_ids[] = (int) $app['app_install_id'];
+			}
+			$criteria = array(
+				'user_id' => $user_id,
+				'$or' =>  array(
+					array('page_id' => $page_id),
+					array('campaign_id' => array('$in'=>$campaign_ids)),
+					array('app_install_id' => array('$in'=>$app_install_ids)),
+				),
+			);
+		} else if ($filter == 'me-app'){
+			$user_facebook_id = $this->CI->FB->getUser();
+			$this->CI->load->model('User_model','users');
+			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
+			
+			$apps = $this->CI->installed_apps->get_installed_apps_by_page_id($page_id);
+			foreach($apps as $app){
+				$app_install_ids[] = (int) $app['app_install_id'];
+			}
+			$criteria = array(
+				'user_id' => $user_id,
+				'app_install_id' => array('$in'=>$app_install_ids)
+			);		
+		} else if ($filter == 'me-campaign'){
+			$user_facebook_id = $this->CI->FB->getUser();
+			$this->CI->load->model('User_model','users');
+			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
+			
+			$campaigns = $this->CI->campaigns->get_page_campaigns_by_page_id($page_id);
+			foreach($campaigns as $campaign){
+				$campaign_ids[] = (int) $campaign['campaign_id'];
+			}
+			$criteria = array(
+				'user_id' => $user_id,
+				'campaign_id' => array('$in'=>$campaign_ids)
+			);
+		} else {
+			$campaigns = $this->CI->campaigns->get_page_campaigns_by_page_id($page_id);
+			foreach($campaigns as $campaign){
+				$campaign_ids[] = (int) $campaign['campaign_id'];
+			}
+			
+			$apps = $this->CI->installed_apps->get_installed_apps_by_page_id($page_id);
+			foreach($apps as $app){
+				$app_install_ids[] = (int) $app['app_install_id'];
+			}
+			$criteria = array(
+				'user_id' => array('$gt'=>0),
+				'$or' =>  array(
+					array('page_id' => $page_id),
+					array('campaign_id' => array('$in'=>$campaign_ids)),
+					array('app_install_id' => array('$in'=>$app_install_ids)),
+				)
+			);
+		}
+
+		$activities = $this->CI->audit_lib->list_audit($criteria, $limit, $offset);
+
+		$this->CI->load->model('user_model','users');
+		foreach($activities as &$activity)
+		{
+			if(isset($activity['user_id']))
+			{
+				$user = $this->CI->users->get_user_profile_by_user_id($activity['user_id']);
+			}
+			if(!isset($user)) { unset($activity['user_id']); continue; }
+			$activity['user_image'] = $user['user_image'];
+			$activity['user_name'] = $user['user_first_name'].' '.$user['user_last_name'];
+		}
+		unset($activity);
+
+		return $activities;
+	}
 }
 
 /* End of file tab_ctrl.php */

@@ -99,7 +99,7 @@ class Audit_model extends CI_Model {
 		}
 		
 		foreach($criteria as $key => $value){
-			if(preg_match('/(_id)$/i',$key)){
+			if(preg_match('/(_id)$/i',$key) && !is_array($value)){
 				$criteria[$key] = (int) $value;
 			}
 		}

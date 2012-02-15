@@ -365,8 +365,8 @@ class Audit_lib
 		$value = isset($audit[$value]) ? $audit[$value] : $value;
 		switch ($type) {
 			case 'app':
-				$this->CI->load->model('app_model','app');
-				$result = $this->CI->app->get_app_by_app_id($value);
+				$this->CI->load->model('app_model');
+				$result = $this->CI->app_model->get_app_by_app_id($value);
 				$app_name = isset($result['app_name']) ? $result['app_name'] : $value;
 				$format_value = '<span class="type_app">'.$app_name.'</span>';
 				break;

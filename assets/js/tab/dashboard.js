@@ -68,7 +68,6 @@ $(function(){
 			if($('.tab-head').length == 0) {
 				element = $('.main-content');
 				tabhead = '&tabhead=true';
-				console.log('firs time');
 			}
 			element.load(base_url+'tab/redeem_list/'+page_id+query+tabhead,function(){
 				$('.tab.sort').unbind('click').click(sort_reward);
@@ -81,10 +80,27 @@ $(function(){
 	}
 
 	load_page_activities = function () {
-		set_loading();
+		
+		var activities_per_page = 10;
+
+		filter_page_activities = function (page_index,jq){
+			set_loading();
+			$.get(base_url+'tab/activities/'+page_id+'/'+activities_per_page+'/'+(page_index * activities_per_page), function(result) {
+				$('.list-recent-activity').html(result);
+				trigger_timeago();
+			});
+			check_pagination('.pagination-activity');
+		}
+		
 		$('.main-content').html('<div class="list-recent-activity"></div><div class="pagination-activity strip"></div>')
-		$('.list-recent-activity').load(base_url+'tab/activities/'+page_id,function(){
-			activity_box();
+		$.get(base_url+'tab/json_count_page_activities/'+page_id, function(count) {
+			$('.pagination-activity').pagination(count, {
+				items_per_page:activities_per_page,
+				callback:filter_page_activities,
+				load_first_page:true,
+				next_text:null,
+				prev_text:null
+			});
 		});
 	}
 
@@ -244,39 +260,39 @@ $(function(){
 
 	activity_box = function () {
 
+		get_filter = function () {
+			return $('.activity-box .tab.active').attr('data-filter');
+		}
+
 		activitiy_pagination = function (){
-			count = $(this).children('ul').children('li').length;
-			$('.pagination-activity').pagination(count, {
-				items_per_page:per_page,
-				callback:filter_activities,
-				load_first_page:true,
-				next_text:null,
-				prev_text:null
+			var filter = get_filter();
+			$.get(base_url+'tab/json_count_page_activities/'+page_id+'?filter='+filter, function(count) {
+				$('.pagination-activity').pagination(count, {
+					items_per_page:per_page,
+					callback:filter_activities,
+					load_first_page:true,
+					next_text:null,
+					prev_text:null
+				});
 			});
-				
-			trigger_timeago();
 		}
 
 		filter_activities = function (page_index,jq){
-			$('.list-recent-activity').children('ul').children('li').hide();
-			for(i=0;i<per_page;i++){
-				$('.list-recent-activity').children('ul').children('li:eq('+((page_index * per_page)+i)+')').show();
-			}
+			var filter = get_filter();
+			set_loading();
+			$.get(base_url+'tab/activities/'+page_id+'/'+per_page+'/'+(page_index * per_page)+'?filter='+filter, function(result) {
+				$('.list-recent-activity').html(result);
+				trigger_timeago();
+			});
 			check_pagination('.pagination-activity');
 		}
 
-		var filter = '?filter='+ $('.activity-box .tab.active').attr('data-filter');
-		var url = base_url+'tab/activities/'+page_id+filter;
-
 		$('.activity-box .tab').click(function(){
-			set_loading();
-			$('.list-recent-activity').load(url, activitiy_pagination);
 			$(this).addClass('active').siblings().removeClass('active');
+			activitiy_pagination();
 		});
 
 		$('.activity-box .tab.active').click();
-
-		if($('.timeago').length>0) trigger_timeago();
 	}
 
 	reward_box = function () {
