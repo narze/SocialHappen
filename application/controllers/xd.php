@@ -145,7 +145,7 @@ class XD extends CI_Controller {
 			'all_notification_link' => $app_mode ? $this->socialhappen->get_tab_url_by_app_install_id($app_install_id).'&app_data='.base64_encode(json_encode($app_data)) : base_url().'tab/notifications/'.$user['user_id'],
 			'app_mode' => $app_mode,
 			'socialhappen_features' => $socialhappen_features,
-			'is_page_admin' => issetor($is_page_admin);
+			'is_page_admin' => issetor($is_page_admin)
 		));
 		$this->load->view('api/app_bar_content');
 	}
