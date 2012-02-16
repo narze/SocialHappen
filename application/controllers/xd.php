@@ -56,7 +56,7 @@ class XD extends CI_Controller {
 		return $user_role;
 	}
 	
-	function get_bar_content($view_as = NULL, $user_id = NULL, $page_id = NULL, $app_install_id = NULL){
+	function get_bar_content($view_as = NULL, $user_id = NULL, $user_facebook_id = NULL, $page_id = NULL, $app_install_id = NULL){
 		$app_mode = FALSE;
 		
 		$this->load->model('Installed_apps_model', 'app');
@@ -70,7 +70,9 @@ class XD extends CI_Controller {
 		$this->load->model('user_pages_model','user_pages');
 		$this->load->model('page_model','pages');
 		$this->load->model('session_model','session_model');
-		$user = $this->User->get_user_profile_by_user_id($user_id);
+		$user = $user_facebook_id ? $this->User->get_user_profile_by_user_facebook_id($user_facebook_id) :
+		 $this->User->get_user_profile_by_user_id($user_id); //TODO so confused
+			;
 		// $user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		if(!$page) {
@@ -80,13 +82,13 @@ class XD extends CI_Controller {
 		$menu = array();
 		//Right menu			
 		//@TODO : This has problems with multiple login, cannot use user_agent to check due to blank user_agent when called via api
-		if($view_as === 'guest'){ 
+		if(!$user || ($view_as === 'guest')){ 
 			$facebook_page = $this->facebook->get_page_info(issetor($page['facebook_page_id']));
 			
 			$signup_link = $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id');
 		} else if($view_as === 'admin' && $this->user_pages->is_page_admin($user['user_id'], $page_id)){			
 			
-			
+			$is_page_admin = TRUE;
 			$page_update = array();
 			if(!$page['page_installed']){
 				$page_update['page_installed'] = TRUE;
@@ -142,7 +144,8 @@ class XD extends CI_Controller {
 			'notification_amount' => $notification_amount,
 			'all_notification_link' => $app_mode ? $this->socialhappen->get_tab_url_by_app_install_id($app_install_id).'&app_data='.base64_encode(json_encode($app_data)) : base_url().'tab/notifications/'.$user['user_id'],
 			'app_mode' => $app_mode,
-			'socialhappen_features' => $socialhappen_features
+			'socialhappen_features' => $socialhappen_features,
+			'is_page_admin' => issetor($is_page_admin);
 		));
 		$this->load->view('api/app_bar_content');
 	}

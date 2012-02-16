@@ -60,7 +60,7 @@
 		</li>
 	<?php endif; ?>
   
-	<?php if($view_as == 'admin') : ?>
+	<?php if($view_as == 'admin' && $is_page_admin) : ?>
 		<li class="setting toggle last-child">
 			<div>Settings</div>
 			<ul>

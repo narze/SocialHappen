@@ -655,7 +655,8 @@ sh_logout = function(){
 
 sh_load_bar = function(){
 	onLoad();
-	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
+	console.log(view_as,user_id,page_id,app_install_id);
+	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+facebook_user_id+'/'+page_id+'/'+app_install_id, function(data){
 		sh_jq('div#sh-bar').html(data);
 	});
 }
@@ -776,6 +777,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			facebook_access_token = data.facebook_access_token;
 			facebook_user_id = data.facebook_user_id;
 			sh_login_status = data.sh_login_status;
+			console.log(facebook_user_id, facebook_access_token);
 			jQuery.getJSON(base_url+'tab/json_facebook_user_check/'+facebook_user_id+'/'+page_id,
 				function(response){ 
 				if(response.user_id){
@@ -788,7 +790,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 					}
 					sh_visit();
 				} else {
-					view_as = response.role;
+					console.log(response.role);view_as = response.role;
 					sh_load_bar();
 				}
 			});
