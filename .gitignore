@@ -15,3 +15,5 @@ shdumper/mongodb_save.bat
 shdumper/mongodb_dump
 shdumper/mysql_dump.sql
 application/backup/*.sql
+application/backup/sh_mongo-*
+application/backup/log-mongodump-*

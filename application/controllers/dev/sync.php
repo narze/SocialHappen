@@ -51,8 +51,44 @@ class Sync extends CI_Controller {
 	}
 	
 	function mongodb_reset(){
-		//TODO backup mongodb first
-		$this->db_sync->mongodb_reset();
+		//Check if mongodb is backed up manually in last x=$interval_limit seconds
+
+		//1.Get latest backup file name
+		$prefix = 'sh_mongo\-';
+		$interval_limit = 120;
+		$backup_dir = glob(APPPATH.'backup/sh_mongo-*_*',GLOB_ONLYDIR);
+		$file_count = count($backup_dir);
+		// var_dump_pre($backup_dir);
+		for ($i = 0; $i < $file_count; $i++)
+		{
+		// Mark wrongly formatted files as false for later filtering
+		$name = basename($backup_dir[$i], '.php');
+			if ( ! preg_match('/^'.$prefix.'\d{8}_\d{6}$/', $name))
+			{
+				$backup_dir[$i] = FALSE;
+			}
+		}
+		
+		sort($backup_dir);
+		$latest_backup = basename(end($backup_dir));
+
+		//2.try convert into unit timestamp
+		$latest_backup = preg_replace('/^('.$prefix.')(\w+)_(\w+)/','${2}${3}',$latest_backup);
+		$y = (int) substr($latest_backup,0,4); 
+		$m = (int) substr($latest_backup,4,2); 
+		$d = (int) substr($latest_backup,6,2); 
+		$h = (int) substr($latest_backup,8,2); 
+		$i = (int) substr($latest_backup,10,2); 
+		$s = (int) substr($latest_backup,12,2);
+		$latest_backup_timestamp = mktime($h, $i, $s, $m, $d, $y); 
+
+		//3.compare with time()
+		$interval = time()-$latest_backup_timestamp;
+		if($interval <= $interval_limit){
+			$this->db_sync->mongodb_reset();
+		} else {
+			echo 'Please try backup using mongodump before reset';
+		}
 	}
 	
 	function generate_field_code(){
