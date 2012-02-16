@@ -11,6 +11,10 @@
  	| <?=anchor('backend/user_roles', 'Back to user roles', 'title="go back to user roles"');?>
  	| <?=anchor('backend/dashboard', 'Back to dashboard', 'title="go back to dashboard"');?>
 	<h1>User Role</h1>
+	<span><?=anchor('backend/edit_user_role/'.
+		$user_role['user_role_id'], 'Edit this user role', 'title="edit this user role"');?></span>
+	<span><?=anchor('backend/delete_user_role/'.
+		$user_role['user_role_id'], 'Delete this user role', 'title="Delete this user role"');?></span>
 	<ul>
 		<?php foreach($user_role as $key => $value) : ?>
 			<li>
