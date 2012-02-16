@@ -70,9 +70,9 @@ class XD extends CI_Controller {
 		$this->load->model('user_pages_model','user_pages');
 		$this->load->model('page_model','pages');
 		$this->load->model('session_model','session_model');
-		$user = $user_facebook_id ? $this->User->get_user_profile_by_user_facebook_id($user_facebook_id) :
-		 $this->User->get_user_profile_by_user_id($user_id); //TODO so confused
-			;
+		$user = $user_facebook_id ? $this->User->get_user_profile_by_user_facebook_id($user_facebook_id) 
+		: $this->User->get_user_profile_by_user_id($user_id); //TODO so confused
+
 		// $user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		$page = $this->pages->get_page_profile_by_page_id($page_id);
 		if(!$page) {
