@@ -117,8 +117,6 @@ class Page_reward extends CI_Controller {
 			$this->form_validation->set_rules('status', 'Status', 'required|trim|xss_clean|max_length[10]');			
 			// $this->form_validation->set_rules('type', 'Type', 'required|trim|xss_clean|max_length[10]');
 
-			$this->form_validation->set_rules('image', 'Image', 'required|trim|xss_clean|max_length[255]');
-
 			$this->form_validation->set_rules('value', 'Value', 'required|trim|xss_clean|max_length[30]');
 
 			$this->form_validation->set_rules('description', 'Reward Description', 'trim|xss_clean');
@@ -128,6 +126,8 @@ class Page_reward extends CI_Controller {
 			$this->load->vars(array(
 				'page_id' => $page_id
 			));
+
+			$this->load->model('reward_item_model');
 			if($update){
 				if($this->input->post('reward_item_id')){
 					$reward_item_id = $this->input->post('reward_item_id');
@@ -135,8 +135,11 @@ class Page_reward extends CI_Controller {
 				if($this->input->get('reward_item_id')){
 					$reward_item_id = $this->input->get('reward_item_id');
 				}
-				$this->load->model('reward_item_model');
 				$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
+			} else {
+				if(isset($_FILES['image']) && !$_FILES['image']['name']) {
+					$this->form_validation->set_rules('image', 'Image', 'required|trim|xss_clean|max_length[255]');
+				}
 			}
 
 			if ($this->form_validation->run() == FALSE)
@@ -164,9 +167,7 @@ class Page_reward extends CI_Controller {
 				$this->load->library('timezone_lib');
 				$start_timestamp = $this->timezone_lib->unconvert_time(set_value('start_date'), $user['user_timezone_offset']);
 				$end_timestamp = $this->timezone_lib->unconvert_time(set_value('end_date'), $user['user_timezone_offset']);
-	
-
-				$this->load->model('reward_item_model');
+				
 				$input = array(
 			       	'name' => set_value('name'),
 			       	'start_timestamp' => strtotime($start_timestamp),
@@ -179,15 +180,20 @@ class Page_reward extends CI_Controller {
 				       	'point' => set_value('point'),
 					    'amount' => set_value('amount')
 				    ),
-				    'image' => set_value('image'),
 				    'value' => set_value('value'),
 				    'description' => set_value('description')
 				);
 				if($update){
-					$input['redeem']['amount_remain'] = issetor($reward_item['redeem']['amount_remain'], $reward_item['redeem']['amount']);
 					$reward_item_id = $this->input->post('reward_item_id');
+
+					$exist_reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
+
+					$input['image'] = $this->socialhappen->replace_image('image', $exist_reward_item['image']);
+					$input['redeem']['amount_remain'] = issetor($reward_item['redeem']['amount_remain'], $reward_item['redeem']['amount']);
+					
 					$update_result = $this->reward_item_model->update($reward_item_id, $input);
 				} else {
+					$input['image'] = $this->socialhappen->upload_image('image');
 					$reward_item_id = $this->reward_item_model->add($input);
 				}
 			

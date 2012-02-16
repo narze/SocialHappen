@@ -295,7 +295,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d5193', end
 	*display:inline;
 	vertical-align: top;
 }
-
+.icon.color {
+	background-image: url(../../images/btn-icon.png);
+	background-repeat: no-repeat;
+}
+.icon.color.edit {
+	width: 23px;
+	height: 23px;
+	background-position: -14px -116px;
+}
 .icon.white {
 	background-image: url(../../images/bg/bg_icon_white.png);
 	background-repeat: no-repeat;

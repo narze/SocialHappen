@@ -325,6 +325,7 @@ $(function(){
 									result = $(result);
 									if(result.find('form').length == 0) {
 										$('.reward-item-form').replaceWith(result);
+										trigger_countdown();
 										item.remove();
 									} else {
 										$('.reward-item-form').html(result.find('form'));
@@ -342,15 +343,19 @@ $(function(){
 		function remove_reward(){
 			var item = $(this).parents('.reward-item');
 			var item_id = item.data('itemId');
-			$.getJSON(
-				base_url+'settings/page_reward/remove_item/'+page_id,
-				{reward_item_id : item_id},
-				function(data){
-					if(data.success==true){
-						item.remove();
+			answer = confirm("Delete this reward?");
+
+			if(answer) {
+				$.getJSON(
+					base_url+'settings/page_reward/remove_item/'+page_id,
+					{reward_item_id : item_id},
+					function(data){
+						if(data.success==true){
+							item.remove();
+						}
 					}
-				}
-			);
+				);
+			}
 		}
 
 		function sort_reward(){

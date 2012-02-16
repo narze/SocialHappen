@@ -406,7 +406,7 @@ class SocialHappen{
 				$image_ext = pathinfo($old_image, PATHINFO_EXTENSION);
 				$image_name = substr($old_image, 0, strrpos($old_image, "_"));
 				foreach($dimensions as $dimension){
-					unlink("{$image_name}_{$dimension}.{$image_ext}");
+					if(file_exists("{$image_name}_{$dimension}.{$image_ext}")) unlink("{$image_name}_{$dimension}.{$image_ext}");
 				}
 			}
 			return $new_image;
