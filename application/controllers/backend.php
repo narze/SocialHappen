@@ -873,7 +873,7 @@ class Backend extends CI_Controller {
 		if($this->form_validation->run())
 		{
 			//Add package
-			$package_image = $this->socialhappen->upload_image('package_image');
+			$package_image = $this->socialhappen->upload_image('package_image', FALSE);
 			$data = array(
 				'package_name' => $this->input->post('package_name', TRUE),
 				'package_detail' => $this->input->post('package_detail', TRUE),
@@ -982,7 +982,7 @@ class Backend extends CI_Controller {
 				'package_custom_badge' => set_value('package_custom_badge') == 'on' ? 1 : 0,
 				'package_duration' => $this->input->post('package_duration', TRUE)
 			);
-			if($package_image = $this->socialhappen->replace_image('package_image', $this->input->post('package_image_old', TRUE))){
+			if($package_image = $this->socialhappen->replace_image('package_image', $this->input->post('package_image_old', FALSE))){
 				$data['package_image'] = $package_image;
 			}
 			$result = $this->Package->update_package_by_package_id($package_id, $data);
