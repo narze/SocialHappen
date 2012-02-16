@@ -8,6 +8,13 @@ class Reindex extends CI_Controller {
 	
 	function __construct(){
 		parent::__construct();
+		if (defined('ENVIRONMENT'))
+		{
+			if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
+			{
+				redirect();
+			}
+		}
 	}
 	
 	function index(){

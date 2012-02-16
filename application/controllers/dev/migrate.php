@@ -8,6 +8,13 @@ class Migrate extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		if (defined('ENVIRONMENT'))
+		{
+			if ($this->input->get('happy') !== 'everyday')
+			{
+				redirect();
+			}
+		}
 		$this->load->library('migrate_lib');
 	}
 	

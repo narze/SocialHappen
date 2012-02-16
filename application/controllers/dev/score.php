@@ -4,6 +4,13 @@ class Score extends CI_Controller {
 
   function __construct(){
     parent::__construct();
+    if (defined('ENVIRONMENT'))
+    {
+      if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
+      {
+        redirect();
+      }
+    }
     $this->socialhappen->check_logged_in();
     $this->load->model('achievement_stat_page_model','achievement_stat_page');
 

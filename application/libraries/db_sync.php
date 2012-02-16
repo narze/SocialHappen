@@ -8,13 +8,13 @@ class DB_Sync {
 	private $CI;
 
 	public function __construct(){
-		// if (defined('ENVIRONMENT'))
-		// {
-		// 	if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
-		// 	{
-		// 		exit('For development & testing only.');
-		// 	}
-		// }
+		if (defined('ENVIRONMENT'))
+		{
+			if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
+			{
+				redirect();
+			}
+		}
 		$this->CI =& get_instance();
 		define('BASE_URL', base_url());
     }
