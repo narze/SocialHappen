@@ -7,13 +7,13 @@
 class Sync extends CI_Controller {
 	
 	function __construct(){
-		if (defined('ENVIRONMENT'))
-		{
-			if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
-			{
-				exit('For development & testing only.');
-			}
-		}
+		// if (defined('ENVIRONMENT'))
+		// {
+		// 	if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
+		// 	{
+		// 		exit('For development & testing only.');
+		// 	}
+		// }
 		parent::__construct();
 		$this->output->enable_profiler(FALSE);
 		
