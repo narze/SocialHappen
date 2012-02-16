@@ -4,7 +4,9 @@
 		if(issetor($update)){
 			echo form_open(base_url().'/settings/page_reward/update_item/'.$page_id, $attributes);
 			echo '<input type="hidden" name="reward_item_id" value="'.set_value('reward_item_id', $reward_item_id).'" />';
+			$add_image = 'Change image';
 		} else {
+			$add_image = 'Add image';
 			echo form_open(base_url().'/settings/page_reward/add_item/'.$page_id, $attributes);
 		}
 
@@ -28,7 +30,11 @@
 
 		<div class="section first">
 			<div class="item-image<?php echo form_error('image') ? ' error' : ''; ?>" style="background-image:url(<?php echo isset($reward_item['image']) && $reward_item['image'] ? $reward_item['image'] : base_url().'assets/images/default/reward.png'; ?>);">
-				<input class="image" type="text" name="image" maxlength="255" value="<?php echo set_value('image', issetor($reward_item['image'])); ?>"  />
+				<div class="item-image-upload abs-r ta-center p5">
+					<span class="icon color edit"></span>
+					<span class="underline">[ <?php echo $add_image; ?> ]</span>
+					<input type="file" name="image" class="file-upload"/>
+				</div>
 			</div>
 			<ul class="item-info">
 				<li>
@@ -97,7 +103,7 @@
 		</div>
 		-->
 		<div class="section">
-			<?php echo form_submit(array('name'=>'submit','value'=>'Submit','style'=>'display:none')); ?>
+			<?php echo form_submit(array('name'=>'submit-form','value'=>'Submit','style'=>'display:none')); ?>
 			<a class="btn grey cancel"><span>Cancel</span></a>
 			<a class="btn green fr save"><span>Save</span></a>
 		</div>
