@@ -6,7 +6,8 @@ application/logs
 index.php
 .settings
 .project
-uploads
+uploads/images/*
+!uploads/images/index.php
 notification/config.js
 shdumper/mysql_load.bat
 shdumper/mysql_save.bat
