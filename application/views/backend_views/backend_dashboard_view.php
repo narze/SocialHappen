@@ -23,6 +23,9 @@
 		<li>
 			<?=anchor('backend/achievements/', 'Manage Achievements', 'title="Manage Achievements"');?>
 		</li>
+		<li>
+			<?=anchor('backend/user_roles/', 'Manage User Roles', 'title="Manage User Roles"');?>
+		</li>
 	</ul>
 	<?=anchor('backend/logout/', 'Logout', 'title="Logout backend"');?>
 </body>

@@ -167,7 +167,7 @@ class Company_model_test extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function update_company_profile_by_company_id_test(){
-		$new_company_name = rand(1,10000);
+		$new_company_name = 'New company name';
 		$data = array(
 			'company_name' => $new_company_name
 		);
