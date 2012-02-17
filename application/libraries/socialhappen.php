@@ -11,7 +11,6 @@ class SocialHappen{
 	private $CI;
 	function __construct() {
         $this->CI =& get_instance();
-		$this->CI->load->model('user_model','users');
     }
 	
 	/**
@@ -162,6 +161,7 @@ class SocialHappen{
 	 */
 	function get_user(){
 		if($this->CI->session->userdata('logged_in') == TRUE){
+			$this->CI->load->model('user_model','users');
 			return $this->CI->users->get_user_profile_by_user_id($this->CI->session->userdata('user_id'));
 		} else {
 			return FALSE;
@@ -317,6 +317,7 @@ class SocialHappen{
 	function login($redirect_url = NULL){
 		if($user = $this->CI->facebook->getUser()){
 			$user_facebook_id = $user['id'];
+			$this->CI->load->model('user_model','users');
 			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
 			if($user_id){
 				if(!$this->CI->session->userdata('logged_in')){ //@TODO : Problem is it will separate logging in through platform & through facebook
