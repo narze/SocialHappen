@@ -135,7 +135,7 @@ class Audit_action_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function get_action_list(){
-		$res = $this->actions->find();
+		$res = $this->actions->find()->sort(array('action_id' => 1));
 		$result = array();
 		foreach ($res as $entry) {
 			$result[] = $entry;
@@ -160,7 +160,7 @@ class Audit_action_model extends CI_Model {
 			}else{
 				$criteria = array('app_id' => $app_id, 'action_id' => $action_id);
 			}
-			$res = $this->actions->find($criteria);
+			$res = $this->actions->find($criteria)->sort(array('action_id' => 1));
 			$result = array();
 			foreach ($res as $entry) {
 				$result[] = $entry;
