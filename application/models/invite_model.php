@@ -26,7 +26,8 @@ class Invite_model extends CI_Model {
 	 * @author Wachiraph C.
 	 */
 	function create_index(){
-		return $this->invite->ensureIndex(array(
+		return $this->invite->deleteIndexes() 
+			&& $this->invite->ensureIndex(array(
 										'invite_key' => 1,
 										'campaign_id' => 1,
 										'app_install_id' => 1,

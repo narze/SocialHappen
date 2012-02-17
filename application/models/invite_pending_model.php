@@ -14,7 +14,8 @@ class Invite_pending_model extends CI_Model {
 	}
 		
 	function create_index(){
-		return $this->pending->ensureIndex(array('user_facebook_id' => 1, 'campaign_id' => 1), array('unique' => 1));
+		return $this->pending->deleteIndexes() 
+			&& $this->pending->ensureIndex(array('user_facebook_id' => 1, 'campaign_id' => 1), array('unique' => 1));
 	}
 	
 	function drop_collection(){

@@ -29,7 +29,8 @@ class Achievement_user_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		return $this->achievement_user->ensureIndex(array(
+		return $this->achievement_user->deleteIndexes() 
+			&& $this->achievement_user->ensureIndex(array(
 										'user_id' => 1,
 										'app_install_id' => 1,
 										'page_id' => 1));

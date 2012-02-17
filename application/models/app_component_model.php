@@ -66,7 +66,8 @@ class App_component_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function create_index(){
-		return $this->app_component->ensureIndex(array('campaign_id'=>1), array('unique' => 1));
+		return $this->app_component->deleteIndexes() 
+			&& $this->app_component->ensureIndex(array('campaign_id'=>1), array('unique' => 1));
 	}
 	
 	/**

@@ -32,7 +32,8 @@ class Audit_action_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		return $this->actions->ensureIndex(array('app_id' => 1, 'action_id' => 1));
+		return $this->actions->deleteIndexes() 
+			&& $this->actions->ensureIndex(array('app_id' => 1, 'action_id' => 1));
 	}
 	
 	/**

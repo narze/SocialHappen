@@ -30,7 +30,8 @@ class Stat_campaign_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		return $this->campaigns->ensureIndex(array('app_id' => 1,
+		return $this->campaigns->deleteIndexes() 
+			&& $this->campaigns->ensureIndex(array('app_id' => 1,
 											'campaign_id' => 1,
 										    'action_id' => 1, 
 										    'date' => -1));

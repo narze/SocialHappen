@@ -54,7 +54,8 @@ class App_component_page_model extends CI_Model {
    * @author Metwara Narksook
    */
   function create_index(){
-    return $this->app_component_page->ensureIndex(array('page_id'=>1), array('unique' => 1));
+    return $this->app_component_page->deleteIndexes() 
+      && $this->app_component_page->ensureIndex(array('page_id'=>1), array('unique' => 1));
   }
   
   /**

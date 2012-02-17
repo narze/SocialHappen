@@ -36,7 +36,8 @@ class Homepage_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function create_index(){
-		return $this->homepage->ensureIndex(array('app_install_id'=>1), array('unique' => 1));
+		return $this->homepage->deleteIndexes() 
+			&& $this->homepage->ensureIndex(array('app_install_id'=>1), array('unique' => 1));
 	}
 	
 	/**
