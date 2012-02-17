@@ -725,6 +725,61 @@ class Api_lib_test extends CI_Controller {
 			"in_array(\$result['conflicted_campaigns'][0]['campaign_id'], array(\$campaign_id_1,\$campaign_id_2)", 
 			in_array($result['conflicted_campaigns'][0]['campaign_id'], array($campaign_id_1,$campaign_id_2)));
 	}
+
+	function _remove_user_id_3_from_page_1_admin_for_test(){
+		$user_id = 3;
+		$page_id = 1;
+		$this->load->model('user_pages');
+		$result = $this->user_pages->remove_user_page($user_id, $page_id);
+		$this->unit->run($result, TRUE, "\$result", $result);
+	}
+
+	function request_page_role_test(){
+		$app_id = APP_ID;
+		$app_secret_key = APP_SECRET_KEY;
+		$app_install_id = $this->app_install_id;
+		$app_install_secret_key = $this->app_install_secret_key;
+		$page_id = PAGE_ID;
+		$facebook_page_id = FACEBOOK_PAGE_ID;
+		$user_id = USER_ID; //admin role
+		$user_facebook_id = USER_FACEBOOK_ID;
+		$result = $this->api_lib->request_page_role($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, NULL,
+			$user_id, NULL);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run($result['data'], array('role' => 'admin'), "\$result['data']", $result['data']);
+
+		$user_id = 3; //not admin, but a page user
+		$result = $this->api_lib->request_page_role($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, NULL, $facebook_page_id,
+			$user_id, NULL);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run($result['data'], array('role' => 'user'), "\$result['data']", $result['data']);
+
+		$user_facebook_id = USER_FACEBOOK_ID.'1'; //guest
+		$result = $this->api_lib->request_page_role($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, NULL,
+			NULL, $user_facebook_id);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run($result['data'], array('role' => 'guest'), "\$result['data']", $result['data']);
+
+		$user_id = 3;
+		$user_facebook_id = USER_FACEBOOK_ID.'1';
+		$result = $this->api_lib->request_page_role($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, NULL,
+			$user_id, $user_facebook_id); //if user_id with user_facebook_id, check user from user_id first
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run($result['data'], array('role' => 'user'), "\$result['data']", $result['data']);
+
+		$user_facebook_id = USER_FACEBOOK_ID; //not found page = error
+		$facebook_page_id = FACEBOOK_PAGE_ID.'1';
+		$result = $this->api_lib->request_page_role($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, 0, $facebook_page_id,
+			NULL, $user_facebook_id);
+		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'ERROR', "\$result['status']", $result['status']);
+		$this->unit->run($result['error'], 'Page not found', "\$result['error']", $result['error']);
+		$this->unit->run($result['data'], 'is_null', "\$result['data']", $result['data']);
+	}
 }
 
 /* End of file api_lib_test.php */

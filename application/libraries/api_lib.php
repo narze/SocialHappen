@@ -34,8 +34,8 @@ class Api_Lib {
 		}
 		
 		if(!$user_id){
-			$this->load->model('user_model','user');
-			$user_id = $this->user->get_user_id_by_user_facebook_id($user_facebook_id);
+			$this->CI->load->model('user_model','user');
+			$user_id = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
 				
 		$this->CI->load->model('Session_model','Session');
@@ -1649,6 +1649,84 @@ class Api_Lib {
 			);
 		}
 		return $response;
+	}
+
+	/**
+	 * Request for user page role
+	 *	@param app_id int id of an app
+	 *	@param app_secret_key string secret key of app
+	 *	@param app_install_id int install id of an app
+	 *	@param app_install_secret_key string install secret key of an app
+	 *	@param page_id
+	 *	@param facebook_page_id [if page_id not specified]
+	 *  @param user_id 
+	 *  @param user_facebook_id [if user_id not specified]
+	 *  @return [success] : array(
+	 *		status : 'OK',
+	 *		success : TRUE,
+	 *		data : { role : admin/user/guest }
+	 *	)
+	 *		[error] : array(
+	 *		status : 'ERROR',
+	 *		success : FALSE,
+	 *		error : [error message],
+	 *		data : NULL
+	 *	)
+	 *  @author Manassarn M.
+	 */
+	function request_page_role($app_id = NULL, $app_secret_key = NULL, 
+		$app_install_id = NULL, $app_install_secret_key = NULL, $page_id = NULL, $facebook_page_id = NULL,
+		$user_id = NULL, $user_facebook_id = NULL){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) || 
+			!($page_id || $facebook_page_id) || !($user_id || $user_facebook_id)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key,
+			 campaign_start_timestamp_utc, campaign_end_timestamp_utc)');
+			return (array( 'error' => '100',
+				'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, 
+				app_install_id, app_install_secret_key, facebook_page_id, user_id,
+				user_facebook_id)'));
+		}
+
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
+			return FALSE;
+		}
+		
+		//authenticate app install with $app_install_id and $app_install_secret_key
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+			return FALSE;
+		}
+		if(!$page_id){
+			$this->CI->load->model('Page_model','Page');
+			if(!$page_id = $this->CI->Page->get_page_id_by_facebook_page_id($facebook_page_id)){
+				return array(
+					'success' => FALSE,
+					'status' => 'ERROR',
+					'error' => 'Page not found',
+					'data' => NULL
+				);
+			}
+		}
+
+		if(!$user_id){
+			$this->CI->load->model('user_model','user');
+			if(!$user_id = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id)){
+				$role = 'guest';
+			}
+		}
+
+		if($user_id){
+			$this->CI->load->model('user_pages');
+			if($this->CI->user_pages->is_page_admin($user_id, $page_id)){
+				$role = 'admin';
+			} else {
+				$role = 'user';
+			}
+		}
+		return array(
+			'success' => TRUE,
+			'status' => 'OK', 
+			'data' => array('role' => $role)
+		);
 	}
 
 	private	function _generate_app_install_secret_key($company_id, $app_id){

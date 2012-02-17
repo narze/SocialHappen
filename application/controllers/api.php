@@ -492,6 +492,25 @@ class Api extends CI_Controller {
 			$app_install_secret_key, $page_id, $facebook_page_id, $campaign_start_timestamp_utc_unix, $campaign_end_timestamp_utc_unix);
 		$this->_print_api_result($response);
 	}
+
+	/**
+	 * Request user page role
+	 * @author Manassarn M.
+	 */
+	function request_page_role(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$page_id = $this->input->get('page_id', TRUE);
+		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
+		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+
+		$response = $this->api_lib->request_page_role($app_id, $app_secret_key, $app_install_id, 
+			$app_install_secret_key, $page_id, $facebook_page_id, $user_id, $user_facebook_id);
+		$this->_print_api_result($response);
+	}
 	
 	function _authenticate_app($app_id, $app_secret_key){
 		// authenticate app with $app_id and $app_secret_key
