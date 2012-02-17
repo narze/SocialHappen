@@ -18,7 +18,6 @@ class Achievement_info_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->achievement_info = sh_mongodb_load( array(
-			'database' => 'achievement',
 			'collection' => 'achievement_info'
 		));
 	}

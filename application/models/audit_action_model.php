@@ -22,8 +22,7 @@ class Audit_action_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->actions = sh_mongodb_load( array(
-			'database' => 'audit',
-			'collection' => 'actions'
+			'collection' => 'audit_actions'
 		));
 	}
 	

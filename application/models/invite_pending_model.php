@@ -9,8 +9,7 @@ class Invite_pending_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->pending = sh_mongodb_load( array(
-			'database' => 'invite',
-			'collection' => 'pending'
+			'collection' => 'invite_pending'
 		));
 	}
 		

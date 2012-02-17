@@ -23,8 +23,7 @@ class Audit_stats_model extends CI_Model {
 		$this->DEFAULT_LIMIT = 0;
 		$this->load->helper('mongodb');
 		$this->stats = sh_mongodb_load( array(
-			'database' => 'audit',
-			'collection' => 'stats'
+			'collection' => 'audit_stats'
 		));
 	}
 	

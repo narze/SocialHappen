@@ -20,8 +20,7 @@ class Stat_page_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->pages = sh_mongodb_load( array(
-			'database' => 'stat',
-			'collection' => 'pages'
+			'collection' => 'stat_pages'
 		));
 	}
 		

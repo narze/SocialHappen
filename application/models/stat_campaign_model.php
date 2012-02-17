@@ -20,8 +20,7 @@ class Stat_campaign_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->campaigns = sh_mongodb_load( array(
-			'database' => 'stat',
-			'collection' => 'campaigns'
+			'collection' => 'stat_campaigns'
 		));
 	}
 		

@@ -49,7 +49,6 @@ class App_component_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->app_component = sh_mongodb_load( array(
-			'database' => 'campaign',
 			'collection' => 'app_component'
 		));
 	}

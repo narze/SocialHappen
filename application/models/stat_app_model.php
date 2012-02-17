@@ -20,8 +20,7 @@ class Stat_app_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->apps = sh_mongodb_load( array(
-			'database' => 'stat',
-			'collection' => 'apps'
+			'collection' => 'stat_apps'
 		));
 	}
 		

@@ -10,11 +10,9 @@ class Get_started_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->get_started_info = sh_mongodb_load( array(
-			'database' => 'get_started',
 			'collection' => 'get_started_info'
 		));
 		$this->get_started_stat = sh_mongodb_load( array(
-			'database' => 'get_started',
 			'collection' => 'get_started_stat'
 		));
 	}

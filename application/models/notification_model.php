@@ -16,7 +16,6 @@ class Notification_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->notification = sh_mongodb_load( array(
-			'database' => 'message',
 			'collection' => 'notification'
 		));
 		

@@ -37,7 +37,6 @@ class App_component_page_model extends CI_Model {
     parent::__construct();
     $this->load->helper('mongodb');
     $this->app_component_page = sh_mongodb_load( array(
-      'database' => 'socialhappen',
       'collection' => 'app_component_page'
     ));
   }

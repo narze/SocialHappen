@@ -32,7 +32,6 @@ class Audit_model extends CI_Model {
 		$this->DEFAULT_LIMIT = 0;
 		$this->load->helper('mongodb');
 		$this->audits = sh_mongodb_load( array(
-			'database' => 'audit',
 			'collection' => 'audits'
 		));
 	}

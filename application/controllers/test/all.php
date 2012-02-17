@@ -19,7 +19,7 @@ class All extends CI_Controller {
 			$result = '<h1>Class : <a href="'.$url.'">'.$class_name.'</a></h1>';
 			$result .= file_get_contents($fetch_url);
 			echo $result;
-			if($all_pass == TRUE && strpos($result, 'TEST FAILED') !== FALSE){
+			if($all_pass == TRUE && (strpos($result, 'TEST FAILED') !== FALSE || strpos($result, 'Fatal error') !== FALSE)){
 				$all_pass = FALSE;
 				echo '<script language="javascript">document.bgColor = "#FF6666";</script>';
 			}

@@ -90,7 +90,8 @@ class Home_ctrl {
 					       	'user_timezone_offset' => $minute_offset,
 					       	'user_facebook_access_token' => $facebook_access_token
 						);
-						
+			
+			$this->CI->load->model('user_model', 'users');
 			$user_id = $this->CI->users->add_user($user);
 			
 			$company = array(

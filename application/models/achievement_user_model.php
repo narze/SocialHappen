@@ -19,7 +19,6 @@ class Achievement_user_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->achievement_user = sh_mongodb_load( array(
-			'database' => 'achievement',
 			'collection' => 'achievement_user'
 		));
 	}

@@ -36,7 +36,6 @@
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->reward_item = sh_mongodb_load( array(
-			'database' => 'socialhappen',
 			'collection' => 'reward_item'
 		));
 	}

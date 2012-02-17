@@ -2,7 +2,7 @@
 
 $config['mongo_host'] = 'localhost';
 $config['mongo_port'] = 27027;
-$config['mongo_db'] = 'audit';
+$config['mongo_db'] = 'socialhappen';
 $config['mongo_user'] = 'sohappen';
 $config['mongo_pass'] = 'figyfigy';
 $config['mongo_persist'] = TRUE;

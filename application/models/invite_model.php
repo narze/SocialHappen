@@ -16,7 +16,6 @@ class Invite_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->invite = sh_mongodb_load( array(
-			'database' => 'invite',
 			'collection' => 'invites'
 		));
 	}
