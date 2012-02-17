@@ -205,6 +205,11 @@ class Backend extends CI_Controller {
 							 'field'   => 'app_facebook_api_key',
 							 'label'   => 'App Facebook API Key',
 							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_config_facebook_canvas_path',
+							 'label'   => 'App Config Facebook Canvas Path',
+							 'rules'   => 'required|trim|xss_clean'
 						)
 				);
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
@@ -225,6 +230,7 @@ class Backend extends CI_Controller {
 								'app_description' => $this->input->post('app_description', TRUE),
 								'app_type_id' => $this->input->post('app_type_id', TRUE),
 								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE),
+								'app_config_facebook_canvas_path' => $this->input->post('app_config_facebook_canvas_path', TRUE),
 								'app_secret_key' => md5($this->_generate_random_string())));
 			redirect('backend/app');
 		}else{
@@ -293,6 +299,11 @@ class Backend extends CI_Controller {
 							 'field'   => 'app_facebook_api_key',
 							 'label'   => 'App Facebook API Key',
 							 'rules'   => 'required|trim|xss_clean'
+						),
+						array(
+							 'field'   => 'app_config_facebook_canvas_path',
+							 'label'   => 'App Config Facebook Canvas Path',
+							 'rules'   => 'required|trim|xss_clean'
 						)
 				);
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
@@ -307,7 +318,8 @@ class Backend extends CI_Controller {
 								'app_support_page_tab' => $this->input->post('app_support_page_tab', FALSE) == 'app_support_page_tab',
 								'app_description' => $this->input->post('app_description', TRUE),
 								'app_type_id' => $this->input->post('app_type_id', TRUE),
-								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE)
+								'app_facebook_api_key' => $this->input->post('app_facebook_api_key', TRUE),
+								'app_config_facebook_canvas_path' => $this->input->post('app_config_facebook_canvas_path', TRUE)
 								);
 			if($app_icon = $this->socialhappen->replace_image('app_icon', $this->input->post('app_icon_old', TRUE), FALSE)){
 				$app['app_icon'] = $app_icon;
@@ -320,19 +332,7 @@ class Backend extends CI_Controller {
 		}else{
 			$this->load->model('App_model', 'App');
 			$app = $this->App->get_app_by_app_id($app_id);
-			$data['app_name'] = $app['app_name'];
-			$data['app_icon'] = $app['app_icon'];
-			$data['app_image'] = $app['app_image'];
-			$data['app_description'] = $app['app_description'];
-			$data['app_url'] = $app['app_url'];
-			$data['app_config_url'] = $app['app_config_url'];
-			$data['app_support_page_tab'] = $app['app_support_page_tab'];
-			$data['app_type_id'] = $app['app_type_id'];
-			$data['app_install_url'] = $app['app_install_url'];
-			$data['app_install_page_url'] = $app['app_install_page_url'];
-			$data['app_facebook_api_key'] = $app['app_facebook_api_key'];
-			$data['app_id'] = $app_id;
-			$this->load->view('backend_views/edit_app_view', $data);
+			$this->load->view('backend_views/edit_app_view', $app);
 		}
 	}
 	

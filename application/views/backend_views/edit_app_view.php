@@ -162,9 +162,25 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 						  'value'       => set_value('app_facebook_api_key', $app_facebook_api_key),
 						  'maxlength'   => '300',
 						  'size'        => '200',
-						  'class'		=> (form_error('app_config_url')) ? 'error' : '',
+						  'class'		=> (form_error('app_facebook_api_key')) ? 'error' : '',
 				))?>
-				<?php echo form_error('app_config_url'); ?>
+				<?php echo form_error('app_facebook_api_key'); ?>
+			</li>
+			
+			<li>
+				<?=form_label('App Config Facebook Canvas Path*', 'app_config_facebook_canvas_path', array(
+				'class' => 'app_config_facebook_canvas_path',
+				'style' => 'color: #000;',
+				));?>
+				<?=form_input(array(
+						  'name'        => 'app_config_facebook_canvas_path',
+						  'id'          => 'app_config_facebook_canvas_path',
+						  'value'       => set_value('app_config_facebook_canvas_path', $app_config_facebook_canvas_path),
+						  'maxlength'   => '300',
+						  'size'        => '200',
+						  'class'		=> (form_error('app_config_facebook_canvas_path')) ? 'error' : '',
+				))?>
+				<?php echo form_error('app_config_facebook_canvas_path'); ?>
 			</li>
 			
 			
