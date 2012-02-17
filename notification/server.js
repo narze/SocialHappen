@@ -13,6 +13,12 @@ var certificate = fs.readFileSync(config.certPath).toString();
 if(config.caPath){
 	ca = fs.readFileSync(config.caPath).toString();
 }
+if(config.http_port){
+	HTTP_PORT = config.http_port;
+}
+if(config.https_port){
+	HTTPS_PORT = config.https_port;
+}
 
 var options = {
 	key : privateKey,

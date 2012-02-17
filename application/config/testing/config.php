@@ -19,12 +19,12 @@ $config['base_url']	= 'https://beta.socialhappen.com/';
 /**
  * Node.js server base url
  */
-$config['node_base_url'] = 'https://beta.socialhappen.com:8081/';
+$config['node_base_url'] = 'https://beta.socialhappen.com:8083/';
 
 /**
  * Node.js server base http url for notification library only
  */
-$config['node_base_url_http'] = 'http://beta.socialhappen.com:8080/';
+$config['node_base_url_http'] = 'http://beta.socialhappen.com:8082/';
 
 /*
 |--------------------------------------------------------------------------
