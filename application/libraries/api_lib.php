@@ -1715,7 +1715,7 @@ class Api_Lib {
 		}
 
 		if($user_id){
-			$this->CI->load->model('user_pages');
+			$this->CI->load->model('user_pages_model','user_pages');
 			if($this->CI->user_pages->is_page_admin($user_id, $page_id)){
 				$role = 'admin';
 			} else {
