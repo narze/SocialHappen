@@ -30,7 +30,8 @@ class Get_started_model extends CI_Model {
 	 * @author Weerapat P.
 	 */
 	function create_index(){
-		return $this->get_started_info->ensureIndex(array('id'=>1), array('unique' => 1));
+		return $this->get_started_info->ensureIndex(array('id'=>1), array('unique' => 1)) 
+			&& $this->get_started_stat->ensureIndex(array('id'=>1));
 	}
 	
 	/**

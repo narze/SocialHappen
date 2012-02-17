@@ -30,7 +30,7 @@ class Stat_page_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->pages->ensureIndex(array('app_id' => 1,
+		return $this->pages->ensureIndex(array('app_id' => 1,
 										'page_id' => 1,
 										'action_id' => 1, 
 										'date' => -1));
