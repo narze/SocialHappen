@@ -16,7 +16,6 @@ class Notification_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->notification = sh_mongodb_load( array(
-			'database' => 'message',
 			'collection' => 'notification'
 		));
 		
@@ -30,7 +29,8 @@ class Notification_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		return $this->notification->ensureIndex(array(
+		return $this->notification->deleteIndexes() 
+			&& $this->notification->ensureIndex(array(
 										'user_id' => 1));
 	}
 	

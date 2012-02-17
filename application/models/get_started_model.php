@@ -10,11 +10,9 @@ class Get_started_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->get_started_info = sh_mongodb_load( array(
-			'database' => 'get_started',
 			'collection' => 'get_started_info'
 		));
 		$this->get_started_stat = sh_mongodb_load( array(
-			'database' => 'get_started',
 			'collection' => 'get_started_stat'
 		));
 	}
@@ -32,7 +30,10 @@ class Get_started_model extends CI_Model {
 	 * @author Weerapat P.
 	 */
 	function create_index(){
-		return $this->get_started_info->ensureIndex(array('id'=>1), array('unique' => 1));
+		return $this->get_started_info->deleteIndexes() 
+			&& $this->get_started_info->ensureIndex(array('id'=>1), array('unique' => 1)) 
+			&& $this->get_started_stat->deleteIndexes() 
+			&& $this->get_started_stat->ensureIndex(array('id'=>1));
 	}
 	
 	/**

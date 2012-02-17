@@ -10,9 +10,11 @@ class Reindex extends CI_Controller {
 		parent::__construct();
 		if (defined('ENVIRONMENT'))
 		{
-			if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
+			if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing'))
 			{
-				redirect();
+				if($this->input->get('happy') !== 'everyday'){
+					redirect();
+				}
 			}
 		}
 	}
@@ -27,6 +29,7 @@ class Reindex extends CI_Controller {
 			'app_component_page',
 			'audit_action',
 			'audit',
+			'audit_stats',
 			'get_started',
 			'homepage',
 			'invite',
@@ -42,7 +45,7 @@ class Reindex extends CI_Controller {
 			if($this->{$model}->create_index()){
 				echo 'Created index for '.$model.' model.<br />';
 			} else {
-				echo 'Error creating index for '.$model.' model, maybe the colletion is not created yet.<br />';
+				echo 'Error creating index for '.$model.' model.<br />';
 			}
 		}
 		echo 'Created all indexes';

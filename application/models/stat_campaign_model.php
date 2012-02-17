@@ -20,8 +20,7 @@ class Stat_campaign_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->campaigns = sh_mongodb_load( array(
-			'database' => 'stat',
-			'collection' => 'campaigns'
+			'collection' => 'stat_campaigns'
 		));
 	}
 		
@@ -31,7 +30,8 @@ class Stat_campaign_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->campaigns->ensureIndex(array('app_id' => 1,
+		return $this->campaigns->deleteIndexes() 
+			&& $this->campaigns->ensureIndex(array('app_id' => 1,
 											'campaign_id' => 1,
 										    'action_id' => 1, 
 										    'date' => -1));

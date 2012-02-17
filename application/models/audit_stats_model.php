@@ -23,8 +23,7 @@ class Audit_stats_model extends CI_Model {
 		$this->DEFAULT_LIMIT = 0;
 		$this->load->helper('mongodb');
 		$this->stats = sh_mongodb_load( array(
-			'database' => 'audit',
-			'collection' => 'stats'
+			'collection' => 'audit_stats'
 		));
 	}
 	
@@ -34,7 +33,8 @@ class Audit_stats_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->stats->ensureIndex(array('timestamp' => -1,
+		return $this->stats->deleteIndexes() 
+			&& $this->stats->ensureIndex(array('timestamp' => -1,
 										 'user_id' => 1,
 										 'app_install_id' => 1));
 	}

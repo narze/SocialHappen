@@ -20,8 +20,7 @@ class Stat_app_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->apps = sh_mongodb_load( array(
-			'database' => 'stat',
-			'collection' => 'apps'
+			'collection' => 'stat_apps'
 		));
 	}
 		
@@ -31,7 +30,8 @@ class Stat_app_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->apps->ensureIndex(array('app_id' => 1,
+		return $this->apps->deleteIndexes() 
+			&& $this->apps->ensureIndex(array('app_id' => 1,
 										'app_install_id' => 1,
 										'action_id' => 1, 
 										'date' => -1));

@@ -27,6 +27,7 @@ class App_ctrl {
 				$this ->CI-> load -> model('campaign_model', 'campaigns');
 				$campaigns = $this ->CI-> campaigns -> get_campaigns_by_app_install_id($app_install_id);
 
+				$this ->CI-> load -> model('user_model', 'users');
 				$campaign_count = $this->CI->campaigns->count_campaigns_by_app_install_id($app_install_id);
 				$user_count = $this->CI->users->count_users_by_app_install_id($app_install_id);
 				$this->CI->config->load('pagination', TRUE);
@@ -37,8 +38,7 @@ class App_ctrl {
 				$new_users = $this->CI->audit_lib->list_stat_app((int)$app_install_id, $action_id, $this->CI->audit_lib->_date());
 				$new_users = count($new_users) == 0 ? 0 : $new_users[0]['count'];
 				
-				$this ->CI-> load -> model('user_model', 'user');
-				$all_users = $this->CI->user->count_users_by_app_install_id($app_install_id);
+				$all_users = $this->CI->users->count_users_by_app_install_id($app_install_id);
 
 				$input = array('app_install_id' => $app_install_id);
 				$common = array(

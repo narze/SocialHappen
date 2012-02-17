@@ -36,7 +36,6 @@
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->reward_item = sh_mongodb_load( array(
-			'database' => 'socialhappen',
 			'collection' => 'reward_item'
 		));
 	}
@@ -54,7 +53,8 @@
 	 * @author Manassarn M.
 	 */
 	function create_index(){
-		return $this->reward_item->ensureIndex(array('criteria_type'=>1, 'criteria_id'=>1));
+		return $this->reward_item->deleteIndexes() 
+			&& $this->reward_item->ensureIndex(array('criteria_type'=>1, 'criteria_id'=>1));
 	}
 	
 	/**

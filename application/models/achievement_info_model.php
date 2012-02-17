@@ -18,7 +18,6 @@ class Achievement_info_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->achievement_info = sh_mongodb_load( array(
-			'database' => 'achievement',
 			'collection' => 'achievement_info'
 		));
 	}
@@ -29,7 +28,8 @@ class Achievement_info_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		return $this->achievement_info->ensureIndex(array(
+		return $this->achievement_info->deleteIndexes() 
+			&& $this->achievement_info->ensureIndex(array(
 										'app_id' => 1,
 										'app_install_id' => 1,
 										'info.page_id' => 1));

@@ -20,8 +20,7 @@ class Stat_page_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->pages = sh_mongodb_load( array(
-			'database' => 'stat',
-			'collection' => 'pages'
+			'collection' => 'stat_pages'
 		));
 	}
 		
@@ -31,7 +30,8 @@ class Stat_page_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->pages->ensureIndex(array('app_id' => 1,
+		return $this->pages->deleteIndexes() 
+			&& $this->pages->ensureIndex(array('app_id' => 1,
 										'page_id' => 1,
 										'action_id' => 1, 
 										'date' => -1));

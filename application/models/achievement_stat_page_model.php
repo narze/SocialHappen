@@ -17,7 +17,6 @@ class Achievement_stat_page_model extends CI_Model {
     parent::__construct();
     $this->load->helper('mongodb');
     $this->achievement_stat_page = sh_mongodb_load( array(
-      'database' => 'achievement',
       'collection' => 'achievement_stat_page'
     ));
   }
@@ -28,7 +27,8 @@ class Achievement_stat_page_model extends CI_Model {
    * @author Metwara Narksook
    */
   function create_index(){
-    return $this->achievement_stat_page->ensureIndex(array('page_id' => 1,
+    return $this->achievement_stat_page->deleteIndexes() 
+      && $this->achievement_stat_page->ensureIndex(array('page_id' => 1,
                     'user_id' => 1));
   }
      

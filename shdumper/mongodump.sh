@@ -2,7 +2,7 @@
 
 #--
 # CONFIG
-DBS="achievement app audit campaign get invite message stat socialhappen"
+DBS="socialhappen_beta socialhappen"
 DUMP_LOCATION=../application/backup
 LOGS_LOCATION=../application/backup
 DIR_NAME=sh_mongo-`date -u +%Y%m%d_%H%M%S`

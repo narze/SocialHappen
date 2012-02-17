@@ -1201,8 +1201,8 @@ class DB_Sync {
 	
 	
 	
-	function drop_mongo_collections(){
-		foreach(func_get_args() as $collection){
+	function drop_mongo_collections($collections){
+		foreach($collections as $collection){
 			echo $this->CI->mongodb->drop_collection($collection) ? "Dropped {$collection}<br />" : "Cannot drop {$collection}<br />";
 		}
 	}
@@ -1213,25 +1213,32 @@ class DB_Sync {
 		if($this->CI->config->item('mongo_testmode') == TRUE){
 			$mongo_db_prefix = $this->CI->config->item('mongo_testmode_prefix');
 		}
+		$collections = array(
+			'achievement_info',
+			'achievement_stat',
+			'achievement_user',
+			'achievement_stat_page',
+			'app_component',
+			'app_component_homepage',
+			'app_component_page',
+			'audits',
+			'audit_actions',
+			'audit_stats',
+			'get_started_info',
+			'get_started_stat',
+			'invites',
+			'invite_pending',
+			'reward',
+			'reward_item',
+			'stat_apps',
+			'stat_campaigns',
+			'stat_pages',
+			'notification'
+		);
+		$mongo_db_name = $this->CI->config->item('mongo_db');
 		$this->CI->load->library('mongo_db', NULL, 'mongodb');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'achievement');
-		$this->drop_mongo_collections('achievement_info','achievement_stat','achievement_user','achievement_stat_page');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'audit');
-		$this->drop_mongo_collections('actions','audits','stats');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'stat');
-		$this->drop_mongo_collections('apps','campaigns','pages');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'message');
-		$this->drop_mongo_collections('notification');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'get_started');
-		$this->drop_mongo_collections('get_started_info','get_started_stat');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'app_component');
-		$this->drop_mongo_collections('homepage');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'campaign');
-		$this->drop_mongo_collections('app_component','app_component_page','homepage','invite','sharebutton');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'invite');
-		$this->drop_mongo_collections('invites','pending');
-		$this->CI->mongodb->switch_db($mongo_db_prefix.'socialhappen');
-		$this->drop_mongo_collections('reward','reward_item');
+		$this->CI->mongodb->switch_db($mongo_db_prefix.$mongo_db_name);
+		$this->drop_mongo_collections($collections);
 		echo 'Dropped collections<br />';
 
 		$this->CI->load->library('audit_lib');

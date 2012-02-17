@@ -22,8 +22,7 @@ class Audit_action_model extends CI_Model {
 		parent::__construct();
 		$this->load->helper('mongodb');
 		$this->actions = sh_mongodb_load( array(
-			'database' => 'audit',
-			'collection' => 'actions'
+			'collection' => 'audit_actions'
 		));
 	}
 	
@@ -33,7 +32,8 @@ class Audit_action_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		$this->actions->ensureIndex(array('app_id' => 1, 'action_id' => 1));
+		return $this->actions->deleteIndexes() 
+			&& $this->actions->ensureIndex(array('app_id' => 1, 'action_id' => 1));
 	}
 	
 	/**

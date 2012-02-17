@@ -18,3 +18,4 @@ shdumper/mysql_dump.sql
 application/backup/*.sql
 application/backup/sh_mongo-*
 application/backup/log-mongodump-*
+notification/node_modules/*
