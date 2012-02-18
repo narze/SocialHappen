@@ -218,12 +218,8 @@ $(function(){
 
 	campaign_box = function () {
 
-		get_filter = function () {
-			return $('.campaign-box .tab.active').attr('data-filter');
-		}
-
 		campaign_pagination =function () {
-			var filter = get_filter();
+			var filter = $('.campaign-box .tab.active').attr('data-filter');
 			var url_count = '';
 			switch(filter){
 				case 'me' : url_count = base_url+"page/json_count_user_campaigns/"+user_id+'/'+page_id; break;
@@ -245,8 +241,9 @@ $(function(){
 		}
 				
 		filter_campaigns = function (page_index,jq){
-			var filter = get_filter();
+			var filter = $('.campaign-box .tab.active').attr('data-filter');
 			var url = base_url+'tab/campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + '?filter='+filter +'&viewas='+ view_as;
+			console.log(url);
 			$('.list-campaign').load(url,trigger_countdown);
 			check_pagination('.pagination-campaign');
 		}
