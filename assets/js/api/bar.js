@@ -656,6 +656,7 @@ sh_logout = function(){
 sh_load_bar = function(){
 	onLoad();
 	console.log(view_as,user_id,page_id,app_install_id);
+	if(!facebook_user_id) var facebook_user_id = 0;
 	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+facebook_user_id+'/'+page_id+'/'+app_install_id, function(data){
 		sh_jq('div#sh-bar').html(data);
 	});
