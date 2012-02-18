@@ -30,11 +30,17 @@
 		  } else {
 		    // the user isn't even logged in to Facebook.
 		  }
+		  var facebook_user_id = 0;
+		  var accessToken = 0;
+		  if(response.authResponse) {
+			  facebook_user_id = response.authResponse.userID;
+			  accessToken = response.authResponse.accessToken;
+		  }
 		  send({
 		  		sh_message:'facebook_login_status',
 		  		facebook_login_status : fb_login_status,
-		  		facebook_user_id : response.authResponse.userID,
-				facebook_access_token : response.authResponse.accessToken,
+		  		facebook_user_id : facebook_user_id,
+				facebook_access_token : accessToken,
 				sh_login_status : <?php echo $sh_user_logged_in;?>
 		  	});
 		 });
