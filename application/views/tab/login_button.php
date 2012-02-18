@@ -18,6 +18,15 @@
 			xfbml  : true,
 			oauth : true
 		});
+        FB.getLoginStatus(function(response){
+            window.fblogin = function () {
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        send({sh_message:'logged in facebook',fb_uid:response.authResponse.userID,fb_access_token:response.authResponse.accessToken});
+                    }
+                }, {scope:'<?php echo $facebook_default_scope ; ?>'});
+            };
+        });
 	};	
 	
 	(function(d){
@@ -27,13 +36,7 @@
      d.getElementsByTagName('head')[0].appendChild(js);
    }(document));
  
-	function fblogin() {
-		FB.login(function(response) {
-			if (response.authResponse) {
-				send({sh_message:'logged in facebook',fb_uid:response.authResponse.userID,fb_access_token:response.authResponse.accessToken});
-			}
-		}, {scope:'<?php echo $facebook_default_scope ; ?>'});
-	}
+	
 	
 /* 
  * a backwards compatable implementation of postMessage

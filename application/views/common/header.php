@@ -47,7 +47,30 @@ endif;
 			xfbml: true,
 		 	oauth: true
 		});
+		FB.getLoginStatus(function(response) {
+		  	window.fblogin = function () {
+				FB.login(function(response) {
+					if (response.status === 'connected') { //console.log('response',response);
+						$.getJSON(base_url+"api/request_login?user_facebook_id=" + response.authResponse.userID
+						// +'&access_token='+response.authResponse.accessToken 
+						, function(json){ //console.log(json);
+							if(json.status != 'OK'){
+								window.location.replace(base_url+"home/signup");
+							} else {
+								<?php if(issetor($next)): ?>
+									window.location.replace('<?php echo $next; ?>');
+								<?php else : ?>
+									window.location.replace(window.location.href+"?logged_in=true");
+								<?php endif; ?>
+							}
+						});
+					}
+				}, {scope:'<?php echo $facebook_default_scope ; ?>'});
+			};
+		});
 	  };
+
+	  
 	 // Load the SDK Asynchronously
 	  (function(d){
 	     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
