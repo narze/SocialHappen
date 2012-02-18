@@ -71,6 +71,7 @@ $(function(){
 			}
 			element.load(base_url+'tab/redeem_list/'+page_id+query+tabhead,function(){
 				$('.tab.sort').unbind('click').click(sort_reward);
+				trigger_countdown();
 				view_reward();
 			});
 		}
@@ -243,7 +244,6 @@ $(function(){
 		filter_campaigns = function (page_index,jq){
 			var filter = $('.campaign-box .tab.active').attr('data-filter');
 			var url = base_url+'tab/campaigns/'+page_id+'/'+per_page+'/'+(page_index * per_page) + '?filter='+filter +'&viewas='+ view_as;
-			console.log(url);
 			$('.list-campaign').load(url,trigger_countdown);
 			check_pagination('.pagination-campaign');
 		}
