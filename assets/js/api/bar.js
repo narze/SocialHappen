@@ -336,9 +336,6 @@ onLoad = function(){
 
 			unhover_hide();
 			sh_popup();
-			sh_sharebutton();
-			sh_invitebutton();
-			sh_test();
 
 			$('div.popup-fb a.bt-start').live('click',function(){
 				jQuery.fancybox.close();
@@ -446,9 +443,6 @@ onLoad = function(){
 					return false;
 				});
 
-				//DEBUG : remove this after test
-				$('body').append('<div class="sh-sharebutton" data-href="" />'); // for debug
-
 				function sh_sharebutton_menu(elem){
 					var share_href = elem.data('href');
 
@@ -484,9 +478,6 @@ onLoad = function(){
 					}
 				});
 
-				//DEBUG : remove this after test
-				$('body').append('<div class="sh-invitebutton" data-href="" />'); // for debug
-
 				function sh_invitebutton_menu(elem){
 					jQuery.fancybox({ // should use something better than fancybox?
 						href:base_url+'invite/'+app_install_id+'?facebook_page_id='+facebook_page_id,
@@ -504,37 +495,47 @@ onLoad = function(){
 					});
 				}
 			}
-
-			function sh_test(){ //this function is to test only, will be removed on production
-				$('<div><a id="page_score" href="'+base_url+'tab/my_page_score/'+page_id+'">My Score</a></div>').appendTo('body');
-				$('<div><a id="page_leaderboard" href="'+base_url+'tab/page_leaderboard/'+page_id+'">Page Leaderboard</a></div>').appendTo('body');
-				$('<div><a id="page_reward" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=start_timestamp&order=desc">Redeem Reward (Sort by start time)</a></div>').appendTo('body');
-				$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=value&order=desc">Redeem Reward (Sort by value)</a></div>').appendTo('body');
-				$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=status">Redeem Reward (Sort by status)</a></div>').appendTo('body');
-				$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=redeem.point&order=desc">Redeem Reward (Sort by point)</a></div>').appendTo('body');
-				var page_score = $('#page_score');
-				var page_leaderboard = $('#page_leaderboard');
-				var page_reward = $('#page_reward, .page_reward_debug');
-				page_score.click(check_guest);
-				page_leaderboard.click(check_guest);
-				page_reward.click(check_guest);
-				function check_guest(){
-					if(view_as == 'guest'){
-						sh_guest();
-					} else {
-						jQuery.fancybox({
-							href:$(this).attr('href'),
-							type:'iframe',
-							transitionIn: 'elastic',
-							transitionOut: 'elastic',
-						});
-					}
-					return false;
-				}
-			}
 		});
 	})(sh_jq);
 };
+
+sh_test = function () { //this function is to test only, will be removed on production
+	(function($){
+		//DEBUG : remove this after test
+		$('body').append('<div class="sh-sharebutton" data-href="" />'); // for debug
+
+
+		//DEBUG : remove this after test
+		$('body').append('<div class="sh-invitebutton" data-href="" />'); // for debug
+
+		$('<div><a id="page_score" href="'+base_url+'tab/my_page_score/'+page_id+'">My Score</a></div>').appendTo('body');
+		$('<div><a id="page_leaderboard" href="'+base_url+'tab/page_leaderboard/'+page_id+'">Page Leaderboard</a></div>').appendTo('body');
+		$('<div><a id="page_reward" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=start_timestamp&order=desc">Redeem Reward (Sort by start time)</a></div>').appendTo('body');
+		$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=value&order=desc">Redeem Reward (Sort by value)</a></div>').appendTo('body');
+		$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=status">Redeem Reward (Sort by status)</a></div>').appendTo('body');
+		$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=redeem.point&order=desc">Redeem Reward (Sort by point)</a></div>').appendTo('body');
+		var page_score = $('#page_score');
+		var page_leaderboard = $('#page_leaderboard');
+		var page_reward = $('#page_reward, .page_reward_debug');
+		page_score.click(check_guest);
+		page_leaderboard.click(check_guest);
+		page_reward.click(check_guest);
+		function check_guest(){
+			if(view_as == 'guest'){
+				sh_guest();
+			} else {
+				jQuery.fancybox({
+					href:$(this).attr('href'),
+					type:'iframe',
+					transitionIn: 'elastic',
+					transitionOut: 'elastic',
+				});
+			}
+			return false;
+		}
+	})(sh_jq);
+	return false;
+}
 
 sh_app_component = function() {
 	(function($){
@@ -655,7 +656,6 @@ sh_logout = function(){
 
 sh_load_bar = function(){
 	onLoad();
-	console.log(view_as,user_id,page_id,app_install_id);
 	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+facebook_user_id+'/'+page_id+'/'+app_install_id, function(data){
 		sh_jq('div#sh-bar').html(data);
 	});
@@ -777,7 +777,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			facebook_access_token = data.facebook_access_token;
 			facebook_user_id = data.facebook_user_id;
 			sh_login_status = data.sh_login_status;
-			console.log(facebook_user_id, facebook_access_token);
+			
 			jQuery.getJSON(base_url+'tab/json_facebook_user_check/'+facebook_user_id+'/'+page_id,
 				function(response){ 
 				if(response.user_id){
@@ -790,7 +790,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 					}
 					sh_visit();
 				} else {
-					console.log(response.role);view_as = response.role;
+					view_as = response.role;
 					sh_load_bar();
 				}
 			});
