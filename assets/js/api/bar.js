@@ -336,6 +336,8 @@ onLoad = function(){
 
 			unhover_hide();
 			sh_popup();
+			sh_sharebutton();
+			sh_invitebutton();
 
 			$('div.popup-fb a.bt-start').live('click',function(){
 				jQuery.fancybox.close();

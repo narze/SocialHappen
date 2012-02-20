@@ -33,7 +33,7 @@
 		<div class="point-cal">
 			<div class="point-summary bold fs14 lh18 round6">
 				<p><span>Your Point </span><span class="fr"><?php echo number_format($page_score); ?> Points</span></p>
-				<p class="tc-red">Point for this Reward <span class="fr">-<?php echo number_format($reward_item_point); ?> Points</span></p>
+				<p class="tc-red">Point for this Reward <span class="fr"><?php echo number_format($reward_item_point); ?> Points</span></p>
 				<?php if($reward_item_point_remain >= 0) { ?>
 					<p class="tc-green6">Remaining point <span class="fr"><?php echo number_format($reward_item_point_remain);?> Points</span></p>
 				<?php } ?>
