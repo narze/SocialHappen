@@ -108,7 +108,11 @@ class Share extends CI_Controller {
 				return;
 			}
 
+			$user = $this->socialhappen->get_user();
 			$this->load->vars(array(
+				'user' => $user,
+				'twitter_checked' => !empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret']),
+				'app_install_id' => $app_install_id,
 				'share_result' => $share_result
 			));
 			$this->load->view('share/main');
