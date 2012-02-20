@@ -17,7 +17,7 @@
 		else 
 		{ ?>
 			<h3>Link</h3>
-			<div class="sh-share-link notice success">
+			<div class="sh-share-link notice success" style="word-break: break-word;">
 				<?php echo $share_link;?>
 			</div><?php
 			$attributes = array('class' => '', 'id' => 'share-submit');

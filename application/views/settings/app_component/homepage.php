@@ -31,7 +31,7 @@ echo form_open_multipart('settings/app_component/homepage/'.$app_install_id, $at
 <li <?php echo form_error('message') ? 'class="error"' : ''; ?>>
         <label for="message">Message : <span class="required">*</span></label>
 	<div class="inputs">						
-        	<?php echo form_textarea( array( 'name' => 'message', 'style' => 'width:297px;height:100px;', 'value' => set_value('message', issetor($homepage['message'])) ) )?>
+        	<?php echo form_textarea( array( 'name' => 'message', 'style' => 'width:288px;height:100px;', 'value' => set_value('message', issetor($homepage['message'])) ) )?>
         </div>
 </li>
 
