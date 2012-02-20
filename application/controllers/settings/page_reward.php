@@ -189,8 +189,9 @@ class Page_reward extends CI_Controller {
 					$exist_reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
 
 					$input['image'] = $this->socialhappen->replace_image('image', $exist_reward_item['image']);
+					if($input['image'] == '') unset($input['image']);
 					$input['redeem']['amount_remain'] = issetor($reward_item['redeem']['amount_remain'], $reward_item['redeem']['amount']);
-					
+
 					$update_result = $this->reward_item_model->update($reward_item_id, $input);
 				} else {
 					$input['image'] = $this->socialhappen->upload_image('image');
