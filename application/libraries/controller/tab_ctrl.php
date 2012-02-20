@@ -286,7 +286,7 @@ class Tab_ctrl {
 			if($invite_key = $this->CI->invite_pending->get_invite_key_by_user_facebook_id_and_campaign_id($user_facebook_id, $campaign_id)){
 				$this->CI->load->library('invite_component_lib');
 				$accept_invite_result = $this->CI->invite_component_lib->accept_invite_campaign_level($invite_key, $user_facebook_id);
-				if($accept_invite_result){
+				if(!$accept_invite_result){
 					$data = array(
 						'status' => 'error',
 						'error' => 'accept_invite_error',
