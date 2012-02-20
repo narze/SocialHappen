@@ -336,6 +336,8 @@ onLoad = function(){
 
 			unhover_hide();
 			sh_popup();
+			sh_sharebutton();
+			sh_invitebutton();
 
 			$('div.popup-fb a.bt-start').live('click',function(){
 				jQuery.fancybox.close();
@@ -656,7 +658,7 @@ sh_logout = function(){
 
 sh_load_bar = function(){
 	onLoad();
-	if(!facebook_user_id) {
+	if(typeof facebook_user_id == 'undefined' || !facebook_user_id) {
 		facebook_user_id = 0;
 	}
 	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+facebook_user_id+'/'+page_id+'/'+app_install_id, function(data){

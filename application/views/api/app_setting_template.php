@@ -17,8 +17,8 @@
 			<ul id="app-setting-menu">
 				<li><a class="config" title="App config" href="<?php echo base_url().'app/config/'.$app['app_install_id']; ?>"></a></li>
 				<li><a class="campaign" title="Campaign Setting" href="<?php echo base_url().'settings/campaign/'.$app['app_install_id']; ?>"></a></li>
-				<li><a class="invite" title="Invite Setting"></a></li>
-				<li><a class="share" title="Share Button Setting"></a></li>
+				<!--<li><a class="invite" title="Invite Setting"></a></li>
+				<li><a class="share" title="Share Button Setting"></a></li>-->
 				<li><a class="non-fan" title="Non-Fan Homepage Setting" href="<?php echo base_url().'settings/app_component/homepage/'.$app['app_install_id']; ?>"></a></li>
 			</ul>
 			<?php } ?>

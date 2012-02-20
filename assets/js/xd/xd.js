@@ -136,7 +136,7 @@ return;
 
 function doesUserLikeFacebookPage(facebook_page_id){
     jQuery.getJSON(base_url+'xd/is_user_liked_page/'+facebook_page_id,function(response){
-        if(!response.error){
+        if(response.data && !response.error){
             send({sh_message:'sh_user_liked_page', liked: response.data.length != 0});
         } else {
             // console.log(response);
