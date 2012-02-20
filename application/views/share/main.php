@@ -21,7 +21,7 @@
 				<?php echo $share_link;?>
 			</div><?php
 			$attributes = array('class' => '', 'id' => 'share-submit');
-			echo form_open('share/share_submit/'.$app_install_id, $attributes); ?>
+			echo form_open('share/share_submit/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
 			<input type="hidden" id="share_link" name="share_link" value="<?php echo $share_link;?>" />
 			
 			<p>

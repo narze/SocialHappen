@@ -183,7 +183,7 @@ sh_signup_campaign = function(){
 				$('#fancybox-content').off()
 				.on('submit', 'div.popup-fb.signup-campaign form.signup-form', submit_form);
 
-				function submit_form(){console.log('submit');
+				function submit_form(){
 					$('form.signup-form').unbind('submit').submit(function() {
 						  var url = $(this).attr('action');
 						  var params = $(this).serialize();
@@ -783,12 +783,18 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			facebook_user_id = data.facebook_user_id;
 			sh_login_status = data.sh_login_status;
 			
-			jQuery.getJSON(base_url+'tab/json_facebook_user_check/'+facebook_user_id+'/'+page_id,
-				function(response){ 
+			jQuery.getJSON(base_url+'tab/json_facebook_user_check/'+facebook_user_id+'/'+page_id+'/'+app_install_id,
+				function(response){
 				if(response.user_id){
 					view_as = response.role;
 					user_name = response.user_name;
 					user_image = response.user_image;
+					if(response.is_page_user){
+						is_user_register_to_page = true;
+					}
+					if(response.is_campaign_user){
+						is_user_register_to_campaign = true;
+					}
 					sh_load_bar();
 					if(!sh_login_status){
 						sh_login();

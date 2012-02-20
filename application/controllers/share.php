@@ -28,7 +28,8 @@ class Share extends CI_Controller {
 						'facebook_checked' => TRUE,
 						'share_message' => $share_message,
 						'share_link' => $share_link,
-						'app_install_id' => $app_install_id
+						'app_install_id' => $app_install_id,
+						'campaign_id' => $campaign_id
 					));
 					$this->load->view('share/main');
 				} else {
@@ -62,7 +63,7 @@ class Share extends CI_Controller {
 		echo json_encode($response);
 	}
 
-	function share_submit($app_install_id = NULL){
+	function share_submit($app_install_id = NULL, $campaign_id = NULL){
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('twitter', 'Twitter', '');			
 		$this->form_validation->set_rules('facebook', 'Facebook', '');			
@@ -108,8 +109,13 @@ class Share extends CI_Controller {
 				return;
 			}
 
+			$user = $this->socialhappen->get_user();
 			$this->load->vars(array(
-				'share_result' => $share_result
+				'user' => $user,
+				'twitter_checked' => !empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret']),
+				'app_install_id' => $app_install_id,
+				'share_result' => $share_result,
+				'campaign_id' => $campaign_id
 			));
 			$this->load->view('share/main');
 
@@ -118,12 +124,11 @@ class Share extends CI_Controller {
 				$user_id = $this->socialhappen->get_user_id();
 				$this->load->library('audit_lib');
 				$audit_additional_data = array(
-					'user_id'=> $user_id
+					'user_id'=> $user_id,
+					'app_install_id' => $app_install_id,
+					'page_id' => $app['page_id'],
+					'campaign_id' => $campaign_id
 				);
-				if($app_install_id){
-					$audit_additional_data['app_install_id'] = $app_install_id;
-					$audit_additional_data['page_id'] = $app['page_id'];
-				}
 
 				$audit_result = $this->audit_lib->add_audit(
 					issetor($app['app_id'],0),
@@ -143,15 +148,11 @@ class Share extends CI_Controller {
 				$this->load->library('achievement_lib');
 				$achievement_info = array(
 					'action_id'=> $share_action,
-					'app_install_id'=>issetor($app_install_id, 0)
+					'app_install_id'=> $app_install_id,
+					'page_id' => $app['page_id'],
+					'campaign_id' => $campaign_id
 				);
-				if(isset($app['page_id'])){
-					$achievement_info['page_id'] = $app['page_id'];
-				}
 
-				// if($campaign_id){
-				// 	$achievement_info['campaign_id'] = $campaign_id;
-				// }
 				$inc_result = $this->achievement_lib->increment_achievement_stat(issetor($app['app_id'],0), $user_id, $achievement_info, 1);
 				if($inc_result){
 					//echo ' increment_achievement_stat complete';

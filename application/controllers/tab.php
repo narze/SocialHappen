@@ -1138,7 +1138,7 @@ class Tab extends CI_Controller {
 	 * @param $facebook_user_id
 	 * @author Manassarn M.
 	 */
-	function json_facebook_user_check($facebook_user_id = NULL, $page_id = NULL){
+	function json_facebook_user_check($facebook_user_id = NULL, $page_id = NULL, $app_install_id = NULL){
 		$return = array();
 		$this->load->model('user_model');
 		if(!$user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user_id)){
@@ -1163,6 +1163,24 @@ class Tab extends CI_Controller {
 				$this->page->update_page_profile_by_page_id($page_id, $page_update);
 			} else {
 				$return['role'] = 'user';
+				//TODO : copied from socialhappen library->get_bar, it should be only in one place
+				$this->load->model('page_user_data_model');
+				if($page_user_data = $this->page_user_data_model->get_page_user_by_user_id_and_page_id($user_id, $page_id)){
+					$return['is_page_user'] = TRUE;
+				} else {
+					$return['is_page_user'] = FALSE;
+				}
+				//TODO : copied from socialhappen library->get_bar, it should be only in one place
+				if($app_install_id) {
+					$this->load->library('campaign_lib');
+					$return['is_campaign_user'] = FALSE;
+					$campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
+					if($campaign['in_campaign']){
+						$campaign_id = $campaign['campaign_id'];
+						$this->load->model('user_campaigns_model','campaign_user');
+						$return['is_campaign_user'] = $this->campaign_user->is_user_in_campaign($user_id, $campaign_id);
+					}
+				}
 			}
 		}
 		echo json_encode($return);
