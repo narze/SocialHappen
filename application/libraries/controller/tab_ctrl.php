@@ -510,6 +510,7 @@ class Tab_ctrl {
 		$data = array();
 		$app_install_ids = array();
 		$campaign_ids = array();
+		$page_id = (int) $page_id;
 
 		if($filter == 'app'){
 			$apps = $this->CI->installed_apps->get_installed_apps_by_page_id($page_id);
