@@ -86,6 +86,9 @@ class Share extends CI_Controller {
 
 			$result = array();
 
+			$this->load->model('installed_apps_model','installed_apps');
+			$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+				
 			if($twitter_share){
 				if($result = $this->sharebutton_lib->twitter_post($message.' '.$share_link)){
 					$share_result['twitter'] = TRUE;
@@ -93,8 +96,6 @@ class Share extends CI_Controller {
 			}
 
 			if($facebook_share){
-				$this->load->model('installed_apps_model','installed_apps');
-				$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
 				$app_name = $app['app_name'];
 				$this->load->library('facebook');
 				if($result = $this->facebook->post_profile($message, $share_link, $app_name)){
@@ -121,6 +122,7 @@ class Share extends CI_Controller {
 				);
 				if($app_install_id){
 					$audit_additional_data['app_install_id'] = $app_install_id;
+					$audit_additional_data['page_id'] = $app['page_id'];
 				}
 
 				$audit_result = $this->audit_lib->add_audit(
@@ -139,7 +141,13 @@ class Share extends CI_Controller {
 				}
 			
 				$this->load->library('achievement_lib');
-				$achievement_info = array('action_id'=> $share_action,'app_install_id'=>issetor($app_install_id, 0));
+				$achievement_info = array(
+					'action_id'=> $share_action,
+					'app_install_id'=>issetor($app_install_id, 0)
+				);
+				if(isset($app['page_id'])){
+					$achievement_info['page_id'] = $app['page_id'];
+				}
 
 				// if($campaign_id){
 				// 	$achievement_info['campaign_id'] = $campaign_id;
