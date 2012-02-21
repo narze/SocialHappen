@@ -107,7 +107,6 @@ class Share extends CI_Controller {
 
 			if(!$twitter_share && !$facebook_share){
 				$share_result['error'] = 'Error occured, please share again';
-				return;
 			}
 
 			$user = $this->socialhappen->get_user();

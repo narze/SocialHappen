@@ -324,7 +324,7 @@ onLoad = function(){
 						}
 					} 
 					if(!sh_canvas_config || !elem.hasClass('config')){
-						var iframe = $('<iframe src="'+elem.attr('href')+'/?tab=true'+'" allowtransparency="true" frameborder="0" sandbox="allow-same-origin allow-forms allow-scripts" style="width:100%;height:100%;min-height:680px;"></iframe>');
+						var iframe = $('<iframe src="'+elem.attr('href')+'/?tab=true'+'" allowtransparency="true" frameborder="0" sandbox="allow-same-origin allow-forms allow-scripts" style="width:100%;height:100%;min-height:720px;"></iframe>');
 						$('#app-content').html( '<div id="app-component-config"></div>' ).find('#app-component-config').append(iframe);
 						$('#app-component-config').prepend('<h2 class="setting-title"><span>'+ elem.attr('title') +'</span></h2>');
 					}

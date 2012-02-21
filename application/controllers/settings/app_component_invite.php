@@ -50,14 +50,15 @@ class App_component_invite extends CI_Controller {
 		if($campaign || $invite){
 			$do_update = TRUE;
 		}
-		if ($this->form_validation->run() == FALSE)
-		{
-			
-			$vars = array(
+
+		$vars = array(
 				'campaign_id' => $campaign_id,
 				'app_install_id' => $app_install_id,
-				'invite' => $invite
+				'invite' => $invite,
+				'invite_option_error' => FALSE
 			);
+		if ($this->form_validation->run() == FALSE)
+		{
 			$this->load->vars($vars);
 			$this->load->view('settings/app_component/invite');
 		}
@@ -81,6 +82,15 @@ class App_component_invite extends CI_Controller {
 					'text' =>  set_value('invite_text')
 				)
 			);
+
+			if($form_data['facebook_invite'] == FALSE && $form_data['email_invite'] == FALSE)
+			{
+				$vars['invite_option_error'] = TRUE;
+				$this->load->vars($vars);
+				$this->load->view('settings/app_component/invite');
+				return FALSE;
+			}
+
 			if($do_update){
 				if(!$invite_image = $this->socialhappen->replace_image('invite_image', $invite['message']['image'])){
 					$invite_image = $invite['message']['image'];
