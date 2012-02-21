@@ -287,9 +287,7 @@ $(function(){
 		$('.activity-box .tab').click(function(){
 			$(this).addClass('active').siblings().removeClass('active');
 			activitiy_pagination();
-		});
-
-		$('.activity-box .tab.active').click();
+		}).eq(0).click();
 	}
 
 	reward_box = function () {
