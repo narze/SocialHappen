@@ -1011,6 +1011,7 @@ class Tab extends CI_Controller {
 		$terms_and_conditions = issetor($page_component['reward']['terms_and_conditions']);
 
 		$this->load->vars(array(
+			'current_user' => $user,
 			'page_id' => $page_id,
 			'reward_item_id' => $reward_item_id,
 			'reward_item' => $reward_item,

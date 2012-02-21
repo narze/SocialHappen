@@ -2,8 +2,13 @@
 	<h2>Get this reward</h2>
 	<div class="reward-item">
 		<div class="section first">
-			<div class="item-image" style="background-image:url(<?php echo $reward_item['image'] ? $reward_item['image'] : base_url().'assets/images/default/reward.png'; ?>);">
-				<div class="remaining-time abs-b bold tc-blue1">Remaining Time <div class="end-time-countdown bold tc-grey5 fs14"><?php echo $reward_item['end_timestamp_local']; ?></div></div>
+			<div class="item-image <?php echo $reward_item['reward_status']; ?>" style="background-image:url(<?php echo $reward_item['image'] ? $reward_item['image'] : base_url().'assets/images/default/reward.png'; ?>);">
+				<div class="remaining-time abs-b bold tc-blue1"><?php 
+					if($reward_item['reward_status']=='soon') { ?>
+					Available in <div class="end-time-countdown bold tc-grey5 fs14"><?php echo $reward_item['start_timestamp_local']; ?></div><?php } 
+					else { ?>
+					Remaining Time <div class="end-time-countdown bold tc-grey5 fs14"><?php echo $reward_item['end_timestamp_local']; ?></div><?php } ?>
+				</div>
 			</div>
 			<div class="item-info">
 				<div>
@@ -12,12 +17,14 @@
 				</div>
 				<div class="box">
 					<p><span class="tc-green6 bold">Quanity: </span><?php echo number_format($reward_item['redeem']['amount_remain']).'/'.number_format($reward_item['redeem']['amount']);?></p>
-					<p><span class="tc-green6 bold">Value: </span><?php echo $reward_item['value']?></p>
+					<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']);?></p>
 				</div>
 				<div class="box">
 					<div class="tc-green6 bold">User who got this reward : </div><?php 
+					$user_got_this_reward = false;
 					if ($reward_item['user_list']) {
-						foreach ($reward_item['user_list'] as $user) { ?>
+						foreach ($reward_item['user_list'] as $user) { 
+							if($user['user_id'] == $current_user['user_id']) { $user_got_this_reward = true;} ?>
 						<a href="#<?php echo $user['user_id']; ?>" title="<?php echo $user['user_name']; ?>" class="user-thumb s25 inline-block mb10" style="background-image:url(<?php echo $user['user_image'] ? $user['user_image'] : base_url().'assets/images/default/user.png'; ?>);"></a><?php
 						}
 					} else { ?>
@@ -27,6 +34,10 @@
 			</div>
 		</div>
 	</div><?php 
+
+	if($user_got_this_reward) { ?>
+		<div class="notice warning">You have got this reward</div><?php 
+	}
 
 	if($reward_item['reward_status'] == 'active') 
 	{ ?>
@@ -77,7 +88,10 @@
 		</div><?php 
 	} 
 	else 
-	{ ?>
+	{
+		if($reward_item['redeem']['amount_remain'] == 0) { ?>
+			<div class="notice error">This reward is out of stock</div><?php
+		} ?>
 		<div class="hr mb20"></div>
 		<div class="ta-center mb10">
 			<a href="#" class="btn grey large ml5 cancel"><span>Close</span></a>

@@ -6,7 +6,11 @@
 <div class="reward-item <?php echo $reward_item['status']; ?>" data-item-id="<?php echo $reward_item_id;?>">
 	<div class="section first">
 		<div class="item-image <?php echo $reward_item['reward_status']; ?>" style="background-image:url(<?php echo $reward_item['image'] ? $reward_item['image'] : base_url().'assets/images/default/reward.png'; ?>);">
-			<div class="remaining-time abs-b bold tc-blue1">Remaining Time <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['end_date']; ?></span></div>
+			<div class="remaining-time abs-b bold tc-blue1"><?php
+				if($reward_item['reward_status']=='soon') { ?>
+				Available in <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['start_date']; ?></span></div><?php }
+				else { ?>
+				Remaining Time <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['end_date']; ?></span></div><?php } ?>
 		</div>
 		<ul class="item-info">
 			<li>
@@ -14,15 +18,15 @@
 				<div class="description"><?php echo nl2br($reward_item['description']);?></div>
 			</li>
 			<li class="box">
-				<p><span class="tc-green6 bold">Quanity: </span><?php echo $reward_item['redeem']['amount']?></p>
-				<p><span class="tc-green6 bold">Value: </span><?php echo $reward_item['value']?></p>
+				<p><span class="tc-green6 bold">Quanity: </span><?php echo number_format($reward_item['redeem']['amount']);?></p>
+				<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']);?></p>
 			</li>
 			<li class="box">
-				<p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo $reward_item['redeem']['point']?></span></p>
+				<p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo number_format($reward_item['redeem']['point']);?></span></p>
 			</li>
 			<li class="box">
-				<p><span class="tc-green6 bold">From :</span><span class="fr fs11"><?php echo date('j F Y, h.iA', $reward_item['start_timestamp']); ?></span></p>
-				<p><span class="tc-green6 bold">To :</span> <span class="fr fs11"><?php echo date('j F Y, h.iA', $reward_item['end_timestamp']); ?></span></p>
+				<p><span class="tc-green6 bold">From :</span><span class="fr fs11"><?php echo date('j F Y, h.iA',strtotime($reward_item['start_date'])); ?></span></p>
+				<p><span class="tc-green6 bold">To :</span> <span class="fr fs11"><?php echo date('j F Y, h.iA',strtotime($reward_item['end_date'])); ?></span></p>
 			</li>
 			<li class="box">
 				<div class="tc-green6 bold">Status : <span class="fs15 fr bold<?php echo $reward_item['status']=='draft' ? ' tc-grey5' : ' tc-green6'; ?>"><?php echo ucfirst($reward_item['status']); ?></span></div>
