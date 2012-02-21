@@ -758,6 +758,18 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result['redeem']['amount_remain'], 0, "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']);
 		$this->unit->run($result['user_list'][0]['count'], 3, "\$result['user_list'][0]['count']", $result['user_list'][0]['count']);
 	}
+
+	function get_facebook_app_tab_url_test(){
+		$app_install_id = 1;
+		$result = $this->tab_ctrl->get_facebook_app_tab_url($app_install_id);
+		$this->unit->run($result, 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_202663143123531', "\$result", $result);
+	}
+
+	function get_facebook_page_tab_url_test(){
+		$page_id = 1;
+		$result = $this->tab_ctrl->get_facebook_page_tab_url($page_id);
+		$this->unit->run($result, 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_108290455924296', "\$result", $result);
+	}
 }
 
 /* End of file tab_ctrl_test.php */

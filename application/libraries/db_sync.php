@@ -481,7 +481,7 @@ class DB_Sync {
 									'options' => NULL,
 								)
 							)),
-							'facebook_tab_url' => ''
+							'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_108290455924296'
 					),
 					array(
 						'page_id' => 2, 
