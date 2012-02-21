@@ -15,8 +15,7 @@ class Tab_ctrl {
 		if ($user_facebook_id){
 			$user = $this->CI->users->get_user_profile_by_user_facebook_id($user_facebook_id);
 		} else {
-			$result['error'] = 'No user_facebook_id specified';
-			return $result;
+			$user = NULL;
 		}
 		$user_id = $user['user_id'];
 

@@ -1462,7 +1462,7 @@ class DB_Sync {
 				'stat_app' => FALSE,
 				'stat_page' => TRUE,
 				'stat_campaign' => FALSE,
-				'format_string' => 'User {user:user_id} accepted page invite from {subject:user_id}',
+				'format_string' => 'User {user:user_id} accepted page invite from {user:subject}',
 				'score' => 1
 			),
 			array(
@@ -1472,7 +1472,7 @@ class DB_Sync {
 				'stat_app' => FALSE,
 				'stat_page' => FALSE,
 				'stat_campaign' => TRUE,
-				'format_string' => 'User {user:user_id} accepted campaign invite from {subject:user_id}',
+				'format_string' => 'User {user:user_id} accepted campaign invite from {user:subject}',
 				'score' => 1
 			),
 			array(

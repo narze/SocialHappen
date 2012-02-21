@@ -54,6 +54,7 @@ class Invite_component_lib {
 				)														
 			);
 		
+			$add_invite_audit = FALSE;
 			if($invite_exists){
 				$invite_key = $invite_exists['invite_key'];
 				if($invite_type==2){
@@ -64,6 +65,7 @@ class Invite_component_lib {
 					$this->_increment_invite_limit($invite_limit_criteria);
 					$result['data'] = array('invite_key' => $invite_key);
 					$result['success'] = TRUE;
+					$add_invite_audit = TRUE;
 				} else {
 				 	$result['error'] = 'Invalid invite type';
 				}
@@ -74,9 +76,22 @@ class Invite_component_lib {
 					$this->_increment_invite_limit($invite_limit_criteria);
 					$result['data'] = array('invite_key' => $invite_key);
 					$result['success'] = TRUE;
+					$add_invite_audit = TRUE;
 				} else {
 					$result['error'] = 'Cannot add invite';
 				}
+			}
+
+			if($add_invite_audit){
+				$this->CI->load->library('audit_lib');
+				$this->CI->audit_lib->audit_add(array(
+					'app_id' => $app_install['app_id'],
+					'app_install_id' => $app_install_id,
+					'campaign_id' => $campaign_id,
+					'action_id' => $this->CI->socialhappen->get_k('audit_action', 'User Invite'),
+					'user_id' => $user_id,
+					'page' => $page['page_id']
+				));
 			}
 		} else {
 			$result['error'] = 'Invite limited';
@@ -85,61 +100,6 @@ class Invite_component_lib {
 		// }
 		return $result;
     }
-	
-	/**
-	 * 
-	 * DEPRECATED : Separated into accept_invite_page_level and accept_invite_campaign_level
-	 * Accept invite and update invite status
-	 *
-	 */
-	public function accept_invite($invite_key, $target_facebook_id = NULL){
-		
-		$exist_check = $this->get_invite_by_invite_key($invite_key);
-		
-		if($exist_check){
-			
-			$data = $exist_check;
-			$data['invite_count'] = $data['invite_count'] + 1;
-			$data['timestamp'] = time();
-			
-			if($data['invite_type']==1){
-			//private
-			
-				if(!isset($data['accepted_target_facebook_id_list']))
-						$data['accepted_target_facebook_id_list'] = array();
-				
-				if(!in_array($target_facebook_id, $data['target_facebook_id_list'] ) ){
-					return array('error' => 'invalid target_facebook_id');
-				}else if (in_array($target_facebook_id, $data['accepted_target_facebook_id_list'])){
-					return array('error' => 'invite is accepted before');
-				}else{
-					array_push($data['accepted_target_facebook_id_list'], $target_facebook_id);
-				}
-				
-				
-			}else{
-			//public
-			
-				if(!isset($data['public_accepted_target_facebook_id']))
-						$data['public_accepted_target_facebook_id'] = array();
-						
-				if(in_array($target_facebook_id, $data['public_accepted_target_facebook_id'])){
-					return array('error' => 'you have accepted this invite before');
-				}else{
-					array_push($data['public_accepted_target_facebook_id'], $target_facebook_id);
-				}
-			}
-			
-			if($this->CI->invite_model->update_invite($invite_key, $data))
-				return $data;
-			else
-				return array('error' => 'accept invite failed');
-			
-		
-		}else
-			return array('error' => 'invite_key is incorrect');
-		
-	}
 	
 	/**
 	 * List invites of a user
@@ -274,38 +234,6 @@ class Invite_component_lib {
 			//return FALSE;
 			return array('error' => 'You are not invited by this key');
 		}
-	}
-
-	/**
-	 * DEPRECATED
-	 * Generate redirect url
-	 * @param $facebook_tab_url
-	 * @param $invite_key
-	 * @author Manassarn M.
-	 */
-	function generate_redirect_url($facebook_tab_url = NULL, $invite_key = NULL){
-		if(!$facebook_tab_url || !$invite_key){
-			return FALSE;
-		}
-		return $facebook_tab_url.'&app_data='.urlencode(json_encode(
-			array(
-				'sh_invite_key' => $invite_key
-			)
-		));
-	}
-
-	/**
-	 * DEPRECATED
-	 * Parse invite key from facebook's app_data
-	 * @param string $app_data
-	 * @author Manassarn M.
-	 */
-	function parse_invite_key_from_app_data($app_data_string = NULL){
-		if(!$app_data_string){
-			return FALSE;
-		}
-		$app_data = json_decode(urldecode($app_data_string));
-		return issetor($app_data->sh_invite_key);
 	}
 
 	function _accept_invite_level($level = NULL, $invite_key = NULL, $user_facebook_id = NULL){

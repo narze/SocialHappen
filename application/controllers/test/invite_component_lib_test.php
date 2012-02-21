@@ -123,6 +123,11 @@ class Invite_component_lib_test extends CI_Controller {
 		$criteria = array('campaign_id' => '1');
 		$result = $this->invite_component_lib->list_invite($criteria);
 		$this->unit->run(count($result), 2, 'list_invite', count($result));
+
+		$this->load->model('audit_model');
+		$result = $this->audit_model->list_recent_audit(2);
+		$this->unit->run($result[0]['action_id'], 113, "\$result[0]['action_id']", $result[0]['action_id']);
+		$this->unit->run($result[1]['action_id'], 113, "\$result[1]['action_id']", $result[1]['action_id']);
 	}
 	
 	function add_duplicate_invite_test(){
@@ -202,32 +207,6 @@ class Invite_component_lib_test extends CI_Controller {
 
 	function _generate_invite_key_test(){
 		
-	}
-	
-	function generate_redirect_url_test(){ //DEPRECATED
-		$facebook_tab_url = 'http://www.facebook.com/pages/SHBeta/135287989899131?sk=app_253512681338518';
-		$invite_key = 'rand0mh4shk3y';
-		$expected_url = 'http://www.facebook.com/pages/SHBeta/135287989899131?sk=app_253512681338518&app_data=';
-		$result = $this->invite_component_lib->generate_redirect_url($facebook_tab_url, $invite_key);
-		$in_pattern = strpos($result, $expected_url) === 0;
-		$this->unit->run($in_pattern, TRUE, 'generate_redirect_url', $result);
-
-		$app_data = substr($result, strlen('app_data=') + strpos($result,'app_data='));
-		//$app_data = ripped after '?app_data=' from $result
-		$app_data = json_decode(urldecode($app_data), TRUE);
-		$app_data = $app_data['sh_invite_key'];
-		$this->unit->run($invite_key === $app_data, TRUE, 'generate_redirect_url', $app_data);
-	}
-
-	function parse_invite_key_from_app_data_test(){ //DEPRECATED
-		$facebook_tab_url = 'http://www.facebook.com/pages/SHBeta/135287989899131?sk=app_253512681338518';
-		$invite_key = 'rand0mh4shk3y';
-
-		$redirect_url = $this->invite_component_lib->generate_redirect_url($facebook_tab_url, $invite_key);
-		$app_data_string = substr($redirect_url, strlen('app_data=') + strpos($redirect_url,'app_data='));
-
-		$result = $this->invite_component_lib->parse_invite_key_from_app_data($app_data_string);
-		$this->unit->run($result, $invite_key, 'parse_invite_key_from_app_data', $app_data_string.' --> '.$result);
 	}
 
 	function reserve_invite_test(){
