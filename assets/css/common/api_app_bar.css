@@ -247,6 +247,7 @@ position: relative;
 max-width: 150px;
 }
 #sh-bar .profile>div {
+width: 115px;
 cursor:pointer;
 padding-left: 35px;
 background:url(../../images/bg_fb/bg_droptop.png) 98% 7px no-repeat;
@@ -280,9 +281,12 @@ height:25px;
 #sh-bar .user-name {
 font-weight: bold;
 color: #FFF;
-min-width: 120px;
+width: 103px;
 font-size: 10px;
 margin-top: 4px;
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
 }
 
 #sh-bar .user-point {
@@ -522,21 +526,23 @@ div.popup-fb.signup-page div.connect {
 position:relative;
 margin: 15px 0;
 background-color:#f1f1f2;
-width:390px;
+padding:0 30px;
 overflow:hidden;
 }
 div.popup-fb.signup-page div.connect div.wrapper { 
 position:relative;
-left:37px;
-top:20px;
+margin-top:20px;
 height:95px;
+text-align:center;
 }
 div.popup-fb.signup-page div.connect div.wrapper div { 
-float:left;
+display:-moz-inline-stack;
+display:inline-block;
+zoom:1;
+*display:inline;
+vertical-align:top;
 }
 div.popup-fb.signup-page div.connect div.profile { 
-width:120px;
-text-align:center;
 position:relative;
 }
 div.popup-fb.signup-page div.connect div.profile img { 
@@ -545,13 +551,15 @@ width:50px;
 height:50px;
 }
 div.popup-fb.signup-page div.connect div.profile p.name { 
-font-size:12px;
-font-weight:bold;
-color:#38599c;
-display:block;
-width:120px;
+font-size: 12px;
+font-weight: bold;
+color: #38599C;
+display: block;
+width: 120px;
+max-height:32px;
+overflow: hidden;
 word-wrap: break-word;
-line-height: 30px;
+margin-top: 10px;
 }
 div.popup-fb.signup-page div.connect div.connect-arrow {
 background: url(../../images/bg_fb/bg_button_2.png) no-repeat -182px -38px;

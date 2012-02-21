@@ -7,7 +7,12 @@
 			<div class="item-overlay ta-center">
 				<a href="<?php echo base_url().'tab/redeem_reward/'.$page_id.'/'.$id;?>" class="btn green large view-reward-detail"><span>View more detail</span></a>
 			</div>
-			<div class="remaining-time abs-b bold tc-blue1">Remaining Time <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['end_timestamp_local']; ?></span></div>
+			<div class="remaining-time abs-b bold tc-blue1"><?php
+				if($reward_item['reward_status']=='soon') { ?>
+				Available in <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['start_timestamp_local']; ?></span><?php } 
+				else { ?>
+				Remaining Time <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['end_timestamp_local']; ?></span><?php } ?>
+			</div>
 		</div>
 		<ul class="item-info">
 			<li>
@@ -15,8 +20,8 @@
 				<div class="description"><?php echo nl2br($reward_item['description']);?></div>
 			</li>
 			<li class="box">
-				<p><span class="tc-green6 bold">Quanity: </span><?php echo $reward_item['redeem']['amount_remain'].'/'.$reward_item['redeem']['amount']?></p>
-				<p><span class="tc-green6 bold">Value: </span><?php echo $reward_item['value']?></p>
+				<p><span class="tc-green6 bold">Quanity: </span><?php echo number_format($reward_item['redeem']['amount_remain']).'/'.number_format($reward_item['redeem']['amount']);?></p>
+				<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']);?></p>
 			</li>
 			<li class="box">
 				<p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo number_format($reward_item['redeem']['point']); ?></span></p>
