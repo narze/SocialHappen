@@ -481,7 +481,7 @@ class DB_Sync {
 									'options' => NULL,
 								)
 							)),
-							'facebook_tab_url' => ''
+							'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_108290455924296'
 					),
 					array(
 						'page_id' => 2, 
@@ -548,7 +548,7 @@ class DB_Sync {
 					    'user_first_name' => 'Noom',
 					    'user_last_name' => 'Narze',
 					    'user_email' => 'noom@figabyte.com',
-					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',					    
+					    'user_image' => 'https://graph.facebook.com/713558190/picture',					    
 					    'user_facebook_id' => 713558190, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -563,7 +563,7 @@ class DB_Sync {
 					    'user_first_name' => 'Pop',
 					    'user_last_name' => 'Prachya',
 					    'user_email' => 'pop@figabyte.com',
-					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',	
+					    'user_image' => 'https://graph.facebook.com/637741627/picture',	
 					    'user_facebook_id' => 637741627, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -578,7 +578,7 @@ class DB_Sync {
 					    'user_first_name' => 'หลินปิง',
 					    'user_last_name' => 'จริงๆนะเออ',
 					    'user_email' => 'wachiraph.c@gmail.com',
-					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_image' => 'https://graph.facebook.com/631885465/picture',		
 					    'user_facebook_id' => 631885465, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -593,7 +593,7 @@ class DB_Sync {
 					    'user_first_name' => 'Metwara',
 					    'user_last_name' => 'Narksook',
 					    'user_email' => 'hybridknight@gmail.com',
-					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_image' => 'https://graph.facebook.com/755758746/picture',		
 					    'user_facebook_id' => 755758746, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -608,7 +608,7 @@ class DB_Sync {
 					    'user_first_name' => 'Charkrid',
 					    'user_last_name' => 'Thanhachartyothin',
 					    'user_email' => 'charkrid@figabyte.com',
-					    'user_image' => BASE_URL.'uploads/images/bd6d2267939eeec1a64b1b46bbf90e77_o.png',		
+					    'user_image' => 'https://graph.facebook.com/508840994/picture',		
 					    'user_facebook_id' => 508840994, 
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
@@ -1462,7 +1462,7 @@ class DB_Sync {
 				'stat_app' => FALSE,
 				'stat_page' => TRUE,
 				'stat_campaign' => FALSE,
-				'format_string' => 'User {user:user_id} accepted page invite from {subject:user_id}',
+				'format_string' => 'User {user:user_id} accepted page invite from {user:subject}',
 				'score' => 1
 			),
 			array(
@@ -1472,7 +1472,7 @@ class DB_Sync {
 				'stat_app' => FALSE,
 				'stat_page' => FALSE,
 				'stat_campaign' => TRUE,
-				'format_string' => 'User {user:user_id} accepted campaign invite from {subject:user_id}',
+				'format_string' => 'User {user:user_id} accepted campaign invite from {user:subject}',
 				'score' => 1
 			),
 			array(

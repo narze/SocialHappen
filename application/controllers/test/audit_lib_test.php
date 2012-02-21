@@ -623,14 +623,54 @@ class audit_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 5, 'list recent audit no criteria', 'count: ' . count($result) . '<pre>' /*. print_r($result, TRUE)*/ . '</pre>');
 	}
 
-	function end_test(){
-		
-		// $this->audit->drop_collection();
-		// $this->audit_action->drop_collection();
-		// $this->stat_page->drop_collection();
-		// $this->stat_app->drop_collection();
-		// $this->stat_campaign->drop_collection();
-		
+	function _get_names_for_test(){
+		$app_install_id = 1;
+		$user_id = 1;
+		$this->load->model('installed_apps_model');
+		$app = $this->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
+		$this->app_name = $app['app_name'];
+		$this->load->model('user_model');
+		$user = $this->user_model->get_user_profile_by_user_id($user_id);
+		$this->user_name = $user['user_first_name'].' '.$user['user_last_name'];
+
+	}
+
+	function translate_format_string_test(){
+		$base_url = base_url();
+		$url_prefix = '';
+		$use_backend_links = TRUE;
+		$use_frontend_links = FALSE;
+		$app_id = 1;
+		$app_install_id = 1;
+		$user_id = 1;
+		$audit = compact('app_id', 'app_install_id', 'user_id');
+		$format_string = '1{app:app_id}';
+		$format_string .= '2{app_install:app_install_id}';
+		$format_string .= '3{user:user_id}';
+		//Too lazy to do it now :P
+		// $format_string .= '4{campaign:campaign_id}';
+		// $format_string .= '5{page:page_id}';
+		// $format_string .= '6{company:company_id}';
+		// $format_string .= '7{package:package_id}';
+		// $format_string .= '8{number:app_id}';
+		// $format_string .= '9{string:app_install_id}';
+
+		$expected = '1<span class="type_app">'.$this->app_name.'</span>';
+		$expected .= '2<span class="type_app_install"><a href="'.$base_url.
+			$url_prefix.'app/'.$app_install_id.'">'.$this->app_name.'</a></span>';
+		$expected .= '3<span class="type_user"><a href="'.base_url().$url_prefix
+			.'user/app/'.$user_id.'/'.$app_id.'">'.$this->user_name.'</a></span>';
+		$result = $this->audit_lib->translate_format_string($format_string, $audit, $use_backend_links);
+		$this->unit->run($result, $expected, "\$result", $result);
+
+		$url_prefix = 'r/';
+		$expected = '1<span class="type_app">'.$this->app_name.'</span>';
+		$expected .= '2<span class="type_app_install"><a href="'.$base_url.
+			$url_prefix.'app/'.$app_install_id.'">'.$this->app_name.'</a></span>';
+		$expected .= '3<span class="type_user"><a href="'.base_url().$url_prefix
+			.'user/app/'.$user_id.'/'.$app_id.'">'.$this->user_name.'</a></span>';
+		$result = $this->audit_lib->translate_format_string($format_string, $audit, $use_frontend_links);
+		$this->unit->run($result, $expected, "\$result", $result);
 	}
 }
 /* End of file audit_lib_test.php */

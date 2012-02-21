@@ -353,7 +353,8 @@ class Audit_lib
 				//echo '</pre>';
 				$result[$i]['message'] = $this->
 						translate_format_string($result_action['format_string'],
-												$result[$i]);
+												$result[$i],
+												($action_id <= 100));
 			}else{
 				$result[$i]['message'] = '[empty format audit]';
 			}
@@ -361,8 +362,9 @@ class Audit_lib
 		return $result;
 	}
 	
-	function transate_type($type, $value, $audit){
+	function transate_type($type, $value, $audit, $use_backend_link){
 		$value = isset($audit[$value]) ? $audit[$value] : $value;
+		$url_prefix = $use_backend_link ? '' : 'r/';
 		switch ($type) {
 			case 'app':
 				$this->CI->load->model('app_model');
@@ -374,49 +376,49 @@ class Audit_lib
 				$this->CI->load->model('Installed_apps_model','app_install');
 				$result = $this->CI->app_install->get_app_profile_by_app_install_id($value);
 				$app_name = isset($result['app_name']) ? $result['app_name'] : $value;
-				$format_value = '<span class="type_app_install"><a href="'.base_url()
+				$format_value = '<span class="type_app_install"><a href="'.base_url().$url_prefix
 						   		.'app/'.$value.'">'.$app_name.'</a></span>';
 				break;
 			case 'user':
 				$this->CI->load->model('User_model','user');
 				$result = $this->CI->user->get_user_profile_by_user_id($value);
 				$name = isset($result['user_first_name']) && isset($result['user_last_name']) > 0 ? $result['user_first_name'].' '.$result['user_last_name'] : $value;
-				$format_value = '<span class="type_user"><a href="'.base_url()
+				$format_value = '<span class="type_user"><a href="'.base_url().$url_prefix
 						   		.'user/app/'.$value.'/'.$audit['app_id'].'">'.$name.'</a></span>';
-				break;
+				break; //TODO : this link is broken, should use app_install_id or not use it at all
 			case 'campaign':
 				$this->CI->load->model('Campaign_model','campaign');
 				$result = $this->CI->campaign->get_campaign_profile_by_campaign_id($value);
 				$campaign_name = isset($result['campaign_name']) ? $result['campaign_name'] : $value;
-				$format_value = '<span class="type_campaign"><a href="'.base_url()
+				$format_value = '<span class="type_campaign"><a href="'.base_url().$url_prefix
 						   		.'campaign/'.$value.'">'.$campaign_name.'</a></span>';
 				break;
 			case 'page':
 				$this->CI->load->model('Page_model','page');
 				$result = $this->CI->page->get_page_profile_by_page_id($value);
 				$page_name = isset($result['page_name']) ? $result['page_name'] : $value;
-				$format_value = '<span class="type_page"><a href="'.base_url()
+				$format_value = '<span class="type_page"><a href="'.base_url().$url_prefix
 						   		.'page/'.$value.'">'.$page_name.'</a></span>';
 				break;
 			case 'company':
 				$this->CI->load->model('Company_model','company');
 				$result = $this->CI->company->get_company_profile_by_company_id($value);
 				$company_name = isset($result['company_name']) ? $result['company_name'] : $value;
-				$format_value = '<span class="type_company"><a href="'.base_url()
+				$format_value = '<span class="type_company"><a href="'.base_url().$url_prefix
 						   		.'company/'.$value.'">'.$company_name.'</a></span>';
 				break;
 			case 'package':
 				$this->CI->load->model('Package_model','package');
 				$result = $this->CI->package->get_package_by_package_id($value);
 				$package_name = isset($result['package_name']) ? $result['package_name'] : $value;
-				$format_value = '<span class="type_package"><a href="'.base_url()
+				$format_value = '<span class="type_package"><a href="'.base_url().$url_prefix
 						   		.'package/'.$value.'">'.$package_name.'</a></span>';
 				break;
 			case 'number':
-				$format_value = $value;
+				$format_value = (int) $value;
 				break;
 			case 'string':
-				$format_value = $value;
+				$format_value = (string) $value;
 				break;
 			default:
 				$format_value = $value;
@@ -426,7 +428,7 @@ class Audit_lib
 		return $format_value;
 	}
 	
-	function translate_format_string($format_string, $audit){
+	function translate_format_string($format_string, $audit, $use_backend_links = FALSE){
 		
 		preg_match_all('/(?P<type>\w+):(?P<variable>\w+)/', $format_string, $matches);
 		/*
@@ -441,7 +443,7 @@ class Audit_lib
 		for($i = 0; $i < count($type); $i++){
 			//$format_type = $this->transate_type($type[$i], $value[$i], $audit);
 			if(isset($audit[$value[$i]])){
-				$format_value = $this->transate_type($type[$i], $value[$i], $audit);
+				$format_value = $this->transate_type($type[$i], $value[$i], $audit, $use_backend_links);
 				//$format_value = str_replace('{'.$type[$i].'}', issetor($audit[$value[$i]]), $format_type);
 			}else{
 				$format_value = $value[$i];

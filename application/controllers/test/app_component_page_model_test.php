@@ -67,6 +67,18 @@ class App_component_page_model_test extends CI_Controller {
 		$this->unit->run($result, TRUE, "\$result", $result);
 	}
 
+	function set_item_currency_test(){
+		$page_id = page_id;
+		$this->item_currency = 'THB';
+		$result = $this->app_component_page->set_item_currency($page_id, $this->item_currency);
+		$this->unit->run($result, TRUE, "\$result", $result);
+
+		$page_id = page_id;
+		$this->item_currency = 'USD';
+		$result = $this->app_component_page->set_item_currency($page_id, $this->item_currency);
+		$this->unit->run($result, TRUE, "\$result", $result);
+	}
+
 	function get_by_page_id_test(){
 		$page_id = page_id;
 		$result = $this->app_component_page->get_by_page_id($page_id);
@@ -74,6 +86,7 @@ class App_component_page_model_test extends CI_Controller {
 		$this->unit->run($result['page_id'], page_id, "\$result['page_id']", $result['page_id']);
 		$this->unit->run($result['reward'], 'is_array', "\$result['reward']", $result['reward']);
 		$this->unit->run($result['reward']['terms_and_conditions'], $this->terms_and_conditions, "\$result['reward']['terms_and_conditions']", $result['reward']['terms_and_conditions']);
+		$this->unit->run($result['reward']['item_currency'], $this->item_currency, "\$result['reward']['item_currency']", $result['reward']['terms_and_conditions']);
 	}
 
 	function update_classes_by_page_id_test(){

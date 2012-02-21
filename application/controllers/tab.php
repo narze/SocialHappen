@@ -644,12 +644,12 @@ class Tab extends CI_Controller {
 		$this->load->model('user_model','users');
 		//if is sh user redirect popup to "regged"
 		if($this->users->get_user_profile_by_user_facebook_id($facebook_user['id'])){
-			echo "Logged in Socialhappen";
-			// if($app_install_id){
-			// 	$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
-			// } else if ($page_id){
-			// 	$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
-			// }
+ 			echo "Logged in Socialhappen";
+			if($app_install_id){
+				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_app($app_install_id, FALSE, TRUE)));
+			} else if ($page_id){
+				$this->load->view('common/redirect',array('redirect_parent' => $this->facebook_page($page_id, FALSE, TRUE)));
+			}
 		} else {
 			$this->load->helper('form');
 			$user_profile_picture = $facebook_user['id'] ? $this->facebook->get_profile_picture($facebook_user['id']) : base_url().'assets/images/default/user.png';
@@ -856,16 +856,7 @@ class Tab extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function facebook_page($page_id = NULL, $force_update = FALSE, $return = FALSE){
-		$this->load->model('page_model','page');
-		if(!$page = $this->page->get_page_profile_by_page_id($page_id)){
-			return FALSE;
-		}
-		$facebook_tab_url = $page['facebook_tab_url'];
-		if(!$facebook_tab_url || $force_update){
-			$facebook_tab_url = $this->facebook->get_facebook_tab_url($this->config->item('facebook_app_id'), $page['facebook_page_id']);
-			
-			$this->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
-		}
+		$facebook_tab_url = $this->tab_ctrl->get_facebook_page_tab_url($page_id, $force_update);
 		if($return){
 			return $facebook_tab_url;
 		}
@@ -880,18 +871,7 @@ class Tab extends CI_Controller {
 	 * @author Manassarn M.
 	 */
 	function facebook_app($app_install_id = NULL, $force_update = FALSE, $return = FALSE){
-		$this->load->model('installed_apps_model','installed_app');
-		if(!$app = $this->installed_app->get_app_profile_by_app_install_id($app_install_id)){
-			return FALSE;
-		}
-		$facebook_tab_url = $app['facebook_tab_url'];
-		if(!$facebook_tab_url || $force_update){
-			$this->load->model('page_model','page');
-			$page = $this->page->get_page_profile_by_page_id($app['page_id']);
-			$facebook_tab_url = $this->facebook->get_facebook_tab_url($app['app_facebook_api_key'], $page['facebook_page_id']);
-			
-			$this->installed_app->update_facebook_tab_url_by_app_install_id($app_install_id, $facebook_tab_url);
-		}
+		$facebook_tab_url = $this->tab_ctrl->get_facebook_app_tab_url($app_install_id, $force_update);
 		if($return){
 			return $facebook_tab_url;
 		}
