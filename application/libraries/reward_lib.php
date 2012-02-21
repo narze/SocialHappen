@@ -103,23 +103,28 @@ class Reward_lib
 		if($reward_item['redeem']['amount_remain'] == 0){
 			return FALSE;
 		}
-		$this->CI->load->library('app_component_lib');
-		if(!$this->CI->app_component_lib->redeem_page_score($page_id, $user['user_id'], $reward_item['redeem']['point'])){
-			return FALSE;
-		}
 		foreach($reward_item['user_list'] as $rewarded_user){
 			if($rewarded_user['user_id'] == $user['user_id']){
+				if($reward_item['redeem']['once']){ //Cannot redeem again if reward is once redeemable
+					return FALSE;
+				}
 				$rewarded_user['count'] += 1;
 				$user_data = $rewarded_user;
 				break;
 			}
 		}
+		$this->CI->load->library('app_component_lib');
+		if(!$this->CI->app_component_lib->redeem_page_score($page_id, $user['user_id'], $reward_item['redeem']['point'])){
+			return FALSE;
+		}
+		
 		$input = array(
 			'type' => 'redeem',
 			'redeem' => array(
 				'point' => $reward_item['redeem']['point'],
 				'amount' => $reward_item['redeem']['amount'],
-				'amount_remain' => $reward_item['redeem']['amount_remain'] - 1
+				'amount_remain' => $reward_item['redeem']['amount_remain'] - 1,
+				'once' => $reward_item['redeem']['once']
 			)
 		);
 		if(isset($user_data)){

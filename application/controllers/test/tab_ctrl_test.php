@@ -472,7 +472,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$type = 'redeem';
 		$redeem = array(
 			'point' => 20,
-			'amount' => 3
+			'amount' => 3,
+			'once' => 1
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
@@ -617,6 +618,7 @@ class Tab_ctrl_test extends CI_Controller {
 				'point' =>3,
 				'amount' =>4,
 				'amount_remain' =>0,
+				'once' => 0
 			)
 		);
 		$result = $this->reward_item->update($this->reward_item_2, $input); // expired & no_more = expired
@@ -628,6 +630,7 @@ class Tab_ctrl_test extends CI_Controller {
 				'point' =>3,
 				'amount' =>4,
 				'amount_remain' =>0,
+				'once' => 0
 			)
 			);
 		$result = $this->reward_item->update($this->reward_item_5, $input); // no_more
@@ -655,9 +658,10 @@ class Tab_ctrl_test extends CI_Controller {
 				'point' =>20,
 				'amount' => 5,
 				'amount_remain' =>5,
+				'once' => 0
 			)
 		);
-		$result = $this->reward_item->update($this->reward_item_2, $input); // expired & no_more = expired
+		$result = $this->reward_item->update($this->reward_item_2, $input);
 		$this->unit->run($result, TRUE, "\$result", $result);
 	}
 
@@ -669,6 +673,29 @@ class Tab_ctrl_test extends CI_Controller {
 		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, TRUE, "\$result", $result); //100-20
 
+		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$this->unit->run($result, FALSE, "\$result", $result); //can redeem once
+	}
+
+	function _update_reward_4_test(){
+		$input = array(
+			'type' => 'redeem',
+			'redeem' => array(
+				'point' => 20,
+				'amount' => 3,
+				'amount_remain' =>2,
+				'once' => 0
+			)
+		);
+		$result = $this->reward_item->update($this->reward_item_1, $input); // not once = can redeem more
+		$this->unit->run($result, TRUE, "\$result", $result);
+	}
+
+	function redeem_reward_confirm_2_test(){
+
+		$page_id = Page_id;
+		$reward_item_id = $this->reward_item_1;
+		$user_facebook_id = User_facebook_id;
 		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, TRUE, "\$result", $result); //80-20
 		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
