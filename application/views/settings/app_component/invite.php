@@ -5,8 +5,10 @@
         <div class="notice success">error</div><?php
 }
 $attributes = array('class' => 'component-invite-form', 'id' => '');
-echo form_open_multipart('settings/app_component/invite/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
-
+echo form_open_multipart('settings/app_component/invite/'.$app_install_id.'/'.$campaign_id, $attributes);
+if($invite_option_error) { ?>
+<div class="notice error">Please select at least one invite option</div>
+<?php } ?>
 <ul class="on-off">
 <li>
 	<label for="facebook">Facebook Invite :</label>

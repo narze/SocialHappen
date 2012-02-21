@@ -54,11 +54,21 @@ class Invite extends CI_Controller {
 	function invite_share($app_install_id = NULL){
 		$share_message = $this->input->post('invite_message');
 		$invite_link = $this->input->post('invite_link');
+
+		$this->load->library('campaign_lib');
+		$current_campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
+
+		$this->load->model('app_component_model','app_component');
+		$campaign = $this->app_component->get_by_campaign_id($current_campaign['campaign_id']);
+
+		$invite = $campaign['invite'];
 		if($user = $this->socialhappen->get_user()){
 			$this->load->vars(array(
 				'user' => $user,
 				'twitter_checked' => !empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret']),
 				'facebook_checked' => TRUE,
+				'email_checked' => TRUE,
+				'invite' => $invite,
 				'share_message' => $share_message,
 				'share_link' => $invite_link,
 				'app_install_id' => $app_install_id 
@@ -93,7 +103,7 @@ class Invite extends CI_Controller {
 
 			if($twitter_share){
 				if($result = $this->sharebutton_lib->twitter_post($message.' '.$share_link)){
-					echo '<div>Shared twitter</div>';
+					$share_result['twitter'] = TRUE;
 				}
 			}
 
@@ -103,14 +113,15 @@ class Invite extends CI_Controller {
 				$app_name = $app['app_name'];
 				$this->load->library('facebook');
 				if($result = $this->facebook->post_profile($message, $share_link, $app_name)){
-					echo '<div>Shared facebook</div>';
+					$share_result['facebook'] = TRUE;
 				}
 			}
 
 			if(!$twitter_share && !$facebook_share){
-				echo 'Error occured, please share again';
-				return;
+				$share_result['error'] = 'Error occured, please share again';
 			}
+
+			$this->load->view('invite/share', array('share_result'=>$share_result));
 		}
 	}
 

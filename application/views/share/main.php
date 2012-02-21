@@ -32,11 +32,15 @@
 			<p>
 				<?php echo form_error('twitter'); ?>
 				<?php echo form_error('facebook'); ?>
+				<?php if($sharebutton['twitter_button']) { ?>
 				<input type="checkbox" id="twitter" name="twitter" value="1" class="cb-share-twitter" <?php echo set_checkbox('twitter', '1', $twitter_checked); ?>> 
 				<label for="twitter">Twitter</label>
+				<?php } ?>
+				<?php if($sharebutton['facebook_button']) { ?>
 				<input type="checkbox" id="facebook" name="facebook" value="1" class="cb-share-facebook" <?php echo set_checkbox('facebook', '1', $facebook_checked); ?>> 		   
 				<label for="facebook">Facebook</label>
-			</p> 
+				<?php } ?>
+			</p>
 
 			<div style="text-align:right;height:50px">
 				<input type="submit" name="submit-form" value="Share" style="display:none">

@@ -5,7 +5,10 @@
         <div class="notice success">error</div><?php
 }
 $attributes = array('class' => 'component-sharebutton-form', 'id' => '');
-echo form_open_multipart('settings/app_component/sharebutton/'.$app_install_id.'/'.$campaign_id, $attributes); ?>
+echo form_open_multipart('settings/app_component/sharebutton/'.$app_install_id.'/'.$campaign_id, $attributes);
+if($share_option_error) { ?>
+<div class="notice error">Please select at least one share option</div>
+<?php } ?>
 <ul class="on-off">
 <li>
 	<label for="share_on_facebook">Facebook Share : </label>
