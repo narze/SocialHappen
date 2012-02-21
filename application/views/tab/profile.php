@@ -94,8 +94,8 @@
 					<p class="tab-name">Recent Activity</p>
 					<span class="fr">
 							<a class="tab" data-filter="">All</a>
-							<a class="tab" data-filter="me_app">Application</a>
-							<a class="tab" data-filter="me_campaign">Campaign</a>
+							<a class="tab" data-filter="me-app">Application</a>
+							<a class="tab" data-filter="me-campaign">Campaign</a>
 							<a class="tab active" data-filter="me">Me</a>
 					</span>
 					<p class="fr p10">Display:</p>

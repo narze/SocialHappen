@@ -26,6 +26,7 @@ class Share extends CI_Controller {
 						'user' => $user,
 						'twitter_checked' => !empty($user['user_twitter_access_token']) && !empty($user['user_twitter_access_token_secret']),
 						'facebook_checked' => TRUE,
+						'sharebutton' => $sharebutton,
 						'share_message' => $share_message,
 						'share_link' => $share_link,
 						'app_install_id' => $app_install_id,

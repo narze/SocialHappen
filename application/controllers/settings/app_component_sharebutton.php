@@ -49,13 +49,16 @@ class App_component_sharebutton extends CI_Controller {
 		if($campaign || $sharebutton){
 			$do_update = TRUE;
 		}
-		if ($this->form_validation->run() == FALSE)
-		{
-			$vars = array(
+
+		$vars = array(
 				'campaign_id' => $campaign_id,
 				'app_install_id' => $app_install_id,
-				'sharebutton' => $sharebutton
+				'sharebutton' => $sharebutton,
+				'share_option_error' => FALSE
 			);
+
+		if ($this->form_validation->run() == FALSE)
+		{
 			$this->load->vars($vars);
 			$this->load->view('settings/app_component/sharebutton');
 		}
@@ -76,6 +79,13 @@ class App_component_sharebutton extends CI_Controller {
 					'text' => set_value('share_description')
 				)
 			);
+
+			if($form_data['facebook_button'] == FALSE && $form_data['twitter_button'] == FALSE) {
+				$vars['share_option_error'] = TRUE;
+				$this->load->vars($vars);
+				$this->load->view('settings/app_component/sharebutton');
+				return FALSE;
+			}
 			if($do_update){
 				if(!$share_image = $this->socialhappen->replace_image('share_image', $sharebutton['message']['image'])){
 					$share_image = $sharebutton['message']['image'];
