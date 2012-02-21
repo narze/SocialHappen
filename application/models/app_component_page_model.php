@@ -213,7 +213,17 @@ class App_component_page_model extends CI_Model {
    * @author Manassarn M.
    */
   function set_terms_and_conditions($page_id = NULL, $terms_and_conditions = NULL){
-    $input = array('$set' => array('reward'=>array('terms_and_conditions' => $terms_and_conditions)));
+    $input = array('$set' => array('reward.terms_and_conditions' => $terms_and_conditions));
+    return $this->_update($page_id, $input);
+  }
+  /**
+   * Set page reward item currency
+   * @param $page_id
+   * @param $reward_item_currency
+   * @author Manassarn M.
+   */
+  function set_item_currency($page_id = NULL, $item_currency = NULL){
+    $input = array('$set' => array('reward.item_currency' => $item_currency));
     return $this->_update($page_id, $input);
   }
 }
