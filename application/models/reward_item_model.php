@@ -135,6 +135,8 @@
 			if(!isset($input['redeem']['point']) || !isset($input['redeem']['amount'])){
 				return FALSE;
 			}
+			$input['redeem']['point'] = (int) $input['redeem']['point'];
+			$input['redeem']['amount'] = (int) $input['redeem']['amount'];
 			$input['redeem']['amount_remain'] = $input['redeem']['amount'];
 		} else if ($input_type === 'random'){
 			if(!isset($input['random']['amount'])){
@@ -145,6 +147,7 @@
 				return FALSE;
 			}
 		}
+		$input['value'] = (int) $input['value'];
 		$input['criteria_id'] = (int) $input['criteria_id'];
 		$input['user_list'] = array();
 		$input['description'] = issetor($input['description']);
@@ -197,12 +200,12 @@
 				if(!isset($input[$type]['point']) || !isset($input[$type]['amount']) || !isset($input[$type]['amount_remain'])){
 					return FALSE;
 				}
-				$update['$set'][$type]['point'] = $input[$type]['point'];
-				$update['$set'][$type]['amount'] = $input[$type]['amount'];
+				$update['$set'][$type]['point'] = (int) $input[$type]['point'];
+				$update['$set'][$type]['amount'] = (int) $input[$type]['amount'];
 				if($input[$type]['amount_remain'] > $input[$type]['amount']){
 					$input[$type]['amount_remain'] = $input[$type]['amount'];
 				}
-				$update['$set'][$type]['amount_remain'] = $input[$type]['amount_remain'];
+				$update['$set'][$type]['amount_remain'] = (int) $input[$type]['amount_remain'];
 				$update['$unset'] = array('random' => 1, 'top_score' => 1);
 			} else if ($type === 'random'){
 				if(!isset($input['random']['amount'])){
@@ -229,7 +232,7 @@
 			if(!$input['value']){
 				return FALSE;
 			}
-			$update['$set']['value'] = $input['value'];
+			$update['$set']['value'] = (int) $input['value'];
 		}
 		if(isset($input['description'])){
 			$update['$set']['description'] = $input['description'];
