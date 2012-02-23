@@ -191,7 +191,7 @@ $(function(){
 		badge_pagination();
 	}
 
-	trigger_timeago = function (argument) {
+	trigger_timeago = function () {
 		$.each( $('.timeago'), function(index, span) { 
 			$('.timeago').eq(index).text($.timeago(new Date(parseInt( $(span).text() , 10) * 1000)));
 		});
@@ -345,6 +345,7 @@ $(function(){
 				
 			$('.confirm-get-this-reward').click(function() {
 				if($(this).hasClass('inactive')) return false;
+				$(this).removeClass('green').addClass('inactive').find('span').text('Loading...');
 				$.fancybox({
 					href: $(this).attr('href'),
 					onComplete: redeem_success

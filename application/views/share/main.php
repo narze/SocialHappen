@@ -4,6 +4,11 @@
 	var base_url = '<?php echo base_url();?>';
 	var user_id = '<?php echo $user['user_id'];?>';
 	var twitter_enable = '<?php echo $twitter_checked ? 1 : 0;?>';
+	$(document).ready(function () {
+		$('.sh-sharebutton').click(function(){
+			$(this).hide().after('<span>Loading...</span>');
+		});
+	});
 </script>
 <script type="text/javascript" src="<?php echo base_url().'assets/js/share/main.js';?>"></script>
 <body style="min-height:500px">
