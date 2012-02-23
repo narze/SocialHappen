@@ -184,7 +184,7 @@ class SocialHappen{
 	 */
 	function get_user_id(){
 		if($this->CI->session->userdata('logged_in') == TRUE){
-			return $this->CI->session->userdata('user_id');
+			return (int) $this->CI->session->userdata('user_id');
 		} else {
 			return FALSE;
 		}
