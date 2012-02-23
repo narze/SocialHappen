@@ -10,7 +10,7 @@
 		endforeach; 
 	endif; ?>
 </script>
-<script src="<?php echo base_url().'assets/js/api/bar.js'; ?>" type="text/javascript"></script>
+<?php $this->load->view('api/bar.js.php'); ?>
 <span class="XD" style="position: absolute; top: -10000px; height:0; width:0"><iframe id="xd_sh" frameborder="0" height="100px" width="100px" scrolling="no" marginheight="0" marginwidth="0" src="<?php echo base_url().'xd';?>"></iframe></span>
 <script>
 	iframe_src =  document.getElementById("xd_sh").src + '#' + encodeURIComponent(document.location.href);

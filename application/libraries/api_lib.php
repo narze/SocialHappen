@@ -970,7 +970,7 @@ class Api_Lib {
 	 *	@param app_install_secret_key string install secret key of an app
 	 *	@param user_facebook_id string facebook id of a user
 	 *	@param user_id int SH id of a user
-	 
+	 *
 	 *	@return setting template's assets
 	 *	@author Weerapat P.
 	 *

@@ -1166,6 +1166,40 @@ class Tab extends CI_Controller {
 		}
 		echo json_encode($return);
 	}
+
+	function json_get_setting_template($app_install_id){
+		$user_id = $this->input->get('user_id', TRUE);
+		$this->load->model('Installed_apps_model', 'app');
+		$app = $this->app->get_app_profile_by_app_install_id($app_install_id);
+		
+		$data = array(
+			'app_install_id' => $app_install_id,
+			'page_id' => $app['page_id'],
+			'user_id' => $user_id
+		);
+		
+		$response = array('status' => 'OK');
+		$response['html'] = $this->socialhappen->get_setting_template($data);
+		echo json_encode($response);
+	}
+
+	function json_get_get_started($app_install_id){
+		$user_id = $this->input->get('user_id', TRUE);
+		$this->load->model('Installed_apps_model', 'app');
+		$app = $this->app->get_app_profile_by_app_install_id($app_install_id);
+		
+		$data = array(
+			'app_install_id' => $app_install_id,
+			'page_id' => $app['page_id'],
+			'user_id' => $user_id,
+			// 'user_facebook_id' => $user_facebook_id,
+			'view' => 'app_get_started'
+		);
+		
+		$response = array('status' => 'OK');
+		$response['html'] = $this->socialhappen->get_setting_template($data);
+		echo json_encode($response);
+	}
 }
 /* End of file tab.php */
 /* Location: ./application/controllers/tab.php */
