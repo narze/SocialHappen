@@ -1392,22 +1392,28 @@ class Backend extends CI_Controller {
 	}
 
 	//TODO : prettify
-	function change_page_member_limit($page_id = NULL, $member_limit = NULL){
-		if(!isset($member_limit)){
-			echo 'please specify member limit behind page_id in url';
-			return;
-		} else if(!is_numeric($member_limit)){
-			echo 'please input integer';
-			return;
-		} else if($page_id){
-			$this->load->model('page_model');
-			if($result = $this->page_model->update_page_profile_by_page_id($page_id, array('page_member_limit' => (int) $member_limit))){
+	function change_page_member_limit($page_id = NULL){
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('page_member_limit', 'Page Member limit', 'required|trim|xss_clean|is_numeric');
+			
+		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$this->load->vars(array('page_id' => $page_id, 'page' => $page));
+		if ($this->form_validation->run() == FALSE) 
+		{
+			$this->load->view('backend_views/page_member_limit');
+		}
+		else 
+		{
+			$form_data = array(
+		       	'page_member_limit' => (int) set_value('page_member_limit')
+			);
+			if($result = $this->page_model->update_page_profile_by_page_id($page_id, $form_data)){
 				redirect('backend/page/'.$page_id.'#success');
 			} else {
 				redirect('backend/page/'.$page_id.'#failed');
 			}
-		} else {
-			redirect('backend/company');
 		}
 	}
 
