@@ -364,15 +364,19 @@ class Tab_ctrl {
 			$result['error'] = 'Page not found';
 		} else {
 			$this->CI->load->model('page_user_data_model');
-			$user_page_scores = array();
+			$user_page_scores = $page_score_for_sorting = array();
 			$page_users = $this->CI->page_user_data_model->get_page_users_by_page_id($page_id);
 			foreach($page_users as $user){
 				$page_user_id = $user['user_id'];
+				$page_score = $this->get_page_score(NULL, $page_id, $page_user_id);
+				$page_score_for_sorting[] = $page_score;
 				$user_page_scores[] = array(
 					'user_id' => $page_user_id,
-					'page_score' => $this->get_page_score(NULL, $page_id, $page_user_id)
+					'page_score' => $page_score
 				);
 			}
+			//sorting
+			array_multisort($page_score_for_sorting, SORT_DESC, SORT_NUMERIC, $user_page_scores);
 			$result['data'] = $user_page_scores;
 			$result['count'] = count($page_users);
 			$result['success'] = TRUE;
@@ -387,15 +391,18 @@ class Tab_ctrl {
 			$result['error'] = 'Page not found';
 		} else {
 			$this->CI->load->model('user_campaigns_model');
-			$user_campaign_scores = array();
+			$user_campaign_scores = $campaign_score_for_sorting = array();
 			$campaign_users = $this->CI->user_campaigns_model->get_campaign_users_by_campaign_id($campaign_id);
 			foreach($campaign_users as $user){
 				$campaign_user_id = $user['user_id'];
+				$campaign_score = $this->get_campaign_score(NULL, $page_id, $campaign_id, $campaign_user_id);
+				$campaign_score_for_sorting[] = $campaign_score;
 				$user_campaign_scores[] = array(
 					'user_id' => $campaign_user_id,
-					'campaign_score' => $this->get_campaign_score(NULL, $page_id, $campaign_id, $campaign_user_id)
+					'campaign_score' => $campaign_score
 				);
 			}
+			array_multisort($campaign_score_for_sorting, SORT_DESC, SORT_NUMERIC, $user_campaign_scores);
 			$result['data'] = $user_campaign_scores;
 			$result['count'] = count($campaign_users);
 			$result['success'] = TRUE;
@@ -431,12 +438,14 @@ class Tab_ctrl {
 					}
 				}
 			}
+			$app_score_for_sorting = array();
 			foreach($app_scores as &$user_app_score){
 				if(!isset($user_app_score['app_score'])){
 					$user_app_score['app_score'] = FALSE;
 				}
-			}
-			unset($user_app_score);
+				$app_score_for_sorting[$user_app_score['user_id']] = $user_app_score['app_score'];
+			} unset($user_app_score);
+			array_multisort($app_score_for_sorting, SORT_DESC, SORT_NUMERIC, $app_scores);
 			$result['data'] = $app_scores;
 			$result['count'] = count($app_scores);
 			$result['success'] = TRUE;

@@ -119,32 +119,23 @@ class Share extends CI_Controller {
 			));
 			$this->load->view('share/main');
 
-			//Add share score TODO: check
-				$share_action = $this->socialhappen->get_k('audit_action','User Share');
-				$user_id = $this->socialhappen->get_user_id();
-				$this->load->library('audit_lib');
-				$audit_additional_data = array(
-					'user_id'=> $user_id,
-					'app_install_id' => $app_install_id,
-					'page_id' => $app['page_id'],
-					'campaign_id' => $campaign_id
-				);
+			//Add share score
+			$share_action = $this->socialhappen->get_k('audit_action','User Share');
 
-				$audit_result = $this->audit_lib->add_audit(
-					issetor($app['app_id'],0),
-					$user_id,
-					$share_action,
-					NULL, 
-					NULL,
-					$audit_additional_data
-				);
-				if($audit_result){
-					//echo 'audit added';
-				} else {
-					log_message('error','add_audit failed');
-					return;
-				}
-			
+			$this->load->library('audit_lib');
+			$user_id = $this->socialhappen->get_user_id();
+			$audit_data = array(
+				'app_id' => issetor($app['app_id'],0),
+				'subject' => $user_id,
+				'action_id' => $share_action,
+				'user_id' => $user_id,
+				'app_install_id' => $app_install_id,
+				'page_id' => $app['page_id'],
+				'campaign_id' => $campaign_id
+			);
+			$audit_result = $this->audit_lib->audit_add($audit_data);
+
+			if($audit_result){
 				$this->load->library('achievement_lib');
 				$achievement_info = array(
 					'action_id'=> $share_action,
@@ -153,13 +144,20 @@ class Share extends CI_Controller {
 					'campaign_id' => $campaign_id
 				);
 
-				$inc_result = $this->achievement_lib->increment_achievement_stat(issetor($app['app_id'],0), $user_id, $achievement_info, 1);
+				$inc_result = $this->achievement_lib->increment_achievement_stat(
+					issetor($app['app_id'],0),
+					$user_id,
+					$achievement_info,
+					1);
 				if($inc_result){
 					//echo ' increment_achievement_stat complete';
 				} else {	
 					log_message('error','increment_achievement_stat failed');
 				}
-			//
+			} else {
+				log_message('error','add_audit failed');
+				return;
+			}
 		}
 	}
 }

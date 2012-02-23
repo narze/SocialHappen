@@ -1,7 +1,8 @@
+ <script type="text/javascript">
  sh_guest = function(){
 	(function($){
 		jQuery.fancybox({
-			href: base_url+'tab/guest',
+			href: "<?php echo $base_url.'tab/guest';?>",
 			onComplete: function (){
 				$('a.bt-don-awesome').on('click', function(){
 					jQuery.fancybox.close();
@@ -13,7 +14,7 @@
 sh_signup = function(){
 	(function($){
 		jQuery.fancybox({
-			href: base_url+'tab/signup/'+page_id+'/'+app_install_id+'?facebook_access_token='+facebook_access_token,
+			href: "<?php echo $base_url.'tab/signup/'.$page_id.'/'.$app_install_id;?>"+'?facebook_access_token='+facebook_access_token,
 			onComplete: signup_form
 		});
 		
@@ -90,18 +91,20 @@ sh_signup_page = function(){
 			jQuery.fancybox({
 				content: 'You have already registered to this page'
 			});
-		} else if(app_mode){
-			jQuery.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'/'+app_install_id+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image)+'&facebook_access_token='+facebook_access_token,
-				modal: true,
-				onComplete: signup_page_form
-			});
 		} else {
-			jQuery.fancybox({
-				href: base_url+'tab/signup_page/'+page_id+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image)+'&facebook_access_token='+facebook_access_token,
-				modal: true,
-				onComplete: signup_page_form
-			});
+			<?php if($app_mode) :?>
+				jQuery.fancybox({
+					href: "<?php echo $base_url.'tab/signup_page/'.$page_id.'/'.$app_install_id;?>"+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image)+'&facebook_access_token='+facebook_access_token,
+					modal: true,
+					onComplete: signup_page_form
+				});
+			<?php else : ?>
+				jQuery.fancybox({
+					href: "<?php echo $base_url.'tab/signup_page/'.$page_id;?>"+'?user_first_name='+user_name+'&user_image='+encodeURIComponent(user_image)+'&facebook_access_token='+facebook_access_token,
+					modal: true,
+					onComplete: signup_page_form
+				});
+			<?php endif; ?>
 		}
 
 		function signup_page_form() { //console.log('signup_page_form invoked');
@@ -161,7 +164,7 @@ sh_signup_page = function(){
 sh_signup_complete = function(redirect_url){
 	(function($){
 		jQuery.fancybox({
-			href: base_url+'tab/signup_complete?next=' + encodeURIComponent(redirect_url),
+			href: "<?php echo $base_url.'tab/signup_complete?next=';?>" + encodeURIComponent(redirect_url),
 			modal: true
 		});
 	})(sh_jq);
@@ -173,40 +176,42 @@ sh_signup_campaign = function(){
 			jQuery.fancybox({
 				content: 'You have already registered to this campaign'
 			});
-		} else if(app_mode){
-			jQuery.fancybox({
-				href: base_url+'tab/signup_campaign/'+app_install_id+'/'+campaign_id,
-				onComplete: signup_campaign_form
-			});
+		} else {
+			<?php if($app_mode) : ?>
+				jQuery.fancybox({
+					href: "<?php echo $base_url.'tab/signup_campaign/'.$app_install_id.'/'.$campaign_id;?>",
+					onComplete: signup_campaign_form
+				});
 
-			function signup_campaign_form() { //console.log('signup_campaign_form invoked');
-				$('#fancybox-content').off()
-				.on('submit', 'div.popup-fb.signup-campaign form.signup-form', submit_form);
+				function signup_campaign_form() { //console.log('signup_campaign_form invoked');
+					$('#fancybox-content').off()
+					.on('submit', 'div.popup-fb.signup-campaign form.signup-form', submit_form);
 
-				function submit_form(){
-					$('form.signup-form').unbind('submit').submit(function() {
-						  var url = $(this).attr('action');
-						  var params = $(this).serialize();
-						  $.getJSON(url + '?' + params + "&callback=?", function(data) {
-							// console.log(data);
-							// success
-							// if(data.status == 'error'){
-							// 	if(data.error == 'verify'){
-							// 		sh_validate_error(data.error_messages);
-							// 	}
-							// } else if(data.status == 'ok'){
-							// 	sh_signup_complete(data.redirect_url);
-							// }
-							if(data.status == 'ok'){
-								is_user_register_to_campaign = 1;
-								jQuery.fancybox.close();
-							}
-						  });
-						  return false;
-					}).submit();
-					return false;
-				}
-			};
+					function submit_form(){
+						$('form.signup-form').unbind('submit').submit(function() {
+							  var url = $(this).attr('action');
+							  var params = $(this).serialize();
+							  $.getJSON(url + '?' + params + "&callback=?", function(data) {
+								// console.log(data);
+								// success
+								// if(data.status == 'error'){
+								// 	if(data.error == 'verify'){
+								// 		sh_validate_error(data.error_messages);
+								// 	}
+								// } else if(data.status == 'ok'){
+								// 	sh_signup_complete(data.redirect_url);
+								// }
+								if(data.status == 'ok'){
+									is_user_register_to_campaign = 1;
+									jQuery.fancybox.close();
+								}
+							  });
+							  return false;
+						}).submit();
+						return false;
+					}
+				};
+			<?php endif; ?>
 		}		
 	})(sh_jq);
 }
@@ -215,27 +220,22 @@ getScript = function(url, checkName, success) {
 	if(checkName != 'jQuery' && (eval('typeof '+checkName+' == "function"') || eval('typeof '+checkName+' == "object"'))) { //check if script is already loaded
 		success(); //don't reload
 	} else {
-		var script     = document.createElement('script');
-			 script.src = url;
+		var script  = document.createElement('script');
+		script.src = url;
 		var head = document.getElementsByTagName('head')[0],
 		done = false;
-
 		// Attach handlers for all browsers
 		script.onload = script.onreadystatechange = function() {
-				if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+			if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
 				done = true;
+				if(checkName == 'jQuery'){
 					
-						if(checkName == 'jQuery'){
-							
-						}
-						// callback function provided as param
-						success();
-
-						script.onload = script.onreadystatechange = null;
-						head.removeChild(script);
-
-
-				};
+				}
+				// callback function provided as param
+				success();
+				script.onload = script.onreadystatechange = null;
+				head.removeChild(script);
+			};
 		};
 		head.appendChild(script);
 	}
@@ -243,10 +243,10 @@ getScript = function(url, checkName, success) {
 
 loadChildScripts = function(){
 	window.sh_jq = jQuery.noConflict(true); // jQuery -> old, sh_jq -> new
-	getScript(base_url+'assets/js/common/jquery-ui.min.js', 'jQuery.ui', function(){
-		getScript(base_url+'assets/js/common/jquery.form.js', 'jQuery.fn.ajaxForm', function(){
-			getScript(base_url + 'assets/js/common/fancybox/jquery.fancybox-1.3.4.js', 'jQuery.fancybox', function(){
-				getScript(base_url + 'assets/js/common/jquery.timeago.js', 'jQuery.timeago', function(){
+	getScript("<?php echo $base_url.'assets/js/common/jquery-ui.min.js';?>", 'jQuery.ui', function(){
+		getScript("<?php echo $base_url.'assets/js/common/jquery.form.js';?>", 'jQuery.fn.ajaxForm', function(){
+			getScript("<?php echo $base_url.'assets/js/common/fancybox/jquery.fancybox-1.3.4.js';?>", 'jQuery.fancybox', function(){
+				getScript("<?php echo $base_url.'assets/js/common/jquery.timeago.js';?>", 'jQuery.timeago', function(){
 	
 				});
 			});
@@ -259,7 +259,7 @@ loadNode = function(){
 		$(function(){
 			if(typeof io != 'undefined'){
 				var session = 'SESSIONNAJA';
-				var socket = io.connect(node_base_url);
+				var socket = io.connect("<?php echo $node_base_url;?>");
 
 				socket.on('connect', function(){
 					console.log('send subscribe');
@@ -315,7 +315,7 @@ onLoad = function(){
 				var elem = $(this);
 				if(!elem.hasClass('active')){
 					elem.parents('ul').find('a.active').removeClass('active');
-					if(sh_canvas_config){
+					if(<?php echo $sh_canvas_config;?>){
 						if(elem.hasClass('config') && $('#app-config').length == 0){
 							$('#app-content').empty();
 							$('#app-config-temp').attr('id', 'app-config').appendTo('#app-content').show();					
@@ -323,7 +323,7 @@ onLoad = function(){
 							$('#app-config').attr('id', 'app-config-temp').appendTo('body').hide();
 						}
 					} 
-					if(!sh_canvas_config || !elem.hasClass('config')){
+					if(!<?php echo $sh_canvas_config;?> || !elem.hasClass('config')){
 						var iframe = $('<iframe src="'+elem.attr('href')+'/?tab=true'+'" allowtransparency="true" frameborder="0" sandbox="allow-same-origin allow-forms allow-scripts" style="width:100%;height:100%;min-height:720px;"></iframe>');
 						$('#app-content').html( '<div id="app-component-config"></div>' ).find('#app-component-config').append(iframe);
 						$('#app-component-config').prepend('<h2 class="setting-title"><span>'+ elem.attr('title') +'</span></h2>');
@@ -378,7 +378,7 @@ onLoad = function(){
 			  // if hide, fetch data
 			  if(!fetching_notification && $('li.notification').hasClass('active')){
 			    fetching_notification = true;
-  				$.get(base_url + 'api/show_notification?user_id='+user_id, function(result){
+  				$.get("<?php echo $base_url.'api/show_notification?user_id=';?>"+user_id, function(result){
   					if(result.notification_list){
   						var notification_list = result.notification_list;
   						var template = $('<li class="separator">'+
@@ -407,7 +407,7 @@ onLoad = function(){
 									$('ul.notification_list_bar li.last-child').prev().remove();
 								}
   							}
-  							$.get(base_url + 'api/read_notification?user_id='+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
+  							$.get("<?php echo $base_url.'api/read_notification?user_id=';?>"+user_id+'&notification_list='+JSON.stringify(notification_id_list), function(result){
   								
   							}, 'json');
   							
@@ -451,11 +451,11 @@ onLoad = function(){
 					if(share_href){
 						share_href = encodeURIComponent(share_href);
 					} else {
-						share_href = encodeURIComponent(facebook_tab_url);
+						share_href = encodeURIComponent("<?php echo $facebook_tab_url;?>");
 					}
 
 					jQuery.fancybox({ // should use something better than fancybox?
-						href:base_url+'share/'+app_install_id+'?link='+share_href,
+						href:"<?php echo $base_url.'share/'.$app_install_id.'?link=';?>"+share_href,
 						type:'iframe',
 						transitionIn: 'elastic',
 						transitionOut: 'elastic',
@@ -482,7 +482,7 @@ onLoad = function(){
 
 				function sh_invitebutton_menu(elem){
 					jQuery.fancybox({ // should use something better than fancybox?
-						href:base_url+'invite/'+app_install_id+'?facebook_page_id='+facebook_page_id,
+						href:"<?php echo $base_url.'invite/'.$app_install_id.'?facebook_page_id='.$facebook_page_id;?>",
 						type:'iframe',
 						transitionIn: 'elastic',
 						transitionOut: 'elastic',
@@ -510,12 +510,12 @@ sh_test = function () { //this function is to test only, will be removed on prod
 		//DEBUG : remove this after test
 		$('body').append('<div class="sh-invitebutton" data-href="" />'); // for debug
 
-		$('<div><a id="page_score" href="'+base_url+'tab/my_page_score/'+page_id+'">My Score</a></div>').appendTo('body');
-		$('<div><a id="page_leaderboard" href="'+base_url+'tab/page_leaderboard/'+page_id+'">Page Leaderboard</a></div>').appendTo('body');
-		$('<div><a id="page_reward" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=start_timestamp&order=desc">Redeem Reward (Sort by start time)</a></div>').appendTo('body');
-		$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=value&order=desc">Redeem Reward (Sort by value)</a></div>').appendTo('body');
-		$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=status">Redeem Reward (Sort by status)</a></div>').appendTo('body');
-		$('<div><a class="page_reward_debug" href="'+base_url+'tab/redeem_list/'+page_id+'?sort=redeem.point&order=desc">Redeem Reward (Sort by point)</a></div>').appendTo('body');
+		$('<div><a id="page_score" href="<?php echo $base_url;?>tab/my_page_score/<?php echo $page_id;?>">My Score</a></div>').appendTo('body');
+		$('<div><a id="page_leaderboard" href="<?php echo $base_url;?>tab/page_leaderboard/<?php echo $page_id;?>">Page Leaderboard</a></div>').appendTo('body');
+		$('<div><a id="page_reward" href="<?php echo $base_url;?>tab/redeem_list/<?php echo $page_id;?>?sort=start_timestamp&order=desc">Redeem Reward (Sort by start time)</a></div>').appendTo('body');
+		$('<div><a class="page_reward_debug" href="<?php echo $base_url;?>tab/redeem_list/<?php echo $page_id;?>?sort=value&order=desc">Redeem Reward (Sort by value)</a></div>').appendTo('body');
+		$('<div><a class="page_reward_debug" href="<?php echo $base_url;?>tab/redeem_list/<?php echo $page_id;?>?sort=status">Redeem Reward (Sort by status)</a></div>').appendTo('body');
+		$('<div><a class="page_reward_debug" href="<?php echo $base_url;?>tab/redeem_list/<?php echo $page_id;?>?sort=redeem.point&order=desc">Redeem Reward (Sort by point)</a></div>').appendTo('body');
 		var page_score = $('#page_score');
 		var page_leaderboard = $('#page_leaderboard');
 		var page_reward = $('#page_reward, .page_reward_debug');
@@ -542,19 +542,15 @@ sh_test = function () { //this function is to test only, will be removed on prod
 sh_app_component = function() {
 	(function($){
 		var app_config = $('a.app-config').attr('href');
-		if(sh_canvas_config){
+		if(<?php echo $sh_canvas_config;?>){
 			top.location.href = app_config;
 		} else {
 			//load template
 			$.ajax({
 				async:true,
 				type: 'GET',
-				url: base_url+'api/setting_template',
+				url: "<?php echo $base_url.'tab/json_get_setting_template/'.$app_install_id;?>",
 				data: {
-					app_id : app_id,
-					app_secret_key : app_secret_key,
-					app_install_id : app_install_id,
-					app_install_secret_key : app_install_secret_key,
 					user_id : user_id
 				},
 				success: function(result) {
@@ -596,12 +592,8 @@ sh_popup = function(){
 				$.ajax({
 					async:false,
 					type: 'GET',
-					url: base_url+'api/get_started',
+					url: "<?php echo $base_url.'tab/json_get_get_started/'.$app_install_id;?>",
 					data: {
-						app_id : app_id,
-						app_secret_key : app_secret_key,
-						app_install_id : app_install_id,
-						app_install_secret_key : app_install_secret_key,
 						user_id : user_id
 					},
 					success: function(result) {
@@ -620,17 +612,7 @@ sh_popup = function(){
 				});
 
 				page_app_installed_id=0;
-			} 
-			// else if(page_installed==0){
-				// jQuery.fancybox({
-					// href: base_url+'tab/page_installed/'+ page_id
-				// });
-				// $('a.bt-stay_fb').die('click');
-				// $('a.bt-stay_fb').live('click',function(){
-					// jQuery.fancybox.close();
-				// });
-				// page_installed=1;
-			// }
+			}
 		} else {
 			if(!is_user_register_to_page) {
 				sh_signup_page();
@@ -649,11 +631,11 @@ close_popup = function(){
 };
 
 sh_login = function(){
-	XD.postMessage({sh_message:'login'}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+	XD.postMessage({sh_message:'login'}, "<?php echo $base_url.'xd';?>", document.getElementById('xd_sh').contentWindow);
 }
 
 sh_logout = function(){
-	XD.postMessage({sh_message:'logout'}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+	XD.postMessage({sh_message:'logout'}, "<?php echo $base_url.'xd';?>", document.getElementById('xd_sh').contentWindow);
 }
 
 sh_load_bar = function(){
@@ -661,13 +643,18 @@ sh_load_bar = function(){
 	if(typeof facebook_user_id == 'undefined' || !facebook_user_id) {
 		facebook_user_id = 0;
 	}
-	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+facebook_user_id+'/'+page_id+'/'+app_install_id, function(data){
+	jQuery.get("<?php echo $base_url.'xd/get_bar_content/';?>"+view_as+'/'+user_id+'/'+facebook_user_id+'/'+"<?php echo $page_id;?>"+'/'+"<?php echo $app_install_id;?>", function(data){
 		sh_jq('div#sh-bar').html(data);
 	});
 }
 
 sh_visit = function(){
-	XD.postMessage({sh_message:'visit',sh_page_id:page_id,sh_app_install_id:app_install_id,sh_app_id:app_id}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
+	XD.postMessage({
+		sh_message:'visit',
+		sh_page_id:"<?php echo $page_id;?>",
+		sh_app_install_id:"<?php echo $app_install_id;?>",
+		sh_app_id:"<?php echo $app_id;?>"
+	}, "<?php echo $base_url.'xd';?>", document.getElementById('xd_sh').contentWindow);
 }
 
 // sh_get_role = function(){
@@ -678,7 +665,7 @@ sh_visit = function(){
 // 	})(sh_jq);
 // }
 
-getScript(base_url + 'assets/js/common/jquery.min.js', 'jQuery', loadChildScripts);
+getScript("<?php echo $base_url.'assets/js/common/jquery.min.js';?>", 'jQuery', loadChildScripts);
 
 /* 
  * a backwards compatable implementation of postMessage
@@ -783,7 +770,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			facebook_user_id = data.facebook_user_id;
 			sh_login_status = data.sh_login_status;
 			
-			jQuery.getJSON(base_url+'tab/json_facebook_user_check/'+facebook_user_id+'/'+page_id+'/'+app_install_id,
+			jQuery.getJSON("<?php echo $base_url.'tab/json_facebook_user_check/';?>"+facebook_user_id+'/'+"<?php echo $page_id.'/'.$app_install_id;?>",
 				function(response){
 				if(response.user_id){
 					view_as = response.role;
@@ -809,19 +796,12 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			view_as = 'guest';
 			sh_load_bar();
 		}
-		if(sh_non_fan_homepage){
+		<?php if($sh_non_fan_homepage) : ?>
 			XD.postMessage({
 				sh_message:'is_user_liked_page',
-				facebook_page_id:facebook_page_id
-			}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
-		}
-
-	// } else if(message === 'sh_page_campaign_user_check'){
-	// 	if(!data.sh_page_user){
-	// 		//register page
-	// 	} else if(!data.sh_campaign_user){
-	// 		//register campaign
-	// 	}
+				facebook_page_id:"<?php echo $facebook_page_id;?>"
+			}, "<?php echo $base_url.'xd';?>", document.getElementById('xd_sh').contentWindow);
+		<?php endif; ?>
 	} else if(message === 'sh_user_liked_page'){
 		if(data.liked){
 
@@ -829,7 +809,7 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 			//show like button
 			//replace content
 			jQuery('body>*').not(':has(#sh-bar)').remove();
-			jQuery('body').append(sh_non_fan_homepage_content);
+			jQuery('body').append("<?php echo $sh_non_fan_homepage_content;?>");
 		}
 	} else if(message === "logged in facebook"){ //login_button.php
 		facebook_access_token = data.fb_access_token;
@@ -842,60 +822,8 @@ XD.receiveMessage(function(message){ // Receives data from child iframe
 		} 
 	} else if(message === "logged out"){ //xd.js
 		jQuery.fancybox({
-			href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
+			href: "<?php echo $base_url.'tab/logout/'.$page_id.'/'.$app_install_id;?>"
 		});
 	} 
-	// old flows // don't delete yet
-	// if(message.data.sh_message === "loaded"){ //xd_view
-	// 	XD.postMessage({
-	// 		sh_message:'get_user_role',
-	// 		sh_page_id:page_id,
-	// 		facebook_page_id:facebook_page_id
-	// 	}, base_url+'xd', document.getElementById('xd_sh').contentWindow);
-	// } else if(message.data.sh_message === 'status'){ 
-	// 	view_as = message.data.sh_status;
-	// 	user_image = message.data.sh_user_image;
-	// 	user_name = message.data.sh_user_name;
-	// 	onLoad();
-	// 	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
-	// 		sh_jq('div#sh-bar').html(data);
-	// 	});
-	// } else if(message.data.sh_message === "logged in facebook"){ //login_button.php
-	// 	facebook_access_token = message.data.fb_access_token;
-	// 	sh_login();
-	// } else if(message.data.sh_message === "logged in"){ //xd.js 
-	// 	if(view_as === 'guest' || is_user_register_to_page) {
-	// 		sh_signup();
-	// 	} else {
-	// 		sh_signup_page();
-	// 	} 
-	// } else if(message.data.sh_message === "logged out"){ //xd.js
-	// 	jQuery.fancybox({
-	// 		href: base_url + 'tab/logout/'+page_id+'/'+app_install_id
-	// 	});
-	// } else if(message.data.sh_message === "facebook page like"){ //xd.js
-	// 	if(message.data.liked){
-	// 		// console.log('like');
-	// 	} else {
-	// 		// console.log('unlike');
-	// 		//call xd/homepage/app_install_id [if app_install_id is defined]
-	// 		if(app_install_id){
-	// 			jQuery.getJSON(base_url+'xd/homepage/'+app_install_id, function(data){
-	// 				if(typeof data.html !== 'undefined'){
-	// 					jQuery('body>*').not(':has(#sh-bar)').remove();
-	// 					jQuery('body').append(data.html);
-	// 				}
-	// 			});
-	// 		}
-	// 	}
-	// } else if (message.data.sh_message === "autologin"){ //xd_view
-	// 	onLoad();
-	// 	jQuery.get(base_url+'xd/get_bar_content/'+view_as+'/'+user_id+'/'+page_id+'/'+app_install_id, function(data){
-	// 		sh_jq('div#sh-bar').html(data);
-	// 	});
-	// 	facebook_access_token = message.data.fb_access_token;
-	// 	sh_login();
-	// }
-}, sh_domain);
-
-
+}, "<?php echo $sh_domain;?>");
+</script>
