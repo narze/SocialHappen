@@ -178,7 +178,8 @@ class Page_reward extends CI_Controller {
 			       	'criteria_id' => $page_id,
 			       	'redeem' => array(
 				       	'point' => set_value('point'),
-					    'amount' => set_value('amount')
+					    'amount' => set_value('amount'),
+					    'once' => $this->input->post('redeem_once') == 1
 				    ),
 				    'value' => set_value('value'),
 				    'description' => set_value('description')

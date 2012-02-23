@@ -59,6 +59,9 @@
                 </li>
                 <li><strong>page name :</strong><?php echo form_error('page_name'); ?><input id="page_name" type="text" name="page_name" maxlength="255" value="<?php echo set_value('page_name',$page['page_name']); ?>"  /></li>
                 <li><strong>page detail :</strong><?php echo form_error('page_detail'); ?><?php echo form_textarea( array( 'name' => 'page_detail', 'id' => 'page_detail' , 'cols'=> 30 ,'value' => set_value('page_detail',$page['page_detail']) ) ); ?></li>
+                <li><strong>page item currency :</strong><?php echo form_error('item_currency'); ?>
+                	<input id="item_currency" type="text" name="item_currency" maxlength="255" value="<?php echo set_value('item_currency',issetor($page['reward']['item_currency'])); ?>"  />
+                </li>
                 <li><?php echo form_submit('submitForm', 'Submit', 'class="bt-update"'); ?></li>
               </ul> 
             </div>

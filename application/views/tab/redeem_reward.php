@@ -35,66 +35,74 @@
 		</div>
 	</div><?php 
 
-	if($user_got_this_reward) { ?>
-		<div class="notice warning">You have got this reward</div><?php 
-	}
-
-	if($reward_item['reward_status'] == 'active') 
+	if($reward_item['redeem']['once'] && $user_got_this_reward) //Redeem not allow
 	{ ?>
-		<div class="point-cal">
-			<div class="point-summary bold fs14 lh18 round6">
-				<p><span>Your Point </span><span class="fr"><?php echo number_format($page_score); ?> Points</span></p>
-				<p class="tc-red">Point for this Reward <span class="fr"><?php echo number_format($reward_item_point); ?> Points</span></p>
-				<?php if($reward_item_point_remain >= 0) { ?>
-					<p class="tc-green6">Remaining point <span class="fr"><?php echo number_format($reward_item_point_remain);?> Points</span></p>
-				<?php } ?>
-			</div>
+		<div class="notice error">This reward can only be redeemed once and once only.</div><?php 
+	} 
+	else //Redeemable
+	{
+		if($user_got_this_reward) //Just notice that user have got this reward
+		{ ?>
+			<div class="notice warning">You have got this reward</div><?php 
+		}
 
-			<div class="mt20"><?php 
-				if($redeem_button) 
-				{ ?>
-					<div class="hr mb20"></div>
-					<div class="ta-center mb10">
-						<a class="btn green large get-this-reward"><span>Get this reward</span></a>
-					</div><?php 
-				} 
-				else 
-				{ ?>
-					<p class="ta-center tc-red bold mb20">"Your point is insufficient"</p>
-					<div class="hr mb20"></div>
-					<div class="mb10">
-						<a class="btn grey large you-need-more-point"><span>You Need More Point</span></a>
-						<a href="#" class="tc-green6 mt10 fr">How to get it?</a>
-					</div><?php
-				} ?>
-			</div>
-
-		</div>
-
-		<div class="terms-and-conditions-box" style="display:none">
-			<div class="hr mb20"></div>
-			<h3 class="">Terms &amp; Conditions</h3>
-			<div class="mt20 mb20"><?php 
-				echo issetor($terms_and_conditions,'-'); ?>
-				<div class="mt20 bold ta-center">
-					<label><input type="checkbox" name="agree-term" class="mr5"> Accept this terms ans conditions</label>
+		if($reward_item['reward_status'] == 'active') 
+		{ ?>
+			<div class="point-cal">
+				<div class="point-summary bold fs14 lh18 round6">
+					<p><span>Your Point </span><span class="fr"><?php echo number_format($page_score); ?> Points</span></p>
+					<p class="tc-red">Point for this Reward <span class="fr"><?php echo number_format($reward_item_point); ?> Points</span></p>
+					<?php if($reward_item_point_remain >= 0) { ?>
+						<p class="tc-green6">Remaining point <span class="fr"><?php echo number_format($reward_item_point_remain);?> Points</span></p>
+					<?php } ?>
 				</div>
+
+				<div class="mt20"><?php 
+					if($redeem_button) 
+					{ ?>
+						<div class="hr mb20"></div>
+						<div class="ta-center mb10">
+							<a class="btn green large get-this-reward"><span>Get this reward</span></a>
+						</div><?php 
+					} 
+					else 
+					{ ?>
+						<p class="ta-center tc-red bold mb20">"Your point is insufficient"</p>
+						<div class="hr mb20"></div>
+						<div class="mb10">
+							<a class="btn grey large you-need-more-point"><span>You Need More Point</span></a>
+							<a href="#" class="tc-green6 mt10 fr">How to get it?</a>
+						</div><?php
+					} ?>
+				</div>
+
 			</div>
 
+			<div class="terms-and-conditions-box" style="display:none">
+				<div class="hr mb20"></div>
+				<h3 class="">Terms &amp; Conditions</h3>
+				<div class="mt20 mb20"><?php 
+					echo issetor($terms_and_conditions,'-'); ?>
+					<div class="mt20 bold ta-center">
+						<label><input type="checkbox" name="agree-term" class="mr5"> Accept this terms ans conditions</label>
+					</div>
+				</div>
+
+				<div class="hr mb20"></div>
+				<div class="ta-center mb10">
+					<a href="<?php echo base_url().'tab/redeem_reward_confirm/'.$page_id.'/'.$reward_item_id;?>" class="btn inactive large confirm-get-this-reward"><span>Confirm to get this reward</span></a>
+				</div>
+			</div><?php 
+		} 
+		else //Soon, Expired, Out of stock
+		{
+			if($reward_item['redeem']['amount_remain'] == 0) { ?>
+				<div class="notice error">This reward is out of stock</div><?php
+			} ?>
 			<div class="hr mb20"></div>
 			<div class="ta-center mb10">
-				<a href="<?php echo base_url().'tab/redeem_reward_confirm/'.$page_id.'/'.$reward_item_id;?>" class="btn inactive large confirm-get-this-reward"><span>Confirm to get this reward</span></a>
-			</div>
-		</div><?php 
-	} 
-	else 
-	{
-		if($reward_item['redeem']['amount_remain'] == 0) { ?>
-			<div class="notice error">This reward is out of stock</div><?php
-		} ?>
-		<div class="hr mb20"></div>
-		<div class="ta-center mb10">
-			<a href="#" class="btn grey large ml5 cancel"><span>Close</span></a>
-		</div><?php 
+				<a href="#" class="btn grey large ml5 cancel"><span>Close</span></a>
+			</div><?php 
+		}
 	} ?>
 </div>

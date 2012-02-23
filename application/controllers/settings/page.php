@@ -34,7 +34,10 @@ class Page extends CI_Controller {
 			
 			$this->load->model('user_companies_model','user_companies');
 			$company_users = $this->user_companies->get_company_users_by_company_id($page['company_id']);
-			
+
+			$this->load->model('app_component_page_model', 'app_component_page');
+			$app_component_page = $this->app_component_page->get_by_page_id($page_id);
+			$page['reward'] = $app_component_page['reward'];
 			
 			foreach($company_users as $key => &$value){ //Company admins
 				if(!($company_users[$key]['role_all'] || $company_users[$key]['role_all_company_pages_edit'])){
@@ -69,6 +72,20 @@ class Page extends CI_Controller {
 			}
 			else 
 			{
+				if($item_currency = $this->input->post('item_currency'))
+				{
+					if($this->app_component_page->set_item_currency($page_id, $item_currency)) 
+					{
+						$page['reward']['item_currency'] = $item_currency;
+					} 
+					else
+					{
+						log_message('error','update item currency failed');
+						echo 'An error occurred saving your information. Please try again later';
+						return;
+					}
+				}
+
 				if(set_value('use_facebook_picture')){
 					$page_image = issetor($page_facebook['picture']);
 				} else if (!$page_image = $this->socialhappen->replace_image('page_image', $page['page_image'])){
@@ -89,6 +106,7 @@ class Page extends CI_Controller {
 				{
 					log_message('error','update company failed');
 					echo 'An error occurred saving your information. Please try again later';
+					return;
 				}
 			}
 		}

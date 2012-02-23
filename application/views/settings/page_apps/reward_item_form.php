@@ -89,6 +89,10 @@
 			); ?>
 			<?php echo form_dropdown('status', $options, set_value('status', issetor($reward_item['status'])), $class)?>
 		</div>
+		<div class="section">
+			<label for="redeem_once" class="black-label">Only be redeemed once : </label>
+			<input type="checkbox" id="redeem_once" name="redeem_once" class="mt5" value="1" <?php echo issetor($reward_item['redeem']['once']) ? 'checked' : ''; ?> />
+		</div>
 		<!--
 		<div class="section">
 			<label for="type">Type <span class="required">*</span></label>
