@@ -11,7 +11,7 @@
 				</div>
 				<ul class="item-info">
 					<li class="box">
-						<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']); ?></p>
+						<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']).' '. $reward_currency; ?></p>
 					</li>
 					<li class="box">
 						<div class="tc-green6 bold">User who got this reward : </div><?php 

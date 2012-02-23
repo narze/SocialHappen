@@ -57,7 +57,8 @@ class Page_reward extends CI_Controller {
 			} unset($reward_item);
 			$this->load->vars(array(
 				'page_id' => $page_id,
-				'reward_items' => $reward_items
+				'reward_items' => $reward_items,
+				'reward_currency' => $this->reward_lib->get_reward_currency($page_id)
 			));
 			$this->load->view('settings/page_apps/reward');
 		}
@@ -115,6 +116,7 @@ class Page_reward extends CI_Controller {
 			$this->form_validation->set_rules('start_date', 'Start date', 'required|trim|xss_clean|max_length[20]');			
 			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');			
 			$this->form_validation->set_rules('status', 'Status', 'required|trim|xss_clean|max_length[10]');			
+			$this->form_validation->set_rules('redeem_once', 'Type', 'trim|xss_clean');
 			// $this->form_validation->set_rules('type', 'Type', 'required|trim|xss_clean|max_length[10]');
 
 			$this->form_validation->set_rules('value', 'Value', 'required|trim|xss_clean|max_length[30]');
@@ -141,6 +143,10 @@ class Page_reward extends CI_Controller {
 					$this->form_validation->set_rules('image', 'Image', 'required|trim|xss_clean|max_length[255]');
 				}
 			}
+
+			$this->load->library('reward_lib');
+			$reward_currency = $this->reward_lib->get_reward_currency($page_id);
+			$this->load->vars(array('reward_currency' => $reward_currency));
 
 			if ($this->form_validation->run() == FALSE)
 			{	
@@ -205,13 +211,16 @@ class Page_reward extends CI_Controller {
 						//update success
 					}
 
-					$this->load->library('reward_lib');
 					$reward_item = $this->reward_lib->get_reward_item($reward_item_id);
 					
 					$reward_item['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $user['user_timezone_offset']);
 					$reward_item['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $user['user_timezone_offset']);
-					
-					$this->load->vars(array('reward_item'=>$reward_item, 'reward_item_id'=>$reward_item_id));
+
+					$this->load->vars(array(
+						'reward_item'=>$reward_item, 
+						'reward_item_id'=>$reward_item_id
+						)
+					);
 					$this->load->view('settings/page_apps/reward_item');
 				}
 				else

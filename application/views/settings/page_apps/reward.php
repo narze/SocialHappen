@@ -11,7 +11,7 @@
 		<div class="reward-item-list">
 	    <?php if(issetor($reward_items)) :
 	    	foreach($reward_items as $reward_item) : 
-	    		$this->load->view('settings/page_apps/reward_item', array('reward_item'=>$reward_item));?>
+	    		$this->load->view('settings/page_apps/reward_item', array('reward_item'=>$reward_item, 'reward_currency'=>$reward_currency));?>
 	    	
 		<?php endforeach;
 			else :

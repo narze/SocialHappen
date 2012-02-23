@@ -260,7 +260,6 @@ $(function(){
 				return false;
 			}
 			$.get(base_url+'settings/page_reward/add_item/'+page_id, function(data){
-				console.log(data);
 				var form_div = $(data).prependTo('.reward-item-list').removeClass('reward-item-template')
 				.addClass('reward-item-form');
 				

@@ -46,8 +46,9 @@
 					<input id="amount" type="text" name="amount" maxlength="10" value="<?php echo set_value('amount', issetor($reward_item['redeem']['amount'])); ?>" <?php echo form_error('amount') ? 'class="form-error"': ''; ?> />
 				</li>
 				<li>
-					<label for="value" class="tc-green6 bold" >Value: </label>
+					<label for="value" class="tc-green6 bold" >Value (<?php echo $reward_currency; ?>): </label>
 					<input id="value" type="text" name="value" maxlength="10" value="<?php echo set_value('value', issetor($reward_item['value'])); ?>" <?php echo form_error('value') ? 'class="form-error"': ''; ?> />
+
 				</li>
 				<li>
 					<label for="point" class="tc-green6 bold" >Required Point: </label>

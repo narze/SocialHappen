@@ -17,7 +17,7 @@
 				</div>
 				<div class="box">
 					<p><span class="tc-green6 bold">Quanity: </span><?php echo number_format($reward_item['redeem']['amount_remain']).'/'.number_format($reward_item['redeem']['amount']);?></p>
-					<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']);?></p>
+					<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']) .' '. $reward_currency;?></p>
 				</div>
 				<div class="box">
 					<div class="tc-green6 bold">User who got this reward : </div><?php 
@@ -35,18 +35,22 @@
 		</div>
 	</div><?php 
 
-	if($reward_item['redeem']['once'] && $user_got_this_reward) //Redeem not allow
+	if($reward_item['redeem']['amount_remain'] == 0) //Out of stock
+	{ ?>
+		<div class="notice error">This reward is out of stock</div><?php
+	} 
+	else if($reward_item['redeem']['once'] && $user_got_this_reward) //Redeem not allow
 	{ ?>
 		<div class="notice error">This reward can only be redeemed once and once only.</div><?php 
-	} 
-	else //Redeemable
+	}
+	else //In stock
 	{
 		if($user_got_this_reward) //Just notice that user have got this reward
 		{ ?>
 			<div class="notice warning">You have got this reward</div><?php 
 		}
 
-		if($reward_item['reward_status'] == 'active') 
+		if($reward_item['reward_status'] == 'active') //Redeemable
 		{ ?>
 			<div class="point-cal">
 				<div class="point-summary bold fs14 lh18 round6">
@@ -94,11 +98,9 @@
 				</div>
 			</div><?php 
 		} 
-		else //Soon, Expired, Out of stock
+		else //Soon, Expired
 		{
-			if($reward_item['redeem']['amount_remain'] == 0) { ?>
-				<div class="notice error">This reward is out of stock</div><?php
-			} ?>
+			?>
 			<div class="hr mb20"></div>
 			<div class="ta-center mb10">
 				<a href="#" class="btn grey large ml5 cancel"><span>Close</span></a>

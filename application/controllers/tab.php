@@ -949,12 +949,17 @@ class Tab extends CI_Controller {
 		$redeem_item_list = $this->tab_ctrl->redeem_list($page_id, $user_facebook_id, $status, $sort, $order);
 		//echo "Your page score is ".$page_score;
 
+		//Currency
+		$this->load->library('reward_lib');
+		$reward_currency = $this->reward_lib->get_reward_currency($page_id);
+
 		$items = '';
 		foreach($redeem_item_list as $redeem_item){
 			$items .= $this->load->view('tab/redeem_reward_item', array(
 				'page_id' => $page_id,
 				'page_score' => $page_score,
-				'reward_item' => $redeem_item
+				'reward_item' => $redeem_item,
+				'reward_currency' => $reward_currency
 			), TRUE);
 		}
 
@@ -990,11 +995,15 @@ class Tab extends CI_Controller {
 		$page_component = $this->app_component_lib->get_page($page_id);
 		$terms_and_conditions = issetor($page_component['reward']['terms_and_conditions']);
 
+		//Currency
+		$reward_currency = $this->reward_lib->get_reward_currency($page_id);
+
 		$this->load->vars(array(
 			'current_user' => $user,
 			'page_id' => $page_id,
 			'reward_item_id' => $reward_item_id,
 			'reward_item' => $reward_item,
+			'reward_currency' => $reward_currency,
 			'page_score' => $page_score,
 			'reward_item_point' => $reward_item['redeem']['point'],
 			'reward_item_point_remain' =>  $page_score - $reward_item['redeem']['point'],
@@ -1018,11 +1027,16 @@ class Tab extends CI_Controller {
 			$page = $this->page_model->get_page_profile_by_page_id($page_id);
 		}
 
+		//Currency
+		$this->load->library('reward_lib');
+		$reward_currency = $this->reward_lib->get_reward_currency($page_id);
+
 		$this->load->vars(array(
 			'success' => $result,
 			'reward_item' => issetor($reward_item),
 			'page_name'=>issetor($page['page_name']),
-			'facebook_tab_url'=>issetor($page['facebook_tab_url'])
+			'facebook_tab_url'=>issetor($page['facebook_tab_url']),
+			'reward_currency' => $reward_currency
 		));
 		$this->load->view('tab/redeem_reward_confirm');
 	}

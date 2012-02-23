@@ -21,7 +21,7 @@
 			</li>
 			<li class="box">
 				<p><span class="tc-green6 bold">Quanity: </span><?php echo number_format($reward_item['redeem']['amount_remain']).'/'.number_format($reward_item['redeem']['amount']);?></p>
-				<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']);?></p>
+				<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']).' '. $reward_currency;?></p>
 			</li>
 			<li class="box">
 				<p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo number_format($reward_item['redeem']['point']); ?></span></p>

@@ -14,6 +14,12 @@ class Reward_lib
 		$this->CI =& get_instance();
 	}
 
+	function get_reward_currency($page_id){
+		$this->CI->load->model('app_component_page_model', 'app_component_page');
+		$app_component_page = $this->CI->app_component_page->get_by_page_id($page_id);
+		return $app_component_page['reward']['item_currency'];
+	}
+
 	function get_reward_item($reward_item_id){
 		$this->CI->load->model('reward_item_model','reward_item');
 		$reward_item = $this->CI->reward_item->get_by_reward_item_id($reward_item_id);
