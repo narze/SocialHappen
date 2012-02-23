@@ -456,12 +456,12 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run($result['count'], 3, "\$result['count']", $result['count']);
 		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
-		$this->unit->run($result['data'][1]['user_id'], 1, "\$result['data'][1]['user_id']", $result['data'][1]['user_id']);
-		$this->unit->run($result['data'][3]['user_id'], 3, "\$result['data'][3]['user_id']", $result['data'][3]['user_id']);
-		$this->unit->run($result['data'][6]['user_id'], 6, "\$result['data'][6]['user_id']", $result['data'][6]['user_id']);	
+		$this->unit->run($result['data'][0]['user_id'], 1, "\$result['data'][0]['user_id']", $result['data'][0]['user_id']);
+		$this->unit->run($result['data'][1]['user_id'], 3, "\$result['data'][1]['user_id']", $result['data'][1]['user_id']);
+		$this->unit->run($result['data'][2]['user_id'], 6, "\$result['data'][2]['user_id']", $result['data'][2]['user_id']);	
+		$this->unit->run($result['data'][0]['app_score'] === 100,TRUE, "\$result['data'][0]['app_score']", $result['data'][0]['app_score']);
 		$this->unit->run($result['data'][1]['app_score'] === 100,TRUE, "\$result['data'][1]['app_score']", $result['data'][1]['app_score']);
-		$this->unit->run($result['data'][3]['app_score'] === 100,TRUE, "\$result['data'][3]['app_score']", $result['data'][3]['app_score']);
-		$this->unit->run($result['data'][6]['app_score'] === FALSE,TRUE, "\$result['data'][6]['app_score']", $result['data'][6]['app_score']);	
+		$this->unit->run($result['data'][2]['app_score'] === FALSE,TRUE, "\$result['data'][2]['app_score']", $result['data'][2]['app_score']);	
 	}
 
 	function _add_reward_test(){

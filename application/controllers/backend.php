@@ -1391,7 +1391,6 @@ class Backend extends CI_Controller {
 		}
 	}
 
-	//TODO : prettify
 	function change_page_member_limit($page_id = NULL){
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('page_member_limit', 'Page Member limit', 'required|trim|xss_clean|is_numeric');

@@ -894,7 +894,7 @@ class Tab extends CI_Controller {
 
 	function page_leaderboard($page_id = NULL){
 		$page_user_scores = $this->tab_ctrl->page_leaderboard($page_id);
-		if($page_user_scores['success']){ //TODO sort
+		if($page_user_scores['success']){
 			if(count($page_user_scores['data']) > 0){
 				foreach($page_user_scores['data'] as $user_score){
 					echo "user id ".$user_score['user_id'].' got '.($user_score['page_score'] | 0).' points in page id '.$page_id;
@@ -916,7 +916,7 @@ class Tab extends CI_Controller {
 
 	function campaign_leaderboard($campaign_id = NULL, $page_id = NULL){
 		$campaign_user_scores = $this->tab_ctrl->campaign_leaderboard($campaign_id, $page_id);
-		if($campaign_user_scores['success']){ //TODO sort
+		if($campaign_user_scores['success']){
 			foreach($campaign_user_scores['data'] as $user_score){
 				echo "user id ".$user_score['user_id'].' got '.($user_score['campaign_score'] | 0).' points in campaign id '.$campaign_id;
 				echo '<br />';
@@ -932,7 +932,7 @@ class Tab extends CI_Controller {
 
 	function app_leaderboard($app_install_id = NULL, $page_id = NULL){
 		$app_user_scores = $this->tab_ctrl->app_leaderboard($app_install_id, $page_id);
-		if($app_user_scores['success']){ //TODO sort
+		if($app_user_scores['success']){
 			foreach($app_user_scores['data'] as $user_score){
 				echo "user id ".$user_score['user_id'].' got '.($user_score['app_score'] | 0).' points in app id '.$app_install_id;
 				echo '<br />';
