@@ -121,9 +121,10 @@ class App_ctrl_test extends CI_Controller {
 	 */
 	function json_get_campaigns_test(){
 		$app_install_id = 1;
+		$filter = '';
 		$limit = NULL;
 		$offset = NULL;
-		$content = $this->app_ctrl->json_get_campaigns($app_install_id, $limit, $offset);
+		$content = $this->app_ctrl->json_get_campaigns($app_install_id, $filter, $limit, $offset);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array, 'is_array', 'json_get_campaigns()');
 		$this->unit->run($array[0], 'is_array', 'First row');

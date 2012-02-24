@@ -346,6 +346,9 @@ class Tab extends CI_Controller {
 				case 'me-expired':
 					$campaigns = $this->user_campaigns->get_expired_user_campaigns($user_id,$limit,$offset);
 					break;
+				case 'incoming':
+					$campaigns = $this->campaigns->get_incoming_campaigns_by_page_id($page_id,$limit,$offset);
+					break;
 				case 'active':
 					$campaigns = $this->campaigns->get_active_campaigns_by_page_id($page_id,$limit,$offset);
 					break;
@@ -1075,6 +1078,18 @@ class Tab extends CI_Controller {
 		$this->socialhappen->ajax_check();
 		$this->load->model('campaign_model','campaigns');
 		$count = $this->campaigns->count_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count incoming campaigns
+	 * @param $page_id
+	 * @author Weerapat P.
+	 */
+	function json_count_incoming_campaigns($page_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_incoming_campaigns_by_page_id($page_id);
 		echo json_encode($count);
 	}
 

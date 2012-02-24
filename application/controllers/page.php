@@ -167,7 +167,8 @@ class Page extends CI_Controller {
 	 */
 	function json_get_campaigns($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$campaigns = $this->page_ctrl->json_get_campaigns($page_id, $limit, $offset);
+		$filter = $this->input->get('filter');
+		$campaigns = $this->page_ctrl->json_get_campaigns($page_id, $filter, $limit, $offset);
 		echo $campaigns;
 	}
 	

@@ -140,9 +140,10 @@ class Page_ctrl_test extends CI_Controller {
 	 */
 	function json_get_campaigns_test(){
 		$page_id = 1;
+		$filter = '';
 		$limit = NULL;
 		$offset = NULL;
-		$content = $this->page_ctrl->json_get_campaigns($page_id, $limit, $offset);
+		$content = $this->page_ctrl->json_get_campaigns($page_id, $filter, $limit, $offset);
 		$array = json_decode($content, TRUE);
 		$this->unit->run($array,'is_array', 'json_get_campaigns()');
 		$this->unit->run($array[0],'is_array', 'First row');

@@ -1,6 +1,4 @@
 $(function(){	
-	var campaign_status_var = {"Inactive":1,"Active":2,"Expired":3};
-	var campaign_status_id = '';
 	Date.createFromMysql = function(mysql_string){ 
 	   if(typeof mysql_string === 'string')
 	   {
@@ -11,9 +9,8 @@ $(function(){
 	}
 	
 	function get_app_campaigns(page_index, jq){
-		var url;
-		if(campaign_status_id != '') {url = base_url+"app/json_get_campaigns_using_status/"+app_install_id+'/'+campaign_status_id+'/'+per_page+'/'+(page_index * per_page);}
-		else {url = base_url+"app/json_get_campaigns/"+app_install_id+'/'+per_page+'/'+(page_index * per_page);}
+		var filter = $('div.filter li.active').find('a').attr('data-filter');
+		var url = base_url+'app/json_get_campaigns/'+app_install_id+'/'+per_page+'/'+(page_index * per_page) + '?filter='+filter;
 		set_loading();
 		$.getJSON(url,function(json){
 			$('.wrapper-details.campaigns .details table tr.hidden-template').siblings().addClass('old-result');
@@ -52,24 +49,19 @@ $(function(){
 		return false;
 	}
 	
-	$('.tab-content ul li.campaigns a,.campaign-filter').live('click',function(){
-		$(this).addClass('active').siblings().removeClass('active');
-		
-		if($(this).hasClass('inactive-campaign')){
-			filtered = true;
-			campaign_status_id = campaign_status_var["Inactive"];
-		} else if($(this).hasClass('active-campaign')){
-			filtered = true;
-			campaign_status_id = campaign_status_var["Active"];
-		} else if($(this).hasClass('expired-campaign')){
-			filtered = true;
-			campaign_status_id = campaign_status_var["Expired"];
-		} else if($(this).hasClass('all-campaign')){
-			filtered = false;
-			campaign_status_id = '';
+	$('div.filter .campaign-filter').live('click',function(){ 
+		$(this).parent().addClass('active').siblings().removeClass('active');
+
+		var filter = $(this).attr('data-filter');
+		var url_count = '';
+		switch(filter){
+			case 'incoming' : url_count = base_url+"app/json_count_incoming_campaigns/"+app_install_id; break;
+			case 'active' : url_count = base_url+"app/json_count_active_campaigns/"+app_install_id; break;
+			case 'expired' : url_count = base_url+"app/json_count_expired_campaigns/"+app_install_id; break;
+			default : url_count = base_url+"app/json_count_campaigns/"+app_install_id; break;
 		}
 		
-		$.getJSON(base_url+"app/json_count_campaigns/"+app_install_id+"/"+campaign_status_id,function(count){
+		$.getJSON(url_count,function(count){
 			if(count==0){
 				$('.wrapper-details.campaigns .details table').hide(null,function(){
 					if(!$(this).find("p.no-results").show()){
@@ -89,7 +81,6 @@ $(function(){
 			});			
 		});
 		return false;
-		
-	});
+	}).eq(0).click();
 });
 

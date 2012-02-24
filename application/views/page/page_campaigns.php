@@ -3,11 +3,11 @@
 		<?php if($campaign_count > 0) { ?>
         <div class="filter">
           <ul>
-			<li class="title">filter by :</li>
-            <li class="active campaign-filter all-campaign"><a href="#">All</a></li>
-            <li class="campaign-filter active-campaign"><a href="#">Active</a></li>
-            <li class="campaign-filter inactive-campaign"><a href="#">Inactive</a></li>
-            <li class="campaign-filter expired-campaign"><a href="#">Expired</a></li>
+			      <li class="title">filter by :</li>
+            <li class="active"><a class="campaign-filter" data-filter="">All</a></li>
+            <li><a class="campaign-filter" data-filter="incoming">Incoming</a></li>
+            <li><a class="campaign-filter" data-filter="active">Active</a></li>
+            <li><a class="campaign-filter" data-filter="expired">Expired</a></li>
           </ul>
         </div>
         <div class="details campaigns">
@@ -15,7 +15,7 @@
             <tr class="campaign-row hidden-template">
               <td class="app-list">
                 <div class="detail-list-style01">
-                  <p class="thumb"><img src="<?php echo base_url()."assets/images/default/campaign.png";?>"></p>
+                  <p class="thumb"><img class="campaign-image" src="<?php echo base_url()."assets/images/default/campaign.png";?>"></p>
                   <h2></h2>
                   <p class="description"></p>
                 </div>

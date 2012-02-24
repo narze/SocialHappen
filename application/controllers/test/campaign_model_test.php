@@ -301,6 +301,43 @@ class Campaign_model_test extends CI_Controller {
 		$this->unit->run($result, 1, "\$result", $result);
 	}
 
+	function get_incoming_campaigns_by_app_install_id_test(){
+		$app_install_id = 1;
+		$result = $this->campaigns->get_incoming_campaigns_by_app_install_id($app_install_id); //1
+		$this->unit->run($result[0]['campaign_name'], 'incoming', "\$result[0]['campaign_name']", $result[0]['campaign_name']);
+		$this->unit->run(count($result), 1, "\count($result)", count($result));
+	}
+
+	function get_active_campaigns_by_app_install_id_test(){
+		$app_install_id = 1;
+		$result = $this->campaigns->get_active_campaigns_by_app_install_id($app_install_id); //0
+		$this->unit->run(count($result), 0, "\count($result)", count($result));
+	}
+
+	function get_expired_campaigns_by_app_install_id_test(){
+		$app_install_id = 1;
+		$result = $this->campaigns->get_expired_campaigns_by_app_install_id($app_install_id); //0
+		$this->unit->run(count($result), 0, "\count($result)", count($result));
+	}
+
+	function count_incoming_campaigns_by_app_install_id_test(){
+		$app_install_id = 1;
+		$result = $this->campaigns->count_incoming_campaigns_by_app_install_id($app_install_id);
+		$this->unit->run($result, 1, "\$result", $result);
+	}
+
+	function count_active_campaigns_by_app_install_id_test(){
+		$app_install_id = 1;
+		$result = $this->campaigns->count_active_campaigns_by_app_install_id($app_install_id);
+		$this->unit->run($result, 0, "\$result", $result);
+	}
+
+	function count_expired_campaigns_by_app_install_id_test(){
+		$app_install_id = 1;
+		$result = $this->campaigns->count_expired_campaigns_by_app_install_id($app_install_id);
+		$this->unit->run($result, 0, "\$result", $result);
+	}
+
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */

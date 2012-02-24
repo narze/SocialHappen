@@ -141,9 +141,23 @@ class App_ctrl {
 	 * @return json $campaigns
 	 * @author Manassarn M.
 	 */
-	function json_get_campaigns($app_install_id = NULL, $limit = NULL, $offset = NULL){
+	function json_get_campaigns($app_install_id = NULL, $filter = NULL, $limit = NULL, $offset = NULL){
 		$this->CI->load->model('campaign_model','campaigns');
-		$campaigns = $this->CI->campaigns->get_app_campaigns_by_app_install_id($app_install_id, $limit, $offset);
+		switch($filter) {
+			case 'incoming':
+				$campaigns = $this->CI->campaigns->get_incoming_campaigns_by_app_install_id($app_install_id,$limit,$offset);
+				break;
+			case 'active':
+				$campaigns = $this->CI->campaigns->get_active_campaigns_by_app_install_id($app_install_id,$limit,$offset);
+				break;
+			case 'expired':
+				$campaigns = $this->CI->campaigns->get_expired_campaigns_by_app_install_id($app_install_id,$limit,$offset);
+				break;
+			default : 
+				$campaigns = $this->CI->campaigns->get_app_campaigns_by_app_install_id($app_install_id, $limit, $offset);
+				break;
+		}
+
 		return json_encode($campaigns);
 	}
 

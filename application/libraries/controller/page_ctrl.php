@@ -248,9 +248,22 @@ class Page_ctrl {
 	 * @param $page_id
 	 * @author Manassarn M.
 	 */
-	function json_get_campaigns($page_id =NULL, $limit = NULL, $offset = NULL){
+	function json_get_campaigns($page_id =NULL, $filter = NULL, $limit = NULL, $offset = NULL){
 		$this -> CI -> load -> model('campaign_model', 'campaigns');
-		$campaigns = $this -> CI -> campaigns -> get_page_campaigns_by_page_id($page_id, $limit, $offset);
+		switch($filter) {
+			case 'incoming':
+				$campaigns = $this->CI->campaigns->get_incoming_campaigns_by_page_id($page_id,$limit,$offset);
+				break;
+			case 'active':
+				$campaigns = $this->CI->campaigns->get_active_campaigns_by_page_id($page_id,$limit,$offset);
+				break;
+			case 'expired':
+				$campaigns = $this->CI->campaigns->get_expired_campaigns_by_page_id($page_id,$limit,$offset);
+				break;
+			default : 
+				$campaigns = $this->CI->campaigns->get_page_campaigns_by_page_id($page_id, $limit, $offset);
+				break;
+		}
 		return json_encode($campaigns);
 	}
 /**

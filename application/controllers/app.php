@@ -87,6 +87,42 @@ class App extends CI_Controller {
 		$count = $this->campaigns->count_campaigns_by_app_install_id_and_campaign_status_id($app_install_id, $campaign_status_id);
 		echo json_encode($count);
 	}
+
+	/**
+	 * JSON : Count incoming campaigns
+	 * @param $app_install_id
+	 * @author Weerapat P.
+	 */
+	function json_count_incoming_campaigns($app_install_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_incoming_campaigns_by_app_install_id($app_install_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count active campaigns
+	 * @param $app_install_id
+	 * @author Weerapat P.
+	 */
+	function json_count_active_campaigns($app_install_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_active_campaigns_by_app_install_id($app_install_id);
+		echo json_encode($count);
+	}
+
+	/**
+	 * JSON : Count expired campaigns
+	 * @param $app_install_id
+	 * @author Weerapat P.
+	 */
+	function json_count_expired_campaigns($app_install_id = NULL){
+		$this->socialhappen->ajax_check();
+		$this->load->model('campaign_model','campaigns');
+		$count = $this->campaigns->count_expired_campaigns_by_app_install_id($app_install_id);
+		echo json_encode($count);
+	}
 	
 	/**
 	 * JSON : Count users
@@ -119,7 +155,8 @@ class App extends CI_Controller {
 	 */
 	function json_get_campaigns($app_install_id = NULL, $limit = NULL, $offset = NULL){
 		$this->socialhappen->ajax_check();
-		$campaigns = $this->app_ctrl->json_get_campaigns($app_install_id, $limit, $offset);
+		$filter = $this->input->get('filter');
+		$campaigns = $this->app_ctrl->json_get_campaigns($app_install_id, $filter, $limit, $offset);
 		echo $campaigns;
 	}
 	
