@@ -298,8 +298,9 @@ $(function(){
 				items_per_page:1,
 				callback:filter_reward,
 				load_first_page:true,
-				next_text:null,
-				prev_text:null
+				next_text:'>',
+				prev_text:'<',
+				num_display_entries:10
 			});
 		}
 

@@ -81,7 +81,7 @@
         </div>
 
         <div class="list-reward p25"></div>
-        <div class="pagination-reward strip mt5 mb5"></div>
+        <div class="pagination-reward mt5 mb5"></div>
       </div>
   	
       <div class="activity-box">

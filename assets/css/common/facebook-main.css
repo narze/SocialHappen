@@ -102,39 +102,37 @@ div.strip div.pagination span.current {
 	padding: 0;
 	height: 30px;
 }
-div.pagination {
+.pagination {
     font-size: 12px;
     font-weight: bold;
     position: relative;
+    text-align:center;
 }
-div.pagination ul li {
-	float:left;
-}
-div.pagination a {
-    display: block;
+.pagination>a, .pagination>span {
+    display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;
     background: url(../../images/bg/bg_main.png) no-repeat;
     cursor: pointer;
-    float:left;
     width:21px;
     height:21px;
-    background-position:0 -250px;
-    text-align:center;
     padding:3px 2px 0 2px;
     color: #666;
 }
-div.pagination a:hover {
+.pagination>a{
+	background-position:0 -250px;
+}
+.pagination a:hover {
     text-decoration:none;
     color:#000;
 }
-div.pagination span{
-    color: #fff;
+.pagination>span{
+    background-position:-29px -250px;
+    color:#fff;
 }
-div.pagination> a.active{
-    width:21px;
-    height:21px;
-    background-position:-30px -250px;
-    color:fff;
-}
+.pagination .current.prev,
+.pagination .current.next { visibility: hidden; }
 
 /* Dashboard */
 .bt-time_up {
