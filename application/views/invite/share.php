@@ -48,7 +48,7 @@
 
 			<div style="text-align:right;height:50px">
 				<input type="submit" name="submit-form" value="Share" style="display:none">
-				<div class="sh-sharebutton submit"></div>
+				<div class="sh-sharebutton submit">Share</div>
 			</div>
 
 			<?php echo form_close();

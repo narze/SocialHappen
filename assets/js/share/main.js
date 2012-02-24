@@ -20,8 +20,12 @@ $(function(){
 	}
 
 	function submit_share(){
+		if($(this).hasClass('inactive')) {return false;}
+		$(this).addClass('inactive').text('Loading...');
+
 		if(!$('input.cb-share-twitter').attr('checked') && !$('input.cb-share-facebook').attr('checked')){
 			alert('Please share something');
+			$(this).removeClass('inactive').text('Share');
 			return false;
 		}
 		$('#share-submit').submit();

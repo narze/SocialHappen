@@ -24,7 +24,7 @@ echo form_open('settings/campaign/add/'.$app_install_id, $attributes); ?>
 </li>
 
 <li class="campaign-hour <?php echo (form_error('campaign_start_hour') || form_error('campaign_end_hour')) ? ' error' : ''; ?>">
-        <label for="campaign_start_hour"><span class="required">*</span>Campaign Period : </label>
+        <label for="campaign_start_hour"><span class="required">*</span>Campaign Hour : </label>
         <div class="inputs">
                 <input <?php echo form_error('campaign_start_hour') ? 'class="error"' : ''; ?> id="campaign_start_hour" type="text" name="campaign_start_hour" maxlength="10" style="width:140px;" value="<?php echo set_value('campaign_start_hour'); ?>"  />
                 <span class="str">Start Hour</span> - 
@@ -34,7 +34,7 @@ echo form_open('settings/campaign/add/'.$app_install_id, $attributes); ?>
 </li>
 
 <li class="campaign-min <?php echo (form_error('campaign_start_min') || form_error('campaign_end_min')) ? ' error' : ''; ?>">
-        <label for="campaign_start_min"><span class="required">*</span>Campaign Period : </label>
+        <label for="campaign_start_min"><span class="required">*</span>Campaign minute : </label>
         <div class="inputs">
                 <input <?php echo form_error('campaign_start_min') ? 'class="error"' : ''; ?> id="campaign_start_min" type="text" name="campaign_start_min" maxlength="10" style="width:140px;" value="<?php echo set_value('campaign_start_min'); ?>"  />
                 <span class="str">Start Min</span> - 

@@ -504,11 +504,11 @@ onLoad = function(){
 sh_test = function () { //this function is to test only, will be removed on production
 	(function($){
 		//DEBUG : remove this after test
-		$('body').append('<div class="sh-sharebutton" data-href="" />'); // for debug
+		$('body').append('<div class="sh-sharebutton" data-href="">Share</div>'); // for debug
 
 
 		//DEBUG : remove this after test
-		$('body').append('<div class="sh-invitebutton" data-href="" />'); // for debug
+		$('body').append('<div class="sh-invitebutton" data-href="" >Invite</div>'); // for debug
 
 		$('<div><a id="page_score" href="<?php echo $base_url;?>tab/my_page_score/<?php echo $page_id;?>">My Score</a></div>').appendTo('body');
 		$('<div><a id="page_leaderboard" href="<?php echo $base_url;?>tab/page_leaderboard/<?php echo $page_id;?>">Page Leaderboard</a></div>').appendTo('body');
