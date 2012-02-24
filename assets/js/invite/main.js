@@ -10,7 +10,7 @@
 		
 		FB.getLoginStatus(function(response) {
 		  if (response.authResponse) {
-			console.log('resp',response);
+			// console.log('resp',response);
 			friendSelectorInit();
 		  } else {
 			console.log('not permitted');

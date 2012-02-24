@@ -209,7 +209,7 @@ class Backend extends CI_Controller {
 						array(
 							 'field'   => 'app_config_facebook_canvas_path',
 							 'label'   => 'App Config Facebook Canvas Path',
-							 'rules'   => 'required|trim|xss_clean'
+							 'rules'   => 'trim|xss_clean'
 						)
 				);
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
@@ -303,7 +303,7 @@ class Backend extends CI_Controller {
 						array(
 							 'field'   => 'app_config_facebook_canvas_path',
 							 'label'   => 'App Config Facebook Canvas Path',
-							 'rules'   => 'required|trim|xss_clean'
+							 'rules'   => 'trim|xss_clean'
 						)
 				);
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
