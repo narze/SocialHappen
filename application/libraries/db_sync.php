@@ -285,6 +285,24 @@ class DB_Sync {
 				'app_image' =>  'https://apps.localhost.com/exclub/images/app_image_o.png',
 				'app_facebook_api_key' => '302231066461728' 	
 			),
+      array(
+        'app_id' => 13, 
+        'app_name' => '[Local]Quiz', 
+        'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'), 
+        'app_maintainance' => 0, 
+        'app_show_in_list' => 1, 
+        'app_description' => 'Quiz Application', 
+        'app_secret_key' => 'b79ebca20151427227b940b3329fff4d', 
+        'app_url' => 'https://apps.localhost.com/quiz?app_install_id={app_install_id}', 
+        'app_install_url' => 'https://apps.localhost.com/quiz/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+        'app_install_page_url' => 'https://apps.localhost.com/quiz/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+        'app_config_url' => 'https://apps.localhost.com/quiz/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+        'app_config_facebook_canvas_path' => NULL,
+        'app_support_page_tab' => 1, 
+        'app_icon' =>  'https://socialhappen.dyndns.org/socialhappen/assets/images/default/app_icon.png',
+        'app_image' =>  'https://socialhappen.dyndns.org/socialhappen/assets/images/default/app.png',
+        'app_facebook_api_key' => '249809481763956'   
+      )
 		);
 		$this->CI->db->insert_batch('app', $app);
 		
