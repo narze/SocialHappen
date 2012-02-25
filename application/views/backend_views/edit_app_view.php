@@ -168,7 +168,7 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 			</li>
 			
 			<li>
-				<?=form_label('App Config Facebook Canvas Path*', 'app_config_facebook_canvas_path', array(
+				<?=form_label('App Config Facebook Canvas Path', 'app_config_facebook_canvas_path', array(
 				'class' => 'app_config_facebook_canvas_path',
 				'style' => 'color: #000;',
 				));?>

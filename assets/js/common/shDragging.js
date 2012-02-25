@@ -340,7 +340,7 @@
 												$.fancybox({
 													content: 'Cannot install app, please contact administrator.'
 												});
-												//console.log("app/curl failed 2");
+												console.log("Failed installing app, please contact administrator.");
 											},
 											success: function(json) {
 												if(json!=null&&json.status.toUpperCase()=="OK") {
@@ -362,7 +362,7 @@
 													$.fancybox({
 													content: 'Cannot install app, please contact administrator.'
 												});
-													//console.log("app/curl json mismatch 2 : " + json);
+													console.log("Cannot install app, please contact administrator.");
 												}
 											}
 										});
@@ -747,7 +747,7 @@
 												.replace("{user_id}",user_id)
 												.replace("{page_id}",page_id)+"&force=1";		
 									set_loading();
-									
+									//console.log(app_install_url);
 									jQuery.ajax({
 										async:true,
 										url: base_url+"app/json_add_to_page",
@@ -765,7 +765,7 @@
 										error: function(jqXHR, textStatus, errorThrown) {
 											shDragging.show_installed_app_in_page(page_id,facebook_page_id);
 											shDragging.show_available_app_in_page(page_id);
-											//console.log("app/curl failed 3 " + errorThrown);
+											console.log(errorThrown);
 										},			
 										success: function(json) {
 											if(json!=null&&json.status!=null&&json.status.toUpperCase()=="OK") {

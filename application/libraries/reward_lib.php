@@ -17,7 +17,7 @@ class Reward_lib
 	function get_reward_currency($page_id){
 		$this->CI->load->model('app_component_page_model', 'app_component_page');
 		$app_component_page = $this->CI->app_component_page->get_by_page_id($page_id);
-		return $app_component_page['reward']['item_currency'];
+		return issetor($app_component_page['reward']['item_currency'], NULL);
 	}
 
 	function get_reward_item($reward_item_id){
