@@ -420,7 +420,12 @@ class DB_Sync {
 							    'company_id' => 1, 
 							    'app_id' => 12, 
 							    'available_date' => '2011-05-19 16:01:20'
-							)
+							),
+              array(
+                  'company_id' => 1, 
+                  'app_id' => 13, 
+                  'available_date' => '2011-05-19 16:01:20'
+              )
 						);
 		$this->CI->db->insert_batch('company_apps', $company_apps);
 		
@@ -1029,10 +1034,14 @@ class DB_Sync {
 				'package_id' => 1,
 				'app_id' => 11
 			),
-			array(
-				'package_id' => 1,
-				'app_id' => 12
-			),
+      array(
+        'package_id' => 1,
+        'app_id' => 12
+      ),
+      array(
+        'package_id' => 1,
+        'app_id' => 13
+      ),
 			array(
 				'package_id' => 2,
 				'app_id' => 1
