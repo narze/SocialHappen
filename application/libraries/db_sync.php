@@ -260,7 +260,7 @@ class DB_Sync {
 				'app_url' => 'https://apps.socialhappen.com/beta/exclub?app_install_id={app_install_id}', 
 				'app_install_url' => 'https://apps.socialhappen.com/beta/exclub/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
 				'app_install_page_url' => 'https://apps.socialhappen.com/beta/exclub/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-				'app_config_url' => 'https://apps.localhost.com/exclub/setting/dashboard/{app_install_id}/{user_id}/{app_install_secret_key}',
+				'app_config_url' => 'https://apps.socialhappen.com/beta/exclub/setting/dashboard/{app_install_id}/{user_id}/{app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
 				'app_support_page_tab' => 1, 
 				'app_icon' =>  'https://apps.socialhappen.com/beta/exclub/images/app_image_16.png',
@@ -284,6 +284,42 @@ class DB_Sync {
 				'app_icon' =>  'https://apps.localhost.com/exclub/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/exclub/images/app_image_o.png',
 				'app_facebook_api_key' => '302231066461728' 	
+			),
+			array(
+				'app_id' => 13, 
+				'app_name' => 'VoteApp', 
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Vote App - create vote feed and other details', 
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+				'app_url' => 'https://apps.socialhappen.com/beta/voteapp?app_install_id={app_install_id}', 
+				'app_install_url' => 'https://apps.socialhappen.com/beta/voteapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/voteapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'https://apps.socialhappen.com/beta/voteapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_config_facebook_canvas_path' => NULL,
+				'app_support_page_tab' => 1, 
+				'app_icon' =>  'https://apps.socialhappen.com/beta/voteapp/assets/images/app_image_16.png',
+				'app_image' =>  'https://apps.socialhappen.com/beta/voteapp/assets/images/app_image_o.png',
+				'app_facebook_api_key' => '109201202537135' 	
+			),
+			array(
+				'app_id' => 14, 
+				'app_name' => '[Local]VoteApp', 
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Vote App - create vote feed and other details', 
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+				'app_url' => 'https://apps.localhost.com/voteapp?app_install_id={app_install_id}', 
+				'app_install_url' => 'https://apps.localhost.com/voteapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'https://apps.localhost.com/voteapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'https://apps.localhost.com/voteapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_config_facebook_canvas_path' => NULL,
+				'app_support_page_tab' => 1, 
+				'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+				'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+				'app_facebook_api_key' => '218961554869668' 	
 			),
 		);
 		$this->CI->db->insert_batch('app', $app);
@@ -401,6 +437,16 @@ class DB_Sync {
 							array(
 							    'company_id' => 1, 
 							    'app_id' => 12, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 13, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 14, 
 							    'available_date' => '2011-05-19 16:01:20'
 							)
 						);
