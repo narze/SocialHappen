@@ -333,7 +333,7 @@ class DB_Sync {
 							    'campaign_status_id' => 1, 
 							    'campaign_start_timestamp' => '2011-05-19',
 							    'campaign_end_timestamp' => '2021-05-18',
-								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							),
 							array(
@@ -344,7 +344,7 @@ class DB_Sync {
 							    'campaign_status_id' => 2, 
 							    'campaign_start_timestamp' => '2011-05-18', 
 							    'campaign_end_timestamp' => '2021-06-18',
-								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							),
 							array(
@@ -355,7 +355,7 @@ class DB_Sync {
 							    'campaign_status_id' => 2, 
 							    'campaign_start_timestamp' => '2011-05-18', 
 							    'campaign_end_timestamp' => '2011-12-31',
-								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							)
 						);
@@ -373,7 +373,7 @@ class DB_Sync {
 							    'company_register_date' => '2011-05-09 17:52:17', 
 							    'company_username' => '', 
 							    'company_password' => '',
-							    'company_image' => BASE_URL.'uploads/images/32b299d9fb8a6e61784646ac80631153_o.png'
+							    'company_image' => BASE_URL.'assets/images/default/campaign.png'
 							)
 						);
 		$this->CI->db->insert_batch('company', $company);
@@ -504,7 +504,7 @@ class DB_Sync {
 						    'page_name' => 'SocialHappen Test', 
 						    'page_detail' => 'This is socialhappen test page',
 							'page_installed' => 0, 
-						    'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						    'page_image' => BASE_URL.'assets/images/default/page.png',
 							'page_user_fields' => json_encode(array(
 								1 => array(
 									'name' => 'size',
@@ -536,7 +536,7 @@ class DB_Sync {
 						'page_name' => 'SH Beta', 
 						'page_detail' => 'This is socialhappen beta page',
 						'page_installed' => 1, 
-						'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						'page_image' => BASE_URL.'assets/images/default/page.png',
 						'page_user_fields' => json_encode(array(
 							1 => array(
 								'name' => 'size',
@@ -573,18 +573,7 @@ class DB_Sync {
 							)	
 						)),
 						'facebook_tab_url' => ''
-					),
-					array(
-						'page_id' => 3, 
-						'facebook_page_id' => '135287989899131', 
-						'company_id' => 1, 
-						'page_name' => 'SH Beta', 
-						'page_detail' => 'detail', 
-						'page_installed' => 0, 
-						'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
-						'page_user_fields' => NULL,
-						'facebook_tab_url' => ''
-					),
+					)
 				);
 		$this->CI->db->insert_batch('page', $page);
 				
@@ -2098,9 +2087,9 @@ class DB_Sync {
 			  )
 		);
 		
-		$this->CI->load->model('App_component_page_model', 'app_component_page');
+		$this->CI->load->library('app_component_lib');
 		foreach($app_component_page_data as $app_component_page){
-			$this->CI->app_component_page->add($app_component_page);
+			$this->CI->app_component_lib->add_page($app_component_page);
 		}
 		
 		

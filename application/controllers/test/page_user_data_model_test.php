@@ -26,6 +26,20 @@ class Page_user_data_model_test extends CI_Controller {
 		// $this->load->model('fields_model','fields');
 		// $this->fields->add_fields(100,array('first_name','last_name','id'));
 	// }
+	function _add_page_before_test(){
+		$this->load->model('page_model');
+		$this->page_model->add_page(array(
+			'page_id' => 3, 
+			'facebook_page_id' => '135287989899131', 
+			'company_id' => 1, 
+			'page_name' => 'SH Beta', 
+			'page_detail' => 'detail', 
+			'page_installed' => 0, 
+			'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+			'page_user_fields' => NULL,
+			'facebook_tab_url' => ''
+		));
+	}
 	
 	/**
 	 * Test add_page_user()
