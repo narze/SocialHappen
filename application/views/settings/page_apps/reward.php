@@ -15,7 +15,7 @@
 	    	
 		<?php endforeach;
 			else :
-				echo 'u have no reward now';
+				echo '<div class="mt20 mb20"><div class="notice warning">You have no reward now.</div></div>';
 			endif;
 	      ?>
 	    </div>

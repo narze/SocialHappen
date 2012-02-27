@@ -259,6 +259,9 @@ $(function(){
 			if($('.reward-item-form').length > 0) {
 				return false;
 			}
+			if($('.notice').length > 0) {
+				$('.notice').hide();
+			}
 			$.get(base_url+'settings/page_reward/add_item/'+page_id, function(data){
 				var form_div = $(data).prependTo('.reward-item-list').removeClass('reward-item-template')
 				.addClass('reward-item-form');
@@ -269,6 +272,9 @@ $(function(){
 					var cancel = $('.btn.cancel').bind('click', cancel);
 					function cancel(){
 						form_div.remove();
+						if($('.reward-item').length == 0) {
+							$('.notice').show();
+						}
 					}
 					if(form_div.find('form').length > 0){
 						$('.start-date, .end-date').datepicker({
