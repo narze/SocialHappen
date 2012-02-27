@@ -83,6 +83,7 @@ $(function(){
 	load_page_activities = function () {
 		
 		var activities_per_page = 10;
+		var limit = 100;
 
 		filter_page_activities = function (page_index,jq){
 			set_loading();
@@ -95,12 +96,14 @@ $(function(){
 		
 		$('.main-content').html('<div class="list-recent-activity"></div><div class="pagination-activity strip"></div>')
 		$.get(base_url+'tab/json_count_page_activities/'+page_id, function(count) {
+			if(count > limit) count = limit;
 			$('.pagination-activity').pagination(count, {
 				items_per_page:activities_per_page,
 				callback:filter_page_activities,
 				load_first_page:true,
 				next_text:null,
-				prev_text:null
+				prev_text:null,
+				num_display_entries:10
 			});
 		});
 	}
@@ -263,13 +266,16 @@ $(function(){
 
 		activitiy_pagination = function (){
 			var filter = get_filter();
+			var limit = 40;
 			$.get(base_url+'tab/json_count_page_activities/'+page_id+'?filter='+filter, function(count) {
+				if(count > limit) count = limit;
 				$('.pagination-activity').pagination(count, {
 					items_per_page:per_page,
 					callback:filter_activities,
 					load_first_page:true,
 					next_text:null,
-					prev_text:null
+					prev_text:null,
+					num_display_entries:10
 				});
 			});
 		}

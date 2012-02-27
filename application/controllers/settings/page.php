@@ -37,7 +37,7 @@ class Page extends CI_Controller {
 
 			$this->load->model('app_component_page_model', 'app_component_page');
 			$app_component_page = $this->app_component_page->get_by_page_id($page_id);
-			$page['reward'] = $app_component_page['reward'];
+			$page['reward'] = isset($app_component_page['reward']) ? $app_component_page['reward'] : '';
 			
 			foreach($company_users as $key => &$value){ //Company admins
 				if(!($company_users[$key]['role_all'] || $company_users[$key]['role_all_company_pages_edit'])){
