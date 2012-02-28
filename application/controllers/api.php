@@ -17,6 +17,26 @@ class Api extends CI_Controller {
 		echo json_encode(array('status' => 'OK'));
 		
 	}
+
+	function request_array(){
+		$app_id = $this->input->get('app_id', TRUE); 
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$company_id = $this->input->get('company_id', TRUE);
+		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$page_id = $this->input->get('page_id', TRUE);
+		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
+		$campaign_id = $this->input->get('campaign_id', TRUE);
+		
+		$request_names = explode(',', $this->input->get('request_names', TRUE));
+		$request_params = compact('app_id', 'app_secret_key', 'app_install_id', 'app_install_secret_key', 'company_id', 'user_id', 'user_facebook_id', 'page_id', 'facebook_page_id', 'campaign_id');
+		
+		$response = $this->api_lib->request_array($request_names, $request_params);
+		
+		$this->_print_api_result($response);
+	}
 	
 	/**
 	 * Request for installation from app
@@ -417,11 +437,13 @@ class Api extends CI_Controller {
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
-		$campaign_id = $this->input->get('campaign_id', TRUE); //optional
+		$page_id = $this->input->get('page_id', TRUE);
 		$facebook_page_id = $this->input->get('facebook_page_id', TRUE); 
-		$user_facebook_id = $this->input->get('user_facebook_id', TRUE); 
+		$user_id = $this->input->get('user_id', TRUE);
+		$user_facebook_id = $this->input->get('user_facebook_id', TRUE);
+		$campaign_id = $this->input->get('campaign_id', TRUE); //optional
 		
-		$response = $this->api_lib->request_invite_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $campaign_id, $facebook_page_id, $user_facebook_id);
+		$response = $this->api_lib->request_invite_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, $facebook_page_id, $user_id, $user_facebook_id, $campaign_id);
 		
 		$this->_print_api_result($response);
 		

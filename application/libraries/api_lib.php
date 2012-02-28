@@ -7,8 +7,159 @@
  */
 class Api_Lib {
 
-	function __construct() {
+	private $skip_auth = FALSE;
+
+	function __construct($skip_auth = FALSE) {
         $this->CI =& get_instance();
+        $this->skip_auth = $skip_auth;
+    }
+
+    /**
+     * Multiple request using array
+     * @param array request names
+     * - apis enabled to request via this function :
+	 *   request_user_facebook_id
+	 *   request_facebook_page_id
+	 *   request_authenticate
+	 *   request_user_session
+	 *   request_user
+	 *   request_page_users
+	 *   request_app_users
+	 *   bar
+	 *   get_started
+	 *   setting_template
+	 *   read_notification
+	 *   show_notification
+	 *   request_facebook_tab_url
+	 *   request_invite_list
+	 *   request_current_campaign
+	 *   request_user_classes
+	 *   request_page_role
+	 *   request_campaign_list'
+     * @param array request parameters
+     * @author Manassarn M.
+     */
+    function request_array($request_names = NULL, $request_params = NULL){
+    	if(!$request_names || !$request_params){
+    		return FALSE;
+    	}
+    	$app_id = issetor($request_params['app_id'], NULL);
+    	$app_secret_key = issetor($request_params['app_secret_key'], NULL);
+    	$app_install_id = issetor($request_params['app_install_id'], NULL);
+    	$app_install_secret_key = issetor($request_params['app_install_secret_key'], NULL);
+    	$page_id = issetor($request_params['page_id'], NULL);
+    	$facebook_page_id = issetor($request_params['facebook_page_id'], NULL);
+    	$user_id = issetor($request_params['user_id'], NULL);
+    	$user_facebook_id = issetor($request_params['user_facebook_id'], NULL);
+    	$campaign_id = issetor($request_params['campaign_id'], NULL);
+    	
+    	if(!$this->_authenticate_app($app_id, $app_secret_key)){
+			return FALSE;
+		}
+		
+		// only for request_install_app and request_authenticate
+		// if(!$this->_authenticate_user($company_id, $user_id)){
+		// 	return FALSE;
+		// }
+
+		if(!$user_id){
+			$this->CI->load->model('user_model','user');
+			$user_id = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id);
+		}
+
+		if(!$page_id){
+			$page_id = $this->CI->Page->get_page_id_by_facebook_page_id($facebook_page_id);
+		}
+
+		$this->skip_auth = TRUE;
+		$result = array();
+		foreach($request_names as $request){
+			switch ($request) {
+				case 'request_user_facebook_id' :
+					$result['data']['request_user_facebook_id'] =
+						$this->request_user_facebook_id($user_id);
+					break;
+				case 'request_facebook_page_id' :
+					$result['data']['request_facebook_page_id'] =
+						$this->request_facebook_page_id($page_id);
+					break;
+				case 'request_authenticate' :
+					$result['data']['request_authenticate'] =
+						$this->request_authenticate($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $user_id, $user_facebook_id);
+					break;
+				case 'request_user_session' :
+					$result['data']['request_user_session'] = 
+						$this->request_user_session($user_id, $user_facebook_id);
+					break;
+				case 'request_user' :
+					$result['data']['request_user'] = 
+						$this->request_user($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $user_id, $user_facebook_id);
+					break;
+				case 'request_page_users' :
+					$result['data']['request_page_users'] = 
+						$this->request_page_users($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, $facebook_page_id);
+					break;
+				case 'request_app_users' :
+					$result['data']['request_app_users'] =
+						$this->request_app_users($app_id, $app_secret_key, $app_install_id, $app_install_secret_key);
+					break;
+				case 'bar' :
+					$result['data']['bar'] = 
+						$this->bar($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $user_facebook_id, $user_id);
+					break;
+				case 'get_started' :
+					$result['data']['get_started'] =
+						$this->get_started($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $user_facebook_id, $user_id);
+					break;
+				case 'setting_template' :
+					$result['data']['setting_template'] = 
+						$this->setting_template($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $user_facebook_id, $user_id);
+					break;
+				case 'read_notification' :
+					$result['data']['read_notification'] =
+						$this->read_notification($user_id, NULL); //TODO : specify $notification_list
+					break;
+				case 'show_notification' :
+					$result['data']['show_notification'] =
+						$this->show_notification($user_id, 10); //TODO : specify $limit
+					break;
+				case 'request_facebook_tab_url' :
+					$result['data']['request_facebook_tab_url'] =
+						$this->request_facebook_tab_url($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $facebook_page_id, $page_id);
+					break;
+				case 'request_invite_list' :
+					$result['data']['request_invite_list'] =
+						$this->request_invite_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, $facebook_page_id, $user_id, $user_facebook_id, $campaign_id);
+					break;
+				case 'request_current_campaign' :
+					$result['data']['request_current_campaign'] =
+						$this->request_current_campaign($app_id, $app_secret_key, $app_install_id, $app_install_secret_key);
+					break;
+				case 'request_user_classes' :
+					$result['data']['request_user_classes'] =
+						$this->request_user_classes($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, $facebook_page_id);
+					break;
+				case 'request_page_role' :
+					$result['data']['request_page_role'] =
+						$this->request_page_role($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $page_id, $facebook_page_id, $user_id, $user_facebook_id);
+					break;
+				case 'request_campaign_list' :
+					$result['data']['request_campaign_list'] =
+						$this->request_campaign_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key);
+					break;
+				
+				default:
+					# code...
+					break;
+				}
+			
+		}
+		if(!empty($result['data'])){
+			$result['status'] = 'OK';
+			$result['success'] = TRUE;
+		}
+    	$this->skip_auth = FALSE;
+    	return $result;
     }
 
 	/**
@@ -47,13 +198,15 @@ class Api_Lib {
 			
 		}		
 		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate user with $company_id and $user_facebook_id
-		if(!$this->_authenticate_user($company_id, $user_id)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate user with $company_id and $user_facebook_id
+			if(!$this->_authenticate_user($company_id, $user_id)){
+				return FALSE;
+			}
 		}
 		
 		// generate app_install_secret_key for app
@@ -165,7 +318,7 @@ class Api_Lib {
 	 *	@param app_install_id int install id of an app
 	 *	@param app_install_secret_key string install secret key of an app
 	 *	@param page_id int SH id of a page
-	 *	@param facebook_page_is string facebook id of a page
+	 *	@param facebook_page_id string facebook id of a page
 	 *	@param user_id int SH id of a user
 	 *	@param user_facebook_id string facebook id of a user
 	 *
@@ -197,14 +350,15 @@ class Api_Lib {
 									'message' => 'user session error, please login through platform'));
 		}
 		
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		$this->CI->load->model('Installed_apps_model', 'Installed_apps');
@@ -395,14 +549,15 @@ class Api_Lib {
 			return (array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 		}
-				
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		// log user
@@ -519,11 +674,12 @@ class Api_Lib {
 
 		}
 		
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
 		}
-		
+
 		// get company_id
 		$this->CI->load->model('Installed_apps_model', 'Installed_apps');
 		$app = $this->CI->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
@@ -541,7 +697,7 @@ class Api_Lib {
 		if(!$user_id){
 			$this->CI->load->model('user_model','user');
 			$user_id = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id);
-		} else if(!$this->_authenticate_user($company_id, $user_id)){
+		} else if(!$this->skip_auth && !$this->_authenticate_user($company_id, $user_id)){
 			return FALSE;
 		}
 		
@@ -608,14 +764,15 @@ class Api_Lib {
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 			
 		}
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 
 		$response = array('status' => 'OK');
@@ -663,14 +820,16 @@ class Api_Lib {
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id)'));
 
 		}
-				
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
 		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		$this->CI->load->model('installed_apps_model','installed_apps');
@@ -731,16 +890,17 @@ class Api_Lib {
 
 		}
 		
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
-		}
-		
+
 		$response = array('status' => 'OK');
 		
 		$this->CI->load->model('user_apps_model','user_apps');
@@ -886,14 +1046,15 @@ class Api_Lib {
 
 		}
 		
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 				
 		$data = array(
@@ -934,13 +1095,15 @@ class Api_Lib {
 			return FALSE;
 		}
 		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		//get page_id
@@ -985,14 +1148,16 @@ class Api_Lib {
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
 			return FALSE;
 		}
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		//get page_id
@@ -1091,14 +1256,15 @@ class Api_Lib {
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, achievement_infos)'));
 		}
 		
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		$response = array('status' => 'OK');
@@ -1186,13 +1352,15 @@ class Api_Lib {
 			return FALSE;
 		}
 		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		// authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			// authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		$response = array();
@@ -1259,13 +1427,15 @@ class Api_Lib {
 
 		}
 		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			//authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		$this->CI->load->library('invite_component_lib');
@@ -1317,13 +1487,15 @@ class Api_Lib {
 			
 		}
 		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			//authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		$this->CI->load->library('invite_component_lib');
@@ -1361,25 +1533,37 @@ class Api_Lib {
 	 */
 	function request_invite_list($app_id = NULL, $app_secret_key = NULL, 
 		$app_install_id = NULL, $app_install_secret_key = NULL,
-		$campaign_id = NULL, $facebook_page_id = NULL,
-		$user_facebook_id = NULL){
+		$page_id = NULL, $facebook_page_id = NULL,
+		$user_id = NULL, $user_facebook_id = NULL,
+		$campaign_id = NULL){
 		
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key) ||
-			!($facebook_page_id) || !($user_facebook_id) 
+			(!$page_id && !$facebook_page_id) || (!$user_facebook_id && !$user_id)
 		){
-			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, facebook_page_id, user_facebook_id)');
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id, user_id/user_facebook_id)');
 			return (array( 'error' => '100',
-									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, facebook_page_id, user_facebook_id)'));
+									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, page_id/facebook_page_id, user_id/user_facebook_id)'));
 
 		}
-		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
 
+		if(!$user_id){
+			$this->CI->load->model('user_model','user');
+			$user_id = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id);
+		}
+
+		if(!$page_id){
+			$page_id = $this->CI->Page->get_page_id_by_facebook_page_id($facebook_page_id);
 		}
 		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			//authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		$this->CI->load->library('invite_component_lib');
@@ -1429,13 +1613,15 @@ class Api_Lib {
 
 		}
 		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			//authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		
 		$this->CI->load->library('campaign_lib');
@@ -1480,13 +1666,15 @@ class Api_Lib {
 
 		}
 		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			//authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 	
 		if(!$page_id){
@@ -1559,14 +1747,17 @@ class Api_Lib {
 
 		}
 
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			//authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
-		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
-		}
+
 		if(!$page_id){
 			$this->CI->load->model('Page_model','Page');
 			$page_id = $this->CI->Page->get_page_id_by_facebook_page_id($facebook_page_id);
@@ -1687,13 +1878,15 @@ class Api_Lib {
 				user_facebook_id)'));
 		}
 
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			//authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 		if(!$page_id){
 			$this->CI->load->model('Page_model','Page');
@@ -1736,13 +1929,15 @@ class Api_Lib {
 				'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
 		}
 		
-		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return FALSE;
-		}
-		
-		//authenticate app install with $app_install_id and $app_install_secret_key
-		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return FALSE;
+		if(!$this->skip_auth){
+			if(!$this->_authenticate_app($app_id, $app_secret_key)){
+				return FALSE;
+			}
+			
+			//authenticate app install with $app_install_id and $app_install_secret_key
+			if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+				return FALSE;
+			}
 		}
 
 		$this->CI->load->model('campaign_model');
