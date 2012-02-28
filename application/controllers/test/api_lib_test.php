@@ -780,6 +780,20 @@ class Api_lib_test extends CI_Controller {
 		$this->unit->run($result['error'], 'Page not found', "\$result['error']", $result['error']);
 		$this->unit->run($result['data'], 'is_null', "\$result['data']", $result['data']);
 	}
+
+	function request_campaign_list_test(){
+		$app_id = APP_ID;
+		$app_secret_key = APP_SECRET_KEY;
+		$app_install_id = $this->app_install_id;
+		$app_install_secret_key = $this->app_install_secret_key;
+		$result = $this->api_lib->request_campaign_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run(count($result['data']), 3, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['campaign_id'] == 7, TRUE, "\$result['data'][0]['campaign_id'] == 7", $result['data'][0]['campaign_id'] == 7);
+		$this->unit->run($result['data'][1]['campaign_id'] == 6, TRUE, "\$result['data'][1]['campaign_id'] == 6", $result['data'][1]['campaign_id'] == 6);
+		$this->unit->run($result['data'][2]['campaign_id'] == 5, TRUE, "\$result['data'][2]['campaign_id'] == 5", $result['data'][2]['campaign_id'] == 5);
+	}
 }
 
 /* End of file api_lib_test.php */

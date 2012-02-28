@@ -511,89 +511,26 @@ class Api extends CI_Controller {
 			$app_install_secret_key, $page_id, $facebook_page_id, $user_id, $user_facebook_id);
 		$this->_print_api_result($response);
 	}
-	
-	function _authenticate_app($app_id, $app_secret_key){
-		// authenticate app with $app_id and $app_secret_key
-		$this->load->model('App_model', 'App');
-		$app = $this->App->get_app_by_app_id($app_id);
-		if($app != NULL && $app['app_secret_key']== $app_secret_key){
-			return TRUE;
-		} else {
-			log_message('error','app_secret_key mismatch, app authenticate failed');
-			echo json_encode(array( 
-				'error' => '200',
-				'message' => 'invalid app_secret_key')
-			);
-			return FALSE;
-		}
-	}
-	
-	function _authenticate_app_install($app_install_id, $app_install_secret_key){
-		// authenticate app with $app_id and $app_install_secret_key
-		$this->load->model('Installed_apps_model', 'Installed_apps');
-		$app = $this->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
-		if($app != NULL){
-			return ($app['app_install_secret_key'] == $app_install_secret_key);
-		} else {
-			log_message('error','app_install_secret_key mismatch, app authenticate failed');
-			echo json_encode(array( 
-				'error' => '500',
-				'message' => 'invalid app_install_secret_key')
-			);
-			return FALSE;
-		}
-	}
-	
-	function _authenticate_user($company_id, $user_id){
-		// authenticate user with $company_id and $user_id
-		$this->load->model('User_companies_model', 'User_companies');
-		$company_admin_list_query = $this->User_companies->get_user_companies_by_company_id($company_id, 1000, 0);
-		$company_admin_list = array();
-		foreach ($company_admin_list_query as $admin) {
-			$company_admin_list[] = $admin['user_id'];
-		}
-		if(in_array($user_id, $company_admin_list)){
-			return TRUE;
-		} else {
-			log_message('error',"User #{$user_id} has no permission in company #{$company_id}");
-			echo json_encode(array( 
-				'error' => '300',
-				'message' => 'you have no permission to install app on this company')
-			);
-			return FALSE;
-		}
-	}
 
-	function _generate_app_install_secret_key($company_id, $app_id){
-		return md5($this->_generate_random_string());
+	function request_campaign_list(){
+		$app_id = $this->input->get('app_id', TRUE);
+		$app_secret_key = $this->input->get('app_secret_key', TRUE);
+		$app_install_id = $this->input->get('app_install_id', TRUE);
+		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$response = $this->api_lib->request_campaign_list($app_id, $app_secret_key, $app_install_id, 
+			$app_install_secret_key);
+		$this->_print_api_result($response);
 	}
 	
 	function _print_api_result($result){
 		if(issetor($result)){
 			echo json_encode($result);
 		}else{
-			echo json_encode(
-								array(
-										'status' => 'ERROR',
-										'message' => 'API error, please check your parameters and try again'
-									)
-							);
+			echo json_encode(array(
+				'status' => 'ERROR',
+				'message' => 'API error, please check your parameters and try again'
+			));
 		}
-	}
-	
-	/**
-	 * generate random string !
-	 */
-	function _generate_random_string() {
-	    $length = 10;
-	    $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-	    $string = '';    
-	
-	    for ($p = 0; $p < $length; $p++) {
-	        $string .= $characters[mt_rand(0, strlen($characters) - 1)];
-	    }
-
-    	return $string;
 	}
 }
 

@@ -48,12 +48,12 @@ class Api_Lib {
 		}		
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate user with $company_id and $user_facebook_id
 		if(!$this->_authenticate_user($company_id, $user_id)){
-			return;
+			return FALSE;
 		}
 		
 		// generate app_install_secret_key for app
@@ -199,12 +199,12 @@ class Api_Lib {
 		
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$this->CI->load->model('Installed_apps_model', 'Installed_apps');
@@ -397,12 +397,12 @@ class Api_Lib {
 		}
 				
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// log user
@@ -521,7 +521,7 @@ class Api_Lib {
 		
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// get company_id
@@ -542,7 +542,7 @@ class Api_Lib {
 			$this->CI->load->model('user_model','user');
 			$user_id = $this->CI->user->get_user_id_by_user_facebook_id($user_facebook_id);
 		} else if(!$this->_authenticate_user($company_id, $user_id)){
-			return;
+			return FALSE;
 		}
 		
 		return (array( 	'status' => 'OK',
@@ -610,12 +610,12 @@ class Api_Lib {
 		}
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 
 		$response = array('status' => 'OK');
@@ -665,12 +665,12 @@ class Api_Lib {
 		}
 				
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$this->CI->load->model('installed_apps_model','installed_apps');
@@ -733,12 +733,12 @@ class Api_Lib {
 		
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$response = array('status' => 'OK');
@@ -888,12 +888,12 @@ class Api_Lib {
 		
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 				
 		$data = array(
@@ -931,16 +931,16 @@ class Api_Lib {
 			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)');
 			echo (array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
-			return;
+			return FALSE;
 		}
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		//get page_id
@@ -983,16 +983,16 @@ class Api_Lib {
 			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)');
 			echo (array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key, user_id/user_facebook_id)'));
-			return;
+			return FALSE;
 		}
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		//get page_id
@@ -1093,12 +1093,12 @@ class Api_Lib {
 		
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$response = array('status' => 'OK');
@@ -1183,16 +1183,16 @@ class Api_Lib {
 			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
 			return (array( 'error' => '100',
 									'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
-			return;
+			return FALSE;
 		}
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		// authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$response = array();
@@ -1260,12 +1260,12 @@ class Api_Lib {
 		}
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		//authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$this->CI->load->library('invite_component_lib');
@@ -1318,12 +1318,12 @@ class Api_Lib {
 		}
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		//authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$this->CI->load->library('invite_component_lib');
@@ -1379,7 +1379,7 @@ class Api_Lib {
 		
 		//authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$this->CI->load->library('invite_component_lib');
@@ -1430,12 +1430,12 @@ class Api_Lib {
 		}
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		//authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		$this->CI->load->library('campaign_lib');
@@ -1481,12 +1481,12 @@ class Api_Lib {
 		}
 		
 		if(!$this->_authenticate_app($app_id, $app_secret_key)){
-			return;
+			return FALSE;
 		}
 		
 		//authenticate app install with $app_install_id and $app_install_secret_key
 		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
-			return;
+			return FALSE;
 		}
 	
 		if(!$page_id){
@@ -1726,6 +1726,31 @@ class Api_Lib {
 			'success' => TRUE,
 			'status' => 'OK', 
 			'data' => array('role' => $role)
+		);
+	}
+
+	function request_campaign_list($app_id = NULL, $app_secret_key = NULL, $app_install_id = NULL, $app_install_secret_key = NULL){
+		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
+			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
+			return (array( 'error' => '100',
+				'message' => 'invalid parameter, some are missing (need: app_id, app_secret_key, app_install_id, app_install_secret_key)'));
+		}
+		
+		if(!$this->_authenticate_app($app_id, $app_secret_key)){
+			return FALSE;
+		}
+		
+		//authenticate app install with $app_install_id and $app_install_secret_key
+		if(!$this->_authenticate_app_install($app_install_id, $app_install_secret_key)){
+			return FALSE;
+		}
+
+		$this->CI->load->model('campaign_model');
+		$campaigns = $this->CI->campaign->get_app_campaigns_by_app_install_id_ordered($app_install_id, 'campaign_start_timestamp desc');
+		return array(
+			'success' => TRUE,
+			'status' => 'OK',
+			'data' => $campaigns
 		);
 	}
 
