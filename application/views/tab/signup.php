@@ -17,10 +17,6 @@
 		<?php $attributes = array('class' => 'signup-form', 'id' => ''); echo form_open_multipart('tab/signup_submit/'.$page_id, $attributes); ?>
         <div class="profile">
 			<img class="profile" src="<?php echo $user_profile_picture;?>" />
-			<div class="upload-pic">
-				<span><a href="#">(Change)</a></span>
-				<input id="user_image" type="file" name="user_image">
-			</div>
 			<p class="name"><?php echo $facebook_user['first_name'].' '.$facebook_user['last_name'];?></p>
         </div>
         <div class="form">

@@ -567,8 +567,8 @@ class Api_lib_test extends CI_Controller {
 																);
 		
 		$result = $this->api_lib->request_invite_list(APP_ID, APP_SECRET_KEY, $this->app_install_id,
-												$this->app_install_secret_key, CAMPAIGN_ID, FACEBOOK_PAGE_ID,
-												USER_FACEBOOK_ID);
+												$this->app_install_secret_key, PAGE_ID, FACEBOOK_PAGE_ID,
+												USER_ID, USER_FACEBOOK_ID, CAMPAIGN_ID);
 		
 		
 		$this->unit->run($result, 'is_array', 'request_invite_list()', print_r($result, TRUE));
@@ -591,7 +591,7 @@ class Api_lib_test extends CI_Controller {
 		
 		$identical_campaign = $current_campaign['campaign_id'] == $result['campaign_id'];
 		
-		$this->unit->run($result, 'is_array', 'request_invite_list()', print_r($result, TRUE));
+		$this->unit->run($result, 'is_array', 'request_current_campaign()', print_r($result, TRUE));
 		$this->unit->run($identical_campaign, 'is_true', 'identical_campaign', $result['campaign_id']);
 		
 	}
@@ -779,6 +779,94 @@ class Api_lib_test extends CI_Controller {
 		$this->unit->run($result['status'], 'ERROR', "\$result['status']", $result['status']);
 		$this->unit->run($result['error'], 'Page not found', "\$result['error']", $result['error']);
 		$this->unit->run($result['data'], 'is_null', "\$result['data']", $result['data']);
+	}
+
+	function request_campaign_list_test(){
+		$app_id = APP_ID;
+		$app_secret_key = APP_SECRET_KEY;
+		$app_install_id = $this->app_install_id;
+		$app_install_secret_key = $this->app_install_secret_key;
+		$result = $this->api_lib->request_campaign_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run(count($result['data']), 3, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['campaign_id'] == 7, TRUE, "\$result['data'][0]['campaign_id'] == 7", $result['data'][0]['campaign_id'] == 7);
+		$this->unit->run($result['data'][1]['campaign_id'] == 6, TRUE, "\$result['data'][1]['campaign_id'] == 6", $result['data'][1]['campaign_id'] == 6);
+		$this->unit->run($result['data'][2]['campaign_id'] == 5, TRUE, "\$result['data'][2]['campaign_id'] == 5", $result['data'][2]['campaign_id'] == 5);
+	}
+
+	function request_array_test(){
+		$app_id = APP_ID;
+		$app_secret_key = APP_SECRET_KEY;
+		$app_install_id = $this->app_install_id;
+		$app_install_secret_key = $this->app_install_secret_key;
+		$user_id = USER_ID;
+		$page_id = PAGE_ID;
+		$campaign_id = CAMPAIGN_ID;
+		$request_array = array(
+			'request_user_facebook_id',
+			'request_facebook_page_id',
+			'request_authenticate',
+			'request_user_session',
+			'request_user',
+			'request_page_users',
+			'request_app_users',
+			'bar',
+			'get_started',
+			'setting_template',
+			'read_notification',
+			'show_notification',
+			'request_facebook_tab_url',
+			'request_invite_list',
+			'request_current_campaign',
+			'request_user_classes',
+			'request_page_role',
+			'request_campaign_list',
+			// these apis are disabled right now
+			// request_create_invite,
+			// request_login,
+			// request_add_achievement_infos,
+			// request_count_limit_service,
+			// request_add_limit_service,
+			// request_user_session,
+			// request_authenticate,
+			// request_log_user,
+			// request_page_id,
+			// request_user_id,
+			// request_install_page,
+			// request_install_app
+		);
+		$request_data = compact(
+			'app_id', 
+			'app_secret_key', 
+			'app_install_id', 
+			'app_install_secret_key', 
+			'user_id', 
+			'page_id',
+			'campaign_id'
+		);
+		$result = $this->api_lib->request_array($request_array, $request_data);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run($result['data']['request_user_facebook_id']['user_facebook_id'], USER_FACEBOOK_ID, "\$result['data']['request_user_facebook_id']['user_facebook_id']", $result['data']['request_user_facebook_id']['user_facebook_id']);
+		$this->unit->run($result['data']['request_facebook_page_id']['facebook_page_id'], FACEBOOK_PAGE_ID, "\$result['data']['request_facebook_page_id']['facebook_page_id']", $result['data']['request_facebook_page_id']['facebook_page_id']);
+		$this->unit->run($result['data']['request_authenticate'], TRUE, "\$result['data']['request_authenticate']", $result['data']['request_authenticate']);
+		$this->unit->run($result['data']['request_user_session'], TRUE, "\$result['data']['request_user_session']", $result['data']['request_user_session']);
+		$this->unit->run($result['data']['request_user']['user_first_name'], 'is_string', "\$result['data']['request_user']['user_first_name']", $result['data']['request_user']['user_first_name']);
+		$this->unit->run($result['data']['request_page_users']['page_users'], 'is_array', "\$result['data']['request_page_users']['page_users']", $result['data']['request_page_users']['page_users']);
+		$this->unit->run($result['data']['request_app_users']['app_users'], 'is_array', "\$result['data']['request_app_users']['app_users']", $result['data']['request_app_users']['app_users']);
+		$this->unit->run($result['data']['bar']['status'], 'OK', "\$result['data']['bar']['status']", $result['data']['bar']['status']);
+		$this->unit->run($result['data']['get_started']['status'], 'OK', "\$result['data']['get_started']['status']", $result['data']['get_started']['status']);
+		$this->unit->run($result['data']['setting_template']['status'], 'OK', "\$result['data']['setting_template']['status']", $result['data']['setting_template']['status']);
+		$this->unit->run($result['data']['show_notification'], 'is_array', "\$result['data']['show_notification']", $result['data']['show_notification']);
+		$this->unit->run($result['data']['read_notification']['result'], 'OK', "\$result['data']['read_notification']['result']", $result['data']['read_notification']['result']);
+		$this->unit->run($result['data']['request_facebook_tab_url']['status'], 'OK', "\$result['data']['request_facebook_tab_url']['status']", $result['data']['request_facebook_tab_url']['status']);
+		$this->unit->run($result['data']['request_invite_list']['invite_list'], 'is_array', "\$result['data']['request_invite_list']['invite_list']", $result['data']['request_invite_list']['invite_list']);
+		$this->unit->run($result['data']['request_current_campaign']['campaign_id'], TRUE, "\$result['data']['request_current_campaign']['campaign_id']", $result['data']['request_current_campaign']['campaign_id']);
+		$this->unit->run(count($result['data']['request_user_classes']['data']), 3, "\$result['data']['request_user_classes']", count($result['data']['request_user_classes']));
+		$this->unit->run($result['data']['request_page_role']['data']['role'], 'admin', "\$result['data']['request_page_role']['data']['role']", $result['data']['request_page_role']['data']['role']);
+		$this->unit->run($result['data']['request_campaign_list']['data'][0]['campaign_id'], 7, "\$result['data']['request_campaign_list']['data'][0]['campaign_id']", $result['data']['request_campaign_list']['data'][0]['campaign_id']);
+
 	}
 }
 

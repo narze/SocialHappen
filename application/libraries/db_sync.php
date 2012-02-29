@@ -260,7 +260,7 @@ class DB_Sync {
 				'app_url' => 'https://apps.socialhappen.com/beta/exclub?app_install_id={app_install_id}', 
 				'app_install_url' => 'https://apps.socialhappen.com/beta/exclub/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
 				'app_install_page_url' => 'https://apps.socialhappen.com/beta/exclub/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
-				'app_config_url' => 'https://apps.localhost.com/exclub/setting/dashboard/{app_install_id}/{user_id}/{app_install_secret_key}',
+				'app_config_url' => 'https://apps.socialhappen.com/beta/exclub/setting/dashboard/{app_install_id}/{user_id}/{app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
 				'app_support_page_tab' => 1, 
 				'app_icon' =>  'https://apps.socialhappen.com/beta/exclub/images/app_image_16.png',
@@ -302,7 +302,61 @@ class DB_Sync {
         'app_icon' =>  'https://socialhappen.dyndns.org/socialhappen/assets/images/default/app_icon.png',
         'app_image' =>  'https://socialhappen.dyndns.org/socialhappen/assets/images/default/app.png',
         'app_facebook_api_key' => '249809481763956'   
-      )
+      ),
+      array(
+        'app_id' => 14, 
+        'app_name' => 'Quiz', 
+        'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'), 
+        'app_maintainance' => 0, 
+        'app_show_in_list' => 1, 
+        'app_description' => 'Quiz Application', 
+        'app_secret_key' => 'b79ebca20151427227b940b3329fff4d', 
+        'app_url' => 'https://apps.localhost.com/quiz?app_install_id={app_install_id}', 
+        'app_install_url' => 'https://apps.localhost.com/quiz/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+        'app_install_page_url' => 'https://apps.localhost.com/quiz/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+        'app_config_url' => 'https://apps.localhost.com/quiz/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+        'app_config_facebook_canvas_path' => NULL,
+        'app_support_page_tab' => 1, 
+        'app_icon' =>  'https://socialhappen.dyndns.org/socialhappen/assets/images/default/app_icon.png',
+        'app_image' =>  'https://socialhappen.dyndns.org/socialhappen/assets/images/default/app.png',
+        'app_facebook_api_key' => '249809481763956'   
+      ),
+			array(
+				'app_id' => 15, 
+				'app_name' => 'VoteApp', 
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Vote App - create vote feed and other details', 
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+				'app_url' => 'https://apps.socialhappen.com/beta/voteapp?app_install_id={app_install_id}', 
+				'app_install_url' => 'https://apps.socialhappen.com/beta/voteapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/voteapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'https://apps.socialhappen.com/beta/voteapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_config_facebook_canvas_path' => NULL,
+				'app_support_page_tab' => 1, 
+				'app_icon' =>  'https://apps.socialhappen.com/beta/voteapp/assets/images/app_image_16.png',
+				'app_image' =>  'https://apps.socialhappen.com/beta/voteapp/assets/images/app_image_o.png',
+				'app_facebook_api_key' => '109201202537135' 	
+			),
+			array(
+				'app_id' => 16, 
+				'app_name' => '[Local]VoteApp', 
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
+				'app_maintainance' => 0, 
+				'app_show_in_list' => 1, 
+				'app_description' => 'Vote App - create vote feed and other details', 
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+				'app_url' => 'https://apps.localhost.com/voteapp?app_install_id={app_install_id}', 
+				'app_install_url' => 'https://apps.localhost.com/voteapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
+				'app_install_page_url' => 'https://apps.localhost.com/voteapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_config_url' => 'https://apps.localhost.com/voteapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
+				'app_config_facebook_canvas_path' => NULL,
+				'app_support_page_tab' => 1, 
+				'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+				'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+				'app_facebook_api_key' => '218961554869668' 	
+			)
 		);
 		$this->CI->db->insert_batch('app', $app);
 		
@@ -315,7 +369,7 @@ class DB_Sync {
 							    'campaign_status_id' => 1, 
 							    'campaign_start_timestamp' => '2011-05-19',
 							    'campaign_end_timestamp' => '2021-05-18',
-								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							),
 							array(
@@ -326,7 +380,7 @@ class DB_Sync {
 							    'campaign_status_id' => 2, 
 							    'campaign_start_timestamp' => '2011-05-18', 
 							    'campaign_end_timestamp' => '2021-06-18',
-								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							),
 							array(
@@ -337,7 +391,7 @@ class DB_Sync {
 							    'campaign_status_id' => 2, 
 							    'campaign_start_timestamp' => '2011-05-18', 
 							    'campaign_end_timestamp' => '2011-12-31',
-								'campaign_image' => BASE_URL.'uploads/images/e9cd374dff834f3bfbeb24d4682c6417_o.png',
+								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							)
 						);
@@ -355,7 +409,7 @@ class DB_Sync {
 							    'company_register_date' => '2011-05-09 17:52:17', 
 							    'company_username' => '', 
 							    'company_password' => '',
-							    'company_image' => BASE_URL.'uploads/images/32b299d9fb8a6e61784646ac80631153_o.png'
+							    'company_image' => BASE_URL.'assets/images/default/campaign.png'
 							)
 						);
 		$this->CI->db->insert_batch('company', $company);
@@ -425,6 +479,21 @@ class DB_Sync {
                   'company_id' => 1, 
                   'app_id' => 13, 
                   'available_date' => '2011-05-19 16:01:20'
+              ),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 14, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+							array(
+							    'company_id' => 1, 
+							    'app_id' => 15, 
+							    'available_date' => '2011-05-19 16:01:20'
+							),
+              array(
+                  'company_id' => 1, 
+                  'app_id' => 16, 
+                  'available_date' => '2011-05-19 16:01:20'
               )
 						);
 		$this->CI->db->insert_batch('company_apps', $company_apps);
@@ -481,7 +550,7 @@ class DB_Sync {
 						    'page_name' => 'SocialHappen Test', 
 						    'page_detail' => 'This is socialhappen test page',
 							'page_installed' => 0, 
-						    'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						    'page_image' => BASE_URL.'assets/images/default/page.png',
 							'page_user_fields' => json_encode(array(
 								1 => array(
 									'name' => 'size',
@@ -513,7 +582,7 @@ class DB_Sync {
 						'page_name' => 'SH Beta', 
 						'page_detail' => 'This is socialhappen beta page',
 						'page_installed' => 1, 
-						'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
+						'page_image' => BASE_URL.'assets/images/default/page.png',
 						'page_user_fields' => json_encode(array(
 							1 => array(
 								'name' => 'size',
@@ -550,18 +619,7 @@ class DB_Sync {
 							)	
 						)),
 						'facebook_tab_url' => ''
-					),
-					array(
-						'page_id' => 3, 
-						'facebook_page_id' => '135287989899131', 
-						'company_id' => 1, 
-						'page_name' => 'SH Beta', 
-						'page_detail' => 'detail', 
-						'page_installed' => 0, 
-						'page_image' => BASE_URL.'uploads/images/1e0e1797879fb03f648d6751f43a2697_o.png',
-						'page_user_fields' => NULL,
-						'facebook_tab_url' => ''
-					),
+					)
 				);
 		$this->CI->db->insert_batch('page', $page);
 				
@@ -2079,9 +2137,9 @@ class DB_Sync {
 			  )
 		);
 		
-		$this->CI->load->model('App_component_page_model', 'app_component_page');
+		$this->CI->load->library('app_component_lib');
 		foreach($app_component_page_data as $app_component_page){
-			$this->CI->app_component_page->add($app_component_page);
+			$this->CI->app_component_lib->add_page($app_component_page);
 		}
 		
 		
