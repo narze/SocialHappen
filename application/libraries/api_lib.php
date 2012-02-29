@@ -1941,7 +1941,7 @@ class Api_Lib {
 		}
 
 		$this->CI->load->model('campaign_model');
-		$campaigns = $this->CI->campaign->get_app_campaigns_by_app_install_id_ordered($app_install_id, 'campaign_start_timestamp desc');
+		$campaigns = $this->CI->campaign_model->get_app_campaigns_by_app_install_id_ordered($app_install_id, 'campaign_start_timestamp desc');
 		return array(
 			'success' => TRUE,
 			'status' => 'OK',
