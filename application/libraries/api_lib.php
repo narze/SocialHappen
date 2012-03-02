@@ -52,6 +52,7 @@ class Api_Lib {
     	$user_id = issetor($request_params['user_id'], NULL);
     	$user_facebook_id = issetor($request_params['user_facebook_id'], NULL);
     	$campaign_id = issetor($request_params['campaign_id'], NULL);
+    	$unix = issetor($request_params['unix'], NULL);
     	
     	if(!$this->_authenticate_app($app_id, $app_secret_key)){
 			return FALSE;
@@ -145,7 +146,7 @@ class Api_Lib {
 					break;
 				case 'request_campaign_list' :
 					$result['data']['request_campaign_list'] =
-						$this->request_campaign_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key);
+						$this->request_campaign_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, $unix);
 					break;
 				
 				default:
@@ -249,6 +250,7 @@ class Api_Lib {
 				$campaign = array(
 					'app_install_id' => $app_install_id,
 					'campaign_name' => 'Campaign',
+					'campaign_status_id' => $this->CI->socialhappen->get_k('campaign_status', 'Active'),
 					'campaign_start_timestamp' => date("y-m-d H:i:s"),
 					'campaign_end_timestamp' => date("y-m-d H:i:s", strtotime('+10 years')),
 					'campaign_end_message' => 'Campaign Ended');
@@ -1922,7 +1924,7 @@ class Api_Lib {
 		);
 	}
 
-	function request_campaign_list($app_id = NULL, $app_secret_key = NULL, $app_install_id = NULL, $app_install_secret_key = NULL){
+	function request_campaign_list($app_id = NULL, $app_secret_key = NULL, $app_install_id = NULL, $app_install_secret_key = NULL, $unix = FALSE){
 		if(!($app_id) || !($app_secret_key) || !($app_install_id) || !($app_install_secret_key)){
 			log_message('error','Missing parameter (app_id, app_secret_key, app_install_id, app_install_secret_key)');
 			return (array( 'error' => '100',
@@ -1942,6 +1944,14 @@ class Api_Lib {
 
 		$this->CI->load->model('campaign_model');
 		$campaigns = $this->CI->campaign_model->get_app_campaigns_by_app_install_id_ordered($app_install_id, 'campaign_start_timestamp desc');
+		if($unix){
+			foreach($campaigns as &$campaign){
+				$campaign['campaign_start_timestamp'] = strtotime($campaign['campaign_start_timestamp']);
+				$campaign['campaign_end_timestamp'] = strtotime($campaign['campaign_end_timestamp']);
+				$campaign['app_install_date'] = strtotime($campaign['app_install_date']);
+			} unset($campaign);
+		}
+
 		return array(
 			'success' => TRUE,
 			'status' => 'OK',

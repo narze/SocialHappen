@@ -29,9 +29,9 @@ class Api extends CI_Controller {
 		$page_id = $this->input->get('page_id', TRUE);
 		$facebook_page_id = $this->input->get('facebook_page_id', TRUE);
 		$campaign_id = $this->input->get('campaign_id', TRUE);
-		
+		$unix = $this->input->get('unit', TRUE);
 		$request_names = explode(',', $this->input->get('request_names', TRUE));
-		$request_params = compact('app_id', 'app_secret_key', 'app_install_id', 'app_install_secret_key', 'company_id', 'user_id', 'user_facebook_id', 'page_id', 'facebook_page_id', 'campaign_id');
+		$request_params = compact('app_id', 'app_secret_key', 'app_install_id', 'app_install_secret_key', 'company_id', 'user_id', 'user_facebook_id', 'page_id', 'facebook_page_id', 'campaign_id', 'unix');
 		
 		$response = $this->api_lib->request_array($request_names, $request_params);
 		
@@ -539,8 +539,9 @@ class Api extends CI_Controller {
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
+		$unit = $this->input->get('unix', TRUE);
 		$response = $this->api_lib->request_campaign_list($app_id, $app_secret_key, $app_install_id, 
-			$app_install_secret_key);
+			$app_install_secret_key, $unix);
 		$this->_print_api_result($response);
 	}
 	

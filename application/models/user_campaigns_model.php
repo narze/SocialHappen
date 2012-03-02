@@ -1,9 +1,10 @@
 <?php
 class User_campaigns_model extends CI_Model {
-	var $campaign_id = '';
 
 	function __construct() {
 		parent::__construct();
+		$this->active_campaign_status_id = $this->socialhappen->get_k('campaign_status', 'Active');
+		$this->inactive_campaign_status_id = $this->socialhappen->get_k('campaign_status', 'Inactive');
 	}
 
 	/**
@@ -105,7 +106,7 @@ class User_campaigns_model extends CI_Model {
 			$this->db->limit($limit, $offset);
 		}
 		$this->db->where('user.user_id',$user_id);
-		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('campaign_status_id', $this->active_campaign_status_id);
 		$this->db->where('TIMESTAMP(campaign_start_timestamp) > CURRENT_TIMESTAMP()');
 		$this->db->order_by('campaign_start_timestamp', 'desc');
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
@@ -119,7 +120,7 @@ class User_campaigns_model extends CI_Model {
 			$this->db->limit($limit, $offset);
 		}
 		$this->db->where('user.user_id',$user_id);
-		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('campaign_status_id', $this->active_campaign_status_id);
 		$this->db->where('TIMESTAMP(campaign_start_timestamp) <= CURRENT_TIMESTAMP()');
 		$this->db->where('TIMESTAMP(campaign_end_timestamp) >= CURRENT_TIMESTAMP()');
 		$this->db->order_by('campaign_start_timestamp', 'desc');
@@ -134,7 +135,7 @@ class User_campaigns_model extends CI_Model {
 			$this->db->limit($limit, $offset);
 		}
 		$this->db->where('user.user_id',$user_id);
-		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('campaign_status_id', $this->active_campaign_status_id);
 		$this->db->where('TIMESTAMP(campaign_end_timestamp) < CURRENT_TIMESTAMP()');
 		$this->db->order_by('campaign_start_timestamp', 'desc');
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
@@ -148,7 +149,7 @@ class User_campaigns_model extends CI_Model {
 			$this->db->limit($limit, $offset);
 		}
 		$this->db->where('user.user_id',$user_id);
-		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('campaign_status_id', $this->active_campaign_status_id);
 		$this->db->where('TIMESTAMP(campaign_start_timestamp) > CURRENT_TIMESTAMP()');
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
 		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');
@@ -160,7 +161,7 @@ class User_campaigns_model extends CI_Model {
 			$this->db->limit($limit, $offset);
 		}
 		$this->db->where('user.user_id',$user_id);
-		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('campaign_status_id', $this->active_campaign_status_id);
 		$this->db->where('TIMESTAMP(campaign_start_timestamp) <= CURRENT_TIMESTAMP()');
 		$this->db->where('TIMESTAMP(campaign_end_timestamp) >= CURRENT_TIMESTAMP()');
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
@@ -173,7 +174,7 @@ class User_campaigns_model extends CI_Model {
 			$this->db->limit($limit, $offset);
 		}
 		$this->db->where('user.user_id',$user_id);
-		$this->db->where('campaign_status_id', 2); //enabled
+		$this->db->where('campaign_status_id', $this->active_campaign_status_id);
 		$this->db->where('TIMESTAMP(campaign_end_timestamp) < CURRENT_TIMESTAMP()');
 		$this -> db -> join('user', 'user.user_id=user_campaigns.user_id');
 		$this->db->join('campaign','user_campaigns.campaign_id=campaign.campaign_id');

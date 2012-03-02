@@ -71,7 +71,7 @@ class Api_lib_test extends CI_Controller {
 	}
 	
 	function request_install_app_test(){
-		
+
 		$this->load->model('Installed_apps_model');
 	
 		$result = $this->api_lib->request_install_app(APP_ID,APP_SECRET_KEY,COMPANY_ID,USER_ID,USER_FACEBOOK_ID);
@@ -85,6 +85,14 @@ class Api_lib_test extends CI_Controller {
 		
 		$result = $this->Installed_apps_model->get_app_profile_by_app_install_id($this->app_install_id);
 		$this->unit->run($result, 'is_array', 'new installed app', print_r($result, TRUE));
+
+		//find campaign created by this app
+		$this->load->model('campaign_model');
+		$result = $this->campaign_model->get_campaigns_by_app_install_id($this->app_install_id);
+		$this->unit->run(count($result), 1, "\$result", $result);
+		$result = $result[0];
+		$this->unit->run($result['campaign_name'], 'Campaign', "\$result['campaign_id']", $result['campaign_id']);
+		$this->unit->run($result['campaign_status_id'], $this->socialhappen->get_k('campaign_status', 'Active'), "\$result['campaign_status_id']", $result['campaign_status_id']);
 		
 	}
 	
@@ -793,6 +801,16 @@ class Api_lib_test extends CI_Controller {
 		$this->unit->run($result['data'][0]['campaign_id'] == 7, TRUE, "\$result['data'][0]['campaign_id'] == 7", $result['data'][0]['campaign_id'] == 7);
 		$this->unit->run($result['data'][1]['campaign_id'] == 6, TRUE, "\$result['data'][1]['campaign_id'] == 6", $result['data'][1]['campaign_id'] == 6);
 		$this->unit->run($result['data'][2]['campaign_id'] == 5, TRUE, "\$result['data'][2]['campaign_id'] == 5", $result['data'][2]['campaign_id'] == 5);
+		$sql_timestamp_length = strlen($result['data'][0]['campaign_start_timestamp']);
+
+		//Enable conversion to unix timestamp
+		$result = $this->api_lib->request_campaign_list($app_id, $app_secret_key, $app_install_id, $app_install_secret_key, TRUE);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['status'], 'OK', "\$result['status']", $result['status']);
+		$this->unit->run(count($result['data']), 3, "count(\$result['data'])", count($result['data']));
+		$this->unit->run(strlen($result['data'][0]['campaign_start_timestamp']) != $sql_timestamp_length, TRUE, "\$result['data'][0]['campaign_start_timestamp']", $result['data'][0]['campaign_start_timestamp']);
+		$this->unit->run(strlen($result['data'][1]['campaign_end_timestamp']) != $sql_timestamp_length, TRUE, "\$result['data'][1]['campaign_end_timestamp']", $result['data'][1]['campaign_end_timestamp']);
+		$this->unit->run(strlen($result['data'][2]['app_install_date']) != $sql_timestamp_length, TRUE, "\$result['data'][2]['app_install_date']", $result['data'][2]['app_install_date']);
 	}
 
 	function request_array_test(){
@@ -803,6 +821,7 @@ class Api_lib_test extends CI_Controller {
 		$user_id = USER_ID;
 		$page_id = PAGE_ID;
 		$campaign_id = CAMPAIGN_ID;
+		$unix = TRUE;
 		$request_array = array(
 			'request_user_facebook_id',
 			'request_facebook_page_id',
@@ -843,7 +862,8 @@ class Api_lib_test extends CI_Controller {
 			'app_install_secret_key', 
 			'user_id', 
 			'page_id',
-			'campaign_id'
+			'campaign_id',
+			'unix'
 		);
 		$result = $this->api_lib->request_array($request_array, $request_data);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
@@ -866,7 +886,7 @@ class Api_lib_test extends CI_Controller {
 		$this->unit->run(count($result['data']['request_user_classes']['data']), 3, "\$result['data']['request_user_classes']", count($result['data']['request_user_classes']));
 		$this->unit->run($result['data']['request_page_role']['data']['role'], 'admin', "\$result['data']['request_page_role']['data']['role']", $result['data']['request_page_role']['data']['role']);
 		$this->unit->run($result['data']['request_campaign_list']['data'][0]['campaign_id'], 7, "\$result['data']['request_campaign_list']['data'][0]['campaign_id']", $result['data']['request_campaign_list']['data'][0]['campaign_id']);
-
+		$this->unit->run(strlen($result['data']['request_campaign_list']['data'][0]['campaign_start_timestamp']) != 19 /*sql timestamp*/, TRUE, "\$result['data']['request_campaign_list']['data'][0]['campaign_start_timestamp']", $result['data']['request_campaign_list']['data'][0]['campaign_start_timestamp']);
 	}
 }
 
