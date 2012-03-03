@@ -539,7 +539,7 @@ class Api extends CI_Controller {
 		$app_secret_key = $this->input->get('app_secret_key', TRUE);
 		$app_install_id = $this->input->get('app_install_id', TRUE);
 		$app_install_secret_key = $this->input->get('app_install_secret_key', TRUE);
-		$unit = $this->input->get('unix', TRUE);
+		$unix = $this->input->get('unix', TRUE);
 		$response = $this->api_lib->request_campaign_list($app_id, $app_secret_key, $app_install_id, 
 			$app_install_secret_key, $unix);
 		$this->_print_api_result($response);
