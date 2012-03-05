@@ -7,9 +7,9 @@
 */
 
 /*set these customized parameters first*/
-define('APP_ID','1');
+define('APP_ID','5');
 define('COMPANY_ID','1');
-define('APP_SECRET_KEY','ad3d4f609ce1c21261f45d0a09effba4');
+define('APP_SECRET_KEY','985a868ee8aec810d3a25a3367776ea7');
 define('USER_ID','1');
 define('PAGE_ID','1');
 define('USER_FACEBOOK_ID','713558190');
@@ -107,11 +107,27 @@ class Api_lib_test extends CI_Controller {
 		$this->unit->run($result, 'is_array', 'request_install_page()', print_r($result, TRUE));
 		$install_status = $result['status'];
 		$this->unit->run($install_status, 'OK', 'install_page_status', $install_status);
+		$this->unit->run($result['message'], 'page saved', "\$result['message']", $result['message']);
 		
 		$finish_installed_page_count = $this->Installed_apps_model->count_installed_apps_by_page_id(PAGE_ID);
 		$different_installed_page = $finish_installed_page_count - $init_installed_page_count;
 		$this->unit->run($different_installed_page, 1, 'new installed page', $different_installed_page);
 		
+		//Install again will be failed
+		$result = $this->api_lib->request_install_page(APP_ID,APP_SECRET_KEY,$this->app_install_id,
+														$this->app_install_secret_key,PAGE_ID,FACEBOOK_PAGE_ID,
+														USER_ID, USER_FACEBOOK_ID);
+		
+		$this->unit->run($result, 'is_array', 'request_install_page()', print_r($result, TRUE));
+		$install_status = $result['status'];
+		$this->unit->run($install_status, 'ERROR', '$install_status', $install_status);
+		$this->unit->run($result['message'], 'duplicated_app_in_page', "\$result['message']", $result['message']);
+		
+		$finish_installed_page_count = $this->Installed_apps_model->count_installed_apps_by_page_id(PAGE_ID);
+		$different_installed_page = $finish_installed_page_count - $init_installed_page_count;
+		$this->unit->run($different_installed_page, 1, 'new installed page', $different_installed_page);
+		
+
 	}
 		
 	function request_user_id_test(){

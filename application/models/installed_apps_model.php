@@ -162,6 +162,13 @@ class Installed_apps_model extends CI_Model {
 	function update_facebook_tab_url_by_app_install_id($app_install_id = NULL, $facebook_tab_url = NULL){
 		return $this->db->update('installed_apps', array('facebook_tab_url' => $facebook_tab_url), array('app_install_id'=>$app_install_id));
 	}
+
+	/**
+	 * Universal Get
+	 */
+	function get($where) {
+		return $this->db->get_where('installed_apps', $where)->result_array();
+	}
 }
 /* End of file installed_apps_model.php */
 /* Location: ./application/models/installed_apps_model.php */

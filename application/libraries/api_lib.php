@@ -363,22 +363,27 @@ class Api_Lib {
 			}
 		}
 		
-		$this->CI->load->model('Installed_apps_model', 'Installed_apps');
-		$company_id = $this->CI->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
-		
-		if(sizeof($company_id)==0){
-			return (array( 'error' => '500',
-									'message' => 'invalid company_id'));
-						
-		}
-		
-		$company_id = $company_id['company_id'];
-		
 		$this->CI->load->model('Page_model', 'Page');
-		
 		if(!$page_id){
 			$page_id = $this->CI->Page->get_page_id_by_facebook_page_id($facebook_page_id);
 		}
+
+		$this->CI->load->model('Installed_apps_model', 'Installed_apps');
+		$installed_app = $this->CI->Installed_apps->get_app_profile_by_app_install_id($app_install_id);
+		
+		if(sizeof($installed_app)==0){
+			return (array( 'error' => '500',
+									'message' => 'invalid company_id'));
+						
+		} else if($same_page_app = $this->CI->Installed_apps->get(array('app_id'=>$app_id,'page_id'=>$page_id))){
+			return (array( 'status' => 'ERROR',
+									'error' => '500',
+									'message' => 'duplicated_app_in_page'));
+		}
+		
+		$company_id = $installed_app['company_id'];
+		
+		
 		
 		if($page = $this->CI->Page->get_page_profile_by_page_id($page_id)){
 			// add app to page = new page_apps
@@ -388,9 +393,7 @@ class Api_Lib {
 				
 				//Update latest installed app install id in page
 				$this->CI->Page->update_page_profile_by_page_id($page_id, array('page_app_installed_id' => $app_install_id));
-				
-			
-										
+					
 				$response = array(	'status' => 'OK',
 							'message' => 'page saved');
 			}else{
