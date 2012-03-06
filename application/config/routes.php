@@ -69,6 +69,7 @@ $route['settings/page_apps/(:num)'] = "settings/page_apps/index/$1";
 $route['settings/page_signup_fields/(:num)'] = "settings/page_signup_fields/index/$1";
 $route['settings/page_user_class/(:num)'] = "settings/page_user_class/index/$1";
 $route['settings/page_reward/(:num)'] = "settings/page_reward/index/$1";
+$route['settings/page_challenge/(:num)'] = "settings/page_challenge/index/$1";
 $route['r/(:any)'] = "redirect/$1";
 
 

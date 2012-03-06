@@ -400,6 +400,10 @@ $(function(){
 	function badges(){
 
 	}
+
+	function challenge() {
+		
+	}
 	
 	$('ul.platform-apps li a').live('click',function(){
 		element = $(this);			
@@ -417,6 +421,8 @@ $(function(){
 					badges();
 				} else if (element.attr('id') == 'reward-terms-and-conditions'){
 					terms_and_conditions();
+				} else if (element.attr('id') == 'challenge'){
+					challenge();
 				}
 			});
 			make_form(element);

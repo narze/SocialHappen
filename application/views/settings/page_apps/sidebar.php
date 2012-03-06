@@ -8,6 +8,7 @@
 				<li><a id="badges" href="<?php echo base_url()."settings/page_badges/view/{$page['page_id']}";?>"><b>Badges</b></a></li>
 				<li><a id="reward" href="<?php echo base_url()."settings/page_reward/view/{$page['page_id']}";?>"><b>Reward</b></a></li>
 				<li><a id="reward-terms-and-conditions" href="<?php echo base_url()."settings/page_reward/terms_and_conditions/{$page['page_id']}";?>">- Terms and Conditions</a></li>
+				<li><a id="challenge" href="<?php echo base_url()."settings/page_challenge/view/{$page['page_id']}";?>"><b>Challenge</b></a></li>
 			</ul>
 			</li>
 			<li>Page apps
