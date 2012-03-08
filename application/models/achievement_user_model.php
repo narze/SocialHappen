@@ -53,14 +53,13 @@ class Achievement_user_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function add($user_id = NULL, $achievement_id = NULL, $app_id = NULL, 
-							$app_install_id = NULL, $info = array()){
+							$app_install_id = NULL, $info = array(), $ref = 'achievement_info'){
 									
 		$check_args = isset($user_id) && isset($app_id) && isset($app_install_id);
 		if($check_args){
 			$achievement_user = array();
 			
-			$achievement_id_ref = MongoDBRef::create("achievement_info", 
-																								new MongoId($achievement_id));
+			$achievement_id_ref = MongoDBRef::create($ref, new MongoId($achievement_id));
 
 			if($this->achievement_user->find(array('user_id' => $user_id,
 							'achievement_id' => $achievement_id_ref))->count() > 0){
@@ -87,7 +86,7 @@ class Achievement_user_model extends CI_Model {
 			
 			return $this->achievement_user->insert($achievement_user);
 			
-		}else{
+		} else {
 			return FALSE;
 		}
 	}
@@ -136,17 +135,16 @@ class Achievement_user_model extends CI_Model {
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function delete($user_id = NULL, $achievement_id = NULL){
+	function delete($user_id = NULL, $achievement_id = NULL, $ref = 'achievement_info'){
 		$check_args = isset($user_id) && isset($achievement_id);
 		if($check_args){
-			$achievement_id_ref = MongoDBRef::create("achievement_info", 
-																								new MongoId($achievement_id));
+			$achievement_id_ref = MongoDBRef::create($ref, new MongoId($achievement_id));
 			
 			return $this->achievement_user
 									->remove(array('user_id' => $user_id,
 									'achievement_id' => $achievement_id_ref), 
 									array('$atomic' => TRUE));
-		}else{
+		} else {
 			return FALSE;
 		}
 	}

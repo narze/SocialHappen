@@ -28,7 +28,6 @@ class Page_challenge extends CI_Controller {
 			$now = time();
 			
 			$challenges = $this->challenge_lib->get(array('page_id' => $page_id));
-
 			foreach($challenges as &$challenge){
 				
 				$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $user['user_timezone_offset']);
@@ -105,6 +104,11 @@ class Page_challenge extends CI_Controller {
 				$this->load->library('timezone_lib');
 				$start_timestamp = $this->timezone_lib->unconvert_time(set_value('start_date'), $user['user_timezone_offset']);
 				$end_timestamp = $this->timezone_lib->unconvert_time(set_value('end_date'), $user['user_timezone_offset']);
+				$criteria = $this->input->post('criteria');
+				foreach($criteria as &$one) {
+					$one['query'] = array_cast_int($one['query']);
+					$one['count'] = (int) $one['count'];
+				} unset($one);
 				
 				$input = array(
 					'page_id' => $page_id,
@@ -112,7 +116,7 @@ class Page_challenge extends CI_Controller {
 			       	'end' => strtotime($end_timestamp),
 			       	// 'status' => set_value('status'),
 			       	'detail' => $this->input->post('detail'),
-				    'criteria' => $this->input->post('criteria')
+				    'criteria' => $criteria
 				);
 				if($update){
 					$challenge_id = $this->input->post('challenge_id');
@@ -130,21 +134,7 @@ class Page_challenge extends CI_Controller {
 			
 				if ($challenge_id)
 				{
-					if($update && issetor($update_result)){
-						echo 'update success';
-					}
-
-					$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($challenge_id)));
-					
-					$challenge['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $user['user_timezone_offset']);
-					$challenge['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['end']), $user['user_timezone_offset']);
-					
-					$this->load->vars(array(
-						'challenge'=>$challenge, 
-						'challenge_id'=>$challenge_id
-						)
-					);
-					$this->load->view('settings/page_apps/challenge');
+					redirect('settings/page_challenge/'.$page_id.'?success=1');
 				}
 				else
 				{

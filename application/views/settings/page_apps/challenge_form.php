@@ -42,17 +42,23 @@
 				echo set_value('criteria[0][name]',
 					issetor($challenge['criteria'][0]['name'])); 
 			?>" />
-		Query
-		<input type="text" name="criteria[0][query]" 
+		Query : app_id
+		<input type="text" name="criteria[0][query][app_id]" 
 			value="<?php 
-				echo set_value('criteria[0][query]',
-					issetor($challenge['criteria'][0]['query'])); 
+				echo set_value('criteria[0][query][app_id]',
+					issetor($challenge['criteria'][0]['query']['app_id'])); 
 			?>" />
-		Image
-		<input type="text" name="criteria[0][image]" 
+		Query : action_id
+		<input type="text" name="criteria[0][query][action_id]" 
 			value="<?php 
-				echo set_value('criteria[0][image]',
-					issetor($challenge['criteria'][0]['image'])); 
+				echo set_value('criteria[0][query][action_id]',
+					issetor($challenge['criteria'][0]['query']['action_id'])); 
+			?>" />
+		Count
+		<input type="text" name="criteria[0][count]" 
+			value="<?php 
+				echo set_value('criteria[0][count]',
+					issetor($challenge['criteria'][0]['count'])); 
 			?>" /><br />
 		Criteria 2<br />
 		Name
@@ -61,17 +67,23 @@
 				echo set_value('criteria[1][name]',
 					issetor($challenge['criteria'][1]['name'])); 
 			?>" />
-		Query
-		<input type="text" name="criteria[1][query]" 
+		Query : app_id
+		<input type="text" name="criteria[1][query][app_id]" 
 			value="<?php 
-				echo set_value('criteria[1][query]',
-					issetor($challenge['criteria'][1]['query'])); 
+				echo set_value('criteria[1][query][app_id]',
+					issetor($challenge['criteria'][1]['query']['app_id'])); 
 			?>" />
-		Image
-		<input type="text" name="criteria[1][image]" 
+		Query : action_id
+		<input type="text" name="criteria[1][query][action_id]" 
 			value="<?php 
-				echo set_value('criteria[1][image]',
-					issetor($challenge['criteria'][1]['image'])); 
+				echo set_value('criteria[1][query][action_id]',
+					issetor($challenge['criteria'][1]['query']['action_id'])); 
+			?>" />
+		Count
+		<input type="text" name="criteria[1][count]" 
+			value="<?php 
+				echo set_value('criteria[1][count]',
+					issetor($challenge['criteria'][1]['count'])); 
 			?>" />
 		<button>Add more criteria</button>
 	<div class="section">
