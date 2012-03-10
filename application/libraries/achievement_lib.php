@@ -340,7 +340,7 @@ class Achievement_lib
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
 		$result = $this->CI->achievement_stat->set($app_id, $user_id, $data);
 		if($result){
-			$this->_test_reward_achievement($app_id, $user_id, $info);
+			$this->_test_reward_achievement_and_challenge($app_id, $user_id, $info);
 		}
 		
 		return $result;
@@ -394,7 +394,7 @@ class Achievement_lib
 				$this->_increment_platform_score($user_id, $app_id, $info['action_id'],
 				 $amount);
 			}
-			$this->_test_reward_achievement($app_id, $user_id, $info);
+			$this->_test_reward_achievement_and_challenge($app_id, $user_id, $info);
 		}
 		
 		return $increment_result;
@@ -453,7 +453,7 @@ class Achievement_lib
 		}
 	}
 	
-	function _test_reward_achievement($app_id = NULL, $user_id = NULL,
+	function _test_reward_achievement_and_challenge($app_id = NULL, $user_id = NULL,
 		$info = array()){
 		
 		$app_id = (int) $app_id;
@@ -627,6 +627,13 @@ class Achievement_lib
 				// echo 'user_id: '.$user_id.' got reward!';
 			}
 		}
+
+		//Check challenge if page_id in included
+		if(isset($info['page_id'])){
+	       	$this->CI->load->library('challenge_lib');
+	       	$check_challenge_result = $this->CI->challenge_lib->check_challenge($info['page_id'], $user_id, $info);
+      		// var_export($check_challenge_result);
+      	}
 	}
 	
 	/**
