@@ -188,6 +188,8 @@ $(function(){
 							new_field.find('div.inputs').append('<textarea></textarea>');
 						break;
 						case 'text':
+							new_field.find('div.inputs').append('<input type="text"></input>');
+						break;
 						default:
 							new_field.find('div.inputs').append('<input type="text"></input>');
 						break;
@@ -402,11 +404,39 @@ $(function(){
 	}
 
 	function challenge() {
-		
+		$('body').off()
+			.on('click', 'a.add-challenge', add_challenge)
+			.on('click', 'a.edit-challenge', edit_challenge)
+			.on('click', '.add-criteria', add_criteria);
+		function add_challenge() {
+			url = $(this).attr('href');
+			$('div#main').load(url, add_challenge_form);
+
+			function add_challenge_form(){
+				$('form.new-challenge-form').on('submit',function(e) {
+					e.stopPropagation();
+					$(this).ajaxSubmit({
+						target:'#new-challenge-form',
+						replaceTarget:true,
+						success:add_challenge_form
+					});
+					return false;
+				});
+			}
+			return false;
+		}
+
+		function edit_challenge() {
+
+		}
+
+		function add_criteria() {
+			console.log('Add one more criteria in the form');
+		}
 	}
 	
-	$('ul.platform-apps li a').live('click',function(){
-		element = $(this);			
+	$('ul.platform-apps li a').live('click',function() {
+		element = $(this);
 		url = element.attr('href');
 		// page_id = get_query(url, 'p');
 		// config_name = get_query(url, 'c');
@@ -464,6 +494,8 @@ $(function(){
 		$('ul.platform-apps li a#reward').click();
 	} else if(config_name == 'user_class'){
 		$('ul.platform-apps li a#user_class').click();
+	} else if(config_name == 'challenge'){
+		$('ul.platform-apps li a#challenge').click();
 	} else if(config_name == 'app'){
 		$('ul.page-apps li a.app[data-appinstallid="'+app_install_id+'"]').click();
 	}

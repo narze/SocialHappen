@@ -82,6 +82,8 @@ class Page_challenge extends CI_Controller {
 			if ($this->form_validation->run() == FALSE)
 			{	
 				if($update){
+					$success = $this->input->get('success');
+					$this->load->vars('success', $success);
 
 					$user = $this->socialhappen->get_user();
 					$this->load->library('timezone_lib');
@@ -134,7 +136,7 @@ class Page_challenge extends CI_Controller {
 			
 				if ($challenge_id)
 				{
-					redirect('settings/page_challenge/'.$page_id.'?success=1');
+					redirect('settings/page_challenge/update/'.$page_id.'?success=1&challenge_id='.$challenge_id);
 				}
 				else
 				{

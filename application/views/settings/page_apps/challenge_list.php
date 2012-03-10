@@ -7,9 +7,10 @@
 	<div class="section first">
 		<?php 
 		echo '<pre>';
-		var_dump($challenge);
+		var_export($challenge);
 		echo '</pre>';
-		echo anchor('settings/page_challenge/update/'.$page_id.'?challenge_id='.$id);
+		echo anchor('settings/page_challenge/update/'.$page_id.'?challenge_id='.$id,'Update','class="update-challenge"');
+		echo '<hr />';
 		?>
 	</div>
 </div>

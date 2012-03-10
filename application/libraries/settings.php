@@ -22,7 +22,14 @@ class Settings{
 	 */
 	function view_settings($setting_name = NULL, $param_id = NULL, $company_id = NULL){
 		
-		$setting_names_and_ids = array('account'=>'user_id','company_pages' => 'company_id', 'company'=>'company_id','page'=>'page_id','package'=>'user_id','reference'=>'user_id');
+		$setting_names_and_ids = array(
+			'account'=>'user_id',
+			'company_pages' => 'company_id', 
+			'company'=>'company_id',
+			'page'=>'page_id',
+			'package'=>'user_id',
+			'reference'=>'user_id',
+		);
 		
 			if(!$setting_name || !array_key_exists($setting_name, $setting_names_and_ids)){
 				redirect("settings/account/".$this->CI->socialhappen->get_user_id());
@@ -106,7 +113,15 @@ class Settings{
 	 */
 	function view_page_app_settings($page_id = NULL, $config_name = NULL, $app_install_id = NULL){
 		if($page_id){
-			$config_names_and_ids = array('signup_fields','badges','app','timezone','user_class','reward');
+			$config_names_and_ids = array(
+				'signup_fields',
+				'badges',
+				'app',
+				'timezone',
+				'user_class',
+				'reward',
+				'challenge'
+			);
 		
 			if(!in_array($config_name, $config_names_and_ids)){
 				redirect("settings/page_apps/{$page_id}");

@@ -1,9 +1,12 @@
-<div class="challenge">
+<div id="new-challenge-form">
+	<?php if(issetor($success)) :?>
+		<p>Updated</p>
+	<?php endif; ?>
 	<?php if(issetor($update)){
-			echo form_open(base_url().'settings/page_challenge/update/'.$page_id);
+			echo form_open(base_url().'settings/page_challenge/update/'.$page_id,'class="new-challenge-form"');
 			echo '<input type="hidden" name="challenge_id" value="'.set_value('challenge_id', $challenge_id).'" />';
 		} else {
-			echo form_open(base_url().'settings/page_challenge/add/'.$page_id);
+			echo form_open(base_url().'settings/page_challenge/add/'.$page_id,'class="new-challenge-form"');
 		}
 	?>	
 		Time
@@ -85,10 +88,10 @@
 				echo set_value('criteria[1][count]',
 					issetor($challenge['criteria'][1]['count'])); 
 			?>" />
-		<button>Add more criteria</button>
+		<p><a class="add-criteria">Add more criteria</a></p>
 	<div class="section">
 		<?php echo form_submit(array('name'=>'submit-form','value'=>'Submit')); ?>
 	</div>
 	<?php echo form_close(); ?>
-
+	<?php echo anchor('settings/page_challenge/'.$page_id,'Back'); ?>
 </div>

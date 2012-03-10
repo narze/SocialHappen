@@ -1,6 +1,6 @@
 <div id="challenge">
 	<h2><span>Challenge List Setting</span></h2>
-	<a href="<?php echo base_url().'settings/page_challenge/form/'.$page_id;?>">Add challenge</a>	
+	<a class="add-challenge" href="<?php echo base_url().'settings/page_challenge/form/'.$page_id;?>">Add challenge</a>	
 	<div class="challenge-list">
     <?php if(issetor($challenges)) :
     	foreach($challenges as $challenge) : 
