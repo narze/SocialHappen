@@ -276,20 +276,50 @@ class Audit_lib
 		$data_to_add['objecti'] = ''.$objecti;
 		
 		// additional data
-		if(isset($additional_data['app_install_id'])){
-			$data_to_add['app_install_id'] = (int)$additional_data['app_install_id'];
-		}
-		if(isset($additional_data['user_id'])){
-			$data_to_add['user_id'] = (int)$additional_data['user_id'];
-		}
+
 		if(isset($additional_data['campaign_id'])){
-			$data_to_add['campaign_id'] = (int)$additional_data['campaign_id'];
+			$data_to_add['campaign_id'] = $campaign_id = $additional_data['campaign_id'];
+
+			if(!isset($additional_data['app_install_id']) && $campaign_id != 0){
+				$this->CI->load->model('campaign_model');
+				$campaign = $this->CI->campaign_model->get_campaign_profile_by_campaign_id($campaign_id);
+				$additional_data['app_install_id'] = $campaign['app_install_id'];
+			}
 		}
+
+		if(isset($additional_data['app_install_id'])){
+			$data_to_add['app_install_id'] = $app_install_id = (int) $additional_data['app_install_id'];
+
+			if(!isset($additional_data['page_id']) && $app_install_id != 0){
+				$this->CI->load->model('installed_apps_model');
+				$installed_app = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
+				$additional_data['page_id'] = $installed_app['page_id'];
+			}
+			if(!isset($additional_data['company_id']) && $app_install_id != 0){
+				if(!isset($installed_app)) {
+					$this->CI->load->model('installed_apps_model');
+					$installed_app = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
+				}
+				$additional_data['company_id'] = $installed_app['company_id'];
+			}
+		}
+
+		if(isset($additional_data['page_id'])){
+			$data_to_add['page_id'] = $page_id = (int)$additional_data['page_id'];
+		
+			if(!isset($additional_data['company_id']) && $page_id != 0){
+				$this->CI->load->model('page_model');
+				$page = $this->CI->page_model->get_page_profile_by_page_id($page_id);
+				$additional_data['company_id'] = $page['company_id'];
+			}
+		}
+
 		if(isset($additional_data['company_id'])){
 			$data_to_add['company_id'] = (int)$additional_data['company_id'];
 		}
-		if(isset($additional_data['page_id'])){
-			$data_to_add['page_id'] = (int)$additional_data['page_id'];
+
+		if(isset($additional_data['user_id'])){
+			$data_to_add['user_id'] = (int)$additional_data['user_id'];
 		}
 		
 		//echo '<pre>' . print_r($data_to_add, TRUE) . '</pre>';
@@ -915,22 +945,7 @@ foreach ($data as $line_key => $line_value) {
 			$action_id = issetor($input['action_id'], NULL);
 			$object = issetor($input['object'], NULL);
 			$objecti = issetor($input['objecti'], NULL);
-			$additional_data = array();
-			if(isset($input['app_install_id'])){
-				$additional_data['app_install_id'] = $input['app_install_id'];
-			}
-			if(isset($input['user_id'])){
-				$additional_data['user_id'] = $input['user_id'];
-			}
-			if(isset($input['campaign_id'])){
-				$additional_data['campaign_id'] = $input['campaign_id'];
-			}
-			if(isset($input['company_id'])){
-				$additional_data['company_id'] = $input['company_id'];
-			}
-			if(isset($input['page_id'])){
-				$additional_data['page_id'] = $input['page_id'];
-			}
+			$additional_data = $input; //add_audit will filter the array
 			return $this->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
 		}
 	}

@@ -615,7 +615,7 @@ class audit_lib_test extends CI_Controller {
 	
 	function list_recent_audit_2_test(){
 		$limit = 0;
-		$result = $this->audit_lib->list_recent_audit();
+		$result = $this->audit_lib->list_recent_audit($limit);
 		$this->unit->run(count($result), 11*2, 'list recent audit no criteria', 'count: ' . count($result) . '<pre>' /*. print_r($result, TRUE)*/ . '</pre>');
 		
 		$limit = 5;
@@ -671,6 +671,98 @@ class audit_lib_test extends CI_Controller {
 			.'user/app/'.$user_id.'/'.$app_id.'">'.$this->user_name.'</a></span>';
 		$result = $this->audit_lib->translate_format_string($format_string, $audit, $use_frontend_links);
 		$this->unit->run($result, $expected, "\$result", $result);
+	}
+
+	function audit_add_chain_test() {
+		$app_id = 0;
+		$action_id = 1;
+		$subject = 'Add chain test';
+		$object = 'B';
+		$objecti = 'C';
+		$campaign_id = 1;
+		$app_install_id = 1;
+		$page_id = 1;
+		$company_id = 1;
+		$limit = 1;
+
+		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'campaign_id');
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_true', 'audit add (with campaign_id only', '');
+
+		$result = $this->audit_lib->list_recent_audit($limit);
+		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);		
+		$this->unit->run(isset($result[0]['campaign_id']), TRUE, "isset(\$result[0]['campaign_id'])", isset($result[0]['campaign_id']));
+		$this->unit->run(isset($result[0]['app_install_id']), TRUE, "isset(\$result[0]['app_install_id'])", isset($result[0]['app_install_id']));
+		$this->unit->run(isset($result[0]['page_id']), TRUE, "isset(\$result[0]['page_id'])", isset($result[0]['page_id']));
+		$this->unit->run(isset($result[0]['company_id']), TRUE, "isset(\$result[0]['company_id'])", isset($result[0]['company_id']));
+		
+
+		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id');
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_true', 'audit add (with app_install_id only', '');
+
+		$result = $this->audit_lib->list_recent_audit($limit);
+		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);		
+		$this->unit->run(isset($result[0]['campaign_id']), FALSE, "isset(\$result[0]['campaign_id'])", isset($result[0]['campaign_id']));
+		$this->unit->run(isset($result[0]['app_install_id']), TRUE, "isset(\$result[0]['app_install_id'])", isset($result[0]['app_install_id']));
+		$this->unit->run(isset($result[0]['page_id']), TRUE, "isset(\$result[0]['page_id'])", isset($result[0]['page_id']));
+		$this->unit->run(isset($result[0]['company_id']), TRUE, "isset(\$result[0]['company_id'])", isset($result[0]['company_id']));
+		
+
+		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'page_id');
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_true', 'audit add (with page_id only', '');
+
+		$result = $this->audit_lib->list_recent_audit($limit);
+		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);		
+		$this->unit->run(isset($result[0]['campaign_id']), FALSE, "isset(\$result[0]['campaign_id'])", isset($result[0]['campaign_id']));
+		$this->unit->run(isset($result[0]['app_install_id']), FALSE, "isset(\$result[0]['app_install_id'])", isset($result[0]['app_install_id']));
+		$this->unit->run(isset($result[0]['page_id']), TRUE, "isset(\$result[0]['page_id'])", isset($result[0]['page_id']));
+		$this->unit->run(isset($result[0]['company_id']), TRUE, "isset(\$result[0]['company_id'])", isset($result[0]['company_id']));
+		
+
+		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'company_id');
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_true', 'audit add (with company_id only', '');
+
+		$result = $this->audit_lib->list_recent_audit($limit);
+		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);		
+		$this->unit->run(isset($result[0]['campaign_id']), FALSE, "isset(\$result[0]['campaign_id'])", isset($result[0]['campaign_id']));
+		$this->unit->run(isset($result[0]['app_install_id']), FALSE, "isset(\$result[0]['app_install_id'])", isset($result[0]['app_install_id']));
+		$this->unit->run(isset($result[0]['page_id']), FALSE, "isset(\$result[0]['page_id'])", isset($result[0]['page_id']));
+		$this->unit->run(isset($result[0]['company_id']), TRUE, "isset(\$result[0]['company_id'])", isset($result[0]['company_id']));
+		
+
+		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'campaign_id');
+		$input['page_id'] = '0';
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_true', 'audit add (with campaign_id=1, page_id=0', '');
+
+		$result = $this->audit_lib->list_recent_audit($limit);
+		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);		
+		$this->unit->run(isset($result[0]['campaign_id']), TRUE, "isset(\$result[0]['campaign_id'])", isset($result[0]['campaign_id']));
+		$this->unit->run(isset($result[0]['app_install_id']), TRUE, "isset(\$result[0]['app_install_id'])", isset($result[0]['app_install_id']));
+		$this->unit->run(isset($result[0]['page_id']), TRUE, "isset(\$result[0]['page_id'])", isset($result[0]['page_id']));
+		$this->unit->run(isset($result[0]['company_id']), TRUE, "isset(\$result[0]['company_id'])", isset($result[0]['company_id']));
+		$this->unit->run($result[0]['campaign_id'], 1, "\$result[0]['campaign_id']", $result[0]['campaign_id']);
+		$this->unit->run($result[0]['app_install_id'], 1, "\$result[0]['app_install_id']", $result[0]['app_install_id']);
+		$this->unit->run($result[0]['page_id'], 0, "\$result[0]['page_id']", $result[0]['page_id']);
+		$this->unit->run($result[0]['company_id'], 1, "\$result[0]['company_id']", $result[0]['company_id']); //mapped from app_install_id
+		
+
+		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'campaign_id');
+		$input['app_install_id'] = '0';
+		$result = $this->audit_lib->audit_add($input);
+		$this->unit->run($result, 'is_true', 'audit add (with campaign_id=1, app_install_id=0', '');
+
+		$result = $this->audit_lib->list_recent_audit($limit);
+		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);		
+		$this->unit->run(isset($result[0]['campaign_id']), TRUE, "isset(\$result[0]['campaign_id'])", isset($result[0]['campaign_id']));
+		$this->unit->run(isset($result[0]['app_install_id']), TRUE, "isset(\$result[0]['app_install_id'])", isset($result[0]['app_install_id']));
+		$this->unit->run(isset($result[0]['page_id']), FALSE, "isset(\$result[0]['page_id'])", isset($result[0]['page_id']));
+		$this->unit->run(isset($result[0]['company_id']), FALSE, "isset(\$result[0]['company_id'])", isset($result[0]['company_id']));
+		$this->unit->run($result[0]['campaign_id'], 1, "\$result[0]['campaign_id']", $result[0]['campaign_id']);
+		$this->unit->run($result[0]['app_install_id'], 0, "\$result[0]['app_install_id']", $result[0]['app_install_id']);
 	}
 }
 /* End of file audit_lib_test.php */
