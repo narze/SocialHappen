@@ -146,7 +146,8 @@ class achievement_stat_model_test extends CI_Controller {
 		$info = array('action_id' => 9,
 									'app_install_id' => 7,
 									'page_id' => 9,
-									'campaign_id' => 10);
+									'campaign_id' => 10,
+									'company_id' => 1);
 		$amount = 10;
 		
 		$result = $this->achievement_stat->increment($app_id, $user_id, $info, $amount);
@@ -236,6 +237,7 @@ class achievement_stat_model_test extends CI_Controller {
 		$this->unit->run($result['user_id'], 2, 'get', print_r($result, TRUE));
 		$this->unit->run($result['action']['6']['page']['9']['count'], 1, 'get', print_r($result, TRUE));
 		$this->unit->run($result['action']['9']['app_install']['7']['count'], 20, 'get', print_r($result, TRUE));
+		$this->unit->run($result['action']['9']['company']['1']['count'], 10, 'get', print_r($result, TRUE));
 	}
 	
 	function end_test(){

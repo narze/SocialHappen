@@ -66,11 +66,14 @@ class Achievement_stat_model extends CI_Model {
 					if(isset($info['campaign_id'])){
 						$inc['action.' . $info['action_id'] 
 							. '.campaign.' . $info['campaign_id'] . '.count'] = $amount;
-					}
-					
+					}					
 					if(isset($info['page_id'])){
 						$inc['action.' . $info['action_id'] . '.page.'
 						 . $info['page_id'] . '.count'] = $amount;
+					}			
+					if(isset($info['company_id'])){
+						$inc['action.' . $info['action_id'] . '.company.'
+						 . $info['company_id'] . '.count'] = $amount;
 					}
 				}
 				

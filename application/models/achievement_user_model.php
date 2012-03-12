@@ -77,6 +77,9 @@ class Achievement_user_model extends CI_Model {
 			date_default_timezone_set('UTC');
 			$achievement_user['timestamp'] = time();
 
+			if(isset($info['company_id'])){
+				$achievement_user['company_id'] = (int)$info['company_id'];
+			}
 			if(isset($info['page_id'])){
 				$achievement_user['page_id'] = (int)$info['page_id'];
 			}

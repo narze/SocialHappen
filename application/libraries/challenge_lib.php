@@ -40,10 +40,10 @@ class Challenge_lib {
 		return $this->CI->challenge_model->delete($criteria);
 	}
 
-	function check_challenge($page_id = NULL, $user_id = NULL,
+	function check_challenge($company_id = NULL, $user_id = NULL,
 		$info = array()) {
 		
-		$page_id = (int) $page_id;
+		$company_id = (int) $company_id;
 		$user_id = (int) $user_id;
 		$result = array(
 			'success' => TRUE,
@@ -53,20 +53,23 @@ class Challenge_lib {
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		
 		$user_achieved = $this->CI->achievement_user->list_user(
-			array('user_id' => $user_id, 'page_id' => $page_id));
+			array('user_id' => $user_id, 'company_id' => $company_id));
 		
 		$user_achieved_id_list = array();
 		foreach ($user_achieved as $achieved){
 			$user_achieved_id_list[] = $achieved['achievement_id']['$id'];
+			if($achieved['achievement_id']['$ref'] === 'challenge'){
+				$result['completed'][] = ''.$achieved['achievement_id']['$id'];
+			}
 		}
 
 		//if user achieved something, exclude them out with $nin
 		if(count($user_achieved_id_list) > 0 ){
 			$candidate_achievement_criteria = 
 				array('_id' => array('$nin' => $user_achieved_id_list),
-				 			'page_id' => $page_id);
+				 			'company_id' => $company_id);
 		} else {
-			$candidate_achievement_criteria = array('page_id' => $page_id);
+			$candidate_achievement_criteria = array('company_id' => $company_id);
                                               // 'info.enable' => TRUE);
 		}
 		
@@ -89,16 +92,16 @@ class Challenge_lib {
 		// } else {
 		// 	$candidate_achievement_criteria['$and'][] = array('campaign_id' => array('$exists' => FALSE));
 		// }
-		
 		$challenge_list = 
 			$this->CI->challenge_model->get($candidate_achievement_criteria);
+
 		$this->CI->load->model('achievement_stat_model', 'achievement_stat');
 		foreach ($challenge_list as $challenge) {
 	  		$match_all_criteria = TRUE;
 			foreach($challenge['criteria'] as $criteria){
 				$query = $criteria['query'];
 				$count = $criteria['count'];
-				$action_query = 'action.'.$query['action_id'].'.page.'.$page_id.'.count';
+				$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
 				$stat_criteria = array(
 					'app_id' => $query['app_id'],
 					'user_id' => $user_id,
@@ -112,30 +115,29 @@ class Challenge_lib {
 				}
 			}
       
-      		if($match_all_criteria) {
-      			$result['completed'][] = ''.$challenge['_id'];
-
-      			//This user completed this challenge
-      			$achieved_info = array(
-      				'page_id' => $page_id
-      			);
-				
+  		if($match_all_criteria) {
+  			$result['completed'][] = ''.$challenge['_id'];
+  			//This user completed this challenge
+  			$achieved_info = array(
+  				'company_id' => $company_id
+  			);
+			
 				if(isset($info['campaign_id'])){
 					$achieved_info['campaign_id'] = $info['campaign_id'];
 				}
 				
+				$ref = 'challenge';
 				if(!$this->CI->achievement_user->add($user_id, $challenge['_id'], 
-					$query['app_id'] = 0, $info['app_install_id'] = 0, $achieved_info)){
+					$query['app_id'] = 0, $info['app_install_id'] = 0, $achieved_info, $ref)){
 					$result['success'] = FALSE;
 				}
 					
-				$ref = 'challenge';
 				$this->CI->load->library('notification_lib');
 				$message = 'You have completed a challenge : ' . $challenge['detail']['name'] . '.';
 				$link = '#';
 				$image = $challenge['detail']['image'];
-				$this->CI->notification_lib->add($user_id, $message, $link, $image, $ref);
-      		}
+				$this->CI->notification_lib->add($user_id, $message, $link, $image);
+    	}
 		}
 		return $result;
 	}

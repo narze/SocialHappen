@@ -8,13 +8,13 @@ class Challenge_model extends CI_Model {
 		$this->collection = $this->challenge = sh_mongodb_load( array(
 			'collection' => 'challenge'
 		));
-		$this->int_values = array('page_id');
+		$this->int_values = array('company_id');
 	}
 
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
 		return $this->collection->deleteIndexes() 
-			&& $this->collection->ensureIndex(array('page_id' => 1));
+			&& $this->collection->ensureIndex(array('company_id' => 1));
 	}
         
 	function add($data)
