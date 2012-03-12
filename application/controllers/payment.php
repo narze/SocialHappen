@@ -606,17 +606,28 @@ class Payment extends CI_Controller {
 			} else {
 				$action_id = $this->socialhappen->get_k('audit_action','Buy Package');
 			}
-			$this->audit_lib->add_audit(
-				0,
-				$user_id,
-				$action_id,
-				$package_id, 
-				'',
-				array(
-					'app_install_id' => 0,
-					'user_id' => $user_id
-				)
-			);
+			// $this->audit_lib->add_audit(
+			// 	0,
+			// 	$user_id,
+			// 	$action_id,
+			// 	$package_id, 
+			// 	'',
+			// 	array(
+			// 		'app_install_id' => 0,
+			// 		'user_id' => $user_id
+			// 	)
+			// );
+			$this->audit_lib->audit_add(array(
+				'user_id' => $user_id,
+				'action_id' => $action_id,
+				'app_id' => 0,
+				'app_install_id' => 0,
+				// 'page_id'=> $page_id,
+				// 'company_id' => $company_id,
+				'subject' => NULL,
+				'object' => $package_id,
+				'objecti' => NULL
+			));
 			
 			$this->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>0);

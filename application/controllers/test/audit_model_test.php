@@ -33,18 +33,18 @@ class Audit_model_test extends CI_Controller {
 	}
 	
 	/**
-	 * 	// optional data
-	var $app_id = '';
-	var $app_install_id = '';
-	var $campaign_id = '';
-	var $page_id = '';
-	var $company_id = '';
-	// basic data
-	var $timestamp = '';
-	var $subject = '';
-	var $action_id = '';
-	var $object = '';
-	var $objecti = '';
+	 * // optional data
+   * var $app_id = '';
+	 * var $app_install_id = '';
+	 * var $campaign_id = '';
+	 * var $page_id = '';
+	 * var $company_id = '';
+	 * // basic data
+	 * var $timestamp = '';
+	 * var $subject = '';
+	 * var $action_id = '';
+	 * var $object = '';
+	 * var $objecti = '';
 	 */
 	function add_audit_test(){
 		$data = array('subject' => 'a',

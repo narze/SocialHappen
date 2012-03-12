@@ -333,17 +333,26 @@ class SocialHappen{
 				if(!$this->CI->session->userdata('logged_in')){ //@TODO : Problem is it will separate logging in through platform & through facebook
 					$this->CI->load->library('audit_lib');
 					$action_id = $this->CI->socialhappen->get_k('audit_action','User Login');
-					$this->CI->audit_lib->add_audit(
-						0,
-						$user_id,
-						$action_id,
-						'', 
-						'',
-						array(
-							'app_install_id' => 0,
-							'user_id' => $user_id
-						)
-					);
+					// $this->CI->audit_lib->add_audit(
+					// 	0,
+					// 	$user_id,
+					// 	$action_id,
+					// 	'', 
+					// 	'',
+					// 	array(
+					// 		'app_install_id' => 0,
+					// 		'user_id' => $user_id
+					// 	)
+					// );
+					$this->CI->audit_lib->audit_add(array(
+						'user_id' => $user_id,
+						'action_id' => $action_id,
+						'app_id' => 0,
+						'app_install_id' => 0,
+						'subject' => $user_id,
+						'object' => NULL,
+						'objecti' => NULL
+					));
 					
 					$this->CI->load->library('achievement_lib');
 					$info = array('action_id'=> $action_id, 'app_install_id'=>0);

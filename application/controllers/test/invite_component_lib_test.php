@@ -296,26 +296,6 @@ class Invite_component_lib_test extends CI_Controller {
 		$result = $this->invite_component_lib->list_invite($criteria);
 		$this->unit->run(count($result), 1, 'list_invite', count($result));
 		
-		//Mock inside _give_page_score_to_all_inviters to return TRUE
-		// $this->page_model = m::mock('page_model');
-		// $this->page_model->shouldReceive('get_page_id_by_facebook_page_id')->andReturn('3');
-		// $this->user_model = m::mock('user_model');
-		// $this->user_model->shouldReceive('get_user_id_by_user_facebook_id')->andReturn(1);
-		// $this->audit_lib = m::mock('audit_lib');
-		// $this->audit_lib->shouldReceive('add_audit')->andReturn(TRUE);
-		// $this->audit_lib->shouldReceive('get_audit_action')->andReturn(array(
-		// 		'app_id' => 0,
-		// 		'action_id' => 114,
-		// 		'description' => 'Invitee Accept Page Invite',
-		// 		'stat_app' => FALSE,
-		// 		'stat_page' => TRUE,
-		// 		'stat_campaign' => FALSE,
-		// 		'format_string' => 'User {user:user_id} accepted page invite',
-		// 		'score' => 1
-		// 	));
-		// $this->achievement_lib = m::mock('achievement_lib');
-		// $this->achievement_lib->shouldReceive('increment_achievement_stat')->andReturn(TRUE);
-
 		//When accept invite 3, will automatically accept invite 1 (same facebook_page_id), whether having pending or not
 		$invite_key = $this->invite_key3;
 		$target_facebook_id = 2;

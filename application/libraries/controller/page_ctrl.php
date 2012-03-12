@@ -307,19 +307,30 @@ class Page_ctrl {
 			$this->CI->load->library('audit_lib');
 			$user_id = $this->CI->session->userdata('user_id');
 			$action_id = $this->CI->socialhappen->get_k('audit_action','Install Page');
-			$this->CI->audit_lib->add_audit(
-				0,
-				$user_id,
-				$action_id,
-				'', 
-				'',
-				array(
-						'page_id'=> $page_id,
-						'company_id' => ($this->CI-> input -> post('company_id')),
-						'app_install_id' => 0,
-						'user_id' => $user_id
-					)
-			);
+			// $this->CI->audit_lib->add_audit(
+			// 	0,
+			// 	$user_id,
+			// 	$action_id,
+			// 	'', 
+			// 	'',
+			// 	array(
+			// 			'page_id'=> $page_id,
+			// 			'company_id' => ($this->CI-> input -> post('company_id')),
+			// 			'app_install_id' => 0,
+			// 			'user_id' => $user_id
+			// 		)
+			// );
+			$this->CI->audit_lib->audit_add(array(
+				'user_id' => $user_id,
+				'action_id' => $action_id,
+				'app_id' => 0,
+				'app_install_id' => 0,
+				'page_id'=> $page_id,
+				'company_id' => $this->CI-> input -> post('company_id'),
+				'subject' => $user_id,
+				'object' => NULL,
+				'objecti' => NULL
+			));
 			$this->CI->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
 			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);

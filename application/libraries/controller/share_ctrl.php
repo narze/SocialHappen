@@ -48,19 +48,30 @@ class Share_ctrl {
     function share_submit($user_id = NULL, $app_install_id = NULL, $app_id = NULL){
     	$share_action = $this->CI->socialhappen->get_k('audit_action','User Share');
 		$this->CI->load->library('audit_lib');
-		$audit_additional_data = array(
-			'user_id'=> $user_id,
-			'app_install_id' => $app_install_id
-		);
+		// $audit_additional_data = array(
+		// 	'user_id'=> $user_id,
+		// 	'app_install_id' => $app_install_id
+		// );
 		$result = array('success' => FALSE);
-		$audit_result = $this->CI->audit_lib->add_audit(
-			$app_id,
-			$user_id,
-			$share_action,
-			NULL, 
-			NULL,
-			$audit_additional_data
-		);
+		// $audit_result = $this->CI->audit_lib->add_audit(
+		// 	$app_id,
+		// 	$user_id,
+		// 	$share_action,
+		// 	NULL, 
+		// 	NULL,
+		// 	$audit_additional_data
+		// );
+		$audit_result = $this->CI->audit_lib->audit_add(array(
+			'user_id' => $user_id,
+			'action_id' => $share_action,
+			'app_id' => $app_id,
+			'app_install_id' => $app_install_id,
+			// 'page_id'=> $page_id,
+			// 'company_id' => $this->CI-> input -> post('company_id'),
+			'subject' => $user_id,
+			'object' => NULL,
+			'objecti' => NULL
+		));
 		if($audit_result){
 			$result['audit_success'] = TRUE;
 		} else {

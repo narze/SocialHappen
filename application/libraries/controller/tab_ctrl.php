@@ -158,19 +158,28 @@ class Tab_ctrl {
 				
 				$this->CI->load->library('audit_lib');
 				$action_id = $this->CI->socialhappen->get_k('audit_action','User Register SocialHappen');
-				$this->CI->audit_lib->add_audit(
-					0,
-					$user_id,
-					$action_id,
-					'', 
-					'',
-					array(
-						'app_install_id' => 0,
-						'user_id' => $user_id,
-						'page_id' => $page_id
-					)
-				);
-				
+				// $this->CI->audit_lib->add_audit(
+				// 	0,
+				// 	$user_id,
+				// 	$action_id,
+				// 	'', 
+				// 	'',
+				// 	array(
+				// 		'app_install_id' => 0,
+				// 		'user_id' => $user_id,
+				// 		'page_id' => $page_id
+				// 	)
+				// );
+				$this->CI->audit_lib->audit_add(array(
+					'user_id' => $user_id,
+					'action_id' => $action_id,
+					'app_id' => 0,
+					'app_install_id' => 0,
+					'page_id'=> $page_id,
+					'subject' => $user_id,
+					'object' => NULL,
+					'objecti' => NULL
+				));
 				$this->CI->load->library('achievement_lib');
 				$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id'=>$page_id);
 				$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
@@ -218,18 +227,28 @@ class Tab_ctrl {
 			
 			$action_id = $this->CI->socialhappen->get_k('audit_action','User Register Page');
 			$this->CI->load->library('audit_lib');
-			$audit_info = array('page_id' => $page_id);
-			if(isset($app_install_id)){
-				$audit_info['app_install_id'] = $app_install_id;
-			}
-			$this->CI->audit_lib->add_audit(
-				0,
-				$user_id,
-				$action_id,
-				'', 
-				'',
-				$audit_info
-			);
+			// $audit_info = array('page_id' => $page_id);
+			// if(isset($app_install_id)){
+			// 	$audit_info['app_install_id'] = $app_install_id;
+			// }
+			// $this->CI->audit_lib->add_audit(
+			// 	0,
+			// 	$user_id,
+			// 	$action_id,
+			// 	'', 
+			// 	'',
+			// 	$audit_info
+			// );
+			$this->CI->audit_lib->audit_add(array(
+				'user_id' => $user_id,
+				'action_id' => $action_id,
+				'app_id' => 0,
+				'app_install_id' => issetor($app_install_id),
+				'page_id'=> $page_id,
+				'subject' => $user_id,
+				'object' => NULL,
+				'objecti' => NULL
+			));
 			
 			$this->CI->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'page_id'=>$page_id);

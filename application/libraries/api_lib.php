@@ -231,19 +231,30 @@ class Api_Lib {
 											));
 											
 				$this->CI->load->library('audit_lib');
-				$this->CI->audit_lib->add_audit(
-											$app_id,
-											$user_id,
-											$this->CI->socialhappen->get_k('audit_action','Install App'),
-											'', 
-											'',
-											array(
-													'app_install_id'=> $app_install_id,
-													'company_id' => $company_id,
-													'user_id' => $user_id
-												)
-										);
-				
+				// $this->CI->audit_lib->add_audit(
+				// 							$app_id,
+				// 							$user_id,
+				// 							$this->CI->socialhappen->get_k('audit_action','Install App'),
+				// 							'', 
+				// 							'',
+				// 							array(
+				// 									'app_install_id'=> $app_install_id,
+				// 									'company_id' => $company_id,
+				// 									'user_id' => $user_id
+				// 								)
+				// 						);
+				$action_id = $this->CI->socialhappen->get_k('audit_action','Install App');
+				$this->CI->audit_lib->audit_add(array(
+					'user_id' => $user_id,
+					'action_id' => $action_id,
+					'app_id' => $app_id,
+					'app_install_id' => $app_install_id,
+					// 'page_id'=> $page_id,
+					'company_id' => $company_id,
+					'subject' => $user_id,
+					'object' => NULL,
+					'objecti' => NULL
+				));
 				//Add first 10-year campaign
 				$this->CI->load->model('campaign_model','campaign');
 				date_default_timezone_set('UTC');
@@ -575,19 +586,31 @@ class Api_Lib {
 			$this->CI->User_apps->add_new($user_id, $app_install_id);
 			
 			$this->CI->load->library('audit_lib');
+			// $action_id = $this->CI->socialhappen->get_k('audit_action','User Register App');
+			// $this->CI->audit_lib->add_audit(
+			// 	0,
+			// 	$user_id,
+			// 	$action_id,
+			// 	'', 
+			// 	'',
+			// 	array(
+			// 		'app_id' => $app_id,
+			// 		'app_install_id' => $app_install_id,
+			// 		'user_id' => $user_id
+			// 	)
+			// );
 			$action_id = $this->CI->socialhappen->get_k('audit_action','User Register App');
-			$this->CI->audit_lib->add_audit(
-				0,
-				$user_id,
-				$action_id,
-				'', 
-				'',
-				array(
-					'app_id' => $app_id,
-					'app_install_id' => $app_install_id,
-					'user_id' => $user_id
-				)
-			);
+			$this->CI->audit_lib->audit_add(array(
+				'user_id' => $user_id,
+				'action_id' => $action_id,
+				'app_id' => 0,
+				'app_install_id' => $app_install_id,
+				// 'page_id'=> $page_id,
+				// 'company_id' => $company_id,
+				'subject' => $user_id,
+				'object' => NULL,
+				'objecti' => NULL
+			));
 			
 			$this->CI->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'app_id'=>$app_id);
@@ -607,19 +630,31 @@ class Api_Lib {
 		$action_text = $this->CI->socialhappen->get_v('audit_action', $action);
 		$this->CI->load->library('audit_lib');
 		
-		$result = $this->CI->audit_lib->add_audit(
-			$app_id,
-			$user_id,
-			$action,
-			NULL, 
-			NULL,
-			array(
-				'app_install_id'=> $app_install_id,
-				'company_id' => $company_id,
-				'user_id'=> $user_id,
-				'page_id' => issetor($app['page_id'])
-			)
-		);
+		// $result = $this->CI->audit_lib->add_audit(
+		// 	$app_id,
+		// 	$user_id,
+		// 	$action,
+		// 	NULL, 
+		// 	NULL,
+		// 	array(
+		// 		'app_install_id'=> $app_install_id,
+		// 		'company_id' => $company_id,
+		// 		'user_id'=> $user_id,
+		// 		'page_id' => issetor($app['page_id'])
+		// 	)
+		// );
+		$result = $this->CI->audit_lib->audit_add(array(
+			'user_id' => $user_id,
+			'action_id' => $action,
+			'app_id' => $app_id,
+			'app_install_id' => $app_install_id,
+			'page_id'=> issetor($app['page_id']),
+			'company_id' => $company_id,
+			'subject' => $user_id,
+			'object' => NULL,
+			'objecti' => NULL
+		));
+
 		if(!$result){
 		log_message('error','add_audit failed');
 		$response = array(

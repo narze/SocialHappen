@@ -299,20 +299,30 @@ class App extends CI_Controller {
 			
 			$this->load->library('audit_lib');
 			$action_id = $this->socialhappen->get_k('audit_action','Install App To Page');
-			$this->audit_lib->add_audit(
-				0,
-				$user_id,
-				$action_id,
-				$app_id,
-				$result['app_install_id'],
-				array(
-					'page_id'=> $page_id,
-					'company_id' => $company_id,
-					'app_install_id' => 0,
-					'user_id' => $user_id
-				)
-			);
-			
+			// $this->audit_lib->add_audit(
+			// 	0,
+			// 	$user_id,
+			// 	$action_id,
+			// 	$app_id,
+			// 	$result['app_install_id'],
+			// 	array(
+			// 		'page_id'=> $page_id,
+			// 		'company_id' => $company_id,
+			// 		'app_install_id' => 0,
+			// 		'user_id' => $user_id
+			// 	)
+			// );
+			$this->audit_lib->audit_add(array(
+				'user_id' => $user_id,
+				'action_id' => $action_id,
+				'app_id' => 0,
+				'app_install_id' => 0,
+				'page_id'=> $page_id,
+				'company_id' => $company_id,
+				'subject' => NULL,
+				'object' => $app_id,
+				'objecti' => $result['app_install_id']
+			));
 			$this->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
 			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
