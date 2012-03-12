@@ -45,6 +45,12 @@
 				echo set_value('criteria[0][name]',
 					issetor($challenge['criteria'][0]['name'])); 
 			?>" />
+		Query : page_id
+		<input type="text" name="criteria[0][query][page_id]" 
+			value="<?php 
+				echo set_value('criteria[0][query][page_id]',
+					issetor($challenge['criteria'][0]['query']['page_id'])); 
+			?>" />
 		Query : app_id
 		<input type="text" name="criteria[0][query][app_id]" 
 			value="<?php 
@@ -69,6 +75,12 @@
 			value="<?php 
 				echo set_value('criteria[1][name]',
 					issetor($challenge['criteria'][1]['name'])); 
+			?>" />
+		Query : app_id
+		<input type="text" name="criteria[1][query][page_id]" 
+			value="<?php 
+				echo set_value('criteria[1][query][page_id]',
+					issetor($challenge['criteria'][1]['query']['page_id'])); 
 			?>" />
 		Query : app_id
 		<input type="text" name="criteria[1][query][app_id]" 

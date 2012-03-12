@@ -27,7 +27,10 @@ class Page_challenge extends CI_Controller {
 			$this->load->library('challenge_lib');
 			$now = time();
 			
-			$challenges = $this->challenge_lib->get(array('page_id' => $page_id));
+			$this->load->model('page_model');
+			$page = $this->page_model->get_page_profile_by_page_id($page_id);
+			$company_id = $page['company_id'];
+			$challenges = $this->challenge_lib->get(array('company_id' => $company_id));
 			foreach($challenges as &$challenge){
 				
 				$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $user['user_timezone_offset']);
@@ -37,6 +40,7 @@ class Page_challenge extends CI_Controller {
 				$challenge['end_date'] = $end_time;
 			} unset($challenge);
 			$this->load->vars(array(
+				'company_id' => $company_id,
 				'page_id' => $page_id,
 				'challenges' => $challenges
 			));
@@ -59,9 +63,13 @@ class Page_challenge extends CI_Controller {
 			// $this->form_validation->set_rules('description', 'Challenge Description', 'trim|xss_clean');
 				
 			$this->form_validation->set_error_delimiters('<li class="error">', '</li>');
-		
+
+			$this->load->model('page_model');
+			$page = $this->page_model->get_page_profile_by_page_id($page_id);
+			$company_id = $page['company_id'];
 			$this->load->vars(array(
-				'page_id' => $page_id
+				'page_id' => $page_id,
+				'company_id' => $company_id
 			));
 
 			$this->load->library('challenge_lib');
@@ -113,12 +121,12 @@ class Page_challenge extends CI_Controller {
 				} unset($one);
 				
 				$input = array(
-					'page_id' => $page_id,
-			       	'start' => strtotime($start_timestamp),
-			       	'end' => strtotime($end_timestamp),
-			       	// 'status' => set_value('status'),
-			       	'detail' => $this->input->post('detail'),
-				    'criteria' => $criteria
+					'company_id' => $company_id,
+	       	'start' => strtotime($start_timestamp),
+	       	'end' => strtotime($end_timestamp),
+	       	// 'status' => set_value('status'),
+	       	'detail' => $this->input->post('detail'),
+			    'criteria' => $criteria
 				);
 				if($update){
 					$challenge_id = $this->input->post('challenge_id');
