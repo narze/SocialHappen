@@ -47,7 +47,8 @@ class Challenge_lib {
 		$user_id = (int) $user_id;
 		$result = array(
 			'success' => TRUE,
-			'completed' => array()
+			'completed' => array(),
+			'in_progress' => array()
 		);
 		
 		$this->CI->load->model('achievement_user_model','achievement_user');
@@ -97,25 +98,35 @@ class Challenge_lib {
 
 		$this->CI->load->model('achievement_stat_model', 'achievement_stat');
 		foreach ($challenge_list as $challenge) {
-	  		$match_all_criteria = TRUE;
+	  	$match_all_criteria = TRUE;
+	  	$is_in_progress = FALSE;
 			foreach($challenge['criteria'] as $criteria){
 				$query = $criteria['query'];
 				$count = $criteria['count'];
 				$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+				//Query in progress challenge
 				$stat_criteria = array(
 					'app_id' => $query['app_id'],
 					'user_id' => $user_id,
-					$action_query => array('$gte' => $count)
+					$action_query => array('$gt' => 0)
 				);
 
-			    $matched_achievement_stat = 
+			    $matched_in_progress_achievement_stat = 
 					$this->CI->achievement_stat->list_stat($stat_criteria);
-				if(!$matched_achievement_stat) {
+				if(!$matched_in_progress_achievement_stat) {
 					$match_all_criteria = FALSE;
+				} else {
+					$is_in_progress = TRUE;
+					$stat_criteria[$action_query] = array('$gte' => $count);
+				  $matched_achievement_stat = 
+						$this->CI->achievement_stat->list_stat($stat_criteria);
+					if(!$matched_achievement_stat) {
+						$match_all_criteria = FALSE;
+					}
 				}
 			}
       
-  		if($match_all_criteria) {
+      if($match_all_criteria) {
   			$result['completed'][] = ''.$challenge['_id'];
   			//This user completed this challenge
   			$achieved_info = array(
@@ -137,7 +148,9 @@ class Challenge_lib {
 				$link = '#';
 				$image = $challenge['detail']['image'];
 				$this->CI->notification_lib->add($user_id, $message, $link, $image);
-    	}
+    	} else if($is_in_progress) {
+      	$result['in_progress'][] = ''.$challenge['_id'];
+      }
 		}
 		return $result;
 	}

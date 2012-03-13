@@ -111,7 +111,26 @@ class Challenge_lib_test extends CI_Controller {
 		$expected_result = array(
 			'success' => TRUE, //no error checking challenges
 			'completed' => array(),
-			// 'in_progress' => array()
+			'in_progress' => array()
+		);
+		$this->unit->run($result, $expected_result, "\$result", $result);
+
+		//Unrelated achievement_stat
+		$this->load->library('achievement_lib');
+		$app_id = 2;
+		$user_id = 1;
+		$inc_result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id,
+			$this->achievement_stat1);
+		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
+
+		$info = array();
+		$company_id = 1;
+		$user_id = 1;
+		$result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
+		$expected_result = array(
+			'success' => TRUE, //no error checking challenges
+			'completed' => array(),
+			'in_progress' => array()
 		);
 		$this->unit->run($result, $expected_result, "\$result", $result);
 
@@ -126,7 +145,7 @@ class Challenge_lib_test extends CI_Controller {
 		$expected_result = array(
 			'success' => TRUE, //no error checking challenges
 			'completed' => array(),
-			// 'in_progress' => array()
+			'in_progress' => array($this->challenge_id)
 		);
 		$this->unit->run($result, $expected_result, "\$result", $result);
 
@@ -141,7 +160,7 @@ class Challenge_lib_test extends CI_Controller {
 		$expected_result = array(
 			'success' => TRUE, //no error checking challenges
 			'completed' => array(),
-			// 'in_progress' => array()
+			'in_progress' => array($this->challenge_id)
 		);
 		$this->unit->run($result, $expected_result, "\$result", $result);
 
@@ -160,8 +179,8 @@ class Challenge_lib_test extends CI_Controller {
 		$result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
 		$expected_result = array(
 			'success' => TRUE, //no error checking challenges
-			'completed' => array($this->challenge_id), //get just completed challenge id
-			// 'in_progress' => array()
+			'completed' => array($this->challenge_id), //get completed challenge id			
+			'in_progress' => array()
 		);
 		$this->unit->run($result, $expected_result, "\$result", $result);
 
@@ -179,8 +198,8 @@ class Challenge_lib_test extends CI_Controller {
 		$result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
 		$expected_result = array(
 			'success' => TRUE, //no error checking challenges
-			'completed' => array($this->challenge_id), //get just completed challenge id
-			// 'in_progress' => array()
+			'completed' => array($this->challenge_id), //get completed challenge id
+			'in_progress' => array()
 		);
 		$this->unit->run($result, $expected_result, "\$result", $result);
 

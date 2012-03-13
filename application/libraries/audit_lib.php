@@ -916,25 +916,22 @@ foreach ($data as $line_key => $line_value) {
 		$html .= '</script>';
 		return $html;
 	}
-	
-	/*
-	 * // optional data
-	var $app_id = '';
-	var $app_install_id = '';
-	var $campaign_id = '';
-	var $page_id = '';
-	var $company_id = '';
-	// basic data
-	var $timestamp = '';
-	var $subject = '';
-	var $action_id = '';
-	var $object = '';
-	var $objecti = '';
-	 * */
 
 	/**
 	 * Add_audit simplified by using associative array as input
-	 * @author Manassarn M.
+	 * @author Manassarn M. 
+	 * // optional data
+	 * var $app_id = '';
+	 * var $app_install_id = '';
+	 * var $campaign_id = '';
+	 * var $page_id = '';
+	 * var $company_id = '';
+	 * // basic data
+	 * var $timestamp = '';
+	 * var $subject = '';
+	 * var $action_id = '';
+	 * var $object = '';
+	 * var $objecti = '';
 	 */
 	function audit_add($input = NULL){
 		if(!is_array($input) || !$input){
