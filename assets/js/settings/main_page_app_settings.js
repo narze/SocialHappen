@@ -1,11 +1,10 @@
 $(function(){
-	Date.createFromMysql = function(mysql_string){ 
-	   if(typeof mysql_string === 'string')
-	   {
-		  var t = mysql_string.split(/[- :]/);
-		  return new Date(t[0], t[1] - 1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);          
-	   }
-	   return null;   
+	Date.createFromMysql = function(mysql_string){
+		if(typeof mysql_string === 'string') {
+			var t = mysql_string.split(/[- :]/);
+			return new Date(t[0], t[1] - 1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
+		}
+		return null;
 	};
 
 	function signup_fields(){
@@ -21,14 +20,14 @@ $(function(){
 			var fields = $('form.signup-fields ul li:not(".no-field")').map(function(){
 				return this.className;
 			}).get();
-			for(i in fields){
+			for(var i in fields){
 				$('#default-fields li input:checkbox[name="'+fields[i]+'"]').attr('checked', true);
 			}
 			
 			//Call fancybox and show checkboxes
 			$.fancybox({
 				content: $('#default-fields').appendTo(this),
-				onCleanup: function(){ 
+				onCleanup: function() {
 					$('#default-fields').clone().appendTo($('#fancy')); //Clone to make ux better, it'll be remove by fancybox
 				}
 			});
@@ -40,8 +39,8 @@ $(function(){
 				var selected = $('#default-fields li input:checkbox:checked').map(function(){
 					return this.name;
 				}).get();
-				for(i in selected){
-					if($('form ul li.'+selected[i]).length == 0){ //if not exists
+				for(var i in selected){
+					if($('form ul li.'+selected[i]).length === 0){ //if not exists
 						$('div#no-submit ul li.'+selected[i]).appendTo('form ul');
 					}
 				}
@@ -49,7 +48,7 @@ $(function(){
 				//Move deselected out of form
 				var deselected = $('#default-fields li input:checkbox:not(:checked)').map(function(){
 					return this.name;
-				}).get();			
+				}).get();
 				for(i in deselected){
 					$('form ul li.'+deselected[i]).appendTo('div#no-submit ul');
 				}
@@ -83,7 +82,7 @@ $(function(){
 			//Change field type
 			$('#custom-fields ul li select[name="field-type"]').die().live('change', function(){
 				var selected_type = $(this).find('option:selected').val();
-				var old_value = $(this)
+				var old_value = $(this);
 				switch (selected_type){
 					case 'radio':
 					case 'checkbox':
@@ -91,6 +90,8 @@ $(function(){
 					break;
 					case 'textarea':
 					case 'text':
+						$(this).parents('#custom-fields ul li').find('div.options').hide();
+					break;
 					default:
 						$(this).parents('#custom-fields ul li').find('div.options').hide();
 					break;
@@ -99,7 +100,7 @@ $(function(){
 			
 			//Remove a field
 			$('#custom-fields ul li a.bt-remove-field').die().live('click',function(){
-				if($(this).parents('li.field').siblings('li.field').length == 0){ //if no option left
+				if($(this).parents('li.field').siblings('li.field').length === 0){ //if no option left
 					add_more_field();
 				}$(this).parents('li.field').remove();
 			});
@@ -108,7 +109,7 @@ $(function(){
 			$('#custom-fields a.add-more-field').click(add_more_field);
 			
 			//Apply custom fields
-			$('#custom-fields p.apply a.bt-apply-to-signup-form').click(function (){ 
+			$('#custom-fields p.apply a.bt-apply-to-signup-form').click(function () {
 				if(add_new_fields()){
 					$.fancybox.close();
 					trigger_empty_field_message();
@@ -121,12 +122,12 @@ $(function(){
 			//Clear error
 			new_fields.find('div.options ul li.option input.option-item').removeClass('form-error'); //Clear error
 			new_fields.find('input[name="new-field"]').removeClass('form-error');
-			var new_fields_data = new Array();
-			var names = new Array();
+			var new_fields_data = [];
+			var names = [];
 			var verified = true;
 			for(i=0; i<new_fields.length; i++){ //For all new custom fields to add
 				var this_field = new_fields.eq(i);
-				new_fields_data[i] = new Object();
+				new_fields_data[i] = {};
 				new_fields_data[i].label = this_field.find('input[name="new-field"]').val();
 				new_fields_data[i].name = new_fields_data[i].label.toLowerCase().replace(/ /,'_');
 				new_fields_data[i].type = this_field.find('select[name="field-type"] option:selected').val();
@@ -200,7 +201,7 @@ $(function(){
 		}
 		
 		function add_more_option(obj){
-			return $(obj).parent().prev().clone(true).insertBefore($(obj).parent()); 
+			return $(obj).parent().prev().clone(true).insertBefore($(obj).parent());
 		}
 		
 		function add_more_field(){
@@ -211,13 +212,13 @@ $(function(){
 			var has = false;
 			var error_names = arr;
 			
-			if(arr.length == 1 && arr[0] == '') {
+			if(arr.length == 1 && arr[0] === '') {
 				has = true;
 			} else {
 				var sorted_arr = arr.slice();
 				sorted_arr.sort();
 				for (var i = 0; i < sorted_arr.length - 1; i += 1) {
-					if (sorted_arr[i] == '' || sorted_arr[i + 1] == sorted_arr[i]) {
+					if (sorted_arr[i] === '' || sorted_arr[i + 1] == sorted_arr[i]) {
 						if(has != true){ //Empty arr once
 							error_names.splice(0,error_names.length);
 							has = true;
@@ -231,7 +232,7 @@ $(function(){
 		
 		function trigger_empty_field_message(){
 			var field_count = $('form ul.submitting.fields li:not(.no-field)').length;
-			if(field_count == 0){
+			if(field_count === 0){
 				$('form ul.submitting.fields li.no-field').show();
 			} else {
 				$('form ul.submitting.fields li.no-field').hide();
@@ -255,7 +256,7 @@ $(function(){
 					format: 'DHMS',
 					layout: '{dn}days {hnn}h {sep} {mnn}m {sep} {snn}s'});
 			});
-		};
+		}
 		
 		function add_reward(){
 			if($('.reward-item-form').length > 0) {
@@ -268,7 +269,7 @@ $(function(){
 				var form_div = $(data).prependTo('.reward-item-list').removeClass('reward-item-template')
 				.addClass('reward-item-form');
 				
-				// var form = 
+				// var form =
 				form_events();
 				function form_events(){
 					var cancel = $('.btn.cancel').bind('click', cancel);
@@ -313,7 +314,7 @@ $(function(){
 				function(data){
 					var form_div = $(data).insertBefore(item).removeClass('reward-item-template')
 					.addClass('reward-item-form');
-					// var form = 
+					// var form =
 					form_events();
 					function form_events(){
 						var cancel = $('.btn.cancel').bind('click', cancel);
@@ -405,14 +406,19 @@ $(function(){
 
 	function challenge() {
 		$('body').off()
-			.on('click', 'a.add-challenge', add_challenge)
-			.on('click', 'a.edit-challenge', edit_challenge)
-			.on('click', '.add-criteria', add_criteria);
-		function add_challenge() {
+			.on('click', 'a.add-challenge', add_update_challenge)
+			.on('click', 'a.update-challenge', add_update_challenge)
+			.on('click', '.add-criteria', add_criteria)
+			.on('click', '.remove-criteria', remove_criteria);
+		function add_update_challenge() {
 			url = $(this).attr('href');
 			$('div#main').load(url, add_challenge_form);
 
 			function add_challenge_form(){
+				$('.start-date, .end-date').datepicker({
+					dateFormat: "yy-mm-dd"});
+				$('#select_page').change(reload_apps);
+
 				$('form.new-challenge-form').on('submit',function(e) {
 					e.stopPropagation();
 					$(this).ajaxSubmit({
@@ -422,16 +428,61 @@ $(function(){
 					});
 					return false;
 				});
+
+				function reload_apps() {
+					var page_id = $('#select_page>select[name="select_page"]').val();
+					if(page_id === '') {
+						return;
+					}
+					$.post(base_url+'settings/page_challenge/ajax_get_page_apps',
+						{page_id:page_id},
+						function(data) {
+							$('#select_app').html(data);
+							$('#select_app').unbind('change').change(reload_actions);
+						});
+
+					$.post(base_url+'settings/page_challenge/ajax_get_app_actions',
+						{},
+						function(data) {
+							$('#select_action').html(data);
+						});
+				}
+
+				function reload_actions() {
+					var app_id = $('#select_app select[name="select_app"]').val();
+					if(app_id === '') {
+						return;
+					}
+					console.log(app_id);
+					$.post(base_url+'settings/page_challenge/ajax_get_app_actions',
+						{app_id:app_id},
+						function(data) {
+							$('#select_action').html(data);
+						});
+				}
 			}
 			return false;
 		}
-
-		function edit_challenge() {
-
+		function remove_criteria() {
+			$(this).parents('.criteria').remove();
 		}
-
 		function add_criteria() {
-			console.log('Add one more criteria in the form');
+			var name = $('#name').val();
+			var page_id = $('#select_page>select[name="select_page"]').val();
+			var app_id = $('#select_app>select[name="select_app"]').val();
+			var action_id = $('#select_action>select[name="select_action"]').val();
+			var count = $('#count').val();
+			if(name && page_id && app_id && action_id && count){
+				var next_nth = $('.criteria[data-nth]:last').data('nth') + 1 ;
+				var new_criteria = $('.criteria-template').clone()
+					.removeClass('criteria-template').addClass('criteria')
+					.data('nth', next_nth).show().appendTo('.criteria_list');
+				new_criteria.find('.name').val(name).attr('name', 'criteria['+next_nth+'][name]');
+				new_criteria.find('.page_id').val(page_id).attr('name', 'criteria['+next_nth+'][query][page_id]');
+				new_criteria.find('.app_id').val(app_id).attr('name', 'criteria['+next_nth+'][query][app_id]');
+				new_criteria.find('.action_id').val(action_id).attr('name', 'criteria['+next_nth+'][query][action_id]');
+				new_criteria.find('.count').val(count).attr('name', 'criteria['+next_nth+'][count]');
+			}
 		}
 	}
 	

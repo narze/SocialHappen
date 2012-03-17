@@ -67,9 +67,15 @@ class Page_challenge extends CI_Controller {
 			$this->load->model('page_model');
 			$page = $this->page_model->get_page_profile_by_page_id($page_id);
 			$company_id = $page['company_id'];
+			$company_pages = $this->page_model->get_company_pages_by_company_id($company_id);
+			$pages = array();
+			foreach($company_pages as $company_page) {
+				$pages[$company_page['page_id']] = $company_page['page_name'];
+			}
 			$this->load->vars(array(
 				'page_id' => $page_id,
-				'company_id' => $company_id
+				'company_id' => $company_id,
+				'company_pages' => $pages
 			));
 
 			$this->load->library('challenge_lib');
@@ -114,7 +120,7 @@ class Page_challenge extends CI_Controller {
 				$this->load->library('timezone_lib');
 				$start_timestamp = $this->timezone_lib->unconvert_time(set_value('start_date'), $user['user_timezone_offset']);
 				$end_timestamp = $this->timezone_lib->unconvert_time(set_value('end_date'), $user['user_timezone_offset']);
-				$criteria = $this->input->post('criteria');
+				$criteria = array_values($this->input->post('criteria'));
 				foreach($criteria as &$one) {
 					$one['query'] = array_cast_int($one['query']);
 					$one['count'] = (int) $one['count'];
@@ -177,6 +183,46 @@ class Page_challenge extends CI_Controller {
 
 	function update($page_id = NULL){
 		$this->form($page_id, TRUE);
+	}
+
+	function ajax_get_page_apps() {
+		if($this->input->is_ajax_request()) {
+			$this->load->helper('form');
+			$page_id = $this->input->post('page_id');
+			$this->load->model('installed_apps_model');
+			if($page_id && ($page_apps = $this->installed_apps_model->get_installed_apps_by_page_id($page_id))) {
+				$apps = array('' => 'Select App');
+				foreach($page_apps as $page_app) {
+					$apps[$page_app['app_id']] = $page_app['app_name'];
+				}
+				// array_unshift($apps, 'Select App');
+			} else {
+				$apps = array('' => 'This page has no apps');
+			}
+			echo form_dropdown('select_app', $apps);
+		} else {
+			return;
+		}
+	}
+
+	function ajax_get_app_actions() {
+		if($this->input->is_ajax_request()) {
+			$this->load->helper('form');
+			$app_id = $this->input->post('app_id');
+			$this->load->model('audit_action_model');
+			if($app_id && ($app_actions = $this->audit_action_model->get_action($app_id))) {
+				$actions = array('' => 'Select Action');
+				foreach($app_actions as $app_action) {
+					$actions[$app_action['action_id']] = $app_action['description'];
+				}
+				// array_unshift($actions, 'Select Actions');
+			} else {
+				$actions = array('' => 'This app has no actions');
+			}
+			echo form_dropdown('select_action', $actions);
+		} else {
+			return;
+		}
 	}
 }
 /* End of file page_challenge.php */

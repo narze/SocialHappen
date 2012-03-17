@@ -156,9 +156,9 @@ class Audit_action_model extends CI_Model {
 	function get_action($app_id = NULL, $action_id = NULL){
 		if(isset($app_id)){
 			if(empty($action_id)){
-				$criteria = array('app_id' => $app_id);
+				$criteria = array('app_id' => (int) $app_id);
 			}else{
-				$criteria = array('app_id' => $app_id, 'action_id' => $action_id);
+				$criteria = array('app_id' => (int) $app_id, 'action_id' => (int) $action_id);
 			}
 			$res = $this->actions->find($criteria)->sort(array('action_id' => 1));
 			$result = array();

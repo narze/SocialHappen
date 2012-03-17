@@ -707,7 +707,7 @@
 								+'<span class="button">'
 								+'<a class="bt-setting_app" href="'+base_url+'settings/page_challenge/'+page_id+'"><span>Setting</span></a>'
 								+'</span>'
-								+'</p><p class="appname">'+ 'Page Challenge' +'</p><input type="hidden" class="app_install_id" value="'+0+'" /></li>');
+								+'</p><p class="appname">'+ 'Company Challenge' +'</p><input type="hidden" class="app_install_id" value="'+0+'" /></li>');
 							for(i in json) {
 								ul_element.append('<li><p><img class="app-image" src="'+imgsize(json[i].app_image,'normal')+'" />'
 								+'<span class="button">'
