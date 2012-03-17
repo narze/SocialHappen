@@ -32,7 +32,11 @@ $(function(){
 					row.find('td.bt-icon a.bt-edit').attr('href', base_url+'app/'+ json[i].app_install_id);
 					row.find('td.bt-icon a.bt-setting').attr('href', base_url+'settings/page_apps/app/'+page_id+'/'+json[i].app_install_id);
 					//row.find('td.bt-icon a.bt-delete').attr('href', base_url+'path/to/delete/'+ json[i].app_install_id);
-					row.find('td.bt-icon a.bt-go').attr('href', json[i].app_url);
+					if(json[i].facebook_tab_url) {
+						row.find('td.bt-icon a.bt-go').attr('href', json[i].facebook_tab_url);
+					} else {
+						row.find('td.bt-icon a.bt-go').attr('href', json[i].app_url);
+					}
 				}
 				$('.wrapper-details.apps .details table tr:even').addClass('next');
 				

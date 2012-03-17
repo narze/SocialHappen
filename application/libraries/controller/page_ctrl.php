@@ -198,8 +198,8 @@ class Page_ctrl {
 	 * @author Manassarn M.
 	 */
 	function json_get_profile($page_id =NULL) {
-		$this -> CI -> load -> model('page_model', 'pages');
-		$profile = $this -> CI -> pages -> get_page_profile_by_page_id($page_id);
+		$this ->CI->load-> model('page_model', 'pages');
+		$profile = $this ->CI-> pages -> get_page_profile_by_page_id($page_id);
 		return json_encode($profile);
 	}
 
@@ -209,10 +209,10 @@ class Page_ctrl {
 	 * @author Manassarn M.
 	 */
 	function json_get_installed_apps($page_id =NULL, $limit = NULL, $offset = NULL){
-		$this -> CI -> load -> model('installed_apps_model', 'installed_apps');
-		$this -> CI -> load -> model('user_model', 'user');
+		$this ->CI->load-> model('installed_apps_model', 'installed_apps');
+		$this ->CI->load-> model('user_model', 'user');
 		
-		$apps = $this -> CI -> installed_apps -> get_installed_apps_by_page_id($page_id, $limit, $offset);
+		$apps = $this ->CI-> installed_apps -> get_installed_apps_by_page_id($page_id, $limit, $offset);
 		//echo '<pre>';
 		//var_dump($apps);
 		//echo '</pre>';
@@ -237,7 +237,8 @@ class Page_ctrl {
 						'app_install_status' => $app['app_install_status'],
 						'app_url' => $this -> CI->app_url->translate_url($app['app_url'], $app['app_install_id']),
 						'app_member' => $this -> CI->user->count_users_by_app_install_id($app['app_install_id']),
-						'app_monthly_active_member' => $active_user
+						'app_monthly_active_member' => $active_user,
+						'facebook_tab_url' => $app['facebook_tab_url']
 						);
 			$json_out[] = $a;
 		}
@@ -249,7 +250,7 @@ class Page_ctrl {
 	 * @author Manassarn M.
 	 */
 	function json_get_campaigns($page_id =NULL, $filter = NULL, $limit = NULL, $offset = NULL){
-		$this -> CI -> load -> model('campaign_model', 'campaigns');
+		$this ->CI->load-> model('campaign_model', 'campaigns');
 		switch($filter) {
 			case 'incoming':
 				$campaigns = $this->CI->campaigns->get_incoming_campaigns_by_page_id($page_id,$limit,$offset);
@@ -273,8 +274,8 @@ class Page_ctrl {
 	 * @author Manassarn M.
 	 */
 	function json_get_campaigns_using_status($page_id =NULL, $campaign_status_id = NULL, $limit = NULL, $offset = NULL){
-		$this -> CI -> load -> model('campaign_model', 'campaigns');
-		$campaigns = $this -> CI -> campaigns -> get_page_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id, $limit, $offset);
+		$this ->CI->load-> model('campaign_model', 'campaigns');
+		$campaigns = $this ->CI-> campaigns -> get_page_campaigns_by_page_id_and_campaign_status_id($page_id, $campaign_status_id, $limit, $offset);
 		return json_encode($campaigns);
 	}
 
@@ -284,14 +285,14 @@ class Page_ctrl {
 	 * @author Manassarn M.
 	 */
 	function json_get_users($page_id =NULL, $limit = NULL, $offset = NULL){
-		$this -> CI -> load -> model('page_user_data_model', 'page_user');
-		$users = $this -> CI -> page_user -> get_page_users_by_page_id($page_id, $limit, $offset);
+		$this ->CI->load-> model('page_user_data_model', 'page_user');
+		$users = $this ->CI-> page_user -> get_page_users_by_page_id($page_id, $limit, $offset);
 		return json_encode($users);
 	}
 
 	function json_add($facebook_page_id = NULL ,$company_id = NULL ,$page_name = NULL ,$page_detail = NULL ,$page_image = NULL){
 		$result = array('success' => FALSE);
-		$this->CI-> load -> model('page_model', 'pages');
+		$this->CI->load-> model('page_model', 'pages');
 		$post_data = array(
 			'facebook_page_id' => $facebook_page_id,
 			'company_id' => $company_id,
@@ -335,7 +336,7 @@ class Page_ctrl {
 			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
 			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
 			
-			$this->CI-> load -> model('user_pages_model', 'user_pages');
+			$this->CI->load-> model('user_pages_model', 'user_pages');
 			$this->CI-> user_pages -> add_user_page(
 				array(
 				'user_id' => $user_id,
