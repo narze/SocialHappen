@@ -198,4 +198,8 @@ class User_model extends CI_Model {
 	function update_user_last_seen($user_id) {
 		return $this -> db -> update('user', array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
 	}
+
+	function find($where) {
+		return $this->db->get_where('user', $where)->result_array();
+	}
 }

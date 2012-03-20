@@ -34,6 +34,7 @@ class Migration_Add_user_password extends CI_Migration {
 
 	public function down()
 	{
+		$this->dbforge->drop_column('user','user_is_player');
 		$this->dbforge->drop_column('user','user_phone');
 		$this->dbforge->drop_column('user','user_password');
 		echo 'Downgraded to version 2<br />';

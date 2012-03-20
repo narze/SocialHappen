@@ -41,6 +41,7 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_last_seen'],'is_string','user_last_seen');
 		$this->unit->run($result['user_facebook_access_token'],'is_string','user_facebook_access_token');
 		$this->unit->run($result['user_is_developer'] == 1, TRUE,'user_is_developer');
+		$this->unit->run($result['user_is_player'] == 0, TRUE,'user_is_player');
 	}
 
 	/**
@@ -97,6 +98,7 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_last_seen'],'is_string','user_last_seen');
 		$this->unit->run($result['user_facebook_access_token'],'is_string','user_facebook_access_token');
 		$this->unit->run($result['user_is_developer'] == 1, TRUE,'user_is_developer');
+		$this->unit->run($result['user_is_player'] == 0, TRUE,'user_is_player');
 	}
 	
 	/**
