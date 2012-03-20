@@ -33,6 +33,8 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_first_name'],'is_string','user_first_name');
 		$this->unit->run($result['user_last_name'],'is_string','user_last_name');
 		$this->unit->run($result['user_email'],'is_string','user_email');
+		$this->unit->run($result['user_phone'],'is_string','user_phone');
+		$this->unit->run(isset($result['user_password']),'is_false','user_password');
 		$this->unit->run($result['user_image'],'is_string','user_image');
 		$this->unit->run($result['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result['user_register_date'],'is_string','user_register_date');
@@ -87,6 +89,8 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_first_name'],'is_string','user_first_name');
 		$this->unit->run($result['user_last_name'],'is_string','user_last_name');
 		$this->unit->run($result['user_email'],'is_string','user_email');
+		$this->unit->run($result['user_phone'],'is_string','user_phone');
+		$this->unit->run(isset($result['user_password']),'is_false','user_password');
 		$this->unit->run($result['user_image'],'is_string','user_image');
 		$this->unit->run($result['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result['user_register_date'],'is_string','user_register_date');
