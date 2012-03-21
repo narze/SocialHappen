@@ -139,6 +139,7 @@ input[type="text"].form-error {
 
 /* buttons */
 .btn {
+	cursor: pointer;
 	display:-moz-inline-stack;
 	display:inline-block;
 	zoom:1;
@@ -388,6 +389,7 @@ input[type="text"].form-error {
 /* Reward setting */
 .tab-head {
 	height:auto;
+	min-height:42px;
 	line-height: 42px;
 	padding:0 15px;
 	color: #fff;
@@ -452,7 +454,7 @@ input[type="text"].form-error {
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 }
-.tab-head .add-reward-item {margin-top: 6px;}
+.tab-head .btn {margin-top: 6px;}
 
 /* Blue tab */
 .tab-blue {

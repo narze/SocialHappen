@@ -409,7 +409,8 @@ $(function(){
 			.on('click', 'a.add-challenge', add_update_challenge)
 			.on('click', 'a.update-challenge', add_update_challenge)
 			.on('click', '.add-criteria', add_criteria)
-			.on('click', '.remove-criteria', remove_criteria);
+			.on('click', '.remove-criteria', remove_criteria)
+			.on('click', '.challenge-property-name', show_challenge_property);
 		function add_update_challenge() {
 			url = $(this).attr('href');
 			$('div#main').load(url, add_challenge_form);
@@ -483,6 +484,9 @@ $(function(){
 				new_criteria.find('.action_id').val(action_id).attr('name', 'criteria['+next_nth+'][query][action_id]');
 				new_criteria.find('.count').val(count).attr('name', 'criteria['+next_nth+'][count]');
 			}
+		}
+		function show_challenge_property() {
+			$(this).parent().addClass('active').siblings().removeClass('active');
 		}
 	}
 	

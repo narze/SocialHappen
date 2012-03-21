@@ -36,8 +36,8 @@ class Page_challenge extends CI_Controller {
 				$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $user['user_timezone_offset']);
 				$end_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['end']), $user['user_timezone_offset']);
 
-				$challenge['start_date'] = $start_time;
-				$challenge['end_date'] = $end_time;
+				$challenge['start_date'] = date('d/m/Y', strtotime($start_time));
+				$challenge['end_date'] = date('d/m/Y', strtotime($end_time));
 			} unset($challenge);
 			$this->load->vars(array(
 				'company_id' => $company_id,

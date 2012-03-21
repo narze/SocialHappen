@@ -1147,3 +1147,136 @@ line-height: 25px;
 	padding:10px 5px;
 	resize:vertical;
 }
+
+/* Challenge settings */
+.challenge-list {margin:10px 0;}
+.challenge-list .challenge {
+	line-height:24px;
+}
+	.challenge .challenge-name {
+		display:-moz-inline-stack;
+		display:inline-block;
+		zoom:1;
+		*display:inline;
+		vertical-align:top;
+		text-decoration:underline;
+		width:200px;
+	}
+	.challenge .challenge-start-date {
+		display:-moz-inline-stack;
+		display:inline-block;
+		zoom:1;
+		*display:inline;
+		vertical-align:top;
+		padding-left:20px;
+		color:#555;
+	}
+	.challenge .challenge-end-date {
+		display:-moz-inline-stack;
+		display:inline-block;
+		zoom:1;
+		*display:inline;
+		vertical-align:top;
+		color:#555;
+	}
+.challenge-preview {
+	display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;
+	vertical-align:top;
+	width:320px;
+	min-height:480px;
+	background-color:#ccc;
+	position: relative;
+}
+	.challenge-preview .wrapper {
+		padding: 0 10px;
+		height:100%;
+		position: relative;
+	}
+		.challenge-preview .challenge-preview-name {
+			margin:10px 0;
+		}
+		.challenge-preview .challenge-preview-name input {
+			border: 0;
+			width: 96.75%;
+			padding:5px;
+			background-color:transparent;
+			font-size:20px;
+			font-weight:bold;
+		}
+		.challenge-preview .challenge-preview-name input:focus {
+			background-color:#fdffd5;
+		}
+		.challenge-preview .challenge-preview-image .image {
+			display:block;
+			width:100%;
+			height:300px;
+			background-color:#fff;
+		}
+		.challenge-preview .challenge-preview-image input {
+			float:left;
+		}
+		.challenge-preview .challenge-preview-desc {
+			margin:10px 0;
+		}
+		.challenge-preview .challenge-preview-desc textarea {
+			border: 0;
+			width: 96.75%;
+			padding:5px 0;
+			background-color:transparent;
+			resize:vertical;
+			height:auto;
+			min-height:42px;
+			max-height:135px;
+		}
+		.challenge-preview .challenge-preview-desc textarea:focus {
+			background-color:#fdffd5;
+			padding:5px;
+		}
+		.challenge-preview .challenge-preview-reward {
+			
+		}
+		.challenge-preview .challenge-preview-actions {
+			margin-top:10px;
+			min-height: 110px;
+		}
+		.challenge-preview .challenge-preview-qr-code {
+			width:100px;
+			height:100px;
+			background-color:#fff;
+			position: absolute;
+			bottom:10px;
+			right:10px;
+		}
+.challenge-properties-list {
+	display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;
+	vertical-align:top;
+	width:276px;
+	height:480px;
+}
+	.challenge-properties-list .challenge-property {
+		height:36px;
+		-webkit-transition: height .25s linear;
+		-moz-transition: height .25s linear;
+		transition: height .25s linear;
+		overflow: hidden;
+	}
+	.challenge-properties-list .challenge-property.active {
+		height:372px;
+	}
+		.challenge-property .challenge-property-name {
+			cursor: pointer;
+			color:#fbfbfb;
+			background-color:#555;
+			padding:10px;
+		}
+		.challenge-property .challenge-property-box {
+			padding: 15px;
+			background-color:#fbfbfb;
+			height:307px;
+		}
