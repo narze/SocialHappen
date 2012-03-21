@@ -1635,15 +1635,75 @@ class DB_Sync {
 				'score' => 1
 			),
 			array(
-        'app_id' => 13,
-        'action_id' => 2000,
-        'description' => 'User answer a question',
-        'stat_app' => TRUE,
-        'stat_page' => TRUE,
-        'stat_campaign' => TRUE,
-        'format_string' => '{user: user_id} answered question {string: object} with answer {string: objecti} in {page: page_id}',
-        'score' => 0
-      ),
+				'app_id' => 13,
+				'action_id' => 2000,
+				'description' => 'User answer a question',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => '{user: user_id} answered question {string: object} with answer {string: objecti} in {page: page_id}',
+				'score' => 0
+			  ),
+			array(
+				'app_id' => 15,
+				'action_id' => 1001,
+				'description' => 'User view an item',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => '{user: user_id} views item {string: object} in {page: page_id}',
+				'score' => 0
+			  ),
+			array(
+				'app_id' => 15,
+				'action_id' => 1002,
+				'description' => 'User votes an item',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => '{user: user_id} votes item {string: object} in {page: page_id}',
+				'score' => 0
+			  ),
+			array(
+				'app_id' => 15,
+				'action_id' => 1003,
+				'description' => 'User shares an item',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => '{user: user_id} answered question {string: object} in {page: page_id}',
+				'score' => 0
+			  ),
+			array(
+				'app_id' => 16,
+				'action_id' => 1001,
+				'description' => 'User view an item',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => '{user: user_id} views item {string: object} in {page: page_id}',
+				'score' => 0
+			  ),
+			array(
+				'app_id' => 16,
+				'action_id' => 1002,
+				'description' => 'User votes an item',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => '{user: user_id} votes item {string: object} in {page: page_id}',
+				'score' => 1
+			  ),
+			array(
+				'app_id' => 16,
+				'action_id' => 1003,
+				'description' => 'User shares an item',
+				'stat_app' => TRUE,
+				'stat_page' => TRUE,
+				'stat_campaign' => TRUE,
+				'format_string' => '{user: user_id} answered question {string: object} in {page: page_id}',
+				'score' => 1
+			  ),
 		);
 		foreach(array_merge($platform_audit_actions,$audit_actions) as $audit_action){
 			$this->CI->audit_lib->add_audit_action($audit_action['app_id'], $audit_action['action_id'], 
