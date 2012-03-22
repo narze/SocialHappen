@@ -2,7 +2,9 @@
 <p id="challenge-description"><?php echo $challenge['detail']['description'];?></p>
 <img id="challenge-image" src="<?php echo $challenge['detail']['image'];?>" alt="<?php echo $challenge['detail']['name'];?>" />
 <ul id="challenge-criteria-list">
-	<?php foreach($challenge['criteria'] as $criteria) : ?>
+	<?php if($challenge['criteria']) 
+	{
+		foreach($challenge['criteria'] as $criteria) : ?>
 		<li id="challenge-criteria">
 			<?php 
 				var_export($criteria);
@@ -14,8 +16,9 @@
 					<a href="#" class="criteria-link">Do this challenge</a>
 				</div>
 			<?php endif; ?>
-		</li>
-	<?php endforeach; ?>
+		</li><?php 
+		endforeach; 
+	} ?>
 </ul>
 <?php if(!$player_logged_in) : 
 	$next_url = "player/challenge/{$challenge_id}";

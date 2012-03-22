@@ -1,3 +1,4 @@
+<?php echo link_tag('css/main.css'); ?>
 <?php foreach($challenges as $challenge) : ?>
 	<div class="challenge">
 		<p><?php echo $challenge['detail']['name'];?></p>
