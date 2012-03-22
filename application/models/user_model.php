@@ -14,8 +14,9 @@ class User_model extends CI_Model {
 		if($limit){
 			$this->db->limit($limit, $offset);
 		}
-		$profiles = $this -> db -> get_where('user', array('user_id' => $user_id)) -> result_array();
-		return $this->socialhappen->map_one_v($profiles[0], 'user_gender');
+		$user = $this -> db -> get_where('user', array('user_id' => $user_id)) -> row_array();
+		unset($user['user_password']);
+		return $this->socialhappen->map_one_v($user, 'user_gender');
 	}
 
 	/**
@@ -100,8 +101,9 @@ class User_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function get_user_profile_by_user_facebook_id($user_facebook_id =NULL) {
-		$profiles = $this -> db -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> result_array();
-		return $this->socialhappen->map_one_v($profiles[0], 'user_gender');
+		$user = $this -> db -> get_where('user', array('user_facebook_id' => $user_facebook_id)) -> row_array();
+		unset($user['user_password']);
+		return $this->socialhappen->map_one_v($user, 'user_gender');
 	}
 	
 	/**
@@ -195,5 +197,11 @@ class User_model extends CI_Model {
 	 */
 	function update_user_last_seen($user_id) {
 		return $this -> db -> update('user', array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
+	}
+
+	function findOne($where) {
+		$user = $this->db->get_where('user', $where)->row_array();
+		unset($user['user_password']);
+		return $user;
 	}
 }
