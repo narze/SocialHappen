@@ -12,6 +12,7 @@ class Player extends CI_Controller {
 		echo anchor('player/signup', 'Signup Socialhappen');
 		echo anchor('player/login', 'Login');
 		echo anchor('player/challenge_list', 'View Challenges');
+		echo anchor('player/settings', 'Player settings');
 	}
 
 	function signup() {
@@ -160,6 +161,37 @@ class Player extends CI_Controller {
 			$this->load->view('player/challenge_view');
 		} else {
 			show_error('Challenge Invalid', 404);
+		}
+	}
+
+	function settings() {
+		if($this->socialhappen->is_logged_in_as_player()) {
+			$user = $this->socialhappen->get_user();
+			if(isset($user['user_facebook_id']) && isset($user['user_facebook_access_token'])) {
+				$facebook_connected = TRUE;
+			} else {
+				$facebook_connected = FALSE;
+			}
+			$this->load->vars(array('facebook_connected' => $facebook_connected));
+			$this->load->view('player/settings_view');
+			
+		} else {
+			redirect('player');
+		}
+	}
+
+	function connect_facebook() {
+		//reconnect facebook
+	}
+
+	function disconnect_facebook() {
+		if($this->socialhappen->is_logged_in_as_player()) {
+			$user_id = $this->socialhappen->get_user_id();
+			$this->load->model('user_model');
+			$this->user_model->update_user($user_id, array('user_facebook_id' => NULL, 'user_facebook_access_token' => NULL));
+			echo 'Disconnected from facebook';
+		} else {
+			redirect('player');
 		}
 	}
 }  
