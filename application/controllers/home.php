@@ -6,6 +6,9 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->library('form_validation');
 		$this->load->library('controller/home_ctrl');
+		if(($user = $this->socialhappen->get_user()) && $user['user_is_player']) {
+			redirect('player');
+		}
 	}
 	
 	/**
