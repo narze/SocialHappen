@@ -35,4 +35,6 @@ echo form_open('player/signup', $attributes); ?>
         <?php echo form_submit( 'submit', 'Submit'); ?>
 </p>
 
+<p>Or <a href="#" id="fblogin">Connect with facebook</a></p>
+
 <?php echo form_close(); ?>
