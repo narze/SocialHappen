@@ -9,10 +9,23 @@ class Player extends CI_Controller {
 	}
 	
 	function index() {
+		$user = $this->socialhappen->get_user();
+		if(isset($user['user_facebook_id']) && isset($user['user_facebook_access_token'])) {
+			$facebook_connected = TRUE;
+		} else {
+			$facebook_connected = FALSE;
+		}
+		$this->load->vars(
+			array(
+				'player_logged_in' => $this->socialhappen->is_logged_in_as_player(),
+				'facebook_connected' => $facebook_connected
+			)
+		);
 		echo anchor('player/signup', 'Signup Socialhappen').'<br/>';
 		echo anchor('player/login', 'Login').'<br/>';
-		echo anchor('player/challenge_list', 'View Challenges');
-		echo anchor('player/settings', 'Player settings');
+		echo anchor('player/challenge_list', 'View Challenges').'<br/>';
+		echo anchor('player/settings', 'Player settings').'<br/>';
+		$this->load->view('player/index_view');
 	}
 
 	function signup() {
@@ -185,7 +198,7 @@ class Player extends CI_Controller {
 	function settings() {
 		if($this->socialhappen->is_logged_in_as_player()) {
 			$user = $this->socialhappen->get_user();
-			if(isset($user['user_facebook_id']) && isset($user['user_facebook_access_token'])) {
+			if(issetor($user['user_facebook_id']) && issetor($user['user_facebook_access_token'])) {
 				$facebook_connected = TRUE;
 			} else {
 				$facebook_connected = FALSE;
@@ -199,7 +212,33 @@ class Player extends CI_Controller {
 	}
 
 	function connect_facebook() {
-		//reconnect facebook
+		if(($user_facebook_id = $this->FB->getUser()) && 
+				($user_facebook_id == $this->input->get('user_facebook_id')) && 
+				($token = $this->input->get('token'))){
+			$connecting_facebook = TRUE;
+			$this->load->model('user_model');
+			$this->user_model->update_user($this->socialhappen->get_user_id(), array(
+				'user_facebook_id' => $user_facebook_id,
+				'user_facebook_access_token' => $token
+			));
+		} else {
+			$connecting_facebook = FALSE;
+		}
+
+		$user = $this->socialhappen->get_user();
+		if($connecting_facebook || (issetor($user['user_facebook_id']) && issetor($user['user_facebook_access_token']))) {
+			redirect('player/settings');
+		}
+
+		$this->load->vars(array(
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_channel_url' => $this->facebook->channel_url,
+			'facebook_default_scope' => $this->config->item('facebook_default_scope'),
+			'facebook_connected' => $connecting_facebook
+			)
+		);
+		$this->load->view('player/connect_facebook_view');
+
 	}
 
 	function disconnect_facebook() {
@@ -207,7 +246,7 @@ class Player extends CI_Controller {
 			$user_id = $this->socialhappen->get_user_id();
 			$this->load->model('user_model');
 			$this->user_model->update_user($user_id, array('user_facebook_id' => NULL, 'user_facebook_access_token' => NULL));
-			echo 'Disconnected from facebook';
+			echo 'Disconnected from facebook ',anchor('player/settings', 'Back'); 
 		} else {
 			redirect('player');
 		}

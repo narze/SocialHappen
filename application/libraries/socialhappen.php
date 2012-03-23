@@ -996,7 +996,8 @@ class SocialHappen{
 			$userdata = array(
 				'user_id' => $user_id,
 				// 'user_facebook_id' => $user_facebook_id,
-				'logged_in_as_player' => TRUE
+				'logged_in_as_player' => TRUE,
+				'logged_in' => TRUE
 			);
 			$this->CI->session->set_userdata($userdata);
 		}
