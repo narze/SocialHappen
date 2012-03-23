@@ -9,13 +9,29 @@ class Player extends CI_Controller {
 	}
 	
 	function index() {
-		echo anchor('player/signup', 'Signup Socialhappen');
-		echo anchor('player/login', 'Login');
+		echo anchor('player/signup', 'Signup Socialhappen').'<br/>';
+		echo anchor('player/login', 'Login').'<br/>';
 		echo anchor('player/challenge_list', 'View Challenges');
 		echo anchor('player/settings', 'Player settings');
 	}
 
 	function signup() {
+
+		$this->load->vars(array(
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_channel_url' => $this->facebook->channel_url,
+			'facebook_default_scope' => $this->config->item('facebook_default_scope')
+			)
+		);
+
+		if($this->input->get('user_facebook_id') && $this->input->get('token'))
+		{
+			$this->session->set_userdata(array(
+				'user_facebook_id' => $this->input->get('user_facebook_id'),
+				'token'=>$this->input->get('token')
+			));
+		}
+
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[100]');			
 		$this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'required|trim|xss_clean|is_numeric|max_length[20]');			
@@ -39,10 +55,12 @@ class Player extends CI_Controller {
 			} else {
 				$encrypted_password = sha1($this->presalt.$password.$this->postsalt);
 				$form_data = array(
-	       	'user_email' => set_value('email'),
-	       	'user_phone' => set_value('mobile_phone_number'),
-	       	'user_password' => $encrypted_password,
-	       	'user_is_player' => 1
+					'user_email' => set_value('email'),
+					'user_phone' => set_value('mobile_phone_number'),
+					'user_password' => $encrypted_password,
+					'user_is_player' => 1,
+					'user_facebook_id' => $this->input->post('user_facebook_id'),
+					'user_facebook_access_token' => $this->input->post('token')
 				);
 					
 				$do_not_add = FALSE;

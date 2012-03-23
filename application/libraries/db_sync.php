@@ -1659,16 +1659,6 @@ class DB_Sync {
 			array(
 				'app_id' => 15,
 				'action_id' => 1001,
-				'description' => 'User view an item',
-				'stat_app' => TRUE,
-				'stat_page' => TRUE,
-				'stat_campaign' => TRUE,
-				'format_string' => '{user: user_id} views item {string: object} in {page: page_id}',
-				'score' => 0
-			  ),
-			array(
-				'app_id' => 15,
-				'action_id' => 1002,
 				'description' => 'User votes an item',
 				'stat_app' => TRUE,
 				'stat_page' => TRUE,
@@ -1678,7 +1668,7 @@ class DB_Sync {
 			  ),
 			array(
 				'app_id' => 15,
-				'action_id' => 1003,
+				'action_id' => 1002,
 				'description' => 'User shares an item',
 				'stat_app' => TRUE,
 				'stat_page' => TRUE,
@@ -1689,16 +1679,6 @@ class DB_Sync {
 			array(
 				'app_id' => 16,
 				'action_id' => 1001,
-				'description' => 'User view an item',
-				'stat_app' => TRUE,
-				'stat_page' => TRUE,
-				'stat_campaign' => TRUE,
-				'format_string' => '{user: user_id} views item {string: object} in {page: page_id}',
-				'score' => 0
-			  ),
-			array(
-				'app_id' => 16,
-				'action_id' => 1002,
 				'description' => 'User votes an item',
 				'stat_app' => TRUE,
 				'stat_page' => TRUE,
@@ -1708,7 +1688,7 @@ class DB_Sync {
 			  ),
 			array(
 				'app_id' => 16,
-				'action_id' => 1003,
+				'action_id' => 1002,
 				'description' => 'User shares an item',
 				'stat_app' => TRUE,
 				'stat_page' => TRUE,
