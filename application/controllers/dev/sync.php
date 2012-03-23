@@ -50,7 +50,7 @@ class Sync extends CI_Controller {
 
 	}
 	
-	function mongodb_reset(){
+	function mongodb_reset($skip = FALSE){
 		//Check if mongodb is backed up manually in last x=$interval_limit seconds
 
 		//1.Get latest backup file name
@@ -84,10 +84,10 @@ class Sync extends CI_Controller {
 
 		//3.compare with time()
 		$interval = time()-$latest_backup_timestamp;
-		if($interval <= $interval_limit){
+		if($interval <= $interval_limit || $skip){
 			$this->db_sync->mongodb_reset();
 		} else {
-			echo 'Please try backup using mongodump before reset';
+			echo 'Please try backup using mongodump before reset, or append true to skip this';
 		}
 	}
 	
