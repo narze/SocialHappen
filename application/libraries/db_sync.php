@@ -1331,7 +1331,8 @@ class DB_Sync {
 			'stat_campaigns',
 			'stat_pages',
 			'notification',
-			'challenge'
+			'challenge',
+			'user'
 		);
 		$mongo_db_name = $this->CI->config->item('mongo_db');
 		$this->CI->load->library('mongo_db', NULL, 'mongodb');
