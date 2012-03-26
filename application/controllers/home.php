@@ -9,6 +9,8 @@ class Home extends CI_Controller {
 		if(($user = $this->socialhappen->get_user()) && $user['user_is_player']) {
 			redirect('player');
 		}
+		$this->presalt = 'tH!s!$Pr3Za|t';
+		$this->postsalt = 'di#!zp0s+s4LT';
 	}
 	
 	/**
@@ -272,6 +274,7 @@ class Home extends CI_Controller {
 	/**
 	 * Login SocialHappen, if cannot, go to signup
 	 */
+	/*
 	function login($redirect_url = NULL){
 		if($this->socialhappen->login()){
 			if(isset($redirect_url)){
@@ -283,6 +286,98 @@ class Home extends CI_Controller {
 			}
 		} else {
 			redirect('home/signup?from=login');
+		}
+	}
+	*/
+
+	function login($redirect_url = NULL)
+	{
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('email', 'Email', 'trim|xss_clean|valid_email|max_length[100]');			
+		$this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');			
+		$this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');
+			
+		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+	
+		$next = $this->input->get('next');
+		$this->load->vars('next', $next ? '?next='.urlencode($next) : '/');
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->load->view('home/login_view');
+		}
+		else
+		{
+     	$email = set_value('email');
+     	$mobile_phone_number = set_value('mobile_phone_number');
+     	$password = set_value('password');
+     	$encrypted_password = sha1($this->presalt.$password.$this->postsalt);
+			
+			$this->load->model('user_model');
+			if($email) {
+				$user = $this->user_model->findOne(array(
+					'user_email' => $email,
+					'user_password' => $encrypted_password
+				));
+			} else if($mobile_phone_number) {
+				$user = $this->user_model->findOne(array(
+					'user_phone' => $mobile_phone_number,
+					'user_password' => $encrypted_password
+				));
+			} else {
+				$user = FALSE;
+				$this->load->vars('email_and_phone_not_entered', TRUE);
+			}
+		
+			if ($user) // the information has therefore been successfully saved in the db
+			{
+				/* Copy from $this->socialhappen->login() ?*/
+				if(!$this->session->userdata('logged_in')){ //@TODO : Problem is it will separate logging in through platform & through facebook
+					$this->load->library('audit_lib');
+					$action_id = $this->socialhappen->get_k('audit_action','User Login');
+					// $this->audit_lib->add_audit(
+					// 	0,
+					// 	$user_id,
+					// 	$action_id,
+					// 	'', 
+					// 	'',
+					// 	array(
+					// 		'app_install_id' => 0,
+					// 		'user_id' => $user_id
+					// 	)
+					// );
+					$this->audit_lib->audit_add(array(
+						'user_id' => $user_id,
+						'action_id' => $action_id,
+						'app_id' => 0,
+						'app_install_id' => 0,
+						'subject' => $user_id,
+						'object' => NULL,
+						'objecti' => NULL
+					));
+					
+					$this->load->library('achievement_lib');
+					$info = array('action_id'=> $action_id, 'app_install_id'=>0);
+					$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+				}
+				$userdata = array(
+					'user_id' => $user['user_id'],
+					//'user_facebook_id' => $user_facebook_id,
+					'logged_in' => TRUE
+				);
+				$this->session->set_userdata($userdata);
+
+				if(isset($redirect_url)){
+					redirect($redirect_url);
+				} else if($next = $this->input->get('next')){
+					redirect($next);
+				} else {
+					redirect('?logged_in=true');
+				}
+			}
+			else
+			{
+				redirect('home/signup?from=login');
+			}
 		}
 	}
 }  

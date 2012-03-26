@@ -11,7 +11,7 @@ class XD extends CI_Controller {
 		$this->load->vars(array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
 			'facebook_channel_url' => $this->facebook->channel_url,
-			'sh_user_logged_in' => json_encode($this->socialhappen->is_logged_in())
+			'sh_user_logged_in' => json_encode($this->socialhappen->is_logged_in() && $this->facebook->getUser() )
 		));
 
 		$this->load->view('xd/xd_view');
@@ -166,7 +166,7 @@ class XD extends CI_Controller {
 	}
 
 	function get_login_status(){
-		echo json_encode($this->socialhappen->is_logged_in());
+		echo json_encode($this->socialhappen->is_logged_in() && $this->facebook->getUser());
 	}
 
 	function visit($page_id = NULL, $app_install_id = NULL, $app_id = NULL){

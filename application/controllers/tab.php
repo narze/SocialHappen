@@ -77,7 +77,7 @@ class Tab extends CI_Controller {
 			return;
 		}
 		
-		$is_logged_in = $this->socialhappen->is_logged_in();
+		$is_logged_in = $this->socialhappen->is_logged_in() && $user_facebook_id;
 
 		//Is get-started completed?
 		$this->load->model('get_started_model', 'get_started');
@@ -129,7 +129,7 @@ class Tab extends CI_Controller {
 			return;
 		}
 		
-		$is_logged_in = $this->socialhappen->is_logged_in();
+		$is_logged_in = $this->socialhappen->is_logged_in() && $user_facebook_id;
 		
 		//get-started checklist
 		$this->load->model('get_started_model', 'get_started');
