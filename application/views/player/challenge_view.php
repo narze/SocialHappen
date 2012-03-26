@@ -11,9 +11,13 @@
 			?>
 			<div class="criteria-name">Name : <?php echo $criteria['name'];?></div>
 			<div class="criteria-count">Count : <?php echo $criteria['count'];?></div>
-			<?php if($player_logged_in) : ?>
+			<?php if($player_logged_in && $player_challenging) : ?>
 				<div class="">
-					<a href="#" class="criteria-link">Do this challenge</a>
+					<button type="button" href="#" class="criteria-link">Do this action</a>
+				</div>
+			<?php elseif($player_logged_in) : ?>
+				<div class="">
+					Please join to this challenge below
 				</div>
 			<?php endif; ?>
 		</li><?php 
@@ -27,4 +31,6 @@
 		<p id="login-message">Please Login SocialHappen First</p>
 		<a href="<?php echo base_url().'player/login?next='.urlencode($next_url);?>" id="login-btn">LOGIN</a>
 	</div>
-<?php endif;
+<?php elseif(!$player_challenging) : ?>
+	<a href="<?php echo base_url().'player/join_challenge/'.$challenge_id;?>" id="join-challenge">join this challenge</a>
+<?php endif; ?>

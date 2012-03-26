@@ -23,7 +23,8 @@ class Player extends CI_Controller {
 		);
 		echo anchor('player/signup', 'Signup Socialhappen').'<br/>';
 		echo anchor('player/login', 'Login').'<br/>';
-		echo anchor('player/challenge_list', 'View Challenges').'<br/>';
+		echo anchor('player/challenge_list', 'View ALL Challenges').'<br/>';
+		echo anchor('player/challenging_list', 'View Challenging Challenges').'<br/>';
 		echo anchor('player/settings', 'Player settings').'<br/>';
 		$this->load->view('player/index_view');
 	}
@@ -176,17 +177,39 @@ class Player extends CI_Controller {
 		}
 	}
 
+	function challenging_list() {
+		$user_id = $this->socialhappen->get_user_id();
+		$this->load->library('user_lib');
+		$user = $this->user_lib->get_user($user_id);
+		if(isset($user['challenge'])) {
+			// echo '<pre>';
+			// var_dump($user['challenge']);
+			// echo '</pre>';
+			foreach($user['challenge'] as &$challenge) {
+				$challenge = new MongoId($challenge);
+			} unset($challenge);
+			$this->load->model('challenge_model');
+			$challenges = $this->challenge_model->get(array('_id' => array('$in' => $user['challenge'])));
+			$this->load->vars('challenges', $challenges);
+			$this->load->view('player/challenge_list_view');
+		} else {
+			echo 'You did not join any challenge';
+		}
+	}
+
 	function challenge($challenge_id) {
 		$this->load->model('challenge_model');
 		if($challenge = $this->challenge_model->getOne(array('_id' => new MongoId($challenge_id)))) {
-			echo '<pre>';
-			var_export($challenge);
-			echo '</pre>';
+			$this->load->library('user_lib');
+			$user_id = $this->socialhappen->get_user_id();
+			$user = $this->user_lib->get_user($user_id);
+			$player_challenging = isset($user['challenge']) && in_array($challenge_id, $user['challenge']);
 			$this->load->vars(
 				array(
 					'challenge_id' => $challenge_id,
 					'challenge' => $challenge,
-					'player_logged_in' => $this->socialhappen->is_logged_in_as_player()
+					'player_logged_in' => $this->socialhappen->is_logged_in_as_player(),
+					'player_challenging' => $player_challenging
 				)
 			);
 			$this->load->view('player/challenge_view');
@@ -249,6 +272,22 @@ class Player extends CI_Controller {
 			echo 'Disconnected from facebook ',anchor('player/settings', 'Back'); 
 		} else {
 			redirect('player');
+		}
+	}
+
+	function join_challenge($challenge_id = NULL) {
+		$this->load->model('challenge_model');
+		if($challenge = $this->challenge_model->getOne(array('_id' => new MongoId($challenge_id)))) {
+			$user_id = $this->socialhappen->get_user_id();
+			$this->load->library('user_lib');
+			if($this->user_lib->join_challenge($user_id, $challenge_id)) {
+				echo 'Challenge joined';
+				echo anchor('player/challenge/'.$challenge_id, 'Back');
+			} else {
+				echo 'Challenge join error';
+			}
+		} else {
+			show_error('Challenge Invalid', 404);
 		}
 	}
 }  
