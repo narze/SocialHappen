@@ -204,12 +204,17 @@ class Player extends CI_Controller {
 			$user_id = $this->socialhappen->get_user_id();
 			$user = $this->user_lib->get_user($user_id);
 			$player_challenging = isset($user['challenge']) && in_array($challenge_id, $user['challenge']);
+			
+			$this->load->library('challenge_lib');
+			$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+
 			$this->load->vars(
 				array(
 					'challenge_id' => $challenge_id,
 					'challenge' => $challenge,
 					'player_logged_in' => $this->socialhappen->is_logged_in_as_player(),
-					'player_challenging' => $player_challenging
+					'player_challenging' => $player_challenging,
+					'challenge_progress' => $challenge_progress
 				)
 			);
 			$this->load->view('player/challenge_view');

@@ -4,13 +4,19 @@
 <ul id="challenge-criteria-list">
 	<?php if($challenge['criteria']) 
 	{
-		foreach($challenge['criteria'] as $criteria) : ?>
+		foreach($challenge['criteria'] as $key => $criteria) : ?>
+		<?php if($challenge_progress) {
+			echo '<p>Challenge progress :</p><pre>Debug ';
+			var_export($challenge_progress[$key]);
+			echo '</pre>';
+		} ?>
 		<li id="challenge-criteria">
 			<?php 
 				var_export($criteria);
 			?>
 			<div class="criteria-name">Name : <?php echo $criteria['name'];?></div>
-			<div class="criteria-count">Count : <?php echo $criteria['count'];?></div>
+			<div class="criteria-count">Count : <?php echo $challenge_progress[$key]['action_count'].'/'.$criteria['count'];?></div>
+			<div class="criteria-done">Done ? : <?php echo $challenge_progress[$key]['action_done'] ? 'Done' : 'Not done';?></div>
 			<?php if($player_logged_in && $player_challenging) : ?>
 				<div class="">
 					<button type="button" href="#" class="criteria-link">Do this action</a>
