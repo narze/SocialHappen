@@ -1,62 +1,62 @@
 <div>
 	<h1><a href="<?php echo base_url();?>"><span>SocialHappen</span></a></h1>	
-	<?php if(!issetor($facebook_user)) : ?>
-		<ul>
-			<li class="fb"><a onclick="fblogin();" ><img src="<?php echo base_url(); ?>images/fb-login.jpg" alt=""></a></li>
-		</ul>
-	<?php elseif(issetor($facebook_user)) : ?>
-		<?php if(isset($user) && $user) : ?>
-			<div class="goto toggle">
-				<p><a href="#">Go to</a></p>
-				<ul>
-					<li>
-						<img class="company-image" src="" alt="">
-						<h2><a href="#"></a></h2>
-						<p class="pagename">&raquo; <a href="#"></a></p>
-						<p class="no-page">No page yet<br /><a href="#">+ add new page</a></p>
-					</li>
-					<?php if($user_can_create_company) { ?><li class="create-company"><a class="bt-create_company"><span>Create Company</span></a></li><?php } ?>
-				</ul>
-			</div>
-			<ul class="menu">
-				<li class="name toggle">
-					<img class="user-image" src="<?php echo imgsize(issetor($user['user_image']),'square');?>" alt="" />
-					<div class="arrow"></div>
-					<?php echo issetor($user['user_first_name']).' '.issetor($user['user_last_name']); ?>
-					<ul>
-						<li><?php echo anchor("settings/account/{$user['user_id']}",'&raquo Profile Setting');?></li>
-						<li><?php echo anchor('logout','&raquo Logout');?></li>
-					</ul>
+	
+
+	<?php if(isset($user) && $user) { ?>
+		<div class="goto toggle">
+			<p><a href="#">Go to</a></p>
+			<ul>
+				<li>
+					<img class="company-image" src="" alt="">
+					<h2><a href="#"></a></h2>
+					<p class="pagename">&raquo; <a href="#"></a></p>
+					<p class="no-page">No page yet<br /><a href="#">+ add new page</a></p>
 				</li>
-				<li class="notification toggle">
+				<?php if($user_can_create_company) { ?><li class="create-company"><a class="bt-create_company"><span>Create Company</span></a></li><?php } ?>
+			</ul>
+		</div>
+		<ul class="menu">
+			<li class="name toggle">
+				<img class="user-image" src="<?php echo imgsize(issetor($user['user_image']),'square');?>" alt="" />
+				<div class="arrow"></div>
+				<?php echo issetor($user['user_first_name']).' '.issetor($user['user_last_name']); ?>
+				<ul>
+					<li><?php echo anchor("settings/account/{$user['user_id']}",'&raquo Profile Setting');?></li>
+					<li><?php echo anchor('logout','&raquo Logout');?></li>
+				</ul>
+			</li>
+			<li class="notification toggle">
 				<a class="amount"><?php if( isset($notification_amount) && $notification_amount > 0 ) { ?><span><?php echo $notification_amount;?></span> <?php } ?></a>
 				<ul class="notification_list_bar">
-					
 					<li class="no-notification"><p>No notification.</p></li>
 					<li class="separator last-child"><a class="a-notification" href="<?php echo $all_notification_link; ?>" >See all Notifications</a></li>
 				</ul>
 			</li>
-			</ul>
-		<?php else : ?>
-			<ul>
-				<li class="name toggle">
-					<img class="user-image" src="<?php echo imgsize("https://graph.facebook.com/{$facebook_user['id']}/picture",'square');?>" alt="" />
-					<?php echo issetor($facebook_user['name']); ?>
-					<ul>
-						<li><?php 
-							$next = NULL;
-							if(isset($_GET['next'])){
-								$next = '?next='.urlencode($_GET['next']);	
-							}
-							echo anchor("home/login".$next,'&raquo Login');?></li>
-						<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
-					</ul>
-				</li>
-			</ul>
-		<?php endif; ?>
-	<?php endif; ?>
+		</ul>
+	<?php } else { ?>
+		<ul>
+			<?php if(issetor($facebook_user)) { ?>
+			<li class="name toggle">
+				<img class="user-image" src="<?php echo imgsize("https://graph.facebook.com/{$facebook_user['id']}/picture",'square');?>" alt="" />
+				<?php echo issetor($facebook_user['name']); ?>
+				<ul>
+					<li>
+						<a onclick="fblogin();" >&raquo; Login</a>
+					</li>
+					<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
+				</ul>
+			</li>
+			<?php } else { ?>
+			<li class="fb">
+				<?php $next = isset($_GET['next']) ? '?next='.urlencode($_GET['next']) : NULL; ?>
+				<a href="home/login<?php echo $next; ?>" id="bar-login">&raquo; Login</a>
+				<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->
+			</li>
+			<?php } ?>
+		</ul>
+	<?php } ?>
 </div>
-<?php if(issetor($facebook_user) && issetor($user)) : ?>
+<?php if(issetor($facebook_user) && issetor($user)) { ?>
 	<script src="<?php echo base_url().'assets/js/api/socket.io.min.js';?>"></script>
 	<script>
 		(function($){
@@ -88,4 +88,4 @@
 			}
 		})(jQuery);
 	</script>
-<?php endif; ?>
+<?php } ?>

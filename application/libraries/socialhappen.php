@@ -160,7 +160,7 @@ class SocialHappen{
 	 * @author Manassarn M. 
 	 */
 	function is_logged_in(){
-		return ($this->CI->session->userdata('logged_in') && $this->CI->facebook->getUser());
+		return ($this->CI->session->userdata('logged_in'));
 	}
 	
 	/**
@@ -211,8 +211,10 @@ class SocialHappen{
 	 */
 	function get_header($data = array()){
 		$common = array();
+		$user = $this->get_user();
 		
-		if(!$facebook_user = $this->CI->facebook->getUser()){
+		//if(!$facebook_user = $this->CI->facebook->getUser()){
+		if(!$user) {
 			$this->logout(); // should relogin facebook to extend cookies TODO : fix
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
@@ -222,6 +224,7 @@ class SocialHappen{
 				'facebook_channel_url' => $this->CI->facebook->channel_url
 			);
 		} else {
+			$facebook_user = $this->CI->facebook->getUser();
 			$this->CI->load->library('notification_lib');
 			$user = $this->get_user();
 			$user_companies = $this->get_user_companies();
@@ -366,6 +369,10 @@ class SocialHappen{
 				$this->CI->session->set_userdata($userdata);
 			}
 		}
+		else { //No facebook
+
+		}
+
 		if($redirect_url){
 			redirect($redirect_url);
 		}

@@ -27,6 +27,18 @@ $(function(){
 		$(this).parent().hide();
 	});
 
+	$('#bar-login').live('click', function() {
+		$.fancybox({
+			href: base_url+'home/login',
+			transitionIn: 'elastic',
+			transitionOut: 'elastic',
+			//padding: 0,
+			scrolling: 'no',
+			//onComplete: label
+		});
+		return false;
+	});
+
 	var template = $('.goto ul li:first-child');
 	var create_company = $('.goto ul li.create-company');
 	$('.goto ul').empty();

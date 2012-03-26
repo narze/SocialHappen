@@ -167,7 +167,7 @@ div.header>div>ul>li.name ul li a {
 	color: #fff;
 }
 div.header>div>ul>li.name ul li a:hover {}
-div.header>div>ul>li.fb {padding: 8px 8px 0;}
+div.header>div>ul>li.fb {line-height:40px;height:40px; overflow: :hidden;}
 
 div.title-name { width: 950px; margin: 0 auto; padding: 20px 0; overflow: hidden; position: relative; z-index: 800;}
 div.title-name p.thumb { float: left; margin-right: 15px;}
