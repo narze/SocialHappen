@@ -111,7 +111,7 @@ class Challenge_lib {
 					$action_query => array('$gt' => 0)
 				);
 
-			    $matched_in_progress_achievement_stat = 
+			  $matched_in_progress_achievement_stat = 
 					$this->CI->achievement_stat->list_stat($stat_criteria);
 				if(!$matched_in_progress_achievement_stat) {
 					$match_all_criteria = FALSE;
@@ -153,5 +153,47 @@ class Challenge_lib {
       }
 		}
 		return $result;
+	}
+
+	function get_challenge_progress($user_id = NULL, $challenge_id = NULL) {
+		$this->CI->load->model('user_mongo_model');
+		if((!$user = $this->CI->user_mongo_model->getOne(array('user_id' => $user_id))) ||
+			(!$challenge = $this->get_one(array('_id' => new MongoId($challenge_id))))){
+			return FALSE;
+		}
+
+		$criterias = $challenge['criteria'];
+		$data = array();
+		foreach ($criterias as $criteria) {
+			$query = $criteria['query'];
+			$target_count = $criteria['count'];
+			$page_id = $query['page_id'];
+			$this->CI->load->model('page_model');
+			$page = $this->CI->page_model->get_page_profile_by_page_id($page_id);
+			$company_id = $page['company_id'];
+			$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+			//Query in progress challenge
+			$stat_criteria = array(
+				'app_id' => $query['app_id'],
+				'user_id' => $user_id,
+				$action_query => array('$gte' => 0)
+			);
+			$action = array();
+
+			$this->CI->load->model('achievement_stat_model', 'achievement_stat');
+		 	if($matched_in_progress_achievement_stat = 
+				$this->CI->achievement_stat->list_stat($stat_criteria)) {
+		 		$progress_count = $matched_in_progress_achievement_stat[0]['action'][$query['action_id']]['company'][$company_id]['count'];
+				$action['action_data'] = $criteria;
+				$action['action_done'] = $progress_count >= $target_count;
+				$action['action_count'] = $action['action_done'] ? $target_count : $progress_count;
+			} else {
+				$action['action_data'] = $criteria;
+				$action['action_done'] = FALSE;
+				$action['action_count'] = 0;
+			}
+			$data[] = $action;
+		}
+		return $data;
 	}
 }

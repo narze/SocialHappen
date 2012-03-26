@@ -17,7 +17,7 @@ class Challenge_lib_test extends CI_Controller {
 		$class_methods = get_class_methods($this);
 		//echo 'Functions : '.(count(get_class_methods($this->achievement_lib))-3).' Tests :'.count($class_methods);
 		foreach ($class_methods as $method) {
-    		if(preg_match("/(_test)$/",$method)) {
+    		if(preg_match("/(_test)/",$method)) {
     			$this->$method();
     		}
 		}
@@ -80,6 +80,15 @@ class Challenge_lib_test extends CI_Controller {
 		);
 	}
 
+	function _create_user_test() {
+		$user_id = 1;
+		$additional_data = array('challenge' => array()); //TODO should check challenge in this array
+		$this->load->library('user_lib');
+		$result = $this->user_lib->create_user($user_id, $additional_data);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+		$this->user_id_1 = $result;
+	}
+
 	function add_test() {
 		$result = $this->challenge_lib->add($this->challenge);
 		$this->unit->run($result, TRUE, "\$result", $result);
@@ -135,6 +144,32 @@ class Challenge_lib_test extends CI_Controller {
 		//Only first element will be updated
 		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
 		$this->unit->run($result[1]['start'], time(), "\$result[1]['start']", $result[1]['start']);
+	}
+
+	function get_challenge_progress_test() {
+		$user_id = 1;
+		$challenge_id = $this->challenge_id;
+		$result = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+		$criteria_1_expect = array(
+			'action_data' => array(
+				'name' => 'C1',
+				'query' => array('page_id' => 1, 'app_id'=>1, 'action_id'=>1),
+				'count' => 1
+			),
+			'action_done' => FALSE,
+			'action_count' => 0
+		);
+		$criteria_2_expect = array(
+			'action_data' => array(
+				'name' => 'C2',
+				'query' => array('page_id' => 1, 'app_id'=>2, 'action_id'=>2),
+				'count' => 2
+			),
+			'action_done' => FALSE,
+			'action_count' => 0
+		);
+		$this->unit->run($result[0], $criteria_1_expect, "\$result[0]", $result[0]);
+		$this->unit->run($result[1], $criteria_2_expect, "\$result[1]", $result[1]);
 	}
 
 	function check_challenge_test() {
@@ -240,6 +275,32 @@ class Challenge_lib_test extends CI_Controller {
 		//Count again
 	  $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
 		$this->unit->run($count, 2, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+	}
+
+	function get_challenge_progress_test_2() {
+		$user_id = 1;
+		$challenge_id = $this->challenge_id;
+		$result = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+		$criteria_1_expect = array(
+			'action_data' => array(
+				'name' => 'C1',
+				'query' => array('page_id' => 1, 'app_id'=>1, 'action_id'=>1),
+				'count' => 1
+			),
+			'action_done' => TRUE,
+			'action_count' => 1
+		);
+		$criteria_2_expect = array(
+			'action_data' => array(
+				'name' => 'C2',
+				'query' => array('page_id' => 1, 'app_id'=>2, 'action_id'=>2),
+				'count' => 2
+			),
+			'action_done' => TRUE,
+			'action_count' => 2 //it should be 3 but we should not make it over action's count
+		);
+		$this->unit->run($result[0], $criteria_1_expect, "\$result[0]", $result[0]);
+		$this->unit->run($result[1], $criteria_2_expect, "\$result[1]", $result[1]);
 	}
 
 	function remove_test() {
