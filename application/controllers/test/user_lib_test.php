@@ -61,19 +61,19 @@ class User_lib_test extends CI_Controller {
 
 	function join_challenge_test() {
 		$user_id = USER_ID_1;
-		$challenge_id = '1234';
-		$result = $this->user_lib->join_challenge($user_id, $challenge_id);
+		$challenge_hash = '1234';
+		$result = $this->user_lib->join_challenge($user_id, $challenge_hash);
 		$this->unit->run($result, TRUE, "\$result", $result);
 		
 		$user_id = (string) USER_ID_2;
-		$challenge_id = '4321';
-		$result = $this->user_lib->join_challenge($user_id, $challenge_id);
+		$challenge_hash = '4321';
+		$result = $this->user_lib->join_challenge($user_id, $challenge_hash);
 		$this->unit->run($result, TRUE, "\$result", $result);
 
 		//This user did not have user record before, we'll add it
 		$user_id = USER_ID_3;
-		$challenge_id = '5678';
-		$result = $this->user_lib->join_challenge($user_id, $challenge_id);
+		$challenge_hash = '5678';
+		$result = $this->user_lib->join_challenge($user_id, $challenge_hash);
 		$this->unit->run($result, TRUE, "\$result", $result);
 	}
 

@@ -11,8 +11,17 @@ class Challenge_lib {
 	}
 
 	function add($data) {
-		$result = $this->CI->challenge_model->add($data);
-		return $result;
+		if($id = $this->CI->challenge_model->add($data)) {
+			$result = $this->CI->challenge_model->update(array(
+				'_id' => new MongoId($id)
+				), array(
+					'$set' => array('hash' => strrev(sha1($id))
+			)));
+			if($result['updatedExisting']) {
+				return $id;
+			}
+		} 
+		return FALSE;
 	}
 	
 	function get($criteria) {
@@ -23,6 +32,10 @@ class Challenge_lib {
 	function get_one($criteria) {
 		$result = $this->CI->challenge_model->getOne($criteria);
 		return $result;
+	}
+
+	function get_by_hash($hash) {
+		return $this->CI->challenge_model->getOne(array('hash' => $hash));
 	}
 
 	function update($criteria, $data) {
@@ -98,6 +111,7 @@ class Challenge_lib {
 
 		$this->CI->load->model('achievement_stat_model', 'achievement_stat');
 		foreach ($challenge_list as $challenge) {
+			$challenge_id = get_mongo_id($challenge);
 	  	$match_all_criteria = TRUE;
 	  	$is_in_progress = FALSE;
 			foreach($challenge['criteria'] as $criteria){
@@ -127,7 +141,8 @@ class Challenge_lib {
 			}
       
       if($match_all_criteria) {
-  			$result['completed'][] = ''.$challenge['_id'];
+
+  			$result['completed'][] = $challenge_id;
   			//This user completed this challenge
   			$achieved_info = array(
   				'company_id' => $company_id
@@ -138,7 +153,7 @@ class Challenge_lib {
 				}
 				
 				$ref = 'challenge';
-				if(!$this->CI->achievement_user->add($user_id, $challenge['_id'], 
+				if(!$this->CI->achievement_user->add($user_id, $challenge_id, 
 					$query['app_id'] = 0, $info['app_install_id'] = 0, $achieved_info, $ref)){
 					$result['success'] = FALSE;
 				}
@@ -148,8 +163,18 @@ class Challenge_lib {
 				$link = '#';
 				$image = $challenge['detail']['image'];
 				$this->CI->notification_lib->add($user_id, $message, $link, $image);
+
+				//Add completed challenge into user mongo model
+				$this->CI->load->model('user_mongo_model');
+				$update_record = array(
+					'$addToSet' => array(
+						'challenge_redeeming' => $challenge_id, 
+						'challenge_completed' => $challenge_id
+					)
+				);
+				$this->CI->user_mongo_model->update(array('user_id' => $user_id), $update_record);
     	} else if($is_in_progress) {
-      	$result['in_progress'][] = ''.$challenge['_id'];
+      	$result['in_progress'][] = $challenge_id;
       }
 		}
 		return $result;
@@ -195,5 +220,23 @@ class Challenge_lib {
 			$data[] = $action;
 		}
 		return $data;
+	}
+
+	function redeem_challenge($user_id = NULL, $challenge_id = NULL) {
+		$this->CI->load->model('user_mongo_model');
+		if((!$user = $this->CI->user_mongo_model->getOne(array('user_id' => $user_id))) ||
+			(!$challenge = $this->get_one(array('_id' => new MongoId($challenge_id))))){
+			return FALSE;
+		}
+
+		if(isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming'])) {
+			$update_record = array(
+				'$pull' => array('challenge_redeeming' => $challenge_id)
+			);
+			$result = $this->CI->user_mongo_model->update(array('user_id' => $user_id), $update_record);
+			return $result['updatedExisting'];
+		} else {
+			return FALSE;
+		}
 	}
 }

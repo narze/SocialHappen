@@ -330,6 +330,7 @@ class Home extends CI_Controller {
 		
 			if ($user) // the information has therefore been successfully saved in the db
 			{
+				$user_id = $user['user_id'];
 				/* Copy from $this->socialhappen->login() ?*/
 				if(!$this->session->userdata('logged_in')){ //@TODO : Problem is it will separate logging in through platform & through facebook
 					$this->load->library('audit_lib');

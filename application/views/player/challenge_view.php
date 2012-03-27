@@ -31,12 +31,23 @@
 	} ?>
 </ul>
 <?php if(!$player_logged_in) : 
-	$next_url = "player/challenge/{$challenge_id}";
+	$next_url = "player/challenge/{$challenge_hash}";
 	?>
 	<div id="login">
 		<p id="login-message">Please Login SocialHappen First</p>
 		<a href="<?php echo base_url().'player/login?next='.urlencode($next_url);?>" id="login-btn">LOGIN</a>
 	</div>
 <?php elseif(!$player_challenging) : ?>
-	<a href="<?php echo base_url().'player/join_challenge/'.$challenge_id;?>" id="join-challenge">join this challenge</a>
-<?php endif; ?>
+	<a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" id="join-challenge">join this challenge</a>
+<?php else : //player logged in and is challenging
+	if($challenge_done) {
+		echo 'Challenge done!!';
+		if($redeem_pending) {
+			echo ' Please show this to merchant';
+		} else {
+			// echo ' You have redeem this challenge's reward;
+		}
+	} else {
+		echo 'This challenge is not done yet';
+	}
+endif;

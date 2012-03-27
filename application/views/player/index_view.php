@@ -2,7 +2,9 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
-				<div><?php
+				<div>
+					<p>
+					<?php
 					if($user) {
 						echo anchor('player/challenge_list', 'View ALL Challenges', 'class="btn btn-primary"').' ';
 						echo anchor('player/challenging_list', 'View Challenging Challenges', 'class="btn btn-primary"').' ';
@@ -12,16 +14,23 @@
 						echo anchor('player/signup', 'Signup Socialhappen').'<br/>';
 						
 					} ?>
+					</p>
 
-					<div>
+					<p>
 					<?php if($facebook_connected) : ?>
 						You are connected to facebook
 					<?php else : ?>
 						You are not connected to facebook
 					<?php endif; ?>
-					</div>
+					</p>
+
+					<?php 
+						echo '<p>Player status :</p> <pre>';
+						var_dump($user);
+						echo '</pre>';
+					?>
 				</div>
-				<div class="bottom"><!--bottom--></div>
 			</div>
 		</div>
 	</div>
+
