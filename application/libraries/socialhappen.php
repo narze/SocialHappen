@@ -212,6 +212,7 @@ class SocialHappen{
 	function get_header($data = array()){
 		$common = array();
 		$user = $this->get_user();
+		$facebook_user = $this->CI->facebook->getUser();
 		
 		//if(!$facebook_user = $this->CI->facebook->getUser()){
 		if(!$user) {
@@ -221,10 +222,10 @@ class SocialHappen{
 				'facebook_default_scope' => $this->CI->config->item('facebook_admin_scope'),
 				'next' => $this->CI->input->get('next'),
 				'user_can_create_company' => FALSE,
-				'facebook_channel_url' => $this->CI->facebook->channel_url
+				'facebook_channel_url' => $this->CI->facebook->channel_url,
+				'facebook_user' => $facebook_user
 			);
 		} else {
-			$facebook_user = $this->CI->facebook->getUser();
 			$this->CI->load->library('notification_lib');
 			$user = $this->get_user();
 			$user_companies = $this->get_user_companies();
@@ -265,6 +266,88 @@ class SocialHappen{
 		}
 		
 		// $this->login(); Don't audologin
+		if($this->CI->session->userdata('logged_in') == TRUE){
+			$data['user_companies'] = isset($user_companies) ? $user_companies : NULL;
+			if($this->CI->input->get('logged_in') == TRUE){
+				if($data['user_companies']){
+					$data['vars']['popup_name'] = 'bar/select_company';
+				}
+			}
+		}
+		
+		if( isset($data['vars']['popup_name']) && !isset($data['vars']['closeEnable']) ) $data['vars']['closeEnable'] = true;
+		
+		return $this->CI->load->view('common/header', $data, TRUE);
+	}
+
+	/**
+	 * Get header view, predefine $user and $user_companies in views
+	 * @return $header
+	 * @author Manassarn M., Weerapat P.
+	 */
+	function get_header_bootstrap($data = array()){
+		$common = array();
+		$user = $this->get_user();
+		$facebook_user = $this->CI->facebook->getUser();
+		$scripts = array(
+					'common/bootstrap.min',
+					'common/functions',
+					//'common/onload',
+					//'common/jquery.form',
+					//'common/bar',
+					//'common/fancybox/jquery.fancybox-1.3.4.pack',
+					//'home/lightbox',
+				);
+		$style = array(
+					'common/bootstrap',
+					'common/bootstrap-responsive',
+					//'common/common',
+					//'common/platform',
+					//'common/main',
+					//'common/fancybox/jquery.fancybox-1.3.4'
+				);
+		
+		if(!$user) {
+			$this->logout(); // should relogin facebook to extend cookies TODO : fix
+			$common = array(
+				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
+				'facebook_default_scope' => $this->CI->config->item('facebook_admin_scope'),
+				'next' => $this->CI->input->get('next'),
+				'user_can_create_company' => FALSE,
+				'facebook_channel_url' => $this->CI->facebook->channel_url,
+				'facebook_user' => $facebook_user,
+				'script' => $scripts,
+				'style' => $style,
+			);
+		} else {
+			$this->CI->load->library('notification_lib');
+			$user = $this->get_user();
+			$user_companies = $this->get_user_companies();
+			$common = array(
+				'node_base_url' => $this->CI->config->item('node_base_url'),
+				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
+				'user' => $user,
+				'image_url' => base_url().'assets/images/',
+				'facebook_user' => $facebook_user,
+				'script' => $scripts,
+				'style' => $style,
+				'user_can_create_company' => !$user_companies ? TRUE : $this->check_package_by_user_id_and_mode($this->CI->session->userdata('user_id'), 'company'), //Check user can create company
+				'notification_amount' => $this->CI->notification_lib->count_unread($user['user_id']),
+				'all_notification_link' => base_url().'temp',
+				'facebook_channel_url' => base_url().'assets/channel/fb.php',
+				'facebook_default_scope' => $this->CI->config->item('facebook_admin_scope')
+			);
+		}
+		
+		$data = array_merge_recursive($common,$data);
+		$data = array_unique_recursive($data);
+		
+		//Override, because array_merge_recursive cause merge(user_id, user_id) -> array(user_id,user_id)
+		if(isset($user['user_id'])){
+			$data['vars']['user_id'] = $user['user_id'];
+		}
+		
+		// $this->login(); Don't autologin
 		if($this->CI->session->userdata('logged_in') == TRUE){
 			$data['user_companies'] = isset($user_companies) ? $user_companies : NULL;
 			if($this->CI->input->get('logged_in') == TRUE){

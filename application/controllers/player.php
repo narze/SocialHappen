@@ -9,7 +9,32 @@ class Player extends CI_Controller {
 	}
 	
 	function index() {
-		$user = $this->socialhappen->get_user();
+
+		if(!$this->socialhappen->is_logged_in_as_player()) { redirect('player/login'); }
+
+		$data = array(
+			'header' => $this -> socialhappen -> get_header_bootstrap( 
+				array(
+					'title' => 'Applications',
+					'script' => array(
+						//'common/functions',
+						//'common/jquery.form',
+						'common/bar',
+						//'common/fancybox/jquery.fancybox-1.3.4.pack',
+						//'home/lightbox',
+						//'payment/payment'
+					),
+					'style' => array(
+						'common/player',
+						//'common/platform',
+						//'common/main',
+						//'common/fancybox/jquery.fancybox-1.3.4'
+					)
+				)
+			),
+			'user' => $user
+		);
+
 		if(isset($user['user_facebook_id']) && isset($user['user_facebook_access_token'])) {
 			$facebook_connected = TRUE;
 		} else {
@@ -21,19 +46,35 @@ class Player extends CI_Controller {
 				'facebook_connected' => $facebook_connected
 			)
 		);
-		echo anchor('player/signup', 'Signup Socialhappen').'<br/>';
-		echo anchor('player/login', 'Login').'<br/>';
-		echo anchor('player/challenge_list', 'View ALL Challenges').'<br/>';
-		echo anchor('player/challenging_list', 'View Challenging Challenges').'<br/>';
-		echo anchor('player/settings', 'Player settings').'<br/>';
-		$this->load->view('player/index_view');
+		
+		$this->parser->parse('player/index_view', $data);
 	}
 
 	function signup() {
 
+		$data = array(
+			'header' => $this -> socialhappen -> get_header_bootstrap( 
+				array(
+					'title' => 'Applications',
+					'script' => array(
+						//'common/functions',
+						//'common/jquery.form',
+						'common/bar',
+						//'common/fancybox/jquery.fancybox-1.3.4.pack',
+						//'home/lightbox',
+						//'payment/payment'
+					),
+					'style' => array(
+						'common/player',
+						//'common/platform',
+						//'common/main',
+						//'common/fancybox/jquery.fancybox-1.3.4'
+					)
+				)
+			)
+		);
+
 		$this->load->vars(array(
-			'facebook_app_id' => $this->config->item('facebook_app_id'),
-			'facebook_channel_url' => $this->facebook->channel_url,
 			'facebook_default_scope' => $this->config->item('facebook_default_scope')
 			)
 		);
@@ -56,7 +97,8 @@ class Player extends CI_Controller {
 	
 		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 		{
-			$this->load->view('player/signup_view');
+			$data['facebook_user'] = $this->facebook->getUser();
+			$this->parser->parse('player/signup_view', $data);
 		}
 		else // passed validation proceed to post success logic
 		{
@@ -65,7 +107,7 @@ class Player extends CI_Controller {
 			$password_again = set_value('password_again');
 			if($password !== $password_again) {
 				$this->load->vars('password_not_match', TRUE);
-				$this->load->view('player/signup_view');
+				$this->parser->parse('player/signup_view', $data);
 			} else {
 				$encrypted_password = sha1($this->presalt.$password.$this->postsalt);
 				$form_data = array(
@@ -90,7 +132,7 @@ class Player extends CI_Controller {
 				}
 
 				if ($do_not_add) {
-					$this->load->view('player/signup_view');
+					$this->parser->parse('player/signup_view', $data);
 				}
 				else if ($user_id = $this->user_model->add_user($form_data)) // the information has therefore been successfully saved in the db
 				{
@@ -107,25 +149,51 @@ class Player extends CI_Controller {
 	}
 
 	function login() {
+
+		if($this->socialhappen->is_logged_in_as_player()) { redirect('player'); }
+
+		$data = array(
+			'header' => $this -> socialhappen -> get_header_bootstrap( 
+				array(
+					'title' => 'Applications',
+					'script' => array(
+						//'common/functions',
+						//'common/jquery.form',
+						'common/bar',
+						//'common/fancybox/jquery.fancybox-1.3.4.pack',
+						//'home/lightbox',
+						//'payment/payment'
+					),
+					'style' => array(
+						'common/player',
+						//'common/platform',
+						//'common/main',
+						//'common/fancybox/jquery.fancybox-1.3.4'
+					)
+				)
+			)
+		);
+
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('email', 'Email', 'trim|xss_clean|valid_email|max_length[100]');			
 		$this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');			
 		$this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');
 			
-		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
 	
 		$next = $this->input->get('next');
 		$this->load->vars('next', $next ? '?next='.urlencode($next) : '/');
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this->load->view('player/login_view');
+			$this->parser->parse('player/login_view', $data);
 		}
 		else
 		{
-     	$email = set_value('email');
-     	$mobile_phone_number = set_value('mobile_phone_number');
-     	$password = set_value('password');
-     	$encrypted_password = sha1($this->presalt.$password.$this->postsalt);
+			$email = set_value('email');
+			$mobile_phone_number = set_value('mobile_phone_number');
+
+			$password = set_value('password');
+			$encrypted_password = sha1($this->presalt.$password.$this->postsalt);
 			
 			$this->load->model('user_model');
 			if($email) {
@@ -160,7 +228,7 @@ class Player extends CI_Controller {
 			else
 			{
 				$this->load->vars('login_failed', TRUE);
-				$this->load->view('player/login_view');
+				$this->parser->parse('player/login_view', $data);
 			}
 		}
 	}

@@ -4,6 +4,7 @@
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="SocialHappen" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SocialHappen<?php if (isset($title)) { echo " - $title"; }?></title>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>

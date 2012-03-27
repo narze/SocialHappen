@@ -58,18 +58,21 @@ div.header h1 a {
 div.header>div div.goto {
 	float: left;
 	height: 40px;
-	line-height: 40px;
 	padding-left: 2px;
 	position: relative;
 	margin-left: 14px;
 	background: url(../../images/bg/bg_liney01.gif) left repeat-y;
 }
-div.header>div div.goto>p a {
+div.header>div div.goto>p {
+	margin:0;
+}
+div.header>div div.goto>p>a {
 	display: block;
 	height: 40px;
 	padding: 0 40px 0 12px;
 	color: #fff;
 	background: url(../../images/bg/bg_droptop.png) 90% 12px no-repeat;
+	line-height: 40px;
 }
 div.header>div div.goto>p a:hover { text-decoration: none;}
 div.header>div div.goto>ul {
@@ -80,6 +83,7 @@ div.header>div div.goto>ul {
 	color: #fff;
 	z-index: 999;
 	width: 250px;
+	margin:0;
 }
 div.header>div div.goto> ul li {
 	padding: 6px 10px 6px 80px;
@@ -89,9 +93,10 @@ div.header>div div.goto> ul li {
 }
 div.header>div div.goto>ul li h2 {
 	font-size: 14px;
+	line-height: 16px;
 	padding-bottom: 5px;
 }
-div.header>div div.goto>ul li p {padding-bottom: 5px;}
+div.header>div div.goto>ul li p {padding-bottom: 5px;margin:0;}
 div.header>div div.goto>ul li img {
 	position: absolute;
 	top: 6px;
@@ -142,6 +147,7 @@ div.header>div>ul>li.name {
 div.header>div>ul>li.name div.arrow { position: absolute; right: 10px; width: 20px; height: 45px; background: url(../../images/bg/bg_droptop.png) 96% 12px no-repeat; }
 div.header>div>ul>li.name img { float: left; margin: 10px 10px 0 0; width: 20px; height: 20px;}
 div.header>div>ul>li.name ul {
+	margin:0;
 	display: none;
 	width: 100%;
 	border-top: 1px solid #1c1c1c;
@@ -187,7 +193,7 @@ div.tab-menumain {
 	margin: 0 auto;
 	background:url(../../images/bg/bg_tab-menumain.png) no-repeat;
 }
-div.tab-menumain>ul.menu {float: left; height: 34px;}
+div.tab-menumain>ul.menu {float: left; height: 34px; margin: 0;}
 div.tab-menumain>ul.tool {float: right;}
 div.tab-menumain>ul.menu:after, div.tab-menumain>ul.tool:after {
     clear:both;

@@ -3,18 +3,20 @@
 	
 
 	<?php if(isset($user) && $user) { ?>
+		<?php if($user['user_is_player'] == 0) { ?>
 		<div class="goto toggle">
 			<p><a href="#">Go to</a></p>
 			<ul>
-				<li>
+				<li class="company">
 					<img class="company-image" src="" alt="">
 					<h2><a href="#"></a></h2>
 					<p class="pagename">&raquo; <a href="#"></a></p>
 					<p class="no-page">No page yet<br /><a href="#">+ add new page</a></p>
 				</li>
-				<?php if($user_can_create_company) { ?><li class="create-company"><a class="bt-create_company"><span>Create Company</span></a></li><?php } ?>
+				<?php if($user_can_create_company) { ?><li class="create-company"><a class="bt-create_company btn btn-primary"><span>Create Company</span></a></li><?php } ?>
 			</ul>
 		</div>
+		<?php } ?>
 		<ul class="menu">
 			<li class="name toggle">
 				<img class="user-image" src="<?php echo imgsize(issetor($user['user_image']),'square');?>" alt="" />
@@ -41,7 +43,7 @@
 				<?php echo issetor($facebook_user['name']); ?>
 				<ul>
 					<li>
-						<a onclick="fblogin();" >&raquo; Login</a>
+						<a onclick="fblogin();" href="#" >&raquo; Login</a>
 					</li>
 					<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 				</ul>
