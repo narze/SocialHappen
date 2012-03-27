@@ -11,8 +11,17 @@ class Challenge_lib {
 	}
 
 	function add($data) {
-		$result = $this->CI->challenge_model->add($data);
-		return $result;
+		if($id = $this->CI->challenge_model->add($data)) {
+			$result = $this->CI->challenge_model->update(array(
+				'_id' => new MongoId($id)
+				), array(
+					'$set' => array('hash' => strrev(sha1($id))
+			)));
+			if($result['updatedExisting']) {
+				return $id;
+			}
+		} 
+		return FALSE;
 	}
 	
 	function get($criteria) {

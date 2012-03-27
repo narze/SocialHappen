@@ -5,8 +5,8 @@ class Challenge_lib_test extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->library('unit_test');
-  	  	$this->load->library('challenge_lib');
-    	$this->unit->reset_dbs();
+  	$this->load->library('challenge_lib');
+  	$this->unit->reset_dbs();
 	}
 
 	function __destruct() {
@@ -105,6 +105,7 @@ class Challenge_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 2, "\$result", count($result));
 		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
 		$this->unit->run($result[0]['detail']['name'], 'Challenge name', "\$result[0]['detail']['name']", $result[0]['detail']['name']);
+		$this->unit->run($result[0]['hash'], strrev(sha1($this->challenge_id)), "\$result[0]['hash']", $result[0]['hash']);
 	}
 
 	function get_one_test() {
