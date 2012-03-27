@@ -40,8 +40,8 @@ class User_lib {
 	 * Join a challenge
 	 * User will be created if not exist
 	 */
-	function join_challenge($user_id = NULL, $challenge_id = NULL) {
-		if(!$challenge_id || (!$user_mongo_id = $this->create_user($user_id, NULL))){
+	function join_challenge($user_id = NULL, $challenge_hash = NULL) {
+		if(!$challenge_hash || (!$user_mongo_id = $this->create_user($user_id, NULL))){
 			return FALSE;
 		}
 
@@ -49,7 +49,7 @@ class User_lib {
 			'user_id' => $user_id
 		);
 		$update_record = array(
-			'$addToSet' => array('challenge' => $challenge_id),
+			'$addToSet' => array('challenge' => $challenge_hash),
 		);
 		return $update_result = $this->CI->user_mongo_model->update($update_criteria, $update_record);
 	}

@@ -26,6 +26,7 @@ class Player extends CI_Controller {
 		echo anchor('player/challenge_list', 'View ALL Challenges').'<br/>';
 		echo anchor('player/challenging_list', 'View Challenging Challenges').'<br/>';
 		echo anchor('player/settings', 'Player settings').'<br/>';
+		echo anchor('player/logout', 'Logout').'<br/>';
 		$this->load->view('player/index_view');
 	}
 
@@ -197,20 +198,20 @@ class Player extends CI_Controller {
 		}
 	}
 
-	function challenge($challenge_id) {
+	function challenge($challenge_hash) {
 		$this->load->model('challenge_model');
-		if($challenge = $this->challenge_model->getOne(array('_id' => new MongoId($challenge_id)))) {
+		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
 			$this->load->library('user_lib');
 			$user_id = $this->socialhappen->get_user_id();
 			$user = $this->user_lib->get_user($user_id);
-			$player_challenging = isset($user['challenge']) && in_array($challenge_id, $user['challenge']);
+			$player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
 			
 			$this->load->library('challenge_lib');
-			$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+			$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_hash);
 
 			$this->load->vars(
 				array(
-					'challenge_id' => $challenge_id,
+					'challenge_hash' => $challenge_hash,
 					'challenge' => $challenge,
 					'player_logged_in' => $this->socialhappen->is_logged_in_as_player(),
 					'player_challenging' => $player_challenging,
@@ -280,20 +281,25 @@ class Player extends CI_Controller {
 		}
 	}
 
-	function join_challenge($challenge_id = NULL) {
-		$this->load->model('challenge_model');
-		if($challenge = $this->challenge_model->getOne(array('_id' => new MongoId($challenge_id)))) {
+	function join_challenge($challenge_hash = NULL) {
+		$this->load->library('challenge_lib');
+		if($challenge = $this->challenge_lib->get_by_hash($challenge_hash)) {
 			$user_id = $this->socialhappen->get_user_id();
 			$this->load->library('user_lib');
-			if($this->user_lib->join_challenge($user_id, $challenge_id)) {
+			if($this->user_lib->join_challenge($user_id, $challenge_hash)) {
 				echo 'Challenge joined';
-				echo anchor('player/challenge/'.$challenge_id, 'Back');
+				echo anchor('player/challenge/'.$challenge_hash, 'Back');
 			} else {
 				echo 'Challenge join error';
 			}
 		} else {
 			show_error('Challenge Invalid', 404);
 		}
+	}
+
+	function logout() {
+		$this->socialhappen->logout();
+		redirect('player');
 	}
 }  
 

@@ -31,12 +31,12 @@
 	} ?>
 </ul>
 <?php if(!$player_logged_in) : 
-	$next_url = "player/challenge/{$challenge_id}";
+	$next_url = "player/challenge/{$challenge_hash}";
 	?>
 	<div id="login">
 		<p id="login-message">Please Login SocialHappen First</p>
 		<a href="<?php echo base_url().'player/login?next='.urlencode($next_url);?>" id="login-btn">LOGIN</a>
 	</div>
 <?php elseif(!$player_challenging) : ?>
-	<a href="<?php echo base_url().'player/join_challenge/'.$challenge_id;?>" id="join-challenge">join this challenge</a>
+	<a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" id="join-challenge">join this challenge</a>
 <?php endif; ?>

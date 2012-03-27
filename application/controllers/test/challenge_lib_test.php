@@ -106,6 +106,7 @@ class Challenge_lib_test extends CI_Controller {
 		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
 		$this->unit->run($result[0]['detail']['name'], 'Challenge name', "\$result[0]['detail']['name']", $result[0]['detail']['name']);
 		$this->unit->run($result[0]['hash'], strrev(sha1($this->challenge_id)), "\$result[0]['hash']", $result[0]['hash']);
+		$this->hash = $result[0]['hash'];
 	}
 
 	function get_one_test() {
@@ -302,6 +303,12 @@ class Challenge_lib_test extends CI_Controller {
 		);
 		$this->unit->run($result[0], $criteria_1_expect, "\$result[0]", $result[0]);
 		$this->unit->run($result[1], $criteria_2_expect, "\$result[1]", $result[1]);
+	}
+
+	function get_by_hash_test() {
+		$result = $this->challenge_lib->get_by_hash($this->hash);
+		$id = $result['_id']['$id'];
+		$this->unit->run($id, $this->challenge_id, "\$result['_id']['$id']", $id);
 	}
 
 	function remove_test() {

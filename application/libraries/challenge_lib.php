@@ -34,6 +34,10 @@ class Challenge_lib {
 		return $result;
 	}
 
+	function get_by_hash($hash) {
+		return $this->CI->challenge_model->getOne(array('hash' => $hash));
+	}
+
 	function update($criteria, $data) {
 		if(!$challenge = $this->get_one($criteria)) {
 			return FALSE;
@@ -164,10 +168,10 @@ class Challenge_lib {
 		return $result;
 	}
 
-	function get_challenge_progress($user_id = NULL, $challenge_id = NULL) {
+	function get_challenge_progress($user_id = NULL, $challenge_hash = NULL) {
 		$this->CI->load->model('user_mongo_model');
 		if((!$user = $this->CI->user_mongo_model->getOne(array('user_id' => $user_id))) ||
-			(!$challenge = $this->get_one(array('_id' => new MongoId($challenge_id))))){
+			(!$challenge = $this->get_one(array('hash' => $challenge_hash)))){
 			return FALSE;
 		}
 
