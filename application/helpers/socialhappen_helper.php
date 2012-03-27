@@ -136,7 +136,13 @@ if(!function_exists('get_mongo_id'))
 	 		return FALSE;
 	 	}
 	 	$id = $mongo_object['_id'];
-		return $id->{'$id'};
+	 	if(is_object($id)) {
+			return $id->{'$id'};
+		} else if(is_array($id)) {
+			return $id['$id'];
+		} else {
+			return FALSE;
+		}
  	}
 }
 

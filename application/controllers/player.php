@@ -28,6 +28,7 @@ class Player extends CI_Controller {
 		echo anchor('player/challenge_list', 'View ALL Challenges').'<br/>';
 		echo anchor('player/challenging_list', 'View Challenging Challenges').'<br/>';
 		echo anchor('player/settings', 'Player settings').'<br/>';
+		echo anchor('player/merchant_redeem_pending_list', '(For merchant) View user redeem pending list').'<br/>';
 		echo anchor('player/logout', 'Logout').'<br/>';
 		$this->load->view('player/index_view');
 	}
@@ -203,6 +204,9 @@ class Player extends CI_Controller {
 	function challenge($challenge_hash) {
 		$this->load->model('challenge_model');
 		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+			echo '<pre>';
+			var_dump($challenge);
+			echo '</pre>';
 			$challenge_id = get_mongo_id($challenge);
 			$this->load->library('user_lib');
 			$user_id = $this->socialhappen->get_user_id();
@@ -211,14 +215,21 @@ class Player extends CI_Controller {
 			
 			$this->load->library('challenge_lib');
 			$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
-
+			$challenge_done = TRUE;
+			foreach($challenge_progress as $action) {
+				if(!$action['action_done']) {
+					$challenge_done = FALSE;
+				}
+			}
 			$this->load->vars(
 				array(
 					'challenge_hash' => $challenge_hash,
 					'challenge' => $challenge,
 					'player_logged_in' => $this->socialhappen->is_logged_in_as_player(),
 					'player_challenging' => $player_challenging,
-					'challenge_progress' => $challenge_progress
+					'challenge_progress' => $challenge_progress,
+					'challenge_done' => $challenge_done,
+					'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
 				)
 			);
 			$this->load->view('player/challenge_view');
@@ -303,6 +314,53 @@ class Player extends CI_Controller {
 	function logout() {
 		$this->socialhappen->logout();
 		redirect('player');
+	}
+
+	function merchant_redeem_pending_list() {
+		$company_id = NULL; //TODO
+		if($user = $this->socialhappen->get_user()) {
+			if($user['user_is_player']) {
+				echo 'You are not merchant';
+			} else {
+				$this->load->library('challenge_lib');
+				$this->load->model('user_mongo_model');
+				$challenges = $this->challenge_lib->get(array()); //TODO search using company id
+				$challenge_ids = array();
+				foreach($challenges as $challenge) {
+					$challenge_ids[] = get_mongo_id($challenge);
+				}
+				$redeeming_users = $this->user_mongo_model->get(array(
+					'challenge_redeeming' => array(
+						'$in' => $challenge_ids
+						)
+					)
+				);
+				$this->load->vars(array(
+					'redeeming_users' => $redeeming_users
+				));
+				$this->load->view('player/merchant_redeem_pending_list');
+			}
+		} else {
+			redirect('player');
+		}
+	}
+
+	function merchant_redeem_pending($user_id, $challenge_id) {
+		$company_id = NULL; //TODO
+		if($user = $this->socialhappen->get_user()) {
+			if($user['user_is_player']) {
+				echo 'You are not merchant';
+			} else {
+				$this->load->library('challenge_lib');
+				if($result = $this->challenge_lib->redeem_challenge($user_id, $challenge_id)){
+					echo 'Redeemed';
+				} else {
+					echo 'Cannot redeem';
+				}
+			}
+		} else {
+			redirect('player');
+		}
 	}
 }  
 

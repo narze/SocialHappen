@@ -39,4 +39,15 @@
 	</div>
 <?php elseif(!$player_challenging) : ?>
 	<a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" id="join-challenge">join this challenge</a>
-<?php endif; ?>
+<?php else : //player logged in and is challenging
+	if($challenge_done) {
+		echo 'Challenge done!!';
+		if($redeem_pending) {
+			echo ' Please show this to merchant';
+		} else {
+			// echo ' You have redeem this challenge's reward;
+		}
+	} else {
+		echo 'This challenge is not done yet';
+	}
+endif;
