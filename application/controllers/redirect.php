@@ -57,6 +57,12 @@ class Redirect extends CI_Controller {
 	function reward($reward_id){
 
 	}
+
+	function c() { //Challenge
+		$challenge_hash = $this->input->get('hash');
+		$this->load->model('challenge_model');
+		redirect('player/challenge/'.$challenge_hash);
+	}
 }  
 
 /* End of file redirect.php */
