@@ -3,10 +3,6 @@
 	<div class="challenge">
 		<p><?php echo $challenge['detail']['name'];?></p>
 		<p><?php echo anchor('player/challenge/'.$challenge['hash'], 'View');?></p>
+		<p><?php echo anchor('r/c?hash='.$challenge['hash']);?></p>
 	</div>
 <?php endforeach; ?>
-
-<?php
-echo '<pre>';
-var_dump($challenges);
-echo '</pre>';

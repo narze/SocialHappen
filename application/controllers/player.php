@@ -15,10 +15,12 @@ class Player extends CI_Controller {
 		} else {
 			$facebook_connected = FALSE;
 		}
+		$this->load->library('user_lib');
 		$this->load->vars(
 			array(
 				'player_logged_in' => $this->socialhappen->is_logged_in_as_player(),
-				'facebook_connected' => $facebook_connected
+				'facebook_connected' => $facebook_connected,
+				'user' => $this->user_lib->get_user($user['user_id'])
 			)
 		);
 		echo anchor('player/signup', 'Signup Socialhappen').'<br/>';
@@ -201,13 +203,14 @@ class Player extends CI_Controller {
 	function challenge($challenge_hash) {
 		$this->load->model('challenge_model');
 		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+			$challenge_id = get_mongo_id($challenge);
 			$this->load->library('user_lib');
 			$user_id = $this->socialhappen->get_user_id();
 			$user = $this->user_lib->get_user($user_id);
 			$player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
 			
 			$this->load->library('challenge_lib');
-			$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_hash);
+			$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
 
 			$this->load->vars(
 				array(

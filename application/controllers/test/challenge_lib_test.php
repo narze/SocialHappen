@@ -211,7 +211,7 @@ class Challenge_lib_test extends CI_Controller {
 		$inc_result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id,
 			$this->achievement_stat1);
 		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
-
+		
 		$result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
 		$expected_result = array(
 			'success' => TRUE, //no error checking challenges
@@ -309,6 +309,37 @@ class Challenge_lib_test extends CI_Controller {
 		$result = $this->challenge_lib->get_by_hash($this->hash);
 		$id = $result['_id']['$id'];
 		$this->unit->run($id, $this->challenge_id, "\$result['_id']['$id']", $id);
+	}
+
+	function _check_user_model_test() {
+		$user_id = 1;
+		$this->load->library('user_lib');
+		$user = $this->user_lib->get_user($user_id);
+		$this->unit->run($user['challenge_redeeming'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
+		$this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_completed']", $user['challenge_completed']);
+	}
+
+	function redeem_challenge_test() {
+		$user_id = 1;
+		$challenge_id = $this->challenge_id;
+		$result = $this->challenge_lib->redeem_challenge($user_id, $challenge_id);
+		$this->unit->run($result, TRUE, "\$result", $result);
+
+		$result = $this->challenge_lib->redeem_challenge($user_id, $challenge_id);
+		$this->unit->run($result, FALSE, "Redeem again", $result);
+
+		$user_id = 2;
+		$challenge_id = $this->challenge_id;
+		$result = $this->challenge_lib->redeem_challenge($user_id, $challenge_id);
+		$this->unit->run($result, FALSE, "Redeem without finishing challenge", $result);
+	}
+
+	function _check_user_model_test_2() {
+		$user_id = 1;
+		$this->load->library('user_lib');
+		$user = $this->user_lib->get_user($user_id);
+		$this->unit->run($user['challenge_redeeming'], array($this->challenge_id2), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
+		$this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_completed']", $user['challenge_completed']);
 	}
 
 	function remove_test() {
