@@ -83,12 +83,15 @@ class Action_data_lib {
 		$action_id = $this->get_platform_action('qr');
 		$qr_data = array(
 			//Book : redefine your data here
-			'qr_message' => $data_from_form['qr_message'],
-			'qr_url' => $data_from_form['qr_url']
+			'qr_message' => $data_from_form['qr_message']
 		);
 		return $this->add_action_data($action_id, $qr_data);
 	}
 	
+  function get_qr_url($_id = NULL){
+    return $_id ? base_url() . 'actions/qr/' . $_id : NULL;
+  }
+  
 	function add_feedback_action_data($data_from_form) {
 		$action_id = $this->get_platform_action('feedback');
 		$feedback_data = array(
