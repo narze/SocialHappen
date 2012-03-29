@@ -89,7 +89,7 @@ class Action_data_lib {
 	}
 	
   function get_qr_url($_id = NULL){
-    return $_id ? base_url() . 'actions/qr/' . $_id : NULL;
+    return $_id ? base_url() . 'actions/qr/go/' . $_id : NULL;
   }
   
 	function add_feedback_action_data($data_from_form) {

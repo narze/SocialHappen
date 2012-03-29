@@ -128,7 +128,7 @@ class Action_data_lib_test extends CI_Controller {
     $this->unit->run($result, $expect, '\$url', $result);
     
     $result = $this->action_data_lib->get_qr_url('4f746aca6803fa3365000057');
-    $expect = base_url() . 'actions/qr/4f746aca6803fa3365000057';
+    $expect = base_url() . 'actions/qr/go/4f746aca6803fa3365000057';
     $this->unit->run($result, $expect, '\$url', $result);
   }
   
