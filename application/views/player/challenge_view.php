@@ -19,7 +19,7 @@
 			<div class="criteria-done">Done ? : <?php echo $challenge_progress[$key]['action_done'] ? 'Done' : 'Not done';?></div>
 			<?php if($player_logged_in && $player_challenging) : ?>
 				<div class="">
-					<button type="button" href="#" class="criteria-link">Do this action</a>
+					<a type="button" href="<?php echo base_url().'player/challenge_action/'.$challenge['hash'].'/'.$key;?>" class="criteria-link">Do this action</a>
 				</div>
 			<?php elseif($player_logged_in) : ?>
 				<div class="">

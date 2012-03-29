@@ -441,6 +441,22 @@ class Player extends CI_Controller {
 			redirect('player');
 		}
 	}
+
+	function challenge_action($challenge_hash, $action) {
+		$this->load->model('challenge_model');
+		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+			
+			if(isset($challenge['criteria'][$action])) {
+				echo '<pre>';
+				var_dump($challenge['criteria'][$action]);
+				echo '</pre>';
+			} else {
+				show_error('Action Invalid');
+			}
+		} else {
+			show_error('Challenge Invalid', 404);
+		}
+	}
 }  
 
 /* End of file player.php */
