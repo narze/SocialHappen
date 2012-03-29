@@ -1053,7 +1053,7 @@ class SocialHappen{
 		return FALSE;
 	}
 
-	function player_login($user_id) {
+	function player_login($user_id = NULL) {
 		if($user_id){
 			if(!$this->CI->session->userdata('logged_in')){ //@TODO : Problem is it will separate logging in through platform & through facebook
 				$this->CI->load->library('audit_lib');
@@ -1091,6 +1091,7 @@ class SocialHappen{
 			);
 			$this->CI->session->set_userdata($userdata);
 		}
+		return $user_id | FALSE;
 	}
 
 	function is_logged_in_as_player() {

@@ -54,7 +54,9 @@ endif;
 					if (response.status === 'connected') { //console.log('response',response);
 						$.getJSON(base_url+"api/request_login?user_facebook_id=" + response.authResponse.userID
 						// +'&access_token='+response.authResponse.accessToken 
-						, function(json){ //console.log(json);
+						, function(json){ 
+							console.log(json);
+							alert(json);
 							if(json.status != 'OK'){
 								window.location.replace(base_url+"home/signup");
 							} else {
