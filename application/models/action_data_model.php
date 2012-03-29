@@ -14,7 +14,7 @@ class Action_data_model extends CI_Model {
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
 		return $this->collection->deleteIndexes() 
-			&& $this->collection->ensureIndex(array('action_id' => 1, 'challenge_id' => 1));
+			&& $this->collection->ensureIndex(array('action_id' => 1));
 	}
         
 	function add($data)
