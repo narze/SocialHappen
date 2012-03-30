@@ -445,11 +445,17 @@ class Player extends CI_Controller {
 	function challenge_action($challenge_hash, $action) {
 		$this->load->model('challenge_model');
 		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-			
 			if(isset($challenge['criteria'][$action])) {
-				echo '<pre>';
-				var_dump($challenge['criteria'][$action]);
-				echo '</pre>';
+				// echo '<pre>';
+				// var_dump($challenge['criteria'][$action]);
+				// echo '</pre>';
+				if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
+					$this->load->library('action_data_lib');
+					$action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
+					redirect($action_url, 'refresh');
+				} else { //TODO if not, redirect to app?
+					echo 'this is not platform\'s action';
+				}
 			} else {
 				show_error('Action Invalid');
 			}

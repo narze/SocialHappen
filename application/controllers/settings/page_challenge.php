@@ -72,10 +72,17 @@ class Page_challenge extends CI_Controller {
 			foreach($company_pages as $company_page) {
 				$pages[$company_page['page_id']] = $company_page['page_name'];
 			}
+			$this->load->library('action_data_lib');
+			$temp_platform_actions = $this->action_data_lib->get_platform_action();
+			$platform_actions = array('' => 'Select Platform Action');
+			foreach($temp_platform_actions as $action_name => $action_id) {
+				$platform_actions[$action_id] = ucfirst($action_name);
+			}
 			$this->load->vars(array(
 				'page_id' => $page_id,
 				'company_id' => $company_id,
-				'company_pages' => $pages
+				'company_pages' => $pages,
+				'platform_actions' => $platform_actions
 			));
 
 			$this->load->library('challenge_lib');
@@ -93,7 +100,7 @@ class Page_challenge extends CI_Controller {
 				}
 			}
 
-			if ($this->form_validation->run() == FALSE)
+			if (($this->form_validation->run() == FALSE) || !is_array($this->input->post('criteria')))
 			{	
 				if($update){
 					$success = $this->input->get('success');
@@ -124,6 +131,19 @@ class Page_challenge extends CI_Controller {
 				foreach($criteria as &$one) {
 					$one['query'] = array_cast_int($one['query']);
 					$one['count'] = (int) $one['count'];
+					if($one['query']['platform_action_id']) {
+						$one['is_platform_action'] = TRUE;
+						unset($one['query']['page_id']);
+						unset($one['query']['app_id']);
+						unset($one['query']['action_id']);
+						if(!$update) {
+							$action_data = array('todo' => 'change this to action\'s data');
+							$action_data_id = $this->action_data_lib->add_action_data($one['query']['platform_action_id'],$action_data);
+							$one['action_data_id'] = $action_data_id;
+						}
+					} else {
+						$one['is_platform_action'] = FALSE;
+					}
 				} unset($one);
 				
 				$input = array(

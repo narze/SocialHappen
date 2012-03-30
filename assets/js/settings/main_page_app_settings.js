@@ -472,8 +472,9 @@ $(function(){
 			var page_id = $('#select_page>select[name="select_page"]').val();
 			var app_id = $('#select_app>select[name="select_app"]').val();
 			var action_id = $('#select_action>select[name="select_action"]').val();
+			var platform_action_id = $('#select_platform_action>select[name="select_platform_action"]').val();
 			var count = $('#count').val();
-			if(name && page_id && app_id && action_id && count){
+			if(name && ((page_id && app_id && action_id) || platform_action_id) && count){
 				var next_nth = $('.criteria[data-nth]:last').data('nth') + 1 ;
 				var new_criteria = $('.criteria-template').clone()
 					.removeClass('criteria-template').addClass('criteria')
@@ -482,6 +483,7 @@ $(function(){
 				new_criteria.find('.page_id').val(page_id).attr('name', 'criteria['+next_nth+'][query][page_id]');
 				new_criteria.find('.app_id').val(app_id).attr('name', 'criteria['+next_nth+'][query][app_id]');
 				new_criteria.find('.action_id').val(action_id).attr('name', 'criteria['+next_nth+'][query][action_id]');
+				new_criteria.find('.platform_action_id').val(platform_action_id).attr('name', 'criteria['+next_nth+'][query][platform_action_id]');
 				new_criteria.find('.count').val(count).attr('name', 'criteria['+next_nth+'][count]');
 			}
 		}
