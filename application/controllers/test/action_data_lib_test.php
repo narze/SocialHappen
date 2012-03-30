@@ -90,7 +90,7 @@ class Action_data_lib_test extends CI_Controller {
 	function add_qr_action_data_test() {
 		$form_data = array(
 			'qr_message' => 'You have completed this rally point!',
-			'qr_url' => base_url().'actions/qr/blahblah?somevar=somecodethatuserwillenter',
+			// 'qr_url' => base_url().'actions/qr/blahblah?somevar=somecodethatuserwillenter',
 		);
 		$result = $this->action_data_lib->add_qr_action_data($form_data);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -111,9 +111,27 @@ class Action_data_lib_test extends CI_Controller {
 		$result = $this->action_data_lib->get_action_data_from_code();
 		$this->unit->run(get_mongo_id($result), $this->another_qr_action_data_id, "\$result", get_mongo_id($result));
 		unset($result['_id']);
-		$this->unit->run($result, $expect, "\$result", $result);
+    
+    $this->unit->run($result['action_id'], $expect['action_id'],
+     "\$result['action_id']", $result['action_id']);
+     
+    $this->unit->run($result['hash'], $expect['hash'],
+     "\$result['hash']", $result['hash']);
+     
+    $this->unit->run($result['data']['qr_message'], $expect['data']['qr_message'],
+     "\$result['data']['qr_message']", $result['data']['qr_message']);
 	}
-
+  
+  function get_qr_url_test(){
+    $result = $this->action_data_lib->get_qr_url();
+    $expect = NULL;
+    $this->unit->run($result, $expect, '\$url', $result);
+    
+    $result = $this->action_data_lib->get_qr_url('4f746aca6803fa3365000057');
+    $expect = base_url() . 'actions/qr/go/4f746aca6803fa3365000057';
+    $this->unit->run($result, $expect, '\$url', $result);
+  }
+  
 	function add_feedback_action_data_test() {
 		$form_data = array(
 			'feedback_welcome_message' => 'What do you think about our store?',
