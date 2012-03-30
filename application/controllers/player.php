@@ -10,7 +10,7 @@ class Player extends CI_Controller {
 	
 	function index() {
 
-		if(!$this->socialhappen->is_logged_in_as_player()) { redirect('player/login'); }
+		if(!$this->socialhappen->is_logged_in()) { redirect('player/login'); }
 
 		$user = $this->socialhappen->get_user();
 
@@ -45,7 +45,7 @@ class Player extends CI_Controller {
 		$this->load->library('user_lib');
 		$this->load->vars(
 			array(
-				'player_logged_in' => $this->socialhappen->is_logged_in_as_player(),
+				'player_logged_in' => $this->socialhappen->is_logged_in(),
 				'facebook_connected' => $facebook_connected,
 				'user' => $this->user_lib->get_user($user['user_id'])
 			)
@@ -55,6 +55,7 @@ class Player extends CI_Controller {
 	}
 
 	function signup() {
+		if($this->socialhappen->is_logged_in()) { redirect('player'); }
 
 		$data = array(
 			'header' => $this -> socialhappen -> get_header_bootstrap( 
@@ -119,8 +120,8 @@ class Player extends CI_Controller {
 					'user_phone' => set_value('mobile_phone_number'),
 					'user_password' => $encrypted_password,
 					'user_is_player' => 1,
-					'user_facebook_id' => $this->input->post('user_facebook_id'),
-					'user_facebook_access_token' => $this->input->post('token')
+					'user_facebook_id' => $this->FB->getUser(),
+					'user_facebook_access_token' => $this->FB->getAccessToken()
 				);
 					
 				$do_not_add = FALSE;
@@ -140,8 +141,9 @@ class Player extends CI_Controller {
 				}
 				else if ($user_id = $this->user_model->add_user($form_data)) // the information has therefore been successfully saved in the db
 				{
-					echo 'Player added';
+					// echo 'Player added';
 					$this->socialhappen->player_login($user_id);
+					redirect('player');
 				}
 				else
 				{
@@ -154,7 +156,15 @@ class Player extends CI_Controller {
 
 	function login() {
 
-		if($this->socialhappen->is_logged_in_as_player()) { redirect('player'); }
+		if($this->socialhappen->is_logged_in()) { 
+			redirect('player'); 
+		}	else if($facebook_user = $this->facebook->getUser()) {
+			$this->load->model('user_model');
+			if($user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user['id'])) {
+				$this->socialhappen->player_login($user['user_id']);
+				redirect('player');
+			}
+		}
 
 		$data = array(
 			'header' => $this -> socialhappen -> get_header_bootstrap( 
@@ -175,7 +185,8 @@ class Player extends CI_Controller {
 						//'common/fancybox/jquery.fancybox-1.3.4'
 					)
 				)
-			)
+			),
+			'facebook_user' => $this->facebook->getUser()
 		);
 
 		$this->load->library('form_validation');
@@ -238,7 +249,7 @@ class Player extends CI_Controller {
 	}
 
 	function challenge_list() {
-		if($this->socialhappen->is_logged_in_as_player()) {
+		if($this->socialhappen->is_logged_in()) {
 			$this->load->model('challenge_model');
 			//TODO : List player's challenges, not all challenges
 			$challenges = $this->challenge_model->get(array());
@@ -293,7 +304,7 @@ class Player extends CI_Controller {
 				array(
 					'challenge_hash' => $challenge_hash,
 					'challenge' => $challenge,
-					'player_logged_in' => $this->socialhappen->is_logged_in_as_player(),
+					'player_logged_in' => $this->socialhappen->is_logged_in(),
 					'player_challenging' => $player_challenging,
 					'challenge_progress' => $challenge_progress,
 					'challenge_done' => $challenge_done,
@@ -307,7 +318,7 @@ class Player extends CI_Controller {
 	}
 
 	function settings() {
-		if($this->socialhappen->is_logged_in_as_player()) {
+		if($this->socialhappen->is_logged_in()) {
 			$user = $this->socialhappen->get_user();
 			if(issetor($user['user_facebook_id']) && issetor($user['user_facebook_access_token'])) {
 				$facebook_connected = TRUE;
@@ -353,7 +364,7 @@ class Player extends CI_Controller {
 	}
 
 	function disconnect_facebook() {
-		if($this->socialhappen->is_logged_in_as_player()) {
+		if($this->socialhappen->is_logged_in()) {
 			$user_id = $this->socialhappen->get_user_id();
 			$this->load->model('user_model');
 			$this->user_model->update_user($user_id, array('user_facebook_id' => NULL, 'user_facebook_access_token' => NULL));
@@ -428,6 +439,22 @@ class Player extends CI_Controller {
 			}
 		} else {
 			redirect('player');
+		}
+	}
+
+	function challenge_action($challenge_hash, $action) {
+		$this->load->model('challenge_model');
+		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+			
+			if(isset($challenge['criteria'][$action])) {
+				echo '<pre>';
+				var_dump($challenge['criteria'][$action]);
+				echo '</pre>';
+			} else {
+				show_error('Action Invalid');
+			}
+		} else {
+			show_error('Challenge Invalid', 404);
 		}
 	}
 }  

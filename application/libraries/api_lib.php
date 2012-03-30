@@ -1350,8 +1350,8 @@ class Api_Lib {
 		$this->CI->load->model('User_model', 'User');
 		$user = $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
 		$user_id_check = $user['user_id'];
-		if(issetor($user['user_facebook_access_token'])){
-			$access_token = $user['user_facebook_access_token'];
+		if(($access_token = issetor($user['user_facebook_access_token'])) || 
+			($access_token = $this->CI->FB->getAccessToken())){
 			$this->CI->FB->setAccessToken($access_token);
 			$user_id = $this->CI->socialhappen->login();
 			if($user_id && $user_id == $user_id_check){
