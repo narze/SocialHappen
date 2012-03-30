@@ -13,7 +13,7 @@
 					<p class="pagename">&raquo; <a href="#"></a></p>
 					<p class="no-page">No page yet<br /><a href="#">+ add new page</a></p>
 				</li>
-				<?php if($user_can_create_company) { ?><li class="create-company"><a class="bt-create_company btn btn-primary"><span>Create Company</span></a></li><?php } ?>
+				<?php if($user_can_create_company) { ?><li class="create-company"><a class="bt-create_company btn btn-primary"><!--Create Company--></a></li><?php } ?>
 			</ul>
 		</div>
 		<?php } ?>

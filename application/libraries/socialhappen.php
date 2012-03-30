@@ -359,6 +359,8 @@ class SocialHappen{
 		
 		if( isset($data['vars']['popup_name']) && !isset($data['vars']['closeEnable']) ) $data['vars']['closeEnable'] = true;
 		
+		$data['bar_view_bootstrap'] = TRUE; //Get new bar view
+
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	

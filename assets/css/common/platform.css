@@ -109,7 +109,8 @@ div.header>div div.goto>ul li p.no-page a {color: #cbed5b;}
 
 div.header>div div.goto>ul li.create-company {
 	height: 40px;
-	padding-top:0;
+	min-height: 40px;
+	padding:5px;
 	background: url(../../images/bg/bg_linex04.gif) top repeat-x #1a1a1a;
 }
 div.header>div div.goto>ul li.last-child {

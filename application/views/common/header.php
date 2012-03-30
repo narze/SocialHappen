@@ -80,6 +80,9 @@ endif;
 	     d.getElementsByTagName('head')[0].appendChild(js);
 	   }(document));
 	</script>
-	<div class="header">
-		<?php $this->load->view('bar/bar_view'); ?>
-	</div>
+
+	<?php if(isset($bar_view_bootstrap)) { ?>
+		<div class="navbar navbar-fixed-top"><?php $this->load->view('bar/bar_view_bootstrap'); ?></div>
+	<?php } else { ?>
+		<div class="header"><?php $this->load->view('bar/bar_view'); ?></div>
+	<?php } ?>
