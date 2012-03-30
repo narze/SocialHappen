@@ -13,7 +13,7 @@ class app_component_lib_test extends CI_Controller {
     $this->load->model('app_component_page_model','app_component_page');
     $this->load->model('achievement_info_model','achievement_info');
     $this->load->model('achievement_stat_model','achievement_stat');
-    $this->load->model('achievement_stat_page_model','achievement_stat_page');
+    $this->load->model('achievement_stat_company_model','achievement_stat_company');
     $this->load->model('achievement_user_model','achievement_user');
     $this->unit->reset_dbs();
   }
@@ -34,7 +34,7 @@ class app_component_lib_test extends CI_Controller {
   function clear_data_before_test(){
     $this->achievement_info->drop_collection();
     $this->achievement_stat->drop_collection();
-    $this->achievement_stat_page->drop_collection();
+    $this->achievement_stat_company->drop_collection();
     $this->achievement_user->drop_collection();
     $this->app_component->drop_collection();
     $this->app_component_page->drop_collection();
@@ -296,17 +296,18 @@ class app_component_lib_test extends CI_Controller {
   }
   
   function prepare_page_stat_test(){
-    $page_id = 1;
+    $company_id = 1;
     $user_id = 2;
     $campaign_id = 10;
     $info = array('campaign_score' => 10,
                   'page_score' => 10,
+                  'page_id' => 1,
                   'campaign_id' => $campaign_id);
     $amount = 10;
     
-    $result = $this->achievement_stat_page->increment($page_id, $user_id, $info, $amount);
+    $result = $this->achievement_stat_company->increment($company_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $result = $this->achievement_stat_company->get($company_id, $user_id);
     $this->unit->run($result['campaign'][$campaign_id]['score'], 10, 'get', print_r($result, TRUE));
     $this->unit->run($result['page_score'], 10, 'get', print_r($result, TRUE));
   }

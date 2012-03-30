@@ -411,15 +411,15 @@ class Invite_component_lib_test extends CI_Controller {
 		$facebook_page_id = $this->FBPAGEID1;
 		$campaign_id = 1;
 		$this->load->model('audit_model');
-		$this->load->model('achievement_stat_page_model');
+		$this->load->model('achievement_stat_company_model');
 		$audit_count_before = count($this->audit_model->list_audit());
 		$this->load->model('user_model');
 		$user_id = $this->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
 		$this->load->model('page_model');
 		$page_id = $this->page_model->get_page_id_by_facebook_page_id($facebook_page_id);
-		$stat_before = $this->achievement_stat_page_model->list_stat(array(
+		$stat_before = $this->achievement_stat_company_model->list_stat(array(
 			'user_id' => (int) $user_id,
-			'page_id' => (int) $page_id
+			'company_id' => 0
 		));
 
 		$this->unit->run($stat_before_count = $stat_before[0]['action'][114]['count'], 'is_int','count $stat_before', $stat_before[0]['action'][114]['count']);
@@ -429,19 +429,19 @@ class Invite_component_lib_test extends CI_Controller {
 		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, TRUE, '_give_page_score_to_all_inviters', $result);
 
-		$stat_after = $this->achievement_stat_page_model->list_stat(array(
+		$stat_after = $this->achievement_stat_company_model->list_stat(array(
 			'user_id' => (int) $user_id,
-			'page_id' => (int) $page_id
+			'company_id' => 0
 		));
 		$this->unit->run($stat_after[0]['action'][114]['count'], $stat_before_count + 1, 'count $stat_after idempotent test', $stat_after[0]['action'][114]['count']);
 	}
 
 	function get_page_score_test(){ //after get invite page score : 
 		$user_id = 1;
-		$page_id = 2;
-		$this->load->model('achievement_stat_page_model');
-    	$stat = $this->achievement_stat_page_model->get($page_id, $user_id);
-		$this->unit->run($stat['page_score'], 100, "\$result", $stat);
+		$company_id = 0;
+		$this->load->model('achievement_stat_company_model');
+    	$stat = $this->achievement_stat_company_model->get($company_id, $user_id);
+		$this->unit->run($stat['company_score'], 100, "\$stat", $stat);
 	}
 
 	function _give_page_score_to_all_inviters_fail_test(){

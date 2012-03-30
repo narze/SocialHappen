@@ -190,7 +190,8 @@ class Challenge_lib_test extends CI_Controller {
 		$this->load->library('achievement_lib');
 		$app_id = 2;
 		$user_id = 1;
-		$inc_result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id,
+		$company_id = 1;
+		$inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
 			$this->achievement_stat1);
 		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 
@@ -208,7 +209,8 @@ class Challenge_lib_test extends CI_Controller {
 		$this->load->library('achievement_lib');
 		$app_id = 1;
 		$user_id = 1;
-		$inc_result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id,
+		$company_id = 1;
+		$inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
 			$this->achievement_stat1);
 		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 		
@@ -223,7 +225,8 @@ class Challenge_lib_test extends CI_Controller {
 		$this->load->library('achievement_lib');
 		$app_id = 2;
 		$user_id = 1;
-		$inc_result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id,
+		$company_id = 1;
+		$inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
 			$this->achievement_stat2);
 		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 
@@ -242,8 +245,9 @@ class Challenge_lib_test extends CI_Controller {
 		$this->load->library('achievement_lib');
 		$app_id = 2;
 		$user_id = 1;
+		$company_id = 1;
 		//Check challenge invoked by increment_achievement_stat already
-		$inc_result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id,
+		$inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
 			$this->achievement_stat2);
 		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 
@@ -262,7 +266,8 @@ class Challenge_lib_test extends CI_Controller {
 		$this->load->library('achievement_lib');
 		$app_id = 2;
 		$user_id = 1;
-		$inc_result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id,
+		$company_id = 1;
+		$inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
 			$this->achievement_stat2);
 		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 

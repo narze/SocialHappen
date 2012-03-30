@@ -7,14 +7,14 @@ class achievement_lib_test extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
-  	  	$this->load->model('app_component_model','app_component');
+  	$this->load->model('app_component_model','app_component');
 		$this->load->model('achievement_info_model','achievement_info');
 		$this->load->model('achievement_stat_model','achievement_stat');
-    	$this->load->model('achievement_stat_page_model','achievement_stat_page');
+    $this->load->model('achievement_stat_company_model','achievement_stat_company');
 		$this->load->model('achievement_user_model','achievement_user');
 		$this->load->library('achievement_lib');
-    	$this->load->library('audit_lib');
-    	$this->unit->reset_dbs();
+    $this->load->library('audit_lib');
+    $this->unit->reset_dbs();
 	}
 
 	function __destruct(){
@@ -30,15 +30,15 @@ class achievement_lib_test extends CI_Controller {
     		}
 		}
 	}
-	
 	function start_test(){
-		$this->achievement_info->drop_collection();
-		$this->achievement_stat->drop_collection();
-  	$this->achievement_stat_page->drop_collection();
-		$this->achievement_user->drop_collection();
+	$this->achievement_info->drop_collection();
+	$this->achievement_stat->drop_collection();
+  	$this->achievement_stat_company->drop_collection();
+	$this->achievement_user->drop_collection();
     $this->app_component->drop_collection();
-	}
-	
+}
+
+
 	function create_index_test(){
 		$this->achievement_lib->create_index();
 	}
@@ -115,7 +115,6 @@ class achievement_lib_test extends CI_Controller {
 		$result = $this->achievement_lib->list_achievement_info_by_page_id($page_id);
 		$total = count($this->achievement_info->list_info(array('page_id' => $page_id)));
 		$this->unit->run($total, 1, 'list_test', print_r($result, TRUE));
-
 		$limit = 2;
 		$result = $this->achievement_lib->list_achievement_info_by_page_id($page_id, $limit, 0);
 		$total = count($this->achievement_info->list_info(array('page_id' => $page_id), $limit, 0));
@@ -252,7 +251,7 @@ class achievement_lib_test extends CI_Controller {
 		$result = $this->achievement_lib->set_achievement_stat($app_id, $user_id, $data, $info);
 		$this->unit->run($result, 'is_true', 'set', print_r($result, TRUE));
 		$total = count($this->achievement_stat->list_stat());
-		$this->unit->run($total, 1, 'increment', print_r($result, TRUE));
+		$this->unit->run($total, 1, 'increment', $total);
 		
 		$app_id = 10;
 		$user_id = 2;
@@ -444,6 +443,7 @@ class achievement_lib_test extends CI_Controller {
 	function increment_achievement_stat_duplicate_test(){
 		$app_id = 1;
 		$user_id = 1;
+		$company_id = 7;
 		$app_install_id = 3;
 		$action_id = 103;
 		$info = array('app_install_id' => $app_install_id,
@@ -451,7 +451,7 @@ class achievement_lib_test extends CI_Controller {
 									'campaign_id' => 5,
 									'action_id' => $action_id);
 		$amount = 1;
-		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$total = count($this->achievement_stat->list_stat());
@@ -477,13 +477,14 @@ class achievement_lib_test extends CI_Controller {
 		$app_id = 1;
 		$user_id = 2;
 		$app_install_id = 3;
+		$company_id = 7;
 		$action_id = 103;
 		$info = array('app_install_id' => $app_install_id,
 									'page_id' => 7,
 									'campaign_id' => 5,
 									'action_id' => $action_id);
 		$amount = 1;
-		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$total = count($this->achievement_stat->list_stat());
@@ -498,7 +499,7 @@ class achievement_lib_test extends CI_Controller {
 		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
 		$this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
 		
-		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		// echo '<pre>';
 		// print_r($achievement_id);
@@ -507,7 +508,7 @@ class achievement_lib_test extends CI_Controller {
 		$this->unit->run(count($result), 1, 'increment', print_r($result, TRUE));
 		// print_r($result);
 		
-		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
@@ -519,11 +520,12 @@ class achievement_lib_test extends CI_Controller {
 		$app_id = 10;
 		$user_id = 2;
 		$app_install_id = 5;
+		$company_id = 7;
 		$action_id = 103;
 		$info = array('app_install_id' => $app_install_id,
 									'action_id' => $action_id);
 		$amount = 1;
-		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$total = count($this->achievement_stat->list_stat());
@@ -538,13 +540,13 @@ class achievement_lib_test extends CI_Controller {
 		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
 		$this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
 		
-		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
 		$this->unit->run(count($result), 1, 'increment', print_r($result, TRUE));
 		
-		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$result = $this->achievement_user->list_user(array('user_id' => $user_id, 'achievement_id' => $achievement_id_ref));
@@ -617,6 +619,7 @@ class achievement_lib_test extends CI_Controller {
 	function increment_score_test(){
 		$app_id = 7;
 		$user_id = 2;
+		$company_id = 6;
 		$app_install_id = 3;
 		$action_id = 103;
 		$info = array('app_install_id' => $app_install_id,
@@ -624,7 +627,7 @@ class achievement_lib_test extends CI_Controller {
 									'campaign_id' => 4,
 									'action_id' => $action_id);
 		$amount = 1;
-		$result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+		$result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
 		$this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
 		
 		$total = count($this->achievement_stat->list_stat());
@@ -642,6 +645,7 @@ class achievement_lib_test extends CI_Controller {
   function increment_page_score_by_share_test(){
     $app_id = 1;
     $page_id = 6;
+    $company_id = 6;
     $user_id = 2;
     $app_install_id = 3;
     $campaign_id = 4;
@@ -651,17 +655,18 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     $amount = 1;
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
-    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $result = $this->achievement_stat_company->get($company_id, $user_id);
     $this->unit->run($result['campaign'][$campaign_id]['score'], 10, 'get', print_r($result, TRUE));
-    $this->unit->run($result['page_score'], 10, 'get', print_r($result, TRUE));
+    $this->unit->run($result['company_score'], 10, 'get', print_r($result, TRUE));
     $this->unit->run($result['action'][$action_id]['count'], 1, 'get', print_r($result, TRUE));
     
     
     $app_id = 2;
     $page_id = 6;
+    $company_id = 6;
     $user_id = 2;
     $app_install_id = 3;
     $campaign_id = 4;
@@ -671,12 +676,12 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     $amount = 1;
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
-    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $result = $this->achievement_stat_company->get($company_id, $user_id);
     $this->unit->run($result['campaign'][$campaign_id]['score'], 20, 'get', print_r($result, TRUE));
-    $this->unit->run($result['page_score'], 20, 'get', print_r($result, TRUE));
+    $this->unit->run($result['company_score'], 20, 'get', print_r($result, TRUE));
     $this->unit->run($result['action'][$action_id]['count'], 2, 'get', print_r($result, TRUE));
 
   }
@@ -684,6 +689,7 @@ class achievement_lib_test extends CI_Controller {
   function increment_page_score_by_invite_test(){
     $app_id = 1;
     $page_id = 6;
+    $company_id = 6;
     $user_id = 2;
     $app_install_id = 3;
     $campaign_id = 4;
@@ -693,12 +699,12 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     $amount = 1;
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
-    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $result = $this->achievement_stat_company->get($company_id, $user_id);
     $this->unit->run($result['campaign'][$campaign_id]['score'], 30, 'get', print_r($result, TRUE));
-    $this->unit->run($result['page_score'], 30, 'get', print_r($result, TRUE));
+    $this->unit->run($result['company_score'], 30, 'get', print_r($result, TRUE));
     $this->unit->run($result['action'][$action_id]['count'], 1, 'get', print_r($result, TRUE));
     
   }
@@ -706,6 +712,7 @@ class achievement_lib_test extends CI_Controller {
   function increment_page_score_by_invalid_test(){
     $app_id = 1;
     $page_id = 6;
+    $company_id = 6;
     $user_id = 2;
     $app_install_id = 3;
     $campaign_id = 4;
@@ -715,12 +722,12 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     $amount = 1;
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
-    $result = $this->achievement_stat_page->get($page_id, $user_id);
+    $result = $this->achievement_stat_company->get($company_id, $user_id);
     $this->unit->run($result['campaign'][$campaign_id]['score'], 30, 'get', print_r($result, TRUE));
-    $this->unit->run($result['page_score'], 30, 'get', print_r($result, TRUE));
+    $this->unit->run($result['company_score'], 30, 'get', print_r($result, TRUE));
   }
   
   function got_reward_by_page_test(){
@@ -728,6 +735,7 @@ class achievement_lib_test extends CI_Controller {
     $app_id = 1;
     $app_install_id = 1;
     $page_id = 1;
+    $company_id = 1;
     $info = array('name' => 'class a',
                   'description' => 'class a',
                   'criteria_string' => array('page invite >= 2', 'page share >= 2'),
@@ -742,6 +750,7 @@ class achievement_lib_test extends CI_Controller {
     // start increment
     $app_id = 1;
     $page_id = 1;
+    $company_id = 1;
     $user_id = 1;
     $app_install_id = 1;
     $campaign_id = 1;
@@ -751,7 +760,7 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     $amount = 1;
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -763,11 +772,11 @@ class achievement_lib_test extends CI_Controller {
     $this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
     
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -780,7 +789,7 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -789,7 +798,7 @@ class achievement_lib_test extends CI_Controller {
     
     // increment again
     // echo '<b>';
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     // echo '</b>';
     
@@ -803,6 +812,7 @@ class achievement_lib_test extends CI_Controller {
     $app_id = 100;
     $app_install_id = 1;
     $page_id = 100;
+    $company_id = 100;
     $info = array('name' => 'class b',
                   'description' => 'class b',
                   'criteria_string' => array('page invite >= 2', 'page share >= 2', 'score >= 1'),
@@ -827,7 +837,7 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     $amount = 1;
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -839,11 +849,11 @@ class achievement_lib_test extends CI_Controller {
     $this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
     
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -856,7 +866,7 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -865,7 +875,7 @@ class achievement_lib_test extends CI_Controller {
     
     // increment again
     // echo '<b>';
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     // echo '</b>';
     
@@ -897,6 +907,7 @@ class achievement_lib_test extends CI_Controller {
     $app_id = 1000;
     $user_id = 1000;
     $app_install_id = 1;
+    $company_id = 1000;
     $campaign_id = 1;
     $action_id = 113; // invite
     $info = array('app_install_id' => $app_install_id,
@@ -904,7 +915,7 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     $amount = 1;
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -916,11 +927,11 @@ class achievement_lib_test extends CI_Controller {
     $this->unit->run(count($result), 0, 'increment', print_r($result, TRUE));
     
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -933,7 +944,7 @@ class achievement_lib_test extends CI_Controller {
                   'campaign_id' => $campaign_id,
                   'action_id' => $action_id);
     // increment again
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     
     // test still not get achievement
@@ -942,7 +953,7 @@ class achievement_lib_test extends CI_Controller {
     
     // increment again
     // echo '<b>';
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     // echo '</b>';
     
@@ -957,7 +968,7 @@ class achievement_lib_test extends CI_Controller {
                   'action_id' => $action_id);
     // increment again
     echo '<b>';
-    $result = $this->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, $amount);
+    $result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     echo '</b>';
     
@@ -970,27 +981,28 @@ class achievement_lib_test extends CI_Controller {
   function decrement_page_score_test(){
     $page_id = '1000';
     $user_id = '1000';
+    $company_id = '1000';
     $amount = '20';
-    $result = $this->achievement_lib->increment_page_score($page_id, $user_id, $amount);
+    $result = $this->achievement_lib->increment_page_score($company_id, $page_id, $user_id, $amount);
     $this->unit->run($result, TRUE, 'decrement', print_r($result, TRUE));
     
-    $result = $this->achievement_stat_page->get((int)$page_id, (int)$user_id);
-    $this->unit->run($result['page_score'], 70, 'decrement');
+    $result = $this->achievement_stat_company->get((int)$company_id, (int)$user_id);
+    $this->unit->run($result['company_score'], 70, 'decrement');
     
     $amount = '-10';
-    $result = $this->achievement_lib->increment_page_score($page_id, $user_id, $amount);
+    $result = $this->achievement_lib->increment_page_score($company_id, $page_id, $user_id, $amount);
     $this->unit->run($result, TRUE, 'decrement');
     
-    $result = $this->achievement_stat_page->get((int)$page_id, (int)$user_id);
-    $this->unit->run($result['page_score'], 60, 'decrement', print_r($result, TRUE));
+    $result = $this->achievement_stat_company->get((int)$company_id, (int)$user_id);
+    $this->unit->run($result['company_score'], 60, 'decrement', print_r($result, TRUE));
   }
   
   function get_page_stat_test(){
-    $page_id = '1000';
+    $company_id = '1000';
     $user_id = '1000';
     
-    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
-    $this->unit->run($result['page_score'], 60, 'decrement');
+    $result = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($result['company_score'], 60, 'decrement');
   }
 
   function count_achievement_info_by_page_id_test()

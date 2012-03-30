@@ -77,11 +77,13 @@ class Share_ctrl {
 		} else {
 			$result['error'] = 'add audit failed';
 		}
-	
+		
+		$this->CI->load->model('installed_apps_model');
+		$installed_app = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
 		$this->CI->load->library('achievement_lib');
 		$achievement_info = array('action_id'=> $share_action,'app_install_id'=>$app_install_id);
 
-		$inc_result = $this->CI->achievement_lib->increment_achievement_stat($app_id, $user_id, $achievement_info, 1);
+		$inc_result = $this->CI->achievement_lib->increment_achievement_stat($installed_app['company_id'], $app_id, $user_id, $achievement_info, 1);
 		if($inc_result){
 			$result['achievement_stat_success'] = TRUE;
 		} else {	

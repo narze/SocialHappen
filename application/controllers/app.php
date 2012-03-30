@@ -325,7 +325,7 @@ class App extends CI_Controller {
 			));
 			$this->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
-			$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+			$stat_increment_result = $this->achievement_lib->increment_achievement_stat($company_id,0, $user_id, $info, 1);
 		}
 		echo json_encode($result);
 	}
@@ -338,27 +338,6 @@ class App extends CI_Controller {
 		$this->socialhappen->ajax_check();
 		$url = $_POST['url'];
 		$result = json_decode($this->curl($url), TRUE);
-		
-		// $this->load->library('audit_lib');
-			// $action_id = $this->socialhappen->get_k('audit_action','Install App');
-			// $this->audit_lib->add_audit(
-				// 0,
-				// $user_id,
-				// $action_id,
-				// '', 
-				// '',
-				// array(
-					// 'page_id'=> $page_id,
-					// 'company_id' => $company_id,
-					// 'app_install_id' => 0,
-					// 'user_id' => $user_id
-				// )
-			// );
-			
-		// $this->load->library('achievement_lib');
-		// $info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
-		// $stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
-		
 		echo $result;
 	}
 }

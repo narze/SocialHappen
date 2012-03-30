@@ -11,9 +11,9 @@ echo form_open('dev/score', $attributes); ?>
 </p>
 
 <p>
-        <label for="page_id">Page_id <span class="required">*</span></label>
-        <?php echo form_error('page_id'); ?>
-        <br /><input id="page_id" type="text" name="page_id" maxlength="10" value="<?php echo set_value('page_id'); ?>"  />
+        <label for="company_id">company_id <span class="required">*</span></label>
+        <?php echo form_error('company_id'); ?>
+        <br /><input id="company_id" type="text" name="company_id" maxlength="10" value="<?php echo set_value('company_id'); ?>"  />
 </p>
 
 <p>
@@ -22,8 +22,8 @@ echo form_open('dev/score', $attributes); ?>
         <br /><input id="score" type="text" name="score" maxlength="10" value="<?php echo set_value('score'); ?>"  />
 </p>
 
-<p>     <?php foreach($page_scores as $page_score) {
-                echo 'Page : '.$page_score['page_id'].' -> '.$page_score['score'].'<br />';
+<p>     <?php foreach($company_scores as $company_score) {
+                echo 'company : '.$company_score['company_id'].' -> '.$company_score['score'].'<br />';
         } ?>
 </p>
 

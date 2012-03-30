@@ -145,6 +145,7 @@ class Share extends CI_Controller {
 				);
 
 				$inc_result = $this->achievement_lib->increment_achievement_stat(
+					issetor($app['company_id'],0),
 					issetor($app['app_id'],0),
 					$user_id,
 					$achievement_info,
