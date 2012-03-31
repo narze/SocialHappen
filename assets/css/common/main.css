@@ -510,9 +510,6 @@ div.header > div div.goto > div ul li p a {
 div.header > div div.goto > div ul li {
 	min-height: 50px;
 }
-.bt-create_company {
-	margin: 8px!important;
-}
 div.header > div > ul > li.fb a {
 	color:#fff;
 	text-decoration:none;
