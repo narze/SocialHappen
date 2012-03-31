@@ -7,6 +7,12 @@ class QR extends CI_Controller {
 		$this->load->library('action_data_lib');
 	}
 	
+  function index(){
+    $action = $this->action_data_lib->get_action_data_from_code();
+    echo 'see QR<pre>';
+    var_dump($action);
+  }
+  
   /**
    * qr code handler method ex. /actions/qr/go/3531sdavgbsd32436fd4363
    *

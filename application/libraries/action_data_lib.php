@@ -78,12 +78,18 @@ class Action_data_lib {
 		$hash = $this->CI->input->get('code');
 		return $this->CI->action_data_model->getOne(array('hash' => $hash));
 	}
-
+  
+  
+  /**
+   * @param qr_done_message html
+   * @param todo_message html
+   */
 	function add_qr_action_data($data_from_form) {
 		$action_id = $this->get_platform_action('qr');
 		$qr_data = array(
 			//Book : redefine your data here
-			'qr_message' => $data_from_form['qr_message']
+			'qr_done_message' => $data_from_form['qr_done_message'],
+			'qr_todo_message' => $data_from_form['qr_todo_message']
 		);
 		return $this->add_action_data($action_id, $qr_data);
 	}
