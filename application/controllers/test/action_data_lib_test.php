@@ -89,8 +89,8 @@ class Action_data_lib_test extends CI_Controller {
 
 	function add_qr_action_data_test() {
 		$form_data = array(
-			'qr_done_message' => 'You have completed this rally point!',
-			'qr_todo_message' => 'You have to check in',
+			'done_message' => 'You have completed this rally point!',
+			'todo_message' => 'You have to check in',
 			// 'qr_url' => base_url().'actions/qr/blahblah?somevar=somecodethatuserwillenter',
 		);
 		$result = $this->action_data_lib->add_qr_action_data($form_data);
@@ -119,11 +119,11 @@ class Action_data_lib_test extends CI_Controller {
     $this->unit->run($result['hash'], $expect['hash'],
      "\$result['hash']", $result['hash']);
      
-    $this->unit->run($result['data']['qr_done_message'], $expect['data']['qr_done_message'],
-     "\$result['data']['qr_done_message']", $result['data']['qr_done_message']);
+    $this->unit->run($result['data']['done_message'], $expect['data']['done_message'],
+     "\$result['data']['done_message']", $result['data']['done_message']);
      
-    $this->unit->run($result['data']['qr_todo_message'], $expect['data']['qr_todo_message'],
-     "\$result['data']['qr_todo_message']", $result['data']['qr_todo_message']);
+    $this->unit->run($result['data']['todo_message'], $expect['data']['todo_message'],
+     "\$result['data']['todo_message']", $result['data']['todo_message']);
 	}
   
   function get_qr_url_test(){

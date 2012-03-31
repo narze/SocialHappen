@@ -88,8 +88,8 @@ class Action_data_lib {
 		$action_id = $this->get_platform_action('qr');
 		$qr_data = array(
 			//Book : redefine your data here
-			'qr_done_message' => $data_from_form['qr_done_message'],
-			'qr_todo_message' => $data_from_form['qr_todo_message']
+			'done_message' => $data_from_form['done_message'],
+			'todo_message' => $data_from_form['todo_message']
 		);
 		return $this->add_action_data($action_id, $qr_data);
 	}
