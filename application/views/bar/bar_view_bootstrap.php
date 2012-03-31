@@ -25,11 +25,11 @@
 							<img class="company-image" src="" alt="">
 							<p class="company-name"><a href="#">Company name</a></p>
 							<p class="page-name">&raquo; <a href="#">Page name</a></p>
-							<p class="no-page">No page yet<br /><button href="#" type="button" class="btn btn-primary">Add new page</button></p>
+							<p class="no-page">No page yet<br /><a href="#">+add new page</a></p>
 						</li>
 						<?php if($user_can_create_company) { ?>
 						<li class="create-company">
-							<button class="bt-create_company btn btn-primary">Create Company</button>
+							<button type="button" class="bt-create_company btn btn-primary">Create Company</button>
 						</li>
 						<?php } ?>
 					</ul>

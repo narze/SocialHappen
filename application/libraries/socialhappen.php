@@ -293,7 +293,7 @@ class SocialHappen{
 					'common/bootstrap.min',
 					'common/functions',
 					//'common/onload',
-					//'common/jquery.form',
+					'common/jquery.form',
 					//'common/bar',
 					//'common/fancybox/jquery.fancybox-1.3.4.pack',
 					//'home/lightbox',
