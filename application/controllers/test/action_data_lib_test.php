@@ -91,6 +91,7 @@ class Action_data_lib_test extends CI_Controller {
 		$form_data = array(
 			'done_message' => 'You have completed this rally point!',
 			'todo_message' => 'You have to check in',
+			'challenge_id' => 'id'
 			// 'qr_url' => base_url().'actions/qr/blahblah?somevar=somecodethatuserwillenter',
 		);
 		$result = $this->action_data_lib->add_qr_action_data($form_data);
@@ -106,7 +107,8 @@ class Action_data_lib_test extends CI_Controller {
 		$expect = array(
 			'action_id' => QR_ACTION_ID,
 			'hash' => strrev(sha1($this->another_qr_action_data_id)),
-			'data' => $form_data
+			'data' => $form_data,
+      'challenge_id' => 'id'
 		);
 		$_GET['code'] = strrev(sha1($this->another_qr_action_data_id));
 		$result = $this->action_data_lib->get_action_data_from_code();
@@ -124,6 +126,9 @@ class Action_data_lib_test extends CI_Controller {
      
     $this->unit->run($result['data']['todo_message'], $expect['data']['todo_message'],
      "\$result['data']['todo_message']", $result['data']['todo_message']);
+    
+    $this->unit->run($result['data']['challenge_id'], $expect['data']['challenge_id'],
+     "\$result['data']['challenge_id']", $result['data']['challenge_id']);
 	}
   
   function get_qr_url_test(){
@@ -132,7 +137,7 @@ class Action_data_lib_test extends CI_Controller {
     $this->unit->run($result, $expect, '\$url', $result);
     
     $result = $this->action_data_lib->get_qr_url('4f746aca6803fa3365000057');
-    $expect = base_url() . 'actions/qr/go/4f746aca6803fa3365000057';
+    $expect = base_url() . 'actions/qr/?code=4f746aca6803fa3365000057';
     $this->unit->run($result, $expect, '\$url', $result);
   }
   
