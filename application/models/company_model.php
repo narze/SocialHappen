@@ -124,4 +124,11 @@ class Company_model extends CI_Model {
 	function update_company_profile_by_company_id($company_id = NULL, $data = array()){
 		return $this->db->update('company', $data, array('company_id' => $company_id));
 	}
+
+	/**
+	 * Get all companys
+	 */
+	function get_all(){
+		return $this->db->get('company')->result_array();
+	}
 }

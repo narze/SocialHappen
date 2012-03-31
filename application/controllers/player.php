@@ -8,6 +8,9 @@ class Player extends CI_Controller {
 		$this->postsalt = 'di#!zp0s+s4LT';
 	}
 	
+	/**
+	 * Index page (for debugging purpose)
+	 */
 	function index() {
 
 		if(!$this->socialhappen->is_logged_in()) { redirect('player/login'); }
@@ -54,6 +57,9 @@ class Player extends CI_Controller {
 		$this->parser->parse('player/index_view', $data);
 	}
 
+	/**
+	 * Player's signup page
+	 */
 	function signup() {
 		if($this->socialhappen->is_logged_in()) { redirect('player'); }
 
@@ -154,6 +160,9 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Player's login page
+	 */
 	function login() {
 
 		if($this->socialhappen->is_logged_in()) { 
@@ -248,6 +257,9 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * View all challenges
+	 */
 	function challenge_list() {
 		if($this->socialhappen->is_logged_in()) {
 			$this->load->model('challenge_model');
@@ -260,6 +272,9 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * View challenges that you are challenging
+	 */
 	function challenging_list() {
 		$user_id = $this->socialhappen->get_user_id();
 		$this->load->library('user_lib');
@@ -280,6 +295,9 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Challenge landing
+	 */
 	function challenge($challenge_hash) {
 		$this->load->model('challenge_model');
 		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
@@ -317,6 +335,9 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * View player's setting
+	 */
 	function settings() {
 		if($this->socialhappen->is_logged_in()) {
 			$user = $this->socialhappen->get_user();
@@ -333,6 +354,9 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Connect to facebook
+	 */
 	function connect_facebook() {
 		if(($user_facebook_id = $this->FB->getUser()) && 
 				($user_facebook_id == $this->input->get('user_facebook_id')) && 
@@ -363,6 +387,9 @@ class Player extends CI_Controller {
 
 	}
 
+	/** 
+	 * Disconnect from facebook
+	 */
 	function disconnect_facebook() {
 		if($this->socialhappen->is_logged_in()) {
 			$user_id = $this->socialhappen->get_user_id();
@@ -374,6 +401,9 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Make the current user joins the challenge
+	 */
 	function join_challenge($challenge_hash = NULL) {
 		$this->load->library('challenge_lib');
 		if($challenge = $this->challenge_lib->get_by_hash($challenge_hash)) {
@@ -390,11 +420,17 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Logout and redirect to index
+	 */
 	function logout() {
 		$this->socialhappen->logout();
 		redirect('player');
 	}
 
+	/**
+	 * View redeem pending list (for merchant only)
+	 */
 	function merchant_redeem_pending_list() {
 		$company_id = NULL; //TODO
 		if($user = $this->socialhappen->get_user()) {
@@ -424,6 +460,9 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Confirm user's redeem (for merchant only)
+	 */
 	function merchant_redeem_pending($user_id, $challenge_id) {
 		$company_id = NULL; //TODO
 		if($user = $this->socialhappen->get_user()) {
@@ -442,14 +481,23 @@ class Player extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Redirect to action's url with ?code=[hash] data
+	 */
 	function challenge_action($challenge_hash, $action) {
 		$this->load->model('challenge_model');
 		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-			
 			if(isset($challenge['criteria'][$action])) {
-				echo '<pre>';
-				var_dump($challenge['criteria'][$action]);
-				echo '</pre>';
+				// echo '<pre>';
+				// var_dump($challenge['criteria'][$action]);
+				// echo '</pre>';
+				if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
+					$this->load->library('action_data_lib');
+					$action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
+					redirect($action_url, 'refresh');
+				} else { //TODO if not, redirect to app?
+					echo 'this is not platform\'s action';
+				}
 			} else {
 				show_error('Action Invalid');
 			}

@@ -1315,6 +1315,7 @@ class DB_Sync {
 			'achievement_stat',
 			'achievement_user',
 			'achievement_stat_page',
+			'achievement_stat_company',
 			'app_component',
 			'app_component_homepage',
 			'app_component_page',

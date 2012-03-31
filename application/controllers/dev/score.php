@@ -12,31 +12,31 @@ class Score extends CI_Controller {
       }
     }
     $this->socialhappen->check_logged_in();
-    $this->load->model('achievement_stat_page_model','achievement_stat_page');
+    $this->load->model('achievement_stat_company_model','achievement_stat_company');
 
   }
 
   function index(){
     $this->load->library('form_validation');
     $this->form_validation->set_rules('user_id', 'User_id', 'required|is_numeric|max_length[10]');      
-    $this->form_validation->set_rules('page_id', 'Page_id', 'required|is_numeric|max_length[10]');      
+    $this->form_validation->set_rules('company_id', 'company_id', 'required|is_numeric|max_length[10]');      
     $this->form_validation->set_rules('score', 'Score', 'required|is_numeric|max_length[10]');
       
     $this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
     $user_id = $this->socialhappen->get_user_id();
-    $this->load->model('page_model');
-    $pages = $this->page_model->get_all();
-    $page_scores = array();
-    foreach($pages as $page){
-      $stat_page = $this->achievement_stat_page->get($page['page_id'], $user_id);
-      $page_score = $stat_page['page_score'];
-      $page_scores[] = array(
-        'page_id' => $page['page_id'],
-        'score' => issetor($page_score, 0)
+    $this->load->model('company_model');
+    $companys = $this->company_model->get_all();
+    $company_scores = array();
+    foreach($companys as $company){
+      $stat_company = $this->achievement_stat_company->get($company['company_id'], $user_id);
+      $company_score = $stat_company['company_score'];
+      $company_scores[] = array(
+        'company_id' => $company['company_id'],
+        'score' => issetor($company_score, 0)
       );
     }
     $success = $this->input->get('success');
-    $vars = compact('user_id', 'page_scores','success');
+    $vars = compact('user_id', 'company_scores','success');
     $this->load->vars($vars);
     if ($this->form_validation->run() == FALSE) 
     {
@@ -45,19 +45,20 @@ class Score extends CI_Controller {
     else 
     {
       $user_id = set_value('user_id');
-      $page_id = set_value('page_id');
+      $company_id = set_value('company_id');
       $score = set_value('score');
       $info = array('campaign_score' => $score,
                     'page_score' => $score,
+                    'page_id' => 5,
                     'campaign_id' => 65535);
-      var_dump_pre(compact('user_id','page_id','score','info'));
-      $increment_page_score_result = $this->achievement_stat_page
-          ->increment($page_id, $user_id, $info);
+      
+      $increment_company_score_result = $this->achievement_stat_company
+          ->increment($company_id, $user_id, $info);
       
     
-      if ($increment_page_score_result) 
+      if ($increment_company_score_result) 
       {
-        redirect('dev/score?success=1');
+        redirect('dev/score?success=1', 'refresh');
       }
       else
       {

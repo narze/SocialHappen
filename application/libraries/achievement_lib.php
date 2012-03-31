@@ -45,12 +45,12 @@ class Achievement_lib
 	function create_index(){
 		$this->CI->load->model('achievement_info_model','achievement_info');
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
-  	$this->CI->load->model('achievement_stat_page_model','achievement_stat_page');
+  	$this->CI->load->model('achievement_stat_company_model','achievement_stat_company');
 		$this->CI->load->model('achievement_user_model','achievement_user');
 		
 		$this->CI->achievement_info->create_index();
 		$this->CI->achievement_stat->create_index();
-    	$this->CI->achievement_stat_page->create_index();
+    	$this->CI->achievement_stat_company->create_index();
 		$this->CI->achievement_user->create_index();
 	}
 	
@@ -324,8 +324,7 @@ class Achievement_lib
 	 * 				app_install_id is required*
 	 * @return result boolean
 	 */
-	function set_achievement_stat(
-		$app_id = NULL, $user_id = NULL, $data = array(), $info = array()){
+	function set_achievement_stat($app_id = NULL, $user_id = NULL, $data = array(), $info = array()){
 		if(empty($user_id) || !isset($app_id) || empty($data) || empty($info)||
 			 !isset($info['app_install_id'])){ return FALSE; }
 		
@@ -362,10 +361,10 @@ class Achievement_lib
 	 * 
 	 * @author Metwara Narksook
 	 */
-	function increment_achievement_stat($app_id = NULL, $user_id = NULL,
+	function increment_achievement_stat($company_id = NULL, $app_id = NULL, $user_id = NULL,
 		 $info = array(), $amount = 1){
 		
-		if(!isset($user_id) || !isset($app_id) || empty($info) ||
+		if(!isset($company_id) || !isset($user_id) || !isset($app_id) || empty($info) ||
 			 !isset($info['app_install_id'])) return FALSE;
 		
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
@@ -380,12 +379,12 @@ class Achievement_lib
 	      || $info['action_id'] == $this->PAGE_INVITE_ACCEPT_ACTION_ID
 	      || $info['action_id'] == $this->CAMPAIGN_INVITE_ACCEPT_ACTION_ID)){
 	      
-	      $this->CI->load->model('achievement_stat_page_model', 'achievement_stat_page');
-	      $increment_page_result = $this->CI->achievement_stat_page
-	        ->increment($info['page_id'], 
+	      $this->CI->load->model('achievement_stat_company_model', 'achievement_stat_company');
+	      $increment_page_result = $this->CI->achievement_stat_company
+	        ->increment($company_id, 
 	        $user_id, $info, $amount);
 	      if(isset($info['campaign_id'])){
-	        $this->_increment_page_score($info['page_id'], $user_id, $info, $amount);
+	        $this->_increment_page_score($company_id, $info['page_id'], $user_id, $info, $amount);
 	      }
 	    }
     
@@ -400,7 +399,7 @@ class Achievement_lib
 		return $increment_result;
 	}
 	
-  function _increment_page_score($page_id, $user_id, $info, $amount){
+  function _increment_page_score($company_id, $page_id, $user_id, $info, $amount){
     $this->CI->load->model('app_component_model','app_component_model');
     
     $campaign = $this->CI->app_component_model
@@ -427,9 +426,10 @@ class Achievement_lib
       if($page_score > 0 || $campaign_score > 0){
         $info = array('campaign_score' => $campaign_score,
                       'page_score' => $page_score,
-                      'campaign_id' => $info['campaign_id']);
-        $increment_page_score_result = $this->CI->achievement_stat_page
-          ->increment($page_id, $user_id, $info, $amount);
+                      'campaign_id' => $info['campaign_id'],
+                      'page_id' => $page_id);
+        $increment_page_score_result = $this->CI->achievement_stat_company
+          ->increment($company_id, $user_id, $info, $amount);
       }
       
     }
@@ -519,7 +519,7 @@ class Achievement_lib
       $stat_page_criteria = array();
       
       if(isset($info['page_id'])){
-        $stat_page_criteria = array('page_id' => $info['page_id'],
+        $stat_page_criteria = array('page.'.$info['page_id'] => array('$exists' => TRUE),
                                     'user_id' => $user_id);
       }
 			
@@ -570,9 +570,9 @@ class Achievement_lib
 			// echo count($stat_page_criteria);
       // echo "<br /><br />";
       if(count($stat_page_criteria) > 2){
-      	$this->CI->load->model('achievement_stat_page_model', 'achievement_stat_page');
+      	$this->CI->load->model('achievement_stat_company_model', 'achievement_stat_company');
         $matched_achievement_page = 
-          $this->CI->achievement_stat_page->list_stat($stat_page_criteria);
+          $this->CI->achievement_stat_company->list_stat($stat_page_criteria);
       }
       
       // echo '<br/>$matched_achievement_page:<br/>';
@@ -655,37 +655,42 @@ class Achievement_lib
 	
   /**
    * increment page score
-   * @param page_id
+   * @param company_id
    * @param user_id
    * @param amount
    * @return result
    */
-  function increment_page_score($page_id = NULL, $user_id = NULL, $amount = 0){
-    if(!isset($page_id) || !isset($user_id)){
+  function increment_page_score($company_id = NULL, $page_id = NULL, $user_id = NULL, $amount = 0){
+    if(!isset($company_id) || !isset($page_id) || !isset($user_id)){
       return FALSE;
     }
-    $page_id = (int) $page_id;
+
+    $company_id = (int) $company_id;
     $user_id = (int) $user_id;
     $amount = (int) $amount;
-    $this->CI->load->model('achievement_stat_page_model', 'achievement_stat_page');
-    return $this->CI->achievement_stat_page->increment($page_id, 
-        $user_id, array('page_score' => $amount), $amount);
+    $info = array(
+    	'page_id' => (int) $page_id,
+    	'page_score' => $amount
+    );
+    $this->CI->load->model('achievement_stat_company_model', 'achievement_stat_company');
+    return $this->CI->achievement_stat_company->increment($company_id, 
+        $user_id, $info, $amount);
   }
   
   /**
-   * get user stat page
-   * @param page_id
+   * get user stat company
+   * @param company_id
    * @param user_id
    * @return result
    */
-  function get_page_stat($page_id = NULL, $user_id = NULL){
-    if(!isset($page_id) || !isset($user_id)){
+  function get_company_stat($company_id = NULL, $user_id = NULL){
+    if(!isset($company_id) || !isset($user_id)){
       return NULL;
     }
-    $page_id = (int) $page_id;
+    $company_id = (int) $company_id;
     $user_id = (int) $user_id;
-    $this->CI->load->model('achievement_stat_page_model', 'achievement_stat_page');
-    return $this->CI->achievement_stat_page->get($page_id, $user_id);
+    $this->CI->load->model('achievement_stat_company_model', 'achievement_stat_company');
+    return $this->CI->achievement_stat_company->get($company_id, $user_id);
   }
 	
 }

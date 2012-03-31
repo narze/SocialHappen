@@ -614,7 +614,7 @@ class Api_Lib {
 			
 			$this->CI->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'app_id'=>$app_id);
-			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
 		}
 		
 		// update user last seen
@@ -669,7 +669,7 @@ class Api_Lib {
 		if($campaign_id){
 			$info['campaign_id'] = $campaign_id;
 		}
-		$result = $this->CI->achievement_lib->increment_achievement_stat($app_id, $user_id, $info, 1);
+		$result = $this->CI->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id, $info, 1);
 		if($result){
 			$response = array(	
 				'status' => 'OK',

@@ -182,7 +182,7 @@ class Tab_ctrl {
 				));
 				$this->CI->load->library('achievement_lib');
 				$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id'=>$page_id);
-				$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+				$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
 			}
 			
 		}
@@ -252,7 +252,7 @@ class Tab_ctrl {
 			
 			$this->CI->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'page_id'=>$page_id);
-			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, $user_id, $info, 1);
+			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
 
 			//Begin : check pending invite
 				if(isset($app_install_id)){ // mode = app

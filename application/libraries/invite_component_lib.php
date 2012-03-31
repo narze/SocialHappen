@@ -347,7 +347,7 @@ class Invite_component_lib {
 				'app_install_id' => 0,
 				'campaign_id' => $campaign_id
 			);
-			if(!$this->CI->achievement_lib->increment_achievement_stat(0, $inviter_user_id, $achievement_info, 1)){
+			if(!$this->CI->achievement_lib->increment_achievement_stat(0, 0, $inviter_user_id, $achievement_info, 1)){
 				// log_message('error', 'no inc');
 				return FALSE;
 			}
@@ -388,7 +388,7 @@ class Invite_component_lib {
 			'campaign_id' => $campaign_id,
 			'app_install_id' => 0
 		);
-		if(!$this->CI->achievement_lib->increment_achievement_stat(0, $inviter_user_id, $achievement_info, 1)){
+		if(!$this->CI->achievement_lib->increment_achievement_stat(0, 0, $inviter_user_id, $achievement_info, 1)){
 			// log_message('error', 'no inc');
 			return FALSE;
 		}

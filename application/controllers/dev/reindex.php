@@ -23,7 +23,7 @@ class Reindex extends CI_Controller {
 		$models = array(
 			'achievement_info',
 			'achievement_stat',
-			'achievement_stat_page',
+			'achievement_stat_company',
 			'achievement_user',
 			'app_component',
 			'app_component_page',
