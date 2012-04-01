@@ -30,8 +30,7 @@ class App_component_lib
     }
     $this->CI =& get_instance();
   }
-  
-  
+    
   function create_index(){
     $this->CI->load->model('app_component_model','app_component');
     $this->CI->app_component->create_index();
