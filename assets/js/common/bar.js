@@ -1,17 +1,5 @@
 $(function(){
 
-	$('#bar-login').live('click', function() {
-		$.fancybox({
-			href: base_url+'home/login',
-			transitionIn: 'elastic',
-			transitionOut: 'elastic',
-			//padding: 0,
-			scrolling: 'no',
-			//onComplete: label
-		});
-		return false;
-	});
-
 	if($('.navbar').length > 0) //For new bar (bootstrap)
 	{
 		var fetching_notification = false;

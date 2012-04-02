@@ -45,8 +45,8 @@
 				{ ?>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<img class="user-image" src="<?php echo imgsize("https://graph.facebook.com/{$facebook_user['id']}/picture",'square');?>" alt="" />
-							<?php echo issetor($facebook_user['name']); ?>
+							<img class="user-image" src="<?php echo $user['user_image'] ? imgsize(issetor($user['user_image']),'square') : base_url('assets/images/default/user.png');?>" alt="" />
+							<?php echo $user['user_first_name'].' '.$user['user_last_name']; ?>
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu mega-dropdown-menu user">
@@ -72,7 +72,7 @@
 				} 
 				else 
 				{
-					if(isset($facebook_user)) 
+					if(isset($facebook_user) && $facebook_user) 
 					{ ?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -81,16 +81,15 @@
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu mega-dropdown-menu user">
-								<li><a onclick="fblogin();" href="#" >&raquo; Login</a></li>
+								<li><a onclick="fblogin();">&raquo; Login</a></li>
 								<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 							</ul>
 						</li><?php 
 					} 
 					else 
 					{ ?>
-						<li class="fb">
-							<?php $next = isset($_GET['next']) ? '?next='.urlencode($_GET['next']) : NULL; ?>
-							<a href="home/login<?php echo $next; ?>" id="bar-login">&raquo; Login</a>
+						<li>
+							<a onclick="fblogin();" href="player/login">&raquo; Login</a>
 							<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->
 						</li><?php 
 					}
