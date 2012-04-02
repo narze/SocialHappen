@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-define('Page_id', 1);
+define('Company_id', 1);
 class Reward_lib_test extends CI_Controller {
 	
 	var $reward_lib;
@@ -69,22 +69,22 @@ class Reward_lib_test extends CI_Controller {
 	}
 
 	function get_expired_redeem_items_test(){
-		$page_id = Page_id;
-		$result = $this->reward_lib->get_expired_redeem_items($page_id);
+		$company_id = Company_id;
+		$result = $this->reward_lib->get_expired_redeem_items($company_id);
 		$this->unit->run(count($result), 1, "count(\$result)", count($result));
 		$this->unit->run($result[0]['name'], 'expired', "\$result[0]['name']", $result[0]['name']);
 	}
 
 	function get_active_redeem_items_test(){
-		$page_id = Page_id;
-		$result = $this->reward_lib->get_active_redeem_items($page_id);
+		$company_id = Company_id;
+		$result = $this->reward_lib->get_active_redeem_items($company_id);
 		$this->unit->run(count($result), 1, "count(\$result)", count($result));
 		$this->unit->run($result[0]['name'], 'active', "\$result[0]['name']", $result[0]['name']);
 	}
 
 	function get_incoming_redeem_items_test(){
-		$page_id = Page_id;
-		$result = $this->reward_lib->get_incoming_redeem_items($page_id);
+		$company_id = Company_id;
+		$result = $this->reward_lib->get_incoming_redeem_items($company_id);
 		$this->unit->run(count($result), 1, "count(\$result)", count($result));
 		$this->unit->run($result[0]['name'], 'incoming', "\$result[0]['name']", $result[0]['name']);
 	}

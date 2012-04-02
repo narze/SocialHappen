@@ -126,7 +126,7 @@
 		if(!in_array($input['status'], array('draft', 'published', 'cancelled'))){
 			return FALSE;
 		}
-		if(!in_array($input['criteria_type'], array('page', 'app', 'campaign'))){
+		if(!in_array($input['criteria_type'], array('company', 'page', 'app', 'campaign'))){
 			return FALSE;
 		}
 		if($input['start_timestamp'] > $input['end_timestamp']){
@@ -177,7 +177,7 @@
 			$update['$set']['status'] = $input['status'];
 		}
 		if(isset($input['criteria_type'])){
-			if(!in_array($input['criteria_type'], array('page', 'app', 'campaign'))){
+			if(!in_array($input['criteria_type'], array('company', 'page', 'app', 'campaign'))){
 				return FALSE;
 			}
 			$update['$set']['criteria_type'] = $input['criteria_type'];

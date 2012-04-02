@@ -26,11 +26,11 @@ class Reward_lib
 		return $this->_add_reward_status($reward_item); 
 	}
 
-	function get_reward_items($page_id, $sort_criteria = NULL){
+	function get_reward_items($company_id, $sort_criteria = NULL){
 		$this->CI->load->model('reward_item_model','reward_item');
 		$criteria = array(
-			'criteria_type' => 'page',
-			'criteria_id' => $page_id
+			'criteria_type' => 'company',
+			'criteria_id' => $company_id
 		);
 		if(!$sort_criteria) $sort_criteria = array('start_timestamp' => -1);
 		$reward_items = $this->CI->reward_item->get($criteria, $sort_criteria);
@@ -38,11 +38,11 @@ class Reward_lib
 		return $reward_items;
 	}
 
-	function get_published_redeem_items($page_id, $sort_criteria = NULL){
+	function get_published_redeem_items($company_id, $sort_criteria = NULL){
 		$this->CI->load->model('reward_item_model','reward_item');
 		$criteria = array(
-			'criteria_type' => 'page',
-			'criteria_id' => $page_id,
+			'criteria_type' => 'company',
+			'criteria_id' => $company_id,
 			'type' => 'redeem',
 			'status' => 'published'
 		);
@@ -52,12 +52,12 @@ class Reward_lib
 		return $redeem_items;
 	}
 
-	function get_expired_redeem_items($page_id = NULL, $sort_criteria = NULL){
+	function get_expired_redeem_items($company_id = NULL, $sort_criteria = NULL){
 		$this->CI->load->model('reward_item_model','reward_item');
 		$now = time();
 		$criteria = array(
-			'criteria_type' => 'page',
-			'criteria_id' => $page_id,
+			'criteria_type' => 'company',
+			'criteria_id' => $company_id,
 			'type' => 'redeem',
 			'end_timestamp'=> array('$lt'=>$now)
 		);
@@ -67,12 +67,12 @@ class Reward_lib
 		return $redeem_items;
 	}
 
-	function get_active_redeem_items($page_id = NULL, $sort_criteria = NULL){
+	function get_active_redeem_items($company_id = NULL, $sort_criteria = NULL){
 		$this->CI->load->model('reward_item_model','reward_item');
 		$now = time();
 		$criteria = array(
-			'criteria_type' => 'page',
-			'criteria_id' => $page_id,
+			'criteria_type' => 'company',
+			'criteria_id' => $company_id,
 			'type' => 'redeem',
 			'start_timestamp' => array('$lte'=>$now), 
 			'end_timestamp'=> array('$gte'=>$now)
@@ -83,12 +83,12 @@ class Reward_lib
 		return $redeem_items;
 	}
 
-	function get_incoming_redeem_items($page_id = NULL, $sort_criteria = NULL){
+	function get_incoming_redeem_items($company_id = NULL, $sort_criteria = NULL){
 		$this->CI->load->model('reward_item_model','reward_item');
 		$now = time();
 		$criteria = array(
-			'criteria_type' => 'page',
-			'criteria_id' => $page_id,
+			'criteria_type' => 'company',
+			'criteria_id' => $company_id,
 			'type' => 'redeem',
 			'start_timestamp' => array('$gt'=>$now)
 		);
@@ -119,8 +119,10 @@ class Reward_lib
 				break;
 			}
 		}
+		$this->CI->load->model('page_model');
+		$page = $this->CI->page_model->get_page_profile_by_page_id($page_id);
 		$this->CI->load->library('app_component_lib');
-		if(!$this->CI->app_component_lib->redeem_page_score($page_id, $user['user_id'], $reward_item['redeem']['point'])){
+		if(!$this->CI->app_component_lib->redeem_page_score($page['company_id'], $page_id, $user['user_id'], $reward_item['redeem']['point'])){
 			return FALSE;
 		}
 		

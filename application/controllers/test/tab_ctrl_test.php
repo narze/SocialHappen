@@ -3,6 +3,7 @@
 define('User_id',1);
 define('User_facebook_id','713558190');
 define('User_facebook_id_2','713558191');
+define('Company_id',1);
 define('Page_id',1);
 define('Facebook_page_id', '116586141725712');
 define('App_install_id', 1);
@@ -303,8 +304,9 @@ class Tab_ctrl_test extends CI_Controller {
 
 	function get_page_score_1_test(){
 		$user_facebook_id = User_facebook_id;
+		$company_id = Company_id;
 		$page_id = Page_id;
-		$result = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id);
+		$result = $this->tab_ctrl->get_page_score($company_id, $page_id, $user_facebook_id);
 		$this->unit->run($result === FALSE, TRUE, "\$result", $result);
 	}
 
@@ -365,7 +367,8 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->load->model('user_model');
 		$user_id = $this->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
 		$this->load->model('page_model');
-		$page_id = $this->page_model->get_page_id_by_facebook_page_id($facebook_page_id);
+		$page = $this->page_model->get_page_profile_by_facebook_page_id($facebook_page_id);
+		$page_id = $page['page_id'];
 		// $stat_before = $this->achievement_stat_company_model->list_stat(array(
 		// 	'user_id' => (int) $user_id,
 		// 	'company_id' => 0
@@ -381,21 +384,23 @@ class Tab_ctrl_test extends CI_Controller {
 
 		$stat_after = $this->achievement_stat_company_model->list_stat(array(
 			'user_id' => (int) $user_id,
-			'company_id' => 0
+			'company_id' => (int) $page['company_id']
 		));
 		$this->unit->run($stat_after[0]['action'][114]['count'], 1, 'count $stat_after idempotent test', $stat_after[0]['action'][114]['count']);
 	}
 
 	function get_page_score_2_test(){ //after get invite page score : 
 		$user_facebook_id = User_facebook_id;
+		$company_id = Company_id;
 		$page_id = Page_id;
-		$result = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id);
+		$result = $this->tab_ctrl->get_page_score($company_id, $page_id, $user_facebook_id);
 		$this->unit->run($result, 100, "\$result", $result);
 	}
 
 	function page_leaderboard_test(){
 		$page_id = Page_id;
-		$result = $this->tab_ctrl->page_leaderboard($page_id);
+		$company_id = Company_id;
+		$result = $this->tab_ctrl->page_leaderboard($page_id, $company_id);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run($result['count'], 6, "\$result['count']", $result['count']);
 		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
@@ -408,26 +413,29 @@ class Tab_ctrl_test extends CI_Controller {
 	}
 
 	function page_leaderboard_fail_test(){
-		$result = $this->tab_ctrl->page_leaderboard(1234);
+		$company_id = Company_id;
+		$result = $this->tab_ctrl->page_leaderboard(1234, $company_id);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
 		$this->unit->run($result['error'], 'Page not found', "\$result['error']", $result['error']);
 	}
 
 	function get_campaign_score_test(){
 		$user_facebook_id = User_facebook_id;
+		$company_id = Company_id;
 		$page_id = Page_id;
 		$campaign_id = Campaign_id;
-		$result = $this->tab_ctrl->get_campaign_score($user_facebook_id, $page_id, $campaign_id);
+		$result = $this->tab_ctrl->get_campaign_score($company_id, $campaign_id, $user_facebook_id);
 		$this->unit->run($result === 100, TRUE, "\$result", $result);
 
-		$result = $this->tab_ctrl->get_campaign_score($user_facebook_id+1, $page_id, $campaign_id);
+		$result = $this->tab_ctrl->get_campaign_score($company_id+1, $campaign_id, $user_facebook_id);
 		$this->unit->run($result === FALSE, TRUE, "\$result", $result); //not found
 	}
 
 	function campaign_leaderboard_test(){
 		$campaign_id = Campaign_id;
 		$page_id = Page_id;
-		$result = $this->tab_ctrl->campaign_leaderboard($campaign_id, $page_id);
+		$company_id = Company_id;
+		$result = $this->tab_ctrl->campaign_leaderboard($campaign_id, $page_id, $company_id);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run($result['count'], 3, "\$result['count']", $result['count']);
 		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
@@ -441,18 +449,20 @@ class Tab_ctrl_test extends CI_Controller {
 
 	function get_app_score_test(){
 		$user_facebook_id = User_facebook_id;
+		$company_id = Company_id;
 		$page_id = Page_id;
 		$app_install_id = App_install_id;
-		$result = $this->tab_ctrl->get_app_score($user_facebook_id, $page_id, $app_install_id);
+		$result = $this->tab_ctrl->get_app_score($company_id, $app_install_id, $user_facebook_id);
 		$this->unit->run($result === 100, TRUE, "\$result", $result);
-		$result = $this->tab_ctrl->get_app_score($user_facebook_id+1, $page_id, $app_install_id);
+		$result = $this->tab_ctrl->get_app_score($company_id+1, $app_install_id, $user_facebook_id);
 		$this->unit->run($result === FALSE, TRUE, "\$result", $result);
 	}
 
 	function app_leaderboard_test(){
 		$app_install_id = App_install_id;
 		$page_id = Page_id;
-		$result = $this->tab_ctrl->app_leaderboard($app_install_id, $page_id);
+		$company_id = Company_id;
+		$result = $this->tab_ctrl->app_leaderboard($app_install_id, $page_id, $company_id);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run($result['count'], 3, "\$result['count']", $result['count']);
 		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
@@ -477,7 +487,7 @@ class Tab_ctrl_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/logo.png';
 		$value = '200THB';
@@ -499,7 +509,7 @@ class Tab_ctrl_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = '1';
 		$image = base_url().'assets/images/logo.png';
 		$value = '200THB';
@@ -521,7 +531,7 @@ class Tab_ctrl_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = '1';
 		$image = base_url().'assets/images/logo.png';
 		$value = '200THB';
@@ -543,7 +553,7 @@ class Tab_ctrl_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = '1';
 		$image = base_url().'assets/images/logo.png';
 		$value = '200THB';
@@ -565,7 +575,7 @@ class Tab_ctrl_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = '1';
 		$image = base_url().'assets/images/logo.png';
 		$value = '200THB';
@@ -597,8 +607,8 @@ class Tab_ctrl_test extends CI_Controller {
 
 	function redeem_list_test(){
 		$user_facebook_id = User_facebook_id;
-		$page_id = Page_id;
-		$result = $this->tab_ctrl->redeem_list($page_id, $user_facebook_id);
+		$company_id = Company_id;
+		$result = $this->tab_ctrl->redeem_list($company_id, $user_facebook_id);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run(count($result), 3, "\$result", count($result)); //redeem only
 		$this->unit->run($result[0]['name'], name.'1', "\$result[0]['name']", $result[0]['name']);
@@ -639,8 +649,8 @@ class Tab_ctrl_test extends CI_Controller {
 
 	function redeem_list_2_test(){
 		$user_facebook_id = User_facebook_id;
-		$page_id = Page_id;
-		$result = $this->tab_ctrl->redeem_list($page_id, $user_facebook_id);
+		$company_id = Company_id;
+		$result = $this->tab_ctrl->redeem_list($company_id, $user_facebook_id);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run(count($result), 3, "\$result", count($result)); //redeem only
 		$this->unit->run($result[0]['name'], name.'1', "\$result[0]['name']", $result[0]['name']);
@@ -667,13 +677,13 @@ class Tab_ctrl_test extends CI_Controller {
 
 
 	function redeem_reward_confirm_test(){
-		$page_id = Page_id;
+		$company_id = Company_id;
 		$reward_item_id = $this->reward_item_1;
 		$user_facebook_id = User_facebook_id;
-		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$result = $this->tab_ctrl->redeem_reward_confirm($company_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, TRUE, "\$result", $result); //100-20
 
-		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$result = $this->tab_ctrl->redeem_reward_confirm($company_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, FALSE, "\$result", $result); //can redeem once
 	}
 
@@ -693,57 +703,57 @@ class Tab_ctrl_test extends CI_Controller {
 
 	function redeem_reward_confirm_2_test(){
 
-		$page_id = Page_id;
+		$company_id = Company_id;
 		$reward_item_id = $this->reward_item_1;
 		$user_facebook_id = User_facebook_id;
-		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$result = $this->tab_ctrl->redeem_reward_confirm($company_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, TRUE, "\$result", $result); //80-20
-		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$result = $this->tab_ctrl->redeem_reward_confirm($company_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, TRUE, "\$result", $result); //60-20
-		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$result = $this->tab_ctrl->redeem_reward_confirm($company_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, FALSE, "\$result", $result); //no amount left
-		log_message('error',print_r($result, true));
+		// log_message('error',print_r($result, true));
 		$reward_item_id = $this->reward_item_2;
-		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$result = $this->tab_ctrl->redeem_reward_confirm($company_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, TRUE, "\$result", $result); //40-20
-		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$result = $this->tab_ctrl->redeem_reward_confirm($company_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, TRUE, "\$result", $result); //20-20
-		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
+		$result = $this->tab_ctrl->redeem_reward_confirm($company_id, $reward_item_id, $user_facebook_id);
 		$this->unit->run($result, FALSE, "\$result", $result); //no point left
 
 		//get action test
 		$this->load->model('audit_model');
 		$recent_audit = $this->audit_model->list_recent_audit(5);
 		$this->unit->run($recent_audit[0]['app_id'], 0, "\$recent_audit[0]['app_id']", $recent_audit[0]['app_id']);
-		$this->unit->run($recent_audit[0]['page_id'], $page_id, "\$recent_audit[0]['page_id']", $recent_audit[0]['page_id']);
+		$this->unit->run($recent_audit[0]['company_id'], $company_id, "\$recent_audit[0]['company_id']", $recent_audit[0]['company_id']);
 		$this->unit->run($recent_audit[0]['action_id'], 116, "\$recent_audit[0]['action_id']", $recent_audit[0]['action_id']);
 		$this->unit->run($recent_audit[0]['user_id'], User_id, "\$recent_audit[0]['user_id']", $recent_audit[0]['user_id']);
 		$this->unit->run($recent_audit[0]['object'], name.'2', "\$recent_audit[0]['object']", $recent_audit[0]['object']);
 		$this->unit->run($recent_audit[0]['objecti'], $this->reward_item_2, "\$recent_audit[0]['objecti']", $recent_audit[0]['objecti']);
 	
 		$this->unit->run($recent_audit[1]['app_id'], 0, "\$recent_audit[1]['app_id']", $recent_audit[1]['app_id']);
-		$this->unit->run($recent_audit[1]['page_id'], $page_id, "\$recent_audit[1]['page_id']", $recent_audit[1]['page_id']);
+		$this->unit->run($recent_audit[1]['company_id'], $company_id, "\$recent_audit[1]['company_id']", $recent_audit[1]['company_id']);
 		$this->unit->run($recent_audit[1]['action_id'], 116, "\$recent_audit[1]['action_id']", $recent_audit[1]['action_id']);
 		$this->unit->run($recent_audit[1]['user_id'], User_id, "\$recent_audit[1]['user_id']", $recent_audit[1]['user_id']);
 		$this->unit->run($recent_audit[1]['object'], name.'2', "\$recent_audit[1]['object']", $recent_audit[1]['object']);
 		$this->unit->run($recent_audit[1]['objecti'], $this->reward_item_2, "\$recent_audit[1]['objecti']", $recent_audit[1]['objecti']);
 	
 		$this->unit->run($recent_audit[2]['app_id'], 0, "\$recent_audit[2]['app_id']", $recent_audit[2]['app_id']);
-		$this->unit->run($recent_audit[2]['page_id'], $page_id, "\$recent_audit[2]['page_id']", $recent_audit[2]['page_id']);
+		$this->unit->run($recent_audit[2]['company_id'], $company_id, "\$recent_audit[2]['company_id']", $recent_audit[2]['company_id']);
 		$this->unit->run($recent_audit[2]['action_id'], 116, "\$recent_audit[2]['action_id']", $recent_audit[2]['action_id']);
 		$this->unit->run($recent_audit[2]['user_id'], User_id, "\$recent_audit[2]['user_id']", $recent_audit[2]['user_id']);
 		$this->unit->run($recent_audit[2]['object'], name.'1', "\$recent_audit[2]['object']", $recent_audit[2]['object']);
 		$this->unit->run($recent_audit[2]['objecti'], $this->reward_item_1, "\$recent_audit[2]['objecti']", $recent_audit[2]['objecti']);
 	
 		$this->unit->run($recent_audit[3]['app_id'], 0, "\$recent_audit[3]['app_id']", $recent_audit[3]['app_id']);
-		$this->unit->run($recent_audit[3]['page_id'], $page_id, "\$recent_audit[3]['page_id']", $recent_audit[3]['page_id']);
+		$this->unit->run($recent_audit[3]['company_id'], $company_id, "\$recent_audit[3]['company_id']", $recent_audit[3]['company_id']);
 		$this->unit->run($recent_audit[3]['action_id'], 116, "\$recent_audit[3]['action_id']", $recent_audit[3]['action_id']);
 		$this->unit->run($recent_audit[3]['user_id'], User_id, "\$recent_audit[3]['user_id']", $recent_audit[3]['user_id']);
 		$this->unit->run($recent_audit[3]['object'], name.'1', "\$recent_audit[3]['object']", $recent_audit[3]['object']);
 		$this->unit->run($recent_audit[3]['objecti'], $this->reward_item_1, "\$recent_audit[3]['objecti']", $recent_audit[3]['objecti']);
 	
 		$this->unit->run($recent_audit[4]['app_id'], 0, "\$recent_audit[4]['app_id']", $recent_audit[4]['app_id']);
-		$this->unit->run($recent_audit[4]['page_id'], $page_id, "\$recent_audit[4]['page_id']", $recent_audit[4]['page_id']);
+		$this->unit->run($recent_audit[4]['company_id'], $company_id, "\$recent_audit[4]['company_id']", $recent_audit[4]['company_id']);
 		$this->unit->run($recent_audit[4]['action_id'], 116, "\$recent_audit[4]['action_id']", $recent_audit[4]['action_id']);
 		$this->unit->run($recent_audit[4]['user_id'], User_id, "\$recent_audit[4]['user_id']", $recent_audit[4]['user_id']);
 		$this->unit->run($recent_audit[4]['object'], name.'1', "\$recent_audit[4]['object']", $recent_audit[4]['object']);

@@ -316,10 +316,12 @@ class Invite_component_lib {
 		}
 		$this->CI->load->model('page_model');
 		$this->CI->load->model('user_model');
-		if(!$page_id = $this->CI->page_model->get_page_id_by_facebook_page_id($facebook_page_id)){
+		if(!$page = $this->CI->page_model->get_page_profile_by_facebook_page_id($facebook_page_id)){
 			log_message('error', '_give_page_score_to_all_inviters : no page');
 			return FALSE;
 		}
+		$page_id = $page['page_id'];
+		$company_id = $page['company_id'];
 
 		$this->CI->load->library('audit_lib');
 		$this->CI->load->library('achievement_lib');
@@ -347,7 +349,7 @@ class Invite_component_lib {
 				'app_install_id' => 0,
 				'campaign_id' => $campaign_id
 			);
-			if(!$this->CI->achievement_lib->increment_achievement_stat(0, 0, $inviter_user_id, $achievement_info, 1)){
+			if(!$this->CI->achievement_lib->increment_achievement_stat($company_id, 0, $inviter_user_id, $achievement_info, 1)){
 				// log_message('error', 'no inc');
 				return FALSE;
 			}

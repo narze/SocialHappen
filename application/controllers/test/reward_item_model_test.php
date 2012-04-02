@@ -47,7 +47,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200THB';
@@ -119,7 +119,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200THB';
@@ -138,7 +138,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200THB';
@@ -157,7 +157,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200THB';
@@ -176,7 +176,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 1000;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200THB';
@@ -196,7 +196,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200THB';
@@ -236,7 +236,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = NULL;
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200THB';
@@ -259,7 +259,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = NULL;
 		$value = '200THB';
@@ -274,7 +274,7 @@ class Reward_item_model_test extends CI_Controller {
 
 		$name = name . '1';
 		$status = 'draft';
-		$type = redeem;
+ 		$type = redeem;
 		$redeem = array(
 			'point' => 20,
 			'amount' => 5,
@@ -282,7 +282,7 @@ class Reward_item_model_test extends CI_Controller {
 		);
 		$start_timestamp = time() + 3600;
 		$end_timestamp = time() + 7200;
-		$criteria_type = 'page';
+		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '';
@@ -305,7 +305,7 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result['start_timestamp'], time() + 3600, "\$result['start_timestamp']", $result['start_timestamp']);
 		$this->unit->run($result['end_timestamp'], time() + 7200, "\$result['end_timestamp']", $result['end_timestamp']);
 		$this->unit->run($result['status'], 'draft', "\$result['status']", $result['status']);
-		$this->unit->run($result['criteria_type'], 'page', "\$result['criteria_type']", $result['criteria_type']);
+		$this->unit->run($result['criteria_type'], 'company', "\$result['criteria_type']", $result['criteria_type']);
 		$this->unit->run($result['criteria_id']===1, TRUE, "\$result['criteria_id']", $result['criteria_id']);
 		$this->unit->run(isset($result['reward_id']), FALSE, "\$result['reward_id']", isset($result['reward_id']));
 		$this->unit->run($result['image'], base_url().'assets/images/cam-icon.png', "\$result['image']", $result['image']);
