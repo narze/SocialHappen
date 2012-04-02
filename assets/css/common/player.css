@@ -2,6 +2,9 @@ body {
   position: relative;
   padding-top: 90px;
 }
+a:hover {
+	cursor:pointer;
+}
 .btn {
 	font-weight:bold;
 }

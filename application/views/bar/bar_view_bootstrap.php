@@ -81,7 +81,7 @@
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu mega-dropdown-menu user">
-								<li><a onclick="fblogin();">&raquo; Login</a></li>
+								<li><a onclick="shlogin();" href="<?php echo base_url('player/login'); ?>">&raquo; Login</a></li>
 								<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 							</ul>
 						</li><?php 
@@ -89,7 +89,7 @@
 					else 
 					{ ?>
 						<li>
-							<a onclick="fblogin();" href="player/login">&raquo; Login</a>
+							<a onclick="shlogin();" href="<?php echo base_url('player/login'); ?>">&raquo; Login</a>
 							<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->
 						</li><?php 
 					}
