@@ -94,6 +94,11 @@ class Action_data_lib {
    * @param challenge_id string
    */
 	function add_qr_action_data($data_from_form) {
+	  if(!isset($data_from_form['done_message'])
+     || !isset($data_from_form['todo_message'])
+     || !isset($data_from_form['challenge_id'])){
+       return FALSE;
+     }
 		$action_id = $this->get_platform_action('qr');
 		$qr_data = array(
 			//Book : redefine your data here
@@ -106,6 +111,10 @@ class Action_data_lib {
 	
   function get_qr_url($code = NULL){
     return $code ? base_url() . 'actions/qr/?code=' . $code : NULL;
+  }
+  
+  function get_proceed_qr_url($code = NULL){
+    return $code ? base_url() . 'actions/qr/go/' . $code : NULL;
   }
   
 	function add_feedback_action_data($data_from_form) {
