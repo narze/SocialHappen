@@ -27,7 +27,7 @@ class Feedback extends CI_Controller {
 	}
 
 	function add_user_data_feedback(){
-		print_r($this->input->post());
+		//print_r($this->input->post());
 		
 		$user_feedback = $this->input->post('user_feedback');
 		$user_score = $this->input->post('user_score');
@@ -36,19 +36,26 @@ class Feedback extends CI_Controller {
 		$_GET['code'] = $action_data_hash;
 		$action_data = $this->action_data_lib->get_action_data_from_code();
 
+		$this->load->library('challenge_lib');
+		$challenge = $this->challenge_lib->get_one(
+													array( 
+														'criteria.action_data_id' => get_mongo_id($action_data)
+													)
+												);
+		
 		$user = $this->socialhappen->get_user();
-	
-		if($user_feedback && $user_score && $action_data && $user) {
+		
+		if($user_feedback && $user_score && $action_data && $user && $challenge) {
 			$user_data = array(
 								'user_feedback' => $user_feedback,
 								'user_score' => (int) $user_score,
 							);
 
 			if($result = $this->action_user_data_lib->add_action_user_data(
-																1, //missing
+																$challenge['company_id'],
 																$action_data['action_id'],
 																get_mongo_id($action_data), 
-																'dummychallengeid', //mising
+																get_mongo_id($challenge),
 																$user['user_id'],
 																$user_data
 				)){
