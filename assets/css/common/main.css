@@ -157,6 +157,23 @@ div.popup_payment, div.popup_payment-complete
 	border:none!important;
 	border-radius: 0 	!important;
 }
+.popup_login {
+	width:350px;
+	padding:0 10px;
+}
+.popup_login .notice { line-height:30px; margin:5px auto; padding:0 10px!important; border:1px solid #999;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; position:relative; }
+.popup_login .notice.error { background-color:#ffc7c1; border-color:#e4aaa5; }
+.popup_login p {
+	margin-bottom:9px;
+}
+.popup_login label {
+	line-height:24px;
+}
+.popup_login input[type="text"],
+.popup_login input[type="password"] {
+	padding:3px;
+	width:340px;
+}
 h2.in-popup {
 	font-size: 24px;
 	font-family: Myriad Pro;
