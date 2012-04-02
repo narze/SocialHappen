@@ -2,6 +2,9 @@ body {
   position: relative;
   padding-top: 90px;
 }
+a:hover {
+	cursor:pointer;
+}
 .btn {
 	font-weight:bold;
 }
@@ -25,7 +28,7 @@ body {
 
 .navbar .dropdown-menu.mega-dropdown-menu {
 	background-color: #2C2C2C;
-border-color: #CCC;
+	border-color: #CCC;
 	padding: 0;
 }
 .navbar .dropdown-menu.mega-dropdown-menu>li:first-child a {

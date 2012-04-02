@@ -61,6 +61,14 @@ class Action_data_lib {
 	function get_action_data($action_data_id) {
 		return $this->CI->action_data_model->getOne(array('_id' => new MongoId($action_data_id)));
 	}
+  
+  function get_action_data_by_code($action_data_code) {
+    if(!$action_data_code){
+      return NULL;
+    }else{
+      return $this->CI->action_data_model->getOne(array('hash' => $action_data_code));
+    }
+  }
 
 	function get_action_url($action_data_id) {
 		if($action_data = $this->get_action_data($action_data_id)) {
@@ -78,18 +86,35 @@ class Action_data_lib {
 		$hash = $this->CI->input->get('code');
 		return $this->CI->action_data_model->getOne(array('hash' => $hash));
 	}
-
+  
+  
+  /**
+   * @param qr_done_message html
+   * @param todo_message html
+   * @param challenge_id string
+   */
 	function add_qr_action_data($data_from_form) {
+	  if(!isset($data_from_form['done_message'])
+     || !isset($data_from_form['todo_message'])
+     || !isset($data_from_form['challenge_id'])){
+       return FALSE;
+     }
 		$action_id = $this->get_platform_action('qr');
 		$qr_data = array(
 			//Book : redefine your data here
-			'qr_message' => $data_from_form['qr_message']
+			'done_message' => $data_from_form['done_message'],
+			'todo_message' => $data_from_form['todo_message'],
+			'challenge_id' => $data_from_form['challenge_id']
 		);
 		return $this->add_action_data($action_id, $qr_data);
 	}
 	
-  function get_qr_url($_id = NULL){
-    return $_id ? base_url() . 'actions/qr/go/' . $_id : NULL;
+  function get_qr_url($code = NULL){
+    return $code ? base_url() . 'actions/qr/?code=' . $code : NULL;
+  }
+  
+  function get_proceed_qr_url($code = NULL){
+    return $code ? base_url() . 'actions/qr/go/' . $code : NULL;
   }
   
 	function add_feedback_action_data($data_from_form) {
