@@ -143,9 +143,12 @@ class Action_data_lib_test extends CI_Controller {
   
 	function add_feedback_action_data_test() {
 		$form_data = array(
-			'feedback_welcome_message' => 'What do you think about our store?',
-			'feedback_thankyou_message' => 'Thank you, please come again',
-		);
+						'feedback_welcome_message' => 'Dear, Our Customer',
+						'feedback_question_message' => 'What do you think about our store?',
+						'feedback_vote_message' => 'Please provide your satisfaction score',
+						'feedback_thankyou_message' => 'Thank you, please come again',
+					);
+		
 		$result = $this->action_data_lib->add_feedback_action_data($form_data);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 		$this->another_feedback_action_data_id = $result;

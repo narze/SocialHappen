@@ -120,8 +120,9 @@ class Action_data_lib {
 	function add_feedback_action_data($data_from_form) {
 		$action_id = $this->get_platform_action('feedback');
 		$feedback_data = array(
-			//Phnx : redefine your data here
 			'feedback_welcome_message' => $data_from_form['feedback_welcome_message'],
+			'feedback_question_message' => $data_from_form['feedback_question_message'],
+			'feedback_vote_message' => $data_from_form['feedback_vote_message'],
 			'feedback_thankyou_message' => $data_from_form['feedback_thankyou_message']
 		);
 		return $this->add_action_data($action_id, $feedback_data);
