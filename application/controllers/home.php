@@ -367,17 +367,28 @@ class Home extends CI_Controller {
 				);
 				$this->session->set_userdata($userdata);
 
-				if(isset($redirect_url)){
-					redirect($redirect_url);
-				} else if($next = $this->input->get('next')){
-					redirect($next);
+				if($this->input->is_ajax_request()) {
+					echo 'logged-in';
 				} else {
-					redirect('?logged_in=true');
+					if(isset($redirect_url)){
+						redirect($redirect_url);
+					} else if($next = $this->input->get('next')){
+						redirect($next);
+					} else {
+						redirect('?logged_in=true');
+					}
 				}
+
+				
 			}
 			else
 			{
-				redirect('home/signup?from=login');
+				if($this->input->is_ajax_request()) {
+					$data['login_failed'] = true;
+					$this->load->view('home/login_view', $data);
+				} else {
+					redirect('home/signup?from=login');
+				}
 			}
 		}
 	}

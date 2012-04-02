@@ -54,12 +54,29 @@ endif;
 				if (response.authResponse) {
 						fblogin();
 				} else { //Not login facebook
+					function bindLoginForm () {
+						$('#merchant_login_form .bt-continue').click(function () {
+							$('#merchant_login_form').ajaxSubmit({
+								success:function (result) {
+									//console.log($(result).hasClass('.logged-in'));
+									if(result == 'logged-in') {
+										window.location.replace(base_url+'?logged_in=true');
+									} else {
+										$('.popup_login').replaceWith(result);
+										bindLoginForm();
+									}
+								}
+							});
+							return false;
+						});
+					}
 					$.fancybox({ //TODO : change to bootstrap modal box
 						href: base_url+'home/login'<?php echo issetor($next); ?>,
 						transitionIn: 'elastic',
 						transitionOut: 'elastic',
 						//padding: 0,
-						scrolling: 'no'
+						scrolling: 'no',
+						onComplete:bindLoginForm
 					});
 					return false;
 				}

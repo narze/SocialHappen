@@ -50,7 +50,7 @@
 			</li>
 			<?php } else { ?>
 			<li class="fb">
-				<a onclick="fblogin();">&raquo; Login</a>
+				<a onclick="shlogin();">&raquo; Login</a>
 				<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->
 			</li>
 			<?php } ?>

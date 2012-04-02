@@ -169,7 +169,7 @@ $(function(){
 		
 		$('.notice a.close').live('click', function() {
 			$(this).parent().hide();
-		});
+		});	
 
 		function loadCompany () {
 			var template = $('.goto ul li:first-child');
