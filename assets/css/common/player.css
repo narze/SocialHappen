@@ -1,6 +1,6 @@
 body {
   position: relative;
-  padding-top: 90px;
+  padding-top: 60px;
 }
 a:hover {
 	cursor:pointer;
@@ -21,7 +21,7 @@ a:hover {
 	width: 125px;
 	background-image: url(../../images/social-happen.png);
 	background-repeat:no-repeat;
-	background-position:center center;
+	background-position:center 60%;
 	text-indent:-9000px;
 	color:transparent;
 }

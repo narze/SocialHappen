@@ -46,6 +46,10 @@ class Challenge_lib {
 			return FALSE;
 		}
 		$data = array_cast_int($data);
+
+		$challenge_id = get_mongo_id($challenge);
+		$data['hash'] = strrev(sha1($challenge_id));
+
 		return $this->CI->challenge_model->update($criteria, $data);
 	}
 

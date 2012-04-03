@@ -16,7 +16,7 @@
 				<li><a href="#">About</a></li>
 				<li><a href="#">FAQ</a></li>
 				-->
-				<?php if(isset($user) && $user) { ?>
+				<?php if(isset($user) && $user['user_is_player'] == 0) { ?>
 				<li class="divider-vertical"></li>
 				<li class="dropdown">
 					<a href="#" class="goto dropdown-toggle" data-toggle="dropdown">Go to <b class="caret"></b></a>

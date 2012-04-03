@@ -58,4 +58,12 @@ class Challenge_model extends CI_Model {
 		return $this->collection->remove($query, array('$atomic' => TRUE));
 	}
 	//End of basic functions
+
+	/**
+	 * Get all companies that have challenge
+	 */
+	function get_distinct_company() {
+		$result = $this->mongo_db->command(array("distinct" => "challenge", "key" => "company_id"));
+		return $result['ok'] ? $result['values'] : array();
+	}
 }

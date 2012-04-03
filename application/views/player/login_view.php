@@ -37,7 +37,7 @@
 
         <div class="control-group">
           <button type="submit" class="btn btn-primary">Login</button>
-          or <?php echo anchor('player/signup', 'Signup Socialhappen'); ?>
+          or <?php echo anchor('player/signup'.$next, 'Signup Socialhappen'); ?>
         </div>
 
         
