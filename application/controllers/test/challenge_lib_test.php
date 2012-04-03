@@ -356,4 +356,9 @@ class Challenge_lib_test extends CI_Controller {
 		// $this->unit->run(count($all_challenge), 0, "count(\$all_challenge)", count($all_challenge));
 	}
 
+	function get_distinct_company_test() {
+		$result = $this->challenge_lib->get_distinct_company();
+		$this->unit->run($result, array(1), "\$result", $result);
+	}
+
 }

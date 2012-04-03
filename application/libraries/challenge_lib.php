@@ -239,4 +239,8 @@ class Challenge_lib {
 			return FALSE;
 		}
 	}
+
+	function get_distinct_company() {
+		return $this->CI->challenge_model->get_distinct_company();
+	}
 }
