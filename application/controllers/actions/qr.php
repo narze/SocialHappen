@@ -30,17 +30,24 @@ class QR extends CI_Controller {
         }
       }
       
+      $challenge_id = $action['data']['challenge_id'];
+      $this->load->library('challenge_lib');
+      $challenge = $this->challenge_lib->get_one(array(
+        '_id' => new MongoId($challenge_id)
+      ));
+      
       if($valid_session){
+        $challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
         
-        $challenge_id = $action['challenge_id'];
-        
-        $this->load->library('challenge_lib');
-        $challenge = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+        if(!$challenge){
+          show_error('Invalid Challenge');
+          return;
+        }
         
         /**
          * check if user joined challenge
          */
-        if($challenge){
+        if($challenge_progress){
           /**
            * @todo : render challenge with proceed button
            *         go to actions/qr/go/{code} when click proceed
@@ -69,7 +76,7 @@ class QR extends CI_Controller {
          */
         $data = array(
           'challenge' => $challenge,
-          'login_url' => site_url('/player/login/?next='. site_url($this->uri->uri_string()))
+          'login_url' => site_url('/player/login/?next='. site_url($this->uri->uri_string()).'?code='.$code)
         );
 
         $this->load->view('actions/qr/qr_challenge_login_view', $data);
@@ -112,12 +119,7 @@ class QR extends CI_Controller {
       
       // $current_url = site_url($this->uri->uri_string());
       $url = $this->action_data_lib->get_qr_url($code);
-      redirect($code);
+      redirect($url);
     }
 	}
-  
-  function authen(){
-    // we do authen here, or use global mobile authentication page
-    echo 'authen';
-  }
 }
