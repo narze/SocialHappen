@@ -114,16 +114,28 @@ class Challenge_lib {
 			$challenge_id = get_mongo_id($challenge);
 	  	$match_all_criteria = TRUE;
 	  	$is_in_progress = FALSE;
+			$company_id = $challenge['company_id'];
 			foreach($challenge['criteria'] as $criteria){
 				$query = $criteria['query'];
 				$count = $criteria['count'];
-				$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
-				//Query in progress challenge
-				$stat_criteria = array(
-					'app_id' => $query['app_id'],
-					'user_id' => $user_id,
-					$action_query => array('$gt' => 0)
-				);
+				if(isset($criteria['is_platform_action']) && $criteria['is_platform_action']) {
+					$query['action_id'] = $query['platform_action_id'];
+					$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+					//Query in progress challenge
+					$stat_criteria = array(
+						'app_id' => 0,
+						'user_id' => $user_id,
+						$action_query => array('$gt' => 0)
+					);
+				} else {
+					$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+					//Query in progress challenge
+					$stat_criteria = array(
+						'app_id' => $query['app_id'],
+						'user_id' => $user_id,
+						$action_query => array('$gt' => 0)
+					);
+				}
 
 			  $matched_in_progress_achievement_stat = 
 					$this->CI->achievement_stat->list_stat($stat_criteria);
@@ -192,17 +204,26 @@ class Challenge_lib {
 		foreach ($criterias as $criteria) {
 			$query = $criteria['query'];
 			$target_count = $criteria['count'];
-			$page_id = $query['page_id'];
-			$this->CI->load->model('page_model');
-			$page = $this->CI->page_model->get_page_profile_by_page_id($page_id);
-			$company_id = $page['company_id'];
-			$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
-			//Query in progress challenge
-			$stat_criteria = array(
-				'app_id' => $query['app_id'],
-				'user_id' => $user_id,
-				$action_query => array('$gte' => 0)
-			);
+			if(isset($criteria['is_platform_action']) && $criteria['is_platform_action']) {
+				$company_id = $challenge['company_id'];
+				$query['action_id'] = $query['platform_action_id'];
+				$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+				//Query in progress challenge
+				$stat_criteria = array(
+					'app_id' => 0,
+					'user_id' => $user_id,
+					$action_query => array('$gte' => 0)
+				);
+			} else {
+				$company_id = $challenge['company_id'];
+				$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+				//Query in progress challenge
+				$stat_criteria = array(
+					'app_id' => $query['app_id'],
+					'user_id' => $user_id,
+					$action_query => array('$gte' => 0)
+				);
+			}
 			$action = array();
 
 			$this->CI->load->model('achievement_stat_model', 'achievement_stat');
