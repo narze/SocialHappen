@@ -10,7 +10,8 @@ class Feedback extends CI_Controller {
 	
 	function index() {
 		$action_data = $this->action_data_lib->get_action_data_from_code();
-		$user = $this->socialhappen->get_user();
+		
+		$user = $this->_get_user_data();
 
 		if($action_data && is_array($action_data) && $user){
 			//print_r($user);
@@ -43,7 +44,7 @@ class Feedback extends CI_Controller {
 													)
 												);
 		
-		$user = $this->socialhappen->get_user();
+		$user = $this->_get_user_data();
 		
 		if($user_feedback && $user_score && $action_data && $user && $challenge) {
 			$user_data = array(
@@ -70,6 +71,24 @@ class Feedback extends CI_Controller {
 			$this->load->view('actions/feedback/feedback_finish', $data);
 		}else{
 			show_error('Invalid data');
+		}
+		
+	}
+
+	function _get_user_data(){
+		$user = $this->socialhappen->get_user();
+
+		if(!$user){
+			if($user_facebook_id = $this->FB->getUser()){
+				$this->load->model('user_model');
+				$user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_id);
+			}
+		}
+
+		if($user){
+			return $user;
+		}else{
+			return NULL;
 		}
 		
 	}
