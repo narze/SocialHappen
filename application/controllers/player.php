@@ -20,7 +20,7 @@ class Player extends CI_Controller {
 		$data = array(
 			'header' => $this -> socialhappen -> get_header_bootstrap( 
 				array(
-					'title' => 'Applications',
+					'title' => 'Player',
 					'script' => array(
 						//'common/functions',
 						//'common/jquery.form',
@@ -66,7 +66,7 @@ class Player extends CI_Controller {
 		$data = array(
 			'header' => $this -> socialhappen -> get_header_bootstrap( 
 				array(
-					'title' => 'Applications',
+					'title' => 'Signup',
 					'script' => array(
 						//'common/functions',
 						//'common/jquery.form',
@@ -178,7 +178,7 @@ class Player extends CI_Controller {
 		$data = array(
 			'header' => $this -> socialhappen -> get_header_bootstrap( 
 				array(
-					'title' => 'Applications',
+					'title' => 'Login',
 					'script' => array(
 						//'common/functions',
 						//'common/jquery.form',
