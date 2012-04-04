@@ -6,8 +6,8 @@
 class Action_data_lib {
 
 	private $platform_actions = array(
-		'qr' => 201,
-		'feedback' => 202
+		'qr' => array('id' => 201, 'add_method' => 'add_qr_action_data'),
+		'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data')
 	);
 
 	function __construct() {
@@ -17,23 +17,42 @@ class Action_data_lib {
 
 	function get_platform_action($action_name = NULL) {
 		if($action_name) {
-			return issetor($this->platform_actions[$action_name]);
+			return issetor($this->platform_actions[$action_name]['id']);
 		} else {
 			return $this->platform_actions;
 		}
 	}
 
+	/**
+	 * used by page_challenge ctrlr
+	 */
 	function add_action_data($action_id = NULL, $action_data = NULL) {
 		if(!$action_id || !$action_data) {
 			return FALSE;
 		}
 
-		if(!in_array($action_id, $this->platform_actions)) {
+		$action_name = NULL;
+		foreach ($this->platform_actions as $an => $platform_action) {
+			if($action_id == $platform_action['id']){
+				$action_name = $an;
+				break;
+			}
+		}
+
+		if(!$action_name) {
 			return FALSE;
 		}
 
 		//TODO : action data validation (different in each action id)
+		
+		return $this->_add_action_data($action_id, $action_data);
 
+	}
+
+	/**
+	 * used by internal method (each action_data adding)
+	 */
+	function _add_action_data($action_id = NULL, $action_data = NULL){
 		$add_record = array(
 			'action_id' => $action_id,
 			'hash' => NULL,
@@ -72,7 +91,16 @@ class Action_data_lib {
 
 	function get_action_url($action_data_id) {
 		if($action_data = $this->get_action_data($action_data_id)) {
-			if($controller_name = array_search($action_data['action_id'], $this->platform_actions)) {
+
+			$controller_name = NULL;
+			foreach ($this->platform_actions as $action_name => $platform_action) {
+				if($action_data['action_id'] == $platform_action['id']){
+					$controller_name = $action_name;
+					break;
+				}
+			}
+
+			if($controller_name) {
 				return base_url().'actions/'.$controller_name.'?code='.strrev(sha1($action_data_id));
 			} else {
 				return FALSE;
@@ -106,7 +134,7 @@ class Action_data_lib {
 			'todo_message' => $data_from_form['todo_message'],
 			'challenge_id' => $data_from_form['challenge_id']
 		);
-		return $this->add_action_data($action_id, $qr_data);
+		return $this->_add_action_data($action_id, $qr_data);
 	}
 	
   function get_qr_url($code = NULL){
@@ -125,7 +153,7 @@ class Action_data_lib {
 			'feedback_vote_message' => $data_from_form['feedback_vote_message'],
 			'feedback_thankyou_message' => $data_from_form['feedback_thankyou_message']
 		);
-		return $this->add_action_data($action_id, $feedback_data);
+		return $this->_add_action_data($action_id, $feedback_data);
 	}
 	
 }

@@ -62,12 +62,40 @@ class Feedback extends CI_Controller {
 				)){
 
 				//platform action goes here
+				$this->load->library('audit_lib');
+				$audit_data = array(
+										'user_id' => $user['user_id'],
+										'action_id' => $action_data['action_id'],
+										'app_id' => 0,
+										'app_install_id' => 0,
+										'page_id' => 0,
+										'company_id' => $challenge['company_id'],
+										'subject' => NULL,
+										'object' => $challenge['detail']['name'],
+										'objecti' => NULL,
+										//'additional_data' => $additional_data
+									);
+				$audit_result = $this->audit_lib->audit_add($audit_data);
 
+				$this->CI->load->library('achievement_lib');
+				$info = array(
+								'action_id'=> $action_data['action_id'],
+								'app_install_id'=> 0, 
+								'page_id' => 0
+							);
+				$achievement_result = $this->CI->achievement_lib->
+										increment_achievement_stat($challenge['company_id'], 0, $user['user_id'], $info, 1);
+
+			}
+
+			if(!$$audit_result || !$achievement_result){
+				$action_data['data']['feedback_thankyou_message'] = 'Something\'s broken please try again later' ;
 			}
 
 			$data = array(
 							'action_data' => $action_data
 						);
+			
 			$this->load->view('actions/feedback/feedback_finish', $data);
 		}else{
 			show_error('Invalid data');
