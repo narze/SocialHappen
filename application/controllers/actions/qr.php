@@ -43,6 +43,8 @@ class QR extends CI_Controller {
           show_error('Invalid Challenge');
           return;
         }
+        $player_challenging = isset($user['challenge']) && in_array($challenge['hash'], $user['challenge']);
+        
         
         /**
          * check if user joined challenge
@@ -52,22 +54,66 @@ class QR extends CI_Controller {
            * @todo : render challenge with proceed button
            *         go to actions/qr/go/{code} when click proceed
            */
+          $this->load->vars(
+            array(
+              'challenge_hash' => $challenge['hash'],
+              'challenge' => $challenge,
+              'player_logged_in' => $this->socialhappen->is_logged_in(),
+              'player_challenging' => $player_challenging,
+              'challenge_progress' => $challenge_progress,
+              'challenge_done' => FALSE,
+              'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
+            )
+          );
           $data = array(
+            'header' => $this -> socialhappen -> get_header_bootstrap( 
+              array(
+                'title' => $challenge['detail']['name'],
+                'script' => array(
+                  'common/bar',
+                ),
+                'style' => array(
+                  'common/player',
+                )
+              )
+            ),
             'challenge' => $challenge,
             'proceed_url' => $this->action_data_lib->get_proceed_qr_url($code)
           );
 
-          $this->load->view('actions/qr/qr_challenge_proceed_view', $data);
+          $this->parser->parse('actions/qr/qr_challenge_proceed_view', $data);
         }else{
           /**
            * @todo : render challenge with join challenge button
            */
+          $this->load->vars(
+            array(
+              'challenge_hash' => $challenge['hash'],
+              'challenge' => $challenge,
+              'player_logged_in' => $this->socialhappen->is_logged_in(),
+              'player_challenging' => $player_challenging,
+              // 'challenge_progress' => $challenge_progress,
+              'challenge_done' => FALSE,
+              'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
+            )
+          );
           $data = array(
+            'header' => $this -> socialhappen -> get_header_bootstrap( 
+              array(
+                'title' => $challenge['detail']['name'],
+                'script' => array(
+                  'common/bar',
+                ),
+                'style' => array(
+                  'common/player',
+                )
+              )
+            ),
             'challenge' => $challenge,
             'join_url' => site_url('/player/join_challenge/' . $challenge['hash'] . '/?next='. site_url($this->uri->uri_string()))
           );
 
-          $this->load->view('actions/qr/qr_challenge_join_view', $data);
+          $this->parser->parse('actions/qr/qr_challenge_join_view', $data);
         }
         
       }else{
