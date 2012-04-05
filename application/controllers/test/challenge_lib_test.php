@@ -65,6 +65,25 @@ class Challenge_lib_test extends CI_Controller {
 			),
 		);
 
+		$this->challenge3 = array(
+			'company_id' => 1,
+			'start' => time(),
+			'end' => time() + 86400,
+			'detail' => array(
+				'name' => 'Challenge name',
+				'description' => 'Challenge description',
+				'image' => 'Challenge image url'
+			),
+			'criteria' => array(
+				array(
+					'name' => 'C3',
+					'query' => array('platform_action_id' => 201),
+					'count' => 2,
+					'is_platform_action' => TRUE
+				)
+			)
+		);
+
 		$this->achievement_stat1 = array(
 			'action_id' => 1,
 			'page_id' => 1,
@@ -77,6 +96,12 @@ class Challenge_lib_test extends CI_Controller {
 			'page_id' => 1,
 			'company_id' => 1,
 			'app_install_id' => 2
+		);
+
+		$this->achievement_stat3 = array(
+			'action_id' => 201,
+			'company_id' => 1,
+			'app_install_id' => 0
 		);
 	}
 
@@ -97,12 +122,16 @@ class Challenge_lib_test extends CI_Controller {
 		$result = $this->challenge_lib->add($this->challenge2);
 		$this->unit->run($result, TRUE, "\$result", $result);
 		$this->challenge_id2 = $result;
+
+		$result = $this->challenge_lib->add($this->challenge3);
+		$this->unit->run($result, TRUE, "\$result", $result);
+		$this->challenge_id3 = $result;
 	}
 
 	function get_test() {
 		$criteria = array('company_id' => '1');
 		$result = $this->challenge_lib->get($criteria);
-		$this->unit->run(count($result), 2, "\$result", count($result));
+		$this->unit->run(count($result), 3, "\$result", count($result));
 		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
 		$this->unit->run($result[0]['detail']['name'], 'Challenge name', "\$result[0]['detail']['name']", $result[0]['detail']['name']);
 		$this->unit->run($result[0]['hash'], strrev(sha1($this->challenge_id)), "\$result[0]['hash']", $result[0]['hash']);
@@ -131,15 +160,14 @@ class Challenge_lib_test extends CI_Controller {
 				'end' => time()
 			)
 		);
-		$result = $this->challenge_lib->update($criteria, $update);echo '<pre>';
-		echo '</pre>';
+		$result = $this->challenge_lib->update($criteria, $update);
 		$this->unit->run($result, FALSE, "\$result", $result); // end < start
 	}
 
 	function get_updated_test() {
 		$criteria = array('company_id' => '1');
 		$result = $this->challenge_lib->get($criteria);
-		$this->unit->run(count($result), 2, "\$result", count($result));
+		$this->unit->run(count($result), 3, "\$result", count($result));
 		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
 		$this->unit->run($result[0]['start'], time() + 86400, "\$result[0]['start']", $result[0]['start']);
 		
@@ -282,6 +310,46 @@ class Challenge_lib_test extends CI_Controller {
 		//Count again
 	  $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
 		$this->unit->run($count, 2, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+		
+		$this->load->library('achievement_lib');
+		$app_id = 0;
+		$user_id = 1;
+		$company_id = 1;
+		$inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
+			$this->achievement_stat3);
+		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
+
+		$result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
+		$expected_result = array(
+			'success' => TRUE, //no error checking challenges
+			'completed' => array($this->challenge_id, $this->challenge_id2), //get completed challenge id
+			'in_progress' => array($this->challenge_id3)
+		);
+		$this->unit->run($result, $expected_result, "\$result", $result);
+
+		//Count again
+	  $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
+		$this->unit->run($count, 2, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+		
+		$this->load->library('achievement_lib');
+		$app_id = 0;
+		$user_id = 1;
+		$company_id = 1;
+		$inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
+			$this->achievement_stat3);
+		$this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
+
+		$result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
+		$expected_result = array(
+			'success' => TRUE, //no error checking challenges
+			'completed' => array($this->challenge_id, $this->challenge_id2, $this->challenge_id3), //get completed challenge id
+			'in_progress' => array()
+		);
+		$this->unit->run($result, $expected_result, "\$result", $result);
+
+		//Count again
+	  $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
+		$this->unit->run($count, 3, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
 	}
 
 	function get_challenge_progress_test_2() {
@@ -320,8 +388,8 @@ class Challenge_lib_test extends CI_Controller {
 		$user_id = 1;
 		$this->load->library('user_lib');
 		$user = $this->user_lib->get_user($user_id);
-		$this->unit->run($user['challenge_redeeming'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
-		$this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_completed']", $user['challenge_completed']);
+		$this->unit->run($user['challenge_redeeming'], array($this->challenge_id,$this->challenge_id2,$this->challenge_id3), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
+		$this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2,$this->challenge_id3), "\$user['challenge_completed']", $user['challenge_completed']);
 	}
 
 	function redeem_challenge_test() {
@@ -343,8 +411,8 @@ class Challenge_lib_test extends CI_Controller {
 		$user_id = 1;
 		$this->load->library('user_lib');
 		$user = $this->user_lib->get_user($user_id);
-		$this->unit->run($user['challenge_redeeming'], array($this->challenge_id2), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
-		$this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_completed']", $user['challenge_completed']);
+		$this->unit->run($user['challenge_redeeming'], array($this->challenge_id2,$this->challenge_id3), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
+		$this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2,$this->challenge_id3), "\$user['challenge_completed']", $user['challenge_completed']);
 	}
 
 	function remove_test() {
@@ -354,6 +422,11 @@ class Challenge_lib_test extends CI_Controller {
 
 		// $all_challenge = $this->challenge_lib->get(array());
 		// $this->unit->run(count($all_challenge), 0, "count(\$all_challenge)", count($all_challenge));
+	}
+
+	function get_distinct_company_test() {
+		$result = $this->challenge_lib->get_distinct_company();
+		$this->unit->run($result, array(1), "\$result", $result);
 	}
 
 }

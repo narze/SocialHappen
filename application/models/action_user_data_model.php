@@ -1,20 +1,29 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Challenge_model extends CI_Model {
+class Action_user_data_model extends CI_Model {
 
 	function __construct() {
 		parent::__construct();
 		$this->load->helper('mongodb');
-		$this->collection = $this->challenge = sh_mongodb_load( array(
-			'collection' => 'challenge'
+		$this->collection = $this->action_user_data = sh_mongodb_load( array(
+			'collection' => 'action_user_data'
 		));
 		$this->int_values = array('company_id');
+		$this->int_values = array('action_id');
+		$this->int_values = array('user_id');
 	}
-
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
 		return $this->collection->deleteIndexes() 
-			&& $this->collection->ensureIndex(array('company_id' => 1));
+			&& $this->collection->ensureIndex(
+												array(
+													'company_id' => 1,
+													'challenge_id' => 1,
+													'action_id' => 1,
+													'action_data_id' => 1,
+													'user_id' => 1
+												)
+											);
 	}
         
 	function add($data)
@@ -58,12 +67,4 @@ class Challenge_model extends CI_Model {
 		return $this->collection->remove($query, array('$atomic' => TRUE));
 	}
 	//End of basic functions
-
-	/**
-	 * Get all companies that have challenge
-	 */
-	function get_distinct_company() {
-		$result = $this->mongo_db->command(array("distinct" => "challenge", "key" => "company_id"));
-		return $result['ok'] ? $result['values'] : array();
-	}
 }

@@ -26,9 +26,9 @@ class Action_data_lib_test extends CI_Controller {
 
 	function get_platform_action_test() {
 		$expect = array(
-			'qr' => 201,
-			'feedback' => 202
-		);
+					'qr' => array('id' => 201, 'add_method' => 'add_qr_action_data'),
+					'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data')
+				);
 		$result = $this->action_data_lib->get_platform_action();
 		$this->unit->run($result, $expect, "\$result", $result);
 		
@@ -89,7 +89,9 @@ class Action_data_lib_test extends CI_Controller {
 
 	function add_qr_action_data_test() {
 		$form_data = array(
-			'qr_message' => 'You have completed this rally point!',
+			'done_message' => 'You have completed this rally point!',
+			'todo_message' => 'You have to check in',
+			'challenge_id' => 'id'
 			// 'qr_url' => base_url().'actions/qr/blahblah?somevar=somecodethatuserwillenter',
 		);
 		$result = $this->action_data_lib->add_qr_action_data($form_data);
@@ -105,7 +107,8 @@ class Action_data_lib_test extends CI_Controller {
 		$expect = array(
 			'action_id' => QR_ACTION_ID,
 			'hash' => strrev(sha1($this->another_qr_action_data_id)),
-			'data' => $form_data
+			'data' => $form_data,
+      'challenge_id' => 'id'
 		);
 		$_GET['code'] = strrev(sha1($this->another_qr_action_data_id));
 		$result = $this->action_data_lib->get_action_data_from_code();
@@ -118,8 +121,14 @@ class Action_data_lib_test extends CI_Controller {
     $this->unit->run($result['hash'], $expect['hash'],
      "\$result['hash']", $result['hash']);
      
-    $this->unit->run($result['data']['qr_message'], $expect['data']['qr_message'],
-     "\$result['data']['qr_message']", $result['data']['qr_message']);
+    $this->unit->run($result['data']['done_message'], $expect['data']['done_message'],
+     "\$result['data']['done_message']", $result['data']['done_message']);
+     
+    $this->unit->run($result['data']['todo_message'], $expect['data']['todo_message'],
+     "\$result['data']['todo_message']", $result['data']['todo_message']);
+    
+    $this->unit->run($result['data']['challenge_id'], $expect['data']['challenge_id'],
+     "\$result['data']['challenge_id']", $result['data']['challenge_id']);
 	}
   
   function get_qr_url_test(){
@@ -128,15 +137,18 @@ class Action_data_lib_test extends CI_Controller {
     $this->unit->run($result, $expect, '\$url', $result);
     
     $result = $this->action_data_lib->get_qr_url('4f746aca6803fa3365000057');
-    $expect = base_url() . 'actions/qr/go/4f746aca6803fa3365000057';
+    $expect = base_url() . 'actions/qr/?code=4f746aca6803fa3365000057';
     $this->unit->run($result, $expect, '\$url', $result);
   }
   
 	function add_feedback_action_data_test() {
 		$form_data = array(
-			'feedback_welcome_message' => 'What do you think about our store?',
-			'feedback_thankyou_message' => 'Thank you, please come again',
-		);
+						'feedback_welcome_message' => 'Dear, Our Customer',
+						'feedback_question_message' => 'What do you think about our store?',
+						'feedback_vote_message' => 'Please provide your satisfaction score',
+						'feedback_thankyou_message' => 'Thank you, please come again',
+					);
+		
 		$result = $this->action_data_lib->add_feedback_action_data($form_data);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 		$this->another_feedback_action_data_id = $result;

@@ -48,31 +48,65 @@ endif;
 			xfbml: true,
 		 	oauth: true
 		});
-		FB.getLoginStatus(function(response) {
-		  	window.fblogin = function () {
-				FB.login(function(response) {
-					if (response.status === 'connected') { //console.log('response',response);
-						$.getJSON(base_url+"api/request_login?user_facebook_id=" + response.authResponse.userID
-						// +'&access_token='+response.authResponse.accessToken 
-						, function(json){ 
-							if(json.status != 'OK'){
-								window.location.replace(base_url+"home/signup");
-							} else {
-								<?php if(issetor($next)): ?>
-									window.location.replace('<?php echo $next; ?>');
-								<?php else : ?>
-									window.location.replace(window.location.href+"?logged_in=true");
-								<?php endif; ?>
-							}
+
+		shlogin = function () {
+			FB.getLoginStatus(function(response) {
+				if (response.authResponse) {
+						fblogin();
+				} else { //Not login facebook
+					function bindLoginForm () {
+						$('#merchant_login_form .bt-continue').click(function () {
+							$('#merchant_login_form').ajaxSubmit({
+								success:function (result) {
+									//console.log($(result).hasClass('.logged-in'));
+									if(result == 'logged-in') {
+										window.location.replace(base_url+'?logged_in=true');
+									} else {
+										$('.popup_login').replaceWith(result);
+										bindLoginForm();
+									}
+								}
+							});
+							return false;
 						});
 					}
-				}, {scope:'<?php echo $facebook_default_scope ; ?>'});
-			};
-		});
+					$.fancybox({ //TODO : change to bootstrap modal box
+						href: base_url+'home/login'<?php echo issetor($next); ?>,
+						transitionIn: 'elastic',
+						transitionOut: 'elastic',
+						//padding: 0,
+						scrolling: 'no',
+						onComplete:bindLoginForm
+					});
+					return false;
+				}
+			});
+		}
+
+		fblogin = function () {
+			FB.login(function(response) {
+				if (response.status === 'connected') { //console.log('response',response);
+					$.getJSON(base_url+"api/request_login?user_facebook_id=" + response.authResponse.userID
+					// +'&access_token='+response.authResponse.accessToken 
+					, function(json){ 
+						if(json.status != 'OK'){
+							window.location.replace(base_url+"home/signup");
+						} else {
+							<?php if(issetor($next)): ?>
+								window.location.replace('<?php echo $next; ?>');
+							<?php else : ?>
+								window.location.replace(window.location.href+"?logged_in=true");
+							<?php endif; ?>
+						}
+					});
+				}
+			}, {scope:'<?php echo $facebook_default_scope ; ?>'});
+		}
+
+
 	  };
 
-	  
-	 // Load the SDK Asynchronously
+	  // Load the SDK Asynchronously
 	  (function(d){
 	     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
 	     js = d.createElement('script'); js.id = id; js.async = true;

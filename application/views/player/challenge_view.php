@@ -1,53 +1,54 @@
-<h1 id="challenge-name"><?php echo $challenge['detail']['name'];?></h1>
-<p id="challenge-description"><?php echo $challenge['detail']['description'];?></p>
-<img id="challenge-image" src="<?php echo $challenge['detail']['image'];?>" alt="<?php echo $challenge['detail']['name'];?>" />
-<ul id="challenge-criteria-list">
-	<?php if($challenge['criteria']) 
-	{
-		foreach($challenge['criteria'] as $key => $criteria) : ?>
-		<?php if($challenge_progress) {
-			echo '<p>Challenge progress :</p><pre>Debug ';
-			var_export($challenge_progress[$key]);
-			echo '</pre>';
+{header}
+	<div class="container-fluid">
+
+		<?php 
+		if($challenge) 
+		{ ?>
+			<div class="page-header">
+				<h1 class="challenge-name"><?php echo $challenge['detail']['name'];?></h1>
+			</div><?php
+
+			if($challenge_done) { ?>
+				<div class="alert alert-info">
+					<b>Challenge complete!</b>
+					<?php if($redeem_pending) { echo ' Please show this to merchant'; }
+					else {} // echo ' You have redeem this challenge's reward; ?>
+				</div><?php
+			} ?>
+				
+
+				<div class="row-fluid">
+					<p>
+						<img class="challenge-image" src="<?php echo $challenge['detail']['image'] ? $challenge['detail']['image'] : base_url('assets/images/default/challenge.png'); ?>" alt="<?php echo $challenge['detail']['name'];?>">
+					</p>
+					<p><?php echo $challenge['start_time'].' - '.$challenge['end_time']; ?></p>
+					<p class="challenge-description "><?php echo $challenge['detail']['description']; ?></p>
+				</div>
+
+				<div class="reward row-fluid">
+					<p>Reward:</p>
+
+				</div>
+
+				<div class="row-fluid">
+					<?php if(!$player_logged_in) : 
+						$next_url = "player/challenge/{$challenge_hash}"; ?>
+						<div id="login">
+							<p id="login-message">Please Login SocialHappen First</p>
+							<a href="<?php echo base_url().'player/login?next='.urlencode($next_url);?>" class="btn btn-primary" id="login-btn">Login</a>
+						</div>
+					<?php elseif(!$player_challenging) : ?>
+						<a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" id="join-challenge">Accept challenge</a>
+					<?php else : //player logged in and is challenging ?>
+						<a href="<?php echo base_url().'player/challenge_actions/'.$challenge_hash;?>" class="btn btn-primary">View actions</a><?php
+					endif; ?>
+				</div><?php
+
+		} else { ?>
+			<div class="alert alert-error">
+				Challenge not found
+			</div><?php
 		} ?>
-		<li id="challenge-criteria">
-			<?php 
-				var_export($criteria);
-			?>
-			<div class="criteria-name">Name : <?php echo $criteria['name'];?></div>
-			<div class="criteria-count">Count : <?php echo $challenge_progress[$key]['action_count'].'/'.$criteria['count'];?></div>
-			<div class="criteria-done">Done ? : <?php echo $challenge_progress[$key]['action_done'] ? 'Done' : 'Not done';?></div>
-			<?php if($player_logged_in && $player_challenging) : ?>
-				<div class="">
-					<a type="button" href="<?php echo base_url().'player/challenge_action/'.$challenge['hash'].'/'.$key;?>" class="criteria-link">Do this action</a>
-				</div>
-			<?php elseif($player_logged_in) : ?>
-				<div class="">
-					Please join to this challenge below
-				</div>
-			<?php endif; ?>
-		</li><?php 
-		endforeach; 
-	} ?>
-</ul>
-<?php if(!$player_logged_in) : 
-	$next_url = "player/challenge/{$challenge_hash}";
-	?>
-	<div id="login">
-		<p id="login-message">Please Login SocialHappen First</p>
-		<a href="<?php echo base_url().'player/login?next='.urlencode($next_url);?>" id="login-btn">LOGIN</a>
+
 	</div>
-<?php elseif(!$player_challenging) : ?>
-	<a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" id="join-challenge">join this challenge</a>
-<?php else : //player logged in and is challenging
-	if($challenge_done) {
-		echo 'Challenge done!!';
-		if($redeem_pending) {
-			echo ' Please show this to merchant';
-		} else {
-			// echo ' You have redeem this challenge's reward;
-		}
-	} else {
-		echo 'This challenge is not done yet';
-	}
-endif;
+

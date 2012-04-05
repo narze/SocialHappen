@@ -37,7 +37,7 @@
 
         <div class="control-group">
           <button type="submit" class="btn btn-primary">Login</button>
-          or <?php echo anchor('player/signup', 'Signup Socialhappen'); ?>
+          or <?php echo anchor('player/signup'.$next, 'Signup Socialhappen'); ?>
         </div>
 
         
@@ -54,7 +54,7 @@
             <?php if($facebook_user) : ?>
               <span>You're logged in as <?php echo $facebook_user['name'];?> <img src="<?php echo 'https://graph.facebook.com/'.$facebook_user['id'].'/picture';?>" /></span>
             <?php else : ?>
-              <a onclick="fblogin();" href="#" id="fblogin"><img src="<?php echo base_url('images/fb-login.jpg'); ?>" alt="Login with facebook"></a>
+              <a onclick="fblogin();" id="fblogin"><img src="<?php echo base_url('images/fb-login.jpg'); ?>" alt="Login with facebook"></a>
             <?php endif; ?>
           </div>
         </div>

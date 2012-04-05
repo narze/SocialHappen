@@ -20,7 +20,7 @@ class Player extends CI_Controller {
 		$data = array(
 			'header' => $this -> socialhappen -> get_header_bootstrap( 
 				array(
-					'title' => 'Applications',
+					'title' => 'Player',
 					'script' => array(
 						//'common/functions',
 						//'common/jquery.form',
@@ -36,9 +36,18 @@ class Player extends CI_Controller {
 						//'common/fancybox/jquery.fancybox-1.3.4'
 					)
 				)
-			),
-			'user' => $user
+			)
 		);
+
+		//get company
+		$this->load->model('challenge_model');
+		$companies = $this->challenge_model->get_distinct_company();
+		$this->load->model('company_model');
+		foreach ($companies as &$company_id) {
+			$company_id = $this->company_model->get_company_profile_by_company_id($company_id);
+		}
+		$this->load->vars('companies', $companies);
+
 
 		if(isset($user['user_facebook_id']) && isset($user['user_facebook_access_token'])) {
 			$facebook_connected = TRUE;
@@ -66,7 +75,7 @@ class Player extends CI_Controller {
 		$data = array(
 			'header' => $this -> socialhappen -> get_header_bootstrap( 
 				array(
-					'title' => 'Applications',
+					'title' => 'Signup',
 					'script' => array(
 						//'common/functions',
 						//'common/jquery.form',
@@ -149,7 +158,13 @@ class Player extends CI_Controller {
 				{
 					// echo 'Player added';
 					$this->socialhappen->player_login($user_id);
-					redirect('player');
+
+					$next = $this->input->get('next');
+					if($next) {
+						redirect($next);
+					} else {
+						redirect('player');
+					}
 				}
 				else
 				{
@@ -176,9 +191,9 @@ class Player extends CI_Controller {
 		}
 
 		$data = array(
-			'header' => $this -> socialhappen -> get_header_bootstrap( 
+			'header' => $this->socialhappen->get_header_bootstrap( 
 				array(
-					'title' => 'Applications',
+					'title' => 'Login',
 					'script' => array(
 						//'common/functions',
 						//'common/jquery.form',
@@ -256,17 +271,41 @@ class Player extends CI_Controller {
 			}
 		}
 	}
-
+	
 	/**
 	 * View all challenges
 	 */
-	function challenge_list() {
-		if($this->socialhappen->is_logged_in()) {
+	function challenge_list($company_id) {
+		if($this->socialhappen->is_logged_in() && $company_id) {
+			
+			
+
+			$this->load->model('company_model');
 			$this->load->model('challenge_model');
+			$company = $this->company_model->get_company_profile_by_company_id($company_id);
 			//TODO : List player's challenges, not all challenges
-			$challenges = $this->challenge_model->get(array());
-			$this->load->vars('challenges', $challenges);
-			$this->load->view('player/challenge_list_view');
+			$this->load->vars(
+				array(
+					'company' => $company,
+					'challenges' => $this->challenge_model->get(array('company_id' => (int) $company_id))
+				)
+			);
+
+			$data = array(
+				'header' => $this->socialhappen->get_header_bootstrap( 
+					array(
+						'title' => $company['company_name'],
+						'script' => array(
+							'common/bar',
+						),
+						'style' => array(
+							'common/player',
+						)
+					)
+				)
+			);
+
+			$this->parser->parse('player/challenge_list_view', $data);
 		} else {
 			redirect('player');
 		}
@@ -301,23 +340,98 @@ class Player extends CI_Controller {
 	function challenge($challenge_hash) {
 		$this->load->model('challenge_model');
 		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-			echo '<pre>';
-			var_dump($challenge);
-			echo '</pre>';
+			//echo '<pre>'; var_dump($challenge); echo '</pre>';
 			$challenge_id = get_mongo_id($challenge);
 			$this->load->library('user_lib');
 			$user_id = $this->socialhappen->get_user_id();
 			$user = $this->user_lib->get_user($user_id);
 			$player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
 			
-			$this->load->library('challenge_lib');
-			$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
-			$challenge_done = TRUE;
-			foreach($challenge_progress as $action) {
-				if(!$action['action_done']) {
-					$challenge_done = FALSE;
+			
+			//challenge_progress
+			if($user_id) {
+				$this->load->library('challenge_lib');
+				$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+				$challenge_done = TRUE;
+				foreach($challenge_progress as $action) {
+					if(!$action['action_done']) {
+						$challenge_done = FALSE;
+					}
 				}
+			} else {
+				$challenge_done = FALSE;
 			}
+			
+			//Challenge Duration
+			if($current_user = $this->socialhappen->get_user($user_id)) {
+				$this->load->library('timezone_lib');
+				$challenge['start_time'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $current_user['user_timezone_offset']);
+				$challenge['end_time'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['end']), $current_user['user_timezone_offset']);
+
+			} else {
+				$challenge['start_time'] = date('Y-m-d H:i:s', $challenge['start']);
+				$challenge['end_time'] = date('Y-m-d H:i:s', $challenge['end']);
+			}
+
+			$this->load->vars(
+				array(
+					'challenge_hash' => $challenge_hash,
+					'challenge' => $challenge,
+					'player_logged_in' => $this->socialhappen->is_logged_in(),
+					'player_challenging' => $player_challenging,
+					'challenge_done' => $challenge_done,
+					'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
+				)
+			);
+
+			$data = array(
+				'header' => $this->socialhappen->get_header_bootstrap( 
+					array(
+						'title' => $challenge['detail']['name'],
+						'script' => array(
+							'common/bar',
+						),
+						'style' => array(
+							'common/player',
+						)
+					)
+				)
+			);
+
+			$this->parser->parse('player/challenge_view', $data);
+		} else {
+			show_error('Challenge Invalid', 404);
+		}
+	}
+
+	/**
+	 * Challenge action
+	 */
+	function challenge_actions($challenge_hash) {
+		$this->load->model('challenge_model');
+		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+			
+			$challenge_id = get_mongo_id($challenge);
+			$this->load->library('user_lib');
+			$user_id = $this->socialhappen->get_user_id();
+			$user = $this->user_lib->get_user($user_id);
+			$player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
+			
+			//challenge_progress
+			if($user_id) {
+				$this->load->library('challenge_lib');
+				$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+				$challenge_done = TRUE;
+				foreach($challenge_progress as $action) {
+					if(!$action['action_done']) {
+						$challenge_done = FALSE;
+					}
+				}
+			} else {
+				$challenge_progress = FALSE;
+				$challenge_done = FALSE;
+			}
+
 			$this->load->vars(
 				array(
 					'challenge_hash' => $challenge_hash,
@@ -329,7 +443,22 @@ class Player extends CI_Controller {
 					'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
 				)
 			);
-			$this->load->view('player/challenge_view');
+
+			$data = array(
+				'header' => $this -> socialhappen -> get_header_bootstrap( 
+					array(
+						'title' => $challenge['detail']['name'],
+						'script' => array(
+							'common/bar',
+						),
+						'style' => array(
+							'common/player',
+						)
+					)
+				)
+			);
+
+			$this->parser->parse('player/challenge_actions_view', $data);
 		} else {
 			show_error('Challenge Invalid', 404);
 		}

@@ -43,6 +43,41 @@ class Bar extends CI_Controller {
 			}
 		}
 	}
+
+	/**
+	 * Create company form
+	 * @author Manassarn M. , Weerapat P.
+	 */
+	function create_company_bootstrap(){
+		$this->socialhappen->check_logged_in();
+		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
+		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');
+			
+		$this->form_validation->set_error_delimiters('<span class="help-inline">', '</span>');
+	
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->load->view('bar/create_company_view_bootstrap');
+		}
+		else 
+		{
+			$user_id = $this->socialhappen->get_user_id();
+			$company_name = set_value('company_name');
+			$company_detail = set_value('company_detail');
+    	 	$company_image = $this->socialhappen->upload_image('company_image');
+			$input = compact('user_id', 'company_name', 'company_detail' ,'company_image');
+			$result = $this->bar_ctrl->create_company($input);
+
+			if($result['success']){
+				$data['created'] = TRUE;
+				$data['redirect'] = base_url('company/'.$result['data']['company_id']);
+				$this->load->view('bar/create_company_view_bootstrap', $data);
+			} else {
+				$this->load->vars('error', $result['error']);
+				$this->load->view('bar/create_company_view_bootstrap');
+			}
+		}
+	}
 	
 	/**
 	 * Select company page

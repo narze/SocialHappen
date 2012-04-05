@@ -16,7 +16,7 @@
 				<li><a href="#">About</a></li>
 				<li><a href="#">FAQ</a></li>
 				-->
-				<?php if(isset($user) && $user) { ?>
+				<?php if(isset($user) && $user['user_is_player'] == 0) { ?>
 				<li class="divider-vertical"></li>
 				<li class="dropdown">
 					<a href="#" class="goto dropdown-toggle" data-toggle="dropdown">Go to <b class="caret"></b></a>
@@ -25,11 +25,11 @@
 							<img class="company-image" src="" alt="">
 							<p class="company-name"><a href="#">Company name</a></p>
 							<p class="page-name">&raquo; <a href="#">Page name</a></p>
-							<p class="no-page">No page yet<br /><button href="#" type="button" class="btn btn-primary">Add new page</button></p>
+							<p class="no-page">No page yet<br /><a href="#">+add new page</a></p>
 						</li>
 						<?php if($user_can_create_company) { ?>
 						<li class="create-company">
-							<button class="bt-create_company btn btn-primary">Create Company</button>
+							<button type="button" class="bt-create_company btn btn-primary">Create Company</button>
 						</li>
 						<?php } ?>
 					</ul>
@@ -45,8 +45,8 @@
 				{ ?>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<img class="user-image" src="<?php echo imgsize("https://graph.facebook.com/{$facebook_user['id']}/picture",'square');?>" alt="" />
-							<?php echo issetor($facebook_user['name']); ?>
+							<img class="user-image" src="<?php echo $user['user_image'] ? imgsize(issetor($user['user_image']),'square') : base_url('assets/images/default/user.png');?>" alt="" />
+							<?php echo $user['user_first_name'].' '.$user['user_last_name']; ?>
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu mega-dropdown-menu user">
@@ -72,7 +72,7 @@
 				} 
 				else 
 				{
-					if(isset($facebook_user)) 
+					if(isset($facebook_user) && $facebook_user) 
 					{ ?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -81,16 +81,15 @@
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu mega-dropdown-menu user">
-								<li><a onclick="fblogin();" href="#" >&raquo; Login</a></li>
+								<li><a onclick="shlogin();" href="<?php echo base_url('player/login'); ?>">&raquo; Login</a></li>
 								<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 							</ul>
 						</li><?php 
 					} 
 					else 
 					{ ?>
-						<li class="fb">
-							<?php $next = isset($_GET['next']) ? '?next='.urlencode($_GET['next']) : NULL; ?>
-							<a href="home/login<?php echo $next; ?>" id="bar-login">&raquo; Login</a>
+						<li>
+							<a onclick="shlogin();" href="<?php echo base_url('player/login'); ?>">&raquo; Login</a>
 							<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->
 						</li><?php 
 					}

@@ -1316,6 +1316,8 @@ class DB_Sync {
 			'achievement_user',
 			'achievement_stat_page',
 			'achievement_stat_company',
+			'action_data',
+			'action_user_data',
 			'app_component',
 			'app_component_homepage',
 			'app_component_page',
@@ -1583,6 +1585,26 @@ class DB_Sync {
 				'stat_page' => TRUE,
 				'stat_campaign' => FALSE,
 				'format_string' => 'User {user:user_id} redeemed {string:object} from page {page:page_id}',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 201,
+				'description' => 'QR',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} entered QR code',
+				'score' => 0
+			),
+			array(
+				'app_id' => 0,
+				'action_id' => 202,
+				'description' => 'Feedback',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} gave feedback for {string:object}',
 				'score' => 0
 			),
 		);

@@ -43,15 +43,14 @@
 				<?php echo issetor($facebook_user['name']); ?>
 				<ul>
 					<li>
-						<a onclick="fblogin();" href="#" >&raquo; Login</a>
+						<a onclick="fblogin();" >&raquo; Login</a>
 					</li>
 					<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 				</ul>
 			</li>
 			<?php } else { ?>
 			<li class="fb">
-				<?php $next = isset($_GET['next']) ? '?next='.urlencode($_GET['next']) : NULL; ?>
-				<a href="home/login<?php echo $next; ?>" id="bar-login">&raquo; Login</a>
+				<a onclick="shlogin();">&raquo; Login</a>
 				<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->
 			</li>
 			<?php } ?>

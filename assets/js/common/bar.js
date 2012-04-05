@@ -1,17 +1,5 @@
 $(function(){
 
-	$('#bar-login').live('click', function() {
-		$.fancybox({
-			href: base_url+'home/login',
-			transitionIn: 'elastic',
-			transitionOut: 'elastic',
-			//padding: 0,
-			scrolling: 'no',
-			//onComplete: label
-		});
-		return false;
-	});
-
 	if($('.navbar').length > 0) //For new bar (bootstrap)
 	{
 		var fetching_notification = false;
@@ -55,8 +43,38 @@ $(function(){
 					}
 				});
 			}
-			if(create_company.length > 0) $('.companies').append(create_company);
-			$('.companies li:last-child').addClass('last-child');
+			if(create_company.length > 0) {
+
+				$('.companies').append(create_company);
+
+				function create_company_submit () {
+					$('.create-company-submit').click(function(){
+						$('#create-company-form').die('submit');
+						$('#create-company-form').ajaxSubmit({
+							success: function (result) {
+								var success = $(result).find('.alert-success');
+								$('.modal-body').replaceWith($(result).find('.modal-body'));
+								if(success.length > 0) {
+									//console.log(success);
+									window.location = success.attr('data-redirect');
+								} else {
+									create_company_submit();
+								}
+							}
+						});
+					});
+				}
+
+				$('.bt-create_company').click(function(){
+					$.get(base_url+'bar/create_company_bootstrap', function(popup){
+						popup = $(popup);
+						$('body').append(popup.hide());
+						popup.modal('show');
+						create_company_submit();
+					});
+					return false;
+				});
+			}
 		}
 
 		function toggleNotification_in_bootstrap(){
@@ -151,7 +169,7 @@ $(function(){
 		
 		$('.notice a.close').live('click', function() {
 			$(this).parent().hide();
-		});
+		});	
 
 		function loadCompany () {
 			var template = $('.goto ul li:first-child');
