@@ -18,17 +18,27 @@ class Apiv2 extends CI_Controller {
   }
   
   /**
-   * user signup application
+   * user sign up application
    * 
    * @POST
    * 
-   * @param app_id
-   * @param app_install_id
-   * @param app_install_secret_key
+   * @param app_id [required]
+   * @param app_install_id [required]
+   * @param app_install_secret_key [required]
    * 
-   * @param email
-   * @param password
-   * @param facebook_user_id
+   * @param user_email [required]
+   * @param user_password [required]
+   * @param user_facebook_id [required]
+   * @param user_first_name
+   * @param user_last_name
+   * @param user_image
+   * @param user_facebook_access_token
+   * @param user_gender_id
+   * @param user_birth_date
+   * @param user_about
+   * @param user_twitter_name
+   * @param user_phone
+   * @param user_gender
    */
   function signup(){
     /**
@@ -38,9 +48,9 @@ class Apiv2 extends CI_Controller {
     $input['app_install_id'] = $this->input->post('app_install_id');
     $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
     
-    $input['email'] = $this->input->post('email');
-    $input['password'] = $this->input->post('password');
-    $input['facebook_user_id'] = $this->input->post('facebook_user_id');
+    $input['user_email'] = $this->input->post('user_email');
+    $input['user_password'] = $this->input->post('user_password');
+    $input['user_facebook_id'] = $this->input->post('user_facebook_id');
     
     $result = $this->apiv2_lib->signup($input);
     
@@ -62,11 +72,11 @@ class Apiv2 extends CI_Controller {
    * 
    * @POST
    * 
-   * @param app_id
-   * @param app_install_id
-   * @param app_install_secret_key
+   * @param app_id [required]
+   * @param app_install_id [required]
+   * @param app_install_secret_key [required]
    * 
-   * @param facebook_user_id
+   * @param user_facebook_id [required]
    */
   function play_app(){
     /**
@@ -76,7 +86,7 @@ class Apiv2 extends CI_Controller {
     $input['app_install_id'] = $this->input->post('app_install_id');
     $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
     
-    $input['facebook_user_id'] = $this->input->post('facebook_user_id');
+    $input['user_facebook_id'] = $this->input->post('user_facebook_id');
     
     $result = $this->apiv2_lib->join_app($input);
     
@@ -98,11 +108,11 @@ class Apiv2 extends CI_Controller {
    * 
    * @POST
    * 
-   * @param app_id
-   * @param app_install_id
-   * @param app_install_secret_key
+   * @param app_id [required]
+   * @param app_install_id [required]
+   * @param app_install_secret_key [required]
    * 
-   * @param facebook_user_id
+   * @param user_facebook_id [required]
    */
   function get_user(){
     /**
@@ -112,7 +122,7 @@ class Apiv2 extends CI_Controller {
     $input['app_install_id'] = $this->input->post('app_install_id');
     $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
     
-    $input['facebook_user_id'] = $this->input->post('facebook_user_id');
+    $input['$user_facebook_id'] = $this->input->post('user_facebook_id');
     
     $result = $this->apiv2_lib->get_user($input);
     
