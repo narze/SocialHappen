@@ -72,11 +72,11 @@ class Apiv2 extends CI_Controller {
     /**
      * post
      */
-    $input['$app_id'] = $this->input->post('app_id');
-    $input['$app_install_id'] = $this->input->post('app_install_id');
-    $input['$app_install_secret_key'] = $this->input->post('app_install_secret_key');
+    $input['app_id'] = $this->input->post('app_id');
+    $input['app_install_id'] = $this->input->post('app_install_id');
+    $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
     
-    $input['$facebook_user_id'] = $this->input->post('facebook_user_id');
+    $input['facebook_user_id'] = $this->input->post('facebook_user_id');
     
     $result = $this->apiv2_lib->join_app($input);
     
@@ -108,11 +108,11 @@ class Apiv2 extends CI_Controller {
     /**
      * post
      */
-    $input['$app_id'] = $this->input->post('app_id');
-    $input['$app_install_id'] = $this->input->post('app_install_id');
-    $input['$app_install_secret_key'] = $this->input->post('app_install_secret_key');
+    $input['app_id'] = $this->input->post('app_id');
+    $input['app_install_id'] = $this->input->post('app_install_id');
+    $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
     
-    $input['$facebook_user_id'] = $this->input->post('facebook_user_id');
+    $input['facebook_user_id'] = $this->input->post('facebook_user_id');
     
     $result = $this->apiv2_lib->get_user($input);
     
