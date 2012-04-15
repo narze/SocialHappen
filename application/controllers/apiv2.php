@@ -88,7 +88,7 @@ class Apiv2 extends CI_Controller {
     
     $input['user_facebook_id'] = $this->input->post('user_facebook_id');
     
-    $result = $this->apiv2_lib->join_app($input);
+    $result = $this->apiv2_lib->play_app($input);
     
     if($result){
       echo json_encode(array(
