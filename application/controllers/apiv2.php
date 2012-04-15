@@ -122,7 +122,7 @@ class Apiv2 extends CI_Controller {
     $input['app_install_id'] = $this->input->post('app_install_id');
     $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
     
-    $input['$user_facebook_id'] = $this->input->post('user_facebook_id');
+    $input['user_facebook_id'] = $this->input->post('user_facebook_id');
     
     $result = $this->apiv2_lib->get_user($input);
     
