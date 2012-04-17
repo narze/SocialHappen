@@ -287,19 +287,19 @@ class App_component_lib
    * @param amount
    * @return result
    */
-  function redeem_page_score($page_id = NULL, $user_id = NULL, $amount = 0){
+  function redeem_page_score($company_id = NULL, $page_id = NULL, $user_id = NULL, $amount = 0){
     if(!isset($page_id) || !isset($user_id)){
       return FALSE;
     }
     $amount = (int) $amount;
     $amount = 0 - abs($amount);
     $this->CI->load->library('achievement_lib');
-    $page_stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
-    $current_score = $page_stat['page_score'];
+    $page_stat = $this->CI->achievement_lib->get_company_stat($company_id, $user_id);
+    $current_score = issetor($page_stat['page'][$page_id]['score']);
     if(abs($amount) > $current_score){ // not enough page score to redeem
       return FALSE;
     }else{
-      return $this->CI->achievement_lib->increment_page_score($page_id, $user_id, $amount);
+      return $this->CI->achievement_lib->increment_page_score($company_id, $page_id, $user_id, $amount);
     }
   }
 

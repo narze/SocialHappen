@@ -26,12 +26,14 @@ class Page_reward extends CI_Controller {
 			$this->load->library('timezone_lib');
 			$this->load->library('reward_lib');
 			$now = time();
-			
+		
+			$this->load->model('page_model');
+			$page = $this->page_model->get_page_profile_by_page_id($page_id);
+			$company_id = $page['company_id'];
 			if(($sort = $this->input->get('sort')) && $sort === 'status'){
-				
-				$reward_item_active = $this->reward_lib->get_active_redeem_items($page_id);
-				$reward_item_incoming = $this->reward_lib->get_incoming_redeem_items($page_id);
-				$reward_item_expired = $this->reward_lib->get_expired_redeem_items($page_id);
+				$reward_item_active = $this->reward_lib->get_active_redeem_items($company_id);
+				$reward_item_incoming = $this->reward_lib->get_incoming_redeem_items($company_id);
+				$reward_item_expired = $this->reward_lib->get_expired_redeem_items($company_id);
 				$reward_items = array_merge($reward_item_active, $reward_item_incoming, $reward_item_expired);
 			} else if($sort && ($order = $this->input->get('order'))){
 				if($order == 'desc'){
@@ -42,9 +44,9 @@ class Page_reward extends CI_Controller {
 				$sort_criteria = array(
 					$sort => $order
 				);
-				$reward_items = $this->reward_lib->get_reward_items($page_id, $sort_criteria);
+				$reward_items = $this->reward_lib->get_reward_items($company_id, $sort_criteria);
 			} else {
-				$reward_items = $this->reward_lib->get_reward_items($page_id, $sort_criteria);
+				$reward_items = $this->reward_lib->get_reward_items($company_id, $sort_criteria);
 			}
 
 			foreach($reward_items as &$reward_item){

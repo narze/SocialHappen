@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		require_once 'MockMe.php';
 		use \Mockery as m;
+define('Company_id', 1);
 class Invite_component_lib_test extends CI_Controller {
 
 	private $invite_key1 = NULL;
@@ -419,7 +420,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$page_id = $this->page_model->get_page_id_by_facebook_page_id($facebook_page_id);
 		$stat_before = $this->achievement_stat_company_model->list_stat(array(
 			'user_id' => (int) $user_id,
-			'company_id' => 0
+			'company_id' => Company_id 
 		));
 
 		$this->unit->run($stat_before_count = $stat_before[0]['action'][114]['count'], 'is_int','count $stat_before', $stat_before[0]['action'][114]['count']);
@@ -431,14 +432,14 @@ class Invite_component_lib_test extends CI_Controller {
 
 		$stat_after = $this->achievement_stat_company_model->list_stat(array(
 			'user_id' => (int) $user_id,
-			'company_id' => 0
+			'company_id' => Company_id 
 		));
 		$this->unit->run($stat_after[0]['action'][114]['count'], $stat_before_count + 1, 'count $stat_after idempotent test', $stat_after[0]['action'][114]['count']);
 	}
 
 	function get_page_score_test(){ //after get invite page score : 
 		$user_id = 1;
-		$company_id = 0;
+		$company_id = Company_id;
 		$this->load->model('achievement_stat_company_model');
     	$stat = $this->achievement_stat_company_model->get($company_id, $user_id);
 		$this->unit->run($stat['company_score'], 100, "\$stat", $stat);

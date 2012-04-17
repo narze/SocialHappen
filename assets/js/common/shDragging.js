@@ -701,7 +701,7 @@
 								+'<span class="button">'
 								+'<a class="bt-setting_app" href="'+base_url+'settings/page_reward/'+page_id+'"><span>Setting</span></a>'
 								+'</span>'
-								+'</p><p class="appname">'+ 'Page Reward' +'</p><input type="hidden" class="app_install_id" value="'+0+'" /></li>');
+								+'</p><p class="appname">'+ 'Company Reward' +'</p><input type="hidden" class="app_install_id" value="'+0+'" /></li>');
 								ul_element.append(
 								'<li><p><img class="app-image" src="'+imgsize(base_url+'assets/images/apps/page-signup/app_image_s.png','normal')+'" />'
 								+'<span class="button">'

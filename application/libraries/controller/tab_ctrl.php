@@ -337,34 +337,37 @@ class Tab_ctrl {
 		return $result;
 	}
 
-	function get_page_score($user_facebook_id = NULL, $page_id = NULL, $user_id = NULL){
+	function get_page_score($company_id = NULL, $page_id = NULL, $user_facebook_id = NULL, $user_id = NULL){
 		$this->CI->load->model('user_model');
 		if(!$user_id) {
 			$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
 		$this->CI->load->library('achievement_lib');
-		$stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
-		return issetor($stat['page_score'], FALSE);
+		$stat = $this->CI->achievement_lib->get_company_stat($company_id, $user_id);
+		echo '<pre>';
+		var_dump($stat);
+		echo '</pre>';
+		return issetor($stat['page'][$page_id]['score'], FALSE);
 	}
 
-	function get_campaign_score($user_facebook_id = NULL, $page_id = NULL, $campaign_id = NULL, $user_id = NULL){
+	function get_campaign_score($company_id = NULL, $campaign_id = NULL, $user_facebook_id = NULL, $user_id = NULL){
 		$this->CI->load->model('user_model');
 		if(!$user_id) {
 			$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
 		$this->CI->load->library('achievement_lib');
-		$stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
+		$stat = $this->CI->achievement_lib->get_company_stat($company_id, $user_id);
 		return issetor($stat['campaign'][$campaign_id]['score'], FALSE);
 	}
 
-	function get_app_score($user_facebook_id = NULL, $page_id = NULL, $app_install_id = NULL, $user_id = NULL){
+	function get_app_score($company_id = NULL, $app_install_id = NULL, $user_facebook_id = NULL, $user_id = NULL){
 		$this->CI->load->model('user_model');
 		$this->CI->load->model('campaign_model');
 		if(!$user_id) {
 			$user_id = $this->CI->user_model->get_user_id_by_user_facebook_id($user_facebook_id);
 		}
 		$this->CI->load->library('achievement_lib');
-		$stat = $this->CI->achievement_lib->get_page_stat($page_id, $user_id);
+		$stat = $this->CI->achievement_lib->get_company_stat($company_id, $user_id);
 		$score = FALSE;
 		$campaigns = $this->CI->campaign_model->get_app_campaigns_by_app_install_id($app_install_id);
 		foreach($campaigns as $campaign){
@@ -376,7 +379,7 @@ class Tab_ctrl {
 		return $score;	
 	}
 
-	function page_leaderboard($page_id = NULL){
+	function page_leaderboard($page_id = NULL, $company_id = NULL){
 		$result = array('success' => FALSE);
 		$this->CI->load->model('page_model');
 		if(!$page = $this->CI->page_model->get_page_profile_by_page_id($page_id)){
@@ -387,7 +390,7 @@ class Tab_ctrl {
 			$page_users = $this->CI->page_user_data_model->get_page_users_by_page_id($page_id);
 			foreach($page_users as $user){
 				$page_user_id = $user['user_id'];
-				$page_score = $this->get_page_score(NULL, $page_id, $page_user_id);
+				$page_score = $this->get_page_score($company_id, $page_id, NULL, $page_user_id);
 				$page_score_for_sorting[] = $page_score;
 				$user_page_scores[] = array(
 					'user_id' => $page_user_id,
@@ -403,33 +406,30 @@ class Tab_ctrl {
 		return $result;
 	}
 
-	function campaign_leaderboard($campaign_id = NULL, $page_id = NULL){
+	function campaign_leaderboard($campaign_id = NULL, $page_id = NULL, $company_id = NULL){
 		$result = array('success' => FALSE);
-		$this->CI->load->model('page_model');
-		if(!$page = $this->CI->page_model->get_page_profile_by_page_id($page_id)){
-			$result['error'] = 'Page not found';
-		} else {
-			$this->CI->load->model('user_campaigns_model');
-			$user_campaign_scores = $campaign_score_for_sorting = array();
-			$campaign_users = $this->CI->user_campaigns_model->get_campaign_users_by_campaign_id($campaign_id);
-			foreach($campaign_users as $user){
-				$campaign_user_id = $user['user_id'];
-				$campaign_score = $this->get_campaign_score(NULL, $page_id, $campaign_id, $campaign_user_id);
-				$campaign_score_for_sorting[] = $campaign_score;
-				$user_campaign_scores[] = array(
-					'user_id' => $campaign_user_id,
-					'campaign_score' => $campaign_score
-				);
-			}
-			array_multisort($campaign_score_for_sorting, SORT_DESC, SORT_NUMERIC, $user_campaign_scores);
-			$result['data'] = $user_campaign_scores;
-			$result['count'] = count($campaign_users);
-			$result['success'] = TRUE;
+		
+		$this->CI->load->model('user_campaigns_model');
+		$user_campaign_scores = $campaign_score_for_sorting = array();
+		$campaign_users = $this->CI->user_campaigns_model->get_campaign_users_by_campaign_id($campaign_id);
+		foreach($campaign_users as $user){
+			$campaign_user_id = $user['user_id'];
+			$campaign_score = $this->get_campaign_score($company_id, $campaign_id, NULL, $campaign_user_id);
+			$campaign_score_for_sorting[] = $campaign_score;
+			$user_campaign_scores[] = array(
+				'user_id' => $campaign_user_id,
+				'campaign_score' => $campaign_score
+			);
 		}
+		array_multisort($campaign_score_for_sorting, SORT_DESC, SORT_NUMERIC, $user_campaign_scores);
+		$result['data'] = $user_campaign_scores;
+		$result['count'] = count($campaign_users);
+		$result['success'] = TRUE;
+		
 		return $result;
 	}
 
-	function app_leaderboard($app_install_id = NULL, $page_id = NULL){
+	function app_leaderboard($app_install_id = NULL, $page_id = NULL, $company_id = NULL){
 		$result = array('success' => FALSE);
 		$this->CI->load->model('page_model');
 		if(!$page = $this->CI->page_model->get_page_profile_by_page_id($page_id)){
@@ -450,9 +450,9 @@ class Tab_ctrl {
 						$user[$campaign_user_id] = array();
 					}
 					if(isset($app_scores[$campaign_user_id]['app_score'])){
-						$app_scores[$campaign_user_id]['app_score'] += $this->get_campaign_score(NULL, $page_id, $campaign_id, $campaign_user_id);
+						$app_scores[$campaign_user_id]['app_score'] += $this->get_campaign_score($company_id, $campaign_id, NULL, $campaign_user_id);
 					} else { //once
-						$app_scores[$campaign_user_id]['app_score'] = $this->get_campaign_score(NULL, $page_id, $campaign_id, $campaign_user_id);
+						$app_scores[$campaign_user_id]['app_score'] = $this->get_campaign_score($company_id, $campaign_id, NULL, $campaign_user_id);
 						$app_scores[$campaign_user_id]['user_id'] = $campaign_user_id;
 					}
 				}
@@ -472,7 +472,7 @@ class Tab_ctrl {
 		return $result;
 	}
 
-	function redeem_list($page_id = NULL, $user_facebook_id = NULL, $status = NULL, $sort = NULL, $order = NULL){
+	function redeem_list($company_id = NULL, $user_facebook_id = NULL, $status = NULL, $sort = NULL, $order = NULL){
 		
 		$this->CI->load->library('Reward_lib');
 		$sort_criteria = array('start_timestamp' => -1);
@@ -480,9 +480,9 @@ class Tab_ctrl {
 		if($sort) 
 		{
 			if($sort === 'status'){
-				$reward_item_active = $this->CI->reward_lib->get_active_redeem_items($page_id);
-				$reward_item_incoming = $this->CI->reward_lib->get_incoming_redeem_items($page_id);
-				$reward_item_expired = $this->CI->reward_lib->get_expired_redeem_items($page_id);
+				$reward_item_active = $this->CI->reward_lib->get_active_redeem_items($company_id);
+				$reward_item_incoming = $this->CI->reward_lib->get_incoming_redeem_items($company_id);
+				$reward_item_expired = $this->CI->reward_lib->get_expired_redeem_items($company_id);
 				$reward_items = array_merge($reward_item_active, $reward_item_incoming, $reward_item_expired);
 			} else if($sort && $order){
 				if($order == 'desc'){
@@ -493,17 +493,17 @@ class Tab_ctrl {
 				$sort_criteria = array(
 					$sort => $order
 				);
-				$reward_items = $this->CI->reward_lib->get_reward_items($page_id, $sort_criteria);
+				$reward_items = $this->CI->reward_lib->get_reward_items($company_id, $sort_criteria);
 			} else {
-				$reward_items = $this->CI->reward_lib->get_reward_items($page_id, $sort_criteria);
+				$reward_items = $this->CI->reward_lib->get_reward_items($company_id, $sort_criteria);
 			}
 		} else {
 			switch($status){
-				case 'soon': $reward_items = $this->CI->reward_lib->get_incoming_redeem_items($page_id, $sort_criteria); break;
-				case 'expired': $reward_items = $this->CI->reward_lib->get_expired_redeem_items($page_id, $sort_criteria); break;
+				case 'soon': $reward_items = $this->CI->reward_lib->get_incoming_redeem_items($company_id, $sort_criteria); break;
+				case 'expired': $reward_items = $this->CI->reward_lib->get_expired_redeem_items($company_id, $sort_criteria); break;
 				case 'no_more': break;
-				case 'active': $reward_items = $this->CI->reward_lib->get_active_redeem_items($page_id, $sort_criteria); break;
-				default : $reward_items = $this->CI->reward_lib->get_published_redeem_items($page_id, $sort_criteria); break;
+				case 'active': $reward_items = $this->CI->reward_lib->get_active_redeem_items($company_id, $sort_criteria); break;
+				default : $reward_items = $this->CI->reward_lib->get_published_redeem_items($company_id, $sort_criteria); break;
 			}
 		}
 

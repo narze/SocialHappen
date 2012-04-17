@@ -122,7 +122,7 @@ class XD extends CI_Controller {
 
 		//User point
 		$this->load->library('controller/tab_ctrl');
-		$page_score = $this->tab_ctrl->get_page_score($user['user_facebook_id'], $page_id) | 0;
+		$page_score = $this->tab_ctrl->get_page_score($page['company_id'], $page_id, $user['user_facebook_id']) | 0;
 
 		$input = compact('user_id', 'page_id');
 		$socialhappen_features = $this->socialhappen->is_developer_or_features_enabled($input);

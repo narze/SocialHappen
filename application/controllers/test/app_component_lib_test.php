@@ -299,6 +299,7 @@ class app_component_lib_test extends CI_Controller {
     $company_id = 1;
     $user_id = 2;
     $campaign_id = 10;
+    $page_id = 1;
     $info = array('campaign_score' => 10,
                   'page_score' => 10,
                   'page_id' => 1,
@@ -309,51 +310,56 @@ class app_component_lib_test extends CI_Controller {
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
     $result = $this->achievement_stat_company->get($company_id, $user_id);
     $this->unit->run($result['campaign'][$campaign_id]['score'], 10, 'get', print_r($result, TRUE));
-    $this->unit->run($result['page_score'], 10, 'get', print_r($result, TRUE));
+    $this->unit->run($result['page'][$page_id]['score'], 10, 'get', print_r($result, TRUE));
   }
   
   function redeem_page_score_invalid_test(){
+    $company_id = 1;
     $page_id = '1';
     $user_id = '2';
     $amount = '50'; // too much
-    $result = $this->app_component_lib->redeem_page_score(NULL, $user_id, $amount);
+    $result = $this->app_component_lib->redeem_page_score($company_id, NULL, $user_id, $amount);
     $this->unit->run($result, 'is_false', 'increment', print_r($result, TRUE));
-    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
-    $this->unit->run($result['page_score'], 10, 'decrement');
+    $result = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($result['page'][$page_id]['score'], 10, 'decrement');
     
+    $company_id = 1;
     $page_id = '1';
     $user_id = '2';
     $amount = '50'; // too much
-    $result = $this->app_component_lib->redeem_page_score($page_id, $user_id, $amount);
+    $result = $this->app_component_lib->redeem_page_score($company_id, $page_id, $user_id, $amount);
     $this->unit->run($result, 'is_false', 'increment', print_r($result, TRUE));
-    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
-    $this->unit->run($result['page_score'], 10, 'decrement');
+    $result = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($result['page'][$page_id]['score'], 10, 'decrement');
     
+    $company_id = 1;
     $page_id = '1';
     $user_id = '2';
     $amount = 00;
-    $result = $this->app_component_lib->redeem_page_score($page_id, $user_id, $amount);
+    $result = $this->app_component_lib->redeem_page_score($company_id, $page_id, $user_id, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
-    $this->unit->run($result['page_score'], 10, 'decrement');
+    $result = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($result['page'][$page_id]['score'], 10, 'decrement');
   }
   
   function redeem_page_score_test(){
+    $company_id = 1;
     $page_id = '1';
     $user_id = '2';
     $amount = '1';
-    $result = $this->app_component_lib->redeem_page_score($page_id, $user_id, $amount);
+    $result = $this->app_component_lib->redeem_page_score($company_id, $page_id, $user_id, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
-    $this->unit->run($result['page_score'], 9, 'decrement');
+    $result = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($result['page'][$page_id]['score'], 9, 'decrement');
     
+    $company_id = 1;
     $page_id = 1;
     $user_id = 2;
     $amount = -1;
-    $result = $this->app_component_lib->redeem_page_score($page_id, $user_id, $amount);
+    $result = $this->app_component_lib->redeem_page_score($company_id, $page_id, $user_id, $amount);
     $this->unit->run($result, 'is_true', 'increment', print_r($result, TRUE));
-    $result = $this->achievement_lib->get_page_stat($page_id, $user_id);
-    $this->unit->run($result['page_score'], 8, 'decrement');
+    $result = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($result['page'][$page_id]['score'], 8, 'decrement');
   }
 
   function add_default_user_classes_test(){

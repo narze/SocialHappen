@@ -190,7 +190,7 @@ class Tab extends CI_Controller {
 				*/
 
 				//User point
-				$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+				$page_score = $this->tab_ctrl->get_page_score($page['company_id'], $page_id, $user_facebook_id) | 0;
 				
 				//user apps
 				$this->load->model('user_apps_model','user_apps');
@@ -888,7 +888,9 @@ class Tab extends CI_Controller {
 	 */
 	function my_page_score($page_id = NULL){
 		if($user_facebook_id = $this->FB->getUser()){
-			$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+			$this->load->model('page_model');
+			$page = $this->page_model->get_page_profile_by_page_id($page_id);
+			$page_score = $this->tab_ctrl->get_page_score($page['company_id'],$page_id, $user_facebook_id) | 0;
 			echo "Your page score is ".$page_score;	
 		} else {
 			echo 'Please login first';
@@ -896,7 +898,10 @@ class Tab extends CI_Controller {
 	}
 
 	function page_leaderboard($page_id = NULL){
-		$page_user_scores = $this->tab_ctrl->page_leaderboard($page_id);
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$company_id = $page['company_id'];
+		$page_user_scores = $this->tab_ctrl->page_leaderboard($page_id, $company_id);
 		if($page_user_scores['success']){
 			if(count($page_user_scores['data']) > 0){
 				foreach($page_user_scores['data'] as $user_score){
@@ -913,12 +918,19 @@ class Tab extends CI_Controller {
 
 	function my_campaign_score($campaign_id = NULL, $page_id = NULL){
 		$user_facebook_id = $this->FB->getUser();
-		$campaign_score = $this->tab_ctrl->get_campaign_score($user_facebook_id, $page_id, $campaign_id);
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$company_id = $page['company_id'];
+		$campaign_score = $this->tab_ctrl->get_campaign_score($company_id, $campaign_id, $user_facebook_id);
 		echo "Your campaign score is ". ($campaign_score ? $campaign_score : 0);
 	}
 
 	function campaign_leaderboard($campaign_id = NULL, $page_id = NULL){
-		$campaign_user_scores = $this->tab_ctrl->campaign_leaderboard($campaign_id, $page_id);
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$company_id = $page['company_id'];
+
+		$campaign_user_scores = $this->tab_ctrl->campaign_leaderboard($campaign_id, $page_id, $company_id);
 		if($campaign_user_scores['success']){
 			foreach($campaign_user_scores['data'] as $user_score){
 				echo "user id ".$user_score['user_id'].' got '.($user_score['campaign_score'] | 0).' points in campaign id '.$campaign_id;
@@ -929,12 +941,19 @@ class Tab extends CI_Controller {
 
 	function my_app_score($app_install_id = NULL, $page_id = NULL){
 		$user_facebook_id = $this->FB->getUser();
-		$app_score = $this->tab_ctrl->get_app_score($user_facebook_id, $page_id, $app_install_id);
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$company_id = $page['company_id'];
+		$app_score = $this->tab_ctrl->get_app_score($company_id, $app_install_id, $user_facebook_id);
 		echo "Your app score is ". ($app_score ? $app_score : 0);
 	}
 
 	function app_leaderboard($app_install_id = NULL, $page_id = NULL){
-		$app_user_scores = $this->tab_ctrl->app_leaderboard($app_install_id, $page_id);
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$company_id = $page['company_id'];
+
+		$app_user_scores = $this->tab_ctrl->app_leaderboard($app_install_id, $page_id, $company_id);
 		if($app_user_scores['success']){
 			foreach($app_user_scores['data'] as $user_score){
 				echo "user id ".$user_score['user_id'].' got '.($user_score['app_score'] | 0).' points in app id '.$app_install_id;
@@ -945,11 +964,14 @@ class Tab extends CI_Controller {
 
 	function redeem_list($page_id = NULL){
 		$user_facebook_id = $this->FB->getUser();
-		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$company_id = $page['company_id'];
+		$page_score = $this->tab_ctrl->get_page_score($company_id, $page_id, $user_facebook_id) | 0;
 		$status = $this->input->get('filter');
 		$sort = $this->input->get('sort');
 		$order = $this->input->get('order');
-		$redeem_item_list = $this->tab_ctrl->redeem_list($page_id, $user_facebook_id, $status, $sort, $order);
+		$redeem_item_list = $this->tab_ctrl->redeem_list($company_id, $user_facebook_id, $status, $sort, $order);
 		//echo "Your page score is ".$page_score;
 
 		//Currency
@@ -977,7 +999,9 @@ class Tab extends CI_Controller {
 
 	function redeem_reward($page_id = NULL, $reward_item_id = NULL){		
 		$user_facebook_id = $this->FB->getUser();
-		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$page_score = $this->tab_ctrl->get_page_score($page['company_id'], $page_id, $user_facebook_id) | 0;
 
 		$this->load->library('reward_lib');
 		$reward_item = $this->reward_lib->get_reward_item($reward_item_id);
@@ -1019,15 +1043,15 @@ class Tab extends CI_Controller {
 
 	function redeem_reward_confirm($page_id = NULL, $reward_item_id = NULL){
 		$user_facebook_id = $this->FB->getUser();
-		$page_score = $this->tab_ctrl->get_page_score($user_facebook_id, $page_id) | 0;
+		$this->load->model('page_model');
+		$page = $this->page_model->get_page_profile_by_page_id($page_id);
+		$page_score = $this->tab_ctrl->get_page_score($page['company_id'], $page_id, $user_facebook_id) | 0;
 		$result = $this->tab_ctrl->redeem_reward_confirm($page_id, $reward_item_id, $user_facebook_id);
 		
 		//$result = true;//test
 		if($result) {
 			$this->load->model('reward_item_model');
 			$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
-			$this->load->model('page_model');
-			$page = $this->page_model->get_page_profile_by_page_id($page_id);
 		}
 
 		//Currency
