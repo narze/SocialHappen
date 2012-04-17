@@ -23,8 +23,7 @@ class Apiv2 extends CI_Controller {
    * @POST
    * 
    * @param app_id [required]
-   * @param app_install_id [required]
-   * @param app_install_secret_key [required]
+   * @param app_secret_key [required]
    * 
    * @param user_email [required]
    * @param user_password [required]
@@ -45,8 +44,7 @@ class Apiv2 extends CI_Controller {
      * post
      */
     $input['app_id'] = $this->input->post('app_id');
-    $input['app_install_id'] = $this->input->post('app_install_id');
-    $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
+    $input['app_secret_key'] = $this->input->post('app_secret_key');
     
     $input['user_email'] = $this->input->post('user_email');
     $input['user_password'] = $this->input->post('user_password');
@@ -73,8 +71,7 @@ class Apiv2 extends CI_Controller {
    * @POST
    * 
    * @param app_id [required]
-   * @param app_install_id [required]
-   * @param app_install_secret_key [required]
+   * @param app_secret_key [required]
    * 
    * @param user_facebook_id [required]
    */
@@ -83,8 +80,7 @@ class Apiv2 extends CI_Controller {
      * post
      */
     $input['app_id'] = $this->input->post('app_id');
-    $input['app_install_id'] = $this->input->post('app_install_id');
-    $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
+    $input['app_secret_key'] = $this->input->post('app_secret_key');
     
     $input['user_facebook_id'] = $this->input->post('user_facebook_id');
     
@@ -109,8 +105,7 @@ class Apiv2 extends CI_Controller {
    * @POST
    * 
    * @param app_id [required]
-   * @param app_install_id [required]
-   * @param app_install_secret_key [required]
+   * @param app_secret_key [required]
    * 
    * @param user_facebook_id [required]
    */
@@ -119,8 +114,7 @@ class Apiv2 extends CI_Controller {
      * post
      */
     $input['app_id'] = $this->input->post('app_id');
-    $input['app_install_id'] = $this->input->post('app_install_id');
-    $input['app_install_secret_key'] = $this->input->post('app_install_secret_key');
+    $input['app_secret_key'] = $this->input->post('app_secret_key');
     
     $input['user_facebook_id'] = $this->input->post('user_facebook_id');
     

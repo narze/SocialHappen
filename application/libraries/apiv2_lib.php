@@ -12,6 +12,8 @@ class Apiv2_Lib {
   function __construct($skip_auth = FALSE) {
     $this->CI =& get_instance();
     $this->skip_auth = $skip_auth;
+    $this->presalt = 'tH!s!$Pr3Za|t';
+    $this->postsalt = 'di#!zp0s+s4LT';
   }
   
   
@@ -21,8 +23,7 @@ class Apiv2_Lib {
    *
    * @param {Array} input
    * @param input.app_id
-   * @param input.app_install_id
-   * @param input.app_install_secret_key
+   * @param input.app_secret_key
    *
    * @param input.user_email
    * @param input.user_password
@@ -40,14 +41,13 @@ class Apiv2_Lib {
     }
     
     $app_id = $input['app_id'];
-    $app_install_id = $input['app_install_id'];
     
     unset($input['app_id']);
-    unset($input['app_install_id']);
-    unset($input['app_install_secret_key']);
+    unset($input['app_secret_key']);
     
     $user = $input;
-    
+    $user['user_password'] = sha1($this->presalt.$user['user_password'].$this->postsalt); //follow player ctrlr
+
     $this->CI->load->model('user_model');
     
     $result = $this->CI->user_model->add_user($user);
@@ -64,15 +64,14 @@ class Apiv2_Lib {
       }
       
       $this->CI->audit_lib->add_audit($app_id, NULL, 101, NULL, NULL, array(
-        'app_install_id' => $app_install_id,
         'user_id' => $user['user_id']
       ));
       
       $this->CI->achievement_lib->increment_achievement_stat(0, $app_id, $user['user_id'],
        array(
         'action_id' => 101,
-        'app_install_id' => $app_install_id,
-        'user_id' => $user['user_id']
+        'user_id' => $user['user_id'],
+        'app_install_id' => 0,  //fix app_install -> 0
        ), $amount = 1);
     }
     
@@ -86,8 +85,7 @@ class Apiv2_Lib {
    * 
    * @param {Array} input
    * @param input.app_id
-   * @param input.app_install_id
-   * @param input.app_install_secret_key
+   * @param input.app_secret_key
    * 
    * @param input.user_facebook_id
    */
@@ -111,15 +109,14 @@ class Apiv2_Lib {
     }
     
     $this->CI->audit_lib->add_audit($input['app_id'], NULL, 103, NULL, NULL, array(
-      'app_install_id' => $input['app_install_id'],
       'user_id' => $user['user_id']
     ));
     
     $this->CI->achievement_lib->increment_achievement_stat(0, $input['app_id'], $user['user_id'],
      array(
       'action_id' => 103,
-      'app_install_id' => $input['app_install_id'],
-      'user_id' => $user['user_id']
+      'user_id' => $user['user_id'],
+      'app_install_id' => 0,      //fix app_install -> 0
      ), $amount = 1);
     
     return TRUE;
@@ -131,8 +128,7 @@ class Apiv2_Lib {
    * 
    * @param {Array} input
    * @param input.app_id
-   * @param input.app_install_id
-   * @param input.app_install_secret_key
+   * @param input.app_secret_key
    * 
    * @param input.user_facebook_id
    */
@@ -153,16 +149,14 @@ class Apiv2_Lib {
   }
   
   /**
-   * check app_id, app_install_id, app_install_secret_key
+   * check app_id, app_secret_key
    * @param input
    * @param input.app_id
-   * @param input.app_install_id
-   * @param input.app_install_secret_key
+   * @param input.app_secret_key
    */
   function _check_app($input = array()){
     if (!isset($input['app_id'])
-     || !isset($input['app_install_id'])
-     || !isset($input['app_install_secret_key'])) {
+     || !isset($input['app_secret_key'])) {
       return FALSE;
     }
     
