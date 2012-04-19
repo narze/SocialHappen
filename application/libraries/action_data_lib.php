@@ -7,7 +7,8 @@ class Action_data_lib {
 
 	private $platform_actions = array(
 		'qr' => array('id' => 201, 'add_method' => 'add_qr_action_data'),
-		'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data')
+		'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data'),
+		'checkin' => array('id' => 203, 'add_method' => 'add_checkin_action_data'),
 	);
 
 	function __construct() {
@@ -154,6 +155,19 @@ class Action_data_lib {
 			'feedback_thankyou_message' => $data_from_form['feedback_thankyou_message']
 		);
 		return $this->_add_action_data($action_id, $feedback_data);
+	}
+
+	function add_checkin_action_data($data_from_form){
+		$action_id = $this->get_platform_action('checkin');
+		$checkin_data = array(
+			'checkin_facebook_place_id' => $data_from_form['checkin_facebook_place_id'],
+			'checkin_facebook_place_name' => $data_from_form['checkin_facebook_place_name'],
+			'checkin_welcome_message' => $data_from_form['checkin_welcome_message'],
+			'checkin_challenge_message' => $data_from_form['checkin_challenge_message'],
+			'checkin_thankyou_message' => $data_from_form['checkin_thankyou_message']
+		);
+		return $this->_add_action_data($action_id, $checkin_data);
+
 	}
 	
 }

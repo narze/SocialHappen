@@ -259,7 +259,7 @@ class Audit_lib
 		}else{ // custom action
 			$result_audit_action = $this->CI->audit_action->get_action($app_id, $action_id);
 		}
-		
+
 		if(count($result_audit_action) == 0){
 			log_message('error','no audit action');
 			return FALSE;

@@ -2,6 +2,7 @@
 
 define('QR_ACTION_ID', 201);
 define('FEEDBACK_ACTION_ID', 202);
+define('CHECKIN_ACTION_ID', 203);
 class Action_data_lib_test extends CI_Controller {
 	
 	function __construct(){
@@ -27,7 +28,8 @@ class Action_data_lib_test extends CI_Controller {
 	function get_platform_action_test() {
 		$expect = array(
 					'qr' => array('id' => 201, 'add_method' => 'add_qr_action_data'),
-					'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data')
+					'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data'),
+					'checkin' => array('id' => 203, 'add_method' => 'add_checkin_action_data')
 				);
 		$result = $this->action_data_lib->get_platform_action();
 		$this->unit->run($result, $expect, "\$result", $result);
@@ -167,6 +169,38 @@ class Action_data_lib_test extends CI_Controller {
 		$_GET['code'] = strrev(sha1($this->another_feedback_action_data_id));
 		$result = $this->action_data_lib->get_action_data_from_code();
 		$this->unit->run(get_mongo_id($result), $this->another_feedback_action_data_id, "\$result", get_mongo_id($result));
+		unset($result['_id']);
+		$this->unit->run($result, $expect, "\$result", $result);
+
+	}
+
+	function add_checkin_action_data_test() {
+		$form_data = array(
+						'checkin_facebook_place_id' => '162135693842364',
+						'checkin_facebook_place_name' => 'Figabyte HQ.',
+						'checkin_welcome_message' => 'Here you are!',
+						'checkin_challenge_message' => 'Please check-in here at Figabyte',
+						'checkin_thankyou_message' => 'Thank you, for check-in',
+					);
+		
+		$result = $this->action_data_lib->add_checkin_action_data($form_data);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+		$this->another_checkin_action_data_id = $result;
+
+		//Test get url
+		$result = $this->action_data_lib->get_action_url($this->another_checkin_action_data_id);
+		$expect = base_url().'actions/checkin?code='.strrev(sha1($this->another_checkin_action_data_id));
+		$this->unit->run($result, $expect, "\$result", $result);
+
+		//Test get data
+		$expect = array(
+			'action_id' => CHECKIN_ACTION_ID,
+			'hash' => strrev(sha1($this->another_checkin_action_data_id)),
+			'data' => $form_data
+		);
+		$_GET['code'] = strrev(sha1($this->another_checkin_action_data_id));
+		$result = $this->action_data_lib->get_action_data_from_code();
+		$this->unit->run(get_mongo_id($result), $this->another_checkin_action_data_id, "\$result", get_mongo_id($result));
 		unset($result['_id']);
 		$this->unit->run($result, $expect, "\$result", $result);
 

@@ -1607,6 +1607,16 @@ class DB_Sync {
 				'format_string' => 'User {user:user_id} gave feedback for {string:object}',
 				'score' => 0
 			),
+			array(
+				'app_id' => 0,
+				'action_id' => 203,
+				'description' => 'Check-In',
+				'stat_app' => FALSE,
+				'stat_page' => TRUE,
+				'stat_campaign' => FALSE,
+				'format_string' => 'User {user:user_id} check-in at {string:object}',
+				'score' => 0
+			),
 		);
 		
 		$audit_actions = array(
