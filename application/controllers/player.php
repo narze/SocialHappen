@@ -353,10 +353,14 @@ class Player extends CI_Controller {
 				$this->load->library('challenge_lib');
 				$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
 				$challenge_done = TRUE;
-				foreach($challenge_progress as $action) {
-					if(!$action['action_done']) {
-						$challenge_done = FALSE;
+				if($challenge_progress) {
+					foreach($challenge_progress as $action) {
+						if(!$action['action_done']) {
+							$challenge_done = FALSE;
+						}
 					}
+				} else {
+					$challenge_done = FALSE;
 				}
 			} else {
 				$challenge_done = FALSE;
@@ -539,8 +543,9 @@ class Player extends CI_Controller {
 			$user_id = $this->socialhappen->get_user_id();
 			$this->load->library('user_lib');
 			if($this->user_lib->join_challenge($user_id, $challenge_hash)) {
-				echo 'Challenge joined';
-				echo anchor('player/challenge/'.$challenge_hash, 'Back');
+				//echo 'Challenge joined';
+				//echo anchor('player/challenge/'.$challenge_hash, 'Back');
+				redirect('player/challenge_actions/'.$challenge_hash);
 			} else {
 				echo 'Challenge join error';
 			}
