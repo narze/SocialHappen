@@ -344,9 +344,6 @@ class Tab_ctrl {
 		}
 		$this->CI->load->library('achievement_lib');
 		$stat = $this->CI->achievement_lib->get_company_stat($company_id, $user_id);
-		echo '<pre>';
-		var_dump($stat);
-		echo '</pre>';
 		return issetor($stat['page'][$page_id]['score'], FALSE);
 	}
 
