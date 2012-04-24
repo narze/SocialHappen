@@ -28,7 +28,7 @@ class Apiv2_lib_test extends CI_Controller {
       'app_id' => 1,
       'app_secret_key' => 1,
       'user_email' => 'a@a.com',
-      'user_password' => 'password',
+      'user_password' => 'password_should_be_null',
       'user_facebook_id' => '354382143516841354',
       'user_first_name' => 'first name'
     );

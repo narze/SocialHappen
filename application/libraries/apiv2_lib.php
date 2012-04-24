@@ -26,12 +26,10 @@ class Apiv2_Lib {
    * @param input.app_secret_key
    *
    * @param input.user_email
-   * @param input.user_password
    * @param input.user_facebook_id
    */
   function signup($input = array()) {
     if (!isset($input['user_email'])
-     || !isset($input['user_password'])
      || !isset($input['user_facebook_id'])) {
       return FALSE;
     }
@@ -46,7 +44,8 @@ class Apiv2_Lib {
     unset($input['app_secret_key']);
     
     $user = $input;
-    $user['user_password'] = sha1($this->presalt.$user['user_password'].$this->postsalt); //follow player ctrlr
+    // $user['user_password'] = sha1($this->presalt.$user['user_password'].$this->postsalt); //follow player ctrlr
+    $user['user_password'] = ''; //create user with blank password (use facebook id to login)
 
     $this->CI->load->model('user_model');
     

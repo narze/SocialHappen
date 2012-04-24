@@ -47,7 +47,7 @@ class Apiv2 extends CI_Controller {
     $input['app_secret_key'] = $this->input->post('app_secret_key');
     
     $input['user_email'] = $this->input->post('user_email');
-    $input['user_password'] = $this->input->post('user_password');
+    // $input['user_password'] = $this->input->post('user_password');
     $input['user_facebook_id'] = $this->input->post('user_facebook_id');
     
     $result = $this->apiv2_lib->signup($input);
@@ -119,7 +119,7 @@ class Apiv2 extends CI_Controller {
     $input['user_facebook_id'] = $this->input->post('user_facebook_id');
     
     $result = $this->apiv2_lib->get_user($input);
-    
+    log_message('error', $result);
     if($result){
       echo json_encode(array(
         'success' => TRUE,

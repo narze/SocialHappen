@@ -831,7 +831,7 @@ class SocialHappen{
 		$this->CI->load->model('session_model','session_model');
 		$page = $this->CI->pages->get_page_profile_by_page_id($page_id);
 		$user = $user_id ? $this->CI->User->get_user_profile_by_user_id($user_id) : $this->CI->User->get_user_profile_by_user_facebook_id($user_facebook_id);
-		$user_id = $user['user_id'];
+		$user_id = issetor($user['user_id'], 0);
 
 		if(!$page['enable_facebook_tab_bar'] && !$user['user_is_developer']) {
 			return NULL;

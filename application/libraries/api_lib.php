@@ -2024,7 +2024,7 @@ class Api_Lib {
 		if($app != NULL){
 			return ($app['app_install_secret_key'] == $app_install_secret_key);
 		} else {
-			log_message('error','app_install_secret_key mismatch, app authenticate failed');
+			log_message('error','app_install_secret_key mismatch, app authenticate failed :: app_install_id:'.$app_install_id.', app_install_secret_key:'.$app_install_secret_key);
 			/* return (array( 
 				'error' => '500',
 				'message' => 'invalid app_install_secret_key')
