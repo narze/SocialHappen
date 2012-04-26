@@ -47,9 +47,11 @@ class Feedback extends CI_Controller {
 		$user = $this->_get_user_data();
 		
 		if($user_feedback && $user_score && $action_data && $user && $challenge) {
+			date_default_timezone_set('UTC');
 			$user_data = array(
 								'user_feedback' => $user_feedback,
 								'user_score' => (int) $user_score,
+								'timestamp' => time(),
 							);
 
 			if($result = $this->action_user_data_lib->add_action_user_data(

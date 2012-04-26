@@ -104,7 +104,7 @@ class Apiv2_Lib {
     $user = $this->CI->user_model->get_user_profile_by_user_facebook_id($input['user_facebook_id']);
     
     if(!$user || !isset($user['user_id'])){
-      return FASLE;
+      return FALSE;
     }
     
     $this->CI->audit_lib->add_audit($input['app_id'], NULL, 103, NULL, NULL, array(
