@@ -639,6 +639,187 @@ class Player extends CI_Controller {
 			show_error('Challenge Invalid', 404);
 		}
 	}
+
+	/**
+	 * Static 
+	 */
+	function static_page(){
+	 	$this->load->library('apiv2_lib');
+
+		$facebook_data = array(
+					'facebook_app_id' => $this->config->item('facebook_app_id'),
+					'facebook_app_scope' => $this->config->item('facebook_default_scope'),
+					'facebook_channel_url' => $this->facebook->channel_url
+		);
+		
+	 	$this->load->vars( array(
+					        	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+					        	)
+     	);
+
+	 	$app_data = $this->input->get('app_data', TRUE);
+
+		if(!$app_data){
+
+			$app_data_array = array(
+								'app_id' => 0, 
+								'app_secret_key' => 0,
+							);
+							
+		} else {
+
+			/*
+			print_r(base64_encode(json_encode(
+												array(
+														'app_id' => 1, 
+														'app_secret_key' => 'asdfghjkasdfghj',
+														'user_facebook_id' => '12345678',
+														'data' => array('message' => 'message', 'link' => 'link')
+													))));
+			*/
+		
+			$app_data_array = json_decode(base64_decode($app_data), TRUE);
+
+		}
+
+		if($user_facebook_data = $this->facebook->getUser()){
+			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
+		}
+
+		$sh_user = $this->apiv2_lib->get_user($app_data_array);
+
+		if($sh_user && $user_facebook_data){
+			//already member
+			//call play app 
+			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
+
+			if(!$app_data_array['app_id'])
+				$data['app_id'] = 0;
+			else
+				$data['app_id'] = $app_data_array['app_id'];
+
+			if($user_facebook_data = $this->facebook->getUser()){
+				$data['user_data'] = $user_facebook_data;
+
+				$this->load->model('user_model');
+				if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
+					$data['user_data']['sh_user_data'] = $user;
+
+			}
+
+			$this->load->view('player/static_port_view', $data);
+
+		} else {
+			//any other case
+			$app_data = base64_encode(json_encode($app_data_array));
+			$data = compact('app_data','app_data_array');
+
+			try {
+				$facebook_user = $this->facebook->getUser();
+				$data['user_email'] = $facebook_user['email'];
+				$data['facebook_name'] = $facebook_user['name'];
+				$data['facebook_image'] = 'http://graph.facebook.com/'.$user_facebook_data['id'].'/picture';
+			} catch (FacebookApiException $e) {
+
+			}
+
+			//try request for permission and/or signup
+			$this->load->view('player/static_signup_view', $data);
+
+			//call play app in play_app_trigger
+			
+		}
+
+	 }
+
+	/**
+	 * Static signup : AJAX
+	 */
+	public function static_signup_trigger(){
+	 	$this->load->library('apiv2_lib');
+
+		//mandatory parameters
+		$app_data = $this->input->post('app_data', TRUE);
+		$user_email = $this->input->post('email', TRUE);
+
+		$app_data = json_decode(base64_decode($app_data), TRUE);
+		
+		$app_id = $app_data['app_id'];
+		$app_secret_key = $app_data['app_secret_key'];
+		$user_facebook_id = $app_data['user_facebook_id'];
+
+		$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
+
+		//check args
+		if(isset($app_id) && isset($app_secret_key) && $user_facebook_id && $user_email){
+			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
+			$signup_result = $this->apiv2_lib->signup($args);
+
+			//show result
+			if($signup_result){
+				if($app_id!=0){
+					$app_data = compact('app_id', 'app_secret_key', 'user_facebook_id');
+					$play_app_result = $this->apiv2_lib->play_app($app_data);
+
+					if($play_app_result['success']){
+						echo json_encode(array('result' => 'ok', 'message' => 'sucessfully log play app', 'data' => $play_app_result));
+					} else {
+						echo json_encode(array('result' => 'error', 'message' => 'log play app error', 'data' => $play_app_result));
+					}
+				} else {
+					echo json_encode(array('result' => 'ok', 'message' => 'sucessfully sign-up', 'data' => $signup_result));
+				}
+				
+			} else {
+				echo json_encode(array('result' => 'error', 'message' => 'signup error', 'data' => $signup_result));
+			}
+		}
+		
+	}
+
+	/**
+	 * redirect after sign-up
+	 */
+	public function static_play_app_trigger(){
+		$this->load->library('apiv2_lib');
+
+		$facebook_data = array(
+					'facebook_app_id' => $this->config->item('facebook_app_id'),
+					'facebook_app_scope' => $this->config->item('facebook_default_scope'),
+					'facebook_channel_url' => $this->facebook->channel_url
+		);
+		
+	 	$this->load->vars( array(
+					        	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+					        	)
+     	);
+
+		//view-redirect after signup
+		$app_data = $this->input->get('app_data', TRUE);
+		$app_data = json_decode(base64_decode($app_data), TRUE);
+
+		//print_r($app_data);
+		$play_app_result = $this->apiv2_lib->play_app($app_data);
+
+		if(!$app_data['app_id'])
+			$data['app_id'] = 0;
+		else
+			$data['app_id'] = $app_data['app_id'];
+
+		if($user_facebook_data = $this->facebook->getUser()){
+			$data['user_data'] = $user_facebook_data;
+
+			$this->load->model('user_model');
+			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
+				$data['user_data']['sh_user_data'] = $user;
+
+		}
+
+		$this->load->view('player/static_port_view', $data);
+
+	}
+
+
 }  
 
 /* End of file player.php */
