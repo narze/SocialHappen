@@ -641,30 +641,29 @@ class Player extends CI_Controller {
 	}
 
 	/**
-	 * Static 
+	 * Static page for non-socialhappen app to redirect
 	 */
 	function static_page(){
 	 	$this->load->library('apiv2_lib');
 
 		$facebook_data = array(
-					'facebook_app_id' => $this->config->item('facebook_app_id'),
-					'facebook_app_scope' => $this->config->item('facebook_default_scope'),
-					'facebook_channel_url' => $this->facebook->channel_url
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_app_scope' => $this->config->item('facebook_player_scope'),
+			'facebook_channel_url' => $this->facebook->channel_url
 		);
 		
-	 	$this->load->vars( array(
-					        	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-					        	)
-     	);
+	 	$this->load->vars(array(
+    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+  	));
 
 	 	$app_data = $this->input->get('app_data', TRUE);
 
 		if(!$app_data){
 
 			$app_data_array = array(
-								'app_id' => 0, 
-								'app_secret_key' => 0,
-							);
+				'app_id' => 0, 
+				'app_secret_key' => 0,
+			);
 							
 		} else {
 
