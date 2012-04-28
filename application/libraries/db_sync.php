@@ -1290,6 +1290,105 @@ class DB_Sync {
 			)
 		);
 		$this->CI->db->insert_batch('page_user_data', $page_user_data);
+
+		//Data for use in development & not test db
+		if(ENVIRONMENT == 'development' && !$this->CI->config->item('mongo_testmode')) {
+		//Add app 10001+
+			$app = array(
+				array(
+					'app_id' => 10001, 
+					'app_name' => 'Ghost', 
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
+					'app_maintainance' => 0, 
+					'app_show_in_list' => 0, 
+					'app_description' => 'ล่าท้าผี คือจะเจอผีแบบไหน', 
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+					'app_url' => 'https://apps.localhost.com/shapp/', 
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
+					'app_config_facebook_canvas_path' => NULL,
+					'app_support_page_tab' => 1, 
+					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+					'app_facebook_api_key' => '204755022911798' 	
+				),
+				array(
+					'app_id' => 10002, 
+					'app_name' => 'Songkran', 
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
+					'app_maintainance' => 0, 
+					'app_show_in_list' => 0, 
+					'app_description' => 'สงกรานต์นี้ คุณจะโดนกี่น้ำ', 
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+					'app_url' => 'https://apps.localhost.com/shapp/', 
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
+					'app_config_facebook_canvas_path' => NULL,
+					'app_support_page_tab' => 1, 
+					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+					'app_facebook_api_key' => '204755022911798' 	
+				),
+				array(
+					'app_id' => 10003, 
+					'app_name' => 'PostItLove', 
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
+					'app_maintainance' => 0, 
+					'app_show_in_list' => 0, 
+					'app_description' => 'คุณอยากจะบอก ... ว่า ...', 
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+					'app_url' => 'https://apps.localhost.com/shapp/', 
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
+					'app_config_facebook_canvas_path' => NULL,
+					'app_support_page_tab' => 1, 
+					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+					'app_facebook_api_key' => '204755022911798' 	
+				),
+				array(
+					'app_id' => 10004, 
+					'app_name' => 'PoseTonight', 
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
+					'app_maintainance' => 0, 
+					'app_show_in_list' => 0, 
+					'app_description' => 'ท่ายากของคุณในคืนนี้คืออะไร เราไปดูกันเลยครับ!', 
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+					'app_url' => 'https://apps.localhost.com/shapp/', 
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
+					'app_config_facebook_canvas_path' => NULL,
+					'app_support_page_tab' => 1, 
+					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+					'app_facebook_api_key' => '204755022911798' 	
+				),
+				array(
+					'app_id' => 10005, 
+					'app_name' => 'WeddingPlace', 
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
+					'app_maintainance' => 0, 
+					'app_show_in_list' => 0, 
+					'app_description' => 'คุณจะได้กันที่ไหน', 
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+					'app_url' => 'https://apps.localhost.com/shapp/', 
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
+					'app_config_facebook_canvas_path' => NULL,
+					'app_support_page_tab' => 1, 
+					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+					'app_facebook_api_key' => '204755022911798' 	
+				)
+			);
+			$this->CI->db->insert_batch('app', $app);
+			echo "Development test data added<br />";
+		}
 		
 		echo "Test data added<br />";
 	}
@@ -2239,6 +2338,100 @@ class DB_Sync {
 			$this->CI->app_component_lib->add_page($app_component_page);
 		}
 		
+		//Data for use in development & not test db
+		if(ENVIRONMENT == 'development' && !$this->CI->config->item('mongo_testmode')) {
+			//Play app id 10001 to add audit
+			$this->CI->load->library('apiv2_lib');
+			$input = array(
+				'user_facebook_id' => '713558190',
+				'app_id' => 10001,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$input = array(
+				'user_facebook_id' => '637741627',
+				'app_id' => 10001,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$input = array(
+				'user_facebook_id' => '631885465',
+				'app_id' => 10001,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$input = array(
+				'user_facebook_id' => '755758746',
+				'app_id' => 10001,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$input = array(
+				'user_facebook_id' => '508840994',
+				'app_id' => 10001,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$input = array(
+				'user_facebook_id' => '688700832',
+				'app_id' => 10001,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+
+			
+			//Play app id 10003 2 times to add audit
+			$this->CI->load->library('apiv2_lib');
+			$input = array(
+				'user_facebook_id' => '713558190',
+				'app_id' => 10003,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$this->CI->apiv2_lib->play_app($input);
+
+			$input = array(
+				'user_facebook_id' => '637741627',
+				'app_id' => 10003,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$this->CI->apiv2_lib->play_app($input);
+
+			$input = array(
+				'user_facebook_id' => '631885465',
+				'app_id' => 10003,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$this->CI->apiv2_lib->play_app($input);
+
+			$input = array(
+				'user_facebook_id' => '755758746',
+				'app_id' => 10003,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$this->CI->apiv2_lib->play_app($input);
+
+			$input = array(
+				'user_facebook_id' => '508840994',
+				'app_id' => 10003,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$this->CI->apiv2_lib->play_app($input);
+
+			$input = array(
+				'user_facebook_id' => '688700832',
+				'app_id' => 10003,
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214'
+			);
+			$this->CI->apiv2_lib->play_app($input);
+			$this->CI->apiv2_lib->play_app($input);
+
+			echo "Development test data added<br />";
+		}
 		
 		echo 'MongoDB reset successfully';
 	}
