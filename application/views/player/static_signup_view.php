@@ -10,17 +10,8 @@
 </head>
 <body>
 	<?php echo $static_fb_root;?>
-	<!--<div class="container hero-unit">
-		<h1>Persuade for signup</h1>
-		<h2><a href="">Continue permission then sign up</a></h2>
-		<h3><a href="<?php echo base_url()?>welcome/play_app_trigger/?app_data=<?php echo $app_data; ?>">After Signup -> Redirect to Call Play App and go to Port_view</a></h3>
-	</div>
-	<div class="alert alert-info span12">
-		<span class="label label-info">Info</span>
-		Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT == 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?>
-	</div>-->
 
-	<div style="width:100%">
+	<div style="width:100%" class="signup_view">
 		<?php if(isset($app_data_array['data']['message']) && isset($app_data_array['data']['link'])) : ?>
 			<div class="alert alert-success" style="margin-top:15px;"><a target="_blank" href="<?php echo $app_data_array['data']['link'];?>"><?php echo $app_data_array['data']['message'];?></a></div>
 		<?php endif;?>
@@ -42,16 +33,14 @@
 
 				<legend>สมัครสมาชิก SocialHappen ด้วย Facebook Account</legend>
 
-				<?php if(isset($facebook_image) && isset($facebook_image)) :?>
-					<div class="control-group" style="margin-bottom:0;">
-						<label class="control-label"><img src="<?php echo $facebook_image;?>" alt="" style="background-color:#ccc;width:50px;height:50px;"></label>
-						<div class="controls">
-							<p style="padding-top:20px;"><b><?php echo $facebook_name;?></b></p>
-						</div>
+				<div class="control-group" style="margin-bottom:0;">
+					<label class="control-label" id="facebook_image_block"></label>
+					<div class="controls">
+						<p style="padding-top:20px;" id="facebook_name_block"></p>
 					</div>
-				<?php endif; ?>
+				</div>
 
-				<input type="hidden" class="input-xlarge" name="email" id="input-email" value="<?php echo $user_email;?>" / >
+				<input type="hidden" class="input-xlarge" name="email" id="input-email" value="" / >
 
 				<div class="form-actions">
 					<button class="btn btn-primary" id="submit-signup">สมัครสมาชิก (รับ 50 แต้ม)</button>
@@ -81,6 +70,7 @@
 
 	<script>	
 		var user_facebook_id = 0;
+		var fb_loaded = false;
 
 		jQuery(document).ready(function(){
 			jQuery('.link-page').click(function(){
@@ -88,15 +78,15 @@
 			});
 
 			jQuery('.progress-signup').click(function(){
-				//check fb permission status to app
-				if(user_facebook_id==0){
-					//if no permission -> show permission request -> then redirect back to this page again
-					fblogin();
-				}else{
-					//else -> show signup-form
-					show_signup_form();
+				if(fb_loaded){
+					//check fb permission status to app
+					if(user_facebook_id==0){
+						fblogin();
+					}else{
+						//else -> show signup-form
+						show_signup_form();
+					}
 				}
-
 			});
 
 			jQuery('.box-overlay').click(function(){
@@ -104,9 +94,10 @@
 			});
 
 			jQuery('#submit-signup').click(function(){
+				
 				var email = jQuery('#input-email').val();
-
 				var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
   				if(regex.test(email)){
   					$('.signup-form').hide();
   					$('#progress_bar').show();
@@ -115,12 +106,14 @@
 						type: "POST",
 						data: {
 							app_data : '<?php echo $app_data; ?>',
+							user_facebook_id: user_facebook_id,
 							email: email
 						},
 						dataType: "json",
 						success:function(data){
 							console.log(data);
 							$('#progress_bar').hide();
+
 							if(data.result=='ok'){
 								//redirect to play_app_trigger
 								jQuery('.signup-result').addClass('alert-success').html('สมัครสมาชิกเรียบร้อยแล้ว <a href="<?php echo base_url()?>player/static_play_app_trigger?app_data=<?php echo $app_data; ?>">Continue</a>');
@@ -129,6 +122,7 @@
 								jQuery('.signup-result').addClass('alert-error').html('Sign Up Failed: ' + data.message + ' <a href="<?php echo base_url()?>player/static_play_app_trigger?app_data=<?php echo $app_data; ?>">Continue</a>');
 								jQuery('.signup-result').show('slow');
 							}
+							
 						}
 					});
 				}
@@ -136,10 +130,23 @@
 			});
 
 		});
+
+		function allow_facebook_login(){
+			fb_loaded = true;
+		}
 	
 		function fbcallback(data){
-			console.log(data.authResponse.userID);
-			user_facebook_id = data.authResponse.userID;
+			console.log(data);
+			user_facebook_id = data.id;
+
+			var facebook_image ='http://graph.facebook.com/'+user_facebook_id+'/picture';
+			var facebook_name = data.name;
+			var facebook_email = data.email;
+
+			jQuery('#facebook_image_block').html('<img src="'+facebook_image+'" alt="" style="background-color:#ccc;width:50px;height:50px;">');
+			jQuery('#facebook_name_block').html('<b>'+facebook_name+'</b>');
+			jQuery('#input-email').val(facebook_email);
+
 			show_signup_form();
 		}
 		

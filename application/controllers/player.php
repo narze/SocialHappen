@@ -661,10 +661,12 @@ class Player extends CI_Controller {
 		if(!$app_data){
 
 			$app_data_array = array(
-				'app_id' => 0, 
-				'app_secret_key' => 0,
-			);
-							
+							'app_id' => 0, 
+							'app_secret_key' => 0,
+						);
+					
+			$app_data = base64_encode(json_encode($app_data_array));
+
 		} else {
 
 			/*
@@ -678,15 +680,19 @@ class Player extends CI_Controller {
 			*/
 		
 			$app_data_array = json_decode(base64_decode($app_data), TRUE);
-
 		}
 
+		$data = compact('app_data','app_data_array');
+		$this->load->view('player/static_signup_view', $data);
+		/*
 		if($user_facebook_data = $this->facebook->getUser()){
 			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
 		}
 
 		$sh_user = $this->apiv2_lib->get_user($app_data_array);
+		*/
 
+		/*
 		if($sh_user && $user_facebook_data){
 			//already member
 			//call play app 
@@ -728,7 +734,7 @@ class Player extends CI_Controller {
 			//call play app in play_app_trigger
 			
 		}
-
+		*/
 	 }
 
 	/**
@@ -740,12 +746,13 @@ class Player extends CI_Controller {
 		//mandatory parameters
 		$app_data = $this->input->post('app_data', TRUE);
 		$user_email = $this->input->post('email', TRUE);
+		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
 
 		$app_data = json_decode(base64_decode($app_data), TRUE);
 		
 		$app_id = $app_data['app_id'];
 		$app_secret_key = $app_data['app_secret_key'];
-		$user_facebook_id = $app_data['user_facebook_id'];
+		$user_facebook_id = $user_facebook_id;
 
 		$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
 

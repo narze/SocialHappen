@@ -10,15 +10,6 @@
 </head>
 <body>
 	<?php echo $static_fb_root;?>
-	<!--<div class="container hero-unit">
-		<h1>Persuade for signup</h1>
-		<h2><a href="">Continue permission then sign up</a></h2>
-		<h3><a href="<?php echo base_url()?>welcome/play_app_trigger/?app_data=<?php echo $app_data; ?>">After Signup -> Redirect to Call Play App and go to Port_view</a></h3>
-	</div>
-	<div class="alert alert-info span12">
-		<span class="label label-info">Info</span>
-		Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT == 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?>
-	</div>-->
 
 	<div style="width:100%">
 		<?php if($app_id!=0){ ?>
