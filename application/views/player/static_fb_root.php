@@ -8,9 +8,17 @@
 			xfbml: true,
 	 		oauth: true
 		});
+
 		FB.getLoginStatus(function(response) {
+			//FBinitial finish
+			allow_facebook_login();
+
 			if (response.status === 'connected' && typeof fbcallback === 'function') {
-				fbcallback(response);
+
+				FB.api('/me', function(data) {
+					fbcallback(data);
+				});
+
 			}
 		  	window.fblogin = function () {
 					FB.login(function(response) {
