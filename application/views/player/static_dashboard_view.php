@@ -10,7 +10,7 @@
 </head>
 <body>
 	<?php echo $static_fb_root;?>
-
+	<div class="navbar navbar-fixed-top"><?php $this->load->view('bar/bar_view_bootstrap'); ?></div>
 	<div style="width:100%">
 		<div class="user-data" style="background:#EEEEEE;width:810px;height:100px;margin:0 auto;margin-bottom:5px">
 		</div>
