@@ -65,4 +65,26 @@ class App_model extends CI_Model {
 		}
 		return $this->db->update('app', $data, array('app_id' => $app_id));
 	}
+
+	/**
+	 * get app by id range
+	 * @param $min_app_id
+	 * @param $max_app_id
+	 * @author Wachiraphan C.
+	 */
+	function get_apps_by_app_id_range($min_app_id = NULL, $max_app_id = NULL){
+		if(!$min_app_id)
+			return false;
+
+		if($max_app_id){
+			$this->db->where(array('app_id <=' => $max_app_id));
+			$this->db->where(array('app_id >=' => $min_app_id));
+			$result = $this->db->get('app')->result_array();
+		}else{
+			$this->db->where(array('app_id >=' => $min_app_id));
+			$result = $this->db->get('app')->result_array();
+		}
+
+		return $this->socialhappen->map_v($result, 'app_type');
+	}
 }

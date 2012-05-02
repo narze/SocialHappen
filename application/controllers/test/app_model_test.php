@@ -75,6 +75,38 @@ class App_model_test extends CI_Controller {
 		$removed_again = $this->apps->remove_app($app_id);
 		$this->unit->run($removed_again == 0, 'is_true','remove_app()');
 	}
+
+	function get_apps_by_app_id_range_test(){
+		$app = array(
+							'app_name' => 'test',
+							'app_type_id' => '1',
+							'app_maintainance' => '0',
+							'app_show_in_list' => '1',
+							'app_description' => 'test',
+							'app_secret_key' => 'test',
+							'app_url' => 'test',
+							'app_install_url' => 'test',
+							'app_config_url' => 'test',
+							'app_support_page_tab' => '1',
+							'app_icon' => 'test_icon_16.png',
+							'app_image' => 'test.jpg'
+						);
+		$app_id1 = $this->apps->add_app($app);
+		$app_id2 = $this->apps->add_app($app);
+		$app_id3 = $this->apps->add_app($app);
+		$app_id4 = $this->apps->add_app($app);
+		$app_id5 = $this->apps->add_app($app);
+
+		$range_2_4 = $this->apps->get_apps_by_app_id_range(2,4);
+		$this->unit->run(sizeof($range_2_4) == 3, 'is_true','get_apps_by_app_id_range()');
+		$range_1_3 = $this->apps->get_apps_by_app_id_range(1,3);
+		$this->unit->run(sizeof($range_1_3) == 3, 'is_true','get_apps_by_app_id_range()');
+		$range_3 = $this->apps->get_apps_by_app_id_range(3);
+		$this->unit->run($range_3[0]['app_id'] == 3, 'is_true','get_apps_by_app_id_range()');
+		$range_888 = $this->apps->get_apps_by_app_id_range(888);
+		$this->unit->run(sizeof($range_888) == 0, 'is_true','get_apps_by_app_id_range()');
+		
+	}
 }
 /* End of file app_model_test.php */
 /* Location: ./application/controllers/test/app_model_test.php */
