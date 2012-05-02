@@ -645,6 +645,8 @@ class Player extends CI_Controller {
 	 */
 	function static_page(){
 	 	$this->load->library('apiv2_lib');
+		$app_data = $this->input->get('app_data', TRUE);
+		$dashboard = $this->input->get('dashboard', TRUE);
 
 		$facebook_data = array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
@@ -654,9 +656,45 @@ class Player extends CI_Controller {
 		
 	 	$this->load->vars(array(
     	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-  	));
+  		));
 
-	 	$app_data = $this->input->get('app_data', TRUE);
+	 	if(!$app_data){
+
+			$app_data_array = array(
+							'app_id' => 0, 
+							'app_secret_key' => 0,
+						);
+					
+			$app_data = base64_encode(json_encode($app_data_array));
+			$data['true_app_data'] = false;
+
+		}else{
+			$data['true_app_data'] = true;
+		}
+
+		$data['app_data'] = $app_data;
+
+	 	if($dashboard){
+	 		$this->load->view('player/static_dashboard_view', $data);
+	 	}else{
+	 		$this->load->view('player/static_routing_view', $data);
+	 	}
+
+	}
+
+	public function static_signup(){
+		$this->load->library('apiv2_lib');
+		$app_data = $this->input->get('app_data', TRUE);
+
+		$facebook_data = array(
+			'facebook_app_id' => $this->config->item('facebook_app_id'),
+			'facebook_app_scope' => $this->config->item('facebook_player_scope'),
+			'facebook_channel_url' => $this->facebook->channel_url
+		);
+		
+	 	$this->load->vars(array(
+    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+  		));
 
 		if(!$app_data){
 
@@ -684,58 +722,7 @@ class Player extends CI_Controller {
 
 		$data = compact('app_data','app_data_array');
 		$this->load->view('player/static_signup_view', $data);
-		/*
-		if($user_facebook_data = $this->facebook->getUser()){
-			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
-		}
-
-		$sh_user = $this->apiv2_lib->get_user($app_data_array);
-		*/
-
-		/*
-		if($sh_user && $user_facebook_data){
-			//already member
-			//call play app 
-			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
-
-			if(!$app_data_array['app_id'])
-				$data['app_id'] = 0;
-			else
-				$data['app_id'] = $app_data_array['app_id'];
-
-			if($user_facebook_data = $this->facebook->getUser()){
-				$data['user_data'] = $user_facebook_data;
-
-				$this->load->model('user_model');
-				if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
-					$data['user_data']['sh_user_data'] = $user;
-
-			}
-
-			$this->load->view('player/static_port_view', $data);
-
-		} else {
-			//any other case
-			$app_data = base64_encode(json_encode($app_data_array));
-			$data = compact('app_data','app_data_array');
-
-			try {
-				$facebook_user = $this->facebook->getUser();
-				$data['user_email'] = $facebook_user['email'];
-				$data['facebook_name'] = $facebook_user['name'];
-				$data['facebook_image'] = 'http://graph.facebook.com/'.$user_facebook_data['id'].'/picture';
-			} catch (FacebookApiException $e) {
-
-			}
-
-			//try request for permission and/or signup
-			$this->load->view('player/static_signup_view', $data);
-
-			//call play app in play_app_trigger
-			
-		}
-		*/
-	 }
+	}
 
 	/**
 	 * Static signup : AJAX
@@ -763,24 +750,76 @@ class Player extends CI_Controller {
 
 			//show result
 			if($signup_result){
-				if($app_id!=0){
-					$app_data = compact('app_id', 'app_secret_key', 'user_facebook_id');
-					$play_app_result = $this->apiv2_lib->play_app($app_data);
-
-					if($play_app_result['success']){
-						echo json_encode(array('result' => 'ok', 'message' => 'sucessfully log play app', 'data' => $play_app_result));
-					} else {
-						echo json_encode(array('result' => 'error', 'message' => 'log play app error', 'data' => $play_app_result));
-					}
-				} else {
-					echo json_encode(array('result' => 'ok', 'message' => 'sucessfully sign-up', 'data' => $signup_result));
-				}
+				echo json_encode(array('result' => 'ok', 'message' => 'sucessfully sign-up', 'data' => $signup_result));
 				
 			} else {
 				echo json_encode(array('result' => 'error', 'message' => 'signup error', 'data' => $signup_result));
 			}
 		}
 		
+	}
+
+	/**
+	 * Static user checking for redirect : AJAX
+	 */
+	public function static_user_check(){
+		$this->load->library('apiv2_lib');
+
+		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
+
+		$app_data_array = array(
+							'app_id' => 0, 
+							'app_secret_key' => 0,
+							'user_facebook_id' => $user_facebook_id
+						);
+		$sh_user = $this->apiv2_lib->get_user($app_data_array);
+
+		if($sh_user){
+			$result = array('result' => 'ok', 'sh_user' => $sh_user);
+		}else{
+			$result = array('result' => 'error', 'message' => 'user not found');
+		}
+
+		echo json_encode($result);
+	}
+
+	/**
+	 * Static user data for dashboard : AJAX
+	 */
+	public function static_get_user_data(){
+		$this->load->library('apiv2_lib');
+		$this->load->library('audit_lib');
+		$this->load->model('app_model');
+
+		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
+
+		$app_data_array = array(
+							'app_id' => 0, 
+							'app_secret_key' => 0,
+							'user_facebook_id' => $user_facebook_id
+						);
+		$sh_user = $this->apiv2_lib->get_user($app_data_array);
+
+		if($sh_user){
+			$user_id = $sh_user['user_id'];
+			$audits = $this->audit_lib->list_audit(array('user_id' => $user_id, 'action_id' => 103, 'app_id' => array('$gt' => 10000)));
+			
+			$unique_app_ids  = array();
+			$played_apps = array();
+			foreach($audits as $audit){
+				if(!in_array($audit['app_id'] ,$unique_app_ids)){
+					$unique_app_ids[] = $audit['app_id'];
+					$played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);				
+					
+				}
+			}
+		}
+
+		$available_apps = $this->app_model->get_apps_by_app_id_range(10001);
+
+		$result = compact('sh_user', 'available_apps', 'played_apps');
+		echo json_encode($result);
+
 	}
 
 	/**
@@ -805,7 +844,6 @@ class Player extends CI_Controller {
 		$app_data = json_decode(base64_decode($app_data), TRUE);
 
 		//print_r($app_data);
-		$play_app_result = $this->apiv2_lib->play_app($app_data);
 
 		if(!$app_data['app_id'])
 			$data['app_id'] = 0;
@@ -819,9 +857,16 @@ class Player extends CI_Controller {
 			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
 				$data['user_data']['sh_user_data'] = $user;
 
+			$app_data['user_facebook_id'] = $user_facebook_data['id'];
+			$play_app_result = $this->apiv2_lib->play_app($app_data);
+
 		}
 
-		$this->load->view('player/static_port_view', $data);
+		$_GET['app_data'] = $app_data;
+		$_GET['dashboard'] = 'true';
+		$_GET['play_app_result'] = $play_app_result;
+
+		$this->static_page();
 
 	}
 

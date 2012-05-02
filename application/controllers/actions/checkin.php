@@ -31,6 +31,7 @@ class Checkin extends CI_Controller {
 		//print_r($this->input->post());
 		
 		$facebook_place_id = $this->input->post('facebook_place_id');
+		$facebook_friend_user_ids = $this->input->post('facebook_friend_user_ids');
 		$action_data_hash = $this->input->post('action_data_hash');
 
 		$_GET['code'] = $action_data_hash;
@@ -45,12 +46,23 @@ class Checkin extends CI_Controller {
 		
 		$user = $this->_get_user_data();
 		
-		if($facebook_place_id  && $action_data && $user && $challenge) {
+		if($facebook_place_id  && $action_data && $user && $challenge && $facebook_friend_user_ids) {
+
+			$facebook_friend_user_ids = explode(",", $facebook_friend_user_ids);
+
+			foreach ($facebook_friend_user_ids as &$facebook_friend_user_id) {
+				$facebook_friend_user_id = trim($facebook_friend_user_id);
+			}
 			
-			if($facebook_place_id == $action_data['data']['checkin_facebook_place_id']){
+			if($facebook_place_id != $action_data['data']['checkin_facebook_place_id']){
+				$action_data['data']['checkin_thankyou_message'] = 'Your check-in location isn\'t correct. Please try again' ;
+			}else if(count($facebook_friend_user_ids) < $action_data['data']['checkin_min_friend_count'])
+				$action_data['data']['checkin_thankyou_message'] = 'Your friends number is less than expected. Please try again' ;
+			}else{
 				$user_data = array(
 									'facebook_place_id' => $facebook_place_id,
-									'timestamp' => time()
+									'timestamp' => time(),
+									'friends' => $facebook_friend_user_ids
 								);
 
 				if($result = $this->action_user_data_lib->add_action_user_data(
@@ -61,6 +73,8 @@ class Checkin extends CI_Controller {
 																	$user['user_id'],
 																	$user_data
 					)){
+
+					//TO-DO : post tags and place to facebook
 
 					//platform action goes here
 					$this->load->library('audit_lib');
@@ -77,7 +91,7 @@ class Checkin extends CI_Controller {
 											//'additional_data' => $additional_data
 										);
 					
-					echo $audit_result = $this->audit_lib->audit_add($audit_data);
+					$audit_result = $this->audit_lib->audit_add($audit_data);
 
 					$this->load->library('achievement_lib');
 					$info = array(
@@ -94,8 +108,6 @@ class Checkin extends CI_Controller {
 					$action_data['data']['checkin_thankyou_message'] = 'Something\'s broken please try again later' ;
 				}
 
-			}else{
-				$action_data['data']['checkin_thankyou_message'] = 'Your check-in location isn\'t correct. Please try again' ;
 			}
 
 			$data = array(
