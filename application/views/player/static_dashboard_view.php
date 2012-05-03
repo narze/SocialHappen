@@ -5,25 +5,84 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>SocialHappen</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/common/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/common/responsive-min.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/player/static-dashboard.css">
 	<?php $this->load->view('player/static_ga'); ?>
 </head>
 <body>
 	<?php echo $static_fb_root;?>
 	<div class="navbar navbar-fixed-top"><?php $this->load->view('bar/bar_view_bootstrap'); ?></div>
-	<div style="width:100%">
-		<div class="user-data" style="background:#EEEEEE;width:810px;height:100px;margin:0 auto;margin-bottom:5px">
-		</div>
-		<div class="played-apps-data" style="background:#EEEEEE;width:810px;height:300px;margin:0 auto;margin-bottom:5px">
-		</div>
-		<div class="all-apps-data" style="background:#EEEEEE;width:810px;height:300px;margin:0 auto;margin-bottom:5px">
-		</div>
-		
-	</div>
+	<div class="container">
+  	<div class="row">
+      <div class="span12">
+        <div class="user-data well">
+          
+        </div>
+      </div>
+      <div class="span12">
+        <div class="page-header">
+          <h1>All apps you've played</h1>
+        </div>
+        <div class="played-app-container">
+          <ul class="played-apps-list">
+            
+          </ul>
+        </div>
+        
+      </div>
+      <div class="span12">
+        <div class="page-header">
+          <h1>Explore more SocialHappen apps
+            <small>play apps and collect points</small>
+          </h1>
+        </div>
+        <ul class="all-apps-list">
+        
+        </ul>
+      </div>
+    </div>
+  </div>
 
 	<script src="<?php echo base_url(); ?>assets/js/common/jquery.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/js/common/bootstrap.min.js"></script>
-
+  <script src="<?php echo base_url(); ?>assets/js/common/underscore-min.js"></script>
+  <script type="text/template" id="user-data-template">
+    <div class="row">
+      <div class="span3">
+        <img src="<%= picture %>" class="user-picture" />
+      </div>
+      <div class="span8">
+        <h2 class="user-name">
+          <%= name %>
+        </h2>
+        <p class="user-point">User Point: <%= point %></p>
+      </div>
+    </div>
+  </script>
+  <script type="text/template" id="app-played-item-template">
+    <li class="played-app">
+      <div class="played-app">
+        <a href="<%= url %>" title="Play" alt="Play"><img src="<%= picture %>" class="app-photo"/></a>
+        <h3 class="app-name"><%= name %></h3>
+      </div>
+    </li>
+  </script>
+  <script type="text/template" id="app-item-template">
+    <li class="app-item">
+      <div class="app-item">
+        <div class="app-photo">
+          <a href="<%= url %>" title="Play" alt="Play"><img src="<%= picture %>" class="app-photo"/></a>
+        </div>
+        <div class="app-detail">
+          <h3 class="app-name"><%= name %></h3>
+          <p class="description"><%= description %></p>
+          <p>
+            <a href="<%= url %>" title="Play" alt="Play" class="btn btn-success">Play</a>
+          </p>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </li>
+  </script>
 	<script>
 		var user_facebook_id = 0;
 		var fb_loaded = false;
@@ -37,14 +96,8 @@
 		}
 
 		function fbcallback(data){
-			console.log(data);
 			user_facebook_id = data.id;
-
-			facebook_image ='http://graph.facebook.com/'+user_facebook_id+'/picture';
-			facebook_name = data.name;
-			facebook_email = data.email;
-
-			get_user_data();
+			get_user_data(data.id);
 		}
 
 		function get_user_data(){
@@ -56,39 +109,47 @@
 				},
 				dataType: "json",
 				success:function(data){
-					console.log(data);
+					console.log('get_user_data', data);
 					$('#progress_bar').hide();
-
-					//TODO - place data to the box
-					jQuery('.user-data').html(facebook_name);
-
-					var tmp = '<p>Played Apps</P>';
-					for(x in data.played_apps){
-						app = data.played_apps[x];
-						tmp = tmp + app.app_name+'<br>';
-					}
 					
-					jQuery('.played-apps-data').html(tmp);
-
-					var tmp = '<p>Avaliable Apps</P>';
-					for(x in data.available_apps){
-						app = data.available_apps[x];
-						tmp = tmp + app.app_name+'<br>';
-					}
-
-					jQuery('.all-apps-data').html(tmp);
+					var sh_user = data.sh_user;
+					var userDataTemplate = _.template($('#user-data-template').html());
+					
+					jQuery('.user-data').html(userDataTemplate({
+					  picture: sh_user.user_image + '?type=large',
+					  name: sh_user.user_first_name + ' ' + sh_user.user_last_name,
+					  point: 'N/A'
+					}));
+          
+          var played_apps = data.played_apps;
+          var playedAppTemplate = _.template($('#app-played-item-template').html());
+          _.each(played_apps, function(app){
+            jQuery('.played-apps-list').append(playedAppTemplate({
+              picture: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg', //app.app_icon,
+              name: app.app_name,
+              url: app.app_url
+            }));
+          });
+          
+          var available_apps = data.available_apps;
+          var appItemTemplate = _.template($('#app-item-template').html());
+          _.each(available_apps, function(app){
+            jQuery('.all-apps-list').append(appItemTemplate({
+              picture: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg', //app.app_icon,
+              name: app.app_name,
+              description: app.app_description,
+              url: app.app_url
+            }));
+          });
+          
+          
 				}
 			});
 		}
 
 		jQuery(document).ready(function(){
 			
-			
-
 		});
-
-
-
 	</script>
 </body>
 </html>
