@@ -655,8 +655,8 @@ class Player extends CI_Controller {
 		);
 		
 	 	$this->load->vars(array(
-    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-  	));
+    		'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+  		));
 
 	 	$data['header'] = $this->socialhappen->get_header_bootstrap( 
 			array(
@@ -689,8 +689,9 @@ class Player extends CI_Controller {
 		
 		$data['app_data'] = $app_data;
 		$data['app_data_array'] = $app_data_array;
-
-	 	if($dashboard){
+	 	
+	 	//add facebook->getUser here to avoid routing_view and redirect to signup or dashboard directly
+	 	if($dashboard && $this->socialhappen->is_logged_in_as_player()){
 	 		$this->load->view('player/static_dashboard_view', $data);
 	 	} else {
 	 		$this->load->view('player/static_routing_view', $data);
@@ -731,9 +732,9 @@ class Player extends CI_Controller {
 			/*
 			print_r(base64_encode(json_encode(
 												array(
-														'app_id' => 1, 
-														'app_secret_key' => 'asdfghjkasdfghj',
-														'user_facebook_id' => '12345678',
+														'app_id' => 10004, 
+														'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+														'user_facebook_id' => '631885465',
 														'data' => array('message' => 'message', 'link' => 'link')
 													))));
 			*/
@@ -878,14 +879,16 @@ class Player extends CI_Controller {
 			$data['user_data'] = $user_facebook_data;
 
 			$this->load->model('user_model');
-			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
+			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id'])){
 				$data['user_data']['sh_user_data'] = $user;
-
+				//login after trigger play_app
+				echo $this->socialhappen->player_login($user['user_id']);
+			}
 			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
-			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
+			echo $play_app_result = $this->apiv2_lib->play_app($app_data_array);
 		}
 
-		redirect('player/static_page?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
+	//redirect('player/static_page?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
 
 	}
 
