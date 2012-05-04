@@ -12,12 +12,17 @@
 		FB.getLoginStatus(function(response) {
 			//FBinitial finish
 			allow_facebook_login();
-
+      console.log('getLoginStatus', response);
 			if (response.status === 'connected' && typeof fbcallback === 'function') {
 
-				FB.api('/me', function(data) {
-					fbcallback(data);
-				});
+				// FB.api('/me', function(data) {
+				  // console.log('FB.api(/me', data);
+					// fbcallback(data);
+				// });
+				
+				fbcallback({
+				  id: FB.getUserID()
+			  });
 
 			}
 		  	window.fblogin = function () {
