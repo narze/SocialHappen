@@ -39,81 +39,121 @@ endif;
 </head>
 <body>
 	<div id="fb-root"></div>
-	<script>
-	  window.fbAsyncInit = function() {
-		FB.init({appId: '<?php echo $facebook_app_id; ?>', 
-			channelURL: '<?php echo $facebook_channel_url;?>', 
-			status: true, 
-			cookie: true,
-			xfbml: true,
-		 	oauth: true
-		});
+	<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
+		<script>
+		  	window.fbAsyncInit = function() {
+				FB.init({appId: '<?php echo $facebook_app_id; ?>', 
+					channelURL: '<?php echo $facebook_channel_url;?>', 
+					status: true, 
+					cookie: true,
+					xfbml: true,
+			 		oauth: true
+				});
 
-		shlogin = function () {
-			FB.getLoginStatus(function(response) {
-				if (response.authResponse) {
-						fblogin();
-				} else { //Not login facebook
-					function bindLoginForm () {
-						$('#merchant_login_form .bt-continue').click(function () {
-							$('#merchant_login_form').ajaxSubmit({
-								success:function (result) {
-									//console.log($(result).hasClass('.logged-in'));
-									if(result == 'logged-in') {
-										window.location.replace(base_url+'?logged_in=true');
-									} else {
-										$('.popup_login').replaceWith(result);
-										bindLoginForm();
-									}
-								}
-							});
-							return false;
+				FB.getLoginStatus(function(response) {
+					//FBinitial finish
+					allow_facebook_login();
+
+					if (response.status === 'connected' && typeof fbcallback === 'function') {
+						FB.api('me', function(data) {
+							fbcallback(data);
 						});
 					}
-					$.fancybox({ //TODO : change to bootstrap modal box
-						href: base_url+'home/login'<?php echo issetor($next); ?>,
-						transitionIn: 'elastic',
-						transitionOut: 'elastic',
-						//padding: 0,
-						scrolling: 'no',
-						onComplete:bindLoginForm
-					});
-					return false;
-				}
+
+			  	window.fblogin = function () {
+						FB.login(function(response) {
+							if (response.status === 'connected') {
+								window.location = window.location.href;
+							}
+						}, {scope:'<?php echo $facebook_scope;?>'});
+					};
+				});
+		  	};
+
+		  	(function(d){
+		    	var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+		    	js = d.createElement('script'); js.id = id; js.async = true;
+		    	js.src = "//connect.facebook.net/en_US/all.js";
+		    	d.getElementsByTagName('head')[0].appendChild(js);
+		  	}(document));
+		</script>
+	<?php else : ?>
+		<script>
+		  window.fbAsyncInit = function() {
+			FB.init({appId: '<?php echo $facebook_app_id; ?>', 
+				channelURL: '<?php echo $facebook_channel_url;?>', 
+				status: true, 
+				cookie: true,
+				xfbml: true,
+			 	oauth: true
 			});
-		}
 
-		fblogin = function () {
-			FB.login(function(response) {
-				if (response.status === 'connected') { //console.log('response',response);
-					$.getJSON(base_url+"api/request_login?user_facebook_id=" + response.authResponse.userID
-					// +'&access_token='+response.authResponse.accessToken 
-					, function(json){ 
-						if(json.status != 'OK'){
-							window.location.replace(base_url+"home/signup");
-						} else {
-							<?php if(issetor($next)): ?>
-								window.location.replace('<?php echo $next; ?>');
-							<?php else : ?>
-								window.location.replace(window.location.href+"?logged_in=true");
-							<?php endif; ?>
+			shlogin = function () {
+				FB.getLoginStatus(function(response) {
+					if (response.authResponse) {
+							fblogin();
+					} else { //Not login facebook
+						function bindLoginForm () {
+							$('#merchant_login_form .bt-continue').click(function () {
+								$('#merchant_login_form').ajaxSubmit({
+									success:function (result) {
+										//console.log($(result).hasClass('.logged-in'));
+										if(result == 'logged-in') {
+											window.location.replace(base_url+'?logged_in=true');
+										} else {
+											$('.popup_login').replaceWith(result);
+											bindLoginForm();
+										}
+									}
+								});
+								return false;
+							});
 						}
-					});
-				}
-			}, {scope:'<?php echo $facebook_default_scope ; ?>'});
-		}
+						$.fancybox({ //TODO : change to bootstrap modal box
+							href: base_url+'home/login'<?php echo issetor($next); ?>,
+							transitionIn: 'elastic',
+							transitionOut: 'elastic',
+							//padding: 0,
+							scrolling: 'no',
+							onComplete:bindLoginForm
+						});
+						return false;
+					}
+				});
+			}
+
+			fblogin = function () {
+				FB.login(function(response) {
+					if (response.status === 'connected') { //console.log('response',response);
+						$.getJSON(base_url+"api/request_login?user_facebook_id=" + response.authResponse.userID
+						// +'&access_token='+response.authResponse.accessToken 
+						, function(json){ 
+							if(json.status != 'OK'){
+								window.location.replace(base_url+"home/signup");
+							} else {
+								<?php if(issetor($next)): ?>
+									window.location.replace('<?php echo $next; ?>');
+								<?php else : ?>
+									window.location.replace(window.location.href+"?logged_in=true");
+								<?php endif; ?>
+							}
+						});
+					}
+				}, {scope:'<?php echo $facebook_default_scope ; ?>'});
+			}
 
 
-	  };
+		  };
 
-	  // Load the SDK Asynchronously
-	  (function(d){
-	     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-	     js = d.createElement('script'); js.id = id; js.async = true;
-	     js.src = "//connect.facebook.net/en_US/all.js";
-	     d.getElementsByTagName('head')[0].appendChild(js);
-	   }(document));
-	</script>
+		  // Load the SDK Asynchronously
+		  (function(d){
+		     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+		     js = d.createElement('script'); js.id = id; js.async = true;
+		     js.src = "//connect.facebook.net/en_US/all.js";
+		     d.getElementsByTagName('head')[0].appendChild(js);
+		   }(document));
+		</script>
+	<?php endif; ?>
 
 	<?php if(isset($bar_view_bootstrap)) { ?>
 		<div class="navbar navbar-fixed-top"><?php $this->load->view('bar/bar_view_bootstrap'); ?></div>

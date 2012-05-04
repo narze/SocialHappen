@@ -663,10 +663,13 @@ class Player extends CI_Controller {
 				'title' => 'Welcome to SocialHappen',
 				'script' => array(
 					'common/bar',
+					'common/underscore-min'
 				),
 				'style' => array(
 					'common/player',
-				)
+					'player/static-dashboard'
+				),
+				'use_static_fb_root' => TRUE
 			)
 		);
 
@@ -699,14 +702,7 @@ class Player extends CI_Controller {
 		$this->load->library('apiv2_lib');
 		$app_data = $this->input->get('app_data', TRUE);
 
-		$facebook_data = array(
-			'facebook_app_id' => $this->config->item('facebook_app_id'),
-			'facebook_app_scope' => $this->config->item('facebook_player_scope'),
-			'facebook_channel_url' => $this->facebook->channel_url
-		);
-		
 	 	$this->load->vars(array(
-    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE),
     	'header' => $this->socialhappen->get_header_bootstrap( 
 				array(
 					'title' => 'Welcome to SocialHappen',
@@ -715,7 +711,8 @@ class Player extends CI_Controller {
 					),
 					'style' => array(
 						'common/player',
-					)
+					),
+					'use_static_fb_root' => TRUE
 				)
 			)
 		));

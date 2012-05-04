@@ -1,16 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>SocialHappen</title>
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/common/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/player/static-dashboard.css">
-	<?php $this->load->view('player/static_ga'); ?>
-</head>
-<body>
-	<?php echo $static_fb_root;?>
-	<div class="navbar navbar-fixed-top"><?php $this->load->view('bar/bar_view_bootstrap'); ?></div>
+<?php echo $header; ?>
+
 	<div class="container">
   	<div class="row">
       <div class="span12">
@@ -42,9 +31,6 @@
     </div>
   </div>
 
-	<script src="<?php echo base_url(); ?>assets/js/common/jquery.min.js"></script>
-	<script src="<?php echo base_url(); ?>assets/js/common/bootstrap.min.js"></script>
-  <script src="<?php echo base_url(); ?>assets/js/common/underscore-min.js"></script>
   <script type="text/template" id="user-data-template">
     <div class="row">
       <div class="span3">

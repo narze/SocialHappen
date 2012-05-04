@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>SocialHappen</title>
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/common/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/common/responsive-min.css">
-	<script src="<?php echo base_url(); ?>assets/js/common/jquery.min.js"></script>
-	<script src="<?php echo base_url(); ?>assets/js/common/bootstrap.min.js"></script>
-	<?php $this->load->view('player/static_ga'); ?>
-</head>
-<body>
-	<?php echo $header; ?>
-	<?php echo $static_fb_root;?>
+<?php echo $header; ?>
 
 	<div style="width:100%">
 		<div id="progress_bar" style="margin:0 auto;width:400px;display:none;">
