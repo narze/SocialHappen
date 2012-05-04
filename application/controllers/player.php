@@ -658,16 +658,14 @@ class Player extends CI_Controller {
     	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
   	));
 
-	 	$data = array(
-			'header' => $this->socialhappen->get_header_bootstrap( 
-				array(
-					'title' => 'Welcome to SocialHappen',
-					'script' => array(
-						'common/bar',
-					),
-					'style' => array(
-						'common/player',
-					)
+	 	$data['header'] = $this->socialhappen->get_header_bootstrap( 
+			array(
+				'title' => 'Welcome to SocialHappen',
+				'script' => array(
+					'common/bar',
+				),
+				'style' => array(
+					'common/player',
 				)
 			)
 		);
@@ -675,22 +673,23 @@ class Player extends CI_Controller {
 	 	if(!$app_data){
 
 			$app_data_array = array(
-							'app_id' => 0, 
-							'app_secret_key' => 0,
-						);
-					
+				'app_id' => 0, 
+				'app_secret_key' => 0,
+			);
 			$app_data = base64_encode(json_encode($app_data_array));
 			$data['true_app_data'] = false;
 
-		}else{
+		} else {
 			$data['true_app_data'] = true;
+			$app_data_array = json_decode(base64_decode($app_data), TRUE);
 		}
-
+		
 		$data['app_data'] = $app_data;
+		$data['app_data_array'] = $app_data_array;
 
 	 	if($dashboard){
 	 		$this->load->view('player/static_dashboard_view', $data);
-	 	}else{
+	 	} else {
 	 		$this->load->view('player/static_routing_view', $data);
 	 	}
 
@@ -766,11 +765,11 @@ class Player extends CI_Controller {
 		
 		$app_id = $app_data['app_id'];
 		$app_secret_key = $app_data['app_secret_key'];
-		$user_facebook_id = $user_facebook_id;
+		$user_image = "https://graph.facebook.com/{$user_facebook_id}/picture";
 
 		//check args
 		if(isset($app_id) && isset($app_secret_key) && $user_facebook_id && $user_email){
-			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email', 'user_first_name', 'user_last_name');
+			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email', 'user_first_name', 'user_last_name', 'user_image');
 			$signup_result = $this->apiv2_lib->signup($args);
 
 			//show result
@@ -801,7 +800,7 @@ class Player extends CI_Controller {
 
 		if($sh_user){
 			$result = array('result' => 'ok', 'sh_user' => $sh_user);
-		}else{
+		} else {
 			$result = array('result' => 'error', 'message' => 'user not found');
 		}
 
@@ -815,6 +814,7 @@ class Player extends CI_Controller {
 		$this->load->library('apiv2_lib');
 		$this->load->library('audit_lib');
 		$this->load->model('app_model');
+		$this->load->model('achievement_stat_model');
 
 		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
 
@@ -834,15 +834,17 @@ class Player extends CI_Controller {
 			foreach($audits as $audit){
 				if(!in_array($audit['app_id'] ,$unique_app_ids)){
 					$unique_app_ids[] = $audit['app_id'];
-					$played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);				
-					
+					$played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);						
 				}
 			}
+
+			$user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
+			$user_score = issetor($user_stat['score'], 0);
 		}
 
 		$available_apps = $this->app_model->get_apps_by_app_id_range(10001);
 
-		$result = compact('sh_user', 'available_apps', 'played_apps');
+		$result = compact('sh_user', 'available_apps', 'played_apps', 'user_score');
 		echo json_encode($result);
 
 	}
@@ -866,14 +868,14 @@ class Player extends CI_Controller {
 
 		//view-redirect after signup
 		$app_data = $this->input->get('app_data', TRUE);
-		$app_data = json_decode(base64_decode($app_data), TRUE);
+		$app_data_array = json_decode(base64_decode($app_data), TRUE);
 
 		//print_r($app_data);
 
-		if(!$app_data['app_id'])
+		if(!$app_data_array['app_id'])
 			$data['app_id'] = 0;
 		else
-			$data['app_id'] = $app_data['app_id'];
+			$data['app_id'] = $app_data_array['app_id'];
 
 		if($user_facebook_data = $this->facebook->getUser()){
 			$data['user_data'] = $user_facebook_data;
@@ -882,16 +884,11 @@ class Player extends CI_Controller {
 			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
 				$data['user_data']['sh_user_data'] = $user;
 
-			$app_data['user_facebook_id'] = $user_facebook_data['id'];
-			$play_app_result = $this->apiv2_lib->play_app($app_data);
-
+			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
+			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
 		}
 
-		$_GET['app_data'] = $app_data;
-		$_GET['dashboard'] = 'true';
-		$_GET['play_app_result'] = $play_app_result;
-
-		$this->static_page();
+		redirect('player/static_page?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
 
 	}
 
