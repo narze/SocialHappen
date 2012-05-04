@@ -120,7 +120,6 @@
 						},
 						dataType: "json",
 						success:function(data){
-							console.log(data);
 							$('#progress_bar').hide();
 
 							if(data.result=='ok'){

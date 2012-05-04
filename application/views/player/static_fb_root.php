@@ -12,39 +12,20 @@
 		FB.getLoginStatus(function(response) {
 			//FBinitial finish
 			allow_facebook_login();
-      console.log('getLoginStatus', response);
+
 			if (response.status === 'connected' && typeof fbcallback === 'function') {
-
-				// FB.api('/me', function(data) {
-				  // console.log('FB.api(/me', data);
-					// fbcallback(data);
-				// });
-				
-				fbcallback({
-				  id: FB.getUserID()
-			  });
-
+				FB.api('me', function(data) {
+					fbcallback(data);
+				});
 			}
-		  	window.fblogin = function () {
-					FB.login(function(response) {
-						if (response.status === 'connected') {
-							window.location = window.location.href;
-						}
-					}, {scope:'<?php echo $facebook_app_scope;?>'});
-				};
-		  // 	window.fblogin = function () {
-				// 	FB.ui({
-				// 		method: 'oauth',
-				// 		client_id: '<?php echo $facebook_app_id; ?>',
-				// 		redirect_uri: window.location.href, //have problem with X-frame
-				// 		display: 'iframe'
-				// 	},
-				// 	function(response) {
-				// 		if (response.status === 'connected') {
-				// 			window.location = window.location.href;
-				// 		}
-				// 	}, {scope:'<?php echo $facebook_app_scope;?>'});
-				// };
+
+	  	window.fblogin = function () {
+				FB.login(function(response) {
+					if (response.status === 'connected') {
+						window.location = window.location.href;
+					}
+				}, {scope:'<?php echo $facebook_app_scope;?>'});
+			};
 		});
   	};
 
