@@ -1384,6 +1384,42 @@ class DB_Sync {
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798' 	
+				),
+				array(
+					'app_id' => 10006, 
+					'app_name' => 'KhmerName', 
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
+					'app_maintainance' => 0, 
+					'app_show_in_list' => 0, 
+					'app_description' => 'ชื่อเขมรของคุณคืออะไร', 
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+					'app_url' => 'https://apps.localhost.com/shapp/', 
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
+					'app_config_facebook_canvas_path' => NULL,
+					'app_support_page_tab' => 1, 
+					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+					'app_facebook_api_key' => '204755022911798' 	
+				),
+				array(
+					'app_id' => 10007, 
+					'app_name' => 'LoveStatus', 
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
+					'app_maintainance' => 0, 
+					'app_show_in_list' => 0, 
+					'app_description' => 'สถานะโดนใจ มือกดไลท์ ไฟเปิดเลย', 
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+					'app_url' => 'https://apps.localhost.com/shapp/', 
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
+					'app_config_facebook_canvas_path' => NULL,
+					'app_support_page_tab' => 1, 
+					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+					'app_facebook_api_key' => '204755022911798' 	
 				)
 			);
 			$this->CI->db->insert_batch('app', $app);
