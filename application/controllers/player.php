@@ -18,7 +18,7 @@ class Player extends CI_Controller {
 		$user = $this->socialhappen->get_user();
 
 		$data = array(
-			'header' => $this -> socialhappen -> get_header_bootstrap( 
+			'header' => $this->socialhappen->get_header_bootstrap( 
 				array(
 					'title' => 'Player',
 					'script' => array(
@@ -73,7 +73,7 @@ class Player extends CI_Controller {
 		if($this->socialhappen->is_logged_in()) { redirect('player'); }
 
 		$data = array(
-			'header' => $this -> socialhappen -> get_header_bootstrap( 
+			'header' => $this->socialhappen->get_header_bootstrap( 
 				array(
 					'title' => 'Signup',
 					'script' => array(
@@ -449,7 +449,7 @@ class Player extends CI_Controller {
 			);
 
 			$data = array(
-				'header' => $this -> socialhappen -> get_header_bootstrap( 
+				'header' => $this->socialhappen->get_header_bootstrap( 
 					array(
 						'title' => $challenge['detail']['name'],
 						'script' => array(
@@ -656,7 +656,21 @@ class Player extends CI_Controller {
 		
 	 	$this->load->vars(array(
     	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-  		));
+  	));
+
+	 	$data = array(
+			'header' => $this->socialhappen->get_header_bootstrap( 
+				array(
+					'title' => 'Welcome to SocialHappen',
+					'script' => array(
+						'common/bar',
+					),
+					'style' => array(
+						'common/player',
+					)
+				)
+			)
+		);
 
 	 	if(!$app_data){
 
@@ -693,8 +707,19 @@ class Player extends CI_Controller {
 		);
 		
 	 	$this->load->vars(array(
-    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-  		));
+    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE),
+    	'header' => $this->socialhappen->get_header_bootstrap( 
+				array(
+					'title' => 'Welcome to SocialHappen',
+					'script' => array(
+						'common/bar',
+					),
+					'style' => array(
+						'common/player',
+					)
+				)
+			)
+		));
 
 		if(!$app_data){
 
@@ -733,6 +758,8 @@ class Player extends CI_Controller {
 		//mandatory parameters
 		$app_data = $this->input->post('app_data', TRUE);
 		$user_email = $this->input->post('email', TRUE);
+		$user_first_name = $this->input->post('firstname', TRUE);
+		$user_last_name = $this->input->post('lastname', TRUE);
 		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
 
 		$app_data = json_decode(base64_decode($app_data), TRUE);
@@ -741,11 +768,9 @@ class Player extends CI_Controller {
 		$app_secret_key = $app_data['app_secret_key'];
 		$user_facebook_id = $user_facebook_id;
 
-		$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
-
 		//check args
 		if(isset($app_id) && isset($app_secret_key) && $user_facebook_id && $user_email){
-			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
+			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email', 'user_first_name', 'user_last_name');
 			$signup_result = $this->apiv2_lib->signup($args);
 
 			//show result

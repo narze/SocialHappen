@@ -9,6 +9,7 @@
 	<?php $this->load->view('player/static_ga'); ?>
 </head>
 <body>
+	<?php echo $header; ?>
 	<?php echo $static_fb_root;?>
 
 	<div style="width:100%" class="signup_view">
@@ -41,6 +42,8 @@
 				</div>
 
 				<input type="hidden" class="input-xlarge" name="email" id="input-email" value="" / >
+				<input type="hidden" class="input-xlarge" name="firstname" id="input-firstname" value="" / >
+				<input type="hidden" class="input-xlarge" name="lastname" id="input-lastname" value="" / >
 
 				<div class="form-actions">
 					<button class="btn btn-primary" id="submit-signup">สมัครสมาชิก (รับ 50 แต้ม)</button>
@@ -71,6 +74,8 @@
 	<script>	
 		var user_facebook_id = 0;
 		var fb_loaded = false;
+		var firstname = '';
+		var lastname = '';
 
 		jQuery(document).ready(function(){
 			jQuery('.link-page').click(function(){
@@ -96,6 +101,8 @@
 			jQuery('#submit-signup').click(function(){
 				
 				var email = jQuery('#input-email').val();
+				var firstname = jQuery('#input-firstname').val();
+				var lastname = jQuery('#input-lastname').val();
 				var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
   				if(regex.test(email)){
@@ -107,7 +114,9 @@
 						data: {
 							app_data : '<?php echo $app_data; ?>',
 							user_facebook_id: user_facebook_id,
-							email: email
+							email: email,
+							firstname: firstname,
+							lastname: lastname
 						},
 						dataType: "json",
 						success:function(data){
@@ -142,10 +151,14 @@
 			var facebook_image ='http://graph.facebook.com/'+user_facebook_id+'/picture';
 			var facebook_name = data.name;
 			var facebook_email = data.email;
+			var facebook_firstname = data.first_name;
+			var facebook_lastname = data.last_name;
 
 			jQuery('#facebook_image_block').html('<img src="'+facebook_image+'" alt="" style="background-color:#ccc;width:50px;height:50px;">');
 			jQuery('#facebook_name_block').html('<b>'+facebook_name+'</b>');
 			jQuery('#input-email').val(facebook_email);
+			jQuery('#input-firstname').val(facebook_firstname);
+			jQuery('#input-lastname').val(facebook_lastname);
 
 			show_signup_form();
 		}

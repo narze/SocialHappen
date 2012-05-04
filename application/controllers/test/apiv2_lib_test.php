@@ -30,7 +30,8 @@ class Apiv2_lib_test extends CI_Controller {
       'user_email' => 'a@a.com',
       'user_password' => 'password_should_be_null',
       'user_facebook_id' => '354382143516841354',
-      'user_first_name' => 'first name'
+      'user_first_name' => 'firstname',
+      'user_last_name' => 'lastname'
     );
     
     $result = $this->apiv2_lib->signup($input);
@@ -47,6 +48,7 @@ class Apiv2_lib_test extends CI_Controller {
     $this->unit->run($input['user_facebook_id'], $user['user_facebook_id'], "\$result", $result);
     $this->unit->run($input['user_email'], $user['user_email'], "\$result", $result);
     $this->unit->run($input['user_first_name'], $user['user_first_name'], "\$result", $result);
+    $this->unit->run($input['user_last_name'], $user['user_last_name'], "\$result", $result);
     
     $user_id = 7;
     $this->load->model('audit_model');
@@ -138,7 +140,8 @@ class Apiv2_lib_test extends CI_Controller {
     $expect = array(
       'user_email' => 'a@a.com',
       'user_facebook_id' => '354382143516841354',
-      'user_first_name' => 'first name'
+      'user_first_name' => 'firstname',
+      'user_last_name' => 'lastname'
     );
     
     $result = $this->apiv2_lib->get_user($input);
@@ -151,6 +154,7 @@ class Apiv2_lib_test extends CI_Controller {
     $this->unit->run($expect['user_facebook_id'], $result['user_facebook_id'], "\$result", $result);
     $this->unit->run($expect['user_email'], $result['user_email'], "\$result", $result);
     $this->unit->run($expect['user_first_name'], $result['user_first_name'], "\$result", $result);
+    $this->unit->run($expect['user_last_name'], $result['user_last_name'], "\$result", $result);
   }
   
   function get_user_invalid_test(){

@@ -6,11 +6,14 @@
 	<title>SocialHappen</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/common/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/common/responsive-min.css">
+	<script src="<?php echo base_url(); ?>assets/js/common/jquery.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/js/common/bootstrap.min.js"></script>
 	<?php $this->load->view('player/static_ga'); ?>
 </head>
 <body>
+	<?php echo $header; ?>
 	<?php echo $static_fb_root;?>
-	<div class="navbar navbar-fixed-top"><?php $this->load->view('bar/bar_view_bootstrap'); ?></div>
+
 	<div style="width:100%">
 		<div class="user-data" style="background:#EEEEEE;width:810px;height:100px;margin:0 auto;margin-bottom:5px">
 		</div>
@@ -20,9 +23,6 @@
 		</div>
 		
 	</div>
-
-	<script src="<?php echo base_url(); ?>assets/js/common/jquery.min.js"></script>
-	<script src="<?php echo base_url(); ?>assets/js/common/bootstrap.min.js"></script>
 
 	<script>
 		var user_facebook_id = 0;
