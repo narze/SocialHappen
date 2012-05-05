@@ -764,10 +764,11 @@ class Player extends CI_Controller {
 		$app_id = $app_data['app_id'];
 		$app_secret_key = $app_data['app_secret_key'];
 		$user_image = "https://graph.facebook.com/{$user_facebook_id}/picture";
+		$user_is_player = 1;
 
 		//check args
 		if(isset($app_id) && isset($app_secret_key) && $user_facebook_id && $user_email){
-			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email', 'user_first_name', 'user_last_name', 'user_image');
+			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email', 'user_first_name', 'user_last_name', 'user_image', 'user_is_player');
 			$signup_result = $this->apiv2_lib->signup($args);
 
 			//show result
