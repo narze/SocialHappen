@@ -131,7 +131,9 @@
 		function fbcallback(data){
 			console.log(data);
 			user_facebook_id = data.id;
-
+      if(!data || !data.id){
+        return;
+      }
 			var facebook_image ='http://graph.facebook.com/'+user_facebook_id+'/picture';
 			var facebook_name = data.name;
 			var facebook_email = data.email;

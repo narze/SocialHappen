@@ -882,13 +882,13 @@ class Player extends CI_Controller {
 			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id'])){
 				$data['user_data']['sh_user_data'] = $user;
 				//login after trigger play_app
-				echo $this->socialhappen->player_login($user['user_id']);
+				$this->socialhappen->player_login($user['user_id']);
 			}
 			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
-			echo $play_app_result = $this->apiv2_lib->play_app($app_data_array);
+			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
 		}
 
-	//redirect('player/static_page?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
+	redirect('player/static_page?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
 
 	}
 

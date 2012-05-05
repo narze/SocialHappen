@@ -17,6 +17,10 @@
 				FB.api('me', function(data) {
 					fbcallback(data);
 				});
+			}else{
+			  fbcallback({
+			    id: 0
+			  });
 			}
 
 	  	window.fblogin = function () {

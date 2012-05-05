@@ -25,15 +25,20 @@
 
 		function fbcallback(data){
 			console.log(data);
-			user_facebook_id = data.id;
-
-
+			if(data && data.id){
+			  user_facebook_id = data.id;
+			}
 			check_user();
 		}
 
 		function check_user(){
 			$('#box-overlay').show();
 			$('#progress_bar').show();
+			console.log(user_facebook_id);
+			if(!user_facebook_id){
+			  self.location.href='<?php echo base_url(); ?>player/static_signup?app_data=<?php echo $app_data?>';
+			  return;
+			}
 			jQuery.ajax({
 				url: '<?php echo base_url(); ?>player/static_user_check',
 				type: "POST",

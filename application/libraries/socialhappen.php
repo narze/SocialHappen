@@ -362,7 +362,7 @@ class SocialHappen{
 		$data['bar_view_bootstrap'] = TRUE; //Get new bar view
 
 		if(isset($data['use_static_fb_root']) && $data['use_static_fb_root']) {
-			$data['facebook_scope'] = $this->CI->config->item('facebook_player_scope');
+			$data['facebook_app_scope'] = $this->CI->config->item('facebook_player_scope');
 		}
 
 		return $this->CI->load->view('common/header', $data, TRUE);
