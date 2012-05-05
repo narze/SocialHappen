@@ -200,9 +200,12 @@ class Action_data_lib_test extends CI_Controller {
 			'data' => $form_data
 		);
 		$_GET['code'] = strrev(sha1($this->another_checkin_action_data_id));
+
 		$result = $this->action_data_lib->get_action_data_from_code();
+
 		$this->unit->run(get_mongo_id($result), $this->another_checkin_action_data_id, "\$result", get_mongo_id($result));
 		unset($result['_id']);
+		
 		$this->unit->run($result, $expect, "\$result", $result);
 
 	}
