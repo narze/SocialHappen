@@ -1,0 +1,24 @@
+/* Body and structure
+-------------------------------------------------- */
+body {
+  position: relative;
+  padding-top: 50px;
+  background-color: #fff;
+}
+
+div.clear{
+  clear: both;
+}
+
+div.profile{
+  
+}
+
+div.profile-picture{
+  width: 300px;
+  float: left;
+}
+
+div.profile-info {
+  float: left;
+}
