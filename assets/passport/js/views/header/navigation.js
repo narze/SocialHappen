@@ -2,22 +2,26 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'bootstrap',
   'text!templates/header/navigation.html' 
-], function($, _, Backbone, headerMenuTemplate){
+], function($, _, Backbone, bootstrap, headerMenuTemplate){
   var HeaderNavigationView = Backbone.View.extend({
     headerMenuTemplate: _.template(headerMenuTemplate),
     el: '#header',
-    intialize: function () {
-      
+    events: {
+
+    },
+    initialize: function () {
+      _.bindAll(this);
+      this.options.currentUserModel.bind('change', this.render);
     },
     render: function () {
       $(this.el).html(this.headerMenuTemplate({
         baseUrl: window.Passport.BASE_URL,
-        user: this.options.userModel
+        user: this.options.currentUserModel.toJSON()
       }));
-    },
-    events: {
-
+      $('div#header .passport').addClass('active');
+      return this;
     }
   })
 

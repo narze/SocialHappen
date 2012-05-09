@@ -46,6 +46,32 @@ class Apiv3 extends CI_Controller {
       echo '{}';
     }
   }
+  
+  /**
+   * list activity of user
+   */
+  function activity($user_id = NULL){
+    if(!$user_id){
+      echo '[]';
+    }else{
+      $this->load->library('audit_lib');
+      $activity = $this->audit_lib->list_audit(array('user_id' => (int)$user_id, 'app_id' => 0));
+      echo json_encode($activity);
+    }
+  }
+  
+  /**
+   * list achievement of user
+   */
+  function achievement($user_id = NULL){
+    if(!$user_id){
+      echo '[]';
+    }else{
+      $this->load->library('achievement_lib');
+      $achievement = $this->achievement_lib->list_user_achieved_by_user_id((int)$user_id);
+      echo json_encode($achievement);
+    }
+  }
 }
 
 

@@ -20,15 +20,17 @@ define([
     var router = new AppRouter(options);
 		router.on('route:profile', function (userId) {
 		  var userModel = options.userModel;
+		  var currentUserModel = options.currentUserModel;
 		  userModel.id = userId;
-		  
+		  currentUserModel.fetch();
 		  userModel.fetch();
 		  
 		  console.log('show profile of userId:', userId);
 		  		  
 			require(['views/profile/page'], function (ProfilePage) {
 				var profilePage = Vm.create(appView, 'ProfilePage', ProfilePage, {
-				  userModel: userModel
+				  userModel: userModel,
+				  currentUserModel: currentUserModel
 				});
 				profilePage.render();
 			});

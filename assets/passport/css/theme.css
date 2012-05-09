@@ -22,3 +22,8 @@ div.profile-picture{
 div.profile-info {
   float: left;
 }
+
+.navbar .user-image {
+width: 20px;
+height: 20px;
+}

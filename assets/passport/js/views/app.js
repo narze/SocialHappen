@@ -16,7 +16,8 @@ define([
       // $(this.el).html(layoutTemplate);
       require(['views/header/navigation'], function (HeaderNavigationView) {
         var headerNavigationView = Vm.create(self, 'HeaderNavigationView', HeaderNavigationView, {
-          userModel: self.options.userModel
+          userModel: self.options.userModel,
+          currentUserModel: self.options.currentUserModel
         });
         headerNavigationView.render();
       });

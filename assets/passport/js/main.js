@@ -6,7 +6,7 @@ require.config({
     jquery: 'libs/jquery/jquery-min',
     underscore: 'libs/underscore/underscore-min', // https://github.com/amdjs
     backbone: 'libs/backbone/backbone-min', // https://github.com/amdjs
-
+    bootstrap: 'libs/bootstrap/bootstrap.min',
     // Require.js plugins
     text: 'libs/require/text',
     order: 'libs/require/order',
@@ -29,16 +29,19 @@ require([
 ], function(AppView, Router, Vm, UserModel){
   
   var userModel = window.Passport.userModel = new UserModel();
+  var currentUserModel = window.Passport.currentUserModel = new UserModel();
   
   var appView = Vm.create({}, 'AppView', AppView, {
-    userModel: userModel
+    userModel: userModel,
+    currentUserModel: currentUserModel
   });
   appView.render();
   
   // The router now has a copy of all main appview
   Router.initialize({
     appView: appView,
-    userModel: userModel
+    userModel: userModel,
+    currentUserModel: currentUserModel
   });
   
 });
