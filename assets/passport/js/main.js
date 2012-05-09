@@ -7,6 +7,7 @@ require.config({
     underscore: 'libs/underscore/underscore-min', // https://github.com/amdjs
     backbone: 'libs/backbone/backbone-min', // https://github.com/amdjs
     bootstrap: 'libs/bootstrap/bootstrap.min',
+    timeago: 'libs/jquery.timeago/jquery.timeago',
     // Require.js plugins
     text: 'libs/require/text',
     order: 'libs/require/order',
@@ -25,11 +26,15 @@ require([
   'views/app',
   'router',
   'vm',
-  'models/user'
-], function(AppView, Router, Vm, UserModel){
+  'models/user',
+  'collections/activitys',
+  'collections/achievements'
+], function(AppView, Router, Vm, UserModel, ActivityCollection, AchievementCollection){
   
   var userModel = window.Passport.userModel = new UserModel();
   var currentUserModel = window.Passport.currentUserModel = new UserModel();
+  var activityCollection = window.Passport.activityCollection = new ActivityCollection([]);
+  var achievementCollection = window.Passport.achievementCollection = new AchievementCollection([]);
   
   var appView = Vm.create({}, 'AppView', AppView, {
     userModel: userModel,
@@ -41,7 +46,9 @@ require([
   Router.initialize({
     appView: appView,
     userModel: userModel,
-    currentUserModel: currentUserModel
+    currentUserModel: currentUserModel,
+    activityCollection: activityCollection,
+    achievementCollection: achievementCollection
   });
   
 });

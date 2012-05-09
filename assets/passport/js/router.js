@@ -26,11 +26,15 @@ define([
 		  userModel.fetch();
 		  
 		  console.log('show profile of userId:', userId);
-		  		  
+		  window.Passport.userId = userId;
+		  options.activityCollection.fetch();
+		  options.achievementCollection.fetch();
 			require(['views/profile/page'], function (ProfilePage) {
 				var profilePage = Vm.create(appView, 'ProfilePage', ProfilePage, {
 				  userModel: userModel,
-				  currentUserModel: currentUserModel
+				  currentUserModel: currentUserModel,
+				  activityCollection: options.activityCollection,
+				  achievementCollection: options.achievementCollection
 				});
 				profilePage.render();
 			});
