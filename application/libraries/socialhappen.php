@@ -1099,4 +1099,28 @@ class SocialHappen{
 	function is_logged_in_as_player() {
 		return $this->CI->session->userdata('logged_in_as_player');
 	}
+
+	function get_bar_data() {
+		$user = $this->get_user();
+		$facebook_user = $this->CI->facebook->getUser();
+
+		$data = array(
+			'is_user' => !!$user,
+			'user' => $user,
+			'is_facebook_user' => !!$facebook_user,
+			'facebook_user' => $facebook_user,
+			'user_can_create_company' => FALSE
+		);
+
+		if($user) {
+			$this->CI->load->library('notification_lib');
+			$user_companies = $this->get_user_companies();
+			$data['user_can_create_company'] = 
+				!$user_companies ? TRUE : $this->check_package_by_user_id_and_mode(
+				$this->CI->session->userdata('user_id'), 'company');
+			$data['notification_amount'] = 
+				$this->CI->notification_lib->count_unread($user['user_id']);
+		}
+		return $data;
+	}
 }
