@@ -54,6 +54,15 @@
       </li>
       <li class="divider"></li>
       <li class="all-notification">
+        <% _.each(notifications.list, function(notification) {  %>
+          <li class="separator">
+            <a href="<%= notification.link %>">
+              <img src="<%= notification.image %>" />
+              <p class="message"><%= notification.message %></p>
+              <p class="time"><%= $.timeago(new Date(parseInt(notification.timestamp, 10) * 1000)) %></p>
+            </a>
+          </li>
+        <% }); %>
         <a class="a-notification" href="#">See all Notifications</a>
       </li>
     </ul>

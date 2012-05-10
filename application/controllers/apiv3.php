@@ -24,7 +24,7 @@ class Apiv3 extends CI_Controller {
     /**
      * post
      */
-    $logged_in = $this -> socialhappen -> is_logged_in();
+    $logged_in = $this->socialhappen->is_logged_in();
     
     if (!$user_id && $logged_in){ // see current user's
       $user = $this->socialhappen->get_user();
@@ -71,6 +71,22 @@ class Apiv3 extends CI_Controller {
       $achievement = $this->achievement_lib->list_user_achieved_by_user_id((int)$user_id);
       echo json_encode($achievement);
     }
+  }
+
+  /**
+   * get notification count and list of user
+   */
+  function notifications($user_id = NULL) {
+    $notifications = array(
+      'count' => 0,
+      'items' => array()
+    );
+    if($user_id == $this->socialhappen->get_user_id()) {
+      $this->load->library('notification_lib');
+      $notifications['items'] = $this->notification_lib->lists($user_id);
+      $notifications['count'] = count($notifications['items']);
+    }
+    echo json_encode($notifications);
   }
 }
 
