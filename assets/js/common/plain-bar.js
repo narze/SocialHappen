@@ -14,6 +14,7 @@ $(function() {
         baseUrl: base_url
       })).children('.play').addClass('active');
       
+      
       var barUserTemplate = _.template($('#bar-user-template').html());
       $('.bar-user').replaceWith(barUserTemplate({
         user: {
@@ -23,11 +24,16 @@ $(function() {
         },
         baseUrl: base_url
       }));
+      $('.btn-logout').click(function(e) {
+        e.preventDefault();
+        window.location = base_url + 'logout?redirect=' + window.location.href;
+      });
+
 
       var barNotificationTemplate = _.template($('#bar-notification-template').html());
       $('.bar-notification').replaceWith(barNotificationTemplate({
         baseUrl: base_url
-      }));      
+      }));
     }
   });
 });
