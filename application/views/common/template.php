@@ -10,18 +10,16 @@
 <?php 
 	foreach($styles as $one) {
 		if($one){
-			echo '<link rel="stylesheet" type="text/css"  href="'.base_url().'assets/css/'.$one.'.css" />'."\n";
-		}
-	}
-
-	foreach($external_styles as $one) {
-		if($one){
-			echo '<link rel="stylesheet" type="text/css"  href="'.$one.'" />'."\n";
+			if(strrchr($one, '.') === '.css') {
+				echo '<link rel="stylesheet" type="text/css"  href="'.$one.'" />'."\n";
+			} else {
+				echo '<link rel="stylesheet" type="text/css"  href="'.base_url().'assets/css/'.$one.'.css" />'."\n";
+			}
 		}
 	}
 ?>
-
 </head>
+<?php flush(); ?>
 <body>
 <?php 
 	foreach($body_views as $view_name => $data) {
@@ -29,11 +27,13 @@
 	}
 
 	foreach($scripts as $one) {
-		if ($one) echo '<script type="text/javascript" src="'.base_url().'assets/js/'.$one.'.js"></script>'."\n";
-	}
-
-	foreach($external_scripts as $one) {
-		if ($one) echo '<script type="text/javascript" src="'.$one.'"></script>'."\n";
+		if ($one) {
+			if(strrchr($one, '.') === '.js') {
+				echo '<script type="text/javascript" src="'.$one.'"></script>'."\n";
+			} else {
+				echo '<script type="text/javascript" src="'.base_url().'assets/js/'.$one.'.js"></script>'."\n";
+			}
+		}
 	}
 ?>
 </body>

@@ -50,7 +50,9 @@
       <div class="span4">&nbsp;</div>
       <div class="span4">
         <div class="control-group text-center">
-          <a onclick="fblogin();" id="fblogin"><img src="<?php echo base_url('images/fb-login.jpg'); ?>" alt="Login with facebook"></a>
+          <a onclick="fbLogin(function() {
+          alert('logged in');
+        });" id="fblogin"><img src="<?php echo base_url('images/fb-login.jpg'); ?>" alt="Login with facebook"></a>
         </div>
       </div>
       <div class="span4">&nbsp;</div>  

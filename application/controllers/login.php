@@ -12,7 +12,7 @@ class Login extends CI_Controller {
    * Login page
    */
   function index() {
-    if($user = $this->socialhappen->get_user()) {
+    if(!$user = $this->socialhappen->get_user()) {
       //Logged in already
       if($next = $this->input->get('next')) {
         redirect($next);
@@ -35,34 +35,33 @@ class Login extends CI_Controller {
     
       $next = $this->input->get('next');
       $this->load->vars('next', $next ? '?next='.urlencode($next) : '/');
-      if ($this->form_validation->run() == FALSE)
-      {
+      if ($this->form_validation->run() == FALSE) {
         $template = array(
-            'title' => 'Login',
-            'vars' => array(),
-            'scripts' => array(
-              'common/jquery.timeago'
+          'title' => 'Login',
+          'vars' => array(),
+          'scripts' => array(
+            'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
+            'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+            'common/jquery.timeago',
+            'common/bootstrap.min'
+          ),
+          'styles' => array(
+            'common/bootstrap',
+            'common/bootstrap-responsive',
+            'common/bar'
+          ),
+          'body_views' => array(
+            'common/fb_root' => array(
+              'facebook_app_id' => $this->config->item('facebook_app_id'),
+              'facebook_channel_url' => $this->facebook->channel_url,
+              'facebook_app_scope' => $this->config->item('facebook_player_scope')
             ),
-            'external_scripts' => array(
-              'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
-              'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js'
-            ),
-            'styles' => array(
-              'common/smoothness/jquery-ui-1.8.9.custom'
-            ),
-            'external_styles' => array(),
-            'body_views' => array(
-              'player/login_view' => array(),
-              'common/plain_bar_view' => array(),
-              'common/fb_root' => array()
-            )
-          );
-          $this->load->view('common/template', $template);
-          
-        
-      }
-      else
-      {
+            'bar/plain_bar_view' => array(),
+            'login/login_view' => array()
+          )
+        );
+        $this->load->view('common/template', $template);
+      } else {
         $email = set_value('email');
         $mobile_phone_number = set_value('mobile_phone_number');
 
@@ -107,24 +106,23 @@ class Login extends CI_Controller {
             'title' => 'Login',
             'vars' => array(),
             'scripts' => array(
-              'common/jquery.timeago'
-            ),
-            'external_scripts' => array(
               'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
-              'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js'
+              'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+              'common/jquery.timeago',
+              'common/bootstrap.min'
             ),
             'styles' => array(
-              'common/smoothness/jquery-ui-1.8.9.custom'
+              'common/bootstrap',
+              'common/bootstrap-responsive',
+              'common/bar'
             ),
-            'external_styles' => array(),
             'body_views' => array(
               'common/fb_root' => array(),
-              'common/plain_bar_view' => array(),
+              'bar/plain_bar_view' => array(),
               'login/login_view' => array()
             )
           );
           $this->load->view('common/template', $template);
-          
         }
       }
     }
