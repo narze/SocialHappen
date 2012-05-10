@@ -5,15 +5,13 @@ $(function() {
     dataType: "json",
     success:function(data){
       if(data.user_id) {
-        $('#progress_bar').hide();
-      
         var barMenuTemplate = _.template($('#bar-menu-template').html());
         $('.bar-menu').html(barMenuTemplate({
           user: {
             id: data.user_id
           },
           baseUrl: base_url
-        })).children('.play').addClass('active');
+        }));
         
         
         var barUserTemplate = _.template($('#bar-user-template').html());
@@ -35,7 +33,6 @@ $(function() {
           type: "POST",
           dataType: "json",
           success: function(data) {
-            console.log(data);
             var barNotificationTemplate = _.template($('#bar-notification-template').html());
             $('.bar-notification').replaceWith(barNotificationTemplate({
               baseUrl: base_url,
@@ -46,10 +43,17 @@ $(function() {
             }));
             $('.no-notification').hide();
           }
-
         });
       } else {
-        //no user_id
+        //guest
+        var barLoginTemplate = _.template($('#bar-login-template').html());
+        $('.nav.pull-right').html(barLoginTemplate({
+          baseUrl: base_url
+        }));
+        $('.btn-login').click(function(e) {
+          e.preventDefault();
+          window.location = base_url + 'login?next=' + window.location.href;
+        });
       }
     }
   });

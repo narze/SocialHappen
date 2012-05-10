@@ -10,55 +10,58 @@ function allow_facebook_login(){
 }
 
 function get_user_data(){
-  jQuery.ajax({
-    url: base_url + 'player/static_get_user_data',
+  $.ajax({
+    url: base_url + 'apiv3/user_play_data',
     type: "POST",
-    data: {
-      user_facebook_id: user_facebook_id
-    },
     dataType: "json",
     success:function(data){
-      console.log('get_user_data', data);
-      $('#progress_bar').hide();
-      
-      var sh_user = data.sh_user;
-      var userDataTemplate = _.template($('#user-data-template').html());
-      
-      jQuery('.user-data').html(userDataTemplate({
-        picture: sh_user.user_image + '?type=large',
-        name: sh_user.user_first_name + ' ' + sh_user.user_last_name,
-        point: data.user_score
-      }));
-      
-      var played_apps = data.played_apps;
-      var playedAppTemplate = _.template($('#app-played-item-template').html());
-      _.each(played_apps, function(app){
-        jQuery('.played-apps-list').append(playedAppTemplate({
-          picture: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg', //app.app_icon,
-          name: app.app_name,
-          url: app.app_url
-        }));
-      });
+      if(data.user) {
+        console.log('get_user_data', data);
+        
+        var user = data.user;
 
-      if(!played_apps.length) {
-        $('.played-app-container').parent('.span12').hide();
-      }
-      
-      var available_apps = data.available_apps;
-      var appItemTemplate = _.template($('#app-item-template').html());
-      _.each(available_apps, function(app){
-        jQuery('.all-apps-list').append(appItemTemplate({
-          picture: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg', //app.app_icon,
-          name: app.app_name,
-          description: app.app_description,
-          url: app.app_url
+        var userDataTemplate = _.template($('#user-data-template').html());
+        
+        $('#user-data').replaceWith(userDataTemplate({
+          picture: user.user_image + '?type=large',
+          name: user.user_first_name + ' ' + user.user_last_name,
+          point: data.user_score
         }));
-      });
-      
-      if(!available_apps.length) {
-        $('.all-apps-list').parent('.span12').hide();
+        
+        var played_apps = data.played_apps;
+        if(played_apps.length > 0) {
+          var playedAppTemplate = _.template($('#app-played-item-template').html());
+          _.each(played_apps, function(app, i){
+            played_apps[i].picture = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg'; //app.app_icon,
+          });
+          $('#played-apps').replaceWith(playedAppTemplate({
+            played_apps: played_apps
+          }));
+        }
+        
+        var available_apps = data.available_apps;
+        if(available_apps.length > 0) {
+          var availableAppsTemplate = _.template($('#app-item-template').html());
+          _.each(available_apps, function(app, i){
+            available_apps[i].app_image = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg'; //app.app_icon,
+          });
+          $('#all-apps').replaceWith(availableAppsTemplate({
+            available_apps: available_apps
+          }));
+        }
+      } else {
+        //guest
+        var all_apps = data.available_apps;
+        if(all_apps.length > 0) {
+          var allAppsTemplate = _.template($('#app-item-template').html());
+          _.each(all_apps, function(app, i){
+            all_apps[i].app_image = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg'; //app.app_icon,
+          });
+          $('#all-apps').replaceWith(allAppsTemplate({
+            available_apps: all_apps
+          }));
+        }
       }
-      
     }
   });
 }

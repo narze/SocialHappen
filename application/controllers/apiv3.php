@@ -46,6 +46,38 @@ class Apiv3 extends CI_Controller {
       echo '{}';
     }
   }
+
+  /**
+   * get user and play data (moved from player->static_get_user_data)
+   * 
+   * @param user_id [required]
+   */
+  function user_play_data(){
+    $this->load->model('app_model');
+    if($user = $this->socialhappen->get_user()) {
+      $this->load->library('apiv2_lib');
+      $this->load->library('audit_lib');
+      $this->load->model('achievement_stat_model');
+
+      $user_id = $user['user_id'];
+      $audits = $this->audit_lib->list_audit(array('user_id' => $user_id, 'action_id' => 103, 'app_id' => array('$gt' => 10000)));
+      
+      $unique_app_ids  = array();
+      $played_apps = array();
+      foreach($audits as $audit){
+        if(!in_array($audit['app_id'], $unique_app_ids)){
+          $unique_app_ids[] = $audit['app_id'];
+          $played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);           
+        }
+      }
+
+      $user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
+      $user_score = issetor($user_stat['score'], 0); 
+    }
+    $available_apps = $this->app_model->get_apps_by_app_id_range(10001);
+    $result = compact('user', 'available_apps', 'played_apps', 'user_score');
+    echo json_encode($result);
+  }
   
   /**
    * list activity of user

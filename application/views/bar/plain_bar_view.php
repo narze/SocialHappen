@@ -18,6 +18,12 @@
   </div>
 </div>
 
+<script type="text/template" id="bar-login-template">
+  <li class="login">
+    <a class="btn-login" href="<%= baseUrl %>login">Login SocialHappen</a>
+  </li>
+</script>
+
 <script type="text/template" id="bar-menu-template">
   <li class="play">
     <a href="<%= baseUrl %>player/play">Play</a>

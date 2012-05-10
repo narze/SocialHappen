@@ -12,7 +12,7 @@ class Login extends CI_Controller {
    * Login page
    */
   function index() {
-    if(!$user = $this->socialhappen->get_user()) {
+    if($user = $this->socialhappen->get_user()) {
       //Logged in already
       if($next = $this->input->get('next')) {
         redirect($next);
@@ -22,6 +22,21 @@ class Login extends CI_Controller {
         redirect('player');
       } else {
         redirect('');
+      }
+    } else if($facebook_user = $this->facebook->getUser()) {
+      if($this->socialhappen->login()) {
+        if($next = $this->input->get('next')) {
+          redirect($next);
+        }
+
+        if($user['user_is_player']) {
+          redirect('player');
+        } else {
+          redirect('');
+        }
+      } else {
+        //register
+        echo 'Register page [soon]';
       }
     } else {
       //Login form
