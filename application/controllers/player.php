@@ -18,7 +18,7 @@ class Player extends CI_Controller {
 		$user = $this->socialhappen->get_user();
 
 		$data = array(
-			'header' => $this -> socialhappen -> get_header_bootstrap( 
+			'header' => $this->socialhappen->get_header_bootstrap( 
 				array(
 					'title' => 'Player',
 					'script' => array(
@@ -73,7 +73,7 @@ class Player extends CI_Controller {
 		if($this->socialhappen->is_logged_in()) { redirect('player'); }
 
 		$data = array(
-			'header' => $this -> socialhappen -> get_header_bootstrap( 
+			'header' => $this->socialhappen->get_header_bootstrap( 
 				array(
 					'title' => 'Signup',
 					'script' => array(
@@ -449,7 +449,7 @@ class Player extends CI_Controller {
 			);
 
 			$data = array(
-				'header' => $this -> socialhappen -> get_header_bootstrap( 
+				'header' => $this->socialhappen->get_header_bootstrap( 
 					array(
 						'title' => $challenge['detail']['name'],
 						'script' => array(
@@ -645,6 +645,8 @@ class Player extends CI_Controller {
 	 */
 	function static_page(){
 	 	$this->load->library('apiv2_lib');
+		$app_data = $this->input->get('app_data', TRUE);
+		$dashboard = $this->input->get('dashboard', TRUE);
 
 		$facebook_data = array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
@@ -653,83 +655,96 @@ class Player extends CI_Controller {
 		);
 		
 	 	$this->load->vars(array(
-    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-  	));
+    		'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+  		));
 
-	 	$app_data = $this->input->get('app_data', TRUE);
+	 	$data['header'] = $this->socialhappen->get_header_bootstrap( 
+			array(
+				'title' => 'Welcome to SocialHappen',
+				'script' => array(
+					'common/bar',
+					'common/underscore-min'
+				),
+				'style' => array(
+					'common/player',
+					'player/static-dashboard'
+				),
+				'use_static_fb_root' => TRUE
+			)
+		);
 
-		if(!$app_data){
+	 	if(!$app_data){
 
 			$app_data_array = array(
 				'app_id' => 0, 
 				'app_secret_key' => 0,
 			);
-							
+			$app_data = base64_encode(json_encode($app_data_array));
+			$data['true_app_data'] = false;
+
+		} else {
+			$data['true_app_data'] = true;
+			$app_data_array = json_decode(base64_decode($app_data), TRUE);
+		}
+		
+		$data['app_data'] = $app_data;
+		$data['app_data_array'] = $app_data_array;
+	 	
+	 	//add facebook->getUser here to avoid routing_view and redirect to signup or dashboard directly
+	 	if($dashboard && $this->socialhappen->is_logged_in_as_player()){
+	 		$this->load->view('player/static_dashboard_view', $data);
+	 	} else {
+	 		$this->load->view('player/static_routing_view', $data);
+	 	}
+
+	}
+
+	public function static_signup(){
+		$this->load->library('apiv2_lib');
+		$app_data = $this->input->get('app_data', TRUE);
+
+	 	$this->load->vars(array(
+    	'header' => $this->socialhappen->get_header_bootstrap( 
+				array(
+					'title' => 'Welcome to SocialHappen',
+					'script' => array(
+						'common/bar',
+					),
+					'style' => array(
+						'common/player',
+					),
+					'use_static_fb_root' => TRUE
+				)
+			)
+		));
+
+		if(!$app_data){
+
+			$app_data_array = array(
+							'app_id' => 0, 
+							'app_secret_key' => 0,
+						);
+					
+			$app_data = base64_encode(json_encode($app_data_array));
+
 		} else {
 
 			/*
 			print_r(base64_encode(json_encode(
 												array(
-														'app_id' => 1, 
-														'app_secret_key' => 'asdfghjkasdfghj',
-														'user_facebook_id' => '12345678',
+														'app_id' => 10004, 
+														'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+														'user_facebook_id' => '631885465',
 														'data' => array('message' => 'message', 'link' => 'link')
 													))));
 			*/
 		
 			$app_data_array = json_decode(base64_decode($app_data), TRUE);
-
 		}
 
-		if($user_facebook_data = $this->facebook->getUser()){
-			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
-		}
-
-		$sh_user = $this->apiv2_lib->get_user($app_data_array);
-
-		if($sh_user && $user_facebook_data){
-			//already member
-			//call play app 
-			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
-
-			if(!$app_data_array['app_id'])
-				$data['app_id'] = 0;
-			else
-				$data['app_id'] = $app_data_array['app_id'];
-
-			if($user_facebook_data = $this->facebook->getUser()){
-				$data['user_data'] = $user_facebook_data;
-
-				$this->load->model('user_model');
-				if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
-					$data['user_data']['sh_user_data'] = $user;
-
-			}
-
-			$this->load->view('player/static_port_view', $data);
-
-		} else {
-			//any other case
-			$app_data = base64_encode(json_encode($app_data_array));
-			$data = compact('app_data','app_data_array');
-
-			try {
-				$facebook_user = $this->facebook->getUser();
-				$data['user_email'] = $facebook_user['email'];
-				$data['facebook_name'] = $facebook_user['name'];
-				$data['facebook_image'] = 'http://graph.facebook.com/'.$user_facebook_data['id'].'/picture';
-			} catch (FacebookApiException $e) {
-
-			}
-
-			//try request for permission and/or signup
-			$this->load->view('player/static_signup_view', $data);
-
-			//call play app in play_app_trigger
-			
-		}
-
-	 }
+		$data = compact('app_data','app_data_array');
+		$this->load->view('player/static_signup_view', $data);
+	}
 
 	/**
 	 * Static signup : AJAX
@@ -740,40 +755,97 @@ class Player extends CI_Controller {
 		//mandatory parameters
 		$app_data = $this->input->post('app_data', TRUE);
 		$user_email = $this->input->post('email', TRUE);
+		$user_first_name = $this->input->post('firstname', TRUE);
+		$user_last_name = $this->input->post('lastname', TRUE);
+		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
 
 		$app_data = json_decode(base64_decode($app_data), TRUE);
 		
 		$app_id = $app_data['app_id'];
 		$app_secret_key = $app_data['app_secret_key'];
-		$user_facebook_id = $app_data['user_facebook_id'];
-
-		$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
+		$user_image = "https://graph.facebook.com/{$user_facebook_id}/picture";
+		$user_is_player = 1;
 
 		//check args
 		if(isset($app_id) && isset($app_secret_key) && $user_facebook_id && $user_email){
-			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
+			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email', 'user_first_name', 'user_last_name', 'user_image', 'user_is_player');
 			$signup_result = $this->apiv2_lib->signup($args);
 
 			//show result
 			if($signup_result){
-				if($app_id!=0){
-					$app_data = compact('app_id', 'app_secret_key', 'user_facebook_id');
-					$play_app_result = $this->apiv2_lib->play_app($app_data);
-
-					if($play_app_result['success']){
-						echo json_encode(array('result' => 'ok', 'message' => 'sucessfully log play app', 'data' => $play_app_result));
-					} else {
-						echo json_encode(array('result' => 'error', 'message' => 'log play app error', 'data' => $play_app_result));
-					}
-				} else {
-					echo json_encode(array('result' => 'ok', 'message' => 'sucessfully sign-up', 'data' => $signup_result));
-				}
+				echo json_encode(array('result' => 'ok', 'message' => 'sucessfully sign-up', 'data' => $signup_result));
 				
 			} else {
 				echo json_encode(array('result' => 'error', 'message' => 'signup error', 'data' => $signup_result));
 			}
 		}
 		
+	}
+
+	/**
+	 * Static user checking for redirect : AJAX
+	 */
+	public function static_user_check(){
+		$this->load->library('apiv2_lib');
+
+		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
+
+		$app_data_array = array(
+							'app_id' => 0, 
+							'app_secret_key' => 0,
+							'user_facebook_id' => $user_facebook_id
+						);
+		$sh_user = $this->apiv2_lib->get_user($app_data_array);
+
+		if($sh_user){
+			$result = array('result' => 'ok', 'sh_user' => $sh_user);
+		} else {
+			$result = array('result' => 'error', 'message' => 'user not found');
+		}
+
+		echo json_encode($result);
+	}
+
+	/**
+	 * Static user data for dashboard : AJAX
+	 */
+	public function static_get_user_data(){
+		$this->load->library('apiv2_lib');
+		$this->load->library('audit_lib');
+		$this->load->model('app_model');
+		$this->load->model('achievement_stat_model');
+
+		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
+
+		$app_data_array = array(
+							'app_id' => 0, 
+							'app_secret_key' => 0,
+							'user_facebook_id' => $user_facebook_id
+						);
+		$sh_user = $this->apiv2_lib->get_user($app_data_array);
+
+		if($sh_user){
+			$user_id = $sh_user['user_id'];
+			$audits = $this->audit_lib->list_audit(array('user_id' => $user_id, 'action_id' => 103, 'app_id' => array('$gt' => 10000)));
+			
+			$unique_app_ids  = array();
+			$played_apps = array();
+			foreach($audits as $audit){
+				if(!in_array($audit['app_id'] ,$unique_app_ids)){
+					$unique_app_ids[] = $audit['app_id'];
+					$played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);						
+				}
+			}
+
+			$user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
+			$user_score = issetor($user_stat['score'], 0);
+		}
+
+		$available_apps = $this->app_model->get_apps_by_app_id_range(10001);
+
+		$result = compact('sh_user', 'available_apps', 'played_apps', 'user_score');
+		echo json_encode($result);
+
 	}
 
 	/**
@@ -795,26 +867,29 @@ class Player extends CI_Controller {
 
 		//view-redirect after signup
 		$app_data = $this->input->get('app_data', TRUE);
-		$app_data = json_decode(base64_decode($app_data), TRUE);
+		$app_data_array = json_decode(base64_decode($app_data), TRUE);
 
 		//print_r($app_data);
-		$play_app_result = $this->apiv2_lib->play_app($app_data);
 
-		if(!$app_data['app_id'])
+		if(!$app_data_array['app_id'])
 			$data['app_id'] = 0;
 		else
-			$data['app_id'] = $app_data['app_id'];
+			$data['app_id'] = $app_data_array['app_id'];
 
 		if($user_facebook_data = $this->facebook->getUser()){
 			$data['user_data'] = $user_facebook_data;
 
 			$this->load->model('user_model');
-			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
+			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id'])){
 				$data['user_data']['sh_user_data'] = $user;
-
+				//login after trigger play_app
+				$this->socialhappen->player_login($user['user_id']);
+			}
+			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
+			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
 		}
 
-		$this->load->view('player/static_port_view', $data);
+	redirect('player/static_page?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
 
 	}
 
