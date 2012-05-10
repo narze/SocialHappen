@@ -658,20 +658,7 @@ class Player extends CI_Controller {
     		'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
   		));
 
-	 	$data['header'] = $this->socialhappen->get_header_bootstrap( 
-			array(
-				'title' => 'Welcome to SocialHappen',
-				'script' => array(
-					'common/bar',
-					'common/underscore-min'
-				),
-				'style' => array(
-					'common/player',
-					'player/static-dashboard'
-				),
-				'use_static_fb_root' => TRUE
-			)
-		);
+
 
 	 	if(!$app_data){
 
@@ -692,9 +679,67 @@ class Player extends CI_Controller {
 	 	
 	 	//add facebook->getUser here to avoid routing_view and redirect to signup or dashboard directly
 	 	if($dashboard && $this->socialhappen->is_logged_in_as_player()){
-	 		$this->load->view('player/static_dashboard_view', $data);
+	 		$template = array(
+        'title' => 'Welcome to SocialHappen',
+        'styles' => array(
+          'common/bootstrap',
+          'common/bootstrap-responsive',
+          'common/bar',
+          'common/player',
+          'player/static-dashboard'
+        ),
+        'body_views' => array(
+          'common/fb_root' => array(
+            'facebook_app_id' => $this->config->item('facebook_app_id'),
+            'facebook_channel_url' => $this->facebook->channel_url,
+            'facebook_app_scope' => $this->config->item('facebook_player_scope')
+          ),
+          // '../../assets/passport/templates/header/navigation.html' => NULL,
+          'bar/plain_bar_view' => array(),
+          'player/static_dashboard_view' => $data,
+          'common/vars' => array(
+          	'vars' => array(
+          		'base_url' => base_url()
+          	)
+          )
+        ),
+        'scripts' => array(
+          'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
+          'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+          'common/jquery.timeago',
+          'common/underscore-min',
+          'common/bootstrap.min',
+          'common/plain-bar',
+          'player/static-dashboard'
+        )
+      );
+      $this->load->view('common/template', $template);
 	 	} else {
-	 		$this->load->view('player/static_routing_view', $data);
+	 		$template = array(
+        'title' => 'Welcome to SocialHappen',
+        'styles' => array(),
+        'body_views' => array(
+          'common/fb_root' => array(
+            'facebook_app_id' => $this->config->item('facebook_app_id'),
+            'facebook_channel_url' => $this->facebook->channel_url,
+            'facebook_app_scope' => $this->config->item('facebook_player_scope')
+          ),
+          // '../../assets/passport/templates/header/navigation.html' => NULL,
+          'player/static_routing_view' => $data,
+          'common/vars' => array(
+          	'vars' => array(
+          		'base_url' => base_url(),
+          		'app_data' => $app_data,
+          		'true_app_data' => $data['true_app_data'] ? 1 : 0
+          	)
+          )
+        ),
+        'scripts' => array(
+          'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
+          'player/static-routing'
+        )
+      );
+      $this->load->view('common/template', $template);
 	 	}
 
 	}
@@ -892,8 +937,6 @@ class Player extends CI_Controller {
 	redirect('player/static_page?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
 
 	}
-
-
 }  
 
 /* End of file player.php */

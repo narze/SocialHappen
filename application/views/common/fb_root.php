@@ -4,7 +4,7 @@
 
   /**
    * Check if user is connected to facebook
-   * Loop until connected, then callback
+   * Loop until connected, then callback with facebook user id
    */
   function checkFBConnected(callback) {
     if(typeof callback === 'function') {
@@ -13,7 +13,7 @@
           checkFBConnected(callback);
         }, 50);
       } else {
-        callback(true);
+        callback(fbData.fbUserID);
       }
     }
   }
@@ -28,6 +28,7 @@
         FB.login(function(response) {
           if(typeof callback === 'function') {
             if (response.status === 'connected') {
+              fbData.fbUserID = response.authResponse.userID;
               callback(true);
             } else {
               callback(false);
@@ -53,6 +54,7 @@
       if (response.status === 'connected') {
         bindFBLogin();
         fbData.fbConnected = true;
+        fbData.fbUserID = response.authResponse.userID;
         // var uid = response.authResponse.userID;
         // var accessToken = response.authResponse.accessToken;
       // } else if (response.status === 'not_authorized') {
@@ -70,6 +72,7 @@
     FB.Event.subscribe('auth.statusChange', function(response) {
       if(response.status === 'connected') {
         fbData.fbConnected = true;
+        fbData.fbUserID = response.authResponse.userID;
       } else {
         bindFBLogin();
         fbData.fbConnected = false;
