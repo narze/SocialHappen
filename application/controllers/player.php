@@ -686,7 +686,7 @@ class Player extends CI_Controller {
           'common/bootstrap-responsive',
           'common/bar',
           'common/player',
-          'player/static-dashboard'
+          'player/play'
         ),
         'body_views' => array(
           'common/fb_root' => array(
@@ -696,7 +696,7 @@ class Player extends CI_Controller {
           ),
           // '../../assets/passport/templates/header/navigation.html' => NULL,
           'bar/plain_bar_view' => array(),
-          'player/static_dashboard_view' => $data,
+          'player/play_view' => $data,
           'common/vars' => array(
           	'vars' => array(
           		'base_url' => base_url()
@@ -710,7 +710,7 @@ class Player extends CI_Controller {
           'common/underscore-min',
           'common/bootstrap.min',
           'common/plain-bar',
-          'player/static-dashboard'
+          'player/play'
         )
       );
       $this->load->view('common/template', $template);
