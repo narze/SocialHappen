@@ -30,7 +30,7 @@ function check_user(){
 
       if(data.result=='ok'){
         if(true_app_data) {
-          self.location.href=base_url+'player/static_page?app_data='+app_data+'&dashboard=true';
+          self.location.href=base_url+'player/play?app_data='+app_data+'&dashboard=true';
         }else{
           self.location.href=base_url+'player/static_play_app_trigger?app_data='+app_data;
         } 

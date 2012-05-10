@@ -641,9 +641,9 @@ class Player extends CI_Controller {
 	}
 
 	/**
-	 * Static page for non-socialhappen app to redirect
+	 * Play page
 	 */
-	function static_page(){
+	function play(){
 	 	$this->load->library('apiv2_lib');
 		$app_data = $this->input->get('app_data', TRUE);
 		$dashboard = $this->input->get('dashboard', TRUE);
@@ -934,7 +934,7 @@ class Player extends CI_Controller {
 			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
 		}
 
-	redirect('player/static_page?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
+	redirect('player/play?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
 
 	}
 }  

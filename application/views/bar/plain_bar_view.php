@@ -20,7 +20,7 @@
 
 <script type="text/template" id="bar-menu-template">
   <li class="play">
-    <a href="<%= baseUrl %>player/static_page">Play</a>
+    <a href="<%= baseUrl %>player/play">Play</a>
   </li>
   <li class="passport">
     <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.id %>">Passport</a>

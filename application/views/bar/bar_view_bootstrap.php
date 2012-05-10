@@ -8,7 +8,7 @@
 		</a>
 
 		<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
-			<a class="brand" href="<?php echo base_url('player/static_page');?>">SocialHappen</a>
+			<a class="brand" href="<?php echo base_url('player/play');?>">SocialHappen</a>
 		<?php else : ?>
 			<a class="brand" href="<?php echo base_url();?>">SocialHappen</a>
 		<?php endif; ?>
