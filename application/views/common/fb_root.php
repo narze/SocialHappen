@@ -8,7 +8,7 @@
    */
   function checkFBConnected(callback) {
     if(typeof callback === 'function') {
-      if(!fbData.fbConnected) {
+      if(fbData.fbConnected === undefined) {
         setTimeout(function() {
           checkFBConnected(callback);
         }, 50);
