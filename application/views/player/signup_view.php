@@ -87,7 +87,7 @@
                                                 if(json.status != 'OK'){
                                                         window.location.replace(base_url+"player/signup?user_facebook_id="+response.id+'&token='+token);
                                                 } else {
-                                                        window.location.replace(base_url+"player/login");
+                                                        window.location.replace(base_url+"login");
                                                 }
                                         });
                                 });

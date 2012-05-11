@@ -92,7 +92,7 @@
 								<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
 									<a onclick="fblogin();">&raquo; Login</a>
 								<?php else : ?>
-									<li><a onclick="shlogin();" href="<?php echo base_url('player/login'); ?>">&raquo; Login</a></li>
+									<li><a onclick="shlogin();" href="<?php echo base_url('login'); ?>">&raquo; Login</a></li>
 									<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 								<?php endif; ?>
 							</ul>
@@ -104,7 +104,7 @@
 							<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
 								<a onclick="fblogin();">&raquo; Login</a>
 							<?php else : ?>
-								<a onclick="shlogin();" href="<?php echo base_url('player/login'); ?>">&raquo; Login</a>
+								<a onclick="shlogin();" href="<?php echo base_url('login'); ?>">&raquo; Login</a>
 							<?php endif; ?>
 							
 							<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->

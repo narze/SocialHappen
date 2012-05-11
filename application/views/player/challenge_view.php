@@ -36,7 +36,7 @@
 						$next_url = "player/challenge/{$challenge_hash}"; ?>
 						<div id="login">
 							<p id="login-message">Please Login SocialHappen First</p>
-							<a href="<?php echo base_url().'player/login?next='.urlencode($next_url);?>" class="btn btn-primary" id="login-btn">Login</a>
+							<a href="<?php echo base_url().'login?next='.urlencode($next_url);?>" class="btn btn-primary" id="login-btn">Login</a>
 						</div>
 					<?php elseif(!$player_challenging) : ?>
 						<a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" id="join-challenge">Accept challenge</a>
