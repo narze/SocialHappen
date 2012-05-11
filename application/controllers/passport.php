@@ -21,7 +21,7 @@ class Passport extends CI_Controller {
     }else if($user_id){ // see specific passport
       redirect('assets/passport#/profile/' . $user_id);
     }else{
-      redirect('player/login');
+      redirect('login?next=passport');
     }
     
     

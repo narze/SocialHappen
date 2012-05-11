@@ -36,7 +36,7 @@ class Login extends CI_Controller {
         }
       } else {
         //register
-        echo 'Register page [soon]';
+        redirect('signup?next='.$this->input->get('next'));
       }
     } else {
       //Login form

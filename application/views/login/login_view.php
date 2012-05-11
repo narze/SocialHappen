@@ -3,7 +3,7 @@
     <div class="span4">&nbsp;</div>
 
     <?php $attributes = array('class' => 'span4 well', 'id' => '');
-    echo form_open('player/login'.$next, $attributes); ?>
+    echo form_open('login'.$next, $attributes); ?>
 
       <?php if(isset($login_failed)) : ?>
         <div class="alert alert-error">
