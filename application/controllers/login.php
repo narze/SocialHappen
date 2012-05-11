@@ -12,32 +12,20 @@ class Login extends CI_Controller {
    * Login page
    */
   function index() {
+    $next = $this->socialhappen->strip_next_from_url($this->input->get('next'));
     if($user = $this->socialhappen->get_user()) {
       //Logged in already
-      if($next = $this->input->get('next')) {
+      if($next) {
         redirect($next);
       }
 
-      if($user['user_is_player']) {
-        redirect('player');
-      } else {
-        redirect('');
+      redirect('player/play');
+    } else if(($facebook_user = $this->facebook->getUser()) && $this->socialhappen->login()) {
+      if($next) {
+        redirect($next);
       }
-    } else if($facebook_user = $this->facebook->getUser()) {
-      if($this->socialhappen->login()) {
-        if($next = $this->input->get('next')) {
-          redirect($next);
-        }
 
-        if($user['user_is_player']) {
-          redirect('player');
-        } else {
-          redirect('');
-        }
-      } else {
-        //register
-        redirect('signup?next='.$this->input->get('next'));
-      }
+      redirect('player/play');
     } else {
       //Login form
 
@@ -47,8 +35,7 @@ class Login extends CI_Controller {
       $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');
         
       $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
-    
-      $next = $this->input->get('next');
+
       $this->load->vars('next', $next ? '?next='.urlencode($next) : '/');
       if ($this->form_validation->run() == FALSE) {
         $template = array(
@@ -72,7 +59,9 @@ class Login extends CI_Controller {
               'facebook_app_scope' => $this->config->item('facebook_player_scope')
             ),
             'bar/plain_bar_view' => array(),
-            'login/login_view' => array()
+            'login/login_view' => array(
+              'next' => $next ? "?next={$next}" : ''
+            )
           )
         );
         $this->load->view('common/template', $template);
@@ -110,7 +99,7 @@ class Login extends CI_Controller {
           if($next) {
             redirect($next);
           } else {
-            redirect('player');
+            redirect('player/play');
           }
         }
         else
@@ -132,9 +121,15 @@ class Login extends CI_Controller {
               'common/bar'
             ),
             'body_views' => array(
-              'common/fb_root' => array(),
+              'common/fb_root' => array(
+                'facebook_app_id' => $this->config->item('facebook_app_id'),
+                'facebook_channel_url' => $this->facebook->channel_url,
+                'facebook_app_scope' => $this->config->item('facebook_player_scope')
+              ),
               'bar/plain_bar_view' => array(),
-              'login/login_view' => array()
+              'login/login_view' => array(
+                'next' => $next ? "?next={$next}" : ''
+              )
             )
           );
           $this->load->view('common/template', $template);

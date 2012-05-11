@@ -13,7 +13,7 @@ class Player extends CI_Controller {
 	 */
 	function index() {
 
-		if(!$this->socialhappen->is_logged_in()) { redirect('player/login'); }
+		if(!$this->socialhappen->is_logged_in()) { redirect('login'); }
 
 		$user = $this->socialhappen->get_user();
 

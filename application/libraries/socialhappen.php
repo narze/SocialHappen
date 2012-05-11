@@ -1127,4 +1127,18 @@ class SocialHappen{
 		}
 		return $data;
 	}
+
+	function strip_next_from_url($url = NULL) {
+		return preg_replace('/(?:&|(\?))' . 'next' . '=[^&]*(?(1)&|)?/i', "$1", $url);
+	}
+
+	function set_next_url($url = NULL) {
+		//Remove next=...& if exists
+  	$url = preg_replace('/(?:&|(\?))' . 'next' . '=[^&]*(?(1)&|)?/i', "$1", $url);
+		return $this->CI->session->set_userdata('next_url', $url);
+	}
+
+	function get_next_url() {
+		return $this->CI->session->userdata('next_url');
+	}
 }
