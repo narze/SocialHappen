@@ -28,7 +28,7 @@ class Checkin extends CI_Controller {
 							'user' => $user
 						);
 			$this->load->helper('form');
-			$this->load->view('actions/checkin/checkin_form', $data);
+			$this->load->view('actions/checkin/checkin_form_basic', $data);
 		} else {
 			show_error('Code not found or user not logged in');
 		}
