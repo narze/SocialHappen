@@ -13,12 +13,12 @@ class Player extends CI_Controller {
 	 */
 	function index() {
 
-		if(!$this->socialhappen->is_logged_in()) { redirect('player/login'); }
+		if(!$this->socialhappen->is_logged_in()) { redirect('login'); }
 
 		$user = $this->socialhappen->get_user();
 
 		$data = array(
-			'header' => $this -> socialhappen -> get_header_bootstrap( 
+			'header' => $this->socialhappen->get_header_bootstrap( 
 				array(
 					'title' => 'Player',
 					'script' => array(
@@ -64,212 +64,6 @@ class Player extends CI_Controller {
 		);
 
 		$this->parser->parse('player/index_view', $data);
-	}
-
-	/**
-	 * Player's signup page
-	 */
-	function signup() {
-		if($this->socialhappen->is_logged_in()) { redirect('player'); }
-
-		$data = array(
-			'header' => $this -> socialhappen -> get_header_bootstrap( 
-				array(
-					'title' => 'Signup',
-					'script' => array(
-						//'common/functions',
-						//'common/jquery.form',
-						'common/bar',
-						//'common/fancybox/jquery.fancybox-1.3.4.pack',
-						//'home/lightbox',
-						//'payment/payment'
-					),
-					'style' => array(
-						'common/player',
-						//'common/platform',
-						//'common/main',
-						//'common/fancybox/jquery.fancybox-1.3.4'
-					)
-				)
-			)
-		);
-
-		$this->load->vars(array(
-			'facebook_default_scope' => $this->config->item('facebook_default_scope')
-			)
-		);
-
-		if($this->input->get('user_facebook_id') && $this->input->get('token'))
-		{
-			$this->session->set_userdata(array(
-				'user_facebook_id' => $this->input->get('user_facebook_id'),
-				'token'=>$this->input->get('token')
-			));
-		}
-
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[100]');			
-		$this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'required|trim|xss_clean|is_numeric|max_length[20]');			
-		$this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');			
-		$this->form_validation->set_rules('password_again', 'Password Again', 'required|trim|xss_clean|max_length[50]');
-			
-		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-	
-		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
-		{
-			$data['facebook_user'] = $this->facebook->getUser();
-			$this->parser->parse('player/signup_view', $data);
-		}
-		else // passed validation proceed to post success logic
-		{
-		 	// build array for the model
-			$password = set_value('password');
-			$password_again = set_value('password_again');
-			if($password !== $password_again) {
-				$this->load->vars('password_not_match', TRUE);
-				$this->parser->parse('player/signup_view', $data);
-			} else {
-				$encrypted_password = sha1($this->presalt.$password.$this->postsalt);
-				$form_data = array(
-					'user_email' => set_value('email'),
-					'user_phone' => set_value('mobile_phone_number'),
-					'user_password' => $encrypted_password,
-					'user_is_player' => 1,
-					'user_facebook_id' => $this->FB->getUser(),
-					'user_facebook_access_token' => $this->FB->getAccessToken()
-				);
-					
-				$do_not_add = FALSE;
-				// run insert model to write data to db
-				$this->load->model('user_model');
-				if($this->user_model->findOne(array('user_email' => $form_data['user_email']))){
-					$this->load->vars('duplicated_email', TRUE);
-					$do_not_add = TRUE;
-				}
-				if($this->user_model->findOne(array('user_phone' => $form_data['user_phone']))){
-					$this->load->vars('duplicated_phone', TRUE);
-					$do_not_add = TRUE;
-				}
-
-				if ($do_not_add) {
-					$this->parser->parse('player/signup_view', $data);
-				}
-				else if ($user_id = $this->user_model->add_user($form_data)) // the information has therefore been successfully saved in the db
-				{
-					// echo 'Player added';
-					$this->socialhappen->player_login($user_id);
-
-					$next = $this->input->get('next');
-					if($next) {
-						redirect($next);
-					} else {
-						redirect('player');
-					}
-				}
-				else
-				{
-					echo 'An error occurred saving your information. Please try again later';
-				// Or whatever error handling is necessary
-				}
-			}
-		}
-	}
-
-	/**
-	 * Player's login page
-	 */
-	function login() {
-
-		if($this->socialhappen->is_logged_in()) { 
-			redirect('player'); 
-		}	else if($facebook_user = $this->facebook->getUser()) {
-			$this->load->model('user_model');
-			if($user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user['id'])) {
-				$this->socialhappen->player_login($user['user_id']);
-				redirect('player');
-			}
-		}
-
-		$data = array(
-			'header' => $this->socialhappen->get_header_bootstrap( 
-				array(
-					'title' => 'Login',
-					'script' => array(
-						//'common/functions',
-						//'common/jquery.form',
-						'common/bar',
-						//'common/fancybox/jquery.fancybox-1.3.4.pack',
-						//'home/lightbox',
-						//'payment/payment'
-					),
-					'style' => array(
-						'common/player',
-						//'common/platform',
-						//'common/main',
-						//'common/fancybox/jquery.fancybox-1.3.4'
-					)
-				)
-			),
-			'facebook_user' => $this->facebook->getUser()
-		);
-
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('email', 'Email', 'trim|xss_clean|valid_email|max_length[100]');			
-		$this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');			
-		$this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');
-			
-		$this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
-	
-		$next = $this->input->get('next');
-		$this->load->vars('next', $next ? '?next='.urlencode($next) : '/');
-		if ($this->form_validation->run() == FALSE)
-		{
-			$this->parser->parse('player/login_view', $data);
-		}
-		else
-		{
-			$email = set_value('email');
-			$mobile_phone_number = set_value('mobile_phone_number');
-
-			$password = set_value('password');
-			$encrypted_password = sha1($this->presalt.$password.$this->postsalt);
-			
-			$this->load->model('user_model');
-			if($email) {
-				$user = $this->user_model->findOne(array(
-					'user_email' => $email,
-					'user_password' => $encrypted_password
-				));
-			} else if($mobile_phone_number) {
-				$user = $this->user_model->findOne(array(
-					'user_phone' => $mobile_phone_number,
-					'user_password' => $encrypted_password
-				));
-			} else {
-				$user = FALSE;
-				$this->load->vars('email_and_phone_not_entered', TRUE);
-			}
-					
-			// run insert model to write data to db
-		
-			if ($user) // the information has therefore been successfully saved in the db
-			{
-				//login process (session)
-				$this->socialhappen->player_login($user['user_id']);
-				//end login process
-
-				if($next) {
-					redirect($next);
-				} else {
-					redirect('player');
-				}
-			}
-			else
-			{
-				$this->load->vars('login_failed', TRUE);
-				$this->parser->parse('player/login_view', $data);
-			}
-		}
 	}
 	
 	/**
@@ -449,7 +243,7 @@ class Player extends CI_Controller {
 			);
 
 			$data = array(
-				'header' => $this -> socialhappen -> get_header_bootstrap( 
+				'header' => $this->socialhappen->get_header_bootstrap( 
 					array(
 						'title' => $challenge['detail']['name'],
 						'script' => array(
@@ -641,10 +435,12 @@ class Player extends CI_Controller {
 	}
 
 	/**
-	 * Static page for non-socialhappen app to redirect
+	 * Play page
 	 */
-	function static_page(){
+	function play(){
 	 	$this->load->library('apiv2_lib');
+		$app_data = $this->input->get('app_data', TRUE);
+		$dashboard = $this->input->get('dashboard', TRUE);
 
 		$facebook_data = array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
@@ -653,10 +449,113 @@ class Player extends CI_Controller {
 		);
 		
 	 	$this->load->vars(array(
-    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-  	));
+    		'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+  		));
 
-	 	$app_data = $this->input->get('app_data', TRUE);
+
+
+	 	if(!$app_data){
+
+			$app_data_array = array(
+				'app_id' => 0, 
+				'app_secret_key' => 0,
+			);
+			$app_data = base64_encode(json_encode($app_data_array));
+			$data['true_app_data'] = false;
+
+		} else {
+			$data['true_app_data'] = true;
+			$app_data_array = json_decode(base64_decode($app_data), TRUE);
+		}
+		
+		$data['app_data'] = $app_data;
+		$data['app_data_array'] = $app_data_array;
+	 	
+	 	//add facebook->getUser here to avoid routing_view and redirect to signup or dashboard directly
+	 	// if($dashboard && $this->socialhappen->is_logged_in_as_player()){
+	 		$template = array(
+        'title' => 'Welcome to SocialHappen',
+        'styles' => array(
+          'common/bootstrap',
+          'common/bootstrap-responsive',
+          'common/bar',
+          'common/player',
+          'player/play'
+        ),
+        'body_views' => array(
+          'common/fb_root' => array(
+            'facebook_app_id' => $this->config->item('facebook_app_id'),
+            'facebook_channel_url' => $this->facebook->channel_url,
+            'facebook_app_scope' => $this->config->item('facebook_player_scope')
+          ),
+          // '../../assets/passport/templates/header/navigation.html' => NULL,
+          'bar/plain_bar_view' => array(),
+          'player/play_view' => $data,
+          'common/vars' => array(
+          	'vars' => array(
+          		'base_url' => base_url()
+          	)
+          )
+        ),
+        'scripts' => array(
+          'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
+          'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+          'common/jquery.timeago',
+          'common/underscore-min',
+          'common/bootstrap.min',
+          'common/plain-bar',
+          'player/play'
+        )
+      );
+      $this->load->view('common/template', $template);
+	 	// } else {
+	 	// 	$template = array(
+   //      'title' => 'Welcome to SocialHappen',
+   //      'styles' => array(),
+   //      'body_views' => array(
+   //        'common/fb_root' => array(
+   //          'facebook_app_id' => $this->config->item('facebook_app_id'),
+   //          'facebook_channel_url' => $this->facebook->channel_url,
+   //          'facebook_app_scope' => $this->config->item('facebook_player_scope')
+   //        ),
+   //        // '../../assets/passport/templates/header/navigation.html' => NULL,
+   //        'player/static_routing_view' => $data,
+   //        'common/vars' => array(
+   //        	'vars' => array(
+   //        		'base_url' => base_url(),
+   //        		'app_data' => $app_data,
+   //        		'true_app_data' => $data['true_app_data'] ? 1 : 0
+   //        	)
+   //        )
+   //      ),
+   //      'scripts' => array(
+   //        'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
+   //        'player/static-routing'
+   //      )
+   //    );
+   //    $this->load->view('common/template', $template);
+	 	// }
+
+	}
+
+	public function static_signup(){
+		$this->load->library('apiv2_lib');
+		$app_data = $this->input->get('app_data', TRUE);
+
+	 	$this->load->vars(array(
+    	'header' => $this->socialhappen->get_header_bootstrap( 
+				array(
+					'title' => 'Welcome to SocialHappen',
+					'script' => array(
+						'common/bar',
+					),
+					'style' => array(
+						'common/player',
+					),
+					'use_static_fb_root' => TRUE
+				)
+			)
+		));
 
 		if(!$app_data){
 
@@ -672,9 +571,9 @@ class Player extends CI_Controller {
 			/*
 			print_r(base64_encode(json_encode(
 												array(
-														'app_id' => 1, 
-														'app_secret_key' => 'asdfghjkasdfghj',
-														'user_facebook_id' => '12345678',
+														'app_id' => 10004, 
+														'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+														'user_facebook_id' => '631885465',
 														'data' => array('message' => 'message', 'link' => 'link')
 													))));
 			*/
@@ -684,58 +583,7 @@ class Player extends CI_Controller {
 
 		$data = compact('app_data','app_data_array');
 		$this->load->view('player/static_signup_view', $data);
-		/*
-		if($user_facebook_data = $this->facebook->getUser()){
-			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
-		}
-
-		$sh_user = $this->apiv2_lib->get_user($app_data_array);
-		*/
-
-		/*
-		if($sh_user && $user_facebook_data){
-			//already member
-			//call play app 
-			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
-
-			if(!$app_data_array['app_id'])
-				$data['app_id'] = 0;
-			else
-				$data['app_id'] = $app_data_array['app_id'];
-
-			if($user_facebook_data = $this->facebook->getUser()){
-				$data['user_data'] = $user_facebook_data;
-
-				$this->load->model('user_model');
-				if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
-					$data['user_data']['sh_user_data'] = $user;
-
-			}
-
-			$this->load->view('player/static_port_view', $data);
-
-		} else {
-			//any other case
-			$app_data = base64_encode(json_encode($app_data_array));
-			$data = compact('app_data','app_data_array');
-
-			try {
-				$facebook_user = $this->facebook->getUser();
-				$data['user_email'] = $facebook_user['email'];
-				$data['facebook_name'] = $facebook_user['name'];
-				$data['facebook_image'] = 'http://graph.facebook.com/'.$user_facebook_data['id'].'/picture';
-			} catch (FacebookApiException $e) {
-
-			}
-
-			//try request for permission and/or signup
-			$this->load->view('player/static_signup_view', $data);
-
-			//call play app in play_app_trigger
-			
-		}
-		*/
-	 }
+	}
 
 	/**
 	 * Static signup : AJAX
@@ -746,41 +594,97 @@ class Player extends CI_Controller {
 		//mandatory parameters
 		$app_data = $this->input->post('app_data', TRUE);
 		$user_email = $this->input->post('email', TRUE);
+		$user_first_name = $this->input->post('firstname', TRUE);
+		$user_last_name = $this->input->post('lastname', TRUE);
 		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
 
 		$app_data = json_decode(base64_decode($app_data), TRUE);
 		
 		$app_id = $app_data['app_id'];
 		$app_secret_key = $app_data['app_secret_key'];
-		$user_facebook_id = $user_facebook_id;
-
-		$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
+		$user_image = "https://graph.facebook.com/{$user_facebook_id}/picture";
+		$user_is_player = 1;
 
 		//check args
 		if(isset($app_id) && isset($app_secret_key) && $user_facebook_id && $user_email){
-			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email');
+			$args = compact('app_id', 'app_secret_key', 'user_facebook_id', 'user_email', 'user_first_name', 'user_last_name', 'user_image', 'user_is_player');
 			$signup_result = $this->apiv2_lib->signup($args);
 
 			//show result
 			if($signup_result){
-				if($app_id!=0){
-					$app_data = compact('app_id', 'app_secret_key', 'user_facebook_id');
-					$play_app_result = $this->apiv2_lib->play_app($app_data);
-
-					if($play_app_result['success']){
-						echo json_encode(array('result' => 'ok', 'message' => 'sucessfully log play app', 'data' => $play_app_result));
-					} else {
-						echo json_encode(array('result' => 'error', 'message' => 'log play app error', 'data' => $play_app_result));
-					}
-				} else {
-					echo json_encode(array('result' => 'ok', 'message' => 'sucessfully sign-up', 'data' => $signup_result));
-				}
+				echo json_encode(array('result' => 'ok', 'message' => 'sucessfully sign-up', 'data' => $signup_result));
 				
 			} else {
 				echo json_encode(array('result' => 'error', 'message' => 'signup error', 'data' => $signup_result));
 			}
 		}
 		
+	}
+
+	/**
+	 * Static user checking for redirect : AJAX
+	 */
+	public function static_user_check(){
+		$this->load->library('apiv2_lib');
+
+		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
+
+		$app_data_array = array(
+							'app_id' => 0, 
+							'app_secret_key' => 0,
+							'user_facebook_id' => $user_facebook_id
+						);
+		$sh_user = $this->apiv2_lib->get_user($app_data_array);
+
+		if($sh_user){
+			$result = array('result' => 'ok', 'sh_user' => $sh_user);
+		} else {
+			$result = array('result' => 'error', 'message' => 'user not found');
+		}
+
+		echo json_encode($result);
+	}
+
+	/**
+	 * DEPRECATED : Static user data for dashboard : AJAX
+	 */
+	public function static_get_user_data(){
+		// $this->load->library('apiv2_lib');
+		// $this->load->library('audit_lib');
+		// $this->load->model('app_model');
+		// $this->load->model('achievement_stat_model');
+
+		// $user_facebook_id = $this->input->post('user_facebook_id', TRUE);
+
+		// $app_data_array = array(
+		// 					'app_id' => 0, 
+		// 					'app_secret_key' => 0,
+		// 					'user_facebook_id' => $user_facebook_id
+		// 				);
+		// $sh_user = $this->apiv2_lib->get_user($app_data_array);
+
+		// if($sh_user){
+		// 	$user_id = $sh_user['user_id'];
+		// 	$audits = $this->audit_lib->list_audit(array('user_id' => $user_id, 'action_id' => 103, 'app_id' => array('$gt' => 10000)));
+			
+		// 	$unique_app_ids  = array();
+		// 	$played_apps = array();
+		// 	foreach($audits as $audit){
+		// 		if(!in_array($audit['app_id'] ,$unique_app_ids)){
+		// 			$unique_app_ids[] = $audit['app_id'];
+		// 			$played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);						
+		// 		}
+		// 	}
+
+		// 	$user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
+		// 	$user_score = issetor($user_stat['score'], 0);
+		// }
+
+		// $available_apps = $this->app_model->get_apps_by_app_id_range(10001);
+
+		// $result = compact('sh_user', 'available_apps', 'played_apps', 'user_score');
+		// echo json_encode($result);
+		echo '{}';
 	}
 
 	/**
@@ -802,30 +706,31 @@ class Player extends CI_Controller {
 
 		//view-redirect after signup
 		$app_data = $this->input->get('app_data', TRUE);
-		$app_data = json_decode(base64_decode($app_data), TRUE);
+		$app_data_array = json_decode(base64_decode($app_data), TRUE);
 
 		//print_r($app_data);
-		$play_app_result = $this->apiv2_lib->play_app($app_data);
 
-		if(!$app_data['app_id'])
+		if(!$app_data_array['app_id'])
 			$data['app_id'] = 0;
 		else
-			$data['app_id'] = $app_data['app_id'];
+			$data['app_id'] = $app_data_array['app_id'];
 
 		if($user_facebook_data = $this->facebook->getUser()){
 			$data['user_data'] = $user_facebook_data;
 
 			$this->load->model('user_model');
-			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id']))
+			if($user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_data['id'])){
 				$data['user_data']['sh_user_data'] = $user;
-
+				//login after trigger play_app
+				$this->socialhappen->player_login($user['user_id']);
+			}
+			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
+			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
 		}
 
-		$this->load->view('player/static_port_view', $data);
+	redirect('player/play?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
 
 	}
-
-
 }  
 
 /* End of file player.php */

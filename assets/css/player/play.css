@@ -1,0 +1,70 @@
+body {
+  position: relative;
+  padding-top: 60px;
+  background-color: #fff;
+}
+
+div.clear {
+  clear: both;
+}
+
+img.user-picture {
+
+}
+
+img.app-photo {
+  width: 128px;
+  height: 128px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+ul.played-apps-list{
+  overflow: hidden;
+  overflow-x: scroll;
+  -ms-overflow-y: hidden;
+  height: 250px;
+  width: 880px;
+  white-space: nowrap;
+}
+
+ul.played-apps-list, ul.all-apps-list li {
+  display: inline-block;
+}
+
+li.played-app{
+  margin: 20px;
+  display: inline-block;
+}
+
+div.played-app{
+  text-align: center;
+}
+
+.played-app-container {
+  
+}
+
+li.app-item{
+  float: left;
+}
+
+div.app-item{
+  width: 400px;
+}
+
+img.app-photo {
+  padding: 10px;
+}
+
+div.app-photo{
+  float: left;
+/*  margin-right: 20px;*/
+}
+div.app-detail{
+  float: left;
+  padding: 10px;
+  width: 220px;
+}

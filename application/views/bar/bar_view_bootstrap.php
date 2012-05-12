@@ -1,5 +1,5 @@
 <div class="navbar-inner">
-	<div class="container">
+	<div class="container-fluid">
 
 		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 			<span class="icon-bar"></span>
@@ -7,7 +7,11 @@
 			<span class="icon-bar"></span>
 		</a>
 
-		<a class="brand" href="<?php echo base_url();?>">SocialHappen</a>
+		<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
+			<a class="brand" href="<?php echo base_url('player/play');?>">SocialHappen</a>
+		<?php else : ?>
+			<a class="brand" href="<?php echo base_url();?>">SocialHappen</a>
+		<?php endif; ?>
 
 		<div class="nav-collapse">
 			<ul class="nav">
@@ -50,8 +54,12 @@
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu mega-dropdown-menu user">
-							<li><?php echo anchor("settings/account/{$user['user_id']}",'&raquo Profile Setting');?></li>
-							<li><?php echo anchor('logout','&raquo Logout');?></li>
+							<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
+								<li><?php echo anchor('player/static_logout','&raquo Logout');?></li>
+							<?php else : ?>
+								<li><?php echo anchor("settings/account/{$user['user_id']}",'&raquo Profile Setting');?></li>
+								<li><?php echo anchor('logout','&raquo Logout');?></li>
+							<?php endif; ?>
 						</ul>
 					</li>
 
@@ -81,15 +89,24 @@
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu mega-dropdown-menu user">
-								<li><a onclick="shlogin();" href="<?php echo base_url('player/login'); ?>">&raquo; Login</a></li>
-								<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
+								<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
+									<a onclick="fblogin();">&raquo; Login</a>
+								<?php else : ?>
+									<li><a onclick="shlogin();" href="<?php echo base_url('login'); ?>">&raquo; Login</a></li>
+									<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
+								<?php endif; ?>
 							</ul>
 						</li><?php 
 					} 
 					else 
 					{ ?>
 						<li>
-							<a onclick="shlogin();" href="<?php echo base_url('player/login'); ?>">&raquo; Login</a>
+							<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
+								<a onclick="fblogin();">&raquo; Login</a>
+							<?php else : ?>
+								<a onclick="shlogin();" href="<?php echo base_url('login'); ?>">&raquo; Login</a>
+							<?php endif; ?>
+							
 							<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->
 						</li><?php 
 					}

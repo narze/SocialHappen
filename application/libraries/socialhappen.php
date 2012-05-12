@@ -361,6 +361,10 @@ class SocialHappen{
 		
 		$data['bar_view_bootstrap'] = TRUE; //Get new bar view
 
+		if(isset($data['use_static_fb_root']) && $data['use_static_fb_root']) {
+			$data['facebook_app_scope'] = $this->CI->config->item('facebook_player_scope');
+		}
+
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 	
@@ -1098,5 +1102,43 @@ class SocialHappen{
 
 	function is_logged_in_as_player() {
 		return $this->CI->session->userdata('logged_in_as_player');
+	}
+
+	function get_bar_data() {
+		$user = $this->get_user();
+		$facebook_user = $this->CI->facebook->getUser();
+
+		$data = array(
+			'is_user' => !!$user,
+			'user' => $user,
+			'is_facebook_user' => !!$facebook_user,
+			'facebook_user' => $facebook_user,
+			'user_can_create_company' => FALSE
+		);
+
+		if($user) {
+			$this->CI->load->library('notification_lib');
+			$user_companies = $this->get_user_companies();
+			$data['user_can_create_company'] = 
+				!$user_companies ? TRUE : $this->check_package_by_user_id_and_mode(
+				$this->CI->session->userdata('user_id'), 'company');
+			$data['notification_amount'] = 
+				$this->CI->notification_lib->count_unread($user['user_id']);
+		}
+		return $data;
+	}
+
+	function strip_next_from_url($url = NULL) {
+		return preg_replace('/(?:&|(\?))' . 'next' . '=[^&]*(?(1)&|)?/i', "$1", $url);
+	}
+
+	function set_next_url($url = NULL) {
+		//Remove next=...& if exists
+  	$url = preg_replace('/(?:&|(\?))' . 'next' . '=[^&]*(?(1)&|)?/i', "$1", $url);
+		return $this->CI->session->set_userdata('next_url', $url);
+	}
+
+	function get_next_url() {
+		return $this->CI->session->userdata('next_url');
 	}
 }

@@ -1,0 +1,35 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+      <a class="brand" href="#">SocialHappen</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li class="play">
+            <a href="<%= baseUrl %>player/play">Play</a>
+          </li>
+          <li class="passport">
+            <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.user_id %>">Passport</a>
+          </li>
+          <li class="world">
+            <a>World</a>
+          </li>
+        </ul>
+        <ul class="nav pull-right">
+          
+          <li class="divider-vertical"></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img class="user-image" src="<%= user.user_image %>?type=square" alt=""/ >  <%= user.user_first_name %> <%= user.user_last_name %> <b class="caret"></b> </a>
+            <ul class="dropdown-menu mega-dropdown-menu user">
+              <li>
+                <a href="https://socialhappen.dyndns.org/socialhappen/logout">» Logout</a>
+              </li>
+            </ul>
+          </li>
+          
+          <li class="dropdown bar-notification notification"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

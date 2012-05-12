@@ -1,11 +1,21 @@
-{header}
-  <div class="container-fluid">
+<div class="container-fluid">
+  <div id="login" style="display:none;">
+    <div class="row-fluid">
+      <div class="span4">&nbsp;</div>
+      <div class="span4 well">
+        <center>
+          <a id="facebook-connect" onclick="fbLogin(fbLoginResult);" id="fblogin" data-redirect="<?php echo base_url('signup/facebook'.$next);?>">
+            <img src="<?php echo base_url('images/fb-login.jpg'); ?>" alt="Connect with facebook" />
+          </a>
+        </center>
+      </div>
+    </div>
+    <div class="row-fluid"><center>or<center></div>
     <div class="row-fluid">
       <div class="span4">&nbsp;</div>
 
       <?php $attributes = array('class' => 'span4 well', 'id' => '');
-      echo form_open('player/login'.$next, $attributes); ?>
-
+      echo form_open('login'.$next, $attributes); ?>
         <?php if(isset($login_failed)) : ?>
           <div class="alert alert-error">
             <a class="close" data-dismiss="alert">×</a>
@@ -37,32 +47,27 @@
 
         <div class="control-group">
           <button type="submit" class="btn btn-primary">Login</button>
-          or <?php echo anchor('player/signup'.$next, 'Signup Socialhappen'); ?>
         </div>
-
-        
-
       <?php echo form_close(); ?>
-
-      <div class="span4">&nbsp;</div>
     </div>
-
     <div class="row-fluid">
-        <div class="span4">&nbsp;</div>
-        <div class="span4">
-          <div class="control-group text-center">
-            <?php if($facebook_user) : ?>
-              <span>You're logged in as <?php echo $facebook_user['name'];?> <img src="<?php echo 'https://graph.facebook.com/'.$facebook_user['id'].'/picture';?>" /></span>
-            <?php else : ?>
-              <a onclick="fblogin();" id="fblogin"><img src="<?php echo base_url('images/fb-login.jpg'); ?>" alt="Login with facebook"></a>
-            <?php endif; ?>
-          </div>
-        </div>
-        <div class="span4">&nbsp;</div>
-            
+      <div class="span4">&nbsp;</div>
+      <div class="span4">or <?php echo anchor('signup'.$next, 'Signup Socialhappen'); ?></div>
     </div>
-
   </div>
+</div>
 
+<script type="text/javascript">
+  //When FB init, show signup buttons
+  checkFBConnected(function(){
+    $('#login').show();
+  });
 
+  //redirect when connected facebook
+  window.fbLoginResult = function(connected) {
+    if(connected) {
+      window.location = $('#facebook-connect').data('redirect');
+    }
+  };
+</script>
 

@@ -122,7 +122,7 @@ class QR extends CI_Controller {
          */
         $data = array(
           'challenge' => $challenge,
-          'login_url' => site_url('/player/login/?next='. site_url($this->uri->uri_string()).'?code='.$code)
+          'login_url' => site_url('/login/?next='. site_url($this->uri->uri_string()).'?code='.$code)
         );
 
         $this->load->view('actions/qr/qr_challenge_login_view', $data);
