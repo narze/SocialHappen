@@ -5,5 +5,12 @@
   <h2 class="name">
     <%= user.user_first_name %> <%= user.user_last_name %>
   </h2>
+  <p>User Point: <%= user.user_score %></p>
+  <% if(user.user_register_date){ %>
+  <p>Join Date: <%= $.timeago(new Date(new Date(user.user_register_date).getTime() + parseInt(user.user_timezone_offset || 0, 10)*60000)) %></p>
+  <% } %>
+  <% if(user.user_last_seen){ %>
+  <p>Last Seen: <%= $.timeago(new Date(new Date(user.user_last_seen).getTime() + parseInt(user.user_timezone_offset || 0, 10)*60000)) %></p>
+  <% } %>
 </div>
 <div class="clear"></div>

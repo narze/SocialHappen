@@ -36,7 +36,12 @@ class Apiv3 extends CI_Controller {
     }else if($user_id){ // see specific user
       $this->load->model('user_model');
       $user = $this->user_model->get_user_profile_by_user_id($user_id);
+      $this->load->model('achievement_stat_model');
+      $user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
+      $user_score = issetor($user_stat['score'], 0); 
+      
       if($user){
+        $user['user_score'] = $user_score;
         echo json_encode($user);
       }else{
         echo '{}';
