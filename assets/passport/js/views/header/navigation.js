@@ -11,7 +11,8 @@ define([
     barNotificationTemplate: _.template(barNotificationTemplate),
     el: '#header',
     events: {
-
+      'click .notification_list_bar>li>a' : 'seeNotification',
+      'click .a-notification' : 'seeNotification'
     },
     initialize: function () {
       _.bindAll(this);
@@ -45,6 +46,10 @@ define([
       });
       
       return this;
+    },
+    
+    seeNotification: function(e){
+      e.preventDefault();
     }
   })
 
