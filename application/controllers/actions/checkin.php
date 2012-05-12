@@ -33,11 +33,51 @@ class Checkin extends CI_Controller {
 			$this->load->helper('form');
 
 			if(!$this->basic_view){
+				$body_views = array(
+					        	'actions/checkin/checkin_form' => $data,
+						        'common/vars' => array(
+						          	'vars' => array(
+						          		'base_url' => base_url()
+						          	)
+						        )
+					        );
+			}else{
+				$body_views = array(
+					        	'actions/checkin/checkin_form_basic' => $data,
+						        'common/vars' => array(
+						          	'vars' => array(
+						          		'base_url' => base_url()
+						          	)
+						        )
+					        );
+			}
+
+			$template = array(
+		        'title' => 'Welcome to SocialHappen',
+		        'styles' => array(
+		          'common/bootstrap',
+		          'common/bootstrap-responsive',
+		          'common/jquery.facebook.multifriend.select',
+		          'common/jquery.facebook.multifriend.select-list',
+		        ),
+		        'body_views' => $body_views,
+		        'scripts' => array(
+		          'common/jquery.min',
+		          'common/jquery.facebook.multifriend.select',
+		          'common/jquery-ui-1.8.20.autocomplete.min',
+		          'challenge/checkin/checkin_form'
+		        )
+		    );
+
+     		$this->load->view('common/template', $template);
+
+/*
+			if(!$this->basic_view){
 				$this->load->view('actions/checkin/checkin_form', $data);
 			}else{
 				$this->load->view('actions/checkin/checkin_form_basic', $data);
 			}
-			
+			*/
 		} else {
 			show_error('Code not found or user not logged in');
 		}
