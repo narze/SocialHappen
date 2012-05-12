@@ -1,11 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Checkin extends CI_Controller {
-	
+	private $basic_view = NULL;
+
 	function __construct(){
 		parent::__construct();
 		$this->load->library('action_data_lib');
 		$this->load->library('action_user_data_lib');
+
+		$this->basic_view = $this->input->get('basic_view', TRUE);
 	}
 	
 	function index() {
@@ -28,7 +31,13 @@ class Checkin extends CI_Controller {
 							'user' => $user
 						);
 			$this->load->helper('form');
-			$this->load->view('actions/checkin/checkin_form_basic', $data);
+
+			if(!$this->basic_view){
+				$this->load->view('actions/checkin/checkin_form', $data);
+			}else{
+				$this->load->view('actions/checkin/checkin_form_basic', $data);
+			}
+			
 		} else {
 			show_error('Code not found or user not logged in');
 		}
@@ -64,8 +73,7 @@ class Checkin extends CI_Controller {
 				$tagged_user_facebook_id = trim($tagged_user_facebook_id);
 			}
 
-			if($facebook_place_id == $action_data['data']['checkin_facebook_place_id']){
-
+			if(in_array($facebook_place_id, $action_data['data']['checkin_facebook_place_id'])){
 				if(count($tagged_user_facebook_ids) >= $action_data['data']['checkin_min_friend_count']){
 					$user_data = array(
 										'facebook_place_id' => $facebook_place_id,

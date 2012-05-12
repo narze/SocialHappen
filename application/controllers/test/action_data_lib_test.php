@@ -176,7 +176,7 @@ class Action_data_lib_test extends CI_Controller {
 
 	function add_checkin_action_data_test() {
 		$form_data = array(
-						'checkin_facebook_place_id' => '162135693842364',
+						'checkin_facebook_place_id' => array('162135693842364'),
 						'checkin_facebook_place_name' => 'Figabyte HQ.',
 						'checkin_min_friend_count' => 3,
 						'checkin_welcome_message' => 'Here you are!',

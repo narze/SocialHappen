@@ -2,15 +2,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-	<?php echo link_tag('assets/css/common/jquery.mobile-1.1.0.min.css'); ?>
-
 </head>
 <body>
 <?php echo $static_fb_root;?>
 <div>
 	<h1><?php echo $action_data['data']['checkin_welcome_message']; ?> <?php echo $user['user_first_name']?></h1>
 	<div>
-		<div id="loading-box" style="display:none;"><img src="<?php echo base_url().'assets/images/loading.gif'; ?>" /></div>
+		<div class="loading-div" style="height:36px;display:block;">
+			<div id="loading-box" style="display:none;"><img src="<?php echo base_url().'assets/images/loading.gif'; ?>" /></div>
+		</div>
 		<form name="" action="<?php echo base_url('actions/checkin/add_user_data_checkin'); ?>" method="post">
 			<div><?php echo $action_data['data']['checkin_challenge_message']; ?></div>
 			<div>
@@ -32,7 +32,6 @@
 							<div id="selected-friends-list">-</div>
 							<input type="text" name="search_friends_basic" id="search_friends_basic" onkeypress="return noenter()" />
 							<input type="button" class="search_basic_submit" data-id="friends" value="Search"> 
-
 							<div id="search_friends_basic_result">
 							</div>
 						</div>
@@ -54,7 +53,6 @@
 
 </body>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/common/jquery.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/common/jquery.mobile-1.1.0.min.js"></script>
 
 	<script>
 		var user_facebook_id = 0;
