@@ -74,6 +74,7 @@ class Checkin extends CI_Controller {
 			}
 
 			if(in_array($facebook_place_id, $action_data['data']['checkin_facebook_place_id'])){
+
 				if(count($tagged_user_facebook_ids) >= $action_data['data']['checkin_min_friend_count']){
 					$user_data = array(
 										'facebook_place_id' => $facebook_place_id,
