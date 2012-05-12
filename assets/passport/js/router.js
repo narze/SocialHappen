@@ -22,7 +22,15 @@ define([
 		  var userModel = options.userModel;
 		  var currentUserModel = options.currentUserModel;
 		  userModel.id = userId;
-		  currentUserModel.fetch();
+		  currentUserModel.fetch({
+		    success: function(model, xhr){
+		      // console.log('user:', model, xhr);
+		      if(!xhr.user_id){
+		        // console.log('not found user:', window.Passport.BASE_URL + '/login?next=' + window.location.href);
+		        window.location = window.Passport.BASE_URL + '/login?next=' + window.location.href;
+		      }
+		    }
+		  });
 		  userModel.fetch();
 		  
 		  console.log('show profile of userId:', userId);
