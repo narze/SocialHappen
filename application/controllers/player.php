@@ -440,7 +440,6 @@ class Player extends CI_Controller {
 	function play(){
 	 	$this->load->library('apiv2_lib');
 		$app_data = $this->input->get('app_data', TRUE);
-		$dashboard = $this->input->get('dashboard', TRUE);
 
 		$facebook_data = array(
 			'facebook_app_id' => $this->config->item('facebook_app_id'),
@@ -449,13 +448,10 @@ class Player extends CI_Controller {
 		);
 		
 	 	$this->load->vars(array(
-    		'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-  		));
-
-
+  		'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+		));
 
 	 	if(!$app_data){
-
 			$app_data_array = array(
 				'app_id' => 0, 
 				'app_secret_key' => 0,
@@ -470,72 +466,42 @@ class Player extends CI_Controller {
 		
 		$data['app_data'] = $app_data;
 		$data['app_data_array'] = $app_data_array;
-	 	
-	 	//add facebook->getUser here to avoid routing_view and redirect to signup or dashboard directly
-	 	// if($dashboard && $this->socialhappen->is_logged_in_as_player()){
-	 		$template = array(
-        'title' => 'Welcome to SocialHappen',
-        'styles' => array(
-          'common/bootstrap',
-          'common/bootstrap-responsive',
-          'common/bar',
-          'common/player',
-          'player/play'
-        ),
-        'body_views' => array(
-          'common/fb_root' => array(
-            'facebook_app_id' => $this->config->item('facebook_app_id'),
-            'facebook_channel_url' => $this->facebook->channel_url,
-            'facebook_app_scope' => $this->config->item('facebook_player_scope')
-          ),
-          // '../../assets/passport/templates/header/navigation.html' => NULL,
-          'bar/plain_bar_view' => array(),
-          'player/play_view' => $data,
-          'common/vars' => array(
-          	'vars' => array(
-          		'base_url' => base_url()
-          	)
-          )
-        ),
-        'scripts' => array(
-          'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
-          'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
-          'common/jquery.timeago',
-          'common/underscore-min',
-          'common/bootstrap.min',
-          'common/plain-bar',
-          'player/play'
-        )
-      );
-      $this->load->view('common/template', $template);
-	 	// } else {
-	 	// 	$template = array(
-   //      'title' => 'Welcome to SocialHappen',
-   //      'styles' => array(),
-   //      'body_views' => array(
-   //        'common/fb_root' => array(
-   //          'facebook_app_id' => $this->config->item('facebook_app_id'),
-   //          'facebook_channel_url' => $this->facebook->channel_url,
-   //          'facebook_app_scope' => $this->config->item('facebook_player_scope')
-   //        ),
-   //        // '../../assets/passport/templates/header/navigation.html' => NULL,
-   //        'player/static_routing_view' => $data,
-   //        'common/vars' => array(
-   //        	'vars' => array(
-   //        		'base_url' => base_url(),
-   //        		'app_data' => $app_data,
-   //        		'true_app_data' => $data['true_app_data'] ? 1 : 0
-   //        	)
-   //        )
-   //      ),
-   //      'scripts' => array(
-   //        'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
-   //        'player/static-routing'
-   //      )
-   //    );
-   //    $this->load->view('common/template', $template);
-	 	// }
 
+ 		$template = array(
+      'title' => 'Welcome to SocialHappen',
+      'styles' => array(
+        'common/bootstrap',
+        'common/bootstrap-responsive',
+        'common/bar',
+        'common/player',
+        'player/play'
+      ),
+      'body_views' => array(
+        'common/fb_root' => array(
+          'facebook_app_id' => $this->config->item('facebook_app_id'),
+          'facebook_channel_url' => $this->facebook->channel_url,
+          'facebook_app_scope' => $this->config->item('facebook_player_scope')
+        ),
+        // '../../assets/passport/templates/header/navigation.html' => NULL,
+        'bar/plain_bar_view' => array(),
+        'player/play_view' => $data,
+        'common/vars' => array(
+        	'vars' => array(
+        		'base_url' => base_url()
+        	)
+        )
+      ),
+      'scripts' => array(
+        'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
+        'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+        'common/jquery.timeago',
+        'common/underscore-min',
+        'common/bootstrap.min',
+        'common/plain-bar',
+        'player/play'
+      )
+    );
+    $this->load->view('common/template', $template);
 	}
 
 	public function static_signup(){
@@ -618,73 +584,6 @@ class Player extends CI_Controller {
 				echo json_encode(array('result' => 'error', 'message' => 'signup error', 'data' => $signup_result));
 			}
 		}
-		
-	}
-
-	/**
-	 * Static user checking for redirect : AJAX
-	 */
-	public function static_user_check(){
-		$this->load->library('apiv2_lib');
-
-		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
-
-		$app_data_array = array(
-							'app_id' => 0, 
-							'app_secret_key' => 0,
-							'user_facebook_id' => $user_facebook_id
-						);
-		$sh_user = $this->apiv2_lib->get_user($app_data_array);
-
-		if($sh_user){
-			$result = array('result' => 'ok', 'sh_user' => $sh_user);
-		} else {
-			$result = array('result' => 'error', 'message' => 'user not found');
-		}
-
-		echo json_encode($result);
-	}
-
-	/**
-	 * DEPRECATED : Static user data for dashboard : AJAX
-	 */
-	public function static_get_user_data(){
-		// $this->load->library('apiv2_lib');
-		// $this->load->library('audit_lib');
-		// $this->load->model('app_model');
-		// $this->load->model('achievement_stat_model');
-
-		// $user_facebook_id = $this->input->post('user_facebook_id', TRUE);
-
-		// $app_data_array = array(
-		// 					'app_id' => 0, 
-		// 					'app_secret_key' => 0,
-		// 					'user_facebook_id' => $user_facebook_id
-		// 				);
-		// $sh_user = $this->apiv2_lib->get_user($app_data_array);
-
-		// if($sh_user){
-		// 	$user_id = $sh_user['user_id'];
-		// 	$audits = $this->audit_lib->list_audit(array('user_id' => $user_id, 'action_id' => 103, 'app_id' => array('$gt' => 10000)));
-			
-		// 	$unique_app_ids  = array();
-		// 	$played_apps = array();
-		// 	foreach($audits as $audit){
-		// 		if(!in_array($audit['app_id'] ,$unique_app_ids)){
-		// 			$unique_app_ids[] = $audit['app_id'];
-		// 			$played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);						
-		// 		}
-		// 	}
-
-		// 	$user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
-		// 	$user_score = issetor($user_stat['score'], 0);
-		// }
-
-		// $available_apps = $this->app_model->get_apps_by_app_id_range(10001);
-
-		// $result = compact('sh_user', 'available_apps', 'played_apps', 'user_score');
-		// echo json_encode($result);
-		echo '{}';
 	}
 
 	/**
