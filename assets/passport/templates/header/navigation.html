@@ -9,7 +9,7 @@
             <a href="<%= baseUrl %>player/play">Play</a>
           </li>
           <li class="passport">
-            <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.id %>">Passport</a>
+            <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.user_id %>">Passport</a>
           </li>
           <li class="world">
             <a>World</a>
@@ -22,7 +22,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img class="user-image" src="<%= user.user_image %>?type=square" alt=""/ >  <%= user.user_first_name %> <%= user.user_last_name %> <b class="caret"></b> </a>
             <ul class="dropdown-menu mega-dropdown-menu user">
               <li>
-                <a href="https://socialhappen.dyndns.org/socialhappen/player/static_logout">» Logout</a>
+                <a href="https://socialhappen.dyndns.org/socialhappen/logout">» Logout</a>
               </li>
             </ul>
           </li>
