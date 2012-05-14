@@ -78,6 +78,7 @@ class Signup extends CI_Controller {
       $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'required|trim|xss_clean|is_numeric|max_length[20]');     
       $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');      
       $this->form_validation->set_rules('password_again', 'Password Again', 'required|trim|xss_clean|max_length[50]');
+      $this->form_validation->set_rules('timezone', 'Timezone', 'required|trim|xss_clean');
         
       $this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
     
@@ -136,14 +137,23 @@ class Signup extends CI_Controller {
             'common/jquery.timeago',
             'common/underscore-min',
             'common/bootstrap.min',
-            'common/plain-bar'
+            'common/jstz.min',
+            'common/plain-bar',
+            'signup/form'
           )
         );
         $this->load->view('common/template', $template);
 
       }
       else
-      {
+      {   
+          $timezone = set_value('timezone');
+          $user_timezone = $timezone ? $timezone : 'UTC';
+          $this->load->library('timezone_lib');
+          if(!$minute_offset = $this->timezone_lib->get_minute_offset_from_timezone($user_timezone)){
+            $minute_offset = 0;
+          }
+
           $encrypted_password = sha1($this->presalt.$password.$this->postsalt);
           $form_data = array(
             'user_email' => set_value('email'),
@@ -153,6 +163,7 @@ class Signup extends CI_Controller {
             'user_image' => base_url().'assets/images/default/user.png',
             'user_first_name' => set_value('first_name'),
             'user_last_name' => set_value('last_name'),
+            'user_timezone_offset' => $minute_offset
           );
             
 

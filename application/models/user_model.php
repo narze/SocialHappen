@@ -196,6 +196,7 @@ class User_model extends CI_Model {
 	 * @author Manassarn M. - Fix bugs
 	 */
 	function update_user_last_seen($user_id) {
+	  date_default_timezone_set('UTC');
 		return $this -> db -> update('user', array('user_last_seen' => date("Y-m-d H:i:s", time())), array('user_id' => $user_id));
 	}
 
