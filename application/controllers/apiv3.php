@@ -126,6 +126,22 @@ class Apiv3 extends CI_Controller {
     }
     echo json_encode($notifications);
   }
+  
+  /**
+   * list challenge
+   */
+  function challenges(){
+    $this->load->library('challenge_lib');
+    $challenges = $this->challenge_lib->get(array());
+    
+    function convert_id($item){
+      $item['_id'] = '' . $item['_id'];
+      return $item;
+    }
+    
+    $challenges = array_map("convert_id", $challenges);
+    echo json_encode($challenges);
+  }
 }
 
 
