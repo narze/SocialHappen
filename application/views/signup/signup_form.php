@@ -3,7 +3,7 @@
     <div class="span4">&nbsp;</div>
 
     <?php $attributes = array('class' => 'span4 well', 'id' => 'signup-form');
-    echo form_open('signup/form'.$next, $attributes); ?>
+    echo form_open(base_url('signup/form'.$next), $attributes); ?>
 
       <?php if(isset($duplicated_email)) : ?>
         <div class="alert alert-error">
@@ -13,11 +13,17 @@
       <?php endif; ?>
 
       <?php if(isset($duplicated_phone)) : ?>
-        <div class="alert alert-error">
+        <!-- <div class="alert alert-error">
           <a class="close" data-dismiss="alert">×</a>
           This phone number is already a SocialHappen user.
-        </div>
+        </div> -->
       <?php endif; ?>
+
+      <div class="control-group <?php echo form_error('email') ? 'error': ''; ?>">
+        <label for="email">Email</label>
+        <input id="email" class="span4" type="text" name="email" maxlength="100" value="<?php echo set_value('email'); ?>"  />
+        <?php echo form_error('email'); ?>
+      </div>
 
       <div class="control-group <?php echo form_error('first_name') ? 'error': ''; ?>">
         <label for="first_name">Firstname</label>
@@ -31,17 +37,11 @@
         <?php echo form_error('last_name'); ?>
       </div>
 
-      <div class="control-group <?php echo form_error('email') ? 'error': ''; ?>">
-        <label for="email">Email</label>
-        <input id="email" class="span4" type="text" name="email" maxlength="100" value="<?php echo set_value('email'); ?>"  />
-        <?php echo form_error('email'); ?>
-      </div>
-
-      <div class="control-group <?php echo form_error('mobile_phone_number') ? 'error': ''; ?>">
+      <!-- <div class="control-group <?php echo form_error('mobile_phone_number') ? 'error': ''; ?>">
         <label for="mobile_phone_number">Mobile Phone Number</label>
         <input id="mobile_phone_number" class="span4" type="text" name="mobile_phone_number" maxlength="20" value="<?php echo set_value('mobile_phone_number'); ?>"  />
         <?php echo form_error('mobile_phone_number'); ?>
-      </div>
+      </div> -->
 
       <div class="control-group <?php echo form_error('password') ? 'error': ''; ?>">
         <label for="password">Password</label>

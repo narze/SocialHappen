@@ -24,7 +24,7 @@
         <?php endif; ?>
 
         <?php if(isset($email_and_phone_not_entered)) : ?>
-          <p class="login-fail">Email and mobile phone number not entered</p>
+          <!-- <p class="login-fail">Email and mobile phone number not entered</p> -->
         <?php endif; ?>
         
         <div class="control-group <?php echo form_error('email') ? 'error': ''; ?>">
@@ -33,11 +33,11 @@
           <?php echo form_error('email'); ?>
         </div>
 
-        <div class="control-group <?php echo form_error('mobile_phone_number') ? 'error': ''; ?>">
+        <!--<div class="control-group <?php echo form_error('mobile_phone_number') ? 'error': ''; ?>">
           <label for="mobile_phone_number">Mobile Phone Number</label>
           <input id="mobile_phone_number" class="span4" type="text" name="mobile_phone_number" maxlength="20" value="<?php echo set_value('mobile_phone_number'); ?>"  />
           <?php echo form_error('mobile_phone_number'); ?>
-        </div>
+        </div> -->
 
         <div class="control-group <?php echo form_error('password') ? 'error': ''; ?>">
           <label for="password">Password</label>

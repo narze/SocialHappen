@@ -75,7 +75,7 @@ class Signup extends CI_Controller {
       $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');     
       $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');     
       $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[100]');     
-      $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'required|trim|xss_clean|is_numeric|max_length[20]');     
+      // $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'required|trim|xss_clean|is_numeric|max_length[20]');     
       $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');      
       $this->form_validation->set_rules('password_again', 'Password Again', 'required|trim|xss_clean|max_length[50]');
       $this->form_validation->set_rules('timezone', 'Timezone', 'required|trim|xss_clean');
@@ -84,7 +84,7 @@ class Signup extends CI_Controller {
     
       $duplicated = FALSE;
       $user_email = set_value('email');
-      $user_phone = set_value('mobile_phone_number');
+      // $user_phone = set_value('mobile_phone_number');
 
       //Try to find if email or phone is already exists
       $this->load->model('user_model');
@@ -92,10 +92,10 @@ class Signup extends CI_Controller {
         $this->load->vars('duplicated_email', TRUE);
         $duplicated = TRUE;
       }
-      if($user_phone && $this->user_model->findOne(array('user_phone' => $user_phone))){
-        $this->load->vars('duplicated_phone', TRUE);
-        $duplicated = TRUE;
-      }
+      // if($user_phone && $this->user_model->findOne(array('user_phone' => $user_phone))){
+      //   $this->load->vars('duplicated_phone', TRUE);
+      //   $duplicated = TRUE;
+      // }
 
       //Check password
       $password_mismatch = FALSE;
@@ -157,7 +157,7 @@ class Signup extends CI_Controller {
           $encrypted_password = sha1($this->presalt.$password.$this->postsalt);
           $form_data = array(
             'user_email' => set_value('email'),
-            'user_phone' => set_value('mobile_phone_number'),
+            // 'user_phone' => $user_phone,
             'user_password' => $encrypted_password,
             'user_is_player' => 1,
             'user_image' => base_url().'assets/images/default/user.png',

@@ -30,8 +30,8 @@ class Login extends CI_Controller {
       //Login form
 
       $this->load->library('form_validation');
-      $this->form_validation->set_rules('email', 'Email', 'trim|xss_clean|valid_email|max_length[100]');      
-      $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');      
+      $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[100]');      
+      // $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');      
       $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');
         
       $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
@@ -67,7 +67,7 @@ class Login extends CI_Controller {
         $this->load->view('common/template', $template);
       } else {
         $email = set_value('email');
-        $mobile_phone_number = set_value('mobile_phone_number');
+        // $mobile_phone_number = set_value('mobile_phone_number');
 
         $password = set_value('password');
         $encrypted_password = sha1($this->presalt.$password.$this->postsalt);
@@ -78,11 +78,11 @@ class Login extends CI_Controller {
             'user_email' => $email,
             'user_password' => $encrypted_password
           ));
-        } else if($mobile_phone_number) {
-          $user = $this->user_model->findOne(array(
-            'user_phone' => $mobile_phone_number,
-            'user_password' => $encrypted_password
-          ));
+        // } else if($mobile_phone_number) {
+        //   $user = $this->user_model->findOne(array(
+        //     'user_phone' => $mobile_phone_number,
+        //     'user_password' => $encrypted_password
+        //   ));
         } else {
           $user = FALSE;
           $this->load->vars('email_and_phone_not_entered', TRUE);
