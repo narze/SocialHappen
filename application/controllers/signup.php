@@ -207,8 +207,20 @@ class Signup extends CI_Controller {
         'user_facebook_access_token' => $this->FB->getAccessToken(),
         'user_image' => $this->facebook->get_profile_picture($facebook_user_id),
         'user_first_name' => $facebook_user['first_name'],
-        'user_last_name' => $facebook_user['last_name'],
+        'user_last_name' => $facebook_user['last_name']
       );
+
+      if(isset($facebook_user['email'])) {
+        $form_data['user_email'] = $facebook_user['email'];
+      }
+
+      if(isset($facebook_user['location']['name'])) {
+        $form_data['user_location'] = $facebook_user['location']['name'];
+      }
+
+      if(isset($facebook_user['locale'])) {
+        $form_data['user_locale'] = $facebook_user['locale'];
+      }
       
       $this->load->model('user_model');
       if ($user_id = $this->user_model->add_user($form_data))
