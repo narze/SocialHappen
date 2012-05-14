@@ -113,12 +113,13 @@ class Apiv3 extends CI_Controller {
   /**
    * get notification count and list of user
    */
-  function notifications($user_id = NULL) {
+  function notifications() {
     $notifications = array(
       'count' => 0,
       'items' => array()
     );
-    if($user_id == $this->socialhappen->get_user_id()) {
+    $user_id = $this->socialhappen->get_user_id();
+    if($user_id) {
       $this->load->library('notification_lib');
       $notifications['items'] = $this->notification_lib->lists($user_id);
       $notifications['count'] = count($notifications['items']);
