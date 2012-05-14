@@ -2,7 +2,7 @@
   <div class="row-fluid">
     <div class="span4">&nbsp;</div>
 
-    <?php $attributes = array('class' => 'span4 well', 'id' => '');
+    <?php $attributes = array('class' => 'span4 well', 'id' => 'signup-form');
     echo form_open('signup/form'.$next, $attributes); ?>
 
       <?php if(isset($duplicated_email)) : ?>
@@ -56,6 +56,8 @@
         <?php if(isset($password_not_match)) { echo '<span class="help-block">Password Not Match</span>'; } ?>
       </div>
 
+      <input type="hidden" id="timezone" name="timezone" value="UTC" />
+      
       <div>
         <button type="submit" class="btn btn-primary">Signup</button>
       </div>
