@@ -37,39 +37,41 @@ function get_user_data(){
           $('#played-apps').replaceWith(playedAppTemplate({
             played_apps: played_apps
           }));
-          $('.played-app-list').masonry({
-            itemSelector: '.played-app',
-            columnWidth: 200
-
+          $('.played-apps-list').masonry({
+            itemSelector: '.played-app-item',
+            columnWidth: 180
           });
+          $('.played-app-item').hover(
+            function show() {
+              $('.played-app-detail', this).stop(true, true).slideDown(200);
+              console.log('show');
+            },function hide() {
+              $('.played-app-detail', this).stop(true, true).slideUp(200);
+            }
+          );
         }
         
         var available_apps = data.available_apps;
         if(available_apps.length > 0) {
           var availableAppsTemplate = _.template($('#app-item-template').html());
-          _.each(available_apps, function(app, i){
-            available_apps[i].app_image = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg'; //app.app_icon,
-          });
           $('#all-apps').replaceWith(availableAppsTemplate({
             available_apps: available_apps
           }));
           $('.all-apps-list').masonry({
             itemSelector: '.app-item',
-            columnWidth: 270
-
+            columnWidth: 250
           });
+          appItemHover();
         }
       } else {
         //guest
         var all_apps = data.available_apps;
         if(all_apps.length > 0) {
           var allAppsTemplate = _.template($('#app-item-template').html());
-          _.each(all_apps, function(app, i){
-            all_apps[i].app_image = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/373027_189828287722179_1658533100_n.jpg'; //app.app_icon,
-          });
           $('#all-apps').replaceWith(allAppsTemplate({
             available_apps: all_apps
           }));
+          appItemHover();
         }
       }
     }
@@ -80,3 +82,13 @@ checkFBConnected(function(id) {
   user_facebook_id = id;
   get_user_data(id);
 });
+
+function appItemHover() {
+  $('.app-item').hover(
+    function show() {
+      $('.app-detail', this).stop(true, true).slideDown(200);
+    },function hide() {
+      $('.app-detail', this).stop(true, true).slideUp(200);
+    }
+  );
+}

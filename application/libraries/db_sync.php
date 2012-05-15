@@ -1301,7 +1301,7 @@ class DB_Sync {
 					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
 					'app_maintainance' => 0, 
 					'app_show_in_list' => 0, 
-					'app_description' => 'ล่าท้าผี คือจะเจอผีแบบไหน', 
+					'app_description' => 'ล่าท้าผี คุณจะเจอผีแบบไหน', 
 					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
 					'app_url' => 'https://apps.localhost.com/shapp/', 
 					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
@@ -1311,7 +1311,8 @@ class DB_Sync {
 					'app_support_page_tab' => 1, 
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
-					'app_facebook_api_key' => '204755022911798' 	
+					'app_facebook_api_key' => '204755022911798',
+					'app_banner' => 'https://apps.localhost.com/apps/ghost/images/start.jpg'
 				),
 				array(
 					'app_id' => 10002, 
@@ -1329,7 +1330,8 @@ class DB_Sync {
 					'app_support_page_tab' => 1, 
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
-					'app_facebook_api_key' => '204755022911798' 	
+					'app_facebook_api_key' => '204755022911798',
+					'app_banner' => 'https://apps.localhost.com/apps/songkran/images/start.gif'
 				),
 				array(
 					'app_id' => 10003, 
@@ -1347,7 +1349,8 @@ class DB_Sync {
 					'app_support_page_tab' => 1, 
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
-					'app_facebook_api_key' => '204755022911798' 	
+					'app_facebook_api_key' => '204755022911798',
+					'app_banner' => 'https://apps.localhost.com/apps/postit/images/start.jpg'
 				),
 				array(
 					'app_id' => 10004, 
@@ -1365,7 +1368,8 @@ class DB_Sync {
 					'app_support_page_tab' => 1, 
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
-					'app_facebook_api_key' => '204755022911798' 	
+					'app_facebook_api_key' => '204755022911798',
+					'app_banner' => 'https://apps.localhost.com/apps/posetonight/images/start.jpg'
 				),
 				array(
 					'app_id' => 10005, 
@@ -1383,7 +1387,8 @@ class DB_Sync {
 					'app_support_page_tab' => 1, 
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
-					'app_facebook_api_key' => '204755022911798' 	
+					'app_facebook_api_key' => '204755022911798',
+					'app_banner' => 'https://apps.localhost.com/apps/weddingplace/images/start.jpg'
 				),
 				array(
 					'app_id' => 10006, 
@@ -1401,7 +1406,8 @@ class DB_Sync {
 					'app_support_page_tab' => 1, 
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
-					'app_facebook_api_key' => '204755022911798' 	
+					'app_facebook_api_key' => '204755022911798',
+					'app_banner' => 'https://apps.localhost.com/apps/khmername/images/start.jpg'
 				),
 				array(
 					'app_id' => 10007, 
@@ -1419,7 +1425,27 @@ class DB_Sync {
 					'app_support_page_tab' => 1, 
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
-					'app_facebook_api_key' => '204755022911798' 	
+					'app_facebook_api_key' => '204755022911798',
+					'app_banner' => 'https://apps.localhost.com/apps/lovestatus/images/start.jpg'
+				),
+				array(
+					'app_id' => 10008, 
+					'app_name' => 'HiddenProfile', 
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
+					'app_maintainance' => 0, 
+					'app_show_in_list' => 0, 
+					'app_description' => 'อะไรแอบในรูปโปรไฟล์ของคุณ', 
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
+					'app_url' => 'https://apps.localhost.com/shapp/', 
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
+					'app_config_facebook_canvas_path' => NULL,
+					'app_support_page_tab' => 1, 
+					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
+					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
+					'app_facebook_api_key' => '204755022911798',
+					'app_banner' => 'https://apps.localhost.com/apps/hiddenprofile/images/start.jpg'
 				)
 			);
 			$this->CI->db->insert_batch('app', $app);

@@ -34,14 +34,16 @@
     </div>
       <div class="played-apps-list">
       <% _.each(played_apps, function(played_app) { %>
-        <div class="played-app well">
-          <div class="app-photo">
-            <a href="<%= played_app.app_url %>" title="Play" alt="Play">
-              <img src="<%= played_app.picture %>" class="app-photo"/>
-            </a>
+        <a href="<%= played_app.app_url %>" title="Play" alt="Play">
+          <div class="played-app-item well">
+            <div class="app-photo">
+                <img src="<%= played_app.picture %>" class="app-photo"/>
+            </div>
+            <div class="played-app-detail" style="display: none;">
+              <h3 class="app-name"><%= played_app.app_name %></h3>
+            </div>
           </div>
-          <h3 class="app-name"><%= played_app.app_name %></h3>
-        </div>
+        </a>
       <% }); %>
     </div>
   </script>
@@ -54,23 +56,19 @@
       </div>
       <div class="all-apps-list">
         <% _.each(available_apps, function(available_app) { %>
-
-          <div class="app-item well">
-            <div class="app-photo">
-              <a href="<%= available_app.app_url %>" title="Play" alt="Play">
-                <img src="<%= available_app.app_image %>" class="app-photo"/>
-              </a>
+          <a href="<%= available_app.app_url %>" alt="Play">
+            <div class="app-item well">
+              <div class="app-photo">
+                <img src="<%= available_app.app_banner %>" class="app-photo"/>
+              </div>
+              <div class="app-detail" style="display: none;">
+                <h3 class="app-name"><%= available_app.app_name %></h3>
+                <p class="description"><%= available_app.app_description %></p>
+              </div>
+              <!--<div>Who played this</div>
+              <div>[Player list]</div>-->
             </div>
-            <div class="app-detail">
-              <h3 class="app-name"><%= available_app.app_name %></h3>
-              <p class="description"><%= available_app.app_description %></p>
-              <p>
-                <a href="<%= available_app.app_url %>" title="Play" alt="Play" class="btn btn-success">Play</a>
-              </p>
-            </div>
-            <!--<div>Who played this</div>
-            <div>[Player list]</div>-->
-          </div>
+          </a>
         <% }); %>
         
       </div>
