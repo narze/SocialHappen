@@ -599,10 +599,9 @@ class Player extends CI_Controller {
 					'facebook_channel_url' => $this->facebook->channel_url
 		);
 		
-	 	$this->load->vars( array(
-					        	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-					        	)
-     	);
+	 	$this->load->vars(array(
+    	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
+  	));
 
 		//view-redirect after signup
 		$app_data = $this->input->get('app_data', TRUE);
@@ -627,9 +626,47 @@ class Player extends CI_Controller {
 			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
 			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
 		}
+		redirect('player/play?app_data='.$app_data.'&play_app_result='.$play_app_result);
+	}
 
-	redirect('player/play?app_data='.$app_data.'&dashboard=1&play_app_result='.$play_app_result);
-
+	/**
+	 * Static page
+	 */
+	function static_page() {
+		$template = array(
+      'title' => 'Welcome to SocialHappen',
+      'styles' => array(
+        'common/bootstrap',
+        'common/bootstrap-responsive',
+        'common/bar',
+        'common/player'
+      ),
+      'body_views' => array(
+        'common/fb_root' => array(
+          'facebook_app_id' => $this->config->item('facebook_app_id'),
+          'facebook_channel_url' => $this->facebook->channel_url,
+          'facebook_app_scope' => $this->config->item('facebook_player_scope')
+        ),
+        // '../../assets/passport/templates/header/navigation.html' => NULL,
+        'bar/plain_bar_view' => array(),
+        'player/static_signup_view' => array(),
+        'common/vars' => array(
+        	'vars' => array(
+        		'base_url' => base_url()
+        	)
+        )
+      ),
+      'scripts' => array(
+        'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
+        'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+        'common/jquery.masonry.min',
+        'common/jquery.timeago',
+        'common/underscore-min',
+        'common/bootstrap.min',
+        'common/plain-bar'
+      )
+    );
+    $this->load->view('common/template', $template);
 	}
 }  
 
