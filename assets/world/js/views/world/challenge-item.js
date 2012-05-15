@@ -13,6 +13,7 @@ define([
     },
     render: function () {
       var data = this.model.toJSON();
+      data.baseUrl = window.World.BASE_URL;
       $(this.el).html(this.challengeItemTemplate(data));
       return this;
     }

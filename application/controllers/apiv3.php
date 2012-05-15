@@ -135,7 +135,9 @@ class Apiv3 extends CI_Controller {
     $challenges = $this->challenge_lib->get(array());
     
     function convert_id($item){
-      $item['_id'] = '' . $item['_id'];
+      // $item['_id'] = '' . $item['_id'];
+      unset($item['_id']);
+      unset($item['criteria']);
       return $item;
     }
     

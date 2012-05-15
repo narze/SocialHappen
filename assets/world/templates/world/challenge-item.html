@@ -1,2 +1,8 @@
-<img src="<%= detail.image %>" />
-<%= detail.name %>
+<a href="<%= baseUrl %>redirect/c?hash=<%= hash %>" title="Play">
+  <img src="<%= detail.image %>" class="challenge-image"/>
+  <div class="challenge-caption">
+    <h4><%= detail.name %></h4>
+    <p><%= detail.description %></p>
+  </div>
+</a>
+

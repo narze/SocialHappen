@@ -24,7 +24,7 @@ define([
         baseUrl: window.World.BASE_URL,
         user: this.options.currentUserModel.toJSON()
       }));
-      // $('div#header .world').addClass('active');
+      $('div#header .world').addClass('active');
       
       var barNotificationTemplate = this.barNotificationTemplate;
       

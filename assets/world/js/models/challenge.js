@@ -4,7 +4,7 @@ define([
 ], function(_, Backbone) {
   var challengeModel = Backbone.Model.extend({
     
-    idAttribute: '_id',
+    idAttribute: 'hash',
     
     defaults: {
       
