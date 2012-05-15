@@ -37,18 +37,11 @@ function get_user_data(){
           $('#played-apps').replaceWith(playedAppTemplate({
             played_apps: played_apps
           }));
+          playedAppItemHover();
           $('.played-apps-list').masonry({
             itemSelector: '.played-app-item',
             columnWidth: 180
           });
-          $('.played-app-item').hover(
-            function show() {
-              $('.played-app-detail', this).stop(true, true).slideDown(200);
-              console.log('show');
-            },function hide() {
-              $('.played-app-detail', this).stop(true, true).slideUp(200);
-            }
-          );
         }
         
         var available_apps = data.available_apps;
@@ -57,11 +50,11 @@ function get_user_data(){
           $('#all-apps').replaceWith(availableAppsTemplate({
             available_apps: available_apps
           }));
+          appItemHover();
           $('.all-apps-list').masonry({
             itemSelector: '.app-item',
             columnWidth: 250
           });
-          appItemHover();
         }
       } else {
         //guest
@@ -76,19 +69,29 @@ function get_user_data(){
       }
     }
   });
+
+  function appItemHover() {
+    $('.app-item').hover(
+      function show() {
+        $('.play-button', this).stop(true, true).fadeIn(100);
+      },function hide() {
+        $('.play-button', this).stop(true, true).fadeOut(100);
+      }
+    );
+  }
+
+  function playedAppItemHover() {
+    $('.played-app-item').hover(
+      function show() {
+        $('.play-button', this).stop(true, true).fadeIn(100);
+      },function hide() {
+        $('.play-button', this).stop(true, true).fadeOut(100);
+      }
+    );
+  }
 }
 
 checkFBConnected(function(id) {
   user_facebook_id = id;
   get_user_data(id);
 });
-
-function appItemHover() {
-  $('.app-item').hover(
-    function show() {
-      $('.app-detail', this).stop(true, true).slideDown(200);
-    },function hide() {
-      $('.app-detail', this).stop(true, true).slideUp(200);
-    }
-  );
-}

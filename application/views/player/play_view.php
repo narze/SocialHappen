@@ -39,8 +39,11 @@
             <div class="app-photo">
                 <img src="<%= played_app.picture %>" class="app-photo"/>
             </div>
-            <div class="played-app-detail" style="display: none;">
+            <div class="played-app-detail">
               <h3 class="app-name"><%= played_app.app_name %></h3>
+            </div>
+            <div class="play-button played" style="display: none;">
+              <div class="btn btn-primary btn-large">Play</div>
             </div>
           </div>
         </a>
@@ -61,13 +64,17 @@
               <div class="app-photo">
                 <img src="<%= available_app.app_banner %>" class="app-photo"/>
               </div>
-              <div class="app-detail" style="display: none;">
+              <div class="app-detail">
                 <h3 class="app-name"><%= available_app.app_name %></h3>
                 <p class="description"><%= available_app.app_description %></p>
               </div>
+              <div class="play-button" style="display: none;">
+                <div class="btn btn-primary btn-large">Play</div>
+              </div>
+            </div>
+
               <!--<div>Who played this</div>
               <div>[Player list]</div>-->
-            </div>
           </a>
         <% }); %>
         
