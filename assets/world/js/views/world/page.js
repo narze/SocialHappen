@@ -16,7 +16,7 @@ define([
     },
     render: function () {
       $(this.el).html(pageTemplate);
-      $('div#header .play').addClass('active');
+      $('div#header .world').addClass('active'); //<-- Noom : this doesn't work
       
       var sidebarView = new SidebarView({
         el: $('#sidebar', this.el),

@@ -24,7 +24,7 @@ define([
         baseUrl: window.World.BASE_URL,
         user: this.options.currentUserModel.toJSON()
       }));
-      $('div#header .passport').addClass('active');
+      // $('div#header .world').addClass('active');
       
       var barNotificationTemplate = this.barNotificationTemplate;
       
@@ -52,7 +52,7 @@ define([
     seeNotification: function(e){
       e.preventDefault();
     }
-  })
+  });
 
   return HeaderNavigationView;
 });

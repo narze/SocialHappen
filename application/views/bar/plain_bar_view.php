@@ -32,7 +32,7 @@
     <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.id %>">Passport</a>
   </li>
   <li class="world">
-    <a>World</a>
+    <a href="<%= baseUrl %>world">World</a>
   </li>
 </script>
 
