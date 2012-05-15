@@ -21,56 +21,6 @@ class Signup extends CI_Controller {
 
       redirect('player/play');
     } else {
-      $template = array(
-        'title' => 'Signup',
-        'styles' => array(
-          'common/bootstrap',
-          'common/bootstrap-responsive',
-          'common/player'
-        ),
-        'body_views' => array(
-          'common/fb_root' => array(
-            'facebook_app_id' => $this->config->item('facebook_app_id'),
-            'facebook_channel_url' => $this->facebook->channel_url,
-            'facebook_app_scope' => $this->config->item('facebook_player_scope')
-          ),
-          'bar/plain_bar_view' => array(),
-          'signup/signup_view' => array(
-            'next' => $next ? "?next={$next}" : ''
-          ),
-          'common/vars' => array(
-            'vars' => array(
-              'base_url' => base_url()
-            )
-          )
-        ),
-        'scripts' => array(
-          'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
-          'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
-          'common/jquery.timeago',
-          'common/underscore-min',
-          'common/bootstrap.min',
-          'common/plain-bar',
-          'signup/signup'
-        )
-      );
-      $this->load->view('common/template', $template);
-    }
-  }
-
-  /**
-   * Signup (with email) page 
-   */
-  function form() {
-    $next = $this->socialhappen->strip_next_from_url($this->input->get('next'));
-    if($this->socialhappen->get_user()) {
-      //Logged in already
-      if($next) {
-        redirect($next);
-      }
-
-      redirect('player/play');
-    } else {
       $this->load->library('form_validation');
       $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');     
       $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');     
@@ -81,7 +31,9 @@ class Signup extends CI_Controller {
       $this->form_validation->set_rules('timezone', 'Timezone', 'required|trim|xss_clean');
         
       $this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-    
+      
+      $validate = $this->form_validation->run();
+
       $duplicated = FALSE;
       $user_email = set_value('email');
       // $user_phone = set_value('mobile_phone_number');
@@ -92,6 +44,7 @@ class Signup extends CI_Controller {
         $this->load->vars('duplicated_email', TRUE);
         $duplicated = TRUE;
       }
+
       // if($user_phone && $this->user_model->findOne(array('user_phone' => $user_phone))){
       //   $this->load->vars('duplicated_phone', TRUE);
       //   $duplicated = TRUE;
@@ -106,8 +59,7 @@ class Signup extends CI_Controller {
         $password_mismatch = TRUE;
       }
 
-      if ($duplicated || $password_mismatch ||($this->form_validation->run() == FALSE)) // validation hasn't been passed
-      {
+      if ($duplicated || $password_mismatch || !$validate) {
         $template = array(
           'title' => 'Signup',
           'styles' => array(
@@ -122,8 +74,8 @@ class Signup extends CI_Controller {
               'facebook_app_scope' => $this->config->item('facebook_player_scope')
             ),
             'bar/plain_bar_view' => array(),
-            'signup/signup_form' => array(
-              'next' => $next ? "?next={$next}" : ''
+            'signup/signup_view' => array(
+              'next' => $next ? "next={$next}" : ''
             ),
             'common/vars' => array(
               'vars' => array(
@@ -139,7 +91,7 @@ class Signup extends CI_Controller {
             'common/bootstrap.min',
             'common/jstz.min',
             'common/plain-bar',
-            'signup/form'
+            'signup/signup'
           )
         );
         $this->load->view('common/template', $template);
@@ -200,6 +152,13 @@ class Signup extends CI_Controller {
 
       redirect('player/play');
     } else if(isset($facebook_user['id'])) {
+      $timezone = $this->input->get('timezone');
+      $user_timezone = $timezone ? $timezone : 'UTC';
+      $this->load->library('timezone_lib');
+      if(!$minute_offset = $this->timezone_lib->get_minute_offset_from_timezone($user_timezone)){
+        $minute_offset = 0;
+      }
+
       $facebook_user_id = $facebook_user['id'];
       $form_data = array(
         'user_is_player' => 1,
@@ -207,7 +166,8 @@ class Signup extends CI_Controller {
         'user_facebook_access_token' => $this->FB->getAccessToken(),
         'user_image' => $this->facebook->get_profile_picture($facebook_user_id),
         'user_first_name' => $facebook_user['first_name'],
-        'user_last_name' => $facebook_user['last_name']
+        'user_last_name' => $facebook_user['last_name'],
+        'user_timezone_offset' => $minute_offset
       );
 
       if(isset($facebook_user['email'])) {
@@ -220,6 +180,10 @@ class Signup extends CI_Controller {
 
       if(isset($facebook_user['locale'])) {
         $form_data['user_locale'] = $facebook_user['locale'];
+      }
+
+      if(isset($facebook_user['timezone'])) {
+        $form_data['user_timezone_offset'] = $facebook_user['timezone'] * 60;
       }
       
       $this->load->model('user_model');

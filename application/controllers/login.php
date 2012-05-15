@@ -50,7 +50,8 @@ class Login extends CI_Controller {
           'styles' => array(
             'common/bootstrap',
             'common/bootstrap-responsive',
-            'common/bar'
+            'common/bar',
+            'common/player'
           ),
           'body_views' => array(
             'common/fb_root' => array(
@@ -118,7 +119,8 @@ class Login extends CI_Controller {
             'styles' => array(
               'common/bootstrap',
               'common/bootstrap-responsive',
-              'common/bar'
+              'common/bar',
+              'common/player'
             ),
             'body_views' => array(
               'common/fb_root' => array(

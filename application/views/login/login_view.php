@@ -1,13 +1,14 @@
 <div class="container-fluid">
   <div id="login" style="display:none;">
-    <div class="row-fluid">
+    <div class="row-fluid text-center">
       <div class="span4">&nbsp;</div>
       <div class="span4 well">
-        <center>
-          <a id="facebook-connect" onclick="fbLogin(fbLoginResult);" id="fblogin" data-redirect="<?php echo base_url('signup/facebook'.$next);?>">
-            <img src="<?php echo base_url('images/fb-login.jpg'); ?>" alt="Connect with facebook" />
-          </a>
-        </center>
+        <button id="facebook-connect"
+          class="btn btn-info" data-toggle="button" 
+          onclick="fbLogin(fbLoginResult)"
+          data-redirect="<?php echo base_url('signup/facebook'.$next);?>">
+            Connect with facebook
+        </button>
       </div>
     </div>
     <div class="row-fluid"><center>or<center></div>
