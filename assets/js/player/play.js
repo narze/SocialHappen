@@ -37,6 +37,11 @@ function get_user_data(){
           $('#played-apps').replaceWith(playedAppTemplate({
             played_apps: played_apps
           }));
+          $('.played-app-list').masonry({
+            itemSelector: '.played-app',
+            columnWidth: 200
+
+          });
         }
         
         var available_apps = data.available_apps;
@@ -48,6 +53,11 @@ function get_user_data(){
           $('#all-apps').replaceWith(availableAppsTemplate({
             available_apps: available_apps
           }));
+          $('.all-apps-list').masonry({
+            itemSelector: '.app-item',
+            columnWidth: 270
+
+          });
         }
       } else {
         //guest

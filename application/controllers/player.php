@@ -494,6 +494,7 @@ class Player extends CI_Controller {
       'scripts' => array(
         'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
         'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+        'common/jquery.masonry.min',
         'common/jquery.timeago',
         'common/underscore-min',
         'common/bootstrap.min',

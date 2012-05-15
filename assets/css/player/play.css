@@ -12,59 +12,33 @@ img.user-picture {
 
 }
 
+div.played-app{
+  height: 150px;
+  width: 150px;
+  margin: 5px;
+  float: left;
+ }
+
+div.app-photo{
+  text-align: center;
+}
+
 img.app-photo {
   width: 128px;
   height: 128px;
 }
 
-ul {
-  list-style-type: none;
-}
-
-ul.played-apps-list{
-  overflow: hidden;
-  overflow-x: scroll;
-  -ms-overflow-y: hidden;
-  height: 250px;
-  width: 880px;
-  white-space: nowrap;
-}
-
-ul.played-apps-list, ul.all-apps-list li {
-  display: inline-block;
-}
-
-li.played-app{
-  margin: 20px;
-  display: inline-block;
-}
-
-div.played-app{
+.app-name {
   text-align: center;
 }
 
-.played-app-container {
-  
-}
-
-li.app-item{
-  float: left;
-}
-
-div.app-item{
-  width: 400px;
-}
-
-img.app-photo {
-  padding: 10px;
-}
-
-div.app-photo{
-  float: left;
-/*  margin-right: 20px;*/
-}
 div.app-detail{
-  float: left;
-  padding: 10px;
+  text-align: center;
+}
+
+.app-item {
+  height: 220px;
   width: 220px;
+  margin: 5px;
+  float: left;
 }
