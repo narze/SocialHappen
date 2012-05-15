@@ -1,0 +1,10 @@
+/* Not really too concerned with how to organize CSS 
+   the opinions are too diverse                      */
+
+@import url("bootstrap.min.css");
+@import url("bootstrap-responsive.min.css");
+
+/* Custom themes */
+@import url("theme.css");
+
+
