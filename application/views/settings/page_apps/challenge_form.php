@@ -90,6 +90,7 @@
 									echo set_value('criteria['.$nth.'][query][platform_action_id]',
 										issetor($criteria['query']['platform_action_id'])); 
 								?>" /><br />
+							<div class="platform-action-setting"></div>
 							Count
 							<input class="count" type="text" name="criteria[<?php echo $nth;?>][count]" 
 								value="<?php 
@@ -138,7 +139,7 @@
 						echo form_dropdown('select_platform_action', $platform_actions);
 					?>
 				</div>
-
+				<div class="platform-action-setting"></div>
 				Count <input id="count" type="text"	value="<?php 
 						echo set_value('criteria[0][count]',
 							issetor($challenge['criteria'][0]['count'])); 

@@ -162,7 +162,6 @@ class Action_data_lib {
 		$checkin_data = array(
 			'checkin_facebook_place_id' => $data_from_form['checkin_facebook_place_id'],
 			'checkin_facebook_place_name' => $data_from_form['checkin_facebook_place_name'],
-			'checkin_min_friend_count' => $data_from_form['checkin_min_friend_count'],
 			'checkin_min_friend_count' => (int) $data_from_form['checkin_min_friend_count'],
 			'checkin_welcome_message' => $data_from_form['checkin_welcome_message'],
 			'checkin_challenge_message' => $data_from_form['checkin_challenge_message'],

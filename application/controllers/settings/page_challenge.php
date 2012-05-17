@@ -138,13 +138,10 @@ class Page_challenge extends CI_Controller {
 						unset($one['query']['action_id']);
 						if(!$update) {
 							
-							$action_data = array('todo' => 'change this to action\'s data');
+							$action_data = $this->input->post('platform_action_setting');
 							$action_data_id = $this->action_data_lib->add_action_data($one['query']['platform_action_id'],$action_data);
 							$one['action_data_id'] = $action_data_id;
-							/*
-							$action_data_id = $this->action_data_lib->add_feedback_action_data($form_data);
-							$one['action_data_id'] = $action_data_id;
-							*/
+
 						}
 					} else {
 						$one['is_platform_action'] = FALSE;
@@ -248,6 +245,24 @@ class Page_challenge extends CI_Controller {
 		} else {
 			return;
 		}
+	}
+
+	/**
+	 * Get platform action setting form
+	 */
+	function get_platform_action_setting_form($action_id) {
+		$this->load->library('action_data_lib');
+		$platform_actions = $this->action_data_lib->get_platform_action();
+		foreach($platform_actions as $name => $data) {
+			if($data['id'] == $action_id) {
+				$action_name = $name;
+			}
+		}
+		if(!isset($action_name)) {
+			return;
+		}
+		$this->load->helper('form');
+		$this->load->view("actions/{$action_name}/{$action_name}_setting_form");
 	}
 }
 /* End of file page_challenge.php */

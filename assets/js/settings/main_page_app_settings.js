@@ -410,7 +410,9 @@ $(function(){
 			.on('click', 'a.update-challenge', add_update_challenge)
 			.on('click', '.add-criteria', add_criteria)
 			.on('click', '.remove-criteria', remove_criteria)
-			.on('click', '.challenge-property-name', show_challenge_property);
+			.on('click', '.challenge-property-name', show_challenge_property)
+			.on('change', 'select[name=select_platform_action]', load_platform_action_form);
+
 		function add_update_challenge() {
 			url = $(this).attr('href');
 			$('div#main').load(url, add_challenge_form);
@@ -464,9 +466,11 @@ $(function(){
 			}
 			return false;
 		}
+
 		function remove_criteria() {
 			$(this).parents('.criteria').remove();
 		}
+
 		function add_criteria() {
 			var name = $('#name').val();
 			var page_id = $('#select_page>select[name="select_page"]').val();
@@ -487,8 +491,29 @@ $(function(){
 				new_criteria.find('.count').val(count).attr('name', 'criteria['+next_nth+'][count]');
 			}
 		}
+
 		function show_challenge_property() {
 			$(this).parent().addClass('active').siblings().removeClass('active');
+		}
+
+		function load_platform_action_form() {
+			var action_id = $(this).val();
+			if(action_id) {
+				$.ajax({
+					type: 'GET',
+					url: base_url + 'settings/page_challenge/get_platform_action_setting_form/' +
+						$(this).val(),
+					success: function(data) {
+						$('.platform-action-setting').html(data);
+					},
+					error: function() {
+						$('.platform-action-setting').html('');
+					}
+
+				});
+			} else {
+				$('.platform-action-setting').html('');
+			}
 		}
 	}
 	
