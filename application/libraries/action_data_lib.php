@@ -124,16 +124,14 @@ class Action_data_lib {
    */
 	function add_qr_action_data($data_from_form) {
 	  if(!isset($data_from_form['done_message'])
-     || !isset($data_from_form['todo_message'])
-     || !isset($data_from_form['challenge_id'])){
+     || !isset($data_from_form['todo_message'])){
        return FALSE;
      }
 		$action_id = $this->get_platform_action('qr');
 		$qr_data = array(
 			//Book : redefine your data here
 			'done_message' => $data_from_form['done_message'],
-			'todo_message' => $data_from_form['todo_message'],
-			'challenge_id' => $data_from_form['challenge_id']
+			'todo_message' => $data_from_form['todo_message']
 		);
 		return $this->_add_action_data($action_id, $qr_data);
 	}

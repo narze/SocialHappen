@@ -30,11 +30,14 @@ class QR extends CI_Controller {
         }
       }
       
-      $challenge_id = $action['data']['challenge_id'];
       $this->load->library('challenge_lib');
-      $challenge = $this->challenge_lib->get_one(array(
-        '_id' => new MongoId($challenge_id)
-      ));
+      $challenge = $this->challenge_lib->get_one(
+        array( 
+          'criteria.action_data_id' => get_mongo_id($action)
+        )
+      );
+
+      $challenge_id = get_mongo_id($challenge);
       
       if($valid_session){
         $challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
@@ -154,7 +157,20 @@ class QR extends CI_Controller {
         // increment_achievement();
         
         // we may render mobile web here
-        echo $action_data['data']['done_message'];
+        $template = array(
+          'title' => 'Welcome to SocialHappen',
+          'styles' => array(
+            'common/bootstrap',
+            'common/bootstrap-responsive'
+          ),
+          'body_views' => array(
+            'actions/qr/qr_challenge_finish_view' => $action_data
+          ),
+          'scripts' => array(
+            'common/bootstrap.min',
+          )
+        );
+        $this->load->view('common/template', $template);
       }else{
         // we may render beautiful error page here
         show_error('Invalid Url');
