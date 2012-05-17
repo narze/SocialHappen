@@ -20,7 +20,26 @@ class Feedback extends CI_Controller {
 							'user' => $user
 						);
 			$this->load->helper('form');
-			$this->load->view('actions/feedback/feedback_form', $data);
+
+			$template = array(
+	      'title' => 'Welcome to SocialHappen',
+	      'styles' => array(
+	        'common/bootstrap',
+	        'common/bootstrap-responsive'
+	      ),
+	      'body_views' => array(
+	        'actions/feedback/feedback_form' => $data,
+	        'common/vars' => array(
+	        	'vars' => array(
+	        		'base_url' => base_url()
+	        	)
+	        )
+	      ),
+	      'scripts' => array(
+	        'common/bootstrap.min',
+	      )
+	    );
+	    $this->load->view('common/template', $template);
 		} else {
 			show_error('Code not found or user not logged in');
 		}
@@ -98,7 +117,25 @@ class Feedback extends CI_Controller {
 				'action_data' => $action_data
 			);
 			
-			$this->load->view('actions/feedback/feedback_finish', $data);
+			$template = array(
+	      'title' => 'Welcome to SocialHappen',
+	      'styles' => array(
+	        'common/bootstrap',
+	        'common/bootstrap-responsive'
+	      ),
+	      'body_views' => array(
+	        'actions/feedback/feedback_finish' => $data,
+	        'common/vars' => array(
+	        	'vars' => array(
+	        		'base_url' => base_url()
+	        	)
+	        )
+	      ),
+	      'scripts' => array(
+	        'common/bootstrap.min',
+	      )
+	    );
+	    $this->load->view('common/template', $template);
 		} else {
 			show_error('Invalid data');
 		}
