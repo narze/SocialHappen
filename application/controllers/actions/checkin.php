@@ -189,7 +189,20 @@ class Checkin extends CI_Controller {
 				'action_data' => $action_data
 			);
 			
-			$this->load->view('actions/checkin/checkin_finish', $data);
+			$template = array(
+        'title' => 'Welcome to SocialHappen',
+        'styles' => array(
+          'common/bootstrap',
+          'common/bootstrap-responsive'
+        ),
+        'body_views' => array(
+          'actions/checkin/checkin_finish' => $data
+        ),
+        'scripts' => array(
+          'common/bootstrap.min',
+        )
+      );
+      $this->load->view('common/template', $template);
 		} else {
 			show_error('Invalid data');
 		}
