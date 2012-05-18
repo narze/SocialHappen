@@ -1,5 +1,5 @@
 
-<style type="text/css">	
+<style type="text/css">
 	.ui-autocomplete{
 		background: #ffffff;
 		cursor: default;
@@ -15,7 +15,7 @@
 			<div class="loading-div" style="height:36px;display:block;">
 				<div id="loading-box" style="display:none;"><img src="<?php echo base_url().'assets/images/loading.gif'; ?>" /></div>
 			</div>
-			<form class="form-horizontal" name="" action="<?php echo base_url('actions/checkin/add_user_data_checkin'); ?>" method="post">
+			<form name="" action="<?php echo base_url('actions/checkin/add_user_data_checkin'); ?>" method="post">
 				<fieldset>
 					<legend><?php echo $action_data['data']['checkin_challenge_message']; ?></legend>
 					<div>
@@ -25,18 +25,18 @@
 						<div class="control-group">
 							<label class="control-label" for="checkin_facebook_place_name">Do Check-In at</label>
 							<div class="controls">
-								<?php echo $action_data['data']['checkin_facebook_place_name']; ?>
+								<label class="checkin_facebook_place_name"><?php echo $action_data['data']['checkin_facebook_place_name']; ?></label>
 							</div>
 						</div>
 						<div class="control-group">
 
-							<div class="control-group" id="search-place-normal"> 
-								<label class="control-label" for="autocomplete">autocomplete location search</label>
+							<div class="control-group" id="search-place-normal">
+								<label class="control-label" for="autocomplete">Location search</label>
 								<div class="controls">
 									<input type="text" name="search_name" id="search_name" onkeypress="return noenter()" />
 								</div>
 							</div>
-						
+
 						</div>
 						<?php if($action_data['data']['checkin_min_friend_count']>0): ?>
 							<div class="control-group">
@@ -45,15 +45,15 @@
 									<?php echo $action_data['data']['checkin_min_friend_count']; ?> of your friends
 								</div>
 							</div>
-						
 
-							<div id="search-friends-normal"> 
+
+							<div id="search-friends-normal">
 								<div id="friend-list">
-									<div id="jfmfs-container"></div> 
-								</div> 
+									<div id="jfmfs-container"></div>
+								</div>
 							</div>
-						
-							
+
+
 						<?php endif; ?>
 						<div class="control-group">
 							<label class="control-label" for="post_message">Message on the post</label>

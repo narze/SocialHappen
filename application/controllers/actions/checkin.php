@@ -59,6 +59,7 @@ class Checkin extends CI_Controller {
 		          'common/bootstrap-responsive',
 		          'common/jquery.facebook.multifriend.select',
 		          'common/jquery.facebook.multifriend.select-list',
+		          'actions/checkin_form'
 		        ),
 		        'body_views' => $body_views,
 		        'scripts' => array(

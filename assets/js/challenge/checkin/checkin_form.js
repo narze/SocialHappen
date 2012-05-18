@@ -35,7 +35,7 @@ function fbcallback(data){
 
 function friendSelectorInit() {
       FB.api('/me', function(response) {
-       
+
         jQuery("#jfmfs-container").jfmfs({
           max_selected: 15,
           max_selected_message: "{0} of {1} selected",
@@ -56,7 +56,7 @@ function friendSelectorInit() {
           jQuery('#jfmfs-friend-selector').css('height', '200px');
           jQuery('#jfmfs-friend-container').css('height', '200px');
         });
-        jQuery("#jfmfs-container").bind("jfmfs.selection.changed", function(e, data) { 
+        jQuery("#jfmfs-container").bind("jfmfs.selection.changed", function(e, data) {
           // window.console && console.log("changed", data);
           var target_list = '';
 
@@ -150,7 +150,7 @@ function searchCallback(response){
 
 jQuery(document).ready(function(){
   jQuery('#search_name').autocomplete({
-                      search: function(event, ui) { 
+                      search: function(event, ui) {
                       valid_place_search_result = false;
                         facebookPlaceSearch(jQuery(this).val());
                      }
@@ -173,9 +173,9 @@ jQuery(document).ready(function(){
 
   //basic_friends_selector
   jQuery('input[type=checkbox].basic_friend_item').live( "change", function() {
-    var friend_id = jQuery(this).val();   
+    var friend_id = jQuery(this).val();
     var friend_name = jQuery(this).attr('data-friend_name');
-           
+
     //in or out
     if(jQuery(this).prop('checked', jQuery(this).checked)){
       basic_selected_friends_list.push(friend_id);
@@ -190,7 +190,7 @@ jQuery(document).ready(function(){
       basic_selected_friends_list.splice(rem_ind, 1);
       basic_selected_friends_name_list.splice(rem_ind, 1);
     }
-    
+
     jQuery('input[name=tagged_user_facebook_ids]').val(basic_selected_friends_list.join());
     jQuery('#selected-friends-list').html(basic_selected_friends_name_list.join());
     //console.log(basic_selected_friends_list.join());
@@ -206,10 +206,10 @@ jQuery(document).ready(function(){
       var basic_place_search_result = '';
       var intervalId = setInterval(
         //wait for result flag : valid_place_search_result
-        function(){ 
+        function(){
           if(valid_place_search_result){
             //console.log(place_search_result);
-            if(place_search_result.length == 0){
+            if(place_search_result.length === 0){
               jQuery('#search_place_basic_result').html('search not found');
             }else{
               basic_place_search_result = '<ul>';
@@ -217,16 +217,15 @@ jQuery(document).ready(function(){
                 basic_place_search_result += '<li style="list-style:none;"><input type="radio" class="basic_place_group" name="place_group" value="'+place_search_result[x].place_id+'">'+place_search_result[x].label+"</li>";
               }
               basic_place_search_result += '</ul>';
-              
+
               jQuery('#loading-box').hide();
-              jQuery('#search_place_basic_result').html(basic_place_search_result); 
+              jQuery('#search_place_basic_result').html(basic_place_search_result);
             }
             valid_place_search_result = false;
-              clearInterval(intervalId);
-            } 
-        }
-      ,100);
-    
+            clearInterval(intervalId);
+          }
+        },100);
+
 
     }else if(id=='friends'){
       search_result = '';
@@ -242,41 +241,40 @@ jQuery(document).ready(function(){
         //first time of friends getting
         var intervalId = setInterval(
           //wait for result flag : valid_place_search_result
-          function(){ 
+          function(){
             if(valid_friends_list_result){
               //console.log(friends_list_result);
-              if(friends_list_result.length == 0){
+              if(friends_list_result.length === 0){
                 jQuery('#search_friends_basic_result').html('search not found');
-                valid_friends_list_result = false
+                valid_friends_list_result = false;
               }else{
                 staticFriendListShow(search_data);
                 //console.log('show after init');
               }
                 clearInterval(intervalId);
-              } 
-          }
-        ,100);
+              }
+          },100);
       }else{
         staticFriendListShow(search_data);
         //console.log('show normal');
       }
 
-      
+
 
     }
-  });   
+  });
 });
 
 setInterval(
       //wait for result flag : valid_place_search_result
-      function(){ 
+      function(){
         if(valid_place_search_result){
             //console.log(place_search_result);
             jQuery( "#search_name" ).autocomplete( "option", "source", place_search_result);
-          } 
+          }
       }
     ,100);
-  
+
 function noenter() {
-    return !(window.event && window.event.keyCode == 13); 
+    return !(window.event && window.event.keyCode == 13);
   }
