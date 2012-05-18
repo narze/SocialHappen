@@ -1,6 +1,6 @@
 
 <?php echo $static_fb_root;?>
-<div>
+<div class="well">
 	<h1><?php echo $action_data['data']['checkin_welcome_message']; ?> <?php echo $user['user_first_name']?></h1>
 	<div>
 		<div class="loading-div" style="height:36px;display:block;">
@@ -11,10 +11,10 @@
 			<div>
 				<p>Do Check-In at : <?php echo $action_data['data']['checkin_facebook_place_name']; ?></p>
 				<p>
-					<div id="search-place-basic"> 
+					<div id="search-place-basic">
 						search
 						<input type="text" name="search_place_basic" id="search_place_basic" onkeypress="return noenter()" />
-						<input type="button" class="search_basic_submit" data-id="place" value="Search"> 
+						<input type="button" class="search_basic_submit" data-id="place" value="Search">
 						<div id="search_place_basic_result">
 						</div>
 					</div>
@@ -26,7 +26,7 @@
 							selected friends
 							<div id="selected-friends-list">-</div>
 							<input type="text" name="search_friends_basic" id="search_friends_basic" onkeypress="return noenter()" />
-							<input type="button" class="search_basic_submit" data-id="friends" value="Search"> 
+							<input type="button" class="search_basic_submit" data-id="friends" value="Search">
 							<div id="search_friends_basic_result">
 							</div>
 						</div>
