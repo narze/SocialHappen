@@ -69,32 +69,35 @@
 									echo set_value('criteria['.$nth.'][name]',
 										$criteria['name']);
 								?>" /><br />
-							Use app action<br />
-							Query : page_id
-							<input class="page_id" type="text" name="criteria[<?php echo $nth;?>][query][page_id]"
-								value="<?php
-									echo set_value('criteria['.$nth.'][query][page_id]',
-										issetor($criteria['query']['page_id']));
-								?>" /><br />
-							Query : app_id
-							<input class="app_id" type="text" name="criteria[<?php echo $nth;?>][query][app_id]"
-								value="<?php
-									echo set_value('criteria['.$nth.'][query][app_id]',
-										issetor($criteria['query']['app_id']));
-								?>" /><br />
-							Query : action_id
-							<input class="action_id" type="text" name="criteria[<?php echo $nth;?>][query][action_id]"
-								value="<?php
-									echo set_value('criteria['.$nth.'][query][action_id]',
-										issetor($criteria['query']['action_id']));
-								?>" /><br />
-							Or use Platform action
-							<input class="platform_action_id" type="text" name="criteria[<?php echo $nth;?>][query][platform_action_id]"
-								value="<?php
+
+							<div class="further-selection" style="display:none">
+								Use app action<br />
+								Query : page_id
+								<input class="page_id" type="text" name="criteria[<?php echo $nth;?>][query][page_id]" 
+									value="<?php 
+										echo set_value('criteria['.$nth.'][query][page_id]',
+											issetor($criteria['query']['page_id'])); 
+									?>" /><br />
+								Query : app_id
+								<input class="app_id" type="text" name="criteria[<?php echo $nth;?>][query][app_id]" 
+									value="<?php 
+										echo set_value('criteria['.$nth.'][query][app_id]',
+											issetor($criteria['query']['app_id'])); 
+									?>" /><br />
+								Query : action_id
+								<input class="action_id" type="text" name="criteria[<?php echo $nth;?>][query][action_id]" 
+									value="<?php 
+										echo set_value('criteria['.$nth.'][query][action_id]',
+											issetor($criteria['query']['action_id'])); 
+									?>" /><br />
+								Or use Platform action
+							</div>
+							<input class="platform_action_id" type="text" name="criteria[<?php echo $nth;?>][query][platform_action_id]" 
+								value="<?php 
 									echo set_value('criteria['.$nth.'][query][platform_action_id]',
 										issetor($criteria['query']['platform_action_id']));
 								?>" /><br />
-							<div class="platform-action-setting"></div>
+							
 							Count
 							<input class="count" type="text" name="criteria[<?php echo $nth;?>][count]"
 								value="<?php
@@ -106,39 +109,45 @@
 						</li>
 						<?php endforeach;
 					} ?>
-					<div class="criteria-template" style="display:none;" data-nth="">
+					<div class="criteria-template" style="display:none;" data-nth="0">
 						Name
 						<input class="name" type="text" /><br />
-						Query : page_id
-						<input class="page_id" type="text" /><br />
-						Query : app_id
-						<input class="app_id" type="text" /><br />
-						Query : action_id
-						<input class="action_id" type="text" /><br />
+						<div class="further-selection" style="display:none">
+							Query : page_id
+							<input class="page_id" type="text" /><br />
+							Query : app_id
+							<input class="app_id" type="text" /><br />
+							Query : action_id
+							<input class="action_id" type="text" /><br />
+						</div>
 						Query : platform_action_id
 						<input class="platform_action_id" type="text" /><br />
 						Count
 						<input class="count" type="text" /><br />
+						<div class="action_data-div">//Custom fields for this action_id</div>
 						<p><a class="remove-criteria">Remove this criteria</a></p>
 					</div>
 				</ul>
 
 				<p class="mb20 bold">Add criteria </p>
 				Name <input id="name" type="text" />
-				<div id="select_page"><?php
-						array_unshift($company_pages, 'Select Page');
-						echo form_dropdown('select_page', $company_pages);
-					?>
+
+				<div class="further-selection" style="display:none;">
+					<div id="select_page"><?php 
+							array_unshift($company_pages, 'Select Page');
+							echo form_dropdown('select_page', $company_pages);
+						?>
+					</div>
+					<div id="select_app"> <?php
+							echo form_dropdown('select_app', array(''=>'Select App'));
+						?>
+					</div>
+					<div id="select_action"> <?php
+							echo form_dropdown('select_action', array(''=>'Select Action'));
+						?>
+					</div>
+					Or
 				</div>
-				<div id="select_app"> <?php
-						echo form_dropdown('select_app', array(''=>'Select App'));
-					?>
-				</div>
-				<div id="select_action"> <?php
-						echo form_dropdown('select_action', array(''=>'Select Action'));
-					?>
-				</div>
-				Or
 				<div id="select_platform_action"> <?php
 						echo form_dropdown('select_platform_action', $platform_actions);
 					?>

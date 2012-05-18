@@ -49,6 +49,7 @@ class Page_challenge extends CI_Controller {
 	}
 
 	function form($page_id = NULL, $update = FALSE){
+	//TO-DO : add custom_form fields
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			$return = array(
 				'success' => FALSE,
@@ -129,6 +130,9 @@ class Page_challenge extends CI_Controller {
 				$start_timestamp = $this->timezone_lib->unconvert_time(set_value('start_date'), $user['user_timezone_offset']);
 				$end_timestamp = $this->timezone_lib->unconvert_time(set_value('end_date'), $user['user_timezone_offset']);
 				$criteria = array_values($this->input->post('criteria'));
+				$action_data = $this->input->post('platform_action_setting');
+
+				$action_index = 0;
 				foreach($criteria as &$one) {
 					$one['query'] = array_cast_int($one['query']);
 					$one['count'] = (int) $one['count'];
@@ -138,15 +142,16 @@ class Page_challenge extends CI_Controller {
 						unset($one['query']['app_id']);
 						unset($one['query']['action_id']);
 						if(!$update) {
-
-							$action_data = $this->input->post('platform_action_setting');
-							$action_data_id = $this->action_data_lib->add_action_data($one['query']['platform_action_id'],$action_data);
+							
+							$action_data_id = $this->action_data_lib->add_action_data($one['query']['platform_action_id'],$action_data[$index]);
 							$one['action_data_id'] = $action_data_id;
 
 						}
 					} else {
 						$one['is_platform_action'] = FALSE;
 					}
+
+					$index++;
 				} unset($one);
 
 				$input = array(
@@ -180,8 +185,10 @@ class Page_challenge extends CI_Controller {
 					echo 'An error occurred saving your information. Please try again later';
 				}
 			}
+			
 		}
 	}
+
 
 	function remove($page_id = NULL){
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
@@ -201,6 +208,7 @@ class Page_challenge extends CI_Controller {
 	}
 
 	function add($page_id = NULL){
+		//print_r($this->input->post());
 		$this->form($page_id, FALSE);
 	}
 
@@ -265,6 +273,24 @@ class Page_challenge extends CI_Controller {
 		$this->load->helper('form');
 		$this->load->view("actions/{$action_name}/{$action_name}_setting_form");
 	}
+
+	function ajax_get_platform_action() {
+		if($this->input->is_ajax_request()) {
+			$this->load->helper('form');
+			$platform_action_id = $this->input->get('platform_action_id');
+			$this->load->library('action_data_lib');
+
+			$custom_fields_view = $this->action_data_lib->get_action_data_custom_form_view($platform_action_id);
+
+			if($custom_fields_view)
+				echo $custom_fields_view;
+			else
+				echo 'error loading form';
+		} else {
+			return;
+		}
+	}
+
 }
 /* End of file page_challenge.php */
 /* Location: ./application/controllers/settings/page_challenge.php */

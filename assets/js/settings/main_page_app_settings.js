@@ -411,7 +411,7 @@ $(function(){
 			.on('click', '.add-criteria', add_criteria)
 			.on('click', '.remove-criteria', remove_criteria)
 			.on('click', '.challenge-property-name', show_challenge_property)
-			.on('change', 'select[name=select_platform_action]', load_platform_action_form);
+			//.on('change', 'select[name=select_platform_action]', load_platform_action_form);
 
 		function add_update_challenge() {
 			url = $(this).attr('href');
@@ -479,7 +479,13 @@ $(function(){
 			var platform_action_id = $('#select_platform_action>select[name="select_platform_action"]').val();
 			var count = $('#count').val();
 			if(name && ((page_id && app_id && action_id) || platform_action_id) && count){
-				var next_nth = $('.criteria[data-nth]:last').data('nth') + 1 ;
+				
+				var curr_nth = $('.criteria[data-nth]:last').data('nth');
+				var next_nth = 0;
+
+				if(curr_nth>=0)
+					next_nth = curr_nth + 1 ;
+
 				var new_criteria = $('.criteria-template').clone()
 					.removeClass('criteria-template').addClass('criteria')
 					.data('nth', next_nth).show().appendTo('.criteria_list');
@@ -488,6 +494,18 @@ $(function(){
 				new_criteria.find('.app_id').val(app_id).attr('name', 'criteria['+next_nth+'][query][app_id]');
 				new_criteria.find('.action_id').val(action_id).attr('name', 'criteria['+next_nth+'][query][action_id]');
 				new_criteria.find('.platform_action_id').val(platform_action_id).attr('name', 'criteria['+next_nth+'][query][platform_action_id]');
+
+				//TO-DO : call ajax_get_platform_action : require platform_action_id
+				$.get(base_url+'settings/page_challenge/ajax_get_platform_action/',
+					{ platform_action_id: platform_action_id },
+					function(data) {		
+						custom_template = data;
+						custom_template = custom_template.replace(/{next_nth}/g, next_nth);
+						//console.log(custom_template);
+						new_criteria.find('.action_data-div').html(custom_template);
+				});
+
+				
 				new_criteria.find('.count').val(count).attr('name', 'criteria['+next_nth+'][count]');
 			}
 		}
