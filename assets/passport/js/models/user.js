@@ -4,12 +4,12 @@ define([
 ], function(_, Backbone) {
   var userModel = Backbone.Model.extend({
     defaults: {
-      
+
     },
     initialize: function(){
-      
+
     },
-    
+
     sync: function(method, model, options) {
     var methodMap = {
       'create': 'POST',
@@ -17,7 +17,7 @@ define([
       'delete': 'DELETE',
       'read':   'GET'
     };
-    
+
     var type = methodMap[method];
 
     // Default options, unless specified.
@@ -28,8 +28,8 @@ define([
 
     // Ensure that we have a URL.
     if (!options.url) {
-      params.url = window.Passport.BASE_URL + '/apiv3/user'
-      
+      params.url = window.Passport.BASE_URL + 'apiv3/user'
+
       if(this.id){
         params.url += '/' + this.id;
       }
@@ -67,7 +67,7 @@ define([
     // Make the request, allowing the user to override any Ajax options.
     return $.ajax(_.extend(params, options));
   }
-    
+
   });
   return userModel;
 
