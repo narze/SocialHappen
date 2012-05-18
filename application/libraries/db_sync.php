@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Database sync library
@@ -10,7 +10,7 @@ class DB_Sync {
 	public function __construct(){
 		if (defined('ENVIRONMENT'))
 		{
-			if (!(ENVIRONMENT == 'development' || ENVIRONMENT == 'testing' ))
+			if (!(ENVIRONMENT === 'development' || ENVIRONMENT === 'testing' ))
 			{
 				redirect();
 			}
@@ -39,7 +39,7 @@ class DB_Sync {
 		}
 		echo "Remove users successfully";
     }
-	
+
 	function mysql_reset(){
 		$this->CI->load->dbforge();
 		$this->drop_tables();
@@ -61,495 +61,495 @@ class DB_Sync {
 					$this->CI->db->insert($table, array('version' => 0));
 				} else {
 					if($this->CI->dbforge->drop_table($table)){
-						echo "Dropped table : {$table}<br />";	
+						echo "Dropped table : {$table}<br />";
 					}
 				}
 			}
 		}
 	}
-	
+
 	function insert_test_data(){
 		$app = array(
 			array(
-				'app_id' => 1, 
-				'app_name' => 'Friend Get Fans', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Friend Get Fans', 
-				'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4', 
-				'app_url' => 'https://apps.socialhappen.com/beta/fgf/profile.php?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.socialhappen.com/beta/fgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
-				'app_install_page_url' => 'https://apps.socialhappen.com/beta/fgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 1,
+				'app_name' => 'Friend Get Fans',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Friend Get Fans',
+				'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4',
+				'app_url' => 'https://apps.socialhappen.com/beta/fgf/profile.php?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.socialhappen.com/beta/fgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1',
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/fgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.socialhappen.com/beta/fgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.socialhappen.com/beta/fgf/images/app_image_16.png',
 				'app_image' =>  'https://apps.socialhappen.com/beta/fgf/images/app_image_o.png',
-				'app_facebook_api_key' => '202663143123531' 	
+				'app_facebook_api_key' => '202663143123531'
 			),
 			array(
-				'app_id' => 2, 
-				'app_name' => '[Local]Friend Get Fans', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Friend Get Fans', 
-				'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4', 
-				'app_url' => 'https://apps.localhost.com/fgf/profile.php?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.localhost.com/fgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1', 
-				'app_install_page_url' => 'https://apps.localhost.com/fgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 2,
+				'app_name' => '[Local]Friend Get Fans',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Friend Get Fans',
+				'app_secret_key' => 'ad3d4f609ce1c21261f45d0a09effba4',
+				'app_url' => 'https://apps.localhost.com/fgf/profile.php?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.localhost.com/fgf/platform.php?action=install&company_id={company_id}&user_id={user_id}&page_id={page_id}&force=1',
+				'app_install_page_url' => 'https://apps.localhost.com/fgf/platform.php?action=install_to_page&app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.localhost.com/fgf/app_config.php?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.localhost.com/fgf/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/fgf/images/app_image_o.png',
-				'app_facebook_api_key' => '154899207922915' 	
+				'app_facebook_api_key' => '154899207922915'
 			),
 			array(
-				'app_id' => 3, 
-				'app_name' => 'SHApp', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'SocialHappen Application', 
-				'app_secret_key' => 'cd14463efa98e6ee00fde6ccd51a9f6d', 
-				'app_url' => 'https://apps.socialhappen.com/beta/shapp?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.socialhappen.com/beta/shapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.socialhappen.com/beta/shapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 3,
+				'app_name' => 'SHApp',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'SocialHappen Application',
+				'app_secret_key' => 'cd14463efa98e6ee00fde6ccd51a9f6d',
+				'app_url' => 'https://apps.socialhappen.com/beta/shapp?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.socialhappen.com/beta/shapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/shapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.socialhappen.com/beta/shapp/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.socialhappen.com/beta/shapp/images/app_image_16.png',
 				'app_image' =>  'https://apps.socialhappen.com/beta/shapp/images/app_image_o.png',
-				'app_facebook_api_key' => '177890852283217' 	
+				'app_facebook_api_key' => '177890852283217'
 			),
 			array(
-				'app_id' => 4, 
-				'app_name' => '[Local]SHApp', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'SocialHappen Application', 
-				'app_secret_key' => 'cd14463efa98e6ee00fde6ccd51a9f6d', 
-				'app_url' => 'https://apps.localhost.com/shapp?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.localhost.com/shapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.localhost.com/shapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 4,
+				'app_name' => '[Local]SHApp',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'SocialHappen Application',
+				'app_secret_key' => 'cd14463efa98e6ee00fde6ccd51a9f6d',
+				'app_url' => 'https://apps.localhost.com/shapp?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.localhost.com/shapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.localhost.com/shapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.localhost.com/shapp/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.localhost.com/shapp/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/shapp/images/app_image_o.png',
-				'app_facebook_api_key' => '204755022911798' 	
-			),			
+				'app_facebook_api_key' => '204755022911798'
+			),
 			array(
-				'app_id' => 5, 
-				'app_name' => 'FeedVideo', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Video Feed', 
-				'app_secret_key' => '985a868ee8aec810d3a25a3367776ea7', 
-				'app_url' => 'https://apps.socialhappen.com/beta/feedv?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.socialhappen.com/beta/feedv/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.socialhappen.com/beta/feedv/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 5,
+				'app_name' => 'FeedVideo',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Video Feed',
+				'app_secret_key' => '985a868ee8aec810d3a25a3367776ea7',
+				'app_url' => 'https://apps.socialhappen.com/beta/feedv?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.socialhappen.com/beta/feedv/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/feedv/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.socialhappen.com/beta/feedv/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.socialhappen.com/beta/feedv/images/app_image_16.png',
 				'app_image' =>  'https://apps.socialhappen.com/beta/feedv/images/app_image_o.png',
-				'app_facebook_api_key' => '203741749684542' 	
+				'app_facebook_api_key' => '203741749684542'
 			),
 			array(
-				'app_id' => 6, 
-				'app_name' => '[Local]FeedVideo', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Video Feed', 
-				'app_secret_key' => '430203a30d65ef835f1521d70fd4e9b5', 
-				'app_url' => 'https://apps.localhost.com/feedv?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.localhost.com/feedv/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.localhost.com/feedv/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 6,
+				'app_name' => '[Local]FeedVideo',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Video Feed',
+				'app_secret_key' => '430203a30d65ef835f1521d70fd4e9b5',
+				'app_url' => 'https://apps.localhost.com/feedv?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.localhost.com/feedv/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.localhost.com/feedv/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.localhost.com/feedv/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.localhost.com/feedv/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/feedv/images/app_image_o.png',
-				'app_facebook_api_key' => '253512681338518' 	
-			),			
+				'app_facebook_api_key' => '253512681338518'
+			),
 			array(
-				'app_id' => 7, 
-				'app_name' => 'FeedRSS', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'RSS Feed', 
-				'app_secret_key' => '9c867d4b57a77c46a7e8ca3830d8fb8c', 
-				'app_url' => 'https://apps.socialhappen.com/beta/feedr?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.socialhappen.com/beta/feedr/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.socialhappen.com/beta/feedr/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 7,
+				'app_name' => 'FeedRSS',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'RSS Feed',
+				'app_secret_key' => '9c867d4b57a77c46a7e8ca3830d8fb8c',
+				'app_url' => 'https://apps.socialhappen.com/beta/feedr?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.socialhappen.com/beta/feedr/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/feedr/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.socialhappen.com/beta/feedr/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.socialhappen.com/beta/feedr/images/app_image_16.png',
 				'app_image' =>  'https://apps.socialhappen.com/beta/feedr/images/app_image_o.png',
-				'app_facebook_api_key' => '249927805038578' 	
+				'app_facebook_api_key' => '249927805038578'
 			),
 			array(
-				'app_id' => 8, 
-				'app_name' => '[Local]FeedRSS', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'RSS Feed', 
-				'app_secret_key' => '985a868ee8aec810d3a25a3367776ea7', 
-				'app_url' => 'https://apps.localhost.com/feedr?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.localhost.com/feedr/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.localhost.com/feedr/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 8,
+				'app_name' => '[Local]FeedRSS',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'RSS Feed',
+				'app_secret_key' => '985a868ee8aec810d3a25a3367776ea7',
+				'app_url' => 'https://apps.localhost.com/feedr?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.localhost.com/feedr/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.localhost.com/feedr/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.localhost.com/feedr/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.localhost.com/feedr/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/feedr/images/app_image_o.png',
-				'app_facebook_api_key' => '123678481062231' 	
-			),			
+				'app_facebook_api_key' => '123678481062231'
+			),
 			array(
-				'app_id' => 9, 
-				'app_name' => 'CMS', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Content management system', 
-				'app_secret_key' => 'c861264d7f42636eed41612c58cc950f', 
-				'app_url' => 'https://apps.socialhappen.com/beta/fbcms?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.socialhappen.com/beta/fbcms/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.socialhappen.com/beta/fbcms/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 9,
+				'app_name' => 'CMS',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Content management system',
+				'app_secret_key' => 'c861264d7f42636eed41612c58cc950f',
+				'app_url' => 'https://apps.socialhappen.com/beta/fbcms?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.socialhappen.com/beta/fbcms/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/fbcms/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.socialhappen.com/beta/fbcms/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => '?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.socialhappen.com/beta/fbcms/images/app_image_16.png',
 				'app_image' =>  'https://apps.socialhappen.com/beta/fbcms/images/app_image_o.png',
-				'app_facebook_api_key' => '133912883383693' 	
+				'app_facebook_api_key' => '133912883383693'
 			),
 			array(
-				'app_id' => 10, 
-				'app_name' => '[Local]CMS', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Content management system', 
-				'app_secret_key' => '655ab6dc53febea644ff59fb55695be5', 
-				'app_url' => 'https://apps.localhost.com/fbcms?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.localhost.com/fbcms/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.localhost.com/fbcms/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 10,
+				'app_name' => '[Local]CMS',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Content management system',
+				'app_secret_key' => '655ab6dc53febea644ff59fb55695be5',
+				'app_url' => 'https://apps.localhost.com/fbcms?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.localhost.com/fbcms/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.localhost.com/fbcms/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.localhost.com/fbcms/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => '?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.localhost.com/fbcms/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/fbcms/images/app_image_o.png',
-				'app_facebook_api_key' => '297378976960614' 	
+				'app_facebook_api_key' => '297378976960614'
 			),array(
-				'app_id' => 11, 
-				'app_name' => 'ExclusiveClub', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Exclusive club', 
-				'app_secret_key' => '7d4b57e0d9c467a77ac88ca38368fb8c', 
-				'app_url' => 'https://apps.socialhappen.com/beta/exclub?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.socialhappen.com/beta/exclub/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.socialhappen.com/beta/exclub/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 11,
+				'app_name' => 'ExclusiveClub',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Exclusive club',
+				'app_secret_key' => '7d4b57e0d9c467a77ac88ca38368fb8c',
+				'app_url' => 'https://apps.socialhappen.com/beta/exclub?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.socialhappen.com/beta/exclub/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/exclub/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.socialhappen.com/beta/exclub/setting/dashboard/{app_install_id}/{user_id}/{app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.socialhappen.com/beta/exclub/images/app_image_16.png',
 				'app_image' =>  'https://apps.socialhappen.com/beta/exclub/images/app_image_o.png',
-				'app_facebook_api_key' => '232687860130389' 	
+				'app_facebook_api_key' => '232687860130389'
 			),
 			array(
-				'app_id' => 12, 
-				'app_name' => '[Local]ExclusiveClub', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Exclusive club', 
-				'app_secret_key' => 'ea7988ee810d77aec863a25a33675a86', 
-				'app_url' => 'https://apps.localhost.com/exclub?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.localhost.com/exclub/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.localhost.com/exclub/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 12,
+				'app_name' => '[Local]ExclusiveClub',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Exclusive club',
+				'app_secret_key' => 'ea7988ee810d77aec863a25a33675a86',
+				'app_url' => 'https://apps.localhost.com/exclub?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.localhost.com/exclub/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.localhost.com/exclub/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.localhost.com/exclub/setting/dashboard/{app_install_id}/{user_id}/{app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.localhost.com/exclub/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/exclub/images/app_image_o.png',
-				'app_facebook_api_key' => '302231066461728' 	
+				'app_facebook_api_key' => '302231066461728'
 			),
       array(
-        'app_id' => 13, 
-        'app_name' => '[Local]Quiz', 
-        'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'), 
-        'app_maintainance' => 0, 
-        'app_show_in_list' => 1, 
-        'app_description' => 'Quiz Application', 
-        'app_secret_key' => 'b79ebca20151427227b940b3329fff4d', 
-        'app_url' => 'https://apps.localhost.com/quiz?app_install_id={app_install_id}', 
-        'app_install_url' => 'https://apps.localhost.com/quiz/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-        'app_install_page_url' => 'https://apps.localhost.com/quiz/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+        'app_id' => 13,
+        'app_name' => '[Local]Quiz',
+        'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'),
+        'app_maintainance' => 0,
+        'app_show_in_list' => 1,
+        'app_description' => 'Quiz Application',
+        'app_secret_key' => 'b79ebca20151427227b940b3329fff4d',
+        'app_url' => 'https://apps.localhost.com/quiz?app_install_id={app_install_id}',
+        'app_install_url' => 'https://apps.localhost.com/quiz/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+        'app_install_page_url' => 'https://apps.localhost.com/quiz/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
         'app_config_url' => 'https://apps.localhost.com/quiz/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
         'app_config_facebook_canvas_path' => NULL,
-        'app_support_page_tab' => 1, 
+        'app_support_page_tab' => 1,
         'app_icon' =>  'https://socialhappen.dyndns.org/socialhappen/assets/images/default/app_icon.png',
         'app_image' =>  'https://socialhappen.dyndns.org/socialhappen/assets/images/default/app.png',
-        'app_facebook_api_key' => '249809481763956'   
+        'app_facebook_api_key' => '249809481763956'
       ),
       array(
-        'app_id' => 14, 
-        'app_name' => 'Quiz', 
-        'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'), 
-        'app_maintainance' => 0, 
-        'app_show_in_list' => 1, 
-        'app_description' => 'Quiz Application', 
-        'app_secret_key' => 'b79ebca20151427227b940b3329fff4d', 
-        'app_url' => 'https://apps.socialhappen.com/quiz?app_install_id={app_install_id}', 
-        'app_install_url' => 'https://apps.socialhappen.com/quiz/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-        'app_install_page_url' => 'https://apps.socialhappen.com/quiz/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+        'app_id' => 14,
+        'app_name' => 'Quiz',
+        'app_type_id' => $this->CI->socialhappen->get_k('app_type','Page Only'),
+        'app_maintainance' => 0,
+        'app_show_in_list' => 1,
+        'app_description' => 'Quiz Application',
+        'app_secret_key' => 'b79ebca20151427227b940b3329fff4d',
+        'app_url' => 'https://apps.socialhappen.com/quiz?app_install_id={app_install_id}',
+        'app_install_url' => 'https://apps.socialhappen.com/quiz/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+        'app_install_page_url' => 'https://apps.socialhappen.com/quiz/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
         'app_config_url' => 'https://apps.socialhappen.com/quiz/sh/config?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
         'app_config_facebook_canvas_path' => NULL,
-        'app_support_page_tab' => 1, 
+        'app_support_page_tab' => 1,
         'app_icon' =>  'https://beta.socialhappen.com/assets/images/default/app_icon.png',
         'app_image' =>  'https://beta.socialhappen.com/assets/images/default/app.png',
-        'app_facebook_api_key' => '323031654420635'   
+        'app_facebook_api_key' => '323031654420635'
       ),
 			array(
-				'app_id' => 15, 
-				'app_name' => 'VoteApp', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Vote App - create vote feed and other details', 
-				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-				'app_url' => 'https://apps.socialhappen.com/beta/voteapp?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.socialhappen.com/beta/voteapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.socialhappen.com/beta/voteapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 15,
+				'app_name' => 'VoteApp',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Vote App - create vote feed and other details',
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+				'app_url' => 'https://apps.socialhappen.com/beta/voteapp?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.socialhappen.com/beta/voteapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.socialhappen.com/beta/voteapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.socialhappen.com/beta/voteapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.socialhappen.com/beta/voteapp/assets/images/app_image_16.png',
 				'app_image' =>  'https://apps.socialhappen.com/beta/voteapp/assets/images/app_image_o.png',
-				'app_facebook_api_key' => '109201202537135' 	
+				'app_facebook_api_key' => '109201202537135'
 			),
 			array(
-				'app_id' => 16, 
-				'app_name' => '[Local]VoteApp', 
-				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'), 
-				'app_maintainance' => 0, 
-				'app_show_in_list' => 1, 
-				'app_description' => 'Vote App - create vote feed and other details', 
-				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-				'app_url' => 'https://apps.localhost.com/voteapp?app_install_id={app_install_id}', 
-				'app_install_url' => 'https://apps.localhost.com/voteapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}', 
-				'app_install_page_url' => 'https://apps.localhost.com/voteapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1', 
+				'app_id' => 16,
+				'app_name' => '[Local]VoteApp',
+				'app_type_id' => $this->CI->socialhappen->get_k('app_type','Support Page'),
+				'app_maintainance' => 0,
+				'app_show_in_list' => 1,
+				'app_description' => 'Vote App - create vote feed and other details',
+				'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+				'app_url' => 'https://apps.localhost.com/voteapp?app_install_id={app_install_id}',
+				'app_install_url' => 'https://apps.localhost.com/voteapp/sh/install?company_id={company_id}&user_id={user_id}&page_id={page_id}',
+				'app_install_page_url' => 'https://apps.localhost.com/voteapp/sh/install_page?app_install_id={app_install_id}&user_id={user_id}&page_id={page_id}&force=1',
 				'app_config_url' => 'https://apps.localhost.com/voteapp/admin/?app_install_id={app_install_id}&user_id={user_id}&app_install_secret_key={app_install_secret_key}',
 				'app_config_facebook_canvas_path' => NULL,
-				'app_support_page_tab' => 1, 
+				'app_support_page_tab' => 1,
 				'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 				'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
-				'app_facebook_api_key' => '218961554869668' 	
+				'app_facebook_api_key' => '218961554869668'
 			)
 		);
 		$this->CI->db->insert_batch('app', $app);
-		
+
 		$campaign = array(
 							array(
 							    'campaign_id' => 1,
-							    'app_install_id' =>  1, 
+							    'app_install_id' =>  1,
 							    'campaign_name' => '1st campaign',
 							    'campaign_detail' => 'This is the first campaign',
-							    'campaign_status_id' => 1, 
+							    'campaign_status_id' => 1,
 							    'campaign_start_timestamp' => '2011-05-19',
 							    'campaign_end_timestamp' => '2021-05-18',
 								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							),
 							array(
-							    'campaign_id' => 2, 
-							    'app_install_id' => 2, 
+							    'campaign_id' => 2,
+							    'app_install_id' => 2,
 							    'campaign_name' => '2nd campaign',
-							    'campaign_detail' => 'This is the 2nd campaign', 
-							    'campaign_status_id' => 2, 
-							    'campaign_start_timestamp' => '2011-05-18', 
+							    'campaign_detail' => 'This is the 2nd campaign',
+							    'campaign_status_id' => 2,
+							    'campaign_start_timestamp' => '2011-05-18',
 							    'campaign_end_timestamp' => '2021-06-18',
 								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							),
 							array(
-							    'campaign_id' => 4, 
-							    'app_install_id' => 2, 
+							    'campaign_id' => 4,
+							    'app_install_id' => 2,
 							    'campaign_name' => '3rd campaign',
-							    'campaign_detail' => 'This is the 3rd campaign', 
-							    'campaign_status_id' => 2, 
-							    'campaign_start_timestamp' => '2011-05-18', 
+							    'campaign_detail' => 'This is the 3rd campaign',
+							    'campaign_status_id' => 2,
+							    'campaign_start_timestamp' => '2011-05-18',
 							    'campaign_end_timestamp' => '2011-12-31',
 								'campaign_image' => BASE_URL.'assets/images/default/app.png',
 								'campaign_end_message' => 'This campaign is ended, please wait for upcoming campaign soon'
 							)
 						);
 		$this->CI->db->insert_batch('campaign', $campaign);
-		
+
 		$company = array(
 						array(
-							    'company_id' => 1, 
-							    'creator_user_id' => 1, 
-							    'company_name' => 'Figabyte Co., Ltd.', 
+							    'company_id' => 1,
+							    'creator_user_id' => 1,
+							    'company_name' => 'Figabyte Co., Ltd.',
 							    'company_detail' => 'a social media agency and award-winning technology firm',
-							    'company_address' => '71 G.P. House Building 3rd-floor, Sab Road, Si Phraya Road, Bangrak, Bangkok 10500', 
-							    'company_email' => 'contact@figabyte.com', 
-							    'company_telephone' => '026370286', 
-							    'company_register_date' => '2011-05-09 17:52:17', 
-							    'company_username' => '', 
+							    'company_address' => '71 G.P. House Building 3rd-floor, Sab Road, Si Phraya Road, Bangrak, Bangkok 10500',
+							    'company_email' => 'contact@figabyte.com',
+							    'company_telephone' => '026370286',
+							    'company_register_date' => '2011-05-09 17:52:17',
+							    'company_username' => '',
 							    'company_password' => '',
 							    'company_image' => BASE_URL.'assets/images/default/campaign.png'
 							)
 						);
 		$this->CI->db->insert_batch('company', $company);
-		
+
 		$company_apps = array(
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 1, 
+							    'company_id' => 1,
+							    'app_id' => 1,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 2, 
+							    'company_id' => 1,
+							    'app_id' => 2,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 3, 
+							    'company_id' => 1,
+							    'app_id' => 3,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 4, 
+							    'company_id' => 1,
+							    'app_id' => 4,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 5, 
+							    'company_id' => 1,
+							    'app_id' => 5,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 6, 
+							    'company_id' => 1,
+							    'app_id' => 6,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 7, 
+							    'company_id' => 1,
+							    'app_id' => 7,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 8, 
+							    'company_id' => 1,
+							    'app_id' => 8,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 9, 
+							    'company_id' => 1,
+							    'app_id' => 9,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 10, 
+							    'company_id' => 1,
+							    'app_id' => 10,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 11, 
+							    'company_id' => 1,
+							    'app_id' => 11,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 12, 
+							    'company_id' => 1,
+							    'app_id' => 12,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
               array(
-                  'company_id' => 1, 
-                  'app_id' => 13, 
+                  'company_id' => 1,
+                  'app_id' => 13,
                   'available_date' => '2011-05-19 16:01:20'
               ),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 14, 
+							    'company_id' => 1,
+							    'app_id' => 14,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
 							array(
-							    'company_id' => 1, 
-							    'app_id' => 15, 
+							    'company_id' => 1,
+							    'app_id' => 15,
 							    'available_date' => '2011-05-19 16:01:20'
 							),
               array(
-                  'company_id' => 1, 
-                  'app_id' => 16, 
+                  'company_id' => 1,
+                  'app_id' => 16,
                   'available_date' => '2011-05-19 16:01:20'
               )
 						);
 		$this->CI->db->insert_batch('company_apps', $company_apps);
-		
+
 		$installed_apps = array(
 								array(
-								    'app_install_id' => 1, 
-								    'company_id' => 1, 
-								    'app_id' => 1, 
-								    'app_install_status_id' => 1, 
-								    'app_install_date' => '2011-05-18 18:37:01', 
-								    'page_id' => 1, 
+								    'app_install_id' => 1,
+								    'company_id' => 1,
+								    'app_id' => 1,
+								    'app_install_status_id' => 1,
+								    'app_install_date' => '2011-05-18 18:37:01',
+								    'page_id' => 1,
 								    'app_install_secret_key' => '457f81902f7b768c398543e473c47465',
 									'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_202663143123531'
 								),
 								array(
-								  	'app_install_id' => 2, 
-								    'company_id' => 1, 
-								    'app_id' => 2, 
-								    'app_install_status_id' => 1, 
-								    'app_install_date' => '2011-05-18 18:37:01', 
-								    'page_id' => 1, 
+								  	'app_install_id' => 2,
+								    'company_id' => 1,
+								    'app_id' => 2,
+								    'app_install_status_id' => 1,
+								    'app_install_date' => '2011-05-18 18:37:01',
+								    'page_id' => 1,
 								    'app_install_secret_key' => 'b4504b54bb0c27a22fedba10cca4eb55',
 									'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_154899207922915'
 								),
 								array(
-								    'app_install_id' => 3, 
-								    'company_id' => 1, 
-								    'app_id' => 3, 
-								    'app_install_status_id' => 1, 
-								    'app_install_date' => '2011-05-18 18:37:01', 
-								    'page_id' => 1, 
+								    'app_install_id' => 3,
+								    'company_id' => 1,
+								    'app_id' => 3,
+								    'app_install_status_id' => 1,
+								    'app_install_date' => '2011-05-18 18:37:01',
+								    'page_id' => 1,
 								    'app_install_secret_key' => '1dd5a598414f201bc521348927c265c3',
 									'facebook_tab_url' => ''
 								),
 								array(
-								  	'app_install_id' => 4, 
-								    'company_id' => 1, 
-								    'app_id' => 4, 
-								    'app_install_status_id' => 1, 
-								    'app_install_date' => '2011-05-18 18:37:01', 
-								    'page_id' => 1, 
+								  	'app_install_id' => 4,
+								    'company_id' => 1,
+								    'app_id' => 4,
+								    'app_install_status_id' => 1,
+								    'app_install_date' => '2011-05-18 18:37:01',
+								    'page_id' => 1,
 								    'app_install_secret_key' => '19323810aedbbc8384b383fa21904626',
 									'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_204755022911798'
 								)
 							);
 		$this->CI->db->insert_batch('installed_apps', $installed_apps);
-		
+
 		$page = array(
 					array(
-						    'page_id' => 1, 
-						    'facebook_page_id' => '116586141725712', 
-						    'company_id' => 1, 
-						    'page_name' => 'SocialHappen Test', 
+						    'page_id' => 1,
+						    'facebook_page_id' => '116586141725712',
+						    'company_id' => 1,
+						    'page_name' => 'SocialHappen Test',
 						    'page_detail' => 'This is socialhappen test page',
-							'page_installed' => 0, 
+							'page_installed' => 0,
 						    'page_image' => BASE_URL.'assets/images/default/page.png',
 							'page_user_fields' => json_encode(array(
 								1 => array(
@@ -576,12 +576,12 @@ class DB_Sync {
 							'facebook_tab_url' => 'https://www.facebook.com/pages/Shtest/116586141725712?sk=app_108290455924296'
 					),
 					array(
-						'page_id' => 2, 
-						'facebook_page_id' => '135287989899131', 
-						'company_id' => 1, 
-						'page_name' => 'SH Beta', 
+						'page_id' => 2,
+						'facebook_page_id' => '135287989899131',
+						'company_id' => 1,
+						'page_name' => 'SH Beta',
 						'page_detail' => 'This is socialhappen beta page',
-						'page_installed' => 1, 
+						'page_installed' => 1,
 						'page_image' => BASE_URL.'assets/images/default/page.png',
 						'page_user_fields' => json_encode(array(
 							1 => array(
@@ -616,23 +616,23 @@ class DB_Sync {
 								'order' => 3,
 								'verify_message' => '---',
 								'options' => NULL,
-							)	
+							)
 						)),
 						'facebook_tab_url' => ''
 					)
 				);
 		$this->CI->db->insert_batch('page', $page);
-				
+
 		$user = array(
 					array(
-					    'user_id' => 1, 
+					    'user_id' => 1,
 					    'user_first_name' => 'Noom',
 					    'user_last_name' => 'Narze',
 					    'user_email' => 'noom@figabyte.com',
 					    'user_phone' => '0812345678',
 					    'user_password' => '64cdb985d7fee7c3d5bcd6972e65ca41093fdce9',
-					    'user_image' => 'https://graph.facebook.com/713558190/picture',					    
-					    'user_facebook_id' => 713558190, 
+					    'user_image' => 'https://graph.facebook.com/713558190/picture',
+					    'user_facebook_id' => 713558190,
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
@@ -642,14 +642,14 @@ class DB_Sync {
 					    'user_is_developer' => 1
 						),
 					array(
-					    'user_id' => 2, 
+					    'user_id' => 2,
 					    'user_first_name' => 'Pop',
 					    'user_last_name' => 'Prachya',
 					    'user_email' => 'pop@figabyte.com',
 					    'user_phone' => '0812345678',
 					    'user_password' => '64cdb985d7fee7c3d5bcd6972e65ca41093fdce9',
-					    'user_image' => 'https://graph.facebook.com/637741627/picture',	
-					    'user_facebook_id' => 637741627, 
+					    'user_image' => 'https://graph.facebook.com/637741627/picture',
+					    'user_facebook_id' => 637741627,
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
@@ -659,14 +659,14 @@ class DB_Sync {
 					    'user_is_developer' => 1
 					),
 					array(
-					    'user_id' => 3, 
+					    'user_id' => 3,
 					    'user_first_name' => 'หลินปิง',
 					    'user_last_name' => 'จริงๆนะเออ',
 					    'user_email' => 'wachiraph.c@gmail.com',
 					    'user_phone' => '0812345678',
 					    'user_password' => '64cdb985d7fee7c3d5bcd6972e65ca41093fdce9',
-					    'user_image' => 'https://graph.facebook.com/631885465/picture',		
-					    'user_facebook_id' => 631885465, 
+					    'user_image' => 'https://graph.facebook.com/631885465/picture',
+					    'user_facebook_id' => 631885465,
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
@@ -676,14 +676,14 @@ class DB_Sync {
 					    'user_is_developer' => 1
 					),
 					array(
-					    'user_id' => 4, 
+					    'user_id' => 4,
 					    'user_first_name' => 'Metwara',
 					    'user_last_name' => 'Narksook',
 					    'user_email' => 'hybridknight@gmail.com',
 					    'user_phone' => '0812345678',
 					    'user_password' => '64cdb985d7fee7c3d5bcd6972e65ca41093fdce9',
-					    'user_image' => 'https://graph.facebook.com/755758746/picture',		
-					    'user_facebook_id' => 755758746, 
+					    'user_image' => 'https://graph.facebook.com/755758746/picture',
+					    'user_facebook_id' => 755758746,
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
@@ -693,14 +693,14 @@ class DB_Sync {
 					    'user_is_developer' => 1
 					),
 					array(
-					    'user_id' => 5, 
+					    'user_id' => 5,
 					    'user_first_name' => 'Charkrid',
 					    'user_last_name' => 'Thanhachartyothin',
 					    'user_email' => 'charkrid@figabyte.com',
 					    'user_phone' => '0812345678',
 					    'user_password' => '64cdb985d7fee7c3d5bcd6972e65ca41093fdce9',
-					    'user_image' => 'https://graph.facebook.com/508840994/picture',		
-					    'user_facebook_id' => 508840994, 
+					    'user_image' => 'https://graph.facebook.com/508840994/picture',
+					    'user_facebook_id' => 508840994,
 					    'user_register_date' => '2011-05-09 17:36:14',
 					    'user_last_seen' => '2011-05-18 12:57:24',
 					    'user_twitter_name' => '',
@@ -710,14 +710,14 @@ class DB_Sync {
 					    'user_is_developer' => 1
 					),
 					array(
-					    'user_id' => 6, 
+					    'user_id' => 6,
 					    'user_first_name' => 'Weerapat',
 					    'user_last_name' => 'Poosri',
 					    'user_email' => 'tong@figabyte.com',
 					    'user_phone' => '0812345678',
 					    'user_password' => '64cdb985d7fee7c3d5bcd6972e65ca41093fdce9',
-					    'user_image' => 'https://graph.facebook.com/688700832/picture',		
-					    'user_facebook_id' => 688700832, 
+					    'user_image' => 'https://graph.facebook.com/688700832/picture',
+					    'user_facebook_id' => 688700832,
 					    'user_register_date' => '2011-08-03 19:00:00',
 					    'user_last_seen' => '2011-08-18 09:27:04',
 					    'user_twitter_name' => '',
@@ -728,23 +728,23 @@ class DB_Sync {
 					)
 				);
 		$this->CI->db->insert_batch('user', $user);
-		
+
 		$user_apps = array(
 							array(
-							    'user_id' => 1, 
-							    'app_install_id' => 1, 
-							    'user_apps_register_date' => '2011-05-19 19:12:20', 
+							    'user_id' => 1,
+							    'app_install_id' => 1,
+							    'user_apps_register_date' => '2011-05-19 19:12:20',
 							    'user_apps_last_seen' => '0000-00-00 00:00:00'
 							),
 							array(
-							    'user_id' => 2, 
-							    'app_install_id' => 2, 
-							    'user_apps_register_date' => '2011-05-19 19:12:20', 
+							    'user_id' => 2,
+							    'app_install_id' => 2,
+							    'user_apps_register_date' => '2011-05-19 19:12:20',
 							    'user_apps_last_seen' => '0000-00-00 00:00:00'
 							)
 						);
 		$this->CI->db->insert_batch('user_apps', $user_apps);
-		
+
 		$user_campaigns = array(
 								array(
 								    'user_id' => 1,
@@ -772,7 +772,7 @@ class DB_Sync {
 								)
 							);
 		$this->CI->db->insert_batch('user_campaigns', $user_campaigns);
-								
+
 		$user_companies = array(
 								array(
 								    'user_id' => 1,
@@ -806,7 +806,7 @@ class DB_Sync {
 								)
 							);
 		$this->CI->db->insert_batch('user_companies', $user_companies);
-		
+
 
 		$sessions = array( //for testing only
 						array(
@@ -829,7 +829,7 @@ class DB_Sync {
 		// if(!$this->CI->db->get_where('sessions', array('session_id'=>1111))){
 			$this->CI->db->insert_batch('sessions', $sessions);
 		// }
-		
+
 		$user_role = array(
 								array(
 								    'user_role_id' => 1,
@@ -923,7 +923,7 @@ class DB_Sync {
 								)
 							);
 		$this->CI->db->insert_batch('user_role', $user_role);
-		
+
 		$user_pages = array(
 								array(
 								    'user_id' => 1,
@@ -987,7 +987,7 @@ class DB_Sync {
 								),
 							);
 		$this->CI->db->insert_batch('user_pages', $user_pages);
-		
+
 		$package = array(
 			array(
 				'package_name' => 'Normal package',
@@ -1024,7 +1024,7 @@ class DB_Sync {
 			),
 		);
 		$this->CI->db->insert_batch('package', $package);
-		
+
 		$package_users = array(
 			array(
 				'package_id' => 1,
@@ -1058,7 +1058,7 @@ class DB_Sync {
 			)
 		);
 		$this->CI->db->insert_batch('package_users', $package_users);
-		
+
 		$package_apps = array(
 			array(
 				'package_id' => 1,
@@ -1210,7 +1210,7 @@ class DB_Sync {
 			)
 		);
 		$this->CI->db->insert_batch('package_apps', $package_apps);
-		
+
 		$order = array(
 			array(
 				'order_id' => 1,
@@ -1232,7 +1232,7 @@ class DB_Sync {
 			)
 		);
 		$this->CI->db->insert_batch('order', $order);
-		
+
 		$order_items = array(
 			array(
 				'order_id' => 1,
@@ -1256,7 +1256,7 @@ class DB_Sync {
 			)
 		);
 		$this->CI->db->insert_batch('order_items', $order_items);
-		
+
 		$page_user_data = array(
 			array(
 				'user_id' => 1,
@@ -1292,156 +1292,156 @@ class DB_Sync {
 		$this->CI->db->insert_batch('page_user_data', $page_user_data);
 
 		//Data for use in development & not test db
-		if(ENVIRONMENT == 'development' && !$this->CI->config->item('mongo_testmode')) {
+		if((ENVIRONMENT === 'development' || ENVIRONMENT === 'testing') && !$this->CI->config->item('mongo_testmode')) {
 		//Add app 10001+
 			$app = array(
 				array(
-					'app_id' => 10001, 
-					'app_name' => 'Ghost', 
-					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-					'app_maintainance' => 0, 
-					'app_show_in_list' => 0, 
-					'app_description' => 'ล่าท้าผี คุณจะเจอผีแบบไหน', 
-					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-					'app_url' => 'https://apps.localhost.com/shapp/', 
-					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
-					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_id' => 10001,
+					'app_name' => 'Ghost',
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+					'app_maintainance' => 0,
+					'app_show_in_list' => 0,
+					'app_description' => 'ล่าท้าผี คุณจะเจอผีแบบไหน',
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+					'app_url' => 'https://apps.localhost.com/shapp/',
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install',
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page',
 					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
 					'app_config_facebook_canvas_path' => NULL,
-					'app_support_page_tab' => 1, 
+					'app_support_page_tab' => 1,
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798',
 					'app_banner' => 'https://apps.localhost.com/apps/ghost/images/start.jpg'
 				),
 				array(
-					'app_id' => 10002, 
-					'app_name' => 'Songkran', 
-					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-					'app_maintainance' => 0, 
-					'app_show_in_list' => 0, 
-					'app_description' => 'สงกรานต์นี้ คุณจะโดนกี่น้ำ', 
-					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-					'app_url' => 'https://apps.localhost.com/shapp/', 
-					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
-					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_id' => 10002,
+					'app_name' => 'Songkran',
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+					'app_maintainance' => 0,
+					'app_show_in_list' => 0,
+					'app_description' => 'สงกรานต์นี้ คุณจะโดนกี่น้ำ',
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+					'app_url' => 'https://apps.localhost.com/shapp/',
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install',
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page',
 					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
 					'app_config_facebook_canvas_path' => NULL,
-					'app_support_page_tab' => 1, 
+					'app_support_page_tab' => 1,
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798',
 					'app_banner' => 'https://apps.localhost.com/apps/songkran/images/start.gif'
 				),
 				array(
-					'app_id' => 10003, 
-					'app_name' => 'PostItLove', 
-					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-					'app_maintainance' => 0, 
-					'app_show_in_list' => 0, 
-					'app_description' => 'คุณอยากจะบอก ... ว่า ...', 
-					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-					'app_url' => 'https://apps.localhost.com/shapp/', 
-					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
-					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_id' => 10003,
+					'app_name' => 'PostItLove',
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+					'app_maintainance' => 0,
+					'app_show_in_list' => 0,
+					'app_description' => 'คุณอยากจะบอก ... ว่า ...',
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+					'app_url' => 'https://apps.localhost.com/shapp/',
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install',
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page',
 					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
 					'app_config_facebook_canvas_path' => NULL,
-					'app_support_page_tab' => 1, 
+					'app_support_page_tab' => 1,
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798',
 					'app_banner' => 'https://apps.localhost.com/apps/postit/images/start.jpg'
 				),
 				array(
-					'app_id' => 10004, 
-					'app_name' => 'PoseTonight', 
-					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-					'app_maintainance' => 0, 
-					'app_show_in_list' => 0, 
-					'app_description' => 'ท่ายากของคุณในคืนนี้คืออะไร เราไปดูกันเลยครับ!', 
-					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-					'app_url' => 'https://apps.localhost.com/shapp/', 
-					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
-					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_id' => 10004,
+					'app_name' => 'PoseTonight',
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+					'app_maintainance' => 0,
+					'app_show_in_list' => 0,
+					'app_description' => 'ท่ายากของคุณในคืนนี้คืออะไร เราไปดูกันเลยครับ!',
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+					'app_url' => 'https://apps.localhost.com/shapp/',
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install',
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page',
 					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
 					'app_config_facebook_canvas_path' => NULL,
-					'app_support_page_tab' => 1, 
+					'app_support_page_tab' => 1,
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798',
 					'app_banner' => 'https://apps.localhost.com/apps/posetonight/images/start.jpg'
 				),
 				array(
-					'app_id' => 10005, 
-					'app_name' => 'WeddingPlace', 
-					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-					'app_maintainance' => 0, 
-					'app_show_in_list' => 0, 
-					'app_description' => 'คุณจะได้กันที่ไหน', 
-					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-					'app_url' => 'https://apps.localhost.com/shapp/', 
-					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
-					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_id' => 10005,
+					'app_name' => 'WeddingPlace',
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+					'app_maintainance' => 0,
+					'app_show_in_list' => 0,
+					'app_description' => 'คุณจะได้กันที่ไหน',
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+					'app_url' => 'https://apps.localhost.com/shapp/',
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install',
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page',
 					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
 					'app_config_facebook_canvas_path' => NULL,
-					'app_support_page_tab' => 1, 
+					'app_support_page_tab' => 1,
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798',
 					'app_banner' => 'https://apps.localhost.com/apps/weddingplace/images/start.jpg'
 				),
 				array(
-					'app_id' => 10006, 
-					'app_name' => 'KhmerName', 
-					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-					'app_maintainance' => 0, 
-					'app_show_in_list' => 0, 
-					'app_description' => 'ชื่อเขมรของคุณคืออะไร', 
-					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-					'app_url' => 'https://apps.localhost.com/shapp/', 
-					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
-					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_id' => 10006,
+					'app_name' => 'KhmerName',
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+					'app_maintainance' => 0,
+					'app_show_in_list' => 0,
+					'app_description' => 'ชื่อเขมรของคุณคืออะไร',
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+					'app_url' => 'https://apps.localhost.com/shapp/',
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install',
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page',
 					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
 					'app_config_facebook_canvas_path' => NULL,
-					'app_support_page_tab' => 1, 
+					'app_support_page_tab' => 1,
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798',
 					'app_banner' => 'https://apps.localhost.com/apps/khmername/images/start.jpg'
 				),
 				array(
-					'app_id' => 10007, 
-					'app_name' => 'LoveStatus', 
-					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-					'app_maintainance' => 0, 
-					'app_show_in_list' => 0, 
-					'app_description' => 'สถานะโดนใจ มือกดไลท์ ไฟเปิดเลย', 
-					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-					'app_url' => 'https://apps.localhost.com/shapp/', 
-					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
-					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_id' => 10007,
+					'app_name' => 'LoveStatus',
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+					'app_maintainance' => 0,
+					'app_show_in_list' => 0,
+					'app_description' => 'สถานะโดนใจ มือกดไลท์ ไฟเปิดเลย',
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+					'app_url' => 'https://apps.localhost.com/shapp/',
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install',
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page',
 					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
 					'app_config_facebook_canvas_path' => NULL,
-					'app_support_page_tab' => 1, 
+					'app_support_page_tab' => 1,
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798',
 					'app_banner' => 'https://apps.localhost.com/apps/lovestatus/images/start.jpg'
 				),
 				array(
-					'app_id' => 10008, 
-					'app_name' => 'HiddenProfile', 
-					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'), 
-					'app_maintainance' => 0, 
-					'app_show_in_list' => 0, 
-					'app_description' => 'อะไรแอบในรูปโปรไฟล์ของคุณ', 
-					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214', 
-					'app_url' => 'https://apps.localhost.com/shapp/', 
-					'app_install_url' => 'https://apps.localhost.com/shapp/?install', 
-					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page', 
+					'app_id' => 10008,
+					'app_name' => 'HiddenProfile',
+					'app_type_id' => $this->CI->socialhappen->get_k('app_type','Standalone'),
+					'app_maintainance' => 0,
+					'app_show_in_list' => 0,
+					'app_description' => 'อะไรแอบในรูปโปรไฟล์ของคุณ',
+					'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
+					'app_url' => 'https://apps.localhost.com/shapp/',
+					'app_install_url' => 'https://apps.localhost.com/shapp/?install',
+					'app_install_page_url' => 'https://apps.localhost.com/shapp/?install_page',
 					'app_config_url' => 'https://apps.localhost.com/shapp/?config',
 					'app_config_facebook_canvas_path' => NULL,
-					'app_support_page_tab' => 1, 
+					'app_support_page_tab' => 1,
 					'app_icon' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_16.png',
 					'app_image' =>  'https://apps.localhost.com/voteapp/assets/images/app_image_o.png',
 					'app_facebook_api_key' => '204755022911798',
@@ -1451,20 +1451,20 @@ class DB_Sync {
 			$this->CI->db->insert_batch('app', $app);
 			echo "Development test data added<br />";
 		}
-		
+
 		echo "Test data added<br />";
 	}
 
-	
-	
-	
-	
+
+
+
+
 	function drop_mongo_collections($collections){
 		foreach($collections as $collection){
 			echo $this->CI->mongodb->drop_collection($collection) ? "Dropped {$collection}<br />" : "Cannot drop {$collection}<br />";
 		}
 	}
-	
+
 	function mongodb_reset(){
 		$mongo_db_prefix = NULL;
 		$this->CI->load->config('mongo_db');
@@ -1505,8 +1505,8 @@ class DB_Sync {
 		echo 'Dropped collections<br />';
 
 		$this->CI->load->library('audit_lib');
-		$this->CI->load->library('achievement_lib');		
-		
+		$this->CI->load->library('achievement_lib');
+
 		$platform_audit_actions = array(
 			array(
 				'app_id' => 0,
@@ -1779,7 +1779,7 @@ class DB_Sync {
 				'score' => 0
 			),
 		);
-		
+
 		$audit_actions = array(
 			array(
 				'app_id' => 5,
@@ -1893,12 +1893,12 @@ class DB_Sync {
 			  ),
 		);
 		foreach(array_merge($platform_audit_actions,$audit_actions) as $audit_action){
-			$this->CI->audit_lib->add_audit_action($audit_action['app_id'], $audit_action['action_id'], 
+			$this->CI->audit_lib->add_audit_action($audit_action['app_id'], $audit_action['action_id'],
 				$audit_action['description'], $audit_action['stat_app'], $audit_action['stat_page'],
 				$audit_action['stat_campaign'], $audit_action['format_string'], $audit_action['score']);
 		}
 		echo 'Added '.count(array_merge($platform_audit_actions,$audit_actions)).' audit actions<br />';
-		
+
 		$achievement_infos = array(
 			// array(
 				// 'app_id' => 5,
@@ -2352,7 +2352,7 @@ class DB_Sync {
 		}
 		echo 'Added '.count($get_started_stats).' get-started stats<br />';
 		*/
-		
+
 		$app_component_page_data = array(
 			array(
 			  'page_id' => 1,
@@ -2366,7 +2366,7 @@ class DB_Sync {
 				array('name' => 'Prime',
 					  'invite_accepted' => 50)
 				)
-			), 
+			),
 			array(
 			  'page_id' => 2,
 			  'classes' => array(
@@ -2394,14 +2394,14 @@ class DB_Sync {
 				)
 			  )
 		);
-		
+
 		$this->CI->load->library('app_component_lib');
 		foreach($app_component_page_data as $app_component_page){
 			$this->CI->app_component_lib->add_page($app_component_page);
 		}
-		
+
 		//Data for use in development & not test db
-		if(ENVIRONMENT == 'development' && !$this->CI->config->item('mongo_testmode')) {
+		if((ENVIRONMENT === 'development' || ENVIRONMENT === 'testing') && !$this->CI->config->item('mongo_testmode')) {
 			//Play app id 10001 to add audit
 			$this->CI->load->library('apiv2_lib');
 			$input = array(
@@ -2441,7 +2441,7 @@ class DB_Sync {
 			);
 			$this->CI->apiv2_lib->play_app($input);
 
-			
+
 			//Play app id 10003 2 times to add audit
 			$this->CI->load->library('apiv2_lib');
 			$input = array(
@@ -2494,7 +2494,7 @@ class DB_Sync {
 
 			echo "Development test data added<br />";
 		}
-		
+
 		echo 'MongoDB reset successfully';
 	}
 }
