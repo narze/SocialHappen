@@ -17,27 +17,27 @@
 	<div class="challenge-preview">
 		<div class="wrapper">
 			<div class="challenge-preview-name">
-				<input type="text" name="detail[name]" 
-					value="<?php 
+				<input type="text" name="detail[name]"
+					value="<?php
 						echo set_value('detail[name]',
-							issetor($challenge['detail']['name'])); 
+							issetor($challenge['detail']['name']));
 					?>" placeholder="Challenge name"/>
 			</div>
 			<div class="challenge-preview-image">
 				<i class="image">
-					<input type="text" name="detail[image]" 
-					value="<?php 
+					<input type="text" name="detail[image]"
+					value="<?php
 						echo set_value('detail[image]',
-							issetor($challenge['detail']['image'])); 
+							issetor($challenge['detail']['image']));
 					?>" placeholder="Image" />
 				</i>
 			</div>
 			<div class="challenge-preview-desc">
-				<textarea name="detail[description]" placeholder="Challenge description"><?php 
-					echo set_value('detail[description]', issetor($challenge['detail']['description'])); 
+				<textarea name="detail[description]" placeholder="Challenge description"><?php
+					echo set_value('detail[description]', issetor($challenge['detail']['description']));
 				?></textarea>
 			</div>
-			<div class="challenge-preview-reward">Rewards : 
+			<div class="challenge-preview-reward">Rewards :
 				<span></span>
 			</div>
 			<div class="challenge-preview-actions">
@@ -46,7 +46,11 @@
 				</ol>
 			</div>
 		</div>
-		<div class="challenge-preview-qr-code">QR</div>
+		<div class="challenge-preview-qr-code">
+			<?php if (isset($hash)) {
+				echo '<img width="100px" height="100px" src="'.base_url('qr?path=c/'.$hash).'" />';
+			};?>
+		</div>
 	</div>
 
 	<ul class="challenge-properties-list">
@@ -54,48 +58,48 @@
 			<div class="challenge-property-name">Actions</div>
 			<div class="challenge-property-box">
 				<ul class="criteria_list">
-					<?php 
+					<?php
 					if(isset($challenge['criteria'])) {
 						foreach($challenge['criteria'] as $nth => $criteria) : ?>
 						<li class="criteria" data-nth="<?php echo $nth;?>">
 							Criteria 1<br />
 							Name
-							<input class="name" type="text" name="criteria[<?php echo $nth;?>][name]" 
-								value="<?php 
+							<input class="name" type="text" name="criteria[<?php echo $nth;?>][name]"
+								value="<?php
 									echo set_value('criteria['.$nth.'][name]',
-										$criteria['name']); 
+										$criteria['name']);
 								?>" /><br />
 							Use app action<br />
 							Query : page_id
-							<input class="page_id" type="text" name="criteria[<?php echo $nth;?>][query][page_id]" 
-								value="<?php 
+							<input class="page_id" type="text" name="criteria[<?php echo $nth;?>][query][page_id]"
+								value="<?php
 									echo set_value('criteria['.$nth.'][query][page_id]',
-										issetor($criteria['query']['page_id'])); 
+										issetor($criteria['query']['page_id']));
 								?>" /><br />
 							Query : app_id
-							<input class="app_id" type="text" name="criteria[<?php echo $nth;?>][query][app_id]" 
-								value="<?php 
+							<input class="app_id" type="text" name="criteria[<?php echo $nth;?>][query][app_id]"
+								value="<?php
 									echo set_value('criteria['.$nth.'][query][app_id]',
-										issetor($criteria['query']['app_id'])); 
+										issetor($criteria['query']['app_id']));
 								?>" /><br />
 							Query : action_id
-							<input class="action_id" type="text" name="criteria[<?php echo $nth;?>][query][action_id]" 
-								value="<?php 
+							<input class="action_id" type="text" name="criteria[<?php echo $nth;?>][query][action_id]"
+								value="<?php
 									echo set_value('criteria['.$nth.'][query][action_id]',
-										issetor($criteria['query']['action_id'])); 
+										issetor($criteria['query']['action_id']));
 								?>" /><br />
 							Or use Platform action
-							<input class="platform_action_id" type="text" name="criteria[<?php echo $nth;?>][query][platform_action_id]" 
-								value="<?php 
+							<input class="platform_action_id" type="text" name="criteria[<?php echo $nth;?>][query][platform_action_id]"
+								value="<?php
 									echo set_value('criteria['.$nth.'][query][platform_action_id]',
-										issetor($criteria['query']['platform_action_id'])); 
+										issetor($criteria['query']['platform_action_id']));
 								?>" /><br />
 							<div class="platform-action-setting"></div>
 							Count
-							<input class="count" type="text" name="criteria[<?php echo $nth;?>][count]" 
-								value="<?php 
+							<input class="count" type="text" name="criteria[<?php echo $nth;?>][count]"
+								value="<?php
 									echo set_value('criteria['.$nth.'][count]',
-										$criteria['count']); 
+										$criteria['count']);
 								?>" /><br />
 
 							<p><a class="remove-criteria">Remove this criteria</a></p>
@@ -121,7 +125,7 @@
 
 				<p class="mb20 bold">Add criteria </p>
 				Name <input id="name" type="text" />
-				<div id="select_page"><?php 
+				<div id="select_page"><?php
 						array_unshift($company_pages, 'Select Page');
 						echo form_dropdown('select_page', $company_pages);
 					?>
@@ -140,9 +144,9 @@
 					?>
 				</div>
 				<div class="platform-action-setting"></div>
-				Count <input id="count" type="text"	value="<?php 
+				Count <input id="count" type="text"	value="<?php
 						echo set_value('criteria[0][count]',
-							issetor($challenge['criteria'][0]['count'])); 
+							issetor($challenge['criteria'][0]['count']));
 					?>" />
 
 				<p class="mt20"><a class="btn green add-criteria"><span>Add Criteria</span></a></p>
@@ -186,16 +190,16 @@
 			<div class="challenge-property-box">
 				<div>
 					<label for="">Time</label>
-					<input class="start-date<?php echo form_error('start_date') ? ' form-error': ''; ?>" 
-						type="text" name="start_date" maxlength="20" 
-						value="<?php echo set_value('start_date', issetor($challenge['start_date'])); ?>" 
+					<input class="start-date<?php echo form_error('start_date') ? ' form-error': ''; ?>"
+						type="text" name="start_date" maxlength="20"
+						value="<?php echo set_value('start_date', issetor($challenge['start_date'])); ?>"
 					/>
 				</div>
 				<div>
 					<label for="">to</label>
-					<input class="end-date<?php echo form_error('end_date') ? ' form-error': ''; ?>" 
-						type="text" name="end_date" maxlength="20" 
-						value="<?php echo set_value('end_date', issetor($challenge['end_date'])); ?>" 
+					<input class="end-date<?php echo form_error('end_date') ? ' form-error': ''; ?>"
+						type="text" name="end_date" maxlength="20"
+						value="<?php echo set_value('end_date', issetor($challenge['end_date'])); ?>"
 						/>
 				</div>
 			</div>
@@ -209,7 +213,7 @@
 			</div>
 		</li>
 	</ul>
-		
+
 	<div class="ta-right mt10">
 		<button type="button" class="btn green fl"><span>Print</span></button>
 		<?php echo anchor('settings/page_challenge/'.$page_id,'<span>Back</span>','class="btn grey"'); ?>
@@ -217,5 +221,5 @@
 		<button type="submit" class="btn green" name="submit-form"><span>Save</span></button>
 	</div>
 	<?php echo form_close(); ?>
-	
+
 </div>

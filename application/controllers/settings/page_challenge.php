@@ -6,7 +6,7 @@ class Page_challenge extends CI_Controller {
 		parent::__construct();
 		$this->socialhappen->check_logged_in();
 	}
-	
+
 	function index($page_id = NULL){
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			exit('You are not admin');
@@ -20,19 +20,19 @@ class Page_challenge extends CI_Controller {
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
-			
+
 			$sort_criteria = array('start' => -1);
 			$user = $this->socialhappen->get_user();
 			$this->load->library('timezone_lib');
 			$this->load->library('challenge_lib');
 			$now = time();
-			
+
 			$this->load->model('page_model');
 			$page = $this->page_model->get_page_profile_by_page_id($page_id);
 			$company_id = $page['company_id'];
 			$challenges = $this->challenge_lib->get(array('company_id' => $company_id));
 			foreach($challenges as &$challenge){
-				
+
 				$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $user['user_timezone_offset']);
 				$end_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['end']), $user['user_timezone_offset']);
 
@@ -48,7 +48,7 @@ class Page_challenge extends CI_Controller {
 		}
 	}
 
-	function form($page_id = NULL, $update = FALSE){ 
+	function form($page_id = NULL, $update = FALSE){
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			$return = array(
 				'success' => FALSE,
@@ -57,11 +57,11 @@ class Page_challenge extends CI_Controller {
 			echo json_encode($return);
 		} else {
 			$this->load->library('form_validation');
-			// $this->form_validation->set_rules('name', 'challenge Name', 'required|trim|xss_clean|max_length[255]');			
-			$this->form_validation->set_rules('start_date', 'Start date', 'required|trim|xss_clean|max_length[20]');			
-			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');			
+			// $this->form_validation->set_rules('name', 'challenge Name', 'required|trim|xss_clean|max_length[255]');
+			$this->form_validation->set_rules('start_date', 'Start date', 'required|trim|xss_clean|max_length[20]');
+			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');
 			// $this->form_validation->set_rules('description', 'Challenge Description', 'trim|xss_clean');
-				
+
 			$this->form_validation->set_error_delimiters('<li class="error">', '</li>');
 
 			$this->load->model('page_model');
@@ -101,7 +101,7 @@ class Page_challenge extends CI_Controller {
 			}
 
 			if (($this->form_validation->run() == FALSE) || !is_array($this->input->post('criteria')))
-			{	
+			{
 				if($update){
 					$success = $this->input->get('success');
 					$this->load->vars('success', $success);
@@ -116,7 +116,8 @@ class Page_challenge extends CI_Controller {
 					$this->load->vars(array(
 						'challenge' => $challenge,
 						'challenge_id' => $challenge_id,
-						'update' => TRUE
+						'update' => TRUE,
+						'hash' => $challenge['hash']
 					));
 				}
 				$this->load->view('settings/page_apps/challenge_form');
@@ -137,7 +138,7 @@ class Page_challenge extends CI_Controller {
 						unset($one['query']['app_id']);
 						unset($one['query']['action_id']);
 						if(!$update) {
-							
+
 							$action_data = $this->input->post('platform_action_setting');
 							$action_data_id = $this->action_data_lib->add_action_data($one['query']['platform_action_id'],$action_data);
 							$one['action_data_id'] = $action_data_id;
@@ -147,7 +148,7 @@ class Page_challenge extends CI_Controller {
 						$one['is_platform_action'] = FALSE;
 					}
 				} unset($one);
-				
+
 				$input = array(
 					'company_id' => $company_id,
 	       	'start' => strtotime($start_timestamp),
@@ -163,13 +164,13 @@ class Page_challenge extends CI_Controller {
 
 					// $input['image'] = $this->socialhappen->replace_image('image', $exist_reward_item['image']);
 					// if($input['image'] == '') unset($input['image']);
-					
+
 					$update_result = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $input);
 				} else {
 					// $input['image'] = $this->socialhappen->upload_image('image');
 					$challenge_id = $this->challenge_lib->add($input);
 				}
-			
+
 				if ($challenge_id)
 				{
 					redirect('settings/page_challenge/update/'.$page_id.'?success=1&challenge_id='.$challenge_id);
