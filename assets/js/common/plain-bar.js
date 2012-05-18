@@ -12,10 +12,10 @@ $(function() {
           },
           baseUrl: base_url
         }));
-        if(window.location.href.indexOf('player/play')) {
+        if(window.location.href.indexOf('play')) {
           $('.bar-menu>li.play').addClass('active');
         }
-        
+
         var barUserTemplate = _.template($('#bar-user-template').html());
         $('.bar-user').replaceWith(barUserTemplate({
           user: {
@@ -60,5 +60,5 @@ $(function() {
     }
   });
 
-  
+
 });

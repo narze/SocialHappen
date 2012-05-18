@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends CI_Controller {
-  
+
   function __construct(){
     parent::__construct();
     $this->presalt = 'tH!s!$Pr3Za|t';
     $this->postsalt = 'di#!zp0s+s4LT';
   }
-  
+
   /**
    * Login page
    */
@@ -19,21 +19,21 @@ class Login extends CI_Controller {
         redirect($next);
       }
 
-      redirect('player/play');
+      redirect('play');
     } else if(($facebook_user = $this->facebook->getUser()) && $this->socialhappen->login()) {
       if($next) {
         redirect($next);
       }
 
-      redirect('player/play');
+      redirect('play');
     } else {
       //Login form
 
       $this->load->library('form_validation');
-      $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[100]');      
-      // $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');      
+      $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[100]');
+      // $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');
       $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');
-        
+
       $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
 
       $this->load->vars('next', $next ? '?next='.urlencode($next) : '/');
@@ -72,7 +72,7 @@ class Login extends CI_Controller {
 
         $password = set_value('password');
         $encrypted_password = sha1($this->presalt.$password.$this->postsalt);
-        
+
         $this->load->model('user_model');
         if($email) {
           $user = $this->user_model->findOne(array(
@@ -88,9 +88,9 @@ class Login extends CI_Controller {
           $user = FALSE;
           $this->load->vars('email_and_phone_not_entered', TRUE);
         }
-            
+
         // run insert model to write data to db
-      
+
         if ($user) // the information has therefore been successfully saved in the db
         {
           //login process (session)
@@ -100,7 +100,7 @@ class Login extends CI_Controller {
           if($next) {
             redirect($next);
           } else {
-            redirect('player/play');
+            redirect('play');
           }
         }
         else

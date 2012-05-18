@@ -61,7 +61,7 @@
           <div class="paging pagination-users"></div>
         </div>
 
-    
+
     <?php } else { ?>
     <div class="blank-tab white-box-01" style="background-image: url('<?php echo base_url(); ?>assets/images/bg/blank_member.jpg');">
       <h2>There's no member yet.</h2>
@@ -75,7 +75,7 @@
         <li>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis </li>
         <li>Praesentium voluptatum deleniti atque corrupti ducid muntibo quos dolores et quas molestias excepturi sint occaecat</li>
       </ul>
-      <a class="bt-learn-more-campaign" href="<?php echo base_url().''; ?>">Learn more about campaign</a>
+      <a class="bt-learn-more-campaign" href="<?php echo base_url('home/package'); ?>">Learn more about campaign</a>
       <br />
     </div>
     <?php } ?>

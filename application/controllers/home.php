@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Home extends CI_Controller {
-	
+
 	function __construct(){
 		parent::__construct();
 		$this->load->library('form_validation');
@@ -12,15 +12,15 @@ class Home extends CI_Controller {
 		$this->presalt = 'tH!s!$Pr3Za|t';
 		$this->postsalt = 'di#!zp0s+s4LT';
 	}
-	
+
 	/**
 	 * Home page
 	 * @author Manassarn M.
 	 */
 	function index(){
-		redirect();
+		redirect('home/package');
 	}
-	
+
 	/**
 	 * Signup page
 	 * @author Manassarn M.
@@ -28,16 +28,16 @@ class Home extends CI_Controller {
 	function signup(){
 		$facebook_user = $this->facebook->getUser();
 		if(!$facebook_user || $this->socialhappen->get_user()){
-			redirect();
+			redirect('home/package');
 		}
-		
+
 		$from =  $this->input->get('from');
 		$facebook_user_id = $facebook_user['id'];
 
 		$this->load->model('user_model','users');
 		if($is_registered = $this->users->get_user_id_by_user_facebook_id($facebook_user['id']) ? TRUE : FALSE){
 			$this->socialhappen->login();
-		} 
+		}
 
 		$input = compact('is_registered','from','facebook_user_id','facebook_user');
 		$result = $this->home_ctrl->signup($input);
@@ -48,22 +48,22 @@ class Home extends CI_Controller {
 			log_message('error', $result['error']);
 		}
 	}
-	
+
 	/**
 	 * Signup form
 	 * @author Manassarn M.
 	 */
 	function signup_form()
 	{
-		
-		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
-		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
+
+		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');
+		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[255]');
-		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
+		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');
 		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');
-			
+
 		$this->form_validation->set_error_delimiters('', '');
-	
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this -> load -> view('home/signup_form');
@@ -74,9 +74,9 @@ class Home extends CI_Controller {
 			$facebook_user = $this->facebook->getUser();
 			$facebook_access_token = $this->FB->getAccessToken();
 			$company_image = $this->socialhappen->upload_image('company_image');
-			
+
 			$user_timezone = $this->input->post('timezone') ? $this->input->post('timezone') : 'UTC';
-			
+
 			$first_name = set_value('first_name');
 			$last_name = set_value('last_name');
 			$email = set_value('email');
@@ -84,7 +84,7 @@ class Home extends CI_Controller {
 			$company_name =	set_value('company_name');
 			$company_detail = set_value('company_detail');
 			$package_id = $this->input->post('package_id');
-			
+
 			$input = compact('user_timezone','first_name','last_name','email','facebook_user_id','company_name','company_detail','company_image','package_id', 'facebook_access_token');
 			$result = $this->home_ctrl->signup_form($input);
 
@@ -97,7 +97,7 @@ class Home extends CI_Controller {
 			}
 		}
 	}
-	
+
 	/**
 	 * Signup complete
 	 * @author Weerapat P.
@@ -111,24 +111,24 @@ class Home extends CI_Controller {
 		);
 		$this->load->view('home/signup_complete', $data);
 	}
-	
+
 	/**
 	 * Package page
 	 * @author Weerapat P.
 	 */
 	function package()
 	{
-		
+
 		$this->load->model('package_model','package');
 		$this->load->model('package_users_model','package_users');
 		$user = $this->socialhappen->get_user();
 		$user_current_package = $this->package_users->get_package_by_user_id($user['user_id']);
-		
+
 		$user_current_package_id = isset($user_current_package['package_id']) ? $user_current_package['package_id'] : 0;
 		$user_current_package_price = isset($user_current_package['package_price']) ? $user_current_package['package_price'] : 0;
-		
+
 		$data = array(
-			'header' => $this -> socialhappen -> get_header( 
+			'header' => $this -> socialhappen -> get_header(
 				array(
 					'title' => 'Package',
 					'script' => array(
@@ -146,19 +146,19 @@ class Home extends CI_Controller {
 					)
 				)
 			),
-			'breadcrumb' => $this -> load -> view('common/breadcrumb', 
+			'breadcrumb' => $this -> load -> view('common/breadcrumb',
 				array(
-					'breadcrumb' => array( 
+					'breadcrumb' => array(
 						'Package' => NULL
 					)
 				),
 			TRUE),
-			'tutorial' => $this -> load -> view('home/tutorial', 
+			'tutorial' => $this -> load -> view('home/tutorial',
 				array(
-					
+
 				),
 			TRUE),
-			'home' => $this -> load -> view('home/package', 
+			'home' => $this -> load -> view('home/package',
 				array(
 					'packages' => $this->package->get_packages(),
 					'user_id' => $user['user_id'],
@@ -168,10 +168,10 @@ class Home extends CI_Controller {
 			TRUE),
 			'footer' => $this -> socialhappen -> get_footer()
 			);
-		
+
 		$this -> parser -> parse('home/home_view', $data);
 	}
-	
+
 	/**
 	 * App page - show all applications
 	 * @author Weerapat P.
@@ -179,9 +179,9 @@ class Home extends CI_Controller {
 	function apps($app_id = NULL)
 	{
 		$this->load->model('app_model','app');
-		
+
 		$data = array(
-			'header' => $this -> socialhappen -> get_header( 
+			'header' => $this -> socialhappen -> get_header(
 				array(
 					'title' => 'Applications',
 					'script' => array(
@@ -199,19 +199,19 @@ class Home extends CI_Controller {
 					)
 				)
 			),
-			'breadcrumb' => $this->load->view('common/breadcrumb', 
+			'breadcrumb' => $this->load->view('common/breadcrumb',
 				array(
-					'breadcrumb' => array( 
+					'breadcrumb' => array(
 						'Applications' => NULL
 					)
 				),
 			TRUE),
 			'footer' => $this->socialhappen->get_footer()
 		);
-		
+
 		if(!$app_id)
 		{
-			$data['home'] = $this->load->view('home/apps', 
+			$data['home'] = $this->load->view('home/apps',
 				array(
 					'apps' => $this->app->get_all_apps()
 				),
@@ -219,7 +219,7 @@ class Home extends CI_Controller {
 		}
 		else
 		{
-			$data['home'] = $this->load->view('home/app', 
+			$data['home'] = $this->load->view('home/app',
 				array(
 					'app' => $this->app->get_app_by_app_id($app_id)
 				),
@@ -239,10 +239,10 @@ class Home extends CI_Controller {
 					$this->get_started->add_get_started_stat($page_id, 'page', array(103));
 				}
 		}
-		
+
 		$this -> parser -> parse('home/home_view', $data);
 	}
-	
+
 	/**
 	 * Facebook connect popup
 	 * @author Weerapat P.
@@ -256,7 +256,7 @@ class Home extends CI_Controller {
 		);
 		$this -> load -> view('home/facebook_connect', $data);
 	}
-	
+
 	/**
 	 * JSON : Check login
 	 * @param $redirect_url
@@ -266,11 +266,11 @@ class Home extends CI_Controller {
 		$this->socialhappen->ajax_check();
 		$json = array(
 			'logged_in' => $this->socialhappen->is_logged_in(),
-			'redirect' => base_url().issetor($redirect_path,'')
+			'redirect' => base_url().issetor($redirect_path, 'home/package')
 		);
 		echo json_encode($json);
 	}
-	
+
 	/**
 	 * Login SocialHappen, if cannot, go to signup
 	 */
@@ -293,12 +293,12 @@ class Home extends CI_Controller {
 	function login($redirect_url = NULL)
 	{
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('email', 'Email', 'trim|xss_clean|valid_email|max_length[100]');			
-		$this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');			
+		$this->form_validation->set_rules('email', 'Email', 'trim|xss_clean|valid_email|max_length[100]');
+		$this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'trim|xss_clean|is_numeric|max_length[20]');
 		$this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');
-			
+
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-	
+
 		$next = $this->input->get('next');
 		$this->load->vars('next', $next ? '?next='.urlencode($next) : '/');
 		if ($this->form_validation->run() == FALSE)
@@ -311,7 +311,7 @@ class Home extends CI_Controller {
      	$mobile_phone_number = set_value('mobile_phone_number');
      	$password = set_value('password');
      	$encrypted_password = sha1($this->presalt.$password.$this->postsalt);
-			
+
 			$this->load->model('user_model');
 			if($email) {
 				$user = $this->user_model->findOne(array(
@@ -327,7 +327,7 @@ class Home extends CI_Controller {
 				$user = FALSE;
 				$this->load->vars('email_and_phone_not_entered', TRUE);
 			}
-		
+
 			if ($user) // the information has therefore been successfully saved in the db
 			{
 				$user_id = $user['user_id'];
@@ -339,7 +339,7 @@ class Home extends CI_Controller {
 					// 	0,
 					// 	$user_id,
 					// 	$action_id,
-					// 	'', 
+					// 	'',
 					// 	'',
 					// 	array(
 					// 		'app_install_id' => 0,
@@ -355,7 +355,7 @@ class Home extends CI_Controller {
 						'object' => NULL,
 						'objecti' => NULL
 					));
-					
+
 					$this->load->library('achievement_lib');
 					$info = array('action_id'=> $action_id, 'app_install_id'=>0);
 					$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
@@ -379,7 +379,7 @@ class Home extends CI_Controller {
 					}
 				}
 
-				
+
 			}
 			else
 			{
@@ -392,7 +392,7 @@ class Home extends CI_Controller {
 			}
 		}
 	}
-}  
+}
 
 /* End of file home.php */
 /* Location: ./application/controllers/home.php */

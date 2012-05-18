@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Player extends CI_Controller {
-	
+
 	function __construct(){
 		parent::__construct();
 		$this->presalt = 'tH!s!$Pr3Za|t';
 		$this->postsalt = 'di#!zp0s+s4LT';
 	}
-	
+
 	/**
 	 * Index page (for debugging purpose)
 	 */
@@ -18,7 +18,7 @@ class Player extends CI_Controller {
 		$user = $this->socialhappen->get_user();
 
 		$data = array(
-			'header' => $this->socialhappen->get_header_bootstrap( 
+			'header' => $this->socialhappen->get_header_bootstrap(
 				array(
 					'title' => 'Player',
 					'script' => array(
@@ -65,14 +65,14 @@ class Player extends CI_Controller {
 
 		$this->parser->parse('player/index_view', $data);
 	}
-	
+
 	/**
 	 * View all challenges
 	 */
 	function challenge_list($company_id) {
 		if($this->socialhappen->is_logged_in() && $company_id) {
-			
-			
+
+
 
 			$this->load->model('company_model');
 			$this->load->model('challenge_model');
@@ -86,7 +86,7 @@ class Player extends CI_Controller {
 			);
 
 			$data = array(
-				'header' => $this->socialhappen->get_header_bootstrap( 
+				'header' => $this->socialhappen->get_header_bootstrap(
 					array(
 						'title' => $company['company_name'],
 						'script' => array(
@@ -140,8 +140,8 @@ class Player extends CI_Controller {
 			$user_id = $this->socialhappen->get_user_id();
 			$user = $this->user_lib->get_user($user_id);
 			$player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
-			
-			
+
+
 			//challenge_progress
 			if($user_id) {
 				$this->load->library('challenge_lib');
@@ -159,7 +159,7 @@ class Player extends CI_Controller {
 			} else {
 				$challenge_done = FALSE;
 			}
-			
+
 			//Challenge Duration
 			if($current_user = $this->socialhappen->get_user($user_id)) {
 				$this->load->library('timezone_lib');
@@ -183,7 +183,7 @@ class Player extends CI_Controller {
 			);
 
 			$data = array(
-				'header' => $this->socialhappen->get_header_bootstrap( 
+				'header' => $this->socialhappen->get_header_bootstrap(
 					array(
 						'title' => $challenge['detail']['name'],
 						'script' => array(
@@ -208,13 +208,13 @@ class Player extends CI_Controller {
 	function challenge_actions($challenge_hash) {
 		$this->load->model('challenge_model');
 		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-			
+
 			$challenge_id = get_mongo_id($challenge);
 			$this->load->library('user_lib');
 			$user_id = $this->socialhappen->get_user_id();
 			$user = $this->user_lib->get_user($user_id);
 			$player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
-			
+
 			//challenge_progress
 			if($user_id) {
 				$this->load->library('challenge_lib');
@@ -243,7 +243,7 @@ class Player extends CI_Controller {
 			);
 
 			$data = array(
-				'header' => $this->socialhappen->get_header_bootstrap( 
+				'header' => $this->socialhappen->get_header_bootstrap(
 					array(
 						'title' => $challenge['detail']['name'],
 						'script' => array(
@@ -275,7 +275,7 @@ class Player extends CI_Controller {
 			}
 			$this->load->vars(array('facebook_connected' => $facebook_connected));
 			$this->load->view('player/settings_view');
-			
+
 		} else {
 			redirect('player');
 		}
@@ -285,8 +285,8 @@ class Player extends CI_Controller {
 	 * Connect to facebook
 	 */
 	function connect_facebook() {
-		if(($user_facebook_id = $this->FB->getUser()) && 
-				($user_facebook_id == $this->input->get('user_facebook_id')) && 
+		if(($user_facebook_id = $this->FB->getUser()) &&
+				($user_facebook_id == $this->input->get('user_facebook_id')) &&
 				($token = $this->input->get('token'))){
 			$connecting_facebook = TRUE;
 			$this->load->model('user_model');
@@ -314,7 +314,7 @@ class Player extends CI_Controller {
 
 	}
 
-	/** 
+	/**
 	 * Disconnect from facebook
 	 */
 	function disconnect_facebook() {
@@ -322,7 +322,7 @@ class Player extends CI_Controller {
 			$user_id = $this->socialhappen->get_user_id();
 			$this->load->model('user_model');
 			$this->user_model->update_user($user_id, array('user_facebook_id' => NULL, 'user_facebook_access_token' => NULL));
-			echo 'Disconnected from facebook ',anchor('player/settings', 'Back'); 
+			echo 'Disconnected from facebook ',anchor('player/settings', 'Back');
 		} else {
 			redirect('player');
 		}
@@ -434,83 +434,12 @@ class Player extends CI_Controller {
 		}
 	}
 
-	/**
-	 * Play page
-	 */
-	function play(){
-	 	$this->load->library('apiv2_lib');
-		$app_data = $this->input->get('app_data', TRUE);
-
-		$facebook_data = array(
-			'facebook_app_id' => $this->config->item('facebook_app_id'),
-			'facebook_app_scope' => $this->config->item('facebook_player_scope'),
-			'facebook_channel_url' => $this->facebook->channel_url
-		);
-		
-	 	$this->load->vars(array(
-  		'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
-		));
-
-	 	if(!$app_data){
-			$app_data_array = array(
-				'app_id' => 0, 
-				'app_secret_key' => 0,
-			);
-			$app_data = base64_encode(json_encode($app_data_array));
-			$data['true_app_data'] = false;
-
-		} else {
-			$data['true_app_data'] = true;
-			$app_data_array = json_decode(base64_decode($app_data), TRUE);
-		}
-		
-		$data['app_data'] = $app_data;
-		$data['app_data_array'] = $app_data_array;
-
- 		$template = array(
-      'title' => 'Welcome to SocialHappen',
-      'styles' => array(
-        'common/bootstrap',
-        'common/bootstrap-responsive',
-        'common/bar',
-        'common/player',
-        'player/play'
-      ),
-      'body_views' => array(
-        'common/fb_root' => array(
-          'facebook_app_id' => $this->config->item('facebook_app_id'),
-          'facebook_channel_url' => $this->facebook->channel_url,
-          'facebook_app_scope' => $this->config->item('facebook_player_scope')
-        ),
-        // '../../assets/passport/templates/header/navigation.html' => NULL,
-        'bar/plain_bar_view' => array(),
-        'player/play_view' => $data,
-        'common/vars' => array(
-        	'vars' => array(
-        		'base_url' => base_url()
-        	)
-        )
-      ),
-      'scripts' => array(
-        'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
-        'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
-        'common/jquery.masonry.min',
-        'common/jquery.timeago',
-        'common/underscore-min',
-        'common/bootstrap.min',
-        'common/plain-bar',
-        'player/play'
-      )
-    );
-    $this->load->view('common/template', $template);
-	}
-
 	public function static_signup(){
 		$this->load->library('apiv2_lib');
 		$app_data = $this->input->get('app_data', TRUE);
 
 	 	$this->load->vars(array(
-    	'header' => $this->socialhappen->get_header_bootstrap( 
+    	'header' => $this->socialhappen->get_header_bootstrap(
 				array(
 					'title' => 'Welcome to SocialHappen',
 					'script' => array(
@@ -527,10 +456,10 @@ class Player extends CI_Controller {
 		if(!$app_data){
 
 			$app_data_array = array(
-							'app_id' => 0, 
+							'app_id' => 0,
 							'app_secret_key' => 0,
 						);
-					
+
 			$app_data = base64_encode(json_encode($app_data_array));
 
 		} else {
@@ -538,13 +467,13 @@ class Player extends CI_Controller {
 			/*
 			print_r(base64_encode(json_encode(
 												array(
-														'app_id' => 10004, 
+														'app_id' => 10004,
 														'app_secret_key' => 'ae25b2c54e89d224de554de6a5edd214',
 														'user_facebook_id' => '631885465',
 														'data' => array('message' => 'message', 'link' => 'link')
 													))));
 			*/
-		
+
 			$app_data_array = json_decode(base64_decode($app_data), TRUE);
 		}
 
@@ -566,7 +495,7 @@ class Player extends CI_Controller {
 		$user_facebook_id = $this->input->post('user_facebook_id', TRUE);
 
 		$app_data = json_decode(base64_decode($app_data), TRUE);
-		
+
 		$app_id = $app_data['app_id'];
 		$app_secret_key = $app_data['app_secret_key'];
 		$user_image = "https://graph.facebook.com/{$user_facebook_id}/picture";
@@ -580,7 +509,7 @@ class Player extends CI_Controller {
 			//show result
 			if($signup_result){
 				echo json_encode(array('result' => 'ok', 'message' => 'sucessfully sign-up', 'data' => $signup_result));
-				
+
 			} else {
 				echo json_encode(array('result' => 'error', 'message' => 'signup error', 'data' => $signup_result));
 			}
@@ -598,7 +527,7 @@ class Player extends CI_Controller {
 					'facebook_app_scope' => $this->config->item('facebook_default_scope'),
 					'facebook_channel_url' => $this->facebook->channel_url
 		);
-		
+
 	 	$this->load->vars(array(
     	'static_fb_root' => $this->load->view('player/static_fb_root', $facebook_data, TRUE)
   	));
@@ -626,7 +555,7 @@ class Player extends CI_Controller {
 			$app_data_array['user_facebook_id'] = $user_facebook_data['id'];
 			$play_app_result = $this->apiv2_lib->play_app($app_data_array);
 		}
-		redirect('player/play?app_data='.$app_data.'&play_app_result='.$play_app_result);
+		redirect('play?app_data='.$app_data.'&play_app_result='.$play_app_result);
 	}
 
 	/**
@@ -668,7 +597,7 @@ class Player extends CI_Controller {
     );
     $this->load->view('common/template', $template);
 	}
-}  
+}
 
 /* End of file player.php */
 /* Location: ./application/controllers/player.php */

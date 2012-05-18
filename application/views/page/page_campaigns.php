@@ -44,7 +44,7 @@
 			<ul>
 				<li>Jett vero eos et accusamus et iusto odio dignissimos bolone qui blanditiis</li>
 			</ul>
-			<a class="bt-learn-more-campaign" href="<?php echo base_url().''; ?>">Learn more about campaign</a>
+			<a class="bt-learn-more-campaign" href="<?php echo base_url('home/package').''; ?>">Learn more about campaign</a>
 		</div>
 		<?php } ?>
 		<br />
