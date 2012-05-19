@@ -29,9 +29,9 @@ class Challenge_model extends CI_Model {
 		}
 	}
 	
-	function get($query){
+	function get($query, $limit = 100){
 		$query = array_cast_int($query, $this->int_values);
-		$result = $this->collection->find($query)->sort(array('_id' => -1));
+		$result = $this->collection->find($query)->sort(array('_id' => -1))->limit($limit);
 		return cursor2array($result);
 	}
 

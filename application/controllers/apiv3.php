@@ -131,8 +131,27 @@ class Apiv3 extends CI_Controller {
    * list challenge
    */
   function challenges(){
+    
+    $last_hash = $this->input->get('last_id', TRUE); 
+    
     $this->load->library('challenge_lib');
-    $challenges = $this->challenge_lib->get(array());
+    $limit = 30;
+    
+    if($last_hash){
+      $challenge = $this->challenge_lib->get_one(array('hash' => $last_hash));
+      if($challenge){
+        $challenges = $this->challenge_lib->get(array(
+          '_id' => array('$lt' => new MongoId($challenge['_id']['$id']))
+        ), $limit);
+      }else{
+        $challenges = array();
+      }
+    }else{
+      $challenges = $this->challenge_lib->get(array(), $limit);
+    }
+    
+    
+    
     
     function convert_id($item){
       // $item['_id'] = '' . $item['_id'];
