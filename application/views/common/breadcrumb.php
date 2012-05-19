@@ -1,6 +1,6 @@
 <div class="tab-menumain">
     <ul class="menu">
-      <li class="home"><a href="<?php echo base_url();?>"><span>home</span></a></li>
+      <li class="home"><a href="<?php echo base_url('home/package');?>"><span>home</span></a></li>
 		<?php
 		$last = end($breadcrumb);
 		foreach($breadcrumb as $name => $url){

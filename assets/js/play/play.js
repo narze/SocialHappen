@@ -15,19 +15,20 @@ function get_user_data(){
     type: "POST",
     dataType: "json",
     success:function(data){
-      if(data.user) {
-        console.log('get_user_data', data);
-        
+      if(data.user) { //If is user, show user's played apps
+        // console.log('get_user_data', data);
+
         var user = data.user;
 
         var userDataTemplate = _.template($('#user-data-template').html());
-        
+
         $('#user-data').replaceWith(userDataTemplate({
           picture: user.user_image + '?type=large',
           name: user.user_first_name + ' ' + user.user_last_name,
           point: data.user_score
         }));
-        
+
+        //Show played apps
         var played_apps = data.played_apps;
         if(played_apps.length > 0) {
           var playedAppTemplate = _.template($('#app-played-item-template').html());
@@ -38,34 +39,29 @@ function get_user_data(){
             played_apps: played_apps
           }));
           playedAppItemHover();
-          $('.played-apps-list').masonry({
-            itemSelector: '.played-app-item',
-            columnWidth: 180
+          $('.played-apps-list').imagesLoaded(function(){
+            $(this).masonry({
+              itemSelector: '.played-app-item',
+              columnWidth: 180
+            });
           });
         }
-        
-        var available_apps = data.available_apps;
-        if(available_apps.length > 0) {
-          var availableAppsTemplate = _.template($('#app-item-template').html());
-          $('#all-apps').replaceWith(availableAppsTemplate({
-            available_apps: available_apps
-          }));
-          appItemHover();
-          $('.all-apps-list').masonry({
+      }
+
+      //Show all apps
+      var available_apps = data.available_apps;
+      if(available_apps.length > 0) {
+        var availableAppsTemplate = _.template($('#app-item-template').html());
+        $('#all-apps').replaceWith(availableAppsTemplate({
+          available_apps: available_apps
+        }));
+        appItemHover();
+        $('.all-apps-list').imagesLoaded(function(){
+          $(this).masonry({
             itemSelector: '.app-item',
             columnWidth: 250
           });
-        }
-      } else {
-        //guest
-        var all_apps = data.available_apps;
-        if(all_apps.length > 0) {
-          var allAppsTemplate = _.template($('#app-item-template').html());
-          $('#all-apps').replaceWith(allAppsTemplate({
-            available_apps: all_apps
-          }));
-          appItemHover();
-        }
+        });
       }
     }
   });

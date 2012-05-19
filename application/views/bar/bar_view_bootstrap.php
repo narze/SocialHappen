@@ -8,7 +8,7 @@
 		</a>
 
 		<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
-			<a class="brand" href="<?php echo base_url('player/play');?>">SocialHappen</a>
+			<a class="brand" href="<?php echo base_url('play');?>">SocialHappen</a>
 		<?php else : ?>
 			<a class="brand" href="<?php echo base_url();?>">SocialHappen</a>
 		<?php endif; ?>
@@ -43,9 +43,9 @@
 			</ul>
 
 			<ul class="nav pull-right">
-				<li class="divider-vertical"></li><?php 
+				<li class="divider-vertical"></li><?php
 
-				if(isset($user) && $user) 
+				if(isset($user) && $user)
 				{ ?>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -76,11 +76,11 @@
 								<a class="a-notification" href="<?php echo $all_notification_link; ?>" >See all Notifications</a>
 							</li>
 						</ul>
-					</li><?php 
-				} 
-				else 
+					</li><?php
+				}
+				else
 				{
-					if(isset($facebook_user) && $facebook_user) 
+					if(isset($facebook_user) && $facebook_user)
 					{ ?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -96,9 +96,9 @@
 									<li><?php echo anchor("home/signup",'&raquo Signup');?></li>
 								<?php endif; ?>
 							</ul>
-						</li><?php 
-					} 
-					else 
+						</li><?php
+					}
+					else
 					{ ?>
 						<li>
 							<?php if(isset($use_static_fb_root) && $use_static_fb_root) : ?>
@@ -106,9 +106,9 @@
 							<?php else : ?>
 								<a onclick="shlogin();" href="<?php echo base_url('login'); ?>">&raquo; Login</a>
 							<?php endif; ?>
-							
+
 							<!-- <a onclick="fblogin();" ><img src="<?php //echo base_url(); ?>images/fb-login.jpg" alt=""></a> -->
-						</li><?php 
+						</li><?php
 					}
 				} ?>
 				<li class="divider-vertical"></li>
@@ -142,7 +142,7 @@
 						$('div.header ul.menu li.notification a.amount').append('<span>').children('span').remove();
 					}
 				});
-				
+
 				socket.on('newNotificationMessage', function (notification_message) {
 					console.log('notification_message: ' + JSON.stringify(notification_message));
 				});

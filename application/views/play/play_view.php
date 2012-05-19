@@ -77,7 +77,7 @@
               <div>[Player list]</div>-->
           </a>
         <% }); %>
-        
+
       </div>
 
     </div>

@@ -76,7 +76,7 @@
         <li>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis </li>
         <li>Praesentium voluptatum deleniti atque corrupti ducid muntibo quos dolores et quas molestias excepturi sint occaecat</li>
       </ul>
-      <a class="bt-learn-more-campaign" href="<?php echo base_url().''; ?>">Learn more about campaign</a>
+      <a class="bt-learn-more-campaign" href="<?php echo base_url().'home/campaign'; ?>">Learn more about campaign</a>
       <br />
     </div>
     <?php } ?>

@@ -24,8 +24,8 @@ class Challenge_lib {
 		return FALSE;
 	}
 	
-	function get($criteria) {
-		$result = $this->CI->challenge_model->get($criteria);
+	function get($criteria, $limit = 100) {
+		$result = $this->CI->challenge_model->get($criteria, $limit);
 		return $result;
 	}
 

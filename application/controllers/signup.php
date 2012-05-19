@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Signup extends CI_Controller {
-  
+
   function __construct(){
     parent::__construct();
     $this->presalt = 'tH!s!$Pr3Za|t';
@@ -19,19 +19,19 @@ class Signup extends CI_Controller {
         redirect($next);
       }
 
-      redirect('player/play');
+      redirect('play');
     } else {
       $this->load->library('form_validation');
-      $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');     
-      $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');     
-      $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[100]');     
-      // $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'required|trim|xss_clean|is_numeric|max_length[20]');     
-      $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');      
+      $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');
+      $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');
+      $this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|max_length[100]');
+      // $this->form_validation->set_rules('mobile_phone_number', 'Mobile Phone Number', 'required|trim|xss_clean|is_numeric|max_length[20]');
+      $this->form_validation->set_rules('password', 'Password', 'required|trim|xss_clean|max_length[50]');
       $this->form_validation->set_rules('password_again', 'Password Again', 'required|trim|xss_clean|max_length[50]');
       $this->form_validation->set_rules('timezone', 'Timezone', 'required|trim|xss_clean');
-        
+
       $this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-      
+
       $validate = $this->form_validation->run();
 
       $duplicated = FALSE;
@@ -98,7 +98,7 @@ class Signup extends CI_Controller {
 
       }
       else
-      {   
+      {
           $timezone = set_value('timezone');
           $user_timezone = $timezone ? $timezone : 'UTC';
           $this->load->library('timezone_lib');
@@ -117,7 +117,7 @@ class Signup extends CI_Controller {
             'user_last_name' => set_value('last_name'),
             'user_timezone_offset' => $minute_offset
           );
-            
+
 
           if ($user_id = $this->user_model->add_user($form_data))
           {
@@ -126,14 +126,14 @@ class Signup extends CI_Controller {
             if($next) {
               redirect($next);
             } else {
-              redirect('player/play');
+              redirect('play');
             }
           }
           else
           {
             echo 'An error occurred saving your information. Please try again later';
           }
-        
+
       }
     }
   }
@@ -143,14 +143,14 @@ class Signup extends CI_Controller {
    */
   function facebook() {
     $next = $this->socialhappen->strip_next_from_url($this->input->get('next'));
-    if(($this->socialhappen->get_user()) || 
+    if(($this->socialhappen->get_user()) ||
       (($facebook_user = $this->facebook->getUser()) && $this->socialhappen->login())) {
       //Logged in already
       if($next) {
         redirect($next);
       }
 
-      redirect('player/play');
+      redirect('play');
     } else if(isset($facebook_user['id'])) {
       $timezone = $this->input->get('timezone');
       $user_timezone = $timezone ? $timezone : 'UTC';
@@ -185,7 +185,7 @@ class Signup extends CI_Controller {
       if(isset($facebook_user['timezone'])) {
         $form_data['user_timezone_offset'] = $facebook_user['timezone'] * 60;
       }
-      
+
       $this->load->model('user_model');
       if ($user_id = $this->user_model->add_user($form_data))
       {
@@ -194,7 +194,7 @@ class Signup extends CI_Controller {
         if($next) {
           redirect($next);
         } else {
-          redirect('player/play');
+          redirect('play');
         }
       }
       else

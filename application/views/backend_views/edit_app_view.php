@@ -26,7 +26,7 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_name'); ?>
 			</li>
-			
+
 			<li>
 				<?=form_label('App Type*', 'app_type_id', array(
 				'class' => 'app_type_id',
@@ -42,7 +42,7 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				<?=form_dropdown('app_type_id', $options, $app_type_id);?>
 				<?php echo form_error('app_type_id'); ?>
 			</li>
-			
+
 			<li>
 				<?=form_label('App Icon', 'app_icon', array(
 				'class' => 'app_icon',
@@ -52,10 +52,10 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				<img src="<?php echo $app_icon; ?>" width="16" height="16" />
 				<?php } ?>
 				<input id="app_icon" type="file" name="app_icon" />
-				<input type="hidden" name="app_image_old" value="<?php echo $app_icon; ?>">
+				<input type="hidden" name="app_icon_old" value="<?php echo $app_icon; ?>">
 				<?php echo form_error('app_icon'); ?>
 			</li>
-			
+
 			<li>
 				<?=form_label('App Image', 'app_image', array(
 				'class' => 'app_image',
@@ -68,7 +68,20 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				<input type="hidden" name="app_image_old" value="<?php echo $app_image; ?>">
 				<?php echo form_error('app_image'); ?>
 			</li>
-			
+
+			<li>
+				<?=form_label('App Banner', 'app_banner', array(
+				'class' => 'app_banner',
+				'style' => 'color: #000;',
+				));
+				if($app_banner) { ?>
+				<img src="<?php echo $app_banner; ?>" />
+				<?php } ?>
+				<input id="app_banner" type="file" name="app_banner" />
+				<input type="hidden" name="app_banner_old" value="<?php echo $app_banner; ?>">
+				<?php echo form_error('app_banner'); ?>
+			</li>
+
 			<li>
 				<?=form_label('App Description*', 'app_description', array(
 				'class' => 'app_description',
@@ -84,9 +97,9 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_description'); ?>
 			</li>
-			
-			
-			
+
+
+
 			<li>
 				<?=form_label('App URL*, parameter: {app_install_id}', 'app_url', array(
 				'class' => 'app_url',
@@ -102,7 +115,7 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_url'); ?>
 			</li>
-			
+
 			<li>
 				<?=form_label('App Install URL*, parameters: {company_id}, {user_id}, {[page_id]}, {[force]}', 'app_install_url', array(
 				'class' => 'app_install_url',
@@ -118,7 +131,7 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_install_url'); ?>
 			</li>
-			
+
 			<li>
 				<?=form_label('App Install to Page URL*, parameters: {app_install_id}, {user_id}, {page_id}, {force}', 'app_install_page_url', array(
 				'class' => 'app_install_page_url',
@@ -134,7 +147,7 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_install_page_url'); ?>
 			</li>
-			
+
 			<li>
 				<?=form_label('App Config URL*, parameters: {app_install_id}, {user_id}, {app_install_secret_key}', 'app_config_url', array(
 				'class' => 'app_config_url',
@@ -150,7 +163,7 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_config_url'); ?>
 			</li>
-			
+
 			<li>
 				<?=form_label('Facebook app API key*', 'app_facebook_api_key', array(
 				'class' => 'app_facebook_api_key',
@@ -166,7 +179,7 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_facebook_api_key'); ?>
 			</li>
-			
+
 			<li>
 				<?=form_label('App Config Facebook Canvas Path', 'app_config_facebook_canvas_path', array(
 				'class' => 'app_config_facebook_canvas_path',
@@ -182,8 +195,8 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				))?>
 				<?php echo form_error('app_config_facebook_canvas_path'); ?>
 			</li>
-			
-			
+
+
 			<li>
 				<?=form_checkbox(array(
 						  'name'        => 'app_support_page_tab',
@@ -198,17 +211,17 @@ echo form_open_multipart('backend/edit_app/'.$app_id);
 				));?>
 				<?php echo form_error('app_support_page_tab'); ?>
 			</li>
-			
+
 		</ul>
-		
+
 		<div class="button-style">
-		
+
 		<p>
 		<?php echo form_submit(array(
-							'name' => 'submit', 
+							'name' => 'submit',
 							'value' => 'Save',
 							'class' => 'bt-create-now'
-							)); ?> or <?php echo anchor('backend/app', 'Cancel');?>	
+							)); ?> or <?php echo anchor('backend/app', 'Cancel');?>
 		</p>
 		</div>
 		<?=form_close()?>
