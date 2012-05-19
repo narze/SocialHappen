@@ -6,10 +6,24 @@ define([
 ], function($, _, Backbone, challengeModel){
   var challengesCollection = Backbone.Collection.extend({
     model: challengeModel,
+    
+    last_id: '',
+    
     initialize: function(){
 
     },
-
+    
+    loadMore: function(callback){
+      this.last_id = this.last().id;
+      
+      this.fetch({
+        add: true,
+        success: function(collection, resp){
+          callback(resp.length);
+        }
+      });
+    },
+    
     sync: function(method, model, options) {
       var methodMap = {
 
@@ -29,7 +43,12 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        params.url = window.World.BASE_URL + 'apiv3/challenges/'
+        if(this.last_id.length > 0){
+          params.url = window.World.BASE_URL + 'apiv3/challenges/?last_id=' + this.last_id;
+        }else{
+          params.url = window.World.BASE_URL + 'apiv3/challenges/';
+        }
+        
       }
 
       // Ensure that we have the appropriate request data.

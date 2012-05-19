@@ -236,3 +236,8 @@ ul.achievement-list > li{
 .item a:hover{
   text-decoration: none;
 }
+
+div.load-more{
+  padding: 10px;
+  text-align: center;
+}
