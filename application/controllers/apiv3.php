@@ -168,13 +168,10 @@ class Apiv3 extends CI_Controller {
       }
     }
     
-    
-    
-    
     function convert_id($item){
       // $item['_id'] = '' . $item['_id'];
       unset($item['_id']);
-      unset($item['criteria']);
+      // unset($item['criteria']);
       return $item;
     }
     

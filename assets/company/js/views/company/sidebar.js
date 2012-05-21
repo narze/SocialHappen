@@ -13,7 +13,9 @@ define([
     
     render: function () {
       var data = this.options.company;
-      $(this.el).html(this.sidebarTemplate(data));
+      if(data){
+        $(this.el).html(this.sidebarTemplate(data));
+      }
       
       return this;
     }

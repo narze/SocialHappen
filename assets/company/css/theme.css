@@ -245,3 +245,7 @@ div.load-more{
 img.company-image{
   max-width: 170px
 }
+
+.modal .challenge-image{
+  margin-bottom: 15px;
+}

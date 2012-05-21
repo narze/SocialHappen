@@ -56,7 +56,8 @@ define([
       // console.log('add one challenge:', model.toJSON());
       
       var challenge = new ChallengeItemView({
-        model: model
+        model: model,
+        vent: this.options.vent
       });
       // console.log($('.tile-list', this.el));
       var el = challenge.render().$el;
