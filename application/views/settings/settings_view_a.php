@@ -6,7 +6,7 @@
 </div>
 {breadcrumb}
 <div class="wrapper-content">
-	<div>	
+	<div>
 		<div class="wrapper-setting">
 			<div>
 				{sidebar}

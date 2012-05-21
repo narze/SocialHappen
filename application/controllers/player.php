@@ -266,19 +266,100 @@ class Player extends CI_Controller {
 	 * View player's setting
 	 */
 	function settings() {
-		if($this->socialhappen->is_logged_in()) {
-			$user = $this->socialhappen->get_user();
-			if(issetor($user['user_facebook_id']) && issetor($user['user_facebook_access_token'])) {
-				$facebook_connected = TRUE;
-			} else {
-				$facebook_connected = FALSE;
-			}
-			$this->load->vars(array('facebook_connected' => $facebook_connected));
-			$this->load->view('player/settings_view');
-
-		} else {
-			redirect('player');
+		if(!$user = $this->socialhappen->get_user()) {
+			redirect('login?next=player/settings');
 		}
+		$user_id = $user['user_id'];
+		$user_facebook = $this->facebook->getUser();
+
+		$this->load->library('form_validation');
+		$this->load->helper('date');
+
+		$this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');			
+		$this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');			
+		$this->form_validation->set_rules('about', 'About', 'trim|xss_clean');
+		$this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
+		$this->form_validation->set_rules('timezones', 'Timezone', 'trim|xss|clean');
+			
+		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
+	
+		$timezones = timezones();
+		$user['user_timezone'] = array_search($user['user_timezone_offset'] / 60, $timezones);
+
+		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
+		{
+			//Do nothing
+		}
+		else
+		{
+			if(set_value('use_facebook_picture')){
+				$user_image = issetor($this->facebook->get_profile_picture($user['user_facebook_id']));
+			} else if (!$user_image = $this->socialhappen->replace_image('user_image', $user['user_image'])){
+				$user_image = $user['user_image'];
+			}
+		
+			$minute_offset = $timezones[set_value('timezones')] * 60;
+
+			$user_update_data = array(
+				'user_first_name' => set_value('first_name'),
+				'user_last_name' => set_value('last_name'),
+				'user_about' => set_value('about'),
+				'user_image' => $user_image,
+				'user_timezone_offset' => $minute_offset
+			);
+			$this->load->model('user_model','users');
+			if ($this->users->update_user($user_id, $user_update_data))
+			{
+				$updated_user = array_merge($user,$user_update_data);
+				$updated_user['user_timezone'] = array_search($updated_user['user_timezone_offset'] / 60, $timezones);
+				$user = $updated_user;
+				$this->load->vars('success', TRUE);
+			}
+			else
+			{
+				log_message('error','update user failed');
+				echo 'error occured';
+			}
+		}
+
+		$data = compact('user', 'user_facebook');
+
+    $template = array(
+      'title' => 'Account settings',
+      'styles' => array(
+        'common/bootstrap',
+        'common/bootstrap-responsive',
+        'common/bar',
+        'common/player',
+        // 'play/play'
+      ),
+      'body_views' => array(
+        'common/fb_root' => array(
+          'facebook_app_id' => $this->config->item('facebook_app_id'),
+          'facebook_channel_url' => $this->facebook->channel_url,
+          'facebook_app_scope' => $this->config->item('facebook_player_scope')
+        ),
+        // '../../assets/passport/templates/header/navigation.html' => NULL,
+        'bar/plain_bar_view' => array(),
+        'player/settings_view' => $data,
+        'common/vars' => array(
+          'vars' => array(
+            'base_url' => base_url()
+          )
+        )
+      ),
+      'scripts' => array(
+        'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
+        'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+        'common/jquery.masonry.min',
+        'common/jquery.timeago',
+        'common/underscore-min',
+        'common/bootstrap.min',
+        'common/plain-bar',
+        'player/settings.js'
+      )
+    );
+    $this->load->view('common/template', $template);
 	}
 
 	/**
