@@ -209,6 +209,11 @@ class Action_data_lib_test extends CI_Controller {
 		$this->unit->run($result, $expect, "\$result", $result);
 
 	}
+
+	function get_action_data_custom_form_view_test(){
+		//TO-DO : test em
+
+	}
 }
 /* End of file action_data_lib_test.php */
 /* Location: ./application/controllers/test/action_data_lib_test.php */

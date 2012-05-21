@@ -43,7 +43,6 @@ class Action_data_lib {
 		if(!$action_name) {
 			return FALSE;
 		}
-
 		//TODO : action data validation (different in each action id)
 		
 		return $this->_add_action_data($action_id, $action_data);
@@ -167,6 +166,21 @@ class Action_data_lib {
 		);
 		return $this->_add_action_data($action_id, $checkin_data);
 
+	}
+
+	function get_action_data_custom_form_view($action_id){
+		$action_name= NULL;
+		foreach ($this->platform_actions as $an => $platform_action) {
+			if($action_id == $platform_action['id']){
+				$action_name = $an;
+				break;
+			}
+		}
+
+		if($action_name) {
+			return $this->CI->load->view('actions/'.$action_name.'/'.$action_name.'_custom_form',NULL, TRUE);
+		}
+			return NULL;
 	}
 	
 }
