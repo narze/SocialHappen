@@ -42,6 +42,9 @@
     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img class="user-image" src="<%= user.user_image %>?type=square" alt=""/ >  <%= user.user_first_name %> <%= user.user_last_name %> <b class="caret"></b> </a>
     <ul class="dropdown-menu mega-dropdown-menu user">
       <li>
+        <a class="btn-settings" href="<%= baseUrl %>player/settings">» Settings</a>
+      </li>
+      <li>
         <a class="btn-logout" href="<%= baseUrl %>logout">» Logout</a>
       </li>
     </ul>
