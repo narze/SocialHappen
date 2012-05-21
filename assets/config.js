@@ -9,3 +9,6 @@ window.World = {
   BASE_URL: BASE_URL
 }
 
+window.Company = {
+  BASE_URL: BASE_URL
+}
