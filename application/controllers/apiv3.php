@@ -28,25 +28,30 @@ class Apiv3 extends CI_Controller {
     
     if (!$user_id && $logged_in){ // see current user's
       $user = $this->socialhappen->get_user();
-      if($user){
-        echo json_encode($user);
-      }else{
-        echo '{}';
-      }
+      
     }else if($user_id){ // see specific user
       $this->load->model('user_model');
       $user = $this->user_model->get_user_profile_by_user_id($user_id);
+    }
+    
+    if(isset($user)){
+      $user_id = $user['user_id'];
+      
       $this->load->model('achievement_stat_model');
       $user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
       $user_score = issetor($user_stat['score'], 0); 
       
-      if($user){
-        $user['user_score'] = $user_score;
-        echo json_encode($user);
+      $this->load->model('user_companies_model');
+      $company = $this->user_companies_model->get_user_companies_by_user_id($user_id, 0, 0);
+      $user['user_score'] = $user_score;
+      
+      if($company){
+        $user['companies'] = $company;
       }else{
-        echo '{}';
+        $user['companies'] = array();
       }
       
+      echo json_encode($user);
     }else{
       echo '{}';
     }
@@ -134,29 +139,39 @@ class Apiv3 extends CI_Controller {
     
     $last_hash = $this->input->get('last_id', TRUE); 
     
+    $company_id = $this->input->get('company_id', TRUE); 
+    
     $this->load->library('challenge_lib');
     $limit = 30;
     
     if($last_hash){
       $challenge = $this->challenge_lib->get_one(array('hash' => $last_hash));
       if($challenge){
-        $challenges = $this->challenge_lib->get(array(
-          '_id' => array('$lt' => new MongoId($challenge['_id']['$id']))
-        ), $limit);
+        
+        if($company_id){
+          $challenges = $this->challenge_lib->get(array(
+            '_id' => array('$lt' => new MongoId($challenge['_id']['$id']), 'company_id' => (int)$company_id)
+          ), $limit);
+        }else{
+          $challenges = $this->challenge_lib->get(array(
+            '_id' => array('$lt' => new MongoId($challenge['_id']['$id']))
+          ), $limit);
+        }
       }else{
         $challenges = array();
       }
     }else{
-      $challenges = $this->challenge_lib->get(array(), $limit);
+      if($company_id){
+        $challenges = $this->challenge_lib->get(array('company_id' => (int)$company_id), $limit);
+      }else{
+        $challenges = $this->challenge_lib->get(array(), $limit);
+      }
     }
-    
-    
-    
     
     function convert_id($item){
       // $item['_id'] = '' . $item['_id'];
       unset($item['_id']);
-      unset($item['criteria']);
+      // unset($item['criteria']);
       return $item;
     }
     
