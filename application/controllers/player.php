@@ -176,11 +176,14 @@ class Player extends CI_Controller {
 				$this->load->library('challenge_lib');
 				$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
 				$challenge_done = TRUE;
-				foreach($challenge_progress as $action) {
-					if(!$action['action_done']) {
-						$challenge_done = FALSE;
-					}
-				}
+        if($challenge_progress){
+          foreach($challenge_progress as $action) {
+  					if(!$action['action_done']) {
+  						$challenge_done = FALSE;
+  					}
+  				}
+        }
+				
 			} else {
 				$challenge_progress = FALSE;
 				$challenge_done = FALSE;
