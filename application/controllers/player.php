@@ -171,51 +171,7 @@ class Player extends CI_Controller {
 				$challenge['end_time'] = date('Y-m-d H:i:s', $challenge['end']);
 			}
 
-			$this->load->vars(
-				array(
-					'challenge_hash' => $challenge_hash,
-					'challenge' => $challenge,
-					'player_logged_in' => $this->socialhappen->is_logged_in(),
-					'player_challenging' => $player_challenging,
-					'challenge_done' => $challenge_done,
-					'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
-				)
-			);
-
-			$data = array(
-				'header' => $this->socialhappen->get_header_bootstrap(
-					array(
-						'title' => $challenge['detail']['name'],
-						'script' => array(
-							'common/bar',
-						),
-						'style' => array(
-							'common/player',
-						)
-					)
-				)
-			);
-
-			$this->parser->parse('player/challenge_view', $data);
-		} else {
-			show_error('Challenge Invalid', 404);
-		}
-	}
-
-	/**
-	 * Challenge action
-	 */
-	function challenge_actions($challenge_hash) {
-		$this->load->model('challenge_model');
-		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-
-			$challenge_id = get_mongo_id($challenge);
-			$this->load->library('user_lib');
-			$user_id = $this->socialhappen->get_user_id();
-			$user = $this->user_lib->get_user($user_id);
-			$player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
-
-			//challenge_progress
+			//Challenge Progress
 			if($user_id) {
 				$this->load->library('challenge_lib');
 				$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
@@ -236,27 +192,47 @@ class Player extends CI_Controller {
 					'challenge' => $challenge,
 					'player_logged_in' => $this->socialhappen->is_logged_in(),
 					'player_challenging' => $player_challenging,
-					'challenge_progress' => $challenge_progress,
 					'challenge_done' => $challenge_done,
+					'challenge_progress' => $challenge_progress,
 					'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
 				)
 			);
 
-			$data = array(
-				'header' => $this->socialhappen->get_header_bootstrap(
-					array(
-						'title' => $challenge['detail']['name'],
-						'script' => array(
-							'common/bar',
-						),
-						'style' => array(
-							'common/player',
-						)
-					)
-				)
-			);
-
-			$this->parser->parse('player/challenge_actions_view', $data);
+			$template = array(
+      'title' => $challenge['detail']['name'],
+      'styles' => array(
+        'common/bootstrap',
+        'common/bootstrap-responsive',
+        'common/bar',
+        'common/player',
+        'player/challenge'
+      ),
+      'body_views' => array(
+        'common/fb_root' => array(
+          'facebook_app_id' => $this->config->item('facebook_app_id'),
+          'facebook_channel_url' => $this->facebook->channel_url,
+          'facebook_app_scope' => $this->config->item('facebook_player_scope')
+        ),
+        'bar/plain_bar_view' => array(),
+        'player/challenge_view' => array(),
+        'common/vars' => array(
+          'vars' => array(
+            'base_url' => base_url()
+          )
+        )
+      ),
+      'scripts' => array(
+        'common/jquery.min',
+        'common/jquery-ui.min',
+        'common/underscore-min',
+        'common/bootstrap.min',
+        'common/jquery.timeago',
+        'common/plain-bar',
+        'common/jquery.form',
+        'player/challenge'
+      )
+    );
+    $this->load->view('common/template', $template);
 		} else {
 			show_error('Challenge Invalid', 404);
 		}
@@ -512,6 +488,35 @@ class Player extends CI_Controller {
 			}
 		} else {
 			show_error('Challenge Invalid', 404);
+		}
+	}
+
+	/**
+	 * Get action's form data
+	 */
+	function get_challenge_action_form($challenge_hash, $action) {
+		$this->load->helper('form');
+		$this->load->model('challenge_model');
+		if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+			if(isset($challenge['criteria'][$action])) {
+				// echo '<pre>';
+				// var_dump($challenge['criteria'][$action]);
+				// echo '</pre>';
+				if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
+					$this->load->library('action_data_lib');
+					// $action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
+					$this->action_data_lib->get_form($challenge['criteria'][$action]['action_data_id']);
+				} else { //TODO if not, redirect to app?
+					echo 'this is not platform\'s action';
+					return;
+				}
+			} else {
+				show_error('Action Invalid');
+				return;
+			}
+		} else {
+			show_error('Challenge Invalid', 404);
+			return;
 		}
 	}
 

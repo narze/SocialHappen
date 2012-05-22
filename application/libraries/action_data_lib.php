@@ -183,4 +183,51 @@ class Action_data_lib {
 			return NULL;
 	}
 	
+	function get_form($action_data_id) {
+		if($action_data = $this->get_action_data($action_data_id)) {
+
+			$controller_name = NULL;
+			foreach ($this->platform_actions as $action_name => $platform_action) {
+				if($action_data['action_id'] == $platform_action['id']){
+					$controller_name = $action_name;
+					break;
+				}
+			}
+
+			if($controller_name) {
+				$user = $this->_get_user_data();
+
+				$data = array(
+					'action_data' => $action_data,
+					'user' => $user
+				);
+
+				if($action_data && is_array($action_data) && $user){
+					$this->CI->load->view("actions/{$controller_name}/{$controller_name}_form", $data);
+				}
+			} else {
+				return;
+			}
+		} else {
+			return;
+		}
+	}
+
+	function _get_user_data(){
+		$user = $this->CI->socialhappen->get_user();
+
+		if(!$user){
+			if($user_facebook_id = $this->CI->FB->getUser()){
+				$this->CI->load->model('user_model');
+				$user = $this->CI->user_model->get_user_profile_by_user_facebook_id($user_facebook_id);
+			}
+		}
+
+		if($user){
+			return $user;
+		} else {
+			return NULL;
+		}
+		
+	}
 }
