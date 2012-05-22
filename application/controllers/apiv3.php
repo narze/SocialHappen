@@ -142,6 +142,7 @@ class Apiv3 extends CI_Controller {
     $company_id = $this->input->get('company_id', TRUE); 
     
     $this->load->library('challenge_lib');
+    $this->load->library('action_data_lib');
     $limit = 30;
     
     if($last_hash){
@@ -163,6 +164,21 @@ class Apiv3 extends CI_Controller {
     }else{
       if($company_id){
         $challenges = $this->challenge_lib->get(array('company_id' => (int)$company_id), $limit);
+        
+        for($j = 0; $j < count($challenges); $j++){
+          $item = $challenges[$j];
+          for($i = 0; $i < count($item['criteria']); $i++){
+            $action_data_id = $item['criteria'][$i]['action_data_id'];
+            if($action_data_id){
+              $action_data = $this->action_data_lib->get_action_data($action_data_id);
+              if(isset($action_data)){
+                $item['criteria'][$i]['action_data'] = $action_data;
+              }
+            }
+          }
+          $challenges[$j] = $item;
+        }
+        
       }else{
         $challenges = $this->challenge_lib->get(array(), $limit);
       }
