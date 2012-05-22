@@ -13,8 +13,11 @@ define([
     },
     initialize: function(){
       _.bindAll(this);
+      this.model.bind('change', this.render);
+      this.model.bind('destroy', this.remove);
     },
     render: function () {
+      console.log('render challenge item');
       var data = this.model.toJSON();
       data.baseUrl = window.World.BASE_URL;
       $(this.el).html(this.challengeItemTemplate(data));

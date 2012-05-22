@@ -33,8 +33,8 @@ require([
   'events'
 ], function(AppView, Router, Vm, UserModel, ChallengesCollection, vent){
   
-  var currentUserModel = window.World.currentUserModel = new UserModel();
-  var challengesCollection = window.World.challengesCollection = new ChallengesCollection([]);
+  var currentUserModel = window.Company.currentUserModel = new UserModel();
+  var challengesCollection = window.Company.challengesCollection = new ChallengesCollection([]);
   
   var appView = Vm.create({}, 'AppView', AppView, {
     currentUserModel: currentUserModel,
