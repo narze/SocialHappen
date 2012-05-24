@@ -18,10 +18,6 @@
 			}
 		}
 	}
-	if(isset($requirejs)) {
-		echo '<script type="text/javascript">var base_url = "'.$base_url.'";</script>'."\n";
-		echo '<script data-main="'.$base_url.'assets/bb/'.$requirejs.'" src="'.$base_url.'assets/bb/js/libs/require/require.js"></script>'."\n";
-	}
 ?>
 </head>
 <?php flush(); ?>
@@ -29,6 +25,13 @@
 <?php 
 	foreach($body_views as $view_name => $data) {
 		$this->load->view($view_name, $data);
+	}
+
+	if(isset($requirejs)) {
+		echo '<script type="text/javascript" src="'.$base_url.'assets/bb/js/libs/require/require.js"></script>'."\n";
+		echo '<script type="text/javascript">var base_url = "'.$base_url.'";require.config({baseUrl: "'.$base_url.'assets/bb/js"});</script>'."\n";
+		echo '<script type="text/javascript" src="'.$base_url.'assets/bb/js/config.js"></script>'."\n";
+		echo '<script type="text/javascript" src="'.$base_url.'assets/bb/'.$requirejs.'.js"></script>'."\n";
 	}
 
 	if(isset($scripts)) {
