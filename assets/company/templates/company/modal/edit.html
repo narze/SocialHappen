@@ -28,6 +28,17 @@
     <textarea class="challenge-description span5" rows="3"><%= detail.description %></textarea>
     <button class="btn save-description btn-primary">Save</button>
   </div>
+  <div class="criteria-list">
+    <div class="btn-group dropup">
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Add New Action <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><a href="#" class="add-feedback">Feedback</a></li>
+        <li><a href="#" class="add-qr">QR Code</a></li>
+        <li><a href="#" class="add-checkin">Check-in</a></li>
+      </ul>
+    </div>
+    <ul class="criteria-list unstyled"></ul>
+  </div>
 </div>
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Close</a>

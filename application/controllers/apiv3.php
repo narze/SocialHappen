@@ -172,6 +172,7 @@ class Apiv3 extends CI_Controller {
             if($action_data_id){
               $action_data = $this->action_data_lib->get_action_data($action_data_id);
               if(isset($action_data)){
+                $action_data['_id'] = $action_data['_id']['$id'];
                 $item['criteria'][$i]['action_data'] = $action_data;
               }
             }
