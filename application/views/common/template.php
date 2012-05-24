@@ -7,15 +7,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SocialHappen<?php  echo " - $title";?></title>
-<?php 
+<?php
+	$base_url = base_url();
 	foreach($styles as $one) {
 		if($one){
 			if(strrchr($one, '.') === '.css') {
 				echo '<link rel="stylesheet" type="text/css"  href="'.$one.'" />'."\n";
 			} else {
-				echo '<link rel="stylesheet" type="text/css"  href="'.base_url().'assets/css/'.$one.'.css" />'."\n";
+				echo '<link rel="stylesheet" type="text/css"  href="'.$base_url.'assets/css/'.$one.'.css" />'."\n";
 			}
 		}
+	}
+	if(isset($requirejs)) {
+		echo '<script data-main="'.$base_url.'assets/bb/'.$requirejs.'" src="'.$base_url.'assets/bb/js/libs/require/require.js"></script>'."\n";
 	}
 ?>
 </head>
@@ -26,12 +30,14 @@
 		$this->load->view($view_name, $data);
 	}
 
-	foreach($scripts as $one) {
-		if ($one) {
-			if(strrchr($one, '.') === '.js') {
-				echo '<script type="text/javascript" src="'.$one.'"></script>'."\n";
-			} else {
-				echo '<script type="text/javascript" src="'.base_url().'assets/js/'.$one.'.js"></script>'."\n";
+	if(isset($scripts)) {
+		foreach($scripts as $one) {
+			if ($one) {
+				if(strrchr($one, '.') === '.js') {
+					echo '<script type="text/javascript" src="'.$one.'"></script>'."\n";
+				} else {
+					echo '<script type="text/javascript" src="'.$base_url.'assets/js/'.$one.'.js"></script>'."\n";
+				}
 			}
 		}
 	}
