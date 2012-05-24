@@ -19,6 +19,7 @@
 		}
 	}
 	if(isset($requirejs)) {
+		echo '<script type="text/javascript">var base_url = "'.$base_url.'";</script>'."\n";
 		echo '<script data-main="'.$base_url.'assets/bb/'.$requirejs.'" src="'.$base_url.'assets/bb/js/libs/require/require.js"></script>'."\n";
 	}
 ?>

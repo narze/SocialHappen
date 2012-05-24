@@ -8,6 +8,13 @@ require.config({
     backbone: 'libs/backbone/backbone-min', // https://github.com/amdjs
     sinon: 'libs/sinon/sinon.js',
     bootstrap: 'libs/bootstrap/bootstrap.min',
+    timeago: 'libs/jquery.timeago/jquery.timeago',
+    masonry: 'libs/masonry/jquery.masonry.min',
+    endlessscroll: 'libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
+    
+    //SocialHappen libs
+    shplainbar: 'libs/sh/plain-bar',
+
     // Require.js plugins
     text: 'libs/require/text',
     order: 'libs/require/order',
@@ -16,18 +23,28 @@ require.config({
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
     templates: '../templates'
   },
-	urlArgs: "bust=" +  (new Date()).getTime()
+  urlArgs: "bust=" +  (new Date()).getTime()
 
 });
 
 // Let's kick off the application
 
 require([
-  'views/app',
+  'views/settings/challenge',
   'router',
-  'vm'
-], function(AppView, Router, Vm){
-  var appView = Vm.create({}, 'AppView', AppView);
+  'vm',
+  'events',
+  'shplainbar'
+], function(AppView, Router, Vm, vent, Shplainbar){
+  
+  var appView = Vm.create({
+    vent: vent
+  }, 'AppView', AppView);
   appView.render();
-  Router.initialize({appView: appView});  // The router now has a copy of all main appview
+  
+  // The router now has a copy of all main appview
+  Router.initialize({
+    appView: appView,
+    vent: vent
+  });
 });
