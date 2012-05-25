@@ -73,7 +73,7 @@
 
 										</div>
 
-										<div class="row-fluid criteria-form">
+										<div data-id="<?php echo $criteria['action_data_id'];?>"class="row-fluid criteria-form">
 											
 										</div>
 									</span>

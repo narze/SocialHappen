@@ -16,7 +16,7 @@ define([
   });
 
   var initialize = function(options){
-		var appView = options.appView;
+		var appView = (options.appView || {vent : options.vent});
     var routerSet = options.routerSet;
     var router = new AppRouter(options);
 
