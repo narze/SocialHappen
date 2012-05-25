@@ -2,8 +2,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/edit.html'
-], function($, _, Backbone, editTemplate){
+  'text!templates/company/modal/edit.html',
+  'views/company/modal/action/feedback-edit',
+  'views/company/modal/action/feedback-add'
+], function($, _, Backbone, editTemplate, FeedbackEditView, FeedbackAddView){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
     
@@ -13,7 +15,10 @@ define([
       'click div.edit-description': 'showEditDescription',
       'click button.save-description': 'saveEditDescription',
       'click img.challenge-image': 'showEditImage',
-      'click button.save-image': 'saveEditImage'
+      'click button.save-image': 'saveEditImage',
+      'click a.add-feedback': 'addFeedback',
+      'click a.add-qr': 'addQR',
+      'click a.add-checkin': 'addCheckin'
     },
     
     initialize: function(){
@@ -33,7 +38,23 @@ define([
     show: function(model){
       this.model = model;
       console.log('show edit modal:', model.toJSON());
-      this.render();      
+      this.render();
+      
+      var criteria = this.model.get('criteria');
+      
+      _.each(criteria, function(action){
+        var type = action.query.platform_action_id;
+        if(type == 202){
+          var feedbackEditView = new FeedbackEditView({
+            model: this.model,
+            action: action,
+            vent: this.options.vent
+          });
+          
+          $('ul.criteria-list', this.el).append(feedbackEditView.render().el);
+        }
+      }, this);
+      
       this.$el.modal('show');
 
     },
@@ -87,6 +108,30 @@ define([
       this.model.set('detail', detail).trigger('change');
             
       this.options.vent.trigger('showEditModal', this.model);
+    },
+    
+    addFeedback: function(e){
+      e.preventDefault();
+      console.log('show add feedback');
+      
+      var feedbackAddView = new FeedbackAddView({
+        model: this.model,
+        vent: this.options.vent
+      });
+      
+      $('ul.criteria-list', this.el).prepend(feedbackAddView.render().el);
+      
+      feedbackAddView.showEdit();
+    },
+    
+    addQR: function(e){
+      e.preventDefault();
+      console.log('show add qr');
+    },
+    
+    addCheckin: function(e){
+      e.preventDefault();
+      console.log('show add checkin');
     }
   });
   return EditModalView;
