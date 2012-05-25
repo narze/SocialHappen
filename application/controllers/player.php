@@ -224,16 +224,17 @@ class Player extends CI_Controller {
           )
         )
       ),
-      'scripts' => array(
-        'common/jquery.min',
-        'common/jquery-ui.min',
-        'common/underscore-min',
-        'common/bootstrap.min',
-        'common/jquery.timeago',
-        'common/plain-bar',
-        'common/jquery.form',
-        'player/challenge'
-      )
+      'requirejs' => 'js/player-challenge'
+      // 'scripts' => array(
+      //   'common/jquery.min',
+      //   'common/jquery-ui.min',
+      //   'common/underscore-min',
+      //   'common/bootstrap.min',
+      //   'common/jquery.timeago',
+      //   'common/plain-bar',
+      //   'common/jquery.form',
+      //   'player/challenge'
+      // )
     );
     $this->load->view('common/template', $template);
 		} else {

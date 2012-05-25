@@ -8,11 +8,7 @@ define([
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Pages
-      '/modules': 'modules',	
-      '/optimize': 'optimize',
-      '/backbone/:section': 'backbone',
-      '/backbone': 'backbone',
-      '/manager': 'manager',
+      '/action/:id': 'challengeAction',
     
       // Default - catch all
       '*actions': 'defaultAction'
@@ -21,37 +17,28 @@ define([
 
   var initialize = function(options){
 		var appView = options.appView;
+    var routerSet = options.routerSet;
     var router = new AppRouter(options);
-		router.on('route:optimize', function () {
-			require(['views/optimize/page'], function (OptimizePage) {
-				var optimizePage = Vm.create(appView, 'OptimizePage', OptimizePage);
-				optimizePage.render();
-			});
-		});
-		router.on('route:defaultAction', function (actions) {
-			require(['views/dashboard/page'], function (DashboardPage) {
-        var dashboardPage = Vm.create(appView, 'DashboardPage', DashboardPage);
-        dashboardPage.render();
+
+    if(routerSet === 'player-challenge') {
+      router.on('route:challengeAction', function (actionDataId) {
+        window.ChallengeAction || (window.ChallengeAction = {});
+        window.ChallengeAction.actionDataId = actionDataId;
+        options.challengeActionModel.url =
+          base_url + 'apiv3/challenge_action?action_data_id=' + actionDataId;
+          
+        options.challengeActionModel.fetch({success: function() {
+          require(['views/player/challenge-action'], function (ChallengeActionView) {
+            var challengeActionView = Vm.create(appView, 'ChallengeActionView', ChallengeActionView, {
+              challengeActionModel: options.challengeActionModel,
+              vent: options.vent
+            });
+            challengeActionView.render();
+          });
+        }});
       });
-		});
-		router.on('route:modules', function () {
-	   require(['views/modules/page'], function (ModulePage) {
-        var modulePage = Vm.create(appView, 'ModulesPage', ModulePage);
-        modulePage.render();
-      });	  	
-		});
-		router.on('route:backbone', function (section) {
-      require(['views/backbone/page'], function (BackbonePage) {
-        var backbonePage = Vm.create(appView, 'BackbonePage', BackbonePage, {section: section});
-        backbonePage.render();
-      });
-		});
-		router.on('route:manager', function () {
-			require(['views/manager/page'], function (ManagerPage) {
-				var managerPage = Vm.create(appView, 'ManagerPage', ManagerPage);
-				managerPage.render();
-			});
-		});
+    }
+
     Backbone.history.start();
   };
   return {

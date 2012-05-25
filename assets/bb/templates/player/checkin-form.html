@@ -1,0 +1,66 @@
+
+<style type="text/css">
+  .ui-autocomplete{
+    background: #ffffff;
+    cursor: default;
+  }
+</style>
+<div class="well">
+<h1><%= checkin_welcome_message %>
+<div>
+  <div class="loading-div" style="height:36px;display:block;">
+    <div id="loading-box" style="display:none;"><img src="<%= base_url + 'assets/images/loading.gif' %>" /></div>
+  </div>
+  <form name="" action="<%= base_url+ 'actions/checkin/add_user_data_checkin' %>" method="post">
+    <fieldset>
+      <legend><%= checkin_challenge_message %></legend>
+      <div>
+        <div class="control-group">
+          <label class="control-label" for="checkin_facebook_place_name">Do Check-In at</label>
+          <div class="controls">
+            <label class="checkin_facebook_place_name"><%= checkin_facebook_place_name %></label>
+          </div>
+        </div>
+        <div class="control-group">
+
+          <div class="control-group" id="search-place-normal">
+            <label class="control-label" for="autocomplete">Location search</label>
+            <div class="controls">
+              <input type="text" name="search_name" id="search_name" onkeypress="return noenter()" />
+            </div>
+          </div>
+
+        </div>
+        <% if(checkin_min_friend_count > 0) { %>
+          <div class="control-group">
+            <label class="control-label" for="checkin_min_friend_count">With at least</label>
+            <div class="controls">
+              <%= checkin_min_friend_count %> of your friends
+            </div>
+          </div>
+
+
+          <div id="search-friends-normal">
+            <div id="friend-list">
+              <div id="jfmfs-container"></div>
+            </div>
+          </div>
+
+
+        <% } %>
+        <div class="control-group">
+          <label class="control-label" for="post_message">Message on the post</label>
+          <div class="controls">
+            <input type="text" name="post_message" />
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="tagged_user_facebook_ids" />
+      <input type="hidden" name="facebook_place_id" id="facebook_place_id" />
+      <input type="hidden" name="action_data_hash" value="<%= hash %>" />
+      <div class="control-group">
+        <button type="submit" class="btn">Submit</button>
+      </div>
+    <fieldset>
+  </form>
+</div>

@@ -56,7 +56,7 @@
 											</p>
 
 											<h3 class="criteria-name span11">
-												<a data-url="<?php echo 'player/get_challenge_action_form/'.$challenge['hash'].'/'.$key;?>" class="criteria-link">
+												<a href="<?php echo '#/action/'.$criteria['action_data_id'];?>" class="criteria-link">
 													<?php echo $criteria['name']; ?>
 												</a>
 											</h3>
