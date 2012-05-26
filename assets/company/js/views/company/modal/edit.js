@@ -14,11 +14,13 @@ define([
       'click button.save-name': 'saveEditName',
       'click div.edit-description': 'showEditDescription',
       'click button.save-description': 'saveEditDescription',
-      'click img.challenge-image': 'showEditImage',
+      'click img.challenge-image, h6.edit-image': 'showEditImage',
       'click button.save-image': 'saveEditImage',
       'click a.add-feedback': 'addFeedback',
       'click a.add-qr': 'addQR',
-      'click a.add-checkin': 'addCheckin'
+      'click a.add-checkin': 'addCheckin',
+      'click button.active-challenge': 'activeChallenge',
+      'click button.deactive-challenge': 'deactiveChallenge'
     },
     
     initialize: function(){
@@ -48,7 +50,8 @@ define([
           var feedbackEditView = new FeedbackEditView({
             model: this.model,
             action: action,
-            vent: this.options.vent
+            vent: this.options.vent,
+            triggerModal: 'showEditModal'
           });
           
           $('ul.criteria-list', this.el).append(feedbackEditView.render().el);
@@ -110,13 +113,24 @@ define([
       this.options.vent.trigger('showEditModal', this.model);
     },
     
+    activeChallenge: function(){
+      this.model.set('active', true).trigger('change');
+      this.options.vent.trigger('showEditModal', this.model);
+    },
+    
+    deactiveChallenge: function(){
+      this.model.set('active', false).trigger('change');
+      this.options.vent.trigger('showEditModal', this.model);
+    },
+
     addFeedback: function(e){
       e.preventDefault();
       console.log('show add feedback');
       
       var feedbackAddView = new FeedbackAddView({
         model: this.model,
-        vent: this.options.vent
+        vent: this.options.vent,
+        triggerModal: 'showEditModal'
       });
       
       $('ul.criteria-list', this.el).prepend(feedbackAddView.render().el);

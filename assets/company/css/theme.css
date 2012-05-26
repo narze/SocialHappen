@@ -288,6 +288,10 @@ img.company-image{
   margin-top: 5px;
 }
 
+.modal h6.edit-image{
+  cursor: pointer;
+}
+
 .modal .edit-name, .modal .edit-description, .modal img.challenge-image{
   cursor: pointer;
 }

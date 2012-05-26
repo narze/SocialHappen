@@ -52,14 +52,14 @@ define([
       
       this.model.set('criteria', criteria).trigger('change');
       
-      this.options.vent.trigger('showEditModal', this.model);
+      this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     
     cancelEdit: function(e){
       e.preventDefault();
       $('div.edit', this.el).hide();
       this.model.trigger('change');
-      this.options.vent.trigger('showEditModal', this.model);
+      this.options.vent.trigger(this.options.triggerModal, this.model);
       this.remove();
     }
     

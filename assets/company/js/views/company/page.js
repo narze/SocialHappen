@@ -39,6 +39,17 @@ define([
               });
             }
           });
+          
+          require(['views/company/modal/add'], function (AddChallenge) {
+            if(!self.addChallenge){
+              self.addChallenge = new AddChallenge({
+                currentUserModel: self.options.currentUserModel,
+                challengesCollection: self.options.challengesCollection,
+                vent: self.options.vent,
+                el: $('div#add-challenge-modal')
+              });
+            }
+          });
         }
       }
       var sidebarView = new SidebarView({

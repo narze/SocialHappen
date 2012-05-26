@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <button class="close" data-dismiss="modal">
+    ×
+  </button>
+  <div class="">
+    <h3 class="edit-name"><%= detail.name %></h3>
+  </div>
+  <div class="edit-name hide">
+    <input class="challenge-name span4" value="<%= detail.name %>" />
+    <button class="btn save-name btn-primary">Save</button>
+  </div>
+</div>
+<div class="modal-body">
+  <h6 class="edit-image">Image:</h6>
+  <div class="edit-image hide">
+    <input class="challenge-image span4" value="<%= detail.image %>" />
+    <button class="btn save-image btn-primary">Save</button>
+  </div>
+  <img class="challenge-image" src="<%= detail.image %>" />
+  <div class="edit-description">
+    <h6>Description:</h6>
+    <p>
+      <%= detail.description %>
+    </p>
+  </div>
+  <div class="edit-description-field hide">
+    <h6>Description:</h6>
+    <textarea class="challenge-description span5" rows="3"><%= detail.description %></textarea>
+    <button class="btn save-description btn-primary">Save</button>
+  </div>
+  <div class="criteria-list">
+    <div class="btn-group dropup">
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Add New Action <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><a href="#" class="add-feedback">Feedback</a></li>
+        <li><a href="#" class="add-qr">QR Code</a></li>
+        <li><a href="#" class="add-checkin">Check-in</a></li>
+      </ul>
+    </div>
+    <ul class="criteria-list unstyled"></ul>
+  </div>
+</div>
+<div class="modal-footer">
+  <a href="#" class="btn" data-dismiss="modal">Close</a>
+  <!-- <% if(active){%>
+    <button class="btn deactive-challenge btn-danger">Deactive this challenge</button>
+  <%}else{%>
+    <button class="btn active-challenge btn-success">Active this challenge</button>
+  <%}%> -->
+  <button class="btn btn-primary create-challenge">Create Challenge</button>
+</div>

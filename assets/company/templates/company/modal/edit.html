@@ -11,7 +11,7 @@
   </div>
 </div>
 <div class="modal-body">
-  <h6>Image:</h6>
+  <h6 class="edit-image">Image:</h6>
   <div class="edit-image hide">
     <input class="challenge-image span4" value="<%= detail.image %>" />
     <button class="btn save-image btn-primary">Save</button>
@@ -42,5 +42,10 @@
 </div>
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Close</a>
+  <% if(active){%>
+    <button class="btn deactive-challenge btn-danger">Deactive this challenge</button>
+  <%}else{%>
+    <button class="btn active-challenge btn-success">Active this challenge</button>
+  <%}%>
 <!--   <button class="btn btn-primary">Save changes</button> -->
 </div>
