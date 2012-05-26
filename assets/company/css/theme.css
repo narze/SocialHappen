@@ -247,7 +247,7 @@ img.company-image{
 }
 
 .modal {
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 50%;
   z-index: 1050;
