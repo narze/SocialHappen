@@ -32,7 +32,7 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        params.url = base_url + 'apiv3/challenge_action?action_data_id=' +  window.ChallengeAction.actionDataId;
+        params.url = base_url + 'apiv3/challenge_action?action_data_id=' + window.ChallengeAction.actionDataId;
       }
 
       // Ensure that we have the appropriate request data.

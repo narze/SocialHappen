@@ -24,6 +24,7 @@ define([
       router.on('route:challengeAction', function (actionDataId) {
         window.ChallengeAction || (window.ChallengeAction = {});
         window.ChallengeAction.actionDataId = actionDataId;
+        console.log(actionDataId);
         options.challengeActionModel.url =
           base_url + 'apiv3/challenge_action?action_data_id=' + actionDataId;
           

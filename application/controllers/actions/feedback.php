@@ -134,7 +134,9 @@ class Feedback extends CI_Controller {
 			
 	    $this->load->view('actions/feedback/feedback_finish', $data);
 		} else {
-			show_error('Invalid data');
+			echo '<pre>';
+			 var_dump($user_feedback , $user_score , $action_data , $user , $challenge);
+			 echo '</pre>'; show_error('Invalid data');
 		}
 		
 	}

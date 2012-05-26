@@ -202,7 +202,9 @@ class Apiv3 extends CI_Controller {
     $this->load->library('action_data_lib');
     $action_data = $this->action_data_lib->get_action_data($action_data_id);
 
-    // unset($action_data['_id']);
+    $id = $action_data['_id'];
+    $id = $id['$id'];
+    $action_data['_id'] = $id;
 
     echo json_encode($action_data);
   }

@@ -1,32 +1,36 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
-  'vm',
-	'events'
-], function($, _, Backbone, Vm, Events){
+  'backbone'
+], function($, _, Backbone){
   var AppView = Backbone.View.extend({
 
+    events: {
+
+    },
     initialize: function () {
       _.bindAll(this);
     },
     render: function () {
-			var that = this;
+			var self = this;
       var challengeAction = this.options.challengeActionModel.attributes;
-      var actionId, formTemplateName;
-      var templates = {
-        201: 'text!templates/player/qr-form.html',
-        202: 'text!templates/player/feedback-form.html',
-        203: 'text!templates/player/checkin-form.html'
+      var formViewName;
+      var views = {
+        201: 'views/player/qr-form',
+        202: 'views/player/feedback-form',
+        203: 'views/player/checkin-form'
+      };
 
-      }
-
-      formTemplateName = templates[challengeAction.action_id]
-      require([formTemplateName], function (formTemplate) {
-        formTemplate = _.template(formTemplate);
-        challengeAction.data.hash = challengeAction.hash;
-        $('.criteria-form:visible').slideUp();
-        $('.criteria-form[data-id="'+ challengeAction._id.$id +'"]').html(formTemplate(challengeAction.data)).slideDown();
+      $('.criteria-form').slideUp();
+      
+      formViewName = views[challengeAction.action_id];
+      require([formViewName], function(FormView) {
+        var formView = new FormView({
+          challengeAction: challengeAction,
+          el: $('.criteria-form[data-id="'+ self.options.challengeActionModel.id +'"]'),
+          vent: self.options.vent
+        });
+        formView.render();
       });
 		}
 	});
