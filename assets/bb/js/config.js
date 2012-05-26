@@ -11,7 +11,7 @@ require.config({
     timeago: 'libs/jquery.timeago/jquery.timeago',
     masonry: 'libs/masonry/jquery.masonry.min',
     endlessscroll: 'libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
-    autocomplete: 'libs/jquery.autocomplete/jquery.autocomplete',
+    jfmfs: 'libs/jfmfs/jfmfs',
     
     //SocialHappen libs
     shplainbar: 'libs/sh/plain-bar',
