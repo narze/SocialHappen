@@ -19,7 +19,7 @@ define([
     render: function () {
       console.log('render challenge item');
       var data = this.model.toJSON();
-      data.baseUrl = window.World.BASE_URL;
+      data.baseUrl = window.Company.BASE_URL;
       $(this.el).html(this.challengeItemTemplate(data));
       return this;
     },
