@@ -20,7 +20,7 @@ class Challenge_model extends CI_Model {
 	function add($data)
 	{
 		$data = array_cast_int($data, $this->int_values);
-		try	{
+		try	{	
 			$this->collection->insert($data, array('safe' => TRUE));
 			return ''.$data['_id'];
 		} catch(MongoCursorException $e){
