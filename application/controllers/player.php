@@ -171,24 +171,6 @@ class Player extends CI_Controller {
 				$challenge['end_time'] = date('Y-m-d H:i:s', $challenge['end']);
 			}
 
-			//Challenge Progress
-			if($user_id) {
-				$this->load->library('challenge_lib');
-				$challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
-				$challenge_done = TRUE;
-        if($challenge_progress){
-          foreach($challenge_progress as $action) {
-  					if(!$action['action_done']) {
-  						$challenge_done = FALSE;
-  					}
-  				}
-        }
-				
-			} else {
-				$challenge_progress = FALSE;
-				$challenge_done = FALSE;
-			}
-
 			$this->load->vars(
 				array(
 					'challenge_hash' => $challenge_hash,
