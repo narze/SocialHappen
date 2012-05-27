@@ -86,9 +86,6 @@ class Checkin extends CI_Controller {
 	}
 
 	function add_user_data_checkin(){
-		//print_r($this->input->post());
-		
-		$facebook_place_id = $this->input->post('facebook_place_id');
 		$tagged_user_facebook_ids_comma = $this->input->post('tagged_user_facebook_ids');
 		$post_message = $this->input->post('post_message');
 		$action_data_hash = $this->input->post('action_data_hash');
@@ -98,14 +95,13 @@ class Checkin extends CI_Controller {
 
 		$this->load->library('challenge_lib');
 		$challenge = $this->challenge_lib->get_one(
-													array( 
-														'criteria.action_data_id' => get_mongo_id($action_data)
-													)
-												);
+			array( 
+				'criteria.action_data_id' => get_mongo_id($action_data)
+			)
+		);
 		
 		$user = $this->_get_user_data();
-		
-		if($facebook_place_id  && $action_data && $user && $challenge) {
+		if($action_data && $user && $challenge) {
 
 			//min friend_count
 			$tagged_user_facebook_ids = explode(",", $tagged_user_facebook_ids_comma);
@@ -114,77 +110,74 @@ class Checkin extends CI_Controller {
 				$tagged_user_facebook_id = trim($tagged_user_facebook_id);
 			}
 
-			if(in_array($facebook_place_id, $action_data['data']['checkin_facebook_place_id'])){
+			$facebook_place_id = $action_data['data']['checkin_facebook_place_id'];
 
-				if(count($tagged_user_facebook_ids) >= $action_data['data']['checkin_min_friend_count']){
-					$user_data = array(
-										'facebook_place_id' => $facebook_place_id,
-										'tagged_user_facebook_ids' => $tagged_user_facebook_ids,
-										'timestamp' => time()
-									);
+			if(count($tagged_user_facebook_ids) >= $action_data['data']['checkin_min_friend_count']){
+				$user_data = array(
+					'facebook_place_id' => $facebook_place_id,
+					'tagged_user_facebook_ids' => $tagged_user_facebook_ids,
+					'timestamp' => time()
+				);
 
-					if($result = $this->action_user_data_lib->add_action_user_data(
-																		$challenge['company_id'],
-																		$action_data['action_id'],
-																		get_mongo_id($action_data), 
-																		get_mongo_id($challenge),
-																		$user['user_id'],
-																		$user_data
-						)){
+				if($result = $this->action_user_data_lib->add_action_user_data(
+																	$challenge['company_id'],
+																	$action_data['action_id'],
+																	get_mongo_id($action_data), 
+																	get_mongo_id($challenge),
+																	$user['user_id'],
+																	$user_data
+					)){
 
-						//facebook post process
-						$post_data = array(
-								'message' => htmlspecialchars($post_message),
-								// 'picture' => $settings['share_fb_picture'], 
-								//'link' => $link, 
-								//'name' => 'name', 
-								'place' => $facebook_place_id,
-								'tags' => $tagged_user_facebook_ids_comma,
-								// 'caption' => 'share_fb_caption', 
-								// 'description' => 'share_fb_description'
-							);
-						$post_result = $this->FB->api('me/feed', 'post', $post_data);
+					//facebook post process
+					$post_data = array(
+							'message' => htmlspecialchars($post_message),
+							// 'picture' => $settings['share_fb_picture'], 
+							//'link' => $link, 
+							//'name' => 'name', 
+							'place' => $facebook_place_id,
+							'tags' => $tagged_user_facebook_ids_comma,
+							// 'caption' => 'share_fb_caption', 
+							// 'description' => 'share_fb_description'
+						);
+					$post_result = $this->FB->api('me/feed', 'post', $post_data);
 
-						//platform action goes here
-						$this->load->library('audit_lib');
-						$audit_data = array(
-												'user_id' => $user['user_id'],
-												'action_id' => $action_data['action_id'],
-												'app_id' => 0,
-												'app_install_id' => 0,
-												'page_id' => 0,
-												'company_id' => $challenge['company_id'],
-												'subject' => NULL,
-												'object' => $action_data['data']['checkin_facebook_place_name'],
-												'objecti' => NULL,
-												//'additional_data' => $additional_data
-											);
-						
-						$audit_result = $this->audit_lib->audit_add($audit_data);
+					//platform action goes here
+					$this->load->library('audit_lib');
+					$audit_data = array(
+											'user_id' => $user['user_id'],
+											'action_id' => $action_data['action_id'],
+											'app_id' => 0,
+											'app_install_id' => 0,
+											'page_id' => 0,
+											'company_id' => $challenge['company_id'],
+											'subject' => NULL,
+											'object' => $action_data['data']['checkin_facebook_place_name'],
+											'objecti' => NULL,
+											//'additional_data' => $additional_data
+										);
+					
+					$audit_result = $this->audit_lib->audit_add($audit_data);
 
-						$this->load->library('achievement_lib');
-						$info = array(
-										'action_id'=> $action_data['action_id'],
-										'app_install_id'=> 0, 
-										'page_id' => 0
-									);
-						$achievement_result = $this->achievement_lib->
-												increment_achievement_stat($challenge['company_id'], 0, $user['user_id'], $info, 1);
+					$this->load->library('achievement_lib');
+					$info = array(
+									'action_id'=> $action_data['action_id'],
+									'app_install_id'=> 0, 
+									'page_id' => 0
+								);
+					$achievement_result = $this->achievement_lib->
+											increment_achievement_stat($challenge['company_id'], 0, $user['user_id'], $info, 1);
 
-					}
-
-					if(!$audit_result || !$achievement_result){
-						$action_data['data']['checkin_thankyou_message'] = 'Something\'s broken please try again later' ;
-					}else if(!$post_result){
-						$action_data['data']['checkin_thankyou_message'] = 'Connection to Facebook failed, information saved' ;
-					}
-				}else{
-					$action_data['data']['checkin_thankyou_message'] = 'Your tagging is less than expected. Please try again' ;
 				}
 
+				if(!$audit_result || !$achievement_result){
+					$action_data['data']['checkin_thankyou_message'] = 'Something\'s broken please try again later' ;
+				}else if(!$post_result){
+					$action_data['data']['checkin_thankyou_message'] = 'Connection to Facebook failed, information saved' ;
+				}
 			}else{
-				$action_data['data']['checkin_thankyou_message'] = 'Your check-in location isn\'t correct. Please try again' ;
+				$action_data['data']['checkin_thankyou_message'] = 'Your tagging is less than expected. Please try again' ;
 			}
+
 
 			$data = array(
 				'action_data' => $action_data

@@ -37,8 +37,8 @@ define([
     formSubmit: function() {
       var $el = $(this.el);
       var data = {
-        user_feedback: $('.user_feedback', $el).val(),
-        user_score: $('.user_score', $el).val(),
+        post_message: $('.post_message', $el).val(),
+        tagged_user_facebook_ids: $("#jfmfs-container", $el).data('jfmfs').getSelectedIds().join(','),
         action_data_hash: $('.action_data_hash', $el).val()
       };
       
@@ -47,6 +47,7 @@ define([
         data: data,
         url: $('div.form', $el).data('action'),
         success: function(result) {
+          console.log(result);
           $el.html(result);
         }
       });

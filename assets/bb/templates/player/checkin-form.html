@@ -4,7 +4,7 @@
   <div class="loading-div" style="height:36px;display:block;">
     <div id="loading-box" style="display:none;"><img src="<%= base_url + 'assets/images/loading.gif' %>" /></div>
   </div>
-  <div data-action="<%= base_url+ 'actions/checkin/add_user_data_checkin' %>">
+  <div class="form" data-action="<%= base_url+ 'actions/checkin/add_user_data_checkin' %>">
     <fieldset>
       <legend><%= data.checkin_challenge_message %></legend>
       <div>
@@ -34,18 +34,14 @@
         <div class="control-group">
           <label class="control-label" for="post_message">Message on the post</label>
           <div class="controls">
-            <input type="text" name="post_message" />
+            <input type="text" class="post_message" name="post_message" />
           </div>
         </div>
       </div>
-      <input type="hidden" name="tagged_user_facebook_ids" />
-      <input type="text" name="facebook_place_id" id="facebook_place_id" />
-      <input type="hidden" name="action_data_hash" value="<%= hash %>" />
+      <input type="hidden" class="action_data_hash" name="action_data_hash" value="<%= hash %>" />
       <div class="control-group">
         <button class="btn submit">Submit</button>
       </div>
     </fieldset>
   </div>
 </div>
-
-

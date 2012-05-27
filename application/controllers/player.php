@@ -158,6 +158,7 @@ class Player extends CI_Controller {
 				}
 			} else {
 				$challenge_done = FALSE;
+				$challenge_progress = FALSE;
 			}
 
 			//Challenge Duration
