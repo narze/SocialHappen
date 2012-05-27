@@ -206,6 +206,111 @@ class Apiv3 extends CI_Controller {
 
     echo json_encode($action_data);
   }
+
+  /**
+   * create/update challenge
+   */
+  function saveChallenge($challenge_id = NULL){
+    $challenge = $this->input->get('challenge', TRUE); 
+    
+    
+    if(!isset($challenge) || $challenge == ''){
+      $result = array('success' => false, 'result' => 'no challenge data');
+    }else{
+      $this->load->library('challenge_lib');
+      $this->load->library('action_data_lib');
+
+      $challenge = json_decode($challenge, TRUE);
+      $action_data_array = $challenge['criteria'];
+      
+      if(!is_array($challenge)){
+        echo json_encode(array('success' => false, 'result' =>'data error'));
+        return false;
+      }
+        
+
+      //add/update action_data
+      foreach($action_data_array as &$action_data_object){
+        $action_data_create_flag = true;
+        $action_data_attr = $action_data_object['action_data'];
+
+        //check exist action_data
+        if(isset($action_data_object['action_data']['_id'])){
+          $mgid = $action_data_object['action_data']['_id'];
+          $action_data = $this->action_data_lib->get_action_data($mgid['$id']);
+
+         
+          if($action_data){
+            //update if exist
+            $action_data_create_flag = false;
+            unset($action_data_attr['_id']);
+            $update_action_data_result = $this->action_data_lib->update($mgid['$id'], $action_data_attr);
+
+            if(!$update_action_data_result){
+              echo json_encode(array('success' => false, 'result' =>'update action_data failed '. print_r($action_data_attr['data'], true)));
+              return false;
+            
+            }
+            
+          }
+        }
+
+        if($action_data_create_flag){
+          //update mongoID to challenge criteria for new added action data
+          if($action_data_id = $this->action_data_lib->add_action_data($action_data_object['action_data']['action_id'], $action_data_attr['data'])){
+
+            //re update challenge object
+            $action_data_object['action_data_id'] = $action_data_id;
+            $action_data_object['action_data']['_id'] = new MongoId($action_data_id);
+            $action_data_object['action_data']['hash'] = strrev(sha1($action_data_id));
+
+          }else{
+            echo json_encode(array('success' => false, 'result' =>'add action_data failed : ' . print_r($action_data_attr['data'], true)));
+            return false;
+
+          }
+          
+          
+        }
+
+      }
+
+      $challenge_create_flag = true;
+      $challenge_update = null;
+      $challenge_create = null;
+
+      //update challenge
+      if($challenge_id){
+        $challenge['hash'] = array('hash' => strrev(sha1($challenge_id)));
+        $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge);
+
+        if($challenge_update)
+            $challenge_create_flag = false;
+      }
+
+      if($challenge_create_flag){
+        unset($challenge['hash']);
+        $challenge_create = $this->challenge_lib->add($challenge);
+
+        if($challenge_create)
+            $challenge_id = $challenge_create;
+
+      }
+
+      if($challenge_create || $challenge_update){
+        $challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($challenge_id)));
+        echo json_encode($challenge);
+      }else{
+        echo json_encode(array('success' => false, 'result' =>'add/update challenge failed'));
+
+      }
+
+
+    }
+    
+
+  }
+
 }
 
 
