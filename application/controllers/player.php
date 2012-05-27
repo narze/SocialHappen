@@ -381,9 +381,7 @@ class Player extends CI_Controller {
 			$user_id = $this->socialhappen->get_user_id();
 			$this->load->library('user_lib');
 			if($this->user_lib->join_challenge($user_id, $challenge_hash)) {
-				//echo 'Challenge joined';
-				//echo anchor('player/challenge/'.$challenge_hash, 'Back');
-				redirect('player/challenge_actions/'.$challenge_hash);
+				redirect('player/challenge/'.$challenge_hash);
 			} else {
 				echo 'Challenge join error';
 			}
