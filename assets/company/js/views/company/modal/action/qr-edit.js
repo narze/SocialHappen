@@ -11,7 +11,7 @@ define([
     events: {
       'click button.edit': 'showEdit',
       'click button.save': 'saveEdit',
-      'click button.cancel': 'cancelEdit',
+      'click button.remove': 'removeAction'
     },
     
     initialize: function(){
@@ -44,10 +44,18 @@ define([
       this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     
-    cancelEdit: function(e){
+    removeAction: function(e){
       e.preventDefault();
-      $('div.edit', this.el).hide();
-      this.model.trigger('change');
+      
+      var dataId = this.options.action.action_data_id;
+      var criteria = this.model.get('criteria');
+      
+      criteria = _.reject(criteria, function(c){
+        return c.action_data_id == dataId;
+      }, this);
+      
+      this.model.set('criteria', criteria).trigger('change');
+      this.model.save();
       this.options.vent.trigger(this.options.triggerModal, this.model);
     }
     
