@@ -114,6 +114,15 @@ class Action_data_lib {
 		$hash = $this->CI->input->get('code');
 		return $this->CI->action_data_model->getOne(array('hash' => $hash));
 	}
+
+	function update($action_data_id, $data) {
+		if(!$action_data = $this->CI->action_data_model->getOne(array('_id' => new MongoId($action_data_id)))) {
+			return FALSE;
+		}
+
+		$data = array_cast_int($data);
+		return $this->CI->action_data_model->update(array('_id' => new MongoId($action_data_id)), $data);
+	}
   
   
   /**
