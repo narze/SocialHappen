@@ -23,7 +23,7 @@ define([
     sync: function(method, model, options) {
       var methodMap = {
         'create': 'POST',
-        'update': 'PUT',
+        'update': 'POST',
         'delete': 'DELETE',
         'read':   'GET'
       };
@@ -38,19 +38,23 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        params.url = window.World.BASE_URL + 'apiv3/challenge/' + this.id
+        if(method == 'update'){
+          params.url = window.Company.BASE_URL + 'apiv3/saveChallenge/' + this.id
+        }else if(method == 'create'){
+          params.url = window.Company.BASE_URL + 'apiv3/saveChallenge/'
+        }
       }
 
       // Ensure that we have the appropriate request data.
       if (!options.data && model && (method == 'create' || method == 'update')) {
         params.contentType = 'application/json';
-        params.data = JSON.stringify(model.toJSON());
+        params.data = 'model='+JSON.stringify(model.toJSON());
       }
 
       // For older servers, emulate JSON by encoding the request into an HTML-form.
-      if (Backbone.emulateJSON) {
+      if (Backbone.emulateJSON || true) {
         params.contentType = 'application/x-www-form-urlencoded';
-        params.data = params.data ? {model: params.data} : {};
+        // params.data = params.data ? {model: params.data} : {};
       }
 
       // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
@@ -69,7 +73,10 @@ define([
       if (params.type !== 'GET' && !Backbone.emulateJSON) {
         params.processData = false;
       }
-
+      
+      console.log('save challenge:', this.toJSON());
+      console.log('POST:', params.data);
+      
       // Make the request, allowing the user to override any Ajax options.
       return $.ajax(_.extend(params, options));
     }

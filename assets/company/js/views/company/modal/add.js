@@ -165,6 +165,7 @@ define([
     
     createChallenge: function(){
       console.log('create challenge!');
+      this.model.set('company_id', window.Company.companyId);
       this.options.challengesCollection.create(this.model);
       
       this.$el.modal('hide');

@@ -39,12 +39,8 @@ define([
       this.options.action.action_data.data.done_message = $('textarea.done_message', this.el).val();
       
       var criteria = this.model.get('criteria');
-      // var matchedAction = _.find(criteria, function(item){
-        // return item.action_data_id == dataId;
-      // });
-      // matchedAction = this.options.action;
       this.model.set('criteria', criteria).trigger('change');
-      
+      this.model.save();
       this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     
