@@ -7,29 +7,12 @@ class QR extends CI_Controller {
 		$this->load->library('action_data_lib');
 	}
 	
-  function index(){
+  function index_deprecated(){
     $action = $this->action_data_lib->get_action_data_from_code();
     $code = $action['hash'];
     
     if($action){
-      /**
-       * @todo : insert session validation method here
-       */
-      $valid_session = FALSE;
-      
-      if($this->socialhappen->is_logged_in()) { 
-        $valid_session = TRUE;
-        $user = $this->socialhappen->get_user();
-        $user_id = $user['user_id'];
-      } else if($facebook_user = $this->facebook->getUser()) {
-        $this->load->model('user_model');
-        if($user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user['id'])) {
-          $this->socialhappen->player_login($user['user_id']);
-          $user_id = $user['user_id'];
-          $valid_session = TRUE;
-        }
-      }
-      
+      $user = $this->socialhappen->get_user();
       $this->load->library('challenge_lib');
       $challenge = $this->challenge_lib->get_one(
         array( 
@@ -39,8 +22,8 @@ class QR extends CI_Controller {
 
       $challenge_id = get_mongo_id($challenge);
       
-      if($valid_session){
-        $challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+      if($user){
+        $challenge_progress = $this->challenge_lib->get_challenge_progress($user['user_id'], $challenge_id);
         
         if(!$challenge){
           show_error('Invalid Challenge');
@@ -141,23 +124,20 @@ class QR extends CI_Controller {
    * @param code hash of action object
    */
 	function go($code = NULL) {
-    /**
-     * @todo : insert session validation method here
-     */
-    $valid_session = TRUE;
     
-    if($valid_session){
-      //Get challenge and action data
-      $action_data = $code ? $this->action_data_lib->get_action_data_by_code($code) : NULL;
-      $this->load->library('challenge_lib');
-      $challenge = $this->challenge_lib->get_one(
-        array( 
-          'criteria.action_data_id' => get_mongo_id($action_data)
-        )
-      );
-      $user = $this->socialhappen->get_user();
+    $user = $this->socialhappen->get_user();
+    
+    //Get challenge and action data
+    $action_data = $code ? $this->action_data_lib->get_action_data_by_code($code) : NULL;
+    $this->load->library('challenge_lib');
+    $challenge = $this->challenge_lib->get_one(
+      array( 
+        'criteria.action_data_id' => get_mongo_id($action_data)
+      )
+    );
 
-      if($user && $challenge && $action_data){
+    if($user = $this->socialhappen->get_user()){
+      if($challenge && $action_data){
         //Add some action-specific user_data
         $user_data = array(
           'timestamp' => time()
@@ -228,13 +208,12 @@ class QR extends CI_Controller {
         // we may render beautiful error page here
         show_error('Invalid Url');
       } 
-    }else{
-      
-      // user have no sesion, redirect to challenge action page
-      
-      // $current_url = site_url($this->uri->uri_string());
-      $url = $this->action_data_lib->get_qr_url($code);
-      redirect($url);
+    } else {
+      if($challenge) {
+        redirect('login?next=actions/qr/go/'.$code);
+      } else {
+        show_error('Invalid Url');
+      }
     }
 	}
 }

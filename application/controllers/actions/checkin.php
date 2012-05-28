@@ -14,10 +14,9 @@ class Checkin extends CI_Controller {
 	function index() {
 		$action_data = $this->action_data_lib->get_action_data_from_code();
 		
-		$user = $this->_get_user_data();
+		$user = $this->socialhappen->get_user();
 
 		if($action_data && is_array($action_data) && $user){
-			//print_r($user);
 			$facebook_data = array(
 				'facebook_app_id' => $this->config->item('facebook_app_id'),
 				'facebook_app_scope' => $this->config->item('facebook_player_scope'),
@@ -53,32 +52,26 @@ class Checkin extends CI_Controller {
 			}
 
 			$template = array(
-		        'title' => 'Welcome to SocialHappen',
-		        'styles' => array(
-		          'common/bootstrap',
-		          'common/bootstrap-responsive',
-		          'common/jquery.facebook.multifriend.select',
-		          'common/jquery.facebook.multifriend.select-list',
-		          'actions/checkin_form'
-		        ),
-		        'body_views' => $body_views,
-		        'scripts' => array(
-		          'common/jquery.min',
-		          'common/jquery.facebook.multifriend.select',
-		          'common/jquery-ui-1.8.20.autocomplete.min',
-		          'challenge/checkin/checkin_form'
-		        )
-		    );
+        'title' => 'Welcome to SocialHappen',
+        'styles' => array(
+          'common/bootstrap',
+          'common/bootstrap-responsive',
+          'common/jquery.facebook.multifriend.select',
+          'common/jquery.facebook.multifriend.select-list',
+          'actions/checkin_form'
+        ),
+        'body_views' => $body_views,
+        'scripts' => array(
+          'common/jquery.min',
+          'common/jquery.facebook.multifriend.select',
+          'common/jquery-ui-1.8.20.autocomplete.min',
+          'challenge/checkin/checkin_form'
+        )
+	    );
 
-     		$this->load->view('common/template', $template);
+   		$this->load->view('common/template', $template);
 
-/*
-			if(!$this->basic_view){
-				$this->load->view('actions/checkin/checkin_form', $data);
-			}else{
-				$this->load->view('actions/checkin/checkin_form_basic', $data);
-			}
-			*/
+
 		} else {
 			show_error('Code not found or user not logged in');
 		}
@@ -200,46 +193,5 @@ class Checkin extends CI_Controller {
 		} else {
 			show_error('Invalid data');
 		}
-		
-	}
-
-	function _get_user_data(){
-		$user = $this->socialhappen->get_user();
-
-		if(!$user){
-			if($user_facebook_id = $this->FB->getUser()){
-				$this->load->model('user_model');
-				$user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_id);
-			}
-		}
-
-		if($user){
-			return $user;
-		} else {
-			return NULL;
-		}
-		
-	}
-	
-	/**
-	 *	Functional Test
-	 *
-	 **/
-	function yreset_action_data(){
-		
-		$this->load->model('action_data_model');
-		$this->action_data_model->
-					delete(
-						array(
-							'action_id'=> $this->action_data_lib->get_platform_action('checkin')
-							)
-					);
-		$form_data = array(
-				'checkin_facebook_place_id' => '162135693842364',
-				'checkin_welcome_message' => 'Here you are!',
-				'checkin_challenge_message' => 'Please check-in here at Figabyte',
-				'checkin_thankyou_message' => 'Thank you, for check-in',
-			);
-		$result = $this->action_data_lib->add_checkin_action_data($form_data);
 	}
 }

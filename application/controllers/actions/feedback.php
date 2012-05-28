@@ -11,10 +11,10 @@ class Feedback extends CI_Controller {
 	function index() {
 		$action_data = $this->action_data_lib->get_action_data_from_code();
 		
-		$user = $this->_get_user_data();
+		$user = $this->socialhappen->get_user();
 
 		if($action_data && is_array($action_data) && $user){
-			//print_r($user);
+
 			$data = array(
 							'action_data' => $action_data,
 							'user' => $user
@@ -48,7 +48,7 @@ class Feedback extends CI_Controller {
 
 	function get_form() {
 		$action_data = $this->action_data_lib->get_action_data_from_code();
-		$user = $this->_get_user_data();
+		$user = $this->socialhappen->get_user();
 
 		$data = array(
 			'action_data' => $action_data,
@@ -77,7 +77,7 @@ class Feedback extends CI_Controller {
 													)
 												);
 		
-		$user = $this->_get_user_data();
+		$user = $this->socialhappen->get_user();
 		
 		if($user_feedback && $user_score && $action_data && $user && $challenge) {
 			date_default_timezone_set('UTC');
@@ -134,50 +134,7 @@ class Feedback extends CI_Controller {
 			
 	    $this->load->view('actions/feedback/feedback_finish', $data);
 		} else {
-			echo '<pre>';
-			 var_dump($user_feedback , $user_score , $action_data , $user , $challenge);
-			 echo '</pre>'; show_error('Invalid data');
-		}
-		
-	}
-
-	function _get_user_data(){
-		$user = $this->socialhappen->get_user();
-
-		if(!$user){
-			if($user_facebook_id = $this->FB->getUser()){
-				$this->load->model('user_model');
-				$user = $this->user_model->get_user_profile_by_user_facebook_id($user_facebook_id);
-			}
-		}
-
-		if($user){
-			return $user;
-		} else {
-			return NULL;
-		}
-		
-	}
-	
-	/**
-	 *	Functional Test
-	 *
-	 **/
-	function yreset_action_data(){
-		
-		$this->load->model('action_data_model');
-		$this->action_data_model->
-					delete(
-						array(
-							'action_id'=> $this->action_data_lib->get_platform_action('feedback')
-							)
-					);
-		$form_data = array(
-				'feedback_welcome_message' => 'Dear, Our Customer',
-				'feedback_question_message' => 'What do you think about our store?',
-				'feedback_vote_message' => 'Please provide your satisfaction score',
-				'feedback_thankyou_message' => 'Thank you, please come again',
-			);
-		$result = $this->action_data_lib->add_feedback_action_data($form_data);
+			show_error('Invalid data');
+		}	
 	}
 }

@@ -206,19 +206,14 @@ class Player extends CI_Controller {
             'base_url' => base_url()
           )
         )
-      ),
-      'requirejs' => 'js/player-challenge'
-      // 'scripts' => array(
-      //   'common/jquery.min',
-      //   'common/jquery-ui.min',
-      //   'common/underscore-min',
-      //   'common/bootstrap.min',
-      //   'common/jquery.timeago',
-      //   'common/plain-bar',
-      //   'common/jquery.form',
-      //   'player/challenge'
-      // )
+      )
     );
+
+		//If challenge is not done, player can do challenges
+		if(!$challenge_done) {
+			$template['requirejs'] = 'js/player-challenge';
+		}
+
     $this->load->view('common/template', $template);
 		} else {
 			show_error('Challenge Invalid', 404);
