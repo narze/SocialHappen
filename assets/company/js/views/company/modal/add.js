@@ -7,9 +7,11 @@ define([
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
-  'views/company/modal/action/qr-add'
+  'views/company/modal/action/qr-add',
+  'views/company/modal/action/checkin-edit',
+  'views/company/modal/action/checkin-add'
 ], function($, _, Backbone, ChallengeModel, addTemplate, FeedbackEditView,
-   FeedbackAddView, QREditView, QRAddView){
+   FeedbackAddView, QREditView, QRAddView, CheckinEditView, CheckinAddView){
   var EditModalView = Backbone.View.extend({
     addTemplate: _.template(addTemplate),
     
@@ -161,6 +163,16 @@ define([
     addCheckin: function(e){
       e.preventDefault();
       console.log('show add checkin');
+      
+      var checkinAddView = new CheckinAddView({
+        model: this.model,
+        vent: this.options.vent,
+        triggerModal: 'showAddModal'
+      });
+      
+      $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
+      
+      checkinAddView.showEdit();
     },
     
     createChallenge: function(){

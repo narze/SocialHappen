@@ -6,9 +6,11 @@ define([
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
-  'views/company/modal/action/qr-add'
+  'views/company/modal/action/qr-add',
+  'views/company/modal/action/checkin-edit',
+  'views/company/modal/action/checkin-add'
 ], function($, _, Backbone, editTemplate, FeedbackEditView, FeedbackAddView,
-  QREditView, QRAddView){
+  QREditView, QRAddView, CheckinEditView, CheckinAddView){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
     
@@ -67,6 +69,15 @@ define([
           });
           
           $('ul.criteria-list', this.el).append(qrEditView.render().el);
+        }else if(type == 203){
+          var checkinEditView = new CheckinEditView({
+            model: this.model,
+            action: action,
+            vent: this.options.vent,
+            triggerModal: 'showEditModal'
+          });
+          
+          $('ul.criteria-list', this.el).append(checkinEditView.render().el);
         }
       }, this);
       
@@ -173,6 +184,16 @@ define([
     addCheckin: function(e){
       e.preventDefault();
       console.log('show add checkin');
+      
+      var checkinAddView = new CheckinAddView({
+        model: this.model,
+        vent: this.options.vent,
+        triggerModal: 'showEditModal'
+      });
+      
+      $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
+      
+      checkinAddView.showEdit();
     }
   });
   return EditModalView;
