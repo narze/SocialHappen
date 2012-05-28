@@ -366,7 +366,9 @@ class Achievement_lib
 		
 		if(!isset($company_id) || !isset($user_id) || !isset($app_id) || empty($info) ||
 			 !isset($info['app_install_id'])) return FALSE;
-		
+
+		//Add $company_id into info
+		$info['company_id'] = $company_id;
 		$this->CI->load->model('achievement_stat_model','achievement_stat');
 		
 		$increment_result = $this->CI->achievement_stat->increment($app_id, 

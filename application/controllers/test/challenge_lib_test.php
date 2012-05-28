@@ -87,20 +87,17 @@ class Challenge_lib_test extends CI_Controller {
 		$this->achievement_stat1 = array(
 			'action_id' => 1,
 			'page_id' => 1,
-			'company_id' => 1,
 			'app_install_id' => 1
 		);
 
 		$this->achievement_stat2 = array(
 			'action_id' => 2,
 			'page_id' => 1,
-			'company_id' => 1,
 			'app_install_id' => 2
 		);
 
 		$this->achievement_stat3 = array(
 			'action_id' => 201,
-			'company_id' => 1,
 			'app_install_id' => 0
 		);
 	}
