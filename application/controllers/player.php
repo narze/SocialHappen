@@ -191,7 +191,6 @@ class Player extends CI_Controller {
         'common/bootstrap-responsive',
         'common/bar',
         'common/player',
-        'common/jquery.facebook.multifriend.select-list',
         'player/challenge'
       ),
       'body_views' => array(

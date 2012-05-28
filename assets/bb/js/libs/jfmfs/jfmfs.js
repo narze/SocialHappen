@@ -75,7 +75,6 @@
             all_friends;
             
         FB.api('/me/friends?fields=' + settings.friend_fields, function(response) {
-            console.log(response);
             var sortedFriendData = response.data.sort(settings.sorter),
                 preselectedFriends = {},
                 buffer = [],

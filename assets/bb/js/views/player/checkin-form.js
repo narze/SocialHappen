@@ -14,6 +14,20 @@ define([
       _.bindAll(this);
     },
     render: function () {
+      //Load jfmfs css
+      var link = document.createElement("link");
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.href = base_url + 'assets/css/common/jquery.facebook.multifriend.select-list.css';
+      document.getElementsByTagName("head")[0].appendChild(link);
+
+      //Load custom css
+      link = document.createElement("link");
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.href = base_url + 'assets/css/common/jquery.jfmfs-custom.css';
+      document.getElementsByTagName("head")[0].appendChild(link);
+
       $(this.el).html(this.formTemplate(this.options.challengeAction));
       $(this.el).slideDown();
 
@@ -35,6 +49,10 @@ define([
       }
     },
     formSubmit: function() {
+      if($("#jfmfs-container", $el).data('jfmfs').getSelectedIds().length < $('#checkin_min_friend_count', $el).val()) {
+        alert('Please tag at least ' + $('#checkin_min_friend_count').val() + ' friend(s).');
+        return false;
+      }
       var $el = $(this.el);
       var data = {
         post_message: $('.post_message', $el).val(),

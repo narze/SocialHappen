@@ -9,30 +9,25 @@
       <legend><%= data.checkin_challenge_message %></legend>
       <div>
         <div class="control-group">
-          <label class="control-label" for="checkin_facebook_place_name">Do Check-In at</label>
-          <div class="controls">
-            <label class="checkin_facebook_place_name"><%= data.checkin_facebook_place_name %></label>
-          </div>
+          <label class="control-label" for="checkin_facebook_place_name">Do Check-In at <strong><%= data.checkin_facebook_place_name %></strong></label>
         </div>
         <% if(data.checkin_min_friend_count > 0) { %>
           <div class="control-group">
-            <label class="control-label" for="checkin_min_friend_count">With at least</label>
-            <div class="controls">
-              <%= data.checkin_min_friend_count %> of your friends
-            </div>
+            <label class="control-label" for="checkin_min_friend_count">With at least <%= data.checkin_min_friend_count %> of your friend(s)</label>
+            <input type="hidden" id="checkin_min_friend_count" value="<%= data.checkin_min_friend_count %>" />
           </div>
 
-
-          <div id="search-friends-normal">
-            <div id="friend-list">
-              <div id="jfmfs-container"></div>
+          <div class="control-group">
+            <div id="search-friends-normal">
+              <div id="friend-list">
+                <div id="jfmfs-container"></div>
+              </div>
             </div>
           </div>
-
 
         <% } %>
         <div class="control-group">
-          <label class="control-label" for="post_message">Message on the post</label>
+          <label class="control-label" for="post_message">Checkin Message</label>
           <div class="controls">
             <input type="text" class="post_message" name="post_message" />
           </div>
