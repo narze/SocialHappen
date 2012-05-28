@@ -8,3 +8,4 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">setTimeout(function(){window.location = "<?php echo $challenge_url;?>"}, 2000);</script>
