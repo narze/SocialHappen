@@ -85,6 +85,7 @@ define([
       detail.name = $('input.challenge-name', this.el).val();
       
       this.model.set('detail', detail).trigger('change');
+      this.model.save();
       
       $('h3.edit-name', this.$el).show();
       $('div.edit-name', this.$el).hide();
@@ -103,6 +104,7 @@ define([
       detail.description = $('textarea.challenge-description', this.el).val();
       
       this.model.set('detail', detail).trigger('change');
+      this.model.save();
       
       $('div.edit-description', this.el).show();
       $('div.edit-description-field', this.el).hide();
@@ -121,17 +123,20 @@ define([
       detail.image = $('input.challenge-image', this.el).val();
       
       this.model.set('detail', detail).trigger('change');
-            
+      this.model.save();
+      
       this.options.vent.trigger('showEditModal', this.model);
     },
     
     activeChallenge: function(){
       this.model.set('active', true).trigger('change');
+      this.model.save();
       this.options.vent.trigger('showEditModal', this.model);
     },
     
     deactiveChallenge: function(){
       this.model.set('active', false).trigger('change');
+      this.model.save();
       this.options.vent.trigger('showEditModal', this.model);
     },
 

@@ -211,8 +211,9 @@ class Apiv3 extends CI_Controller {
    * create/update challenge
    */
   function saveChallenge($challenge_id = NULL){
-    $challenge = $this->input->get('challenge', TRUE); 
+    header('Content-Type: application/json', TRUE);
     
+    $challenge = $this->input->post('model', TRUE); 
     
     if(!isset($challenge) || $challenge == ''){
       $result = array('success' => false, 'result' => 'no challenge data');
@@ -299,6 +300,7 @@ class Apiv3 extends CI_Controller {
 
       if($challenge_create || $challenge_update){
         $challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($challenge_id)));
+        $challenge['_id'] = $challenge['_id']['$id'];
         echo json_encode($challenge);
       }else{
         echo json_encode(array('success' => false, 'result' =>'add/update challenge failed'));
