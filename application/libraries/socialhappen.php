@@ -10,8 +10,10 @@
 class SocialHappen{
 	private $CI;
 	function __construct() {
-        $this->CI =& get_instance();
-    }
+    $this->CI =& get_instance();
+		$this->CI->load->library('session');
+    $this->update_session();
+  }
 	
 	/**
 	 * Global variables
@@ -216,7 +218,7 @@ class SocialHappen{
 		
 		//if(!$facebook_user = $this->CI->facebook->getUser()){
 		if(!$user) {
-			$this->logout(); // should relogin facebook to extend cookies TODO : fix
+			// $this->logout(); // should relogin facebook to extend cookies TODO : fix
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'facebook_default_scope' => $this->CI->config->item('facebook_admin_scope'),
@@ -308,7 +310,7 @@ class SocialHappen{
 				);
 		
 		if(!$user) {
-			$this->logout(); // should relogin facebook to extend cookies TODO : fix
+			// $this->logout(); // should relogin facebook to extend cookies TODO : fix
 			$common = array(
 				'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 				'facebook_default_scope' => $this->CI->config->item('facebook_admin_scope'),
@@ -477,6 +479,7 @@ class SocialHappen{
 	 */
 	function logout($redirect_url = NULL){
 	    $this->CI->session->sess_destroy();
+
 		if($redirect_url){
 			redirect($redirect_url);
 		}
@@ -1145,5 +1148,9 @@ class SocialHappen{
 
 	function get_next_url() {
 		return $this->CI->session->userdata('next_url');
+	}
+
+	function update_session() {
+		return $this->CI->session->sess_update();
 	}
 }

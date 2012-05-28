@@ -1358,7 +1358,7 @@ class Api_Lib {
 				$response = array('status' => 'OK', 'user_id' => $user_id);
 			} else {
 				$response = array('status' => 'ERROR', 'message' => 'User not found');
-				$this->CI->socialhappen->logout();
+				// $this->CI->socialhappen->logout();
 			}
 		} else {
 			$response = array('status' => 'ERROR', 'message' => 'Not connected with facebook');
