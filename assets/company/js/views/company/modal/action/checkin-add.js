@@ -39,7 +39,8 @@ define([
       };
       this.options.action.name = $('textarea.name', this.el).val();
       this.options.action.action_data = {
-        data: {}
+        data: {},
+        action_id: 203
       }
       this.options.action.action_data.data.checkin_facebook_place_id = $('input.checkin_facebook_place_id', this.el).val();
       this.options.action.action_data.data.checkin_welcome_message = $('textarea.checkin_welcome_message', this.el).val();
