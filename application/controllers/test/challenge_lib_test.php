@@ -29,7 +29,7 @@ class Challenge_lib_test extends CI_Controller {
 			'start' => time(),
 			'end' => time() + 86400,
 			'detail' => array(
-				'name' => 'Challenge name',
+				'name' => 'Challenge name 1',
 				'description' => 'Challenge description',
 				'image' => 'Challenge image url'
 			),
@@ -52,7 +52,7 @@ class Challenge_lib_test extends CI_Controller {
 			'start' => time(),
 			'end' => time() + 86400,
 			'detail' => array(
-				'name' => 'Challenge name',
+				'name' => 'Challenge name 2',
 				'description' => 'Challenge description',
 				'image' => 'Challenge image url'
 			),
@@ -70,7 +70,7 @@ class Challenge_lib_test extends CI_Controller {
 			'start' => time(),
 			'end' => time() + 86400,
 			'detail' => array(
-				'name' => 'Challenge name',
+				'name' => 'Challenge name 3',
 				'description' => 'Challenge description',
 				'image' => 'Challenge image url'
 			),
@@ -133,16 +133,17 @@ class Challenge_lib_test extends CI_Controller {
 		$result = $this->challenge_lib->get($criteria);
 		$this->unit->run(count($result), 3, "\$result", count($result));
 		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
-		$this->unit->run($result[0]['detail']['name'], 'Challenge name', "\$result[0]['detail']['name']", $result[0]['detail']['name']);
-		$this->unit->run($result[0]['hash'], strrev(sha1($this->challenge_id)), "\$result[0]['hash']", $result[0]['hash']);
-		$this->hash = $result[0]['hash'];
+		$this->unit->run($result[0]['hash'], strrev(sha1($this->challenge_id3)), "\$result[0]['hash']", $result[0]['hash']);
+		$this->unit->run($result[1]['hash'], strrev(sha1($this->challenge_id2)), "\$result[1]['hash']", $result[1]['hash']);
+		$this->unit->run($result[2]['hash'], strrev(sha1($this->challenge_id)), "\$result[2]['hash']", $result[2]['hash']);
+		$this->hash = $result[2]['hash'];
 	}
 
 	function get_one_test() {
 		$criteria = array('company_id' => '1');
 		$result = $this->challenge_lib->get_one($criteria);
 		$this->unit->run($result, 'is_array', "\$result", $result);
-		$this->unit->run($result['detail']['name'], 'Challenge name', "\$result['detail']['name']", $result['detail']['name']);
+		$this->unit->run($result['detail']['name'], 'Challenge name 1', "\$result['detail']['name']", $result['detail']['name']);
 	}
 
 	function update_test() {
@@ -168,12 +169,14 @@ class Challenge_lib_test extends CI_Controller {
 		$criteria = array('company_id' => '1');
 		$result = $this->challenge_lib->get($criteria);
 		$this->unit->run(count($result), 3, "\$result", count($result));
-		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
-		$this->unit->run($result[0]['start'], time() + 86400, "\$result[0]['start']", $result[0]['start']);
+		$this->unit->run($result[2], 'is_array', "\$result[2]", $result[2]);
+		$this->unit->run($result[2]['start'], time() + 86400, "\$result[2]['start']", $result[2]['start']);
 		
 		//Only first element will be updated
-		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
+		$this->unit->run($result[1], 'is_array', "\$result[1]", $result[1]);
 		$this->unit->run($result[1]['start'], time(), "\$result[1]['start']", $result[1]['start']);
+		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
+		$this->unit->run($result[0]['start'], time(), "\$result[0]['start']", $result[0]['start']);
 	}
 
 	function get_challenge_progress_test() {
@@ -262,12 +265,12 @@ class Challenge_lib_test extends CI_Controller {
 		$expected_result = array(
 			'success' => TRUE, //no error checking challenges
 			'completed' => array(),
-			'in_progress' => array($this->challenge_id, $this->challenge_id2)
+			'in_progress' => array($this->challenge_id2, $this->challenge_id)
 		);
 		$this->unit->run($result, $expected_result, "\$result", $result);
 
 		//Count achieved before complete challenge
-	  	$count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
+  	$count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
 		$this->unit->run($count, 0, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
 		
 		$this->load->library('achievement_lib');
