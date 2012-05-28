@@ -52,9 +52,11 @@ define([
       var dataId = this.options.action.action_data_id;
       var criteria = this.model.get('criteria');
       
-      criteria = _.reject(criteria, function(c){
-        return c.action_data_id == dataId;
-      }, this);
+      var target = $(e.currentTarget).parent().parent().parent().parent();
+      var index = target.index();
+            
+      delete criteria[index];
+      criteria = _.compact(criteria);
       
       this.model.set('criteria', criteria).trigger('change');
       this.model.save();

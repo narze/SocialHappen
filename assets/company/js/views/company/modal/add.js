@@ -73,6 +73,15 @@ define([
           });
           
           $('ul.criteria-list', this.el).append(qrEditView.render().el);
+        }else if(type == 203){
+          var checkinEditView = new CheckinEditView({
+            model: this.model,
+            action: action,
+            vent: this.options.vent,
+            triggerModal: 'showAddModal'
+          });
+          
+          $('ul.criteria-list', this.el).append(checkinEditView.render().el);
         }
       }, this);
       
