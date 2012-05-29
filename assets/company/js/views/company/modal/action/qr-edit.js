@@ -11,7 +11,7 @@ define([
     events: {
       'click button.edit': 'showEdit',
       'click button.save': 'saveEdit',
-      'click button.cancel': 'cancelEdit',
+      'click button.remove': 'removeAction'
     },
     
     initialize: function(){
@@ -39,19 +39,25 @@ define([
       this.options.action.action_data.data.done_message = $('textarea.done_message', this.el).val();
       
       var criteria = this.model.get('criteria');
-      // var matchedAction = _.find(criteria, function(item){
-        // return item.action_data_id == dataId;
-      // });
-      // matchedAction = this.options.action;
       this.model.set('criteria', criteria).trigger('change');
-      
+      this.model.save();
       this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     
-    cancelEdit: function(e){
+    removeAction: function(e){
       e.preventDefault();
-      $('div.edit', this.el).hide();
-      this.model.trigger('change');
+      
+      var dataId = this.options.action.action_data_id;
+      var criteria = this.model.get('criteria');
+      
+      var target = $(e.currentTarget).parent().parent().parent().parent();
+      var index = target.index();
+            
+      delete criteria[index];
+      criteria = _.compact(criteria);
+      
+      this.model.set('criteria', criteria).trigger('change');
+      this.model.save();
       this.options.vent.trigger(this.options.triggerModal, this.model);
     }
     

@@ -6,9 +6,11 @@ define([
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
-  'views/company/modal/action/qr-add'
+  'views/company/modal/action/qr-add',
+  'views/company/modal/action/checkin-edit',
+  'views/company/modal/action/checkin-add'
 ], function($, _, Backbone, editTemplate, FeedbackEditView, FeedbackAddView,
-  QREditView, QRAddView){
+  QREditView, QRAddView, CheckinEditView, CheckinAddView){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
     
@@ -67,6 +69,15 @@ define([
           });
           
           $('ul.criteria-list', this.el).append(qrEditView.render().el);
+        }else if(type == 203){
+          var checkinEditView = new CheckinEditView({
+            model: this.model,
+            action: action,
+            vent: this.options.vent,
+            triggerModal: 'showEditModal'
+          });
+          
+          $('ul.criteria-list', this.el).append(checkinEditView.render().el);
         }
       }, this);
       
@@ -85,6 +96,7 @@ define([
       detail.name = $('input.challenge-name', this.el).val();
       
       this.model.set('detail', detail).trigger('change');
+      this.model.save();
       
       $('h3.edit-name', this.$el).show();
       $('div.edit-name', this.$el).hide();
@@ -103,6 +115,7 @@ define([
       detail.description = $('textarea.challenge-description', this.el).val();
       
       this.model.set('detail', detail).trigger('change');
+      this.model.save();
       
       $('div.edit-description', this.el).show();
       $('div.edit-description-field', this.el).hide();
@@ -121,17 +134,20 @@ define([
       detail.image = $('input.challenge-image', this.el).val();
       
       this.model.set('detail', detail).trigger('change');
-            
+      this.model.save();
+      
       this.options.vent.trigger('showEditModal', this.model);
     },
     
     activeChallenge: function(){
       this.model.set('active', true).trigger('change');
+      this.model.save();
       this.options.vent.trigger('showEditModal', this.model);
     },
     
     deactiveChallenge: function(){
       this.model.set('active', false).trigger('change');
+      this.model.save();
       this.options.vent.trigger('showEditModal', this.model);
     },
 
@@ -168,6 +184,16 @@ define([
     addCheckin: function(e){
       e.preventDefault();
       console.log('show add checkin');
+      
+      var checkinAddView = new CheckinAddView({
+        model: this.model,
+        vent: this.options.vent,
+        triggerModal: 'showEditModal'
+      });
+      
+      $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
+      
+      checkinAddView.showEdit();
     }
   });
   return EditModalView;

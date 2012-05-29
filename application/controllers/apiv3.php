@@ -165,21 +165,6 @@ class Apiv3 extends CI_Controller {
       if($company_id){
         $challenges = $this->challenge_lib->get(array('company_id' => (int)$company_id), $limit);
         
-        for($j = 0; $j < count($challenges); $j++){
-          $item = $challenges[$j];
-          for($i = 0; $i < count($item['criteria']); $i++){
-            $action_data_id = $item['criteria'][$i]['action_data_id'];
-            if($action_data_id){
-              $action_data = $this->action_data_lib->get_action_data($action_data_id);
-              if(isset($action_data)){
-                $action_data['_id'] = $action_data['_id']['$id'];
-                $item['criteria'][$i]['action_data'] = $action_data;
-              }
-            }
-          }
-          $challenges[$j] = $item;
-        }
-        
       }else{
         $challenges = $this->challenge_lib->get(array(), $limit);
       }
@@ -213,8 +198,9 @@ class Apiv3 extends CI_Controller {
    * create/update challenge
    */
   function saveChallenge($challenge_id = NULL){
-    $challenge = $this->input->get('challenge', TRUE); 
+    header('Content-Type: application/json', TRUE);
     
+    $challenge = $this->input->post('model', TRUE); 
     
     if(!isset($challenge) || $challenge == ''){
       $result = array('success' => false, 'result' => 'no challenge data');
@@ -301,6 +287,7 @@ class Apiv3 extends CI_Controller {
 
       if($challenge_create || $challenge_update){
         $challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($challenge_id)));
+        $challenge['_id'] = $challenge['_id']['$id'];
         echo json_encode($challenge);
       }else{
         echo json_encode(array('success' => false, 'result' =>'add/update challenge failed'));

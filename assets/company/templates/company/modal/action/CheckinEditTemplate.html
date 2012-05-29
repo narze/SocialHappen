@@ -1,5 +1,5 @@
 <div>
-  <h3>Feedback 
+  <h3>Check-in 
     <small>
       <button class="btn edit"><i class="icon-pencil"></i></button>
       <%= name %>
@@ -16,27 +16,27 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="feedback_welcome_message">Welcome Message</label>
+        <label class="control-label" for="checkin_facebook_place_id">Facebook Place ID</label>
         <div class="controls">
-          <textarea class="input-xlarge feedback_welcome_message" name="feedback_welcome_message" rows="2"><%= action_data.data.feedback_welcome_message %></textarea>
+          <input class="input-xlarge checkin_facebook_place_id" name="checkin_facebook_place_id" value="<%= action_data.data.checkin_facebook_place_id %>"></input>
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="feedback_question_message">Question Message</label>
+        <label class="control-label" for="checkin_welcome_message">Welcome Message</label>
         <div class="controls">
-          <textarea class="input-xlarge feedback_question_message" name="feedback_question_message" rows="2"><%= action_data.data.feedback_question_message %></textarea>
+          <textarea class="input-xlarge checkin_welcome_message" name="checkin_welcome_message" rows="2"><%= action_data.data.checkin_welcome_message %></textarea>
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="feedback_vote_message">Vote Message</label>
+        <label class="control-label" for="checkin_challenge_message">Challenge Message</label>
         <div class="controls">
-          <textarea class="input-xlarge feedback_vote_message" name="feedback_vote_message" rows="2"><%= action_data.data.feedback_vote_message %></textarea>
+          <textarea class="input-xlarge checkin_challenge_message" name="checkin_challenge_message" rows="2"><%= action_data.data.checkin_challenge_message %></textarea>
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="feedback_thankyou_message">Thank you Message</label>
+        <label class="control-label" for="checkin_thankyou_message">Thank you Message</label>
         <div class="controls">
-          <textarea class="input-xlarge feedback_thankyou_message" name="feedback_thankyou_message" rows="2"><%= action_data.data.feedback_thankyou_message %></textarea>
+          <textarea class="input-xlarge checkin_thankyou_message" name="checkin_thankyou_message" rows="2"><%= action_data.data.checkin_thankyou_message %></textarea>
         </div>
       </div>
     </fieldset>

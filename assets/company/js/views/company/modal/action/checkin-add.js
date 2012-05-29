@@ -2,10 +2,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/feedbackAddTemplate.html'
-], function($, _, Backbone, feedbackTemplate){
-  var FeedbackAddView = Backbone.View.extend({
-    feedbackTemplate: _.template(feedbackTemplate),
+  'text!templates/company/modal/action/CheckinAddTemplate.html'
+], function($, _, Backbone, CheckinTemplate){
+  var CheckinAddView = Backbone.View.extend({
+    CheckinTemplate: _.template(CheckinTemplate),
     tagName: 'li',
     
     events: {
@@ -19,7 +19,7 @@ define([
     },
     
     render: function () {
-      $(this.el).html(this.feedbackTemplate(this.options.action));
+      $(this.el).html(this.CheckinTemplate(this.options.action));
       
       return this;
     },
@@ -34,18 +34,18 @@ define([
       
       this.options.action = {
         query: {
-          platform_action_id: 202
+          platform_action_id: 203
         }
       };
       this.options.action.name = $('textarea.name', this.el).val();
       this.options.action.action_data = {
         data: {},
-        action_id: 202
+        action_id: 203
       }
-      this.options.action.action_data.data.feedback_welcome_message = $('textarea.feedback_welcome_message', this.el).val();
-      this.options.action.action_data.data.feedback_question_message = $('textarea.feedback_question_message', this.el).val();
-      this.options.action.action_data.data.feedback_vote_message = $('textarea.feedback_vote_message', this.el).val();
-      this.options.action.action_data.data.feedback_thankyou_message = $('textarea.feedback_thankyou_message', this.el).val();
+      this.options.action.action_data.data.checkin_facebook_place_id = $('input.checkin_facebook_place_id', this.el).val();
+      this.options.action.action_data.data.checkin_welcome_message = $('textarea.checkin_welcome_message', this.el).val();
+      this.options.action.action_data.data.checkin_challenge_message = $('textarea.checkin_challenge_message', this.el).val();
+      this.options.action.action_data.data.checkin_thankyou_message = $('textarea.checkin_thankyou_message', this.el).val();
       
       var criteria = this.model.get('criteria');
       
@@ -66,5 +66,5 @@ define([
     
     
   });
-  return FeedbackAddView;
+  return CheckinAddView;
 });

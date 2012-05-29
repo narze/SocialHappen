@@ -2,10 +2,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/feedbackEditTemplate.html'
-], function($, _, Backbone, feedbackTemplate){
-  var FeedbackEditView = Backbone.View.extend({
-    feedbackTemplate: _.template(feedbackTemplate),
+  'text!templates/company/modal/action/CheckinEditTemplate.html'
+], function($, _, Backbone, CheckinTemplate){
+  var CheckinEditView = Backbone.View.extend({
+    CheckinTemplate: _.template(CheckinTemplate),
     tagName: 'li',
     
     events: {
@@ -19,7 +19,7 @@ define([
     },
     
     render: function () {
-      $(this.el).html(this.feedbackTemplate(this.options.action));
+      $(this.el).html(this.CheckinTemplate(this.options.action));
       
       return this;
     },
@@ -35,10 +35,10 @@ define([
       var dataId = this.options.action.action_data_id;
       
       this.options.action.name = $('textarea.name', this.el).val();
-      this.options.action.action_data.data.feedback_welcome_message = $('textarea.feedback_welcome_message', this.el).val();
-      this.options.action.action_data.data.feedback_question_message = $('textarea.feedback_question_message', this.el).val();
-      this.options.action.action_data.data.feedback_vote_message = $('textarea.feedback_vote_message', this.el).val();
-      this.options.action.action_data.data.feedback_thankyou_message = $('textarea.feedback_thankyou_message', this.el).val();
+      this.options.action.action_data.data.checkin_facebook_place_id = $('input.checkin_facebook_place_id', this.el).val();
+      this.options.action.action_data.data.checkin_welcome_message = $('textarea.checkin_welcome_message', this.el).val();
+      this.options.action.action_data.data.checkin_challenge_message = $('textarea.checkin_challenge_message', this.el).val();
+      this.options.action.action_data.data.checkin_thankyou_message = $('textarea.checkin_thankyou_message', this.el).val();
       
       var criteria = this.model.get('criteria');
       this.model.set('criteria', criteria).trigger('change');
@@ -65,5 +65,5 @@ define([
     
     
   });
-  return FeedbackEditView;
+  return CheckinEditView;
 });

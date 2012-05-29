@@ -39,17 +39,18 @@ define([
       };
       this.options.action.name = $('textarea.name', this.el).val();
       this.options.action.action_data = {
-        data: {}
+        data: {},
+        action_id: 201
       }
       this.options.action.action_data.data.todo_message = $('textarea.todo_message', this.el).val();
-      this.options.action.action_data.data.todo_message = $('textarea.todo_message', this.el).val();
+      this.options.action.action_data.data.done_message = $('textarea.done_message', this.el).val();
       
       var criteria = this.model.get('criteria');
       
       criteria.push(this.options.action);
       
       this.model.set('criteria', criteria).trigger('change');
-      
+      this.model.save();
       this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     
