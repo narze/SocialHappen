@@ -35,7 +35,8 @@ define([
       this.options.action = {
         query: {
           action_id: 202
-        }
+        },
+        count: 1
       };
       this.options.action.name = $('textarea.name', this.el).val();
       this.options.action.action_data = {
