@@ -1,4 +1,4 @@
-define([
+require([
   'jquery',
   'underscore',
   'bootstrap',
@@ -21,7 +21,6 @@ define([
           $('.bar-menu>li.play').addClass('active');
         }
 
-        //barUserTemplate uses jquery.timeago
         var barUserTemplate = _.template($('#bar-user-template').html());
         $('.bar-user').replaceWith(barUserTemplate({
           user: {
@@ -41,6 +40,7 @@ define([
           type: "POST",
           dataType: "json",
           success: function(data) {
+            //barNotificationTemplate uses jquery.timeago
             var barNotificationTemplate = _.template($('#bar-notification-template').html());
             $('.bar-notification').replaceWith(barNotificationTemplate({
               baseUrl: base_url,

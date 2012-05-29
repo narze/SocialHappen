@@ -8,43 +8,49 @@
 
 <title>SocialHappen<?php  echo " - $title";?></title>
 <?php
-	$base_url = base_url();
-	foreach($styles as $one) {
-		if($one){
-			if(strrchr($one, '.') === '.css') {
-				echo '<link rel="stylesheet" type="text/css"  href="'.$one.'" />'."\n";
-			} else {
-				echo '<link rel="stylesheet" type="text/css"  href="'.$base_url.'assets/css/'.$one.'.css" />'."\n";
-			}
-		}
-	}
+  $base_url = base_url();
+  foreach($styles as $one) {
+    if($one){
+      if(strrchr($one, '.') === '.css') {
+        echo '<link rel="stylesheet" type="text/css"  href="'.$one.'" />'."\n";
+      } else {
+        echo '<link rel="stylesheet" type="text/css"  href="'.$base_url.'assets/css/'.$one.'.css" />'."\n";
+      }
+    }
+  }
 ?>
 </head>
 <?php flush(); ?>
 <body>
 <?php 
-	foreach($body_views as $view_name => $data) {
-		$this->load->view($view_name, $data);
-	}
+  foreach($body_views as $view_name => $data) {
+    $this->load->view($view_name, $data);
+  }
 
-	if(isset($requirejs)) {
-		echo '<script type="text/javascript" src="'.$base_url.'assets/bb/js/libs/require/require.js"></script>'."\n";
-		echo '<script type="text/javascript">var base_url = "'.$base_url.'";require.config({baseUrl: "'.$base_url.'assets/bb/js"});</script>'."\n";
-		echo '<script type="text/javascript" src="'.$base_url.'assets/bb/js/config.js"></script>'."\n";
-		echo '<script type="text/javascript" src="'.$base_url.'assets/bb/'.$requirejs.'.js"></script>'."\n";
-	}
+  if(isset($requirejs)) {
+    echo '<script type="text/javascript" src="'.$base_url.'assets/bb/js/libs/require/require.js"></script>'."\n";
+    echo '<script type="text/javascript">var base_url = "'.$base_url.'";require.config({baseUrl: "'.$base_url.'assets/bb/js"});</script>'."\n";
+    echo '<script type="text/javascript" src="'.$base_url.'assets/bb/js/config.js"></script>'."\n";
+    if(is_array($requirejs)) {
+      foreach($requirejs as $js) {
+        echo '<script type="text/javascript" src="'.$base_url.'assets/bb/'.$js.'.js"></script>'."\n";
+      }
+    } else {      
+      echo '<script type="text/javascript" src="'.$base_url.'assets/bb/'.$requirejs.'.js"></script>'."\n";
+    }
+  }
 
-	if(isset($scripts)) {
-		foreach($scripts as $one) {
-			if ($one) {
-				if(strrchr($one, '.') === '.js') {
-					echo '<script type="text/javascript" src="'.$one.'"></script>'."\n";
-				} else {
-					echo '<script type="text/javascript" src="'.$base_url.'assets/js/'.$one.'.js"></script>'."\n";
-				}
-			}
-		}
-	}
+  if(isset($scripts)) {
+    foreach($scripts as $one) {
+      if ($one) {
+        if(strrchr($one, '.') === '.js') {
+          echo '<script type="text/javascript" src="'.$one.'"></script>'."\n";
+        } else {
+          echo '<script type="text/javascript" src="'.$base_url.'assets/js/'.$one.'.js"></script>'."\n";
+        }
+      }
+    }
+  }
 ?>
 </body>
 </html>

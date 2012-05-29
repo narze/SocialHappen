@@ -2,9 +2,8 @@ require([
   'router',
   'vm',
   'events',
-  'shplainbar',
   'models/challenge-action'
-], function(Router, Vm, vent, Shplainbar, ChallengeActionModel){
+], function(Router, Vm, vent, ChallengeActionModel){
   
   var challengeActionModel = new ChallengeActionModel();
   // The router now has a copy of all main appview

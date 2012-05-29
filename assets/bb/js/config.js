@@ -13,8 +13,8 @@ require.config({
     endlessscroll: 'libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
     jfmfs: 'libs/jfmfs/jfmfs',
     
-    //SocialHappen libs
-    shplainbar: 'libs/sh/plain-bar',
+    //SocialHappen bar
+    shplainbar: 'plain-bar',
 
     // Require.js plugins
     text: 'libs/require/text',
