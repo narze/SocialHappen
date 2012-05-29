@@ -42,13 +42,24 @@ class Challenge_lib {
 		if(!$challenge = $this->get_one($criteria)) {
 			return FALSE;
 		}
-		if(isset($data['$set']['end']) && $data['$set']['end'] < $challenge['start']) {
-			return FALSE;
-		}
+
 		$data = array_cast_int($data);
 
 		$challenge_id = get_mongo_id($challenge);
 		//$data['$set']['hash'] = strrev(sha1($challenge_id));
+
+		//Pack data into $set
+		if(!isset($data['$set'])) {
+			$data_temp = $data;
+			$data = array(
+				'$set' => $data_temp
+			);
+		}
+
+		//Check time
+		if(isset($data['$set']['end']) && $data['$set']['end'] < $challenge['start']) {
+			return FALSE;
+		}
 
 		return $this->CI->challenge_model->update($criteria, $data);
 	}
@@ -122,9 +133,9 @@ class Challenge_lib {
 			foreach($challenge['criteria'] as $criteria){
 				$query = $criteria['query'];
 				$count = $criteria['count'];
-				if(isset($criteria['is_platform_action']) && $criteria['is_platform_action']) {
-					$query['action_id'] = $query['platform_action_id'];
-					$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+
+				$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+				if(!isset($query['app_id']) || (isset($criteria['is_platform_action']) && $criteria['is_platform_action'])) {
 					//Query in progress challenge
 					$stat_criteria = array(
 						'app_id' => 0,
@@ -132,7 +143,6 @@ class Challenge_lib {
 						$action_query => array('$gt' => 0)
 					);
 				} else {
-					$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
 					//Query in progress challenge
 					$stat_criteria = array(
 						'app_id' => $query['app_id'],
@@ -204,14 +214,14 @@ class Challenge_lib {
 		}
 
 		$criterias = $challenge['criteria'];
+		$company_id = $challenge['company_id'];
 		$data = array();
 		foreach ($criterias as $criteria) {
 			$query = $criteria['query'];
-			$target_count = $criteria['count'];
-			if(isset($criteria['is_platform_action']) && $criteria['is_platform_action']) {
-				$company_id = $challenge['company_id'];
-				$query['action_id'] = $query['platform_action_id'];
-				$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+			$target_count = isset($criteria['count']) ? $criteria['count'] : 1;
+
+			$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+			if(!isset($query['app_id']) || (isset($criteria['is_platform_action']) && $criteria['is_platform_action'])) {
 				//Query in progress challenge
 				$stat_criteria = array(
 					'app_id' => 0,
@@ -219,8 +229,6 @@ class Challenge_lib {
 					$action_query => array('$gte' => 0)
 				);
 			} else {
-				$company_id = $challenge['company_id'];
-				$action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
 				//Query in progress challenge
 				$stat_criteria = array(
 					'app_id' => $query['app_id'],

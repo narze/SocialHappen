@@ -113,9 +113,6 @@ class Player extends CI_Controller {
     $this->load->library('user_lib');
     $user = $this->user_lib->get_user($user_id);
     if(isset($user['challenge'])) {
-      // echo '<pre>';
-      // var_dump($user['challenge']);
-      // echo '</pre>';
       foreach($user['challenge'] as &$challenge) {
         $challenge = new MongoId($challenge);
       } unset($challenge);
@@ -134,16 +131,16 @@ class Player extends CI_Controller {
   function challenge($challenge_hash) {
     $this->load->model('challenge_model');
     if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-      //echo '<pre>'; var_dump($challenge); echo '</pre>';
       $challenge_id = get_mongo_id($challenge);
       $this->load->library('user_lib');
       $user_id = $this->socialhappen->get_user_id();
       $user = $this->user_lib->get_user($user_id);
+
       $player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
 
 
       //challenge_progress
-      if($user_id) {
+      if($player_challenging) {
         $this->load->library('challenge_lib');
         $challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
         $challenge_done = TRUE;
@@ -162,15 +159,21 @@ class Player extends CI_Controller {
       }
 
       //Challenge Duration
-      if($current_user = $this->socialhappen->get_user($user_id)) {
-        $this->load->library('timezone_lib');
-        $challenge['start_time'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $current_user['user_timezone_offset']);
-        $challenge['end_time'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['end']), $current_user['user_timezone_offset']);
+      if(isset($challenge['start']) && isset($challenge['end'])) {
+        if($current_user = $this->socialhappen->get_user($user_id)) {
+          $this->load->library('timezone_lib');
+          $challenge['start_time'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $current_user['user_timezone_offset']);
+          $challenge['end_time'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['end']), $current_user['user_timezone_offset']);
 
+        } else {
+          $challenge['start_time'] = date('Y-m-d H:i:s', $challenge['start']);
+          $challenge['end_time'] = date('Y-m-d H:i:s', $challenge['end']);
+        }
       } else {
-        $challenge['start_time'] = date('Y-m-d H:i:s', $challenge['start']);
-        $challenge['end_time'] = date('Y-m-d H:i:s', $challenge['end']);
+        $challenge['start_time'] = NULL;
+        $challenge['end_time'] = NULL;
       }
+      
 
       $this->load->vars(
         array(
@@ -454,9 +457,6 @@ class Player extends CI_Controller {
     $this->load->model('challenge_model');
     if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
       if(isset($challenge['criteria'][$action])) {
-        // echo '<pre>';
-        // var_dump($challenge['criteria'][$action]);
-        // echo '</pre>';
         if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
           $this->load->library('action_data_lib');
           $action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
@@ -480,9 +480,6 @@ class Player extends CI_Controller {
     $this->load->model('challenge_model');
     if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
       if(isset($challenge['criteria'][$action])) {
-        // echo '<pre>';
-        // var_dump($challenge['criteria'][$action]);
-        // echo '</pre>';
         if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
           $this->load->library('action_data_lib');
           // $action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);

@@ -476,9 +476,7 @@ $(function(){
 			var page_id = $('#select_page>select[name="select_page"]').val();
 			var app_id = $('#select_app>select[name="select_app"]').val();
 			var action_id = $('#select_action>select[name="select_action"]').val();
-			var platform_action_id = $('#select_platform_action>select[name="select_platform_action"]').val();
-			var count = $('#count').val();
-			if(name && ((page_id && app_id && action_id) || platform_action_id) && count){
+			if(name && action_id) && count){
 				
 				var curr_nth = $('.criteria[data-nth]:last').data('nth');
 				var next_nth = 0;
@@ -493,11 +491,9 @@ $(function(){
 				new_criteria.find('.page_id').val(page_id).attr('name', 'criteria['+next_nth+'][query][page_id]');
 				new_criteria.find('.app_id').val(app_id).attr('name', 'criteria['+next_nth+'][query][app_id]');
 				new_criteria.find('.action_id').val(action_id).attr('name', 'criteria['+next_nth+'][query][action_id]');
-				new_criteria.find('.platform_action_id').val(platform_action_id).attr('name', 'criteria['+next_nth+'][query][platform_action_id]');
-
-				//TO-DO : call ajax_get_platform_action : require platform_action_id
+				//TO-DO : call ajax_get_platform_action : require action_id
 				$.get(base_url+'settings/page_challenge/ajax_get_platform_action/',
-					{ platform_action_id: platform_action_id },
+					{ action_id: action_id },
 					function(data) {		
 						custom_template = data;
 						custom_template = custom_template.replace(/{next_nth}/g, next_nth);

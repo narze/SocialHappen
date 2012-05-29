@@ -44,7 +44,7 @@ class Challenge_model extends CI_Model {
 	function update($query, $data)
 	{
 		$query = array_cast_int($query, $this->int_values);
-		$data = array_cast_int($data, $this->int_values);
+
 		try	{
 			return $this->collection->update($query, $data, array('safe' => TRUE));
 		} catch(MongoCursorException $e){

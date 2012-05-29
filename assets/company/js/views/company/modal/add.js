@@ -54,7 +54,7 @@ define([
       var criteria = this.model.get('criteria');
       
       _.each(criteria, function(action){
-        var type = action.query.platform_action_id;
+        var type = action.query.action_id;
         if(type == 202){
           var feedbackEditView = new FeedbackEditView({
             model: this.model,

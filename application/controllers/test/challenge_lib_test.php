@@ -77,7 +77,7 @@ class Challenge_lib_test extends CI_Controller {
 			'criteria' => array(
 				array(
 					'name' => 'C3',
-					'query' => array('platform_action_id' => 201),
+					'query' => array('action_id' => 201),
 					'count' => 2,
 					'is_platform_action' => TRUE
 				)

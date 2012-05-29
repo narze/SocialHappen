@@ -34,7 +34,7 @@ define([
       
       this.options.action = {
         query: {
-          platform_action_id: 203
+          action_id: 203
         }
       };
       this.options.action.name = $('textarea.name', this.el).val();
@@ -52,7 +52,7 @@ define([
       criteria.push(this.options.action);
       
       this.model.set('criteria', criteria).trigger('change');
-      this.model.save();
+      // this.model.save();
       this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     

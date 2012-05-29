@@ -209,7 +209,6 @@ class Apiv3 extends CI_Controller {
       $this->load->library('action_data_lib');
 
       $challenge = json_decode($challenge, TRUE);
-      $action_data_array = $challenge['criteria'];
       
       if(!is_array($challenge)){
         echo json_encode(array('success' => false, 'result' =>'data error'));
@@ -218,7 +217,7 @@ class Apiv3 extends CI_Controller {
         
 
       //add/update action_data
-      foreach($action_data_array as &$action_data_object){
+      foreach($challenge['criteria'] as &$action_data_object){
         $action_data_create_flag = true;
         $action_data_attr = $action_data_object['action_data'];
 

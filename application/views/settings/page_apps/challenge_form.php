@@ -92,10 +92,10 @@
 									?>" /><br />
 								Or use Platform action
 							</div>
-							<input class="platform_action_id" type="text" name="criteria[<?php echo $nth;?>][query][platform_action_id]" 
+							<input class="action_id" type="text" name="criteria[<?php echo $nth;?>][query][action_id]" 
 								value="<?php 
-									echo set_value('criteria['.$nth.'][query][platform_action_id]',
-										issetor($criteria['query']['platform_action_id']));
+									echo set_value('criteria['.$nth.'][query][action_id]',
+										issetor($criteria['query']['action_id']));
 								?>" /><br />
 							
 							Count
@@ -120,8 +120,8 @@
 							Query : action_id
 							<input class="action_id" type="text" /><br />
 						</div>
-						Query : platform_action_id
-						<input class="platform_action_id" type="text" /><br />
+						Query : action_id
+						<input class="action_id" type="text" /><br />
 						Count
 						<input class="count" type="text" /><br />
 						<div class="action_data-div">//Custom fields for this action_id</div>

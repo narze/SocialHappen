@@ -19,8 +19,10 @@
 					<p>
 						<img class="challenge-image" src="<?php echo $challenge['detail']['image'] ? $challenge['detail']['image'] : base_url('assets/images/default/challenge.png'); ?>" alt="<?php echo $challenge['detail']['name'];?>">
 					</p>
-					<p>Start <?php echo $challenge['start_time']; ?></p>
-					<p>End <?php echo $challenge['end_time']; ?></p>
+					<?php
+						if($challenge['start_time']) echo "<p>Start {$challenge['start_time']}</p>";
+						if($challenge['end_time']) echo "<p>End {$challenge['end_time']}</p>";
+					?>
 					<p class="challenge-description "><?php echo $challenge['detail']['description']; ?></p>
 				</div>
 
@@ -65,9 +67,9 @@
 												<?php if($challenge_progress[$key]['action_done']) : ?>
 													<span class="badge badge-success">Done</span>
 												<?php else : ?>
-													<span class="badge">
+													<!-- <span class="badge">
 														<?php echo $challenge_progress[$key]['action_count'].'/'.$criteria['count'];?>
-													</span>
+													</span> -->
 												<?php endif; ?>
 											</div>
 

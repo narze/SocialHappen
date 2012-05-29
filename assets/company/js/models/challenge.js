@@ -14,7 +14,8 @@ define([
       },
       hash: null,
       criteria: [],
-      active: false
+      active: false,
+      company_id: 0
     },
     initialize: function(){
 

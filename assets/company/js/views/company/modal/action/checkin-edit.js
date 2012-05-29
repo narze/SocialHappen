@@ -42,7 +42,7 @@ define([
       
       var criteria = this.model.get('criteria');
       this.model.set('criteria', criteria).trigger('change');
-      this.model.save();
+      // this.model.save();
       this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     
@@ -59,7 +59,7 @@ define([
       criteria = _.compact(criteria);
       
       this.model.set('criteria', criteria).trigger('change');
-      this.model.save();
+      // this.model.save();
       this.options.vent.trigger(this.options.triggerModal, this.model);
     }
     

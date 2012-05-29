@@ -136,14 +136,14 @@ class Page_challenge extends CI_Controller {
 				foreach($criteria as &$one) {
 					$one['query'] = array_cast_int($one['query']);
 					$one['count'] = (int) $one['count'];
-					if($one['query']['platform_action_id']) {
+					if($one['query']['action_id'] > 200) { //TODO : change platform action indicator
 						$one['is_platform_action'] = TRUE;
 						unset($one['query']['page_id']);
 						unset($one['query']['app_id']);
 						unset($one['query']['action_id']);
 						if(!$update) {
 							
-							$action_data_id = $this->action_data_lib->add_action_data($one['query']['platform_action_id'],$action_data[$index]);
+							$action_data_id = $this->action_data_lib->add_action_data($one['query']['action_id'],$action_data[$index]);
 							$one['action_data_id'] = $action_data_id;
 
 						}
@@ -277,10 +277,10 @@ class Page_challenge extends CI_Controller {
 	function ajax_get_platform_action() {
 		if($this->input->is_ajax_request()) {
 			$this->load->helper('form');
-			$platform_action_id = $this->input->get('platform_action_id');
+			$action_id = $this->input->get('action_id');
 			$this->load->library('action_data_lib');
 
-			$custom_fields_view = $this->action_data_lib->get_action_data_custom_form_view($platform_action_id);
+			$custom_fields_view = $this->action_data_lib->get_action_data_custom_form_view($action_id);
 
 			if($custom_fields_view)
 				echo $custom_fields_view;
