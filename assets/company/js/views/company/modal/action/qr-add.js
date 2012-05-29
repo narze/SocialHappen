@@ -50,7 +50,9 @@ define([
       criteria.push(this.options.action);
       
       this.model.set('criteria', criteria).trigger('change');
-      // this.model.save();
+      if(this.options.save){
+        this.model.save();
+      }
       this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     

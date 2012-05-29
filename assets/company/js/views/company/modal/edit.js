@@ -56,7 +56,8 @@ define([
             model: this.model,
             action: action,
             vent: this.options.vent,
-            triggerModal: 'showEditModal'
+            triggerModal: 'showEditModal',
+            save: true
           });
           
           $('ul.criteria-list', this.el).append(feedbackEditView.render().el);
@@ -65,7 +66,8 @@ define([
             model: this.model,
             action: action,
             vent: this.options.vent,
-            triggerModal: 'showEditModal'
+            triggerModal: 'showEditModal',
+            save: true
           });
           
           $('ul.criteria-list', this.el).append(qrEditView.render().el);
@@ -74,7 +76,8 @@ define([
             model: this.model,
             action: action,
             vent: this.options.vent,
-            triggerModal: 'showEditModal'
+            triggerModal: 'showEditModal',
+            save: true
           });
           
           $('ul.criteria-list', this.el).append(checkinEditView.render().el);
@@ -158,7 +161,8 @@ define([
       var feedbackAddView = new FeedbackAddView({
         model: this.model,
         vent: this.options.vent,
-        triggerModal: 'showEditModal'
+        triggerModal: 'showEditModal',
+        save: true
       });
       
       $('ul.criteria-list', this.el).prepend(feedbackAddView.render().el);
@@ -173,7 +177,8 @@ define([
       var qrAddView = new QRAddView({
         model: this.model,
         vent: this.options.vent,
-        triggerModal: 'showEditModal'
+        triggerModal: 'showEditModal',
+        save: true
       });
       
       $('ul.criteria-list', this.el).prepend(qrAddView.render().el);
@@ -188,7 +193,8 @@ define([
       var checkinAddView = new CheckinAddView({
         model: this.model,
         vent: this.options.vent,
-        triggerModal: 'showEditModal'
+        triggerModal: 'showEditModal',
+        save: true
       });
       
       $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
