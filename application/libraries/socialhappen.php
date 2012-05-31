@@ -1147,10 +1147,14 @@ class SocialHappen{
 	}
 
 	function get_next_url() {
-		if($next = $this->CI->session->userdata('next_url')) {
+		if($next = $this->CI->input->get('next')) {
 			return $this->strip_next_from_url($next);
 		}
-	 	return $this->CI->input->get('next');
+
+		//Get from session and then clear the session
+		$next = $this->CI->session->userdata('next_url');
+		$this->CI->session->unset_userdata('next_url');
+	 	return $next;
 	}
 
 	function update_session() {

@@ -201,7 +201,7 @@ class QR extends CI_Controller {
       }
 
       //Add challenge url to redirect back
-      $action_data['challenge_url'] = base_url('player/challenge/'.$challenge['hash']);
+      $action_data['challenge_url'] = base_url('player/challenge/'.$challenge['hash'].'?action_done=1');
 
       // we may render mobile web here
       $template = array(
