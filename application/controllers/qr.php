@@ -16,9 +16,9 @@ class QR extends CI_Controller {
 		$config['cachedir']     = ''; //string, the default is application/cache/
 		$config['errorlog']     = ''; //string, the default is application/logs/
 		$config['quality']      = TRUE; //boolean, the default is true
-		$config['size']         = ''; //integer, the default is 1024
+		$config['size']         = 1024; //integer, the default is 1024
 
-		$this->load->library('ciqrcode', NULL, $config);
+		$this->load->library('ciqrcode', $config);
 
 		// $this->ciqrcode->initialize($config);
 
