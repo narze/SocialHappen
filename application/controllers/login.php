@@ -12,7 +12,7 @@ class Login extends CI_Controller {
    * Login page
    */
   function index() {
-    $next = $this->socialhappen->strip_next_from_url($this->input->get('next'));
+    $next = $this->socialhappen->get_next_url();
     if($user = $this->socialhappen->get_user()) {
       //Logged in already
       if($next) {

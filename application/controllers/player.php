@@ -6,6 +6,10 @@ class Player extends CI_Controller {
     parent::__construct();
     $this->presalt = 'tH!s!$Pr3Za|t';
     $this->postsalt = 'di#!zp0s+s4LT';
+
+    if($next = $this->input->get('next')) {
+      $this->socialhappen->set_next_url($next);
+    }
   }
 
   /**
@@ -206,7 +210,8 @@ class Player extends CI_Controller {
         'player/challenge_view' => array(),
         'common/vars' => array(
           'vars' => array(
-            'base_url' => base_url()
+            'base_url' => base_url(),
+            'next' => $this->socialhappen->get_next_url()
           )
         )
       ),
@@ -376,17 +381,21 @@ class Player extends CI_Controller {
    */
   function join_challenge($challenge_hash = NULL) {
     $this->load->library('challenge_lib');
-    if($challenge = $this->challenge_lib->get_by_hash($challenge_hash)) {
-      $user_id = $this->socialhappen->get_user_id();
-      $this->load->library('user_lib');
-      if($this->user_lib->join_challenge($user_id, $challenge_hash)) {
-        redirect('player/challenge/'.$challenge_hash);
-      } else {
-        echo 'Challenge join error';
-      }
-    } else {
-      show_error('Challenge Invalid', 404);
+    if(!$challenge = $this->challenge_lib->get_by_hash($challenge_hash)) {
+      return show_error('Challenge Invalid', 404);
     }
+
+    $user_id = $this->socialhappen->get_user_id();
+    $this->load->library('user_lib');
+    if(!$this->user_lib->join_challenge($user_id, $challenge_hash)) {
+      return show_error('Challenge Error', 404);
+    }
+
+    if($next = $this->socialhappen->get_next_url()) {
+      return redirect($next);
+    }
+    
+    redirect('player/challenge/'.$challenge_hash);   
   }
 
   /**

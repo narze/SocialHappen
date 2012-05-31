@@ -1137,17 +1137,20 @@ class SocialHappen{
 	}
 
 	function strip_next_from_url($url = NULL) {
+		//Remove next=...& if exists
 		return preg_replace('/(?:&|(\?))' . 'next' . '=[^&]*(?(1)&|)?/i', "$1", $url);
 	}
 
 	function set_next_url($url = NULL) {
-		//Remove next=...& if exists
-  	$url = preg_replace('/(?:&|(\?))' . 'next' . '=[^&]*(?(1)&|)?/i', "$1", $url);
+  	$url = $this->strip_next_from_url($url);
 		return $this->CI->session->set_userdata('next_url', $url);
 	}
 
 	function get_next_url() {
-		return $this->CI->session->userdata('next_url');
+		if($next = $this->CI->session->userdata('next_url')) {
+			return $this->strip_next_from_url($next);
+		}
+	 	return $this->CI->input->get('next');
 	}
 
 	function update_session() {
