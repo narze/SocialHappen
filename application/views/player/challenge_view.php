@@ -32,17 +32,10 @@
 
 				<div class="row-fluid">
 
-					<?php if(!$player_logged_in) : 
-						$next_url = "player/challenge/{$challenge_hash}"; ?>
+					<?php if(!$player_logged_in || !$player_challenging) : ?>
 
-						<div id="login">
-							<p id="login-message">Please Login SocialHappen First</p>
-							<a href="<?php echo base_url().'login?next='.urlencode($next_url);?>" class="btn btn-primary" id="login-btn">Login</a>
-						</div>
-
-					<?php elseif(!$player_challenging) : ?>
-
-						<a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" id="join-challenge">Accept challenge</a>
+						<!-- <a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" id="join-challenge">Accept challenge</a> -->
+						<a id="join-challenge" data-url="<?php echo 'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" style="display: none;">Accept challenge</a>
 					
 					<?php else : //player logged in and is challenging ?>
 						<!-- Challenge Actions -->

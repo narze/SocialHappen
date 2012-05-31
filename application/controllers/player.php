@@ -192,38 +192,41 @@ class Player extends CI_Controller {
       );
 
       $template = array(
-      'title' => $challenge['detail']['name'],
-      'styles' => array(
-        'common/bootstrap',
-        'common/bootstrap-responsive',
-        'common/bar',
-        'common/player',
-        'player/challenge'
-      ),
-      'body_views' => array(
-        'common/fb_root' => array(
-          'facebook_app_id' => $this->config->item('facebook_app_id'),
-          'facebook_channel_url' => $this->facebook->channel_url,
-          'facebook_app_scope' => $this->config->item('facebook_player_scope')
+        'title' => $challenge['detail']['name'],
+        'styles' => array(
+          'common/bootstrap',
+          'common/bootstrap-responsive',
+          'common/bar',
+          'common/player',
+          'player/challenge'
         ),
-        'bar/plain_bar_view' => array(),
-        'player/challenge_view' => array(),
-        'common/vars' => array(
-          'vars' => array(
-            'base_url' => base_url(),
-            'next' => $this->socialhappen->get_next_url()
+        'body_views' => array(
+          'common/fb_root' => array(
+            'facebook_app_id' => $this->config->item('facebook_app_id'),
+            'facebook_channel_url' => $this->facebook->channel_url,
+            'facebook_app_scope' => $this->config->item('facebook_player_scope')
+          ),
+          'bar/plain_bar_view' => array(),
+          'player/challenge_view' => array(),
+          'common/vars' => array(
+            'vars' => array(
+              'base_url' => base_url()
+            )
           )
-        )
-      ),
-      'requirejs' => array('js/plain-bar')
-    );
+        ),
+        'scripts' => array(
+          'common/jquery.min',
+          'player/challenge'
+        ),
+        'requirejs' => array('js/plain-bar')
+      );
 
-    //If challenge is not done, player can do challenges
-    if(!$challenge_done) {
-      $template['requirejs'][] = 'js/player-challenge';
-    }
+      //If challenge is not done, player can do challenges
+      if(!$challenge_done) {
+        $template['requirejs'][] = 'js/player-challenge';
+      }
 
-    $this->load->view('common/template', $template);
+      $this->load->view('common/template', $template);
     } else {
       show_error('Challenge Invalid', 404);
     }
@@ -385,7 +388,10 @@ class Player extends CI_Controller {
       return show_error('Challenge Invalid', 404);
     }
 
-    $user_id = $this->socialhappen->get_user_id();
+    if(!$user_id = $this->socialhappen->get_user_id()) {
+      return redirect('player/challenge/'.$challenge_hash);
+    }
+
     $this->load->library('user_lib');
     if(!$this->user_lib->join_challenge($user_id, $challenge_hash)) {
       return show_error('Challenge Error', 404);
@@ -394,7 +400,7 @@ class Player extends CI_Controller {
     if($next = $this->socialhappen->get_next_url()) {
       return redirect($next);
     }
-    
+
     redirect('player/challenge/'.$challenge_hash);   
   }
 
