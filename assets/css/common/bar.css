@@ -190,6 +190,9 @@ a:hover {
     line-height: 25px;
   }
 
+.center-or {
+  margin-bottom: 20px;
+}
 /* Responsive
 -------------------------------------------------- */
 @media (max-width: 480px) {

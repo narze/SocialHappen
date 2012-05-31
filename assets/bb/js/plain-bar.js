@@ -60,7 +60,8 @@ require([
         }));
         $('.btn-login').click(function(e) {
           e.preventDefault();
-          window.location = base_url + 'login?next=' + window.location.href;
+          // window.location = base_url + 'login?next=' + window.location.href;
+          $('#bar-login-modal').modal();
         });
       }
     }

@@ -18,6 +18,48 @@
   </div>
 </div>
 
+<div class="modal hide fade" id="bar-login-modal">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <h3>Login SocialHappen</h3>
+  </div>
+
+  <div class="modal-body">
+    <div id="login">
+      <div class="row-fluid text-center">
+        <div class="well">
+          <button id="facebook-connect"
+            class="btn btn-info" data-toggle="button" 
+            onclick="fbLogin(fbLoginResult)"
+            data-redirect="">
+              Connect with facebook
+          </button>
+        </div>
+      </div>
+      <div class="row-fluid"><center class="center-or">or<center></div>
+      <div class="row-fluid">
+        <div class="well">
+          <form method="POST" action="login">
+            
+            <div class="control-group">
+              <label for="email">Email</label>
+              <input id="email" type="text" name="email" maxlength="100" value=""  />
+            </div>
+
+            <div class="control-group">
+              <label for="password">Password</label>
+              <input id="password" type="password" name="password" maxlength="50" value=""  />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary">Login</a><span> or </span><a href="#" class="btn">Signup SocialHappen</a>
+  </div>
+</div>
+
 <script type="text/template" id="bar-login-template">
   <li class="login">
     <a class="btn-login" href="<%= baseUrl %>login">Login SocialHappen</a>
