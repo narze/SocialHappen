@@ -4,6 +4,12 @@ require([
   'bootstrap',
   'timeago'
 ], function($, _, bootstrap, timeago) {
+  window.fbLoginResult = function(success) {
+    if(success) {
+      window.location = base_url + 'login?next=' + window.location.href;
+    }
+  }
+
   $.ajax({
     url: base_url + 'apiv3/user',
     type: "POST",

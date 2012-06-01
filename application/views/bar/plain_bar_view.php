@@ -24,23 +24,23 @@
     <h3>Login SocialHappen</h3>
   </div>
 
-  <div class="modal-body">
-    <div id="login">
-      <div class="row-fluid text-center">
-        <div class="well">
-          <button id="facebook-connect"
-            class="btn btn-info" data-toggle="button" 
-            onclick="fbLogin(fbLoginResult)"
-            data-redirect="">
-              Connect with facebook
-          </button>
+  <form method="POST" action="<?php echo base_url('login');?>">
+    <div class="modal-body">
+      <div id="login">
+        <div class="row-fluid text-center">
+          <div class="well">
+            <button id="facebook-connect"
+              class="btn btn-info" data-toggle="button" 
+              onclick="fbLogin(fbLoginResult)"
+              data-redirect="">
+                Connect with facebook
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="row-fluid"><center class="center-or">or<center></div>
-      <div class="row-fluid">
-        <div class="well">
-          <form method="POST" action="login">
-            
+        <div class="row-fluid"><center class="center-or">or<center></div>
+        <div class="row-fluid">
+          <div class="well">
+
             <div class="control-group">
               <label for="email">Email</label>
               <input id="email" type="text" name="email" maxlength="100" value=""  />
@@ -50,14 +50,15 @@
               <label for="password">Password</label>
               <input id="password" type="password" name="password" maxlength="50" value=""  />
             </div>
-          </form>
+            
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn btn-primary">Login</a><span> or </span><a href="#" class="btn">Signup SocialHappen</a>
-  </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Login</button><span> or </span><a href="<?php echo base_url('signup');?>" class="btn">Signup SocialHappen</a>
+    </div>
+  </form>
 </div>
 
 <script type="text/template" id="bar-login-template">
