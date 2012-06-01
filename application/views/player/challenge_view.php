@@ -93,3 +93,19 @@
 	</div>
 </div>
 
+<div class="modal hide fade" id="challenge-complete-modal">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <h3>Challenge Complete!</h3>
+  </div>
+
+  <div class="modal-body">
+    <div id="login">
+      <div class="row-fluid text-center">
+        <div class="well">
+          <div>Congrats!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

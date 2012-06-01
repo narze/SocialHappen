@@ -142,7 +142,7 @@ class Player extends CI_Controller {
 
       $player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
 
-
+      $action_done = $this->input->get('action_done') && $user_id;
       //challenge_progress
       if($player_challenging) {
         $this->load->library('challenge_lib');
@@ -210,7 +210,9 @@ class Player extends CI_Controller {
           'player/challenge_view' => array(),
           'common/vars' => array(
             'vars' => array(
-              'base_url' => base_url()
+              'base_url' => base_url(),
+              'challenge_done' => $challenge_done ? 1 : 0,
+              'action_done' => $action_done ? 1 : 0
             )
           )
         ),
@@ -224,6 +226,9 @@ class Player extends CI_Controller {
       //If challenge is not done, player can do challenges
       if(!$challenge_done) {
         $template['requirejs'][] = 'js/player-challenge';
+      } else if($action_done) {
+        //If last action is done
+        $template['requirejs'][] = 'js/player-challenge-complete';
       }
 
       $this->load->view('common/template', $template);

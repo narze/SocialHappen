@@ -2,7 +2,9 @@ require([
   'router',
   'vm',
   'events',
-  'models/challenge-action'
+  'models/challenge-action',
+  'jquery',
+  'bootstrap'
 ], function(Router, Vm, vent, ChallengeActionModel){
   
   var challengeActionModel = new ChallengeActionModel();
