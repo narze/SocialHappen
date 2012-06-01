@@ -1,17 +1,19 @@
 <div class="container-fluid">
-  <div id="login" style="display:none;">
+  <div id="login">
     <div class="row-fluid text-center">
       <div class="span4">&nbsp;</div>
       <div class="span4 well">
-        <button id="facebook-connect"
-          class="btn btn-info" data-toggle="button" 
-          onclick="fbLogin(fbLoginResult)"
-          data-redirect="<?php echo base_url('signup/facebook'.$next);?>">
-            Connect with facebook
-        </button>
+        <span class="facebook-connect" style="display:none;">
+          <button id="facebook-connect"
+            class="btn btn-info" data-toggle="button" 
+            onclick="fbLogin(fbLoginResult)"
+            data-redirect="<?php echo base_url('signup/facebook'.$next);?>">
+              Connect with facebook
+          </button>
+        </span>
       </div>
     </div>
-    <div class="row-fluid"><center>or<center></div>
+    <div class="row-fluid"><center class="center-or">or<center></div>
     <div class="row-fluid">
       <div class="span4">&nbsp;</div>
 
@@ -47,13 +49,9 @@
         </div>
 
         <div class="control-group">
-          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-primary">Login</button><span> or </span><a href="<?php echo base_url('signup');?>" class="btn">Signup SocialHappen</a>
         </div>
       <?php echo form_close(); ?>
-    </div>
-    <div class="row-fluid">
-      <div class="span4">&nbsp;</div>
-      <div class="span4">or <?php echo anchor('signup'.$next, 'Signup Socialhappen'); ?></div>
     </div>
   </div>
 </div>
@@ -61,7 +59,7 @@
 <script type="text/javascript">
   //When FB init, show signup buttons
   checkFBConnected(function(){
-    $('#login').show();
+    $('.facebook-connect').show();
   });
 
   //redirect when connected facebook

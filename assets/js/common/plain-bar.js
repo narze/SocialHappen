@@ -35,6 +35,7 @@ $(function() {
           type: "POST",
           dataType: "json",
           success: function(data) {
+            //barNotificationTemplate uses jquery.timeago
             var barNotificationTemplate = _.template($('#bar-notification-template').html());
             $('.bar-notification').replaceWith(barNotificationTemplate({
               baseUrl: base_url,
@@ -55,10 +56,9 @@ $(function() {
         $('.btn-login').click(function(e) {
           e.preventDefault();
           window.location = base_url + 'login?next=' + window.location.href;
+          // $('#bar-login-modal').modal();
         });
       }
     }
   });
-
-
 });

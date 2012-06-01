@@ -38,6 +38,7 @@ class Login extends CI_Controller {
 
       $this->load->vars('next', $next ? '?next='.urlencode($next) : '/');
       if ($this->form_validation->run() == FALSE) {
+
         $template = array(
           'title' => 'Login',
           'vars' => array(),
@@ -45,7 +46,9 @@ class Login extends CI_Controller {
             'https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js',
             'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
             'common/jquery.timeago',
-            'common/bootstrap.min'
+            'common/bootstrap.min',
+            'common/underscore-min',
+            'common/plain-bar'
           ),
           'styles' => array(
             'common/bootstrap',
@@ -62,6 +65,11 @@ class Login extends CI_Controller {
             'bar/plain_bar_view' => array(),
             'login/login_view' => array(
               'next' => $next ? "?next={$next}" : ''
+            ),
+            'common/vars' => array(
+              'vars' => array(
+                'base_url' => base_url()
+              )
             )
           )
         );
