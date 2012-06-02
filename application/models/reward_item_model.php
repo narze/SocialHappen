@@ -94,6 +94,19 @@
 	}
 	
 	/**
+	 * Get one reward item
+	 * @param $criteria
+	 * @author Manassarn M.
+	 */
+	function get_one($criteria = NULL){
+		if(isset($criteria['criteria_id'])){
+			$criteria['criteria_id'] = (int) $criteria['criteria_id'];
+		}
+		$result = $this->reward_item->findOne($criteria);
+		return $result;
+	}
+	
+	/**
 	 * Add reward by campaign_id
 	 * @param $reward_item = array(
 	 *		'name' => <name>,
@@ -303,6 +316,35 @@
     } else {
       return FALSE;
     }
+  }
+
+  /**
+   * Add challenge reward
+   */
+  function add_challenge_reward($input = array()) {
+  	if(!issetor($input['name']) || !issetor($input['image'])
+  		|| !issetor($input['value']) || !issetor($input['challenge_id'])){
+			return FALSE;
+		}
+
+		if(!isset($input['status']) || !in_array($input['status'], array('draft', 'published', 'cancelled'))){
+			$input['status'] = 'draft';
+		}
+
+		if(!isset($input['challenge_id'])) {
+			$input['challenge_id'] = NULL;
+		}
+		
+		$input['value'] = (int) $input['value'];
+		$input['user_list'] = array();
+		$input['description'] = issetor($input['description']);
+		try	{
+			$this->reward_item->insert($input, array('safe' => TRUE));
+			return get_mongo_id($input);
+		} catch(MongoCursorException $e){
+			log_message('error', 'Mongo error : '. $e);
+			return FALSE;
+		}
   }
 }
 

@@ -392,6 +392,14 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result, FALSE, "\$result", $result);
 	}
 
+	function get_one_test(){
+		$criteria = array(
+			'criteria_type' => 'campaign',
+			'criteria_id' => '2');
+		$result = $this->reward_item->get_one($criteria);
+		$this->unit->run($result['name'], 'new_name', "\$result['name']", $result['name']);
+	}
+
 	function get_test(){
 		$criteria = array(
 			'criteria_type' => 'campaign',
@@ -458,6 +466,32 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result, FALSE, "\$result", $result);
 		$count = $this->reward_item->count_all();
 		$this->unit->run($count, 0, 'count', $count);
+	}
+
+	function add_challenge_reward_test(){
+		$name = 'Chalenge reward';
+		$status = 'published';
+		$challenge_id = 'asdf';
+		$image = base_url().'assets/images/cam-icon.png';
+		$value = '200THB';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description');
+		
+		$this->reward_item_4 = $result = $this->reward_item->add_challenge_reward($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 1, 'count', $count);
+
+
+		$challenge_id = NULL;
+		$input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description');
+		
+		$result = $this->reward_item->add_challenge_reward($input);
+		$this->unit->run($result, 'is_false', "\$result", $result);
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 1, 'count', $count);
 	}
 }
 /* End of file reward_item_model_test.php */

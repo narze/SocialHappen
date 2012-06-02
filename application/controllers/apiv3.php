@@ -308,6 +308,32 @@ class Apiv3 extends CI_Controller {
 
   }
 
+  /**
+   * Test challenge reward
+   */
+  function add_sample_challenge_reward($challenge_id = NULL) {
+    if(!$challenge_id) {
+      echo array();
+      return;
+    }
+
+    $this->load->model('reward_item_model');
+    $reward = array(
+      'name' => 'Sample reward',
+      'image' => 'http://www.tlcthai.com/backoffice/upload_images2/20091229100903.jpg',
+      'value' => 200000000,
+      'challenge_id' => $challenge_id,
+      'status' => 'published',
+      'descript' => 'กินชมพู่ฟรีทั้งปี'
+    );
+    
+    if($reward_id = $this->reward_item_model->add_challenge_reward($reward)) {
+      echo json_encode(array('success' => TRUE));
+      return;
+    }
+
+    echo json_encode(array('success' => FALSE));
+  }
 }
 
 

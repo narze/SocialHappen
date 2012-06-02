@@ -106,6 +106,11 @@
           <h2>Congrats!</h2>
           <?php if($challenge_reward) : ?>
           	<p> You got this reward : </p>
+            <div>
+              <?php echo '<pre>';
+              var_dump($challenge_reward);
+              echo '</pre>';?>
+            </div>
           	<?php //@todo - display reward ;?>
           <?php else : ?>
           	<p> This challenge has no reward </p>

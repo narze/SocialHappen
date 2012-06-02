@@ -180,8 +180,9 @@ class Player extends CI_Controller {
       
       //Challenge reward
       $challenge_reward = NULL;
-      if(isset($challenge['reward_item_id'])) {
-        //@todo - Get reward from reward_item_id
+      $this->load->model('reward_item_model');
+      if($challenge_reward = $this->reward_item_model->get_one(array('challenge_id' => $challenge_id))) {
+        //@todo - Process challenge reward
       }
 
       $this->load->vars(
