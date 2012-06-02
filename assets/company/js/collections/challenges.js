@@ -14,7 +14,12 @@ define([
     },
     
     loadMore: function(callback){
-      this.last_id = this.last().id;
+      if(this.length == 0){
+        this.last_id = null;
+      }else{
+        this.last_id = this.last().id;
+      }
+      
       
       this.fetch({
         add: true,
@@ -45,7 +50,7 @@ define([
       
       // Ensure that we have a URL.
       if (!options.url) {
-        if(this.last_id.length > 0 && window.Company.companyId){
+        if(this.last_id && this.last_id.length > 0 && window.Company.companyId){
           params.url = window.Company.BASE_URL + 'apiv3/challenges/?last_id=' + this.last_id + '&company_id=' + window.Company.companyId;
         }else if(window.Company.companyId){
           params.url = window.Company.BASE_URL + 'apiv3/challenges/?company_id=' + window.Company.companyId;
