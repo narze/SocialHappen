@@ -43,11 +43,13 @@ class Challenge_lib {
 			return FALSE;
 		}
 
-		$data = array_cast_int($data);
+		//$data = array_cast_int($data);
 
 		$challenge_id = get_mongo_id($challenge);
 		//$data['$set']['hash'] = strrev(sha1($challenge_id));
 
+		unset($data['_id']);
+		
 		//Pack data into $set
 		if(!isset($data['$set'])) {
 			$data_temp = $data;
