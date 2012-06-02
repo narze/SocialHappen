@@ -268,8 +268,8 @@ class Apiv3 extends CI_Controller {
 
       //update challenge
       if($challenge_id){
-        $challenge['hash'] = array('hash' => strrev(sha1($challenge_id)));
-        $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge);
+        //$challenge['hash'] = array('hash' => strrev(sha1($challenge_id)));
+        $challenge_update = $this->challenge_lib->update(array('hash' => $challenge_id), $challenge);
 
         if($challenge_update)
             $challenge_create_flag = false;
