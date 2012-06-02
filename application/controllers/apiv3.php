@@ -197,7 +197,7 @@ class Apiv3 extends CI_Controller {
   /**
    * create/update challenge
    */
-  function saveChallenge($challenge_id = NULL){
+  function saveChallenge($challenge_hash = NULL){
     header('Content-Type: application/json', TRUE);
     
     $challenge = $this->input->post('model', TRUE); 
@@ -267,9 +267,18 @@ class Apiv3 extends CI_Controller {
       $challenge_create = null;
 
       //update challenge
-      if($challenge_id){
-        $challenge['hash'] = array('hash' => strrev(sha1($challenge_id)));
-        $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge);
+      if($challenge_hash){
+        //$challenge['hash'] = array('hash' => strrev(sha1($challenge_id)));
+
+        try{
+          $asis_challenge = $this->challenge_lib->get_one(array('hash' => $challenge_hash));
+          $challenge_id = get_mongo_id($asis_challenge);
+
+          $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge);
+        }catch(Exception $ex){
+          //update exception
+          $challenge_create_flag = false;
+        }
 
         if($challenge_update)
             $challenge_create_flag = false;

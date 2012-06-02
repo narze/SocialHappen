@@ -22,6 +22,18 @@
         </div>
       </div>
       <div class="control-group">
+        <label class="control-label" for="checkin_facebook_place_name">Facebook Place Name</label>
+        <div class="controls">
+          <input class="input-xlarge checkin_facebook_place_name" name="checkin_facebook_place_name" value="<%= action_data.data.checkin_facebook_place_name %>"></input>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="checkin_min_friend_count">Minimum Friends Tag</label>
+        <div class="controls">
+          <input class="input-xlarge checkin_min_friend_count" name="checkin_min_friend_count" value="<%= action_data.data.checkin_min_friend_count %>"></input>
+        </div>
+      </div>
+      <div class="control-group">
         <label class="control-label" for="checkin_welcome_message">Welcome Message</label>
         <div class="controls">
           <textarea class="input-xlarge checkin_welcome_message" name="checkin_welcome_message" rows="2"><%= action_data.data.checkin_welcome_message %></textarea>
