@@ -2,7 +2,6 @@ application/config/config.php
 application/config/database.php
 application/config/facebook.php
 application/config/twitter.php
-application/logs
 index.php
 .settings
 .project
@@ -19,3 +18,10 @@ application/backup/*.sql
 application/backup/sh_mongo-*
 application/backup/log-mongodump-*
 notification/node_modules/*
+
+*/config/development
+*/logs/log-*.php
+*/logs/!index.html
+*/cache/*
+*/cache/!index.html
+
