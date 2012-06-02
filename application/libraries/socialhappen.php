@@ -53,7 +53,9 @@ class SocialHappen{
 			113 => 'User Invite',
 			114 => 'Invitee Accept Page Invite',
 			115 => 'Invitee Accept Campaign Invite',
-			116 => 'User Redeem Reward'
+			116 => 'User Redeem Reward',
+			117 => 'User Join Challenge',
+			118 => 'User Complete Challenge'
 		)
 	);
 	
