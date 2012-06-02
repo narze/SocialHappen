@@ -35,6 +35,11 @@ define([
       });
       
       this.addAll();
+      
+      if(this.collection.model.length <= 30){
+        $('button.load-more', this.el).addClass('hide');
+      }
+      
       var self = this;
       
       // console.log('bind endless scroll');
