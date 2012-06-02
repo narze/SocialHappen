@@ -93,7 +93,7 @@ class Checkin extends CI_Controller {
 			)
 		);
 		
-		$user = $this->_get_user_data();
+		$user = $this->socialhappen->get_user();
 		if($action_data && $user && $challenge) {
 
 			//min friend_count
