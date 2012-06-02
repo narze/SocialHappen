@@ -22,7 +22,6 @@ define([
       };
 
       $('.criteria-form').slideUp();
-      
       formViewName = views[challengeAction.action_id];
       require([formViewName], function(FormView) {
         var formView = new FormView({

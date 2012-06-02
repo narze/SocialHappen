@@ -1,11 +1,21 @@
-$(function() {
+require([
+  'jquery'
+], function($){
+  
   checkFBConnected(checkCallback);
   checkActionDone();
-
+  
   function checkCallback(fbUserID) {
     $('#join-challenge').show();
+    
+    if(!fbUserID) {
+      return $('#join-challenge').click(function() {
+        window.fbLogin(loginCallback);
+      });
+    }
+
     $('#join-challenge').click(function() {
-      window.fbLogin(loginCallback);
+      loginCallback(true);
     });
   }
 

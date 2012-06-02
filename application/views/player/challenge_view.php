@@ -103,9 +103,19 @@
     <div id="login">
       <div class="row-fluid text-center">
         <div class="well">
-          <div>Congrats!</div>
+          <h2>Congrats!</h2>
+          <?php if($challenge_reward) : ?>
+          	<p> You got this reward : </p>
+          	<?php //@todo - display reward ;?>
+          <?php else : ?>
+          	<p> This challenge has no reward </p>
+          <?php endif; ?>
         </div>
       </div>
     </div>
   </div>
+
+	<div class="modal-footer">
+		<button id="share-challenge-complete" class="btn btn-primary" data-dismiss="modal">Share</button>
+	</div>
 </div>

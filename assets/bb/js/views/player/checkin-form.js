@@ -67,6 +67,9 @@ define([
         success: function(result) {
           console.log(result);
           $el.html(result);
+          setTimeout(function(){
+            window.location = window.location.origin + window.location.pathname + '?action_done=1';
+          }, 2000);
         }
       });
     }

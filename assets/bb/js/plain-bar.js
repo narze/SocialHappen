@@ -8,7 +8,7 @@ require([
     if(success) {
       window.location = base_url + 'login?next=' + window.location.href;
     }
-  }
+  };
 
   $.ajax({
     url: base_url + 'apiv3/user',

@@ -178,6 +178,11 @@ class Player extends CI_Controller {
         $challenge['end_time'] = NULL;
       }
       
+      //Challenge reward
+      $challenge_reward = NULL;
+      if(isset($challenge['reward_item_id'])) {
+        //@todo - Get reward from reward_item_id
+      }
 
       $this->load->vars(
         array(
@@ -188,6 +193,7 @@ class Player extends CI_Controller {
           'challenge_done' => $challenge_done,
           'challenge_progress' => $challenge_progress,
           'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
+          'challenge_reward' => $challenge_reward
         )
       );
 
@@ -216,11 +222,8 @@ class Player extends CI_Controller {
             )
           )
         ),
-        'scripts' => array(
-          'common/jquery.min',
-          'player/challenge'
-        ),
-        'requirejs' => array('js/plain-bar')
+        'scripts' => array(),
+        'requirejs' => array('js/plain-bar', 'js/player-challenge-common')
       );
 
       //If challenge is not done, player can do challenges
