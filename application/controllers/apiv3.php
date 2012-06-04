@@ -101,7 +101,56 @@ class Apiv3 extends CI_Controller {
       echo json_encode($activity);
     }
   }
+
+  /**
+   * list activity of challenge or actions in a challenge
+   * Challenge hash -> objecti
+   * 
+   */
+  function challenge_activity(){
+
+    header('Content-Type: application/json', TRUE);
+    $challenge_hashes = $this->input->post('challenge_hashes', TRUE);
+    $activity_result = array();
+
+    if(isset($challenge_hashes) && $challenge_hashes != ''){
+        $challenge_hash_array = json_decode($challenge_hashes);
+        $activity_search_result = array();
+
+        $this->load->library('audit_lib');
+
+        foreach($challenge_hash_array as $challenge_hash){
+          $challenge_activity =  $this->audit_lib->list_audit(array('objecti' => $challenge_hash));
+          
+          $activity_search_result = array_merge($activity_search_result, $challenge_activity);
+        }
+
+        //sort timestamp
+        usort($activity_search_result, array("apiv3", '_timestamp_cmp'));
+        $activity_search_result = array_reverse($activity_search_result);
+
+        $activity_result = $activity_search_result;
+    }
+        
+    echo json_encode($activity_result);
+
+    /*
+    if(!$user_id){
+      echo '[]';
+    }else{
+      $this->load->library('audit_lib');
+      $activity = $this->audit_lib->list_audit(array('user_id' => (int)$user_id, 'app_id' => 0));
+      echo json_encode($activity);
+    }
+    */
+  }
   
+
+  static function _timestamp_cmp($a, $b){
+    return strcmp($a["timestamp"], $b["timestamp"]);
+  }
+
+
   /**
    * list achievement of user
    */
