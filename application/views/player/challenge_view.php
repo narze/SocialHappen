@@ -104,6 +104,9 @@
       <div class="row-fluid text-center">
         <div class="well">
           <h2>Congrats!</h2>
+            <?php if(isset($challenge_score) && isset($company_score)) : ?>
+              <p>You got <?php echo $challenge_score; ?> points from the challenge, now you have <?php echo $company_score;?> points in total.</p>
+            <?php endif; ?>
           <?php if($challenge_reward) : ?>
           	<p> You got this reward : </p>
             <div>

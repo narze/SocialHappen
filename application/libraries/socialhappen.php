@@ -86,7 +86,7 @@ class SocialHappen{
 	 * @author Manassarn M.
 	 */
 	function get_k($var_name = NULL, $value = NULL){
-		return array_search(strtolower($value),array_map('strtolower',issetor($this->global_variables[$var_name], NULL)));
+		return array_search($value, issetor($this->global_variables[$var_name], FALSE));
 	}
 	
 	/**

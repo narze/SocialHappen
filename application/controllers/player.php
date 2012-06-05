@@ -185,6 +185,16 @@ class Player extends CI_Controller {
         //@todo - Process challenge reward
       }
 
+      //Challenge score
+      $this->load->library('audit_lib');
+      $user_complete_challenge_action = $this->audit_lib->get_audit_action(0, $this->socialhappen->get_k('audit_action', 'User Complete Challenge'));
+      $challenge_score = $user_complete_challenge_action['score'];
+
+      //User's company score
+      $this->load->library('achievement_lib');
+      $user_company_stat = $this->achievement_lib->get_company_stat($challenge['company_id'], $user_id);
+      $company_score = issetor($user_company_stat['company_score'], 0);
+
       $this->load->vars(
         array(
           'challenge_hash' => $challenge_hash,
@@ -194,7 +204,9 @@ class Player extends CI_Controller {
           'challenge_done' => $challenge_done,
           'challenge_progress' => $challenge_progress,
           'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
-          'challenge_reward' => $challenge_reward
+          'challenge_reward' => $challenge_reward,
+          'challenge_score' => $challenge_score,
+          'company_score' => $company_score
         )
       );
 
