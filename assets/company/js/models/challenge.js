@@ -15,7 +15,9 @@ define([
       hash: null,
       criteria: [],
       active: false,
-      company_id: 0
+      company_id: 0,
+      start_date: null,
+      end_date: null
     },
     initialize: function(){
 
