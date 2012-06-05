@@ -2,9 +2,12 @@
   <h3>QR 
     <small>
       <button class="btn edit"><i class="icon-pencil"></i></button>
-      <%= name %> <a href="<%= window.Company.BASE_URL + 'actions/qr/go/' + action_data.hash %>">
-        <img src="<%= window.Company.BASE_URL + 'qr?path=actions/qr/go/' + action_data.hash %>" />
-      </a>
+      <%= name %> 
+      <% if(action_data.hash) { %>
+        <a href="<%= window.Company.BASE_URL + 'actions/qr/go/' + action_data.hash %>">
+          <img src="<%= window.Company.BASE_URL + 'qr?path=actions/qr/go/' + action_data.hash %>" />
+        </a>
+      <% } %>
     </small>
   </h3>
 </div>
