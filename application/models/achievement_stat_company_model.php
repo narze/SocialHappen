@@ -58,28 +58,35 @@ class Achievement_stat_company_model extends CI_Model {
       $inc = array();
       $result = TRUE;
       $do_increment = FALSE;
-      if(isset($info['action_id'])){
 
+      if(isset($info['action_id'])){
         $inc['action.' . $info['action_id'] . '.count'] = $amount;
         $do_increment = TRUE;
-      }else {
-        if(isset($info['campaign_score']) && isset($info['campaign_id'])){
-          
-          $inc['campaign.' . $info['campaign_id'] . '.score'] = (int) $info['campaign_score'];
-          $do_increment = TRUE;
-        }
-        if(isset($info['page_score']) && isset($info['page_id'])){
-          $inc['page.'.$info['page_id'].'.score'] = (int) $info['page_score'];
-          $inc['company_score'] = (int) $info['page_score'];
-          $do_increment = TRUE;
-        }
       }
+
+      if(isset($info['campaign_score']) && isset($info['campaign_id'])){
+        $inc['campaign.' . $info['campaign_id'] . '.score'] = (int) $info['campaign_score'];
+        $do_increment = TRUE;
+      }
+      
+      if(isset($info['page_score']) && isset($info['page_id'])){
+        $inc['page.'.$info['page_id'].'.score'] = (int) $info['page_score'];
+        $inc['company_score'] = (int) $info['page_score'];
+        $do_increment = TRUE;
+      }
+
+      if(isset($info['company_score'])) {
+        $inc['company_score'] = (int) $info['company_score'];
+        $do_increment = TRUE;
+      }
+
+
       if($do_increment) {
         $result = $this->achievement_stat_company->update($criteria,
           array('$inc' => $inc), TRUE);
       }
       return $result;
-    }else{
+    } else {
       return FALSE;
     }
   }
@@ -104,7 +111,7 @@ class Achievement_stat_company_model extends CI_Model {
         array('$set' => $info), TRUE);
         
       return $result;
-    }else{
+    } else {
       return FALSE;
     }
   }
@@ -133,7 +140,7 @@ class Achievement_stat_company_model extends CI_Model {
         $result[] = $stat;
       }
       return count($result) > 0 ? $result[0] : NULL;
-    }else{
+    } else {
       return FALSE;
     }
   }

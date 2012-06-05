@@ -147,7 +147,7 @@ class Tab_ctrl {
 				//TODO : erase uploaded image
 				log_message('error','add user failed, $post_data : '. print_r($post_data, TRUE));
 				log_message('error','$user_id : '. print_r($user_id, TRUE));
-				echo 'Error occured';
+				// echo 'Error occured';
 				$error['status'] = 'error';
 				$error['error'] = 'add_user';
 				$result['error'] = $error;
