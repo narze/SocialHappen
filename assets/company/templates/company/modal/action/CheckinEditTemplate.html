@@ -16,15 +16,15 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="checkin_facebook_place_id">Facebook Place ID</label>
+        <label class="control-label" for="checkin_facebook_place_name">Facebook Place Name</label>
         <div class="controls">
-          <input class="input-xlarge checkin_facebook_place_id" name="checkin_facebook_place_id" value="<%= action_data.data.checkin_facebook_place_id %>"></input>
+          <input type="hidden" class="input-xlarge checkin_facebook_place_id" name="checkin_facebook_place_id" value="<%= action_data.data.checkin_facebook_place_id %>"></input>
+          <input class="input-xlarge checkin_facebook_place_name" name="checkin_facebook_place_name" value="<%= action_data.data.checkin_facebook_place_name %>"></input>
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="checkin_facebook_place_name">Facebook Place Name</label>
-        <div class="controls">
-          <input class="input-xlarge checkin_facebook_place_name" name="checkin_facebook_place_name" value="<%= action_data.data.checkin_facebook_place_name %>"></input>
+        <div class="controls place-list">
+          <ul class="place-list unstyled"></ul>
         </div>
       </div>
       <div class="control-group">

@@ -80,7 +80,7 @@ define([
         this.renderPlaceList([]);
       }else{
         var self = this;
-        FB.api('/search?q='+encodeURIComponent(query)+'&type=page&access_token=' + FB.getAccessToken(), function(data) {
+        FB.api('/search?q='+encodeURIComponent(query)+'&type=place&access_token=' + FB.getAccessToken(), function(data) {
           self.renderPlaceList(data.data||[]);
         });
       }
