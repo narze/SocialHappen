@@ -23,7 +23,9 @@ define([
         status: 'Reward Status',
         description: 'Reward Description'
       },
-      score: 10
+      score: 10,
+      start_date: null,
+      end_date: null
     },
     initialize: function(){
 

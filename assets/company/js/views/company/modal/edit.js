@@ -8,9 +8,10 @@ define([
   'views/company/modal/action/qr-edit',
   'views/company/modal/action/qr-add',
   'views/company/modal/action/checkin-edit',
-  'views/company/modal/action/checkin-add'
+  'views/company/modal/action/checkin-add',
+  'jqueryui'
 ], function($, _, Backbone, editTemplate, FeedbackEditView, FeedbackAddView,
-  QREditView, QRAddView, CheckinEditView, CheckinAddView){
+  QREditView, QRAddView, CheckinEditView, CheckinAddView, jqueryui){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
     
@@ -41,8 +42,43 @@ define([
     render: function () {
       console.log('render modal');
       
+      if(!this.model){
+        return;
+      }
+      
       var data = this.model.toJSON();
       $(this.el).html(this.editTemplate(data));
+      
+      var self = this;
+       
+      $('#edit_challenge_start').datetimepicker({
+        onClose : function(dateText, inst) {
+          var date = $('#edit_challenge_start').datetimepicker('getDate');
+          self.model.save({
+            start_date: date.getTime()/1000
+          });
+        }
+      });
+      $('#edit_challenge_end').datetimepicker({
+        onClose : function(dateText, inst) {
+          var date = $('#edit_challenge_end').datetimepicker('getDate');
+          self.model.save({
+            end_date: date.getTime()/1000
+          });
+        }
+      }); 
+      
+      var startDate = this.model.get('start_date');
+      if(startDate){
+        startDate *= 1000;
+        $('#edit_challenge_start').datetimepicker('setDate', (new Date(startDate)));
+      }
+      
+      var endDate = this.model.get('end_date');
+      if(endDate){
+        endDate *= 1000;
+        $('#edit_challenge_end').datetimepicker('setDate', (new Date(endDate)));
+      }
       
       return this;
     },

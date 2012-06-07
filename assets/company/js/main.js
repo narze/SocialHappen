@@ -9,6 +9,7 @@ require.config({
     bootstrap: 'libs/bootstrap/bootstrap.min',
     timeago: 'libs/jquery.timeago/jquery.timeago',
     masonry: 'libs/masonry/jquery.masonry.min',
+    jqueryui: 'libs/jquery.ui/jquery-ui-1.8.20.custom.min',
     endlessscroll: 'libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
     // Require.js plugins
     text: 'libs/require/text',
