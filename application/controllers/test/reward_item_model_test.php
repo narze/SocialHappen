@@ -482,16 +482,6 @@ class Reward_item_model_test extends CI_Controller {
 
 		$count = $this->reward_item->count_all();
 		$this->unit->run($count, 1, 'count', $count);
-
-
-		$challenge_id = NULL;
-		$input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description');
-		
-		$result = $this->reward_item->add_challenge_reward($input);
-		$this->unit->run($result, 'is_false', "\$result", $result);
-
-		$count = $this->reward_item->count_all();
-		$this->unit->run($count, 1, 'count', $count);
 	}
 }
 /* End of file reward_item_model_test.php */

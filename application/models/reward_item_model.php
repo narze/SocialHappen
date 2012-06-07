@@ -257,6 +257,7 @@
 		if(!$update['$set']){
 			unset($update['$set']);
 		}
+
 		if(isset($input['user'])){ //pull old user data out and push the new one with more count
 			$pull = array(
 				'$pull' => array('user_list' => array('user_id'=>$input['user']['user_id']))
@@ -275,6 +276,7 @@
 			}
 			$update['$push']['user_list'] = $input['user'];
 		}
+		
 		try	{
 			$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
 			$update, array('safe' => TRUE));
@@ -323,16 +325,12 @@
    */
   function add_challenge_reward($input = array()) {
   	if(!issetor($input['name']) || !issetor($input['image'])
-  		|| !issetor($input['value']) || !issetor($input['challenge_id'])){
+  		|| !issetor($input['value'])) {
 			return FALSE;
 		}
 
 		if(!isset($input['status']) || !in_array($input['status'], array('draft', 'published', 'cancelled'))){
 			$input['status'] = 'draft';
-		}
-
-		if(!isset($input['challenge_id'])) {
-			$input['challenge_id'] = NULL;
 		}
 		
 		$input['value'] = (int) $input['value'];

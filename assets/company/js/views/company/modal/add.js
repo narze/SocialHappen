@@ -202,10 +202,10 @@ define([
 
       var reward = this.model.get('reward');
       reward.name = $('input.reward-name', this.el).val() || reward.name;
-      reward.image = $('input.reward-image', this.el).val();
-      reward.value = $('input.reward-value', this.el).val();
-      reward.status = $('input.reward-status', this.el).val();
-      reward.description = $('input.reward-description', this.el).val();
+      reward.image = $('input.reward-image', this.el).val() || reward.image;
+      reward.value = $('input.reward-value', this.el).val() || reward.value;
+      reward.status = $('input.reward-status', this.el).val() || reward.status;
+      reward.description = $('input.reward-description', this.el).val() || reward.description;
       
       this.model.set('reward', reward).trigger('change');
             

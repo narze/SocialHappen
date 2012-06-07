@@ -90,7 +90,7 @@ define([
       $('ul.place-list', this.el).html('');
       if(data.length > 0){
         data = data.length > 5 ? data.slice(0, 5) : data;
-        console.log(data);
+
         _.each(data, function(i){
           $('ul.place-list', this.el).append(this.placeItemTemplate(i));
         }, this);

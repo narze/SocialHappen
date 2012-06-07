@@ -17,7 +17,11 @@ define([
       active: false,
       company_id: 0,
       reward: {
-        name: 'Reward Name'
+        name: 'Reward Name',
+        image: 'Reward Image URL',
+        value: 10,
+        status: 'Reward Status',
+        description: 'Reward Description'
       },
       score: 10
     },
@@ -44,9 +48,9 @@ define([
       // Ensure that we have a URL.
       if (!options.url) {
         if(method == 'update'){
-          params.url = window.Company.BASE_URL + 'apiv3/saveChallenge/' + this.id
+          params.url = window.Company.BASE_URL + 'apiv3/saveChallenge/' + this.id;
         }else if(method == 'create'){
-          params.url = window.Company.BASE_URL + 'apiv3/saveChallenge/'
+          params.url = window.Company.BASE_URL + 'apiv3/saveChallenge/';
         }
       }
 
@@ -81,9 +85,21 @@ define([
       
       console.log('save challenge:', this.toJSON());
       console.log('POST:', params.data);
-      
-      // Make the request, allowing the user to override any Ajax options.
+
       return $.ajax(_.extend(params, options));
+    },
+
+    //parse saveChallenge's response
+    //{success: [success?], 'data': [data]}
+    parse: function(resp, xhr) {
+      if(resp.success === true) {
+        return resp.data;
+      } else if(typeof resp.success !== 'undefined') {
+        return this.previousAttributes();
+      }
+
+      //if resp.success is undefined, resp itself is data
+      return resp;
     }
 
   });

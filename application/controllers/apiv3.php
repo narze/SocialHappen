@@ -252,7 +252,7 @@ class Apiv3 extends CI_Controller {
     $challenge = $this->input->post('model', TRUE); 
     
     if(!isset($challenge) || $challenge == ''){
-      $result = array('success' => false, 'result' => 'no challenge data');
+      $result = array('success' => false, 'data' => 'no challenge data');
     }else{
       $this->load->library('challenge_lib');
       $this->load->library('action_data_lib');
@@ -260,10 +260,9 @@ class Apiv3 extends CI_Controller {
       $challenge = json_decode($challenge, TRUE);
       
       if(!is_array($challenge)){
-        echo json_encode(array('success' => false, 'result' =>'data error'));
+        echo json_encode(array('success' => false, 'data' =>'data error'));
         return false;
-      }
-        
+      }   
 
       //add/update action_data
       foreach($challenge['criteria'] as &$action_data_object){
@@ -275,7 +274,6 @@ class Apiv3 extends CI_Controller {
           $mgid = $action_data_object['action_data']['_id'];
           $action_data = $this->action_data_lib->get_action_data($mgid['$id']);
 
-         
           if($action_data){
             //update if exist
             $action_data_create_flag = false;
@@ -283,11 +281,9 @@ class Apiv3 extends CI_Controller {
             $update_action_data_result = $this->action_data_lib->update($mgid['$id'], $action_data_attr);
 
             if(!$update_action_data_result){
-              echo json_encode(array('success' => false, 'result' =>'update action_data failed '. print_r($action_data_attr['data'], true)));
+              echo json_encode(array('success' => false, 'data' =>'update action_data failed '. print_r($action_data_attr['data'], true)));
               return false;
-            
             }
-            
           }
         }
 
@@ -301,30 +297,54 @@ class Apiv3 extends CI_Controller {
             $action_data_object['action_data']['hash'] = strrev(sha1($action_data_id));
 
           }else{
-            echo json_encode(array('success' => false, 'result' =>'add action_data failed : ' . print_r($action_data_attr['data'], true)));
+            echo json_encode(array('success' => false, 'data' =>'add action_data failed : ' . print_r($action_data_attr['data'], true)));
             return false;
-
           }
-          
-          
         }
-
       }
+
+      //create 
 
       $challenge_create_flag = true;
       $challenge_update = null;
       $challenge_create = null;
 
-      //update challenge
-      if($challenge_hash){
-        //$challenge['hash'] = array('hash' => strrev(sha1($challenge_id)));
+      //Add-update reward
+      if(issetor($challenge['reward'])) {
+        $this->load->model('reward_item_model');
+        $reward = $challenge['reward'];
 
-        try{
+        if(isset($challenge['reward']['_id'])) {
+          //Reward exists : update
+          $reward_item_id = get_mongo_id($challenge['reward']);
+          if(!$reward_update_result = $this->reward_item_model->update($reward_item_id, $reward)) {
+            echo json_encode(array('success' => FALSE, 'data' => 'Update reward failed'));
+            return;
+          }
+        } else {
+          //New reward : add new
+          if(!$reward_item_id = $this->reward_item_model->add_challenge_reward($reward)) {
+            echo json_encode(array('success' => FALSE, 'data' => 'Add reward failed'));
+            return;
+          }
+        }
+
+        $challenge['reward_item_id'] = $reward_item_id;
+      }
+
+
+      //Create challenge data without reward (to store in challenge's model)
+      $challenge_data = $challenge;
+      unset($challenge_data['reward']);
+
+      //Try to update challenge
+      if($challenge_hash){
+        try {
           $asis_challenge = $this->challenge_lib->get_one(array('hash' => $challenge_hash));
           $challenge_id = get_mongo_id($asis_challenge);
 
-          $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge);
-        }catch(Exception $ex){
+          $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge_data);
+        } catch (Exception $ex){
           //update exception
           $challenge_create_flag = false;
         }
@@ -333,9 +353,9 @@ class Apiv3 extends CI_Controller {
             $challenge_create_flag = false;
       }
 
+      //Create challenge if cannot update
       if($challenge_create_flag){
-        unset($challenge['hash']);
-        $challenge_create = $this->challenge_lib->add($challenge);
+        $challenge_create = $this->challenge_lib->add($challenge_data);
 
         if($challenge_create)
             $challenge_id = $challenge_create;
@@ -343,45 +363,31 @@ class Apiv3 extends CI_Controller {
       }
 
       if($challenge_create || $challenge_update){
-        $challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($challenge_id)));
-        $challenge['_id'] = $challenge['_id']['$id'];
-        echo json_encode($challenge);
+        // $challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($challenge_id)));
+        // $challenge['_id'] = $challenge['_id']['$id'];
+        echo json_encode(array('success' => TRUE, 'data' => $challenge));
       }else{
-        echo json_encode(array('success' => false, 'result' =>'add/update challenge failed'));
-
+        echo json_encode(array('success' => false, 'data' =>'add/update challenge failed'));
       }
-
-
     }
-    
-
   }
 
   /**
-   * Test challenge reward
+   * Get reward_item
    */
-  function add_sample_challenge_reward($challenge_id = NULL) {
-    if(!$challenge_id) {
-      echo array();
+  function reward_item($reward_item_id = NULL) {
+    if(!$reward_item_id) {
+      echo json_encode(array('success' => FALSE, 'data' => 'id not specified'));
       return;
     }
 
     $this->load->model('reward_item_model');
-    $reward = array(
-      'name' => 'Sample reward',
-      'image' => 'http://www.tlcthai.com/backoffice/upload_images2/20091229100903.jpg',
-      'value' => 200000000,
-      'challenge_id' => $challenge_id,
-      'status' => 'published',
-      'descript' => 'กินชมพู่ฟรีทั้งปี'
-    );
-    
-    if($reward_id = $this->reward_item_model->add_challenge_reward($reward)) {
-      echo json_encode(array('success' => TRUE));
-      return;
+    if(!$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id)) {
+      // echo json_encode(array('success' => TRUE, 'data' => NULL));
+      // return;
     }
 
-    echo json_encode(array('success' => FALSE));
+    echo json_encode(array('success' => TRUE, 'data' => $reward_item));
   }
 }
 

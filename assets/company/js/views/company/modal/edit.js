@@ -48,6 +48,29 @@ define([
     },
     
     show: function(model){
+      //skip getting reward_item if already fetched
+      if(model.get('reward')._id) {
+        return this.showEdit(model);
+      }
+
+      var self = this;
+      self.model = model;
+
+      //get challenge's reward item
+      $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: window.Company.BASE_URL + 'apiv3/reward_item/' + self.model.get('reward_item_id'),
+        success: function(result) {
+          if(result.data) {
+            self.model.set('reward', result.data);
+          }
+          self.showEdit(self.model);
+        }
+      });
+    },
+
+    showEdit: function(model) {
       this.model = model;
       console.log('show edit modal:', model.toJSON());
       this.render();
@@ -90,7 +113,6 @@ define([
       }, this);
       
       this.$el.modal('show');
-
     },
     
     showEditName: function(){
@@ -213,18 +235,18 @@ define([
     },
 
     saveEditReward: function(e) {
-      $('div.edit-reward', this.el).hide();
-      $('h3.edit-reward', this.el).show();
-
       var reward = this.model.get('reward');
       reward.name = $('input.reward-name', this.el).val() || reward.name;
-      reward.image = $('input.reward-image', this.el).val();
-      reward.value = $('input.reward-value', this.el).val();
-      reward.status = $('input.reward-status', this.el).val();
-      reward.description = $('input.reward-description', this.el).val();
-      
+      reward.image = $('input.reward-image', this.el).val() || reward.image;
+      reward.value = $('input.reward-value', this.el).val() || reward.value;
+      reward.status = $('input.reward-status', this.el).val() || reward.status;
+      reward.description = $('input.reward-description', this.el).val() || reward.description;
+
       this.model.set('reward', reward).trigger('change');
       this.model.save();
+
+      $('h3.edit-reward', this.el).show();
+      $('div.edit-reward', this.el).hide();
 
       this.options.vent.trigger('showEditModal', this.model);
     },
