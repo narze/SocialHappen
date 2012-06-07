@@ -62,6 +62,15 @@
     <button class="btn save-score btn-primary">Save</button>
   </div>
 
+  <h6 class="qrcode-label">QR Code:</h6>
+  <div class="qrcode">
+    <center>
+      <a href="<%= window.Company.BASE_URL + 'player/challenge/' + hash %>">
+        <img src="<%= window.Company.BASE_URL + 'qr?path=player/challenge/' + hash %>" />
+      </a>
+    </center>
+  </div>
+
 </div>
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Close</a>
