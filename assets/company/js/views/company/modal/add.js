@@ -25,7 +25,12 @@ define([
       'click a.add-feedback': 'addFeedback',
       'click a.add-qr': 'addQR',
       'click a.add-checkin': 'addCheckin',
-      'click button.create-challenge': 'createChallenge'
+      'click button.create-challenge': 'createChallenge',
+      'click button.edit-reward': 'showEditReward',
+      'click button.save-reward': 'saveEditReward',
+      'click button.cancel-edit-reward': 'cancelEditReward',
+      'click button.edit-score': 'showEditScore',
+      'click button.save-score': 'saveEditScore'
     },
     
     initialize: function(){
@@ -91,6 +96,7 @@ define([
     showEditName: function(){
       $('h3.edit-name', this.el).hide();
       $('div.edit-name', this.el).show();
+      $('input.challenge-name', this.el).focus();
     },
     
     saveEditName: function(){
@@ -109,6 +115,7 @@ define([
     showEditDescription: function(){
       $('div.edit-description', this.el).hide();
       $('div.edit-description-field', this.el).show();
+      $('textarea.challenge-description', this.el).focus();
     },
     
     saveEditDescription: function(){
@@ -126,6 +133,7 @@ define([
     
     showEditImage: function(){
       $('div.edit-image', this.el).show();
+      $('input.challenge-image', this.el).focus();
     },
     
     saveEditImage: function(){
@@ -183,10 +191,58 @@ define([
       
       checkinAddView.showEdit();
     },
+
+    showEditReward: function() {
+      $('div.edit-reward', this.el).show();
+      $('input.reward-name', this.el).focus();
+    },
+
+    saveEditReward: function(e) {
+      $('div.edit-reward', this.el).hide();
+
+      var reward = this.model.get('reward');
+      reward.name = $('input.reward-name', this.el).val() || reward.name;
+      reward.image = $('input.reward-image', this.el).val();
+      reward.value = $('input.reward-value', this.el).val();
+      reward.status = $('input.reward-status', this.el).val();
+      reward.description = $('input.reward-description', this.el).val();
+      
+      this.model.set('reward', reward).trigger('change');
+            
+      this.options.vent.trigger('showAddModal', this.model);
+    },
+
+    cancelEditReward: function(e){
+      e.preventDefault();
+      $('div.edit-reward', this.el).hide();
+      this.render();
+    },
+
+    showEditScore: function(){
+      $('h3.edit-score', this.el).hide();
+      $('div.edit-score', this.el).show();
+      $('input.challenge-score', this.el).focus();
+    },
+    
+    saveEditScore: function(){
+      var score = $('input.challenge-score', this.el).val();
+      var intRegex = /^\d+$/;
+      if(!(intRegex.test(score))) {
+        return;
+      }
+
+      this.model.set('score', score).trigger('change');
+      
+      $('h3.edit-score', this.$el).show();
+      $('div.edit-score', this.$el).hide();
+      
+      this.options.vent.trigger('showAddModal', this.model);
+    },
     
     createChallenge: function(){
       console.log('create challenge!');
       this.model.set('company_id', window.Company.companyId);
+
       this.options.challengesCollection.create(this.model);
       
       this.$el.modal('hide');

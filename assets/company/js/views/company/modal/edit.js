@@ -25,7 +25,12 @@ define([
       'click a.add-qr': 'addQR',
       'click a.add-checkin': 'addCheckin',
       'click button.active-challenge': 'activeChallenge',
-      'click button.deactive-challenge': 'deactiveChallenge'
+      'click button.deactive-challenge': 'deactiveChallenge',
+      'click button.edit-reward': 'showEditReward',
+      'click button.save-reward': 'saveEditReward',
+      'click button.cancel-edit-reward': 'cancelEditReward',
+      'click button.edit-score': 'showEditScore',
+      'click button.save-score': 'saveEditScore'
     },
     
     initialize: function(){
@@ -200,7 +205,58 @@ define([
       $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
       
       checkinAddView.showEdit();
+    },
+
+    showEditReward: function() {
+      $('h3.edit-reward', this.el).hide();
+      $('div.edit-reward', this.el).show();
+    },
+
+    saveEditReward: function(e) {
+      $('div.edit-reward', this.el).hide();
+      $('h3.edit-reward', this.el).show();
+
+      var reward = this.model.get('reward');
+      reward.name = $('input.reward-name', this.el).val() || reward.name;
+      reward.image = $('input.reward-image', this.el).val();
+      reward.value = $('input.reward-value', this.el).val();
+      reward.status = $('input.reward-status', this.el).val();
+      reward.description = $('input.reward-description', this.el).val();
+      
+      this.model.set('reward', reward).trigger('change');
+      this.model.save();
+
+      this.options.vent.trigger('showEditModal', this.model);
+    },
+
+    showEditScore: function(){
+      $('h3.edit-score', this.el).hide();
+      $('div.edit-score', this.el).show();
+      $('input.challenge-score', this.el).focus();
+    },
+    
+    saveEditScore: function(){
+      var score = $('input.challenge-score', this.el).val();
+      var intRegex = /^\d+$/;
+      if(!(intRegex.test(score))) {
+        return;
+      }
+
+      this.model.set('score', score).trigger('change');
+      this.model.save();
+      
+      $('h3.edit-score', this.el).show();
+      $('div.edit-score', this.el).hide();
+
+      this.options.vent.trigger('showEditModal', this.model);
+    },
+
+    cancelEditReward: function(e){
+      e.preventDefault();
+      $('div.edit-reward', this.el).hide();
+      this.render();
     }
+    
   });
   return EditModalView;
 });

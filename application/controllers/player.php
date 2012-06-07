@@ -181,9 +181,11 @@ class Player extends CI_Controller {
       //Challenge reward
       $challenge_reward = NULL;
       $this->load->model('reward_item_model');
-      if($challenge_reward = $this->reward_item_model->get_one(array('challenge_id' => $challenge_id))) {
-        //@todo - Process challenge reward
-      }
+      //Use reward in challenge for now
+      $challenge_reward = issetor($challenge['reward'], NULL);
+      // if($challenge_reward = $this->reward_item_model->get_one(array('challenge_id' => $challenge_id))) {
+      //   //@todo - Process challenge reward
+      // }
 
       //Challenge score
       $this->load->library('audit_lib');

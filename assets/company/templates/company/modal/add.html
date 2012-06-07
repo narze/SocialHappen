@@ -39,6 +39,29 @@
     </div>
     <ul class="criteria-list unstyled"></ul>
   </div>
+
+  <h6 class="edit-reward-label">Reward:</h6>
+  <h3 class="edit-reward"><%= reward.name %> <button class="btn edit-reward"><i class="icon-pencil"></i></button>
+  </h3>
+  <div class="edit-reward hide">
+    <label for="reward-name">Reward Name</label><input type="text" class="reward-name" value="<%= reward.name %>" />
+    <label for="reward-image">Reward Image</label><input type="text" class="reward-image" />
+    <label for="reward-value">Reward Value</label><input type="text" class="reward-value" />
+    <label for="reward-status">Reward Status</label><input type="text" class="reward-status" />
+    <label for="reward-description">Reward Description</label><input type="text" class="reward-description" />
+    <div class="reward-form-actions">
+      <button class="btn save-reward btn-primary">Save</button>
+      <button class="btn cancel-edit-reward">Cancel</button>
+    </div>
+  </div>
+
+  <h6 class="edit-score-label">Score:</h6>
+  <h3 class="edit-score"><%= score %> <button class="btn edit-score"><i class="icon-pencil"></i></button></h3>
+  <div class="edit-score hide">
+    <input class="challenge-score span4" value="<%= score %>" />
+    <button class="btn save-score btn-primary">Save</button>
+  </div>
+
 </div>
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Close</a>

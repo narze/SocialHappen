@@ -15,7 +15,11 @@ define([
       hash: null,
       criteria: [],
       active: false,
-      company_id: 0
+      company_id: 0,
+      reward: {
+        name: 'Reward Name'
+      },
+      score: 10
     },
     initialize: function(){
 

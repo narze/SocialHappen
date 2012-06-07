@@ -105,16 +105,29 @@
         <div class="well">
           <h2>Congrats!</h2>
             <?php if(isset($challenge_score) && isset($company_score)) : ?>
-              <p>You got <?php echo $challenge_score; ?> points from the challenge, now you have <?php echo $company_score;?> points in total.</p>
+              <p>You got <span class="badge badge-success"><?php echo $challenge_score; ?></span> points from the challenge, now you have <span class="badge badge-success"><?php echo $company_score;?></span> points in total.</p>
             <?php endif; ?>
           <?php if($challenge_reward) : ?>
           	<p> You got this reward : </p>
-            <div>
-              <?php echo '<pre>';
-              var_dump($challenge_reward);
-              echo '</pre>';?>
+            <div class="reward-container alert alert-success">
+              <div class="reward-image">
+                <img src="<?php echo $challenge_reward['image']; ?>" />
+              </div>
+              <div class="reward-info">
+                <span class="reward-name">
+                  <?php echo $challenge_reward['name']; ?>
+                </span>
+                <span class="reward-value">
+                  (<?php echo $challenge_reward['value']; ?>)
+                </span>
+                <div class="reward-description">
+                  <?php echo $challenge_reward['description']; ?>
+                </div>
+              </div>
+              <!-- <div class="reward-status">
+                <?php echo $challenge_reward['status']; ?>
+              </div> -->
             </div>
-          	<?php //@todo - display reward ;?>
           <?php else : ?>
           	<p> This challenge has no reward </p>
           <?php endif; ?>

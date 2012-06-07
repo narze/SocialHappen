@@ -1,3 +1,39 @@
 .challenge-image {
   width: 100%
 }
+
+.reward-container {
+  min-height: 100px;
+}
+
+.reward-image {
+  float: left;
+}
+
+.reward-image img {
+  width: 100px;
+  height: 100px;
+}
+
+.reward-info {
+  float: left;
+  margin-left: 10px;
+}
+
+.reward-name {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.reward-description {
+  padding: 5px 0 0 5px;
+  text-align: left;
+}
+
+.reward-status {
+
+}
+
+.reward-value {
+
+}
