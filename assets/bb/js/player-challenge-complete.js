@@ -1,10 +1,7 @@
 require([
-  'jquery'
+  'jquery',
+  'bootstrap'
 ], function($){
-  require([
-    'bootstrap'
-  ], function(Bootstrap){
-    
     if(challenge_done) {
       $('#challenge-complete-modal').modal();
       shareChallengeComplete();
@@ -27,5 +24,4 @@ require([
         });
       });
     }
-  });
 });

@@ -24,6 +24,25 @@ require.config({
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
     templates: '../templates'
   },
-  urlArgs: "bust=" +  (new Date()).getTime()
+  urlArgs: "bust=" +  (new Date()).getTime(),
+  shim: {
+    //jQuery dependencies
+    underscore: {
+        deps: ['jquery'],
+        exports: '_'
+    },
+    backbone: {
+        deps: ['underscore', 'jquery'],
+        exports: 'Backbone'
+    },
+    
+    //jQuery plugins
+    timeago: ['jquery'],
+    bootstrap: ['jquery'],
+    masonry: ['jquery'],
+    jfmfs: ['jquery'],
+    endlessscroll: ['jquery']
+  }
+
 
 });
