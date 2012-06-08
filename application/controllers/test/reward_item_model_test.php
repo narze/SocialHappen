@@ -482,6 +482,9 @@ class Reward_item_model_test extends CI_Controller {
 
 		$count = $this->reward_item->count_all();
 		$this->unit->run($count, 1, 'count', $count);
+
+		$reward = $this->reward_item->get_one(array('_id' => new MongoId($this->reward_item_4)));
+		$this->unit->run($reward['type'], 'challenge', "\$reward['type']", $reward['type']);
 	}
 }
 /* End of file reward_item_model_test.php */

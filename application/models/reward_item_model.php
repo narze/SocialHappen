@@ -333,6 +333,7 @@
 			$input['status'] = 'draft';
 		}
 		
+		$input['type'] = 'challenge';
 		$input['value'] = (int) $input['value'];
 		$input['user_list'] = array();
 		$input['description'] = issetor($input['description']);
