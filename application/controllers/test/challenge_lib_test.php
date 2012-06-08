@@ -454,4 +454,22 @@ $app_id = 0;
     $this->unit->run($result['company_score'], 50 * 3, '$result[company_score]', $result['company_score']);
   }
 
+  function get_challengers_test() {
+    $user_id = 1;
+    $this->load->model('user_mongo_model');
+    $user = $this->user_mongo_model->getOne(array('user_id' => $user_id));
+    $expected_result = array(
+      'in_progress' => array(),
+      'completed' => array($user)
+    );
+
+    $challenge_id = $this->challenge_id;
+    $result = $this->challenge_lib->get_challengers($challenge_id);
+    $this->unit->run($result['in_progress'], $expected_result['in_progress'], "\$result['in_progress']", $result['in_progress']);
+    $this->unit->run(count($result['completed'][0]['user_id']),
+      count($expected_result['completed'][0]['user_id']),
+      "count(\$result['completed'][0]['user_id'])",
+      count($result['completed'][0]['user_id'])
+    );
+  }
 }

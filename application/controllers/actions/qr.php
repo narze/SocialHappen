@@ -29,7 +29,7 @@ class QR extends CI_Controller {
           show_error('Invalid Challenge');
           return;
         }
-        $player_challenging = isset($user['challenge']) && in_array($challenge['hash'], $user['challenge']);
+        $player_challenging = isset($user['challenge']) && in_array(get_mongo_id($challenge), $user['challenge']);
         
         
         /**
@@ -146,7 +146,7 @@ class QR extends CI_Controller {
     //Check if challenge accepted
     $this->load->library('user_lib');
     $user = $this->user_lib->get_user($user_id);
-    $player_challenging = isset($user['challenge']) && in_array($challenge['hash'], $user['challenge']);
+    $player_challenging = isset($user['challenge']) && in_array(get_mongo_id($challenge), $user['challenge']);
     if(!$player_challenging) {
       return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
     }

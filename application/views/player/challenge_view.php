@@ -81,6 +81,28 @@
 					<?php endif; ?>
   			</div>
 
+        <div class="row-fluid">
+          <div class="span4">Who joined this challenge:</div>
+          <div class="span4"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
+            <?php foreach($challengers['in_progress'] as $user) :?>
+              <span>
+                <img src="<?php echo $user['user_image'];?>" alt="" /> <?php echo $user['user_first_name'];?>
+              </span>
+            <?php endforeach; ?>
+          </div>
+        </div>
+
+        <div class="row-fluid">
+          <div class="span4">Who completed this challenge:</div>
+          <div class="span4"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
+            <?php foreach($challengers['completed'] as $user) :?>
+              <span>
+                <img src="<?php echo $user['user_image'];?>" alt="" /> <?php echo $user['user_first_name'];?>
+              </span>
+            <?php endforeach; ?>
+          </div>
+        </div>
+
 			<?php else : ?>
 
 				<div class="alert alert-error">

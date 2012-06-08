@@ -105,6 +105,30 @@ define([
       }
       
       $('select.select-challenge-reward', this.el).change(this.changeReward);
+
+      //Show challengers
+      $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id,
+        success: function(resp) {
+          if(resp.in_progress.length) {
+            _.each(resp.in_progress, function(user) {
+              $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" /> '+ user.user_first_name +'</div>');
+            });
+          } else {
+            $('.joined', self.el).append('None');
+          }
+
+          if(resp.completed.length) {
+            _.each(resp.completed, function(user) {
+              $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" /> '+ user.user_first_name +'</div>');
+            });
+          } else {
+            $('.completed', self.el).append('None');
+          }
+        }
+      });
       
       return this;
     },
@@ -343,17 +367,17 @@ define([
 
     changeReward: function() {
       var challengeRewards = this.challengeRewards;
-      var challengeId = $('select.select-challenge-reward', this.el).find('option:selected').data('challengeId');
-      if(!challengeId) { return ;}
-      var chosenChallenge = challengeRewards[challengeId];
+      var rewardId = $('select.select-challenge-reward', this.el).find('option:selected').data('rewardId');
+      if(!rewardId) { return ;}
+      var chosenReward = challengeRewards[rewardId];
       
-      this.model.set('reward', {_id: chosenChallenge._id});
+      this.model.set('reward', {_id: chosenReward._id});
 
-      $('input.reward-name', this.el).val(chosenChallenge.name);
-      $('input.reward-image', this.el).val(chosenChallenge.image);
-      $('input.reward-value', this.el).val(chosenChallenge.value);
-      $('input.reward-status', this.el).val(chosenChallenge.status);
-      $('input.reward-description', this.el).val(chosenChallenge.description);
+      $('input.reward-name', this.el).val(chosenReward.name);
+      $('input.reward-image', this.el).val(chosenReward.image);
+      $('input.reward-value', this.el).val(chosenReward.value);
+      $('input.reward-status', this.el).val(chosenReward.status);
+      $('input.reward-description', this.el).val(chosenReward.description);
 
       this.saveEditReward();
     }

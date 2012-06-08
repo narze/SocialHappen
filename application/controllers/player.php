@@ -134,18 +134,18 @@ class Player extends CI_Controller {
    */
   function challenge($challenge_hash) {
     $this->load->model('challenge_model');
+    $this->load->library('challenge_lib');
     if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
       $challenge_id = get_mongo_id($challenge);
       $this->load->library('user_lib');
       $user_id = $this->socialhappen->get_user_id();
       $user = $this->user_lib->get_user($user_id);
 
-      $player_challenging = isset($user['challenge']) && in_array($challenge_hash, $user['challenge']);
+      $player_challenging = isset($user['challenge']) && in_array($challenge_id, $user['challenge']);
 
       $action_done = $this->input->get('action_done') && $user_id;
       //challenge_progress
       if($player_challenging) {
-        $this->load->library('challenge_lib');
         $challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
         $challenge_done = TRUE;
         if($challenge_progress) {
@@ -181,11 +181,7 @@ class Player extends CI_Controller {
       //Challenge reward
       $challenge_reward = NULL;
       $this->load->model('reward_item_model');
-      //Use reward in challenge for now
-      $challenge_reward = issetor($challenge['reward'], NULL);
-      // if($challenge_reward = $this->reward_item_model->get_one(array('challenge_id' => $challenge_id))) {
-      //   //@todo - Process challenge reward
-      // }
+      $challenge_reward = $this->reward_item_model->get_one(array('_id' => new MongoId($challenge['reward_item_id'])));
 
       //Challenge score
       $this->load->library('audit_lib');
@@ -196,6 +192,26 @@ class Player extends CI_Controller {
       $this->load->library('achievement_lib');
       $user_company_stat = $this->achievement_lib->get_company_stat($challenge['company_id'], $user_id);
       $company_score = issetor($user_company_stat['company_score'], 0);
+
+      //Challengers
+      $challengers = $this->challenge_lib->get_challengers($challenge_id);
+      //Get users' profile
+      $this->load->model('user_model');
+      $limit = 5;
+      $challengers['in_progress_count'] = count($challengers['in_progress']);
+      $challengers['completed_count'] = count($challengers['completed']);
+      foreach($challengers['in_progress'] as $key => &$challenger_in_progress){
+        if($key >= $limit) {
+          unset($challengers['in_progress'][$key]);
+        }
+        $challenger_in_progress = $this->user_model->get_user_profile_by_user_id($challenger_in_progress['user_id']);
+      }
+      foreach($challengers['completed'] as $key => &$challenger_completed){
+        if($key >= $limit) {
+          unset($challengers['completed'][$key]);
+        }
+        $challenger_completed = $this->user_model->get_user_profile_by_user_id($challenger_completed['user_id']);
+      }
 
       $this->load->vars(
         array(
@@ -208,7 +224,8 @@ class Player extends CI_Controller {
           'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
           'challenge_reward' => $challenge_reward,
           'challenge_score' => $challenge_score,
-          'company_score' => $company_score
+          'company_score' => $company_score,
+          'challengers' => $challengers
         )
       );
 

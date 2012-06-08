@@ -287,4 +287,36 @@ class Challenge_lib {
   function get_distinct_company() {
     return $this->CI->challenge_model->get_distinct_company();
   }
+
+  function get_challengers($challenge_id) {
+    $challenge_criteria = array(
+      'challenge' => $challenge_id
+    );
+    $challenge_complated_criteria = array(
+      'challenge_completed' => $challenge_id
+    );
+
+    $this->CI->load->model('user_mongo_model');
+    $all_challengers = $this->CI->user_mongo_model->get($challenge_criteria);
+    $completed_challengers = $this->CI->user_mongo_model->get($challenge_complated_criteria);
+
+    foreach($completed_challengers as $user) {
+      unset($all_challengers[array_search($user['user_id'], $all_challengers)]);
+    }
+
+    $result = array(
+      'in_progress' => $all_challengers,
+      'completed' => $completed_challengers
+    );
+
+    return $result;
+  }
+
+  function get_challengers_by_challenge_hash($challenge_hash) {
+    if($challenge = $this->get_by_hash($challenge_hash)) {
+      return $this->get_challengers(get_mongo_id($challenge));
+    }
+
+    return FALSE;
+  }
 }

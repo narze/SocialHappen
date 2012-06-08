@@ -51,7 +51,7 @@
       or select from list <select class="select-challenge-reward span1">
       <option>Select :</option>
       <% _.each(challengeRewards, function(challengeReward) { %>
-        <option class="challenge-reward" data-challenge-id="<%= challengeReward._id.$id %>"><%= challengeReward.name %></option>
+        <option class="challenge-reward" data-reward-id="<%= challengeReward._id.$id %>"><%= challengeReward.name %></option>
       <% }); %>
       </select>
     <% } %>
@@ -82,6 +82,16 @@
         <img src="<%= window.Company.BASE_URL + 'qr?path=player/challenge/' + hash %>" />
       </a>
     </center>
+  </div>
+
+  <h6 class="joined-label">Who joined this challenge:</h6>
+  <div class="joined">
+    
+  </div>
+
+  <h6 class="completed-label">Who completed this challenge:</h6>
+  <div class="completed">
+    
   </div>
 
 </div>
