@@ -101,22 +101,7 @@ define([
         $('#add_challenge_end').datetimepicker('setDate', (new Date(endDate)));
       }
       
-      var challengeRewards = this.challengeRewards;
-      $('select.select-challenge-reward', this.el).change(function(e) {
-        var challengeId = $(this).find('option:selected').data('challengeId');
-        if(!challengeId) { return ;}
-        var chosenChallenge = challengeRewards[challengeId];
-        
-        self.model.set('reward', {_id: chosenChallenge._id});
-
-        $('input.reward-name', this.el).val(chosenChallenge.name);
-        $('input.reward-image', this.el).val(chosenChallenge.image);
-        $('input.reward-value', this.el).val(chosenChallenge.value);
-        $('input.reward-status', this.el).val(chosenChallenge.status);
-        $('input.reward-description', this.el).val(chosenChallenge.description);
-
-        self.saveEditReward();
-      });
+      $('select.select-challenge-reward', this.el).change(this.changeReward);
 
       return this;
     },
@@ -320,7 +305,29 @@ define([
       this.options.challengesCollection.create(this.model);
       
       this.$el.modal('hide');
+
+      //Refresh
+      window.location = window.location.href;
+
+    },
+
+    changeReward: function() {
+      var challengeRewards = this.challengeRewards;
+      var challengeId = $('select.select-challenge-reward', this.el).find('option:selected').data('challengeId');
+      if(!challengeId) { return ;}
+      var chosenChallenge = challengeRewards[challengeId];
+      
+      this.model.set('reward', {_id: chosenChallenge._id});
+
+      $('input.reward-name', this.el).val(chosenChallenge.name);
+      $('input.reward-image', this.el).val(chosenChallenge.image);
+      $('input.reward-value', this.el).val(chosenChallenge.value);
+      $('input.reward-status', this.el).val(chosenChallenge.status);
+      $('input.reward-description', this.el).val(chosenChallenge.description);
+
+      this.saveEditReward();
     }
+    
   });
   return EditModalView;
 });

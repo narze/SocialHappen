@@ -47,6 +47,14 @@
 
   <h6 class="edit-reward-label">Reward:</h6>
   <h3 class="edit-reward"><%= reward.name %> <button class="btn edit-reward"><i class="icon-pencil"></i></button>
+    <% if(typeof challengeRewards !== 'undefined') { %>
+      or select from list <select class="select-challenge-reward span1">
+      <option>Select :</option>
+      <% _.each(challengeRewards, function(challengeReward) { %>
+        <option class="challenge-reward" data-challenge-id="<%= challengeReward._id.$id %>"><%= challengeReward.name %></option>
+      <% }); %>
+      </select>
+    <% } %>
   </h3>
   <div class="edit-reward hide">
     <label for="reward-name">Reward Name</label><input type="text" class="reward-name" value="<%= reward.name %>" />
