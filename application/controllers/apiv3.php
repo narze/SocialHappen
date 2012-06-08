@@ -389,6 +389,25 @@ class Apiv3 extends CI_Controller {
 
     echo json_encode(array('success' => TRUE, 'data' => $reward_item));
   }
+
+  /**
+   * Get rewards (type challenge)
+   */
+  function get_rewards_for_challenge() {
+    $this->load->model('reward_item_model');
+    $criteria = array(
+      'type' => 'challenge'
+    );
+    $rewards = $this->reward_item_model->get($criteria);
+
+    //Use key as index
+    $rewards_processed = array();
+    foreach ($rewards as $value) {
+      $rewards_processed[get_mongo_id($value)] = $value;
+    }
+
+    echo json_encode(array('data' => $rewards_processed));
+  }
 }
 
 

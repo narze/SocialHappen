@@ -39,15 +39,39 @@ define([
       _.bindAll(this);
       this.options.vent.bind('showAddModal', this.show);
     },
+
+    getRewards: function() {
+      var self = this;
+      console.log('getting rewards');
+      //Get all rewards
+      $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: window.Company.BASE_URL + 'apiv3/get_rewards_for_challenge',
+        success: function(resp) {
+          self.challengeRewards = resp.data;
+          self.render();
+        },
+        error: function() {
+          self.challengeRewards = {};
+          self.render();
+        }
+      });
+    },
     
     render: function () {
       console.log('render modal');
       
+      if(typeof this.challengeRewards === 'undefined') {
+        return this.getRewards();
+      }
+      
       var data = this.model.toJSON();
+      data.challengeRewards = this.challengeRewards;
       $(this.el).html(this.addTemplate(data));
       
       var self = this;
-       
+
       $('#add_challenge_start').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_start').datetimepicker('getDate');
@@ -77,7 +101,23 @@ define([
         $('#add_challenge_end').datetimepicker('setDate', (new Date(endDate)));
       }
       
-      
+      var challengeRewards = this.challengeRewards;
+      $('select.select-challenge-reward', this.el).change(function(e) {
+        var challengeId = $(this).find('option:selected').data('challengeId');
+        if(!challengeId) { return ;}
+        var chosenChallenge = challengeRewards[challengeId];
+        
+        self.model.set('reward', {_id: chosenChallenge._id});
+
+        $('input.reward-name', this.el).val(chosenChallenge.name);
+        $('input.reward-image', this.el).val(chosenChallenge.image);
+        $('input.reward-value', this.el).val(chosenChallenge.value);
+        $('input.reward-status', this.el).val(chosenChallenge.status);
+        $('input.reward-description', this.el).val(chosenChallenge.description);
+
+        self.saveEditReward();
+      });
+
       return this;
     },
     
