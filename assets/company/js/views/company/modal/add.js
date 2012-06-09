@@ -302,13 +302,14 @@ define([
       console.log('create challenge!');
       this.model.set('company_id', window.Company.companyId);
 
-      this.options.challengesCollection.create(this.model);
+      this.options.challengesCollection.create(this.model, {
+        success: function() {
+          //Refresh
+          window.location = window.Company.BASE_URL + 'r/company/' + window.Company.companyId;
+        }
+      });
       
       this.$el.modal('hide');
-
-      //Refresh
-      window.location = window.Company.BASE_URL + 'r/company/' + window.Company.companyId;
-      
     },
 
     changeReward: function() {
