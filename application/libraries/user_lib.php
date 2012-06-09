@@ -46,6 +46,16 @@ class User_lib {
 			return FALSE;
 		}
 
+		//Add audit
+		$this->CI->load->library('audit_lib');
+		$this->CI->audit_lib->audit_add(array(
+			'company_id' => $challenge['company_id'],
+			'action_id' => $this->CI->socialhappen->get_k('audit_action', 'User Join Challenge'),
+			'objecti' => $challenge_hash,
+			'user_id' => $user_id,
+			'app_id' => 0
+		));
+
 		$update_criteria = array(
 			'user_id' => $user_id
 		);

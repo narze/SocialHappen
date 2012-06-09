@@ -192,7 +192,9 @@ class Challenge_lib {
           'app_id' => 0,
           'subject' => '',
           'action_id' => $action_id,
-          'company_id' => $company_id
+          'company_id' => $company_id,
+          'objecti' => $challenge['hash'],
+          'user_id' => $user_id
         );
         $audit_add_result = $this->CI->audit_lib->audit_add($audit);
 

@@ -926,6 +926,7 @@ foreach ($data as $line_key => $line_value) {
 	 * var $campaign_id = '';
 	 * var $page_id = '';
 	 * var $company_id = '';
+	 * var $user_id
 	 * // basic data
 	 * var $timestamp = '';
 	 * var $subject = '';
