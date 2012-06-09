@@ -115,7 +115,7 @@ class Apiv3 extends CI_Controller {
     $activity_result = array();
 
     if($challenge_hashes){
-      $challenge_hash_array = explode(',', $challenge_hashes);
+      $challenge_hash_array = json_decode($challenge_hashes);
       $activity_search_result = array();
 
       $this->load->library('audit_lib');

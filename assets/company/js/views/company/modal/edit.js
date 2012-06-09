@@ -3,6 +3,7 @@ define([
   'underscore',
   'backbone',
   'text!templates/company/modal/edit.html',
+  'text!templates/company/modal/activity-item.html',
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
@@ -10,11 +11,11 @@ define([
   'views/company/modal/action/checkin-edit',
   'views/company/modal/action/checkin-add',
   'jqueryui'
-], function($, _, Backbone, editTemplate, FeedbackEditView, FeedbackAddView,
+], function($, _, Backbone, editTemplate, activityItemTemplate, FeedbackEditView, FeedbackAddView,
   QREditView, QRAddView, CheckinEditView, CheckinAddView, jqueryui){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
-    
+    activityItemTemplate: _.template(activityItemTemplate),
     events: {
       'click h3.edit-name': 'showEditName',
       'click button.save-name': 'saveEditName',
@@ -31,7 +32,9 @@ define([
       'click button.save-reward': 'saveEditReward',
       'click button.cancel-edit-reward': 'cancelEditReward',
       'click button.edit-score': 'showEditScore',
-      'click button.save-score': 'saveEditScore'
+      'click button.save-score': 'saveEditScore',
+      'click button.show-activity': 'showActivity',
+      'click button.hide-activity': 'hideActivity'
     },
     
     initialize: function(){
@@ -126,24 +129,6 @@ define([
             });
           } else {
             $('.completed', self.el).append('None');
-          }
-        }
-      });
-
-      //Show Activities
-      var hashes = this.model.id;
-      $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: window.Company.BASE_URL + 'apiv3/challenge_activity',
-        data: {
-          challenge_hashes: hashes
-        },
-        success: function(resp) {
-          if(resp.length) {
-            _.each(resp, function (activity) {
-              $('.activities', self.el).append('<li class="activity">'+activity.message+'</li>');
-            });
           }
         }
       });
@@ -398,6 +383,44 @@ define([
       $('input.reward-description', this.el).val(chosenReward.description);
 
       this.saveEditReward();
+    },
+    
+    hideActivity: function(){
+      console.log('hideActivity');
+      
+      $('button.show-activity', this.el).show();
+      $('button.hide-activity', this.el).hide();
+      $('ul.activity-list', this.el).hide();
+    },
+    
+    showActivity: function(){
+      console.log('showActivity');
+      var self = this;
+      $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        // contentType: 'application/json',
+        data: 'challenge_hashes=' + JSON.stringify([self.model.id]),
+        url: window.Company.BASE_URL + 'apiv3/challenge_activity/',
+        success: function(result) {
+
+          if(_.isArray(result)){
+            if(result.length > 0){
+              $('ul.activity-list').html('');
+              _.each(result, function(activity){
+                 $('ul.activity-list').append(self.activityItemTemplate(activity));
+              });
+            }else{
+              $('ul.activity-list').html('no activity');
+            }
+            $('ul.activity-list', this.el).show();
+            $('button.show-activity', this.el).hide();
+            $('button.hide-activity', this.el).show();
+          }
+          
+          
+        }
+      });
     }
     
   });
