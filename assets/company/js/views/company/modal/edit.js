@@ -45,7 +45,7 @@ define([
       //Get all rewards
       $.ajax({
         dataType: 'json',
-        method: 'POST',
+        type: 'POST',
         url: window.Company.BASE_URL + 'apiv3/get_rewards_for_challenge',
         success: function(resp) {
           self.challengeRewards = resp.data;
@@ -109,7 +109,7 @@ define([
       //Show challengers
       $.ajax({
         dataType: 'json',
-        method: 'POST',
+        type: 'POST',
         url: window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id,
         success: function(resp) {
           if(resp.in_progress.length) {
@@ -129,6 +129,24 @@ define([
           }
         }
       });
+
+      //Show Activities
+      var hashes = this.model.id;
+      $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: window.Company.BASE_URL + 'apiv3/challenge_activity',
+        data: {
+          challenge_hashes: hashes
+        },
+        success: function(resp) {
+          if(resp.length) {
+            _.each(resp, function (activity) {
+              $('.activities', self.el).append('<li class="activity">'+activity.message+'</li>');
+            });
+          }
+        }
+      });
       
       return this;
     },
@@ -145,7 +163,7 @@ define([
       //get challenge's reward item
       $.ajax({
         dataType: 'json',
-        method: 'POST',
+        type: 'POST',
         url: window.Company.BASE_URL + 'apiv3/reward_item/' + self.model.get('reward_item_id'),
         success: function(result) {
           if(result.data) {
