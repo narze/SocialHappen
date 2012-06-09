@@ -307,8 +307,8 @@ define([
       this.$el.modal('hide');
 
       //Refresh
-      window.location = window.location.href;
-
+      window.location = window.Company.BASE_URL + 'r/company/' + window.Company.companyId;
+      
     },
 
     changeReward: function() {

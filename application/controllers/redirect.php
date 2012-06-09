@@ -46,10 +46,6 @@ class Redirect extends CI_Controller {
 		redirect($facebook_tab_url);
 	}
 
-	function company($company_id){
-
-	}
-
 	function package($package_id){
 
 	}
@@ -64,6 +60,12 @@ class Redirect extends CI_Controller {
 		}
 		$this->load->model('challenge_model');
 		redirect('player/challenge/'.$challenge_hash);
+	}
+
+	function company($company_id = NULL){
+		if($company_id){
+			redirect('assets/company/#/company/'.$company_id);
+		}
 	}
 }
 
