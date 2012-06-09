@@ -161,22 +161,6 @@ class Player extends CI_Controller {
         $challenge_done = FALSE;
         $challenge_progress = FALSE;
       }
-
-      //Challenge Duration
-      if(isset($challenge['start']) && isset($challenge['end'])) {
-        if($current_user = $this->socialhappen->get_user($user_id)) {
-          $this->load->library('timezone_lib');
-          $challenge['start_time'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['start']), $current_user['user_timezone_offset']);
-          $challenge['end_time'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $challenge['end']), $current_user['user_timezone_offset']);
-
-        } else {
-          $challenge['start_time'] = date('Y-m-d H:i:s', $challenge['start']);
-          $challenge['end_time'] = date('Y-m-d H:i:s', $challenge['end']);
-        }
-      } else {
-        $challenge['start_time'] = NULL;
-        $challenge['end_time'] = NULL;
-      }
       
       //Challenge reward
       $challenge_reward = NULL;

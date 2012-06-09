@@ -20,8 +20,8 @@
 						<img class="challenge-image" src="<?php echo $challenge['detail']['image'] ? $challenge['detail']['image'] : base_url('assets/images/default/challenge.png'); ?>" alt="<?php echo $challenge['detail']['name'];?>">
 					</p>
 					<?php
-						if($challenge['start_time']) echo "<p>Start {$challenge['start_time']}</p>";
-						if($challenge['end_time']) echo "<p>End {$challenge['end_time']}</p>";
+						if($challenge['start_date']) echo "<p>Start {$challenge['start_date']}</p>";
+						if($challenge['end_date']) echo "<p>End {$challenge['end_date']}</p>";
 					?>
 					<p class="challenge-description "><?php echo $challenge['detail']['description']; ?></p>
 				</div>

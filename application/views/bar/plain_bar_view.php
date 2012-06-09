@@ -77,6 +77,9 @@
   <li class="world">
     <a href="<%= baseUrl %>world">World</a>
   </li>
+  <li class="company">
+    <a href="<%= baseUrl %>assets/company/#/company/1">Company (beta)</a>
+  </li>
 </script>
 
 <script type="text/template" id="bar-user-template">

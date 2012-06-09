@@ -239,7 +239,11 @@ class Apiv3 extends CI_Controller {
    */
   function saveChallenge($challenge_hash = NULL){
     header('Content-Type: application/json', TRUE);
-    
+    if(!$user = $this->socialhappen->get_user()) {
+      echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
+      return;
+    }
+
     $challenge = $this->input->post('model', TRUE); 
     
     if(!isset($challenge) || $challenge == ''){
@@ -295,7 +299,6 @@ class Apiv3 extends CI_Controller {
       }
 
       //create 
-
       $challenge_create_flag = true;
       $challenge_update = null;
       $challenge_create = null;
