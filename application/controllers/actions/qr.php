@@ -181,7 +181,7 @@ class QR extends CI_Controller {
         'company_id' => $challenge['company_id'],
         'subject' => NULL,
         'object' => NULL,
-        'objecti' => NULL,
+        'objecti' => $challenge['hash'],
         //'additional_data' => $additional_data
       );
 

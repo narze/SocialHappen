@@ -145,7 +145,7 @@ class Checkin extends CI_Controller {
 											'company_id' => $challenge['company_id'],
 											'subject' => NULL,
 											'object' => $action_data['data']['checkin_facebook_place_name'],
-											'objecti' => NULL,
+											'objecti' => $challenge['hash'],
 											//'additional_data' => $additional_data
 										);
 					
