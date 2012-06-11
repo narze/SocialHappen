@@ -234,7 +234,9 @@ class Player extends CI_Controller {
             'vars' => array(
               'base_url' => base_url(),
               'challenge_done' => $challenge_done ? 1 : 0,
-              'action_done' => $action_done ? 1 : 0
+              'action_done' => $action_done ? 1 : 0,
+              'challenge_start_date' => $challenge['start_date'] | 0,
+              'challenge_end_date' => $challenge['end_date'] | 0
             )
           )
         ),
