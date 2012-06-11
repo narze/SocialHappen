@@ -407,6 +407,10 @@ class Player extends CI_Controller {
    * Make the current user joins the challenge
    */
   function join_challenge($challenge_hash = NULL) {
+    if(!$this->socialhappen->is_logged_in()) {
+      redirect('login?next=player/join_challenge/' . $challenge_hash);
+    }
+
     $this->load->library('challenge_lib');
     if(!$challenge = $this->challenge_lib->get_by_hash($challenge_hash)) {
       return show_error('Challenge Invalid', 404);

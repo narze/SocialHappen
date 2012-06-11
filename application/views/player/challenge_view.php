@@ -35,7 +35,7 @@
 					<?php if(!$player_logged_in || !$player_challenging) : ?>
 
 						<!-- <a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" id="join-challenge">Accept challenge</a> -->
-						<a id="join-challenge" data-url="<?php echo 'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" style="display: none;">Accept challenge</a>
+						<a id="join-challenge" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary">Accept challenge</a>
 					
 					<?php else : //player logged in and is challenging ?>
 						<!-- Challenge Actions -->
