@@ -444,6 +444,12 @@ class Audit_lib
 				$format_value = '<span class="type_package"><a href="'.base_url().$url_prefix
 						   		.'package/'.$value.'">'.$package_name.'</a></span>';
 				break;
+			case 'challenge':
+				$this->CI->load->library('challenge_lib');
+				$challenge = $this->CI->challenge_lib->get_by_hash($value);
+				$challenge_name = isset($challenge['detail']['name']) ? $challenge['detail']['name'] : $value;
+				$format_value = '<span class="type_challenge"><a href="'.base_url('player/challenge/'.$value).'">'.$challenge_name.'</a></span>';
+				break;
 			case 'number':
 				$format_value = (int) $value;
 				break;

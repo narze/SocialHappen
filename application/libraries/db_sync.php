@@ -1755,7 +1755,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} joined challenge {string:object}',
+        'format_string' => 'User {user:user_id} joined challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1765,7 +1765,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} completed challenge {string:object}',
+        'format_string' => 'User {user:user_id} completed challenge {challenge:objecti}',
         'score' => 50
       ),
       array(
