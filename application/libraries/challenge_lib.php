@@ -133,7 +133,11 @@ class Challenge_lib {
             $action_query => array('$gt' => 0)
           );
         }
-
+        
+        /**
+         * @TODO: we can reduce one step here // Book
+         */
+        
         $matched_in_progress_achievement_stat = 
           $this->CI->achievement_stat->list_stat($stat_criteria);
         if(!$matched_in_progress_achievement_stat) {
@@ -148,6 +152,10 @@ class Challenge_lib {
           }
         }
       }
+
+      /**
+       * @TODO: get action_user_data to check chellenge // Book
+       */
       
       if($match_all_criteria) {
 
