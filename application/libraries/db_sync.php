@@ -1775,7 +1775,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} entered QR code',
+        'format_string' => 'User {user:user_id} entered QR code in challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1785,7 +1785,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} gave feedback for {string:object}',
+        'format_string' => 'User {user:user_id} gave feedback and rated {string:object} in challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1795,7 +1795,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} check-in at {string:object}',
+        'format_string' => 'User {user:user_id} check-in at {string:object} in challenge {challenge:objecti}',
         'score' => 0
       ),
     );
