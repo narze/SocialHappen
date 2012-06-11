@@ -1,31 +1,10 @@
 require([
-  'jquery'
-], function($){
-  
-  checkFBConnected(checkCallback);
+  'jquery',
+  'moment'
+], function($, moment){
+
   checkActionDone();
-  
-  function checkCallback(fbUserID) {
-    $('#join-challenge').show();
-    
-    if(!fbUserID) {
-      return $('#join-challenge').click(function() {
-        window.fbLogin(loginCallback);
-      });
-    }
-
-    $('#join-challenge').click(function() {
-      loginCallback(true);
-    });
-  }
-
-  function loginCallback(loggedIn) {
-    if(!loggedIn) {
-      return;
-    }
-
-    return window.location = base_url + 'login?next=' + $('#join-challenge').data('url');
-  }
+  formatDate();
 
   function checkActionDone() {
     if(action_done) {
@@ -33,5 +12,17 @@ require([
       $('.page-header').before(actionDoneDiv);
       actionDoneDiv.delay(1000).slideDown();
     }
+  }
+
+  function formatDate() {
+
+    var startString = moment.unix(challenge_start_date).format("dddd, MMMM Do YYYY, h:mm:ss a");
+    $('#challenge-start-date').html(startString);
+
+    var endString = moment.unix(challenge_end_date).format("dddd, MMMM Do YYYY, h:mm:ss a");
+    $('#challenge-end-date').html(endString);
+
+    var untilEndString = moment.unix(challenge_end_date).fromNow();
+    $('#challenge-until-end').html(untilEndString);
   }
 });

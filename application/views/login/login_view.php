@@ -3,11 +3,11 @@
     <div class="row-fluid text-center">
       <div class="span4">&nbsp;</div>
       <div class="span4 well">
-        <span class="facebook-connect" style="display:none;">
-          <button id="facebook-connect"
+        <span class="login-form-facebook-connect">
+          <button id="login-form-facebook-connect"
             class="btn btn-info" data-toggle="button" 
             onclick="fbLogin(fbLoginResult)"
-            data-redirect="<?php echo base_url('signup/facebook'.$next);?>">
+            data-redirect="<?php echo 'signup/facebook'.$next;?>">
               Connect with facebook
           </button>
         </span>
@@ -64,8 +64,9 @@
 
   //redirect when connected facebook
   window.fbLoginResult = function(connected) {
+    console.log(connected);
     if(connected) {
-      window.location = $('#facebook-connect').data('redirect');
+      window.location = base_url + 'login/success?redirect=' + $('#login-form-facebook-connect').data('redirect');
     }
   };
 </script>

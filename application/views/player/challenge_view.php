@@ -20,8 +20,10 @@
 						<img class="challenge-image" src="<?php echo $challenge['detail']['image'] ? $challenge['detail']['image'] : base_url('assets/images/default/challenge.png'); ?>" alt="<?php echo $challenge['detail']['name'];?>">
 					</p>
 					<?php
-						if($challenge['start_date']) echo "<p>Start {$challenge['start_date']}</p>";
-						if($challenge['end_date']) echo "<p>End {$challenge['end_date']}</p>";
+            if($challenge['start_date']) 
+              echo '<p>Start : <span id="challenge-start-date"></span></p>';
+						if($challenge['end_date'])
+              echo '<p>End : <span id="challenge-end-date"></span> (<span id="challenge-until-end"></span>)</p>';
 					?>
 					<p class="challenge-description "><?php echo $challenge['detail']['description']; ?></p>
 				</div>
@@ -35,7 +37,7 @@
 					<?php if(!$player_logged_in || !$player_challenging) : ?>
 
 						<!-- <a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" id="join-challenge">Accept challenge</a> -->
-						<a id="join-challenge" data-url="<?php echo 'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" style="display: none;">Accept challenge</a>
+						<a id="join-challenge" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary">Accept challenge</a>
 					
 					<?php else : //player logged in and is challenging ?>
 						<!-- Challenge Actions -->

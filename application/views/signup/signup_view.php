@@ -1,9 +1,9 @@
 <div class="container-fluid">
-  <div id="login" style="display:none">
+  <div id="login">
     <div class="row-fluid text-center">
       <div class="span4">&nbsp;</div>
       <div class="span4 well">
-        <button id="facebook-connect"
+        <button id="signup-form-facebook-connect"
           class="btn btn-info" data-toggle="button" 
           onclick="fbLogin(fbLoginResult)"
           data-redirect="<?php echo base_url('signup/facebook');?>"

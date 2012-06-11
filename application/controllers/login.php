@@ -147,4 +147,9 @@ class Login extends CI_Controller {
       }
     }
   }
+
+  function success() {
+    $redirect = $this->input->get('redirect');
+    redirect($redirect);
+  }
 }

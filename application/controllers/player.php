@@ -234,7 +234,9 @@ class Player extends CI_Controller {
             'vars' => array(
               'base_url' => base_url(),
               'challenge_done' => $challenge_done ? 1 : 0,
-              'action_done' => $action_done ? 1 : 0
+              'action_done' => $action_done ? 1 : 0,
+              'challenge_start_date' => $challenge['start_date'] | 0,
+              'challenge_end_date' => $challenge['end_date'] | 0
             )
           )
         ),
@@ -407,6 +409,10 @@ class Player extends CI_Controller {
    * Make the current user joins the challenge
    */
   function join_challenge($challenge_hash = NULL) {
+    if(!$this->socialhappen->is_logged_in()) {
+      redirect('login?next=player/join_challenge/' . $challenge_hash);
+    }
+
     $this->load->library('challenge_lib');
     if(!$challenge = $this->challenge_lib->get_by_hash($challenge_hash)) {
       return show_error('Challenge Invalid', 404);

@@ -76,7 +76,7 @@ define([
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_start').datetimepicker('getDate');
           self.model.set({
-            start_date: date.getTime()/1000
+            start_date: Math.floor(date.getTime()/1000)
           });
         }
       });
@@ -84,7 +84,7 @@ define([
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_end').datetimepicker('getDate');
           self.model.set({
-            end_date: date.getTime()/1000
+            end_date: Math.floor(date.getTime()/1000)
           });
         }
       });

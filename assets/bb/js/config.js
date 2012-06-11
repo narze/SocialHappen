@@ -12,6 +12,7 @@ require.config({
     masonry: 'libs/masonry/jquery.masonry.min',
     endlessscroll: 'libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
     jfmfs: 'libs/jfmfs/jfmfs',
+    moment: 'libs/moment/moment.min',
     
     //SocialHappen bar
     shplainbar: 'plain-bar',
