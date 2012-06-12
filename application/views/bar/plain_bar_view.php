@@ -10,6 +10,7 @@
       <div class="nav-collapse collapse">
         <ul class="nav bar-menu"></ul>
         <ul class="nav pull-right">
+          <li class="bar-company-list"></li>
           <li class="bar-user"></li>
           <li class="bar-notification"></li>
         </ul>
@@ -77,9 +78,25 @@
   <li class="world">
     <a href="<%= baseUrl %>world">World</a>
   </li>
-  <li class="company">
-    <a href="<%= baseUrl %>assets/company/#/company/1">Company (beta)</a>
-  </li>
+</script>
+
+<script type="text/template" id="bar-company-list-template">
+  <% if(companies && companies.length) { %>
+    <li class="divider-vertical"></li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Your Companies<b class="caret"></b></a>
+      <ul class="dropdown-menu mega-dropdown-menu user">
+        <% _.each(companies, function(company) {  %>
+          <li class="separator">
+            <a href="<%= base_url + 'assets/company/#/company/' + company.company_id %>">
+              <img src="<%= company.company_image %>" />
+              <p class="company-name"><%= company.company_name %></p>
+            </a>
+          </li>
+        <% }); %>
+      </ul>
+    </li>
+  <% } %>
 </script>
 
 <script type="text/template" id="bar-user-template">
@@ -100,7 +117,7 @@
 <script type="text/template" id="bar-notification-template">
   <li class="divider-vertical"></li>
   <li class="dropdown notification">
-    <a href="#" class="dropdown-toggle amount" data-toggle="dropdown"> </a>
+    <a href="#" class="dropdown-toggle amount" data-toggle="dropdown"></a>
     <ul class="dropdown-menu mega-dropdown-menu notification_list_bar">
       <li class="no-notification">
         <p>
