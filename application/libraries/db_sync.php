@@ -2334,6 +2334,20 @@ class DB_Sync {
         ),
         'score' => 0
       ),
+      array(
+        'app_id' => 0,
+        'app_install_id' => NULL,
+        'info' => array(
+          'name' => 'First Challenge Done',
+          'description' => 'Completed challenge the first time',
+          'criteria_string' => array('Challenge completed = 1'),
+          'badge_image' => BASE_URL.'assets/images/badges/default.png'
+        ),
+        'criteria' => array(
+          'action.118.count' => 1
+        ),
+        'score' => 0
+      ),
     );
     foreach(array_merge($achievement_infos, $platform_achievements) as $achievement_info){
       $this->CI->achievement_lib->add_achievement_info(
