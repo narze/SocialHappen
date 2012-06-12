@@ -3,10 +3,11 @@ define([
   'underscore',
   'backbone',
   'bootstrap',
+  'timeago',
   'text!templates/header/navigation.html',
   'text!templates/header/bar-notification.html',
   'text!templates/header/bar-company-list.html'
-], function($, _, Backbone, bootstrap, headerMenuTemplate, barNotificationTemplate, barCompanyListTemplate){
+], function($, _, Backbone, bootstrap, timeago, headerMenuTemplate, barNotificationTemplate, barCompanyListTemplate){
   var HeaderNavigationView = Backbone.View.extend({
     headerMenuTemplate: _.template(headerMenuTemplate),
     barNotificationTemplate: _.template(barNotificationTemplate),
