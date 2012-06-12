@@ -21,7 +21,8 @@ define([
       var sidebarView = new SidebarView({
         el: $('#sidebar', this.el),
         userModel: this.options.userModel,
-        vent: this.options.vent
+        vent: this.options.vent,
+        collection: this.options.companiesCollection
       });
       sidebarView.render();
       

@@ -429,6 +429,19 @@ class Apiv3 extends CI_Controller {
     }
     echo json_encode($challengers);
   }
+
+  /**
+   * Get company list
+   */
+  function companies() {
+    $this->load->model('company_model');
+    if($company_id = $this->input->get('company_id')) {
+      echo json_encode($this->company_model->get_company_profile_by_company_id($company_id));
+      return;
+    }
+
+    echo json_encode($this->company_model->get_all());
+  }
 }
 
 

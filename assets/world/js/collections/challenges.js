@@ -45,7 +45,9 @@ define([
       if (!options.url) {
         if(this.last_id.length > 0){
           params.url = window.World.BASE_URL + 'apiv3/challenges/?last_id=' + this.last_id;
-        }else{
+        } else if(window.World.companyId){
+          params.url = window.World.BASE_URL + 'apiv3/challenges/?company_id=' + window.World.companyId;
+        } else {
           params.url = window.World.BASE_URL + 'apiv3/challenges/';
         }
         
