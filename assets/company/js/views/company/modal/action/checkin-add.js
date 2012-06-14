@@ -42,7 +42,7 @@ define([
         },
         count: 1
       };
-      this.options.action.name = $('textarea.name', this.el).val();
+      this.options.action.name = $('input.name', this.el).val();
       this.options.action.action_data = {
         data: {},
         action_id: 203

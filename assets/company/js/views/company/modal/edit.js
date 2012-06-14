@@ -358,8 +358,8 @@ define([
       reward.name = $('input.reward-name', this.el).val() || reward.name;
       reward.image = $('input.reward-image', this.el).val() || reward.image;
       reward.value = $('input.reward-value', this.el).val() || reward.value;
-      reward.status = $('input.reward-status', this.el).val() || reward.status;
-      reward.description = $('input.reward-description', this.el).val() || reward.description;
+      reward.status = $('select.reward-status', this.el).val() || reward.status;
+      reward.description = $('textarea.reward-description', this.el).text() || reward.description;
 
       this.model.set('reward', reward).trigger('change');
       this.model.save();
@@ -409,8 +409,8 @@ define([
       $('input.reward-name', this.el).val(chosenReward.name);
       $('input.reward-image', this.el).val(chosenReward.image);
       $('input.reward-value', this.el).val(chosenReward.value);
-      $('input.reward-status', this.el).val(chosenReward.status);
-      $('input.reward-description', this.el).val(chosenReward.description);
+      $('select.reward-status', this.el).val(chosenReward.status);
+      $('textarea.reward-description', this.el).text(chosenReward.description);
 
       this.saveEditReward();
     },

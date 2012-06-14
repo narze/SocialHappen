@@ -197,6 +197,15 @@ class Player extends CI_Controller {
         $challenger_completed = $this->user_model->get_user_profile_by_user_id($challenger_completed['user_id']);
       }
 
+      //Challenge expiration
+      $challenge_not_started = $challenge_ended = FALSE;
+      date_default_timezone_set('UTC');
+      if($challenge['start_date'] > time()) {
+        $challenge_not_started = TRUE;
+      } else if($challenge['end_date'] < time()) {
+        $challenge_ended = TRUE;
+      }
+
       $this->load->vars(
         array(
           'challenge_hash' => $challenge_hash,
@@ -209,7 +218,9 @@ class Player extends CI_Controller {
           'challenge_reward' => $challenge_reward,
           'challenge_score' => $challenge_score,
           'company_score' => $company_score,
-          'challengers' => $challengers
+          'challengers' => $challengers,
+          'challenge_not_started' => $challenge_not_started,
+          'challenge_ended' => $challenge_ended
         )
       );
 

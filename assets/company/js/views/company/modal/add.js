@@ -293,9 +293,9 @@ define([
       reward.name = $('input.reward-name', this.el).val() || reward.name;
       reward.image = $('input.reward-image', this.el).val() || reward.image;
       reward.value = $('input.reward-value', this.el).val() || reward.value;
-      reward.status = $('input.reward-status', this.el).val() || reward.status;
-      reward.description = $('input.reward-description', this.el).val() || reward.description;
-      
+      reward.status = $('select.reward-status', this.el).val() || reward.status;
+      reward.description = $('textarea.reward-description', this.el).text() || reward.description;
+
       this.model.set('reward', reward).trigger('change');
             
       this.options.vent.trigger('showAddModal', this.model);
@@ -353,8 +353,8 @@ define([
       $('input.reward-name', this.el).val(chosenChallenge.name);
       $('input.reward-image', this.el).val(chosenChallenge.image);
       $('input.reward-value', this.el).val(chosenChallenge.value);
-      $('input.reward-status', this.el).val(chosenChallenge.status);
-      $('input.reward-description', this.el).val(chosenChallenge.description);
+      $('select.reward-status', this.el).val(chosenChallenge.status);
+      $('textarea.reward-description', this.el).text(chosenChallenge.description);
 
       this.saveEditReward();
     }

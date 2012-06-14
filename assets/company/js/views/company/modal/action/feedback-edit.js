@@ -34,7 +34,7 @@ define([
       
       var dataId = this.options.action.action_data_id;
       
-      this.options.action.name = $('textarea.name', this.el).val();
+      this.options.action.name = $('input.name', this.el).val();
       this.options.action.action_data.data.feedback_welcome_message = $('textarea.feedback_welcome_message', this.el).val();
       this.options.action.action_data.data.feedback_question_message = $('textarea.feedback_question_message', this.el).val();
       this.options.action.action_data.data.feedback_vote_message = $('textarea.feedback_vote_message', this.el).val();

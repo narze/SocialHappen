@@ -38,7 +38,7 @@ define([
         },
         count: 1
       };
-      this.options.action.name = $('textarea.name', this.el).val();
+      this.options.action.name = $('input.name', this.el).val();
       this.options.action.action_data = {
         data: {},
         action_id: 202
@@ -47,7 +47,7 @@ define([
       this.options.action.action_data.data.feedback_question_message = $('textarea.feedback_question_message', this.el).val();
       this.options.action.action_data.data.feedback_vote_message = $('textarea.feedback_vote_message', this.el).val();
       this.options.action.action_data.data.feedback_thankyou_message = $('textarea.feedback_thankyou_message', this.el).val();
-      
+     console.log(this.options.action); 
       var criteria = this.model.get('criteria');
       
       criteria.push(this.options.action);

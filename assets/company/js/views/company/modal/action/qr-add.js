@@ -11,7 +11,7 @@ define([
     events: {
       'click button.edit': 'showEdit',
       'click button.save': 'saveEdit',
-      'click button.cancel': 'cancelEdit',
+      'click button.cancel': 'cancelEdit'
     },
     
     initialize: function(){
@@ -38,11 +38,11 @@ define([
         },
         count: 1
       };
-      this.options.action.name = $('textarea.name', this.el).val();
+      this.options.action.name = $('input.name', this.el).val();
       this.options.action.action_data = {
         data: {},
         action_id: 201
-      }
+      };
       this.options.action.action_data.data.todo_message = $('textarea.todo_message', this.el).val();
       this.options.action.action_data.data.done_message = $('textarea.done_message', this.el).val();
       

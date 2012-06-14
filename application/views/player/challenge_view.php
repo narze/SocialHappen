@@ -33,13 +33,13 @@
 				</div>
 
 				<div class="row-fluid">
-
-					<?php if(!$player_logged_in || !$player_challenging) : ?>
-
-						<!-- <a href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary" id="join-challenge">Accept challenge</a> -->
+          <?php if($challenge_not_started) : ?>
+            <div class="challenge-not-started"><span class="badge badge-success">Challenge not yet started.</span></div>
+          <?php elseif($challenge_ended) : ?>
+            <div class="challenge-ended"><span class="badge badge-success">Challenge ended.</span></div>
+					<?php elseif(!$player_logged_in || !$player_challenging) : ?>
 						<a id="join-challenge" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary">Accept challenge</a>
-					
-					<?php else : //player logged in and is challenging ?>
+          <?php else : //player logged in and is challenging ?>
 						<!-- Challenge Actions -->
 						<div class="row-fluid" id="challenge-criteria-list">
 

@@ -60,8 +60,13 @@
     <label for="reward-name">Reward Name</label><input type="text" class="reward-name" value="<%= reward.name %>" />
     <label for="reward-image">Reward Image</label><input type="text" class="reward-image" value="<%= reward.image %>" />
     <label for="reward-value">Reward Value</label><input type="text" class="reward-value" value="<%= reward.value %>" />
-    <label for="reward-status">Reward Status</label><input type="text" class="reward-status" value="<%= reward.status %>" />
-    <label for="reward-description">Reward Description</label><input type="text" class="reward-description" value="<%= reward.description %>" /> 
+    <label for="reward-status">Reward Status</label>
+    <select name="reward-status" class="reward-status">
+      <option value="published" <% if(reward.status === 'published') print('selected') %>>Published</option>
+      <option value="draft" <% if(reward.status === 'draft') print('selected') %>>Draft</option>
+    </select>
+    <label for="reward-description">Reward Description</label>
+    <textarea class="reward-description"><%= reward.description %></textarea>
     <div class="reward-form-actions">
       <button class="btn save-reward btn-primary">Save</button>
       <button class="btn cancel-edit-reward">Cancel</button>
