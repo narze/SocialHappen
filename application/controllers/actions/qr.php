@@ -138,6 +138,13 @@ class QR extends CI_Controller {
       return show_error('Invalid QR Code');
     }
 
+    //Check if challenge is playable
+    if($challenge['end_date'] < time()) {
+      return redirect('player/challenge/'.$challenge['hash'].'?error=ended');
+    } else if($challenge['start_date'] > time()) {
+      return redirect('player/challenge/'.$challenge['hash'].'?error=not_started');
+    }
+
     //Check if login
     if(!$user_id = $this->socialhappen->get_user_id()){
       return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
