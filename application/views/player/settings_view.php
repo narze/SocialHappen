@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span4">&nbsp;</div>
-      <div class="span4">
+      <div class="span">
         <?php if(isset($success)) : ?>
         <div class="well" id="updated-notice">
           <span>Updated</span>
@@ -35,12 +35,12 @@
                     <img class="user-image" src="<?php echo imgsize($user['user_image'],'square');?>" />
                     <span class="help-inline">
                       <span>
-                        <input id="user_image" type="file" name="user_image" style="opacity:0;filter: Alpha(Opacity=0);height:29px;position: absolute;width: 144px; "/>
+                        <input id="user_image" type="file" name="user_image" style="opacity:0;filter: Alpha(Opacity=0);height:18px;position: absolute;width: 144px; "/>
                         <a class="bt-change_pic" href="#">
                           <span>Change picture</span>
                         </a>
                       </span>
-                      <label for="use_facebook_picture">
+                      <label class="checkbox" for="use_facebook_picture">
                         <span>
                           <input type="checkbox" id="use_facebook_picture" name="use_facebook_picture" <?php echo set_checkbox('use_facebook_picture', NULL, FALSE); ?>>
                         Use your facebook avatar
