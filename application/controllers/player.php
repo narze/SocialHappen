@@ -135,7 +135,11 @@ class Player extends CI_Controller {
   function challenge($challenge_hash) {
     $this->load->model('challenge_model');
     $this->load->library('challenge_lib');
-    if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+    if(!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+      show_error('Challenge Invalid', 404);
+    } else if (!$challenge['active']) {
+      show_error('Challenge Inactive', 404);
+    } else {
       $challenge_id = get_mongo_id($challenge);
       $this->load->library('user_lib');
       $user_id = $this->socialhappen->get_user_id();
@@ -265,8 +269,6 @@ class Player extends CI_Controller {
       }
 
       $this->load->view('common/template', $template);
-    } else {
-      show_error('Challenge Invalid', 404);
     }
   }
 
