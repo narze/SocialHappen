@@ -69,6 +69,10 @@ div.app-detail{
 }
 
 .played {
-  top: 70px;
   width: 150px;
+  height: 146px;
+}
+
+.played .btn {
+  margin-top: 55px;
 }

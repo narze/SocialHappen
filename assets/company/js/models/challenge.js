@@ -10,7 +10,7 @@ define([
       detail: {
         name: 'Challenge Name',
         description: 'Challenge Description',
-        image: 'https://lh6.googleusercontent.com/JomHaEUw0LXXx3C7iggcx5R42Uu7KB7F9lHXrQqWW16ZGcTjpTs4P2RzKUvwiTAuBXYf4sEHiU8=s640-h400-e365'
+        image: 'https://lh3.googleusercontent.com/XBLfCOS_oKO-XjeYiaOAuIdukQo9wXMWsdxJZLJO8hvWMBLFwCU3r_0BrRMn_c0TnEDarKuxDg=s640-h400-e365'
       },
       hash: null,
       criteria: [],
