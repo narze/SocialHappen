@@ -10,8 +10,8 @@
 
 				<?php if($challenge_done) : ?>
 					<div class="alert alert-info">
-						<b>Challenge complete!</b>
-						<?php if($redeem_pending) { echo ' Please show this to merchant'; }
+						<b>You've already completed this challenge</b>
+						<?php if($redeem_pending) { echo ' Redeem your reward at the company.'; }
 						else {} // echo ' You have redeem this challenge's reward; ?>
 					</div>
 				<?php endif; ?>
@@ -48,13 +48,13 @@
 				<div class="row-fluid">
 					<div class="control-group">
 
-	          		<?php if($challenge_not_started) : ?>
-	            		<div class="challenge-not-started"><span class="badge badge-success">Challenge not yet started.</span></div>
-	         		<?php elseif($challenge_ended) : ?>
-	            		<div class="challenge-ended"><span class="badge badge-success">Challenge ended.</span></div>
+					<?php if($challenge_not_started) : ?>
+						<div class="challenge-not-started"><span class="badge badge-success">Challenge not yet started.</span></div>
+					<?php elseif($challenge_ended) : ?>
+						<div class="challenge-ended"><span class="badge badge-success">Challenge ended.</span></div>
 					<?php elseif(!$player_logged_in || !$player_challenging) : ?>
 							<a id="join-challenge" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary">Accept challenge</a>
-	          		<?php else : //player logged in and is challenging ?>
+					<?php else : //player logged in and is challenging ?>
 							<!-- Challenge Actions -->
 							<div class="row-fluid" id="challenge-criteria-list">
 
@@ -99,26 +99,32 @@
 				<div class="row-fluid">
 					<div class="control-group">
 						<h6>Who joined this challenge:</h6>
-						<div class="controls"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
+						<div class="controls challengers-in-progress"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['in_progress'] as $user) :?>
 							<span>
 								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" />
 							</span>
 						<?php endforeach; ?>
 						</div>
+						<?php if($challengers['in_progress_count'] > count($challengers['in_progress'])) :?>
+							<button class="btn btn-info load-more-in-progress">Load more</button>
+						<?php endif; ?>
 					</div>
 				</div>
 
 				<div class="row-fluid">
 					<div class="control-group">
 						<h6>Who completed this challenge:</h6>
-						<div class="controls"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
+						<div class="controls challengers-completed"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['completed'] as $user) :?>
 							<span>
 								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" /> 
 							</span>
 						<?php endforeach; ?>
 						</div>
+						<?php if($challengers['completed_count'] > count($challengers['completed'])) :?>
+							<button class="btn btn-info load-more-completed">Load more</button>
+						<?php endif; ?>
 					</div>
 				</div>
 
@@ -182,3 +188,9 @@
 		<button id="share-challenge-complete" class="btn btn-primary" data-dismiss="modal">Share</button>
 	</div>
 </div>
+
+<script type="text/template" id="challengers-item-template">
+  <span>
+    <img src="<%= user_image %>" alt="" /> <%= user_first_name %> 
+  </span>
+</script>

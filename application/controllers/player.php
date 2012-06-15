@@ -185,7 +185,7 @@ class Player extends CI_Controller {
       $challengers = $this->challenge_lib->get_challengers($challenge_id);
       //Get users' profile
       $this->load->model('user_model');
-      $limit = 5;
+      $limit = 1;
       $challengers['in_progress_count'] = count($challengers['in_progress']);
       $challengers['completed_count'] = count($challengers['completed']);
       foreach($challengers['in_progress'] as $key => &$challenger_in_progress){
@@ -252,7 +252,11 @@ class Player extends CI_Controller {
               'action_done' => $action_done ? 1 : 0,
               'challenge_start_date' => $challenge['start_date'] | 0,
               'challenge_end_date' => $challenge['end_date'] | 0,
-              'challengeError' => $this->input->get('error')
+              'challengeError' => $this->input->get('error'),
+              'challengeInProgressIndex' => $limit,
+              'challengeCompletedIndex' => $limit,
+              'getMoreLimit' => $limit,
+              'challengeHash' => $challenge['hash']
             )
           )
         ),
