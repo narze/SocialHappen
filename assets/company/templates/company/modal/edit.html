@@ -11,91 +11,115 @@
   </div>
 </div>
 <div class="modal-body">
-  <h6 class="edit-image">Image:</h6>
-  <div class="edit-image hide">
-    <input class="challenge-image span4" value="<%= detail.image %>" />
-    <button class="btn save-image btn-primary">Save</button>
+
+  <div class="control-group">
+    <h6 class="edit-image">Image:</h6>
+    <div class="edit-image hide">
+      <div class="control-group">
+        <input class="challenge-image span4" value="<%= detail.image %>" />
+        <button class="btn save-image btn-primary">Save</button>
+      </div>
+    </div>
   </div>
+
   <img class="challenge-image" src="<%= detail.image %>" />
-  <div class="edit-description">
-    <h6>Description:</h6>
-    <p>
-      <%= detail.description %>
-    </p>
+
+  <div class="control-group">
+    <div class="edit-description">
+      <h6>Description:</h6>
+      <p>
+        <%= detail.description %>
+      </p>
+    </div>
+    <div class="edit-description-field hide">
+      <h6>Description:</h6>
+      <textarea class="challenge-description span5" rows="3"><%= detail.description %></textarea>
+      <button class="btn save-description btn-primary">Save</button>
+    </div>
   </div>
-  <div class="edit-description-field hide">
-    <h6>Description:</h6>
-    <textarea class="challenge-description span5" rows="3"><%= detail.description %></textarea>
-    <button class="btn save-description btn-primary">Save</button>
-  </div>
-  <div class="date">
+
+  <div class="control-group date">
     <h6>Start and End Date:</h6>
     <input type="text" name="edit_challenge_start" id="edit_challenge_start" value="" placeholder="select start date...">
      <input type="text" name="edit_challenge_end" id="edit_challenge_end" value="" placeholder="select end date...">
   </div>
+
   <div class="criteria-list">
-    <div class="btn-group dropup">
-      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Add New Action <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <li><a href="#" class="add-feedback">Feedback</a></li>
-        <li><a href="#" class="add-qr">QR Code</a></li>
-        <li><a href="#" class="add-checkin">Check-in</a></li>
-      </ul>
+    <div class="control-group">
+      <div class="btn-group dropup">
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Add New Action <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a href="#" class="add-feedback">Feedback</a></li>
+          <li><a href="#" class="add-qr">QR Code</a></li>
+          <li><a href="#" class="add-checkin">Check-in</a></li>
+        </ul>
+      </div>
     </div>
     <ul class="criteria-list unstyled"></ul>
   </div>
 
-  <h6 class="edit-reward-label">Reward:</h6>
-  <h3 class="edit-reward"><%= reward.name %> <button class="btn edit-reward"><i class="icon-pencil"></i></button>
-    <% if(typeof challengeRewards !== 'undefined') { %>
-      or select from list <select class="select-challenge-reward span1">
-      <option>Select :</option>
-      <% _.each(challengeRewards, function(challengeReward) { %>
-        <option class="challenge-reward" data-reward-id="<%= challengeReward._id.$id %>"><%= challengeReward.name %></option>
-      <% }); %>
-      </select>
-    <% } %>
-  </h3>
-  <div class="edit-reward hide">
-    <label for="reward-name">Reward Name</label><input type="text" class="reward-name" value="<%= reward.name %>" />
-    <label for="reward-image">Reward Image</label><input type="text" class="reward-image" value="<%= reward.image %>" />
-    <label for="reward-value">Reward Value</label><input type="text" class="reward-value" value="<%= reward.value %>" />
-    <label for="reward-status">Reward Status</label><input type="text" class="reward-status" value="<%= reward.status %>" />
-    <label for="reward-description">Reward Description</label><input type="text" class="reward-description" value="<%= reward.description %>" /> 
-    <div class="reward-form-actions">
-      <button class="btn save-reward btn-primary">Save</button>
-      <button class="btn cancel-edit-reward">Cancel</button>
+  <div class="control-group">
+    <h6 class="edit-reward-label">Reward:</h6>
+    <h3 class="edit-reward form-inline"><%= reward.name %> <button class="btn edit-reward"><i class="icon-pencil"></i></button>
+      <% if(typeof challengeRewards !== 'undefined') { %>
+        or select from list <select class="select-challenge-reward span1">
+        <option>Select :</option>
+        <% _.each(challengeRewards, function(challengeReward) { %>
+          <option class="challenge-reward" data-reward-id="<%= challengeReward._id.$id %>"><%= challengeReward.name %></option>
+        <% }); %>
+        </select>
+      <% } %>
+    </h3>
+    <div class="edit-reward hide">
+      <label for="reward-name">Reward Name</label><input type="text" class="reward-name" value="<%= reward.name %>" />
+      <label for="reward-image">Reward Image</label><input type="text" class="reward-image" value="<%= reward.image %>" />
+      <label for="reward-value">Reward Value</label><input type="text" class="reward-value" value="<%= reward.value %>" />
+      <label for="reward-status">Reward Status</label><input type="text" class="reward-status" value="<%= reward.status %>" />
+      <label for="reward-description">Reward Description</label><input type="text" class="reward-description" value="<%= reward.description %>" /> 
+      <div class="reward-form-actions">
+        <button class="btn save-reward btn-primary">Save</button>
+        <button class="btn cancel-edit-reward">Cancel</button>
+      </div>
     </div>
   </div>
 
-  <h6 class="edit-score-label">Score:</h6>
-  <h3 class="edit-score"><%= score %> <button class="btn edit-score"><i class="icon-pencil"></i></button></h3>
-  <div class="edit-score hide">
-    <input class="challenge-score span4" value="<%= score %>" />
-    <button class="btn save-score btn-primary">Save</button>
+  <div class="control-group">
+    <h6 class="edit-score-label">Score:</h6>
+    <h3 class="edit-score"><%= score %> <button class="btn edit-score"><i class="icon-pencil"></i></button></h3>
+    <div class="edit-score hide form-inline">
+      <input class="challenge-score span4" value="<%= score %>" />
+      <button class="btn save-score btn-primary">Save</button>
+    </div>
   </div>
 
-  <h6 class="qrcode-label">QR Code:</h6>
-  <div class="qrcode">
-    <center>
-      <a href="<%= window.Company.BASE_URL + 'player/challenge/' + hash %>">
-        <img src="<%= window.Company.BASE_URL + 'qr?path=player/challenge/' + hash %>" />
-      </a>
-    </center>
+  <div class="control-group">
+    <h6 class="qrcode-label">QR Code:</h6>
+    <div class="qrcode">
+      <center>
+        <a href="<%= window.Company.BASE_URL + 'player/challenge/' + hash %>">
+          <img src="<%= window.Company.BASE_URL + 'qr?path=player/challenge/' + hash %>" />
+        </a>
+      </center>
+    </div>
   </div>
 
-  <h6 class="joined-label">Who joined this challenge:</h6>
-  <div class="joined">
-    
+  <div class="control-group">
+    <h6 class="joined-label">Who joined this challenge:</h6>
+    <div class="joined">
+      
+    </div>
   </div>
 
-  <h6 class="completed-label">Who completed this challenge:</h6>
-  <div class="completed">
+  <div class="control-group">
+    <h6 class="completed-label">Who completed this challenge:</h6>
+    <div class="completed">
+
+    </div>
     
   </div>
   
   <div class="page-header activity-label">
-    <h1>Activities <small><button class="show-activity btn">Show Activities</button> <button class="hide-activity btn hide">Hide Activities</button></small></h1>
+    <h1>Activities <small><button class="show-activity btn btn-mini">Show Activities</button> <button class="hide-activity btn btn-mini hide">Hide Activities</button></small></h1>
   </div>
   <div class="activity-list">
     <ul class="activity-list unstyled hide"></ul>

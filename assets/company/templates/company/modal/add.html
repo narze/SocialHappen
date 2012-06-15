@@ -13,8 +13,10 @@
 <div class="modal-body">
   <h6 class="edit-image">Image:</h6>
   <div class="edit-image hide">
-    <input class="challenge-image span4" value="<%= detail.image %>" />
-    <button class="btn save-image btn-primary">Save</button>
+    <div class="control-group">
+      <input class="challenge-image span4" value="<%= detail.image %>" />
+      <button class="btn save-image btn-primary">Save</button>
+    </div>
   </div>
   <img class="challenge-image" src="<%= detail.image %>" />
   <div class="edit-description">
