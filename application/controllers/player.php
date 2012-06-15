@@ -135,7 +135,11 @@ class Player extends CI_Controller {
   function challenge($challenge_hash) {
     $this->load->model('challenge_model');
     $this->load->library('challenge_lib');
-    if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+    if(!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+      show_error('Challenge Invalid', 404);
+    } else if (!$challenge['active']) {
+      show_error('Challenge Inactive', 404);
+    } else {
       $challenge_id = get_mongo_id($challenge);
       $this->load->library('user_lib');
       $user_id = $this->socialhappen->get_user_id();
@@ -197,6 +201,15 @@ class Player extends CI_Controller {
         $challenger_completed = $this->user_model->get_user_profile_by_user_id($challenger_completed['user_id']);
       }
 
+      //Challenge expiration
+      $challenge_not_started = $challenge_ended = FALSE;
+      date_default_timezone_set('UTC');
+      if($challenge['start_date'] > time()) {
+        $challenge_not_started = TRUE;
+      } else if($challenge['end_date'] < time()) {
+        $challenge_ended = TRUE;
+      }
+
       $this->load->vars(
         array(
           'challenge_hash' => $challenge_hash,
@@ -209,7 +222,9 @@ class Player extends CI_Controller {
           'challenge_reward' => $challenge_reward,
           'challenge_score' => $challenge_score,
           'company_score' => $company_score,
-          'challengers' => $challengers
+          'challengers' => $challengers,
+          'challenge_not_started' => $challenge_not_started,
+          'challenge_ended' => $challenge_ended
         )
       );
 
@@ -236,7 +251,8 @@ class Player extends CI_Controller {
               'challenge_done' => $challenge_done ? 1 : 0,
               'action_done' => $action_done ? 1 : 0,
               'challenge_start_date' => $challenge['start_date'] | 0,
-              'challenge_end_date' => $challenge['end_date'] | 0
+              'challenge_end_date' => $challenge['end_date'] | 0,
+              'challengeError' => $this->input->get('error')
             )
           )
         ),
@@ -253,8 +269,6 @@ class Player extends CI_Controller {
       }
 
       $this->load->view('common/template', $template);
-    } else {
-      show_error('Challenge Invalid', 404);
     }
   }
 
