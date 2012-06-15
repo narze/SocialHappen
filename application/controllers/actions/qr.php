@@ -163,6 +163,11 @@ class QR extends CI_Controller {
       return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
     }
 
+    //Check if challeng already completed
+    if($player_completed = isset($user['challenge_completed']) && in_array(get_mongo_id($challenge), $user['challenge_completed'])) {
+      return redirect('player/challenge/'.$challenge['hash'].'?already_completed=1');
+    }
+
     //Perform the QR action
 
     //Add some action-specific user_data
