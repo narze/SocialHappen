@@ -62,12 +62,12 @@
 
 									foreach($challenge['criteria'] as $key => $criteria) : ?>
 										<span class="criteria-item">
-											<div class="row-fluid span12">
-												<p class="span1">
+											<div class="row-fluid">
+												<div class="span2">
 													<img class="action-image" style="width:100%;" src="<?php echo isset($criteria['image']) ? $criteria['image'] : base_url('assets/images/default/action.png'); ?>" alt="<?php echo $criteria['name'];?>">
-												</p>
+												</div>
 
-												<h3 class="criteria-name span11">
+												<h3 class="criteria-name span10">
 													<a href="<?php echo '#/action/'.$criteria['action_data_id'];?>" class="criteria-link">
 														<?php echo $criteria['name']; ?>
 													</a>
@@ -91,7 +91,7 @@
 							</div>
 
 					<?php endif; ?>
-					
+
 					</div>
 
 				</div>
@@ -102,7 +102,7 @@
 						<div class="controls"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['in_progress'] as $user) :?>
 							<span>
-								<img src="<?php echo $user['user_image'];?>" alt="" /> <?php echo $user['user_first_name'];?>
+								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" />
 							</span>
 						<?php endforeach; ?>
 						</div>
@@ -115,7 +115,7 @@
 						<div class="controls"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['completed'] as $user) :?>
 							<span>
-								<img src="<?php echo $user['user_image'];?>" alt="" /> <?php echo $user['user_first_name'];?>
+								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" /> 
 							</span>
 						<?php endforeach; ?>
 						</div>
