@@ -10,8 +10,8 @@
 
 				<?php if($challenge_done) : ?>
 					<div class="alert alert-info">
-						<b>Challenge complete!</b>
-						<?php if($redeem_pending) { echo ' Please show this to merchant'; }
+						<b>You've already completed this challenge</b>
+						<?php if($redeem_pending) { echo ' Redeem your reward at the company.'; }
 						else {} // echo ' You have redeem this challenge's reward; ?>
 					</div>
 				<?php endif; ?>

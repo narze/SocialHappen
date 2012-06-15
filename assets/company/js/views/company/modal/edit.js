@@ -4,6 +4,7 @@ define([
   'backbone',
   'text!templates/company/modal/edit.html',
   'text!templates/company/modal/activity-item.html',
+  'text!templates/company/modal/challengers-item-template.html',
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
@@ -11,7 +12,7 @@ define([
   'views/company/modal/action/checkin-edit',
   'views/company/modal/action/checkin-add',
   'jqueryui'
-], function($, _, Backbone, editTemplate, activityItemTemplate, FeedbackEditView, FeedbackAddView,
+], function($, _, Backbone, editTemplate, activityItemTemplate, challengersItemTemplate, FeedbackEditView, FeedbackAddView,
   QREditView, QRAddView, CheckinEditView, CheckinAddView, jqueryui){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
@@ -143,7 +144,7 @@ define([
       $.ajax({
         dataType: 'json',
         type: 'POST',
-        url: window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id,
+        url: window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id + '/' + 1,
         success: function(resp) {
           if(resp.in_progress.length) {
             _.each(resp.in_progress, function(user) {
@@ -160,11 +161,62 @@ define([
           } else {
             $('.completed', self.el).append('None');
           }
+
+          $('.load-more-in-progress', self.el).click(loadMoreInProgress);
+          $('.load-more-completed', self.el).click(loadMoreCompleted);
         }
       });
       
+      function loadMoreInProgress() {
+        var limit = 5;
+        var offset = self.challengeInProgressIndex;
+        var inProgressTemplate = _.template(challengersItemTemplate);
+        var challengeHash = self.model.id;
+        $('.load-more-in-progress', self.el).hide();
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
+          success: function (resp) {
+            if(!resp.in_progress || (resp.in_progress.length < limit)) {
+              return;
+            }
+            $('.load-more-in-progress', self.el).show();
+            _.each(resp.in_progress, function(user) {
+              $('.challengers-in-progress', self.el).append(inProgressTemplate(user));
+            });
+          }
+        });
+        self.challengeInProgressIndex = offset + limit;
+      }
+      
+      function loadMoreCompleted() {
+        var limit = 5;
+        var offset = self.challengeCompletedIndex;
+        var completedTemplate = _.template(challengersItemTemplate);
+        var challengeHash = self.model.id;
+        $('.load-more-completed', self.el).hide();
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
+          success: function (resp) {
+            if(!resp.completed || (resp.completed.length < limit)) {
+              return;
+            }
+            $('.load-more-completed', self.el).show();
+            _.each(resp.completed, function(user) {
+              $('.challengers-completed', self.el).append(completedTemplate(user));
+            });
+          }
+        });
+        self.challengeCompletedIndex = offset + limit;
+      }
+      
       return this;
     },
+    challengeInProgressIndex: 1,
+    challengeCompletedIndex: 1,
     
     show: function(model){
       //skip getting reward_item if already fetched
