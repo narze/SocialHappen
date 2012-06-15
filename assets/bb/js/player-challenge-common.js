@@ -6,6 +6,8 @@ require([
   checkActionDone();
   formatDate();
   checkChallengeError();
+  $('.load-more-in-progress').click(loadMoreInProgress);
+  $('.load-more-completed').click(loadMoreCompleted);
 
   function checkActionDone() {
     if(action_done) {
@@ -40,5 +42,39 @@ require([
 
     var untilEndString = moment.unix(challenge_end_date).fromNow();
     $('#challenge-until-end').html(untilEndString);
+  }
+  
+  function loadMoreInProgress() {
+    var limit = getMoreLimit;
+    var offset = challengeInProgressIndex;
+    var inProgressTemplate = _.template($('#challengers-item-template').html());
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: base_url + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
+      success: function (resp) {
+        _.each(resp.in_progress, function(user) {
+          $('.challengers-in-progress').append(inProgressTemplate(user));
+        });
+      }
+    });
+    challengeInProgressIndex = offset + limit;
+  }
+  
+  function loadMoreCompleted() {
+    var limit = getMoreLimit;
+    var offset = challengeCompletedIndex;
+    var completedTemplate = _.template($('#challengers-item-template').html());
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: base_url + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
+      success: function (resp) {
+        _.each(resp.completed, function(user) {
+          $('.challengers-completed').append(completedTemplate(user));
+        });
+      }
+    });
+    challengeCompletedIndex = offset + limit;
   }
 });

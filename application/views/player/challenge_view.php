@@ -85,24 +85,30 @@
 
         <div class="row-fluid">
           <div class="span4">Who joined this challenge:</div>
-          <div class="span4"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
+          <div class="span4 challengers-in-progress"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
             <?php foreach($challengers['in_progress'] as $user) :?>
               <span>
                 <img src="<?php echo $user['user_image'];?>" alt="" /> <?php echo $user['user_first_name'];?>
               </span>
             <?php endforeach; ?>
           </div>
+          <?php if($challengers['in_progress_count'] > count($challengers['in_progress'])) :?>
+            <button class="btn btn-info load-more-in-progress">Load more</button>
+          <?php endif; ?>
         </div>
 
         <div class="row-fluid">
           <div class="span4">Who completed this challenge:</div>
-          <div class="span4"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
+          <div class="span4 challengers-completed"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
             <?php foreach($challengers['completed'] as $user) :?>
               <span>
                 <img src="<?php echo $user['user_image'];?>" alt="" /> <?php echo $user['user_first_name'];?>
               </span>
             <?php endforeach; ?>
           </div>
+          <?php if($challengers['completed_count'] > count($challengers['completed'])) :?>
+            <button class="btn btn-info load-more-completed">Load more</button>
+          <?php endif; ?>
         </div>
 
 			<?php else : ?>
@@ -164,3 +170,9 @@
 		<button id="share-challenge-complete" class="btn btn-primary" data-dismiss="modal">Share</button>
 	</div>
 </div>
+
+<script type="text/template" id="challengers-item-template">
+  <span>
+    <img src="<%= user_image %>" alt="" /> <%= user_first_name %> 
+  </span>
+</script>
