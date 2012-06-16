@@ -137,4 +137,110 @@ class Feedback extends CI_Controller {
 			show_error('Invalid data');
 		}	
 	}
+
+	function show_user_data_feedback(){
+
+		//get action_user_data list of an action_data (belong to a challenge) for selection
+		$action_data_hash = $this->input->get('action_data_hash');
+
+		$_GET['code'] = $action_data_hash;
+		$action_data = $this->action_data_lib->get_action_data_from_code();
+		//print_r($action_data);
+
+		if($action_data){
+			$action_data_id = get_mongo_id($action_data);
+			$action_user_data_array = $this->action_user_data_lib->get_action_user_data_by_action_data($action_data_id);
+			$action_user_data_id_array = array();
+
+			foreach ($action_user_data_array as $action_user_data) {
+				$action_user_data_id_array[] = get_mongo_id($action_user_data);
+			}
+
+			$this->load->library('challenge_lib');
+			$challenge = $this->challenge_lib->get_one(array('criteria.action_data_id' => $action_data_id ));
+
+			$criteria_name = '';
+			foreach($challenge['criteria'] as $criteria){
+				if($criteria['action_data_id'] == $action_data_id)
+					$criteria_name = $criteria['name'];
+
+			}
+			
+			$data = array(
+							'action_user_data_id_array' => json_encode($action_user_data_id_array),
+							'action_data_name' => $criteria_name,
+						);
+
+			$template = array(
+								'title' => 'Welcome to SocialHappen',
+								'styles' => array(
+									'common/bootstrap',
+									'common/bootstrap-responsive'
+								),
+								'body_views' => array(
+									'actions/feedback/feedback_show' => $data,
+									'common/vars' => array(
+										'vars' => array(
+											'base_url' => base_url()
+										)
+									)
+								),
+								'scripts' => array(
+									'common/jquery.min',
+									'common/bootstrap.min',
+									'challenge/feedback/feedback',
+								)
+		    				);
+
+		    $this->load->view('common/template', $template);
+		}else{
+			show_error('Invalid data');
+		}
+
+	}
+
+	function read_action_user_data(){
+		//ajax call from show_user_data_feedback
+		//identify action_id first ?
+		header('Content-Type: application/json', TRUE);
+		$action_user_data_id_array = $this->input->post('action_user_data_id', TRUE);
+		//print_r($action_user_data_id_array);
+		if(!$action_user_data_id_array){
+			echo json_encode(array('result' => 'error', 'message' => 'no input parameter : action_user_data_id'));
+		}else{
+			//$action_user_data_id_array = json_decode($action_user_data_id_array);
+			$this->load->model('user_model');
+
+			$action_user_data_array = array();
+
+			$action_user_data_criteria = array('$or' => array(
+											//array('_id' => new MongoId('4fd258d08a837bdc0e000000')),
+								));
+
+			foreach ($action_user_data_id_array as $action_user_data_id) {
+				$action_user_data_criteria['$or'][] = array('_id' => new MongoId($action_user_data_id));
+
+			}
+
+			if($action_user_data = $this->action_user_data_lib->get_action_user_data_array($action_user_data_criteria)){;
+				foreach($action_user_data as &$user_data){
+					
+					$user_data['user'] = $this->user_model->get_user_profile_by_user_id($user_data['user_id']);
+					$user_data['user_data']['timestamp'] = date('Y-m-j H:i:s', $user_data['user_data']['timestamp']);
+					$action_user_data_array[] = $user_data;
+				}
+
+				
+			}
+
+			if(sizeof($action_user_data_array) > 0){
+				echo json_encode(array('result' => 'ok', 'data' => $action_user_data_array));
+			}else{
+				echo json_encode(array('result' => 'error', 'message' => 'action_user_data not found'));
+			}
+
+		}
+		
+	}
+
 }
