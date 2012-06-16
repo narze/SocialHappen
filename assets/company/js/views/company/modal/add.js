@@ -331,7 +331,7 @@ define([
     createChallenge: function(){
       console.log('create challenge!');
       this.model.set('company_id', window.Company.companyId);
-
+      this.model.set('active', true);
       this.options.challengesCollection.create(this.model, {
         success: function() {
           //Refresh
