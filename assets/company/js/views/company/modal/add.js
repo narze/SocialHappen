@@ -119,12 +119,14 @@ define([
         }
       });
       
+      this.model.set('start_date', Math.floor((new Date()).getTime()/1000));
       var startDate = this.model.get('start_date');
       if(startDate){
         startDate *= 1000;
         $('#add_challenge_start').datetimepicker('setDate', (new Date(startDate)));
       }
       
+      this.model.set('end_date', Math.floor((new Date()).getTime()/1000 + 60*60*24*365));
       var endDate = this.model.get('end_date');
       if(endDate){
         endDate *= 1000;
@@ -329,9 +331,14 @@ define([
     },
     
     createChallenge: function(){
+      if(!this.model.get('end_date') || !this.model.get('start_date')){
+        alert('Please set start and end date');
+        return;
+      }
+      
       console.log('create challenge!');
       this.model.set('company_id', window.Company.companyId);
-
+      this.model.set('active', true);
       this.options.challengesCollection.create(this.model, {
         success: function() {
           //Refresh
