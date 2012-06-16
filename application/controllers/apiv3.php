@@ -262,6 +262,7 @@ class Apiv3 extends CI_Controller {
     }else{
       $this->load->library('challenge_lib');
       $this->load->library('action_data_lib');
+      $this->load->library('bitly_lib');
 
       $challenge = json_decode($challenge, TRUE);
       
@@ -296,6 +297,22 @@ class Apiv3 extends CI_Controller {
         if($action_data_create_flag){
           //update mongoID to challenge criteria for new added action data
           if($action_data_id = $this->action_data_lib->add_action_data($action_data_object['action_data']['action_id'], $action_data_attr['data'])){
+
+            if($action_data_object['action_data']['action_id'] == 201){
+              //short url for qr
+
+              $qr_action_url = $this->action_data_lib->get_action_url($action_data_id);
+
+              try{
+                $bitly_response = $this->bitly_lib->bitly_v3_shorten($qr_action_url);  
+                $short_qr_action_url = $bitly_response['url'];
+              }catch(Exception $ex){
+                $short_qr_action_url = '';
+              }
+
+              $action_data_object['action_data']['short_url'] = $short_qr_action_url;
+
+            }
 
             //re update challenge object
             $action_data_object['action_data_id'] = $action_data_id;
@@ -370,7 +387,6 @@ class Apiv3 extends CI_Controller {
           $challenge_hash = strrev(sha1($challenge_id));
           $challenge_url = base_url().'player/challenge/'.$challenge_hash;
 
-          $this->load->library('bitly_lib');
           try{
             $bitly_response = $this->bitly_lib->bitly_v3_shorten($challenge_url);  
             $short_challenge_url = $bitly_response['url'];

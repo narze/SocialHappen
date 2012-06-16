@@ -43,8 +43,9 @@ class Action_data_lib {
 		if(!$action_name) {
 			return FALSE;
 		}
-		//TODO : action data validation (different in each action id)
 		
+		//TODO : action data validation (different in each action id)
+
 		return $this->_add_action_data($action_id, $action_data);
 
 	}
@@ -59,6 +60,26 @@ class Action_data_lib {
 			'data' => $action_data,
 		);
 		if($action_data_id = $this->CI->action_data_model->add($add_record)) {
+			
+			//qr short url bitly
+			if($action_id == 201){
+				$qr_action_url = $this->get_action_url($action_data_id);
+
+				$this->CI->load->library('bitly_lib');
+				try{
+					$bitly_response = $this->CI->bitly_lib->bitly_v3_shorten($qr_action_url);  
+					$short_qr_action_url = $bitly_response['url'];
+				}catch(Exception $ex){
+					$short_qr_action_url = '';
+				}
+
+				//add ".qrcode?s=<size>" follows the bitly's short_url for qr
+				$add_record['short_url'] = $short_qr_action_url;
+
+				$this->CI->action_data_model->update(array('_id' => new MongoId($action_data_id)), $add_record);
+	        
+			}
+
 			if($update_result = $this->CI->action_data_model->update(array(
 				'_id' => new MongoId($action_data_id)),
 				array(
