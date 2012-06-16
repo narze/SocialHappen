@@ -138,6 +138,18 @@ class QR extends CI_Controller {
       return show_error('Invalid QR Code');
     }
 
+    //Check if challenge is active
+    if (!$challenge['active']) {
+      show_error('Challenge Inactive', 404);
+    }
+    
+    //Check if challenge is playable
+    if($challenge['end_date'] < time()) {
+      return redirect('player/challenge/'.$challenge['hash'].'?error=ended');
+    } else if($challenge['start_date'] > time()) {
+      return redirect('player/challenge/'.$challenge['hash'].'?error=not_started');
+    }
+
     //Check if login
     if(!$user_id = $this->socialhappen->get_user_id()){
       return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
@@ -149,6 +161,11 @@ class QR extends CI_Controller {
     $player_challenging = isset($user['challenge']) && in_array(get_mongo_id($challenge), $user['challenge']);
     if(!$player_challenging) {
       return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
+    }
+
+    //Check if challeng already completed
+    if($player_completed = isset($user['challenge_completed']) && in_array(get_mongo_id($challenge), $user['challenge_completed'])) {
+      return redirect('player/challenge/'.$challenge['hash'].'?already_completed=1');
     }
 
     //Perform the QR action
@@ -181,7 +198,7 @@ class QR extends CI_Controller {
         'company_id' => $challenge['company_id'],
         'subject' => NULL,
         'object' => NULL,
-        'objecti' => NULL,
+        'objecti' => $challenge['hash'],
         //'additional_data' => $additional_data
       );
 

@@ -203,8 +203,10 @@ class Challenge_lib_test extends CI_Controller {
   }
 
   function check_challenge_test() {
-    $info = array();
     $company_id = 1;
+    $info = array(
+      'company_id' => $company_id
+    );
     $user_id = 1;
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
@@ -284,7 +286,7 @@ class Challenge_lib_test extends CI_Controller {
 
     //Count achieved after complete
       $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+    $this->unit->run($count, 1 + 1 /*FirstChallengeAchievement*/, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
     $app_id = 2;
     $user_id = 1;
     $company_id = 1;
@@ -302,7 +304,7 @@ class Challenge_lib_test extends CI_Controller {
 
     //Count again
     $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 2, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+    $this->unit->run($count, 2 + 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
     $app_id = 0;
     $user_id = 1;
     $company_id = 1;
@@ -320,7 +322,7 @@ class Challenge_lib_test extends CI_Controller {
 
     //Count again
     $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 2, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+    $this->unit->run($count, 2 + 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
     $app_id = 0;
     $user_id = 1;
     $company_id = 1;
@@ -338,7 +340,7 @@ class Challenge_lib_test extends CI_Controller {
 
     //Count again
     $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 3, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+    $this->unit->run($count, 3 + 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
 $app_id = 0;
     $user_id = 1;
     $company_id = 1;
@@ -356,7 +358,7 @@ $app_id = 0;
 
     //Count again
     $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 3, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+    $this->unit->run($count, 3 + 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
   }
 
   function get_challenge_progress_test_2() {

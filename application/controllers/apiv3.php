@@ -406,31 +406,41 @@ class Apiv3 extends CI_Controller {
   /**
    * Get challenge's challenger
    */
-  function get_challengers($challenge_hash) {
+  function get_challengers($challenge_hash, $limit = 5, $offset = 0) {
     $this->load->library('challenge_lib');
     $this->load->model('user_model');
     $challengers = $this->challenge_lib->get_challengers_by_challenge_hash($challenge_hash);
 
-    //Get users' profile (limited to 5 users)
-    $limit = 5;
     $challengers['in_progress_count'] = count($challengers['in_progress']);
     $challengers['completed_count'] = count($challengers['completed']);
     foreach($challengers['in_progress'] as $key => &$challenger_in_progress){
-      if($key >= $limit) {
+      if($key >= $offset + $limit || $key < $offset) {
         unset($challengers['in_progress'][$key]);
       }
       $challenger_in_progress = $this->user_model->get_user_profile_by_user_id($challenger_in_progress['user_id']);
     }
     foreach($challengers['completed'] as $key => &$challenger_completed){
-      if($key >= $limit) {
+      if($key >= $offset + $limit || $key < $offset) {
         unset($challengers['completed'][$key]);
       }
       $challenger_completed = $this->user_model->get_user_profile_by_user_id($challenger_completed['user_id']);
     }
     echo json_encode($challengers);
   }
-}
 
+  /**
+   * Get company list
+   */
+  function companies() {
+    $this->load->model('company_model');
+    if($company_id = $this->input->get('company_id')) {
+      echo json_encode($this->company_model->get_company_profile_by_company_id($company_id));
+      return;
+    }
+
+    echo json_encode($this->company_model->get_all());
+  }
+}
 
 /* End of file apiv3.php */
 /* Location: ./application/controllers/apiv3.php */

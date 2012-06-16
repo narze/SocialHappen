@@ -4,6 +4,7 @@ define([
   'backbone',
   'text!templates/company/modal/edit.html',
   'text!templates/company/modal/activity-item.html',
+  'text!templates/company/modal/challengers-item-template.html',
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
@@ -11,7 +12,7 @@ define([
   'views/company/modal/action/checkin-edit',
   'views/company/modal/action/checkin-add',
   'jqueryui'
-], function($, _, Backbone, editTemplate, activityItemTemplate, FeedbackEditView, FeedbackAddView,
+], function($, _, Backbone, editTemplate, activityItemTemplate, challengersItemTemplate, FeedbackEditView, FeedbackAddView,
   QREditView, QRAddView, CheckinEditView, CheckinAddView, jqueryui){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
@@ -81,6 +82,21 @@ define([
       $('#edit_challenge_start').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#edit_challenge_start').datetimepicker('getDate');
+          
+          var endDate = $('#edit_challenge_end').datetimepicker('getDate');
+          
+          if(endDate && date && date >= endDate){
+            alert('Start date must come before end date');
+            var startDate = self.model.get('start_date');
+            if(startDate){
+              startDate *= 1000;
+              $('#edit_challenge_start').datetimepicker('setDate', (new Date(startDate)));
+            }else{
+              $('#edit_challenge_start').datetimepicker('setDate', null);
+            }
+            return;
+          }
+          
           self.model.save({
             start_date: Math.floor(date.getTime()/1000)
           });
@@ -89,6 +105,21 @@ define([
       $('#edit_challenge_end').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#edit_challenge_end').datetimepicker('getDate');
+          
+          var startDate = $('#edit_challenge_start').datetimepicker('getDate');
+          
+          if(date && startDate && startDate >= date){
+            alert('End date must come after start date');
+            var endDate = self.model.get('end_date');
+            if(endDate){
+              endDate *= 1000;
+              $('#edit_challenge_end').datetimepicker('setDate', (new Date(endDate)));
+            }else{
+              $('#edit_challenge_end').datetimepicker('setDate', null);
+            }
+            return;
+          }
+          
           self.model.save({
             end_date: Math.floor(date.getTime()/1000)
           });
@@ -113,11 +144,11 @@ define([
       $.ajax({
         dataType: 'json',
         type: 'POST',
-        url: window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id,
+        url: window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id + '/' + 1,
         success: function(resp) {
           if(resp.in_progress.length) {
             _.each(resp.in_progress, function(user) {
-              $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" /> '+ user.user_first_name +'</div>');
+              $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
             });
           } else {
             $('.joined', self.el).append('None');
@@ -125,16 +156,67 @@ define([
 
           if(resp.completed.length) {
             _.each(resp.completed, function(user) {
-              $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" /> '+ user.user_first_name +'</div>');
+              $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
             });
           } else {
             $('.completed', self.el).append('None');
           }
+
+          $('.load-more-in-progress', self.el).click(loadMoreInProgress);
+          $('.load-more-completed', self.el).click(loadMoreCompleted);
         }
       });
       
+      function loadMoreInProgress() {
+        var limit = 5;
+        var offset = self.challengeInProgressIndex;
+        var inProgressTemplate = _.template(challengersItemTemplate);
+        var challengeHash = self.model.id;
+        $('.load-more-in-progress', self.el).hide();
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
+          success: function (resp) {
+            if(!resp.in_progress || (resp.in_progress.length < limit)) {
+              return;
+            }
+            $('.load-more-in-progress', self.el).show();
+            _.each(resp.in_progress, function(user) {
+              $('.challengers-in-progress', self.el).append(inProgressTemplate(user));
+            });
+          }
+        });
+        self.challengeInProgressIndex = offset + limit;
+      }
+      
+      function loadMoreCompleted() {
+        var limit = 5;
+        var offset = self.challengeCompletedIndex;
+        var completedTemplate = _.template(challengersItemTemplate);
+        var challengeHash = self.model.id;
+        $('.load-more-completed', self.el).hide();
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
+          success: function (resp) {
+            if(!resp.completed || (resp.completed.length < limit)) {
+              return;
+            }
+            $('.load-more-completed', self.el).show();
+            _.each(resp.completed, function(user) {
+              $('.challengers-completed', self.el).append(completedTemplate(user));
+            });
+          }
+        });
+        self.challengeCompletedIndex = offset + limit;
+      }
+      
       return this;
     },
+    challengeInProgressIndex: 1,
+    challengeCompletedIndex: 1,
     
     show: function(model){
       //skip getting reward_item if already fetched
@@ -328,8 +410,8 @@ define([
       reward.name = $('input.reward-name', this.el).val() || reward.name;
       reward.image = $('input.reward-image', this.el).val() || reward.image;
       reward.value = $('input.reward-value', this.el).val() || reward.value;
-      reward.status = $('input.reward-status', this.el).val() || reward.status;
-      reward.description = $('input.reward-description', this.el).val() || reward.description;
+      reward.status = $('select.reward-status', this.el).val() || reward.status;
+      reward.description = $('textarea.reward-description', this.el).text() || reward.description;
 
       this.model.set('reward', reward).trigger('change');
       this.model.save();
@@ -364,7 +446,7 @@ define([
 
     cancelEditReward: function(e){
       e.preventDefault();
-      $('div.edit-reward', this.el).hide();
+      $('div.edit-reward', this.el).slideUp();
       this.render();
     },
 
@@ -379,8 +461,8 @@ define([
       $('input.reward-name', this.el).val(chosenReward.name);
       $('input.reward-image', this.el).val(chosenReward.image);
       $('input.reward-value', this.el).val(chosenReward.value);
-      $('input.reward-status', this.el).val(chosenReward.status);
-      $('input.reward-description', this.el).val(chosenReward.description);
+      $('select.reward-status', this.el).val(chosenReward.status);
+      $('textarea.reward-description', this.el).text(chosenReward.description);
 
       this.saveEditReward();
     },

@@ -1,32 +1,20 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
-  'models/challenge'
-], function($, _, Backbone, challengeModel){
-  var challengesCollection = Backbone.Collection.extend({
-    model: challengeModel,
-    
-    last_id: '',
-    
+  'backbone'
+], function(_, Backbone) {
+  var companyModel = Backbone.Model.extend({
+
+    idAttribute: 'hash',
+
+    defaults: {
+
+    },
     initialize: function(){
 
     },
-    
-    loadMore: function(callback){
-      this.last_id = this.last().id;
-      
-      this.fetch({
-        add: true,
-        success: function(collection, resp){
-          callback(resp.length);
-        }
-      });
-    },
-    
+
     sync: function(method, model, options) {
       var methodMap = {
-
         'create': 'POST',
         'update': 'PUT',
         'delete': 'DELETE',
@@ -43,14 +31,7 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        if(this.last_id.length > 0){
-          params.url = window.World.BASE_URL + 'apiv3/challenges/?last_id=' + this.last_id;
-        } else if(window.World.companyId){
-          params.url = window.World.BASE_URL + 'apiv3/challenges/?company_id=' + window.World.companyId;
-        } else {
-          params.url = window.World.BASE_URL + 'apiv3/challenges/';
-        }
-        
+        params.url = window.World.BASE_URL + 'apiv3/company/' + this.id;
       }
 
       // Ensure that we have the appropriate request data.
@@ -87,6 +68,6 @@ define([
     }
 
   });
+  return companyModel;
 
-  return challengesCollection;
 });

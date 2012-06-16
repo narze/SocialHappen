@@ -413,8 +413,8 @@ class Audit_lib
 				$this->CI->load->model('User_model','user');
 				$result = $this->CI->user->get_user_profile_by_user_id($value);
 				$name = isset($result['user_first_name']) && isset($result['user_last_name']) > 0 ? $result['user_first_name'].' '.$result['user_last_name'] : $value;
-				$format_value = '<span class="type_user"><a href="'.base_url().$url_prefix
-						   		.'user/app/'.$value.'/'.$audit['app_id'].'">'.$name.'</a></span>';
+				$format_value = '<span class="type_user"><a href="'.base_url()
+						   		.'passport/'.$value.'/">'.$name.'</a></span>';
 				break; //TODO : this link is broken, should use app_install_id or not use it at all
 			case 'campaign':
 				$this->CI->load->model('Campaign_model','campaign');
@@ -443,6 +443,12 @@ class Audit_lib
 				$package_name = isset($result['package_name']) ? $result['package_name'] : $value;
 				$format_value = '<span class="type_package"><a href="'.base_url().$url_prefix
 						   		.'package/'.$value.'">'.$package_name.'</a></span>';
+				break;
+			case 'challenge':
+				$this->CI->load->library('challenge_lib');
+				$challenge = $this->CI->challenge_lib->get_by_hash($value);
+				$challenge_name = isset($challenge['detail']['name']) ? $challenge['detail']['name'] : $value;
+				$format_value = '<span class="type_challenge"><a href="'.base_url('player/challenge/'.$value).'">'.$challenge_name.'</a></span>';
 				break;
 			case 'number':
 				$format_value = (int) $value;

@@ -38,7 +38,7 @@ define([
       
       var dataId = this.options.action.action_data_id;
       
-      this.options.action.name = $('textarea.name', this.el).val();
+      this.options.action.name = $('input.name', this.el).val();
       this.options.action.action_data.data.checkin_facebook_place_id = $('input.checkin_facebook_place_id', this.el).val();
       this.options.action.action_data.data.checkin_facebook_place_name = $('input.checkin_facebook_place_name', this.el).val();
       this.options.action.action_data.data.checkin_min_friend_count = $('input.checkin_min_friend_count', this.el).val();

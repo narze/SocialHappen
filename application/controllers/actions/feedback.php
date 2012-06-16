@@ -106,8 +106,8 @@ class Feedback extends CI_Controller {
 										'page_id' => 0,
 										'company_id' => $challenge['company_id'],
 										'subject' => NULL,
-										'object' => $challenge['detail']['name'],
-										'objecti' => NULL,
+										'object' => $user_score,
+										'objecti' => $challenge['hash'],
 										//'additional_data' => $additional_data
 									);
 				$audit_result = $this->audit_lib->audit_add($audit_data);

@@ -25,16 +25,16 @@ define([
     },
     
     showEdit: function(){
-      $('div.edit', this.el).toggle();
+      $('div.edit', this.el).slideToggle();
     },
     
     saveEdit: function(e){
       e.preventDefault();
-      $('div.edit', this.el).hide();
+      $('div.edit', this.el).slideUp();
       
       var dataId = this.options.action.action_data_id;
       
-      this.options.action.name = $('textarea.name', this.el).val();
+      this.options.action.name = $('input.name', this.el).val();
       this.options.action.action_data.data.todo_message = $('textarea.todo_message', this.el).val();
       this.options.action.action_data.data.done_message = $('textarea.done_message', this.el).val();
       

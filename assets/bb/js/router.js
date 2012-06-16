@@ -22,7 +22,7 @@ define([
 
     if(routerSet === 'player-challenge') {
       router.on('route:challengeAction', function (actionDataId) {
-        window.ChallengeAction || (window.ChallengeAction = {});
+        window.ChallengeAction = window.ChallengeAction || {};
         window.ChallengeAction.actionDataId = actionDataId;
 
         options.challengeActionModel.url =

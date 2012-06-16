@@ -75,16 +75,46 @@ define([
       $('#add_challenge_start').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_start').datetimepicker('getDate');
+          
+          var endDate = $('#add_challenge_end').datetimepicker('getDate');
+          
+          if(endDate && date && date >= endDate){
+            alert('Start date must come before end date');
+            var startDate = self.model.get('start_date');
+            if(startDate){
+              startDate *= 1000;
+              $('#add_challenge_start').datetimepicker('setDate', (new Date(startDate)));
+            }else{
+              $('#add_challenge_start').datetimepicker('setDate', null);
+            }
+            return;
+          }
+          
           self.model.set({
-            start_date: date.getTime()/1000
+            start_date: Math.floor(date.getTime()/1000)
           });
         }
       });
       $('#add_challenge_end').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_end').datetimepicker('getDate');
+          
+          var startDate = $('#add_challenge_start').datetimepicker('getDate');
+          
+          if(date && startDate && startDate >= date){
+            alert('End date must come after start date');
+            var endDate = self.model.get('end_date');
+            if(endDate){
+              endDate *= 1000;
+              $('#add_challenge_end').datetimepicker('setDate', (new Date(endDate)));
+            }else{
+              $('#add_challenge_end').datetimepicker('setDate', null);
+            }
+            return;
+          }
+          
           self.model.set({
-            end_date: date.getTime()/1000
+            end_date: Math.floor(date.getTime()/1000)
           });
         }
       });
@@ -263,9 +293,9 @@ define([
       reward.name = $('input.reward-name', this.el).val() || reward.name;
       reward.image = $('input.reward-image', this.el).val() || reward.image;
       reward.value = $('input.reward-value', this.el).val() || reward.value;
-      reward.status = $('input.reward-status', this.el).val() || reward.status;
-      reward.description = $('input.reward-description', this.el).val() || reward.description;
-      
+      reward.status = $('select.reward-status', this.el).val() || reward.status;
+      reward.description = $('textarea.reward-description', this.el).text() || reward.description;
+
       this.model.set('reward', reward).trigger('change');
             
       this.options.vent.trigger('showAddModal', this.model);
@@ -273,7 +303,7 @@ define([
 
     cancelEditReward: function(e){
       e.preventDefault();
-      $('div.edit-reward', this.el).hide();
+      $('div.edit-reward', this.el).slideUp();
       this.render();
     },
 
@@ -301,7 +331,7 @@ define([
     createChallenge: function(){
       console.log('create challenge!');
       this.model.set('company_id', window.Company.companyId);
-
+      this.model.set('active', true);
       this.options.challengesCollection.create(this.model, {
         success: function() {
           //Refresh
@@ -323,8 +353,8 @@ define([
       $('input.reward-name', this.el).val(chosenChallenge.name);
       $('input.reward-image', this.el).val(chosenChallenge.image);
       $('input.reward-value', this.el).val(chosenChallenge.value);
-      $('input.reward-status', this.el).val(chosenChallenge.status);
-      $('input.reward-description', this.el).val(chosenChallenge.description);
+      $('select.reward-status', this.el).val(chosenChallenge.status);
+      $('textarea.reward-description', this.el).text(chosenChallenge.description);
 
       this.saveEditReward();
     }

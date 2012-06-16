@@ -31,7 +31,7 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        params.url = window.World.BASE_URL + 'apiv3/challenge/' + this.id
+        params.url = window.World.BASE_URL + 'apiv3/challenge/' + this.id;
       }
 
       // Ensure that we have the appropriate request data.

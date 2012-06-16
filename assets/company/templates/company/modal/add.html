@@ -13,8 +13,10 @@
 <div class="modal-body">
   <h6 class="edit-image">Image:</h6>
   <div class="edit-image hide">
-    <input class="challenge-image span4" value="<%= detail.image %>" />
-    <button class="btn save-image btn-primary">Save</button>
+    <div class="control-group">
+      <input class="challenge-image span4" value="<%= detail.image %>" />
+      <button class="btn save-image btn-primary">Save</button>
+    </div>
   </div>
   <img class="challenge-image" src="<%= detail.image %>" />
   <div class="edit-description">
@@ -46,7 +48,7 @@
   </div>
 
   <h6 class="edit-reward-label">Reward:</h6>
-  <h3 class="edit-reward"><%= reward.name %> <button class="btn edit-reward"><i class="icon-pencil"></i></button>
+  <h3 class="edit-reward form-inline"><%= reward.name %> <button class="btn edit-reward"><i class="icon-pencil"></i></button>
   <% if(typeof challengeRewards !== 'undefined') { %>
     or select from list <select class="select-challenge-reward span1">
     <option>Select :</option>
@@ -56,12 +58,17 @@
   </select>
   <% } %>
   </h3>
-  <div class="edit-reward hide">
+  <div class="edit-reward well hide">
     <label for="reward-name">Reward Name</label><input type="text" class="reward-name" value="<%= reward.name %>" />
     <label for="reward-image">Reward Image</label><input type="text" class="reward-image" value="<%= reward.image %>" />
     <label for="reward-value">Reward Value</label><input type="text" class="reward-value" value="<%= reward.value %>" />
-    <label for="reward-status">Reward Status</label><input type="text" class="reward-status" value="<%= reward.status %>" />
-    <label for="reward-description">Reward Description</label><input type="text" class="reward-description" value="<%= reward.description %>" />
+    <label for="reward-status">Reward Status</label>
+    <select name="reward-status" class="reward-status">
+      <option value="published">Published</option>
+      <option value="draft">Draft</option>
+    </select>
+    <label for="reward-description">Reward Description</label>
+    <textarea class="reward-description"><%= reward.description %></textarea>
     <div class="reward-form-actions">
       <button class="btn save-reward btn-primary">Save</button>
       <button class="btn cancel-edit-reward">Cancel</button>
@@ -70,7 +77,7 @@
 
   <h6 class="edit-score-label">Score:</h6>
   <h3 class="edit-score"><%= score %> <button class="btn edit-score"><i class="icon-pencil"></i></button></h3>
-  <div class="edit-score hide">
+  <div class="edit-score hide form-inline">
     <input class="challenge-score span4" value="<%= score %>" />
     <button class="btn save-score btn-primary">Save</button>
   </div>

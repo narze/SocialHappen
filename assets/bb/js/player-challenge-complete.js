@@ -8,12 +8,12 @@ require([
     }
 
     function shareChallengeComplete() {
-      $('#share-challenge-complete').click(function() {
-        var url = window.location.href;
-        if(url.indexOf('?') !== -1) {
-          url = url.substring(0, url.indexOf('?'));
-        }
+      var url = window.location.href;
+      if(url.indexOf('?') !== -1) {
+        url = url.substring(0, url.indexOf('?'));
+      }
 
+      $('#share-challenge-complete').click(function() {
         FB.ui({
           method: 'feed',
           picture: null,
@@ -22,6 +22,10 @@ require([
           description: 'I\'ve completed a Challenge!!',
           link: url
         });
+      });
+
+      $('#challenge-complete-modal').on('hidden', function () {
+        window.location = url;
       });
     }
 });
