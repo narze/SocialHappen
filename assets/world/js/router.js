@@ -20,11 +20,13 @@ define([
     
     router.on('route:defaultAction', function () {
       window.World.companyId = null;
+      options.challengesCollection.last_id = '';
       renderViews();
     });
     
     router.on('route:companyWorld', function (companyId) {
       window.World.companyId = companyId;
+      options.challengesCollection.last_id = '';
       renderViews();
     });
 
