@@ -135,10 +135,8 @@ class Player extends CI_Controller {
   function challenge($challenge_hash) {
     $this->load->model('challenge_model');
     $this->load->library('challenge_lib');
-    if(!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-      show_error('Challenge Invalid', 404);
-    } else if (!$challenge['active']) {
-      show_error('Challenge Inactive', 404);
+    if((!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) || !$challenge['active']) {
+      show_error('Challenge invalid. <a href="'.base_url('assets/world').'">Back</a>');
     } else {
       $challenge_id = get_mongo_id($challenge);
       $this->load->library('user_lib');
