@@ -43,42 +43,37 @@ define([
       this.options.vent.bind('showEditModal', this.show);
     },
 
-    getRewards: function() {
-      var self = this;
-      console.log('getting rewards');
-      //Get all rewards
-      $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: window.Company.BASE_URL + 'apiv3/get_rewards_for_challenge',
-        success: function(resp) {
-          self.challengeRewards = resp.data;
-          self.render();
-        },
-        error: function() {
-          self.challengeRewards = {};
-          self.render();
-        }
-      });
-    },
-    
     render: function () {
       console.log('render modal');
       
       if(!this.model){
         return;
       }
-
-      if(typeof this.challengeRewards === 'undefined') {
-        return this.getRewards();
-      }
       
       var data = this.model.toJSON();
-      data.challengeRewards = this.challengeRewards;
+      console.log(data);
       $(this.el).html(this.editTemplate(data));
+      console.log($('ul.criteria-list'));
       
       var self = this;
        
+      //Get all rewards
+      if(!data.challengeRewards) {
+        $.ajax({
+          dataType: 'json',
+          type: 'POST',
+          url: window.Company.BASE_URL + 'apiv3/get_rewards_for_challenge',
+          success: function(resp) {
+            self.model.set('challengeRewards', resp.data);
+            self.showEdit(self.model);
+          },
+          error: function() {
+
+          }
+        });
+      }
+
+
       $('#edit_challenge_start').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#edit_challenge_start').datetimepicker('getDate');
@@ -220,6 +215,7 @@ define([
     
     show: function(model){
       //skip getting reward_item if already fetched
+      console.log('show');
       if(model.get('reward')._id) {
         return this.showEdit(model);
       }
@@ -244,10 +240,10 @@ define([
     showEdit: function(model) {
       this.model = model;
       console.log('show edit modal:', model.toJSON());
-      this.render();
+      this.$el.modal('show');
       
       var criteria = this.model.get('criteria');
-      
+
       _.each(criteria, function(action){
         var type = action.query.action_id;
         if(type == 202){
