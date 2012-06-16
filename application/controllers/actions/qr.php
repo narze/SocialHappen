@@ -135,12 +135,12 @@ class QR extends CI_Controller {
 
     //Check if challenge is valid
     if(!$challenge || !isset($challenge['hash'])) {
-      return show_error('Invalid QR Code');
+      show_error('Challenge invalid. <a href="'.base_url('assets/world').'">Back</a>');
     }
 
     //Check if challenge is active
     if (!$challenge['active']) {
-      show_error('Challenge Inactive', 404);
+      show_error('Challenge invalid. <a href="'.base_url('assets/world/#/company/'.$challenge['company_id']).'">Back</a>');
     }
     
     //Check if challenge is playable
