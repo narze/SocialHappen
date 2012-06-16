@@ -617,7 +617,6 @@ class bitly_lib {
       $params['code'] = $code;
       $params['redirect_uri'] = $redirect;
       $output = $this->bitly_post_curl($url, $params);
-      print_r( $params);
       $parts = explode('&', $output);
       foreach ($parts as $part) {
         $bits = explode('=', $part);
@@ -827,7 +826,6 @@ class bitly_lib {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         $output = curl_exec($ch);
 
-        echo curl_error($ch);
       } catch (Exception $e) {
       }
       return $output;

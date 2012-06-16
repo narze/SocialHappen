@@ -234,14 +234,6 @@ class Apiv3 extends CI_Controller {
     echo json_encode($action_data);
   }
 
-  function test_bitly(){
-    $this->load->library('bitly_lib');
-    $return_from_bitly = $this->input->get();
-    print_r($this->bitly_lib->bitly_oauth_access_token
-              ($return_from_bitly['code'], 'https://socialhappen.dyndns.org/socialhappen/apiv3/test_bitly')
-            );
-  }
-
   /**
    * create/update challenge
    */
