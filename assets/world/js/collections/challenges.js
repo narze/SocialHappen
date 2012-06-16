@@ -44,11 +44,11 @@ define([
       // Ensure that we have a URL.
       if (!options.url) {
         if(this.last_id.length > 0){
-          params.url = window.World.BASE_URL + 'apiv3/challenges/?last_id=' + this.last_id;
+          params.url = window.World.BASE_URL + 'apiv3/challenges/?active=true&last_id=' + this.last_id;
         } else if(window.World.companyId){
-          params.url = window.World.BASE_URL + 'apiv3/challenges/?company_id=' + window.World.companyId;
+          params.url = window.World.BASE_URL + 'apiv3/challenges/?active=true&company_id=' + window.World.companyId;
         } else {
-          params.url = window.World.BASE_URL + 'apiv3/challenges/';
+          params.url = window.World.BASE_URL + 'apiv3/challenges/?active=true';
         }
         
       }

@@ -177,6 +177,8 @@ class Apiv3 extends CI_Controller {
    */
   function challenges(){
     
+    $active = $this->input->get('active', TRUE); 
+    
     $last_hash = $this->input->get('last_id', TRUE); 
     
     $company_id = $this->input->get('company_id', TRUE); 
@@ -189,25 +191,34 @@ class Apiv3 extends CI_Controller {
       $challenge = $this->challenge_lib->get_one(array('hash' => $last_hash));
       if($challenge){
         
+        $query = array(
+          '_id' => array('$lt' => new MongoId($challenge['_id']['$id']))
+        );
+        
         if($company_id){
-          $challenges = $this->challenge_lib->get(array(
-            '_id' => array('$lt' => new MongoId($challenge['_id']['$id']), 'company_id' => (int)$company_id)
-          ), $limit);
-        }else{
-          $challenges = $this->challenge_lib->get(array(
-            '_id' => array('$lt' => new MongoId($challenge['_id']['$id']))
-          ), $limit);
+          $query['company_id'] = (int)$company_id;
         }
+        
+        if($active){
+          $query['active'] = true;
+        }
+        
+        $challenges = $this->challenge_lib->get($query, $limit);
       }else{
         $challenges = array();
       }
     }else{
+      $query = array();
+      
       if($company_id){
-        $challenges = $this->challenge_lib->get(array('company_id' => (int)$company_id), $limit);
-        
-      }else{
-        $challenges = $this->challenge_lib->get(array(), $limit);
+        $query['company_id'] = (int)$company_id;
       }
+      
+      if($active){
+        $query['active'] = true;
+      }
+      
+      $challenges = $this->challenge_lib->get($query, $limit);
     }
     
     function convert_id($item){
