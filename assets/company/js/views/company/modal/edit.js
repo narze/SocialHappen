@@ -148,7 +148,7 @@ define([
         success: function(resp) {
           if(resp.in_progress.length) {
             _.each(resp.in_progress, function(user) {
-              $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" /> '+ user.user_first_name +'</div>');
+              $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
             });
           } else {
             $('.joined', self.el).append('None');
@@ -156,7 +156,7 @@ define([
 
           if(resp.completed.length) {
             _.each(resp.completed, function(user) {
-              $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" /> '+ user.user_first_name +'</div>');
+              $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
             });
           } else {
             $('.completed', self.el).append('None');
@@ -446,7 +446,7 @@ define([
 
     cancelEditReward: function(e){
       e.preventDefault();
-      $('div.edit-reward', this.el).hide();
+      $('div.edit-reward', this.el).slideUp();
       this.render();
     },
 

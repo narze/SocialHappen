@@ -303,7 +303,7 @@ define([
 
     cancelEditReward: function(e){
       e.preventDefault();
-      $('div.edit-reward', this.el).hide();
+      $('div.edit-reward', this.el).slideUp();
       this.render();
     },
 

@@ -25,12 +25,12 @@ define([
     },
     
     showEdit: function(){
-      $('div.edit', this.el).toggle();
+      $('div.edit', this.el).slideToggle();
     },
     
     saveEdit: function(e){
       e.preventDefault();
-      $('div.edit', this.el).hide();
+      $('div.edit', this.el).slideUp();
       
       var dataId = this.options.action.action_data_id;
       
