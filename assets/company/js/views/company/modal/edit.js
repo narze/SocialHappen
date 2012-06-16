@@ -51,9 +51,7 @@ define([
       }
       
       var data = this.model.toJSON();
-      console.log(data);
       $(this.el).html(this.editTemplate(data));
-      console.log($('ul.criteria-list'));
       
       var self = this;
        
@@ -240,7 +238,7 @@ define([
     showEdit: function(model) {
       this.model = model;
       console.log('show edit modal:', model.toJSON());
-      this.$el.modal('show');
+      this.render();
       
       var criteria = this.model.get('criteria');
 
