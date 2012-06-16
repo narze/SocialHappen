@@ -83,6 +83,7 @@
 													<?php endif; ?>
 												</div>
 											</div>
+                      <div data-id="<?php echo $criteria['action_data_id'];?>"class="row-fluid criteria-form"></div>
 										</span>
 									<?php endforeach; 
 
