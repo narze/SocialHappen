@@ -659,7 +659,7 @@ class audit_lib_test extends CI_Controller {
 		$expected .= '2<span class="type_app_install"><a href="'.$base_url.
 			$url_prefix.'app/'.$app_install_id.'">'.$this->app_name.'</a></span>';
 		$expected .= '3<span class="type_user"><a href="'.base_url().$url_prefix
-			.'user/app/'.$user_id.'/'.$app_id.'">'.$this->user_name.'</a></span>';
+			.'passport/'.$user_id.'/">'.$this->user_name.'</a></span>';
 		$result = $this->audit_lib->translate_format_string($format_string, $audit, $use_backend_links);
 		$this->unit->run($result, $expected, "\$result", $result);
 
@@ -667,8 +667,8 @@ class audit_lib_test extends CI_Controller {
 		$expected = '1<span class="type_app">'.$this->app_name.'</span>';
 		$expected .= '2<span class="type_app_install"><a href="'.$base_url.
 			$url_prefix.'app/'.$app_install_id.'">'.$this->app_name.'</a></span>';
-		$expected .= '3<span class="type_user"><a href="'.base_url().$url_prefix
-			.'user/app/'.$user_id.'/'.$app_id.'">'.$this->user_name.'</a></span>';
+		$expected .= '3<span class="type_user"><a href="'.base_url()
+			.'passport/'.$user_id.'/">'.$this->user_name.'</a></span>';
 		$result = $this->audit_lib->translate_format_string($format_string, $audit, $use_frontend_links);
 		$this->unit->run($result, $expected, "\$result", $result);
 	}
