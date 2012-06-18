@@ -37,6 +37,10 @@ class Action_user_data_lib {
 		return $this->CI->action_user_data_model->getOne(array('_id' => new MongoId($action_user_data_id)));
 	}
 
+	function get_action_user_data_array($action_user_data_id = array()) {
+		return $this->CI->action_user_data_model->get($action_user_data_id);
+	}
+
 	function get_action_user_data_by_company($company_id) {
 		return $this->CI->action_user_data_model->get(array('company_id' => $company_id));
 	}

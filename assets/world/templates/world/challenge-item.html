@@ -4,5 +4,11 @@
     <h4><%= detail.name %></h4>
     <p><%= detail.description %></p>
   </div>
+  <div class="expired <%= expired?'':'hide' %>">
+    EXPIRED
+  </div>
+  <div class="notstart <%= notstart?'':'hide' %>">
+    NOT START
+  </div>
 </a>
 

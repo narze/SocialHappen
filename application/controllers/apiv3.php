@@ -362,8 +362,30 @@ class Apiv3 extends CI_Controller {
       if($challenge_create_flag){
         $challenge_create = $this->challenge_lib->add($challenge_data);
 
-        if($challenge_create)
-            $challenge_id = $challenge_create;
+        if($challenge_create){
+          $challenge_id = $challenge_create;
+
+          //https://socialhappen.dyndns.org/socialhappen/player/challenge/6c700063f3a8188a57446fd910eeecc46ad4fc5e
+          //create hash for short url
+          $challenge_hash = strrev(sha1($challenge_id));
+          $challenge_url = base_url().'player/challenge/'.$challenge_hash;
+
+          $this->load->library('bitly_lib');
+          try{
+            $bitly_response = $this->bitly_lib->bitly_v3_shorten($challenge_url);  
+            $short_challenge_url = $bitly_response['url'];
+          }catch(Exception $ex){
+            $short_challenge_url = '';
+          }
+
+          //add ".qrcode?s=<size>" follows the bitly's short_url for qr
+          $update_challenge_data = array();
+          $update_challenge_data['short_url'] = $short_challenge_url;
+          
+          $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $update_challenge_data);
+          
+        }
+            
 
       }
 
