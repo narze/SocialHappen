@@ -321,6 +321,10 @@ class Audit_lib
 		if(isset($additional_data['user_id'])){
 			$data_to_add['user_id'] = (int)$additional_data['user_id'];
 		}
+
+		if(isset($additional_data['timestamp'])){
+			$data_to_add['timestamp'] = (int)$additional_data['timestamp'];
+		}
 		
 		//echo '<pre>' . print_r($data_to_add, TRUE) . '</pre>';
 		
@@ -755,46 +759,46 @@ class Audit_lib
 	 * @return int
 	 */
 	function count_audit_range($key = NULL, $app_id = NULL, $action_id = NULL, $criteria = NULL, $start_date = NULL, $end_date = NULL){
-		$check_args = isset($key) && isset($action_id) && isset($criteria) && isset($start_date);
+		$check_args = isset($action_id) && isset($criteria) && isset($start_date);
 		if(!$check_args){
 			return NULL;
 		}
 		$this->CI->load->model('audit_model', 'audit');
 		
-		$db_criteria = array();
-		if(isset($app_id)){
-			$db_criteria['app_id'] = (int)$app_id;
-		}
+		$criteria['app_id'] = (int)$app_id;
 		
-		$db_criteria['action_id'] = (int)$action_id;
+		$criteria['action_id'] = (int)$action_id;
 		
 		if(isset($criteria['subject'])){
-			$db_criteria['subject'] = ''.$criteria['subject'];
+			$criteria['subject'] = ''.$criteria['subject'];
 		}
 		
 		if(isset($criteria['object'])){
-			$db_criteria['object'] = ''.$criteria['object'];
+			$criteria['object'] = ''.$criteria['object'];
 		}
 		
 		if(isset($criteria['objecti'])){
-			$db_criteria['objecti'] = ''.$criteria['objecti'];
+			$criteria['objecti'] = ''.$criteria['objecti'];
 		}
 		
 		if(isset($criteria['app_install_id'])){
-			$db_criteria['app_install_id'] = (int)$criteria['app_install_id'];
+			$criteria['app_install_id'] = (int)$criteria['app_install_id'];
 		}
 		if(isset($criteria['page_id'])){
-			$db_criteria['page_id'] = (int)$criteria['page_id'];
+			$criteria['page_id'] = (int)$criteria['page_id'];
 		}
 		if(isset($criteria['campaign_id'])){
-			$db_criteria['campaign_id'] = (int)$criteria['campaign_id'];
+			$criteria['campaign_id'] = (int)$criteria['campaign_id'];
+		}
+		if(isset($criteria['company_id'])){
+			$criteria['company_id'] = (int)$criteria['company_id'];
 		}
 		
-		//echo 'count_audit <pre>';
-		//var_dump($db_criteria);
-		//echo '</pre>';
+		// echo 'count_audit <pre>';
+		// var_dump($criteria);
+		// echo '</pre>';
 		
-		return $this->CI->audit->count_distinct_audit($key, $db_criteria, $this->convert_statdate_to_date((int)$start_date), $this->convert_statdate_to_date((int)$end_date));
+		return $this->CI->audit->count_distinct_audit($key, $criteria, $this->convert_statdate_to_date((int)$start_date), $this->convert_statdate_to_date((int)$end_date));
 	}
 	
 	/**

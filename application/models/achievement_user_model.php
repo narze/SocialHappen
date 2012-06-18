@@ -86,6 +86,9 @@ class Achievement_user_model extends CI_Model {
 			if(isset($info['campaign_id'])){
 				$achievement_user['campaign_id'] = (int)$info['campaign_id'];
 			}
+			if(isset($info['is_daily_challenge'])) {
+				$achievement_user['is_daily_challenge'] = $info['is_daily_challenge'];
+			}
 			
 			return $this->achievement_user->insert($achievement_user);
 			

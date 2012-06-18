@@ -50,11 +50,7 @@ class Audit_model extends CI_Model {
 											 'user_id' => 1,
 											 'campaign_id' => 1,
 											 'page_id' => 1,
-											 'company_id' => 1)) 
-			&& $this->audits->ensureIndex(array('timestamp' => -1,
-											 'app_id' => 1,
-											 'app_install_id' => 1,
-											 'user_id' => 1));
+											 'company_id' => 1));
 
 	}
 	
@@ -149,43 +145,11 @@ class Audit_model extends CI_Model {
 	}
 	
 	function count_distinct_audit($key = NULL, $criteria = NULL, $start_date = NULL, $end_date = NULL){
-		$check_args = isset($key) && isset($criteria) && isset($start_date);
+		$check_args = isset($criteria) && isset($start_date);
 		if(!$check_args){
 			return NULL;
 		}
-		$db_criteria = array();
-		
-		if(isset($criteria['subject'])){
-			$db_criteria['subject'] = $criteria['subject'];
-		}
-		
-		if(isset($criteria['object'])){
-			$db_criteria['object'] = $criteria['object'];
-		}
-		
-		if(isset($criteria['objecti'])){
-			$db_criteria['objecti'] = $criteria['objecti'];
-		}
-		
-		if(isset($criteria['app_id'])){
-			$db_criteria['app_id'] = $criteria['app_id'];
-		}
-		if(isset($criteria['action_id'])){
-			$db_criteria['action_id'] = $criteria['action_id'];
-		}
-		if(isset($criteria['app_install_id'])){
-			$db_criteria['app_install_id'] = $criteria['app_install_id'];
-		}
-		if(isset($criteria['user_id'])){
-			$db_criteria['user_id'] = $criteria['user_id'];
-		}
-		if(isset($criteria['page_id'])){
-			$db_criteria['page_id'] = $criteria['page_id'];
-		}
-		if(isset($criteria['campaign_id'])){
-			$db_criteria['campaign_id'] = $criteria['campaign_id'];
-		}
-		
+
 		$start_time = $this->_get_start_day_time($start_date);
 		if(isset($end_date)){
 			$end_time = $this->_get_end_day_time($end_date);
@@ -193,19 +157,34 @@ class Audit_model extends CI_Model {
 			$end_time = $this->_get_end_day_time($start_date);
 		}
 		
-		$db_criteria['timestamp'] = array('$gte' => $start_time, '$lt' => $end_time);
-		//echo 'count_distinct_audit criteria<pre>';
-		//var_dump($db_criteria);
-		//echo '</pre>';
-		
-		
-		$cursor = $this->mongo_db->command(array('distinct' => 'audits', 'key' => $key, 'query' => $db_criteria));
-		$result = array();
-		foreach ($cursor as $audit) {
-			$result[] = $audit;
+		$criteria['timestamp'] = array('$gte' => $start_time, '$lt' => $end_time);
+	
+		// unset($criteria['user_id']);
+		// unset($criteria['company_id']);
+		// unset($criteria['action_id']);
+		// unset($criteria['timestamp']);
+		// unset($criteria['app_id']);		
+// debug_print_backtrace();
+		// echo 'count_distinct_audit criteria<pre>';
+		// var_dump($criteria);
+		// echo '</pre>';
+
+		//Distinct count
+		if($key) {
+			$cursor = $this->mongo_db->command(array('distinct' => 'audits', 'key' => $key, 'query' => $criteria));
+			$result = array();
+			foreach ($cursor as $audit) {
+				$result[] = $audit;
+			}
+			return count($result[0]);
+		} else { //Non-distinct count
+			$result = array();
+			$cursor = $this->audits->find($criteria);
+			foreach ($cursor as $audit) {
+				$result[] = $audit;
+			}
+			return count($result);
 		}
-		 
-		return count($result[0]);
 	}
   
   

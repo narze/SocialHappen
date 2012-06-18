@@ -78,7 +78,8 @@ class Challenge_lib {
     $result = array(
       'success' => TRUE,
       'completed' => array(),
-      'in_progress' => array()
+      'in_progress' => array(),
+      'completed_today' => array()
     );
     
     $this->CI->load->model('achievement_user_model','achievement_user');
@@ -87,11 +88,22 @@ class Challenge_lib {
       array('user_id' => $user_id, 'company_id' => $company_id));
     
     $user_achieved_id_list = array();
-    foreach ($user_achieved as $achieved){
-      $user_achieved_id_list[] = $achieved['achievement_id']['$id'];
+    foreach ($user_achieved as $key => $achieved){
       if($achieved['achievement_id']['$ref'] === 'challenge'){
         $result['completed'][] = ''.$achieved['achievement_id']['$id'];
+        //Mark completed today if is daily challenge
+        if(isset($achieved['is_daily_challenge']) && $achieved['is_daily_challenge']) {
+          if(date('Y-m-d', $achieved['timestamp']) === date('Y-m-d')) {
+            $result['completed_today'][] = ''.$achieved['achievement_id']['$id'];
+          } else {
+            //Don't remove from candidate list, by skip adding into user_achieved_id_list
+            continue;
+          }
+          
+        }
       }
+
+      $user_achieved_id_list[] = $achieved['achievement_id']['$id'];
     }
 
     //if user achieved something, exclude them out with $nin
@@ -113,60 +125,85 @@ class Challenge_lib {
       $match_all_criteria = TRUE;
       $is_in_progress = FALSE;
       $company_id = $challenge['company_id'];
-      foreach($challenge['criteria'] as $criteria){
-        $query = $criteria['query'];
-        $count = $criteria['count'];
 
-        $action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
-        if(!isset($query['app_id']) || (isset($criteria['is_platform_action']) && $criteria['is_platform_action'])) {
-          //Query in progress challenge
-          $stat_criteria = array(
-            'app_id' => 0,
-            'user_id' => $user_id,
-            $action_query => array('$gt' => 0)
-          );
-        } else {
-          //Query in progress challenge
-          $stat_criteria = array(
-            'app_id' => $query['app_id'],
-            'user_id' => $user_id,
-            $action_query => array('$gt' => 0)
-          );
+      //If challenge is daily, we must check in audit as well (time-based criteria) 
+      if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+        $this->CI->load->library('audit_lib');
+        $match_all_criteria_today = TRUE;
+        foreach($challenge['criteria'] as $criteria){
+          $count_required = $criteria['count'];
+          $query = $criteria['query'];
+          $app_id = isset($query['app_id']) ? $query['app_id'] : 0;
+          $action_id = $query['action_id'];
+          $audit_criteria = compact('company_id', 'user_id');
+          $start_date = $end_date = date('Ymd');
+
+          $audit_count = $this->CI->audit_lib->count_audit_range(NULL, $app_id, $action_id, $audit_criteria, $start_date, $end_date);
+
+          if($audit_count < $count_required) {
+            $match_all_criteria_today = FALSE;
+          }
         }
-        
-        /**
-         * @TODO: we can reduce one step here // Book
-         */
-        
-        $matched_in_progress_achievement_stat = 
-          $this->CI->achievement_stat->list_stat($stat_criteria);
-        if(!$matched_in_progress_achievement_stat) {
-          $match_all_criteria = FALSE;
-        } else {
-          $is_in_progress = TRUE;
-          $stat_criteria[$action_query] = array('$gte' => $count);
-          $matched_achievement_stat = 
+
+        if($match_all_criteria_today) {
+          $result['completed_today'][] = $challenge_id;
+        }
+      }
+      //Don't have to check stat if audit count reached count_required
+
+        foreach($challenge['criteria'] as $criteria){
+          $query = $criteria['query'];
+          $count = $criteria['count'];
+
+          $action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+          if(!isset($query['app_id']) || (isset($criteria['is_platform_action']) && $criteria['is_platform_action'])) {
+            //Query in progress challenge
+            $stat_criteria = array(
+              'app_id' => 0,
+              'user_id' => $user_id,
+              $action_query => array('$gt' => 0)
+            );
+          } else {
+            //Query in progress challenge
+            $stat_criteria = array(
+              'app_id' => $query['app_id'],
+              'user_id' => $user_id,
+              $action_query => array('$gt' => 0)
+            );
+          }
+
+          /**
+           * @TODO: we can reduce one step here // Book
+           */
+          
+          $matched_in_progress_achievement_stat = 
             $this->CI->achievement_stat->list_stat($stat_criteria);
-          if(!$matched_achievement_stat) {
+          if(!$matched_in_progress_achievement_stat) {
             $match_all_criteria = FALSE;
-          }else if(isset($criteria['action_data_id'])){
-            
-            /**
-             * check with action_user_data that user have done it or not
-             */
-            $this->CI->load->library('action_user_data_lib');
-            $action_user_data = $this->CI->action_user_data_lib->
-              get_action_user_data_by_action_data($criteria['action_data_id']);
-            
-            if(!$action_user_data){
+          } else {
+            $is_in_progress = TRUE;
+            $stat_criteria[$action_query] = array('$gte' => $count);
+            $matched_achievement_stat = 
+              $this->CI->achievement_stat->list_stat($stat_criteria);
+            if(!$matched_achievement_stat) {
               $match_all_criteria = FALSE;
+            }else if(isset($criteria['action_data_id'])){
+              
+              /**
+               * check with action_user_data that user have done it or not
+               */
+              $this->CI->load->library('action_user_data_lib');
+              $action_user_data = $this->CI->action_user_data_lib->
+                get_action_user_data_by_action_data($criteria['action_data_id']);
+              
+              if(!$action_user_data){
+                $match_all_criteria = FALSE;
+              }
             }
           }
         }
-        
-        
-      }
-
+  
+      
       if($match_all_criteria) {
 
         $result['completed'][] = $challenge_id;
@@ -177,6 +214,12 @@ class Challenge_lib {
       
         if(isset($info['campaign_id'])){
           $achieved_info['campaign_id'] = $info['campaign_id'];
+        }
+
+        //Daily challenge flag
+        if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily') 
+          && isset($match_all_criteria_today) && $match_all_criteria_today) {
+          $achieved_info['is_daily_challenge'] = TRUE;
         }
         
         //Add achievement
