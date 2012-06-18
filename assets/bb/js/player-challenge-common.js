@@ -13,7 +13,7 @@ require([
     if(action_done) {
       var actionDoneDiv = $('<div class="action-done alert alert-info"><strong>Action done!</strong></div>').hide();
       $('.page-header').before(actionDoneDiv);
-      actionDoneDiv.delay(1000).slideDown();
+      actionDoneDiv.slideDown();
     }
   }
 
@@ -28,7 +28,7 @@ require([
 
       var challengeErrorDiv = $('<div class="action-done alert alert-error"><strong>'+message+'</strong></div>').hide();
       $('.page-header').before(challengeErrorDiv);
-      challengeErrorDiv.delay(1000).slideDown();
+      challengeErrorDiv.slideDown();
     }
   }
 
