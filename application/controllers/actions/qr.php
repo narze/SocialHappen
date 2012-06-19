@@ -163,8 +163,17 @@ class QR extends CI_Controller {
       return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
     }
 
-    //Check if challeng already completed
-    if($player_completed = isset($user['challenge_completed']) && in_array(get_mongo_id($challenge), $user['challenge_completed'])) {
+    //Check daily challenge 
+    if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+      if($player_completed_daily = (isset($user['daily_challenge_completed'][date('Ymd')])
+        && in_array(get_mongo_id($challenge), $user['daily_challenge_completed'][date('Ymd')]))) {
+        // echo '<pre>';
+        // var_dump($user['daily_challenge_completed']);
+        // echo '</pre>';
+        return redirect('player/challenge/'.$challenge['hash'].'?completed_daily=1');
+      }
+    } else if($player_completed = isset($user['challenge_completed']) && in_array(get_mongo_id($challenge), $user['challenge_completed'])) {
+      //Check if challeng already completed
       return redirect('player/challenge/'.$challenge['hash'].'?already_completed=1');
     }
 
@@ -212,6 +221,10 @@ class QR extends CI_Controller {
             );
       $achievement_result = $this->achievement_lib->
         increment_achievement_stat($challenge['company_id'], 0, $user['user_id'], $info, 1);
+
+      //Check challenge after stat increment
+      $this->load->library('challenge_lib');
+      $check_challenge_result = $this->challenge_lib->check_challenge($challenge['company_id'], $user_id, $info);
       
       if(!$audit_result || !$achievement_result) {
         log_message('error', 'Audit | Achievement error');

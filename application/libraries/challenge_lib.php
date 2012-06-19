@@ -293,7 +293,7 @@ class Challenge_lib {
       //else use temp record
 
       //TODO : and remove old temp records 
-      if(!$daily_challenge_done = (isset($user['daily_challenge_completed'][date('Ymd')]) && in_array($challenge_id, $user['daily_challenge_completed'][date('Ymd')]))) {
+      // if(!$daily_challenge_done = (isset($user['daily_challenge_completed'][date('Ymd')]) && in_array($challenge_id, $user['daily_challenge_completed'][date('Ymd')]))) {
         //Check daily challenge progress in audits
         $this->CI->load->library('audit_lib');
         $data = array();
@@ -321,10 +321,10 @@ class Challenge_lib {
         if($all_done) {
           $update_result = $this->CI->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('daily_challenge_completed.'.date('Ymd') => $challenge_id)));
         }
-
-        $data['daily_challenge'] = TRUE;
         return $data;
-      }
+      // }
+
+
     } else {
       $criterias = $challenge['criteria'];
       $company_id = $challenge['company_id'];

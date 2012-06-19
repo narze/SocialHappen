@@ -8,12 +8,20 @@
 					<h1 class="challenge-name"><?php echo $challenge['detail']['name'];?></h1>
 				</div>
 
-				<?php if($challenge_done) : ?>
-					<div class="alert alert-info">
-						<b>You've already completed this challenge</b>
-						<?php if($redeem_pending) { echo ' Redeem your reward at the company.'; }
-						else {} // echo ' You have redeem this challenge's reward; ?>
-					</div>
+				<?php if($challenge_done) : 
+					if($is_daily_challenge) : ?>
+						<div class="alert alert-info">
+							<b>You've already completed this challenge today</b>
+							<?php if($redeem_pending) { echo ' Redeem your reward at the company.'; }
+							else {} // echo ' You have redeem this challenge's reward; ?>
+						</div>
+					<?php else : ?>
+						<div class="alert alert-info">
+							<b>You've already completed this challenge</b>
+							<?php if($redeem_pending) { echo ' Redeem your reward at the company.'; }
+							else {} // echo ' You have redeem this challenge's reward; ?>
+						</div>
+					<?php endif; ?>
 				<?php endif; ?>
 
 				<div class="row-fluid">

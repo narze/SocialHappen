@@ -528,7 +528,7 @@ class Challenge_lib_test extends CI_Controller {
       'action_done' => FALSE,
       'action_count' => 0,
     );
-    $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
+    // $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
     $this->unit->run($result[0], $criteria_expect, "\$result[0]", $result[0]);
   }
 
@@ -635,7 +635,7 @@ class Challenge_lib_test extends CI_Controller {
       'action_done' => TRUE,
       'action_count' => 1,
     );
-    $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
+    // $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
     $this->unit->run($result[0], $criteria_expect, "\$result[0]", $result[0]);
   }
 }

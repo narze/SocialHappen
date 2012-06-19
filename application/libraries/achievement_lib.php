@@ -627,11 +627,12 @@ class Achievement_lib
       }
     }
 
+    //THIS CAUSES INFINITE LOOP!
     //Check challenge if company_id in included
-    if(isset($info['company_id'])){
-      $this->CI->load->library('challenge_lib');
-      $check_challenge_result = $this->CI->challenge_lib->check_challenge($info['company_id'], $user_id, $info);
-    }
+    // if(isset($info['company_id'])){
+    //   $this->CI->load->library('challenge_lib');
+    //   $check_challenge_result = $this->CI->challenge_lib->check_challenge($info['company_id'], $user_id, $info);
+    // }
   }
   
   /**
