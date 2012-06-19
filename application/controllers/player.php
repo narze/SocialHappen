@@ -143,19 +143,19 @@ class Player extends CI_Controller {
       $user_id = $this->socialhappen->get_user_id();
       $user = $this->user_lib->get_user($user_id);
 
-      //Check daily challenge
-      $is_daily_challenge = isset($challenge['repeat']) && ($challenge['repeat'] === 'daily');
-
       $player_challenging = isset($user['challenge']) && in_array($challenge_id, $user['challenge']);
+
+      //Check daily challenge
+      if($is_daily_challenge = isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+        $player_challenging = isset($user['daily_challenge'][date('Ymd')]) && in_array($challenge_id, $user['daily_challenge'][date('Ymd')]);
+      }
+
 
       $action_done = $this->input->get('action_done') && $user_id;
       //challenge_progress
 
       if($player_challenging) {
         $challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
-        echo '<pre>';
-        var_dump($challenge_progress);
-        echo '</pre>';
         $challenge_done = TRUE;
         if($challenge_progress) {
           foreach($challenge_progress as $action) {

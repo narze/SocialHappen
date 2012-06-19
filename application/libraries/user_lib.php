@@ -59,9 +59,15 @@ class User_lib {
 		$update_criteria = array(
 			'user_id' => $user_id
 		);
-		$update_record = array(
-			'$addToSet' => array('challenge' => get_mongo_id($challenge)),
-		);
+		if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+			$update_record = array(
+				'$addToSet' => array('daily_challenge.'.date('Ymd') => get_mongo_id($challenge)),
+			);
+		} else {
+			$update_record = array(
+				'$addToSet' => array('challenge' => get_mongo_id($challenge)),
+			);
+		}
 		return $update_result = $this->CI->user_mongo_model->update($update_criteria, $update_record);
 	}
 

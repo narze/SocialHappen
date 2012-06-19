@@ -155,16 +155,17 @@ class QR extends CI_Controller {
       return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
     }
 
-    //Check if challenge accepted
-    $this->load->library('user_lib');
-    $user = $this->user_lib->get_user($user_id);
-    $player_challenging = isset($user['challenge']) && in_array(get_mongo_id($challenge), $user['challenge']);
-    if(!$player_challenging) {
-      return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
-    }
 
     //Check daily challenge 
     if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+      //Check if daily challenge accepted
+      $this->load->library('user_lib');
+      $user = $this->user_lib->get_user($user_id);
+      $player_challenging = isset($user['daily_challenge'][date('Ymd')]) && in_array(get_mongo_id($challenge), $user['daily_challenge'][date('Ymd')]);
+      if(!$player_challenging) {
+        return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
+      }
+
       if($player_completed_daily = (isset($user['daily_challenge_completed'][date('Ymd')])
         && in_array(get_mongo_id($challenge), $user['daily_challenge_completed'][date('Ymd')]))) {
         // echo '<pre>';
@@ -172,9 +173,19 @@ class QR extends CI_Controller {
         // echo '</pre>';
         return redirect('player/challenge/'.$challenge['hash'].'?completed_daily=1');
       }
-    } else if($player_completed = isset($user['challenge_completed']) && in_array(get_mongo_id($challenge), $user['challenge_completed'])) {
-      //Check if challeng already completed
-      return redirect('player/challenge/'.$challenge['hash'].'?already_completed=1');
+    } else {
+      //Check if challenge accepted
+      $this->load->library('user_lib');
+      $user = $this->user_lib->get_user($user_id);
+      $player_challenging = isset($user['challenge']) && in_array(get_mongo_id($challenge), $user['challenge']);
+      if(!$player_challenging) {
+        return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
+      }
+
+      if($player_completed = isset($user['challenge_completed']) && in_array(get_mongo_id($challenge), $user['challenge_completed'])) {
+        //Check if challeng already completed
+        return redirect('player/challenge/'.$challenge['hash'].'?already_completed=1');
+      }
     }
 
     //Perform the QR action
