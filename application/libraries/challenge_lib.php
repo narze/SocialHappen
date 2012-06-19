@@ -287,56 +287,97 @@ class Challenge_lib {
       return FALSE;
     }
 
-    $criterias = $challenge['criteria'];
-    $company_id = $challenge['company_id'];
-    $data = array();
-    foreach ($criterias as $criteria) {
-      $query = $criteria['query'];
-      $target_count = isset($criteria['count']) ? $criteria['count'] : 1;
+    if($is_daily_challenge = isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+      //If check daily challenge and user don't have today's temp record (user->challenge_daily_completed-> {[Ymd]: challenge_id})
+        //Run check challenge and get completed today
+      //else use temp record
 
-      $action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
-      if(!isset($query['app_id']) || (isset($criteria['is_platform_action']) && $criteria['is_platform_action'])) {
-        //Query in progress challenge
-        $stat_criteria = array(
-          'app_id' => 0,
-          'user_id' => $user_id,
-          $action_query => array('$gte' => 0)
-        );
-      } else {
-        //Query in progress challenge
-        $stat_criteria = array(
-          'app_id' => $query['app_id'],
-          'user_id' => $user_id,
-          $action_query => array('$gte' => 0)
-        );
-      }
-      $action = array();
+      //TODO : and remove old temp records 
+      if(!$daily_challenge_done = (isset($user['daily_challenge_completed'][date('Ymd')]) && in_array($challenge_id, $user['daily_challenge_completed'][date('Ymd')]))) {
+        //Check daily challenge progress in audits
+        $this->CI->load->library('audit_lib');
+        $data = array();
+        $all_done = TRUE;
+        $company_id = $challenge['company_id'];
+        foreach($challenge['criteria'] as $criteria){
+          $count_required = $criteria['count'];
+          $query = $criteria['query'];
+          $app_id = isset($query['app_id']) ? $query['app_id'] : 0;
+          $action_id = $query['action_id'];
+          $audit_criteria = compact('company_id', 'user_id');
+          $start_date = $end_date = date('Ymd');
 
-      $this->CI->load->model('achievement_stat_model', 'achievement_stat');
-      $matched_in_progress_achievement_stat = 
-        $this->CI->achievement_stat->list_stat($stat_criteria);
-      
-      if(isset($criteria['action_data_id'])){
-        $this->CI->load->library('action_user_data_lib');
-        $action_user_data = $this->CI->action_user_data_lib->
-          get_action_user_data_by_action_data($criteria['action_data_id']);
-      }else{
-        $action_user_data = TRUE;
+          $audit_count = $this->CI->audit_lib->count_audit_range(NULL, $app_id, $action_id, $audit_criteria, $start_date, $end_date);
+
+          $action['action_data'] = $criteria;
+          $action['action_done'] = $audit_count >= $count_required;
+          if(!$action['action_done']) {
+            $all_done = FALSE;
+          }
+          $action['action_count'] = $audit_count;
+          
+          $data[] = $action;  
+        }
+        if($all_done) {
+          $update_result = $this->CI->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('daily_challenge_completed.'.date('Ymd') => $challenge_id)));
+        }
+
+        $data['daily_challenge'] = TRUE;
+        return $data;
       }
-      
-      if($matched_in_progress_achievement_stat && $action_user_data) {
-        $progress_count = $matched_in_progress_achievement_stat[0]['action'][$query['action_id']]['company'][$company_id]['count'];
-        $action['action_data'] = $criteria;
-        $action['action_done'] = $progress_count >= $target_count;
-        $action['action_count'] = $action['action_done'] ? $target_count : $progress_count;
-      } else {
-        $action['action_data'] = $criteria;
-        $action['action_done'] = FALSE;
-        $action['action_count'] = 0;
+    } else {
+      $criterias = $challenge['criteria'];
+      $company_id = $challenge['company_id'];
+      $data = array();
+      foreach ($criterias as $criteria) {
+        $query = $criteria['query'];
+        $target_count = isset($criteria['count']) ? $criteria['count'] : 1;
+
+        $action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+        if(!isset($query['app_id']) || (isset($criteria['is_platform_action']) && $criteria['is_platform_action'])) {
+          //Query in progress challenge
+          $stat_criteria = array(
+            'app_id' => 0,
+            'user_id' => $user_id,
+            $action_query => array('$gte' => 0)
+          );
+        } else {
+          //Query in progress challenge
+          $stat_criteria = array(
+            'app_id' => $query['app_id'],
+            'user_id' => $user_id,
+            $action_query => array('$gte' => 0)
+          );
+        }
+        $action = array();
+
+        $this->CI->load->model('achievement_stat_model', 'achievement_stat');
+        $matched_in_progress_achievement_stat = 
+          $this->CI->achievement_stat->list_stat($stat_criteria);
+        
+        if(isset($criteria['action_data_id'])){
+          $this->CI->load->library('action_user_data_lib');
+          $action_user_data = $this->CI->action_user_data_lib->
+            get_action_user_data_by_action_data($criteria['action_data_id']);
+        }else{
+          $action_user_data = TRUE;
+        }
+
+        
+        if($matched_in_progress_achievement_stat && $action_user_data) {
+          $progress_count = $matched_in_progress_achievement_stat[0]['action'][$query['action_id']]['company'][$company_id]['count'];
+          $action['action_data'] = $criteria;
+          $action['action_done'] = $progress_count >= $target_count;
+          $action['action_count'] = $action['action_done'] ? $target_count : $progress_count;
+        } else {
+          $action['action_data'] = $criteria;
+          $action['action_done'] = FALSE;
+          $action['action_count'] = 0;
+        }
+        $data[] = $action;
       }
-      $data[] = $action;
-    }
-    return $data;
+      return $data;
+    }    
   }
 
   function redeem_challenge($user_id = NULL, $challenge_id = NULL) {

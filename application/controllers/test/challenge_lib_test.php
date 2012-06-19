@@ -514,6 +514,24 @@ class Challenge_lib_test extends CI_Controller {
     );
   }
 
+  function get_challenge_progress_test_for_daily_challenge() {
+    $user_id = 1;
+    $challenge_id = $this->challenge_id4;
+    $result = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+    $criteria_expect = array(
+      'action_data' => array(
+        'name' => 'C4',
+        'query' => array('action_id' => 203),
+        'count' => 1,
+        'is_platform_action' => TRUE
+      ),
+      'action_done' => FALSE,
+      'action_count' => 0,
+    );
+    $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
+    $this->unit->run($result[0], $criteria_expect, "\$result[0]", $result[0]);
+  }
+
   function check_challenge_test_for_daily_challenge() {
     //Increment stat to complete challenge
     $app_id = 0;
@@ -551,7 +569,7 @@ class Challenge_lib_test extends CI_Controller {
       'completed_today' => array()
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
-    
+
     //Add audit tomorrow
     $audit = array(
       'app_id' => 0,
@@ -601,5 +619,23 @@ class Challenge_lib_test extends CI_Controller {
       'completed_today' => array($this->challenge_id4) //challenge_id4 is here as well (check audit)
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
+  }
+
+  function get_challenge_progress_done_test_for_daily_challenge() {
+    $user_id = 1;
+    $challenge_id = $this->challenge_id4;
+    $result = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
+    $criteria_expect = array(
+      'action_data' => array(
+        'name' => 'C4',
+        'query' => array('action_id' => 203),
+        'count' => 1,
+        'is_platform_action' => TRUE
+      ),
+      'action_done' => TRUE,
+      'action_count' => 1,
+    );
+    $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
+    $this->unit->run($result[0], $criteria_expect, "\$result[0]", $result[0]);
   }
 }
