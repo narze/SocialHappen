@@ -6,6 +6,10 @@ class QR extends CI_Controller {
 		parent::__construct();
 		$this->load->library('action_data_lib');
 	}
+
+  function index() {
+    $this->go($this->input->get('code'));
+  }
 	
   /**
    * qr code handler method ex. /actions/qr/go/3531sdavgbsd32436fd4363

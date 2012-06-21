@@ -4,8 +4,8 @@
       <button class="btn edit"><i class="icon-pencil"></i></button>
       <%= name %> 
       <% if(action_data.hash) { %>
-        <a href="<%= window.Company.BASE_URL + 'actions/qr/go/' + action_data.hash %>">
-          <img src="<%= window.Company.BASE_URL + 'qr?path=actions/qr/go/' + action_data.hash %>" />
+        <a href="<%= action_data.short_url %>">
+          <img src="<%= action_data.short_url + '.qrcode?s=200' %>" />
         </a>
       <% } %>
     </small>
