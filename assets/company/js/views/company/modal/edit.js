@@ -96,6 +96,8 @@ define([
           self.model.save({
             start_date: Math.floor(date.getTime()/1000)
           });
+
+          self.options.vent.trigger('showEditModal', self.model);
         }
       });
       $('#edit_challenge_end').datetimepicker({
@@ -119,6 +121,8 @@ define([
           self.model.save({
             end_date: Math.floor(date.getTime()/1000)
           });
+
+          self.options.vent.trigger('showEditModal', self.model);
         }
       });
       
@@ -162,7 +166,25 @@ define([
           $('.load-more-completed', self.el).click(loadMoreCompleted);
         }
       });
-      
+
+      //Show challenge status
+      var challengeStatus;
+      if(this.model.get('active') === false) {
+        challengeStatus = 'Draft';
+      } else {
+        var start = this.model.get('start_date');
+        var end = this.model.get('end_date');
+        var now = Math.floor(new Date().getTime()/1000);
+        if(now < start) {
+          challengeStatus = 'Not started';
+        } else if(now > end) {
+          challengeStatus = 'Ended';
+        } else {
+          challengeStatus = 'Published';
+        }
+      }
+      $('.challenge-status', this.el).html(challengeStatus);
+
       function loadMoreInProgress() {
         var limit = 5;
         var offset = self.challengeInProgressIndex;
