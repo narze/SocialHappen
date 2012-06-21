@@ -1162,4 +1162,38 @@ class SocialHappen{
 	function update_session() {
 		return $this->CI->session->sess_update();
 	}
+
+	function error_page(/* error_messages */) {
+		$error_messages = func_get_args();
+		$template = array(
+		  'title' => 'Error',
+		  'styles' => array(
+		    'common/bootstrap',
+		    'common/bootstrap-responsive',
+		    'common/bar',
+		    'common/error'
+		  ),
+		  'body_views' => array(
+		    'common/fb_root' => array(
+		      'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
+		      'facebook_channel_url' => $this->CI->facebook->channel_url,
+		      'facebook_app_scope' => $this->CI->config->item('facebook_player_scope')
+		    ),
+		    'bar/plain_bar_view' => array(),
+		    'common/error_view' => array(
+					'error_messages' => $error_messages
+				),
+		    'common/vars' => array(
+		      'vars' => array(
+		        'base_url' => base_url()
+		      )
+		    )
+		  ),
+		  'scripts' => array(),
+		  'requirejs' => array('js/plain-bar')
+		);
+
+		$this->CI->load->view('common/template', $template);
+		// exit();
+	}
 }

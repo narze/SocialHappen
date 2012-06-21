@@ -136,7 +136,13 @@ class Player extends CI_Controller {
     $this->load->model('challenge_model');
     $this->load->library('challenge_lib');
     if((!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) || !$challenge['active']) {
-      show_error('Challenge invalid. <a href="'.base_url('assets/world').'">Back</a>');
+      return $this->socialhappen->error_page(
+      'Challenge not found.', 
+      '<p>
+        <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
+          Back 
+        </a>
+      </p>');
     } else {
       $challenge_id = get_mongo_id($challenge);
       $this->load->library('user_lib');
@@ -439,7 +445,13 @@ class Player extends CI_Controller {
 
     $this->load->library('challenge_lib');
     if(!$challenge = $this->challenge_lib->get_by_hash($challenge_hash)) {
-      return show_error('Challenge Invalid', 404);
+      return $this->socialhappen->error_page(
+      'Challenge not found.', 
+      '<p>
+        <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
+          Back 
+        </a>
+      </p>');
     }
 
     if(!$user_id = $this->socialhappen->get_user_id()) {
@@ -524,21 +536,34 @@ class Player extends CI_Controller {
    */
   function challenge_action($challenge_hash, $action) {
     $this->load->model('challenge_model');
-    if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-      if(isset($challenge['criteria'][$action])) {
-        if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
-          $this->load->library('action_data_lib');
-          $action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
-          redirect($action_url, 'refresh');
-        } else { //TODO if not, redirect to app?
-          echo 'this is not platform\'s action';
-        }
-      } else {
-        show_error('Action Invalid');
-      }
-    } else {
-      show_error('Challenge Invalid', 404);
+    if(!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+      return $this->socialhappen->error_page(
+      'Challenge not found.', 
+      '<p>
+        <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
+          Back 
+        </a>
+      </p>');
     }
+
+    if(!isset($challenge['criteria'][$action])) {
+      return $this->socialhappen->error_page(
+      'Action invalid.', 
+      '<p>
+        <a href="'.base_url('player/challenge/'.$challenge_hash).'" class="btn btn-primary btn-large">
+          Back 
+        </a>
+      </p>');
+    }
+
+    if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
+      $this->load->library('action_data_lib');
+      $action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
+      redirect($action_url, 'refresh');
+    } else { //TODO if not, redirect to app?
+      echo 'this is not platform\'s action';
+    }
+   
   }
 
   /**
@@ -547,22 +572,32 @@ class Player extends CI_Controller {
   function get_challenge_action_form($challenge_hash, $action) {
     $this->load->helper('form');
     $this->load->model('challenge_model');
-    if($challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
-      if(isset($challenge['criteria'][$action])) {
-        if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
-          $this->load->library('action_data_lib');
-          // $action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
-          $this->action_data_lib->get_form($challenge['criteria'][$action]['action_data_id']);
-        } else { //TODO if not, redirect to app?
-          echo 'this is not platform\'s action';
-          return;
-        }
-      } else {
-        show_error('Action Invalid');
-        return;
-      }
-    } else {
-      show_error('Challenge Invalid', 404);
+    if(!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
+      return $this->socialhappen->error_page(
+      'Challenge not found.', 
+      '<p>
+        <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
+          Back 
+        </a>
+      </p>');
+    }
+
+    if(!isset($challenge['criteria'][$action])) {
+      return $this->socialhappen->error_page(
+      'Action invalid.', 
+      '<p>
+        <a href="'.base_url('player/challenge/'.$challenge_hash).'" class="btn btn-primary btn-large">
+          Back 
+        </a>
+      </p>');
+    }
+    
+    if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
+      $this->load->library('action_data_lib');
+      // $action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
+      $this->action_data_lib->get_form($challenge['criteria'][$action]['action_data_id']);
+    } else { //TODO if not, redirect to app?
+      echo 'this is not platform\'s action';
       return;
     }
   }

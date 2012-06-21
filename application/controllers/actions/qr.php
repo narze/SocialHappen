@@ -7,117 +7,6 @@ class QR extends CI_Controller {
 		$this->load->library('action_data_lib');
 	}
 	
-  function index_deprecated(){
-    $action = $this->action_data_lib->get_action_data_from_code();
-    $code = $action['hash'];
-    
-    if($action){
-      $user = $this->socialhappen->get_user();
-      $this->load->library('challenge_lib');
-      $challenge = $this->challenge_lib->get_one(
-        array( 
-          'criteria.action_data_id' => get_mongo_id($action)
-        )
-      );
-
-      $challenge_id = get_mongo_id($challenge);
-      
-      if($user){
-        $challenge_progress = $this->challenge_lib->get_challenge_progress($user['user_id'], $challenge_id);
-        
-        if(!$challenge){
-          show_error('Invalid Challenge');
-          return;
-        }
-        $player_challenging = isset($user['challenge']) && in_array(get_mongo_id($challenge), $user['challenge']);
-        
-        
-        /**
-         * check if user joined challenge
-         */
-        if($challenge_progress){
-          /**
-           * @todo : render challenge with proceed button
-           *         go to actions/qr/go/{code} when click proceed
-           */
-          $this->load->vars(
-            array(
-              'challenge_hash' => $challenge['hash'],
-              'challenge' => $challenge,
-              'player_logged_in' => $this->socialhappen->is_logged_in(),
-              'player_challenging' => $player_challenging,
-              'challenge_progress' => $challenge_progress,
-              'challenge_done' => FALSE,
-              'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
-            )
-          );
-          $data = array(
-            'header' => $this -> socialhappen -> get_header_bootstrap( 
-              array(
-                'title' => $challenge['detail']['name'],
-                'script' => array(
-                  'common/bar',
-                ),
-                'style' => array(
-                  'common/player',
-                )
-              )
-            ),
-            'challenge' => $challenge,
-            'proceed_url' => $this->action_data_lib->get_proceed_qr_url($code)
-          );
-
-          $this->parser->parse('actions/qr/qr_challenge_proceed_view', $data);
-        }else{
-          /**
-           * @todo : render challenge with join challenge button
-           */
-          $this->load->vars(
-            array(
-              'challenge_hash' => $challenge['hash'],
-              'challenge' => $challenge,
-              'player_logged_in' => $this->socialhappen->is_logged_in(),
-              'player_challenging' => $player_challenging,
-              // 'challenge_progress' => $challenge_progress,
-              'challenge_done' => FALSE,
-              'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
-            )
-          );
-          $data = array(
-            'header' => $this -> socialhappen -> get_header_bootstrap( 
-              array(
-                'title' => $challenge['detail']['name'],
-                'script' => array(
-                  'common/bar',
-                ),
-                'style' => array(
-                  'common/player',
-                )
-              )
-            ),
-            'challenge' => $challenge,
-            'join_url' => site_url('/player/join_challenge/' . $challenge['hash'] . '/?next='. site_url($this->uri->uri_string()))
-          );
-
-          $this->parser->parse('actions/qr/qr_challenge_join_view', $data);
-        }
-        
-      }else{
-        /**
-         * @todo : render challenge with login or register button
-         */
-        $data = array(
-          'challenge' => $challenge,
-          'login_url' => site_url('/login/?next='. site_url($this->uri->uri_string()).'?code='.$code)
-        );
-
-        $this->load->view('actions/qr/qr_challenge_login_view', $data);
-      }
-    }else{
-      show_error('Invalid Url');
-    }
-  }
-  
   /**
    * qr code handler method ex. /actions/qr/go/3531sdavgbsd32436fd4363
    *
@@ -133,14 +22,15 @@ class QR extends CI_Controller {
       )
     );
 
-    //Check if challenge is valid
-    if(!$challenge || !isset($challenge['hash'])) {
-      show_error('Challenge invalid. <a href="'.base_url('assets/world').'">Back</a>');
-    }
-
-    //Check if challenge is active
-    if (!$challenge['active']) {
-      show_error('Challenge invalid. <a href="'.base_url('assets/world/#/company/'.$challenge['company_id']).'">Back</a>');
+    //Check if challenge is valid and active
+    if(!$challenge || !isset($challenge['hash']) || !$challenge['active']) {
+      return $this->socialhappen->error_page(
+      'Challenge not found.',
+      '<p>
+        <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
+          Back 
+        </a>
+      </p>');
     }
     
     //Check if challenge is playable
@@ -154,7 +44,6 @@ class QR extends CI_Controller {
     if(!$user_id = $this->socialhappen->get_user_id()){
       return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
     }
-
 
     //Check daily challenge 
     if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
