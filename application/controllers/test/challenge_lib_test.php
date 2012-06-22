@@ -101,7 +101,7 @@ class Challenge_lib_test extends CI_Controller {
           'is_platform_action' => TRUE
         )
       ),
-      'repeat' => 'daily'
+      'repeat' => 1
     );
 
     $this->achievement_stat1 = array(

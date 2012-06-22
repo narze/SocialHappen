@@ -45,6 +45,7 @@ class User_lib {
 		if((!$challenge = $this->CI->challenge_lib->get_by_hash($challenge_hash)) || (!$user_mongo_id = $this->create_user($user_id, NULL))){
 			return FALSE;
 		}
+		$challenge_id = get_mongo_id($challenge);
 
 		//Add audit
 		$this->CI->load->library('audit_lib');
@@ -59,13 +60,15 @@ class User_lib {
 		$update_criteria = array(
 			'user_id' => $user_id
 		);
-		if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+		if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)) {
+			$start_date = date('Ymd');
+			$end_date = date('Ymd', time() + ($days-1)*60*60*24);
 			$update_record = array(
-				'$addToSet' => array('daily_challenge.'.date('Ymd') => get_mongo_id($challenge)),
+				'$addToSet' => array('daily_challenge.'.$challenge_id => array('start_date' => $start_date, 'end_date' => $end_date))
 			);
 		} else {
 			$update_record = array(
-				'$addToSet' => array('challenge' => get_mongo_id($challenge)),
+				'$addToSet' => array('challenge' => $challenge_id),
 			);
 		}
 		return $update_result = $this->CI->user_mongo_model->update($update_criteria, $update_record);

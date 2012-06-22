@@ -92,8 +92,11 @@ class Challenge_lib {
       if($achieved['achievement_id']['$ref'] === 'challenge'){
         $result['completed'][] = ''.$achieved['achievement_id']['$id'];
         //Mark completed today if is daily challenge
-        if(isset($achieved['is_daily_challenge']) && $achieved['is_daily_challenge']) {
-          if(date('Y-m-d', $achieved['timestamp']) === date('Y-m-d')) {
+        if(isset($achieved['daily_challenge']) && $achieved['daily_challenge']) {
+          $start = $achieved['daily_challenge']['start_date'];
+          $end = $achieved['daily_challenge']['end_date'];
+          $now = date('Ymd');
+          if($now >= $start && $now <= $end) {
             $result['completed_today'][] = ''.$achieved['achievement_id']['$id'];
           } else {
             //Don't remove from candidate list, by skip adding into user_achieved_id_list
@@ -127,7 +130,7 @@ class Challenge_lib {
       $company_id = $challenge['company_id'];
 
       //If challenge is daily, we must check in audit as well (time-based criteria) 
-      if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+      if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
         $this->CI->load->library('audit_lib');
         $match_all_criteria_today = TRUE;
         foreach($challenge['criteria'] as $criteria){
@@ -136,7 +139,8 @@ class Challenge_lib {
           $app_id = isset($query['app_id']) ? $query['app_id'] : 0;
           $action_id = $query['action_id'];
           $audit_criteria = compact('company_id', 'user_id');
-          $start_date = $end_date = date('Ymd');
+          $start_date = date('Ymd');
+          $end_date = date('Ymd', time() + (($days-1) * 60 * 60 * 24));
 
           $audit_count = $this->CI->audit_lib->count_audit_range(NULL, $app_id, $action_id, $audit_criteria, $start_date, $end_date);
 
@@ -217,9 +221,14 @@ class Challenge_lib {
         }
 
         //Daily challenge flag
-        if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily') 
+        if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)
           && isset($match_all_criteria_today) && $match_all_criteria_today) {
-          $achieved_info['is_daily_challenge'] = TRUE;
+          $start_date = date('Ymd');
+          $end_date = date('Ymd', time() + (($days-1) * 60 * 60 * 24));
+          $achieved_info['daily_challenge'] = array(
+            'start_date' => $start_date,
+            'end_date' => $end_date
+          );
         }
         
         //Add achievement
@@ -287,11 +296,10 @@ class Challenge_lib {
       return FALSE;
     }
 
-    if($is_daily_challenge = isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+    if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)) {
       //If check daily challenge and user don't have today's temp record (user->challenge_daily_completed-> {[Ymd]: challenge_id})
         //Run check challenge and get completed today
       //else use temp record
-
       //TODO : and remove old temp records 
       // if(!$daily_challenge_done = (isset($user['daily_challenge_completed'][date('Ymd')]) && in_array($challenge_id, $user['daily_challenge_completed'][date('Ymd')]))) {
         //Check daily challenge progress in audits
@@ -299,13 +307,14 @@ class Challenge_lib {
         $data = array();
         $all_done = TRUE;
         $company_id = $challenge['company_id'];
+        $start_date = date('Ymd');
+        $end_date = date('Ymd', time() + ($days-1)*60*60*24);
         foreach($challenge['criteria'] as $criteria){
           $count_required = $criteria['count'];
           $query = $criteria['query'];
           $app_id = isset($query['app_id']) ? $query['app_id'] : 0;
           $action_id = $query['action_id'];
           $audit_criteria = compact('company_id', 'user_id');
-          $start_date = $end_date = date('Ymd');
 
           $audit_count = $this->CI->audit_lib->count_audit_range(NULL, $app_id, $action_id, $audit_criteria, $start_date, $end_date);
 
@@ -319,7 +328,7 @@ class Challenge_lib {
           $data[] = $action;  
         }
         if($all_done) {
-          $update_result = $this->CI->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('daily_challenge_completed.'.date('Ymd') => $challenge_id)));
+          $update_result = $this->CI->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('daily_challenge_completed.'.$challenge_id => array('start_date' => $start_date, 'end_date' => $end_date))));
         }
         return $data;
       // }
