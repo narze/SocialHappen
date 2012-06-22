@@ -193,6 +193,11 @@ a:hover {
 .center-or {
   margin-bottom: 20px;
 }
+
+p.company-name {
+  text-align: center;
+}
+
 /* Responsive
 -------------------------------------------------- */
 @media (max-width: 480px) {

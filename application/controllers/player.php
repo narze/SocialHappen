@@ -254,7 +254,6 @@ class Player extends CI_Controller {
           'common/bootstrap',
           'common/bootstrap-responsive',
           'common/bar',
-          'common/player',
           'player/challenge'
         ),
         'body_views' => array(
@@ -364,7 +363,7 @@ class Player extends CI_Controller {
         'common/bootstrap',
         'common/bootstrap-responsive',
         'common/bar',
-        'common/player',
+        // 'common/player',
         // 'play/play'
       ),
       'body_views' => array(
@@ -744,7 +743,6 @@ class Player extends CI_Controller {
         'common/bootstrap',
         'common/bootstrap-responsive',
         'common/bar',
-        'common/player'
       ),
       'body_views' => array(
         'common/fb_root' => array(
@@ -752,7 +750,6 @@ class Player extends CI_Controller {
           'facebook_channel_url' => $this->facebook->channel_url,
           'facebook_app_scope' => $this->config->item('facebook_player_scope')
         ),
-        // '../../assets/passport/templates/header/navigation.html' => NULL,
         'bar/plain_bar_view' => array(),
         'player/static_signup_view' => array(),
         'common/vars' => array(

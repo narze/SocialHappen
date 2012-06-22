@@ -45,7 +45,6 @@ class Play extends CI_Controller {
         'common/bootstrap',
         'common/bootstrap-responsive',
         'common/bar',
-        'common/player',
         'play/play'
       ),
       'body_views' => array(
