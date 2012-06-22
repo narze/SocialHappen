@@ -152,10 +152,18 @@ class Player extends CI_Controller {
       $player_challenging = isset($user['challenge']) && in_array($challenge_id, $user['challenge']);
 
       //Check daily challenge
-      if($is_daily_challenge = isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
-        $player_challenging = isset($user['daily_challenge'][date('Ymd')]) && in_array($challenge_id, $user['daily_challenge'][date('Ymd')]);
+      if($is_daily_challenge = (isset($challenge['repeat']) && is_int($challenge['repeat']))) {
+        $player_challenging = FALSE;
+        $now = date('Ymd');
+        if(isset($user['daily_challenge'][$challenge_id])) {
+          foreach($user['daily_challenge'][$challenge_id] as $challenge_range) {
+            if($challenge_range['start_date'] <= $now && $now <= $challenge_range['end_date']) {
+              $player_challenging = TRUE;
+              break;
+            }
+          }
+        }
       }
-
 
       $action_done = $this->input->get('action_done') && $user_id;
       //challenge_progress

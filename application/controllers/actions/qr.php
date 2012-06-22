@@ -37,6 +37,8 @@ class QR extends CI_Controller {
       </p>');
     }
     
+    $challenge_id = get_mongo_id($challenge);
+
     //Check if challenge is playable
     if($challenge['end_date'] < time()) {
       return redirect('player/challenge/'.$challenge['hash'].'?error=ended');
@@ -50,32 +52,43 @@ class QR extends CI_Controller {
     }
 
     //Check daily challenge 
-    if(isset($challenge['repeat']) && ($challenge['repeat'] === 'daily')) {
+    if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
       //Check if daily challenge accepted
       $this->load->library('user_lib');
       $user = $this->user_lib->get_user($user_id);
-      $player_challenging = isset($user['daily_challenge'][date('Ymd')]) && in_array(get_mongo_id($challenge), $user['daily_challenge'][date('Ymd')]);
+      $player_challenging = FALSE;
+      $now = date('Ymd');
+      if(isset($user['daily_challenge'][$challenge_id])) {
+        foreach($user['daily_challenge'][$challenge_id] as $challenge_range) {
+          if($challenge_range['start_date'] <= $now && $now <= $challenge_range['end_date']) {
+            $player_challenging = TRUE;
+            break;
+          }
+        }
+      }
       if(!$player_challenging) {
         return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
       }
 
-      if($player_completed_daily = (isset($user['daily_challenge_completed'][date('Ymd')])
-        && in_array(get_mongo_id($challenge), $user['daily_challenge_completed'][date('Ymd')]))) {
-        // echo '<pre>';
-        // var_dump($user['daily_challenge_completed']);
-        // echo '</pre>';
-        return redirect('player/challenge/'.$challenge['hash'].'?completed_daily=1');
+      $player_completed_daily = FALSE;
+      if(isset($user['daily_challenge_completed'][$challenge_id])) {
+        foreach($user['daily_challenge_completed'][$challenge_id] as $challenge_range) {
+          if($challenge_range['start_date'] <= $now && $now <= $challenge_range['end_date']) {
+            $player_completed_daily = TRUE;
+            return redirect('player/challenge/'.$challenge['hash'].'?completed_daily=1');
+          }
+        }
       }
     } else {
       //Check if challenge accepted
       $this->load->library('user_lib');
       $user = $this->user_lib->get_user($user_id);
-      $player_challenging = isset($user['challenge']) && in_array(get_mongo_id($challenge), $user['challenge']);
+      $player_challenging = isset($user['challenge']) && in_array($challenge_id, $user['challenge']);
       if(!$player_challenging) {
         return redirect('player/challenge/'.$challenge['hash'].'?next=actions/qr/go/'.$code);
       }
 
-      if($player_completed = isset($user['challenge_completed']) && in_array(get_mongo_id($challenge), $user['challenge_completed'])) {
+      if($player_completed = isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
         //Check if challeng already completed
         return redirect('player/challenge/'.$challenge['hash'].'?already_completed=1');
       }
