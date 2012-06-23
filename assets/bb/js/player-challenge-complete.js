@@ -2,8 +2,11 @@ require([
   'jquery',
   'bootstrap'
 ], function($){
-    if(challenge_done) {
+    if(action_done) {
       $('#challenge-complete-modal').modal();
+      shareChallengeComplete();
+    } else {
+      $('#challenge-already-complete-modal').modal();
       shareChallengeComplete();
     }
 
@@ -13,7 +16,7 @@ require([
         url = url.substring(0, url.indexOf('?'));
       }
 
-      $('#share-challenge-complete').click(function() {
+      $('.share-challenge-complete').click(function() {
         FB.ui({
           method: 'feed',
           picture: null,
@@ -22,10 +25,6 @@ require([
           description: 'I\'ve completed a Challenge!!',
           link: url
         });
-      });
-
-      $('#challenge-complete-modal').on('hidden', function () {
-        window.location = url;
       });
     }
 });

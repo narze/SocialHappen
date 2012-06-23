@@ -156,13 +156,18 @@ class Player extends CI_Controller {
         $player_challenging = FALSE;
         $now = date('Ymd');
         if(isset($user['daily_challenge'][$challenge_id])) {
-          foreach($user['daily_challenge'][$challenge_id] as $challenge_range) {
-            if($challenge_range['start_date'] <= $now && $now <= $challenge_range['end_date']) {
-              $player_challenging = TRUE;
-              break;
-            }
+          $challenge_range = array_pop($user['daily_challenge'][$challenge_id]);
+          if($challenge_range['start_date'] <= $now && $now <= $challenge_range['end_date']) {
+            $player_challenging = TRUE;
           }
         }
+
+        $date = $challenge_range['end_date'].'';
+        $y = substr($date, 0, 4);
+        $m = substr($date, 4, 2);
+        $d = substr($date, 6, 2);
+        date_default_timezone_set('UTC');
+        $challenge_available_date = date('Y-m-d', mktime(0, 0, 0, $m, $d + 1, $y));
       }
 
       $action_done = $this->input->get('action_done') && $user_id;
@@ -244,7 +249,8 @@ class Player extends CI_Controller {
           'challengers' => $challengers,
           'challenge_not_started' => $challenge_not_started,
           'challenge_ended' => $challenge_ended,
-          'is_daily_challenge' => $is_daily_challenge
+          'is_daily_challenge' => $is_daily_challenge,
+          'challenge_available_date' => $challenge_available_date
         )
       );
 
@@ -286,7 +292,7 @@ class Player extends CI_Controller {
       //If challenge is not done, player can do challenges
       if(!$challenge_done) {
         $template['requirejs'][] = 'js/player-challenge';
-      } else if($action_done) {
+      } else {
         //If last action is done
         $template['requirejs'][] = 'js/player-challenge-complete';
       }
