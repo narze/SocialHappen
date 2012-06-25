@@ -97,6 +97,10 @@ class Coupon_model extends CI_Model {
 		$data['confirmed'] = FALSE;
 		$data['confirmed_timestamp'] = NULL;
 		$data['confirmed_by_id'] = NULL;
+
+		if(!isset($data['challenge_id'])) {
+			$data['challenge_id'] = NULL;
+		}
 		return $this->_add($data);
 	}
 
@@ -106,5 +110,14 @@ class Coupon_model extends CI_Model {
 	function get_by_id($coupon_id = NULL) {
 		if(!$coupon_id)	{ return FALSE; }
 		return $this->_getOne(array('_id' => new MongoId($coupon_id)));
+	}
+
+	/**
+	 * Get coupon(s) by user_id and challenge_id
+	 */
+	function get_by_user_and_challenge($user_id = NULL, $challenge_id = NULL) {
+		if(!$user_id || !$challenge_id) { return FALSE; }
+		$query = array('user_id' => $user_id, 'challenge_id' => $challenge_id);
+		return $this->_get($query);
 	}
 }

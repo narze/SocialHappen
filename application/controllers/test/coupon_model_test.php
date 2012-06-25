@@ -26,7 +26,8 @@ class Coupon_model_test extends CI_Controller {
 		$data = array(
 			'reward_item_id' => 'testrewardid',
 			'user_id' => 1,
-			'company_id' => 3
+			'company_id' => 3,
+			'challenge_id' => 123
 		);
 		$result = $this->coupon_model->add($data);
 		$this->unit->run($result, TRUE, "\$result", $result);
@@ -43,6 +44,7 @@ class Coupon_model_test extends CI_Controller {
 		$this->unit->run($result['timestamp'], 'is_int', "\$result['timestamp']", $result['timestamp']);
 		$this->unit->run($result['reward_item_id'], 'testrewardid', "\$result['reward_item_id']", $result['reward_item_id']);
 		$this->unit->run($result['company_id'], 3, "\$result['company_id']", $result['company_id']);
+		$this->unit->run($result['challenge_id'], 123, "\$result['challenge_id']", $result['challenge_id']);
 	}
 
 	function list_user_coupons_test() {
@@ -58,6 +60,7 @@ class Coupon_model_test extends CI_Controller {
 		$this->unit->run($result[0]['timestamp'], 'is_int', "\$result[0]['timestamp']", $result[0]['timestamp']);
 		$this->unit->run($result[0]['reward_item_id'], 'testrewardid', "\$result[0]['reward_item_id']", $result[0]['reward_item_id']);
 		$this->unit->run($result[0]['company_id'], 3, "\$result[0]['company_id']", $result[0]['company_id']);
+		$this->unit->run($result[0]['challenge_id'], 123, "\$result[0]['challenge_id']", $result[0]['challenge_id']);
 
 	}
 
@@ -78,6 +81,16 @@ class Coupon_model_test extends CI_Controller {
 		$this->unit->run($result['timestamp'], 'is_int', "\$result['timestamp']", $result['timestamp']);
 		$this->unit->run($result['reward_item_id'], 'testrewardid', "\$result['reward_item_id']", $result['reward_item_id']);
 		$this->unit->run($result['company_id'], 3, "\$result['company_id']", $result['company_id']);
+		$this->unit->run($result['challenge_id'], 123, "\$result['challenge_id']", $result['challenge_id']);
+	}
+
+	function get_by_user_and_challenge_test() {
+		$user_id = 1;
+		$challenge_id = 123;
+		$result = $this->coupon_model->get_by_user_and_challenge($user_id, $challenge_id);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
+		$this->unit->run($result[0]['_id'], new MongoId($this->coupon_id), "\$result[0]['_id']", $result[0]['_id']);
 	}
 
 }

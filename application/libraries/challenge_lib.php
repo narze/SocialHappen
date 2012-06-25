@@ -277,7 +277,20 @@ class Challenge_lib {
           'action_id' => $action_id,
           'app_install_id' => 0
         );
+        
+        //Give reward coupon
+        if(isset($challenge['reward_item_id'])) {
+          $this->CI->load->model('coupon_model');
+          $coupon = array(
+            'reward_item_id' => $challenge['reward_item_id'],
+            'user_id' => $user_id,
+            'company_id' => $company_id,
+            'challenge_id' => $challenge_id
+          );
+          $coupon_add_result = $this->CI->coupon_model->add($coupon);
+        }
 
+        //Increment company stat
         $this->CI->load->library('achievement_lib');
         $increment_page_score_result = $this->CI->achievement_lib->
           increment_achievement_stat($company_id, 0, $user_id, $increment_info, 1);

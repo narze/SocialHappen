@@ -23,6 +23,26 @@ class Challenge_lib_test extends CI_Controller {
     }
   }
 
+  function _add_challenge_reward_test(){
+    $this->load->model('reward_item_model', 'reward_item');
+    $name = 'Chalenge reward';
+    $status = 'published';
+    $challenge_id = 'asdf';
+    $image = base_url().'assets/images/cam-icon.png';
+    $value = '200THB';
+    $description = 'This is pasta!!!';
+    $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description');
+    
+    $this->reward_item_id = $result = $this->reward_item->add_challenge_reward($input);
+    $this->unit->run($result, 'is_string', "\$result", $result);
+
+    $count = $this->reward_item->count_all();
+    $this->unit->run($count, 1, 'count', $count);
+
+    $reward = $this->reward_item->get_one(array('_id' => new MongoId($this->reward_item_id)));
+    $this->unit->run($reward['type'], 'challenge', "\$reward['type']", $reward['type']);
+  }
+
   function setup_before_test() {
     $this->challenge = array(
       'company_id' => 1,
@@ -101,7 +121,8 @@ class Challenge_lib_test extends CI_Controller {
           'is_platform_action' => TRUE
         )
       ),
-      'repeat' => 1
+      'repeat' => 1,
+      'reward_item_id' => $this->reward_item_id
     );
 
     $this->achievement_stat1 = array(
@@ -637,5 +658,15 @@ class Challenge_lib_test extends CI_Controller {
     );
     // $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
     $this->unit->run($result[0], $criteria_expect, "\$result[0]", $result[0]);
+  }
+
+  function get_coupon_test() {
+    $user_id = 1;
+    $challenge_id = $this->challenge_id4;
+    $this->load->model('coupon_model');
+    $result = $this->coupon_model->get_by_user_and_challenge($user_id, $challenge_id);
+    $this->unit->run($result, 'is_array', "\$result", $result);
+    $this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
+    $this->unit->run($result[0]['_id'], TRUE, "\$result[0]['_id']", $result[0]['_id']);
   }
 }
