@@ -34,7 +34,7 @@ class Player extends CI_Controller {
             //'payment/payment'
           ),
           'style' => array(
-            'common/player',
+            'common/bar',
             //'common/platform',
             //'common/main',
             //'common/fancybox/jquery.fancybox-1.3.4'
@@ -97,7 +97,7 @@ class Player extends CI_Controller {
               'common/bar',
             ),
             'style' => array(
-              'common/player',
+              'common/bar',
             )
           )
         )
@@ -254,7 +254,6 @@ class Player extends CI_Controller {
           'common/bootstrap',
           'common/bootstrap-responsive',
           'common/bar',
-          'common/player',
           'player/challenge'
         ),
         'body_views' => array(
@@ -364,7 +363,6 @@ class Player extends CI_Controller {
         'common/bootstrap',
         'common/bootstrap-responsive',
         'common/bar',
-        'common/player',
         // 'play/play'
       ),
       'body_views' => array(
@@ -622,7 +620,7 @@ class Player extends CI_Controller {
             'common/bar',
           ),
           'style' => array(
-            'common/player',
+            'common/bar',
           ),
           'use_static_fb_root' => TRUE
         )
@@ -743,8 +741,7 @@ class Player extends CI_Controller {
       'styles' => array(
         'common/bootstrap',
         'common/bootstrap-responsive',
-        'common/bar',
-        'common/player'
+        'common/bar'
       ),
       'body_views' => array(
         'common/fb_root' => array(
