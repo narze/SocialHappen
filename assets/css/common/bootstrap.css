@@ -4327,3 +4327,8 @@ a.thumbnail:hover {
 .invisible {
   visibility: hidden;
 }
+.btn-primary,
+.btn-primary:hover {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+  color: #455514;
+}

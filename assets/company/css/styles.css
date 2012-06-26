@@ -1,8 +1,8 @@
 /* Not really too concerned with how to organize CSS 
    the opinions are too diverse                      */
 
-@import url("bootstrap.min.css");
-@import url("bootstrap-responsive.min.css");
+@import url("../../css/common/bootstrap.min.css");
+@import url("../../css/common/bootstrap-responsive.min.css");
 @import url("jquery-ui-1.8.20.custom.css");
 /* Custom themes */
 @import url("theme.css");

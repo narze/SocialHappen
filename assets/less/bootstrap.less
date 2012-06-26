@@ -27,7 +27,7 @@
 @import "tables.less";
 
 // Components: common
-// @import "sprites.less";
+// @import "sprites.less"; // Uses font-awesome instead
 @import "font-awesome.less";
 @import "dropdowns.less";
 @import "wells.less";
@@ -62,3 +62,12 @@
 
 // Utility classes
 @import "utilities.less"; // Has to be last to override when necessary
+
+// SocialHappen's less
+@import "socialhappen.less";
+
+/*
+  How to compile : 
+    lessc bootstrap.less ../css/common/bootstrap.min.css -x 
+    && lessc bootstrap.less ../css/common/bootstrap.css
+*/

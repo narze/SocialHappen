@@ -28,7 +28,7 @@
   }
 
   if(isset($requirejs)) {
-    echo '<script type="text/javascript" src="'.$base_url.'assets/bb/js/libs/require/require.js"></script>'."\n";
+    echo '<script type="text/javascript" src="'.$base_url.'assets/libs/require/require.js"></script>'."\n";
     echo '<script type="text/javascript">var base_url = "'.$base_url.'";require.config({baseUrl: "'.$base_url.'assets/bb/js"});</script>'."\n";
     echo '<script type="text/javascript" src="'.$base_url.'assets/bb/js/config.js"></script>'."\n";
     if(is_array($requirejs)) {
