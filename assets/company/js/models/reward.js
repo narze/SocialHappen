@@ -2,14 +2,14 @@ define([
   'underscore',
   'backbone'
 ], function(_, Backbone) {
-  var challengeModel = Backbone.Model.extend({
+  var rewardModel = Backbone.Model.extend({
 
     idAttribute: 'hash',
 
     defaults: {
       detail: {
-        name: 'Challenge Name',
-        description: 'Challenge Description',
+        name: 'Reward Name',
+        description: 'Reward Description',
         image: 'https://lh3.googleusercontent.com/XBLfCOS_oKO-XjeYiaOAuIdukQo9wXMWsdxJZLJO8hvWMBLFwCU3r_0BrRMn_c0TnEDarKuxDg=s640-h400-e365'
       },
       hash: null,
@@ -26,8 +26,7 @@ define([
       score: 10,
       start_date: null,
       end_date: null,
-      repeat: null,
-      short_url: null
+      repeat: null
     },
     initialize: function(){
 
@@ -52,9 +51,9 @@ define([
       // Ensure that we have a URL.
       if (!options.url) {
         if(method == 'update'){
-          params.url = window.Company.BASE_URL + 'apiv3/saveChallenge/' + this.id;
+          params.url = window.Company.BASE_URL + 'apiv3/saveReward/' + this.id;
         }else if(method == 'create'){
-          params.url = window.Company.BASE_URL + 'apiv3/saveChallenge/';
+          params.url = window.Company.BASE_URL + 'apiv3/saveReward/';
         }
       }
 
@@ -62,7 +61,7 @@ define([
       if (!options.data && model && (method == 'create' || method == 'update')) {
         params.contentType = 'application/json';
         var data = model.toJSON();
-        delete data.challengeRewards;
+        delete data.rewardRewards;
         params.data = 'model='+JSON.stringify(data);
       }
 
@@ -89,13 +88,13 @@ define([
         params.processData = false;
       }
       
-      console.log('save challenge:', this.toJSON());
+      console.log('save reward:', this.toJSON());
       console.log('POST:', params.data);
 
       return $.ajax(_.extend(params, options));
     },
 
-    //parse saveChallenge's response
+    //parse saveReward's response
     //{success: [success?], 'data': [data]}
     parse: function(resp, xhr) {
       if(resp.success === true) {
@@ -109,6 +108,6 @@ define([
     }
 
   });
-  return challengeModel;
+  return rewardModel;
 
 });

@@ -2,17 +2,17 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/challenge',
-  'text!templates/company/challenge-list.html',
-  'views/company/challenge-item',
+  'models/reward',
+  'text!templates/company/reward-list.html',
+  'views/company/reward-item',
   'masonry',
   'endlessscroll'
-], function($, _, Backbone, ChallengeModel, challengeListTemplate, ChallengeItemView, masonry, endlessscroll){
-  var ChallengeListPane = Backbone.View.extend({
-    challengeListTemplate: _.template(challengeListTemplate),
+], function($, _, Backbone, RewardModel, rewardListTemplate, RewardItemView, masonry, endlessscroll){
+  var RewardListPane = Backbone.View.extend({
+    rewardListTemplate: _.template(rewardListTemplate),
     
     events: {
-      'click button.add-challenge': 'showAddChallenge',
+      'click button.add-reward': 'showAddReward',
       'click button.load-more' : 'loadMore'
     },
     
@@ -24,7 +24,7 @@ define([
     },
     
     render: function () {
-      $(this.el).html(this.challengeListTemplate({
+      $(this.el).html(this.rewardListTemplate({
       }));
       
       $('.tile-list', this.el).masonry({
@@ -42,32 +42,18 @@ define([
         $('button.load-more', this.el).addClass('hide');
       }
       
-      var self = this;
-      
-      // console.log('bind endless scroll');
-      // $(window).endlessScroll({
-        // bottomPixels: 50,
-        // fireDelay: 100,
-        // callback: function(fireSequence, pageSequence){
-          // console.log('start load more. fireSequence:', fireSequence, 'pageSequence:', pageSequence);
-          // self.collection.loadMore(function(){
-            // console.log('load more done. fireSequence:', fireSequence, 'pageSequence:', pageSequence);
-          // });
-          // return true;
-        // }
-      // });
       return this;
     },
     
     addOne: function(model){
-      // console.log('add one challenge:', model.toJSON());
+      // console.log('add one reward:', model.toJSON());
       
-      var challenge = new ChallengeItemView({
+      var reward = new RewardItemView({
         model: model,
         vent: this.options.vent
       });
       // console.log($('.tile-list', this.el));
-      var el = challenge.render().$el;
+      var el = reward.render().$el;
       $('.tile-list', this.el).append(el);
     },
     
@@ -95,9 +81,9 @@ define([
       });
     },
     
-    showAddChallenge: function(){
-      console.log('show add challenge');
-      var newModel = new ChallengeModel({});
+    showAddReward: function(){
+      console.log('show add reward');
+      var newModel = new RewardModel({});
       newModel.set({
         detail: {
           name: 'Challenge Name',
@@ -113,5 +99,5 @@ define([
       this.options.vent.trigger('showAddModal', newModel);
     }
   });
-  return ChallengeListPane;
+  return RewardListPane;
 });

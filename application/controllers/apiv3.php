@@ -489,6 +489,16 @@ class Apiv3 extends CI_Controller {
 
     echo json_encode($this->company_model->get_all());
   }
+  
+  function rewards(){
+    $rewards = array(
+      array(
+        '_id' => 'what',
+        'name' => 'iPad'
+      )
+    );
+    echo json_encode($rewards);
+  }
 }
 
 /* End of file apiv3.php */

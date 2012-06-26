@@ -59,6 +59,8 @@ class Action_data_lib_test extends CI_Controller {
 		$result = $this->action_data_lib->get_action_data($this->qr_action_data_id);
 		$this->unit->run(get_mongo_id($result), $this->qr_action_data_id, "\$result", get_mongo_id($result));
 		unset($result['_id']);
+		unset($result['short_url']);
+
 		$this->unit->run($result, $expect, "\$result", $result);
 	}
 	
@@ -78,6 +80,7 @@ class Action_data_lib_test extends CI_Controller {
 		$result = $this->action_data_lib->get_action_data_from_code();
 		$this->unit->run(get_mongo_id($result), $this->qr_action_data_id, "\$result", get_mongo_id($result));
 		unset($result['_id']);
+		unset($result['short_url']);
 		$this->unit->run($result, $expect, "\$result", $result);
 
 		$_GET['code'] = 'blahblah';

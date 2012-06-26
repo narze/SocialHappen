@@ -147,25 +147,26 @@ class QR extends CI_Controller {
         log_message('error', 'Audit | Achievement error');
       }
 
-      //Add challenge url to redirect back
-      $action_data['challenge_url'] = base_url('player/challenge/'.$challenge['hash'].'?action_done=1');
+      // //Add challenge url to redirect back
+      // $action_data['challenge_url'] = base_url('player/challenge/'.$challenge['hash'].'?action_done=1');
 
-      // we may render mobile web here
-      $template = array(
-        'title' => 'Welcome to SocialHappen',
-        'styles' => array(
-          'common/bootstrap',
-          'common/bootstrap-responsive'
-        ),
-        'body_views' => array(
-          'actions/qr/qr_challenge_finish_view' => $action_data
-        ),
-        'scripts' => array(
-          'common/bootstrap.min',
-        )
-      );
-      $this->load->view('common/template', $template);
+      // // we may render mobile web here
+      // $template = array(
+      //   'title' => 'Welcome to SocialHappen',
+      //   'styles' => array(
+      //     'common/bootstrap',
+      //     'common/bootstrap-responsive'
+      //   ),
+      //   'body_views' => array(
+      //     'actions/qr/qr_challenge_finish_view' => $action_data
+      //   ),
+      //   'scripts' => array(
+      //     'common/bootstrap.min',
+      //   )
+      // );
+      // $this->load->view('common/template', $template);
+
+      redirect('player/challenge/'.$challenge['hash'].'?action_done=1');
     }
-    
 	}
 }

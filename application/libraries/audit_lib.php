@@ -794,10 +794,6 @@ class Audit_lib
 			$criteria['company_id'] = (int)$criteria['company_id'];
 		}
 		
-		// echo 'count_audit <pre>';
-		// var_dump($criteria);
-		// echo '</pre>';
-		
 		return $this->CI->audit->count_distinct_audit($key, $criteria, $this->convert_statdate_to_date((int)$start_date), $this->convert_statdate_to_date((int)$end_date));
 	}
 	

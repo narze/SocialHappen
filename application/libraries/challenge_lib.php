@@ -139,8 +139,8 @@ class Challenge_lib {
           $app_id = isset($query['app_id']) ? $query['app_id'] : 0;
           $action_id = $query['action_id'];
           $audit_criteria = compact('company_id', 'user_id');
-          $start_date = date('Ymd');
-          $end_date = date('Ymd', time() + (($days-1) * 60 * 60 * 24));
+          $start_date = date('Ymd', time() - (($days-1) * 60 * 60 * 24));
+          $end_date = date('Ymd');
 
           $audit_count = $this->CI->audit_lib->count_audit_range(NULL, $app_id, $action_id, $audit_criteria, $start_date, $end_date);
 
@@ -320,8 +320,8 @@ class Challenge_lib {
         $data = array();
         $all_done = TRUE;
         $company_id = $challenge['company_id'];
-        $start_date = date('Ymd');
-        $end_date = date('Ymd', time() + ($days-1)*60*60*24);
+        $start_date = date('Ymd', time() - (($days-1) * 60 * 60 * 24));
+        $end_date = date('Ymd');
         foreach($challenge['criteria'] as $criteria){
           $count_required = $criteria['count'];
           $query = $criteria['query'];
@@ -341,6 +341,8 @@ class Challenge_lib {
           $data[] = $action;  
         }
         if($all_done) {
+          $start_date = date('Ymd');
+          $end_date = date('Ymd', time() + (($days-1) * 60 * 60 * 24));
           $update_result = $this->CI->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('daily_challenge_completed.'.$challenge_id => array('start_date' => $start_date, 'end_date' => $end_date))));
         }
         return $data;
