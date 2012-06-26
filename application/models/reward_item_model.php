@@ -345,6 +345,42 @@
 			return FALSE;
 		}
   }
+
+  /**
+   * Add redeemable reward
+   * @todo : test function
+   */
+  function add_redeem_reward($input = array()) {
+  	if(!issetor($input['name']) || !issetor($input['image'])
+  		|| !issetor($input['value'])) {
+			return FALSE;
+		}
+		
+		$input['type'] = 'redeem';
+		if(!isset($input['redeem']['point']) || !isset($input['redeem']['amount'])){
+			return FALSE;
+		}
+
+		$input['redeem']['point'] = (int) $input['redeem']['point'];
+		$input['redeem']['amount'] = (int) $input['redeem']['amount'];
+		$input['redeem']['amount_remain'] = $input['redeem']['amount'];
+		$input['redeem']['once'] = (int) issetor($input['redeem']['once']);
+
+		if(!isset($input['status']) || !in_array($input['status'], array('draft', 'published', 'cancelled'))){
+			$input['status'] = 'draft';
+		}
+
+		$input['value'] = (int) $input['value'];
+		$input['user_list'] = array();
+		$input['description'] = issetor($input['description']);
+		try	{
+			$this->reward_item->insert($input, array('safe' => TRUE));
+			return get_mongo_id($input);
+		} catch(MongoCursorException $e){
+			log_message('error', 'Mongo error : '. $e);
+			return FALSE;
+		}
+  }
 }
 
 /* End of file reward_model.php */
