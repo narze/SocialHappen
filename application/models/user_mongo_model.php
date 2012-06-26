@@ -56,4 +56,23 @@ class User_mongo_model extends CI_Model {
 		return $this->collection->remove($query, array('$atomic' => TRUE));
 	}
 	//End of basic functions
+
+	function add_reward_item($user_id, $reward_item_id) {
+		return $this->update(
+			array(
+				'user_id' => $user_id,
+			),
+			array(
+				'$addToSet' => array(
+					'reward_items' => $reward_item_id
+				)
+			)
+		);
+	}
+
+	function get_user($user_id = NULL) {
+		return $this->getOne(array(
+			'user_id' => $user_id)
+		);
+	}
 }

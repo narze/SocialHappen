@@ -98,6 +98,9 @@ class Reward_lib
 		return $redeem_items;
 	}
 
+	/**
+	 * DEPRECATED : Use coupon to redeem instead
+	 */
 	function redeem_reward($page_id, $reward_item_id, $user_facebook_id){
 		$this->CI->load->model('reward_item_model');
 		$reward_item = $this->CI->reward_item_model->get_by_reward_item_id($reward_item_id);
@@ -122,7 +125,15 @@ class Reward_lib
 		$this->CI->load->model('page_model');
 		$page = $this->CI->page_model->get_page_profile_by_page_id($page_id);
 		$this->CI->load->library('app_component_lib');
-		if(!$this->CI->app_component_lib->redeem_page_score($page['company_id'], $page_id, $user['user_id'], $reward_item['redeem']['point'])){
+		if(!$this
+			->CI
+			->app_component_lib
+			->redeem_page_score(
+				$page['company_id'],
+				$page_id,
+				$user['user_id'],
+				$reward_item['redeem']['point']
+			)){
 			return FALSE;
 		}
 		
@@ -149,7 +160,8 @@ class Reward_lib
 		$this->CI->load->library('audit_lib');
 		$audit_add_result = $this->CI->audit_lib->audit_add(array(
 			'app_id' => 0,
-			'action_id' => $this->CI->socialhappen->get_k('audit_action', 'User Redeem Reward'),
+			'action_id' => 
+				$this->CI->socialhappen->get_k('audit_action', 'User Redeem Reward'),
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,
 			'user_id' => $user['user_id'],
@@ -166,7 +178,8 @@ class Reward_lib
 			$reward_status = 'soon';
 		} else if ($now > $end_time){
 			$reward_status = 'expired';
-		} else if (isset($reward_item['redeem']) && $reward_item['redeem']['amount_remain'] == 0){
+		} else if (isset($reward_item['redeem'])
+			&& $reward_item['redeem']['amount_remain'] == 0){
 			$reward_status = 'no_more';
 		} else {
 			$reward_status = 'active';
@@ -174,6 +187,33 @@ class Reward_lib
 		$reward_item['reward_status'] = $reward_status;
 
 		return $reward_item;
+	}
+
+	function redeem_with_coupon($coupon_id = NULL, $user_id = NULL, $confirm_user_id = NULl) {
+		if(!$coupon_id || !$user_id) { return FALSE; }
+
+		// Check coupon
+		$this->CI->load->model('coupon_model');
+		$coupon = $this->CI->coupon_model->get_by_id($coupon_id);
+
+		// Check if not confirmed or user_id did not match
+		if((isset($coupon['confirmed']) && $coupon['confirmed']) || ($coupon['user_id'] !== $user_id)) {
+			return FALSE;
+		}
+
+		// Confirm the coupon
+		if(!$confirm_coupon_result = $this->CI->coupon_model->confirm_coupon($coupon_id, $confirm_user_id)) {
+			return FALSE;
+		}
+
+		// Add into user's inventory
+		$this->CI->load->model('user_mongo_model');
+		$reward_item_id = $coupon['reward_item_id'];
+		if(!$add_user_reward_item = $this->CI->user_mongo_model->add_reward_item($user_id, $reward_item_id)) {
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 }
 /* End of file reward_lib.php */
