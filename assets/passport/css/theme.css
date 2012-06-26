@@ -116,6 +116,12 @@ ul.achievement-list > li{
     border-top:1px solid #323232;
   }
 
+  /* Your company */
+  .navbar .bar-company-list {}
+  .navbar .icon-large {
+    width:inherit;
+  }
+
 
   /* Navbar User */
   .navbar .dropdown-menu.user a {
@@ -156,6 +162,9 @@ p.company-name {
   border-radius: 3px;
   text-align: center;
   box-shadow: 1px 1px 1px #000;
+}
+.navbar .notification .amount i {
+  margin-left: -12px;
 }
 .navbar .notification > ul li p {
   font-size:11px;

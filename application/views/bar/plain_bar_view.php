@@ -64,13 +64,13 @@
 
 <script type="text/template" id="bar-menu-template">
   <li class="play">
-    <a href="<%= baseUrl %>play"><i class="icon-play icon-large"></i> <span class="bar-text">Play</span></a>
+    <a href="<%= baseUrl %>play"><i class="icon-play icon-large"></i><span class="bar-text">Play</span></a>
   </li>
   <li class="passport">
-    <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.id %>"><i class="icon-book icon-large"></i> <span class="bar-text">Passport</span></a>
+    <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.id %>"><i class="icon-book icon-large"></i><span class="bar-text">Passport</span></a>
   </li>
   <li class="world">
-    <a href="<%= baseUrl %>world"><i class="icon-globe icon-large"></i> <span class="bar-text">World</span></a>
+    <a href="<%= baseUrl %>world"><i class="icon-globe icon-large"></i><span class="bar-text">World</span></a>
   </li>
 </script>
 
@@ -78,7 +78,7 @@
   <% if(companies && companies.length) { %>
     <li class="bar-company-list dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="icon-group icon-large"></i> <span class="bar-text-right">Your Companies<b class="caret"></b></span>
+        <i class="icon-group icon-large"></i><span class="bar-text-right">Your Companies<b class="caret"></b></span>
       </a>
       <ul class="dropdown-menu mega-dropdown-menu user">
         <% _.each(companies, function(company) {  %>
@@ -116,7 +116,8 @@
   <li class="divider-vertical"></li>
   <li class="bar-notification dropdown notification">
     <a href="#" class="dropdown-toggle amount" data-toggle="dropdown">
-      <i class="icon-info-sign icon-large"></i>
+    <i class="icon-info-sign icon-large"></i>
+    <span></span>
     </a>
     <ul class="dropdown-menu mega-dropdown-menu notification_list_bar">
       <li class="no-notification">
