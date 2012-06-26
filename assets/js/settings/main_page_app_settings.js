@@ -476,7 +476,7 @@ $(function(){
 			var page_id = $('#select_page>select[name="select_page"]').val();
 			var app_id = $('#select_app>select[name="select_app"]').val();
 			var action_id = $('#select_action>select[name="select_action"]').val();
-			if(name && action_id) && count){
+			if(name && action_id && count){
 				
 				var curr_nth = $('.criteria[data-nth]:last').data('nth');
 				var next_nth = 0;
@@ -494,9 +494,9 @@ $(function(){
 				//TO-DO : call ajax_get_platform_action : require action_id
 				$.get(base_url+'settings/page_challenge/ajax_get_platform_action/',
 					{ action_id: action_id },
-					function(data) {		
+					function(data) {
 						custom_template = data;
-						custom_template = custom_template.replace(/{next_nth}/g, next_nth);
+						custom_template = custom_template.replace(/\{next_nth\}/g, next_nth);
 						//console.log(custom_template);
 						new_criteria.find('.action_data-div').html(custom_template);
 				});
