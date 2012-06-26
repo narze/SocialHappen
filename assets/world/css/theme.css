@@ -126,7 +126,6 @@ p.company-name {
 
 /* Navbar Notification */
 .navbar .notification .amount {
-  background: url(../../../assets/images/bg/bg_main_2.png) no-repeat -229px 7px;
   display: block;
   width: 9px;
   height: 21px;

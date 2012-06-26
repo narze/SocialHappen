@@ -1,20 +1,14 @@
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container-fluid">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <a class="brand" href="#">SocialHappen</a>
-      <div class="nav-collapse collapse">
-        <ul class="nav bar-menu"></ul>
-        <ul class="nav pull-right">
-          <li class="bar-company-list"></li>
-          <li class="bar-user"></li>
-          <li class="bar-notification"></li>
-        </ul>
-      </div>
+      <span class="bar-icon pull-left"><a href="#"><strong>SocialHappen</strong></a></span>
+      <span class="bar-text"><a class="brand" href="#">SocialHappen</a></span>
+      <ul class="nav bar-menu"></ul>
+      <ul class="nav pull-right">
+        <li class="bar-company-list"></li>
+        <li class="bar-user"></li>
+        <li class="bar-notification"></li>
+      </ul>
     </div>
   </div>
 </div>
@@ -70,21 +64,22 @@
 
 <script type="text/template" id="bar-menu-template">
   <li class="play">
-    <a href="<%= baseUrl %>play">Play</a>
+    <a href="<%= baseUrl %>play"><i class="icon-play icon-large"></i> <span class="bar-text">Play</span></a>
   </li>
   <li class="passport">
-    <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.id %>">Passport</a>
+    <a href="<%= baseUrl %>assets/passport/#/profile/<%= user.id %>"><i class="icon-book icon-large"></i> <span class="bar-text">Passport</span></a>
   </li>
   <li class="world">
-    <a href="<%= baseUrl %>world">World</a>
+    <a href="<%= baseUrl %>world"><i class="icon-globe icon-large"></i> <span class="bar-text">World</span></a>
   </li>
 </script>
 
 <script type="text/template" id="bar-company-list-template">
   <% if(companies && companies.length) { %>
-    <li class="divider-vertical"></li>
-    <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Your Companies<b class="caret"></b></a>
+    <li class="bar-company-list dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="icon-group icon-large"></i> <span class="bar-text-right">Your Companies<b class="caret"></b></span>
+      </a>
       <ul class="dropdown-menu mega-dropdown-menu user">
         <% _.each(companies, function(company) {  %>
           <li class="separator">
@@ -101,8 +96,11 @@
 
 <script type="text/template" id="bar-user-template">
   <li class="divider-vertical"></li>
-  <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img class="user-image" src="<%= user.user_image %>?type=square" alt=""/ >  <%= user.user_first_name %> <%= user.user_last_name %> <b class="caret"></b> </a>
+  <li class="bar-user dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <img class="user-image" src="<%= user.user_image %>?type=square" alt=""/ >
+      <span class="bar-text-right"> <%= user.user_first_name %> <%= user.user_last_name %> <b class="caret"></b></span>
+    </a>
     <ul class="dropdown-menu mega-dropdown-menu user">
       <li>
         <a class="btn-settings" href="<%= baseUrl %>player/settings">» Settings</a>
@@ -116,8 +114,10 @@
 
 <script type="text/template" id="bar-notification-template">
   <li class="divider-vertical"></li>
-  <li class="dropdown notification">
-    <a href="#" class="dropdown-toggle amount" data-toggle="dropdown"></a>
+  <li class="bar-notification dropdown notification">
+    <a href="#" class="dropdown-toggle amount" data-toggle="dropdown">
+      <i class="icon-info-sign icon-large"></i>
+    </a>
     <ul class="dropdown-menu mega-dropdown-menu notification_list_bar">
       <li class="no-notification">
         <p>
@@ -139,5 +139,4 @@
       </li>
     </ul>
   </li>
-  <li class="divider-vertical"></li>
 </script>

@@ -117,7 +117,6 @@ a:hover {
 
   /* Navbar Notification */
   .navbar .notification .amount {
-    background: url(../../../assets/images/bg/bg_main_2.png) no-repeat -229px 7px;
     display: block;
     width: 9px;
     height: 21px;
@@ -212,7 +211,7 @@ p.company-name {
     margin-top: 18px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 
   /* Remove any padding from the body */
   body {
@@ -220,7 +219,7 @@ p.company-name {
   }
 }
 
-@media (min-width: 768px) and (max-width: 980px) {
+@media (min-width: 767px) and (max-width: 980px) {
 
   /* Remove any padding from the body */
   body {

@@ -4332,3 +4332,30 @@ a.thumbnail:hover {
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
   color: #455514;
 }
+@media (max-width: 767px) {
+  .bar-text {
+    display: none;
+  }
+  .bar-icon {
+    display: inline;
+  }
+}
+@media (min-width: 767px) {
+  .bar-text {
+    display: inline;
+    padding-left: 8px;
+  }
+  .bar-icon {
+    display: none;
+  }
+}
+@media (max-width: 979px) {
+  .bar-text-right {
+    display: none;
+  }
+}
+/*
+  How to compile : 
+    lessc bootstrap.less ../css/common/bootstrap.min.css -x 
+    && lessc bootstrap.less ../css/common/bootstrap.css
+*/
