@@ -31,11 +31,13 @@ require([
   'vm',
   'models/user',
   'collections/challenges',
+  'collections/rewards',
   'events'
-], function(AppView, Router, Vm, UserModel, ChallengesCollection, vent){
+], function(AppView, Router, Vm, UserModel, ChallengesCollection, RewardsCollection, vent){
   
   var currentUserModel = window.Company.currentUserModel = new UserModel();
   var challengesCollection = window.Company.challengesCollection = new ChallengesCollection([]);
+  var rewardsCollection = window.Company.rewardsCollection = new RewardsCollection([]);
   
   var appView = Vm.create({}, 'AppView', AppView, {
     currentUserModel: currentUserModel,
@@ -48,6 +50,7 @@ require([
     appView: appView,
     currentUserModel: currentUserModel,
     challengesCollection: challengesCollection,
+    rewardsCollection: rewardsCollection,
     vent: vent
   });
   

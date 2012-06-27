@@ -1,0 +1,169 @@
+<div class="modal-header">
+  <button class="close" data-dismiss="modal">
+    ×
+  </button>
+  <div class="">
+    <h3 class="edit-name"><%= detail.name %></h3>
+  </div>
+  <div class="edit-name hide">
+    <input class="challenge-name span4" value="<%= detail.name %>" />
+    <button class="btn save-name btn-primary">Save</button>
+  </div>
+</div>
+<div class="modal-body">
+  <h6>Status:</h6>
+  <div class="control-group">
+    <div class="controls">
+      <label class="challenge-status"></label>
+    </div>
+  </div>
+  <h6 class="edit-repeat">Repeat:</h6>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" class="repeat-enable" value="true" <%= repeat?'checked="checked"':''%>>
+        User can play this challenge more than one time
+      </label>
+    </div>
+  </div>
+  <div class="edit-repeat hide">
+    <div class="control-group">
+      User can play every <input class="repeat-interval span1" value="<%= repeat?repeat:7 %>" /> days.
+      <button class="btn save-repeat-interval btn-primary">Save</button>
+    </div>
+  </div>
+  <div class="view-repeat <%= repeat?'':'hide' %>">
+    <div class="control-group">
+      User can play every <%= repeat || 7 %> days.
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <h6 class="edit-image">Image:</h6>
+    <div class="edit-image hide">
+      <div class="control-group">
+        <input class="challenge-image span4" value="<%= detail.image %>" />
+        <button class="btn save-image btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <img class="challenge-image" src="<%= detail.image %>" />
+
+  <div class="control-group">
+    <div class="edit-description">
+      <h6>Description:</h6>
+      <p>
+        <%= detail.description %>
+      </p>
+    </div>
+    <div class="edit-description-field hide">
+      <h6>Description:</h6>
+      <textarea class="challenge-description span5" rows="3"><%= detail.description %></textarea>
+      <button class="btn save-description btn-primary">Save</button>
+    </div>
+  </div>
+
+  <div class="control-group date">
+    <h6>Start and End Date:</h6>
+    <input type="text" name="edit_challenge_start" id="edit_challenge_start" value="" placeholder="select start date...">
+     <input type="text" name="edit_challenge_end" id="edit_challenge_end" value="" placeholder="select end date...">
+  </div>
+
+  <div class="criteria-list">
+    <div class="control-group">
+      <div class="btn-group dropup">
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Add New Action <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a href="#" class="add-feedback">Feedback</a></li>
+          <li><a href="#" class="add-qr">QR Code</a></li>
+          <li><a href="#" class="add-checkin">Check-in</a></li>
+        </ul>
+      </div>
+    </div>
+    <ul class="criteria-list unstyled"></ul>
+  </div>
+
+  <div class="control-group">
+    <h6 class="edit-reward-label">Reward:</h6>
+    <h3 class="edit-reward form-inline"><%= reward.name %> <button class="btn edit-reward"><i class="icon-pencil"></i></button>
+      <% if(typeof challengeRewards !== 'undefined') { %>
+        or select from list <select class="select-challenge-reward span1">
+        <option>Select :</option>
+        <% _.each(challengeRewards, function(challengeReward) { %>
+          <option class="challenge-reward" data-reward-id="<%= challengeReward._id.$id %>"><%= challengeReward.name %></option>
+        <% }); %>
+        </select>
+      <% } %>
+    </h3>
+    <div class="edit-reward well hide">
+      <label for="reward-name">Reward Name</label><input type="text" class="reward-name" value="<%= reward.name %>" />
+      <label for="reward-image">Reward Image</label><input type="text" class="reward-image" value="<%= reward.image %>" />
+      <label for="reward-value">Reward Value</label><input type="text" class="reward-value" value="<%= reward.value %>" />
+      <label for="reward-status">Reward Status</label>
+      <select name="reward-status" class="reward-status">
+        <option value="published" <% if(reward.status === 'published') print('selected') %>>Published</option>
+        <option value="draft" <% if(reward.status === 'draft') print('selected') %>>Draft</option>
+      </select>
+      <label for="reward-description">Reward Description</label>
+      <textarea class="reward-description"><%= reward.description %></textarea>
+      <div class="reward-form-actions">
+        <button class="btn save-reward btn-primary">Save</button>
+        <button class="btn cancel-edit-reward">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <h6 class="edit-score-label">Score:</h6>
+    <h3 class="edit-score"><%= score %> <button class="btn edit-score"><i class="icon-pencil"></i></button></h3>
+    <div class="edit-score hide form-inline">
+      <input class="challenge-score span4" value="<%= score %>" />
+      <button class="btn save-score btn-primary">Save</button>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <h6 class="qrcode-label">QR Code:</h6>
+    <div class="qrcode">
+      <center>
+        <a href="<%= short_url %>">
+          <img src="<%= short_url + '.qrcode?s=200' %>" />
+        </a>
+      </center>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <h6 class="joined-label">Who joined this challenge:</h6>
+    <div class="joined challengers-in-progress">
+      
+    </div>
+    <button class="btn btn-info load-more-in-progress">Load more</button>
+  </div>
+
+  <div class="control-group">
+    <h6 class="completed-label">Who completed this challenge:</h6>
+    <div class="completed challengers-completed">
+
+    </div>
+    <button class="btn btn-info load-more-completed">Load more</button>
+  </div>
+  
+  <div class="page-header activity-label">
+    <h1>Activities <small><button class="show-activity btn btn-mini">Show Activities</button> <button class="hide-activity btn btn-mini hide">Hide Activities</button></small></h1>
+  </div>
+  <div class="activity-list">
+    <ul class="activity-list unstyled hide"></ul>
+  </div>
+  
+</div>
+<div class="modal-footer">
+  <a href="#" class="btn" data-dismiss="modal">Close</a>
+  <% if(active){%>
+    <button class="btn deactive-challenge btn-danger">Unpublish this challenge</button>
+  <%}else{%>
+    <button class="btn active-challenge btn-success">Publish this challenge</button>
+  <%}%>
+<!--   <button class="btn btn-primary">Save changes</button> -->
+</div>

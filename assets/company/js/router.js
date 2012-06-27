@@ -9,6 +9,8 @@ define([
     routes: {
       // Default - catch all
       '/company/:id': 'company',
+      '/company/:id/challenge': 'company',
+      '/company/:id/reward': 'reward',
       '*actions': 'defaultAction'
     }
   });
@@ -16,59 +18,94 @@ define([
   var initialize = function(options){
     var appView = options.appView;
     var router = new AppRouter(options);
-    router.on('route:defaultAction', function () {
-      var currentUserModel = options.currentUserModel;
-      currentUserModel.fetch({
-        success: function(model, xhr){
-          // console.log('user:', model, xhr);
-          if(!xhr.user_id){
-            // console.log('not found user:', window.Passport.BASE_URL + '/login?next=' + window.location.href);
-            window.location = window.Company.BASE_URL + '/login?next=' + window.location.href;
-          }
+    
+    var self = this;
+    
+    var currentUserModel = options.currentUserModel;
+    currentUserModel.fetch({
+      success: function(model, xhr){
+        // console.log('user:', model, xhr);
+        if(!xhr.user_id){
+          // console.log('not found user:', window.Passport.BASE_URL + '/login?next=' + window.location.href);
+          window.location = window.Company.BASE_URL + '/login?next=' + window.location.href;
         }
-      });
+      }
+    });
+    
+    router.on('route:defaultAction', function () {
       
       options.challengesCollection.fetch();
       require(['views/company/page'], function (WorldPage) {
-        var worldPage = Vm.create(appView, 'CompanyPage', WorldPage, {
+        var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
           currentUserModel: currentUserModel,
           challengesCollection: options.challengesCollection,
           vent: options.vent
         });
-        worldPage.render();
+        companyPage.render();
       });
     });
     
     router.on('route:company', function (companyId) {
       
-      // console.log('show company:', companyId);
+      console.log('show company:', companyId);
       
       window.Company.companyId = companyId;
       
       options.challengesCollection.url = window.Company.BASE_URL + '/apiv3/challenges/?company_id=' + companyId;
       
-      var currentUserModel = options.currentUserModel;
-      currentUserModel.fetch({
-        success: function(model, xhr){
-          // console.log('user:', model, xhr);
-          if(!xhr.user_id){
-            // console.log('not found user:', window.Passport.BASE_URL + '/login?next=' + window.location.href);
-            window.location = window.Company.BASE_URL + '/login?next=' + window.location.href;
-          }
-        }
-      });
-      
       options.challengesCollection.fetch();
-      require(['views/company/page'], function (WorldPage) {
-        var worldPage = Vm.create(appView, 'CompanyPage', WorldPage, {
-          currentUserModel: currentUserModel,
-          challengesCollection: options.challengesCollection,
-          vent: options.vent
+      if(!self.companyPage){
+        require(['views/company/page'], function (WorldPage) {
+          
+          var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
+            currentUserModel: currentUserModel,
+            challengesCollection: options.challengesCollection,
+            rewardsCollection: options.rewardsCollection,
+            vent: options.vent,
+            now: 'challenge'
+          });
+          companyPage.render();
+          self.companyPage = companyPage;
+          
         });
-        worldPage.render();
-      });
+      }else{
+        self.companyPage.options.now = 'challenge';
+        self.companyPage.render();
+      }
     });
     
+    router.on('route:reward', function (companyId) {
+      
+      console.log('show reward:', companyId);
+      
+      window.Company.companyId = companyId;
+      
+      options.rewardsCollection.url = window.Company.BASE_URL + '/apiv3/rewards/?company_id=' + companyId;
+      
+      options.rewardsCollection.fetch();
+      
+      if(!self.companyPage){
+        require(['views/company/page'], function (WorldPage) {
+          
+          var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
+            currentUserModel: currentUserModel,
+            challengesCollection: options.challengesCollection,
+            rewardsCollection: options.rewardsCollection,
+            vent: options.vent,
+            now: 'reward'
+          });
+          companyPage.render();
+          self.companyPage = companyPage;
+          
+        });
+      }else{
+        self.companyPage.options.now = 'reward';
+        self.companyPage.render();
+      }
+        
+    });
+
+
     Backbone.history.start();
   };
   return {

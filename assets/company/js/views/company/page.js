@@ -6,8 +6,9 @@ define([
   'views/company/sidebar',
   'views/company/carousel',
   'views/company/challenge-list',
+  'views/company/reward-list',
   'bootstrap'
-], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, bootstrap){
+], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, bootstrap){
   var ProfilePage = Backbone.View.extend({
     pageTemplate: _.template(pageTemplate),
     el: '#content',
@@ -51,13 +52,36 @@ define([
               });
             }
           });
+          
+          require(['views/company/modal/reward/edit-reward'], function (EditReward) {
+            if(!self.editReward){
+              self.editReward = new EditReward({
+                currentUserModel: self.options.currentUserModel,
+                challengesCollection: self.options.challengesCollection,
+                vent: self.options.vent,
+                el: $('div#edit-reward-modal')
+              });
+            }
+          });
+          
+          require(['views/company/modal/reward/add-reward'], function (AddReward) {
+            if(!self.addReward){
+              self.addReward = new AddReward({
+                currentUserModel: self.options.currentUserModel,
+                rewardsCollection: self.options.rewardsCollection,
+                vent: self.options.vent,
+                el: $('div#add-reward-modal')
+              });
+            }
+          });
         }
       }
       var sidebarView = new SidebarView({
         el: $('#sidebar', this.el),
         currentUserModel: this.options.currentUserModel,
         vent: this.options.vent,
-        company: company
+        company: company,
+        now: this.options.now
       });
       sidebarView.render();
       
@@ -68,13 +92,25 @@ define([
       });
       carouselView.render();
       
-      var challengeListView = new ChallengeListView({
-        collection: this.options.challengesCollection,
-        el: $('#challenge-list', this.el),
-        vent: this.options.vent
-      });
+      if(this.options.now == 'challenge'){
+        var challengeListView = new ChallengeListView({
+          collection: this.options.challengesCollection,
+          el: $('#content-pane', this.el),
+          vent: this.options.vent
+        });
+        
+        challengeListView.render();
+      }else if(this.options.now == 'reward'){
+        var rewardListView = new RewardListView({
+          collection: this.options.rewardsCollection,
+          el: $('#content-pane', this.el),
+          vent: this.options.vent
+        });
+        
+        rewardListView.render();
+      }
       
-      challengeListView.render();
+      
     }
   });
   return ProfilePage;
