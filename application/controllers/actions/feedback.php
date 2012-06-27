@@ -106,7 +106,7 @@ class Feedback extends CI_Controller {
 										'page_id' => 0,
 										'company_id' => $challenge['company_id'],
 										'subject' => NULL,
-										'object' => $challenge['detail']['name'],
+										'object' => $user_score,
 										'objecti' => $challenge['hash'],
 										//'additional_data' => $additional_data
 									);

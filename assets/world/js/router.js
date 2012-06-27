@@ -7,6 +7,8 @@ define([
 ], function ($, _, Backbone, Vm) {
   var AppRouter = Backbone.Router.extend({
     routes: {
+      '/company/:id': 'companyWorld',
+
       // Default - catch all
       '*actions': 'defaultAction'
     }
@@ -15,7 +17,18 @@ define([
   var initialize = function(options){
     var appView = options.appView;
     var router = new AppRouter(options);
+    
     router.on('route:defaultAction', function () {
+      window.World.companyId = null;
+      renderViews();
+    });
+    
+    router.on('route:companyWorld', function (companyId) {
+      window.World.companyId = companyId;
+      renderViews();
+    });
+
+    function renderViews() {
       var currentUserModel = options.currentUserModel;
       currentUserModel.fetch({
         success: function(model, xhr){
@@ -27,16 +40,18 @@ define([
         }
       });
       
+      options.companiesCollection.fetch();
       options.challengesCollection.fetch();
       require(['views/world/page'], function (WorldPage) {
         var worldPage = Vm.create(appView, 'WorldPage', WorldPage, {
           currentUserModel: currentUserModel,
           challengesCollection: options.challengesCollection,
+          companiesCollection: options.companiesCollection,
           vent: options.vent
         });
         worldPage.render();
       });
-    });
+    }
     
     Backbone.history.start();
   };

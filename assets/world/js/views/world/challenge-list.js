@@ -21,10 +21,7 @@ define([
       this.collection.bind('add', this.addOne);
     },
     
-    render: function () {
-      $(this.el).html(this.challengeListTemplate({
-      }));
-      
+    render: function () {      
       $('.tile-list', this.el).masonry({
         // options
         itemSelector : '.item',
@@ -35,20 +32,6 @@ define([
       });
       
       this.addAll();
-      var self = this;
-      
-      // console.log('bind endless scroll');
-      // $(window).endlessScroll({
-        // bottomPixels: 50,
-        // fireDelay: 100,
-        // callback: function(fireSequence, pageSequence){
-          // console.log('start load more. fireSequence:', fireSequence, 'pageSequence:', pageSequence);
-          // self.collection.loadMore(function(){
-            // console.log('load more done. fireSequence:', fireSequence, 'pageSequence:', pageSequence);
-          // });
-          // return true;
-        // }
-      // });
       return this;
     },
     
@@ -64,6 +47,14 @@ define([
     },
     
     addAll: function(){
+      //Reset
+      $(this.el).html(this.challengeListTemplate());
+
+      if(!this.collection.length) {
+        $('.btn.load-more').replaceWith('<div class="no-challenge">No Challenge</div>');
+        return false;
+      }
+
       this.collection.each(function(model){
         this.addOne(model);
       }, this);

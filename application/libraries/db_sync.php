@@ -1755,7 +1755,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} joined challenge {string:object}',
+        'format_string' => 'User {user:user_id} joined challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1765,7 +1765,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} completed challenge {string:object}',
+        'format_string' => 'User {user:user_id} completed challenge {challenge:objecti}',
         'score' => 50
       ),
       array(
@@ -1775,7 +1775,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} entered QR code',
+        'format_string' => 'User {user:user_id} entered QR code in challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1785,7 +1785,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} gave feedback for {string:object}',
+        'format_string' => 'User {user:user_id} gave feedback and rated {string:object} in challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1795,7 +1795,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} check-in at {string:object}',
+        'format_string' => 'User {user:user_id} check-in at {string:object} in challenge {challenge:objecti}',
         'score' => 0
       ),
     );
@@ -2331,6 +2331,20 @@ class DB_Sync {
         ),
         'criteria' => array(
           'action.2.count' => 1
+        ),
+        'score' => 0
+      ),
+      array(
+        'app_id' => 0,
+        'app_install_id' => NULL,
+        'info' => array(
+          'name' => 'First Challenge Done',
+          'description' => 'Completed challenge the first time',
+          'criteria_string' => array('Challenge completed = 1'),
+          'badge_image' => BASE_URL.'assets/images/badges/default.png'
+        ),
+        'criteria' => array(
+          'action.118.count' => 1
         ),
         'score' => 0
       ),

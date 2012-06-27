@@ -30,6 +30,7 @@ $(function() {
           window.location = base_url + 'logout?redirect=' + window.location.href;
         });
 
+        //Get notifications
         $.ajax({
           url: base_url + 'apiv3/notifications/' + data.user_id,
           type: "POST",
@@ -47,6 +48,15 @@ $(function() {
             $('.no-notification').hide();
           }
         });
+
+        //Show company list
+        if(data.companies.length) {
+          var barCompanyListTemplate = _.template($('#bar-company-list-template').html());
+          $('.bar-company-list').replaceWith(barCompanyListTemplate({
+            companies: data.companies
+          }));
+        }
+
       } else {
         //guest
         var barLoginTemplate = _.template($('#bar-login-template').html());

@@ -17,10 +17,11 @@ define([
       this.options.currentUserModel.bind('change', this.render);
     },
     render: function () {
+      var company;
       $(this.el).html(pageTemplate);
       
       if(this.options.currentUserModel){
-        var company = _.find(this.options.currentUserModel.get('companies'), function(i){
+        company = _.find(this.options.currentUserModel.get('companies'), function(i){
           return i.company_id == window.Company.companyId;
         });
         
