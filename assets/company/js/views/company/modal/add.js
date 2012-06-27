@@ -371,7 +371,7 @@ define([
     
     toggleRepeat: function(){
       var enable = !_.isUndefined($('input.repeat-enable', this.el).attr('checked'));
-      var value = parseInt($('input.repeat-interval').val(), 10);
+      var value = parseInt($('input.repeat-interval', this.el).val(), 10);
       if(enable){
         $('div.edit-repeat').show();
         $('div.view-repeat').hide();
@@ -384,7 +384,7 @@ define([
     },
     
     saveRepeat: function(){
-      var value = parseInt($('input.repeat-interval').val(), 10);
+      var value = parseInt($('input.repeat-interval', this.el).val(), 10);
       
       if(!value || value < 0){
         alert('number of days should be a number');
