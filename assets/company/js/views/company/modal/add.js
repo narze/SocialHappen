@@ -386,6 +386,11 @@ define([
     saveRepeat: function(){
       var value = parseInt($('input.repeat-interval').val(), 10);
       
+      if(!value || value < 0){
+        alert('number of days should be a number');
+        return;
+      }
+      
       $('div.view-repeat').show();
       $('div.edit-repeat').hide();
       

@@ -35,7 +35,10 @@ define([
       'click button.edit-score': 'showEditScore',
       'click button.save-score': 'saveEditScore',
       'click button.show-activity': 'showActivity',
-      'click button.hide-activity': 'hideActivity'
+      'click button.hide-activity': 'hideActivity',
+      'change input.repeat-enable': 'toggleRepeat',
+      'click button.save-repeat-interval': 'saveRepeat',
+      'click div.view-repeat': 'showEditRepeat'
     },
     
     initialize: function(){
@@ -497,6 +500,45 @@ define([
           
         }
       });
+    },
+    
+    toggleRepeat: function(){
+      var enable = !_.isUndefined($('input.repeat-enable', this.el).attr('checked'));
+      var value = parseInt($('input.repeat-interval').val(), 10);
+      if(enable && value){
+        $('div.edit-repeat').show();
+        $('div.view-repeat').hide();
+        this.model.set('repeat', value).trigger('change');
+        this.model.save();
+      }else{
+        $('div.view-repeat').hide();
+        $('div.edit-repeat').hide();
+        this.model.set('repeat', null).trigger('change');
+        this.model.save();
+      }
+    },
+    
+    saveRepeat: function(){
+      var value = parseInt($('input.repeat-interval').val(), 10);
+      
+      if(!value || value < 0){
+        alert('number of days should be a number');
+        return;
+      }
+      
+      $('div.view-repeat').show();
+      $('div.edit-repeat').hide();
+      
+      this.model.set('repeat', value).trigger('change');
+      this.model.save();
+      console.log('save repeat', value, this.model.toJSON());
+      
+      this.options.vent.trigger('showEditModal', this.model);
+    },
+    
+    showEditRepeat: function(){
+      $('div.edit-repeat').show();
+      $('div.view-repeat').hide();
     }
     
   });
