@@ -54,6 +54,15 @@ class Redirect extends CI_Controller {
 
 	}
 
+	function coupon($coupon_hash = null){
+		// admin confirm coupon
+		if(!$coupon_hash) {
+			$coupon_hash = $this->input->get('hash');
+		}
+	
+		
+	}
+
 	function c($challenge_hash = NULL) { //Challenge
 		if(!$challenge_hash) {
 			$challenge_hash = $this->input->get('hash');

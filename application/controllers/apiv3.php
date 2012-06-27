@@ -521,6 +521,19 @@ class Apiv3 extends CI_Controller {
     );
     echo json_encode($rewards);
   }
+
+  function coupon_list(){
+    $this->load->library('coupon_lib');
+    //TO-DO : return coupon list by a criteria
+
+  }
+
+  function coupon_confirm($coupon_hash){
+    $this->load->library('coupon_lib');
+
+  }
+
+
 }
 
 /* End of file apiv3.php */

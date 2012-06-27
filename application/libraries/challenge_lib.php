@@ -280,14 +280,14 @@ class Challenge_lib {
         
         //Give reward coupon
         if(isset($challenge['reward_item_id'])) {
-          $this->CI->load->model('coupon_model');
+          $this->CI->load->library('coupon_lib');
           $coupon = array(
             'reward_item_id' => $challenge['reward_item_id'],
             'user_id' => $user_id,
             'company_id' => $company_id,
             'challenge_id' => $challenge_id
           );
-          $coupon_add_result = $this->CI->coupon_model->add($coupon);
+          $coupon_add_result = $this->CI->coupon_lib->create_coupon($coupon);
         }
 
         //Increment company stat
