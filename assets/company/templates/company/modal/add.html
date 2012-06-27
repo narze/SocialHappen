@@ -11,6 +11,26 @@
   </div>
 </div>
 <div class="modal-body">
+  <h6 class="edit-repeat">Repeat:</h6>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" class="repeat-enable" value="true" <%= repeat?'checked="checked"':''%>>
+        User can play this challenge more than one time
+      </label>
+    </div>
+  </div>
+  <div class="edit-repeat hide">
+    <div class="control-group">
+      User can play every <input class="repeat-interval span1" value="<%= repeat?repeat:7 %>" /> days.
+      <button class="btn save-repeat-interval btn-primary">Save</button>
+    </div>
+  </div>
+  <div class="view-repeat <%= repeat?'':'hide' %>">
+    <div class="control-group">
+      User can play every <%= repeat || 7 %> days.
+    </div>
+  </div>
   <h6 class="edit-image">Image:</h6>
   <div class="edit-image hide">
     <div class="control-group">

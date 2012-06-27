@@ -25,7 +25,8 @@ define([
       },
       score: 10,
       start_date: null,
-      end_date: null
+      end_date: null,
+      repeat: null
     },
     initialize: function(){
 

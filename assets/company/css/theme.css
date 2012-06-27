@@ -304,7 +304,7 @@ img.company-image{
   cursor: pointer;
 }
 
-.modal .edit-name, .modal .edit-description, .modal img.challenge-image{
+.modal .edit-name, .modal .edit-description, .modal img.challenge-image, .modal .view-repeat{
   cursor: pointer;
 }
 

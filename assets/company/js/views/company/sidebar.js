@@ -36,7 +36,8 @@ define([
         },
         hash: null,
         criteria: [],
-        active: false
+        active: true,
+        repeat: null
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       this.options.vent.trigger('showAddModal', newModel);
