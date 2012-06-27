@@ -522,14 +522,43 @@ class Apiv3 extends CI_Controller {
     echo json_encode($rewards);
   }
 
-  function coupon_list(){
+  function counpon_detail(){
+    $hash = $this->input->get('coupon_hash');
     $this->load->library('coupon_lib');
-    //TO-DO : return coupon list by a criteria
+    $rerult = array();
+
+    if(isset($hash) && $hash!='')
+      $result = $this0>coupon_lib->get_by_hash($hash);
+
+    echo json_encode($result);
 
   }
 
-  function coupon_confirm($coupon_hash){
+  function coupon_list(){
+    $company_id = $this->input->get('company_id');
+    $challenge_id = $this->input->get('challenge_id');
+    $user_id = $this->input->get('user_id');
+
     $this->load->library('coupon_lib');
+    
+    $result = array();
+
+    if(isset($company_id) && $company_id!=''){
+      $result = $this->coupon_lib->list_company_coupon($company_id);
+    }else if(isset($challenge_id) && $challenge_id!=''){
+      $result = $this->coupon_lib->list_company_coupon($challenge_id);
+    }else if(isset($user_id) && $user_id!=''){
+      $result = $this->coupon_lib->list_company_coupon($user_id);
+    }
+
+    echo json_encode($result);
+  }
+
+  function confirm_coupon(){
+    $hash = $this->input->post('hash');
+    $this->load->library('coupon_lib');
+    //TO-DO : get current user's id (admin_id) -> call coupon_lib->confirm_coupon
+
 
   }
 

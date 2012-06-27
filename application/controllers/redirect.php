@@ -59,7 +59,7 @@ class Redirect extends CI_Controller {
 		if(!$coupon_hash) {
 			$coupon_hash = $this->input->get('hash');
 		}
-	
+		//redirect to admin page ? 
 		
 	}
 

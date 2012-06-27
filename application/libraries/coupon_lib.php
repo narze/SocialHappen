@@ -13,22 +13,19 @@ Class Coupon_lib{
 	}
 
 	function create_coupon($data){
+
 		if($id = $this->CI->coupon_model->add_coupon($data)) {
 	      $result = $this->CI->coupon_model->update(array(
 	        '_id' => new MongoId($id)
 	        ), array(
-	          '$set' => array('hash' => strrev(sha1($id))
+	          '$set' => array(
+	          					'hash' => strrev(sha1($id))
 	      )));
 	      if($result['updatedExisting']) {
 	        return $id;
 	      }
 	    } 
 	    return FALSE;
-	}
-
-	function get_coupon($criteria, $limit = 100){
-		$result = $this->CI->coupon_model->get($criteria, $limit);
-   		return $result;
 	}
 
 	function get_one($criteria) {
@@ -40,21 +37,82 @@ Class Coupon_lib{
 		return $this->CI->coupon_model->getOne(array('hash' => $hash));
 	}
 
-	function confirm_counpon($coupon_id = NULL, $admin_user_id = NULL){
-		if((isset($coupon_id) && $coupon_id != '' && (isset($admin_user_id) && $admin_user_id != '')){
-			
-			if($this->CI->confirm_coupon($coupon_id, $admin_user_id))
-				return true;
+	function confirm_coupon($coupon_id = NULL, $admin_user_id = NULL){
+		//not tested yet
+		if((isset($coupon_id) && $coupon_id != '') && (isset($admin_user_id) && $admin_user_id != '')) {
+			$this->CI->load->library('reward_lib');
+			$coupon = $this->CI->coupon_model->get_by_id($coupon_id);
+
+			if($coupon){
+				if($this->CI->coupon_model->confirm_coupon($coupon_id, $admin_user_id)){
+					if($this->CI->reward_lib->redeem_with_coupon($coupon_id, $coupon['user_id'])){
+						return true;
+					}
+				}
+			}
 		}
-	
 		return false;
 	}
 
-	function user_coupon($user_id){
+	function get_coupon_admin_url($data){
+		$coupon = NULL;
+		if(array_key_exists('coupon_hash', $data)){
+			$coupon = $this->CI->coupon_model->get(array('hash' => $data['coupon_hash']));
+		}else if(array_key_exists('coupon_id', $data)){
+				
+			$coupon = $this->CI->coupon_model->get(array('_id' => new MongoId($data['coupon_id'])));
+
+		}
+
+		if($coupon){
+			return base_url().'redirect/coupon/'.$coupon[0]['hash'];
+
+		}else{
+			return false;
+		}
+
+	}
+
+	function list_user_challenge_coupon($user_id, $challenge_id){
+		if((isset($user_id) && $user_id != '') &&
+			(isset($challenge_id) && $challenge_id != '') 
+		){
+			
+			if($coupon_list = $this->CI->coupon_model->get_by_user_and_challenge($user_id, $challenge_id))
+				return $coupon_list;
+		}
+	
+		return false;
+		
+	}
+
+	function list_user_coupon($user_id){
 		if((isset($user_id) && $user_id != '') ){
 			
-			if($coupon = $this->CI->get_by_user_and_challenge($user_id))
-				return coupon;
+			if($coupon_list = $this->CI->coupon_model->get_by_user($user_id))
+				return $coupon_list;
+		}
+	
+		return false;
+		
+	}
+
+	function list_challenge_coupon($challenge_id){
+		if((isset($challenge_id) && $challenge_id != '') ){
+			
+			if($coupon_list = $this->CI->coupon_model->get_by_challenge($challenge_id))
+				return $coupon_list;
+		}
+	
+		return false;
+		
+	}
+
+	function list_company_coupon($company_id){
+		if(isset($company_id) ){
+			
+			if($coupon_list = $this->CI->coupon_model->get_by_company($company_id))
+				return $coupon_list;
 		}
 	
 		return false;

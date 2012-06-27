@@ -120,4 +120,31 @@ class Coupon_model extends CI_Model {
 		$query = array('user_id' => $user_id, 'challenge_id' => $challenge_id);
 		return $this->get($query);
 	}
+
+	/**
+	 * Get coupon(s) by company_id
+	 */
+	function get_by_company($company_id = NULL) {
+		if(!$company_id) { return FALSE; }
+		$query = array('company_id' => $company_id);
+		return $this->get($query);
+	}
+
+	/**
+	 * Get coupon(s) by user_id
+	 */
+	function get_by_user($user_id = NULL) {
+		if(!$user_id) { return FALSE; }
+		$query = array('user_id' => $user_id);
+		return $this->get($query);
+	}
+
+	/**
+	 * Get coupon(s) by challenge_id
+	 */
+	function get_by_challenge($challenge_id = NULL) {
+		if(!$challenge_id) { return FALSE; }
+		$query = array('challenge_id' => $challenge_id);
+		return $this->get($query);
+	}
 }
