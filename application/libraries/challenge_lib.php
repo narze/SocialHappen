@@ -149,14 +149,24 @@ class Challenge_lib {
             $this->CI->achievement_stat->list_stat($stat_criteria);
           if(!$matched_achievement_stat) {
             $match_all_criteria = FALSE;
+          }else if(isset($criteria['action_data_id'])){
+            
+            /**
+             * check with action_user_data that user have done it or not
+             */
+            $this->CI->load->library('action_user_data_lib');
+            $action_user_data = $this->CI->action_user_data_lib->
+              get_action_user_data_by_action_data($criteria['action_data_id']);
+            
+            if(!$action_user_data){
+              $match_all_criteria = FALSE;
+            }
           }
         }
+        
+        
       }
 
-      /**
-       * @TODO: get action_user_data to check chellenge // Book
-       */
-      
       if($match_all_criteria) {
 
         $result['completed'][] = $challenge_id;
@@ -260,8 +270,18 @@ class Challenge_lib {
       $action = array();
 
       $this->CI->load->model('achievement_stat_model', 'achievement_stat');
-      if($matched_in_progress_achievement_stat = 
-        $this->CI->achievement_stat->list_stat($stat_criteria)) {
+      $matched_in_progress_achievement_stat = 
+        $this->CI->achievement_stat->list_stat($stat_criteria);
+      
+      if(isset($criteria['action_data_id'])){
+        $this->CI->load->library('action_user_data_lib');
+        $action_user_data = $this->CI->action_user_data_lib->
+          get_action_user_data_by_action_data($criteria['action_data_id']);
+      }else{
+        $action_user_data = TRUE;
+      }
+      
+      if($matched_in_progress_achievement_stat && $action_user_data) {
         $progress_count = $matched_in_progress_achievement_stat[0]['action'][$query['action_id']]['company'][$company_id]['count'];
         $action['action_data'] = $criteria;
         $action['action_done'] = $progress_count >= $target_count;

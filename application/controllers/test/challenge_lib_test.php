@@ -203,8 +203,10 @@ class Challenge_lib_test extends CI_Controller {
   }
 
   function check_challenge_test() {
-    $info = array();
     $company_id = 1;
+    $info = array(
+      'company_id' => $company_id
+    );
     $user_id = 1;
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
