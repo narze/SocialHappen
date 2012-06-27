@@ -60,7 +60,9 @@ define([
       // Ensure that we have the appropriate request data.
       if (!options.data && model && (method == 'create' || method == 'update')) {
         params.contentType = 'application/json';
-        params.data = 'model='+JSON.stringify(model.toJSON());
+        var data = model.toJSON();
+        delete data.challengeRewards;
+        params.data = 'model='+JSON.stringify(data);
       }
 
       // For older servers, emulate JSON by encoding the request into an HTML-form.
