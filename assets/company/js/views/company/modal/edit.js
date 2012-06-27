@@ -81,6 +81,21 @@ define([
       $('#edit_challenge_start').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#edit_challenge_start').datetimepicker('getDate');
+          
+          var endDate = $('#edit_challenge_end').datetimepicker('getDate');
+          
+          if(endDate && date && date >= endDate){
+            alert('Start date must come before end date');
+            var startDate = self.model.get('start_date');
+            if(startDate){
+              startDate *= 1000;
+              $('#edit_challenge_start').datetimepicker('setDate', (new Date(startDate)));
+            }else{
+              $('#edit_challenge_start').datetimepicker('setDate', null);
+            }
+            return;
+          }
+          
           self.model.save({
             start_date: Math.floor(date.getTime()/1000)
           });
@@ -89,6 +104,21 @@ define([
       $('#edit_challenge_end').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#edit_challenge_end').datetimepicker('getDate');
+          
+          var startDate = $('#edit_challenge_start').datetimepicker('getDate');
+          
+          if(date && startDate && startDate >= date){
+            alert('End date must come after start date');
+            var endDate = self.model.get('end_date');
+            if(endDate){
+              endDate *= 1000;
+              $('#edit_challenge_end').datetimepicker('setDate', (new Date(endDate)));
+            }else{
+              $('#edit_challenge_end').datetimepicker('setDate', null);
+            }
+            return;
+          }
+          
           self.model.save({
             end_date: Math.floor(date.getTime()/1000)
           });

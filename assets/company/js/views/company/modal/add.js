@@ -75,6 +75,21 @@ define([
       $('#add_challenge_start').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_start').datetimepicker('getDate');
+          
+          var endDate = $('#add_challenge_end').datetimepicker('getDate');
+          
+          if(endDate && date && date >= endDate){
+            alert('Start date must come before end date');
+            var startDate = self.model.get('start_date');
+            if(startDate){
+              startDate *= 1000;
+              $('#add_challenge_start').datetimepicker('setDate', (new Date(startDate)));
+            }else{
+              $('#add_challenge_start').datetimepicker('setDate', null);
+            }
+            return;
+          }
+          
           self.model.set({
             start_date: Math.floor(date.getTime()/1000)
           });
@@ -83,6 +98,21 @@ define([
       $('#add_challenge_end').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_end').datetimepicker('getDate');
+          
+          var startDate = $('#add_challenge_start').datetimepicker('getDate');
+          
+          if(date && startDate && startDate >= date){
+            alert('End date must come after start date');
+            var endDate = self.model.get('end_date');
+            if(endDate){
+              endDate *= 1000;
+              $('#add_challenge_end').datetimepicker('setDate', (new Date(endDate)));
+            }else{
+              $('#add_challenge_end').datetimepicker('setDate', null);
+            }
+            return;
+          }
+          
           self.model.set({
             end_date: Math.floor(date.getTime()/1000)
           });
