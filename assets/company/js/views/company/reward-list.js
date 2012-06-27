@@ -85,18 +85,19 @@ define([
       console.log('show add reward');
       var newModel = new RewardModel({});
       newModel.set({
-        detail: {
-          name: 'Challenge Name',
-          description: 'Challenge Description',
-          image: 'https://lh3.googleusercontent.com/XBLfCOS_oKO-XjeYiaOAuIdukQo9wXMWsdxJZLJO8hvWMBLFwCU3r_0BrRMn_c0TnEDarKuxDg=s640-h400-e365'
+        name: 'Click here to set Reward\'s Name',
+        image: 'https://lh5.googleusercontent.com/mww1eX8x-JdWhYUA1B-ovYX3MQf5gGwsqcXvySmebElaBcnKeH0wojdCDSF4rfhnAMlXvsG_=s640-h400-e365',
+        value: 0,
+        description: 'Click here to edit reward\'s description',
+        redeem: {
+          point: 0,
+          amount: 0,
+          once: true
         },
-        hash: null,
-        criteria: [],
-        active: true,
-        repeat: null
+        status: 'draft'
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
-      this.options.vent.trigger('showAddModal', newModel);
+      this.options.vent.trigger('showAddRewardModal', newModel);
     }
   });
   return RewardListPane;

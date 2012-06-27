@@ -57,7 +57,7 @@ define([
             if(!self.editReward){
               self.editReward = new EditReward({
                 currentUserModel: self.options.currentUserModel,
-                challengesCollection: self.options.challengesCollection,
+                rewardsCollection: self.options.rewardsCollection,
                 vent: self.options.vent,
                 el: $('div#edit-reward-modal')
               });

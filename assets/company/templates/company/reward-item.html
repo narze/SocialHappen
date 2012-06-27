@@ -1,8 +1,8 @@
-<a href="<%= baseUrl %>redirect/c?hash=<%= hash %>" class="reward" title="Play">
-  <img src="<%= detail.image %>" class="challenge-image"/>
+<a href="#" class="reward" title="View">
+  <img src="<%= image %>" class="reward-image"/>
   <div class="challenge-caption">
-    <h4><%= detail.name %></h4>
-    <p><%= detail.description %></p>
+    <h4><%- name||'' %></h4>
+    <p><%- description||'' %></p>
   </div>
 </a>
 

@@ -212,7 +212,7 @@ p.company-name {
   float: left;
 }
 
-.tile-list .challenge-image {
+.tile-list .challenge-image, .tile-list .reward-image {
   max-width: 282px;
   max-height: 176px;
 }
@@ -297,7 +297,7 @@ img.company-image{
   margin-bottom: 0px;
 }
 
-.modal .challenge-image{
+.modal .challenge-image, .modal .reward-image{
   margin-bottom: 15px;
 }
 
@@ -305,7 +305,7 @@ img.company-image{
   cursor: pointer;
 }
 
-.modal .edit-name, .modal .edit-description, .modal img.challenge-image, .modal .view-repeat{
+.modal .edit-name, .modal .edit-description, .modal img.challenge-image, .modal img.reward-image, .modal .view-repeat, .modal .edit-redeem{
   cursor: pointer;
 }
 

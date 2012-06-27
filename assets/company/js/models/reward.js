@@ -4,29 +4,19 @@ define([
 ], function(_, Backbone) {
   var rewardModel = Backbone.Model.extend({
 
-    idAttribute: 'hash',
+    idAttribute: '_id',
 
     defaults: {
-      detail: {
-        name: 'Reward Name',
-        description: 'Reward Description',
-        image: 'https://lh3.googleusercontent.com/XBLfCOS_oKO-XjeYiaOAuIdukQo9wXMWsdxJZLJO8hvWMBLFwCU3r_0BrRMn_c0TnEDarKuxDg=s640-h400-e365'
+      name: '',
+      image: null,
+      value: 0,
+      description: '',
+      redeem: {
+        point: 0,
+        amount: 0,
+        once: true
       },
-      hash: null,
-      criteria: [],
-      active: false,
-      company_id: 0,
-      reward: {
-        name: 'Reward Name',
-        image: 'Reward Image URL',
-        value: 10,
-        status: 'Reward Status',
-        description: 'Reward Description'
-      },
-      score: 10,
-      start_date: null,
-      end_date: null,
-      repeat: null
+      status: 'draft'
     },
     initialize: function(){
 

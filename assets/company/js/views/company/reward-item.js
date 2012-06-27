@@ -26,7 +26,8 @@ define([
     
     showEdit: function(e){
       e.preventDefault();
-      this.options.vent.trigger('showEditModal', this.model);
+      console.log('show reward edit modal');
+      this.options.vent.trigger('showEditRewardModal', this.model);
     }
   });
   return RewardItemView;

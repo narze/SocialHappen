@@ -493,8 +493,30 @@ class Apiv3 extends CI_Controller {
   function rewards(){
     $rewards = array(
       array(
-        '_id' => 'what',
-        'name' => 'iPad'
+        '_id' => '111',
+        'name' => 'iPad',
+        'value' => 132124,
+        'image' => 'https://lh4.googleusercontent.com/Li4BxtMtXLDKXWESQ6Zj7ajmHivRz8HBT4cAQ3s1dBb20b8U0SasftaZEnaBzwGWzpn01vWON1g=s640-h400-e365',
+        'description' => 'an iPad',
+        'redeem' => array(
+          'point' => 100,
+          'amount' => 5,
+          'once' => true
+        ),
+        'status' => 'draft'
+      ),
+      array(
+        '_id' => '112',
+        'name' => 'iPhone',
+        'value' => 3854,
+        'image' => 'https://lh4.googleusercontent.com/52favTFlUZZZ3lb2OvZPb7f6ILAj7rApZFDg8Zyy86Q6oKUUkdPrgas-TVG-wOkPCv-zS_Y9=s640-h400-e365',
+        'description' => 'an iPhone',
+        'redeem' => array(
+          'point' => 80,
+          'amount' => 20,
+          'once' => true
+        ),
+        'status' => 'published'
       )
     );
     echo json_encode($rewards);
