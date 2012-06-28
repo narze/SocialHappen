@@ -14,7 +14,7 @@
 
   <script type="text/template" id="user-data-template">
     <div class="well">
-      <div class="row">
+      <div class="row-fluid">
         <div class="span3">
           <img src="<%= picture %>" class="user-picture" />
         </div>

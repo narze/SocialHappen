@@ -3,6 +3,7 @@
 
 @import url("../../css/common/bootstrap.min.css");
 @import url("../../css/common/bootstrap-responsive.min.css");
+@import url("../../css/common/bar.css");
 
 /* Custom themes */
 @import url("theme.css");

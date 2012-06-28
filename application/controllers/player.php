@@ -258,8 +258,8 @@ class Player extends CI_Controller {
       $template = array(
         'title' => $challenge['detail']['name'],
         'styles' => array(
-          'common/bootstrap',
-          'common/bootstrap-responsive',
+          'common/bootstrap.min',
+          'common/bootstrap-responsive.min',
           'common/bar',
           'player/challenge'
         ),
@@ -367,8 +367,8 @@ class Player extends CI_Controller {
     $template = array(
       'title' => 'Account settings',
       'styles' => array(
-        'common/bootstrap',
-        'common/bootstrap-responsive',
+        'common/bootstrap.min',
+        'common/bootstrap-responsive.min',
         'common/bar',
         // 'play/play'
       ),
@@ -746,8 +746,8 @@ class Player extends CI_Controller {
     $template = array(
       'title' => 'Welcome to SocialHappen',
       'styles' => array(
-        'common/bootstrap',
-        'common/bootstrap-responsive',
+        'common/bootstrap.min',
+        'common/bootstrap-responsive.min',
         'common/bar'
       ),
       'body_views' => array(

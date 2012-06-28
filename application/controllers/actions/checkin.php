@@ -54,8 +54,8 @@ class Checkin extends CI_Controller {
 			$template = array(
         'title' => 'Welcome to SocialHappen',
         'styles' => array(
-          'common/bootstrap',
-          'common/bootstrap-responsive',
+          'common/bootstrap.min',
+          'common/bootstrap-responsive.min',
           'common/jquery.facebook.multifriend.select',
           'common/jquery.facebook.multifriend.select-list',
           'actions/checkin_form'
@@ -179,8 +179,8 @@ class Checkin extends CI_Controller {
 			$template = array(
         'title' => 'Welcome to SocialHappen',
         'styles' => array(
-          'common/bootstrap',
-          'common/bootstrap-responsive'
+          'common/bootstrap.min',
+          'common/bootstrap-responsive.min'
         ),
         'body_views' => array(
           'actions/checkin/checkin_finish' => $data

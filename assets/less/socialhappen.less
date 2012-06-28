@@ -1,6 +1,8 @@
 // SOCIALHAPPEN STYLES
 // -------------
-
+.clear{
+  clear: both;
+}
 // Buttons 
 .btn-primary,
 .btn-primary:hover {
@@ -9,19 +11,55 @@
 }
 
 // Responsive bar
+.navbar .nav > li > a {
+  padding: 10px 0 11px;
+}
+.navbar .notification .amount i {
+  margin-left: -12px;
+}
+.navbar .nav {
+  margin-right: 0;
+}
+.navbar .nav.pull-right {
+  
+  margin-left: 0;
+}
 @media (max-width: 767px) {
+  body {
+    padding-top: 0;
+  }
   .bar-text {
     display: none;
   }
   .bar-icon {
     display: inline;
+    margin: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: url(../../images/sh_logo_50.jpg);
+    background-repeat: no-repeat;
+    background-size: 30px;
+    border-radius: 4px;
+  }
+  .bar-icon strong {
+    display: none;
+  }
+  .navbar .nav > li.active > a {
+    margin: 5px 0;
+    padding: 5px 0 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
   }
 }
 
 @media (min-width: 767px) {
+  body {
+    padding-top: 60px;
+  }
   .bar-text {
     display: inline;
-    padding-left: 8px;
+    padding-right: 8px;
   }
   .bar-icon {
     display: none;
@@ -32,9 +70,4 @@
   .bar-text-right {
     display: none;
   }
-}
-
-.navbar .nav {
-  margin-right: 0;
-  margin-left: 0;
 }

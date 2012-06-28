@@ -42,8 +42,8 @@ class Play extends CI_Controller {
     $template = array(
       'title' => 'Welcome to SocialHappen',
       'styles' => array(
-        'common/bootstrap',
-        'common/bootstrap-responsive',
+        'common/bootstrap.min',
+        'common/bootstrap-responsive.min',
         'common/bar',
         'play/play'
       ),

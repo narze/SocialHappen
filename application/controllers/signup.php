@@ -63,8 +63,8 @@ class Signup extends CI_Controller {
         $template = array(
           'title' => 'Signup',
           'styles' => array(
-            'common/bootstrap',
-            'common/bootstrap-responsive',
+            'common/bootstrap.min',
+            'common/bootstrap-responsive.min',
             'common/player'
           ),
           'body_views' => array(

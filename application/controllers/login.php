@@ -51,8 +51,8 @@ class Login extends CI_Controller {
             'common/plain-bar'
           ),
           'styles' => array(
-            'common/bootstrap',
-            'common/bootstrap-responsive',
+            'common/bootstrap.min',
+            'common/bootstrap-responsive.min',
             'common/bar',
             'common/player'
           ),
@@ -125,8 +125,8 @@ class Login extends CI_Controller {
               'common/bootstrap.min'
             ),
             'styles' => array(
-              'common/bootstrap',
-              'common/bootstrap-responsive',
+              'common/bootstrap.min',
+              'common/bootstrap-responsive.min',
               'common/bar',
               'common/player'
             ),

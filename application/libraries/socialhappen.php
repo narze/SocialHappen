@@ -303,8 +303,8 @@ class SocialHappen{
 					//'home/lightbox',
 				);
 		$style = array(
-					'common/bootstrap',
-					'common/bootstrap-responsive',
+					'common/bootstrap.min',
+					'common/bootstrap-responsive.min',
 					//'common/common',
 					//'common/platform',
 					//'common/main',
@@ -1168,8 +1168,8 @@ class SocialHappen{
 		$template = array(
 		  'title' => 'Error',
 		  'styles' => array(
-		    'common/bootstrap',
-		    'common/bootstrap-responsive',
+		    'common/bootstrap.min',
+		    'common/bootstrap-responsive.min',
 		    'common/bar',
 		    'common/error'
 		  ),

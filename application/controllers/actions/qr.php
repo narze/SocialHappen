@@ -154,8 +154,8 @@ class QR extends CI_Controller {
       // $template = array(
       //   'title' => 'Welcome to SocialHappen',
       //   'styles' => array(
-      //     'common/bootstrap',
-      //     'common/bootstrap-responsive'
+      //     'common/bootstrap.min',
+      //     'common/bootstrap-responsive.min'
       //   ),
       //   'body_views' => array(
       //     'actions/qr/qr_challenge_finish_view' => $action_data

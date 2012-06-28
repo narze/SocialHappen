@@ -11,8 +11,8 @@ class Challenge extends CI_Controller {
 		$template = array(
       'title' => 'Challenge Settings',
       'styles' => array(
-        'common/bootstrap',
-        'common/bootstrap-responsive',
+        'common/bootstrap.min',
+        'common/bootstrap-responsive.min',
         'common/bar'
       ),
       'body_views' => array(
