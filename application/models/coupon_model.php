@@ -23,7 +23,7 @@ class Coupon_model extends CI_Model {
 			));
 	}
         
-	function add($data)	{
+	function add_($data)	{
 		$data = array_cast_int($data, $this->int_values);
 		try	{
 			$this->collection->insert($data, array('safe' => TRUE));
@@ -34,19 +34,19 @@ class Coupon_model extends CI_Model {
 		}
 	}
 	
-	function get($query){
+	function get_($query){
 		$query = array_cast_int($query, $this->int_values);
 		$result = $this->collection->find($query);
 		return cursor2array($result);
 	}
 
-	function getOne($query){
+	function getOne_($query){
 		$query = array_cast_int($query, $this->int_values);
 		$result = $this->collection->findOne($query);
 		return obj2array($result);
 	}
 		
-	function update($query, $data)
+	function update_($query, $data)
 	{
 		$query = array_cast_int($query, $this->int_values);
 		try	{
@@ -57,7 +57,7 @@ class Coupon_model extends CI_Model {
 		}
 	}
 
-	function delete($query){
+	function delete_($query){
 		$query = array_cast_int($query, $this->int_values);
 		return $this->collection->remove($query, array('$atomic' => TRUE));
 	}
@@ -68,7 +68,7 @@ class Coupon_model extends CI_Model {
 	 */
 	function list_user_coupons($user_id)  {
 		$query = array('user_id' => $user_id);
-		return $this->get($query);
+		return $this->get_($query);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Coupon_model extends CI_Model {
 				'confirmed_by_id' => $admin_user_id
 			)
 		);
-		return $this->update($criteria, $update);
+		return $this->update_($criteria, $update);
 	}
 
 	/**
@@ -101,7 +101,7 @@ class Coupon_model extends CI_Model {
 		if(!isset($data['challenge_id'])) {
 			$data['challenge_id'] = NULL;
 		}
-		return $this->add($data);
+		return $this->add_($data);
 	}
 
 	/**
@@ -109,7 +109,7 @@ class Coupon_model extends CI_Model {
 	 */
 	function get_by_id($coupon_id = NULL) {
 		if(!$coupon_id)	{ return FALSE; }
-		return $this->getOne(array('_id' => new MongoId($coupon_id)));
+		return $this->getOne_(array('_id' => new MongoId($coupon_id)));
 	}
 
 	/**
@@ -118,7 +118,7 @@ class Coupon_model extends CI_Model {
 	function get_by_user_and_challenge($user_id = NULL, $challenge_id = NULL) {
 		if(!$user_id || !$challenge_id) { return FALSE; }
 		$query = array('user_id' => (int) $user_id, 'challenge_id' => $challenge_id);
-		return $this->get($query);
+		return $this->get_($query);
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Coupon_model extends CI_Model {
 	function get_by_company($company_id = NULL) {
 		if(!$company_id) { return FALSE; }
 		$query = array('company_id' => (int) $company_id);
-		return $this->get($query);
+		return $this->get_($query);
 	}
 
 	/**
@@ -136,7 +136,7 @@ class Coupon_model extends CI_Model {
 	function get_by_user($user_id = NULL) {
 		if(!$user_id) { return FALSE; }
 		$query = array('user_id' => (int) $user_id);
-		return $this->get($query);
+		return $this->get_($query);
 	}
 
 	/**
@@ -145,6 +145,6 @@ class Coupon_model extends CI_Model {
 	function get_by_challenge($challenge_id = NULL) {
 		if(!$challenge_id) { return FALSE; }
 		$query = array('challenge_id' => $challenge_id);
-		return $this->get($query);
+		return $this->get_($query);
 	}
 }

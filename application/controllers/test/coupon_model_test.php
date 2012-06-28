@@ -22,14 +22,14 @@ class Coupon_model_test extends CI_Controller {
 		}
 	}
 	 
-	function add_test() {
+	function add_coupon_test() {
 		$data = array(
 			'reward_item_id' => 'testrewardid',
 			'user_id' => 1,
 			'company_id' => 3,
 			'challenge_id' => 123
 		);
-		$result = $this->coupon_model->add($data);
+		$result = $this->coupon_model->add_coupon($data);
 		$this->unit->run($result, TRUE, "\$result", $result);
 		$this->coupon_id = $result;
 	}
