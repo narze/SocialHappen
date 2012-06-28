@@ -522,13 +522,13 @@ class Apiv3 extends CI_Controller {
     echo json_encode($rewards);
   }
 
-  function counpon_detail(){
+  function coupon_detail(){
     $hash = $this->input->get('coupon_hash');
     $this->load->library('coupon_lib');
     $rerult = array();
 
     if(isset($hash) && $hash!='')
-      $result = $this0>coupon_lib->get_by_hash($hash);
+      $result = $this->coupon_lib->get_by_hash($hash);
 
     echo json_encode($result);
 
