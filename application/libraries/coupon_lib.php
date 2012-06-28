@@ -51,7 +51,7 @@ Class Coupon_lib{
 				}
 			}
 		}
-		return false;
+		return FALSE;
 	}
 
 	function get_coupon_admin_url($data){
@@ -68,7 +68,7 @@ Class Coupon_lib{
 			return base_url().'redirect/coupon/'.$coupon[0]['hash'];
 
 		}else{
-			return false;
+			return FALSE;
 		}
 
 	}
@@ -82,7 +82,7 @@ Class Coupon_lib{
 				return $coupon_list;
 		}
 	
-		return false;
+		return FALSE;
 		
 	}
 
@@ -93,7 +93,7 @@ Class Coupon_lib{
 				return $coupon_list;
 		}
 	
-		return false;
+		return FALSE;
 		
 	}
 
@@ -104,7 +104,7 @@ Class Coupon_lib{
 				return $coupon_list;
 		}
 	
-		return false;
+		return FALSE;
 		
 	}
 
@@ -115,7 +115,7 @@ Class Coupon_lib{
 				return $coupon_list;
 		}
 	
-		return false;
+		return FALSE;
 		
 	}
 

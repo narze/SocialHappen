@@ -7,8 +7,9 @@ define([
   'views/company/carousel',
   'views/company/challenge-list',
   'views/company/reward-list',
+  'views/company/coupon-list',
   'bootstrap'
-], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, bootstrap){
+], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, bootstrap){
   var ProfilePage = Backbone.View.extend({
     pageTemplate: _.template(pageTemplate),
     el: '#content',
@@ -108,6 +109,14 @@ define([
         });
         
         rewardListView.render();
+      }else if(this.options.now == 'coupon'){
+        var couponListView = new CouponListView({
+          collection: this.options.couponsCollection,
+          el: $('#content-pane', this.el),
+          vent: this.options.vent
+        });
+        
+        couponListView.render();
       }
       
       

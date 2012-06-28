@@ -117,7 +117,7 @@ class Coupon_model extends CI_Model {
 	 */
 	function get_by_user_and_challenge($user_id = NULL, $challenge_id = NULL) {
 		if(!$user_id || !$challenge_id) { return FALSE; }
-		$query = array('user_id' => $user_id, 'challenge_id' => $challenge_id);
+		$query = array('user_id' => (int) $user_id, 'challenge_id' => $challenge_id);
 		return $this->get($query);
 	}
 
@@ -126,7 +126,7 @@ class Coupon_model extends CI_Model {
 	 */
 	function get_by_company($company_id = NULL) {
 		if(!$company_id) { return FALSE; }
-		$query = array('company_id' => $company_id);
+		$query = array('company_id' => (int) $company_id);
 		return $this->get($query);
 	}
 
@@ -135,7 +135,7 @@ class Coupon_model extends CI_Model {
 	 */
 	function get_by_user($user_id = NULL) {
 		if(!$user_id) { return FALSE; }
-		$query = array('user_id' => $user_id);
+		$query = array('user_id' => (int) $user_id);
 		return $this->get($query);
 	}
 

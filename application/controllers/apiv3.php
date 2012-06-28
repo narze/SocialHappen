@@ -534,7 +534,7 @@ class Apiv3 extends CI_Controller {
 
   }
 
-  function coupon_list(){
+  function coupons(){
     $company_id = $this->input->get('company_id');
     $challenge_id = $this->input->get('challenge_id');
     $user_id = $this->input->get('user_id');
@@ -543,12 +543,12 @@ class Apiv3 extends CI_Controller {
     
     $result = array();
 
-    if(isset($company_id) && $company_id!=''){
+    if(isset($company_id) && $company_id){
       $result = $this->coupon_lib->list_company_coupon($company_id);
-    }else if(isset($challenge_id) && $challenge_id!=''){
-      $result = $this->coupon_lib->list_company_coupon($challenge_id);
-    }else if(isset($user_id) && $user_id!=''){
-      $result = $this->coupon_lib->list_company_coupon($user_id);
+    } else if(isset($challenge_id) && $challenge_id){
+      $result = $this->coupon_lib->list_challenge_coupon($challenge_id);
+    } else if(isset($user_id) && $user_id){
+      $result = $this->coupon_lib->list_user_coupon($user_id);
     }
 
     echo json_encode($result);
@@ -562,7 +562,9 @@ class Apiv3 extends CI_Controller {
 
   }
 
+  function saveCoupon($coupon_id = NULL) {
 
+  }
 }
 
 /* End of file apiv3.php */
