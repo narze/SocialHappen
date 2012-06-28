@@ -6,7 +6,7 @@ define([
 ], function($, _, Backbone, couponModel){
   var couponsCollection = Backbone.Collection.extend({
     model: couponModel,
-    
+    filter: null,
     last_id: null,
     
     initialize: function(){
@@ -24,6 +24,33 @@ define([
         add: true,
         success: function(collection, resp){
           callback(resp.length);
+        }
+      });
+    },
+
+    loadAll: function(callback) {
+      this.filter = null;
+      this.fetch({
+        success: function(collection, resp){
+          if(callback) callback(resp.length);
+        }
+      });
+    },
+
+    loadConfirmed: function(callback) {
+      this.filter = 'confirmed';
+      this.fetch({
+        success: function(collection, resp){
+          if(callback) callback(resp.length);
+        }
+      });
+    },
+
+    loadNotConfirmed: function(callback) {
+      this.filter = 'not_confirmed';
+      this.fetch({
+        success: function(collection, resp){
+          if(callback) callback(resp.length);
         }
       });
     },
@@ -49,12 +76,29 @@ define([
       
       // Ensure that we have a URL.
       if (!options.url) {
-        if(this.last_id && window.Company.companyId){
-          params.url = window.Company.BASE_URL + 'apiv3/coupons/?last_id=' + this.last_id + '&company_id=' + window.Company.companyId;
-        }else if(window.Company.companyId){
-          params.url = window.Company.BASE_URL + 'apiv3/coupons/?company_id=' + window.Company.companyId;
+        var query = {};
+        if(window.Company.companyId) {
+          query.company_id = window.Company.companyId;
         }
-        
+        if(this.last_id) {
+          query.last_id = this.last_id;
+        }
+        if(this.filter) {
+          query.filter = this.filter;
+        }
+
+        var serialize = function(obj, prefix) {
+          var str = [];
+          for(var p in obj) {
+            var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+            str.push(typeof v == "object" ? 
+              serialize(v, k) :
+              encodeURIComponent(k) + "=" + encodeURIComponent(v));
+          }
+          return str.join("&");
+        };
+
+        params.url = window.Company.BASE_URL + 'apiv3/coupons/?' + serialize(query);
       }
 
       // Ensure that we have the appropriate request data.

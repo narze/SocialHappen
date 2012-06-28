@@ -12,12 +12,14 @@ define([
     couponListTemplate: _.template(couponListTemplate),
     
     events: {
-      'click button.load-more' : 'loadMore'
+      'click button.load-more' : 'loadMore',
+      'click button.coupon-filter-all': 'loadAll',
+      'click button.coupon-filter-confirmed': 'loadConfirmed',
+      'click button.coupon-filter-not-confirmed': 'loadNotConfirmed'
     },
     
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.bind('reloadMasonry', this.reloadMasonry);
       this.collection.bind('reset', this.addAll);
       this.collection.bind('add', this.addOne);
     },
@@ -53,11 +55,7 @@ define([
         this.addOne(model);
       }, this);
     },
-    
-    reloadMasonry: function(){
-      $('.coupon-list', this.el).masonry('reload');
-    },
-    
+
     loadMore: function(){
       
       var button = $('button.load-more', this.el).addClass('disabled');
@@ -69,7 +67,20 @@ define([
         }
         
       });
+    },
+
+    loadAll: function() {
+      this.collection.loadAll();
+    },
+
+    loadConfirmed: function() {
+      this.collection.loadConfirmed();
+    },
+
+    loadNotConfirmed: function() {
+      this.collection.loadNotConfirmed();
     }
+
   });
   return CouponListPane;
 });

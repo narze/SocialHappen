@@ -538,24 +538,38 @@ class Apiv3 extends CI_Controller {
     $company_id = $this->input->get('company_id');
     $challenge_id = $this->input->get('challenge_id');
     $user_id = $this->input->get('user_id');
+    $filter = $this->input->get('filter');
+    if($filter === 'confirmed') {
+      $filter = TRUE;
+    } else if($filter === 'not_confirmed') {
+      $filter = FALSE;
+    } else {
+      $filter = NULL;
+    }
 
     $this->load->library('coupon_lib');
     
     $result = array();
 
     if(isset($company_id) && $company_id){
-      $result = $this->coupon_lib->list_company_coupon($company_id);
+      $result = $this->coupon_lib->list_company_coupon($company_id, $filter);
     } else if(isset($challenge_id) && $challenge_id){
-      $result = $this->coupon_lib->list_challenge_coupon($challenge_id);
+      $result = $this->coupon_lib->list_challenge_coupon($challenge_id, $filter);
     } else if(isset($user_id) && $user_id){
-      $result = $this->coupon_lib->list_user_coupon($user_id);
+      $result = $this->coupon_lib->list_user_coupon($user_id, $filter);
     }
 
     //Get user from results
     $this->load->model('user_model');
-    foreach ($result as &$coupon) {
+    foreach ($result as $key => &$coupon) {
+      if(($filter !== NULL) && (!!$filter !== !!$coupon['confirmed'])) {
+        unset($result[$key]);
+        continue;
+      }
+
       $coupon['user'] = $this->user_model->get_user_profile_by_user_id($coupon['user_id']);
     } unset($coupon);
+    $result = array_values($result); //Sort again
 
     echo json_encode($result);
   }
