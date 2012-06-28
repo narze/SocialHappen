@@ -534,7 +534,7 @@ class Apiv3 extends CI_Controller {
 
   }
 
-  function coupon_list(){
+  function coupons(){
     $company_id = $this->input->get('company_id');
     $challenge_id = $this->input->get('challenge_id');
     $user_id = $this->input->get('user_id');
@@ -543,26 +543,41 @@ class Apiv3 extends CI_Controller {
     
     $result = array();
 
-    if(isset($company_id) && $company_id!=''){
+    if(isset($company_id) && $company_id){
       $result = $this->coupon_lib->list_company_coupon($company_id);
-    }else if(isset($challenge_id) && $challenge_id!=''){
-      $result = $this->coupon_lib->list_company_coupon($challenge_id);
-    }else if(isset($user_id) && $user_id!=''){
-      $result = $this->coupon_lib->list_company_coupon($user_id);
+    } else if(isset($challenge_id) && $challenge_id){
+      $result = $this->coupon_lib->list_challenge_coupon($challenge_id);
+    } else if(isset($user_id) && $user_id){
+      $result = $this->coupon_lib->list_user_coupon($user_id);
     }
+
+    //Get user from results
+    $this->load->model('user_model');
+    foreach ($result as &$coupon) {
+      $coupon['user'] = $this->user_model->get_user_profile_by_user_id($coupon['user_id']);
+    } unset($coupon);
 
     echo json_encode($result);
   }
 
   function confirm_coupon(){
-    $hash = $this->input->post('hash');
+    $coupon_id = $this->input->post('coupon_id');
     $this->load->library('coupon_lib');
     //TO-DO : get current user's id (admin_id) -> call coupon_lib->confirm_coupon
+    $admin_id = $this->socialhappen->get_user_id();
+    $return = array(
+      'success' => FALSE,
+      'coupon' => NULL
+    );
+    if($result = $this->coupon_lib->confirm_coupon($coupon_id, $admin_id)) {
+      $return = array(
+        'success' => TRUE,
+        'coupon' => $result
+      );
+    }
 
-
+    echo json_encode($return);
   }
-
-
 }
 
 /* End of file apiv3.php */
