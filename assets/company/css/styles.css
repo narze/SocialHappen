@@ -3,7 +3,9 @@
 
 @import url("../../css/common/bootstrap.min.css");
 @import url("../../css/common/bootstrap-responsive.min.css");
+@import url("../../css/common/bar.css");
 @import url("jquery-ui-1.8.20.custom.css");
+
 /* Custom themes */
 @import url("theme.css");
 
