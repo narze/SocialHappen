@@ -562,7 +562,7 @@ class Apiv3 extends CI_Controller {
     //Get user from results
     $this->load->model('user_model');
     foreach ($result as $key => &$coupon) {
-      if(($filter !== NULL) && (!!$filter !== !!$coupon['confirmed'])) {
+      if(($filter !== NULL) && ($filter !== $coupon['confirmed'])) {
         unset($result[$key]);
         continue;
       }
