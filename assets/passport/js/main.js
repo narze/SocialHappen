@@ -28,13 +28,15 @@ require([
   'vm',
   'models/user',
   'collections/activitys',
-  'collections/achievements'
-], function(AppView, Router, Vm, UserModel, ActivityCollection, AchievementCollection){
+  'collections/achievements',
+  'collections/coupons'
+], function(AppView, Router, Vm, UserModel, ActivityCollection, AchievementCollection, CouponCollection){
   
   var userModel = window.Passport.userModel = new UserModel();
   var currentUserModel = window.Passport.currentUserModel = new UserModel();
   var activityCollection = window.Passport.activityCollection = new ActivityCollection([]);
   var achievementCollection = window.Passport.achievementCollection = new AchievementCollection([]);
+  var couponCollection = window.Passport.couponCollection = new CouponCollection([]);
   
   var appView = Vm.create({}, 'AppView', AppView, {
     userModel: userModel,
@@ -48,7 +50,8 @@ require([
     userModel: userModel,
     currentUserModel: currentUserModel,
     activityCollection: activityCollection,
-    achievementCollection: achievementCollection
+    achievementCollection: achievementCollection,
+    couponCollection: couponCollection
   });
   
 });

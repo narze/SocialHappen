@@ -3,17 +3,14 @@ define([
   'underscore',
   'backbone',
   'models/coupon',
-  'text!templates/company/coupon-list.html',
-  'views/company/coupon-item'
+  'text!templates/profile/coupon-list.html',
+  'views/profile/coupon-item'
 ], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView){
   var CouponListPane = Backbone.View.extend({
     couponListTemplate: _.template(couponListTemplate),
     
     events: {
-      'click button.load-more' : 'loadMore',
-      'click button.coupon-filter-all': 'loadAll',
-      'click button.coupon-filter-confirmed': 'loadConfirmed',
-      'click button.coupon-filter-not-confirmed': 'loadNotConfirmed'
+      'click button.load-more' : 'loadMore'
     },
     
     initialize: function(){
@@ -63,20 +60,8 @@ define([
         }else{
           button.addClass('hide');
         }
-        
+       
       });
-    },
-
-    loadAll: function() {
-      this.collection.loadAll();
-    },
-
-    loadConfirmed: function() {
-      this.collection.loadConfirmed();
-    },
-
-    loadNotConfirmed: function() {
-      this.collection.loadNotConfirmed();
     }
 
   });

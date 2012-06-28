@@ -5,8 +5,9 @@ define([
   'text!templates/profile/page.html',
   'views/profile/profile',
   'views/profile/activity-list',
-  'views/profile/achievement-list'
-], function($, _, Backbone, profilePageTemplate, ProfilePane, ActivityListView, AchievementListView){
+  'views/profile/achievement-list',
+  'views/profile/coupon-list'
+], function($, _, Backbone, profilePageTemplate, ProfilePane, ActivityListView, AchievementListView, CouponListView){
   var ProfilePage = Backbone.View.extend({
     profilePageTemplate: _.template(profilePageTemplate),
     el: '#content',
@@ -38,7 +39,15 @@ define([
       
       achievementListView.render();
       
+      //@TODO - Coupon list could be seen only for current user
+
+      var couponListView = new CouponListView({
+        collection: this.options.couponCollection,
+        el: $('div.coupon', this.el)
+      });
       
+      couponListView.render();
+
     }
   });
   return ProfilePage;

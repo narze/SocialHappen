@@ -37,12 +37,14 @@ define([
       window.Passport.userId = userId;
       options.activityCollection.fetch();
       options.achievementCollection.fetch();
+      options.couponCollection.fetch();
       require(['views/profile/page'], function (ProfilePage) {
         var profilePage = Vm.create(appView, 'ProfilePage', ProfilePage, {
           userModel: userModel,
           currentUserModel: currentUserModel,
           activityCollection: options.activityCollection,
-          achievementCollection: options.achievementCollection
+          achievementCollection: options.achievementCollection,
+          couponCollection: options.couponCollection
         });
         profilePage.render();
       });
