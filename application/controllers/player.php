@@ -168,6 +168,7 @@ class Player extends CI_Controller {
           $d = substr($date, 6, 2);
           date_default_timezone_set('UTC');
           $challenge_available_date = date('Y-m-d', mktime(0, 0, 0, $m, $d + 1, $y));
+          $this->load->vars('challenge_available_date', $challenge_available_date);
         }
       }
 
@@ -250,8 +251,7 @@ class Player extends CI_Controller {
           'challengers' => $challengers,
           'challenge_not_started' => $challenge_not_started,
           'challenge_ended' => $challenge_ended,
-          'is_daily_challenge' => $is_daily_challenge,
-          'challenge_available_date' => $challenge_available_date
+          'is_daily_challenge' => $is_daily_challenge
         )
       );
 
