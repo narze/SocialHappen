@@ -788,6 +788,8 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .show{display:block;}
 .invisible{visibility:hidden;}
 .clear{clear:both;}
+.modal-backdrop:last-child{z-index:1051;}
+.modal-super{z-index:1052;}
 .navbar .nav>li>a{padding:10px 0 11px;}
 .navbar .notification .amount i{margin-left:-12px;}
 .navbar .nav{margin-right:0;}
