@@ -551,19 +551,32 @@ class Apiv3 extends CI_Controller {
       $result = $this->coupon_lib->list_user_coupon($user_id);
     }
 
+    //Get user from results
+    $this->load->model('user_model');
+    foreach ($result as &$coupon) {
+      $coupon['user'] = $this->user_model->get_user_profile_by_user_id($coupon['user_id']);
+    } unset($coupon);
+
     echo json_encode($result);
   }
 
   function confirm_coupon(){
-    $hash = $this->input->post('hash');
+    $coupon_id = $this->input->post('coupon_id');
     $this->load->library('coupon_lib');
     //TO-DO : get current user's id (admin_id) -> call coupon_lib->confirm_coupon
+    $admin_id = $this->socialhappen->get_user_id();
+    $return = array(
+      'success' => FALSE,
+      'coupon' => NULL
+    );
+    if($result = $this->coupon_lib->confirm_coupon($coupon_id, $admin_id)) {
+      $return = array(
+        'success' => TRUE,
+        'coupon' => $result
+      );
+    }
 
-
-  }
-
-  function saveCoupon($coupon_id = NULL) {
-
+    echo json_encode($return);
   }
 }
 

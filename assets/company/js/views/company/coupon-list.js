@@ -26,15 +26,6 @@ define([
       $(this.el).html(this.couponListTemplate({
       }));
       
-      $('.tile-list', this.el).masonry({
-        // options
-        itemSelector : '.item',
-        animationOptions: {
-          duration: 400
-        },
-        isFitWidth: true
-      });
-      
       this.addAll();
       
       if(this.collection.model.length <= 30){
@@ -51,20 +42,20 @@ define([
         model: model,
         vent: this.options.vent
       });
-      // console.log($('.tile-list', this.el));
+      // console.log($('.coupon-list', this.el));
       var el = coupon.render().$el;
-      $('.tile-list', this.el).append(el);
+      $('.coupon-list', this.el).append(el);
     },
     
     addAll: function(){
-      $('.tile-list', this.el).html('');
+      $('.coupon-list', this.el).html('');
       this.collection.each(function(model){
         this.addOne(model);
       }, this);
     },
     
     reloadMasonry: function(){
-      $('.tile-list', this.el).masonry('reload');
+      $('.coupon-list', this.el).masonry('reload');
     },
     
     loadMore: function(){

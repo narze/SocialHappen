@@ -1,7 +1,21 @@
-<a href="#" class="coupon" title="View">
-  <div class="challenge-caption">
-    <h4><%- user_id||'' %></h4>
-    <p><%- confirmed||'' %></p>
+<div class="coupon well">
+  <div class="coupon-hash">
+    Coupon ID : <%= hash %>
   </div>
-</a>
-
+  <div class="coupon-user">
+    Coupon Owner : <%= user.user_first_name + ' ' + user.user_last_name %>
+  </div>
+  <div class="coupon-timestamp">
+    Date : <%= new Date(timestamp * 1000).toString() %>
+  </div>
+  <div class="coupon-status">
+    Coupon Status : <%= confirmed ? 'Approved' : 'Pending' %>
+  </div>
+  <% if (confirmed) { %>
+    Approved Date : <%= new Date(confirmed_timestamp * 1000).toString() %>
+  <% } else { %>
+    <span>
+      <button class="coupon-approve btn btn-primary">Approve</button>
+    </span>
+  <% } %>
+</div>

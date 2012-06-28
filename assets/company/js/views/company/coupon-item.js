@@ -9,7 +9,7 @@ define([
     className: 'item',
     couponItemTemplate: _.template(couponItemTemplate),
     events: {
-      'click a.coupon': 'showEdit'
+      'click button.coupon-approve': 'approveCoupon'
     },
     initialize: function(){
       _.bindAll(this);
@@ -23,11 +23,22 @@ define([
       $(this.el).html(this.couponItemTemplate(data));
       return this;
     },
-    
-    showEdit: function(e){
+    approveCoupon: function(e){
       e.preventDefault();
-      console.log('show coupon edit modal');
-      this.options.vent.trigger('showEditCouponModal', this.model);
+      console.log('approve coupon');
+      var model = this.model;
+      $.ajax({
+        type: 'POST',
+        url: window.Company.BASE_URL + 'apiv3/confirm_coupon',
+        dataType: 'json',
+        data: {
+          coupon_id: this.model.get('_id').$id
+        },
+        success: function(res) {
+          model.set(res.coupon);
+          model.change();
+        }
+      });
     }
   });
   return CouponItemView;

@@ -39,15 +39,14 @@ Class Coupon_lib{
 
 	function confirm_coupon($coupon_id = NULL, $admin_user_id = NULL){
 		//not tested yet
-		if((isset($coupon_id) && $coupon_id != '') && (isset($admin_user_id) && $admin_user_id != '')) {
+		if($coupon_id && $admin_user_id) {
 			$this->CI->load->library('reward_lib');
 			$coupon = $this->CI->coupon_model->get_by_id($coupon_id);
 
 			if($coupon){
-				if($this->CI->coupon_model->confirm_coupon($coupon_id, $admin_user_id)){
-					if($this->CI->reward_lib->redeem_with_coupon($coupon_id, $coupon['user_id'])){
-						return true;
-					}
+				if($this->CI->reward_lib->redeem_with_coupon($coupon_id, $coupon['user_id'])){
+					//return coupon with confirmed data
+					return $this->CI->coupon_model->get_by_id($coupon_id);
 				}
 			}
 		}
