@@ -35,7 +35,7 @@ $config['node_base_url_http'] = 'http://beta.socialhappen.com:8082/';
 | (CI's hook must be enabled to use this)
 |
 */
-$config['sh_test_mode'] = TRUE;
+$config['sh_test_mode'] = FALSE;
 $config['sh_test_mode_password'] = 'happyeveryday';
 
 /*
