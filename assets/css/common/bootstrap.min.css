@@ -788,7 +788,9 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .show{display:block;}
 .invisible{visibility:hidden;}
 .clear{clear:both;}
-.modal-backdrop:last-child{z-index:1051;}
+.modal{position:absolute;top:10px;left:50%;margin:0px 0 0 -280px;}
+.modal-body{max-height:none;padding:15px;overflow-y:auto;}
+.modal-backdrop+.modal-backdrop,.modal-backdrop+div+.modal-backdrop{z-index:1051;}
 .modal-super{z-index:1052;}
 .navbar .nav>li>a{padding:10px 0 11px;}
 .navbar .notification .amount i{margin-left:-12px;}
