@@ -39,15 +39,28 @@ define([
       
       achievementListView.render();
       
-      //@TODO - Coupon list could be seen only for current user
-
+      //Coupon list could be seen only for current user
+      if(this.options.currentUserModel.get('user_id') === window.Passport.userId) {
+        this.renderCouponList();
+      } else {
+        //Fetch again and check
+        var self = this;
+        this.options.currentUserModel.fetch({
+          success: function(model, xhr) {
+            if(xhr.user_id && (xhr.user_id === window.Passport.userId)) {
+              self.renderCouponList();
+            }
+          }
+        });
+      }
+    },
+    renderCouponList: function() {
       var couponListView = new CouponListView({
         collection: this.options.couponCollection,
         el: $('div.coupon', this.el)
       });
       
       couponListView.render();
-
     }
   });
   return ProfilePage;
