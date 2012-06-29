@@ -18,6 +18,7 @@ application/backup/*.sql
 application/backup/sh_mongo-*
 application/backup/log-mongodump-*
 notification/node_modules/*
+assets/config.js
 
 */config/development
 */logs/log-*.php
