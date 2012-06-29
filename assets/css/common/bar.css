@@ -1,6 +1,9 @@
 a:hover {
   cursor:pointer;
 }
+.btn {
+  font-weight:bold;
+}
 
 .text-left {text-align:left}
 .text-right {text-align:right}
@@ -10,6 +13,7 @@ a:hover {
   width: 125px;
   height: 40px;
   padding: 0 8px;
+  margin: 0;
   background-image: url(../../images/social-happen.png);
   background-repeat: no-repeat;
   background-position: center center;
@@ -232,8 +236,5 @@ p.company-name {
 @media (max-width: 979px) {
   .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
     padding: 0;
-  }
-  .navbar .brand {
-    margin-left: -20px;
   }
 }
