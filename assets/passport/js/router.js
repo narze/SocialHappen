@@ -24,9 +24,7 @@ define([
       userModel.id = userId;
       currentUserModel.fetch({
         success: function(model, xhr){
-          // console.log('user:', model, xhr);
           if(!xhr.user_id){
-            // console.log('not found user:', window.Passport.BASE_URL + '/login?next=' + window.location.href);
             window.location = window.Passport.BASE_URL + '/login?next=' + window.location.href;
           }
         }
@@ -50,7 +48,7 @@ define([
       });
     });
     router.on('route:defaultAction', function (actions) {
-      console.log('default view');
+      
     });
     
     Backbone.history.start();

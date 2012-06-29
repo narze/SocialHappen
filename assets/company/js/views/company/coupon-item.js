@@ -17,7 +17,6 @@ define([
       this.model.bind('destroy', this.remove);
     },
     render: function () {
-      console.log('render coupon item');
       var data = this.model.toJSON();
       data.baseUrl = window.Company.BASE_URL;
       $(this.el).html(this.couponItemTemplate(data));
@@ -25,7 +24,6 @@ define([
     },
     approveCoupon: function(e){
       e.preventDefault();
-      console.log('approve coupon');
       var model = this.model;
       $.ajax({
         type: 'POST',
