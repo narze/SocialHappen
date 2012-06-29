@@ -53,8 +53,7 @@ class Login extends CI_Controller {
           'styles' => array(
             'common/bootstrap.min',
             'common/bootstrap-responsive.min',
-            'common/bar',
-            'common/player'
+            'common/bar'
           ),
           'body_views' => array(
             'common/fb_root' => array(
@@ -127,8 +126,7 @@ class Login extends CI_Controller {
             'styles' => array(
               'common/bootstrap.min',
               'common/bootstrap-responsive.min',
-              'common/bar',
-              'common/player'
+              'common/bar'
             ),
             'body_views' => array(
               'common/fb_root' => array(
