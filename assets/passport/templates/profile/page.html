@@ -1,14 +1,27 @@
 <div class="row-fluid">
   <div class="span9" id="left">
     <div class="profile well"></div>
-    <div class="coupon"></div>
-    <div class="activity">
-      <div class="page-header">
-        <h1>Activities <small>what did this player do</small></h1>
-      </div>
-      <ul class="activity-list unstyled">
-        
+    <div class="tabbable"> <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Activities</a></li>
+        <li><a href="#tab2" data-toggle="tab">Coupons</a></li>
       </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+          <div class="page-header">
+            <h1>Activities <small>what did this player do</small></h1>
+          </div>
+          <ul class="activity-list unstyled"></ul> 
+        </div>
+        <div class="tab-pane" id="tab2">
+          <div class="activity">
+            <div class="coupon">
+              <div class="page-header"><h1>Coupons</h1></div>
+              <p>You cannot see this user's coupons</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="span3 well" id="right">
