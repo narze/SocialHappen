@@ -11,9 +11,9 @@ define([
     
     events: {
       'click button.load-more' : 'loadMore',
-      'click button.coupon-filter-all': 'loadAll',
-      'click button.coupon-filter-confirmed': 'loadConfirmed',
-      'click button.coupon-filter-not-confirmed': 'loadNotConfirmed'
+      'click a.coupon-filter-all': 'loadAll',
+      'click a.coupon-filter-confirmed': 'loadConfirmed',
+      'click a.coupon-filter-not-confirmed': 'loadNotConfirmed'
     },
     
     initialize: function(){
