@@ -18,12 +18,7 @@ define([
     addTemplate: _.template(addTemplate),
     
     events: {
-      'click h3.edit-name': 'showEditName',
-      'click button.save-name': 'saveEditName',
-      'click div.edit-description': 'showEditDescription',
-      'click button.save-description': 'saveEditDescription',
-      'click img.challenge-image, h6.edit-image': 'showEditImage',
-      'click button.save-image': 'saveEditImage',
+      'click .add-new-action': 'showAddNewActionModal',
       'click a.add-feedback': 'addFeedback',
       'click a.add-qr': 'addQR',
       'click a.add-checkin': 'addCheckin',
@@ -205,46 +200,21 @@ define([
       
       this.options.vent.trigger('showAddModal', this.model);
     },
-    
-    showEditDescription: function(){
-      $('div.edit-description', this.el).hide();
-      $('div.edit-description-field', this.el).show();
-      $('textarea.challenge-description', this.el).focus();
-    },
-    
-    saveEditDescription: function(){
-      
-      var detail = this.model.get('detail');
-      detail.description = $('textarea.challenge-description', this.el).val();
-      
-      this.model.set('detail', detail).trigger('change');
-      
-      $('div.edit-description', this.el).show();
-      $('div.edit-description-field', this.el).hide();
-      
-      this.options.vent.trigger('showAddModal', this.model);
-    },
-    
-    showEditImage: function(){
-      $('div.edit-image', this.el).show();
-      $('input.challenge-image', this.el).focus();
-    },
-    
-    saveEditImage: function(){
-      $('div.edit-image', this.el).hide();
-      
-      var detail = this.model.get('detail');
-      detail.image = $('input.challenge-image', this.el).val();
-      
-      this.model.set('detail', detail).trigger('change');
-            
-      this.options.vent.trigger('showAddModal', this.model);
+
+    showAddNewActionModal: function() {
+      //Test modal lv2
+      $('#add-action-modal').html(['<div class="modal-header"><button class="close" data-dismiss="modal">×</button><h3>Add new Action</h3></div><div class="modal-body">',
+        '<button type="button" class="action-icon btn btn-primary add-share">Share</button> ',
+        '<button type="button" class="action-icon btn btn-success add-feedback">Feed back</button> ',
+        '<button type="button" class="action-icon btn btn-danger add-checkin">Checkin</button> ',
+        '<button type="button" class="action-icon btn btn-warning add-qr">QR</button>',
+        '</div>'].join('')).modal('show');
     },
     
     addFeedback: function(e){
       e.preventDefault();
       console.log('show add feedback');
-      
+
       var feedbackAddView = new FeedbackAddView({
         model: this.model,
         vent: this.options.vent,

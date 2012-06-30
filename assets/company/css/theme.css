@@ -67,19 +67,61 @@ img.company-image{
   max-width: 170px
 }
 
-.modal input.challenge-name, .modal input.challenge-image{
-  margin-bottom: 0px;
+.modal .control-group {
+  position: relative;
+}
+.modal .edit-image {
+  position: relative;
 }
 
-.modal .challenge-image, .modal .reward-image{
-  margin-bottom: 15px;
+.modal .edit-image .edit-image-form {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.modal .edit-image:hover .edit-image-form {
+  display: block;
+}
+.modal .edit-image-form .form-inline {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px 0;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -78px;
+  margin-left: -125px;
+  width: 241px;
 }
 
-.modal h6.edit-image{
+.modal img.reward-image, .modal .view-repeat, .modal .edit-redeem{
   cursor: pointer;
 }
-
-.modal .edit-name, .modal .edit-description, .modal img.challenge-image, .modal img.reward-image, .modal .view-repeat, .modal .edit-redeem{
-  cursor: pointer;
+.criteria-list .action-icon,
+.reward-list .action-icon {
+  cursor: default;
 }
-
+.action-icon {
+  height: 70px;
+  width: 70px;
+  background-image: none;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.setup-your-reward {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 40px 0;
+  text-align: center;
+  position: absolute;
+  top: 23px;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  z-index: 10;
+}
