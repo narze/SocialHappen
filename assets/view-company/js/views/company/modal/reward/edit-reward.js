@@ -8,15 +8,7 @@ define([
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
     events: {
-      'click h3.edit-name': 'showEditName',
-      'click button.save-name': 'saveEditName',
-      'click div.edit-description': 'showEditDescription',
-      'click button.save-description': 'saveEditDescription',
-      'click img.reward-image, h6.edit-image': 'showEditImage',
-      'click button.save-image': 'saveEditImage',
-      'change select.reward-status': 'setRewardStatus',
-      'click .edit-redeem': 'showEditRedeem',
-      'click .save-redeem': 'saveEditRedeem'
+
     },
     
     initialize: function(){

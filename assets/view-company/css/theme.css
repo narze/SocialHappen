@@ -58,6 +58,28 @@
   text-decoration: none;
 }
 
+.notstart, .expired{
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  top: -195px;
+  padding: 20px 15px;
+  background: #333;
+  background: rgba(150, 0, 0, 0.75);
+  -webkit-transition:all 0.2s ease-in-out;
+  -moz-transition:all 0.2s ease-in-out;
+  -o-transition:all 0.2s ease-in-out;
+  -ms-transition:all 0.2s ease-in-out;  
+  transition:all 0.2s ease-in-out;
+  
+  font-size: 18px;
+}
+
+.notstart{
+  background: rgba(0, 40, 150, .75);
+}
+
 div.load-more{
   padding: 10px;
   text-align: center;
@@ -98,7 +120,7 @@ img.company-image{
 }
 
 .modal img.reward-image, .modal .view-repeat, .modal .edit-redeem{
-  cursor: pointer;
+/*  cursor: pointer;*/
 }
 .criteria-list .action-icon,
 .reward-list .action-icon {

@@ -50,9 +50,9 @@ define([
       // Ensure that we have a URL.
       if (!options.url) {
         if(this.last_id && window.Company.companyId){
-          params.url = window.Company.BASE_URL + 'apiv3/rewards/?last_id=' + this.last_id + '&company_id=' + window.Company.companyId;
+          params.url = window.Company.BASE_URL + 'apiv3/viewRewards/?last_id=' + this.last_id + '&company_id=' + window.Company.companyId;
         }else if(window.Company.companyId){
-          params.url = window.Company.BASE_URL + 'apiv3/rewards/?company_id=' + window.Company.companyId;
+          params.url = window.Company.BASE_URL + 'apiv3/viewRewards/?company_id=' + window.Company.companyId;
         }
         
       }

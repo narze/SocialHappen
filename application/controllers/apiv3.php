@@ -543,6 +543,19 @@ class Apiv3 extends CI_Controller {
     }, $rewards);
     echo json_encode($rewards);
   }
+  
+  /**
+   * list only published rewards
+   */
+  function viewRewards(){
+    $this->load->model('reward_item_model');
+    $rewards = $this->reward_item_model->get(array('status'=>'published'));
+    $rewards = array_map(function($reward) {
+      $reward['_id'] = get_mongo_id($reward);
+      return $reward;
+    }, $rewards);
+    echo json_encode($rewards);
+  }
 
   function coupon_detail(){
     $hash = $this->input->get('coupon_hash');

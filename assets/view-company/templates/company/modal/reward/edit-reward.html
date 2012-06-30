@@ -5,32 +5,11 @@
   <div class="">
     <h3 class="edit-name"><%= name %></h3>
   </div>
-  <div class="edit-name hide">
-    <input class="reward-name span4" value="<%- name||'' %>" />
-    <button class="btn save-name btn-primary">Save</button>
-  </div>
 </div>
 <div class="modal-body">
-  <h6>Status:</h6>
-  <div class="control-group">
-    <div class="controls">
-      <label class="status"></label>
-      <select class="reward-status">
-        <option value="draft" <%= status=='draft'?'selected':''%>>Draft</option>
-        <option value="published" <%= status=='published'?'selected':''%>>Published</option>
-        <option value="cancelled" <%= status=='cancelled'?'selected':''%>>Cancelled</option>
-      </select>
-    </div>
-  </div>
   
   <div class="control-group">
     <h6 class="edit-image">Image:</h6>
-    <div class="edit-image hide">
-      <div class="control-group">
-        <input class="reward-image span4" value="<%= image %>" />
-        <button class="btn save-image btn-primary">Save</button>
-      </div>
-    </div>
   </div>
 
   <img class="reward-image" src="<%= image %>" />
@@ -41,11 +20,6 @@
       <p>
         <%- description %>
       </p>
-    </div>
-    <div class="edit-description-field hide">
-      <h6>Description:</h6>
-      <textarea class="reward-description span5" rows="3"><%- description %></textarea>
-      <button class="btn save-description btn-primary">Save</button>
     </div>
   </div>
   
@@ -61,19 +35,6 @@
       <p>
         User can redeem only once: <%= redeem.once?'Yes':'No' %>
       </p>
-    </div>
-    <div class="edit-redeem-field hide">
-      <h6>Redeem:</h6>
-      <p>
-        Quantity: <input type="text" class="reward-amount" value="<%= redeem.amount %>" />
-      </p>
-      <p>
-        Require Point: <input type="text" class="reward-point" value="<%= redeem.point %>" />
-      </p>
-      <p>
-        User can redeem only once: <input type="checkbox" class="reward-once" value="" <%= redeem.once?'checked':'' %> />
-      </p>
-      <button class="btn save-redeem btn-primary">Save</button>
     </div>
   </div>
 </div>
