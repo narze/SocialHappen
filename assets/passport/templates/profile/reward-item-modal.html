@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <button class="close" data-dismiss="modal">
+    ×
+  </button>
+  <div class="">
+    <h3 class="edit-name"><%= name %></h3>
+  </div>
+</div>
+<div class="modal-body">  
+  <div class="control-group">
+    <h6 class="edit-image">Image:</h6>
+  </div>
+
+  <img class="reward-image" src="<%= image %>" />
+
+  <div class="control-group">
+    <div class="edit-description">
+      <h6>Description:</h6>
+      <p>
+        <%- description %>
+      </p>
+    </div>
+  </div>
+
+  <div class="coupon-status">
+    Coupon Status : <%= coupon.confirmed ? 'Approved' : 'Pending' %>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <a href="#" class="btn" data-dismiss="modal">Close</a>
+</div>
