@@ -1,0 +1,127 @@
+#ui-datepicker-div
+{
+    z-index: 9999999;
+}
+
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+.tile-list .item {
+  width: 282px;
+  height: 176px;
+  overflow: hidden;
+  margin: 3px;
+  float: left;
+}
+
+.tile-list .challenge-image, .tile-list .reward-image {
+  max-width: 282px;
+  max-height: 176px;
+}
+
+.challenge-caption {
+  position: relative;
+  top: -40px;
+  padding: 10px 15px 5px;
+  background: #333;
+  background: rgba(0, 0, 0, 0.75);
+  -webkit-transition:all 0.2s ease-in-out;
+  -moz-transition:all 0.2s ease-in-out;
+  -o-transition:all 0.2s ease-in-out;
+  -ms-transition:all 0.2s ease-in-out;  
+  transition:all 0.2s ease-in-out;
+}
+.tile-list .item {
+  
+}
+.tile-list .item:hover .challenge-caption{
+  position: relative;
+  top: -175px;
+  padding: 10px 15px 5px;
+  background: #333;
+  background: rgba(0, 0, 0, 0.75);
+}
+.challenge-caption h4{
+  margin-bottom: 10px;
+}
+
+.challenge-caption h4, .challenge-caption p{
+  color: #fff;
+}
+
+.item a:hover{
+  text-decoration: none;
+}
+
+div.load-more{
+  padding: 10px;
+  text-align: center;
+}
+
+img.company-image{
+  max-width: 170px
+}
+
+.modal .control-group {
+  position: relative;
+}
+.modal .edit-image {
+  position: relative;
+}
+
+.modal .edit-image .edit-image-form {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.modal .edit-image:hover .edit-image-form {
+  display: block;
+}
+.modal .edit-image-form .form-inline {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px 0;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -78px;
+  margin-left: -125px;
+  width: 241px;
+}
+
+.modal img.reward-image, .modal .view-repeat, .modal .edit-redeem{
+  cursor: pointer;
+}
+.criteria-list .action-icon,
+.reward-list .action-icon {
+  cursor: default;
+}
+.action-icon {
+  height: 70px;
+  width: 70px;
+  background-image: none;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.setup-your-reward {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 40px 0;
+  text-align: center;
+  position: absolute;
+  top: 23px;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  z-index: 10;
+}

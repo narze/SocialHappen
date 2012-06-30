@@ -1,0 +1,16 @@
+<div class="well">
+  <h3><%= company_name %></h3>
+  <img class="company-image" src="<%= company_image %>" />
+  <p><%= company_detail %></p>
+</div>
+
+<div class="menu well" style="padding: 8px 0;">
+  <ul class="nav nav-list">
+    <li class="<%= now === 'challenge' ? 'active' : '' %>">
+      <a href="#/company/<%= companyId %>/challenge">Challenge</a>
+    </li>
+    <li class="<%= now === 'reward' ? 'active' : '' %>">
+      <a href="#/company/<%= companyId %>/reward">Reward</a>
+    </li>
+  </ul>
+</div>

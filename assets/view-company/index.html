@@ -1,0 +1,85 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>SocialHappen | Company</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="">
+	<link rel="stylesheet" href="css/styles.css">
+  <script type="text/javascript" src="../config.js"></script>
+	<script data-main="js/main" src="../libs/require/require.js"></script>
+</head>
+<body>
+  <div id="fb-root"></div>
+  <script>
+  
+    var fbData = {};
+    
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : window.Company.APP_ID, // App ID
+        channelUrl : window.Company.BASE_URL + 'assets/channel/fb.php', // Channel File
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+      
+      fbData.fbEnsureInit = true;
+  
+      FB.getLoginStatus(function(response) {
+        
+        console.log('got login status:', response);
+        
+        if (response.status === 'connected') {
+          // bindFBLogin();
+          fbData.fbConnected = true;
+          fbData.fbUserID = response.authResponse.userID;
+          // var uid = response.authResponse.userID;
+          // var accessToken = response.authResponse.accessToken;
+        // } else if (response.status === 'not_authorized') {
+        //   // the user is logged in to Facebook, 
+        //   // but has not authenticated your app
+        //   bindFBLogin();
+        //   fbData.fbConnected = false;
+        } else {
+          // the user isn't logged in to Facebook.
+          // bindFBLogin();
+          fbData.fbConnected = false;
+        }
+      });
+  
+      FB.Event.subscribe('auth.statusChange', function(response) {
+        if(response.status === 'connected') {
+          fbData.fbConnected = true;
+          fbData.fbUserID = response.authResponse.userID;
+        } else {
+          // bindFBLogin();
+          fbData.fbConnected = false;
+        }
+      });    
+    };
+  
+    // Load the SDK Asynchronously
+    (function(d){
+       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       ref.parentNode.insertBefore(js, ref);
+     }(document));
+  </script>
+  <!-- Initially populated by templates/layout.html -->
+  <div class="header" id="header"></div>
+  <div class="container" id="content"></div>
+  <div class="modal hide" id="edit-challenge-modal"></div>
+  <div class="modal hide" id="add-challenge-modal"></div>
+  <div class="modal hide" id="edit-reward-modal"></div>
+  <div class="modal hide" id="add-reward-modal"></div>
+  <div class="modal-super modal hide" id="add-action-modal"></div>
+</body>
+</html>
