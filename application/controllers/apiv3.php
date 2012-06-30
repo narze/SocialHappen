@@ -258,7 +258,7 @@ class Apiv3 extends CI_Controller {
     $challenge = $this->input->post('model', TRUE); 
     
     if(!isset($challenge) || $challenge == ''){
-      $result = array('success' => false, 'data' => 'no challenge data');
+      $result = array('success' => FALSE, 'data' => 'no challenge data');
     }else{
       $this->load->library('challenge_lib');
       $this->load->library('action_data_lib');
@@ -267,8 +267,8 @@ class Apiv3 extends CI_Controller {
       $challenge = json_decode($challenge, TRUE);
       
       if(!is_array($challenge)){
-        echo json_encode(array('success' => false, 'data' =>'data error'));
-        return false;
+        echo json_encode(array('success' => FALSE, 'data' =>'data error'));
+        return FALSE;
       }   
 
       //add/update action_data
@@ -283,13 +283,13 @@ class Apiv3 extends CI_Controller {
 
           if($action_data){
             //update if exist
-            $action_data_create_flag = false;
+            $action_data_create_flag = FALSE;
             unset($action_data_attr['_id']);
             $update_action_data_result = $this->action_data_lib->update($mgid['$id'], $action_data_attr);
 
             if(!$update_action_data_result){
-              echo json_encode(array('success' => false, 'data' =>'update action_data failed '. print_r($action_data_attr['data'], true)));
-              return false;
+              echo json_encode(array('success' => FALSE, 'data' =>'update action_data failed '. print_r($action_data_attr['data'], true)));
+              return FALSE;
             }
           }
         }
@@ -320,8 +320,8 @@ class Apiv3 extends CI_Controller {
             $action_data_object['action_data']['hash'] = strrev(sha1($action_data_id));
 
           }else{
-            echo json_encode(array('success' => false, 'data' =>'add action_data failed : ' . print_r($action_data_attr['data'], true)));
-            return false;
+            echo json_encode(array('success' => FALSE, 'data' =>'add action_data failed : ' . print_r($action_data_attr['data'], true)));
+            return FALSE;
           }
         }
       }
@@ -368,11 +368,11 @@ class Apiv3 extends CI_Controller {
           $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge_data);
         } catch (Exception $ex){
           //update exception
-          $challenge_create_flag = false;
+          $challenge_create_flag = FALSE;
         }
 
         if($challenge_update)
-            $challenge_create_flag = false;
+            $challenge_create_flag = FALSE;
       }
 
       //Create challenge if cannot update
@@ -410,9 +410,53 @@ class Apiv3 extends CI_Controller {
         // $challenge['_id'] = $challenge['_id']['$id'];
         echo json_encode(array('success' => TRUE, 'data' => $challenge));
       }else{
-        echo json_encode(array('success' => false, 'data' =>'add/update challenge failed'));
+        echo json_encode(array('success' => FALSE, 'data' =>'add/update challenge failed'));
       }
     }
+  }
+
+  /**
+   * create/update reward
+   */
+  function saveReward($reward_id = NULL){
+    header('Content-Type: application/json', TRUE);
+    if(!$user = $this->socialhappen->get_user()) {
+      echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
+      return;
+    }
+
+    $reward = $this->input->post('model', TRUE); 
+    
+    if(!isset($reward) || $reward == ''){
+      echo json_encode(array('success' => FALSE, 'data' => 'no reward data'));
+      return;
+    }
+
+    $this->load->model('reward_item_model');
+    $reward = json_decode($reward, TRUE);
+    
+    if(!is_array($reward)){
+      echo json_encode(array('success' => FALSE, 'data' =>'data error'));
+      return FALSE;
+    }
+
+    if(isset($reward['_id'])) {
+      //Reward exists : update
+      $reward_item_id = $reward['_id'];
+      if(!$reward_update_result = $this->reward_item_model->update($reward_item_id, $reward)) {
+        echo json_encode(array('success' => FALSE, 'data' => 'Update reward failed'));
+        return;
+      }
+    } else {
+      //New reward : add new
+      if(!$reward_item_id = $this->reward_item_model->add_redeem_reward($reward)) {
+        echo json_encode(array('success' => FALSE, 'data' => 'Add reward failed'));
+        return;
+      }
+    }
+
+    echo json_encode(array('success' => TRUE, 'data' => $reward, 'debug' => $reward_update_result));
+    
   }
 
   /**
@@ -491,34 +535,12 @@ class Apiv3 extends CI_Controller {
   }
   
   function rewards(){
-    $rewards = array(
-      array(
-        '_id' => '111',
-        'name' => 'iPad',
-        'value' => 132124,
-        'image' => 'https://lh4.googleusercontent.com/Li4BxtMtXLDKXWESQ6Zj7ajmHivRz8HBT4cAQ3s1dBb20b8U0SasftaZEnaBzwGWzpn01vWON1g=s640-h400-e365',
-        'description' => 'an iPad',
-        'redeem' => array(
-          'point' => 100,
-          'amount' => 5,
-          'once' => true
-        ),
-        'status' => 'draft'
-      ),
-      array(
-        '_id' => '112',
-        'name' => 'iPhone',
-        'value' => 3854,
-        'image' => 'https://lh4.googleusercontent.com/52favTFlUZZZ3lb2OvZPb7f6ILAj7rApZFDg8Zyy86Q6oKUUkdPrgas-TVG-wOkPCv-zS_Y9=s640-h400-e365',
-        'description' => 'an iPhone',
-        'redeem' => array(
-          'point' => 80,
-          'amount' => 20,
-          'once' => true
-        ),
-        'status' => 'published'
-      )
-    );
+    $this->load->model('reward_item_model');
+    $rewards = $this->reward_item_model->get(array());
+    $rewards = array_map(function($reward) {
+      $reward['_id'] = get_mongo_id($reward);
+      return $reward;
+    }, $rewards);
     echo json_encode($rewards);
   }
 
