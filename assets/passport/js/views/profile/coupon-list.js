@@ -33,13 +33,10 @@ define([
     },
     
     addOne: function(model){
-      // console.log('add one coupon:', model.toJSON());
-      
       var coupon = new CouponItemView({
         model: model,
         vent: this.options.vent
       });
-      // console.log($('.coupon-list', this.el));
       var el = coupon.render().$el;
       $('.coupon-list', this.el).append(el);
     },

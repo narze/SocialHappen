@@ -22,7 +22,6 @@ define([
     },
     
     addOne: function(model){
-      console.log('addOne', model.toJSON());
       var achievementItemView = new AchievementItemView({
         model: model
       });
@@ -31,7 +30,6 @@ define([
     },
     
     addAll: function(){
-      console.log('addAll');
       var self = this;
       this.collection.each(function(model){
         self.addOne(model);

@@ -45,8 +45,6 @@ define([
         type: "POST",
         dataType: "json",
         success: function(data) {
-          console.log('notification', data, $('.bar-notification'));
-
           $('.bar-notification').replaceWith(barNotificationTemplate({
             baseUrl: window.Passport.BASE_URL,
             notifications: {

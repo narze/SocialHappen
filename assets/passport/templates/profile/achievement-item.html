@@ -1,1 +1,3 @@
-<img src="<%= achievement_info.info.badge_image %>" class="achievement-thumb" title="<%= achievement_info.info.name %>" />
+<% if (achievement_info && achievement_info.info) { %>
+  <img src="<%= achievement_info.info.badge_image %>" class="achievement-thumb" title="<%= achievement_info.info.name %>" />
+<% } %>

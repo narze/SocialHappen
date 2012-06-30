@@ -17,7 +17,6 @@ define([
     },
     
     addOne: function(model){
-      console.log('addOne');
       var activityItemView = new ActivityItemView({
         model: model
       });
@@ -26,7 +25,6 @@ define([
     },
     
     addAll: function(){
-      console.log('addAll');
       var self = this;
       this.collection.each(function(model){
         self.addOne(model);
