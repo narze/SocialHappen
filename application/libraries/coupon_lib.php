@@ -15,7 +15,7 @@ Class Coupon_lib{
 	function create_coupon($data){
 
 		if($id = $this->CI->coupon_model->add_coupon($data)) {
-	      $result = $this->CI->coupon_model->update(array(
+	      $result = $this->CI->coupon_model->update_(array(
 	        '_id' => new MongoId($id)
 	        ), array(
 	          '$set' => array(
