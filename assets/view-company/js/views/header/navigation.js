@@ -26,7 +26,8 @@ define([
         baseUrl: window.Company.BASE_URL,
         user: this.options.currentUserModel.toJSON()
       }));
-      
+      $('div#header .world').addClass('active');
+
       //Company list
       var companies = this.options.currentUserModel.get('companies');
       if(companies && companies.length) {

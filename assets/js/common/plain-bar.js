@@ -12,8 +12,11 @@ $(function() {
           },
           baseUrl: base_url
         }));
-        if(window.location.href.indexOf('play')) {
+        // @TODO - better menu detection
+        if(window.location.href.indexOf('/play/') !== -1) {
           $('.bar-menu>li.play').addClass('active');
+        } else if (window.location.href.indexOf('/challenge/') !== -1) {
+          $('.bar-menu>li.world').addClass('active');
         }
 
         var barUserTemplate = _.template($('#bar-user-template').html());
