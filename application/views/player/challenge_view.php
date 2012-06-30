@@ -2,6 +2,12 @@
 	<div class="row-fluid">
 		<div class="span4">&nbsp;</div>
 		<div class="span4">
+			<p class="back"><a href="<?php echo base_url('assets/view-company/#/company/'.$company_id);?>">Back to company</a></p>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span4">&nbsp;</div>
+		<div class="span4">
 			<div class="chalenge-card">
 			<?php if($challenge) : ?>
 				<button type="button" class="btn pull-right"><i class="icon-share-alt"></i>&nbsp;</button>
