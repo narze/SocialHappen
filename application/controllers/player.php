@@ -144,6 +144,7 @@ class Player extends CI_Controller {
         </a>
       </p>');
     } else {
+      $company_id = $challenge['company_id'];
       $challenge_id = get_mongo_id($challenge);
       $this->load->library('user_lib');
       $user_id = $this->socialhappen->get_user_id();
@@ -204,7 +205,7 @@ class Player extends CI_Controller {
 
       //User's company score
       $this->load->library('achievement_lib');
-      $user_company_stat = $this->achievement_lib->get_company_stat($challenge['company_id'], $user_id);
+      $user_company_stat = $this->achievement_lib->get_company_stat($company_id, $user_id);
       $company_score = issetor($user_company_stat['company_score'], 0);
 
       //Challengers
@@ -251,7 +252,8 @@ class Player extends CI_Controller {
           'challengers' => $challengers,
           'challenge_not_started' => $challenge_not_started,
           'challenge_ended' => $challenge_ended,
-          'is_daily_challenge' => $is_daily_challenge
+          'is_daily_challenge' => $is_daily_challenge,
+          'company_id' => $company_id
         )
       );
 

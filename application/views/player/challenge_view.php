@@ -2,6 +2,12 @@
 	<div class="row-fluid">
 		<div class="span4">&nbsp;</div>
 		<div class="span4">
+			<p class="back"><a href="<?php echo base_url('assets/view-company/#/company/'.$company_id);?>">Back to company</a></p>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span4">&nbsp;</div>
+		<div class="span4">
 			<div class="well">
 			<?php if($challenge) : ?>
 				<div class="page-header">
