@@ -2,11 +2,13 @@
 	<div class="row-fluid">
 		<div class="span4">&nbsp;</div>
 		<div class="span4">
-			<div class="well">
+			<div class="chalenge-card">
 			<?php if($challenge) : ?>
-				<div class="page-header">
-					<h1 class="challenge-name"><?php echo $challenge['detail']['name'];?></h1>
-				</div>
+				<button type="button" class="btn pull-right"><i class="icon-share-alt"></i>&nbsp;</button>
+				<h2 class="challenge-name"><?php echo $challenge['detail']['name'];?></h2>
+				<p class="small">By : SocialHappen Start : June 16, 2012 End : July 16,2012</p>
+
+				<hr class="divider" />
 
 				<?php if($challenge_done) : 
 					if($is_daily_challenge) : ?>
@@ -30,6 +32,10 @@
 				<?php endif; ?>
 
 				<div class="row-fluid">
+					<p class="challenge-description "><?php echo $challenge['detail']['description']; ?></p>
+				</div>
+
+				<div class="row-fluid">
 					<div class="control-group">
 						<img class="challenge-image" src="<?php echo $challenge['detail']['image'] ? $challenge['detail']['image'] : base_url('assets/images/default/challenge.png'); ?>" alt="<?php echo $challenge['detail']['name'];?>">
 					</div>
@@ -37,28 +43,17 @@
 
 				<div class="row-fluid">
 					<?php if($challenge['start_date']) { ?>
-						<div class="control-group"><h6>Start: </h6><span id="challenge-start-date"></span></div><?php
+						<div class="control-group"><h6>Start </h6><span id="challenge-start-date"></span></div><?php
 					}
 					if($challenge['end_date']) { ?>
-						<div class="control-group"><h6>End: </h6><span id="challenge-end-date"></span> (<span id="challenge-until-end"></span>)</div><?php
+						<div class="control-group"><h6>End </h6><span id="challenge-end-date"></span> (<span id="challenge-until-end"></span>)</div><?php
 					} ?>
 				</div>
-					
-				<div class="row-fluid">
-					<div class="control-group">
-						<h6>Description</h6>
-						<p class="challenge-description "><?php echo $challenge['detail']['description']; ?></p>
-					</div>
-				</div>
 
-				<div class="reward row-fluid">
-					<div class="control-group">
-						<h6>Reward:</h6>
-						<p>-</p>
-					</div>
-				</div>
+				<hr class="divider" />
 
 				<div class="row-fluid">
+					<label><h6>How to WIN</h6></label>
 					<div class="control-group">
 
 					<?php if($challenge_not_started) : ?>
@@ -96,7 +91,7 @@
 													<?php endif; ?>
 												</div>
 											</div>
-                      <div data-id="<?php echo $criteria['action_data_id'];?>"class="row-fluid criteria-form"></div>
+											<div data-id="<?php echo $criteria['action_data_id'];?>"class="row-fluid criteria-form"></div>
 										</span>
 									<?php endforeach; 
 
@@ -110,9 +105,20 @@
 
 				</div>
 
-				<div class="row-fluid">
+				<hr class="divider" />
+
+				<div class="reward row-fluid">
+					<label><h6>Rewards</h6></label>
 					<div class="control-group">
-						<h6>Who joined this challenge:</h6>
+						<p>-</p>
+					</div>
+				</div>
+
+				<hr class="divider" />
+
+				<div class="row-fluid">
+					<h6>Who joined this challenge</h6>
+					<div class="control-group">
 						<div class="controls challengers-in-progress"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['in_progress'] as $user) :?>
 							<span>
@@ -128,7 +134,7 @@
 
 				<div class="row-fluid">
 					<div class="control-group">
-						<h6>Who completed this challenge:</h6>
+						<h6>Who completed this challenge</h6>
 						<div class="controls challengers-completed"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['completed'] as $user) :?>
 							<span>
@@ -140,6 +146,17 @@
 							<button class="btn btn-info load-more-completed">Load more</button>
 						<?php endif; ?>
 					</div>
+				</div>
+
+				<hr class="divider" />
+
+				<div class="row-fluid">
+					<h6>Other challenge from SocialHappen</h6>
+					<div class="control-group">
+						-
+					</div>
+					<div class="text-right"><button type="text" class="btn">See more</button></div>
+					
 				</div>
 
 				<?php else : ?>
