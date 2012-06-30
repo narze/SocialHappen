@@ -15,7 +15,7 @@ Class Coupon_lib{
 	function create_coupon($data){
 
 		if($id = $this->CI->coupon_model->add_coupon($data)) {
-	      $result = $this->CI->coupon_model->update_(array(
+	      $result = $this->CI->coupon_model->update(array(
 	        '_id' => new MongoId($id)
 	        ), array(
 	          '$set' => array(
@@ -77,8 +77,8 @@ Class Coupon_lib{
 			(isset($challenge_id) && $challenge_id != '') 
 		){
 			
-			if($coupon_list = $this->CI->coupon_model->get_by_user_and_challenge($user_id, $challenge_id))
-				return $coupon_list;
+		if($coupon_list = $this->CI->coupon_model->get_by_user_and_challenge($user_id, $challenge_id))
+			return $coupon_list;
 		}
 	
 		return FALSE;
@@ -88,8 +88,8 @@ Class Coupon_lib{
 	function list_user_coupon($user_id){
 		if((isset($user_id) && $user_id != '') ){
 			
-			if($coupon_list = $this->CI->coupon_model->get_by_user($user_id))
-				return $coupon_list;
+		if($coupon_list = $this->CI->coupon_model->get_by_user($user_id))
+			return $coupon_list;
 		}
 	
 		return FALSE;
@@ -99,8 +99,8 @@ Class Coupon_lib{
 	function list_challenge_coupon($challenge_id){
 		if((isset($challenge_id) && $challenge_id != '') ){
 			
-			if($coupon_list = $this->CI->coupon_model->get_by_challenge($challenge_id))
-				return $coupon_list;
+		if($coupon_list = $this->CI->coupon_model->get_by_challenge($challenge_id))
+			return $coupon_list;
 		}
 	
 		return FALSE;
