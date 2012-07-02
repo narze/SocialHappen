@@ -549,7 +549,7 @@ class Apiv3 extends CI_Controller {
    */
   function viewRewards(){
     $this->load->model('reward_item_model');
-    $rewards = $this->reward_item_model->get(array('status'=>'published'));
+    $rewards = $this->reward_item_model->get(array('status'=>'published', 'type' => 'redeem'));
     $rewards = array_map(function($reward) {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;
@@ -626,6 +626,19 @@ class Apiv3 extends CI_Controller {
     }
 
     echo json_encode($return);
+  }
+
+  function rewardsRedeemed() {
+    if(!$user_id = $this->socialhappen->get_user_id()) {
+      echo json_encode(array('success' => FALSE));
+      return;
+    }
+
+    //Get user rewards
+    $this->load->model('user_mongo_model');
+    $user = $this->user_mongo_model->get_user($user_id);
+    $user_rewards = isset($user['reward_items']) && !empty($user['reward_items']) ? $user['reward_items'] : array();
+    echo json_encode(array('success' => TRUE, 'data' => $user_rewards));
   }
 }
 

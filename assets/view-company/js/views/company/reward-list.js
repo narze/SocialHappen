@@ -41,6 +41,26 @@ define([
       if(this.collection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
+
+      var self = this;
+
+      //Check if each reward are redeemed
+      $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: window.Passport.BASE_URL + 'apiv3/rewardsRedeemed',
+        success: function(res) {
+          if(res.success) {
+            for (var i = 0, len = res.data.length; i < len; i++) {
+              var model = self.collection.get(res.data[i]);
+              if(model) {
+                model.set('redeemed', true);
+                model.change();
+              }
+            }
+          }
+        }
+      });
       
       return this;
     },

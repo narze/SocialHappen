@@ -58,7 +58,7 @@
   text-decoration: none;
 }
 
-.notstart, .expired{
+.notstart, .expired, .redeemed, .usedup{
   text-align: center;
   font-weight: bold;
   color: white;
@@ -76,7 +76,7 @@
   font-size: 18px;
 }
 
-.notstart{
+.notstart, .redeemed{
   background: rgba(0, 40, 150, .75);
 }
 

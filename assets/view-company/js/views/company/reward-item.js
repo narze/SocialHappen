@@ -20,6 +20,8 @@ define([
       console.log('render reward item');
       var data = this.model.toJSON();
       data.baseUrl = window.Company.BASE_URL;
+      data.redeemed = data.redeemed || false;
+      data.usedup = data.redeem.amount_remain === 0;
       $(this.el).html(this.rewardItemTemplate(data));
       return this;
     },

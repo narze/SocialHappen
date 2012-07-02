@@ -14,6 +14,7 @@ define([
       redeem: {
         point: 0,
         amount: 0,
+        amount_remain: 0,
         once: true
       },
       status: 'draft'
