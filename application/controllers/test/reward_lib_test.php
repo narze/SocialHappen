@@ -66,15 +66,16 @@ class Reward_lib_test extends CI_Controller {
 			'end_timestamp' => $now - 3600
 		));
 		$this->unit->run($result, TRUE, "\$result", $result);
-    
-    //Add user coupon
-    $this->load->model('coupon_model');
-    $coupon = array(
-      'reward_item_id' => $this->reward_item_id,
-      'user_id' => 1,
-      'company_id' => 1,
-    );
-    $this->coupon_id = $this->coupon_model->add($coupon);
+
+    //create user 1
+    $user_id = 1;
+    $this->load->library('user_lib');
+    $this->user_lib->create_user(1);
+
+    //Add company 1 score
+    $company_id = 1;
+    $this->load->model('achievement_stat_company_model');
+    $this->achievement_lib->increment_company_score($company_id, $user_id, 500);
 	}
 
 	function get_expired_redeem_items_test(){
@@ -102,6 +103,19 @@ class Reward_lib_test extends CI_Controller {
 		//now test is in tab_ctrl_test
 	}
 
+  function purchase_coupon_test() {
+    $user_id = 1;
+    $company_id = 1;
+    $reward_item_id = $this->reward_item_id;
+    $result = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id);
+    $this->unit->run($result, 'is_string', "\$result", $result);
+    $this->coupon_id = $result;
+
+    $user_id = 2;
+    $result = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id);
+    $this->unit->run($result, FALSE, "\$result", $result);
+  }
+
   function redeem_with_coupon_test() {
     $coupon_id = $this->coupon_id;
     $user_id = 1;
@@ -113,14 +127,17 @@ class Reward_lib_test extends CI_Controller {
     $result = $this->reward_lib->redeem_with_coupon($coupon_id, $user_id);
     $this->unit->run($result, FALSE, "\$result", $result);
 
+    //Check user 1 inventory
+    $this->load->model('user_mongo_model');
+    $user = $this->user_mongo_model->get_user($user_id);
+    $rewards = $user['reward_items'];
+    $this->unit->run(in_array($this->reward_item_id, $rewards), TRUE, "in_array($this->reward_item_id, $rewards)", in_array($this->reward_item_id, $rewards));
+    
     //Cannot redeem because user don't have coupon
     $user_id = 2;
     $confirm_user_id = 5;
     $result = $this->reward_lib->redeem_with_coupon($coupon_id, $user_id);
     $this->unit->run($result, FALSE, "\$result", $result);
-
-    //Check user inventory
-    // @todo : add into user's inventory
   }
 }
 /* End of file reward_lib_test.php */

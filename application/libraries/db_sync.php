@@ -1742,11 +1742,11 @@ class DB_Sync {
       array(
         'app_id' => 0,
         'action_id' => 116,
-        'description' => 'User Redeem Reward',
+        'description' => 'User Receive Coupon',
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} redeemed {string:object} from page {page:page_id}',
+        'format_string' => 'User {user:user_id} received a reward coupon from company {company:company_id}',
         'score' => 0
       ),
       array(
@@ -1768,6 +1768,16 @@ class DB_Sync {
         'stat_campaign' => FALSE,
         'format_string' => 'User {user:user_id} completed challenge {challenge:objecti}',
         'score' => 50
+      ),
+      array(
+        'app_id' => 0,
+        'action_id' => 119,
+        'description' => 'User Redeem Reward',
+        'stat_app' => FALSE,
+        'stat_page' => TRUE,
+        'stat_campaign' => FALSE,
+        'format_string' => 'User {user:user_id} redeemed {string:object} from company {company:company_id}',
+        'score' => 0
       ),
       array(
         'app_id' => 0,

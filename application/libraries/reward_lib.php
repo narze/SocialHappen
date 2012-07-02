@@ -213,7 +213,100 @@ class Reward_lib
 			return FALSE;
 		}
 
+		$this->CI->load->model('reward_item_model');
+		$reward_item = $this->CI->reward_item_model->get_one(array('_id' => new MongoId($reward_item_id)));
+
+		//Add action
+		if(!$audit_add_result = $this->CI->audit_lib->audit_add(array(
+			'app_id' => 0,
+			'action_id' => 
+				$this->CI->socialhappen->get_k('audit_action', 'User Redeem Reward'),
+			'object' => $reward_item['name'],
+			'objecti' => $reward_item_id,
+			'user_id' => $user_id
+		))) {
+			return FALSE;
+		}
+
 		return TRUE;
+	}
+
+	function purchase_coupon($user_id = NULl, $reward_item_id, $company_id) {
+		if(!$user_id || !$reward_item_id || !$company_id) { return FALSE; }
+
+		$this->CI->load->model('reward_item_model');
+
+		if(!$reward_item = 
+			$this->CI->reward_item_model->get_by_reward_item_id($reward_item_id)){
+			return FALSE;
+		}
+
+		//Check if no reward remains
+		if(!isset($reward_item['redeem']['amount_remain'])
+			|| ($reward_item['redeem']['amount_remain'] == 0)) {
+			return FALSE;
+		}
+
+		//@TODO - Check if redeemable once
+		// foreach($reward_item['user_list'] as $rewarded_user){
+		// 	if($rewarded_user['user_id'] == $user['user_id']){
+		// 		if($reward_item['redeem']['once']){ 
+		// 			//Cannot redeem again if reward is once redeemable
+		// 			return FALSE;
+		// 		}
+		// 		$rewarded_user['count'] += 1;
+		// 		$user_data = $rewarded_user;
+		// 		break;
+		// 	}
+		// }
+
+		//Check if company point is sufficient
+		$this->CI->load->library('achievement_lib');
+		$company_stat = $this->CI->achievement_lib->get_company_stat($company_id, $user_id);
+		
+		if(!isset($company_stat['company_score'])) {
+			//No stat = 0 points = cannot purchase
+			return FALSE;
+		}
+
+		$company_score = $company_stat['company_score'];
+
+		if($company_score < $reward_item['redeem']['point']) {
+			//Insufficient points
+			return FALSE;
+		}
+
+		//Update the company point of the user
+		$this->CI->load->model('achievement_stat_company_model');
+		$reward_points = - abs($reward_item['redeem']['point']);
+		if(!$increment_result = $this->CI->achievement_stat_company_model->increment($reward_points, $user_id)) {
+			return FALSE;
+		}
+
+		//Give user coupon
+		$this->CI->load->library('coupon_lib');
+		if(!$coupon_id = $this->CI->coupon_lib->create_coupon(array(
+			'reward_item_id' => get_mongo_id($reward_item),
+			'user_id' => $user_id,
+			'company_id' => $company_id,
+		))) {
+			return FALSE;
+		}
+
+		//Add action
+		$this->CI->load->library('audit_lib');
+		if(!$audit_add_result = $this->CI->audit_lib->audit_add(array(
+			'app_id' => 0,
+			'action_id' => 
+				$this->CI->socialhappen->get_k('audit_action', 'User Receive Coupon'),
+			'object' => $reward_item['name'],
+			'objecti' => $reward_item_id,
+			'user_id' => $user_id
+		))) {
+			return FALSE;
+		}
+
+		return $coupon_id;
 	}
 }
 /* End of file reward_lib.php */

@@ -1027,6 +1027,18 @@ class achievement_lib_test extends CI_Controller {
   	$this->unit->run($count, 2, 'count_user_achieved_in_page_test', print_r($count, TRUE));
   }
 
+  function increment_company_score_test() {
+  	$user_id = '1000';
+  	$company_id = '1000';
+  	$amount = 40;
+  	$result = $this->achievement_lib->increment_company_score($company_id, $user_id, $amount);
+  	$this->unit->run($result, TRUE, "\$result", $result);
+
+  	//check stat again
+    $result = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($result['company_score'], 100, 'increment');
+  }
+
 	function end_test(){
 		// $this->achievement_info->drop_collection();
 		// $this->achievement_stat->drop_collection();

@@ -640,6 +640,20 @@ class Apiv3 extends CI_Controller {
     $user_rewards = isset($user['reward_items']) && !empty($user['reward_items']) ? $user['reward_items'] : array();
     echo json_encode(array('success' => TRUE, 'data' => $user_rewards));
   }
+
+  function purchaseReward() {
+    if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE)); return; }
+    if(!$reward_item_id = $this->input->post('reward_item_id')) { echo json_encode(array('success' => FALSE)); return; }
+    if(!$company_id = $this->input->post('company_id')) { echo json_encode(array('success' => FALSE)); return; }
+
+    $this->load->library('reward_lib');
+    if(!$coupon_id = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id)) {
+      echo json_encode(array('success' => FALSE, 'data' => 'Purchase failed'));
+      return;
+    }
+
+    echo json_encode(array('success' => TRUE, 'data' => $coupon_id));
+  }
 }
 
 /* End of file apiv3.php */
