@@ -100,20 +100,6 @@ img.company-image{
 .modal img.reward-image, .modal .view-repeat, .modal .edit-redeem{
   cursor: pointer;
 }
-.criteria-list .action-icon,
-.reward-list .action-icon {
-  cursor: default;
-}
-.action-icon {
-  height: 70px;
-  width: 70px;
-  background-image: none;
-  opacity: 0.65;
-  filter: alpha(opacity=65);
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
 .setup-your-reward {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 40px 0;

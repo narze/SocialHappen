@@ -1,7 +1,7 @@
-<div class="well">
-<h1><%= data.checkin_welcome_message %>
 <div>
-  <div class="loading-div" style="height:36px;display:block;">
+<hr />
+<h1><%= data.checkin_welcome_message %></h1>
+  <div class="loading-div" style="display:block;">
     <div id="loading-box" style="display:none;"><img src="<%= base_url + 'assets/images/loading.gif' %>" /></div>
   </div>
   <div class="form" data-action="<%= base_url+ 'actions/checkin/add_user_data_checkin' %>">

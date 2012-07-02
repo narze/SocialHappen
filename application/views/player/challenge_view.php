@@ -1,18 +1,26 @@
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span4">&nbsp;</div>
-		<div class="span4">
-			<p class="back"><a href="<?php echo base_url('assets/view-company/#/company/'.$company_id);?>">Back to company</a></p>
+		<div class="span3">&nbsp;</div>
+		<div class="span6">
+			<p class="back">
+				<a href="<?php echo base_url('assets/view-company/#/company/'.$company_id);?>">Back to company</a>
+				<a href="#" class="pull-right">Term of challenge</a>
+			</p>
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span4">&nbsp;</div>
-		<div class="span4">
+		<div class="span3">&nbsp;</div>
+		<div class="span6">
 			<div class="chalenge-card">
 			<?php if($challenge) : ?>
-				<button type="button" class="btn pull-right"><i class="icon-share-alt"></i>&nbsp;</button>
+				<p class="pull-right">
+					<?php if(!$player_logged_in || !$player_challenging) { ?>
+					<a id="join-challenge" class="btn btn-primary" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>">Accept challenge</a>
+					<?php } ?>
+				</p>
 				<h2 class="challenge-name"><?php echo $challenge['detail']['name'];?></h2>
-				<p class="small">By : SocialHappen Start : June 16, 2012 End : July 16,2012</p>
+				<p class="small">By : SocialHappen Start : <span id="challenge-start-date"></span> End : <span id="challenge-end-date"></span></p>
+
 
 				<hr class="divider" />
 
@@ -47,71 +55,57 @@
 					</div>
 				</div>
 
-				<div class="row-fluid">
-					<?php if($challenge['start_date']) { ?>
-						<div class="control-group"><h6>Start </h6><span id="challenge-start-date"></span></div><?php
-					}
-					if($challenge['end_date']) { ?>
-						<div class="control-group"><h6>End </h6><span id="challenge-end-date"></span> (<span id="challenge-until-end"></span>)</div><?php
-					} ?>
-				</div>
+				
 
 				<hr class="divider" />
 
 				<div class="row-fluid">
-					<label><h6>How to WIN</h6></label>
 					<div class="control-group">
-
 					<?php if($challenge_not_started) : ?>
-						<div class="challenge-not-started"><span class="badge badge-success">Challenge not yet started.</span></div>
+						<div class="challenge-not-started alert alert-error">Challenge not yet started.</div>
 					<?php elseif($challenge_ended) : ?>
-						<div class="challenge-ended"><span class="badge badge-success">Challenge ended.</span></div>
-					<?php elseif(!$player_logged_in || !$player_challenging) : ?>
-							<a id="join-challenge" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>" class="btn btn-primary">Accept challenge</a>
+						<div class="challenge-ended alert alert-error">Challenge ended.</div>
 					<?php else : //player logged in and is challenging ?>
 							<!-- Challenge Actions -->
-							<div class="row-fluid" id="challenge-criteria-list">
-
-								<?php if($challenge['criteria']) :
-
-									foreach($challenge['criteria'] as $key => $criteria) : ?>
-										<span class="criteria-item">
+							<div class="row-fluid criteria-list" id="challenge-criteria-list">
+								<?php if($challenge['criteria']) : ?>
+									<label><h6>How to WIN</h6></label>
+									<?php foreach($challenge['criteria'] as $key => $criteria) : ?>
+										<div class="criteria-item well">
 											<div class="row-fluid">
 												<div class="span2">
-													<img class="action-image" style="width:100%;" src="<?php echo isset($criteria['image']) ? $criteria['image'] : base_url('assets/images/default/action.png'); ?>" alt="<?php echo $criteria['name'];?>">
+													<button disabled type="button" class="action-icon btn">Action Icon</button>
 												</div>
 
-												<h3 class="criteria-name span10">
-													<a href="<?php echo '#/action/'.$criteria['action_data_id'];?>" class="criteria-link">
-														<?php echo $criteria['name']; ?>
-													</a>
-												</h3>
-
-												<div class="span11 offset1">
-													<?php if($challenge_progress[$key]['action_done']) : ?>
-														<span class="badge badge-success">Done</span>
-													<?php else : ?>
+												<h3 class="criteria-name span10"><?php echo $criteria['name']; ?></h3>
+												<?php if($player_challenging) {
+													if($challenge_progress[$key]['action_done']) { ?>
+														<p class="span10">
+															<button disabled type="button" class="btn btn-success btn-small">Done</button>
+														</p>
+													<?php } else { ?>
+														<p class="span10">
+															<a href="<?php echo '#/action/'.$criteria['action_data_id'];?>" class="criteria-link btn btn-primary btn-small">
+															Do it
+															</a>
+														</p>
 														<!-- <span class="badge">
 															<?php echo $challenge_progress[$key]['action_count'].'/'.$criteria['count'];?>
 														</span> -->
-													<?php endif; ?>
-												</div>
+													<?php } ?>
+													
+												<?php } ?>
 											</div>
 											<div data-id="<?php echo $criteria['action_data_id'];?>"class="row-fluid criteria-form"></div>
-										</span>
-									<?php endforeach; 
-
+										</div>
+									<?php endforeach; ?>
+									<hr class="divider" />
+								<?php
 								endif; ?>
-
 							</div>
-
 					<?php endif; ?>
-
 					</div>
-
 				</div>
-
-				<hr class="divider" />
 
 				<div class="reward row-fluid">
 					<label><h6>Rewards</h6></label>
@@ -123,7 +117,7 @@
 				<hr class="divider" />
 
 				<div class="row-fluid">
-					<h6>Who joined this challenge</h6>
+					<label><h6>Who joined this challenge</h6></label>
 					<div class="control-group">
 						<div class="controls challengers-in-progress"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['in_progress'] as $user) :?>
@@ -140,7 +134,7 @@
 
 				<div class="row-fluid">
 					<div class="control-group">
-						<h6>Who completed this challenge</h6>
+						<label><h6>Who completed this challenge</h6></label>
 						<div class="controls challengers-completed"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['completed'] as $user) :?>
 							<span>
@@ -157,12 +151,17 @@
 				<hr class="divider" />
 
 				<div class="row-fluid">
-					<h6>Other challenge from SocialHappen</h6>
+					<label><h6>Other challenge from SocialHappen</h6></label>
 					<div class="control-group">
 						-
 					</div>
-					<div class="text-right"><button type="text" class="btn">See more</button></div>
-					
+				</div>
+
+				<div class="challenge-footer text-right">
+					<button type="text" class="btn">See more</button>
+					<?php if(!$player_logged_in || !$player_challenging) { ?>
+					<a id="join-challenge" class="btn btn-primary" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>">Accept challenge</a>
+					<?php } ?>
 				</div>
 
 				<?php else : ?>

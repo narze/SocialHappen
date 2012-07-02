@@ -4,7 +4,7 @@ require([
 ], function($, moment){
 
   checkActionDone();
-  formatDate();
+  formatDate("MMMM Do, YYYY");
   checkChallengeError();
   $('.load-more-in-progress').click(loadMoreInProgress);
   $('.load-more-completed').click(loadMoreCompleted);
@@ -32,12 +32,13 @@ require([
     }
   }
 
-  function formatDate() {
+  function formatDate(format) {
+    if(!format) format = "dddd, MMMM Do YYYY, h:mm:ss a";
 
-    var startString = moment.unix(challenge_start_date).format("dddd, MMMM Do YYYY, h:mm:ss a");
+    var startString = moment.unix(challenge_start_date).format(format);
     $('#challenge-start-date').html(startString);
 
-    var endString = moment.unix(challenge_end_date).format("dddd, MMMM Do YYYY, h:mm:ss a");
+    var endString = moment.unix(challenge_end_date).format(format);
     $('#challenge-end-date').html(endString);
 
     var untilEndString = moment.unix(challenge_end_date).fromNow();

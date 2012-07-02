@@ -1,23 +1,24 @@
-<div class="well">
+<div>
+  <hr />
   <h1><%= data.feedback_welcome_message %></h1>
   <div>
     <div class="form" data-action="<%= base_url + 'actions/feedback/add_user_data_feedback' %>">
       <fieldset>
         <legend><%= data.feedback_question_message %></legend>
         <div class="control-group">
-          <textarea name="user_feedback" class="span4 user_feedback"></textarea>
+          <textarea name="user_feedback" class="span12 user_feedback"></textarea>
         </div>
         <div class="control-group">
           <label class="control-label" for="user_score">
             <%= data.feedback_vote_message %>
           </label>
           <div class="controls">
-            <select name="user_score" class="span1 user_score">
-              <<option value="5">5</option>
-              <<option value="4">4</option>
-              <<option value="3">3</option>
-              <<option value="2">2</option>
-              <<option value="1">1</option>
+            <select name="user_score" class="span2 user_score">
+              <option value="5">5</option>
+              <option value="4">4</option>
+              <option value="3">3</option>
+              <option value="2">2</option>
+              <option value="1">1</option>
             </select>
           </div>
         </div>
