@@ -352,7 +352,7 @@
    */
   function add_redeem_reward($input = array()) {
   	if(!issetor($input['name']) || !issetor($input['image'])
-  		|| !isset($input['value']) || !isset($input['company_id'])) {
+  		|| !isset($input['value'])) {
 			return FALSE;
 		}
 		

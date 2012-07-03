@@ -40,7 +40,7 @@
 
   <center>
     <div class="redeem-reward">
-      <% if (redeem.once && redeemed) { %>
+      <% if (redeem.once && (typeof redeemed !== 'undefined') && redeemed) { %>
         <button class="btn btn-primary btn-large" disabled>Redeemed</button>
       <% } else { %>
         <button class="redeem-reward btn btn-primary btn-large">Redeem this reward</button>
