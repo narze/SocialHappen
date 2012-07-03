@@ -677,6 +677,30 @@ class Achievement_lib
   }
   
   /**
+   * increment company score
+   * @param company_id
+   * @param user_id
+   * @param amount
+   * @return result
+   */
+  function increment_company_score($company_id = NULL, $user_id = NULL, $amount = 0){
+    if(!isset($company_id) || !isset($company_id) || !isset($user_id)){
+      return FALSE;
+    }
+
+    $company_id = (int) $company_id;
+    $user_id = (int) $user_id;
+    $amount = (int) $amount;
+    $info = array(
+      'company_id' => (int) $company_id,
+      'company_score' => $amount
+    );
+    $this->CI->load->model('achievement_stat_company_model', 'achievement_stat_company');
+    return $this->CI->achievement_stat_company->increment($company_id, 
+        $user_id, $info, $amount);
+  }
+  
+  /**
    * get user stat company
    * @param company_id
    * @param user_id

@@ -98,6 +98,9 @@ class Coupon_model extends CI_Model {
 		$data['confirmed_timestamp'] = NULL;
 		$data['confirmed_by_id'] = NULL;
 
+		$data['company_id'] = (int) $data['company_id'];
+		$data['user_id'] = (int) $data['user_id'];
+
 		if(!isset($data['challenge_id'])) {
 			$data['challenge_id'] = NULL;
 		}

@@ -24,6 +24,7 @@ define([
       }
       
       var data = this.model.toJSON();
+      console.log(data);
       $(this.el).html(this.editTemplate(data));
       
       return this;
@@ -41,8 +42,23 @@ define([
       this.$el.modal('show');
     },
 
-    redeemReward: function(model) {
-      console.log('Redeeming reward');
+    redeemReward: function() {
+      var model = this.model;
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          reward_item_id: model.id,
+          company_id: window.Company.companyId
+        },
+        url: window.Company.BASE_URL + 'apiv3/purchaseReward',
+        success: function(res) {
+          if(res.success) {
+            console.log('got coupon id : ' + res.data);
+            $('button.redeem-reward', self.el).html('Redeemed').attr("disabled", "disabled");
+          }
+        }
+      });
     }
   });
   return EditModalView;
