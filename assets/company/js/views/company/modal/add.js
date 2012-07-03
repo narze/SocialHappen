@@ -4,6 +4,8 @@ define([
   'backbone',
   'models/challenge',
   'text!templates/company/modal/add.html',
+  'text!templates/company/modal/recipe.html',
+  'text!templates/company/modal/addAction.html',
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
@@ -11,14 +13,15 @@ define([
   'views/company/modal/action/checkin-edit',
   'views/company/modal/action/checkin-add',
   'jqueryui'
-], function($, _, Backbone, ChallengeModel, addTemplate, FeedbackEditView,
+], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate, addActionTemplate, FeedbackEditView,
    FeedbackAddView, QREditView, QRAddView, CheckinEditView, CheckinAddView,
    jqueryui){
   var EditModalView = Backbone.View.extend({
     addTemplate: _.template(addTemplate),
+    addActionTemplate: _.template(addActionTemplate),
+    recipeTemplate: _.template(recipeTemplate),
     
     events: {
-      'click .add-new-action': 'showAddNewActionModal',
       'click a.add-feedback': 'addFeedback',
       'click a.add-qr': 'addQR',
       'click a.add-checkin': 'addCheckin',
@@ -30,12 +33,14 @@ define([
       'click button.save-score': 'saveEditScore',
       'change input.repeat-enable': 'toggleRepeat',
       'click button.save-repeat-interval': 'saveRepeat',
-      'click div.view-repeat': 'showEditRepeat'
+      'click div.view-repeat': 'showEditRepeat',
+      'click .add-new-action': 'showAddNewActionModal'
     },
     
     initialize: function(){
       _.bindAll(this);
       this.options.vent.bind('showAddModal', this.show);
+      this.options.vent.bind('showRecipeModal', this.showRecipeModal);
     },
 
     getRewards: function() {
@@ -137,11 +142,7 @@ define([
     },
     
     show: function(model){
-      // if(!model){
-        // this.model = new ChallengeModel({});
-      // }else{
-        this.model = model;
-      // }
+      this.model = model;
       console.log('show add modal:', this.model.toJSON());
       this.render();
       
@@ -189,7 +190,6 @@ define([
     },
     
     saveEditName: function(){
-      
       var detail = this.model.get('detail');
       detail.name = $('input.challenge-name', this.el).val();
       
@@ -202,13 +202,32 @@ define([
     },
 
     showAddNewActionModal: function() {
-      //Test modal lv2
-      $('#add-action-modal').html(['<div class="modal-header"><button class="close" data-dismiss="modal">×</button><h3>Add new Action</h3></div><div class="modal-body">',
-        '<button type="button" class="action-icon btn btn-primary add-share">Share</button> ',
-        '<button type="button" class="action-icon btn btn-success add-feedback">Feed back</button> ',
-        '<button type="button" class="action-icon btn btn-danger add-checkin">Checkin</button> ',
-        '<button type="button" class="action-icon btn btn-warning add-qr">QR</button>',
-        '</div>'].join('')).modal('show');
+      var addActionModal = $('#add-action-modal');
+      addActionModal.html(addActionTemplate).modal('show');
+      var recipe = null;
+      var self = this;
+      //On recipe click
+      $('.recipes button', addActionModal).click(function() {
+        $('.recipes button', addActionModal).addClass('disabled');
+        $(this).removeClass('disabled');
+        recipe = $(this).data('recipe');
+
+        if(recipe === 'share') {
+          
+        } else if(recipe === 'feedback') {
+          //@TODO
+        } else if(recipe === 'checkin') {
+          //@TODO
+        } else if(recipe === 'qr') {
+          console.log('add qr action');
+          var qrAddView = new QRAddView({
+            model: self.model,
+            vent: self.options.vent,
+            triggerModal: 'showAddModal'
+          });
+          qrAddView.render().showForm();
+        }
+      });
     },
     
     addFeedback: function(e){
@@ -221,9 +240,9 @@ define([
         triggerModal: 'showAddModal'
       });
       
-      $('ul.criteria-list', this.el).prepend(feedbackAddView.render().el);
+      $('ul.criteria-list', this.el).append(feedbackAddView.render().el);
       
-      feedbackAddView.showEdit();
+      // feedbackAddView.showEdit();
     },
     
     addQR: function(e){
@@ -235,10 +254,11 @@ define([
         vent: this.options.vent,
         triggerModal: 'showAddModal'
       });
+
+
+      $('ul.criteria-list', this.el).append(qrAddView.render().el);
       
-      $('ul.criteria-list', this.el).prepend(qrAddView.render().el);
-      
-      qrAddView.showEdit();
+      // qrAddView.showEdit();
     },
     
     addCheckin: function(e){
@@ -251,9 +271,9 @@ define([
         triggerModal: 'showAddModal'
       });
       
-      $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
+      $('ul.criteria-list', this.el).append(checkinAddView.render().el);
       
-      checkinAddView.showEdit();
+      // checkinAddView.showEdit();
     },
 
     showEditReward: function() {
@@ -374,6 +394,48 @@ define([
     showEditRepeat: function(){
       $('div.edit-repeat').show();
       $('div.view-repeat').hide();
+    },
+
+    showRecipeModal: function() {
+      var recipeModal = $('#recipe-modal');
+      recipeModal.html(this.recipeTemplate()).modal('show');
+
+      var recipe = null, reward = null;
+      //On recipe click
+      $('.recipes button', recipeModal).click(function() {
+        $('.recipes button', recipeModal).addClass('disabled');
+        $(this).removeClass('disabled');
+        recipe = $(this).data('recipe');
+      });
+
+      //On reward click
+      $('.rewards button', recipeModal).click(function() {
+        $('.rewards button', recipeModal).addClass('disabled');
+        $(this).removeClass('disabled');
+        reward = $(this).data('reward');
+      });
+
+      var self = this;
+      //Choose recipe
+      $('button.choose-recipe', recipeModal).click(function(e) {
+        if(recipe === 'share') {
+          // self.addShare(e);
+        } else if(recipe === 'feedback') {
+          self.addFeedback(e);
+        } else if(recipe === 'checkin') {
+          self.addCheckin(e);
+        } else if(recipe === 'qr') {
+          self.addQR(e);
+        }
+
+        if(reward === 'points') {
+          //@TODO
+        } else if(reward === 'discount') {
+          //@TODO
+        } else if(reward === 'giveaway') {
+          //@TODO
+        }
+      });
     }
     
   });

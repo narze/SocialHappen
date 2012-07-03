@@ -3,15 +3,18 @@ define([
   'underscore',
   'backbone',
   'text!templates/company/modal/action/CheckinAddTemplate.html',
-  'text!templates/company/modal/action/placeItemTemplate.html'
-], function($, _, Backbone, CheckinTemplate, placeItemTemplate){
+  'text!templates/company/modal/action/placeItemTemplate.html',
+  'text!templates/company/modal/action/CheckinActionTemplate.html'
+], function($, _, Backbone, CheckinTemplate, placeItemTemplate, CheckinActionTemplate){
   var CheckinAddView = Backbone.View.extend({
     CheckinTemplate: _.template(CheckinTemplate),
     placeItemTemplate: _.template(placeItemTemplate),
+    CheckinActionTemplate: _.template(CheckinActionTemplate),
     tagName: 'li',
     
     events: {
-      'click button.edit': 'showEdit',
+      'click .edit-action': 'showEdit',
+      'click .remove-action': 'remove',
       'click button.save': 'saveEdit',
       'click button.cancel': 'cancelEdit',
       'keyup input.checkin_facebook_place_name': 'searchPlace',
@@ -23,18 +26,17 @@ define([
     },
     
     render: function () {
-      $(this.el).html(this.CheckinTemplate(this.options.action));
-      
+      $(this.el).html(this.CheckinActionTemplate(this.options.action));
+      $('#action-modal').html(this.CheckinTemplate(this.options.action));
       return this;
     },
     
     showEdit: function(){
-      $('div.edit', this.el).toggle();
+      $('#action-modal').modal('show');
     },
     
     saveEdit: function(e){
       e.preventDefault();
-      $('div.edit', this.el).hide();
       
       this.options.action = {
         query: {
@@ -46,7 +48,7 @@ define([
       this.options.action.action_data = {
         data: {},
         action_id: 203
-      }
+      };
       this.options.action.action_data.data.checkin_facebook_place_id = $('input.checkin_facebook_place_id', this.el).val();
       this.options.action.action_data.data.checkin_facebook_place_name = $('input.checkin_facebook_place_name', this.el).val();
       this.options.action.action_data.data.checkin_min_friend_count = $('input.checkin_min_friend_count', this.el).val();
@@ -76,7 +78,7 @@ define([
     searchPlace: function(e){
       var query = $('input.checkin_facebook_place_name').val();
       
-      if(query.length == 0){
+      if(query.length === 0){
         this.renderPlaceList([]);
       }else{
         var self = this;
@@ -105,6 +107,12 @@ define([
       $('input.checkin_facebook_place_id').val(id);
       $('input.checkin_facebook_place_name').val(name);
       
+    },
+
+    remove: function(e) {
+      e.preventDefault();
+      this.$el.remove();
+      $('#action-modal').empty();
     }
     
     
