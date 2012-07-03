@@ -247,11 +247,26 @@ define([
     
     addQR: function(e){
       e.preventDefault();
-      console.log('show add qr');
+      console.log('show add qr: ', this.model.toJSON());
       
       var qrAddView = new QRAddView({
         model: this.model,
         vent: this.options.vent,
+        action: {
+          query: {
+            action_id: 201
+          },
+          count: 1,
+          name: 'QR Action',
+          action_data: {
+            data: {
+              todo_message: 'Find and scan the QR code',
+              done_message: 'Congratulations! You\'ve found and scanned the QR code'
+            },
+            action_id: 201
+          },
+          
+        },
         triggerModal: 'showAddModal'
       });
 
