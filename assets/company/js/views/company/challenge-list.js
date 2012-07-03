@@ -111,6 +111,7 @@ define([
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       this.options.vent.trigger('showAddModal', newModel);
+      this.options.vent.trigger('showRecipeModal');
     }
   });
   return ChallengeListPane;

@@ -2,15 +2,15 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/QREditTemplate.html'
-], function($, _, Backbone, QRTemplate){
+  'text!templates/company/modal/action/QRActionTemplate.html'
+], function($, _, Backbone, QRActionTemplate){
   var QREditView = Backbone.View.extend({
-    QRTemplate: _.template(QRTemplate),
+    QRActionTemplate: _.template(QRActionTemplate),
     tagName: 'li',
-    
+    formEl: null,
     events: {
-      'click button.edit': 'showEdit',
-      'click button.save': 'saveEdit',
+      'click .edit-action': 'showEdit',
+      'click .remove-action': 'remove',
       'click button.remove': 'removeAction'
     },
     
@@ -19,24 +19,24 @@ define([
     },
     
     render: function () {
-      $(this.el).html(this.QRTemplate(this.options.action));
-      
+      $(this.el).html(this.QRActionTemplate(this.options.action));
       return this;
     },
     
     showEdit: function(){
-      $('div.edit', this.el).slideToggle();
+      this.formEl = $('.modal', this.el).appendTo('#action-modal').modal('show');
+      $('button.save', this.formEl).click(this.saveEdit);
+      $('button.cancel', this.formEl).click(this.cancelEdit);
     },
     
     saveEdit: function(e){
       e.preventDefault();
-      $('div.edit', this.el).slideUp();
       
       var dataId = this.options.action.action_data_id;
       
-      this.options.action.name = $('input.name', this.el).val();
-      this.options.action.action_data.data.todo_message = $('textarea.todo_message', this.el).val();
-      this.options.action.action_data.data.done_message = $('textarea.done_message', this.el).val();
+      this.options.action.name = $('input.name', this.formEl).val();
+      this.options.action.action_data.data.todo_message = $('textarea.todo_message', this.formEl).val();
+      this.options.action.action_data.data.done_message = $('textarea.done_message', this.formEl).val();
       
       var criteria = this.model.get('criteria');
       this.model.set('criteria', criteria).trigger('change');

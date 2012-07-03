@@ -22,7 +22,6 @@ define([
     recipeTemplate: _.template(recipeTemplate),
     
     events: {
-      'click .add-new-action': 'showAddNewActionModal',
       'click a.add-feedback': 'addFeedback',
       'click a.add-qr': 'addQR',
       'click a.add-checkin': 'addCheckin',
@@ -34,12 +33,14 @@ define([
       'click button.save-score': 'saveEditScore',
       'change input.repeat-enable': 'toggleRepeat',
       'click button.save-repeat-interval': 'saveRepeat',
-      'click div.view-repeat': 'showEditRepeat'
+      'click div.view-repeat': 'showEditRepeat',
+      'click .add-new-action': 'showAddNewActionModal'
     },
     
     initialize: function(){
       _.bindAll(this);
       this.options.vent.bind('showAddModal', this.show);
+      this.options.vent.bind('showRecipeModal', this.showRecipeModal);
     },
 
     getRewards: function() {
@@ -180,9 +181,6 @@ define([
       }, this);
       
       this.$el.modal('show');
-
-      //show recipe modal
-      this.showRecipeModal();
     },
     
     showEditName: function(){
@@ -192,7 +190,6 @@ define([
     },
     
     saveEditName: function(){
-      
       var detail = this.model.get('detail');
       detail.name = $('input.challenge-name', this.el).val();
       
@@ -208,26 +205,27 @@ define([
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addActionTemplate).modal('show');
       var recipe = null;
-
+      var self = this;
       //On recipe click
       $('.recipes button', addActionModal).click(function() {
         $('.recipes button', addActionModal).addClass('disabled');
         $(this).removeClass('disabled');
         recipe = $(this).data('recipe');
-      });
 
-      var self = this;
-
-      //Choose recipe
-      $('button.choose-recipe', addActionModal).click(function(e) {
         if(recipe === 'share') {
-          // self.addShare(e);
+          
         } else if(recipe === 'feedback') {
-          self.addFeedback(e);
+          //@TODO
         } else if(recipe === 'checkin') {
-          self.addCheckin(e);
+          //@TODO
         } else if(recipe === 'qr') {
-          self.addQR(e);
+          console.log('add qr action');
+          var qrAddView = new QRAddView({
+            model: self.model,
+            vent: self.options.vent,
+            triggerModal: 'showAddModal'
+          });
+          qrAddView.render().showForm();
         }
       });
     },
@@ -256,7 +254,8 @@ define([
         vent: this.options.vent,
         triggerModal: 'showAddModal'
       });
-      
+
+
       $('ul.criteria-list', this.el).append(qrAddView.render().el);
       
       // qrAddView.showEdit();
@@ -430,11 +429,11 @@ define([
         }
 
         if(reward === 'points') {
-
+          //@TODO
         } else if(reward === 'discount') {
-
+          //@TODO
         } else if(reward === 'giveaway') {
-
+          //@TODO
         }
       });
     }
