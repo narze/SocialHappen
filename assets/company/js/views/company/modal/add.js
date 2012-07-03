@@ -5,6 +5,7 @@ define([
   'models/challenge',
   'text!templates/company/modal/add.html',
   'text!templates/company/modal/recipe.html',
+  'text!templates/company/modal/addAction.html',
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
@@ -12,11 +13,12 @@ define([
   'views/company/modal/action/checkin-edit',
   'views/company/modal/action/checkin-add',
   'jqueryui'
-], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate, FeedbackEditView,
+], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate, addActionTemplate, FeedbackEditView,
    FeedbackAddView, QREditView, QRAddView, CheckinEditView, CheckinAddView,
    jqueryui){
   var EditModalView = Backbone.View.extend({
     addTemplate: _.template(addTemplate),
+    addActionTemplate: _.template(addActionTemplate),
     recipeTemplate: _.template(recipeTemplate),
     
     events: {
@@ -203,13 +205,31 @@ define([
     },
 
     showAddNewActionModal: function() {
-      //Test modal lv2
-      $('#add-action-modal').html(['<div class="modal-header"><button class="close" data-dismiss="modal">×</button><h3>Add new Action</h3></div><div class="modal-body">',
-        '<button type="button" class="action-icon btn btn-primary add-share">Share</button> ',
-        '<button type="button" class="action-icon btn btn-success add-feedback">Feed back</button> ',
-        '<button type="button" class="action-icon btn btn-danger add-checkin">Checkin</button> ',
-        '<button type="button" class="action-icon btn btn-warning add-qr">QR</button>',
-        '</div>'].join('')).modal('show');
+      var addActionModal = $('#add-action-modal');
+      addActionModal.html(addActionTemplate).modal('show');
+      var recipe = null;
+
+      //On recipe click
+      $('.recipes button', addActionModal).click(function() {
+        $('.recipes button', addActionModal).addClass('disabled');
+        $(this).removeClass('disabled');
+        recipe = $(this).data('recipe');
+      });
+
+      var self = this;
+
+      //Choose recipe
+      $('button.choose-recipe', addActionModal).click(function(e) {
+        if(recipe === 'share') {
+          // self.addShare(e);
+        } else if(recipe === 'feedback') {
+          self.addFeedback(e);
+        } else if(recipe === 'checkin') {
+          self.addCheckin(e);
+        } else if(recipe === 'qr') {
+          self.addQR(e);
+        }
+      });
     },
     
     addFeedback: function(e){
@@ -222,7 +242,7 @@ define([
         triggerModal: 'showAddModal'
       });
       
-      $('ul.criteria-list', this.el).prepend(feedbackAddView.render().el);
+      $('ul.criteria-list', this.el).append(feedbackAddView.render().el);
       
       // feedbackAddView.showEdit();
     },
@@ -237,7 +257,7 @@ define([
         triggerModal: 'showAddModal'
       });
       
-      $('ul.criteria-list', this.el).prepend(qrAddView.render().el);
+      $('ul.criteria-list', this.el).append(qrAddView.render().el);
       
       // qrAddView.showEdit();
     },
@@ -252,7 +272,7 @@ define([
         triggerModal: 'showAddModal'
       });
       
-      $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
+      $('ul.criteria-list', this.el).append(checkinAddView.render().el);
       
       // checkinAddView.showEdit();
     },
