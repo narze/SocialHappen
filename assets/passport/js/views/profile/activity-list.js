@@ -12,6 +12,8 @@ define([
       this.collection.bind('reset', this.addAll);
     },
     render: function () {
+      $(this.el).html('');
+
       this.addAll();
       return this;
     },

@@ -1,32 +1,34 @@
 <div class="row-fluid">
-  <div class="span9" id="left">
-    <div class="profile well"></div>
-    <div class="tabbable"> <!-- Only required for left/right tabs -->
-      <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab1" data-toggle="tab">Activities</a></li>
-        <li><a href="#tab2" data-toggle="tab">Coupons</a></li>
+  <div class="span2 user-left-pane" id="left">
+    <div class="well">
+      <div class="profile text-center"></div>
+      <hr class="divider"/>
+      <ul class="nav nav-list">
+        <li class="nav-header">
+          Menu
+        </li>
+        <li>
+          <a class="user-menu-my-profile" href="#">My Profile</a>
+          <ul>
+            <li><a class="user-submenu-photos" href="#">Photos</a></li>
+            <li><a class="user-submenu-feedbacks" href="#">Feedbacks</a></li>
+            <li><a class="user-submenu-badges" href="#">Badges</a></li>
+            <li><a class="user-submenu-rewards" href="#">Rewards</a></li>
+          </ul>
+        </li>
+        <li>
+          <a class="user-menu-my-card"href="#">My Card</a>
+        </li>
+        <li>
+          <a class="user-menu-my-reward" href="#">My Reward</a>
+        </li>
+        <li>
+          <a class="user-menu-activity" href="#">Activity</a>
+        </li>
       </ul>
-      <div class="tab-content">
-        <div class="tab-pane active" id="tab1">
-          <div class="page-header">
-            <h1>Activities <small>what did this player do</small></h1>
-          </div>
-          <ul class="activity-list unstyled"></ul> 
-        </div>
-        <div class="tab-pane" id="tab2">
-          <div class="activity">
-            <div class="coupon">
-              <div class="page-header"><h1>Coupons</h1></div>
-              <p>You cannot see this user's coupons</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
-  <div class="span3 well" id="right">
-    <div class="achievement">
-      
-    </div>
+  <div class="span10 well user-right-pane" id="right">
+    
   </div>
 </div>

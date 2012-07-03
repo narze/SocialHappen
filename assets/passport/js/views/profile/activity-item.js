@@ -6,7 +6,7 @@ define([
   'timeago'
 ], function($, _, Backbone, activityItemTemplate, timeago){
   var ActivityItem = Backbone.View.extend({
-    tagName: 'li',
+    tagName: 'div',
     activityItemTemplate: _.template(activityItemTemplate),    
     initialize: function(){
       _.bindAll(this);

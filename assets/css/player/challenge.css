@@ -14,9 +14,6 @@
   -moz-background-clip:padding-box;
   background-clip:padding-box;
 }
-.chalenge-card .small {
-  font-size: smaller;
-}
 .chalenge-card .divider {
   margin-left: -15px;
   margin-right: -15px;

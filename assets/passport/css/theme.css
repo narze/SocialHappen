@@ -1,17 +1,5 @@
 /* Body and structure
 -------------------------------------------------- */
-div.profile{
-  
-}
-
-div.profile-picture{
-  width: 300px;
-  float: left;
-}
-
-div.profile-info {
-  float: left;
-}
 
 ul.achievement-list > li{
   padding: 10px;

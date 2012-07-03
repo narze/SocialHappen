@@ -19,7 +19,7 @@
 					<?php } ?>
 				</p>
 				<h2 class="challenge-name"><?php echo $challenge['detail']['name'];?></h2>
-				<p class="small">By : SocialHappen Start : <span id="challenge-start-date"></span> End : <span id="challenge-end-date"></span></p>
+				<p class="text-small">By : SocialHappen Start : <span id="challenge-start-date"></span> End : <span id="challenge-end-date"></span></p>
 
 
 				<hr class="divider" />
