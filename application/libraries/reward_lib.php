@@ -248,17 +248,6 @@ class Reward_lib
 		}
 
 		//@TODO - Check if redeemable once
-		// foreach($reward_item['user_list'] as $rewarded_user){
-		// 	if($rewarded_user['user_id'] == $user['user_id']){
-		// 		if($reward_item['redeem']['once']){ 
-		// 			//Cannot redeem again if reward is once redeemable
-		// 			return FALSE;
-		// 		}
-		// 		$rewarded_user['count'] += 1;
-		// 		$user_data = $rewarded_user;
-		// 		break;
-		// 	}
-		// }
 
 		//Check if company point is sufficient
 		$this->CI->load->library('achievement_lib');

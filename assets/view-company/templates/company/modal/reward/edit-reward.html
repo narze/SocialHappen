@@ -33,14 +33,18 @@
         Require Point: <%= redeem.point %>
       </p>
       <p>
-        User can redeem only once: <%= redeem.once?'Yes':'No' %>
+        User can redeem only once: <%= redeem.once? 'Yes' : 'No' %>
       </p>
     </div>
   </div>
 
   <center>
     <div class="redeem-reward">
-      <button class="redeem-reward btn btn-primary btn-large">Redeem this reward</button>
+      <% if (redeem.once && redeemed) { %>
+        <button class="btn btn-primary btn-large" disabled>Redeemed</button>
+      <% } else { %>
+        <button class="redeem-reward btn btn-primary btn-large">Redeem this reward</button>
+      <% } %>
     </div>
   </center>
 </div>
