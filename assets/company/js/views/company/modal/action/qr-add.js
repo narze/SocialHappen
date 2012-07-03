@@ -2,14 +2,17 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/QRAddTemplate.html'
-], function($, _, Backbone, QRTemplate){
+  'text!templates/company/modal/action/QRAddTemplate.html',
+  'text!templates/company/modal/action/QRActionTemplate.html'
+], function($, _, Backbone, QRTemplate, QRActionTemplate){
   var QRAddView = Backbone.View.extend({
     QRTemplate: _.template(QRTemplate),
+    QRActionTemplate: _.template(QRActionTemplate),
     tagName: 'li',
     
     events: {
-      'click button.edit': 'showEdit',
+      'click .edit-action': 'showEdit',
+      'click .remove-action': 'remove',
       'click button.save': 'saveEdit',
       'click button.cancel': 'cancelEdit'
     },
@@ -19,18 +22,17 @@ define([
     },
     
     render: function () {
-      $(this.el).html(this.QRTemplate(this.options.action));
-      
+      $(this.el).html(this.QRActionTemplate(this.options.action));
+      $('#action-modal').html(this.QRTemplate(this.options.action));
       return this;
     },
     
     showEdit: function(){
-      $('div.edit', this.el).toggle();
+      $('#action-modal').modal('show');
     },
     
     saveEdit: function(e){
       e.preventDefault();
-      $('div.edit', this.el).hide();
       
       this.options.action = {
         query: {
@@ -63,9 +65,13 @@ define([
       this.model.trigger('change');
       this.options.vent.trigger(this.options.triggerModal, this.model);
       this.remove();
+    },
+
+    remove: function(e) {
+      e.preventDefault();
+      this.$el.remove();
+      $('#action-modal').empty();
     }
-    
-    
   });
   return QRAddView;
 });

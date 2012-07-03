@@ -4,6 +4,7 @@ define([
   'backbone',
   'models/challenge',
   'text!templates/company/modal/add.html',
+  'text!templates/company/modal/recipe.html',
   'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
   'views/company/modal/action/qr-edit',
@@ -11,11 +12,12 @@ define([
   'views/company/modal/action/checkin-edit',
   'views/company/modal/action/checkin-add',
   'jqueryui'
-], function($, _, Backbone, ChallengeModel, addTemplate, FeedbackEditView,
+], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate, FeedbackEditView,
    FeedbackAddView, QREditView, QRAddView, CheckinEditView, CheckinAddView,
    jqueryui){
   var EditModalView = Backbone.View.extend({
     addTemplate: _.template(addTemplate),
+    recipeTemplate: _.template(recipeTemplate),
     
     events: {
       'click .add-new-action': 'showAddNewActionModal',
@@ -137,11 +139,7 @@ define([
     },
     
     show: function(model){
-      // if(!model){
-        // this.model = new ChallengeModel({});
-      // }else{
-        this.model = model;
-      // }
+      this.model = model;
       console.log('show add modal:', this.model.toJSON());
       this.render();
       
@@ -180,6 +178,9 @@ define([
       }, this);
       
       this.$el.modal('show');
+
+      //show recipe modal
+      this.showRecipeModal();
     },
     
     showEditName: function(){
@@ -223,7 +224,7 @@ define([
       
       $('ul.criteria-list', this.el).prepend(feedbackAddView.render().el);
       
-      feedbackAddView.showEdit();
+      // feedbackAddView.showEdit();
     },
     
     addQR: function(e){
@@ -238,7 +239,7 @@ define([
       
       $('ul.criteria-list', this.el).prepend(qrAddView.render().el);
       
-      qrAddView.showEdit();
+      // qrAddView.showEdit();
     },
     
     addCheckin: function(e){
@@ -253,7 +254,7 @@ define([
       
       $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
       
-      checkinAddView.showEdit();
+      // checkinAddView.showEdit();
     },
 
     showEditReward: function() {
@@ -374,6 +375,48 @@ define([
     showEditRepeat: function(){
       $('div.edit-repeat').show();
       $('div.view-repeat').hide();
+    },
+
+    showRecipeModal: function() {
+      var recipeModal = $('#recipe-modal');
+      recipeModal.html(this.recipeTemplate()).modal('show');
+
+      var recipe = null, reward = null;
+      //On recipe click
+      $('.recipes button', recipeModal).click(function() {
+        $('.recipes button', recipeModal).addClass('disabled');
+        $(this).removeClass('disabled');
+        recipe = $(this).data('recipe');
+      });
+
+      //On reward click
+      $('.rewards button', recipeModal).click(function() {
+        $('.rewards button', recipeModal).addClass('disabled');
+        $(this).removeClass('disabled');
+        reward = $(this).data('reward');
+      });
+
+      var self = this;
+      //Choose recipe
+      $('button.choose-recipe', recipeModal).click(function(e) {
+        if(recipe === 'share') {
+          // self.addShare(e);
+        } else if(recipe === 'feedback') {
+          self.addFeedback(e);
+        } else if(recipe === 'checkin') {
+          self.addCheckin(e);
+        } else if(recipe === 'qr') {
+          self.addQR(e);
+        }
+
+        if(reward === 'points') {
+
+        } else if(reward === 'discount') {
+
+        } else if(reward === 'giveaway') {
+
+        }
+      });
     }
     
   });

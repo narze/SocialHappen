@@ -111,3 +111,10 @@ img.company-image{
   height: 30px;
   z-index: 10;
 }
+
+/* Recipe modal */
+.recipe-icon {
+  height: 90px;
+  width: 90px;
+  margin-top: 10px;
+}

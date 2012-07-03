@@ -16,9 +16,9 @@
     <div class="controls">
       <label class="status"></label>
       <select class="reward-status">
-        <option value="draft" <%= status=='draft'?'selected':''%>>Draft</option>
-        <option value="published" <%= status=='published'?'selected':''%>>Published</option>
-        <option value="cancelled" <%= status=='cancelled'?'selected':''%>>Cancelled</option>
+        <option value="draft" <%= status === 'draft' ? 'selected' : '' %>>Draft</option>
+        <option value="published" <%= status === 'published' ? 'selected' : ''%>>Published</option>
+        <option value="cancelled" <%= status === 'cancelled' ? 'selected' : ''%>>Cancelled</option>
       </select>
     </div>
   </div>
