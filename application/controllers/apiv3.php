@@ -535,8 +535,14 @@ class Apiv3 extends CI_Controller {
   }
   
   function rewards(){
+    
+    if(!$company_id = $this->input->get('company_id')) {
+      echo json_encode(array('success' => FALSE, 'data' => 'No company_id'));
+      return;
+    }
+    
     $this->load->model('reward_item_model');
-    $rewards = $this->reward_item_model->get(array());
+    $rewards = $this->reward_item_model->get(array('company_id' => (int)$company_id));
     $rewards = array_map(function($reward) {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;
@@ -548,8 +554,24 @@ class Apiv3 extends CI_Controller {
    * list only published rewards
    */
   function viewRewards(){
+    if(!$user = $this->socialhappen->get_user()) {
+      echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
+      return;
+    }
+    
+    if(!$company_id = $this->input->get('company_id')) {
+      echo json_encode(array('success' => FALSE, 'data' => 'No company_id'));
+      return;
+    }
+    
     $this->load->model('reward_item_model');
-    $rewards = $this->reward_item_model->get(array('status'=>'published', 'type' => 'redeem'));
+    
+    $rewards = $this->reward_item_model->get(array(
+      'status'=>'published', 
+      'type' => 'redeem', 
+      'company_id' => (int)$company_id
+    ));
+    
     $rewards = array_map(function($reward) {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;

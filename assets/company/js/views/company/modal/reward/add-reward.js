@@ -130,6 +130,7 @@ define([
       
       console.log('set redeem:', redeem)
       
+      this.model.set('company_id', parseInt(window.Company.companyId, 10))
       this.model.set('redeem', redeem).trigger('change');
       
       
