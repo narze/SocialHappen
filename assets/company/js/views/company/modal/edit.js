@@ -5,18 +5,18 @@ define([
   'text!templates/company/modal/edit.html',
   'text!templates/company/modal/activity-item.html',
   'text!templates/company/modal/challengers-item-template.html',
-  'views/company/modal/action/feedback-edit',
+  'text!templates/company/modal/addAction.html',
   'views/company/modal/action/feedback-add',
-  'views/company/modal/action/qr-edit',
   'views/company/modal/action/qr-add',
-  'views/company/modal/action/checkin-edit',
   'views/company/modal/action/checkin-add',
   'jqueryui'
-], function($, _, Backbone, editTemplate, activityItemTemplate, challengersItemTemplate, FeedbackEditView, FeedbackAddView,
-  QREditView, QRAddView, CheckinEditView, CheckinAddView, jqueryui){
+], function($, _, Backbone, editTemplate, activityItemTemplate, challengersItemTemplate, addActionTemplate, FeedbackAddView,
+  QRAddView, CheckinAddView, jqueryui){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
+    addActionTemplate: _.template(addActionTemplate),
     activityItemTemplate: _.template(activityItemTemplate),
+
     events: {
       'click h3.edit-name': 'showEditName',
       'click button.save-name': 'saveEditName',
@@ -38,7 +38,8 @@ define([
       'click button.hide-activity': 'hideActivity',
       'change input.repeat-enable': 'toggleRepeat',
       'click button.save-repeat-interval': 'saveRepeat',
-      'click div.view-repeat': 'showEditRepeat'
+      'click div.view-repeat': 'showEditRepeat',
+      'click .add-new-action': 'showAddNewActionModal'
     },
     
     initialize: function(){
@@ -270,7 +271,7 @@ define([
       _.each(criteria, function(action){
         var type = action.query.action_id;
         if(type == 202){
-          var feedbackEditView = new FeedbackEditView({
+          var feedbackAddView = new FeedbackAddView({
             model: this.model,
             action: action,
             vent: this.options.vent,
@@ -278,9 +279,9 @@ define([
             save: true
           });
           
-          $('ul.criteria-list', this.el).append(feedbackEditView.render().el);
+          $('ul.criteria-list', this.el).append(feedbackAddView.render().el);
         }else if(type == 201){
-          var qrEditView = new QREditView({
+          var qrAddView = new QRAddView({
             model: this.model,
             action: action,
             vent: this.options.vent,
@@ -288,9 +289,9 @@ define([
             save: true
           });
           
-          $('ul.criteria-list', this.el).append(qrEditView.render().el);
+          $('ul.criteria-list', this.el).append(qrAddView.render().el);
         }else if(type == 203){
-          var checkinEditView = new CheckinEditView({
+          var checkinAddView = new CheckinAddView({
             model: this.model,
             action: action,
             vent: this.options.vent,
@@ -298,7 +299,7 @@ define([
             save: true
           });
           
-          $('ul.criteria-list', this.el).append(checkinEditView.render().el);
+          $('ul.criteria-list', this.el).append(checkinAddView.render().el);
         }
       }, this);
       
@@ -374,50 +375,109 @@ define([
     addFeedback: function(e){
       e.preventDefault();
       console.log('show add feedback');
-      
+
+      var feedbackDefaultAction = {
+        query: {
+          action_id: 202
+        },
+        count: 1,
+        name: 'Feedback Action',
+        action_data: {
+          data: {
+            feedback_welcome_message: 'Find and scan the QR code',
+            feedback_question_message: 'Find and scan the QR code',
+            feedback_vote_message: 'Find and scan the QR code',
+            feedback_thankyou_message: 'Congratulations! You\'ve found and scanned the QR code'
+          },
+          action_id: 202
+        }
+      };
+
       var feedbackAddView = new FeedbackAddView({
         model: this.model,
         vent: this.options.vent,
+        action: feedbackDefaultAction,
         triggerModal: 'showEditModal',
+        add: true,
         save: true
       });
       
-      $('ul.criteria-list', this.el).prepend(feedbackAddView.render().el);
+      $('ul.criteria-list', this.el).append(feedbackAddView.render().el);
       
-      feedbackAddView.showEdit();
+      return feedbackAddView;
     },
     
     addQR: function(e){
       e.preventDefault();
-      console.log('show add qr');
+      console.log('show add qr: ', this.model.toJSON());
       
+      var qrDefaultAction = {
+        query: {
+          action_id: 201
+        },
+        count: 1,
+        name: 'QR Action',
+        action_data: {
+          data: {
+            todo_message: 'Find and scan the QR code',
+            done_message: 'Congratulations! You\'ve found and scanned the QR code'
+          },
+          action_id: 201
+        }
+      };
+
       var qrAddView = new QRAddView({
         model: this.model,
         vent: this.options.vent,
+        action: qrDefaultAction,
         triggerModal: 'showEditModal',
+        add: true,
         save: true
       });
+
+
+      $('ul.criteria-list', this.el).append(qrAddView.render().el);
       
-      $('ul.criteria-list', this.el).prepend(qrAddView.render().el);
-      
-      qrAddView.showEdit();
+      return qrAddView;
     },
     
     addCheckin: function(e){
       e.preventDefault();
       console.log('show add checkin');
       
+      var checkinDefaultAction = {
+        query: {
+          action_id: 203
+        },
+        count: 1,
+        name: 'Checkin Action',
+        action_data: {
+          data: {
+            checkin_facebook_place_name: 'Facebook Place Name',
+            checkin_facebook_place_id: null,
+            checkin_min_friend_count: 1,
+            checkin_welcome_message: 'Welcome to checkin page',
+            checkin_challenge_message: 'Please checkin to complete this action',
+            checkin_thankyou_message: 'Thank you for checkin'
+          },
+          action_id: 203
+        }
+      };
+
       var checkinAddView = new CheckinAddView({
         model: this.model,
         vent: this.options.vent,
+        action: checkinDefaultAction,
         triggerModal: 'showEditModal',
+        add: true,
         save: true
       });
       
-      $('ul.criteria-list', this.el).prepend(checkinAddView.render().el);
+      $('ul.criteria-list', this.el).append(checkinAddView.render().el);
       
-      checkinAddView.showEdit();
+      return checkinAddView;
     },
+
 
     showEditReward: function() {
       $('h3.edit-reward', this.el).hide();
@@ -561,6 +621,32 @@ define([
     showEditRepeat: function(){
       $('div.edit-repeat').show();
       $('div.view-repeat').hide();
+    },
+
+    showAddNewActionModal: function(e) {
+      var addActionModal = $('#add-action-modal');
+      addActionModal.html(addActionTemplate).modal('show');
+      var recipe = null;
+      var self = this;
+
+      //On recipe click
+      $('.recipes button', addActionModal).click(function() {
+        $('.recipes button', addActionModal).addClass('disabled');
+        $(this).removeClass('disabled');
+        recipe = $(this).data('recipe');
+      });
+
+      $('button.choose-recipe', addActionModal).click(function(e) {
+        if(recipe === 'share') {
+          // self.addShare(e);
+        } else if(recipe === 'feedback') {
+          self.addFeedback(e).showEdit();
+        } else if(recipe === 'checkin') {
+          self.addCheckin(e).showEdit();
+        } else if(recipe === 'qr') {
+          self.addQR(e).showEdit();
+        }
+      });
     }
     
   });

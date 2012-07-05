@@ -46,7 +46,8 @@ define([
         model: this.model,
         action: this.options.action,
         vent: this.options.vent,
-        triggerModal: this.options.triggerModal
+        triggerModal: this.options.triggerModal,
+        save: this.options.save
       });
       $('#action-modal').html(checkinFormView.render().el);
       $('#action-modal').modal('show');
