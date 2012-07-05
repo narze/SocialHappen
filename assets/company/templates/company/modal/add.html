@@ -36,7 +36,7 @@
     <h6 class="edit-repeat">Repeat:</h6>
     <div class="controls">
       <label class="checkbox">
-        <input type="checkbox" class="repeat-enable" value="true" <%= repeat?'checked="checked"':''%>>
+        <input type="checkbox" class="repeat-enable" value="true" <%= repeat ? 'checked="checked"' : ''%>>
         User can play this challenge more than one time
       </label>
     </div>
@@ -46,7 +46,7 @@
         <button type="button" class="btn save-repeat-interval btn-primary">Save</button>
       </div>
     </div>
-    <div class="view-repeat <%= repeat?'':'hide' %>">
+    <div class="view-repeat <%= repeat ? '' : 'hide' %>">
       <div class="control-group">
         User can play every <%= repeat || 7 %> days.
       </div>
@@ -83,7 +83,6 @@
   <hr class="divider" />
 
   <div class="control-group">
-
     <label><h6 class="edit-reward-label">How will you reward your member when they complete challenge?</h6></label>
     <div class="setup-your-reward">
       <button type="button" class="btn btn-primary">Set up your reward</button>

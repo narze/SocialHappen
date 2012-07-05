@@ -2,12 +2,13 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'views/company/modal/action/qr-form',
   'text!templates/company/modal/action/QRActionTemplate.html'
-], function($, _, Backbone, QRActionTemplate){
+], function($, _, Backbone, QRFormView, QRActionTemplate){
   var QRAddView = Backbone.View.extend({
-    QRActionTemplate: _.template(QRActionTemplate),
+    qrActionTemplate: _.template(QRActionTemplate),
     tagName: 'li',
-    formEl: null,
+
     events: {
       'click .edit-action': 'showEdit',
       'click .remove-action': 'remove'
@@ -15,66 +16,49 @@ define([
     
     initialize: function(){
       _.bindAll(this);
+
+      //Add action into model
+      if(this.options.add) {
+        var criteria = this.model.get('criteria');
+      
+        criteria.push(this.options.action);
+        
+        this.model.set('criteria', criteria).trigger('change');
+        if(this.options.save){
+          this.model.save();
+        }
+      }
     },
     
     render: function () {
-      $(this.el).html(this.QRActionTemplate(this.options.action));
+      $(this.el).html(this.qrActionTemplate(this.options.action));
       return this;
     },
     
     showEdit: function(){
-      this.formEl = $('.modal', this.el).appendTo('#action-modal').modal('show');
-      $('button.save', this.formEl).click(this.saveEdit);
-      $('button.cancel', this.formEl).click(this.cancelEdit);
+      var qrFormView = new QRFormView({
+        model: this.model,
+        action: this.options.action,
+        vent: this.options.vent,
+        triggerModal: this.options.triggerModal,
+        save: this.options.save
+      });
+      $('#action-modal').html(qrFormView.render().el);
+      $('#action-modal').modal('show');
     },
-    
-    saveEdit: function(e){
+
+    remove: function(e) {
       e.preventDefault();
-      console.log('model', this.model);
-      this.options.action = {
-        query: {
-          action_id: 201
-        },
-        count: 1
-      };
-      this.options.action.name = $('input.name', this.formEl).val();
-      this.options.action.action_data = {
-        data: {},
-        action_id: 201
-      };
-      this.options.action.action_data.data.todo_message = $('textarea.todo_message', this.formEl).val();
-      this.options.action.action_data.data.done_message = $('textarea.done_message', this.formEl).val();
-      
       var criteria = this.model.get('criteria');
-      
-      criteria.push(this.options.action);
-      
+      var removeIndex = $(e.currentTarget).parents('ul.criteria-list > li').index();
+      delete criteria[removeIndex];
+      criteria = _.compact(criteria);
+
       this.model.set('criteria', criteria).trigger('change');
       if(this.options.save){
         this.model.save();
       }
       this.options.vent.trigger(this.options.triggerModal, this.model);
-    },
-    
-    cancelEdit: function(e){
-      e.preventDefault();
-      $('div.edit', this.formEl).hide();
-      this.model.trigger('change');
-      this.options.vent.trigger(this.options.triggerModal, this.model);
-      this.remove(e);
-    },
-
-    remove: function(e) {
-      e.preventDefault();
-      this.$el.remove();
-      $('#action-modal').empty();
-    },
-
-    showForm: function() {
-      this.formEl = $('.modal > *', this.el).not('.modal-header');
-      $('#add-action-modal .add-action-form').html(this.formEl);
-      $('button.save', this.formEl).click(this.saveEdit);
-      $('button.cancel', this.formEl).click(this.cancelEdit);
     }
   });
   return QRAddView;

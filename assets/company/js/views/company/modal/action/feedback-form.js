@@ -3,15 +3,13 @@ define([
   'underscore',
   'backbone',
   'text!templates/company/modal/action/feedbackEditTemplate.html'
-], function($, _, Backbone, feedbackTemplate){
-  var FeedbackEditView = Backbone.View.extend({
-    feedbackTemplate: _.template(feedbackTemplate),
-    tagName: 'li',
-    
+], function($, _, Backbone, feedbackEditTemplate){
+  var FeedbackFormView = Backbone.View.extend({
+    feedbackEditTemplate: _.template(feedbackEditTemplate),
+
     events: {
-      'click button.edit': 'showEdit',
       'click button.save': 'saveEdit',
-      'click button.remove': 'removeAction'
+      'click button.cancel': 'cancelEdit'
     },
     
     initialize: function(){
@@ -19,20 +17,16 @@ define([
     },
     
     render: function () {
-      $(this.el).html(this.feedbackTemplate(this.options.action));
-      
+      $(this.el).html(this.feedbackEditTemplate(this.options.action));
       return this;
     },
     
     showEdit: function(){
-      $('div.edit', this.el).toggle();
+      $(this.el).modal('show');
     },
     
     saveEdit: function(e){
       e.preventDefault();
-      $('div.edit', this.el).hide();
-      
-      var dataId = this.options.action.action_data_id;
       
       this.options.action.name = $('input.name', this.el).val();
       this.options.action.action_data.data.feedback_welcome_message = $('textarea.feedback_welcome_message', this.el).val();
@@ -48,26 +42,11 @@ define([
       this.options.vent.trigger(this.options.triggerModal, this.model);
     },
     
-    removeAction: function(e){
+    cancelEdit: function(e){
       e.preventDefault();
-      
-      var dataId = this.options.action.action_data_id;
-      var criteria = this.model.get('criteria');
-      
-      var target = $(e.currentTarget).parent().parent().parent().parent();
-      var index = target.index();
-            
-      delete criteria[index];
-      criteria = _.compact(criteria);
-      
-      this.model.set('criteria', criteria).trigger('change');
-      if(this.options.save){
-        this.model.save();
-      }
+      this.model.trigger('change');
       this.options.vent.trigger(this.options.triggerModal, this.model);
     }
-    
-    
   });
-  return FeedbackEditView;
+  return FeedbackFormView;
 });
