@@ -2,10 +2,11 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'views/company/modal/action/checkin-form',
   'text!templates/company/modal/action/CheckinAddTemplate.html',
   'text!templates/company/modal/action/placeItemTemplate.html',
   'text!templates/company/modal/action/CheckinActionTemplate.html'
-], function($, _, Backbone, CheckinTemplate, placeItemTemplate, CheckinActionTemplate){
+], function($, _, Backbone, CheckinFormView, CheckinTemplate, placeItemTemplate, CheckinActionTemplate){
   var CheckinAddView = Backbone.View.extend({
     CheckinTemplate: _.template(CheckinTemplate),
     placeItemTemplate: _.template(placeItemTemplate),
@@ -15,64 +16,40 @@ define([
     events: {
       'click .edit-action': 'showEdit',
       'click .remove-action': 'remove',
-      'click button.save': 'saveEdit',
-      'click button.cancel': 'cancelEdit',
       'keyup input.checkin_facebook_place_name': 'searchPlace',
       'click a.place-item': 'selectPlace'
     },
     
     initialize: function(){
       _.bindAll(this);
+
+      //Add action into model
+      if(this.options.add) {
+        var criteria = this.model.get('criteria');
+      
+        criteria.push(this.options.action);
+        
+        this.model.set('criteria', criteria).trigger('change');
+        if(this.options.save){
+          this.model.save();
+        }
+      }
     },
     
     render: function () {
       $(this.el).html(this.CheckinActionTemplate(this.options.action));
-      $('#action-modal').html(this.CheckinTemplate(this.options.action));
       return this;
     },
     
     showEdit: function(){
+      var checkinFormView = new CheckinFormView({
+        model: this.model,
+        action: this.options.action,
+        vent: this.options.vent,
+        triggerModal: this.options.triggerModal
+      });
+      $('#action-modal').html(checkinFormView.render().el);
       $('#action-modal').modal('show');
-    },
-    
-    saveEdit: function(e){
-      e.preventDefault();
-      
-      this.options.action = {
-        query: {
-          action_id: 203
-        },
-        count: 1
-      };
-      this.options.action.name = $('input.name', this.el).val();
-      this.options.action.action_data = {
-        data: {},
-        action_id: 203
-      };
-      this.options.action.action_data.data.checkin_facebook_place_id = $('input.checkin_facebook_place_id', this.el).val();
-      this.options.action.action_data.data.checkin_facebook_place_name = $('input.checkin_facebook_place_name', this.el).val();
-      this.options.action.action_data.data.checkin_min_friend_count = $('input.checkin_min_friend_count', this.el).val();
-      this.options.action.action_data.data.checkin_welcome_message = $('textarea.checkin_welcome_message', this.el).val();
-      this.options.action.action_data.data.checkin_challenge_message = $('textarea.checkin_challenge_message', this.el).val();
-      this.options.action.action_data.data.checkin_thankyou_message = $('textarea.checkin_thankyou_message', this.el).val();
-      
-      var criteria = this.model.get('criteria');
-      
-      criteria.push(this.options.action);
-      
-      this.model.set('criteria', criteria).trigger('change');
-      if(this.options.save){
-        this.model.save();
-      }
-      this.options.vent.trigger(this.options.triggerModal, this.model);
-    },
-    
-    cancelEdit: function(e){
-      e.preventDefault();
-      $('div.edit', this.el).hide();
-      this.model.trigger('change');
-      this.options.vent.trigger(this.options.triggerModal, this.model);
-      this.remove();
     },
     
     searchPlace: function(e){
@@ -111,11 +88,17 @@ define([
 
     remove: function(e) {
       e.preventDefault();
-      this.$el.remove();
-      $('#action-modal').empty();
+      var criteria = this.model.get('criteria');
+      var removeIndex = $(e.currentTarget).parents('ul.criteria-list > li').index();
+      delete criteria[removeIndex];
+      criteria = _.compact(criteria);
+
+      this.model.set('criteria', criteria).trigger('change');
+      if(this.options.save){
+        this.model.save();
+      }
+      this.options.vent.trigger(this.options.triggerModal, this.model);
     }
-    
-    
   });
   return CheckinAddView;
 });
