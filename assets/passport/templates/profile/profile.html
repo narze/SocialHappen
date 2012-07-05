@@ -9,12 +9,12 @@
     <h3 class="name">
       <%= user.user_first_name %> <%= user.user_last_name %>
     </h3>
-    <p class="text-small">User Point: <%= user.user_score %></p>
+    <p><small>User Point: <%= user.user_score %></small></p>
     <% if(user.user_register_date){ %>
-    <p class="text-small">Join Date: <%= $.timeago(new Date(new Date(user.user_register_date).getTime() + parseInt(user.user_timezone_offset || 0, 10)*60000)) %></p>
+    <p><small>Join Date: <%= $.timeago(new Date(new Date(user.user_register_date).getTime() + parseInt(user.user_timezone_offset || 0, 10)*60000)) %></small></p>
     <% } %>
     <% if(user.user_last_seen){ %>
-    <p class="text-small">Last Seen: <%= $.timeago(new Date(new Date(user.user_last_seen).getTime() + parseInt(user.user_timezone_offset || 0, 10)*60000)) %></p>
+    <p><small>Last Seen: <%= $.timeago(new Date(new Date(user.user_last_seen).getTime() + parseInt(user.user_timezone_offset || 0, 10)*60000)) %></small></p>
     <% } %>
     <button class="btn btn-primary">Follow <%= user.user_first_name %></button>
   </div>

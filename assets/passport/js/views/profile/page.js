@@ -13,13 +13,16 @@ define([
     el: '#content',
 
     events: {
-      'click .user-menu-my-profile': 'render',
-        'click .user-submenu-photos': 'render',
-        'click .user-submenu-feedbacks': 'render',
-        'click .user-submenu-badges': 'showAchievementList',
-        'click .user-submenu-rewards': 'render',
-      'click .user-menu-my-card': 'render',
-      'click .user-menu-my-reward': 'showCouponList',
+      'click .user-profile-nav>li>a': 'setMenuActive',
+      'click .user-profile-nav ul>li>a': 'setSubMenuActive',
+      'click .user-menu-my-profile': 'showMyProfileList',
+        'click .user-submenu-photos': 'showPhotosList',
+        'click .user-submenu-feedbacks': 'showFeedbacksList',
+        'click .user-submenu-badges': 'showBadgesList',
+        'click .user-submenu-rewards': 'showRewardsList',
+      'click .user-menu-my-card': 'showMyCardList',
+        'click .card': 'showCard',
+      'click .user-menu-my-reward': 'showMyRewardList',
       'click .user-menu-activity': 'showActivityList'
     },
     
@@ -30,29 +33,41 @@ define([
       $(this.el).html(profilePageTemplate);
       $('div#header .passport').addClass('active');
       
+      //Render profile pane
       var profilePane = new ProfilePane({
         el: $('.profile', this.el),
         userModel: this.options.userModel
       });
       profilePane.render();
       
-      $('.user-menu-activity').click();
+      //Render right pane
+      $('.user-menu-activity').parent().addClass('active');
+      this.showActivityList();
+
+      //Menu
+      $('#badges-count').text();
       
     },
-    showActivityList: function(e) {
+    setMenuActive: function(e) {
       e.preventDefault();
-      $('.user-menu-activity').parent().addClass('active').siblings().removeClass('active');
-      var activityListView = new ActivityListView({
-        collection: this.options.activityCollection,
-        el: $('.user-right-pane', this.el)
-      });
-      
-      activityListView.render();
+      $('.user-profile-nav li').removeClass('active');
+      $(e.currentTarget).parent().addClass('active');
     },
-    showAchievementList: function(e) {
+    setSubMenuActive: function(e) {
       e.preventDefault();
-      $('.user-menu-my-profile').parent().addClass('active').siblings().removeClass('active');
+      $('.user-profile-nav li').removeClass('active');
+      $(e.currentTarget).parent().addClass('active').closest('ul').parent().addClass('active');
+    },
+    showMyProfileList: function() {
       
+    },
+    showPhotosList: function() {
+      
+    },
+    showFeedbacksList: function() {
+      
+    },
+    showBadgesList: function() {
       var achievementListView = new AchievementListView({
         collection: this.options.achievementCollection,
         el: $('.user-right-pane', this.el)
@@ -60,10 +75,21 @@ define([
       
       achievementListView.render();
     },
-    showCouponList: function(e) {
-      e.preventDefault();
-      $('.user-menu-my-reward').parent().addClass('active').siblings().removeClass('active');
-
+    showRewardsList: function() {
+      
+    },
+    showMyCardList: function() {
+      //Test template
+      $.get('templates/profile/card-list.html', function (card) {
+        card_template = $(card).find('.card').removeClass('open');
+        $('.user-right-pane').html(card);
+        $('.card-list').append(card_template.clone()).append(card_template.clone());
+      });
+    },
+    showCard: function(e) {
+      $(e.currentTarget).addClass('open').siblings().removeClass('open');
+    },
+    showMyRewardList: function() {
       var couponListView = new CouponListView({
         collection: this.options.couponCollection,
         el: $('.user-right-pane', this.el)
@@ -83,6 +109,13 @@ define([
           }
         });
       }
+    },
+    showActivityList: function() {
+      var activityListView = new ActivityListView({
+        collection: this.options.activityCollection,
+        el: $('.user-right-pane', this.el)
+      });
+      activityListView.render();
     }
   });
   return ProfilePage;
