@@ -208,6 +208,11 @@ class Player extends CI_Controller {
       $user_company_stat = $this->achievement_lib->get_company_stat($company_id, $user_id);
       $company_score = issetor($user_company_stat['company_score'], 0);
 
+      //Company name
+      $this->load->model('company_model');
+      $company = $this->company_model->get_company_profile_by_company_id($company_id);
+      $company_name = $company['company_name'];
+
       //Challengers
       $challengers = $this->challenge_lib->get_challengers($challenge_id);
       //Get users' profile
@@ -253,7 +258,8 @@ class Player extends CI_Controller {
           'challenge_not_started' => $challenge_not_started,
           'challenge_ended' => $challenge_ended,
           'is_daily_challenge' => $is_daily_challenge,
-          'company_id' => $company_id
+          'company_id' => $company_id,
+          'company_name' => $company_name
         )
       );
 
