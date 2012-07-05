@@ -6,15 +6,12 @@ define([
   'text!templates/company/modal/add.html',
   'text!templates/company/modal/recipe.html',
   'text!templates/company/modal/addAction.html',
-  'views/company/modal/action/feedback-edit',
   'views/company/modal/action/feedback-add',
-  'views/company/modal/action/qr-edit',
   'views/company/modal/action/qr-add',
-  'views/company/modal/action/checkin-edit',
   'views/company/modal/action/checkin-add',
   'jqueryui'
-], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate, addActionTemplate, FeedbackEditView,
-   FeedbackAddView, QREditView, QRAddView, CheckinEditView, CheckinAddView,
+], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate, addActionTemplate,
+   FeedbackAddView, QRAddView, CheckinAddView,
    jqueryui){
   var EditModalView = Backbone.View.extend({
     addTemplate: _.template(addTemplate),
