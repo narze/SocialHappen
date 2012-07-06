@@ -32,7 +32,7 @@
         
         <div class="control-group <?php echo form_error('email') ? 'error': ''; ?>">
           <label for="email">Email</label>
-          <input id="email" class="span4" type="text" name="email" maxlength="100" value="<?php echo set_value('email'); ?>"  />
+          <input id="email" class="span12" type="text" name="email" maxlength="100" value="<?php echo set_value('email'); ?>"  />
           <?php echo form_error('email'); ?>
         </div>
 
@@ -44,7 +44,7 @@
 
         <div class="control-group <?php echo form_error('password') ? 'error': ''; ?>">
           <label for="password">Password</label>
-          <input id="password" class="span4" type="password" name="password" maxlength="50" value="<?php echo set_value('password'); ?>"  />
+          <input id="password" class="span12" type="password" name="password" maxlength="50" value="<?php echo set_value('password'); ?>"  />
           <?php echo form_error('password'); ?>
         </div>
 
