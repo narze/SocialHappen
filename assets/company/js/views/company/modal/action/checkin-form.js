@@ -2,14 +2,19 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/checkinEditTemplate.html'
-], function($, _, Backbone, checkinEditTemplate){
+  'text!templates/company/modal/action/checkinEditTemplate.html',
+  'text!templates/company/modal/action/placeItemTemplate.html'
+], function($, _, Backbone, checkinEditTemplate, placeItemTemplate){
   var CheckinFormView = Backbone.View.extend({
+    
+    placeItemTemplate: _.template(placeItemTemplate),
     checkinEditTemplate: _.template(checkinEditTemplate),
 
     events: {
       'click button.save': 'saveEdit',
-      'click button.cancel': 'cancelEdit'
+      'click button.cancel': 'cancelEdit',
+      'keyup input.checkin_facebook_place_name': 'searchPlace',
+      'click a.place-item': 'selectPlace'
     },
     
     initialize: function(){
@@ -48,7 +53,41 @@ define([
       e.preventDefault();
       this.model.trigger('change');
       this.options.vent.trigger(this.options.triggerModal, this.model);
+    },
+
+    searchPlace: function(e){
+      var query = $('input.checkin_facebook_place_name').val();
+      
+      if(query.length === 0){
+        this.renderPlaceList([]);
+      }else{
+        var self = this;
+        FB.api('/search?q='+encodeURIComponent(query)+'&type=place&access_token=' + FB.getAccessToken(), function(data) {
+          self.renderPlaceList(data.data||[]);
+        });
+      }
+    },
+    
+    renderPlaceList: function(data){
+      $('ul.place-list', this.el).html('');
+      if(data.length > 0){
+        data = data.length > 5 ? data.slice(0, 5) : data;
+
+        _.each(data, function(i){
+          $('ul.place-list', this.el).append(this.placeItemTemplate(i));
+        }, this);
+      }
+      
+    },
+    
+    selectPlace: function(e){
+      e.preventDefault();
+      var id = $(e.currentTarget).data('id');
+      var name = $(e.currentTarget).data('name');
+      $('input.checkin_facebook_place_id').val(id);
+      $('input.checkin_facebook_place_name').val(name);
     }
+
   });
   return CheckinFormView;
 });

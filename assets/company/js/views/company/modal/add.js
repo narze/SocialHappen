@@ -221,6 +221,39 @@ define([
       });
     },
     
+    addQR: function(e){
+      e.preventDefault();
+      console.log('show add qr: ', this.model.toJSON());
+      
+      var qrDefaultAction = {
+        query: {
+          action_id: 201
+        },
+        count: 1,
+        name: 'QR Action',
+        action_data: {
+          data: {
+            todo_message: 'Find and scan the QR code',
+            done_message: 'Congratulations! You\'ve found and scanned the QR code'
+          },
+          action_id: 201
+        }
+      };
+
+      var qrActionView = new QRActionView({
+        model: this.model,
+        vent: this.options.vent,
+        action: qrDefaultAction,
+        triggerModal: 'showAddModal',
+        add: true
+      });
+
+
+      $('ul.criteria-list', this.el).append(qrActionView.render().el);
+      
+      return qrActionView;
+    },
+    
     addFeedback: function(e){
       e.preventDefault();
       console.log('show add feedback');
@@ -255,39 +288,6 @@ define([
       return feedbackActionView;
     },
     
-    addQR: function(e){
-      e.preventDefault();
-      console.log('show add qr: ', this.model.toJSON());
-      
-      var qrDefaultAction = {
-        query: {
-          action_id: 201
-        },
-        count: 1,
-        name: 'QR Action',
-        action_data: {
-          data: {
-            todo_message: 'Find and scan the QR code',
-            done_message: 'Congratulations! You\'ve found and scanned the QR code'
-          },
-          action_id: 201
-        }
-      };
-
-      var qrActionView = new QRActionView({
-        model: this.model,
-        vent: this.options.vent,
-        action: qrDefaultAction,
-        triggerModal: 'showAddModal',
-        add: true
-      });
-
-
-      $('ul.criteria-list', this.el).append(qrActionView.render().el);
-      
-      return qrActionView;
-    },
-    
     addCheckin: function(e){
       e.preventDefault();
       console.log('show add checkin');
@@ -300,7 +300,7 @@ define([
         name: 'Checkin Action',
         action_data: {
           data: {
-            checkin_facebook_place_name: 'Facebook Place Name',
+            checkin_facebook_place_name: null,
             checkin_facebook_place_id: null,
             checkin_min_friend_count: 1,
             checkin_welcome_message: 'Welcome to checkin page',

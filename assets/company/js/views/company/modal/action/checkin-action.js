@@ -3,21 +3,17 @@ define([
   'underscore',
   'backbone',
   'views/company/modal/action/checkin-form',
-  'text!templates/company/modal/action/CheckinAddTemplate.html',
-  'text!templates/company/modal/action/placeItemTemplate.html',
   'text!templates/company/modal/action/CheckinActionTemplate.html'
-], function($, _, Backbone, CheckinFormView, CheckinTemplate, placeItemTemplate, CheckinActionTemplate){
+], function($, _, Backbone, CheckinFormView, CheckinActionTemplate){
   var CheckinAddView = Backbone.View.extend({
-    CheckinTemplate: _.template(CheckinTemplate),
-    placeItemTemplate: _.template(placeItemTemplate),
-    CheckinActionTemplate: _.template(CheckinActionTemplate),
+
+    checkinActionTemplate: _.template(CheckinActionTemplate),
     tagName: 'li',
     
     events: {
       'click .edit-action': 'showEdit',
       'click .remove-action': 'remove',
-      'keyup input.checkin_facebook_place_name': 'searchPlace',
-      'click a.place-item': 'selectPlace'
+      'click button.setup-checkin-place': 'showSetupCheckinPlace'
     },
     
     initialize: function(){
@@ -37,7 +33,7 @@ define([
     },
     
     render: function () {
-      $(this.el).html(this.CheckinActionTemplate(this.options.action));
+      $(this.el).html(this.checkinActionTemplate(this.options.action));
       return this;
     },
     
@@ -53,40 +49,19 @@ define([
       $('#action-modal').modal('show');
     },
     
-    searchPlace: function(e){
-      var query = $('input.checkin_facebook_place_name').val();
-      
-      if(query.length === 0){
-        this.renderPlaceList([]);
-      }else{
-        var self = this;
-        FB.api('/search?q='+encodeURIComponent(query)+'&type=place&access_token=' + FB.getAccessToken(), function(data) {
-          self.renderPlaceList(data.data||[]);
-        });
-      }
+    showSetupCheckinPlace: function(){
+      var checkinFormView = new CheckinFormView({
+        model: this.model,
+        action: this.options.action,
+        vent: this.options.vent,
+        triggerModal: this.options.triggerModal,
+        save: this.options.save
+      });
+      $('#action-modal').html(checkinFormView.render().el);
+      $('#action-modal').find('.modal-body > .control-group').not('.facebook-place').hide();
+      $('#action-modal').modal('show');
     },
     
-    renderPlaceList: function(data){
-      $('ul.place-list', this.el).html('');
-      if(data.length > 0){
-        data = data.length > 5 ? data.slice(0, 5) : data;
-
-        _.each(data, function(i){
-          $('ul.place-list', this.el).append(this.placeItemTemplate(i));
-        }, this);
-      }
-      
-    },
-    
-    selectPlace: function(e){
-      e.preventDefault();
-      var id = $(e.currentTarget).data('id');
-      var name = $(e.currentTarget).data('name');
-      $('input.checkin_facebook_place_id').val(id);
-      $('input.checkin_facebook_place_name').val(name);
-      
-    },
-
     remove: function(e) {
       e.preventDefault();
       var criteria = this.model.get('criteria');
