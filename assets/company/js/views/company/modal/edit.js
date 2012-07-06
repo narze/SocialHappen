@@ -6,12 +6,12 @@ define([
   'text!templates/company/modal/activity-item.html',
   'text!templates/company/modal/challengers-item-template.html',
   'text!templates/company/modal/addAction.html',
-  'views/company/modal/action/feedback-add',
-  'views/company/modal/action/qr-add',
-  'views/company/modal/action/checkin-add',
+  'views/company/modal/action/feedback-action',
+  'views/company/modal/action/qr-action',
+  'views/company/modal/action/checkin-action',
   'jqueryui'
-], function($, _, Backbone, editTemplate, activityItemTemplate, challengersItemTemplate, addActionTemplate, FeedbackAddView,
-  QRAddView, CheckinAddView, jqueryui){
+], function($, _, Backbone, editTemplate, activityItemTemplate, challengersItemTemplate, addActionTemplate, FeedbackActionView,
+  QRActionView, CheckinActionView, jqueryui){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
     addActionTemplate: _.template(addActionTemplate),
@@ -271,7 +271,7 @@ define([
       _.each(criteria, function(action){
         var type = action.query.action_id;
         if(type == 202){
-          var feedbackAddView = new FeedbackAddView({
+          var feedbackActionView = new FeedbackActionView({
             model: this.model,
             action: action,
             vent: this.options.vent,
@@ -279,9 +279,9 @@ define([
             save: true
           });
           
-          $('ul.criteria-list', this.el).append(feedbackAddView.render().el);
+          $('ul.criteria-list', this.el).append(feedbackActionView.render().el);
         }else if(type == 201){
-          var qrAddView = new QRAddView({
+          var qrActionView = new QRActionView({
             model: this.model,
             action: action,
             vent: this.options.vent,
@@ -289,9 +289,9 @@ define([
             save: true
           });
           
-          $('ul.criteria-list', this.el).append(qrAddView.render().el);
+          $('ul.criteria-list', this.el).append(qrActionView.render().el);
         }else if(type == 203){
-          var checkinAddView = new CheckinAddView({
+          var checkinActionView = new CheckinActionView({
             model: this.model,
             action: action,
             vent: this.options.vent,
@@ -299,7 +299,7 @@ define([
             save: true
           });
           
-          $('ul.criteria-list', this.el).append(checkinAddView.render().el);
+          $('ul.criteria-list', this.el).append(checkinActionView.render().el);
         }
       }, this);
       
@@ -393,7 +393,7 @@ define([
         }
       };
 
-      var feedbackAddView = new FeedbackAddView({
+      var feedbackActionView = new FeedbackActionView({
         model: this.model,
         vent: this.options.vent,
         action: feedbackDefaultAction,
@@ -402,9 +402,9 @@ define([
         save: true
       });
       
-      $('ul.criteria-list', this.el).append(feedbackAddView.render().el);
+      $('ul.criteria-list', this.el).append(feedbackActionView.render().el);
       
-      return feedbackAddView;
+      return feedbackActionView;
     },
     
     addQR: function(e){
@@ -426,7 +426,7 @@ define([
         }
       };
 
-      var qrAddView = new QRAddView({
+      var qrActionView = new QRActionView({
         model: this.model,
         vent: this.options.vent,
         action: qrDefaultAction,
@@ -436,9 +436,9 @@ define([
       });
 
 
-      $('ul.criteria-list', this.el).append(qrAddView.render().el);
+      $('ul.criteria-list', this.el).append(qrActionView.render().el);
       
-      return qrAddView;
+      return qrActionView;
     },
     
     addCheckin: function(e){
@@ -464,7 +464,7 @@ define([
         }
       };
 
-      var checkinAddView = new CheckinAddView({
+      var checkinActionView = new CheckinActionView({
         model: this.model,
         vent: this.options.vent,
         action: checkinDefaultAction,
@@ -473,9 +473,9 @@ define([
         save: true
       });
       
-      $('ul.criteria-list', this.el).append(checkinAddView.render().el);
+      $('ul.criteria-list', this.el).append(checkinActionView.render().el);
       
-      return checkinAddView;
+      return checkinActionView;
     },
 
 
