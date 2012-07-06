@@ -17,11 +17,6 @@ define([
       active: false,
       company_id: 0,
       reward: {
-        name: 'Reward Name',
-        image: 'Reward Image URL',
-        value: 10,
-        status: 'Reward Status',
-        description: 'Reward Description'
       },
       score: 10,
       start_date: null,

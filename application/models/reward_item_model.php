@@ -325,7 +325,7 @@
    */
   function add_challenge_reward($input = array()) {
   	if(!issetor($input['name']) || !issetor($input['image'])
-  		|| !issetor($input['value'])) {
+  		|| !isset($input['value'])) {
 			return FALSE;
 		}
 
