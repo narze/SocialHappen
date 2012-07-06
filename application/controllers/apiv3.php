@@ -676,6 +676,58 @@ class Apiv3 extends CI_Controller {
 
     echo json_encode(array('success' => TRUE, 'data' => $coupon_id));
   }
+
+  /**
+   * get all users' action data
+   */
+  function userActionData() {
+    if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE)); return; }
+    $action_id = $this->input->get('action_id');
+
+    $query = array_filter(array(
+      'user_id' => $user_id,
+      'action_id' => (int) $action_id
+    ));
+
+    $this->load->library('action_user_data_lib');
+    $user_action_data = $this->action_user_data_lib->get_action_user_data_array($query);
+
+    $user_action_data = array_map(function($data) {
+      $data['_id'] = get_mongo_id($data);
+      return $data;
+    }, $user_action_data);
+
+    //echo json_encode($user_action_data); return;
+
+    //Get message
+    $result = $user_action_data;
+    $action_list = array();
+    $this->load->library('audit_lib');
+    for($i = 0;$i < count($result); $i++){
+      $app_id = (int) 0;
+      $action_id = $result[$i]['action_id'];
+      if(empty($action_list[$app_id.'_'.$action_id])){
+        $result_action = $this->audit_lib->get_audit_action($app_id, $action_id);
+        if(isset($result_action)){
+          $action_list[$app_id.'_'.$action_id] = $result_action;
+        }
+      }else{
+        $result_action = $action_list[$app_id.'_'.$action_id];
+      }
+      
+      if(isset($result_action['format_string'])){
+        $result[$i]['message'] = $this->audit_lib->translate_format_string(
+          $result_action['format_string'],
+          $result[$i],
+          ($action_id <= 100)
+        );
+      }else{
+        $result[$i]['message'] = '[empty format audit]';
+      }
+    }
+
+    echo json_encode($result);
+  }
 }
 
 /* End of file apiv3.php */

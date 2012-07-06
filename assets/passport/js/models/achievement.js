@@ -28,7 +28,7 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        params.url = window.Passport.BASE_URL + 'apiv3/achievementModel' + window.Passport.userId
+        params.url = window.Passport.BASE_URL + 'apiv3/achievement/' + window.Passport.userId
       }
 
       // Ensure that we have the appropriate request data.

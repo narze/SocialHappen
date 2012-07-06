@@ -3,11 +3,13 @@ define([
   'underscore',
   'backbone',
   'text!templates/profile/page.html',
+  'text!templates/profile/action.html',
+  'text!templates/profile/action-item.html',
   'views/profile/profile',
   'views/profile/activity-list',
   'views/profile/achievement-list',
   'views/profile/coupon-list'
-], function($, _, Backbone, profilePageTemplate, ProfilePane, ActivityListView, AchievementListView, CouponListView){
+], function($, _, Backbone, profilePageTemplate, actionListTemplate, actionItemTemplate, ProfilePane, ActivityListView, AchievementListView, CouponListView){
   var ProfilePage = Backbone.View.extend({
     profilePageTemplate: _.template(profilePageTemplate),
     el: '#content',
@@ -58,14 +60,55 @@ define([
       $('.user-profile-nav li').removeClass('active');
       $(e.currentTarget).parent().addClass('active').closest('ul').parent().addClass('active');
     },
-    showMyProfileList: function() {
+    getUserActionData: function(action_id) {
       
+      var ajax_options = {
+        url: window.Passport.BASE_URL + 'apiv3/userActionData',
+        data: {
+          action_id: action_id
+        },
+        dataType: 'json',
+        success: function (data) {
+          console.log(data);
+
+          _.each(data, function(action) {
+            var li = $('<li></li>').html($(actionItemTemplate).clone());
+            var title = action.user_data.user_feedback;
+            li.find('.action-title').html(title);
+            li.find('.action-msg').html(action.message);
+            $('.action-list').append(li);
+          });
+        }
+      };
+
+      //Coupon list could be seen only for current user
+      if(this.options.currentUserModel.get('user_id') !== window.Passport.userId) {
+        $.ajax(ajax_options);
+      } else {
+        //Fetch again and check
+        var self = this;
+        this.options.currentUserModel.fetch({
+          success: function(model, xhr) {
+            if(xhr.user_id && (xhr.user_id === window.Passport.userId)) {
+              $.ajax(ajax_options);
+            }
+          }
+        });
+      }
+    },
+    showMyProfileList: function(action_id) {
+      $('.user-right-pane', this.el).html($(actionListTemplate).clone());
+      this.getUserActionData();
     },
     showPhotosList: function() {
-      
+      $('.user-right-pane', this.el).html($(actionListTemplate).clone());
+      $('.header-sub', this.el).text('Photos');
+      this.getUserActionData(9999);
     },
     showFeedbacksList: function() {
-      
+      $('.user-right-pane', this.el).html($(actionListTemplate).clone());
+      $('.header-sub', this.el).text('Feedbacks');
+      this.getUserActionData(202);
     },
     showBadgesList: function() {
       var achievementListView = new AchievementListView({
@@ -76,7 +119,9 @@ define([
       achievementListView.render();
     },
     showRewardsList: function() {
-      
+      $('.user-right-pane', this.el).html($(actionListTemplate).clone());
+      $('.header-sub', this.el).text('Rewards');
+      this.getUserActionData(119);
     },
     showMyCardList: function() {
       //Test template
@@ -100,7 +145,6 @@ define([
         couponListView.render();
       } else {
         //Fetch again and check
-        var self = this;
         this.options.currentUserModel.fetch({
           success: function(model, xhr) {
             if(xhr.user_id && (xhr.user_id === window.Passport.userId)) {
