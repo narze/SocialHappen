@@ -12,10 +12,12 @@ define([
 
     initialize: function(){
       _.bindAll(this);
+      this.model.bind('change', this.render);
     },
     
     render: function () {
-      var data = this.options.company;
+      var data = this.model.toJSON();;
+      console.log('render sidebar', data);
       if(data){
         data.now = this.options.now;
         data.companyId = window.Company.companyId;

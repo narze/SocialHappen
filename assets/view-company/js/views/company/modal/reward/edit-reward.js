@@ -25,6 +25,10 @@ define([
       
       var data = this.model.toJSON();
       console.log(data);
+
+      data.passportCouponPageURL = window.Company.BASE_URL + 'passport/'
+       + Company.currentUserModel.get('user_id');
+      
       $(this.el).html(this.editTemplate(data));
       
       return this;
