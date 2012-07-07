@@ -255,7 +255,7 @@ class Apiv3 extends CI_Controller {
       return;
     }
 
-    $challenge = $this->input->post('model', TRUE); 
+    $challenge = $this->input->post('model', TRUE);
     
     if(!isset($challenge) || $challenge == ''){
       $result = array('success' => FALSE, 'data' => 'no challenge data');
@@ -265,6 +265,7 @@ class Apiv3 extends CI_Controller {
       $this->load->library('bitly_lib');
 
       $challenge = json_decode($challenge, TRUE);
+      $company_id = $challenge['company_id'];
       
       if(!is_array($challenge)){
         echo json_encode(array('success' => FALSE, 'data' =>'data error'));
@@ -335,6 +336,7 @@ class Apiv3 extends CI_Controller {
       if(issetor($challenge['reward'])) {
         $this->load->model('reward_item_model');
         $reward = $challenge['reward'];
+        $reward['company_id'] = $company_id;
 
         if(isset($challenge['reward']['_id'])) {
           //Reward exists : update
@@ -455,7 +457,7 @@ class Apiv3 extends CI_Controller {
       }
     }
 
-    echo json_encode(array('success' => TRUE, 'data' => $reward, 'debug' => $reward_update_result));
+    echo json_encode(array('success' => TRUE, 'data' => $reward));
     
   }
 

@@ -164,6 +164,9 @@
 		}
 		$input['value'] = (int) $input['value'];
 		$input['criteria_id'] = (int) $input['criteria_id'];
+		if(isset($input['company_id'])) {
+			$input['company_id'] = (int) $input['company_id'];
+		}
 		$input['user_list'] = array();
 		$input['description'] = issetor($input['description']);
 		try	{
@@ -335,6 +338,9 @@
 		
 		$input['type'] = 'challenge';
 		$input['value'] = (int) $input['value'];
+		if(isset($input['company_id'])) {
+			$input['company_id'] = (int) $input['company_id'];
+		}
 		$input['user_list'] = array();
 		$input['description'] = issetor($input['description']);
 		try	{
@@ -361,6 +367,9 @@
 			return FALSE;
 		}
 
+		if(isset($input['company_id'])) {
+			$input['company_id'] = (int) $input['company_id'];
+		}
 		$input['redeem']['point'] = (int) $input['redeem']['point'];
 		$input['redeem']['amount'] = (int) $input['redeem']['amount'];
 		$input['redeem']['amount_remain'] = $input['redeem']['amount'];

@@ -5,7 +5,7 @@ define([
   'models/challenge',
   'text!templates/company/modal/reward/add-reward.html',
   'jqueryui'
-], function($, _, Backbone, ChallengeModel, addTemplate, 
+], function($, _, Backbone, ChallengeModel, addTemplate,
    jqueryui){
   var EditModalView = Backbone.View.extend({
     addTemplate: _.template(addTemplate),
@@ -128,9 +128,9 @@ define([
       redeem.point = point;
       redeem.once = once;
       
-      console.log('set redeem:', redeem)
+      console.log('set redeem:', redeem);
       
-      this.model.set('company_id', parseInt(window.Company.companyId, 10))
+      this.model.set('company_id', parseInt(window.Company.companyId, 10));
       this.model.set('redeem', redeem).trigger('change');
       
       
@@ -143,7 +143,8 @@ define([
     createReward: function(){
       
       console.log('create reward!');
-      
+      this.model.set('company_id', parseInt(window.Company.companyId, 10));
+
       this.options.rewardsCollection.create(this.model, {
         success: function() {
           //Refresh

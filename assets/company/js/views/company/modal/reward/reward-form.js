@@ -29,7 +29,6 @@ define([
       e.preventDefault();
       
       var reward = this.model.get('reward');
-      console.log(reward);
       reward.name = $('input.reward-name', this.el).val();
       reward.image = $('input.reward-image', this.el).val();
       reward.value = $('input.reward-value', this.el).val();
