@@ -58,13 +58,28 @@ class Apiv3 extends CI_Controller {
   }
 
   function company($company_id = NULL){
+
+    
+    if(!$user = $this->socialhappen->get_user()) {
+      echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
+      return;
+    }
+
+    $user_id = $user['user_id'];
+
     if($company_id){
       $this->load->model('company_model');
       $company = $this->company_model->get_company_profile_by_campaign_id($company_id);
 
+      $this->load->library('achievement_lib');
+      $company_stat = $this->achievement_lib->get_company_stat($company_id, $user_id);
+
       if($company){
         unset($company['company_username']);
         unset($company['company_password']);
+
+        $company['company_score'] = $company_stat['company_score'];
+
         echo json_encode($company);
       }else{
         echo '{}';
