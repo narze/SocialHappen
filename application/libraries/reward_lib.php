@@ -238,13 +238,13 @@ class Reward_lib
 
 		if(!$reward_item = 
 			$this->CI->reward_item_model->get_by_reward_item_id($reward_item_id)){
-			return FALSE;
+			return array('success' => FALSE, 'data' => 'Reward not found');
 		}
 
 		//Check if no reward remains
 		if(!isset($reward_item['redeem']['amount_remain'])
 			|| ($reward_item['redeem']['amount_remain'] == 0)) {
-			return FALSE;
+			return array('success' => FALSE, 'data' => 'Reward used up');
 		}
 
 		//@TODO - Check if redeemable once
@@ -252,24 +252,23 @@ class Reward_lib
 		//Check if company point is sufficient
 		$this->CI->load->library('achievement_lib');
 		$company_stat = $this->CI->achievement_lib->get_company_stat($company_id, $user_id);
-		
 		if(!isset($company_stat['company_score'])) {
 			//No stat = 0 points = cannot purchase
-			return FALSE;
+			return array('success' => FALSE, 'data' => 'Insufficient score');
 		}
 
 		$company_score = $company_stat['company_score'];
 
 		if($company_score < $reward_item['redeem']['point']) {
 			//Insufficient points
-			return FALSE;
+			return array('success' => FALSE, 'data' => 'Insufficient score');
 		}
 
 		//Update the company point of the user
 		$this->CI->load->model('achievement_stat_company_model');
 		$reward_points = - abs($reward_item['redeem']['point']);
 		if(!$increment_result = $this->CI->achievement_stat_company_model->increment($reward_points, $user_id)) {
-			return FALSE;
+			return array('success' => FALSE, 'data' => 'Score update failed');
 		}
 
 		//Give user coupon
@@ -279,7 +278,7 @@ class Reward_lib
 			'user_id' => $user_id,
 			'company_id' => $company_id,
 		))) {
-			return FALSE;
+			return array('success' => FALSE, 'data' => 'Cannot create coupon');
 		}
 
 		//Add action
@@ -292,10 +291,13 @@ class Reward_lib
 			'objecti' => $reward_item_id,
 			'user_id' => $user_id
 		))) {
-			return FALSE;
+			return array('success' => FALSE, 'data' => 'Add action failed');
 		}
 
-		return $coupon_id;
+		return array('success' => TRUE, 'data' => array(
+			'coupon_id' => $coupon_id,
+			'points_remain' => ($company_score - $reward_item['redeem']['point'])
+		));
 	}
 }
 /* End of file reward_lib.php */

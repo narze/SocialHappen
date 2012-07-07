@@ -666,17 +666,13 @@ class Apiv3 extends CI_Controller {
   }
 
   function purchaseReward() {
-    if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE)); return; }
-    if(!$reward_item_id = $this->input->post('reward_item_id')) { echo json_encode(array('success' => FALSE)); return; }
-    if(!$company_id = $this->input->post('company_id')) { echo json_encode(array('success' => FALSE)); return; }
+    if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE, 'data' => 'Not logged in')); return; }
+    if(!$reward_item_id = $this->input->post('reward_item_id')) { echo json_encode(array('success' => FALSE, 'data' => 'Unspecified reward item')); return; }
+    if(!$company_id = $this->input->post('company_id')) { echo json_encode(array('success' => FALSE, 'data' => 'Unspecified company')); return; }
 
     $this->load->library('reward_lib');
-    if(!$coupon_id = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id)) {
-      echo json_encode(array('success' => FALSE, 'data' => 'Purchase failed'));
-      return;
-    }
-
-    echo json_encode(array('success' => TRUE, 'data' => $coupon_id));
+    $purchase_coupon_result = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id);
+    echo json_encode($purchase_coupon_result);
   }
 
   /**

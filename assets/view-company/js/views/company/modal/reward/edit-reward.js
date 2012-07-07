@@ -54,7 +54,7 @@ define([
         url: window.Company.BASE_URL + 'apiv3/purchaseReward',
         success: function(res) {
           if(res.success) {
-            console.log('got coupon id : ' + res.data);
+            console.log('got coupon id : ' + res.data.coupon_id);
             $('button.redeem-reward', self.el).html('Redeemed').attr("disabled", "disabled");
           }
         }

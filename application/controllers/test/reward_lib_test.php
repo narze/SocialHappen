@@ -108,12 +108,14 @@ class Reward_lib_test extends CI_Controller {
     $company_id = 1;
     $reward_item_id = $this->reward_item_id;
     $result = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id);
-    $this->unit->run($result, 'is_string', "\$result", $result);
-    $this->coupon_id = $result;
+    $this->unit->run($result['success'], 'is_true', "\$result", $result);
+    $this->unit->run($result['data']['points_remain'], 500-20, "\$result", $result);
+    $this->coupon_id = $result['data']['coupon_id'];
 
     $user_id = 2;
     $result = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id);
-    $this->unit->run($result, FALSE, "\$result", $result);
+    $this->unit->run($result['success'], FALSE, "\$result", $result);
+    $this->unit->run($result['data'], 'Insufficient score', "\$result", $result);
   }
 
   function redeem_with_coupon_test() {
