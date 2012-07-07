@@ -39,6 +39,7 @@ define([
       require(['views/company/page'], function (WorldPage) {
         var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
           currentUserModel: currentUserModel,
+          currentCompanyModel: options.currentCompanyModel,
           challengesCollection: options.challengesCollection,
           rewardsCollection: options.rewardsCollection,
           couponsCollection: options.couponsCollection,
@@ -57,11 +58,18 @@ define([
       options.challengesCollection.url = window.Company.BASE_URL + '/apiv3/challenges/?company_id=' + companyId;
       
       options.challengesCollection.fetch();
+
+      options.currentCompanyModel.set('id', companyId, {
+        silent: true
+      });
+      options.currentCompanyModel.fetch();
+
       if(!self.companyPage){
         require(['views/company/page'], function (WorldPage) {
           
           var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
             currentUserModel: currentUserModel,
+            currentCompanyModel: options.currentCompanyModel,
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
@@ -87,12 +95,18 @@ define([
       options.rewardsCollection.url = window.Company.BASE_URL + '/apiv3/rewards/?company_id=' + companyId;
       
       options.rewardsCollection.fetch();
-      
+
+      options.currentCompanyModel.set('id', companyId, {
+        silent: true
+      });
+      options.currentCompanyModel.fetch();
+
       if(!self.companyPage){
         require(['views/company/page'], function (WorldPage) {
           
           var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
             currentUserModel: currentUserModel,
+            currentCompanyModel: options.currentCompanyModel,
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
@@ -108,39 +122,6 @@ define([
         self.companyPage.render();
       }
     });
-    
-    router.on('route:coupon', function (companyId) {
-      
-      console.log('show coupon:', companyId);
-      
-      window.Company.companyId = companyId;
-      
-      options.couponsCollection.url = window.Company.BASE_URL + '/apiv3/coupons/?company_id=' + companyId;
-      
-      options.couponsCollection.fetch();
-
-      if(!self.companyPage){
-        require(['views/company/page'], function (WorldPage) {
-          
-          var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
-            currentUserModel: currentUserModel,
-            challengesCollection: options.challengesCollection,
-            rewardsCollection: options.rewardsCollection,
-            couponsCollection: options.couponsCollection,
-            vent: options.vent,
-            now: 'coupon'
-          });
-          companyPage.render();
-          self.companyPage = companyPage;
-          
-        });
-      }else{
-        self.companyPage.options.now = 'coupon';
-        self.companyPage.render();
-      }
-        
-    });
-
 
     Backbone.history.start();
   };

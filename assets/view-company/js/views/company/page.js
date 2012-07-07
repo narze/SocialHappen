@@ -31,29 +31,7 @@ define([
           // window.location = window.Company.BASE_URL + '/play';
         }else{
           var self = this;
-      
-          require(['views/company/modal/edit'], function (EditChallenge) {
-            if(!self.editChallenge){
-              self.editChallenge = new EditChallenge({
-                currentUserModel: self.options.currentUserModel,
-                challengesCollection: self.options.challengesCollection,
-                vent: self.options.vent,
-                el: $('div#edit-challenge-modal')
-              });
-            }
-          });
-          
-          require(['views/company/modal/add'], function (AddChallenge) {
-            if(!self.addChallenge){
-              self.addChallenge = new AddChallenge({
-                currentUserModel: self.options.currentUserModel,
-                challengesCollection: self.options.challengesCollection,
-                vent: self.options.vent,
-                el: $('div#add-challenge-modal')
-              });
-            }
-          });
-          
+
           require(['views/company/modal/reward/edit-reward'], function (EditReward) {
             if(!self.editReward){
               self.editReward = new EditReward({
@@ -64,22 +42,11 @@ define([
               });
             }
           });
-          
-          require(['views/company/modal/reward/add-reward'], function (AddReward) {
-            if(!self.addReward){
-              self.addReward = new AddReward({
-                currentUserModel: self.options.currentUserModel,
-                rewardsCollection: self.options.rewardsCollection,
-                vent: self.options.vent,
-                el: $('div#add-reward-modal')
-              });
-            }
-          });
         }
       }
       var sidebarView = new SidebarView({
         el: $('#sidebar', this.el),
-        currentUserModel: this.options.currentUserModel,
+        model: this.options.currentCompanyModel,
         vent: this.options.vent,
         company: company,
         now: this.options.now

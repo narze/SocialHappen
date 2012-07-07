@@ -78,7 +78,7 @@ class Apiv3 extends CI_Controller {
         unset($company['company_username']);
         unset($company['company_password']);
 
-        $company['company_score'] = $company_stat['company_score'];
+        $company['company_score'] = $company_stat && $company_stat['company_score'] ? $company_stat['company_score'] : 0;
 
         echo json_encode($company);
       }else{

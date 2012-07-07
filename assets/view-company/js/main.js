@@ -30,13 +30,15 @@ require([
   'router',
   'vm',
   'models/user',
+  'models/company',
   'collections/challenges',
   'collections/rewards',
   'collections/coupons',
   'events'
-], function(AppView, Router, Vm, UserModel, ChallengesCollection, RewardsCollection, CouponsCollection, vent){
+], function(AppView, Router, Vm, UserModel, CompanyModel, ChallengesCollection, RewardsCollection, CouponsCollection, vent){
   
   var currentUserModel = window.Company.currentUserModel = new UserModel();
+  var currentCompanyModel = window.Company.currentCompanyModel = new CompanyModel();
   var challengesCollection = window.Company.challengesCollection = new ChallengesCollection([]);
   var rewardsCollection = window.Company.rewardsCollection = new RewardsCollection([]);
   var couponsCollection = window.Company.couponsCollection = new CouponsCollection([]);
@@ -51,6 +53,7 @@ require([
   Router.initialize({
     appView: appView,
     currentUserModel: currentUserModel,
+    currentCompanyModel: currentCompanyModel,
     challengesCollection: challengesCollection,
     rewardsCollection: rewardsCollection,
     couponsCollection: couponsCollection,
