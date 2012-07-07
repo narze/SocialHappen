@@ -14,14 +14,14 @@
       <input type="text" class="name" name="name" value="<%= name %>" />
     </div>
   </div>
-  <div class="control-group">
+  <div class="control-group facebook-place">
     <label class="control-label" for="checkin_facebook_place_name">Facebook Place Name</label>
     <div class="controls">
       <input type="hidden" class="input-xlarge checkin_facebook_place_id" name="checkin_facebook_place_id" value="<%= action_data.data.checkin_facebook_place_id %>"></input>
-      <input class="input-xlarge checkin_facebook_place_name" name="checkin_facebook_place_name" value="<%= action_data.data.checkin_facebook_place_name %>"></input>
+      <input type="text" class="input-xlarge checkin_facebook_place_name" name="checkin_facebook_place_name" value="<%= action_data.data.checkin_facebook_place_name %>" placeholder="type to search place"></input>
     </div>
   </div>
-  <div class="control-group">
+  <div class="control-group facebook-place">
     <div class="controls place-list">
       <ul class="place-list unstyled"></ul>
     </div>

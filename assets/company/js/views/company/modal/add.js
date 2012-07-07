@@ -6,29 +6,31 @@ define([
   'text!templates/company/modal/add.html',
   'text!templates/company/modal/recipe.html',
   'text!templates/company/modal/addAction.html',
-  'views/company/modal/action/feedback-add',
-  'views/company/modal/action/qr-add',
-  'views/company/modal/action/checkin-add',
+  'text!templates/company/modal/addReward.html',
+  'views/company/modal/action/feedback-action',
+  'views/company/modal/action/qr-action',
+  'views/company/modal/action/checkin-action',
+  'views/company/modal/reward/reward',
   'jqueryui'
-], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate, addActionTemplate,
-   FeedbackAddView, QRAddView, CheckinAddView,
-   jqueryui){
+], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate,
+   addActionTemplate, addRewardTemplate, FeedbackActionView,
+   QRActionView, CheckinActionView, RewardView, jqueryui){
   var EditModalView = Backbone.View.extend({
+    
     addTemplate: _.template(addTemplate),
     addActionTemplate: _.template(addActionTemplate),
+    addRewardTemplate: _.template(addRewardTemplate),
     recipeTemplate: _.template(recipeTemplate),
     
     events: {
       'click button.create-challenge': 'createChallenge',
-      'click button.edit-reward': 'showEditReward',
-      'click button.save-reward': 'saveEditReward',
-      'click button.cancel-edit-reward': 'cancelEditReward',
       'click button.edit-score': 'showEditScore',
       'click button.save-score': 'saveEditScore',
       'change input.repeat-enable': 'toggleRepeat',
       'click button.save-repeat-interval': 'saveRepeat',
       'click div.view-repeat': 'showEditRepeat',
-      'click .add-new-action': 'showAddNewActionModal'
+      'click .add-new-action': 'showAddNewActionModal',
+      'click .add-new-reward': 'showAddNewRewardModal'
     },
     
     initialize: function(){
@@ -141,38 +143,42 @@ define([
       this.render();
       
       var criteria = this.model.get('criteria');
-      
       _.each(criteria, function(action){
         var type = action.query.action_id;
         if(type == 202){
-          var feedbackAddView = new FeedbackAddView({
+          var feedbackActionView = new FeedbackActionView({
             model: this.model,
             action: action,
             vent: this.options.vent,
             triggerModal: 'showAddModal'
           });
           
-          $('ul.criteria-list', this.el).append(feedbackAddView.render().el);
+          $('ul.criteria-list', this.el).append(feedbackActionView.render().el);
         }else if(type == 201){
-          var qrAddView = new QRAddView({
+          var qrActionView = new QRActionView({
             model: this.model,
             action: action,
             vent: this.options.vent,
             triggerModal: 'showAddModal'
           });
           
-          $('ul.criteria-list', this.el).append(qrAddView.render().el);
+          $('ul.criteria-list', this.el).append(qrActionView.render().el);
         }else if(type == 203){
-          var checkinAddView = new CheckinAddView({
+          var checkinActionView = new CheckinActionView({
             model: this.model,
             action: action,
             vent: this.options.vent,
             triggerModal: 'showAddModal'
           });
           
-          $('ul.criteria-list', this.el).append(checkinAddView.render().el);
+          $('ul.criteria-list', this.el).append(checkinActionView.render().el);
         }
       }, this);
+
+      var reward = this.model.get('reward');
+      if(reward !== {}) {
+        this._addReward(reward);
+      }
       
       this.$el.modal('show');
     },
@@ -221,6 +227,39 @@ define([
       });
     },
     
+    addQR: function(e){
+      e.preventDefault();
+      console.log('show add qr: ', this.model.toJSON());
+      
+      var qrDefaultAction = {
+        query: {
+          action_id: 201
+        },
+        count: 1,
+        name: 'QR Action',
+        action_data: {
+          data: {
+            todo_message: 'Find and scan the QR code',
+            done_message: 'Congratulations! You\'ve found and scanned the QR code'
+          },
+          action_id: 201
+        }
+      };
+
+      var qrActionView = new QRActionView({
+        model: this.model,
+        vent: this.options.vent,
+        action: qrDefaultAction,
+        triggerModal: 'showAddModal',
+        add: true
+      });
+
+
+      $('ul.criteria-list', this.el).append(qrActionView.render().el);
+      
+      return qrActionView;
+    },
+    
     addFeedback: function(e){
       e.preventDefault();
       console.log('show add feedback');
@@ -242,7 +281,7 @@ define([
         }
       };
 
-      var feedbackAddView = new FeedbackAddView({
+      var feedbackActionView = new FeedbackActionView({
         model: this.model,
         vent: this.options.vent,
         action: feedbackDefaultAction,
@@ -250,42 +289,9 @@ define([
         add: true
       });
       
-      $('ul.criteria-list', this.el).append(feedbackAddView.render().el);
+      $('ul.criteria-list', this.el).append(feedbackActionView.render().el);
       
-      return feedbackAddView;
-    },
-    
-    addQR: function(e){
-      e.preventDefault();
-      console.log('show add qr: ', this.model.toJSON());
-      
-      var qrDefaultAction = {
-        query: {
-          action_id: 201
-        },
-        count: 1,
-        name: 'QR Action',
-        action_data: {
-          data: {
-            todo_message: 'Find and scan the QR code',
-            done_message: 'Congratulations! You\'ve found and scanned the QR code'
-          },
-          action_id: 201
-        }
-      };
-
-      var qrAddView = new QRAddView({
-        model: this.model,
-        vent: this.options.vent,
-        action: qrDefaultAction,
-        triggerModal: 'showAddModal',
-        add: true
-      });
-
-
-      $('ul.criteria-list', this.el).append(qrAddView.render().el);
-      
-      return qrAddView;
+      return feedbackActionView;
     },
     
     addCheckin: function(e){
@@ -300,7 +306,7 @@ define([
         name: 'Checkin Action',
         action_data: {
           data: {
-            checkin_facebook_place_name: 'Facebook Place Name',
+            checkin_facebook_place_name: null,
             checkin_facebook_place_id: null,
             checkin_min_friend_count: 1,
             checkin_welcome_message: 'Welcome to checkin page',
@@ -311,7 +317,7 @@ define([
         }
       };
 
-      var checkinAddView = new CheckinAddView({
+      var checkinActionView = new CheckinActionView({
         model: this.model,
         vent: this.options.vent,
         action: checkinDefaultAction,
@@ -319,35 +325,98 @@ define([
         add: true
       });
       
-      $('ul.criteria-list', this.el).append(checkinAddView.render().el);
+      $('ul.criteria-list', this.el).append(checkinActionView.render().el);
       
-      return checkinAddView;
+      return checkinActionView;
     },
 
-    showEditReward: function() {
-      $('div.edit-reward', this.el).show();
-      $('input.reward-name', this.el).focus();
+    showAddNewRewardModal: function(e) {
+      var addActionModal = $('#add-action-modal');
+      addActionModal.html(addRewardTemplate).modal('show');
+      var reward = null;
+      var self = this;
+      //On reward click
+      $('.rewards button', addActionModal).click(function() {
+        $('.rewards button', addActionModal).addClass('disabled');
+        $(this).removeClass('disabled');
+        reward = $(this).data('reward');
+      });
+
+      $('button.choose-recipe', addActionModal).click(function(e) {
+        if(reward === 'points') {
+          self.addPointsReward(e).showEdit();
+        } else if(reward === 'discount') {
+          self.addDiscountReward(e).showEdit();
+        } else if(reward === 'giveaway') {
+          self.addGiveawayReward(e).showEdit();
+        }
+      });
     },
-
-    saveEditReward: function(e) {
-      $('div.edit-reward', this.el).hide();
-
-      var reward = this.model.get('reward');
-      reward.name = $('input.reward-name', this.el).val() || reward.name;
-      reward.image = $('input.reward-image', this.el).val() || reward.image;
-      reward.value = $('input.reward-value', this.el).val() || reward.value;
-      reward.status = $('select.reward-status', this.el).val() || reward.status;
-      reward.description = $('textarea.reward-description', this.el).text() || reward.description;
-
-      this.model.set('reward', reward).trigger('change');
-            
-      this.options.vent.trigger('showAddModal', this.model);
-    },
-
-    cancelEditReward: function(e){
+    
+    addPointsReward: function(e){
       e.preventDefault();
-      $('div.edit-reward', this.el).slideUp();
-      this.render();
+      
+      var reward = {
+        name: 'Redeeming Points',
+        image: window.Company.BASE_URL + 'assets/images/blank.png',
+        value: 10,
+        status: 'published',
+        type: 'challenge',
+        description: '10 Points for redeeming rewards in this company'
+      };
+
+      return this._addReward(reward);
+    },
+    
+    addDiscountReward: function(e){
+      e.preventDefault();
+      
+      var reward = {
+        name: 'Discount Coupon',
+        image: window.Company.BASE_URL + 'assets/images/blank.png',
+        value: 0,
+        status: 'published',
+        type: 'challenge',
+        description: '10% discount coupon'
+      };
+
+      return this._addReward(reward);
+    },
+    
+    addGiveawayReward: function(e){
+      e.preventDefault();
+      
+      var reward = {
+        name: 'Giveaway Reward',
+        image: window.Company.BASE_URL + 'assets/images/blank.png',
+        value: 0,
+        status: 'published',
+        type: 'challenge',
+        description: 'Giveaway reward'
+      };
+
+      return this._addReward(reward);
+    },
+
+    _addReward: function(reward) {
+      var rewardView = new RewardView({
+        model: this.model,
+        vent: this.options.vent,
+        triggerModal: 'showAddModal',
+        reward: reward
+      });
+      
+      //@TODO - use append() when a challenge should have more than 1 reward
+      $('ul.reward-list', this.el).html(rewardView.render().el);
+      
+      if(this.model.get('reward') !== {}) {
+        $('.setup-your-reward').hide();
+        $('.reward-add').hide();
+      } else {
+        $('.setup-your-reward').show();
+        $('.reward-add').show();
+      }
+      return rewardView;
     },
 
     showEditScore: function(){
@@ -477,11 +546,11 @@ define([
         }
 
         if(reward === 'points') {
-          //@TODO
+          self.addPointsReward(e);
         } else if(reward === 'discount') {
-          //@TODO
+          self.addDiscountReward(e);
         } else if(reward === 'giveaway') {
-          //@TODO
+          self.addGiveawayReward(e);
         }
       });
     }

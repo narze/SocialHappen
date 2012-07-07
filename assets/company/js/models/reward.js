@@ -17,6 +17,7 @@ define([
         amount_remain: 0,
         once: true
       },
+      company_id: window.Company.companyId,
       status: 'draft'
     },
     initialize: function(){

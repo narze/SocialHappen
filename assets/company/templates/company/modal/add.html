@@ -72,84 +72,77 @@
   
   <div class="criteria-list">
     <label><h6>What your member have to do to achieve this challenge?</h6></label>
+    <% if(criteria.length === 0) { %>
+     <!--  <div class="setup-your-reward">
+        <button type="button" class="add-new-aciton btn btn-primary">Set up your action</button>
+      </div> -->
+    <% } %>
     <ul class="criteria-list unstyled">
+      <% if(criteria.length === 0) { %>
+        <!-- <li class="well">
+          <div class="btn-group pull-right">
+            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+              <i class="icon-cog"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Edit</a></li>
+              <li><a href="#">Delete</a></li>
+            </ul>
+          </div>
+          <div class="row-fluid">
+            <div class="span2">
+              <button type="button" class="action-icon btn btn-warning">20% OFF</button>
+            </div>
+            <div class="span9">
+              <h5>QR Code Hunting</h5>
+              <p>Find our QR codes in the area.</p>
+            </div>
+          </div>
+        </li> -->
+      <% } %>
     </ul>
     <div class="alert alert-info">
       <div class="text-center"><a class="add-new-action"><i class="icon-plus"></i> Add Action</a></div>
     </div>
-    
   </div>
 
   <hr class="divider" />
 
   <div class="control-group">
     <label><h6 class="edit-reward-label">How will you reward your member when they complete challenge?</h6></label>
-    <div class="setup-your-reward">
-      <button type="button" class="btn btn-primary">Set up your reward</button>
-    </div>
+    <% if(!reward.name) { %>
+      <div class="setup-your-reward">
+        <button type="button" class="add-new-reward btn btn-primary">Set up your reward</button>
+      </div>
+    <% } %>
     <ul class="reward-list unstyled">
-      <li class="well">
-        <div class="btn-group pull-right">
-          <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-cog"></i>
-          </button>
-          <ul class="dropdown-menu">
-            <li><a href="#">Edit</a></li>
-            <li><a href="#">Delete</a></li>
-          </ul>
-        </div>
-        <div class="row-fluid">
-          <div class="span2">
-            <button type="button" class="action-icon btn btn-warning">20% OFF</button>
+      <% if(!reward.name) { %>
+        <li class="well">
+          <div class="btn-group pull-right">
+            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+              <i class="icon-cog"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Edit</a></li>
+              <li><a href="#">Delete</a></li>
+            </ul>
           </div>
-          <div class="span9">
-            <h5>Special offer</h5>
-            <p>Browse through the latest special offers and deals from us include the unlimited selections of our challenge.</p>
+          <div class="row-fluid">
+            <div class="span2">
+              <button type="button" class="action-icon btn btn-warning">20% OFF</button>
+            </div>
+            <div class="span9">
+              <h5>Special offer</h5>
+              <p>Browse through the latest special offers and deals from us include the unlimited selections of our challenge.</p>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
+      <% } %>
     </ul>
 
-    <div class="alert alert-info">
-      <div class="text-center"><a class="add-reward"><i class="icon-plus"></i> Add Reward</a></div>
+    <div class="reward-add alert alert-info">
+      <div class="text-center"><a class="add-new-reward"><i class="icon-plus"></i> Add Reward</a></div>
     </div>
-
-
-    <!--
-    <h3 class="edit-reward form-inline"><%= reward.name %> <button class="btn edit-reward"><i class="icon-pencil"></i></button>
-      <% if(typeof challengeRewards !== 'undefined') { %>
-        or select from list <select class="select-challenge-reward span1">
-        <option>Select :</option>
-        <% _.each(challengeRewards, function(challengeReward) { %>
-        <option class="challenge-reward" data-challenge-id="<%= challengeReward._id.$id %>"><%= challengeReward.name %></option>
-        <% }); %>
-        </select>
-      <% } %>
-    </h3>
-    <div class="edit-reward well hide">
-      <label for="reward-name">Reward Name</label><input type="text" class="reward-name" value="<%= reward.name %>" />
-      <label for="reward-image">Reward Image</label><input type="text" class="reward-image" value="<%= reward.image %>" />
-      <label for="reward-value">Reward Value</label><input type="text" class="reward-value" value="<%= reward.value %>" />
-      <label for="reward-status">Reward Status</label>
-      <select name="reward-status" class="reward-status">
-        <option value="published">Published</option>
-        <option value="draft">Draft</option>
-      </select>
-      <label for="reward-description">Reward Description</label>
-      <textarea class="reward-description"><%= reward.description %></textarea>
-      <div class="reward-form-actions">
-        <button class="btn save-reward btn-primary">Save</button>
-        <button class="btn cancel-edit-reward">Cancel</button>
-      </div>
-    </div>
-
-    <h6 class="edit-score-label">Score:</h6>
-    <h3 class="edit-score"><%= score %> <button class="btn edit-score"><i class="icon-pencil"></i></button></h3>
-    <div class="edit-score hide form-inline">
-      <input class="challenge-score span4" value="<%= score %>" />
-      <button class="btn save-score btn-primary">Save</button>
-    </div>
-    -->
 </div>
 
 </div>

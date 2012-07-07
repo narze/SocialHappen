@@ -15,6 +15,9 @@
     <div class="span9">
       <h5>Checkin</h5>
       <p><%= name %></p>
+      <% if(!action_data.data.checkin_facebook_place_id) { %>
+        <p><button class="setup-checkin-place btn btn-info">Setup checkin place</button></p>
+      <% } %>
     </div>
   </div>
 </li>
