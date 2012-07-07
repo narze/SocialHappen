@@ -57,6 +57,24 @@ class Apiv3 extends CI_Controller {
     }
   }
 
+  function company($company_id = NULL){
+    if($company_id){
+      $this->load->model('company_model');
+      $company = $this->company_model->get_company_profile_by_campaign_id($company_id);
+
+      if($company){
+        unset($company['company_username']);
+        unset($company['company_password']);
+        echo json_encode($company);
+      }else{
+        echo '{}';
+      }
+
+    }else{
+      echo '{}';
+    }
+  }
+
   /**
    * get user and play data (moved from player->static_get_user_data)
    * 
