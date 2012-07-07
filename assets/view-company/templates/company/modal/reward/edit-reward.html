@@ -6,7 +6,7 @@
     <h3 class="edit-name"><%= name %></h3>
   </div>
 </div>
-<div class="modal-body">
+<div class="modal-body reward-action">
   
   <div class="control-group">
     <h6 class="edit-image">Image:</h6>
@@ -47,6 +47,31 @@
       <% } %>
     </div>
   </center>
+</div>
+<div class="modal-body reward-success hide">
+  <div>
+    Redeem Success
+  </div>
+
+  <div class="control-group">
+    <p>Reward: <%- name %></p>
+    <p>Point left: </p>
+  </div>
+
+  <p><img class="reward-image" src="<%= image %>" /></p>
+
+  <div class="control-group">
+    <div class="edit-description">
+      <label><h6>Description:</h6></label>
+      <p>
+        <%- description %>
+      </p>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <a href="<%= passportCouponPageURL %>">View all coupons</a>
+  </div>
 </div>
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Close</a>
