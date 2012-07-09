@@ -278,16 +278,18 @@ class Challenge_lib {
           'app_install_id' => 0
         );
         
-        //Give reward coupon
-        if(isset($challenge['reward_item_id'])) {
+        //Give reward coupons
+        if(issetor($challenge['reward_item_ids'])) {
           $this->CI->load->library('coupon_lib');
-          $coupon = array(
-            'reward_item_id' => $challenge['reward_item_id'],
-            'user_id' => $user_id,
-            'company_id' => $company_id,
-            'challenge_id' => $challenge_id
-          );
-          $coupon_add_result = $this->CI->coupon_lib->create_coupon($coupon);
+          foreach($challenge['reward_item_ids'] as $reward_item_id) {
+              $coupon = array(
+              'reward_item_id' => $reward_item_id,
+              'user_id' => $user_id,
+              'company_id' => $company_id,
+              'challenge_id' => $challenge_id
+            );
+            $coupon_add_result = $this->CI->coupon_lib->create_coupon($coupon);
+          }
         }
 
         //Increment company stat

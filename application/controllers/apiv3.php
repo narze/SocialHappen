@@ -365,34 +365,33 @@ class Apiv3 extends CI_Controller {
       $challenge_update = null;
       $challenge_create = null;
 
-      //Add-update reward
-      if(issetor($challenge['reward'])) {
+      //Add-update rewards
+      if(issetor($challenge['reward_items'])) {
         $this->load->model('reward_item_model');
-        $reward = $challenge['reward'];
-        $reward['company_id'] = $company_id;
+        foreach($challenge['reward_items'] as $reward_item) {
+          if(isset($reward_item['_id'])) {
+            //Reward exists : update
+            $reward_item_id = get_mongo_id($reward_item);
+            if(!$reward_update_result = $this->reward_item_model->update($reward_item_id, $reward_item)) {
+              echo json_encode(array('success' => FALSE, 'data' => 'Update reward failed'));
+              return;
+            }
+          } else {
+            //New reward : add new
+            if(!$reward_item_id = $this->reward_item_model->add_challenge_reward($reward_item)) {
+              echo json_encode(array('success' => FALSE, 'data' => 'Add reward failed'));
+              return;
+            }
+          }
 
-        if(isset($challenge['reward']['_id'])) {
-          //Reward exists : update
-          $reward_item_id = get_mongo_id($challenge['reward']);
-          if(!$reward_update_result = $this->reward_item_model->update($reward_item_id, $reward)) {
-            echo json_encode(array('success' => FALSE, 'data' => 'Update reward failed'));
-            return;
-          }
-        } else {
-          //New reward : add new
-          if(!$reward_item_id = $this->reward_item_model->add_challenge_reward($reward)) {
-            echo json_encode(array('success' => FALSE, 'data' => 'Add reward failed'));
-            return;
-          }
+          $challenge['reward_item_ids'][] = $reward_item_id;
         }
-
-        $challenge['reward_item_id'] = $reward_item_id;
       }
 
 
       //Create challenge data without reward (to store in challenge's model)
       $challenge_data = $challenge;
-      unset($challenge_data['reward']);
+      unset($challenge_data['reward_item']);
 
       //Try to update challenge
       if($challenge_hash){
