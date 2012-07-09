@@ -47,6 +47,7 @@ define([
     },
 
     redeemReward: function() {
+      var self = this;
       var model = this.model;
       $.ajax({
         type: 'POST',
@@ -60,6 +61,9 @@ define([
           if(res.success) {
             console.log('got coupon id : ' + res.data.coupon_id);
             $('button.redeem-reward', self.el).html('Redeemed').attr("disabled", "disabled");
+            self.options.rewardsCollection.fetch();
+            self.$('.reward-action').hide();
+            self.$('.reward-success').show();
           }else{
             alert(res.data);
           }
