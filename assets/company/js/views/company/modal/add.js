@@ -16,12 +16,12 @@ define([
    addActionTemplate, addRewardTemplate, FeedbackActionView,
    QRActionView, CheckinActionView, RewardView, jqueryui){
   var EditModalView = Backbone.View.extend({
-    
+
     addTemplate: _.template(addTemplate),
     addActionTemplate: _.template(addActionTemplate),
     addRewardTemplate: _.template(addRewardTemplate),
     recipeTemplate: _.template(recipeTemplate),
-    
+
     events: {
       'click button.create-challenge': 'createChallenge',
       'click button.edit-score': 'showEditScore',
@@ -30,53 +30,29 @@ define([
       'click button.save-repeat-interval': 'saveRepeat',
       'click div.view-repeat': 'showEditRepeat',
       'click .add-new-action': 'showAddNewActionModal',
-      'click .add-new-reward': 'showAddNewRewardModal'
+      'click .add-new-reward': 'showAddNewRewardModal',
+      'click .cancel': 'cancelAdd'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
       this.options.vent.bind('showAddModal', this.show);
       this.options.vent.bind('showRecipeModal', this.showRecipeModal);
     },
 
-    getRewards: function() {
-      var self = this;
-      console.log('getting rewards');
-      //Get all rewards
-      $.ajax({
-        dataType: 'json',
-        method: 'POST',
-        url: window.Company.BASE_URL + 'apiv3/get_rewards_for_challenge',
-        success: function(resp) {
-          self.challengeRewards = resp.data;
-          self.render();
-        },
-        error: function() {
-          self.challengeRewards = {};
-          self.render();
-        }
-      });
-    },
-    
     render: function () {
       console.log('render modal');
-      
-      if(typeof this.challengeRewards === 'undefined') {
-        return this.getRewards();
-      }
-      
       var data = this.model.toJSON();
-      data.challengeRewards = this.challengeRewards;
       $(this.el).html(this.addTemplate(data));
-      
+
       var self = this;
 
       $('#add_challenge_start').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_start').datetimepicker('getDate');
-          
+
           var endDate = $('#add_challenge_end').datetimepicker('getDate');
-          
+
           if(endDate && date && date >= endDate){
             alert('Start date must come before end date');
             var startDate = self.model.get('start_date');
@@ -88,7 +64,7 @@ define([
             }
             return;
           }
-          
+
           self.model.set({
             start_date: Math.floor(date.getTime()/1000)
           });
@@ -97,9 +73,9 @@ define([
       $('#add_challenge_end').datetimepicker({
         onClose : function(dateText, inst) {
           var date = $('#add_challenge_end').datetimepicker('getDate');
-          
+
           var startDate = $('#add_challenge_start').datetimepicker('getDate');
-          
+
           if(date && startDate && startDate >= date){
             alert('End date must come after start date');
             var endDate = self.model.get('end_date');
@@ -111,37 +87,37 @@ define([
             }
             return;
           }
-          
+
           self.model.set({
             end_date: Math.floor(date.getTime()/1000)
           });
         }
       });
-      
+
       this.model.set('start_date', Math.floor((new Date()).getTime()/1000));
       var startDate = this.model.get('start_date');
       if(startDate){
         startDate *= 1000;
         $('#add_challenge_start').datetimepicker('setDate', (new Date(startDate)));
       }
-      
+
       this.model.set('end_date', Math.floor((new Date()).getTime()/1000 + 60*60*24*365));
       var endDate = this.model.get('end_date');
       if(endDate){
         endDate *= 1000;
         $('#add_challenge_end').datetimepicker('setDate', (new Date(endDate)));
       }
-      
+
       $('select.select-challenge-reward', this.el).change(this.changeReward);
 
       return this;
     },
-    
+
     show: function(model){
       this.model = model;
       console.log('show add modal:', this.model.toJSON());
       this.render();
-      
+
       var criteria = this.model.get('criteria');
       _.each(criteria, function(action){
         var type = action.query.action_id;
@@ -152,7 +128,7 @@ define([
             vent: this.options.vent,
             triggerModal: 'showAddModal'
           });
-          
+
           $('ul.criteria-list', this.el).append(feedbackActionView.render().el);
         }else if(type == 201){
           var qrActionView = new QRActionView({
@@ -161,7 +137,7 @@ define([
             vent: this.options.vent,
             triggerModal: 'showAddModal'
           });
-          
+
           $('ul.criteria-list', this.el).append(qrActionView.render().el);
         }else if(type == 203){
           var checkinActionView = new CheckinActionView({
@@ -170,34 +146,41 @@ define([
             vent: this.options.vent,
             triggerModal: 'showAddModal'
           });
-          
+
           $('ul.criteria-list', this.el).append(checkinActionView.render().el);
         }
       }, this);
 
-      var reward = this.model.get('reward');
-      if(reward !== {}) {
-        this._addReward(reward);
-      }
-      
+      var reward_items = this.model.get('reward_items');
+      _.each(reward_items, function(reward_item){
+        var rewardView = new RewardView({
+          model: this.model,
+          vent: this.options.vent,
+          triggerModal: 'showAddModal',
+          reward_item: reward_item
+        });
+
+        $('ul.reward-list', this.el).append(rewardView.render().el);
+      }, this);
+
       this.$el.modal('show');
     },
-    
+
     showEditName: function(){
       $('h3.edit-name', this.el).hide();
       $('div.edit-name', this.el).show();
       $('input.challenge-name', this.el).focus();
     },
-    
+
     saveEditName: function(){
       var detail = this.model.get('detail');
       detail.name = $('input.challenge-name', this.el).val();
-      
+
       this.model.set('detail', detail).trigger('change');
-      
+
       $('h3.edit-name', this.$el).show();
       $('div.edit-name', this.$el).hide();
-      
+
       this.options.vent.trigger('showAddModal', this.model);
     },
 
@@ -226,11 +209,11 @@ define([
         }
       });
     },
-    
+
     addQR: function(e){
       e.preventDefault();
       console.log('show add qr: ', this.model.toJSON());
-      
+
       var qrDefaultAction = {
         query: {
           action_id: 201
@@ -256,10 +239,10 @@ define([
 
 
       $('ul.criteria-list', this.el).append(qrActionView.render().el);
-      
+
       return qrActionView;
     },
-    
+
     addFeedback: function(e){
       e.preventDefault();
       console.log('show add feedback');
@@ -288,16 +271,16 @@ define([
         triggerModal: 'showAddModal',
         add: true
       });
-      
+
       $('ul.criteria-list', this.el).append(feedbackActionView.render().el);
-      
+
       return feedbackActionView;
     },
-    
+
     addCheckin: function(e){
       e.preventDefault();
       console.log('show add checkin');
-      
+
       var checkinDefaultAction = {
         query: {
           action_id: 203
@@ -324,9 +307,9 @@ define([
         triggerModal: 'showAddModal',
         add: true
       });
-      
+
       $('ul.criteria-list', this.el).append(checkinActionView.render().el);
-      
+
       return checkinActionView;
     },
 
@@ -343,19 +326,22 @@ define([
       });
 
       $('button.choose-recipe', addActionModal).click(function(e) {
+        $('.setup-your-reward').hide();
         if(reward === 'points') {
           self.addPointsReward(e).showEdit();
         } else if(reward === 'discount') {
           self.addDiscountReward(e).showEdit();
         } else if(reward === 'giveaway') {
           self.addGiveawayReward(e).showEdit();
+        } else {
+          $('.setup-your-reward').show();
         }
       });
     },
-    
+
     addPointsReward: function(e){
       e.preventDefault();
-      
+
       var reward = {
         name: 'Redeeming Points',
         image: window.Company.BASE_URL + 'assets/images/blank.png',
@@ -367,10 +353,10 @@ define([
 
       return this._addReward(reward);
     },
-    
+
     addDiscountReward: function(e){
       e.preventDefault();
-      
+
       var reward = {
         name: 'Discount Coupon',
         image: window.Company.BASE_URL + 'assets/images/blank.png',
@@ -382,10 +368,10 @@ define([
 
       return this._addReward(reward);
     },
-    
+
     addGiveawayReward: function(e){
       e.preventDefault();
-      
+
       var reward = {
         name: 'Giveaway Reward',
         image: window.Company.BASE_URL + 'assets/images/blank.png',
@@ -398,24 +384,17 @@ define([
       return this._addReward(reward);
     },
 
-    _addReward: function(reward) {
+    _addReward: function(reward_item) {
       var rewardView = new RewardView({
         model: this.model,
         vent: this.options.vent,
         triggerModal: 'showAddModal',
-        reward: reward
+        reward_item: reward_item,
+        add: true
       });
-      
-      //@TODO - use append() when a challenge should have more than 1 reward
-      $('ul.reward-list', this.el).html(rewardView.render().el);
-      
-      if(this.model.get('reward') !== {}) {
-        $('.setup-your-reward').hide();
-        $('.reward-add').hide();
-      } else {
-        $('.setup-your-reward').show();
-        $('.reward-add').show();
-      }
+
+      $('ul.reward-list', this.el).append(rewardView.render().el);
+
       return rewardView;
     },
 
@@ -424,7 +403,7 @@ define([
       $('div.edit-score', this.el).show();
       $('input.challenge-score', this.el).focus();
     },
-    
+
     saveEditScore: function(){
       var score = $('input.challenge-score', this.el).val();
       var intRegex = /^\d+$/;
@@ -433,19 +412,19 @@ define([
       }
 
       this.model.set('score', score).trigger('change');
-      
+
       $('h3.edit-score', this.$el).show();
       $('div.edit-score', this.$el).hide();
-      
+
       this.options.vent.trigger('showAddModal', this.model);
     },
-    
+
     createChallenge: function(){
       if(!this.model.get('end_date') || !this.model.get('start_date')){
         alert('Please set start and end date');
         return;
       }
-      
+
       console.log('create challenge!');
       this.model.set('company_id', window.Company.companyId);
       this.model.set('active', true);
@@ -455,27 +434,10 @@ define([
           window.location = window.Company.BASE_URL + 'r/company/' + window.Company.companyId;
         }
       });
-      
+
       this.$el.modal('hide');
     },
 
-    changeReward: function() {
-      var challengeRewards = this.challengeRewards;
-      var challengeId = $('select.select-challenge-reward', this.el).find('option:selected').data('challengeId');
-      if(!challengeId) { return ;}
-      var chosenChallenge = challengeRewards[challengeId];
-      
-      this.model.set('reward', {_id: chosenChallenge._id});
-
-      $('input.reward-name', this.el).val(chosenChallenge.name);
-      $('input.reward-image', this.el).val(chosenChallenge.image);
-      $('input.reward-value', this.el).val(chosenChallenge.value);
-      $('select.reward-status', this.el).val(chosenChallenge.status);
-      $('textarea.reward-description', this.el).text(chosenChallenge.description);
-
-      this.saveEditReward();
-    },
-    
     toggleRepeat: function(){
       var enable = !_.isUndefined($('input.repeat-enable', this.el).attr('checked'));
       var value = parseInt($('input.repeat-interval', this.el).val(), 10);
@@ -489,25 +451,25 @@ define([
         this.model.set('repeat', null).trigger('change');
       }
     },
-    
+
     saveRepeat: function(){
       var value = parseInt($('input.repeat-interval', this.el).val(), 10);
-      
+
       if(!value || value < 0){
         alert('number of days should be a number');
         return;
       }
-      
+
       $('div.view-repeat').show();
       $('div.edit-repeat').hide();
-      
+
       this.model.set('repeat', value).trigger('change');
-      
+
       console.log('save repeat', value, this.model.toJSON());
-      
+
       this.options.vent.trigger('showAddModal', this.model);
     },
-    
+
     showEditRepeat: function(){
       $('div.edit-repeat').show();
       $('div.view-repeat').hide();
@@ -545,16 +507,27 @@ define([
           self.addQR(e);
         }
 
+        $('.setup-your-reward').hide();
         if(reward === 'points') {
           self.addPointsReward(e);
         } else if(reward === 'discount') {
           self.addDiscountReward(e);
         } else if(reward === 'giveaway') {
           self.addGiveawayReward(e);
+        } else {
+          $('.setup-your-reward').show();
         }
       });
+    },
+
+    cancelAdd: function(e) {
+      console.log('cancel add challenge');
+      this.options.action = {};
+      this.options.reward_item = {};
+      this.model = new ChallengeModel();
+      this.model.set('reward_items', null);
     }
-    
+
   });
   return EditModalView;
 });

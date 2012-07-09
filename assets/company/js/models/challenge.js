@@ -16,8 +16,7 @@ define([
       criteria: [],
       active: false,
       company_id: 0,
-      reward: {
-      },
+      reward_items: [],
       score: 10,
       start_date: null,
       end_date: null,

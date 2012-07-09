@@ -4,38 +4,44 @@ define([
   'backbone',
   'views/company/modal/reward/reward-form',
   'text!templates/company/modal/reward/rewardTemplate.html'
-], function($, _, Backbone, RewardFormView, RewardTemplate){
-  var CheckinAddView = Backbone.View.extend({
+], function($, _, Backbone, RewardFormView, RewardItemTemplate){
+  var RewardView = Backbone.View.extend({
 
-    rewardTemplate: _.template(RewardTemplate),
+    rewardItemTemplate: _.template(RewardItemTemplate),
 
     tagName: 'li',
-    
+
     events: {
       'click .edit-reward': 'showEdit',
       'click .remove-reward': 'remove'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
 
-      var reward = this.options.reward;
-      this.model.set('reward', reward).trigger('change');
-      
-      if(this.options.save){
-        this.model.save();
+      //Add reward into model
+      if(this.options.add) {
+        var reward_items = this.model.get('reward_items');
+
+        reward_items.push(this.options.reward_item);
+
+        this.model.set('reward_items', reward_items).trigger('change');
+
+        if(this.options.save){
+          this.model.save();
+        }
       }
     },
-    
+
     render: function () {
-      $(this.el).html(this.rewardTemplate(this.options.reward));
+      $(this.el).html(this.rewardItemTemplate(this.options.reward_item));
       return this;
     },
-    
+
     showEdit: function(){
       var rewardFormView = new RewardFormView({
         model: this.model,
-        reward: this.options.reward,
+        reward_item: this.options.reward_item,
         vent: this.options.vent,
         triggerModal: this.options.triggerModal,
         save: this.options.save
@@ -43,15 +49,20 @@ define([
       $('#action-modal').html(rewardFormView.render().el);
       $('#action-modal').modal('show');
     },
-    
+
     remove: function(e) {
       e.preventDefault();
-      this.model.set('reward', {}).trigger('change');
+      var reward_items = this.model.get('reward_items');
+      var removeIndex = $(e.currentTarget).parents('ul.reward-list > li').index();
+      delete reward_items[removeIndex];
+      reward_items = _.compact(reward_items);
+
+      this.model.set('reward_items', reward_items).trigger('change');
       if(this.options.save){
         this.model.save();
       }
       this.options.vent.trigger(this.options.triggerModal, this.model);
     }
   });
-  return CheckinAddView;
+  return RewardView;
 });

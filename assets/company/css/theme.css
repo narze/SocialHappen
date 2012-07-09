@@ -35,7 +35,7 @@
   -webkit-transition:top 0.2s ease-in-out;
   -moz-transition:top 0.2s ease-in-out;
   -o-transition:top 0.2s ease-in-out;
-  -ms-transition:top 0.2s ease-in-out;  
+  -ms-transition:top 0.2s ease-in-out;
   transition:top 0.2s ease-in-out;
 }
 .tile-list .item:hover .challenge-caption{

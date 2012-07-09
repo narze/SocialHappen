@@ -5,11 +5,11 @@
   <div class="">
     <h3>Create challenge</h3>
   </div>
-  
+
 </div>
 
 <div class="modal-body">
-  
+
   <div class="edit-name control-group">
     <label><h6>Challenge Name:</h6></label>
     <div class="row-fluid">
@@ -52,7 +52,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="edit-image">
     <div class="edit-image-form hide">
         <div class="form-inline">
@@ -69,7 +69,7 @@
   </div>
 
   <hr class="divider" />
-  
+
   <div class="criteria-list">
     <label><h6>What your member have to do to achieve this challenge?</h6></label>
     <% if(criteria.length === 0) { %>
@@ -110,14 +110,14 @@
 
   <div class="control-group">
     <label><h6 class="edit-reward-label">How will you reward your member when they complete challenge?</h6></label>
-    <% if(!reward.name) { %>
+    <% if(!reward_items.length) { %>
       <div class="setup-your-reward">
         <button type="button" class="add-new-reward btn btn-primary">Set up your reward</button>
       </div>
     <% } %>
     <ul class="reward-list unstyled">
-      <% if(!reward.name) { %>
-        <li class="well">
+      <% if(!reward_items.length) { %>
+        <li class="setup-your-reward well">
           <div class="btn-group pull-right">
             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
               <i class="icon-cog"></i>
@@ -147,7 +147,7 @@
 
 </div>
 <div class="modal-footer">
-  <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+  <button class="btn cancel" data-dismiss="modal">Cancel</button>
   <!-- <% if(active){%>
     <button class="btn deactive-challenge btn-danger">Deactive this challenge</button>
   <%}else{%>
