@@ -18,12 +18,12 @@ define([
       'click .user-profile-nav>li>a': 'setMenuActive',
       'click .user-profile-nav ul>li>a': 'setSubMenuActive',
       'click .user-menu-my-profile': 'showMyProfileList',
-        'click .user-submenu-photos': 'showPhotosList',
-        'click .user-submenu-feedbacks': 'showFeedbacksList',
-        'click .user-submenu-badges': 'showBadgesList',
-        'click .user-submenu-rewards': 'showRewardsList',
+      'click .user-submenu-photos': 'showPhotosList',
+      'click .user-submenu-feedbacks': 'showFeedbacksList',
+      'click .user-submenu-badges': 'showBadgesList',
+        // 'click .user-submenu-rewards': 'showRewardsList',
       'click .user-menu-my-card': 'showMyCardList',
-        'click .card': 'showCard',
+      'click .card': 'showCard',
       'click .user-menu-my-reward': 'showMyRewardList',
       'click .user-menu-activity': 'showActivityList'
     },
@@ -118,11 +118,11 @@ define([
       
       achievementListView.render();
     },
-    showRewardsList: function() {
-      $('.user-right-pane', this.el).html($(actionListTemplate).clone());
-      $('.header-sub', this.el).text('Rewards');
-      this.getUserActionData(119);
-    },
+    // showRewardsList: function() {
+    //   $('.user-right-pane', this.el).html($(actionListTemplate).clone());
+    //   $('.header-sub', this.el).text('Rewards');
+    //   this.getUserActionData(119);
+    // },
     showMyCardList: function() {
       //Test template
       $.get('templates/profile/card-list.html', function (card) {
