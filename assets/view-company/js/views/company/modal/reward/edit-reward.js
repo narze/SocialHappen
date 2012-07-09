@@ -60,6 +60,8 @@ define([
           if(res.success) {
             console.log('got coupon id : ' + res.data.coupon_id);
             $('button.redeem-reward', self.el).html('Redeemed').attr("disabled", "disabled");
+          }else{
+            alert(res.data);
           }
         }
       });

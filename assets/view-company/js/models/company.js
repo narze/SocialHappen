@@ -6,7 +6,8 @@ define([
     defaults: {
       company_name: '',
       company_image: '',
-      company_detail: ''
+      company_detail: '',
+      company_score: 0
     },
     initialize: function(){
 
