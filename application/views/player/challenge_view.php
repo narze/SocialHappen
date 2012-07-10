@@ -24,7 +24,7 @@
 
 				<hr class="divider" />
 
-				<?php if($challenge_done) : 
+				<?php if($challenge_done) :
 					if($is_daily_challenge) : ?>
 						<!-- <div class="alert alert-info">
 							<b>You've already completed this challenge today, this challellenge will be available for you again on <?php echo $challenge_available_date; ?>.</b>
@@ -55,7 +55,7 @@
 					</div>
 				</div>
 
-				
+
 
 				<hr class="divider" />
 
@@ -93,7 +93,7 @@
 															<?php echo $challenge_progress[$key]['action_count'].'/'.$criteria['count'];?>
 														</span> -->
 													<?php } ?>
-													
+
 												<?php } ?>
 											</div>
 											<div data-id="<?php echo $criteria['action_data_id'];?>"class="row-fluid criteria-form"></div>
@@ -138,7 +138,7 @@
 						<div class="controls challengers-completed"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['completed'] as $user) :?>
 							<span>
-								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" /> 
+								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" />
 							</span>
 						<?php endforeach; ?>
 						</div>
@@ -190,27 +190,33 @@
 			<?php if(isset($challenge_score) && isset($company_score)) : ?>
 				<p>You got <span class="badge badge-success"><?php echo $challenge_score; ?></span> points from the challenge, now you have <span class="badge badge-success"><?php echo $company_score;?></span> points in total.</p>
 			<?php endif; ?>
-			<?php if($challenge_reward) : ?>
-				<p> You got this reward : </p>
-			<div class="reward-container alert alert-success">
-				<div class="reward-image">
-				<img src="<?php echo $challenge_reward['image']; ?>" />
-				</div>
-				<div class="reward-info">
-				<span class="reward-name">
-					<?php echo $challenge_reward['name']; ?>
-				</span>
-				<span class="reward-value">
-					(<?php echo $challenge_reward['value']; ?>)
-				</span>
-				<div class="reward-description">
-					<?php echo $challenge_reward['description']; ?>
-				</div>
-				</div>
-				<!-- <div class="reward-status">
-				<?php echo $challenge_reward['status']; ?>
-				</div> -->
-			</div>
+			<?php if($challenge_rewards) : ?>
+				<?php if(count($challenge_rewards) === 1) : ?>
+					<p> You got this reward : </p>
+				<?php else : ?>
+					<p>You got these rewards :</p>
+				<?php endif; ?>
+				<?php foreach($challenge_rewards as $challenge_reward) : ?>
+					<div class="reward-container alert alert-success">
+						<div class="reward-image">
+						<img src="<?php echo $challenge_reward['image']; ?>" />
+						</div>
+						<div class="reward-info">
+						<span class="reward-name">
+							<?php echo $challenge_reward['name']; ?>
+						</span>
+						<span class="reward-value">
+							(<?php echo $challenge_reward['value']; ?>)
+						</span>
+						<div class="reward-description">
+							<?php echo $challenge_reward['description']; ?>
+						</div>
+						</div>
+						<!-- <div class="reward-status">
+						<?php echo $challenge_reward['status']; ?>
+						</div> -->
+					</div>
+				<?php endforeach; ?>
 			<?php else : ?>
 				<p> This challenge has no reward </p>
 			<?php endif; ?>
@@ -270,6 +276,6 @@
 
 <script type="text/template" id="challengers-item-template">
   <span>
-    <img src="<%= user_image %>" alt="" /> <%= user_first_name %> 
+    <img src="<%= user_image %>" alt="" /> <%= user_first_name %>
   </span>
 </script>

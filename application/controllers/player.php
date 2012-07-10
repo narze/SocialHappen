@@ -137,10 +137,10 @@ class Player extends CI_Controller {
     $this->load->library('challenge_lib');
     if((!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) || !$challenge['active']) {
       return $this->socialhappen->error_page(
-      'Challenge not found.', 
+      'Challenge not found.',
       '<p>
         <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
-          Back 
+          Back
         </a>
       </p>');
     } else {
@@ -192,11 +192,13 @@ class Player extends CI_Controller {
         $challenge_done = FALSE;
         $challenge_progress = FALSE;
       }
-      
+
       //Challenge reward
-      $challenge_reward = NULL;
+      $challenge_rewards = array();
       $this->load->model('reward_item_model');
-      $challenge_reward = $this->reward_item_model->get_one(array('_id' => new MongoId($challenge['reward_item_id'])));
+      foreach($challenge['reward_item_ids'] as $reward_item_id) {
+        $challenge_rewards[] = $this->reward_item_model->get_one(array('_id' => new MongoId($reward_item_id)));
+      }
 
       //Challenge score
       $this->load->library('audit_lib');
@@ -251,7 +253,7 @@ class Player extends CI_Controller {
           'challenge_done' => $challenge_done,
           'challenge_progress' => $challenge_progress,
           'redeem_pending' => isset($user['challenge_redeeming']) && in_array($challenge_id, $user['challenge_redeeming']),
-          'challenge_reward' => $challenge_reward,
+          'challenge_rewards' => $challenge_rewards,
           'challenge_score' => $challenge_score,
           'company_score' => $company_score,
           'challengers' => $challengers,
@@ -323,14 +325,14 @@ class Player extends CI_Controller {
     $this->load->library('form_validation');
     $this->load->helper('date');
 
-    $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');     
-    $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');     
+    $this->form_validation->set_rules('first_name', 'First name', 'required|trim|xss_clean|max_length[255]');
+    $this->form_validation->set_rules('last_name', 'Last name', 'required|trim|xss_clean|max_length[255]');
     $this->form_validation->set_rules('about', 'About', 'trim|xss_clean');
     $this->form_validation->set_rules('use_facebook_picture', 'Use facebook picture', '');
     $this->form_validation->set_rules('timezones', 'Timezone', 'trim|xss|clean');
-      
+
     $this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-  
+
     $timezones = timezones();
     $user['user_timezone'] = array_search($user['user_timezone_offset'] / 60, $timezones);
 
@@ -345,7 +347,7 @@ class Player extends CI_Controller {
       } else if (!$user_image = $this->socialhappen->replace_image('user_image', $user['user_image'])){
         $user_image = $user['user_image'];
       }
-    
+
       $minute_offset = $timezones[set_value('timezones')] * 60;
 
       $user_update_data = array(
@@ -467,10 +469,10 @@ class Player extends CI_Controller {
     $this->load->library('challenge_lib');
     if(!$challenge = $this->challenge_lib->get_by_hash($challenge_hash)) {
       return $this->socialhappen->error_page(
-      'Challenge not found.', 
+      'Challenge not found.',
       '<p>
         <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
-          Back 
+          Back
         </a>
       </p>');
     }
@@ -488,7 +490,7 @@ class Player extends CI_Controller {
       return redirect($next);
     }
 
-    redirect('player/challenge/'.$challenge_hash);   
+    redirect('player/challenge/'.$challenge_hash);
   }
 
   /**
@@ -559,20 +561,20 @@ class Player extends CI_Controller {
     $this->load->model('challenge_model');
     if(!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
       return $this->socialhappen->error_page(
-      'Challenge not found.', 
+      'Challenge not found.',
       '<p>
         <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
-          Back 
+          Back
         </a>
       </p>');
     }
 
     if(!isset($challenge['criteria'][$action])) {
       return $this->socialhappen->error_page(
-      'Action invalid.', 
+      'Action invalid.',
       '<p>
         <a href="'.base_url('player/challenge/'.$challenge_hash).'" class="btn btn-primary btn-large">
-          Back 
+          Back
         </a>
       </p>');
     }
@@ -584,7 +586,7 @@ class Player extends CI_Controller {
     } else { //TODO if not, redirect to app?
       echo 'this is not platform\'s action';
     }
-   
+
   }
 
   /**
@@ -595,24 +597,24 @@ class Player extends CI_Controller {
     $this->load->model('challenge_model');
     if(!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) {
       return $this->socialhappen->error_page(
-      'Challenge not found.', 
+      'Challenge not found.',
       '<p>
         <a href="'.base_url('assets/world').'" class="btn btn-primary btn-large">
-          Back 
+          Back
         </a>
       </p>');
     }
 
     if(!isset($challenge['criteria'][$action])) {
       return $this->socialhappen->error_page(
-      'Action invalid.', 
+      'Action invalid.',
       '<p>
         <a href="'.base_url('player/challenge/'.$challenge_hash).'" class="btn btn-primary btn-large">
-          Back 
+          Back
         </a>
       </p>');
     }
-    
+
     if($challenge['criteria'][$action]['is_platform_action']) { //If platform's action : handle it by using library
       $this->load->library('action_data_lib');
       // $action_url = $this->action_data_lib->get_action_url($challenge['criteria'][$action]['action_data_id']);
