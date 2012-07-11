@@ -1,21 +1,28 @@
 <div class="coupon well">
-  <div class="coupon-hash">
-    Coupon ID : <%= hash %>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span10">
+        <div class="coupon-hash">
+          <a class="coupon-view"><%= hash %></a>
+        </div>
+        <div class="coupon-user">
+          User : <%= user.user_first_name + ' ' + user.user_last_name %>
+        </div>
+        <div class="coupon-timestamp">
+          Date : <%= new Date(timestamp * 1000).toString() %>
+        </div>
+      </div>
+      <div class="span2">
+        <% if (confirmed) { %>
+          <span>
+            <button disabled="disabled" class="btn btn-disabled">Approved</button>
+          </span>
+        <% } else { %>
+          <span>
+            <button class="coupon-view btn btn-primary">View</button>
+          </span>
+        <% } %>
+      </div>
+    </div>
   </div>
-  <div class="coupon-user">
-    Coupon Owner : <%= user.user_first_name + ' ' + user.user_last_name %>
-  </div>
-  <div class="coupon-timestamp">
-    Date : <%= new Date(timestamp * 1000).toString() %>
-  </div>
-  <div class="coupon-status">
-    Coupon Status : <%= confirmed ? 'Approved' : 'Pending' %>
-  </div>
-  <% if (confirmed) { %>
-    Approved Date : <%= new Date(confirmed_timestamp * 1000).toString() %>
-  <% } else { %>
-    <span>
-      <button class="coupon-approve btn btn-primary">Approve</button>
-    </span>
-  <% } %>
 </div>

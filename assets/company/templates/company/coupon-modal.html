@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <button class="close" data-dismiss="modal">
+    ×
+  </button>
+  <div>
+    <h3>Coupon : <%= hash %></h3>
+  </div>
+</div>
+<div class="modal-body">
+  <div class="control-group">
+    <h6 class="reward-name">Name:</h6>
+  </div>
+  <div class="reward-name"><%= reward.name %></div>
+
+  <div class="control-group">
+    <h6 class="reward-image">Image:</h6>
+  </div>
+
+  <img class="reward-image" src="<%= reward.image %>" />
+
+  <div class="control-group">
+    <div class="reward-description">
+      <h6>Description:</h6>
+      <p>
+        <%- reward.description %>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="pull-right">
+    <% if(confirmed) { %>
+      <button disabled="disabled" class="btn btn-disabled">Approved</button>
+    <% } else { %>
+      <button class="coupon-approve btn btn-primary" data-dismiss="modal">Approve</button>
+    <% } %>
+    <a class="btn" data-dismiss="modal">Close</a>
+  </div>
+</div>

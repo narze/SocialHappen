@@ -2,14 +2,16 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/coupon-item.html'
-], function($, _, Backbone, couponItemTemplate){
+  'text!templates/company/coupon-item.html',
+  'text!templates/company/coupon-modal.html'
+], function($, _, Backbone, couponItemTemplate, couponModalTemplate){
   var CouponItemView = Backbone.View.extend({
     tagName: 'div',
     className: 'item',
     couponItemTemplate: _.template(couponItemTemplate),
+    couponModalTemplate: _.template(couponModalTemplate),
     events: {
-      'click button.coupon-approve': 'approveCoupon'
+      'click .coupon-view ': 'viewCouponModal'
     },
     initialize: function(){
       _.bindAll(this);
@@ -21,6 +23,26 @@ define([
       data.baseUrl = window.Company.BASE_URL;
       $(this.el).html(this.couponItemTemplate(data));
       return this;
+    },
+    viewCouponModal: function(e) {
+      e.preventDefault();
+      var data = this.model.toJSON(),
+        self = this;
+
+      //View reward
+      $.ajax({
+        type: 'GET',
+        url: window.Company.BASE_URL + 'apiv3/reward_item/' + self.model.get('reward_item_id'),
+        dataType: 'json',
+        success: function(res) {
+          if(res.success) {
+            data.reward = res.data;
+          }
+          $('#coupon-modal').html(self.couponModalTemplate(data)).modal('show');
+
+          $('#coupon-modal .coupon-approve').unbind('click').bind('click', self.approveCoupon);
+        }
+      })
     },
     approveCoupon: function(e){
       e.preventDefault();

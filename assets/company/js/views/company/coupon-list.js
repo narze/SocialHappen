@@ -8,36 +8,37 @@ define([
 ], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView){
   var CouponListPane = Backbone.View.extend({
     couponListTemplate: _.template(couponListTemplate),
-    
+
     events: {
       'click button.load-more' : 'loadMore',
       'click a.coupon-filter-all': 'loadAll',
       'click a.coupon-filter-confirmed': 'loadConfirmed',
-      'click a.coupon-filter-not-confirmed': 'loadNotConfirmed'
+      'click a.coupon-filter-not-confirmed': 'loadNotConfirmed',
+      'keyup .coupon-search-text': 'searchCoupon'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
       this.collection.bind('reset', this.addAll);
       this.collection.bind('add', this.addOne);
     },
-    
+
     render: function () {
       $(this.el).html(this.couponListTemplate({
       }));
-      
+
       this.addAll();
-      
+
       if(this.collection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
-      
+
       return this;
     },
-    
+
     addOne: function(model){
       // console.log('add one coupon:', model.toJSON());
-      
+
       var coupon = new CouponItemView({
         model: model,
         vent: this.options.vent
@@ -46,7 +47,7 @@ define([
       var el = coupon.render().$el;
       $('.coupon-list', this.el).append(el);
     },
-    
+
     addAll: function(){
       $('.coupon-list', this.el).html('');
       this.collection.each(function(model){
@@ -55,7 +56,7 @@ define([
     },
 
     loadMore: function(){
-      
+
       var button = $('button.load-more', this.el).addClass('disabled');
       this.collection.loadMore(function(loaded){
         if(loaded > 0){
@@ -63,7 +64,7 @@ define([
         }else{
           button.addClass('hide');
         }
-        
+
       });
     },
 
@@ -77,6 +78,10 @@ define([
 
     loadNotConfirmed: function() {
       this.collection.loadNotConfirmed();
+    },
+
+    searchCoupon: function() {
+      console.log($('input.coupon-search-text', this.el).val());
     }
 
   });

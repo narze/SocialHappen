@@ -17,9 +17,9 @@
 <body>
   <div id="fb-root"></div>
   <script>
-  
+
     var fbData = {};
-    
+
     window.fbAsyncInit = function() {
       FB.init({
         appId      : window.Company.APP_ID, // App ID
@@ -28,13 +28,13 @@
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
       });
-      
+
       fbData.fbEnsureInit = true;
-  
+
       FB.getLoginStatus(function(response) {
-        
+
         console.log('got login status:', response);
-        
+
         if (response.status === 'connected') {
           // bindFBLogin();
           fbData.fbConnected = true;
@@ -42,7 +42,7 @@
           // var uid = response.authResponse.userID;
           // var accessToken = response.authResponse.accessToken;
         // } else if (response.status === 'not_authorized') {
-        //   // the user is logged in to Facebook, 
+        //   // the user is logged in to Facebook,
         //   // but has not authenticated your app
         //   bindFBLogin();
         //   fbData.fbConnected = false;
@@ -52,7 +52,7 @@
           fbData.fbConnected = false;
         }
       });
-  
+
       FB.Event.subscribe('auth.statusChange', function(response) {
         if(response.status === 'connected') {
           fbData.fbConnected = true;
@@ -61,9 +61,9 @@
           // bindFBLogin();
           fbData.fbConnected = false;
         }
-      });    
+      });
     };
-  
+
     // Load the SDK Asynchronously
     (function(d){
        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -80,6 +80,7 @@
   <div class="modal hide" id="add-challenge-modal"></div>
   <div class="modal hide" id="edit-reward-modal"></div>
   <div class="modal hide" id="add-reward-modal"></div>
+  <div class="modal hide" id="coupon-modal"></div>
   <div class="modal-super modal hide" id="add-action-modal"></div>
   <div class="modal-super modal hide" id="recipe-modal"></div>
   <div class="modal-super modal hide" id="action-modal"></div>
