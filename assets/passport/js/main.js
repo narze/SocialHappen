@@ -8,6 +8,7 @@ require.config({
     backbone: '../../libs/backbone/backbone-min', // https://github.com/amdjs
     bootstrap: '../../libs/bootstrap/bootstrap.min',
     timeago: '../../libs/jquery.timeago/jquery.timeago',
+    masonry: '../../libs/masonry/jquery.masonry.min',
     // Require.js plugins
     text: '../../libs/require/text',
     order: '../../libs/require/order',

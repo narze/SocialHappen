@@ -4,8 +4,9 @@ define([
   'backbone',
   'models/coupon',
   'text!templates/profile/coupon-list.html',
-  'views/profile/coupon-item'
-], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView){
+  'views/profile/coupon-item',
+  'masonry'
+], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView, masonry){
   var CouponListPane = Backbone.View.extend({
     couponListTemplate: _.template(couponListTemplate),
     
@@ -17,11 +18,21 @@ define([
       _.bindAll(this);
       this.collection.bind('reset', this.addAll);
       this.collection.bind('add', this.addOne);
+      // this.options.vent.bind('reloadMasonry', this.reloadMasonry);
     },
     
     render: function () {
       $(this.el).html(this.couponListTemplate({
       }));
+
+      $('.coupon-list', this.el).masonry({
+        // options
+        itemSelector : '.item',
+        animationOptions: {
+          duration: 400
+        },
+        isFitWidth: true
+      });
       
       this.addAll();
       
@@ -46,6 +57,10 @@ define([
       this.collection.each(function(model){
         this.addOne(model);
       }, this);
+    },
+
+    reloadMasonry: function(){
+      $('.coupon-list', this.el).masonry('reload');
     },
 
     loadMore: function(){
