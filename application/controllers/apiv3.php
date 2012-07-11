@@ -14,10 +14,10 @@ class Apiv3 extends CI_Controller {
   function index(){
     echo json_encode(array('status' => 'OK'));
   }
-  
+
   /**
    * get platform user
-   * 
+   *
    * @param user_id [required]
    */
   function user($user_id = NULL){
@@ -25,32 +25,32 @@ class Apiv3 extends CI_Controller {
      * post
      */
     $logged_in = $this->socialhappen->is_logged_in();
-    
+
     if (!$user_id && $logged_in){ // see current user's
       $user = $this->socialhappen->get_user();
-      
+
     }else if($user_id){ // see specific user
       $this->load->model('user_model');
       $user = $this->user_model->get_user_profile_by_user_id($user_id);
     }
-    
+
     if(isset($user)){
       $user_id = $user['user_id'];
-      
+
       $this->load->model('achievement_stat_model');
       $user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
-      $user_score = issetor($user_stat['score'], 0); 
-      
+      $user_score = issetor($user_stat['score'], 0);
+
       $this->load->model('user_companies_model');
       $company = $this->user_companies_model->get_user_companies_by_user_id($user_id, 0, 0);
       $user['user_score'] = $user_score;
-      
+
       if($company){
         $user['companies'] = $company;
       }else{
         $user['companies'] = array();
       }
-      
+
       echo json_encode($user);
     }else{
       echo '{}';
@@ -59,7 +59,7 @@ class Apiv3 extends CI_Controller {
 
   function company($company_id = NULL){
 
-    
+
     if(!$user = $this->socialhappen->get_user()) {
       echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
       return;
@@ -92,7 +92,7 @@ class Apiv3 extends CI_Controller {
 
   /**
    * get user and play data (moved from player->static_get_user_data)
-   * 
+   *
    * @param user_id [required]
    */
   function user_play_data(){
@@ -104,24 +104,24 @@ class Apiv3 extends CI_Controller {
 
       $user_id = $user['user_id'];
       $audits = $this->audit_lib->list_audit(array('user_id' => $user_id, 'action_id' => 103, 'app_id' => array('$gt' => 10000)));
-      
+
       $unique_app_ids  = array();
       $played_apps = array();
       foreach($audits as $audit){
         if(!in_array($audit['app_id'], $unique_app_ids)){
           $unique_app_ids[] = $audit['app_id'];
-          $played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);           
+          $played_apps[] = $this->app_model->get_app_by_app_id($audit['app_id']);
         }
       }
 
       $user_stat = $this->achievement_stat_model->get($app_id = 0, $user_id);
-      $user_score = issetor($user_stat['score'], 0); 
+      $user_score = issetor($user_stat['score'], 0);
     }
     $available_apps = $this->app_model->get_apps_by_app_id_range(10001);
     $result = compact('user', 'available_apps', 'played_apps', 'user_score');
     echo json_encode($result);
   }
-  
+
   /**
    * list activity of user
    */
@@ -139,7 +139,7 @@ class Apiv3 extends CI_Controller {
    * list activity of challenge or actions in a challenge
    * @param $challenge_hashes comma-separated values
    * Challenge hash -> objecti
-   * 
+   *
    */
   function challenge_activity(){
 
@@ -155,7 +155,7 @@ class Apiv3 extends CI_Controller {
 
       foreach($challenge_hash_array as $challenge_hash){
         $challenge_activity =  $this->audit_lib->list_audit(array('objecti' => trim($challenge_hash)));
-        
+
         $activity_search_result = array_merge($activity_search_result, $challenge_activity);
       }
 
@@ -165,15 +165,13 @@ class Apiv3 extends CI_Controller {
 
       $activity_result = $activity_search_result;
     }
-        
+
     echo json_encode($activity_result);
   }
-  
 
   static function _timestamp_cmp($a, $b){
     return strcmp($a["timestamp"], $b["timestamp"]);
   }
-
 
   /**
    * list achievement of user
@@ -204,64 +202,64 @@ class Apiv3 extends CI_Controller {
     }
     echo json_encode($notifications);
   }
-  
+
   /**
    * list challenge
    */
   function challenges(){
-    
-    $active = $this->input->get('active', TRUE); 
-    
-    $last_hash = $this->input->get('last_id', TRUE); 
-    
-    $company_id = $this->input->get('company_id', TRUE); 
-    
+
+    $active = $this->input->get('active', TRUE);
+
+    $last_hash = $this->input->get('last_id', TRUE);
+
+    $company_id = $this->input->get('company_id', TRUE);
+
     $this->load->library('challenge_lib');
     $this->load->library('action_data_lib');
     $limit = 30;
-    
+
     if($last_hash){
       $challenge = $this->challenge_lib->get_one(array('hash' => $last_hash));
       if($challenge){
-        
+
         $query = array(
           '_id' => array('$lt' => new MongoId($challenge['_id']['$id']))
         );
-        
+
         if($company_id){
           $query['company_id'] = (int)$company_id;
         }
-        
+
         if($active){
           $query['active'] = true;
         }
-        
+
         $challenges = $this->challenge_lib->get($query, $limit);
       }else{
         $challenges = array();
       }
     }else{
       $query = array();
-      
+
       if($company_id){
         $query['company_id'] = (int)$company_id;
       }
-      
+
       if($active){
         $query['active'] = true;
       }
-      
+
       $challenges = $this->challenge_lib->get($query, $limit);
     }
-    
-    function convert_id($item){
-      // $item['_id'] = '' . $item['_id'];
-      unset($item['_id']);
-      // unset($item['criteria']);
-      return $item;
-    }
-    
-    $challenges = array_map("convert_id", $challenges);
+
+    // function convert_id($item){
+    //   // $item['_id'] = '' . $item['_id'];
+    //   unset($item['_id']);
+    //   // unset($item['criteria']);
+    //   return $item;
+    // }
+
+    // $challenges = array_map("convert_id", $challenges);
     echo json_encode($challenges);
   }
 
@@ -289,7 +287,7 @@ class Apiv3 extends CI_Controller {
     }
 
     $challenge = $this->input->post('model', TRUE);
-    
+
     if(!isset($challenge) || $challenge == ''){
       $result = array('success' => FALSE, 'data' => 'no challenge data');
     }else{
@@ -299,11 +297,11 @@ class Apiv3 extends CI_Controller {
 
       $challenge = json_decode($challenge, TRUE);
       $company_id = $challenge['company_id'];
-      
+
       if(!is_array($challenge)){
         echo json_encode(array('success' => FALSE, 'data' =>'data error'));
         return FALSE;
-      }   
+      }
 
       //add/update action_data
       foreach($challenge['criteria'] as &$action_data_object){
@@ -338,7 +336,7 @@ class Apiv3 extends CI_Controller {
               $qr_action_url = $this->action_data_lib->get_action_url($action_data_id);
 
               try{
-                $bitly_response = $this->bitly_lib->bitly_v3_shorten($qr_action_url);  
+                $bitly_response = $this->bitly_lib->bitly_v3_shorten($qr_action_url);
                 $short_qr_action_url = $bitly_response['url'];
               }catch(Exception $ex){
                 $short_qr_action_url = '';
@@ -360,7 +358,7 @@ class Apiv3 extends CI_Controller {
         }
       }
 
-      //create 
+      //create
       $challenge_create_flag = true;
       $challenge_update = null;
       $challenge_create = null;
@@ -422,7 +420,7 @@ class Apiv3 extends CI_Controller {
           $challenge_url = base_url().'player/challenge/'.$challenge_hash;
 
           try{
-            $bitly_response = $this->bitly_lib->bitly_v3_shorten($challenge_url);  
+            $bitly_response = $this->bitly_lib->bitly_v3_shorten($challenge_url);
             $short_challenge_url = $bitly_response['url'];
           }catch(Exception $ex){
             $short_challenge_url = '';
@@ -431,11 +429,11 @@ class Apiv3 extends CI_Controller {
           //add ".qrcode?s=<size>" follows the bitly's short_url for qr
           $update_challenge_data = array();
           $update_challenge_data['short_url'] = $short_challenge_url;
-          
+
           $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $update_challenge_data);
-          
+
         }
-            
+
 
       }
 
@@ -459,8 +457,8 @@ class Apiv3 extends CI_Controller {
       return;
     }
 
-    $reward = $this->input->post('model', TRUE); 
-    
+    $reward = $this->input->post('model', TRUE);
+
     if(!isset($reward) || $reward == ''){
       echo json_encode(array('success' => FALSE, 'data' => 'no reward data'));
       return;
@@ -468,7 +466,7 @@ class Apiv3 extends CI_Controller {
 
     $this->load->model('reward_item_model');
     $reward = json_decode($reward, TRUE);
-    
+
     if(!is_array($reward)){
       echo json_encode(array('success' => FALSE, 'data' =>'data error'));
       return FALSE;
@@ -490,7 +488,7 @@ class Apiv3 extends CI_Controller {
     }
 
     echo json_encode(array('success' => TRUE, 'data' => $reward));
-    
+
   }
 
   /**
@@ -567,14 +565,14 @@ class Apiv3 extends CI_Controller {
 
     echo json_encode($this->company_model->get_all());
   }
-  
+
   function rewards(){
-    
+
     if(!$company_id = $this->input->get('company_id')) {
       echo json_encode(array('success' => FALSE, 'data' => 'No company_id'));
       return;
     }
-    
+
     $this->load->model('reward_item_model');
     $rewards = $this->reward_item_model->get(array('company_id' => (int)$company_id));
     $rewards = array_map(function($reward) {
@@ -583,7 +581,7 @@ class Apiv3 extends CI_Controller {
     }, $rewards);
     echo json_encode($rewards);
   }
-  
+
   /**
    * list only published rewards
    */
@@ -592,20 +590,20 @@ class Apiv3 extends CI_Controller {
       echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
       return;
     }
-    
+
     if(!$company_id = $this->input->get('company_id')) {
       echo json_encode(array('success' => FALSE, 'data' => 'No company_id'));
       return;
     }
-    
+
     $this->load->model('reward_item_model');
-    
+
     $rewards = $this->reward_item_model->get(array(
-      'status'=>'published', 
-      'type' => 'redeem', 
+      'status'=>'published',
+      'type' => 'redeem',
       'company_id' => (int)$company_id
     ));
-    
+
     $rewards = array_map(function($reward) {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;
@@ -639,7 +637,7 @@ class Apiv3 extends CI_Controller {
     }
 
     $this->load->library('coupon_lib');
-    
+
     $result = array();
 
     if(isset($company_id) && $company_id){
@@ -744,7 +742,7 @@ class Apiv3 extends CI_Controller {
       }else{
         $result_action = $action_list[$app_id.'_'.$action_id];
       }
-      
+
       if(isset($result_action['format_string'])){
         $result[$i]['message'] = $this->audit_lib->translate_format_string(
           $result_action['format_string'],

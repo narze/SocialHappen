@@ -23,7 +23,7 @@ class Reward_lib
 	function get_reward_item($reward_item_id){
 		$this->CI->load->model('reward_item_model','reward_item');
 		$reward_item = $this->CI->reward_item->get_by_reward_item_id($reward_item_id);
-		return $this->_add_reward_status($reward_item); 
+		return $this->_add_reward_status($reward_item);
 	}
 
 	function get_reward_items($company_id, $sort_criteria = NULL){
@@ -74,7 +74,7 @@ class Reward_lib
 			'criteria_type' => 'company',
 			'criteria_id' => $company_id,
 			'type' => 'redeem',
-			'start_timestamp' => array('$lte'=>$now), 
+			'start_timestamp' => array('$lte'=>$now),
 			'end_timestamp'=> array('$gte'=>$now)
 		);
 		if(!$sort_criteria) $sort_criteria = array('start_timestamp' => -1);
@@ -136,7 +136,7 @@ class Reward_lib
 			)){
 			return FALSE;
 		}
-		
+
 		$input = array(
 			'type' => 'redeem',
 			'redeem' => array(
@@ -160,7 +160,7 @@ class Reward_lib
 		$this->CI->load->library('audit_lib');
 		$audit_add_result = $this->CI->audit_lib->audit_add(array(
 			'app_id' => 0,
-			'action_id' => 
+			'action_id' =>
 				$this->CI->socialhappen->get_k('audit_action', 'User Redeem Reward'),
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,
@@ -216,10 +216,11 @@ class Reward_lib
 		$this->CI->load->model('reward_item_model');
 		$reward_item = $this->CI->reward_item_model->get_one(array('_id' => new MongoId($reward_item_id)));
 
+		$this->CI->load->library('audit_lib');
 		//Add action
 		if(!$audit_add_result = $this->CI->audit_lib->audit_add(array(
 			'app_id' => 0,
-			'action_id' => 
+			'action_id' =>
 				$this->CI->socialhappen->get_k('audit_action', 'User Redeem Reward'),
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,
@@ -236,7 +237,7 @@ class Reward_lib
 
 		$this->CI->load->model('reward_item_model');
 
-		if(!$reward_item = 
+		if(!$reward_item =
 			$this->CI->reward_item_model->get_by_reward_item_id($reward_item_id)){
 			return array('success' => FALSE, 'data' => 'Reward not found');
 		}
@@ -285,7 +286,7 @@ class Reward_lib
 		$this->CI->load->library('audit_lib');
 		if(!$audit_add_result = $this->CI->audit_lib->audit_add(array(
 			'app_id' => 0,
-			'action_id' => 
+			'action_id' =>
 				$this->CI->socialhappen->get_k('audit_action', 'User Receive Coupon'),
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,

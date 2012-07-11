@@ -3,6 +3,7 @@ define([
   'underscore',
   'backbone',
   'text!templates/company/modal/edit.html',
+  'text!templates/company/modal/coupon-item.html',
   'text!templates/company/modal/activity-item.html',
   'text!templates/company/modal/challengers-item-template.html',
   'text!templates/company/modal/addAction.html',
@@ -12,7 +13,7 @@ define([
   'views/company/modal/action/checkin-action',
   'views/company/modal/reward/reward',
   'jqueryui'
-], function($, _, Backbone, editTemplate, activityItemTemplate, challengersItemTemplate,
+], function($, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate, challengersItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
   QRActionView, CheckinActionView, RewardView, jqueryui){
   var EditModalView = Backbone.View.extend({
@@ -21,6 +22,7 @@ define([
     addActionTemplate: _.template(addActionTemplate),
     addRewardTemplate: _.template(addRewardTemplate),
     activityItemTemplate: _.template(activityItemTemplate),
+    couponItemTemplate: _.template(couponItemTemplate),
 
     events: {
       'click h3.edit-name': 'showEditName',
@@ -39,18 +41,20 @@ define([
       'click button.save-repeat-interval': 'saveRepeat',
       'click div.view-repeat': 'showEditRepeat',
       'click .add-new-action': 'showAddNewActionModal',
-      'click .add-new-reward': 'showAddNewRewardModal'
+      'click .add-new-reward': 'showAddNewRewardModal',
+      'click button.show-coupon': 'showCoupon',
+      'click button.hide-coupon': 'hideCoupon'
     },
 
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.bind('showEditModal', this.showEdit);
+      this.options.vent.bind('showEditModal', this.showEdit)
     },
 
     render: function () {
       console.log('render modal');
 
-      if(!this.model){
+      if(!this.model) {
         return;
       }
 
@@ -111,7 +115,7 @@ define([
             alert('End date must come after start date');
             var endDate = self.model.get('end_date');
             if(endDate){
-              endDate *= 1000;
+              endDate *= 1000
               $('#edit_challenge_end').datetimepicker('setDate', (new Date(endDate)));
             }else{
               $('#edit_challenge_end').datetimepicker('setDate', null);
@@ -670,6 +674,40 @@ define([
           self.addCheckin(e).showEdit();
         } else if(recipe === 'qr') {
           self.addQR(e).showEdit();
+        }
+      });
+    },
+
+    hideCoupon: function(){
+      $('button.show-coupon', this.el).show();
+      $('button.hide-coupon', this.el).hide();
+      $('ul.coupon-list', this.el).hide();
+    },
+
+    showCoupon: function(){
+      console.log('showCoupon');
+      var self = this;
+      $.ajax({
+        dataType: 'json',
+        type: 'GET',
+        // contentType: 'application/json',
+        data: 'challenge_id=' + self.model.get('_id').$id,
+        url: window.Company.BASE_URL + 'apiv3/coupons/',
+        success: function(result) {
+          console.log(result);
+          if(_.isArray(result)){
+            if(result.length > 0){
+              $('ul.coupon-list').html('');
+              _.each(result, function(coupon){
+                 $('ul.coupon-list').append(self.couponItemTemplate(coupon));
+              });
+            }else{
+              $('ul.coupon-list').html('No coupons');
+            }
+            $('ul.coupon-list', this.el).show();
+            $('button.show-coupon', this.el).hide();
+            $('button.hide-coupon', this.el).show();
+          }
         }
       });
     }
