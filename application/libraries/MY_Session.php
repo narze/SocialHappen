@@ -5,9 +5,9 @@
  * @author Manassarn M.
  */
 class MY_Session extends CI_Session {
-	
+
 	private $test_database_group = 'local_unit_test';
-	
+
 	/**
 	 * Update $user_id
 	 * @author Manassarn M.
@@ -18,7 +18,7 @@ class MY_Session extends CI_Session {
 			$this->CI->db->update($this->sess_table_name, array('user_id' => $this->userdata['user_id']));
 		}
 	}
-	
+
 	/**
 	 * Write the session data, then update $user_id
 	 * @author Manassarn M.
@@ -27,7 +27,7 @@ class MY_Session extends CI_Session {
 		parent::sess_write();
 		$this->update_user_id();
 	}
-	
+
 	/**
 	 * Create a new session, then update $user_id
 	 * @author Manassarn M.
@@ -39,14 +39,17 @@ class MY_Session extends CI_Session {
 		parent::sess_create();
 		$this->update_user_id();
 	}
-	
+
 	/**
 	 * Update an existing session, then update $user_id
 	 * @author Manassarn M.
 	 */
 	function sess_update(){
-		parent::sess_update();
-		$this->update_user_id();
+		//Don't update session if is ajax request : see http://stackoverflow.com/questions/3381786/problem-with-session-in-codeigniter
+		if(!$this->CI->input->is_ajax_request()) {
+			parent::sess_update();
+			$this->update_user_id();
+		}
 	}
 
 	function sess_read(){
