@@ -6,7 +6,7 @@
     <h3 class="edit-name"><%= name %></h3>
   </div>
 </div>
-<div class="modal-body">  
+<div class="modal-body">
   <div class="control-group">
     <h6 class="edit-image">Image:</h6>
   </div>
@@ -28,5 +28,6 @@
 
 </div>
 <div class="modal-footer">
-  <a href="#" class="btn" data-dismiss="modal">Close</a>
+  <a target="_popup" href="<%= window.Passport.BASE_URL + 'assets/passport/#/profile/' + window.Passport.userId + '/coupons/' + couponId %>" class="coupon-print btn btn-primary">Print</a>
+  <a class="btn" data-dismiss="modal">Close</a>
 </div>

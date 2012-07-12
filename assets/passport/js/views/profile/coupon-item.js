@@ -35,6 +35,7 @@ define([
         success: function(res) {
           var data = res.data;
           data.coupon = self.model.toJSON();
+          data.couponId = self.model.id;
           $('#reward-item').html(self.rewardItemTemplate(data)).modal();
         }
       });

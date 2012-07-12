@@ -8,18 +8,18 @@ define([
     model: couponModel,
     filter: null,
     last_id: null,
-    
+
     initialize: function(){
       _.bindAll(this);
     },
-    
+
     loadMore: function(callback){
       if(this.models.length == 0){
         this.last_id = null;
       }else{
         this.last_id = this.last().id;
       }
-      
+
       this.fetch({
         add: true,
         success: function(collection, resp){
@@ -27,7 +27,7 @@ define([
         }
       });
     },
-    
+
     sync: function(method, model, options) {
       var methodMap = {
 
@@ -44,14 +44,14 @@ define([
 
       // Default JSON-request options.
       var params = {type: type, dataType: 'json'};
-      
-      
-      
+
+
+
       // Ensure that we have a URL.
       if (!options.url) {
         var query = {};
         if(window.Passport.userId) {
-          query.company_id = window.Passport.userId;
+          query.user_id = window.Passport.userId;
         }
         if(this.last_id) {
           query.last_id = this.last_id;
@@ -64,7 +64,7 @@ define([
           var str = [];
           for(var p in obj) {
             var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
-            str.push(typeof v == "object" ? 
+            str.push(typeof v == "object" ?
               serialize(v, k) :
               encodeURIComponent(k) + "=" + encodeURIComponent(v));
           }

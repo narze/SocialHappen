@@ -17,6 +17,7 @@ define([
       _.bindAll(this);
       this.model.bind('change', this.render);
       this.model.bind('destroy', this.remove);
+      this.model.bind('view', this.viewCouponModal);
     },
     render: function () {
       var data = this.model.toJSON();
@@ -25,7 +26,7 @@ define([
       return this;
     },
     viewCouponModal: function(e) {
-      e.preventDefault();
+      if(e) { e.preventDefault(); }
       var data = this.model.toJSON(),
         self = this;
 
