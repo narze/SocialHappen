@@ -24,7 +24,7 @@ Class Coupon_lib{
 	      if($result['updatedExisting']) {
 	        return $id;
 	      }
-	    } 
+	    }
 	    return FALSE;
 	}
 
@@ -58,7 +58,7 @@ Class Coupon_lib{
 		if(array_key_exists('coupon_hash', $data)){
 			$coupon = $this->CI->coupon_model->get(array('hash' => $data['coupon_hash']));
 		}else if(array_key_exists('coupon_id', $data)){
-				
+
 			$coupon = $this->CI->coupon_model->get(array('_id' => new MongoId($data['coupon_id'])));
 
 		}
@@ -74,48 +74,27 @@ Class Coupon_lib{
 
 	function list_user_challenge_coupon($user_id, $challenge_id){
 		if((isset($user_id) && $user_id != '') &&
-			(isset($challenge_id) && $challenge_id != '') 
+			(isset($challenge_id) && $challenge_id != '')
 		){
-			
+
 		if($coupon_list = $this->CI->coupon_model->get_by_user_and_challenge($user_id, $challenge_id))
 			return $coupon_list;
 		}
-	
+
 		return FALSE;
-		
+
 	}
 
-	function list_user_coupon($user_id){
-		if((isset($user_id) && $user_id != '') ){
-			
-		if($coupon_list = $this->CI->coupon_model->get_by_user($user_id))
-			return $coupon_list;
-		}
-	
-		return FALSE;
-		
+	function list_user_coupon($user_id = NULL){
+		return $this->CI->coupon_model->get_by_user($user_id);
 	}
 
-	function list_challenge_coupon($challenge_id){
-		if((isset($challenge_id) && $challenge_id != '') ){
-			
-		if($coupon_list = $this->CI->coupon_model->get_by_challenge($challenge_id))
-			return $coupon_list;
-		}
-	
-		return FALSE;
-		
+	function list_challenge_coupon($challenge_id = NULL){
+		return $this->CI->coupon_model->get_by_challenge($challenge_id);
 	}
 
-	function list_company_coupon($company_id){
-		if(isset($company_id) ){
-			
-			if($coupon_list = $this->CI->coupon_model->get_by_company($company_id))
-				return $coupon_list;
-		}
-	
-		return FALSE;
-		
+	function list_company_coupon($company_id = NULL){
+		return $this->CI->coupon_model->get_by_company($company_id);
 	}
 
 }
