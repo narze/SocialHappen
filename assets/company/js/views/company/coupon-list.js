@@ -17,6 +17,8 @@ define([
       'keyup .coupon-search-text': 'searchCoupon'
     },
 
+    couponListTemp: [],
+
     initialize: function(){
       _.bindAll(this);
       this.collection.bind('reset', this.addAll);
@@ -28,6 +30,7 @@ define([
       }));
 
       this.addAll();
+      this.couponListTemp = this.collection.models;
 
       if(this.collection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
@@ -81,7 +84,21 @@ define([
     },
 
     searchCoupon: function() {
-      console.log($('input.coupon-search-text', this.el).val());
+      this.collection.reset(this.couponListTemp);
+      var search_text = $('input.coupon-search-text', this.el).val();
+      var search_results = this.collection.select(function(coupon) {
+        coupon.user = coupon.get('user');
+        var search_fields = [coupon.id, coupon.user.user_first_name, coupon.user.user_last_name, coupon.user.user_email, coupon.user.user_phone];
+        for(var i in search_fields) {
+          var field = search_fields[i];
+          if(field.search(new RegExp(search_text, 'i')) !== -1) {
+            return true;
+          }
+        }
+        return false;
+      });
+      this.collection.reset(search_results);
+      this.addAll();
     }
 
   });
