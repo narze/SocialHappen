@@ -241,7 +241,7 @@ class Reward_lib
 		return TRUE;
 	}
 
-	function purchase_coupon($user_id = NULl, $reward_item_id, $company_id) {
+	function purchase_coupon($user_id = NULL, $reward_item_id, $company_id) {
 		if(!$user_id || !$reward_item_id || !$company_id) { return FALSE; }
 
 		$this->CI->load->model('reward_item_model');
@@ -257,7 +257,16 @@ class Reward_lib
 			return array('success' => FALSE, 'data' => 'Reward used up');
 		}
 
-		//@TODO - Check if redeemable once
+		//Check if redeemable once and redeemed already
+		if($reward_item['redeem']['once']) {
+			$this->CI->load->model('user_mongo_model');
+			if(!$user = $this->CI->user_mongo_model->get_user($user_id)) {
+				return array('success' => FALSE, 'data' => 'User invalid');
+			}
+			if(isset($user['reward_items']) && in_array($reward_item_id, $user['reward_items'])) {
+				return array('success' => FALSE, 'data' => 'Already redeemed');
+			}
+		}
 
 		//Check if company point is sufficient
 		$this->CI->load->library('achievement_lib');
