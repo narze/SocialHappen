@@ -260,9 +260,6 @@ class Reward_lib
 		//Check if redeemable once and redeemed already
 		if($reward_item['redeem']['once']) {
 			$this->CI->load->model('user_mongo_model');
-			if(!$user = $this->CI->user_mongo_model->get_user($user_id)) {
-				return array('success' => FALSE, 'data' => 'User invalid');
-			}
 			if(isset($user['reward_items']) && in_array($reward_item_id, $user['reward_items'])) {
 				return array('success' => FALSE, 'data' => 'Already redeemed');
 			}
@@ -297,6 +294,20 @@ class Reward_lib
 			'company_id' => $company_id,
 		))) {
 			return array('success' => FALSE, 'data' => 'Cannot create coupon');
+		}
+
+		//Decrement amount_remain
+		$reward_update = array(
+			'type' => 'redeem',
+			'redeem' => array(
+				'point' => $reward_item['redeem']['point'],
+				'amount' => $reward_item['redeem']['amount'],
+				'amount_remain' => $reward_item['redeem']['amount_remain'] - 1,
+				'once' => $reward_item['redeem']['once']
+			)
+		);
+		if(!$this->CI->reward_item_model->update($reward_item_id, $reward_update)) {
+			return array('success' => FALSE, 'data' => 'Failed decrement reward');
 		}
 
 		//Add action

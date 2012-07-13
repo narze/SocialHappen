@@ -16,11 +16,11 @@
       </p>
     </div>
   </div>
-  
+
   <div class="control-group">
     <div class="edit-redeem">
       <p>
-        Quantity: <%= redeem.amount %>
+        Quantity: <%= redeem.amount_remain + '/' + redeem.amount %>
       </p>
       <p>
         Require Point: <%= redeem.point %>
@@ -63,7 +63,7 @@
       </p>
     </div>
   </div>
-  
+
   <div class="control-group">
     <a href="<%= passportCouponPageURL %>">View all coupons</a>
   </div>

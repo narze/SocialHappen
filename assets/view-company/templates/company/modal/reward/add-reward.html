@@ -16,13 +16,13 @@
     <div class="controls">
       <label class="status"></label>
       <select class="reward-status">
-        <option value="draft" <%= status=='draft'?'selected':''%>>Draft</option>
-        <option value="published" <%= status=='published'?'selected':''%>>Published</option>
-        <option value="cancelled" <%= status=='cancelled'?'selected':''%>>Cancelled</option>
+        <option value="draft" <%= status === 'draft' ? 'selected' : ''%>>Draft</option>
+        <option value="published" <%= status === 'published' ? 'selected' : ''%>>Published</option>
+        <option value="cancelled" <%= status === 'cancelled' ? 'selected' : ''%>>Cancelled</option>
       </select>
     </div>
   </div>
-  
+
   <div class="control-group">
     <h6 class="edit-image">Image:</h6>
     <div class="edit-image hide">
@@ -48,12 +48,12 @@
       <button class="btn save-description btn-primary">Save</button>
     </div>
   </div>
-  
+
   <div class="control-group">
     <div class="edit-redeem">
       <h6>Redeem:</h6>
       <p>
-        Quantity: <%= redeem.amount %>
+        Quantity: <%= redeem.amount_remain + '/' + redeem.amount %>
       </p>
       <p>
         Require Point: <%= redeem.point %>
