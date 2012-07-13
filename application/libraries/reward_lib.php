@@ -275,9 +275,8 @@ class Reward_lib
 		}
 
 		//Update the company point of the user
-		$this->CI->load->model('achievement_stat_company_model');
 		$reward_points = - abs($reward_item['redeem']['point']);
-		if(!$increment_result = $this->CI->achievement_stat_company_model->increment($reward_points, $user_id)) {
+		if(!$increment_result = $this->CI->achievement_lib->increment_company_score($company_id, $user_id, $reward_points)) {
 			return array('success' => FALSE, 'data' => 'Score update failed');
 		}
 

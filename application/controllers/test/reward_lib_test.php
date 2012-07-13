@@ -1,9 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 define('Company_id', 1);
 class Reward_lib_test extends CI_Controller {
-	
+
 	var $reward_lib;
-	
+
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
@@ -14,7 +14,7 @@ class Reward_lib_test extends CI_Controller {
 	function __destruct(){
 		$this->unit->report_with_counter();
 	}
-	
+
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
@@ -74,7 +74,6 @@ class Reward_lib_test extends CI_Controller {
 
     //Add company 1 score
     $company_id = 1;
-    $this->load->model('achievement_stat_company_model');
     $this->achievement_lib->increment_company_score($company_id, $user_id, 500);
 	}
 
@@ -118,6 +117,13 @@ class Reward_lib_test extends CI_Controller {
     $this->unit->run($result['data'], 'Insufficient score', "\$result", $result);
   }
 
+  function _check_company_score_test() {
+    $company_id = 1;
+    $user_id = 1;
+    $company_stat = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($company_stat['company_score'], 500-20, "\$company_stat['company_score']", $company_stat['company_score']);
+  }
+
   function redeem_with_coupon_test() {
     $coupon_id = $this->coupon_id;
     $user_id = 1;
@@ -134,7 +140,7 @@ class Reward_lib_test extends CI_Controller {
     $user = $this->user_mongo_model->get_user($user_id);
     $rewards = $user['reward_items'];
     $this->unit->run(in_array($this->reward_item_id, $rewards), TRUE, "in_array($this->reward_item_id, $rewards)", in_array($this->reward_item_id, $rewards));
-    
+
     //Cannot redeem because user don't have coupon
     $user_id = 2;
     $confirm_user_id = 5;

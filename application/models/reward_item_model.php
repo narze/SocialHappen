@@ -27,7 +27,7 @@
  * ]
  */
  class Reward_item_model extends CI_Model {
-	
+
 	/**
 	 * Connect to mongodb
 	 * @author Manassarn M.
@@ -39,24 +39,24 @@
 			'collection' => 'reward_item'
 		));
 	}
-	
-	/** 
+
+	/**
 	 * Drop reward collection
 	 * @author Manassarn M.
 	 */
 	function drop_collection(){
 		return $this->reward_item->drop();
 	}
-	
+
 	/**
 	 * Create index for reward collection
 	 * @author Manassarn M.
 	 */
 	function create_index(){
-		return $this->reward_item->deleteIndexes() 
+		return $this->reward_item->deleteIndexes()
 			&& $this->reward_item->ensureIndex(array('criteria_type'=>1, 'criteria_id'=>1));
 	}
-	
+
 	/**
 	 * Count all reward
 	 * @author Manassarn M.
@@ -64,7 +64,7 @@
 	function count_all(){
 		return $this->reward_item->count();
 	}
-	
+
 	/**
 	 * Get reward item by reward_item_id
 	 * @param $campaign_id
@@ -75,7 +75,7 @@
 		$result = obj2array($result);
 		return $result;
 	}
-	
+
 	/**
 	 * Get reward item
 	 * @param $criteria
@@ -88,11 +88,11 @@
 		$result = $this->reward_item->find($criteria);
 		if(is_array($sort)){
 			$result = $result->sort($sort);
-		} 
+		}
 		$result = cursor2array($result);
 		return $result;
 	}
-	
+
 	/**
 	 * Get one reward item
 	 * @param $criteria
@@ -105,7 +105,7 @@
 		$result = $this->reward_item->findOne($criteria);
 		return $result;
 	}
-	
+
 	/**
 	 * Add reward by campaign_id
 	 * @param $reward_item = array(
@@ -215,7 +215,7 @@
 			$type = $input['type'];
 			$update['$set'][$type] = array();
 			if($type === 'redeem'){
-				if(!isset($input[$type]['point']) || !isset($input[$type]['amount']) 
+				if(!isset($input[$type]['point']) || !isset($input[$type]['amount'])
 					|| !isset($input[$type]['amount_remain']) || !isset($input[$type]['once'])){
 					return FALSE;
 				}
@@ -224,7 +224,7 @@
 				if($input[$type]['amount_remain'] > $input[$type]['amount']){
 					$input[$type]['amount_remain'] =  (int) $input[$type]['amount'];
 				}
-				$update['$set'][$type]['once'] = (int) $input[$type]['once'];
+				$update['$set'][$type]['once'] = !!$input[$type]['once'];
 				$update['$set'][$type]['amount_remain'] = (int) $input[$type]['amount_remain'];
 				$update['$unset'] = array('random' => 1, 'top_score' => 1);
 			} else if ($type === 'random'){
@@ -249,9 +249,6 @@
 			$update['$set']['image'] = $input['image'];
 		}
 		if(isset($input['value'])){
-			if(!$input['value']){
-				return FALSE;
-			}
 			$update['$set']['value'] = (int) $input['value'];
 		}
 		if(isset($input['description'])){
@@ -269,7 +266,7 @@
 				$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
 				$pull, array('safe' => TRUE));
 				if($result['n'] != 0 || $result['err']){
-	            	
+
 	            } else {
 	            	return FALSE;
 	            }
@@ -279,7 +276,7 @@
 			}
 			$update['$push']['user_list'] = $input['user'];
 		}
-		
+
 		try	{
 			$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
 			$update, array('safe' => TRUE));
@@ -293,13 +290,13 @@
 			return FALSE;
 		}
 	}
-  
+
   /**
    * Remove reward item
    * @param reward_item_id
-   * 
+   *
    * @return result boolean
-   * 
+   *
    * @author Metwara Narksook
    */
   function remove($reward_item_id = NULL){
@@ -307,7 +304,7 @@
     if($check_args){
     	try	{
 			$result = $this->reward_item
-                  ->remove(array('_id' => new MongoId($reward_item_id)), 
+                  ->remove(array('_id' => new MongoId($reward_item_id)),
                   array('$atomic' => TRUE, 'safe' => TRUE));
             if($result['n'] != 0 || $result['err']){
             	return TRUE;
@@ -335,7 +332,7 @@
 		if(!isset($input['status']) || !in_array($input['status'], array('draft', 'published', 'cancelled'))){
 			$input['status'] = 'draft';
 		}
-		
+
 		$input['type'] = 'challenge';
 		$input['value'] = (int) $input['value'];
 		if(isset($input['company_id'])) {
@@ -361,7 +358,7 @@
   		|| !isset($input['value'])) {
 			return FALSE;
 		}
-		
+
 		$input['type'] = 'redeem';
 		if(!isset($input['redeem']['point']) || !isset($input['redeem']['amount'])){
 			return FALSE;
