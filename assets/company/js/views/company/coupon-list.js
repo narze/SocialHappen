@@ -14,7 +14,7 @@ define([
       'click a.coupon-filter-all': 'loadAll',
       'click a.coupon-filter-confirmed': 'loadConfirmed',
       'click a.coupon-filter-not-confirmed': 'loadNotConfirmed',
-      'keyup .coupon-search-text': 'searchCoupon'
+      'click button#coupon-search': 'searchCoupon'
     },
 
     couponListTemp: [],
@@ -76,27 +76,59 @@ define([
     },
 
     loadConfirmed: function() {
-      this.collection.loadConfirmed();
+      this.collection.reset(this.couponListTemp);
+
+      var confirmedCoupons = this.collection.select(function(coupon) {
+        return coupon.get('confirmed')
+      });
+
+      this.collection.reset(confirmedCoupons);
+      this.addAll();
     },
 
     loadNotConfirmed: function() {
-      this.collection.loadNotConfirmed();
+      this.collection.reset(this.couponListTemp);
+
+      var notConfirmedCoupons = this.collection.select(function(coupon) {
+        return !coupon.get('confirmed')
+      });
+
+      this.collection.reset(notConfirmedCoupons);
+      this.addAll();
     },
 
-    searchCoupon: function() {
+    searchCoupon: function(e) {
+      e.preventDefault();
+
       this.collection.reset(this.couponListTemp);
-      var search_text = $('input.coupon-search-text', this.el).val();
+      var search_texts = {
+        id: $('#coupon-search-id', this.el).val(),
+        name: $('#coupon-search-name', this.el).val(),
+        email: $('#coupon-search-email', this.el).val(),
+        phone: $('#coupon-search-phone', this.el).val()
+      }
+
       var search_results = this.collection.select(function(coupon) {
         coupon.user = coupon.get('user');
-        var search_fields = [coupon.id, coupon.user.user_first_name, coupon.user.user_last_name, coupon.user.user_email, coupon.user.user_phone];
+        var search_datas = {
+          id: coupon.id,
+          name: coupon.user.user_first_name + coupon.user.user_last_name,
+          email: coupon.user.user_email,
+          phone: coupon.user.user_phone
+        }
+        var search_fields = ['id', 'name', 'email', 'phone']
+
         for(var i in search_fields) {
           var field = search_fields[i];
-          if(field.search(new RegExp(search_text, 'i')) !== -1) {
-            return true;
+          if(search_texts[field] !== '') {
+            if(search_datas[field].search(new RegExp(search_texts[field], 'i')) === -1) {
+              return false;
+            }
           }
         }
-        return false;
+        return true;
       });
+
       this.collection.reset(search_results);
       this.addAll();
     }

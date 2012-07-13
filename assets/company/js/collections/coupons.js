@@ -8,18 +8,18 @@ define([
     model: couponModel,
     filter: null,
     last_id: null,
-    
+
     initialize: function(){
       _.bindAll(this);
     },
-    
+
     loadMore: function(callback){
       if(this.models.length == 0){
         this.last_id = null;
       }else{
         this.last_id = this.last().id;
       }
-      
+
       this.fetch({
         add: true,
         success: function(collection, resp){
@@ -37,24 +37,6 @@ define([
       });
     },
 
-    loadConfirmed: function(callback) {
-      this.filter = 'confirmed';
-      this.fetch({
-        success: function(collection, resp){
-          if(callback) callback(resp.length);
-        }
-      });
-    },
-
-    loadNotConfirmed: function(callback) {
-      this.filter = 'not_confirmed';
-      this.fetch({
-        success: function(collection, resp){
-          if(callback) callback(resp.length);
-        }
-      });
-    },
-    
     sync: function(method, model, options) {
       var methodMap = {
 
@@ -71,9 +53,9 @@ define([
 
       // Default JSON-request options.
       var params = {type: type, dataType: 'json'};
-      
-      
-      
+
+
+
       // Ensure that we have a URL.
       if (!options.url) {
         var query = {};
@@ -91,7 +73,7 @@ define([
           var str = [];
           for(var p in obj) {
             var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
-            str.push(typeof v == "object" ? 
+            str.push(typeof v == "object" ?
               serialize(v, k) :
               encodeURIComponent(k) + "=" + encodeURIComponent(v));
           }

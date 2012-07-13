@@ -21,10 +21,33 @@
         </div>
       </div>
     </div>
-    <div class="span7">&nbsp;</div>
-    <div class="span3">
-      <div class="coupon-search">
-        <input type="text" class="coupon-search-text">
+    <div class="span2">
+      <div class="btn-group">
+        <div class="dropdown">
+          <a class="btn dropdown-toggle" data-toggle="dropdown">Search <span class="caret"></span></a>
+          <div class="dropdown-menu">
+            <form>
+              <div class="coupon-search">
+
+                <div>Search by Coupon ID</div>
+                <div><input type="text" id="coupon-search-id" /></div>
+
+                <div>Search by name</div>
+                <div><input type="text" id="coupon-search-name" /></div>
+
+                <div>Search by email</div>
+                <div><input type="text" id="coupon-search-email" /></div>
+
+                <div>Search by phone</div>
+                <div><input type="text" id="coupon-search-phone" /></div>
+
+                <div>
+                  <button id="coupon-search" class="btn btn-primary" data-toggle="dropdown"><i class="icon-search"></i></button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
