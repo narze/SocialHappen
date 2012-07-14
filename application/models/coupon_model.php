@@ -36,7 +36,7 @@ class Coupon_model extends CI_Model {
 	
 	function get($query){
 		$query = array_cast_int($query, $this->int_values);
-		$result = $this->collection->find($query);
+		$result = $this->collection->find($query)->sort(array('_id'=>-1));
 		return cursor2array($result);
 	}
 
