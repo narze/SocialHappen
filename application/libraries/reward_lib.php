@@ -319,7 +319,8 @@ class Reward_lib
 				$this->CI->socialhappen->get_k('audit_action', 'User Receive Coupon'),
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,
-			'user_id' => $user_id
+			'user_id' => $user_id,
+			'company_id' => $company_id
 		))) {
 			return array('success' => FALSE, 'data' => 'Add action failed');
 		}

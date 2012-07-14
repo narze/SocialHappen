@@ -73,7 +73,7 @@ class Redirect extends CI_Controller {
 
 	function company($company_id = NULL){
 		if($company_id){
-			redirect('assets/company/#/company/'.$company_id);
+			redirect('assets/view-company/#/company/'.$company_id);
 		}
 	}
 }
