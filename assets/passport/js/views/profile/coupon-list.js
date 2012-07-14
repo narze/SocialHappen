@@ -25,7 +25,7 @@ define([
       $(this.el).html(this.couponListTemplate({
       }));
 
-      $('.coupon-list', this.el).masonry({
+      $('.pending.coupon-list', this.el).masonry({
         // options
         itemSelector : '.item',
         animationOptions: {
@@ -34,6 +34,15 @@ define([
         isFitWidth: true
       });
       
+      $('.approved.coupon-list', this.el).masonry({
+        // options
+        itemSelector : '.item',
+        animationOptions: {
+          duration: 400
+        },
+        isFitWidth: true
+      });
+
       this.addAll();
       
       if(this.collection.model.length <= 30){
@@ -49,7 +58,12 @@ define([
         vent: this.options.vent
       });
       var el = coupon.render().$el;
-      $('.coupon-list', this.el).append(el);
+      if(model.get('confirmed')){
+        $('.approved.coupon-list', this.el).append(el);
+      }else{
+        $('.pending.coupon-list', this.el).append(el);
+      }
+      
     },
     
     addAll: function(){
