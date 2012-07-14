@@ -47,3 +47,50 @@
 .card.open .card-header {
 	cursor: default;
 }
+
+.coupon-list .item {
+  width: 282px;
+  height: 176px;
+  overflow: hidden;
+  margin: 3px;
+  float: left;
+  position: relative;
+}
+
+.tile-list .reward-image {
+  max-width: 282px;
+}
+
+.item a:hover{
+  text-decoration: none;
+}
+
+.reward-caption {
+  position: absolute;
+  top: 141px;
+  right: 0;
+  left: 0;
+  padding: 10px 15px 5px;
+  background: #333;
+  background: rgba(0, 0, 0, 0.75);
+  -webkit-transition:top 0.2s ease-in-out;
+  -moz-transition:top 0.2s ease-in-out;
+  -o-transition:top 0.2s ease-in-out;
+  -ms-transition:top 0.2s ease-in-out;  
+  transition:top 0.2s ease-in-out;
+}
+.coupon-list .item:hover .reward-caption{
+  top: 0;
+}
+.reward-caption h4{
+  margin-bottom: 10px;
+}
+
+.reward-caption h4, .reward-caption p{
+  color: #fff;
+}
+
+.reward-image{
+	padding-top: 8px;
+	padding-bottom: 8px;
+}

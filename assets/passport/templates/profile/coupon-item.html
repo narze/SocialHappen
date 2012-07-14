@@ -1,4 +1,4 @@
-<div class="coupon well">
+<!-- <div class="coupon well">
   <div class="coupon-hash">
     Coupon ID : <%= hash %>
   </div>
@@ -15,4 +15,13 @@
     Approved Date : <%= new Date(confirmed_timestamp * 1000).toString() %>
   <% } %>
   <div class="coupon-reward"><button class="btn view-reward">View Reward</button></div>
-</div>
+</div> -->
+
+<a href="#" class="reward" title="View">
+  <img src="<%= reward.image %>" class="reward-image"/>
+  <div class="reward-caption">
+    <h4><%- reward.name || '' %></h4>
+    <p><%- reward.description||'' %></p>
+  </div>
+</a>
+

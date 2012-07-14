@@ -7,23 +7,31 @@
   </div>
 </div>
 <div class="modal-body">
-  <div class="control-group">
-    <h6 class="edit-image">Image:</h6>
+
+  <div class="coupon-status">
+    Coupon Status : <%= coupon.confirmed ? 'Approved' : 'Pending' %>
   </div>
 
+  <% if (coupon.confirmed) { %>
+    Approved Date : <%= new Date(coupon.confirmed_timestamp * 1000).toString() %>
+  <% } %>
+  
   <img class="reward-image" src="<%= image %>" />
 
   <div class="control-group">
     <div class="edit-description">
-      <h6>Description:</h6>
       <p>
         <%- description %>
       </p>
     </div>
   </div>
 
-  <div class="coupon-status">
-    Coupon Status : <%= coupon.confirmed ? 'Approved' : 'Pending' %>
+   <div class="coupon-hash">
+    Coupon ID : <%= coupon.hash %>
+  </div>
+
+  <div class="coupon-timestamp">
+    Date : <%= new Date(coupon.timestamp * 1000).toString() %>
   </div>
 
 </div>
