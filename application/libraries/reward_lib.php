@@ -23,7 +23,8 @@ class Reward_lib
 	function get_reward_item($reward_item_id){
 		$this->CI->load->model('reward_item_model','reward_item');
 		$reward_item = $this->CI->reward_item->get_by_reward_item_id($reward_item_id);
-		return $this->_add_reward_status($reward_item);
+		// return $this->_add_reward_status($reward_item);
+		return $reward_item;
 	}
 
 	function get_reward_items($company_id, $sort_criteria = NULL){
