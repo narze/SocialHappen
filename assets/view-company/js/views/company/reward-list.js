@@ -19,7 +19,7 @@ define([
     initialize: function(){
       _.bindAll(this);
       this.options.vent.bind('reloadMasonry', this.reloadMasonry);
-      this.collection.bind('reset', this.addAll);
+      this.collection.bind('reset', this.render);
       this.collection.bind('add', this.addOne);
     },
     
