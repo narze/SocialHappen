@@ -225,7 +225,8 @@ class Reward_lib
 				$this->CI->socialhappen->get_k('audit_action', 'User Redeem Reward'),
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,
-			'user_id' => $user_id
+			'user_id' => $user_id,
+			'company_id' => $reward_item['company_id']
 		))) {
 			return FALSE;
 		}
