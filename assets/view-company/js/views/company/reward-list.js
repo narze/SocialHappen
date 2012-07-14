@@ -53,7 +53,9 @@ define([
           if(res.success) {
             for (var i = 0, len = res.data.length; i < len; i++) {
               var model = self.collection.get(res.data[i]);
+
               if(model) {
+                console.log('rewardsRedeemed', model.get('name'));
                 model.set('redeemed', true);
                 model.change();
               }
