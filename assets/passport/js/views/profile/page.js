@@ -27,28 +27,28 @@ define([
       'click .user-menu-my-reward': 'showMyRewardList',
       'click .user-menu-activity': 'showActivityList'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
     },
     render: function () {
       $(this.el).html(profilePageTemplate);
       $('div#header .passport').addClass('active');
-      
+
       //Render profile pane
       var profilePane = new ProfilePane({
         el: $('.profile', this.el),
         userModel: this.options.userModel
       });
       profilePane.render();
-      
+
       //Render right pane
       $('.user-menu-activity').parent().addClass('active');
       this.showActivityList();
 
       //Menu
       $('#badges-count').text();
-      
+
     },
     setMenuActive: function(e) {
       e.preventDefault();
@@ -61,7 +61,7 @@ define([
       $(e.currentTarget).parent().addClass('active').closest('ul').parent().addClass('active');
     },
     getUserActionData: function(action_id) {
-      
+
       var ajax_options = {
         url: window.Passport.BASE_URL + 'apiv3/userActionData',
         data: {
@@ -115,7 +115,7 @@ define([
         collection: this.options.achievementCollection,
         el: $('.user-right-pane', this.el)
       });
-      
+
       achievementListView.render();
     },
     // showRewardsList: function() {

@@ -56,6 +56,10 @@ define([
           coupon_id: this.model.get('_id').$id
         },
         success: function(res) {
+          $('#coupon-modal .coupon-modal-header').hide();
+          $('#coupon-modal .approve-success').show();
+          $('button.coupon-approve').attr('disabled', 'disabled');
+
           model.set(res.coupon);
           model.change();
         }

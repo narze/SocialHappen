@@ -37,8 +37,8 @@ define([
     router.on('route:defaultAction', function () {
 
       options.challengesCollection.fetch();
-      require(['views/company/page'], function (WorldPage) {
-        var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
+      require(['views/company/page'], function (CompanyPage) {
+        var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
           currentUserModel: currentUserModel,
           challengesCollection: options.challengesCollection,
           rewardsCollection: options.rewardsCollection,
@@ -50,7 +50,6 @@ define([
     });
 
     router.on('route:company', function (companyId) {
-
       console.log('show company:', companyId);
 
       window.Company.companyId = companyId;
@@ -59,9 +58,9 @@ define([
 
       options.challengesCollection.fetch();
       if(!self.companyPage){
-        require(['views/company/page'], function (WorldPage) {
+        require(['views/company/page'], function (CompanyPage) {
 
-          var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
+          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
             currentUserModel: currentUserModel,
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
@@ -90,9 +89,9 @@ define([
       options.rewardsCollection.fetch();
 
       if(!self.companyPage){
-        require(['views/company/page'], function (WorldPage) {
+        require(['views/company/page'], function (CompanyPage) {
 
-          var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
+          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
             currentUserModel: currentUserModel,
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
@@ -123,9 +122,9 @@ define([
       options.couponsCollection.fetch();
 
       if(!self.companyPage){
-        require(['views/company/page'], function (WorldPage) {
+        require(['views/company/page'], function (CompanyPage) {
 
-          var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
+          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
             currentUserModel: currentUserModel,
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
