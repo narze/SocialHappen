@@ -136,6 +136,20 @@ class Apiv3 extends CI_Controller {
   }
 
   /**
+   * list activity of a company
+   */
+  function company_activities($company_id = NULL){
+    if(!$company_id){
+      echo '[]';
+      return;
+    }
+
+    $this->load->library('audit_lib');
+    $activity = $this->audit_lib->list_audit(array('company_id' => (int) $company_id, 'app_id' => 0));
+    echo json_encode($activity);
+  }
+
+  /**
    * list activity of challenge or actions in a challenge
    * @param $challenge_hashes comma-separated values
    * Challenge hash -> objecti

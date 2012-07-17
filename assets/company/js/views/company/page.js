@@ -8,8 +8,9 @@ define([
   'views/company/challenge-list',
   'views/company/reward-list',
   'views/company/coupon-list',
+  'views/company/activity-list',
   'bootstrap'
-], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, bootstrap){
+], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, ActivityListView, bootstrap){
   var ProfilePage = Backbone.View.extend({
     pageTemplate: _.template(pageTemplate),
     el: '#content',
@@ -29,7 +30,7 @@ define([
 
         if(!company){
           window.location = window.Company.BASE_URL + 'passport';
-        }else{
+        } else {
           var self = this;
 
           require(['views/company/modal/edit'], function (EditChallenge) {
@@ -93,7 +94,7 @@ define([
       });
       carouselView.render();
 
-      if(this.options.now == 'challenge'){
+      if(this.options.now === 'challenge'){
         var challengeListView = new ChallengeListView({
           collection: this.options.challengesCollection,
           el: $('#content-pane', this.el),
@@ -101,7 +102,7 @@ define([
         });
 
         challengeListView.render();
-      }else if(this.options.now == 'reward'){
+      } else if(this.options.now === 'reward'){
         var rewardListView = new RewardListView({
           collection: this.options.rewardsCollection,
           el: $('#content-pane', this.el),
@@ -109,7 +110,7 @@ define([
         });
 
         rewardListView.render();
-      }else if(this.options.now == 'coupon'){
+      } else if(this.options.now === 'coupon'){
         var couponListView = new CouponListView({
           collection: this.options.couponsCollection,
           el: $('#content-pane', this.el),
@@ -117,6 +118,14 @@ define([
         });
 
         couponListView.render();
+      } else if(this.options.now === 'activities'){
+        var activityListView = new ActivityListView({
+          collection: this.options.activitiesCollection,
+          el: $('#content-pane', this.el),
+          vent: this.options.vent
+        });
+
+        activityListView.render();
       }
 
 

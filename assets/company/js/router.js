@@ -12,6 +12,7 @@ define([
       '/company/:id/challenge': 'company',
       '/company/:id/reward': 'reward',
       '/company/:id/coupon': 'coupon',
+      '/company/:id/activities': 'activities',
       '/company/:id/coupon/:couponId': 'couponPopup',
       '*actions': 'defaultAction'
     }
@@ -43,6 +44,7 @@ define([
           challengesCollection: options.challengesCollection,
           rewardsCollection: options.rewardsCollection,
           couponsCollection: options.couponsCollection,
+            activitiesCollection: options.activitiesCollection,
           vent: options.vent
         });
         companyPage.render();
@@ -65,6 +67,7 @@ define([
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
+            activitiesCollection: options.activitiesCollection,
             vent: options.vent,
             now: 'challenge'
           });
@@ -96,6 +99,7 @@ define([
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
+            activitiesCollection: options.activitiesCollection,
             vent: options.vent,
             now: 'reward'
           });
@@ -129,6 +133,7 @@ define([
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
+            activitiesCollection: options.activitiesCollection,
             vent: options.vent,
             now: 'coupon'
           });
@@ -143,6 +148,36 @@ define([
         self.companyPage.render();
       }
     }
+
+    router.on('route:activities', function(companyId) {
+      console.log('show activities:', companyId);
+
+      window.Company.companyId = companyId;
+
+      options.activitiesCollection.url = window.Company.BASE_URL + '/apiv3/company_activities/' + companyId;
+
+      options.activitiesCollection.fetch();
+
+      if(!self.companyPage){
+        require(['views/company/page'], function (CompanyPage) {
+
+          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
+            currentUserModel: currentUserModel,
+            challengesCollection: options.challengesCollection,
+            rewardsCollection: options.rewardsCollection,
+            couponsCollection: options.couponsCollection,
+            activitiesCollection: options.activitiesCollection,
+            vent: options.vent,
+            now: 'activities'
+          });
+          companyPage.render();
+          self.companyPage = companyPage;
+        });
+      } else {
+        self.companyPage.options.now = 'activities';
+        self.companyPage.render();
+      }
+    });
 
     Backbone.history.start();
   };
