@@ -369,6 +369,7 @@ class Apiv3 extends CI_Controller {
         foreach($challenge['reward_items'] as $reward_item) {
           if(isset($reward_item['_id'])) {
             //Reward exists : update
+            $reward_item['company_id'] = $company_id;
             $reward_item_id = $reward_item['_id'];
             if(!$reward_update_result = $this->reward_item_model->update($reward_item_id, $reward_item)) {
               echo json_encode(array('success' => FALSE, 'data' => 'Update reward failed'));
@@ -376,6 +377,7 @@ class Apiv3 extends CI_Controller {
             }
           } else {
             //New reward : add new
+            $reward_item['company_id'] = $company_id;
             if(!$reward_item_id = $this->reward_item_model->add_challenge_reward($reward_item)) {
               echo json_encode(array('success' => FALSE, 'data' => 'Add reward failed'));
               return;
@@ -755,6 +757,59 @@ class Apiv3 extends CI_Controller {
     }
 
     echo json_encode($result);
+  }
+
+  function getMyCards() {
+    if(!$user_id = $this->socialhappen->get_user_id()) {
+      echo json_encode(array('success' => FALSE, 'data' => 'No user session')); return;
+    }
+
+    $cards = array();
+
+    // Get all companies that user played
+    $this->load->model('achievement_stat_company_model');
+    $criteria = array(
+      'user_id' => (int) $user_id,
+      'company_id' => array( '$gt' => 0 )
+    );
+    $companies_stat = $this->achievement_stat_company_model->list_stat($criteria);
+    foreach($companies_stat as $company_stat) {
+      $card = array();
+
+      $company_id = $company_stat['company_id'];
+      $card['company_id'] = $company_id;
+
+      //Get company profile
+      $this->load->model('company_model');
+      $card['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
+
+      //Get company points
+      $card['company_score'] = $company_stat['company_score'];
+
+      //Get rewards got from this company & count
+      $this->load->model('user_mongo_model');
+      $user = $this->user_mongo_model->get_user($user_id);
+      $reward_items = $user['reward_items'];
+      $this->load->model('reward_item_model');
+      $reward_item_ids = array();
+      foreach($reward_items as $reward_item_id) {
+        $reward_item_ids[] = new MongoId($reward_item_id);
+      }
+      $reward_item_criteria = array(
+        '_id' => array( '$in' => $reward_item_ids )
+      );
+      $card['rewards'] = $this->reward_item_model->get($reward_item_criteria);
+      $card['rewards_count'] = count($card['rewards']);
+
+      //@TODO - Get activities
+      $card['activities'] = array();
+
+      $cards[] = $card;
+    }
+
+    echo json_encode(array('success' => TRUE, 'data' => $cards));
+    return;
+
   }
 }
 

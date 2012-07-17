@@ -35,7 +35,7 @@ class User_lib {
 			return $this->CI->user_mongo_model->add($user_record);
 		}
 	}
-	
+
 	/**
 	 * Join a challenge
 	 * User will be created if not exist
@@ -56,6 +56,11 @@ class User_lib {
 			'user_id' => $user_id,
 			'app_id' => 0
 		));
+
+		//Make user's company stat (if not exists)
+		$this->CI->load->model('achievement_stat_company_model');
+		$this->CI->achievement_stat_company_model->increment($challenge['company_id'], $user_id, array( 'company_score' => 0 ));
+
 
 		$update_criteria = array(
 			'user_id' => $user_id

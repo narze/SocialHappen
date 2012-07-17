@@ -8,8 +8,9 @@ define([
   'views/profile/profile',
   'views/profile/activity-list',
   'views/profile/achievement-list',
-  'views/profile/coupon-list'
-], function($, _, Backbone, profilePageTemplate, actionListTemplate, actionItemTemplate, ProfilePane, ActivityListView, AchievementListView, CouponListView){
+  'views/profile/coupon-list',
+  'views/profile/card-list'
+], function($, _, Backbone, profilePageTemplate, actionListTemplate, actionItemTemplate, ProfilePane, ActivityListView, AchievementListView, CouponListView, CardListView){
   var ProfilePage = Backbone.View.extend({
     profilePageTemplate: _.template(profilePageTemplate),
     el: '#content',
@@ -23,7 +24,6 @@ define([
       'click .user-submenu-badges': 'showBadgesList',
         // 'click .user-submenu-rewards': 'showRewardsList',
       'click .user-menu-my-card': 'showMyCardList',
-      'click .card': 'showCard',
       'click .user-menu-my-reward': 'showMyRewardList',
       'click .user-menu-activity': 'showActivityList'
     },
@@ -124,15 +124,12 @@ define([
     //   this.getUserActionData(119);
     // },
     showMyCardList: function() {
-      //Test template
-      $.get('templates/profile/card-list.html', function (card) {
-        card_template = $(card).find('.card').removeClass('open');
-        $('.user-right-pane').html(card);
-        $('.card-list').append(card_template.clone()).append(card_template.clone());
-      });
-    },
-    showCard: function(e) {
-      $(e.currentTarget).addClass('open').siblings().removeClass('open');
+      var cardListView = new CardListView ({
+        el: $('.user-right-pane', this.el),
+        currentUserModel: this.options.currentUserModel
+      })
+
+      cardListView.render()
     },
     showMyRewardList: function() {
       var couponListView = new CouponListView({
