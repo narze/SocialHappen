@@ -335,17 +335,7 @@ class Home extends CI_Controller {
 				if(!$this->session->userdata('logged_in')){ //@TODO : Problem is it will separate logging in through platform & through facebook
 					$this->load->library('audit_lib');
 					$action_id = $this->socialhappen->get_k('audit_action','User Login');
-					// $this->audit_lib->add_audit(
-					// 	0,
-					// 	$user_id,
-					// 	$action_id,
-					// 	'',
-					// 	'',
-					// 	array(
-					// 		'app_install_id' => 0,
-					// 		'user_id' => $user_id
-					// 	)
-					// );
+
 					$this->audit_lib->audit_add(array(
 						'user_id' => $user_id,
 						'action_id' => $action_id,
@@ -353,7 +343,8 @@ class Home extends CI_Controller {
 						'app_install_id' => 0,
 						'subject' => $user_id,
 						'object' => NULL,
-						'objecti' => NULL
+						'objecti' => NULL,
+						'image' => $user['user_image']
 					));
 
 					$this->load->library('achievement_lib');

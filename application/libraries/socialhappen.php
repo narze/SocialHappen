@@ -2,9 +2,9 @@
 
 /**
  * SocialHappen Platform Library
- * 
+ *
  * This class includes frequently used functions such as sessions & authentications
- * 
+ *
  * @author Manassarn M.
  */
 class SocialHappen{
@@ -14,7 +14,7 @@ class SocialHappen{
 		$this->CI->load->library('session');
     $this->update_session();
   }
-	
+
 	/**
 	 * Global variables
 	 * @author Manassarn M.
@@ -59,7 +59,7 @@ class SocialHappen{
 			119 => 'User Redeem Reward'
 		)
 	);
-	
+
 	/** Default urls
 	 * @author Manassarn M.'
 	 */
@@ -70,7 +70,7 @@ class SocialHappen{
 		'company_image' => 'assets/images/default/company.png',
 		'user_image' => 'assets/images/default/user.png'
 	);
-	
+
 	/**
 	 * Get global variable
 	 * @param $var_name
@@ -79,7 +79,7 @@ class SocialHappen{
 	function get_global($var_name){
 		return issetor($this->global_variables[$var_name]);
 	}
-	
+
 	/**
 	 * Get a global variable key
 	 * @param $var_name
@@ -89,7 +89,7 @@ class SocialHappen{
 	function get_k($var_name = NULL, $value = NULL){
 		return array_search($value, issetor($this->global_variables[$var_name], FALSE));
 	}
-	
+
 	/**
 	 * Get a global variable value
 	 * @param $var_name
@@ -99,7 +99,7 @@ class SocialHappen{
 	function get_v($var_name = NULL, $key = NULL){
 		return issetor($this->global_variables[$var_name][$key], NULL);
 	}
-	
+
 	/**
 	 * Map global value in array
 	 * @param &$each
@@ -117,7 +117,7 @@ class SocialHappen{
 		}
 		return $each;
 	}
-	
+
 	/**
 	 * Maps global values in multi array
 	 * @param &$array
@@ -130,7 +130,7 @@ class SocialHappen{
 		unset($each);
 		return $array;
 	}
-	
+
 	/**
 	 * Get a default url
 	 * @param $var_name
@@ -142,32 +142,32 @@ class SocialHappen{
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * Check if logged in (both facebook and SocialHappen) if not, redirect to specified url
 	 * @param $redirect_url
-	 * @author Manassarn M. 
+	 * @author Manassarn M.
 	 */
 	function check_logged_in($redirect_url = NULL){
 		if($this->is_logged_in()){
 			return TRUE;
 		} else {
-			// $protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') 
+			// $protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https')
                 // === FALSE ? 'http' : 'https';
 				$protocol = 'https';
 			$url = "{$protocol}://{$_SERVER['SERVER_NAME']}{$_SERVER['REQUEST_URI']}";
 			redirect($redirect_url."?next=".urlencode($url));
 		}
 	}
-    
+
 	/**
 	 * Check if logged in (both facebook and SocialHappen)
-	 * @author Manassarn M. 
+	 * @author Manassarn M.
 	 */
 	function is_logged_in(){
 		return ($this->CI->session->userdata('logged_in'));
 	}
-	
+
 	/**
 	 * Get user from session
 	 * @return SocialHappen user if found, otherwise FALSE
@@ -181,7 +181,7 @@ class SocialHappen{
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * Get user id from session
 	 * @return $user_id
@@ -194,7 +194,7 @@ class SocialHappen{
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * Get user companies from database
 	 * @return $user_companies
@@ -208,7 +208,7 @@ class SocialHappen{
 			return array();
 		}
 	}
-	
+
 	/**
 	 * Get header view, predefine $user and $user_companies in views
 	 * @return $header
@@ -218,7 +218,7 @@ class SocialHappen{
 		$common = array();
 		$user = $this->get_user();
 		$facebook_user = $this->CI->facebook->getUser();
-		
+
 		//if(!$facebook_user = $this->CI->facebook->getUser()){
 		if(!$user) {
 			// $this->logout(); // should relogin facebook to extend cookies TODO : fix
@@ -261,15 +261,15 @@ class SocialHappen{
 				'facebook_default_scope' => $this->CI->config->item('facebook_admin_scope')
 			);
 		}
-		
+
 		$data = array_merge_recursive($common,$data);
 		$data = array_unique_recursive($data);
-		
+
 		//Override, because array_merge_recursive cause merge(user_id, user_id) -> array(user_id,user_id)
 		if(isset($user['user_id'])){
 			$data['vars']['user_id'] = $user['user_id'];
 		}
-		
+
 		// $this->login(); Don't audologin
 		if($this->CI->session->userdata('logged_in') == TRUE){
 			$data['user_companies'] = isset($user_companies) ? $user_companies : NULL;
@@ -279,9 +279,9 @@ class SocialHappen{
 				}
 			}
 		}
-		
+
 		if( isset($data['vars']['popup_name']) && !isset($data['vars']['closeEnable']) ) $data['vars']['closeEnable'] = true;
-		
+
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
 
@@ -311,7 +311,7 @@ class SocialHappen{
 					//'common/main',
 					//'common/fancybox/jquery.fancybox-1.3.4'
 				);
-		
+
 		if(!$user) {
 			// $this->logout(); // should relogin facebook to extend cookies TODO : fix
 			$common = array(
@@ -343,15 +343,15 @@ class SocialHappen{
 				'facebook_default_scope' => $this->CI->config->item('facebook_admin_scope')
 			);
 		}
-		
+
 		$data = array_merge_recursive($common,$data);
 		$data = array_unique_recursive($data);
-		
+
 		//Override, because array_merge_recursive cause merge(user_id, user_id) -> array(user_id,user_id)
 		if(isset($user['user_id'])){
 			$data['vars']['user_id'] = $user['user_id'];
 		}
-		
+
 		// $this->login(); Don't autologin
 		if($this->CI->session->userdata('logged_in') == TRUE){
 			$data['user_companies'] = isset($user_companies) ? $user_companies : NULL;
@@ -361,9 +361,9 @@ class SocialHappen{
 				}
 			}
 		}
-		
+
 		if( isset($data['vars']['popup_name']) && !isset($data['vars']['closeEnable']) ) $data['vars']['closeEnable'] = true;
-		
+
 		$data['bar_view_bootstrap'] = TRUE; //Get new bar view
 
 		if(isset($data['use_static_fb_root']) && $data['use_static_fb_root']) {
@@ -372,7 +372,7 @@ class SocialHappen{
 
 		return $this->CI->load->view('common/header', $data, TRUE);
 	}
-	
+
 	/**
 	 * Get header view, predefine $user and $user_companies in views
 	 * @return $header
@@ -386,7 +386,7 @@ class SocialHappen{
 		$data['image_url'] = base_url().'assets/images/';
 		return $this->CI->load->view('common/header_lightbox', $data, TRUE);
 	}
-	
+
 	/**
 	 * Get footer view
 	 * @return $footer
@@ -400,7 +400,7 @@ class SocialHappen{
 			return $this->CI->load->view('common/footer', array() , TRUE);
 		}
 	}
-	
+
 	/**
 	 * Get footer view
 	 * @return $footer
@@ -414,7 +414,7 @@ class SocialHappen{
 			return $this->CI->load->view('common/footer_lightbox', array() , TRUE);
 		}
 	}
-	
+
 	/**
 	 * Login into SocialHappen
 	 * Stores user session with facebook id
@@ -428,19 +428,12 @@ class SocialHappen{
 			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
 			if($user_id){
 				if(!$this->CI->session->userdata('logged_in')){ //@TODO : Problem is it will separate logging in through platform & through facebook
+
+					$this->CI->load->model('user_model');
+					$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
+
 					$this->CI->load->library('audit_lib');
 					$action_id = $this->CI->socialhappen->get_k('audit_action','User Login');
-					// $this->CI->audit_lib->add_audit(
-					// 	0,
-					// 	$user_id,
-					// 	$action_id,
-					// 	'', 
-					// 	'',
-					// 	array(
-					// 		'app_install_id' => 0,
-					// 		'user_id' => $user_id
-					// 	)
-					// );
 					$this->CI->audit_lib->audit_add(array(
 						'user_id' => $user_id,
 						'action_id' => $action_id,
@@ -448,13 +441,14 @@ class SocialHappen{
 						'app_install_id' => 0,
 						'subject' => $user_id,
 						'object' => NULL,
-						'objecti' => NULL
+						'objecti' => NULL,
+						'image' => $user['user_image']
 					));
-					
+
 					$this->CI->load->library('achievement_lib');
 					$info = array('action_id'=> $action_id, 'app_install_id'=>0);
 					$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
-          
+
           $this->CI->users->update_user_last_seen($user_id);
 				}
 				$userdata = array(
@@ -474,7 +468,7 @@ class SocialHappen{
 		}
 		return issetor($user_id);
 	}
-	
+
 	/**
 	 * Logout
 	 * @param $redirect_url
@@ -487,14 +481,14 @@ class SocialHappen{
 			redirect($redirect_url);
 		}
 	}
-	
+
 	/**
 	 * Upload and resize image
 	 * @param $name
 	 * @return $image_url
 	 * @author Manassarn M.
 	 */
-	function upload_image($name = NULL, $resize = TRUE){ 
+	function upload_image($name = NULL, $resize = TRUE){
 		$config['upload_path'] = './uploads/images/';
 		$config['allowed_types'] = 'gif|jpg|png';
 		$config['max_size']	= '2048';
@@ -505,17 +499,17 @@ class SocialHappen{
 		if ($_FILES[$name]['error'] == 0 && $this->CI->upload->do_upload($name)){
 			log_message('error','uploaded');
 			$image_data = $this->CI->upload->data();
-			if($resize) { 
-				$this->resize_image($image_data); 
+			if($resize) {
+				$this->resize_image($image_data);
 			} else {
 				rename($image_data['full_path'],"{$image_data['file_path']}{$image_data['raw_name']}_o{$image_data['file_ext']}");
 			}
 			return base_url()."uploads/images/{$image_data['raw_name']}_o{$image_data['file_ext']}";
 		} else {
-			return FALSE; 
+			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * Replace image
 	 * @param $new_image
@@ -534,10 +528,10 @@ class SocialHappen{
 				}
 			}
 			return $new_image;
-		} 
+		}
 		return FALSE;
 	}
-	
+
 	/**
 	 * Resize image and save as separated files
 	 * @param $image_data (see http://codeigniter.com/user_guide/libraries/file_uploading.html)
@@ -546,7 +540,7 @@ class SocialHappen{
 	function resize_image($image_data = NULL, $dimensions = array()){
 		$dimensions = array('q' => array(50,50),'t' => array(50,100),'s' => array(100,200),'n' => array(200,400));
 		if($image_data) {
-			$this->CI->load->library('image_lib'); 
+			$this->CI->load->library('image_lib');
 			foreach($dimensions as $dimension_name => $dimension_size){
 				$config['image_library'] = 'gd2';
 				$config['source_image']	= "uploads/images/{$image_data['file_name']}";
@@ -555,14 +549,14 @@ class SocialHappen{
 				$config['master_dim'] = 'width';
 				$config['width'] = $dimension_size[0];
 				$config['height'] = $dimension_size[1];
-				
-				$this->CI->image_lib->initialize($config); 
+
+				$this->CI->image_lib->initialize($config);
 				$this->CI->image_lib->resize();
 			}
 			rename($image_data['full_path'],"{$image_data['file_path']}{$image_data['raw_name']}_o{$image_data['file_ext']}");
 		}
 	}
-	
+
 	/**
 	 * Check if is called with xml http request (ajax)
 	 * @author Manassarn M.
@@ -570,12 +564,12 @@ class SocialHappen{
 	function ajax_check(){
 		//file_get_content is allowed (no user agent)
 		if( ! isset($_SERVER['HTTP_USER_AGENT']) ){
-		
+
 		} else if(!$this->CI->input->is_ajax_request()){
 			exit();
 		}
 	}
-	
+
 	/**
 	 * (Private) Check if user has company roles that override page roles
 	 * @param $user_id
@@ -598,14 +592,14 @@ class SocialHappen{
 							//echo 'no company role.';
 							$has_company_roles = FALSE;
 						}
-					}						
+					}
 					return $has_company_roles;
 				}
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Check if user is admin
 	 * @param array $data
@@ -615,7 +609,7 @@ class SocialHappen{
 		if(!$user_id = $this->CI->session->userdata('user_id')){
 			return FALSE;
 		}
-		
+
 		if ( ! function_exists('in_each_array')){
 			function in_each_array($needle_key, $needle_value, $haystack_array = array()){
 				foreach($haystack_array as $haystack){
@@ -626,7 +620,7 @@ class SocialHappen{
 				return FALSE;
 			}
 		}
-		
+
 		if(isset($data['company_id'])){
 			$this->CI->load->model('user_companies_model','user_companies');
 			$company_users = $this->CI->user_companies->get_company_users_by_company_id($data['company_id']);
@@ -641,13 +635,13 @@ class SocialHappen{
 								if(in_array($role,array('role_company_edit','role_company_delete','role_all_company_pages_edit','role_all_company_pages_delete')) && $company_user[$role] == FALSE){
 									return FALSE;
 								}
-							}						
+							}
 						}
 					}
 				}
 			}
 		}
-		if(isset($data['page_id'])){ 
+		if(isset($data['page_id'])){
 			$this->CI->load->model('page_model','pages');
 			$page = $this->CI->pages->get_page_profile_by_page_id($data['page_id']);
 			$this->CI->load->model('user_pages_model','user_pages');
@@ -665,7 +659,7 @@ class SocialHappen{
 									if(in_array($role,array('role_page_edit','role_page_delete')) && $page_user[$role] == FALSE){
 										return FALSE;
 									}
-								}						
+								}
 							}
 						}
 					}
@@ -708,7 +702,7 @@ class SocialHappen{
 											//echo 'no role';
 											return FALSE;
 										}
-									}						
+									}
 								}
 							}
 						}
@@ -730,7 +724,7 @@ class SocialHappen{
 				}
 			if($roles){
 				$required_roles = array('role_all_company_campaigns_edit','role_all_company_campaigns_delete');
-				
+
 				if(!$this->_has_company_roles($user_id,$page['company_id'],$roles,$required_roles)){
 					foreach($user_pages as $user_page){
 						if($user_page['user_id'] == $user_id){
@@ -739,7 +733,7 @@ class SocialHappen{
 									if(in_array($role,array('role_campaign_edit','role_campaign_delete')) && $user_page[$role] == FALSE){
 										return FALSE;
 									}
-								}						
+								}
 							}
 						}
 					}
@@ -748,7 +742,7 @@ class SocialHappen{
 		}
 		return TRUE;
 	}
-	
+
 	/**
 	 * Check if user is exist
 	 * @param $user_id
@@ -759,7 +753,7 @@ class SocialHappen{
 		$user = $this->CI->users->get_user_profile_by_user_id($user_id);
 		return count($user) != 0;
 	}
-	
+
 	/**
 	 * Check package
 	 * @param $user_id
@@ -776,7 +770,7 @@ class SocialHappen{
 			return $this->CI->package_users->check_user_package_can_add_user($user_id);
 		} else return FALSE;
 	}
-	
+
 	/**
 	 * Check package over the limit
 	 * @param $user_id
@@ -789,23 +783,23 @@ class SocialHappen{
 		//Count user companies
 		$this->CI->load->model('company_model','companies');
 		$user_companies = count($this->CI->companies->get_companies_by_user_id($user_id));
-		
+
 		//Count user pages
 		$this->CI->load->model('user_pages_model','user_pages');
 		$user_pages = count($this->CI->user_pages->get_user_pages_by_user_id($user_id));
-		
+
 		//Count members
 		$members = $this->CI->package_users->count_user_members_by_user_id($user_id);
-		
+
 		$over = false;
 		if($user_companies > $current_package['package_max_companies']) $over = true;
 		if($user_pages > $current_package['package_max_pages']) $over = true;
 		if($members > $current_package['package_max_users']) $over = true;
-		
+
 		return $over;
 	}
-	
-	/** 
+
+	/**
 	 * Get socialhappen bar
 	 * @param $data
 	 * @author Manassarn M.
@@ -817,7 +811,7 @@ class SocialHappen{
 		$user_facebook_id = issetor($data['user_facebook_id']);
 		$app_mode = FALSE;
 		$campaign_id = NULL;
-		
+
 		$this->CI->load->model('Installed_apps_model', 'app');
 		$app = $this->CI->app->get_app_profile_by_app_install_id($app_install_id);
 		if($app && isset($app['page_id'])){
@@ -836,7 +830,7 @@ class SocialHappen{
 				$sh_non_fan_homepage_content = '<p>'.$sh_non_fan_homepage['message'].'</p><p><img src="'.$sh_non_fan_homepage['image'].'"</img></p>';
 			}
 		}
-		
+
 		$this->CI->load->model('User_model', 'User');
 		$this->CI->load->model('user_pages_model','user_pages');
 		$this->CI->load->model('page_model','pages');
@@ -849,7 +843,7 @@ class SocialHappen{
 			return NULL;
 		}
 
-		$menu = array();		
+		$menu = array();
 		$menu['left'] = array();
 		if($page_id){
 			$apps = $this->CI->app->get_installed_apps_by_page_id($page_id);
@@ -865,15 +859,15 @@ class SocialHappen{
 				}
 			}
 		}
-		
+
 		$is_user_register_to_page = $is_user_register_to_campaign = FALSE;
 		$this->CI->load->model('page_user_data_model','page_user_data');
 		if($user_id) {
 			$is_user_register_to_page = $this->CI->page_user_data->get_page_user_by_user_id_and_page_id($user_id, $page_id);
-		
+
 			$this->CI->load->model('user_campaigns_model','campaign_user');
 			$is_user_register_to_campaign = $this->CI->campaign_user->is_user_in_campaign($user_id, $campaign_id);
-			
+
 			//$this->CI->load->library('notification_lib');
 			//$notification_amount = $this->CI->notification_lib->count_unread($user['user_id']);
 			//$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
@@ -916,12 +910,12 @@ class SocialHappen{
 			'sh_non_fan_homepage' => issetor($sh_non_fan_homepage),
 			'sh_non_fan_homepage_content' => issetor($sh_non_fan_homepage_content,''),
 
-			
+
 		));
 		return $this->CI->load->view('api/app_bar_view', array(), TRUE);
 	}
-	
-	/** 
+
+	/**
 	 * Get app setting template
 	 * @param $data
 	 * @author Weerapat P.
@@ -943,17 +937,17 @@ class SocialHappen{
 		if(!$page['enable_facebook_tab_bar'] && !$user['user_is_developer']) {
 			return NULL;
 		}
-		
+
 		//app
 		$this->CI->load->model('Installed_apps_model', 'app');
 		$app = $this->CI->app->get_app_profile_by_app_install_id($app_install_id);
-		
+
 		//is_admin
 		$this->CI->load->model('company_model','companies');
 		$company = $this->CI->companies->get_company_profile_by_page_id($page_id);
 		$this->CI->load->model('user_companies_model','user_companies');
 		$is_admin = $this->CI->user_companies->is_company_admin($user_id, $company['company_id']);
-		
+
 		$this->CI->load->vars(array(
 			'app' => $app,
 			'is_logged_in' => true, //$this->is_logged_in(),
@@ -961,8 +955,8 @@ class SocialHappen{
 		));
 		return $this->CI->load->view('api/'.$view, array(), TRUE);
 	}
-	
-	/** 
+
+	/**
 	 * Get socialhappen tab bar url
 	 * @param $app_install_id
 	 * @author Weerapat P.
@@ -990,7 +984,7 @@ class SocialHappen{
 		return issetor($user['user_is_developer']) ? TRUE : FALSE;
 	}
 
-	/** 
+	/**
 	 * Developer + socialhappen features check
 	 * @param array $input [campaign_id,app_install_id,page_id]
 	 * @author Manassarn M.
@@ -1072,17 +1066,10 @@ class SocialHappen{
 			if(!$this->CI->session->userdata('logged_in')){ //@TODO : Problem is it will separate logging in through platform & through facebook
 				$this->CI->load->library('audit_lib');
 				$action_id = $this->CI->socialhappen->get_k('audit_action','User Login');
-				// $this->CI->audit_lib->add_audit(
-				// 	0,
-				// 	$user_id,
-				// 	$action_id,
-				// 	'', 
-				// 	'',
-				// 	array(
-				// 		'app_install_id' => 0,
-				// 		'user_id' => $user_id
-				// 	)
-				// );
+
+				$this->CI->load->model('user_model');
+				$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
+
 				$this->CI->audit_lib->audit_add(array(
 					'user_id' => $user_id,
 					'action_id' => $action_id,
@@ -1090,13 +1077,14 @@ class SocialHappen{
 					'app_install_id' => 0,
 					'subject' => $user_id,
 					'object' => NULL,
-					'objecti' => NULL
+					'objecti' => NULL,
+					'image' => $user['user_image']
 				));
-				
+
 				$this->CI->load->library('achievement_lib');
 				$info = array('action_id'=> $action_id, 'app_install_id'=>0);
 				$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
-        
+
         $this->CI->load->model('user_model', 'users');
         $this->CI->users->update_user_last_seen($user_id);
 			}
@@ -1130,10 +1118,10 @@ class SocialHappen{
 		if($user) {
 			$this->CI->load->library('notification_lib');
 			$user_companies = $this->get_user_companies();
-			$data['user_can_create_company'] = 
+			$data['user_can_create_company'] =
 				!$user_companies ? TRUE : $this->check_package_by_user_id_and_mode(
 				$this->CI->session->userdata('user_id'), 'company');
-			$data['notification_amount'] = 
+			$data['notification_amount'] =
 				$this->CI->notification_lib->count_unread($user['user_id']);
 		}
 		return $data;

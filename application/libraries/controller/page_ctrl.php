@@ -15,35 +15,35 @@ class Page_ctrl {
 	    if(!$this->CI->socialhappen->check_admin(array('page_id' => $page_id),array())){
 			$result['error'] = 'User is not admin';
 		} else {
-			
+
 			$this -> CI->load -> model('page_model', 'pages');
 			$page = $this -> CI->pages -> get_page_profile_by_page_id($page_id);
-			
+
 			if(!$page) {
 				$result['error'] = 'Page not found';
 			} else {
 				$this -> CI->load -> model('company_model', 'companies');
 				$company = $this -> CI->companies -> get_company_profile_by_page_id($page_id);
-				
+
 				$facebook_page_graph = $this->CI->facebook->get_page_info($page['facebook_page_id']);
 
 				$this -> CI->load ->model('installed_apps_model','installed_apps');
 				$app_count = $this->CI->installed_apps->count_installed_apps_by_page_id($page_id);
-				
+
 				$this -> CI->load ->model('campaign_model','campaigns');
 				$campaign_count = $this->CI->campaigns->count_campaigns_by_page_id($page_id);
 				$this -> CI->load ->model('page_user_data_model','page_users');
 				$user_count = $this->CI->page_users->count_page_users_by_page_id($page_id);
 				$this->CI->config->load('pagination', TRUE);
 				$per_page = $this->CI->config->item('per_page','pagination');
-				
+
 				// $key = 'subject';
 				// $app_id = ???;
 				// $action_id = ???;
 				// $criteria = array('page_id' => $page_id);
 				// $date = date("Ymd");
 				// $new_user_count = $this->CI->audit_lib->count_audit($key, $app_id, $action_id, $criteria, $date));
-				
+
 				$this->CI->load->library('audit_lib');
 				//var_dump($page_id);
 				$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Register App');
@@ -65,14 +65,14 @@ class Page_ctrl {
 					'user_exceed_limit' => !$this->CI->socialhappen->is_developer_or_member_under_limit($input)
 				);
 				$this->CI->load->vars($common);
-				
+
 				$result['data'] = array(
 					'page_id' => $page_id,
 					'page_installed' => $page['page_installed'],
 					'facebook_page_id' => $page['facebook_page_id'],
 					'app_facebook_api_key' => $this->CI->config->item('facebook_app_id'),
 					'facebook_tab_url' => $page['facebook_tab_url'],
-					'header' => $this -> CI->socialhappen -> get_header( 
+					'header' => $this -> CI->socialhappen -> get_header(
 						array(
 							'company_id' => $company['company_id'],
 							'title' => $page['page_name'],
@@ -95,8 +95,8 @@ class Page_ctrl {
 								//for fancybox in application tab
 								'common/fancybox/jquery.mousewheel-3.0.4.pack',
 								'common/fancybox/jquery.fancybox-1.3.4.pack',
-								
-								
+
+
 								//stat
 								'stat/excanvas.min',
 								'stat/jquery.jqplot.min',
@@ -105,7 +105,7 @@ class Page_ctrl {
 								'stat/jqplot.dateAxisRenderer.min',
 								'stat/jqplot.canvasTextRenderer.min',
 								'stat/jqplot.canvasAxisTickRenderer.min',
-								'stat/jqplot.pointLabels.min'			 				
+								'stat/jqplot.pointLabels.min'
 							),
 							'style' => array(
 								'common/main',
@@ -119,21 +119,21 @@ class Page_ctrl {
 							)
 						)
 					),
-					'company_image_and_name' => $this -> CI->load -> view('company/company_image_and_name', 
+					'company_image_and_name' => $this -> CI->load -> view('company/company_image_and_name',
 						array(
 							'company' => $company
 						),
 					TRUE),
-					'breadcrumb' => $this -> CI->load -> view('common/breadcrumb', 
+					'breadcrumb' => $this -> CI->load -> view('common/breadcrumb',
 						array(
-							'breadcrumb' => array( 
+							'breadcrumb' => array(
 								$company['company_name'] => base_url() . "company/{$company['company_id']}",
 								$page['page_name'] => base_url() . "page/{$page['page_id']}"
 								),
 							'settings_url' => base_url()."settings/page/{$page['page_id']}"
 						),
 					TRUE),
-					'page_profile' => $this -> CI->load -> view('page/page_profile', 
+					'page_profile' => $this -> CI->load -> view('page/page_profile',
 						array('page_profile' => $page,
 							'app_count' => $app_count,
 							'campaign_count' => $campaign_count,
@@ -145,23 +145,23 @@ class Page_ctrl {
 							)
 						),
 					TRUE),
-					'page_tabs' => $this -> CI->load -> view('page/page_tabs', 
+					'page_tabs' => $this -> CI->load -> view('page/page_tabs',
 						array(
 							'app_count' => $app_count,
 							'campaign_count' => $campaign_count,
 							'user_count' => $user_count
 							),
-					TRUE), 
-					'page_apps' => $this -> CI->load -> view('page/page_apps', 
+					TRUE),
+					'page_apps' => $this -> CI->load -> view('page/page_apps',
 						array('app_count' => $app_count),
-					TRUE), 
-					'page_campaigns' => $this -> CI->load -> view('page/page_campaigns', 
+					TRUE),
+					'page_campaigns' => $this -> CI->load -> view('page/page_campaigns',
 						array('campaign_count' => $campaign_count, 'page_id'=>$page_id),
 					TRUE),
-					'page_users' => $this -> CI->load -> view('page/page_users', 
+					'page_users' => $this -> CI->load -> view('page/page_users',
 						array('user_count' => $user_count),
 					TRUE),
-					'page_report' => $this -> CI->load -> view('page/page_report', 
+					'page_report' => $this -> CI->load -> view('page/page_report',
 						array(),
 					TRUE),
 					'footer' => $this -> CI->socialhappen -> get_footer()
@@ -173,23 +173,23 @@ class Page_ctrl {
     }
 
 	function json_count_apps(){
-		
+
 	}
 
 	function json_count_campaigns(){
-		
+
 	}
 
 	function json_count_user_apps(){
-		
+
 	}
 
 	function json_count_user_campaigns(){
-		
+
 	}
 
 	function json_count_users(){
-		
+
 	}
 
 	/**
@@ -211,14 +211,14 @@ class Page_ctrl {
 	function json_get_installed_apps($page_id =NULL, $limit = NULL, $offset = NULL){
 		$this ->CI->load-> model('installed_apps_model', 'installed_apps');
 		$this ->CI->load-> model('user_model', 'user');
-		
+
 		$apps = $this ->CI-> installed_apps -> get_installed_apps_by_page_id($page_id, $limit, $offset);
 		//echo '<pre>';
 		//var_dump($apps);
 		//echo '</pre>';
 		$json_out = array();
-		
-		$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Visit');	
+
+		$action_id = $this->CI->socialhappen->get_k('audit_action', 'User Visit');
 		foreach($apps as $app){
 			$this -> CI->load->library('audit_lib');
 			$this -> CI->load->library('app_url');
@@ -229,7 +229,7 @@ class Page_ctrl {
 			$active_user = $this -> CI->audit_lib->count_audit_range('subject', NULL, $action_id,
 			 array('page_id' => (int)$page_id, 'app_install_id' => (int)$app['app_install_id']),
 			  $start_date, $end_date);
-			
+
 			$a = array('app_image' => $app['app_image'],
 						'app_install_id' => $app['app_install_id'],
 						'app_name' => $app['app_name'],
@@ -261,7 +261,7 @@ class Page_ctrl {
 			case 'expired':
 				$campaigns = $this->CI->campaigns->get_expired_campaigns_by_page_id($page_id,$limit,$offset);
 				break;
-			default : 
+			default :
 				$campaigns = $this->CI->campaigns->get_page_campaigns_by_page_id($page_id, $limit, $offset);
 				break;
 		}
@@ -300,7 +300,7 @@ class Page_ctrl {
 			'page_detail' => $page_detail,
 			'page_image' => $page_image
 		);
-		
+
 		if($this->CI->pages->get_page_id_by_facebook_page_id($post_data['facebook_page_id'])){
 			log_message('error','Duplicated facebook page id');
 			$result['error'] = 'This page has already installed Socialhappen';
@@ -308,19 +308,7 @@ class Page_ctrl {
 			$this->CI->load->library('audit_lib');
 			$user_id = $this->CI->session->userdata('user_id');
 			$action_id = $this->CI->socialhappen->get_k('audit_action','Install Page');
-			// $this->CI->audit_lib->add_audit(
-			// 	0,
-			// 	$user_id,
-			// 	$action_id,
-			// 	'', 
-			// 	'',
-			// 	array(
-			// 			'page_id'=> $page_id,
-			// 			'company_id' => ($this->CI-> input -> post('company_id')),
-			// 			'app_install_id' => 0,
-			// 			'user_id' => $user_id
-			// 		)
-			// );
+
 			$this->CI->audit_lib->audit_add(array(
 				'user_id' => $user_id,
 				'action_id' => $action_id,
@@ -330,12 +318,14 @@ class Page_ctrl {
 				'company_id' => $this->CI-> input -> post('company_id'),
 				'subject' => $user_id,
 				'object' => NULL,
-				'objecti' => NULL
+				'objecti' => NULL,
+				'image' => $page_image
 			));
+
 			$this->CI->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id' => $page_id);
 			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
-			
+
 			$this->CI->load-> model('user_pages_model', 'user_pages');
 			$this->CI-> user_pages -> add_user_page(
 				array(
@@ -364,27 +354,27 @@ class Page_ctrl {
 	}
 
 	function json_get_not_installed_facebook_pages(){
-		
+
 	}
 
 	function json_update_page_order_in_dashboard(){
-		
+
 	}
 
 	function addapp_lightbox(){
-		
+
 	}
 
 	function get_stat_graph(){
-		
+
 	}
 
 	function json_get_page_user_data(){
-		
+
 	}
 
 	function config(){
-		
+
 	}
 
 

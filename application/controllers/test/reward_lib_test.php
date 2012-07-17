@@ -115,6 +115,11 @@ class Reward_lib_test extends CI_Controller {
     $result = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id);
     $this->unit->run($result['success'], FALSE, "\$result", $result);
     $this->unit->run($result['data'], 'Insufficient score', "\$result", $result);
+
+    //Check latest audit
+    $this->load->library('audit_lib');
+    $audits = $this->audit_lib->list_recent_audit(1);
+    $this->unit->run(!!$audits[0]['image'], TRUE, "\$audits[0]['image']", $audits[0]['image']);
   }
 
   function _check_company_score_test() {
@@ -152,6 +157,11 @@ class Reward_lib_test extends CI_Controller {
     $confirm_user_id = 5;
     $result = $this->reward_lib->redeem_with_coupon($coupon_id, $user_id);
     $this->unit->run($result, FALSE, "\$result", $result);
+
+    //Check latest audit
+    $this->load->library('audit_lib');
+    $audits = $this->audit_lib->list_recent_audit(1);
+    $this->unit->run(!!$audits[0]['image'], TRUE, "\$audits[0]['image']", $audits[0]['image']);
   }
 
   function _check_audit_image_test() {

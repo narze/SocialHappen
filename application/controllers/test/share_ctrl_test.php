@@ -84,7 +84,7 @@ class Share_ctrl_test extends CI_Controller {
 	        )
 	      )
 	    );
-	    
+
 	    $this->app_component_lib->add_campaign($app_component_data);
 
 	    //Campaign 2 without share message
@@ -119,7 +119,7 @@ class Share_ctrl_test extends CI_Controller {
 		$result = $this->campaign_model->add_campaign($this->campaign_3);
 		$this->unit->run($result, TRUE, 'add campaign for test', print_r($result, TRUE));
 	}
-	
+
 	function main_fail_test(){
 		$app_install_id = App_install_id_1;
 		$share_link = Share_link;
@@ -163,7 +163,7 @@ class Share_ctrl_test extends CI_Controller {
 	}
 
 	function share_submit_fail_test(){
-		
+
 	}
 
 	function share_submit_test(){
@@ -175,6 +175,11 @@ class Share_ctrl_test extends CI_Controller {
 		// $data = $result['data'];
 		$this->unit->run($result['audit_success'], TRUE, "result['audit_success']", $result['audit_success']);
 		$this->unit->run($result['achievement_stat_success'], TRUE, "result['achievement_stat_success']", $result['achievement_stat_success']);
+
+		//Check latest audit
+		$this->load->library('audit_lib');
+		$audits = $this->audit_lib->list_recent_audit(1);
+		$this->unit->run(!!$audits[0]['image'], TRUE, "\$audits[0]['image']", $audits[0]['image']);
 	}
 }
 

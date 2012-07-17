@@ -16,7 +16,7 @@ class Home_ctrl {
 		$facebook_user = issetor($input['facebook_user']);
 
 		$result['data'] = array(
-			'header' => $this->CI-> socialhappen -> get_header( 
+			'header' => $this->CI-> socialhappen -> get_header(
 				array(
 					'title' => 'Signup',
 					'script' => array(
@@ -36,16 +36,16 @@ class Home_ctrl {
 					'user_companies' => FALSE
 				)
 			),
-			'breadcrumb' => $this->CI-> load -> view('common/breadcrumb', 
+			'breadcrumb' => $this->CI-> load -> view('common/breadcrumb',
 				array(
-					'breadcrumb' => array( 
+					'breadcrumb' => array(
 						'Signup' => NULL
 					)
 				),
 			TRUE),
-			'tutorial' => $this->CI-> load -> view('home/tutorial', 
+			'tutorial' => $this->CI-> load -> view('home/tutorial',
 				array(
-					
+
 				),
 			TRUE),
 			'footer' => $this->CI-> socialhappen -> get_footer(),
@@ -55,8 +55,8 @@ class Home_ctrl {
 			'facebook_user'=>$facebook_user
 		);
 		$result['success'] = TRUE;
-		
-		if(!$is_registered) 
+
+		if(!$is_registered)
 		{
 			$result['data']['signup_form'] = $this->CI-> load -> view('home/signup_form', NULL, TRUE);
 		}
@@ -90,10 +90,10 @@ class Home_ctrl {
 					       	'user_timezone_offset' => $minute_offset,
 					       	'user_facebook_access_token' => $facebook_access_token
 						);
-			
+
 			$this->CI->load->model('user_model', 'users');
 			$user_id = $this->CI->users->add_user($user);
-			
+
 			$company = array(
 					       	'company_name' => $company_name,
 					       	'company_detail' => $company_detail,
@@ -102,9 +102,9 @@ class Home_ctrl {
 						);
 			$this->CI->load->model('company_model','company');
 			$company_id = $this->CI->company->add_company($company);
-			
+
 			if (!($user_id && $company_id))
-			{	
+			{
 				$result['error'] = 'company,user add failed';
 			}
 			else
@@ -115,24 +115,13 @@ class Home_ctrl {
 				  'company_id' => $company_id,
 				  'user_role' => 1 //Company admin
 				));
-        
+
 				if(!$add_user_company){
 					$result['error'] = 'company_user add failed';
 				}else{
 					$this->CI->load->library('audit_lib');
 					$action_id = $this->CI->socialhappen->get_k('audit_action','User Register SocialHappen');
-					// $this->CI->audit_lib->add_audit(
-					// 	0,
-					// 	$user_id,
-					// 	$action_id,
-					// 	'', 
-					// 	'',
-					// 	array(
-					// 		'app_install_id' => 0,
-					// 		'company_id' => $company_id,
-					// 		'user_id' => $user_id
-					// 	)
-					// );
+
 					$this->CI->audit_lib->audit_add(array(
 						'user_id' => $user_id,
 						'action_id' => $action_id,
@@ -141,15 +130,16 @@ class Home_ctrl {
 						'company_id' => $company_id,
 						'subject' => $user_id,
 						'object' => NULL,
-						'objecti' => NULL
+						'objecti' => NULL,
+						'image' => $user['user_image']
 					));
-					
+
 					$this->CI->load->library('achievement_lib');
 					$info = array('action_id'=> $action_id, 'app_install_id'=>0);
 					$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
 
 					$redirect_url = base_url().'home/package?payment=true';
-					if($package_id) 
+					if($package_id)
 					{
 						$redirect_url .= '&package_id='. $package_id;
 					}
@@ -166,6 +156,6 @@ class Home_ctrl {
 	}
 
 	function apps(){
-		
+
 	}
 }

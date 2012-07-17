@@ -48,19 +48,12 @@ class Share_ctrl {
     function share_submit($user_id = NULL, $app_install_id = NULL, $app_id = NULL){
     	$share_action = $this->CI->socialhappen->get_k('audit_action','User Share');
 		$this->CI->load->library('audit_lib');
-		// $audit_additional_data = array(
-		// 	'user_id'=> $user_id,
-		// 	'app_install_id' => $app_install_id
-		// );
+
 		$result = array('success' => FALSE);
-		// $audit_result = $this->CI->audit_lib->add_audit(
-		// 	$app_id,
-		// 	$user_id,
-		// 	$share_action,
-		// 	NULL, 
-		// 	NULL,
-		// 	$audit_additional_data
-		// );
+
+		$this->CI->load->model('user_model');
+		$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
+
 		$audit_result = $this->CI->audit_lib->audit_add(array(
 			'user_id' => $user_id,
 			'action_id' => $share_action,
@@ -70,14 +63,15 @@ class Share_ctrl {
 			// 'company_id' => $this->CI-> input -> post('company_id'),
 			'subject' => $user_id,
 			'object' => NULL,
-			'objecti' => NULL
+			'objecti' => NULL,
+			'image' => $user['user_image']
 		));
 		if($audit_result){
 			$result['audit_success'] = TRUE;
 		} else {
 			$result['error'] = 'add audit failed';
 		}
-		
+
 		$this->CI->load->model('installed_apps_model');
 		$installed_app = $this->CI->installed_apps_model->get_app_profile_by_app_install_id($app_install_id);
 		$this->CI->load->library('achievement_lib');
@@ -86,7 +80,7 @@ class Share_ctrl {
 		$inc_result = $this->CI->achievement_lib->increment_achievement_stat($installed_app['company_id'], $app_id, $user_id, $achievement_info, 1);
 		if($inc_result){
 			$result['achievement_stat_success'] = TRUE;
-		} else {	
+		} else {
 			$result['error'] = 'increment stat failed';
 		}
 
@@ -95,7 +89,7 @@ class Share_ctrl {
 		}
 		return $result;
     }
-	
+
 }
 
 /* End of file share_ctrl.php */

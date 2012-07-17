@@ -23,7 +23,7 @@ class Invite_component_lib_test extends CI_Controller {
 	function __destruct(){
 		$this->unit->report_with_counter();
 	}
-	
+
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
@@ -128,9 +128,11 @@ class Invite_component_lib_test extends CI_Controller {
 		$this->load->model('audit_model');
 		$result = $this->audit_model->list_recent_audit(2);
 		$this->unit->run($result[0]['action_id'], 113, "\$result[0]['action_id']", $result[0]['action_id']);
+		$this->unit->run(!!$result[0]['image'], TRUE, "\$result[0]['image']", $result[0]['image']);
 		$this->unit->run($result[1]['action_id'], 113, "\$result[1]['action_id']", $result[1]['action_id']);
+		$this->unit->run(!!$result[1]['image'], TRUE, "\$result[1]['image']", $result[1]['image']);
 	}
-	
+
 	function add_duplicate_invite_test(){
 		$campaign_id = 1;
 		$app_install_id = 1;
@@ -203,11 +205,11 @@ class Invite_component_lib_test extends CI_Controller {
 	}
 
 	function _extract_target_id_test(){
-		
+
 	}
 
 	function _generate_invite_key_test(){
-		
+
 	}
 
 	function reserve_invite_test(){
@@ -223,7 +225,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$user_facebook_id = '1';
 		$result_status = TRUE;
 		$result = $this->invite_component_lib->reserve_invite($invite_key, $user_facebook_id);
-		
+
 		$result_status = TRUE;
 		if(isset($result['error']))
 			$result_status = FALSE;
@@ -296,7 +298,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$criteria = array('campaign_id' => '4');
 		$result = $this->invite_component_lib->list_invite($criteria);
 		$this->unit->run(count($result), 1, 'list_invite', count($result));
-		
+
 		//When accept invite 3, will automatically accept invite 1 (same facebook_page_id), whether having pending or not
 		$invite_key = $this->invite_key3;
 		$target_facebook_id = 2;
@@ -352,6 +354,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$result = $this->invite_pending_model->get_invite_key_by_user_facebook_id_and_campaign_id($target_facebook_id, 1);
 		$this->unit->run($result, TRUE, 'found in pending invite', $result);
 		$result = $this->invite_component_lib->accept_invite_campaign_level($invite_key, $target_facebook_id);
+
 		$this->unit->run($result, TRUE, 'accept_invite_campaign_level', $result);
 		$result = $this->invite_pending_model->get_invite_key_by_user_facebook_id_and_campaign_id($target_facebook_id, 1);
 		$this->unit->run($result, FALSE, 'not found in pending invite', $result);
@@ -403,7 +406,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$result_status = TRUE;
 		if(isset($result['error']))
 			$result_status = FALSE;
-			
+
 		$this->unit->run($result_status, FALSE, 'reserve_invite : failed (user already in this campaign)', $invite_key.' - '.$user_facebook_id);
 	}
 
@@ -420,7 +423,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$page_id = $this->page_model->get_page_id_by_facebook_page_id($facebook_page_id);
 		$stat_before = $this->achievement_stat_company_model->list_stat(array(
 			'user_id' => (int) $user_id,
-			'company_id' => Company_id 
+			'company_id' => Company_id
 		));
 
 		$this->unit->run($stat_before_count = $stat_before[0]['action'][114]['count'], 'is_int','count $stat_before', $stat_before[0]['action'][114]['count']);
@@ -432,12 +435,12 @@ class Invite_component_lib_test extends CI_Controller {
 
 		$stat_after = $this->achievement_stat_company_model->list_stat(array(
 			'user_id' => (int) $user_id,
-			'company_id' => Company_id 
+			'company_id' => Company_id
 		));
 		$this->unit->run($stat_after[0]['action'][114]['count'], $stat_before_count + 1, 'count $stat_after idempotent test', $stat_after[0]['action'][114]['count']);
 	}
 
-	function get_page_score_test(){ //after get invite page score : 
+	function get_page_score_test(){ //after get invite page score :
 		$user_id = 1;
 		$company_id = Company_id;
 		$this->load->model('achievement_stat_company_model');
@@ -460,7 +463,7 @@ class Invite_component_lib_test extends CI_Controller {
 		$campaign_id = 1;
 		$result = $this->invite_component_lib->_give_page_score_to_all_inviters($facebook_page_id, $inviters, $campaign_id,$user_facebook_id);
 		$this->unit->run($result, FALSE, '_give_page_score_to_all_inviters', $result);
-		
+
 		//no inviters
 		$facebook_page_id = $this->FBPAGEID2;
 		$inviters = NULL;

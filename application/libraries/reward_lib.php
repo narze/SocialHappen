@@ -166,7 +166,8 @@ class Reward_lib
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,
 			'user_id' => $user['user_id'],
-			'page_id' => $page_id
+			'page_id' => $page_id,
+			'image' => $reward_item['image']
 		));
 		return $this->CI->reward_item_model->update($reward_item_id, $input);
 	}
@@ -322,7 +323,8 @@ class Reward_lib
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,
 			'user_id' => $user_id,
-			'company_id' => $company_id
+			'company_id' => $company_id,
+			'image' => $reward_item['image']
 		))) {
 			return array('success' => FALSE, 'data' => 'Add action failed');
 		}

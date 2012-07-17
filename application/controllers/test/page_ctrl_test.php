@@ -10,7 +10,7 @@ class Page_ctrl_test extends CI_Controller {
 		$this->load->library('controller/page_ctrl');
 		$this->unit->reset_dbs();
 	}
-	
+
 	function __destruct(){
 		$this->unit->report_with_counter();
 	}
@@ -62,23 +62,23 @@ class Page_ctrl_test extends CI_Controller {
 	}
 
 	function json_count_apps_test(){
-		
+
 	}
 
 	function json_count_campaigns_test(){
-		
+
 	}
 
 	function json_count_user_apps_test(){
-		
+
 	}
 
 	function json_count_user_campaigns_test(){
-		
+
 	}
 
 	function json_count_users_test(){
-		
+
 	}
 
 	/**
@@ -98,7 +98,7 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array['page_detail'],'is_string','page_detail');
 		$this->unit->run($array['page_image'],'is_string','page_image');
 	}
-	
+
 	/**
 	 * Tests json_get_installed_apps()
 	 * @author Manassarn M.
@@ -133,7 +133,7 @@ class Page_ctrl_test extends CI_Controller {
 		//$this->unit->run($array[0]['app_facebook_api_key'],'is_string','app_facebook_api_key');
 		//$this->unit->run(count($array[0]) == 19,'is_true', 'number of column');
 	}
-	
+
 	/**
 	 * Tests json_get_campaigns()
 	 * @author Manassarn M.
@@ -155,7 +155,7 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['campaign_status'],'is_string','campaign_status');
 		$this->unit->run($array[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($array[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
-		
+
 		$this->unit->run($array[0]['company_id'],'is_string','company_id');
 		$this->unit->run($array[0]['app_id'],'is_string','app_id');
 		$this->unit->run($array[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
@@ -186,7 +186,7 @@ class Page_ctrl_test extends CI_Controller {
 		$this->unit->run($array[0]['campaign_status'],'is_string','campaign_status');
 		$this->unit->run($array[0]['campaign_start_timestamp'],'is_string','campaign_start_timestamp');
 		$this->unit->run($array[0]['campaign_end_timestamp'],'is_string','campaign_end_timestamp');
-		
+
 		$this->unit->run($array[0]['company_id'],'is_string','company_id');
 		$this->unit->run($array[0]['app_id'],'is_string','app_id');
 		$this->unit->run($array[0]['app_install_status_id'] == 1,'is_true','app_install_status_id == 1');
@@ -233,6 +233,11 @@ class Page_ctrl_test extends CI_Controller {
 		$result = $this->page_ctrl->json_add($facebook_page_id,$company_id,$page_name,$page_detail,$page_image);
 		$this->unit->run($result['success'], TRUE, "result['success']", $result['success']);
 		$this->unit->run($result['data']['page_id'], 'is_int', "result['data']['page_id']", $result['data']['page_id']);
+
+		//Check latest audit
+		$this->load->library('audit_lib');
+		$audits = $this->audit_lib->list_recent_audit(1);
+		$this->unit->run($audits[0]['image'] === $page_image, TRUE, "\$audits[0]['image']", $audits[0]['image']);
 	}
 
 	function json_add_fail_dup_test(){
@@ -247,27 +252,27 @@ class Page_ctrl_test extends CI_Controller {
 	}
 
 	function json_get_not_installed_facebook_pages_test(){
-		
+
 	}
 
 	function json_update_page_order_in_dashboard_test(){
-		
+
 	}
 
 	function addapp_lightbox_test(){
-		
+
 	}
 
 	function get_stat_graph_test(){
-		
+
 	}
 
 	function json_get_page_user_data_test(){
-		
+
 	}
 
 	function config_test(){
-		
+
 	}
 
 }

@@ -6,14 +6,14 @@ class Share extends CI_Controller {
 		parent::__construct();
 		$this->socialhappen->check_logged_in();
 	}
-	
+
 	function index($app_install_id = NULL, $share_link = NULL){
 		$this->load->library('form_validation');
 		$share_link = $share_link ? $share_link : $this->input->get('link');
 		if($app_install_id){
 			$this->load->library('campaign_lib');
 			$campaign = $this->campaign_lib->get_current_campaign_by_app_install_id($app_install_id);
-		
+
 			if(issetor($campaign['in_campaign'])){
 				$campaign_id = $campaign['campaign_id'];
 				$this->load->model('app_component_model','app_component');
@@ -53,7 +53,7 @@ class Share extends CI_Controller {
 		$oauth_token = $this->input->get('oauth_token');
 		$oauth_verifier = $this->input->get('oauth_verifier');
 		$denied = $this->input->get('denied');
-		
+
 		$this->load->library('sharebutton_lib');
 		$this->sharebutton_lib->twitter_callback($oauth_token, $oauth_verifier, $denied);
 	}
@@ -66,14 +66,14 @@ class Share extends CI_Controller {
 
 	function share_submit($app_install_id = NULL, $campaign_id = NULL){
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('twitter', 'Twitter', '');			
-		$this->form_validation->set_rules('facebook', 'Facebook', '');			
+		$this->form_validation->set_rules('twitter', 'Twitter', '');
+		$this->form_validation->set_rules('facebook', 'Facebook', '');
 		$this->form_validation->set_rules('message', 'Message', 'required|trim|xss_clean');
-			
+
 		$this->form_validation->set_error_delimiters('<div class="notice error">', '</div>');
 
 		$share_link = $this->input->post('share_link');
-	
+
 		if ($this->form_validation->run() == FALSE) // validation hasn't been passed
 		{
 			$this->index($app_install_id, $share_link);
@@ -90,7 +90,7 @@ class Share extends CI_Controller {
 
 			$this->load->model('installed_apps_model','installed_apps');
 			$app = $this->installed_apps->get_app_profile_by_app_install_id($app_install_id);
-				
+
 			if($twitter_share){
 				if($result = $this->sharebutton_lib->twitter_post($message.' '.$share_link)){
 					$share_result['twitter'] = TRUE;
@@ -131,7 +131,8 @@ class Share extends CI_Controller {
 				'user_id' => $user_id,
 				'app_install_id' => $app_install_id,
 				'page_id' => $app['page_id'],
-				'campaign_id' => $campaign_id
+				'campaign_id' => $campaign_id,
+				'image' => $user['user_image']
 			);
 			$audit_result = $this->audit_lib->audit_add($audit_data);
 
@@ -152,7 +153,7 @@ class Share extends CI_Controller {
 					1);
 				if($inc_result){
 					//echo ' increment_achievement_stat complete';
-				} else {	
+				} else {
 					log_message('error','increment_achievement_stat failed');
 				}
 			} else {

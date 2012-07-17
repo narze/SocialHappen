@@ -10,10 +10,10 @@ class Checkin extends CI_Controller {
 
 		$this->basic_view = $this->input->get('basic_view', TRUE);
 	}
-	
+
 	function index() {
 		$action_data = $this->action_data_lib->get_action_data_from_code();
-		
+
 		$user = $this->socialhappen->get_user();
 
 		if($action_data && is_array($action_data) && $user){
@@ -75,7 +75,7 @@ class Checkin extends CI_Controller {
 		} else {
 			show_error('Code not found or user not logged in');
 		}
-		
+
 	}
 
 	function add_user_data_checkin(){
@@ -88,11 +88,11 @@ class Checkin extends CI_Controller {
 
 		$this->load->library('challenge_lib');
 		$challenge = $this->challenge_lib->get_one(
-			array( 
+			array(
 				'criteria.action_data_id' => get_mongo_id($action_data)
 			)
 		);
-		
+
 		$user = $this->socialhappen->get_user();
 		if($action_data && $user && $challenge) {
 
@@ -115,7 +115,7 @@ class Checkin extends CI_Controller {
 				if($result = $this->action_user_data_lib->add_action_user_data(
 																	$challenge['company_id'],
 																	$action_data['action_id'],
-																	get_mongo_id($action_data), 
+																	get_mongo_id($action_data),
 																	get_mongo_id($challenge),
 																	$user['user_id'],
 																	$user_data
@@ -124,12 +124,12 @@ class Checkin extends CI_Controller {
 					//facebook post process
 					$post_data = array(
 							'message' => htmlspecialchars($post_message),
-							// 'picture' => $settings['share_fb_picture'], 
-							//'link' => $link, 
-							//'name' => 'name', 
+							// 'picture' => $settings['share_fb_picture'],
+							//'link' => $link,
+							//'name' => 'name',
 							'place' => $facebook_place_id,
 							'tags' => $tagged_user_facebook_ids_comma,
-							// 'caption' => 'share_fb_caption', 
+							// 'caption' => 'share_fb_caption',
 							// 'description' => 'share_fb_description'
 						);
 					$post_result = $this->FB->api('me/feed', 'post', $post_data);
@@ -146,15 +146,15 @@ class Checkin extends CI_Controller {
 											'subject' => NULL,
 											'object' => $action_data['data']['checkin_facebook_place_name'],
 											'objecti' => $challenge['hash'],
-											//'additional_data' => $additional_data
+											'image' => $user['user_image']
 										);
-					
+
 					$audit_result = $this->audit_lib->audit_add($audit_data);
 
 					$this->load->library('achievement_lib');
 					$info = array(
 									'action_id'=> $action_data['action_id'],
-									'app_install_id'=> 0, 
+									'app_install_id'=> 0,
 									'page_id' => 0
 								);
 					$achievement_result = $this->achievement_lib->
@@ -175,7 +175,7 @@ class Checkin extends CI_Controller {
 			$data = array(
 				'action_data' => $action_data
 			);
-			
+
 			$template = array(
         'title' => 'Welcome to SocialHappen',
         'styles' => array(

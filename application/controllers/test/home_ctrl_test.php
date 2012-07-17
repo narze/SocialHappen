@@ -10,11 +10,11 @@ class Home_ctrl_test extends CI_Controller {
 		$this->load->library('controller/home_ctrl');
 		$this->unit->reset_dbs();
 	}
-	
+
 	function __destruct(){
 		$this->unit->report_with_counter();
 	}
-	
+
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
@@ -68,7 +68,7 @@ class Home_ctrl_test extends CI_Controller {
 		$this->unit->run(isset($data['redirect_url']), TRUE, 'redirect_url', $data['redirect_url']);
 		$this->unit->run($user_id, 'is_int', 'user_id', $user_id);
 		$this->unit->run($company_id, 'is_int', 'company_id', $company_id);
-		
+
 		$this->load->model('user_model');
 		$this->load->model('company_model');
 		$user = $this->user_model->get_user_profile_by_user_id($user_id);
@@ -83,6 +83,10 @@ class Home_ctrl_test extends CI_Controller {
 		$this->unit->run($company['company_detail'], $company_detail, 'company_detail', $company['company_detail']);
 		$this->unit->run($company['company_image'], $company_image, 'company_image', $company['company_image']);
 
+		//Check latest audit
+		$this->load->library('audit_lib');
+		$audits = $this->audit_lib->list_recent_audit(1);
+		$this->unit->run($audits[0]['image'] === $user['user_image'], TRUE, "\$audits[0]['image']", $audits[0]['image']);
 	}
 }
 /* End of file home_ctrl_test.php */

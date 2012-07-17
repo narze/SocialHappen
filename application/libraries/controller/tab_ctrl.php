@@ -38,12 +38,12 @@ class Tab_ctrl {
 		$company = $this->CI->companies->get_company_profile_by_page_id($page_id);
 		$this->CI->load->model('user_companies_model','user_companies');
 		$is_admin = $this->CI->user_companies->is_company_admin($user_id, $company['company_id']);
-		
+
 		$this->CI->config->load('pagination', TRUE);
 		$per_page = $this->CI->config->item('per_page','pagination');
 
 		$result['data'] = array(
-			'header' => $this->CI->load->view('tab/header', 
+			'header' => $this->CI->load->view('tab/header',
 				array(
 					'facebook_app_id' => $this->CI->config->item('facebook_app_id'),
 					'facebook_channel_url' => $this->CI->facebook->channel_url,
@@ -80,7 +80,7 @@ class Tab_ctrl {
 					)
 				),
 			TRUE),
-			'bar' => 
+			'bar' =>
 			$this->CI->socialhappen->get_bar(
 				array(
 					'user_id' => $user_id,
@@ -109,7 +109,7 @@ class Tab_ctrl {
 			'email' => array('label' => 'Email', 'rules' => 'required|email', 'input' => $email, 'verify_message' => 'Please enter a valid email.')
 		);
 		$validation_result = $this->CI->text_validate->text_validate_array($validate_array);
-		
+
 		if(!$validation_result){
 			$error['status'] = 'error';
 			$error['error'] = 'verify';
@@ -139,10 +139,10 @@ class Tab_ctrl {
 				'user_email' => $email,
 				'user_image' => $user_image,
 				'user_facebook_id' => $user_facebook_id,
-			   	'user_timezone_offset' => $minute_offset,
-			   	'user_facebook_access_token' => $user_facebook_access_token
+		   	'user_timezone_offset' => $minute_offset,
+		   	'user_facebook_access_token' => $user_facebook_access_token
 			);
-			
+
 			if(!$user_id = $this->CI->users->add_user($post_data)){
 				//TODO : erase uploaded image
 				log_message('error','add user failed, $post_data : '. print_r($post_data, TRUE));
@@ -155,21 +155,10 @@ class Tab_ctrl {
 				$this->CI->socialhappen->login();
 				$result['success'] = TRUE;
 				$result['data']['user_id'] = $user_id;
-				
+
 				$this->CI->load->library('audit_lib');
 				$action_id = $this->CI->socialhappen->get_k('audit_action','User Register SocialHappen');
-				// $this->CI->audit_lib->add_audit(
-				// 	0,
-				// 	$user_id,
-				// 	$action_id,
-				// 	'', 
-				// 	'',
-				// 	array(
-				// 		'app_install_id' => 0,
-				// 		'user_id' => $user_id,
-				// 		'page_id' => $page_id
-				// 	)
-				// );
+
 				$this->CI->audit_lib->audit_add(array(
 					'user_id' => $user_id,
 					'action_id' => $action_id,
@@ -178,16 +167,17 @@ class Tab_ctrl {
 					'page_id'=> $page_id,
 					'subject' => $user_id,
 					'object' => NULL,
-					'objecti' => NULL
+					'objecti' => NULL,
+					'image' => $user_image
 				));
 				$this->CI->load->library('achievement_lib');
 				$info = array('action_id'=> $action_id, 'app_install_id'=>0, 'page_id'=>$page_id);
 				$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
 			}
-			
+
 		}
 		return $result;
-	
+
 	}
 
 	function signup_page_submit($user_id = NULL, $user_facebook_id = NULL, $app_install_id = NULL, $page_id = NULL, $user_data = NULL){
@@ -211,7 +201,7 @@ class Tab_ctrl {
 				$facebook_tab_url = $this->CI->facebook_app($page_id, TRUE, TRUE);
 			}
 		}
-		
+
 		$this->CI->load->model('page_user_data_model','page_users');
 		if(!$this->CI->page_users->add_page_user($post_data)){
 			log_message('error','add page user failed');
@@ -224,21 +214,13 @@ class Tab_ctrl {
 			$data['status'] = 'ok';
 			$data['redirect_url'] = $facebook_tab_url;
 			$result['data'] = $data;
-			
+
+			$this->CI->load->model('user_model');
+			$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
+
 			$action_id = $this->CI->socialhappen->get_k('audit_action','User Register Page');
 			$this->CI->load->library('audit_lib');
-			// $audit_info = array('page_id' => $page_id);
-			// if(isset($app_install_id)){
-			// 	$audit_info['app_install_id'] = $app_install_id;
-			// }
-			// $this->CI->audit_lib->add_audit(
-			// 	0,
-			// 	$user_id,
-			// 	$action_id,
-			// 	'', 
-			// 	'',
-			// 	$audit_info
-			// );
+
 			$this->CI->audit_lib->audit_add(array(
 				'user_id' => $user_id,
 				'action_id' => $action_id,
@@ -247,9 +229,10 @@ class Tab_ctrl {
 				'page_id'=> $page_id,
 				'subject' => $user_id,
 				'object' => NULL,
-				'objecti' => NULL
+				'objecti' => NULL,
+				'image' => $user['user_image']
 			));
-			
+
 			$this->CI->load->library('achievement_lib');
 			$info = array('action_id'=> $action_id, 'app_install_id'=>$app_install_id, 'page_id'=>$page_id);
 			$stat_increment_result = $this->CI->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1);
@@ -373,7 +356,7 @@ class Tab_ctrl {
 				$score = $stat['campaign'][$campaign_id]['score'] + $score;
 			}
 		}
-		return $score;	
+		return $score;
 	}
 
 	function page_leaderboard($page_id = NULL, $company_id = NULL){
@@ -405,7 +388,7 @@ class Tab_ctrl {
 
 	function campaign_leaderboard($campaign_id = NULL, $page_id = NULL, $company_id = NULL){
 		$result = array('success' => FALSE);
-		
+
 		$this->CI->load->model('user_campaigns_model');
 		$user_campaign_scores = $campaign_score_for_sorting = array();
 		$campaign_users = $this->CI->user_campaigns_model->get_campaign_users_by_campaign_id($campaign_id);
@@ -422,7 +405,7 @@ class Tab_ctrl {
 		$result['data'] = $user_campaign_scores;
 		$result['count'] = count($campaign_users);
 		$result['success'] = TRUE;
-		
+
 		return $result;
 	}
 
@@ -438,7 +421,7 @@ class Tab_ctrl {
 			$app_scores = array(); // app_scores[$user_id]['app_score'] = score
 			foreach($campaigns as $campaign){
 				$campaign_id = $campaign['campaign_id'];
-				
+
 				$user_campaign_scores = array();
 				$campaign_users = $this->CI->user_campaigns_model->get_campaign_users_by_campaign_id($campaign_id);
 				foreach($campaign_users as $user){
@@ -470,11 +453,11 @@ class Tab_ctrl {
 	}
 
 	function redeem_list($company_id = NULL, $user_facebook_id = NULL, $status = NULL, $sort = NULL, $order = NULL){
-		
+
 		$this->CI->load->library('Reward_lib');
 		$sort_criteria = array('start_timestamp' => -1);
 
-		if($sort) 
+		if($sort)
 		{
 			if($sort === 'status'){
 				$reward_item_active = $this->CI->reward_lib->get_active_redeem_items($company_id);
@@ -529,7 +512,7 @@ class Tab_ctrl {
 		$this->CI->load->model('audit_action_model','audit_action');
 		$this->CI->load->model('campaign_model','campaigns');
 		$this->CI->load->model('installed_apps_model','installed_apps');
-			
+
 		$data = array();
 		$app_install_ids = array();
 		$campaign_ids = array();
@@ -558,12 +541,12 @@ class Tab_ctrl {
 			$user_facebook_id = $this->CI->FB->getUser();
 			$this->CI->load->model('User_model','users');
 			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
-		
+
 			$campaigns = $this->CI->campaigns->get_page_campaigns_by_page_id($page_id);
 			foreach($campaigns as $campaign){
 				$campaign_ids[] = (int) $campaign['campaign_id'];
 			}
-			
+
 			$apps = $this->CI->installed_apps->get_installed_apps_by_page_id($page_id);
 			foreach($apps as $app){
 				$app_install_ids[] = (int) $app['app_install_id'];
@@ -580,7 +563,7 @@ class Tab_ctrl {
 			$user_facebook_id = $this->CI->FB->getUser();
 			$this->CI->load->model('User_model','users');
 			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
-			
+
 			$apps = $this->CI->installed_apps->get_installed_apps_by_page_id($page_id);
 			foreach($apps as $app){
 				$app_install_ids[] = (int) $app['app_install_id'];
@@ -588,12 +571,12 @@ class Tab_ctrl {
 			$criteria = array(
 				'user_id' => $user_id,
 				'app_install_id' => array('$in'=>$app_install_ids)
-			);		
+			);
 		} else if ($filter == 'me-campaign'){
 			$user_facebook_id = $this->CI->FB->getUser();
 			$this->CI->load->model('User_model','users');
 			$user_id = $this->CI->users->get_user_id_by_user_facebook_id($user_facebook_id);
-			
+
 			$campaigns = $this->CI->campaigns->get_page_campaigns_by_page_id($page_id);
 			foreach($campaigns as $campaign){
 				$campaign_ids[] = (int) $campaign['campaign_id'];
@@ -607,7 +590,7 @@ class Tab_ctrl {
 			foreach($campaigns as $campaign){
 				$campaign_ids[] = (int) $campaign['campaign_id'];
 			}
-			
+
 			$apps = $this->CI->installed_apps->get_installed_apps_by_page_id($page_id);
 			foreach($apps as $app){
 				$app_install_ids[] = (int) $app['app_install_id'];
@@ -656,7 +639,7 @@ class Tab_ctrl {
 			$this->CI->load->model('page_model','page');
 			$page = $this->CI->page->get_page_profile_by_page_id($app['page_id']);
 			$facebook_tab_url = $this->CI->facebook->get_facebook_tab_url($app['app_facebook_api_key'], $page['facebook_page_id']);
-			
+
 			$this->CI->installed_app->update_facebook_tab_url_by_app_install_id($app_install_id, $facebook_tab_url);
 		}
 		return $facebook_tab_url;
@@ -676,7 +659,7 @@ class Tab_ctrl {
 		$facebook_tab_url = $page['facebook_tab_url'];
 		if(!$facebook_tab_url || $force_update){
 			$facebook_tab_url = $this->CI->facebook->get_facebook_tab_url($this->CI->config->item('facebook_app_id'), $page['facebook_page_id']);
-			
+
 			$this->CI->page->update_facebook_tab_url_by_page_id($page_id, $facebook_tab_url);
 		}
 		return $facebook_tab_url;

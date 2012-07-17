@@ -1,16 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Feedback extends CI_Controller {
-	
+
 	function __construct(){
 		parent::__construct();
 		$this->load->library('action_data_lib');
 		$this->load->library('action_user_data_lib');
 	}
-	
+
 	function index() {
 		$action_data = $this->action_data_lib->get_action_data_from_code();
-		
+
 		$user = $this->socialhappen->get_user();
 
 		if($action_data && is_array($action_data) && $user){
@@ -43,7 +43,7 @@ class Feedback extends CI_Controller {
 		} else {
 			show_error('Code not found or user not logged in');
 		}
-		
+
 	}
 
 	function get_form() {
@@ -62,7 +62,7 @@ class Feedback extends CI_Controller {
 
 	function add_user_data_feedback(){
 		//print_r($this->input->post());
-		
+
 		$user_feedback = $this->input->post('user_feedback');
 		$user_score = $this->input->post('user_score');
 		$action_data_hash = $this->input->post('action_data_hash');
@@ -72,13 +72,13 @@ class Feedback extends CI_Controller {
 
 		$this->load->library('challenge_lib');
 		$challenge = $this->challenge_lib->get_one(
-													array( 
+													array(
 														'criteria.action_data_id' => get_mongo_id($action_data)
 													)
 												);
-		
+
 		$user = $this->socialhappen->get_user();
-		
+
 		if($user_feedback && $user_score && $action_data && $user && $challenge) {
 			date_default_timezone_set('UTC');
 			$user_data = array(
@@ -90,7 +90,7 @@ class Feedback extends CI_Controller {
 			if($result = $this->action_user_data_lib->add_action_user_data(
 																$challenge['company_id'],
 																$action_data['action_id'],
-																get_mongo_id($action_data), 
+																get_mongo_id($action_data),
 																get_mongo_id($challenge),
 																$user['user_id'],
 																$user_data
@@ -108,14 +108,14 @@ class Feedback extends CI_Controller {
 										'subject' => NULL,
 										'object' => $user_score,
 										'objecti' => $challenge['hash'],
-										//'additional_data' => $additional_data
+										'image' => $user['user_image']
 									);
 				$audit_result = $this->audit_lib->audit_add($audit_data);
 
 				$this->load->library('achievement_lib');
 				$info = array(
 								'action_id'=> $action_data['action_id'],
-								'app_install_id'=> 0, 
+								'app_install_id'=> 0,
 								'page_id' => 0
 							);
 				$achievement_result = $this->achievement_lib->
@@ -130,12 +130,12 @@ class Feedback extends CI_Controller {
 			$data = array(
 				'action_data' => $action_data
 			);
-			
-			
+
+
 	    $this->load->view('actions/feedback/feedback_finish', $data);
 		} else {
 			show_error('Invalid data');
-		}	
+		}
 	}
 
 	function show_user_data_feedback(){
@@ -165,7 +165,7 @@ class Feedback extends CI_Controller {
 					$criteria_name = $criteria['name'];
 
 			}
-			
+
 			$data = array(
 							'action_user_data_id_array' => json_encode($action_user_data_id_array),
 							'action_data_name' => $criteria_name,
@@ -224,13 +224,13 @@ class Feedback extends CI_Controller {
 
 			if($action_user_data = $this->action_user_data_lib->get_action_user_data_array($action_user_data_criteria)){;
 				foreach($action_user_data as &$user_data){
-					
+
 					$user_data['user'] = $this->user_model->get_user_profile_by_user_id($user_data['user_id']);
 					$user_data['user_data']['timestamp'] = date('Y-m-j H:i:s', $user_data['user_data']['timestamp']);
 					$action_user_data_array[] = $user_data;
 				}
 
-				
+
 			}
 
 			if(sizeof($action_user_data_array) > 0){
@@ -240,7 +240,7 @@ class Feedback extends CI_Controller {
 			}
 
 		}
-		
+
 	}
 
 }

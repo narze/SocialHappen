@@ -47,6 +47,9 @@ class User_lib {
 		}
 		$challenge_id = get_mongo_id($challenge);
 
+		$this->CI->load->model('user_model');
+		$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
+
 		//Add audit
 		$this->CI->load->library('audit_lib');
 		$this->CI->audit_lib->audit_add(array(
@@ -54,7 +57,8 @@ class User_lib {
 			'action_id' => $this->CI->socialhappen->get_k('audit_action', 'User Join Challenge'),
 			'objecti' => $challenge_hash,
 			'user_id' => $user_id,
-			'app_id' => 0
+			'app_id' => 0,
+			'image' => $user['user_image']
 		));
 
 		//Make user's company stat (if not exists)

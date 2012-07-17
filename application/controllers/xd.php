@@ -16,15 +16,15 @@ class XD extends CI_Controller {
 
 		$this->load->view('xd/xd_view');
 	}
-	
+
 	function login(){
 		$this->socialhappen->login();
 	}
-	
+
 	function logout(){
 		$this->socialhappen->logout();
 	}
-	
+
 	function get_user($page_id = NULL){
 		if($user = $this->socialhappen->get_user()){
 			$user['user_role'] = $this->get_role($user['user_id'], $page_id);
@@ -34,43 +34,43 @@ class XD extends CI_Controller {
 		// log_message('error',print_r($user,TRUE));
 		echo json_encode($user);
 	}
-	
+
 	function get_role($user_id = NULL, $page_id = NULL){
 		$this->load->model('user_pages_model','user_page');
 		$this->load->model('page_model','page');
 		$page = $this->page->get_page_profile_by_page_id($page_id);
-		if($this->user_page->is_page_admin($user_id, $page_id)){			
+		if($this->user_page->is_page_admin($user_id, $page_id)){
 			$user_role = 'admin';
-			
+
 			$page_update = array();
 			if(!$page['page_installed']){
 				$page_update['page_installed'] = TRUE;
 			} else if($page['page_app_installed_id'] != 0){
 				$page_update['page_app_installed_id'] = 0;
-			}		
-			
+			}
+
 			$this->page->update_page_profile_by_page_id($page_id, $page_update);
 		} else {
 			$user_role = 'user';
 		}
 		return $user_role;
 	}
-	
+
 	function get_bar_content($view_as = NULL, $user_id = NULL, $user_facebook_id = NULL, $page_id = NULL, $app_install_id = NULL){
 		$app_mode = FALSE;
-		
+
 		$this->load->model('Installed_apps_model', 'app');
 		$app = $this->app->get_app_profile_by_app_install_id($app_install_id);
 		if($app && isset($app['page_id'])){
 			$app_mode = TRUE;
 			$page_id = $app['page_id'];
 		}
-		
+
 		$this->load->model('User_model', 'User');
 		$this->load->model('user_pages_model','user_pages');
 		$this->load->model('page_model','pages');
 		$this->load->model('session_model','session_model');
-		$user = $user_facebook_id ? $this->User->get_user_profile_by_user_facebook_id($user_facebook_id) 
+		$user = $user_facebook_id ? $this->User->get_user_profile_by_user_facebook_id($user_facebook_id)
 		: $this->User->get_user_profile_by_user_id($user_id); //TODO so confused
 
 		// $user = $user_id ? $this->User->get_user_profile_by_user_id($user_id) : $this->User->get_user_profile_by_user_facebook_id($user_facebook_id);
@@ -80,26 +80,26 @@ class XD extends CI_Controller {
 		}
 
 		$menu = array();
-		//Right menu			
+		//Right menu
 		//@TODO : This has problems with multiple login, cannot use user_agent to check due to blank user_agent when called via api
-		if(!$user || ($view_as === 'guest')){ 
+		if(!$user || ($view_as === 'guest')){
 			$facebook_page = $this->facebook->get_page_info(issetor($page['facebook_page_id']));
-			
+
 			$signup_link = $facebook_page['link'].'?sk=app_'.$this->config->item('facebook_app_id');
-		} else if($view_as === 'admin' && $this->user_pages->is_page_admin($user['user_id'], $page_id)){			
-			
+		} else if($view_as === 'admin' && $this->user_pages->is_page_admin($user['user_id'], $page_id)){
+
 			$is_page_admin = TRUE;
 			$page_update = array();
 			if(!$page['page_installed']){
 				$page_update['page_installed'] = TRUE;
 			} else if($page['page_app_installed_id'] != 0){
 				$page_update['page_app_installed_id'] = 0;
-			}		
+			}
 			$this->pages->update_page_profile_by_page_id($page_id, $page_update);
 		} else {
 			// $view_as = 'user';
 		}
-		
+
 		$menu['left'] = array();
 		if($page_id){
 			$apps = $this->app->get_installed_apps_by_page_id($page_id);
@@ -115,7 +115,7 @@ class XD extends CI_Controller {
 				}
 			}
 		}
-		
+
 		$this->load->library('notification_lib');
 		$notification_amount = $this->notification_lib->count_unread($user['user_id']);
 		$app_data = array('view'=>'notification', 'return_url' => $app['facebook_tab_url'] );
@@ -170,10 +170,12 @@ class XD extends CI_Controller {
 	}
 
 	function visit($page_id = NULL, $app_install_id = NULL, $app_id = NULL){
-		if(!$page_id || !$app_install_id || (!$user_id = $this->socialhappen->get_user_id())){
+		if(!$page_id || !$app_install_id || (!$user = $this->socialhappen->get_user())){
 			echo json_encode(array('success'=>FALSE));
 			return;
 		}
+		$user_id = $user['user_id'];
+
 		$this->load->library('audit_lib');
 		$this->audit_lib->audit_add(array(
 			'app_id' => $app_id,
@@ -181,11 +183,12 @@ class XD extends CI_Controller {
 			'user_id' => $user_id,
 			'action_id' => $this->socialhappen->get_k('audit_action', 'User Visit'),
 			'page_id' => $page_id,
-			'app_install_id' => $app_install_id
+			'app_install_id' => $app_install_id,
+			'image' => $user['user_image']
 		));
 		echo json_encode(array('success' => TRUE));
 	}
-}  
+}
 
 /* End of file xd.php */
 /* Location: ./application/controllers/xd.php */
