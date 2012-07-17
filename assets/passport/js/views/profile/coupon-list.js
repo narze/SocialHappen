@@ -104,7 +104,7 @@ define([
       $('.approved-coupons', this.el).hide();
     },
 
-    showBoth',
+    showBoth: function() {
       $('.pending-coupons', this.el).show();
       $('.approved-coupons', this.el).show();
     }
