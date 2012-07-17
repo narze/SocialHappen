@@ -20,10 +20,10 @@ class Challenge_lib {
       if($result['updatedExisting']) {
         return $id;
       }
-    } 
+    }
     return FALSE;
   }
-  
+
   function get($criteria, $limit = 100) {
     $result = $this->CI->challenge_model->get($criteria, $limit);
     return $result;
@@ -49,7 +49,7 @@ class Challenge_lib {
     //$data['$set']['hash'] = strrev(sha1($challenge_id));
 
     unset($data['_id']);
-    
+
     //Pack data into $set
     if(!isset($data['$set'])) {
       $data_temp = $data;
@@ -72,7 +72,7 @@ class Challenge_lib {
 
   function check_challenge($company_id = NULL, $user_id = NULL,
     $info = array()) {
-    
+
     $company_id = (int) $company_id;
     $user_id = (int) $user_id;
     $result = array(
@@ -81,12 +81,12 @@ class Challenge_lib {
       'in_progress' => array(),
       'completed_today' => array()
     );
-    
+
     $this->CI->load->model('achievement_user_model','achievement_user');
-    
+
     $user_achieved = $this->CI->achievement_user->list_user(
       array('user_id' => $user_id, 'company_id' => $company_id));
-    
+
     $user_achieved_id_list = array();
     foreach ($user_achieved as $key => $achieved){
       if($achieved['achievement_id']['$ref'] === 'challenge'){
@@ -102,7 +102,7 @@ class Challenge_lib {
             //Don't remove from candidate list, by skip adding into user_achieved_id_list
             continue;
           }
-          
+
         }
       }
 
@@ -111,15 +111,15 @@ class Challenge_lib {
 
     //if user achieved something, exclude them out with $nin
     if(count($user_achieved_id_list) > 0 ){
-      $candidate_achievement_criteria = 
+      $candidate_achievement_criteria =
         array('_id' => array('$nin' => $user_achieved_id_list),
               'company_id' => $company_id);
     } else {
       $candidate_achievement_criteria = array('company_id' => $company_id);
                                               // 'info.enable' => TRUE);
     }
-    
-    $challenge_list = 
+
+    $challenge_list =
       $this->CI->challenge_model->get($candidate_achievement_criteria);
 
     $this->CI->load->model('achievement_stat_model', 'achievement_stat');
@@ -129,7 +129,7 @@ class Challenge_lib {
       $is_in_progress = FALSE;
       $company_id = $challenge['company_id'];
 
-      //If challenge is daily, we must check in audit as well (time-based criteria) 
+      //If challenge is daily, we must check in audit as well (time-based criteria)
       if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
         $this->CI->load->library('audit_lib');
         $match_all_criteria_today = TRUE;
@@ -179,35 +179,35 @@ class Challenge_lib {
           /**
            * @TODO: we can reduce one step here // Book
            */
-          
-          $matched_in_progress_achievement_stat = 
+
+          $matched_in_progress_achievement_stat =
             $this->CI->achievement_stat->list_stat($stat_criteria);
           if(!$matched_in_progress_achievement_stat) {
             $match_all_criteria = FALSE;
           } else {
             $is_in_progress = TRUE;
             $stat_criteria[$action_query] = array('$gte' => $count);
-            $matched_achievement_stat = 
+            $matched_achievement_stat =
               $this->CI->achievement_stat->list_stat($stat_criteria);
             if(!$matched_achievement_stat) {
               $match_all_criteria = FALSE;
             }else if(isset($criteria['action_data_id'])){
-              
+
               /**
                * check with action_user_data that user have done it or not
                */
               $this->CI->load->library('action_user_data_lib');
               $action_user_data = $this->CI->action_user_data_lib->
                 get_action_user_data_by_action_data($criteria['action_data_id']);
-              
+
               if(!$action_user_data){
                 $match_all_criteria = FALSE;
               }
             }
           }
         }
-  
-      
+
+
       if($match_all_criteria) {
 
         $result['completed'][] = $challenge_id;
@@ -215,7 +215,7 @@ class Challenge_lib {
         $achieved_info = array(
           'company_id' => $company_id
         );
-      
+
         if(isset($info['campaign_id'])){
           $achieved_info['campaign_id'] = $info['campaign_id'];
         }
@@ -230,14 +230,14 @@ class Challenge_lib {
             'end_date' => $end_date
           );
         }
-        
+
         //Add achievement
         $ref = 'challenge';
-        if(!$this->CI->achievement_user->add($user_id, $challenge_id, 
+        if(!$this->CI->achievement_user->add($user_id, $challenge_id,
           $query['app_id'] = 0, $info['app_install_id'] = 0, $achieved_info, $ref)){
           $result['success'] = FALSE;
         }
-        
+
         //Add notification
         $this->CI->load->library('notification_lib');
         $message = 'You have completed a challenge : ' . $challenge['detail']['name'] . '.';
@@ -249,7 +249,7 @@ class Challenge_lib {
         $this->CI->load->model('user_mongo_model');
         $update_record = array(
           '$addToSet' => array(
-            'challenge_redeeming' => $challenge_id, 
+            'challenge_redeeming' => $challenge_id,
             'challenge_completed' => $challenge_id
           )
         );
@@ -264,7 +264,8 @@ class Challenge_lib {
           'action_id' => $action_id,
           'company_id' => $company_id,
           'objecti' => $challenge['hash'],
-          'user_id' => $user_id
+          'user_id' => $user_id,
+          'image' => $image
         );
         $audit_add_result = $this->CI->audit_lib->audit_add($audit);
 
@@ -277,7 +278,7 @@ class Challenge_lib {
           'action_id' => $action_id,
           'app_install_id' => 0
         );
-        
+
         //Give reward coupons
         if(issetor($challenge['reward_item_ids'])) {
           $this->CI->load->library('coupon_lib');
@@ -315,7 +316,7 @@ class Challenge_lib {
       //If check daily challenge and user don't have today's temp record (user->challenge_daily_completed-> {[Ymd]: challenge_id})
         //Run check challenge and get completed today
       //else use temp record
-      //TODO : and remove old temp records 
+      //TODO : and remove old temp records
       // if(!$daily_challenge_done = (isset($user['daily_challenge_completed'][date('Ymd')]) && in_array($challenge_id, $user['daily_challenge_completed'][date('Ymd')]))) {
         //Check daily challenge progress in audits
         $this->CI->load->library('audit_lib');
@@ -339,8 +340,8 @@ class Challenge_lib {
             $all_done = FALSE;
           }
           $action['action_count'] = $audit_count;
-          
-          $data[] = $action;  
+
+          $data[] = $action;
         }
         if($all_done) {
           $start_date = date('Ymd');
@@ -378,9 +379,9 @@ class Challenge_lib {
         $action = array();
 
         $this->CI->load->model('achievement_stat_model', 'achievement_stat');
-        $matched_in_progress_achievement_stat = 
+        $matched_in_progress_achievement_stat =
           $this->CI->achievement_stat->list_stat($stat_criteria);
-        
+
         if(isset($criteria['action_data_id'])){
           $this->CI->load->library('action_user_data_lib');
           $action_user_data = $this->CI->action_user_data_lib->
@@ -389,7 +390,7 @@ class Challenge_lib {
           $action_user_data = TRUE;
         }
 
-        
+
         if($matched_in_progress_achievement_stat && $action_user_data) {
           $progress_count = $matched_in_progress_achievement_stat[0]['action'][$query['action_id']]['company'][$company_id]['count'];
           $action['action_data'] = $criteria;
@@ -403,7 +404,7 @@ class Challenge_lib {
         $data[] = $action;
       }
       return $data;
-    }    
+    }
   }
 
   function redeem_challenge($user_id = NULL, $challenge_id = NULL) {

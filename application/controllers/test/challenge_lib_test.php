@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Challenge_lib_test extends CI_Controller {
-  
+
   function __construct() {
     parent::__construct();
     $this->load->library('unit_test');
@@ -12,7 +12,7 @@ class Challenge_lib_test extends CI_Controller {
   function __destruct() {
     $this->unit->report_with_counter();
   }
-  
+
   function index() {
     $class_methods = get_class_methods($this);
     //echo 'Functions : '.(count(get_class_methods($this->achievement_lib))-3).' Tests :'.count($class_methods);
@@ -32,7 +32,7 @@ class Challenge_lib_test extends CI_Controller {
     $value = '200THB';
     $description = 'This is pasta!!!';
     $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description');
-    
+
     $this->reward_item_id = $result = $this->reward_item->add_challenge_reward($input);
     $this->unit->run($result, 'is_string', "\$result", $result);
 
@@ -218,7 +218,7 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run(count($result), 3, "\$result", count($result));
     $this->unit->run($result[2], 'is_array', "\$result[2]", $result[2]);
     $this->unit->run($result[2]['start'], time() + 86400, "\$result[2]['start']", $result[2]['start']);
-    
+
     //Only first element will be updated
     $this->unit->run($result[1], 'is_array', "\$result[1]", $result[1]);
     $this->unit->run($result[1]['start'], time(), "\$result[1]['start']", $result[1]['start']);
@@ -294,7 +294,7 @@ class Challenge_lib_test extends CI_Controller {
     $inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
       $this->achievement_stat1);
     $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
-    
+
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
       'success' => TRUE, //no error checking challenges
@@ -333,7 +333,7 @@ class Challenge_lib_test extends CI_Controller {
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
       'success' => TRUE, //no error checking challenges
-      'completed' => array($this->challenge_id), //get completed challenge id     
+      'completed' => array($this->challenge_id), //get completed challenge id
       'in_progress' => array($this->challenge_id2),
       'completed_today' => array(),
     );
@@ -504,13 +504,18 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($result[0]['action_id'], 118, "\$result[0]['action_id']", $result[0]['action_id']);
     $this->unit->run($result[1]['action_id'], 118, "\$result[1]['action_id']", $result[1]['action_id']);
     $this->unit->run($result[2]['action_id'], 118, "\$result[2]['action_id']", $result[2]['action_id']);
+
+    //Check audit image
+    $this->unit->run($result[0]['image'], 'Challenge image url', "\$result[0]['image']", $result[0]['image']);
+    $this->unit->run($result[1]['image'], 'Challenge image url', "\$result[1]['image']", $result[1]['image']);
+    $this->unit->run($result[2]['image'], 'Challenge image url', "\$result[2]['image']", $result[2]['image']);
   }
 
   function user_score_test() {
     $company_id = 1;
     $user_id = 1;
     $this->load->model('achievement_stat_company_model');
-    
+
     $result = $this->achievement_stat_company_model->get((int)$company_id, (int)$user_id);
     $this->unit->run($result['company_score'], 50 * 3, '$result[company_score]', $result['company_score']);
   }
@@ -558,7 +563,7 @@ class Challenge_lib_test extends CI_Controller {
     $app_id = 0;
     $user_id = 1;
     $company_id = 2;
-    
+
     $info = array(
       'company_id' => $company_id
     );

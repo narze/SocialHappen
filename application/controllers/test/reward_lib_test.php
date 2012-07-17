@@ -153,6 +153,12 @@ class Reward_lib_test extends CI_Controller {
     $result = $this->reward_lib->redeem_with_coupon($coupon_id, $user_id);
     $this->unit->run($result, FALSE, "\$result", $result);
   }
+
+  function _check_audit_image_test() {
+    $this->load->library('audit_lib');
+    $audits = $this->audit_lib->list_recent_audit(1);
+    $this->unit->run($audits[0]['image'], base_url().'assets/images/cam-icon.png', "\$audits[0]['image']", $audits[0]['image']);
+  }
 }
 /* End of file reward_lib_test.php */
 /* Location: ./application/controllers/test/reward_lib_test.php */

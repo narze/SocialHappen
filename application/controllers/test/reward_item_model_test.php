@@ -4,7 +4,7 @@ define('redeem', 'redeem');
 define('random', 'random');
 define('top_score', 'top_score');
 class Reward_item_model_test extends CI_Controller {
-	
+
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
@@ -14,7 +14,7 @@ class Reward_item_model_test extends CI_Controller {
 	function __destruct(){
 		$this->unit->report_with_counter();
 	}
-	
+
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
@@ -27,11 +27,11 @@ class Reward_item_model_test extends CI_Controller {
 	function setup_before_test(){
 		$this->unit->reset_mongodb();
 	}
-	
+
 	function start_test(){
 		$this->reward_item->drop_collection();
 	}
-	
+
 	function create_index_test(){
 		$this->reward_item->create_index();
 	}
@@ -40,6 +40,7 @@ class Reward_item_model_test extends CI_Controller {
 		$name = name . '1';
 		$status = 'draft';
 		$type = redeem;
+		$company_id = 1;
 		$redeem = array(
 			'point' => 20,
 			'amount' => 5,
@@ -52,8 +53,8 @@ class Reward_item_model_test extends CI_Controller {
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200THB';
 		$description = 'This is pasta!!!';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id');
+
 		$this->reward_item_1 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 
@@ -76,7 +77,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'random', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$this->reward_item_2 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 
@@ -100,7 +101,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$this->reward_item_3 = $result = $this->reward_item->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 
@@ -125,7 +126,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //type mismatch with data
 
@@ -144,7 +145,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //first_place < 1
 
@@ -163,7 +164,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //first_place < last_place
 
@@ -182,7 +183,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); //start_timestamp > end_timestamp
 
@@ -202,7 +203,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); // bad status
 
@@ -222,7 +223,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); // bad criteria_type
 
@@ -242,7 +243,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); // bad criteria_id
 
@@ -265,7 +266,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); // bad image
 
@@ -288,7 +289,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
-		
+
 		$result = $this->reward_item->add($input);
 		$this->unit->run($result, FALSE, "\$result", $result); // bad value
 
@@ -385,7 +386,7 @@ class Reward_item_model_test extends CI_Controller {
 		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
 		$this->unit->run($result['redeem']['amount_remain'], 5, "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']); //redeem.amount_remain > amount -> set to amount
 		$this->unit->run($result['redeem']['once'], 0, "\$result['redeem']['once']", $result['redeem']['once']);
-		
+
 		//FAIL tests
 		$input['type'] = top_score; //no top_score options specified
 		$result = $this->reward_item->update($this->reward_item_1, $input);
@@ -476,7 +477,7 @@ class Reward_item_model_test extends CI_Controller {
 		$value = '200THB';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description');
-		
+
 		$this->reward_item_4 = $result = $this->reward_item->add_challenge_reward($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 

@@ -226,7 +226,8 @@ class Reward_lib
 			'object' => $reward_item['name'],
 			'objecti' => $reward_item_id,
 			'user_id' => $user_id,
-			'company_id' => $reward_item['company_id']
+			'company_id' => $reward_item['company_id'],
+			'image' => $reward_item['image']
 		))) {
 			return FALSE;
 		}
