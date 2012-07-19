@@ -44,7 +44,8 @@ define([
           currentUserModel: currentUserModel,
           activityCollection: options.activityCollection,
           achievementCollection: options.achievementCollection,
-          couponCollection: options.couponCollection
+          couponCollection: options.couponCollection,
+          vent: options.vent
         });
         profilePage.render();
       });

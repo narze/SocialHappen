@@ -30,21 +30,23 @@ require([
   'models/user',
   'collections/activitys',
   'collections/achievements',
-  'collections/coupons'
-], function(AppView, Router, Vm, UserModel, ActivityCollection, AchievementCollection, CouponCollection){
-  
+  'collections/coupons',
+  'events'
+], function(AppView, Router, Vm, UserModel, ActivityCollection, AchievementCollection, CouponCollection, vent){
+
   var userModel = window.Passport.userModel = new UserModel();
   var currentUserModel = window.Passport.currentUserModel = new UserModel();
   var activityCollection = window.Passport.activityCollection = new ActivityCollection([]);
   var achievementCollection = window.Passport.achievementCollection = new AchievementCollection([]);
   var couponCollection = window.Passport.couponCollection = new CouponCollection([]);
-  
+
   var appView = Vm.create({}, 'AppView', AppView, {
     userModel: userModel,
-    currentUserModel: currentUserModel
+    currentUserModel: currentUserModel,
+    vent: vent
   });
   appView.render();
-  
+
   // The router now has a copy of all main appview
   Router.initialize({
     appView: appView,
@@ -52,7 +54,8 @@ require([
     currentUserModel: currentUserModel,
     activityCollection: activityCollection,
     achievementCollection: achievementCollection,
-    couponCollection: couponCollection
+    couponCollection: couponCollection,
+    vent: vent
   });
-  
+
 });

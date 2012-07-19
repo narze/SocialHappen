@@ -3,9 +3,9 @@ define([
   'underscore',
   'backbone',
   'collections/cards',
-  'text!templates/profile/card-list.html',
-  'text!templates/profile/card-item.html'
-], function($, _, Backbone, CardsCollection, cardListTemplate, cardItemTemplate){
+  'views/profile/card-item',
+  'text!templates/profile/card-list.html'
+], function($, _, Backbone, CardsCollection, CardItemView, cardListTemplate){
   var CardListPane = Backbone.View.extend({
 
     events: {
@@ -17,7 +17,7 @@ define([
     },
 
     render: function () {
-      this.$el.html(_.template(cardListTemplate));
+      $(this.el).html(_.template(cardListTemplate));
       var cardsCollection = new CardsCollection();
       var self = this;
       cardsCollection.fetch({
@@ -30,19 +30,23 @@ define([
     },
 
     addAll: function(collection) {
-      collection.each(function(model) {
-        this.addOne(model);
-      }, this);
+      collection.each(this.addOne);
     },
 
     addOne: function(model) {
-      var card = model.attributes;
-      card.user = this.options.currentUserModel.attributes;
-      $('.card-list', this.el).append(_.template(cardItemTemplate)(card));
+      model.set('user', this.options.currentUserModel.attributes)
+      var card = new CardItemView({
+        model: model,
+        vent: this.options.vent
+      });
+
+      var cardView = card.render();
+      $('#card-list', this.el).append(cardView.el);
     },
 
     showCard: function(e) {
       $(e.currentTarget).addClass('open').siblings().removeClass('open');
+      this.options.vent.trigger('reloadMasonry');
     }
 
   });

@@ -126,7 +126,8 @@ define([
     showMyCardList: function() {
       var cardListView = new CardListView ({
         el: $('.user-right-pane', this.el),
-        currentUserModel: this.options.currentUserModel
+        currentUserModel: this.options.currentUserModel,
+        vent: this.options.vent
       })
 
       cardListView.render()
