@@ -46,7 +46,6 @@ define([
 
     showCard: function(e) {
       $(e.currentTarget).addClass('open').siblings().removeClass('open');
-      this.options.vent.trigger('reloadMasonry');
     }
 
   });
