@@ -7,7 +7,7 @@ define([
 ], function($, _, Backbone, activityItemTemplate, timeago){
   var ActivityItem = Backbone.View.extend({
     tagName: 'li',
-    activityItemTemplate: _.template(activityItemTemplate),    
+    activityItemTemplate: _.template(activityItemTemplate),
     initialize: function(){
       _.bindAll(this);
     },
