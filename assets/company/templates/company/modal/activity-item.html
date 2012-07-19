@@ -1,3 +1,15 @@
-<li>
-  <%= message %>
-</li>
+<li><div class="media media-small">
+  <a class="media-thumb" href="#thumb-href">
+    <% if(typeof image !== 'undefined' && image !== null) { %>
+      <img class="" src="<%= image %>" alt="">
+    <% } else { %>
+      <img class="" src="../images/default/user.png" alt="">
+    <% } %>
+  </a>
+  <div class="media-info">
+    <h5>Username or Company name</h5>
+    <p><%= message %><br />
+      <small><%= timeago %></small>
+    </p>
+  </div>
+</div></li>

@@ -12,10 +12,11 @@ define([
   'views/company/modal/action/qr-action',
   'views/company/modal/action/checkin-action',
   'views/company/modal/reward/reward',
-  'jqueryui'
+  'jqueryui',
+  'timeago'
 ], function($, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate, challengersItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
-  QRActionView, CheckinActionView, RewardView, jqueryui){
+  QRActionView, CheckinActionView, RewardView, jqueryui, timeago){
   var EditModalView = Backbone.View.extend({
 
     editTemplate: _.template(editTemplate),
@@ -598,7 +599,8 @@ define([
             if(result.length > 0){
               $('ul.activity-list').html('');
               _.each(result, function(activity){
-                 $('ul.activity-list').append(self.activityItemTemplate(activity));
+                activity.timeago = $.timeago(new Date(activity.timestamp*1000));
+                $('ul.activity-list').append(self.activityItemTemplate(activity));
               });
             }else{
               $('ul.activity-list').html('no activity');
@@ -607,8 +609,6 @@ define([
             $('button.show-activity', this.el).hide();
             $('button.hide-activity', this.el).show();
           }
-
-
         }
       });
     },
