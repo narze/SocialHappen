@@ -10,7 +10,7 @@ define([
     events: {
       'click button.redeem-reward': 'redeemReward'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
       this.options.vent.bind('showEditRewardModal', this.show);
@@ -18,22 +18,22 @@ define([
 
     render: function () {
       console.log('render modal');
-      
+
       if(!this.model){
         return;
       }
-      
+
       var data = this.model.toJSON();
       console.log(data);
 
       data.passportCouponPageURL = window.Company.BASE_URL + 'passport/'
        + Company.currentUserModel.get('user_id');
-      
+
       $(this.el).html(this.editTemplate(data));
-      
+
       return this;
     },
-    
+
     show: function(model){
       this.showEdit(model);
     },
@@ -42,7 +42,7 @@ define([
       this.model = model;
       console.log('show edit modal:', model.toJSON());
       this.render();
-      
+
       this.$el.modal('show');
     },
 
