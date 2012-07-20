@@ -2,8 +2,8 @@ require([
   'jquery',
   'underscore',
   'bootstrap',
-  'timeago'
-], function($, _, bootstrap, timeago) {
+  'moment'
+], function($, _, bootstrap, moment) {
   window.fbLoginResult = function(success) {
     if(success) {
       window.location = base_url + 'login?next=' + window.location.href;
@@ -50,14 +50,15 @@ require([
           type: "POST",
           dataType: "json",
           success: function(data) {
-            //barNotificationTemplate uses jquery.timeago
+            //barNotificationTemplate uses moment.js
             var barNotificationTemplate = _.template($('#bar-notification-template').html());
             $('.bar-notification').replaceWith(barNotificationTemplate({
               baseUrl: base_url,
               notifications: {
                 count: data.count,
                 list: data.items
-              }
+              },
+              moment: moment
             }));
             $('.no-notification').hide();
           }
@@ -85,7 +86,7 @@ require([
       }
     }
   });
-  
+
   //Now have nothing to return
   return {};
 });

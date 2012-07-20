@@ -90,6 +90,7 @@ class Signup extends CI_Controller {
             'common/underscore-min',
             'common/bootstrap.min',
             'common/jstz.min',
+            'common/moment.min',
             'common/plain-bar',
             'signup/signup'
           )

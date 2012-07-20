@@ -13,7 +13,7 @@ require.config({
     endlessscroll: '../../libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
     jfmfs: '../../libs/jfmfs/jfmfs',
     moment: '../../libs/moment/moment.min',
-    
+
     //SocialHappen bar
     shplainbar: 'plain-bar',
 
@@ -36,7 +36,7 @@ require.config({
         deps: ['underscore', 'jquery'],
         exports: 'Backbone'
     },
-    
+
     //jQuery plugins
     timeago: ['jquery'],
     bootstrap: ['jquery'],

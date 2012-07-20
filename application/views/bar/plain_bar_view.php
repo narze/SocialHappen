@@ -25,7 +25,7 @@
         <div class="row-fluid text-center">
           <div class="well">
             <button id="facebook-connect"
-              class="btn btn-info" data-toggle="button" 
+              class="btn btn-info" data-toggle="button"
               onclick="fbLogin(fbLoginResult)"
               data-redirect="">
                 Connect with facebook
@@ -45,7 +45,7 @@
               <label for="password">Password</label>
               <input id="password" type="password" name="password" maxlength="50" value=""  />
             </div>
-            
+
           </div>
         </div>
       </div>
@@ -132,7 +132,7 @@
             <a href="<%= notification.link %>">
               <img src="<%= notification.image %>" />
               <p class="message"><%= notification.message %></p>
-              <p class="time"><%= $.timeago(new Date(parseInt(notification.timestamp, 10) * 1000)) %></p>
+              <p class="time"><%= moment().from(moment.unix(notification.timestamp)) %></p>
             </a>
           </li>
         <% }); %>

@@ -405,8 +405,8 @@ class Player extends CI_Controller {
         'common/jquery.timeago',
         'common/underscore-min',
         'common/bootstrap.min',
-        'common/plain-bar',
-        'player/settings.js'
+        'common/moment.min',
+        'common/plain-bar'
       )
     );
     $this->load->view('common/template', $template);
@@ -782,6 +782,7 @@ class Player extends CI_Controller {
         'common/jquery.timeago',
         'common/underscore-min',
         'common/bootstrap.min',
+        'common/moment.min',
         'common/plain-bar'
       )
     );

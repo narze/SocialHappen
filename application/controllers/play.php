@@ -69,6 +69,7 @@ class Play extends CI_Controller {
         'common/jquery.timeago',
         'common/underscore-min',
         'common/bootstrap.min',
+        'common/moment.min',
         'common/plain-bar',
         'play/play'
       )

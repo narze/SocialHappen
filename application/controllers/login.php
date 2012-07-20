@@ -48,6 +48,7 @@ class Login extends CI_Controller {
             'common/jquery.timeago',
             'common/bootstrap.min',
             'common/underscore-min',
+            'common/moment.min',
             'common/plain-bar'
           ),
           'styles' => array(
