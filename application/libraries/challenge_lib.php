@@ -282,8 +282,11 @@ class Challenge_lib {
         //Give reward coupons
         if(issetor($challenge['reward_item_ids'])) {
           $this->CI->load->library('coupon_lib');
+          $this->CI->load->library('reward_lib');
           foreach($challenge['reward_item_ids'] as $reward_item_id) {
-              $coupon = array(
+            $reward_item = $this->CI->reward_lib->get_reward_item($reward_item_id);
+            $coupon = array(
+              'reward_item' => $reward_item,
               'reward_item_id' => $reward_item_id,
               'user_id' => $user_id,
               'company_id' => $company_id,

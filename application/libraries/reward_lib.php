@@ -294,6 +294,7 @@ class Reward_lib
 		$this->CI->load->library('coupon_lib');
 		if(!$coupon_id = $this->CI->coupon_lib->create_coupon(array(
 			'reward_item_id' => get_mongo_id($reward_item),
+			'reward_item' => $reward_item,
 			'user_id' => $user_id,
 			'company_id' => $company_id,
 		))) {

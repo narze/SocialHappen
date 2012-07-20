@@ -800,20 +800,25 @@ class Apiv3 extends CI_Controller {
       //Get company points
       $card['company_score'] = $company_stat['company_score'];
 
+      //Get coupons (not rewards)
+      $this->load->model('coupon_model');
+      $card['coupons'] = $this->coupon_model->get(array('user_id' => (int) $user_id, 'company_id' => $company_id ));
+      $card['coupons_count'] = count($card['coupons']);
+
       //Get rewards got from this company & count
-      $this->load->model('user_mongo_model');
-      $user = $this->user_mongo_model->get_user($user_id);
-      $reward_items = $user['reward_items'];
-      $this->load->model('reward_item_model');
-      $reward_item_ids = array();
-      foreach($reward_items as $reward_item_id) {
-        $reward_item_ids[] = new MongoId($reward_item_id);
-      }
-      $reward_item_criteria = array(
-        '_id' => array( '$in' => $reward_item_ids )
-      );
-      $card['rewards'] = $this->reward_item_model->get($reward_item_criteria);
-      $card['rewards_count'] = count($card['rewards']);
+      // $this->load->model('user_mongo_model');
+      // $user = $this->user_mongo_model->get_user($user_id);
+      // $reward_items = $user['reward_items'];
+      // $this->load->model('reward_item_model');
+      // $reward_item_ids = array();
+      // foreach($reward_items as $reward_item_id) {
+      //   $reward_item_ids[] = new MongoId($reward_item_id);
+      // }
+      // $reward_item_criteria = array(
+      //   '_id' => array( '$in' => $reward_item_ids )
+      // );
+      // $card['rewards'] = $this->reward_item_model->get($reward_item_criteria);
+      // $card['rewards_count'] = count($card['rewards']);
 
       //@TODO - Get activities
       $card['activities'] = array();

@@ -673,5 +673,6 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($result, 'is_array', "\$result", $result);
     $this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
     $this->unit->run($result[0]['_id'], TRUE, "\$result[0]['_id']", $result[0]['_id']);
+    $this->unit->run($result[0]['reward_item'], 'is_array', "\$result[0]['reward_item']", $result[0]['reward_item']);
   }
 }

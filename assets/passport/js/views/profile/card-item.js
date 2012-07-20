@@ -19,7 +19,7 @@ define([
 
       $(this.el).html(_.template(cardItemTemplate)(card));
 
-      this.addAllActivities(card.rewards);
+      this.addAllActivities(card.coupons);
 
       return this;
     },
@@ -30,7 +30,8 @@ define([
     },
 
     addOneActivity: function(activity) {
-      $('.card-activity-list', this.el).append(_.template(cardActivityItemTemplate)(activity));
+      console.log(activity);
+      $('.card-activity-list', this.el).append(_.template(cardActivityItemTemplate)(activity.reward_item));
     }
 
   });
