@@ -3,11 +3,11 @@ define([
   'underscore',
   'backbone',
   'bootstrap',
-  'timeago',
+  'moment',
   'text!templates/header/navigation.html',
   'text!templates/header/bar-notification.html',
   'text!templates/header/bar-company-list.html'
-], function($, _, Backbone, bootstrap, timeago, headerMenuTemplate, barNotificationTemplate, barCompanyListTemplate){
+], function($, _, Backbone, bootstrap, moment, headerMenuTemplate, barNotificationTemplate, barCompanyListTemplate){
   var HeaderNavigationView = Backbone.View.extend({
     headerMenuTemplate: _.template(headerMenuTemplate),
     barNotificationTemplate: _.template(barNotificationTemplate),
@@ -27,7 +27,7 @@ define([
         user: this.options.currentUserModel.toJSON()
       }));
       $('div#header .world').addClass('active');
-      
+
       //Company list
       var companies = this.options.currentUserModel.get('companies');
       if(companies && companies.length) {
@@ -57,10 +57,10 @@ define([
           $('.no-notification').hide();
         }
       });
-      
+
       return this;
     },
-    
+
     seeNotification: function(e){
       e.preventDefault();
     }

@@ -10,6 +10,7 @@ require.config({
     timeago: '../../libs/jquery.timeago/jquery.timeago',
     masonry: '../../libs/masonry/jquery.masonry.min',
     endlessscroll: '../../libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
+    moment: '../../libs/moment/moment.min',
     // Require.js plugins
     text: '../../libs/require/text',
     order: '../../libs/require/order',
@@ -33,7 +34,7 @@ require([
   'collections/companies',
   'events'
 ], function(AppView, Router, Vm, UserModel, ChallengesCollection, CompaniesCollection, vent){
-  
+
   var currentUserModel = window.World.currentUserModel = new UserModel();
   var challengesCollection = window.World.challengesCollection = new ChallengesCollection([]);
   var companiesCollection = window.World.companiesCollection = new CompaniesCollection([]);
@@ -43,7 +44,7 @@ require([
     vent: vent
   });
   appView.render();
-  
+
   // The router now has a copy of all main appview
   Router.initialize({
     appView: appView,
@@ -52,5 +53,5 @@ require([
     companiesCollection: companiesCollection,
     vent: vent
   });
-  
+
 });

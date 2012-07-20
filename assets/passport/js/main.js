@@ -9,6 +9,7 @@ require.config({
     bootstrap: '../../libs/bootstrap/bootstrap.min',
     timeago: '../../libs/jquery.timeago/jquery.timeago',
     masonry: '../../libs/masonry/jquery.masonry.min',
+    moment: '../../libs/moment/moment.min',
     // Require.js plugins
     text: '../../libs/require/text',
     order: '../../libs/require/order',
