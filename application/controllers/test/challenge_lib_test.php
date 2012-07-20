@@ -122,7 +122,7 @@ class Challenge_lib_test extends CI_Controller {
         )
       ),
       'repeat' => 1,
-      'reward_item_ids' => array($this->reward_item_id)
+      'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id)))
     );
 
     $this->achievement_stat1 = array(

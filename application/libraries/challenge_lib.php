@@ -43,12 +43,17 @@ class Challenge_lib {
       return FALSE;
     }
 
-    //$data = array_cast_int($data);
-
     $challenge_id = get_mongo_id($challenge);
     //$data['$set']['hash'] = strrev(sha1($challenge_id));
 
     unset($data['_id']);
+
+
+    //Cleanup unused reward_item_ids
+    //@TODO - remove this after some time
+    if(isset($data['reward_item_ids'])) {
+      unset($data['reward_item_ids']);
+    }
 
     //Pack data into $set
     if(!isset($data['$set'])) {
@@ -57,6 +62,10 @@ class Challenge_lib {
         '$set' => $data_temp
       );
     }
+
+    //Cleanup unused reward_item_ids
+    //@TODO - remove this after some time
+    $data['$unset'] = array('reward_item_ids' => TRUE);
 
     //Check time
     if(isset($data['$set']['end']) && $data['$set']['end'] < $challenge['start']) {
@@ -280,11 +289,11 @@ class Challenge_lib {
         );
 
         //Give reward coupons
-        if(issetor($challenge['reward_item_ids'])) {
+        if(issetor($challenge['reward_items'])) {
           $this->CI->load->library('coupon_lib');
           $this->CI->load->library('reward_lib');
-          foreach($challenge['reward_item_ids'] as $reward_item_id) {
-            $reward_item = $this->CI->reward_lib->get_reward_item($reward_item_id);
+          foreach($challenge['reward_items'] as $reward_item) {
+            $reward_item_id = get_mongo_id($reward_item);
             $coupon = array(
               'reward_item' => $reward_item,
               'reward_item_id' => $reward_item_id,
