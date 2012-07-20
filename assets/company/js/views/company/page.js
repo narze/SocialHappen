@@ -25,7 +25,7 @@ define([
 
       if(this.options.currentUserModel){
         company = _.find(this.options.currentUserModel.get('companies'), function(i){
-          return i.company_id == window.Company.companyId;
+          return i.company_id === window.Company.companyId;
         });
 
         if(!company){
