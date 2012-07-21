@@ -31,7 +31,9 @@ define([
       'click div.view-repeat': 'showEditRepeat',
       'click .add-new-action': 'showAddNewActionModal',
       'click .add-new-reward': 'showAddNewRewardModal',
-      'click .cancel': 'cancelAdd'
+      'click .cancel': 'cancelAdd',
+      'keypress input.challenge-name': 'onTypeChallengeName',
+      'keypress textarea.challenge-description': 'onTypeChallengeDescription'
     },
 
     initialize: function(){
@@ -164,6 +166,20 @@ define([
       }, this);
 
       this.$el.modal('show');
+    },
+
+    onTypeChallengeName: function(e){
+       var detail = this.model.get('detail');
+      detail.name = $('input.challenge-name', this.el).val();
+
+      this.model.set('detail', detail).trigger('change');
+    },
+
+    onTypeChallengeDescription: function(e){
+       var detail = this.model.get('detail');
+      detail.description = $('textarea.challenge-description', this.el).val();
+
+      this.model.set('detail', detail).trigger('change');
     },
 
     showEditName: function(){
