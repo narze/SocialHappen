@@ -49,6 +49,7 @@
 }
 
 .coupon-list .item {
+  background: url('../../images/default/reward.png');
   width: 282px;
   height: 176px;
   overflow: hidden;
