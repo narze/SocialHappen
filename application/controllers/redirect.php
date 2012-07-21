@@ -76,6 +76,12 @@ class Redirect extends CI_Controller {
 			redirect('assets/view-company/#/company/'.$company_id);
 		}
 	}
+
+	function company_admin($company_id = NULL){
+		if($company_id){
+			redirect('assets/company/#/company/'.$company_id);
+		}
+	}
 }
 
 /* End of file redirect.php */

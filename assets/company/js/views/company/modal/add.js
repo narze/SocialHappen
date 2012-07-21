@@ -431,7 +431,7 @@ define([
       this.options.challengesCollection.create(this.model, {
         success: function() {
           //Refresh
-          window.location = window.Company.BASE_URL + 'r/company/' + window.Company.companyId;
+          window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
         }
       });
 
