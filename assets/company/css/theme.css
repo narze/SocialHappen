@@ -26,6 +26,14 @@
   max-width: 282px;
 }
 
+button.recipe-icon.disabled{
+  cursor: pointer;
+}
+
+.menu{
+  margin-bottom: 20px;
+}
+
 .filter-bar{
   margin-bottom: 20px;
 }
