@@ -192,7 +192,7 @@
 			<?php endif; ?>
 			<?php if($challenge_rewards) : ?>
 				<?php if(count($challenge_rewards) === 1) : ?>
-					<p> You got this reward : </p>
+					<p>You got this reward : </p>
 				<?php else : ?>
 					<p>You got these rewards :</p>
 				<?php endif; ?>

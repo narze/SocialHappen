@@ -194,12 +194,7 @@ class Player extends CI_Controller {
       }
 
       //Challenge reward
-      $challenge_rewards = array();
-      $this->load->model('reward_item_model');
-      foreach($challenge['reward_items'] as $reward_item) {
-        $reward_item_id = get_mongo_id($reward_item);
-        $challenge_rewards[] = $this->reward_item_model->get_one(array('_id' => new MongoId($reward_item_id)));
-      }
+      $challenge_rewards = $challenge['reward_items'];
 
       //Challenge score
       $this->load->library('audit_lib');

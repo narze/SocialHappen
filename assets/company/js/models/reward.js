@@ -18,7 +18,8 @@ define([
         once: true
       },
       company_id: window.Company.companyId,
-      status: 'draft'
+      status: 'draft',
+      is_points_reward: false
     },
     initialize: function(){
 
@@ -79,7 +80,7 @@ define([
       if (params.type !== 'GET' && !Backbone.emulateJSON) {
         params.processData = false;
       }
-      
+
       console.log('save reward:', this.toJSON());
       console.log('POST:', params.data);
 
