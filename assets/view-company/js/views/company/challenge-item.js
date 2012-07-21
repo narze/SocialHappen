@@ -9,7 +9,7 @@ define([
     className: 'item',
     challengeItemTemplate: _.template(challengeItemTemplate),
     events: {
-      
+      'click': 'onClickChallenge'
     },
     initialize: function(){
       _.bindAll(this);
@@ -34,6 +34,11 @@ define([
     showEdit: function(e){
       e.preventDefault();
       this.options.vent.trigger('showEditModal', this.model);
+    },
+
+    onClickChallenge: function(){
+      // https://socialhappen.dyndns.org/socialhappen/redirect/c?hash=e795bf1bfeecad4d759559a415835cfe6f8f20df
+      window.location.href = window.Company.BASE_URL + 'redirect/c?hash=' + this.model.id;
     }
   });
   return ChallengeItemView;
