@@ -63,6 +63,12 @@ img.company-image{
   max-width: 170px
 }
 
+.modal .edit-name,
+.modal .edit-image,
+.modal .edit-description{
+  cursor: pointer;
+}
+
 .modal .control-group {
   position: relative;
 }
