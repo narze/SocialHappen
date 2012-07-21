@@ -19,6 +19,7 @@
   margin: 3px;
   float: left;
   position: relative;
+  cursor: pointer;
 }
 
 .tile-list .challenge-image, .tile-list .reward-image {

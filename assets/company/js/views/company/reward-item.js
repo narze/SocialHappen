@@ -9,7 +9,8 @@ define([
     className: 'item',
     rewardItemTemplate: _.template(rewardItemTemplate),
     events: {
-      'click a.reward': 'showEdit'
+      'click a.reward': 'showEdit',
+      'click': 'showEdit'
     },
     initialize: function(){
       _.bindAll(this);
