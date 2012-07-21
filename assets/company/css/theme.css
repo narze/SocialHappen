@@ -26,6 +26,10 @@
   max-width: 282px;
 }
 
+.coupon-search{
+  padding: 20px 20px 0 20px;
+}
+
 .challenge-caption {
   position: absolute;
   top: 141px;
