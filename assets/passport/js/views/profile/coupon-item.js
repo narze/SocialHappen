@@ -12,7 +12,8 @@ define([
     rewardItemTemplate: _.template(rewardItemTemplate),
     events: {
       'click button.view-reward': 'viewReward',
-      'click a.reward': 'viewReward'
+      'click a.reward': 'viewReward',
+      'click': 'viewReward'
     },
     initialize: function(){
       _.bindAll(this);
