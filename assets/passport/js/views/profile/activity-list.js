@@ -20,15 +20,15 @@ define([
       this.addAll();
       return this;
     },
-    
+
     addOne: function(model){
       var activityItemView = new ActivityItemView({
         model: model
       });
-      
+
       $('ul.activity-list', this.$el).append(activityItemView.render().el);
     },
-    
+
     addAll: function(){
       var self = this;
       this.collection.each(function(model){

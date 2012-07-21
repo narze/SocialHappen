@@ -37,6 +37,7 @@ define([
       options.activityCollection.fetch();
       options.achievementCollection.fetch();
       options.couponCollection.fetch();
+      options.actionCollection.fetch();
 
       require(['views/profile/page'], function (ProfilePage) {
         var profilePage = Vm.create(appView, 'ProfilePage', ProfilePage, {
@@ -45,6 +46,7 @@ define([
           activityCollection: options.activityCollection,
           achievementCollection: options.achievementCollection,
           couponCollection: options.couponCollection,
+          actionCollection: options.actionCollection,
           vent: options.vent
         });
         profilePage.render();

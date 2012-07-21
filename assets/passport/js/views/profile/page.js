@@ -9,8 +9,9 @@ define([
   'views/profile/activity-list',
   'views/profile/achievement-list',
   'views/profile/coupon-list',
-  'views/profile/card-list'
-], function($, _, Backbone, profilePageTemplate, actionListTemplate, actionItemTemplate, ProfilePane, ActivityListView, AchievementListView, CouponListView, CardListView){
+  'views/profile/card-list',
+  'views/profile/action-list'
+], function($, _, Backbone, profilePageTemplate, actionListTemplate, actionItemTemplate, ProfilePane, ActivityListView, AchievementListView, CouponListView, CardListView, ActionListView){
   var ProfilePage = Backbone.View.extend({
     profilePageTemplate: _.template(profilePageTemplate),
     el: '#content',
@@ -18,11 +19,10 @@ define([
     events: {
       'click .user-profile-nav>li>a': 'setMenuActive',
       'click .user-profile-nav ul>li>a': 'setSubMenuActive',
-      'click .user-menu-my-profile': 'showMyProfileList',
+      'click .user-menu-my-profile': 'showActionList',
       'click .user-submenu-photos': 'showPhotosList',
       'click .user-submenu-feedbacks': 'showFeedbacksList',
       'click .user-submenu-badges': 'showBadgesList',
-        // 'click .user-submenu-rewards': 'showRewardsList',
       'click .user-menu-my-card': 'showMyCardList',
       'click .user-menu-my-reward': 'showMyRewardList',
       'click .user-menu-activity': 'showActivityList'
@@ -60,56 +60,6 @@ define([
       $('.user-profile-nav li').removeClass('active');
       $(e.currentTarget).parent().addClass('active').closest('ul').parent().addClass('active');
     },
-    getUserActionData: function(action_id) {
-
-      var ajax_options = {
-        url: window.Passport.BASE_URL + 'apiv3/userActionData',
-        data: {
-          action_id: action_id
-        },
-        dataType: 'json',
-        success: function (data) {
-          console.log(data);
-
-          _.each(data, function(action) {
-            var li = $('<li></li>').html($(actionItemTemplate).clone());
-            var title = action.user_data.user_feedback;
-            li.find('.action-title').html(title);
-            li.find('.action-msg').html(action.message);
-            $('.action-list').append(li);
-          });
-        }
-      };
-
-      //Coupon list could be seen only for current user
-      if(this.options.currentUserModel.get('user_id') !== window.Passport.userId) {
-        $.ajax(ajax_options);
-      } else {
-        //Fetch again and check
-        var self = this;
-        this.options.currentUserModel.fetch({
-          success: function(model, xhr) {
-            if(xhr.user_id && (xhr.user_id === window.Passport.userId)) {
-              $.ajax(ajax_options);
-            }
-          }
-        });
-      }
-    },
-    showMyProfileList: function(action_id) {
-      $('.user-right-pane', this.el).html($(actionListTemplate).clone());
-      this.getUserActionData();
-    },
-    showPhotosList: function() {
-      $('.user-right-pane', this.el).html($(actionListTemplate).clone());
-      $('.header-sub', this.el).text('Photos');
-      this.getUserActionData(9999);
-    },
-    showFeedbacksList: function() {
-      $('.user-right-pane', this.el).html($(actionListTemplate).clone());
-      $('.header-sub', this.el).text('Feedbacks');
-      this.getUserActionData(202);
-    },
     showBadgesList: function() {
       var achievementListView = new AchievementListView({
         collection: this.options.achievementCollection,
@@ -118,11 +68,6 @@ define([
 
       achievementListView.render();
     },
-    // showRewardsList: function() {
-    //   $('.user-right-pane', this.el).html($(actionListTemplate).clone());
-    //   $('.header-sub', this.el).text('Rewards');
-    //   this.getUserActionData(119);
-    // },
     showMyCardList: function() {
       var cardListView = new CardListView ({
         el: $('.user-right-pane', this.el),
@@ -158,6 +103,31 @@ define([
         el: $('.user-right-pane', this.el)
       });
       activityListView.render();
+    },
+    showFeedbacksList: function() {
+      var actionListView = new ActionListView({
+        collection: this.options.actionCollection,
+        el: $('.user-right-pane', this.el),
+        filter: 202,
+        header_text: 'Feedbacks'
+      });
+      actionListView.render();
+    },
+    showPhotosList: function() {
+      var actionListView = new ActionListView({
+        collection: this.options.actionCollection,
+        el: $('.user-right-pane', this.el),
+        filter: 9999,
+        header_text: 'Photos'
+      });
+      actionListView.render();
+    },
+    showActionList: function() {
+      var actionListView = new ActionListView({
+        collection: this.options.actionCollection,
+        el: $('.user-right-pane', this.el)
+      });
+      actionListView.render();
     }
   });
   return ProfilePage;
