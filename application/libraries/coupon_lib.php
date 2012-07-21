@@ -90,10 +90,11 @@ Class Coupon_lib{
 
 		$coupons =  $this->CI->coupon_model->get_by_user($user_id);
 
-		for ($i = 0; $i < count($coupons); $i++) {
-			$reward = $this->CI->reward_lib->get_reward_item($coupons[$i]['reward_item_id']);
-			$coupons[$i]['reward'] = $reward;
-		}
+		// get reward data for each coupon
+		// for ($i = 0; $i < count($coupons); $i++) {
+		// 	$reward = $this->CI->reward_lib->get_reward_item($coupons[$i]['reward_item_id']);
+		// 	$coupons[$i]['reward'] = $reward;
+		// }
 
 		return $coupons;
 	}

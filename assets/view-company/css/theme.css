@@ -12,6 +12,7 @@
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 
 .tile-list .item {
+  background: url('../../images/default/reward.png');
   width: 282px;
   height: 176px;
   overflow: hidden;

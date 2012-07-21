@@ -35,7 +35,7 @@ define([
       //   dataType: 'json',
       //   url: window.Passport.BASE_URL + 'apiv3/reward_item/' + reward_item_id,
       //   success: function(res) {
-          var data = this.model.get('reward');
+          var data = this.model.get('reward_item') || {};
           data.coupon = self.model.toJSON();
           data.couponId = self.model.id;
           $('#reward-item').html(self.rewardItemTemplate(data)).modal();
