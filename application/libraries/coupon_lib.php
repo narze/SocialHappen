@@ -39,7 +39,7 @@ Class Coupon_lib{
 
 	function confirm_coupon($coupon_id = NULL, $admin_user_id = NULL){
 		//not tested yet
-		if($coupon_id && $admin_user_id) {
+		if($coupon_id && ($admin_user_id !== NULL)) {
 			$this->CI->load->library('reward_lib');
 			$coupon = $this->CI->coupon_model->get_by_id($coupon_id);
 

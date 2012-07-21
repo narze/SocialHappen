@@ -301,7 +301,12 @@ class Challenge_lib {
               'company_id' => $company_id,
               'challenge_id' => $challenge_id
             );
-            $coupon_add_result = $this->CI->coupon_lib->create_coupon($coupon);
+            $coupon_id = $this->CI->coupon_lib->create_coupon($coupon);
+
+            //If the reward is_points_reward : approve it immediately
+            if(issetor($reward_item['is_points_reward'])) {
+              $coupon_confirm_result = $this->CI->coupon_lib->confirm_coupon($coupon_id, 0);
+            }
           }
         }
 

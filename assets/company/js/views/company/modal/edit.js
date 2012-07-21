@@ -503,7 +503,8 @@ define([
         value: 10,
         status: 'published',
         type: 'challenge',
-        description: '10 Points for redeeming rewards in this company'
+        description: '10 Points for redeeming rewards in this company',
+        is_points_reward: true
       };
 
       return this._addReward(reward);
