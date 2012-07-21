@@ -26,6 +26,10 @@
   max-width: 282px;
 }
 
+.filter-bar{
+  margin-bottom: 20px;
+}
+
 .coupon-search{
   padding: 20px 20px 0 20px;
 }
