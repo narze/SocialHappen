@@ -724,11 +724,9 @@ class Apiv3 extends CI_Controller {
    */
   function userActionData() {
     if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE)); return; }
-    $action_id = $this->input->get('action_id');
 
     $query = array_filter(array(
-      'user_id' => $user_id,
-      'action_id' => (int) $action_id
+      'user_id' => $user_id
     ));
 
     $this->load->library('action_user_data_lib');

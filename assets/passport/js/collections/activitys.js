@@ -1,11 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
-  'models/activity'
-], function($, _, Backbone, activityModel){
+  'backbone'
+], function($, _, Backbone){
   var activityCollection = Backbone.Collection.extend({
-    model: activityModel,
     initialize: function(){
 
     },
