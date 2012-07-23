@@ -51,7 +51,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = '200';
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id');
 
@@ -74,7 +74,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'app';
 		$criteria_id = '2';
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'random', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -98,7 +98,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'campaign';
 		$criteria_id = '3';
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -123,7 +123,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -142,7 +142,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -161,7 +161,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -180,7 +180,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'top_score', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -200,7 +200,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -220,7 +220,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'badtype';
 		$criteria_id = 1;
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -240,7 +240,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'company';
 		$criteria_id = NULL;
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -263,7 +263,7 @@ class Reward_item_model_test extends CI_Controller {
 		$criteria_type = 'company';
 		$criteria_id = 1;
 		$image = NULL;
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description');
 
@@ -310,7 +310,7 @@ class Reward_item_model_test extends CI_Controller {
 		$this->unit->run($result['criteria_id']===1, TRUE, "\$result['criteria_id']", $result['criteria_id']);
 		$this->unit->run(isset($result['reward_id']), FALSE, "\$result['reward_id']", isset($result['reward_id']));
 		$this->unit->run($result['image'], base_url().'assets/images/cam-icon.png', "\$result['image']", $result['image']);
-		$this->unit->run($result['value'], '200THB', "\$result['value']", $result['value']);
+		$this->unit->run($result['value'], 200, "\$result['value']", $result['value']);
 		$this->unit->run($result['description'], 'This is pasta!!!', "\$result['description']", $result['description']);
 
 		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_2);
@@ -474,7 +474,7 @@ class Reward_item_model_test extends CI_Controller {
 		$status = 'published';
 		$challenge_id = 'asdf';
 		$image = base_url().'assets/images/cam-icon.png';
-		$value = '200THB';
+		$value = 200;
 		$description = 'This is pasta!!!';
 		$input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description');
 

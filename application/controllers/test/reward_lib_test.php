@@ -174,6 +174,14 @@ class Reward_lib_test extends CI_Controller {
     $this->unit->run(!!$audits[0]['image'], TRUE, "\$audits[0]['image']", $audits[0]['image']);
   }
 
+  function _check_company_score_after_redeem_test() {
+    $user_id = 1;
+    $company_id = 1;
+    $this->load->library('achievement_lib');
+    $result = $this->achievement_lib->get_company_stat($company_id, $user_id);
+    $this->unit->run($result['company_score'], 480 + 200, "\$result['company_score']", $result['company_score']);
+  }
+
   function _check_audit_image_test() {
     $this->load->library('audit_lib');
     $audits = $this->audit_lib->list_recent_audit(1);

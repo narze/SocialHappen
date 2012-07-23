@@ -203,20 +203,21 @@ class Reward_lib
 			return FALSE;
 		}
 
+		//Get reward
+		$reward_item_id = $coupon['reward_item_id'];
+		$this->CI->load->model('reward_item_model');
+		if(!$reward_item = $this->CI->reward_item_model->get_one(array('_id' => new MongoId($reward_item_id)))) {
+			return FALSE;
+		}
+
 		// Confirm the coupon
 		if(!$confirm_coupon_result = $this->CI->coupon_model->confirm_coupon($coupon_id, $confirm_user_id)) {
 			return FALSE;
 		}
 
-		// Add into user's inventory
+		// Add reward into user's inventory
 		$this->CI->load->model('user_mongo_model');
-		$reward_item_id = $coupon['reward_item_id'];
 		if(!$add_user_reward_item = $this->CI->user_mongo_model->add_reward_item($user_id, $reward_item_id)) {
-			return FALSE;
-		}
-
-		$this->CI->load->model('reward_item_model');
-		if(!$reward_item = $this->CI->reward_item_model->get_one(array('_id' => new MongoId($reward_item_id)))) {
 			return FALSE;
 		}
 
@@ -232,6 +233,12 @@ class Reward_lib
 			'company_id' => $reward_item['company_id'],
 			'image' => $reward_item['image']
 		))) {
+			return FALSE;
+		}
+
+		//Add reward value into user's company score
+		$this->CI->load->library('achievement_lib');
+		if(!$increment_result = $this->CI->achievement_lib->increment_company_score($reward_item['company_id'], $user_id, $reward_item['value'])) {
 			return FALSE;
 		}
 
