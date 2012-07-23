@@ -380,7 +380,7 @@ class Apiv3 extends CI_Controller {
       //Add-update rewards
       if(issetor($challenge['reward_items'])) {
         $this->load->model('reward_item_model');
-        foreach($challenge['reward_items'] as $reward_item) {
+        foreach($challenge['reward_items'] as &$reward_item) {
           if(isset($reward_item['_id'])) {
             //Reward exists : update
             $reward_item['company_id'] = $company_id;
@@ -396,8 +396,11 @@ class Apiv3 extends CI_Controller {
               echo json_encode(array('success' => FALSE, 'data' => 'Add reward failed'));
               return;
             }
+
+            //Set reward id
+            $reward_item['_id'] = new MongoId($reward_item_id);
           }
-        }
+        } unset($reward_item);
       }
 
 

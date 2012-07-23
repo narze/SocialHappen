@@ -191,7 +191,7 @@ class Reward_lib
 		return $reward_item;
 	}
 
-	function redeem_with_coupon($coupon_id = NULL, $user_id = NULL, $confirm_user_id = NULl) {
+	function redeem_with_coupon($coupon_id = NULL, $user_id = NULL, $confirm_user_id = NULL) {
 		if(!$coupon_id || !$user_id) { return FALSE; }
 
 		// Check coupon
@@ -216,7 +216,9 @@ class Reward_lib
 		}
 
 		$this->CI->load->model('reward_item_model');
-		$reward_item = $this->CI->reward_item_model->get_one(array('_id' => new MongoId($reward_item_id)));
+		if(!$reward_item = $this->CI->reward_item_model->get_one(array('_id' => new MongoId($reward_item_id)))) {
+			return FALSE;
+		}
 
 		$this->CI->load->library('audit_lib');
 		//Add action
