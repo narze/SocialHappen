@@ -132,7 +132,7 @@ class Share extends CI_Controller {
 				'app_install_id' => $app_install_id,
 				'page_id' => $app['page_id'],
 				'campaign_id' => $campaign_id,
-				'image' => $user['user_image']
+				'image' => $campaign['campaign_image']
 			);
 			$audit_result = $this->audit_lib->audit_add($audit_data);
 

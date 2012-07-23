@@ -58,7 +58,7 @@ class User_lib {
 			'objecti' => $challenge_hash,
 			'user_id' => $user_id,
 			'app_id' => 0,
-			'image' => $user['user_image']
+			'image' => $challenge['detail']['image']
 		));
 
 		//Make user's company stat (if not exists)

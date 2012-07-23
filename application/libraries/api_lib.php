@@ -569,6 +569,9 @@ class Api_Lib {
 			}
 		}
 
+		$this->CI->load->model('installed_apps_model','installed_apps');
+		$app = $this->CI->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+
 		// log user
 		$this->CI->load->model('User_apps_model', 'User_apps');
 		$this->CI->load->model('User_model', 'User');
@@ -594,7 +597,7 @@ class Api_Lib {
 				'subject' => $user_id,
 				'object' => NULL,
 				'objecti' => NULL,
-				'image' => $user['user_image']
+				'image' => $app['app_image']
 			));
 
 			$this->CI->load->library('achievement_lib');
@@ -609,8 +612,7 @@ class Api_Lib {
 		if(!$action){ //User default action if not specified
 			$action = $this->CI->socialhappen->get_k('audit_action', 'User Visit');
 		}
-		$this->CI->load->model('installed_apps_model','installed_apps');
-		$app = $this->CI->installed_apps->get_app_profile_by_app_install_id($app_install_id);
+
 		$company_id = $app['company_id'];
 		$action_text = $this->CI->socialhappen->get_v('audit_action', $action);
 		$this->CI->load->library('audit_lib');
@@ -628,7 +630,7 @@ class Api_Lib {
 			'subject' => $user_id,
 			'object' => NULL,
 			'objecti' => NULL,
-			'image' => $user['user_image']
+			'image' => $app['app_image']
 		));
 
 		if(!$result){

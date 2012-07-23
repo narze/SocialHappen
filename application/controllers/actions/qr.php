@@ -126,7 +126,7 @@ class QR extends CI_Controller {
         'subject' => NULL,
         'object' => NULL,
         'objecti' => $challenge['hash'],
-        'image' => $user['user_image']
+        'image' => $challenge['detail']['image']
       );
 
       $audit_result = $this->audit_lib->audit_add($audit_data);

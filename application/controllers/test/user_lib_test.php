@@ -33,10 +33,10 @@ class User_lib_test extends CI_Controller {
 
 	function add_challenge_for_test() {
 		$this->load->model('challenge_model');
-		$this->challenge1 = $this->challenge_model->add(array('hash' => '1234', 'company_id' => 1));
-		$this->challenge2 = $this->challenge_model->add(array('hash' => '5678', 'company_id' => 1));
-		$this->challenge3 = $this->challenge_model->add(array('hash' => '0000', 'company_id' => 1));
-		$this->challenge4 = $this->challenge_model->add(array('hash' => '1111', 'company_id' => 1));
+		$this->challenge1 = $this->challenge_model->add(array('hash' => '1234', 'company_id' => 1, 'detail' => array('image' => 'blank.jpg')));
+		$this->challenge2 = $this->challenge_model->add(array('hash' => '5678', 'company_id' => 1, 'detail' => array('image' => 'blank.jpg')));
+		$this->challenge3 = $this->challenge_model->add(array('hash' => '0000', 'company_id' => 1, 'detail' => array('image' => 'blank.jpg')));
+		$this->challenge4 = $this->challenge_model->add(array('hash' => '1111', 'company_id' => 1, 'detail' => array('image' => 'blank.jpg')));
 	}
 
 	function create_user_test() {
