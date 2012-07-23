@@ -193,13 +193,14 @@ class Player extends CI_Controller {
         $challenge_progress = FALSE;
       }
 
-      //Challenge reward
+      //Challenge reward & scores
+      $challenge_score = 0;
       $challenge_rewards = $challenge['reward_items'];
-
-      //Challenge score
-      $this->load->library('audit_lib');
-      $user_complete_challenge_action = $this->audit_lib->get_audit_action(0, $this->socialhappen->get_k('audit_action', 'User Complete Challenge'));
-      $challenge_score = $user_complete_challenge_action['score'];
+      foreach($challenge_rewards as $challenge_reward) {
+        if($challenge_reward['value']) {
+          $challenge_score = $challenge_score + $challenge_reward['value'];
+        }
+      }
 
       //User's company score
       $this->load->library('achievement_lib');

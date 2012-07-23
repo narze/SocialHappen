@@ -384,7 +384,7 @@ class Apiv3 extends CI_Controller {
           if(isset($reward_item['_id'])) {
             //Reward exists : update
             $reward_item['company_id'] = $company_id;
-            $reward_item_id = $reward_item['_id'];
+            $reward_item_id = get_mongo_id($reward_item);
             if(!$reward_update_result = $this->reward_item_model->update($reward_item_id, $reward_item)) {
               echo json_encode(array('success' => FALSE, 'data' => 'Update reward failed'));
               return;

@@ -1767,7 +1767,7 @@ class DB_Sync {
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
         'format_string' => 'User {user:user_id} completed challenge {challenge:objecti}',
-        'score' => 50
+        'score' => 0 //User will get score from its reward
       ),
       array(
         'app_id' => 0,
