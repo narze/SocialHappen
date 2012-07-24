@@ -10,6 +10,13 @@ define([
       // Pages
       '/profile/:id': 'profile',
       '/profile/:id/coupons/:couponId': 'coupon',
+      '/profile/:id/myprofile': 'myProfile',
+      '/profile/:id/photos': 'photos',
+      '/profile/:id/feedbacks': 'feedbacks',
+      '/profile/:id/badges': 'badges',
+      '/profile/:id/card': 'myCard',
+      '/profile/:id/coupon': 'myCoupon',
+      '/profile/:id/activity': 'activity',
 
       // Default - catch all
       '*actions': 'defaultAction'
@@ -19,55 +26,112 @@ define([
   var initialize = function(options){
     var appView = options.appView;
     var router = new AppRouter(options);
-    router.on('route:profile', function (userId) {
-      var userModel = options.userModel;
-      var currentUserModel = options.currentUserModel;
-      userModel.id = userId;
-      currentUserModel.fetch({
-        success: function(model, xhr){
-          if(!xhr.user_id){
-            window.location = window.Passport.BASE_URL + '/login?next=' + window.location.href;
-          }
+    var page = null;
+    // Check login : Fetch current user
+    var currentUserModel = options.currentUserModel;
+    currentUserModel.fetch({
+      success: function(model, xhr){
+        if(!xhr.user_id){
+          window.location = window.Passport.BASE_URL + '/login?next=' + window.location.href
+          return
         }
-      });
-      userModel.fetch();
+      }
+    })
 
+    router.on('route:profile', viewMyProfile);
+    router.on('route:myProfile', viewMyProfile);
+    router.on('route:photos', viewPhotos);
+    router.on('route:feedbacks', viewFeedbacks);
+    router.on('route:badges', viewBadges);
+    router.on('route:myCard', viewMyCard);
+    router.on('route:myCoupon', viewMyCoupon);
+    router.on('route:activity', viewActivity);
+
+    function loadMainPage(viewOptions) {
+      var userModel = options.userModel;
+      var userId = viewOptions.userId;
+      userModel.id = userId;
+      userModel.fetch();
       console.log('show profile of userId:', userId);
       window.Passport.userId = userId;
-      options.activityCollection.fetch();
-      options.achievementCollection.fetch();
-      options.couponCollection.fetch();
-      options.actionCollection.fetch();
+      viewOptions.userModel = userModel;
+
+      viewOptions.activityCollection = options.activityCollection;
+      viewOptions.achievementCollection = options.achievementCollection;
+      viewOptions.couponCollection = options.couponCollection;
+      viewOptions.actionCollection = options.actionCollection;
+
+      viewOptions.activityCollection.fetch();
+      viewOptions.achievementCollection.fetch();
+      viewOptions.couponCollection.fetch();
+      viewOptions.actionCollection.fetch();
+
+      viewOptions.currentUserModel = currentUserModel;
+      viewOptions.vent = options.vent;
 
       require(['views/profile/page'], function (ProfilePage) {
-        var profilePage = Vm.create(appView, 'ProfilePage', ProfilePage, {
-          userModel: userModel,
-          currentUserModel: currentUserModel,
-          activityCollection: options.activityCollection,
-          achievementCollection: options.achievementCollection,
-          couponCollection: options.couponCollection,
-          actionCollection: options.actionCollection,
-          vent: options.vent
-        });
-        profilePage.render();
+        if(!page) {
+          page = Vm.create(appView, 'ProfilePage', ProfilePage, viewOptions);
+        }
+        page.render();
+        page[viewOptions.load]();
       });
-    });
+    }
+
+    function viewMyProfile(userId) {
+      loadMainPage({
+        userId: userId,
+        load: 'showActionList'
+      });
+    }
+
+    function viewPhotos(userId) {
+      loadMainPage({
+        userId: userId,
+        load: 'showPhotosList'
+      })
+    }
+
+    function viewFeedbacks(userId) {
+      loadMainPage({
+        userId: userId,
+        load: 'showFeedbacksList'
+      })
+    }
+
+    function viewBadges(userId) {
+      loadMainPage({
+        userId: userId,
+        load: 'showBadgesList'
+      })
+    }
+
+    function viewMyCard(userId) {
+      loadMainPage({
+        userId: userId,
+        load: 'showMyCardList'
+      })
+    }
+
+    function viewMyCoupon(userId) {
+      loadMainPage({
+        userId: userId,
+        load: 'showMyRewardList'
+      })
+    }
+
+    function viewActivity(userId) {
+      loadMainPage({
+        userId: userId,
+        load: 'showActivityList'
+      })
+    }
+
 
     router.on('route:coupon', function(userId, couponId) {
       var userModel = options.userModel
-      var currentUserModel = options.currentUserModel
       userModel.id = userId
       window.Passport.userId = userId
-
-
-      currentUserModel.fetch({
-        success: function(model, xhr){
-          if(!xhr.user_id){
-            window.location = window.Passport.BASE_URL + '/login?next=' + window.location.href
-            return
-          }
-        }
-      })
 
       options.couponCollection.fetch({
         success: function(collection, xhr) {
@@ -85,7 +149,7 @@ define([
     })
 
     router.on('route:defaultAction', function (actions) {
-
+      console.log('Route not found : ', actions);
     });
 
     Backbone.history.start();

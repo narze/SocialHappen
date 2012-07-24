@@ -18,21 +18,23 @@ define([
 
     events: {
       'click .user-profile-nav>li>a': 'setMenuActive',
-      'click .user-profile-nav ul>li>a': 'setSubMenuActive',
-      'click .user-menu-my-profile': 'showActionList',
-      'click .user-submenu-photos': 'showPhotosList',
-      'click .user-submenu-feedbacks': 'showFeedbacksList',
-      'click .user-submenu-badges': 'showBadgesList',
-      'click .user-menu-my-card': 'showMyCardList',
-      'click .user-menu-my-reward': 'showMyRewardList',
-      'click .user-menu-activity': 'showActivityList'
+      'click .user-profile-nav ul>li>a': 'setSubMenuActive'
+      // 'click .user-menu-my-profile': 'showActionList',
+      // // 'click .user-submenu-photos': 'showPhotosList',
+      // 'click .user-submenu-feedbacks': 'showFeedbacksList',
+      // 'click .user-submenu-badges': 'showBadgesList',
+      // 'click .user-menu-my-card': 'showMyCardList',
+      // 'click .user-menu-my-reward': 'showMyRewardList',
+      // 'click .user-menu-activity': 'showActivityList'
     },
 
     initialize: function(){
       _.bindAll(this);
     },
     render: function () {
-      $(this.el).html(profilePageTemplate);
+      $(this.el).html(this.profilePageTemplate({
+        userId: this.options.userId
+      }));
       $('div#header .passport').addClass('active');
 
       //Render profile pane
@@ -51,12 +53,12 @@ define([
 
     },
     setMenuActive: function(e) {
-      e.preventDefault();
+      // e.preventDefault();
       $('.user-profile-nav li').removeClass('active');
       $(e.currentTarget).parent().addClass('active');
     },
     setSubMenuActive: function(e) {
-      e.preventDefault();
+      // e.preventDefault();
       $('.user-profile-nav li').removeClass('active');
       $(e.currentTarget).parent().addClass('active').closest('ul').parent().addClass('active');
     },
