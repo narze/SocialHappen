@@ -19,6 +19,8 @@ define([
       _.bindAll(this);
       this.model.bind('change', this.render);
       this.model.bind('destroy', this.remove);
+
+      this.options.vent.bind('viewRewardByModel', this.viewRewardByModel);
     },
     render: function () {
       console.log('render coupon item');
@@ -28,20 +30,17 @@ define([
       return this;
     },
     viewReward: function(e) {
-      e.preventDefault();
-      var reward_item_id = this.model.get('reward_item_id');
-      var self = this;
-      // $.ajax({
-      //   type: 'POST',
-      //   dataType: 'json',
-      //   url: window.Passport.BASE_URL + 'apiv3/reward_item/' + reward_item_id,
-      //   success: function(res) {
-          var data = this.model.get('reward_item') || {};
-          data.coupon = self.model.toJSON();
-          data.couponId = self.model.id;
-          $('#reward-item').html(self.rewardItemTemplate(data)).modal();
-      //   }
-      // });
+      if(e) { e.preventDefault(); }
+      var data = this.model.get('reward_item') || {};
+      data.coupon = this.model.toJSON();
+      data.couponId = this.model.id;
+      $('#reward-item').html(this.rewardItemTemplate(data)).modal();
+    },
+    viewRewardByModel: function(model) {
+      var data = model.get('reward_item') || {};
+      data.coupon = model.toJSON();
+      data.couponId = model.id;
+      $('#reward-item').html(this.rewardItemTemplate(data)).modal();
     }
   });
   return CouponItemView;

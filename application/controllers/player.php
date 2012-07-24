@@ -258,7 +258,9 @@ class Player extends CI_Controller {
           'challenge_ended' => $challenge_ended,
           'is_daily_challenge' => $is_daily_challenge,
           'company_id' => $company_id,
-          'company_name' => $company_name
+          'company_name' => $company_name,
+          'user_id' => $user_id,
+          'coupon_hash' => ''
         )
       );
 

@@ -79,24 +79,47 @@ define([
 
       cardListView.render()
     },
-    showMyRewardList: function() {
+    showMyRewardList: function(callback) {
       var couponListView = new CouponListView({
         collection: this.options.couponCollection,
-        el: $('.user-right-pane', this.el)
+        el: $('.user-right-pane', this.el),
+        vent: this.options.vent
       });
 
       //Coupon list could be seen only for current user
       if(this.options.currentUserModel.get('user_id') === window.Passport.userId) {
         couponListView.render();
+        if(typeof callback === 'function') { callback() }
       } else {
         //Fetch again and check
         this.options.currentUserModel.fetch({
           success: function(model, xhr) {
             if(xhr.user_id && (xhr.user_id === window.Passport.userId)) {
               couponListView.render();
+              if(typeof callback === 'function') { callback() }
             }
           }
         });
+      }
+    },
+    showMyCouponItem: function() {
+      var self = this;
+      //Show the list first
+      this.showMyRewardList(showItem);
+
+      function showItem() {
+        if(self.options.couponCollection.isFetched) {
+          var rewardItemId = self.options.rewardItemId;
+          //Find the model
+          //@TODO - sometimes couponcollection is not fetched yet, use setTimeout for now
+          var model = _.find(self.options.couponCollection.models, function(model) { return model.get('reward_item_id') === rewardItemId; });
+          //Trigger coupon-item.js event
+          self.options.vent.trigger('viewRewardByModel', model);
+
+        } else {
+          console.log('coupons not fetched yet');
+          setTimeout(showItem, 500);
+        }
       }
     },
     showActivityList: function() {

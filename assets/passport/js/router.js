@@ -9,13 +9,14 @@ define([
     routes: {
       // Pages
       '/profile/:id': 'profile',
-      '/profile/:id/coupons/:couponId': 'coupon',
+      '/profile/:id/coupons/:couponId': 'couponLanding',
       '/profile/:id/myprofile': 'myProfile',
       '/profile/:id/photos': 'photos',
       '/profile/:id/feedbacks': 'feedbacks',
       '/profile/:id/badges': 'badges',
       '/profile/:id/card': 'myCard',
       '/profile/:id/coupon': 'myCoupon',
+      '/profile/:id/coupon/:id': 'myCouponItem',
       '/profile/:id/activity': 'activity',
 
       // Default - catch all
@@ -45,6 +46,7 @@ define([
     router.on('route:badges', viewBadges);
     router.on('route:myCard', viewMyCard);
     router.on('route:myCoupon', viewMyCoupon);
+    router.on('route:myCouponItem', viewMyCouponItem);
     router.on('route:activity', viewActivity);
 
     function loadMainPage(viewOptions) {
@@ -72,6 +74,8 @@ define([
       require(['views/profile/page'], function (ProfilePage) {
         if(!page) {
           page = Vm.create(appView, 'ProfilePage', ProfilePage, viewOptions);
+        } else {
+          page.options = viewOptions;
         }
         page.render();
         page[viewOptions.load]();
@@ -120,6 +124,14 @@ define([
       })
     }
 
+    function viewMyCouponItem(userId, rewardItemId) {
+      loadMainPage({
+        userId: userId,
+        rewardItemId: rewardItemId,
+        load: 'showMyCouponItem'
+      })
+    }
+
     function viewActivity(userId) {
       loadMainPage({
         userId: userId,
@@ -128,7 +140,7 @@ define([
     }
 
 
-    router.on('route:coupon', function(userId, couponId) {
+    router.on('route:couponLanding', function(userId, couponId) {
       var userModel = options.userModel
       userModel.id = userId
       window.Passport.userId = userId
