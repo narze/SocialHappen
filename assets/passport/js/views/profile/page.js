@@ -44,10 +44,6 @@ define([
       });
       profilePane.render();
 
-      //Render right pane
-      $('.user-menu-activity').parent().addClass('active');
-      this.showActivityList();
-
       //Menu
       $('#badges-count').text();
 
