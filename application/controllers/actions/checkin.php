@@ -112,12 +112,13 @@ class Checkin extends CI_Controller {
 					'timestamp' => time()
 				);
 
+				$user_id = $user['user_id'];
 				if($result = $this->action_user_data_lib->add_action_user_data(
 																	$challenge['company_id'],
 																	$action_data['action_id'],
 																	get_mongo_id($action_data),
 																	get_mongo_id($challenge),
-																	$user['user_id'],
+																	$user_id,
 																	$user_data
 					)){
 
@@ -137,7 +138,7 @@ class Checkin extends CI_Controller {
 					//platform action goes here
 					$this->load->library('audit_lib');
 					$audit_data = array(
-											'user_id' => $user['user_id'],
+											'user_id' => $user_id,
 											'action_id' => $action_data['action_id'],
 											'app_id' => 0,
 											'app_install_id' => 0,
@@ -158,8 +159,11 @@ class Checkin extends CI_Controller {
 									'page_id' => 0
 								);
 					$achievement_result = $this->achievement_lib->
-											increment_achievement_stat($challenge['company_id'], 0, $user['user_id'], $info, 1);
+						increment_achievement_stat($challenge['company_id'], 0, $user_id, $info, 1);
 
+					//Check challenge after stat increment
+					$this->load->library('challenge_lib');
+					$check_challenge_result = $this->challenge_lib->check_challenge($challenge['company_id'], $user_id, $info);
 				}
 
 				if(!$audit_result || !$achievement_result){
