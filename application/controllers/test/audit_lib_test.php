@@ -260,7 +260,7 @@ class audit_lib_test extends CI_Controller {
 									 'company_id' => 3,
 									 'page_id' => 4);
 			$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
-			$this->unit->run($result, 'is_true', 'add audit - 0 - 2', '');
+			$this->unit->run($result, 'is_string', 'add audit - 0 - 2', '');
 		}
 
 		for ($i=0; $i < 3; $i++) {
@@ -275,7 +275,7 @@ class audit_lib_test extends CI_Controller {
 									 'company_id' => 3,
 									 'page_id' => 4);
 			$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
-			$this->unit->run($result, 'is_true', 'add audit - 0 - 1', '');
+			$this->unit->run($result, 'is_string', 'add audit - 0 - 1', '');
 		}
 
 		for ($i=0; $i < 3; $i++) {
@@ -290,7 +290,7 @@ class audit_lib_test extends CI_Controller {
 									 'company_id' => 3,
 									 'page_id' => 4);
 			$result = $this->audit_lib->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
-			$this->unit->run($result, 'is_true', 'add audit - 2 - 4', '');
+			$this->unit->run($result, 'is_string', 'add audit - 2 - 4', '');
 		}
 	}
 
@@ -551,7 +551,7 @@ class audit_lib_test extends CI_Controller {
 			$page_id = 4;
 			$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id', 'campaign_id', 'company_id','page_id');
 			$result = $this->audit_lib->audit_add($input);
-			$this->unit->run($result, 'is_true', 'audit add - 0 - 2', '');
+			$this->unit->run($result, 'is_string', 'audit add - 0 - 2', '');
 		}
 
 		for ($i=0; $i < 3; $i++) {
@@ -567,7 +567,7 @@ class audit_lib_test extends CI_Controller {
 			$page_id = 4;
 			$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id', 'campaign_id', 'company_id','page_id');
 			$result = $this->audit_lib->audit_add($input);
-			$this->unit->run($result, 'is_true', 'audit add - 0 - 1', '');
+			$this->unit->run($result, 'is_string', 'audit add - 0 - 1', '');
 		}
 
 		for ($i=0; $i < 3; $i++) {
@@ -583,7 +583,7 @@ class audit_lib_test extends CI_Controller {
 			$page_id = 4;
 			$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id', 'campaign_id', 'company_id','page_id');
 			$result = $this->audit_lib->audit_add($input);
-			$this->unit->run($result, 'is_true', 'audit add - 2 - 4', '');
+			$this->unit->run($result, 'is_string', 'audit add - 2 - 4', '');
 		}
 	}
 
@@ -688,7 +688,7 @@ class audit_lib_test extends CI_Controller {
 
 		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'campaign_id', 'image');
 		$result = $this->audit_lib->audit_add($input);
-		$this->unit->run($result, 'is_true', 'audit add (with campaign_id only', '');
+		$this->unit->run($result, 'is_string', 'audit add (with campaign_id only', '');
 
 		$result = $this->audit_lib->list_recent_audit($limit);
 		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);
@@ -701,7 +701,7 @@ class audit_lib_test extends CI_Controller {
 
 		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id');
 		$result = $this->audit_lib->audit_add($input);
-		$this->unit->run($result, 'is_true', 'audit add (with app_install_id only', '');
+		$this->unit->run($result, 'is_string', 'audit add (with app_install_id only', '');
 
 		$result = $this->audit_lib->list_recent_audit($limit);
 		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);
@@ -713,7 +713,7 @@ class audit_lib_test extends CI_Controller {
 
 		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'page_id');
 		$result = $this->audit_lib->audit_add($input);
-		$this->unit->run($result, 'is_true', 'audit add (with page_id only', '');
+		$this->unit->run($result, 'is_string', 'audit add (with page_id only', '');
 
 		$result = $this->audit_lib->list_recent_audit($limit);
 		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);
@@ -725,7 +725,7 @@ class audit_lib_test extends CI_Controller {
 
 		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'company_id');
 		$result = $this->audit_lib->audit_add($input);
-		$this->unit->run($result, 'is_true', 'audit add (with company_id only', '');
+		$this->unit->run($result, 'is_string', 'audit add (with company_id only', '');
 
 		$result = $this->audit_lib->list_recent_audit($limit);
 		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);
@@ -738,7 +738,7 @@ class audit_lib_test extends CI_Controller {
 		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'campaign_id');
 		$input['page_id'] = '0';
 		$result = $this->audit_lib->audit_add($input);
-		$this->unit->run($result, 'is_true', 'audit add (with campaign_id=1, page_id=0', '');
+		$this->unit->run($result, 'is_string', 'audit add (with campaign_id=1, page_id=0', '');
 
 		$result = $this->audit_lib->list_recent_audit($limit);
 		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);
@@ -755,7 +755,7 @@ class audit_lib_test extends CI_Controller {
 		$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'campaign_id');
 		$input['app_install_id'] = '0';
 		$result = $this->audit_lib->audit_add($input);
-		$this->unit->run($result, 'is_true', 'audit add (with campaign_id=1, app_install_id=0', '');
+		$this->unit->run($result, 'is_string', 'audit add (with campaign_id=1, app_install_id=0', '');
 
 		$result = $this->audit_lib->list_recent_audit($limit);
 		$this->unit->run($result[0]['subject'], 'Add chain test', "\$result[0]['subject']", $result[0]['subject']);

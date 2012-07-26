@@ -113,7 +113,7 @@ class Checkin extends CI_Controller {
 				);
 
 				$user_id = $user['user_id'];
-				if($result = $this->action_user_data_lib->add_action_user_data(
+				if($action_user_data_id = $this->action_user_data_lib->add_action_user_data(
 																	$challenge['company_id'],
 																	$action_data['action_id'],
 																	get_mongo_id($action_data),
@@ -150,7 +150,10 @@ class Checkin extends CI_Controller {
 											'image' => $user['user_image']
 										);
 
-					$audit_result = $this->audit_lib->audit_add($audit_data);
+					$audit_id = $this->audit_lib->audit_add($audit_data);
+
+					//Update action user data with audit id
+					$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id));
 
 					$this->load->library('achievement_lib');
 					$info = array(
@@ -166,7 +169,7 @@ class Checkin extends CI_Controller {
 					$check_challenge_result = $this->challenge_lib->check_challenge($challenge['company_id'], $user_id, $info);
 				}
 
-				if(!$audit_result || !$achievement_result){
+				if(!$audit_id || !$achievement_result){
 					$action_data['data']['checkin_thankyou_message'] = 'Something\'s broken please try again later' ;
 				}else if(!$post_result){
 					$action_data['data']['checkin_thankyou_message'] = 'Connection to Facebook failed, information saved' ;

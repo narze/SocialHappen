@@ -18,32 +18,32 @@ class Audit_model extends CI_Model {
 	var $action_id = '';
 	var $object = '';
 	var $objecti = '';
-	
-	
+
+
 	var $DEFAULT_LIMIT;
-	
+
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function __construct() {
 		parent::__construct();
 		$this->DEFAULT_LIMIT = 0;
 		$this->load->helper('mongodb');
-		$this->audits = sh_mongodb_load( array(
+		$this->collection = sh_mongodb_load( array(
 			'collection' => 'audits'
 		));
 	}
-	
+
 	/**
 	 * create index for collection
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		return $this->audits->deleteIndexes() 
-			&& $this->audits->ensureIndex(array('timestamp' => -1,
+		return $this->collection->deleteIndexes()
+			&& $this->collection->ensureIndex(array('timestamp' => -1,
 											 'action_id' => 1,
 											 'app_id' => 1,
 											 'app_install_id' => 1,
@@ -53,14 +53,14 @@ class Audit_model extends CI_Model {
 											 'company_id' => 1));
 
 	}
-	
+
 	/**
 	 * add new audit entry to database
-	 * 
+	 *
 	 * @param data array of attribute to be added
-	 * 
-	 * @return result boolean
-	 * 
+	 *
+	 * @return audit_id
+	 *
 	 * @author Metwara Narksook
 	 */
 	function add_audit($data = array()){
@@ -70,80 +70,99 @@ class Audit_model extends CI_Model {
 			$time = isset($data['timestamp']) ? $data['timestamp'] : time();
 			$data_to_add = array('timestamp' => $time);
 			$data_to_add = array_merge($data_to_add, $data);
-			// add new 
-			$this->audits->insert($data_to_add);
-			return TRUE;
+			// add new
+			return $this->add($data_to_add);
 		}else{
 			return FALSE;
 		}
-		
+
 	}
-	
+
+	function add($data = array())	{
+		try	{
+			$this->collection->insert($data, array('safe' => TRUE));
+			return ''.$data['_id'];
+		} catch(MongoCursorException $e){
+			log_message('error', 'Mongodb error : '. $e);
+			return FALSE;
+		}
+	}
+
+	function get($query){
+		$result = $this->collection->find($query)->sort(array('_id'=>-1));
+		return cursor2array($result);
+	}
+
+	function getOne($query){
+		$result = $this->collection->findOne($query);
+		return obj2array($result);
+	}
+
 	/**
 	 * list audit data by input criteria to query
-	 * 
+	 *
 	 * @param criteria array of attribute to query
 	 * @param limit int number of results
 	 * @param offset int offset number
-	 * 
+	 *
 	 * @return result
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function list_audit($criteria = array(), $limit = NULL, $offset = 0){
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
-		
+
 		foreach($criteria as $key => $value){
 			if(preg_match('/(_id)$/i',$key) && !is_array($value)){
 				$criteria[$key] = (int) $value;
 			}
 		}
-		
-		$res = $this->audits->find($criteria)->sort(array('timestamp' => -1, '_id' => -1))->skip($offset)->limit($limit);
-		
+
+		$res = $this->collection->find($criteria)->sort(array('timestamp' => -1, '_id' => -1))->skip($offset)->limit($limit);
+
 		$result = array();
 		foreach ($res as $audit) {
 			$result[] = $audit;
 		}
 		return $result;
 	}
-	
+
 	/**
 	 * list recent audit entry
-	 * 
+	 *
 	 * @param limit number of entries to get
-	 * 
+	 *
 	 * @return result array of audit
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function list_recent_audit($limit = NULL){
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
-		$res = $this->audits->find()->sort(array('timestamp' => -1, '_id' => -1))->limit($limit);
-		
+		$res = $this->collection->find()->sort(array('timestamp' => -1, '_id' => -1))->limit($limit);
+
 		$result = array();
 		foreach ($res as $audit) {
 			$result[] = $audit;
 		}
 		return $result;
 	}
-	
+
 	function _get_start_day_time($timestamp = NULL){
 		date_default_timezone_set('UTC');
 		$start = mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp));
 		return $start;
 	}
-	
+
 	function _get_end_day_time($timestamp = NULL){
 		date_default_timezone_set('UTC');
 		$end = mktime(24, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp));
 		return $end;
 	}
-	
+
 	function count_distinct_audit($key = NULL, $criteria = NULL, $start_date = NULL, $end_date = NULL){
 		$check_args = isset($criteria) && isset($start_date);
 		if(!$check_args){
@@ -156,14 +175,14 @@ class Audit_model extends CI_Model {
 		}else{
 			$end_time = $this->_get_end_day_time($start_date);
 		}
-		
+
 		$criteria['timestamp'] = array('$gte' => $start_time, '$lt' => $end_time);
-	
+
 		// unset($criteria['user_id']);
 		// unset($criteria['company_id']);
 		// unset($criteria['action_id']);
 		// unset($criteria['timestamp']);
-		// unset($criteria['app_id']);		
+		// unset($criteria['app_id']);
 // debug_print_backtrace();
 		// echo 'count_distinct_audit criteria<pre>';
 		// var_dump($criteria);
@@ -179,34 +198,34 @@ class Audit_model extends CI_Model {
 			return count($result[0]);
 		} else { //Non-distinct count
 			$result = array();
-			$cursor = $this->audits->find($criteria);
+			$cursor = $this->collection->find($criteria);
 			foreach ($cursor as $audit) {
 				$result[] = $audit;
 			}
 			return count($result);
 		}
 	}
-  
-  
+
+
   function list_distinct_audit($key = NULL, $criteria = NULL){
     $check_args = isset($key) && isset($criteria);
     if(!$check_args){
       return NULL;
     }
-    
+
     $db_criteria = array();
     if(isset($criteria['subject'])){
       $db_criteria['subject'] = $criteria['subject'];
     }
-    
+
     if(isset($criteria['object'])){
       $db_criteria['object'] = $criteria['object'];
     }
-    
+
     if(isset($criteria['objecti'])){
       $db_criteria['objecti'] = $criteria['objecti'];
     }
-    
+
     if(isset($criteria['app_id'])){
       $db_criteria['app_id'] = $criteria['app_id'];
     }
@@ -225,7 +244,7 @@ class Audit_model extends CI_Model {
     if(isset($criteria['campaign_id'])){
       $db_criteria['campaign_id'] = $criteria['campaign_id'];
     }
-    
+
     // construct map and reduce functions
 		$map = new MongoCode("function() { emit(this.".$key.",this.timestamp); }");
 		$reduce = new MongoCode("function(k, vals) { ".
@@ -236,26 +255,26 @@ class Audit_model extends CI_Model {
 		      "}".
 		    "}".
 		    "return max; }");
-		
+
 		$cursor = $this->mongo_db->command(array(
-		    "mapreduce" => "audits", 
+		    "mapreduce" => "audits",
 		    "map" => $map,
 		    "reduce" => $reduce,
 		    "query" => count($db_criteria) == 0 ? NULL : $db_criteria,
 		    "out" => array("inline" => 1)));
-    
+
     $result = array();
     foreach ($cursor as $audit) {
       $result[] = $audit;
     }
-    
+
 		$out_array = $result[0];
-		
+
 		// if something wrong from database query, just return
 		if(!is_array($out_array)){
 			return array();
 		}
-		
+
 		/*
 		 * sort output by timestamp
 		 */
@@ -266,26 +285,26 @@ class Audit_model extends CI_Model {
 	    return ($a['value'] < $b['value']) ? 1 : -1;
 		}
 		uasort($out_array, 'cmp');
-		
+
 		/*
 		 * filter result array
 		 */
     $out_array = array_map(function($a){ return $a['_id']; }, $out_array);
-		
+
 		/*
 		 * correct array keys
 		 */
     return array_values($out_array);
   }
-	
+
 	/**
 	 * drop entire collection
 	 * you will lost all audit data
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function drop_collection(){
-		$this->audits->drop();
+		$this->collection->drop();
 	}
 }
 

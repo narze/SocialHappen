@@ -30,11 +30,17 @@ class Action_user_data_lib {
 		} else {
 			return FALSE;
 		}
-
 	}
 
 	function get_action_user_data($action_user_data_id) {
 		return $this->CI->action_user_data_model->getOne(array('_id' => new MongoId($action_user_data_id)));
+	}
+
+	function update_action_user_data($action_user_data_id, $data) {
+		$set = array(
+			'$set' => $data
+		);
+		return $this->CI->action_user_data_model->update(array('_id' => new MongoId($action_user_data_id)), $set);
 	}
 
 	function get_action_user_data_array($criteria = array()) {

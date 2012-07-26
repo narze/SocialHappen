@@ -14,7 +14,7 @@ define('COMPANYID2', 2);
 
 
 class Action_user_data_lib_test extends CI_Controller {
-	
+
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
@@ -28,7 +28,7 @@ class Action_user_data_lib_test extends CI_Controller {
 		$this->action_user_data_model->delete(array('_id' => new MongoId($this->action_user_data_id2)));
 		$this->unit->report_with_counter();
 	}
-	
+
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
@@ -63,7 +63,7 @@ class Action_user_data_lib_test extends CI_Controller {
 
 		$result = $this->action_user_data_lib->add_action_user_data($company_id, $this->action_id2, $action_data_id, $challenge_id, $user_id, $this->user_data2);
 		$this->unit->run($result, 'is_string', "\$result", $result);
-		$this->action_user_data_id2 = $result; 
+		$this->action_user_data_id2 = $result;
 
 		//fail test
 		$result = $this->action_user_data_lib->add_action_user_data($company_id, $this->action_id2, $action_data_id, $challenge_id, $user_id, NULL);
@@ -104,7 +104,7 @@ class Action_user_data_lib_test extends CI_Controller {
 
 	function get_action_user_data_by_company_test() {
 		$result = $this->action_user_data_lib->get_action_user_data_by_company(COMPANYID1);
-		
+
 		unset($result['_id']);
 		foreach ($result as $action_user_data) {
 			if(get_mongo_id($action_user_data) == $this->action_user_data_id1){
@@ -115,7 +115,7 @@ class Action_user_data_lib_test extends CI_Controller {
 		}
 
 		$result = $this->action_user_data_lib->get_action_user_data_by_company(COMPANYID2);
-		
+
 		unset($result['_id']);
 		foreach ($result as $action_user_data) {
 			if(get_mongo_id($action_user_data) == $this->action_user_data_id1){
@@ -133,7 +133,7 @@ class Action_user_data_lib_test extends CI_Controller {
 
 	function get_action_user_data_by_action_test() {
 		$result = $this->action_user_data_lib->get_action_user_data_by_action($this->action_id);
-		
+
 		unset($result['_id']);
 		foreach ($result as $action_user_data) {
 			if(get_mongo_id($action_user_data) == $this->action_user_data_id1){
@@ -142,9 +142,9 @@ class Action_user_data_lib_test extends CI_Controller {
 				$this->unit->run($action_user_data, $this->expect1, "same object", $action_user_data);
 			}
 		}
-		
+
 		$result = $this->action_user_data_lib->get_action_user_data_by_action($this->action_id2);
-		
+
 		unset($result['_id']);
 		foreach ($result as $action_user_data) {
 			if(get_mongo_id($action_user_data) == $this->action_user_data_id1){
@@ -161,7 +161,7 @@ class Action_user_data_lib_test extends CI_Controller {
 
 	function get_action_user_data_by_action_data_test() {
 		$result = $this->action_user_data_lib->get_action_user_data_by_action_data(ACTIONDATAMONGOID1);
-		
+
 		unset($result['_id']);
 		foreach ($result as $action_user_data) {
 			if(get_mongo_id($action_user_data) == $this->action_user_data_id1){
@@ -171,7 +171,7 @@ class Action_user_data_lib_test extends CI_Controller {
 			}
 		}
 		$result = $this->action_user_data_lib->get_action_user_data_by_action_data(ACTIONDATAMONGOID2);
-		
+
 		unset($result['_id']);
 		foreach ($result as $action_user_data) {
 			if(get_mongo_id($action_user_data) == $this->action_user_data_id1){
@@ -188,9 +188,9 @@ class Action_user_data_lib_test extends CI_Controller {
 
 	function get_action_user_data_by_challenge_test() {
 		$result = $this->action_user_data_lib->get_action_user_data_by_challenge(CHALLENGEMONGOID1);
-		
+
 		unset($result['_id']);
-		
+
 		foreach ($result as $action_user_data) {
 			if(get_mongo_id($action_user_data) == $this->action_user_data_id1){
 				$this->unit->run(get_mongo_id($action_user_data), $this->action_user_data_id1, "same object id", get_mongo_id($action_user_data));
@@ -199,7 +199,7 @@ class Action_user_data_lib_test extends CI_Controller {
 			}
 		}
 		$result = $this->action_user_data_lib->get_action_user_data_by_challenge(CHALLENGEMONGOID2);
-		
+
 		unset($result['_id']);
 		foreach ($result as $action_user_data) {
 			if(get_mongo_id($action_user_data) == $this->action_user_data_id1){
@@ -212,6 +212,16 @@ class Action_user_data_lib_test extends CI_Controller {
 		//fail test
 		$result = $this->action_user_data_lib->get_action_user_data_by_challenge('ultragaaaaayyyyyy');
 		$this->unit->run(sizeof($result) > 0, 'is_false', "\$result", $result);
+	}
+
+	function update_action_user_data_test() {
+		$update = array('audit_id' => '12345678');
+		$result = $this->action_user_data_lib->update_action_user_data($this->action_user_data_id1, $update);
+		$this->unit->run($result, TRUE, "\$result", $result);
+
+		//Check
+		$action_user_data = $this->action_user_data_lib->get_action_user_data($this->action_user_data_id1);
+		$this->unit->run($action_user_data['audit_id'], '12345678', "\$action_user_data['audit_id']", $action_user_data['audit_id']);
 	}
 
 }

@@ -746,6 +746,7 @@ class Apiv3 extends CI_Controller {
     $result = $user_action_data;
     $action_list = array();
     $this->load->library('audit_lib');
+    $this->load->model('audit_model');
     for($i = 0;$i < count($result); $i++){
       $app_id = (int) 0;
       $action_id = $result[$i]['action_id'];
@@ -761,7 +762,7 @@ class Apiv3 extends CI_Controller {
       if(isset($result_action['format_string'])){
         $result[$i]['message'] = $this->audit_lib->translate_format_string(
           $result_action['format_string'],
-          $result[$i],
+          $this->audit_model->getOne(array('_id' => new MongoId($result[$i]['audit_id']))),
           ($action_id <= 100)
         );
       }else{
@@ -769,7 +770,7 @@ class Apiv3 extends CI_Controller {
       }
     }
 
-    echo json_encode($result);
+    echo json_encode(array_reverse($result));
   }
 
   function getMyCards() {
