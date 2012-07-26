@@ -187,7 +187,7 @@
 	<div id="login">
 		<div class="row-fluid text-center">
 		<div class="well">
-			<?php if(isset($challenge_score) && isset($company_score)) : ?>
+			<?php if(isset($challenge_score) && ($challenge_score > 0) && isset($company_score)) : ?>
 				<p>You got <span class="badge badge-success"><?php echo $challenge_score; ?></span> points from the challenge, now you have <span class="badge badge-success"><?php echo $company_score;?></span> points in total.</p>
 			<?php endif; ?>
 			<?php if($challenge_rewards) : ?>
@@ -205,9 +205,11 @@
 							<span class="reward-name">
 								<?php echo $challenge_reward['name']; ?>
 							</span>
-							<span class="reward-value">
-								(<?php echo $challenge_reward['value']; ?>)
-							</span>
+							<?php if($challenge_reward['value'] > 0) : ?>
+								<span class="reward-value">
+									(<?php echo $challenge_reward['value']; ?>)
+								</span>
+							<?php endif; ?>
 							<div class="reward-description">
 								<?php echo $challenge_reward['description']; ?>
 							</div>
