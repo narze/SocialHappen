@@ -52,10 +52,11 @@ define([
     function loadMainPage(viewOptions) {
       var userModel = options.userModel;
       var userId = viewOptions.userId;
+
+      window.Passport.userId = userId;
+
       userModel.id = userId;
       userModel.fetch();
-      console.log('show profile of userId:', userId);
-      window.Passport.userId = userId;
       viewOptions.userModel = userModel;
 
       viewOptions.activityCollection = options.activityCollection;
@@ -63,10 +64,12 @@ define([
       viewOptions.couponCollection = options.couponCollection;
       viewOptions.actionCollection = options.actionCollection;
 
-      viewOptions.activityCollection.fetch();
-      viewOptions.achievementCollection.fetch();
-      viewOptions.couponCollection.fetch();
-      viewOptions.actionCollection.fetch();
+      if(!page) {
+        viewOptions.activityCollection.fetch();
+        viewOptions.achievementCollection.fetch();
+        viewOptions.couponCollection.fetch();
+        viewOptions.actionCollection.fetch();
+      }
 
       viewOptions.currentUserModel = currentUserModel;
       viewOptions.vent = options.vent;
@@ -74,10 +77,10 @@ define([
       require(['views/profile/page'], function (ProfilePage) {
         if(!page) {
           page = Vm.create(appView, 'ProfilePage', ProfilePage, viewOptions);
+          page.render();
         } else {
           page.options = viewOptions;
         }
-        page.render();
         page[viewOptions.load]();
       });
     }

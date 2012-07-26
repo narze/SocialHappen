@@ -16,19 +16,19 @@ define([
       this.$el.html(this.achievementListTemplate({
         total: this.collection.length
       }));
-      
+
       this.addAll();
       return this;
     },
-    
+
     addOne: function(model){
       var achievementItemView = new AchievementItemView({
         model: model
       });
-      
+
       $('ul.achievement-list', this.$el).append(achievementItemView.render().el);
     },
-    
+
     addAll: function(){
       var self = this;
       this.collection.each(function(model){

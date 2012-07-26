@@ -14,7 +14,6 @@ define([
     render: function () {
       if(this.model.get('message')){
         var data = this.model.toJSON();
-        // console.log(data);
         data.timeago = $.timeago(new Date(data.user_data.timestamp*1000));
         $(this.el).html(this.actionItemTemplate(data));
       }

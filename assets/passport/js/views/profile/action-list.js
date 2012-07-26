@@ -9,6 +9,8 @@ define([
     actionListTemplate: _.template(actionListTemplate),
     initialize: function(){
       _.bindAll(this);
+      this.collection.bind('add', this.addOne);
+      this.collection.bind('reset', this.render);
     },
     render: function () {
       this.$el.html(this.actionListTemplate({

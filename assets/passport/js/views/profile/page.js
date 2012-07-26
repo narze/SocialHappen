@@ -43,18 +43,20 @@ define([
         userModel: this.options.userModel
       });
       profilePane.render();
-
+      console.log('page rendered');
       //Menu
-      $('#badges-count').text();
+      // $('#badges-count').text();
 
     },
     setMenuActive: function(e) {
       // e.preventDefault();
+      console.log($(e.currentTarget).parent());
       $('.user-profile-nav li').removeClass('active');
       $(e.currentTarget).parent().addClass('active');
     },
     setSubMenuActive: function(e) {
       // e.preventDefault();
+      console.log($(e.currentTarget).parent());
       $('.user-profile-nav li').removeClass('active');
       $(e.currentTarget).parent().addClass('active').closest('ul').parent().addClass('active');
     },
