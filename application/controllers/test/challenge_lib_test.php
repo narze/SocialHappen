@@ -517,7 +517,7 @@ class Challenge_lib_test extends CI_Controller {
     $this->load->model('achievement_stat_company_model');
 
     $result = $this->achievement_stat_company_model->get((int)$company_id, (int)$user_id);
-    $this->unit->run($result['company_score'], 50 * 3, '$result[company_score]', $result['company_score']);
+    $this->unit->run($result['company_score'], 0, '$result[company_score]', $result['company_score']);
   }
 
   function get_challengers_test() {
