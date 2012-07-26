@@ -377,10 +377,10 @@ define([
         name: 'Feedback Action',
         action_data: {
           data: {
-            feedback_welcome_message: 'Find and scan the QR code',
-            feedback_question_message: 'Find and scan the QR code',
-            feedback_vote_message: 'Find and scan the QR code',
-            feedback_thankyou_message: 'Congratulations! You\'ve found and scanned the QR code'
+            feedback_welcome_message: 'Welcome',
+            feedback_question_message: 'What do you think about us?',
+            feedback_vote_message: 'Please give us a rating',
+            feedback_thankyou_message: 'Thank you'
           },
           action_id: 202
         }
