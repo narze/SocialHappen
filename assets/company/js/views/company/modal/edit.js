@@ -34,8 +34,6 @@ define([
       'click button.save-image': 'saveEditImage',
       'click button.active-challenge': 'activeChallenge',
       'click button.deactive-challenge': 'deactiveChallenge',
-      'click button.edit-score': 'showEditScore',
-      'click button.save-score': 'saveEditScore',
       'click button.show-activity': 'showActivity',
       'click button.hide-activity': 'hideActivity',
       'change input.repeat-enable': 'toggleRepeat',
@@ -553,28 +551,6 @@ define([
       $('ul.reward-list', this.el).append(rewardView.render().el);
 
       return rewardView;
-    },
-
-    showEditScore: function(){
-      $('h3.edit-score', this.el).hide();
-      $('div.edit-score', this.el).show();
-      $('input.challenge-score', this.el).focus();
-    },
-
-    saveEditScore: function(){
-      var score = $('input.challenge-score', this.el).val();
-      var intRegex = /^\d+$/;
-      if(!(intRegex.test(score))) {
-        return;
-      }
-
-      this.model.set('score', score).trigger('change');
-      this.model.save();
-
-      $('h3.edit-score', this.el).show();
-      $('div.edit-score', this.el).hide();
-
-      this.options.vent.trigger('showEditModal', this.model);
     },
 
     hideActivity: function(){

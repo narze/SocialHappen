@@ -24,8 +24,6 @@ define([
 
     events: {
       'click button.create-challenge': 'createChallenge',
-      'click button.edit-score': 'showEditScore',
-      'click button.save-score': 'saveEditScore',
       'change input.repeat-enable': 'toggleRepeat',
       'click button.save-repeat-interval': 'saveRepeat',
       'click div.view-repeat': 'showEditRepeat',
@@ -413,27 +411,6 @@ define([
       $('ul.reward-list', this.el).append(rewardView.render().el);
 
       return rewardView;
-    },
-
-    showEditScore: function(){
-      $('h3.edit-score', this.el).hide();
-      $('div.edit-score', this.el).show();
-      $('input.challenge-score', this.el).focus();
-    },
-
-    saveEditScore: function(){
-      var score = $('input.challenge-score', this.el).val();
-      var intRegex = /^\d+$/;
-      if(!(intRegex.test(score))) {
-        return;
-      }
-
-      this.model.set('score', score).trigger('change');
-
-      $('h3.edit-score', this.$el).show();
-      $('div.edit-score', this.$el).hide();
-
-      this.options.vent.trigger('showAddModal', this.model);
     },
 
     createChallenge: function(){
