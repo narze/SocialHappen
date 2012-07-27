@@ -29,7 +29,7 @@ define([
         });
 
         if(!company){
-          window.location = window.Company.BASE_URL + 'passport';
+          // window.location = window.Company.BASE_URL + 'passport';
         } else {
           var self = this;
 
