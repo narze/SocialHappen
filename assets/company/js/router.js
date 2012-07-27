@@ -31,9 +31,23 @@ define([
         if(!xhr.user_id){
           // console.log('not found user:', window.Passport.BASE_URL + '/login?next=' + window.location.href);
           window.location = window.Company.BASE_URL + '/login?next=' + window.location.href;
+        }else{
+          checkCurrentUser();
         }
       }
     });
+
+    function checkCurrentUser(){
+      if(currentUserModel.get('user_id') && window.Company.companyId){
+        var company = _.find(currentUserModel.get('companies'), function(i){
+          return i.company_id === window.Company.companyId;
+        });
+
+        if(!company){
+          window.location = window.Company.BASE_URL + 'passport';
+        }
+      }
+    }
 
     router.on('route:defaultAction', function () {
 
@@ -55,6 +69,8 @@ define([
       console.log('show company:', companyId);
 
       window.Company.companyId = companyId;
+
+      checkCurrentUser();
 
       options.challengesCollection.url = window.Company.BASE_URL + '/apiv3/challenges/?company_id=' + companyId;
 
