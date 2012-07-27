@@ -5,7 +5,7 @@ class Error extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 	}
-	
+
 	/**
 	 * Error page
 	 * @author Weerapat P.
@@ -18,38 +18,7 @@ class Error extends CI_Controller {
 		if(!array_key_exists($error_num, $title)){
 			redirect('error/404');
 		}
-		$data = array(
-			'header' => $this -> socialhappen -> get_header( 
-				array(
-					'title' => $title[$error_num],
-					'script' => array(
-						'common/functions',
-						'common/jquery.form',
-						'common/bar',
-						'common/fancybox/jquery.fancybox-1.3.4.pack',
-					),
-					'style' => array(
-						'common/platform',
-						'common/fancybox/jquery.fancybox-1.3.4',
-						'common/main'
-					)
-				)
-			),
-			'breadcrumb' => $this -> load -> view('common/breadcrumb', 
-				array(
-					'breadcrumb' => array( 
-						'Error' => NULL
-					)
-				),
-			TRUE),
-			'error' => $this -> load -> view('error/'.$error_num, 
-				array(
-
-				),
-			TRUE),
-			'footer' => $this -> socialhappen -> get_footer()
-		);
-		$this -> parser -> parse('error/error_view', $data);
+		return $this->socialhappen->error_page($error_num . ' : ' . $title[$error_num]);
 	}
 }
 
