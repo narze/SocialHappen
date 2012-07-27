@@ -23,7 +23,7 @@ define([
       $(this.el).html(this.challengeItemTemplate(data));
       return this;
     },
-    
+
     showEdit: function(e){
       e.preventDefault();
       this.options.vent.trigger('showEditModal', this.model);

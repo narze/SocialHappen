@@ -4,12 +4,12 @@ define([
   'backbone',
   'vm',
 	'events',
-  'text!templates/layout.html' 
+  'text!templates/layout.html'
 ], function($, _, Backbone, Vm, Events, layoutTemplate){
   var AppView = Backbone.View.extend({
     el: '#content',
     initialize: function () {
-		  
+
     },
     render: function () {
 			var self = this;
@@ -20,7 +20,7 @@ define([
         });
         headerNavigationView.render();
       });
-		} 
+		}
 	});
   return AppView;
 });

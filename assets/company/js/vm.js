@@ -25,8 +25,8 @@ define([
 		Events.trigger('viewCreated');
 		return view;
 	}
-	
-	
+
+
   return {
   	create: create
   };

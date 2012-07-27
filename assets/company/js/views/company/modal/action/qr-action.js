@@ -13,28 +13,28 @@ define([
       'click .edit-action': 'showEdit',
       'click .remove-action': 'remove'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
 
       //Add action into model
       if(this.options.add) {
         var criteria = this.model.get('criteria');
-      
+
         criteria.push(this.options.action);
-        
+
         this.model.set('criteria', criteria).trigger('change');
         if(this.options.save){
           this.model.save();
         }
       }
     },
-    
+
     render: function () {
       $(this.el).html(this.qrActionTemplate(this.options.action));
       return this;
     },
-    
+
     showEdit: function(){
       var qrFormView = new QRFormView({
         model: this.model,

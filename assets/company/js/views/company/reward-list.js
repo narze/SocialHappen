@@ -10,23 +10,23 @@ define([
 ], function($, _, Backbone, RewardModel, rewardListTemplate, RewardItemView, masonry, endlessscroll){
   var RewardListPane = Backbone.View.extend({
     rewardListTemplate: _.template(rewardListTemplate),
-    
+
     events: {
       'click button.add-reward': 'showAddReward',
       'click button.load-more' : 'loadMore'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
       this.options.vent.bind('reloadMasonry', this.reloadMasonry);
       this.collection.bind('reset', this.addAll);
       this.collection.bind('add', this.addOne);
     },
-    
+
     render: function () {
       $(this.el).html(this.rewardListTemplate({
       }));
-      
+
       $('.tile-list', this.el).masonry({
         // options
         itemSelector : '.item',
@@ -35,19 +35,19 @@ define([
         },
         isFitWidth: true
       });
-      
+
       this.addAll();
-      
+
       if(this.collection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
-      
+
       return this;
     },
-    
+
     addOne: function(model){
       // console.log('add one reward:', model.toJSON());
-      
+
       var reward = new RewardItemView({
         model: model,
         vent: this.options.vent
@@ -56,20 +56,20 @@ define([
       var el = reward.render().$el;
       $('.tile-list', this.el).append(el);
     },
-    
+
     addAll: function(){
       $('.tile-list', this.el).html('');
       this.collection.each(function(model){
         this.addOne(model);
       }, this);
     },
-    
+
     reloadMasonry: function(){
       $('.tile-list', this.el).masonry('reload');
     },
-    
+
     loadMore: function(){
-      
+
       var button = $('button.load-more', this.el).addClass('disabled');
       this.collection.loadMore(function(loaded){
         if(loaded > 0){
@@ -77,10 +77,10 @@ define([
         }else{
           button.addClass('hide');
         }
-        
+
       });
     },
-    
+
     showAddReward: function(){
       console.log('show add reward');
       var newModel = new RewardModel({});

@@ -25,7 +25,7 @@ define([
       $(this.el).html(this.rewardItemTemplate(data));
       return this;
     },
-    
+
     showEdit: function(e){
       e.preventDefault();
       console.log('show reward edit modal');

@@ -10,14 +10,14 @@ define([
   var ProfilePage = Backbone.View.extend({
     pageTemplate: _.template(pageTemplate),
     el: '#content',
-    
+
     initialize: function(){
       _.bindAll(this);
     },
     render: function () {
       $(this.el).html(pageTemplate);
       $('div#header .world').addClass('active'); //<-- Noom : this doesn't work
-      
+
       var sidebarView = new SidebarView({
         el: $('#sidebar', this.el),
         userModel: this.options.userModel,
@@ -25,20 +25,20 @@ define([
         collection: this.options.companiesCollection
       });
       sidebarView.render();
-      
+
       var carouselView = new CarouselView({
         el: $('#carousel', this.el),
         userModel: this.options.userModel,
         vent: this.options.vent
       });
       carouselView.render();
-      
+
       var challengeListView = new ChallengeListView({
         collection: this.options.challengesCollection,
         el: $('#challenge-list', this.el),
         vent: this.options.vent
       });
-      
+
       challengeListView.render();
     }
   });

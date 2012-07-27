@@ -6,7 +6,7 @@ define([
 ], function($, _, Backbone, sidebarTemplate){
   var SideBarView = Backbone.View.extend({
     sidebarTemplate: _.template(sidebarTemplate),
-    
+
     events: {
     },
 
@@ -14,7 +14,7 @@ define([
       _.bindAll(this);
       this.model.bind('change', this.render);
     },
-    
+
     render: function () {
       var data = this.model.toJSON();;
       console.log('render sidebar', data);
@@ -23,10 +23,10 @@ define([
         data.companyId = window.Company.companyId;
         $(this.el).html(this.sidebarTemplate(data));
       }
-      
+
       return this;
     }
-    
+
   });
   return SideBarView;
 });

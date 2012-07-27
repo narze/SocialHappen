@@ -19,9 +19,9 @@ define([
   var initialize = function(options){
     var appView = options.appView;
     var router = new AppRouter(options);
-    
+
     var self = this;
-    
+
     var currentUserModel = options.currentUserModel;
     currentUserModel.fetch({
       success: function(model, xhr){
@@ -34,7 +34,7 @@ define([
     });
 
     router.on('route:defaultAction', function () {
-      
+
       options.challengesCollection.fetch();
       require(['views/company/page'], function (WorldPage) {
         var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
@@ -48,15 +48,15 @@ define([
         companyPage.render();
       });
     });
-    
+
     router.on('route:company', function (companyId) {
-      
+
       console.log('show company:', companyId);
-      
+
       window.Company.companyId = companyId;
-      
+
       options.challengesCollection.url = window.Company.BASE_URL + '/apiv3/challenges/?company_id=' + companyId;
-      
+
       options.challengesCollection.fetch();
 
       options.currentCompanyModel.set('id', companyId, {
@@ -66,7 +66,7 @@ define([
 
       if(!self.companyPage){
         require(['views/company/page'], function (WorldPage) {
-          
+
           var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
             currentUserModel: currentUserModel,
             currentCompanyModel: options.currentCompanyModel,
@@ -78,22 +78,22 @@ define([
           });
           companyPage.render();
           self.companyPage = companyPage;
-          
+
         });
       }else{
         self.companyPage.options.now = 'challenge';
         self.companyPage.render();
       }
     });
-    
+
     router.on('route:reward', function (companyId) {
-      
+
       console.log('show reward:', companyId);
-      
+
       window.Company.companyId = companyId;
-      
+
       options.rewardsCollection.url = window.Company.BASE_URL + '/apiv3/rewards/?company_id=' + companyId;
-      
+
       options.rewardsCollection.fetch();
 
       options.currentCompanyModel.set('id', companyId, {
@@ -103,7 +103,7 @@ define([
 
       if(!self.companyPage){
         require(['views/company/page'], function (WorldPage) {
-          
+
           var companyPage = Vm.create(appView, 'CompanyPage', WorldPage, {
             currentUserModel: currentUserModel,
             currentCompanyModel: options.currentCompanyModel,
@@ -115,7 +115,7 @@ define([
           });
           companyPage.render();
           self.companyPage = companyPage;
-          
+
         });
       }else{
         self.companyPage.options.now = 'reward';

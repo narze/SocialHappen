@@ -75,7 +75,7 @@ define([
       if (params.type !== 'GET' && !Backbone.emulateJSON) {
         params.processData = false;
       }
-      
+
       console.log('save coupon:', this.toJSON());
       console.log('POST:', params.data);
 

@@ -6,16 +6,16 @@ define([
 ], function($, _, Backbone, companyModel){
   var companyCollection = Backbone.Collection.extend({
     model: companyModel,
-    
+
     last_id: '',
-    
+
     initialize: function(){
 
     },
-    
+
     loadMore: function(callback){
       this.last_id = this.last().id;
-      
+
       this.fetch({
         add: true,
         success: function(collection, resp){
@@ -23,7 +23,7 @@ define([
         }
       });
     },
-    
+
     sync: function(method, model, options) {
       var methodMap = {
 
@@ -48,7 +48,7 @@ define([
         } else {
           params.url = window.World.BASE_URL + 'apiv3/companies/';
         }
-        
+
       }
 
       // Ensure that we have the appropriate request data.

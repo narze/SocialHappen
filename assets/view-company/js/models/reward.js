@@ -78,7 +78,7 @@ define([
       if (params.type !== 'GET' && !Backbone.emulateJSON) {
         params.processData = false;
       }
-      
+
       console.log('save reward:', this.toJSON());
       console.log('POST:', params.data);
 

@@ -9,19 +9,19 @@ define([
 ], function($, _, Backbone, challengeListTemplate, ChallengeItemView, masonry, endlessscroll){
   var ChallengeListPane = Backbone.View.extend({
     challengeListTemplate: _.template(challengeListTemplate),
-    
+
     events: {
       'click button.load-more' : 'loadMore'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
       this.options.vent.bind('reloadMasonry', this.reloadMasonry);
       this.collection.bind('reset', this.addAll);
       this.collection.bind('add', this.addOne);
     },
-    
-    render: function () {      
+
+    render: function () {
       $('.tile-list', this.el).masonry({
         // options
         itemSelector : '.item',
@@ -30,14 +30,14 @@ define([
         },
         isFitWidth: true
       });
-      
+
       this.addAll();
       return this;
     },
-    
+
     addOne: function(model){
       // console.log('add one challenge:', model.toJSON());
-      
+
       var challenge = new ChallengeItemView({
         model: model
       });
@@ -45,7 +45,7 @@ define([
       var el = challenge.render().$el;
       $('.tile-list', this.el).append(el);
     },
-    
+
     addAll: function(){
       //Reset
       $(this.el).html(this.challengeListTemplate());
@@ -59,13 +59,13 @@ define([
         this.addOne(model);
       }, this);
     },
-    
+
     reloadMasonry: function(){
       $('.tile-list', this.el).masonry('reload');
     },
-    
+
     loadMore: function(){
-      
+
       var button = $('button.load-more', this.el).addClass('disabled');
       this.collection.loadMore(function(loaded){
         if(loaded > 0){
@@ -73,7 +73,7 @@ define([
         }else{
           button.addClass('hide');
         }
-        
+
       });
     }
   });

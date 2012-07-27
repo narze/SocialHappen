@@ -6,20 +6,20 @@ define([
 ], function($, _, Backbone, challengeModel){
   var challengesCollection = Backbone.Collection.extend({
     model: challengeModel,
-    
+
     last_id: null,
-    
+
     initialize: function(){
       _.bindAll(this);
     },
-    
+
     loadMore: function(callback){
       if(this.models.length == 0){
         this.last_id = null;
       }else{
         this.last_id = this.last().id;
       }
-      
+
       this.fetch({
         add: true,
         success: function(collection, resp){
@@ -27,7 +27,7 @@ define([
         }
       });
     },
-    
+
     sync: function(method, model, options) {
       var methodMap = {
 
@@ -44,9 +44,9 @@ define([
 
       // Default JSON-request options.
       var params = {type: type, dataType: 'json'};
-      
-      
-      
+
+
+
       // Ensure that we have a URL.
       if (!options.url) {
         if(this.last_id && window.Company.companyId){
@@ -54,7 +54,7 @@ define([
         }else if(window.Company.companyId){
           params.url = window.Company.BASE_URL + 'apiv3/challenges/?company_id=' + window.Company.companyId;
         }
-        
+
       }
 
       // Ensure that we have the appropriate request data.

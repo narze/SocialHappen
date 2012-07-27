@@ -9,34 +9,34 @@ define([
 
     checkinActionTemplate: _.template(CheckinActionTemplate),
     tagName: 'li',
-    
+
     events: {
       'click .edit-action': 'showEdit',
       'click .remove-action': 'remove',
       'click button.setup-checkin-place': 'showSetupCheckinPlace'
     },
-    
+
     initialize: function(){
       _.bindAll(this);
 
       //Add action into model
       if(this.options.add) {
         var criteria = this.model.get('criteria');
-      
+
         criteria.push(this.options.action);
-        
+
         this.model.set('criteria', criteria).trigger('change');
         if(this.options.save){
           this.model.save();
         }
       }
     },
-    
+
     render: function () {
       $(this.el).html(this.checkinActionTemplate(this.options.action));
       return this;
     },
-    
+
     showEdit: function(){
       var checkinFormView = new CheckinFormView({
         model: this.model,
@@ -48,7 +48,7 @@ define([
       $('#action-modal').html(checkinFormView.render().el);
       $('#action-modal').modal('show');
     },
-    
+
     showSetupCheckinPlace: function(){
       var checkinFormView = new CheckinFormView({
         model: this.model,
@@ -61,7 +61,7 @@ define([
       $('#action-modal').find('.modal-body > .control-group').not('.facebook-place').hide();
       $('#action-modal').modal('show');
     },
-    
+
     remove: function(e) {
       e.preventDefault();
       var criteria = this.model.get('criteria');

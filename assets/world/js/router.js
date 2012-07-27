@@ -17,13 +17,13 @@ define([
   var initialize = function(options){
     var appView = options.appView;
     var router = new AppRouter(options);
-    
+
     router.on('route:defaultAction', function () {
       window.World.companyId = null;
       options.challengesCollection.last_id = '';
       renderViews();
     });
-    
+
     router.on('route:companyWorld', function (companyId) {
       window.World.companyId = companyId;
       options.challengesCollection.last_id = '';
@@ -41,7 +41,7 @@ define([
           }
         }
       });
-      
+
       options.companiesCollection.fetch();
       options.challengesCollection.fetch();
       require(['views/world/page'], function (WorldPage) {
@@ -54,7 +54,7 @@ define([
         worldPage.render();
       });
     }
-    
+
     Backbone.history.start();
   };
   return {
