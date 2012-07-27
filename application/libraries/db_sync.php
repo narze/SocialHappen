@@ -1516,7 +1516,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has installed {app:app_id}',
+        'format_string' => '{user:user_id} has installed {app:app_id}',
         'score' => 0
       ),
       array(
@@ -1526,7 +1526,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has installed {app:object} in {page:page_id}',
+        'format_string' => '{user:user_id} has installed {app:object} in {page:page_id}',
         'score' => 0
       ),
       array(
@@ -1536,7 +1536,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has removed {app:app_id}',
+        'format_string' => '{user:user_id} has removed {app:app_id}',
         'score' => 0
       ),
       array(
@@ -1546,7 +1546,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has updated {app:app_id} configuration',
+        'format_string' => '{user:user_id} has updated {app:app_id} configuration',
         'score' => 0
       ),
       array(
@@ -1556,7 +1556,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has installed {page:page_id} in {company:company_id}',
+        'format_string' => '{user:user_id} has installed {page:page_id} in {company:company_id}',
         'score' => 0
       ),
       array(
@@ -1566,7 +1566,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has created company {company:company_id}',
+        'format_string' => '{user:user_id} has created company {company:company_id}',
         'score' => 0
       ),
       array(
@@ -1576,7 +1576,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has bought package {package:object}',
+        'format_string' => '{user:user_id} has bought package {package:object}',
         'score' => 0
       ),
       array(
@@ -1586,7 +1586,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has bought the most expensive package {package:object}',
+        'format_string' => '{user:user_id} has bought the most expensive package {package:object}',
         'score' => 0
       ),
       array(
@@ -1596,7 +1596,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => TRUE,
-        'format_string' => 'User {user:user_id} has registered SocialHappen',
+        'format_string' => '{user:user_id} has registered SocialHappen',
         'score' => 50
       ),
       array(
@@ -1606,7 +1606,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => TRUE,
-        'format_string' => 'User {user:user_id} has registered {app:app_id}',
+        'format_string' => '{user:user_id} has registered {app:app_id}',
         'score' => 0
       ),
       array(
@@ -1616,7 +1616,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => TRUE,
-        'format_string' => 'User {user:user_id} visited {app_install:app_install_id} in {page:page_id}',
+        'format_string' => '{user:user_id} visited {app_install:app_install_id} in {page:page_id}',
         'score' => 0
       ),
       array(
@@ -1626,7 +1626,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => TRUE,
-        'format_string' => 'User {user:user_id} has action', //@TODO What action?
+        'format_string' => '{user:user_id} has action', //@TODO What action?
         'score' => 0
       ),
       array(
@@ -1636,7 +1636,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => TRUE,
-        'format_string' => 'User {user:user_id} has joined {campaign:campaign_id} in {app:app_id}',
+        'format_string' => '{user:user_id} has joined {campaign:campaign_id} in {app:app_id}',
         'score' => 0
       ),
       array(
@@ -1646,7 +1646,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => TRUE,
-        'format_string' => 'User {user:user_id} registered {page:page_id}',
+        'format_string' => '{user:user_id} registered {page:page_id}',
         'score' => 50
       ),
       array(
@@ -1656,7 +1656,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} shared profile',
+        'format_string' => '{user:user_id} shared profile',
         'score' => 5
       ),
       array(
@@ -1666,7 +1666,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => TRUE,
-        'format_string' => 'User {user:user_id} shared on {app_install:app_install_id}',
+        'format_string' => '{user:user_id} shared on {app_install:app_install_id}',
         'score' => 1
       ),
       array(
@@ -1676,7 +1676,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} logged in',
+        'format_string' => '{user:user_id} logged in',
         'score' => 5
       ),
       array(
@@ -1686,7 +1686,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} linked with Twitter account',
+        'format_string' => '{user:user_id} linked with Twitter account',
         'score' => 10
       ),
       array(
@@ -1696,7 +1696,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} linked with Facebook account',
+        'format_string' => '{user:user_id} linked with Facebook account',
         'score' => 10
       ),
       array(
@@ -1706,7 +1706,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} linked with Foursquare account',
+        'format_string' => '{user:user_id} linked with Foursquare account',
         'score' => 10
       ),
       array(
@@ -1716,7 +1716,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} invited a friend',
+        'format_string' => '{user:user_id} invited a friend',
         'score' => 1
       ),
       array(
@@ -1726,7 +1726,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} accepted page invite from {user:subject}',
+        'format_string' => '{user:user_id} accepted page invite from {user:subject}',
         'score' => 1
       ),
       array(
@@ -1736,7 +1736,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => TRUE,
-        'format_string' => 'User {user:user_id} accepted campaign invite from {user:subject}',
+        'format_string' => '{user:user_id} accepted campaign invite from {user:subject}',
         'score' => 1
       ),
       array(
@@ -1746,7 +1746,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} received a reward coupon from company {company:company_id}',
+        'format_string' => '{user:user_id} received a reward coupon from company {company:company_id}',
         'score' => 0
       ),
       array(
@@ -1756,7 +1756,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} joined challenge {challenge:objecti}',
+        'format_string' => '{user:user_id} joined challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1766,7 +1766,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} completed challenge {challenge:objecti}',
+        'format_string' => '{user:user_id} completed challenge {challenge:objecti}',
         'score' => 0 //User will get score from its reward
       ),
       array(
@@ -1776,7 +1776,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} redeemed {string:object} from company {company:company_id}',
+        'format_string' => '{user:user_id} redeemed {string:object} from company {company:company_id}',
         'score' => 0
       ),
       array(
@@ -1786,7 +1786,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} entered QR code in challenge {challenge:objecti}',
+        'format_string' => '{user:user_id} entered QR code in challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1796,7 +1796,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} gave feedback and rated {string:object} in challenge {challenge:objecti}',
+        'format_string' => '{user:user_id} gave feedback and rated {string:object} in challenge {challenge:objecti}',
         'score' => 0
       ),
       array(
@@ -1806,7 +1806,7 @@ class DB_Sync {
         'stat_app' => FALSE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} check-in at {string:object} in challenge {challenge:objecti}',
+        'format_string' => '{user:user_id} check-in at {string:object} in challenge {challenge:objecti}',
         'score' => 0
       ),
     );
@@ -1819,7 +1819,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has viewed video {string:object} in {app:app_id}',
+        'format_string' => '{user:user_id} has viewed video {string:object} in {app:app_id}',
         'score' => 1
       ),
       array(
@@ -1829,7 +1829,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has shared video {string:object} in {app:app_id}',
+        'format_string' => '{user:user_id} has shared video {string:object} in {app:app_id}',
         'score' => 1
       ),
       array(
@@ -1839,7 +1839,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has viewed video {string:object} in {app:app_id}',
+        'format_string' => '{user:user_id} has viewed video {string:object} in {app:app_id}',
         'score' => 1
       ),
       array(
@@ -1849,7 +1849,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has shared video {string:object} in {app:app_id}',
+        'format_string' => '{user:user_id} has shared video {string:object} in {app:app_id}',
         'score' => 1
       ),
       array(
@@ -1859,7 +1859,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has shared feed {string:object} in {app:app_id}',
+        'format_string' => '{user:user_id} has shared feed {string:object} in {app:app_id}',
         'score' => 1
       ),
       array(
@@ -1869,7 +1869,7 @@ class DB_Sync {
         'stat_app' => TRUE,
         'stat_page' => TRUE,
         'stat_campaign' => FALSE,
-        'format_string' => 'User {user:user_id} has shared feed {string:object} in {app:app_id}',
+        'format_string' => '{user:user_id} has shared feed {string:object} in {app:app_id}',
         'score' => 1
       ),
       array(
