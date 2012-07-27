@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/qrEditTemplate.html'
+  'text!templates/company/modal/action/QREditTemplate.html'
 ], function($, _, Backbone, qrEditTemplate){
   var QRFormView = Backbone.View.extend({
     qrEditTemplate: _.template(qrEditTemplate),

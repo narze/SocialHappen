@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/checkinEditTemplate.html',
+  'text!templates/company/modal/action/CheckinEditTemplate.html',
   'text!templates/company/modal/action/placeItemTemplate.html'
 ], function($, _, Backbone, checkinEditTemplate, placeItemTemplate){
   var CheckinFormView = Backbone.View.extend({
