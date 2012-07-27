@@ -195,7 +195,7 @@ class Player extends CI_Controller {
 
       //Challenge reward & scores
       $challenge_score = 0;
-      $challenge_rewards = $challenge['reward_items'];
+      $challenge_rewards = issetor($challenge['reward_items'], array());
       foreach($challenge_rewards as $challenge_reward) {
         if($challenge_reward['value']) {
           $challenge_score = $challenge_score + $challenge_reward['value'];
