@@ -53,6 +53,11 @@ define([
 
     addAll: function(){
       $('.coupon-list', this.el).html('');
+
+      if(this.collection.models.length == 0){
+        $('.coupon-list', this.el).html('Your company have no coupon.');
+      }
+
       this.collection.each(function(model){
         this.addOne(model);
       }, this);
