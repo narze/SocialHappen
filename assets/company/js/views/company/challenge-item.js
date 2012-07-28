@@ -9,7 +9,7 @@ define([
     className: 'item',
     challengeItemTemplate: _.template(challengeItemTemplate),
     events: {
-      'click a.challenge': 'showEdit'
+      'click': 'showEdit'
     },
     initialize: function(){
       _.bindAll(this);
