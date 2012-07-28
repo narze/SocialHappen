@@ -143,3 +143,13 @@ img.company-image{
   float: left;
   padding: 4px;
 }
+
+.modal-super{
+  position: relative;
+  margin-top: 200px;
+}
+
+#recipe-modal.modal-super{
+  position: fixed;
+  margin-top: -250px;
+}
