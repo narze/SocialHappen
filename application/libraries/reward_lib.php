@@ -267,14 +267,27 @@ class Reward_lib
 		//Check if no reward remains
 		if(!isset($reward_item['redeem']['amount_remain'])
 			|| ($reward_item['redeem']['amount_remain'] == 0)) {
-			return array('success' => FALSE, 'data' => 'Reward used up');
+			return array('success' => FALSE, 'data' => 'This reward was used up');
 		}
 
 		//Check if redeemable once and redeemed already
 		if($reward_item['redeem']['once']) {
 			$this->CI->load->model('user_mongo_model');
 			if(isset($user['reward_items']) && in_array($reward_item_id, $user['reward_items'])) {
-				return array('success' => FALSE, 'data' => 'Already redeemed');
+				return array('success' => FALSE, 'data' => 'You have already redeemed this reward.');
+			}
+		}
+
+		// Check coupon
+		if($reward_item['redeem']['once']) {
+			$this->CI->load->library('coupon_lib');
+			$user_coupon = $this->CI->coupon_lib->get_one(array(
+				'user_id' => (int)$user_id,
+				'reward_item_id' => $reward_item_id
+			));
+
+			if($user_coupon){
+				return array('success' => FALSE, 'data' => 'You have already redeemed this reward.');
 			}
 		}
 
@@ -283,14 +296,14 @@ class Reward_lib
 		$company_stat = $this->CI->achievement_lib->get_company_stat($company_id, $user_id);
 		if(!isset($company_stat['company_score'])) {
 			//No stat = 0 points = cannot purchase
-			return array('success' => FALSE, 'data' => 'Insufficient score');
+			return array('success' => FALSE, 'data' => 'You have insufficient company score');
 		}
 
 		$company_score = $company_stat['company_score'];
 
 		if($company_score < $reward_item['redeem']['point']) {
 			//Insufficient points
-			return array('success' => FALSE, 'data' => 'Insufficient score');
+			return array('success' => FALSE, 'data' => 'You have insufficient company score');
 		}
 
 		//Update the company point of the user
