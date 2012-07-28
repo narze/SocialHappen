@@ -709,6 +709,31 @@ class Apiv3 extends CI_Controller {
     $this->load->model('user_mongo_model');
     $user = $this->user_mongo_model->get_user($user_id);
     $user_rewards = isset($user['reward_items']) && !empty($user['reward_items']) ? $user['reward_items'] : array();
+
+    $this->load->library('coupon_lib');
+    $company_id = $this->input->get('company_id');
+
+    $user_coupon = array();
+    if($user_id && $company_id){
+      $user_coupon = $this->coupon_lib->list_user_company_coupon($user_id, $company_id);
+    }else if($user_id){
+      $user_coupon = $this->coupon_lib->list_user_coupon($user_id);
+    }
+
+    $user_coupon = array_map(function($coupon){
+      if(!$coupon['confirmed']){
+        return $coupon['reward_item_id'];
+      }else{
+        return NULL;
+      }
+    }, $user_coupon);
+
+    $user_coupon = array_filter($user_coupon, function($coupon){
+      return $coupon != NULL;
+    });
+
+
+    $user_rewards = array_merge($user_rewards, $user_coupon);
     echo json_encode(array('success' => TRUE, 'data' => $user_rewards));
   }
 

@@ -107,6 +107,10 @@ Class Coupon_lib{
 		return $this->CI->coupon_model->get_by_company($company_id);
 	}
 
+	function list_user_company_coupon($user_id, $company_id){
+		return $this->CI->coupon_model->get_by_user_company($user_id, $company_id);
+	}
+
 }
 /* End of file coupon_lib.php */
 /* Location: ./application/libraries/coupon_lib.php */

@@ -13,7 +13,7 @@ class Coupon_model extends CI_Model {
 
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
-		return $this->collection->deleteIndexes() 
+		return $this->collection->deleteIndexes()
 			&& $this->collection->ensureIndex(array(
 				'user_id' => 1,
 				'company_id' => 1,
@@ -22,7 +22,7 @@ class Coupon_model extends CI_Model {
 				'confirmed_timestamp' => 1
 			));
 	}
-        
+
 	function add($data)	{
 		$data = array_cast_int($data, $this->int_values);
 		try	{
@@ -33,7 +33,7 @@ class Coupon_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
+
 	function get($query){
 		$query = array_cast_int($query, $this->int_values);
 		$result = $this->collection->find($query)->sort(array('_id'=>-1));
@@ -45,7 +45,7 @@ class Coupon_model extends CI_Model {
 		$result = $this->collection->findOne($query);
 		return obj2array($result);
 	}
-		
+
 	function update($query, $data)
 	{
 		$query = array_cast_int($query, $this->int_values);
@@ -139,6 +139,22 @@ class Coupon_model extends CI_Model {
 	function get_by_user($user_id = NULL) {
 		if(!$user_id) { return FALSE; }
 		$query = array('user_id' => (int) $user_id);
+		return $this->get($query);
+	}
+
+	/**
+	 * Get coupons by user_id and company_id
+	 */
+	function get_by_user_company($user_id = NULL, $company_id = NULL){
+		if(!$user_id || !$company_id){
+			return FALSE;
+		}
+
+		$query = array(
+			'user_id' => (int) $user_id,
+			'company_id' => (int) $company_id
+		);
+
 		return $this->get($query);
 	}
 
