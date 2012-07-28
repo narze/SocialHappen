@@ -248,27 +248,38 @@
 			<?php if(isset($challenge_available_date)) : ?>
 				<p>You've already completed this challenge. This challellenge will be available for you again on <?php echo $challenge_available_date; ?>.</p>
 			<?php endif; ?>
-			<?php if($challenge_reward) : ?>
-				<p> You got this reward : </p>
-			<div class="reward-container alert alert-success">
-				<div class="reward-image">
-				<img src="<?php echo $challenge_reward['image']; ?>" />
-				</div>
-				<div class="reward-info">
-					<span class="reward-name">
-						<?php echo $challenge_reward['name']; ?>
-					</span>
-					<span class="reward-value">
-						(<?php echo $challenge_reward['value']; ?>)
-					</span>
-					<div class="reward-description">
-						<?php echo $challenge_reward['description']; ?>
+			<?php if($challenge_rewards) : ?>
+				<?php if(count($challenge_rewards) === 1) : ?>
+					<p>You got this reward : </p>
+				<?php else : ?>
+					<p>You got these rewards :</p>
+				<?php endif; ?>
+				<?php foreach($challenge_rewards as $challenge_reward) : ?>
+					<div class="reward-container alert alert-success">
+						<div class="reward-image">
+							<img src="<?php echo $challenge_reward['image']; ?>" />
+							</div>
+							<div class="reward-info">
+							<span class="reward-name">
+								<?php echo $challenge_reward['name']; ?>
+							</span>
+							<?php if($challenge_reward['value'] > 0) : ?>
+								<span class="reward-value">
+									(<?php echo $challenge_reward['value']; ?>)
+								</span>
+							<?php endif; ?>
+							<div class="reward-description">
+								<?php echo $challenge_reward['description']; ?>
+							</div>
+							<div class="reward-coupon-link">
+								<a class="btn btn-success view-coupon" href="<?php echo base_url('assets/passport/#/profile/'.$user_id.'/coupon/'.get_mongo_id($challenge_reward)); ?>">View Coupon</a>
+							</div>
+						</div>
+						<!-- <div class="reward-status">
+						<?php echo $challenge_reward['status']; ?>
+						</div> -->
 					</div>
-					<div class="reward-coupon-link">
-						<a class="btn btn-success view-coupon" href="<?php echo base_url('assets/passport/#/profile/'.$user_id.'/coupon/'.get_mongo_id($challenge_reward)); ?>">View Coupon</a>
-					</div>
-				</div>
-			</div>
+				<?php endforeach; ?>
 			<?php else : ?>
 				<p> This challenge has no reward </p>
 			<?php endif; ?>
