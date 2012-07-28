@@ -463,8 +463,8 @@ class Challenge_lib {
     }
 
     $result = array(
-      'in_progress' => $all_challengers,
-      'completed' => $completed_challengers
+      'in_progress' => array_values($all_challengers),
+      'completed' => array_values($completed_challengers)
     );
 
     return $result;

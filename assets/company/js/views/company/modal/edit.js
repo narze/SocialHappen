@@ -13,10 +13,11 @@ define([
   'views/company/modal/action/checkin-action',
   'views/company/modal/reward/reward',
   'jqueryui',
-  'timeago'
+  'timeago',
+  'collections/challenger'
 ], function($, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate, challengersItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
-  QRActionView, CheckinActionView, RewardView, jqueryui, timeago){
+  QRActionView, CheckinActionView, RewardView, jqueryui, timeago, ChallengerCollection){
   var EditModalView = Backbone.View.extend({
 
     editTemplate: _.template(editTemplate),
@@ -24,6 +25,11 @@ define([
     addRewardTemplate: _.template(addRewardTemplate),
     activityItemTemplate: _.template(activityItemTemplate),
     couponItemTemplate: _.template(couponItemTemplate),
+
+    //Limit for challenger items in list
+    limit: 1,
+    challengeInProgressIndex: 1,
+    challengeCompletedIndex: 1,
 
     events: {
       'click h3.edit-name': 'showEditName',
@@ -142,32 +148,41 @@ define([
         $('#edit_challenge_end').datetimepicker('setDate', (new Date(endDate)));
       }
 
-      //Show challengers
-      $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id + '/' + 1,
-        success: function(resp) {
+      //Get challengers
+      var limit = this.limit;
+      var challengerCollection = new ChallengerCollection();
+      challengerCollection.url = window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id + '/' + limit;
+      challengerCollection.fetch({
+        success: function(collection, resp) {
           if(resp.in_progress.length) {
+            $('.joined', self.el).empty();
             _.each(resp.in_progress, function(user) {
               $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
             });
+            if(resp.in_progress.length < limit) {
+              $('.load-more-in-progress', self.el).hide();
+            } else {
+              $('.load-more-in-progress', self.el).show().click(loadMoreInProgress);
+            }
           } else {
-            $('.joined', self.el).append('None');
+            $('.challenger-joined', self.el).hide();
           }
 
           if(resp.completed.length) {
+            $('.completed', self.el).empty();
             _.each(resp.completed, function(user) {
               $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
             });
+            if(resp.in_progress.length < limit) {
+              $('.load-more-completed', self.el).hide();
+            } else {
+              $('.load-more-completed', self.el).show() .click(loadMoreCompleted);
+            }
           } else {
-            $('.completed', self.el).append('None');
+            $('.challenger-completed', self.el).hide();
           }
-
-          $('.load-more-in-progress', self.el).click(loadMoreInProgress);
-          $('.load-more-completed', self.el).click(loadMoreCompleted);
         }
-      });
+      })
 
       //Show challenge status
       var challengeStatus;
@@ -188,30 +203,28 @@ define([
       $('.challenge-status', this.el).html(challengeStatus);
 
       function loadMoreInProgress() {
-        var limit = 5;
         var offset = self.challengeInProgressIndex;
         var inProgressTemplate = _.template(challengersItemTemplate);
         var challengeHash = self.model.id;
+
         $('.load-more-in-progress', self.el).hide();
-        $.ajax({
-          type: 'POST',
-          dataType: 'json',
-          url: window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
-          success: function (resp) {
+        challengerCollection.url = window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset;
+        challengerCollection.fetch({
+          success: function(collection, resp) {
             if(!resp.in_progress || (resp.in_progress.length < limit)) {
               return;
             }
             $('.load-more-in-progress', self.el).show();
+            $('.challengers-in-progress', self.el).empty();
             _.each(resp.in_progress, function(user) {
               $('.challengers-in-progress', self.el).append(inProgressTemplate(user));
             });
+            self.challengeInProgressIndex = offset + limit;
           }
-        });
-        self.challengeInProgressIndex = offset + limit;
+        })
       }
 
       function loadMoreCompleted() {
-        var limit = 5;
         var offset = self.challengeCompletedIndex;
         var completedTemplate = _.template(challengersItemTemplate);
         var challengeHash = self.model.id;
@@ -225,6 +238,7 @@ define([
               return;
             }
             $('.load-more-completed', self.el).show();
+            $('.challengers-completed', self.el).empty();
             _.each(resp.completed, function(user) {
               $('.challengers-completed', self.el).append(completedTemplate(user));
             });
@@ -235,8 +249,6 @@ define([
 
       return this;
     },
-    challengeInProgressIndex: 1,
-    challengeCompletedIndex: 1,
 
     showEdit: function(model) {
       this.model = model;
