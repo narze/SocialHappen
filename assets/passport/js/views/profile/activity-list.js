@@ -31,6 +31,10 @@ define([
 
     addAll: function(){
       var self = this;
+      if(this.collection.models.length == 0){
+        this.$('ul.activity-list').html('No activity');
+      }
+
       this.collection.each(function(model){
         self.addOne(model);
       });
