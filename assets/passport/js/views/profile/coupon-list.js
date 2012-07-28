@@ -71,7 +71,8 @@ define([
     },
 
     addAll: function(){
-      $('.coupon-list', this.el).html('');
+      $('.coupon-list', this.el).html('No coupon')
+
       this.collection.each(function(model){
         this.addOne(model);
       }, this);
