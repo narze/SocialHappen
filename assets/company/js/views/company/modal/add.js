@@ -31,8 +31,8 @@ define([
       'click .add-new-action': 'showAddNewActionModal',
       'click .add-new-reward': 'showAddNewRewardModal',
       'click .cancel': 'cancelAdd',
-      'keypress input.challenge-name': 'onTypeChallengeName',
-      'keypress textarea.challenge-description': 'onTypeChallengeDescription'
+      'keyup input.challenge-name': 'onTypeChallengeName',
+      'keyup textarea.challenge-description': 'onTypeChallengeDescription'
     },
 
     initialize: function(){

@@ -137,3 +137,9 @@ img.company-image{
   width: 90px;
   margin-top: 10px;
 }
+
+/* Challenge modal */
+.joined-user, .completed-user {
+  float: left;
+  padding: 4px;
+}

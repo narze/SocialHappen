@@ -556,17 +556,19 @@ class Apiv3 extends CI_Controller {
     $challengers['in_progress_count'] = count($challengers['in_progress']);
     $challengers['completed_count'] = count($challengers['completed']);
     foreach($challengers['in_progress'] as $key => &$challenger_in_progress){
-      if($key >= $offset + $limit || $key < $offset) {
+      if(($key >= $offset + $limit) || ($key < $offset)) {
         unset($challengers['in_progress'][$key]);
       }
       $challenger_in_progress = $this->user_model->get_user_profile_by_user_id($challenger_in_progress['user_id']);
     }
     foreach($challengers['completed'] as $key => &$challenger_completed){
-      if($key >= $offset + $limit || $key < $offset) {
+      if(($key >= $offset + $limit) || ($key < $offset)) {
         unset($challengers['completed'][$key]);
       }
       $challenger_completed = $this->user_model->get_user_profile_by_user_id($challenger_completed['user_id']);
     }
+    $challengers['in_progress'] = array_values($challengers['in_progress']);
+    $challengers['completed'] = array_values($challengers['completed']);
     echo json_encode($challengers);
   }
 
@@ -583,15 +585,20 @@ class Apiv3 extends CI_Controller {
     echo json_encode($this->company_model->get_all());
   }
 
-  function rewards(){
-
+  /**
+   * list redeem type rewards
+   */
+  function rewards() {
     if(!$company_id = $this->input->get('company_id')) {
       echo json_encode(array('success' => FALSE, 'data' => 'No company_id'));
       return;
     }
 
     $this->load->model('reward_item_model');
-    $rewards = $this->reward_item_model->get(array('company_id' => (int)$company_id));
+    $rewards = $this->reward_item_model->get(array(
+      'company_id' => (int) $company_id,
+      'type' => 'redeem'
+    ));
     $rewards = array_map(function($reward) {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;

@@ -116,12 +116,14 @@ define([
     saveEditRedeem: function(){
 
       var amount = $('input.reward-amount', this.el).val();
+      var amount_remain = $('input.reward-amount-remain', this.el).val();
       var point = $('input.reward-point', this.el).val();
       var once = !_.isUndefined($('input.reward-once', this.el).attr('checked'));
 
       var redeem = this.model.get('redeem');
 
       redeem.amount = amount;
+      redeem.amount_remain = amount_remain;
       redeem.point = point;
       redeem.once = once;
 
