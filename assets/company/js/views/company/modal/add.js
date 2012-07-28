@@ -220,7 +220,7 @@ define([
     showAddNewActionModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addActionTemplate).modal('show');
-      var recipe = null;
+      var recipe = 'feedback';
       var self = this;
 
       //On recipe click
@@ -349,7 +349,7 @@ define([
     showAddNewRewardModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addRewardTemplate).modal('show');
-      var reward = null;
+      var reward = 'points';
       var self = this;
       //On reward click
       $('.rewards button', addActionModal).click(function() {
@@ -494,7 +494,7 @@ define([
       var recipeModal = $('#recipe-modal');
       recipeModal.html(this.recipeTemplate()).modal('show');
 
-      var recipe = null, reward = null;
+      var recipe = 'feedback', reward = 'points';
       //On recipe click
       $('.recipes button', recipeModal).click(function() {
         $('.recipes button', recipeModal).addClass('disabled');
