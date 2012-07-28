@@ -529,7 +529,8 @@ define([
         value: 0,
         status: 'published',
         type: 'challenge',
-        description: '10% discount coupon'
+        description: '10% discount coupon',
+        is_points_reward: false
       };
 
       return this._addReward(reward);
@@ -544,7 +545,8 @@ define([
         value: 0,
         status: 'published',
         type: 'challenge',
-        description: 'Giveaway reward'
+        description: 'Giveaway reward',
+        is_points_reward: false
       };
 
       return this._addReward(reward);

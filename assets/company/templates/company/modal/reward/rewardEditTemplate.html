@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="control-group <%= (typeof is_points_reward !== 'undefined') && is_points_reward ? '' : 'hide' %>">
     <div class="edit-value-field">
       <h6>value:</h6>
       <input type="text" class="reward-value span1" value="<%- value %>"></input>

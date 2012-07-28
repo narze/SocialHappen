@@ -111,6 +111,13 @@ define([
 
       $('select.select-challenge-reward', this.el).change(this.changeReward);
 
+      // Disable publish button if no action/reward
+      if(!this.model.get('reward_items').length || !this.model.get('criteria').length) {
+        $('button.create-challenge', this.el).attr('disabled', 'disabled');
+      } else {
+        $('button.create-challenge', this.el).removeAttr('disabled');
+      }
+
       return this;
     },
 
@@ -213,7 +220,7 @@ define([
     showAddNewActionModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addActionTemplate).modal('show');
-      var recipe = null;
+      var recipe = 'feedback';
       var self = this;
 
       //On recipe click
@@ -342,7 +349,7 @@ define([
     showAddNewRewardModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addRewardTemplate).modal('show');
-      var reward = null;
+      var reward = 'points';
       var self = this;
       //On reward click
       $('.rewards button', addActionModal).click(function() {
@@ -390,7 +397,8 @@ define([
         value: 0,
         status: 'published',
         type: 'challenge',
-        description: '10% discount coupon'
+        description: '10% discount coupon',
+        is_points_reward: false
       };
 
       return this._addReward(reward);
@@ -405,7 +413,8 @@ define([
         value: 0,
         status: 'published',
         type: 'challenge',
-        description: 'Giveaway reward'
+        description: 'Giveaway reward',
+        is_points_reward: false
       };
 
       return this._addReward(reward);
@@ -485,7 +494,7 @@ define([
       var recipeModal = $('#recipe-modal');
       recipeModal.html(this.recipeTemplate()).modal('show');
 
-      var recipe = null, reward = null;
+      var recipe = 'feedback', reward = 'points';
       //On recipe click
       $('.recipes button', recipeModal).click(function() {
         $('.recipes button', recipeModal).addClass('disabled');
