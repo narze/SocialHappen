@@ -30,6 +30,10 @@ define([
     },
 
     addAll: function(collection) {
+      if(collection.models.length == 0){
+        $('#card-list', this.el).html('No card');
+      }
+
       collection.each(this.addOne);
     },
 

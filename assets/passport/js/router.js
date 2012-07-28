@@ -82,6 +82,26 @@ define([
           page.options = viewOptions;
         }
         page[viewOptions.load]();
+
+        if(viewOptions.load == 'showMyRewardList'){
+          $('a.user-menu-my-reward').parent().addClass('active');
+        }else if(viewOptions.load == 'showActionList'){
+          $('a.user-menu-my-profile').parent().addClass('active');
+        }else if(viewOptions.load == 'showFeedbacksList'){
+          $('a.user-menu-my-profile').parent().addClass('active');
+        }else if(viewOptions.load == 'showBadgesList'){
+          $('a.user-menu-my-profile').parent().addClass('active');
+          $('a.user-submenu-badges').parent().addClass('active');
+        }else if(viewOptions.load == 'showFeedbacksList'){
+          $('a.user-menu-my-profile').parent().addClass('active');
+          $('a.user-submenu-feedbacks').parent().addClass('active');
+        }else if(viewOptions.load == 'showActivityList'){
+          $('a.user-menu-activity').parent().addClass('active');
+        }else if(viewOptions.load == 'showMyCouponItem'){
+          $('a.user-menu-my-reward').parent().addClass('active');
+        }else if(viewOptions.load == 'showMyCardList'){
+          $('a.user-menu-my-card').parent().addClass('active');
+        }
       });
     }
 

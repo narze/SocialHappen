@@ -80,6 +80,11 @@ define([
 
     addAll: function(){
       $('.tile-list', this.el).html('');
+
+      if(this.collection.models.length == 0){
+        $('.tile-list', this.el).html('This company have no reward.');
+      }
+
       this.collection.each(function(model){
         this.addOne(model);
       }, this);

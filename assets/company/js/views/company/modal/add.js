@@ -27,6 +27,7 @@ define([
       'change input.repeat-enable': 'toggleRepeat',
       'click button.save-repeat-interval': 'saveRepeat',
       'click div.view-repeat': 'showEditRepeat',
+      'click button.save-image': 'saveEditImage',
       'click .add-new-action': 'showAddNewActionModal',
       'click .add-new-reward': 'showAddNewRewardModal',
       'click .cancel': 'cancelAdd',
@@ -184,6 +185,17 @@ define([
       $('h3.edit-name', this.el).hide();
       $('div.edit-name', this.el).show();
       $('input.challenge-name', this.el).focus();
+    },
+
+    saveEditImage: function(){
+
+      console.log('save image');
+      var detail = this.model.get('detail');
+      detail.image = $('input.challenge-image', this.el).val();
+
+      this.model.set('detail', detail).trigger('change');
+
+      this.options.vent.trigger('showAddModal', this.model);
     },
 
     saveEditName: function(){

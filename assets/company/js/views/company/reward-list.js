@@ -59,6 +59,11 @@ define([
 
     addAll: function(){
       $('.tile-list', this.el).html('');
+
+      if(this.collection.models.length == 0){
+        $('.tile-list', this.el).html('Your company have no reward. Start creating a reward by clicking "Create Reward" button.');
+      }
+
       this.collection.each(function(model){
         this.addOne(model);
       }, this);

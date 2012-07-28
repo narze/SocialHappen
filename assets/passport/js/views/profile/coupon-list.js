@@ -71,7 +71,26 @@ define([
     },
 
     addAll: function(){
+
+      var approved = 0;
+      var notApproved = 0;
+      this.collection.each(function(model){
+        if(model.get('confirmed')){
+          approved++;
+        }else{
+          notApproved++;
+        }
+      }, this);
+
       $('.coupon-list', this.el).html('');
+
+      if(approved == 0){
+        $('.approved.coupon-list', this.el).html('No coupon');
+      }
+      if(notApproved == 0){
+        $('.pending.coupon-list', this.el).html('No coupon');
+      }
+
       this.collection.each(function(model){
         this.addOne(model);
       }, this);
