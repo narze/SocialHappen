@@ -583,15 +583,20 @@ class Apiv3 extends CI_Controller {
     echo json_encode($this->company_model->get_all());
   }
 
-  function rewards(){
-
+  /**
+   * list redeem type rewards
+   */
+  function rewards() {
     if(!$company_id = $this->input->get('company_id')) {
       echo json_encode(array('success' => FALSE, 'data' => 'No company_id'));
       return;
     }
 
     $this->load->model('reward_item_model');
-    $rewards = $this->reward_item_model->get(array('company_id' => (int)$company_id));
+    $rewards = $this->reward_item_model->get(array(
+      'company_id' => (int) $company_id,
+      'type' => 'redeem'
+    ));
     $rewards = array_map(function($reward) {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;
