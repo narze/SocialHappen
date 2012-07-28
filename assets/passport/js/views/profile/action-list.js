@@ -40,9 +40,15 @@ define([
         models = this.collection.filter(function(action) {
           return action.get('action_id') === self.options.filter
         });
+
       } else {
         models = this.collection.models;
       }
+
+      if(models.length == 0){
+        this.$('ul.action-list').html('No action');
+      }
+
       _.each(models, function(model){
         self.addOne(model);
       });

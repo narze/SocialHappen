@@ -31,6 +31,11 @@ define([
 
     addAll: function(){
       var self = this;
+
+      if(this.collection.models.length == 0){
+        this.$('ul.achievement-list').html('No badge');
+      }
+
       this.collection.each(function(model){
         self.addOne(model);
       });
