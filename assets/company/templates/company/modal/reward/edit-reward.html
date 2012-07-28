@@ -15,7 +15,7 @@
 
   <h6 class="">Type:</h6>
   <div class="control-group">
-    <%= type %>    
+    <%= type %>
   </div>
 
   <h6>Status:</h6>
@@ -72,7 +72,7 @@
     <div class="edit-redeem-field hide">
       <h6>Redeem:</h6>
       <p>
-        Quantity: <input type="text" class="reward-amount" value="<%= redeem.amount %>" />
+        Quantity: <input type="text" class="reward-amount-remain" value="<%= redeem.amount_remain%>" /> / <input type="text" class="reward-amount" value="<%= redeem.amount %>" />
       </p>
       <p>
         Require Point: <input type="text" class="reward-point" value="<%= redeem.point %>" />
