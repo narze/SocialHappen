@@ -111,6 +111,7 @@ define([
         },
         hash: null,
         criteria: [],
+        reward_items: [],
         active: true,
         repeat: null
       });
