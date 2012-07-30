@@ -270,7 +270,6 @@ define([
         add: true
       });
 
-
       $('ul.criteria-list', this.el).append(qrActionView.render().el);
 
       return qrActionView;
@@ -531,6 +530,13 @@ define([
           self.addGiveawayReward(e);
         } else {
           $('.setup-your-reward').show();
+        }
+
+        // Disable publish button if no action/reward
+        if(!self.model.get('reward_items').length || !self.model.get('criteria').length) {
+          $('button.create-challenge', self.el).attr('disabled', 'disabled');
+        } else {
+          $('button.create-challenge', self.el).removeAttr('disabled');
         }
       });
     },

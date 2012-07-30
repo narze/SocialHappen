@@ -456,7 +456,7 @@ define([
         name: 'Checkin Action',
         action_data: {
           data: {
-            checkin_facebook_place_name: 'Facebook Place Name',
+            checkin_facebook_place_name: null,
             checkin_facebook_place_id: null,
             checkin_min_friend_count: 1,
             checkin_welcome_message: 'Welcome to checkin page',
