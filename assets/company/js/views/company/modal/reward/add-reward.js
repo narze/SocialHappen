@@ -20,7 +20,8 @@ define([
       'change select.reward-status': 'setRewardStatus',
       'click .edit-redeem': 'showEditRedeem',
       'click .save-redeem': 'saveEditRedeem',
-      'click button.create-reward': 'createReward'
+      'click button.create-reward': 'createReward',
+      'click button.upload-image-submit': 'uploadImage'
     },
 
     initialize: function(){
@@ -36,6 +37,7 @@ define([
       }
 
       var data = this.model.toJSON();
+      console.log(data);
       $(this.el).html(this.addTemplate(data));
 
       return this;
@@ -144,6 +146,7 @@ define([
 
       console.log('create reward!');
       this.model.set('company_id', parseInt(window.Company.companyId, 10));
+      this.model.set('type', 'redeem');
 
       this.options.rewardsCollection.create(this.model, {
         success: function() {
@@ -153,6 +156,28 @@ define([
       });
 
       this.$el.modal('hide');
+    },
+
+    uploadImage: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-image', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var imageUrl = resp.data;
+
+            // Save image
+            self.model.set('image', imageUrl).trigger('change');
+
+            self.options.vent.trigger('showAddRewardModal', self.model);
+            return;
+          }
+          alert(resp.data);
+        }
+      })
     }
 
   });

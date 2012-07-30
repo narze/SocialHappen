@@ -857,12 +857,15 @@ class Apiv3 extends CI_Controller {
 
     if(!$file_input_name) {
       if(!isset($_FILES) || !$_FILES) {
-        echo json_encode(array('success' => FALSE, 'data' => 'File not found'));
+        echo json_encode(array('success' => FALSE, 'data' => 'Please select file to upload'));
         return;
       }
       // Get first key in $_FILES
       reset($_FILES);
       $file_input_name = key($_FILES);
+    } else if(!isset($_FILES[$file_input_name])) {
+      echo json_encode(array('success' => FALSE, 'data' => 'Please select file to upload'));
+      return;
     }
 
     if(!$file_url = $this->socialhappen->replace_image($file_input_name, $old_image)) {

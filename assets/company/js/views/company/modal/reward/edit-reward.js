@@ -16,7 +16,8 @@ define([
       'click button.save-image': 'saveEditImage',
       'change select.reward-status': 'setRewardStatus',
       'click .edit-redeem': 'showEditRedeem',
-      'click .save-redeem': 'saveEditRedeem'
+      'click .save-redeem': 'saveEditRedeem',
+      'click button.upload-image-submit': 'uploadImage'
     },
 
     initialize: function(){
@@ -136,6 +137,31 @@ define([
       $('div.edit-redeem-field', this.el).hide();
 
       this.options.vent.trigger('showEditRewardModal', this.model);
+    },
+
+    uploadImage: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-image', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var imageUrl = resp.data;
+
+            // Save image
+            self.model.set('image', imageUrl).trigger('change');
+
+            //Save change
+            self.model.save();
+
+            self.options.vent.trigger('showEditRewardModal', self.model);
+            return;
+          }
+          alert(resp.data);
+        }
+      })
     }
   });
   return EditModalView;
