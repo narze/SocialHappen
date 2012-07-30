@@ -14,9 +14,17 @@
 			<div class="chalenge-card">
 			<?php if($challenge) : ?>
 				<p class="pull-right">
-					<?php if(!$player_logged_in || !$player_challenging) { ?>
+					<?php if($challenge_ended) : ?>
+						<button class="btn btn-primary disabled" disabled="disabled">
+							Challenge Ended
+						</button>
+					<?php elseif($challenge_not_started) : ?>
+						<button class="btn btn-primary disabled" disabled="disabled">
+							Challenge Not Started
+						</button>
+					<?php elseif(!$player_logged_in || !$player_challenging) : ?>
 					<a id="join-challenge" class="btn btn-primary" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>">Accept challenge</a>
-					<?php } ?>
+					<?php endif; ?>
 				</p>
 				<h2 class="challenge-name"><?php echo $challenge['detail']['name'];?></h2>
 				<p><small>By : <?php echo $company_name;?> Start : <span id="challenge-start-date"></span> End : <span id="challenge-end-date"></span></small></p>
@@ -159,9 +167,17 @@
 
 				<div class="challenge-footer text-right">
 					<button type="text" class="btn">See more</button>
-					<?php if(!$player_logged_in || !$player_challenging) { ?>
+					<?php if($challenge_ended) : ?>
+						<button class="btn btn-primary disabled" disabled="disabled">
+							Challenge Ended
+						</button>
+					<?php elseif($challenge_not_started) : ?>
+						<button class="btn btn-primary disabled" disabled="disabled">
+							Challenge Not Started
+						</button>
+					<?php elseif(!$player_logged_in || !$player_challenging) : ?>
 					<a id="join-challenge" class="btn btn-primary" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>">Accept challenge</a>
-					<?php } ?>
+					<?php endif; ?>
 				</div>
 
 				<?php else : ?>

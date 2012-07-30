@@ -482,7 +482,7 @@ class Player extends CI_Controller {
 
     $this->load->library('user_lib');
     if(!$this->user_lib->join_challenge($user_id, $challenge_hash)) {
-      return show_error('Challenge Error', 404);
+      return show_error('Cannot join challenge', 500);
     }
 
     if($next = $this->socialhappen->get_next_url()) {
