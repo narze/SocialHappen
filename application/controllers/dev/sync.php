@@ -50,12 +50,15 @@ class Sync extends CI_Controller {
 
 	}
 
-	function mongodb_reset($skip = FALSE){
-		$timestamp = date('Ymd_His');
+	function mongodb_reset(){
 		$output = array();
 		$ret = null;
-		echo $this->config->item('mongo_user');
-		exec("cd ". FCPATH. "shdumper && sh mongodump.sh sohap figyfigy 27017 {$timestamp}", $output, $ret);
+		$timestamp = date('Ymd_His');
+		$this->load->config('mongo_db');
+		$u = $this->config->item('mongo_user');
+		$p = $this->config->item('mongo_pass');
+		$port = $this->config->item('mongo_port');
+		exec("cd ". FCPATH. "shdumper && sh mongodump.sh {$u} {$p} {$port} {$timestamp}", $output, $ret);
 		$backup_success = file_exists(FCPATH . "application/backup/sh_mongo-{$timestamp}");
 
 		if($backup_success) {
