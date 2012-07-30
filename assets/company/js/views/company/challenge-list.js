@@ -60,7 +60,9 @@ define([
     },
 
     addOne: function(model){
-      // console.log('add one challenge:', model.toJSON());
+      if(this.collection.models.length == 1){
+        $('.tile-list', this.el).html('');
+      }
 
       var challenge = new ChallengeItemView({
         model: model,

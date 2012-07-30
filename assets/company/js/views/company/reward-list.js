@@ -46,13 +46,16 @@ define([
     },
 
     addOne: function(model){
-      // console.log('add one reward:', model.toJSON());
+
+      if(this.collection.models.length == 1){
+        $('.tile-list', this.el).html('');
+      }
 
       var reward = new RewardItemView({
         model: model,
         vent: this.options.vent
       });
-      // console.log($('.tile-list', this.el));
+
       var el = reward.render().$el;
       $('.tile-list', this.el).append(el);
     },
