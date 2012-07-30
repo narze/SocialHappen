@@ -12,6 +12,7 @@ require.config({
     jqueryui: '../../libs/jquery.ui/jquery-ui-1.8.20.custom.min',
     endlessscroll: '../../libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
     moment: '../../libs/moment/moment.min',
+    jqueryForm: '../../libs/jquery.form/jquery.form',
     // Require.js plugins
     text: '../../libs/require/text',
     order: '../../libs/require/order',

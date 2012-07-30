@@ -850,6 +850,25 @@ class Apiv3 extends CI_Controller {
     return;
 
   }
+
+  function uploadImage($file_input_name = NULL) {
+    if(!$file_input_name) {
+      if(!isset($_FILES) || !$_FILES) {
+        echo json_encode(array('success' => FALSE, 'data' => 'File not found'));
+        return;
+      }
+      // Get first key in $_FILES
+      reset($_FILES);
+      $file_input_name = key($_FILES);
+    }
+
+    if(!$file_url = $this->socialhappen->upload_image($file_input_name)) {
+      echo json_encode(array('success' => FALSE, 'data' => 'Upload failed'));
+      return;
+    }
+
+    echo json_encode(array('success' => TRUE, 'data' => $file_url));
+  }
 }
 
 /* End of file apiv3.php */

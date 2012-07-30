@@ -11,10 +11,11 @@ define([
   'views/company/modal/action/qr-action',
   'views/company/modal/action/checkin-action',
   'views/company/modal/reward/reward',
-  'jqueryui'
+  'jqueryui',
+  'jqueryForm'
 ], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate,
    addActionTemplate, addRewardTemplate, FeedbackActionView,
-   QRActionView, CheckinActionView, RewardView, jqueryui){
+   QRActionView, CheckinActionView, RewardView, jqueryui, jqueryForm){
   var EditModalView = Backbone.View.extend({
 
     addTemplate: _.template(addTemplate),
@@ -32,7 +33,8 @@ define([
       'click .add-new-reward': 'showAddNewRewardModal',
       'click .cancel': 'cancelAdd',
       'keyup input.challenge-name': 'onTypeChallengeName',
-      'keyup textarea.challenge-description': 'onTypeChallengeDescription'
+      'keyup textarea.challenge-description': 'onTypeChallengeDescription',
+      'click button.upload-image-submit': 'uploadImage'
     },
 
     initialize: function(){
@@ -547,6 +549,31 @@ define([
       this.options.reward_item = {};
       this.model = new ChallengeModel();
       this.model.set('reward_items', null);
+    },
+
+    uploadImage: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-image', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var imageUrl = resp.data;
+
+            // Save image
+            var detail = self.model.get('detail');
+            detail.image = imageUrl;
+
+            self.model.set('detail', detail).trigger('change');
+
+            self.options.vent.trigger('showAddModal', self.model);
+            return;
+          }
+          alert(resp.data);
+        }
+      })
     }
 
   });

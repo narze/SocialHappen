@@ -57,12 +57,16 @@
     <h6>Image:</h6>
     <div class="edit-image-form hide">
       <div class="form-inline">
-        <label><h4>Change Image</h4></label>
+        <label><h4>Enter image URL</h4></label>
         <div class="control-group">
           <input type="text" class="challenge-image input-medium" placeholder="Image URL" value="<%= detail.image %>" /> <button class="save-image btn btn-primary btn-small">&nbsp;Save&nbsp;</button>
         </div>
-        <div class="control-group hide">
-          <input type="text" class="challenge-image input-medium" placeholder="Browse Image" value="" /> <button class="save-image btn btn-primary btn-small">Browse</button>
+        <label><h4>Or upload your own image</h4></label>
+        <div class="control-group">
+          <form type="POST" enctype="multipart/form-data" action="<%= window.Company.BASE_URL + 'apiv3/uploadImage' %>" class="upload-image">
+            <input type="file" name="image" />
+            <button class="upload-image-submit btn btn-primary btn-small">Upload</button>
+          </form>
         </div>
       </div>
     </div>
