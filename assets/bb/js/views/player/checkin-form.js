@@ -32,7 +32,7 @@ define([
       $(this.el).slideDown();
 
       checkFBConnected(loadJFMFS);
-      
+
       function loadJFMFS() {
         $("#jfmfs-container", this.el).jfmfs({
           max_selected: 15,
@@ -49,6 +49,9 @@ define([
       }
     },
     formSubmit: function() {
+      //Disable button
+      $('button.submit', this.el).attr('disabled', 'disabled');
+
       if($("#jfmfs-container", $el).data('jfmfs').getSelectedIds().length < $('#checkin_min_friend_count', $el).val()) {
         alert('Please tag at least ' + $('#checkin_min_friend_count').val() + ' friend(s).');
         return false;
@@ -59,7 +62,7 @@ define([
         tagged_user_facebook_ids: $("#jfmfs-container", $el).data('jfmfs').getSelectedIds().join(','),
         action_data_hash: $('.action_data_hash', $el).val()
       };
-      
+
       $.ajax({
         type: 'POST',
         data: data,

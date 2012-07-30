@@ -17,13 +17,16 @@ define([
       $(this.el).slideDown();
 		},
     formSubmit: function() {
+      //Disable button
+      $('button.submit', this.el).attr('disabled', 'disabled');
+
       var $el = $(this.el);
       var data = {
         user_feedback: $('.user_feedback', $el).val(),
         user_score: $('.user_score', $el).val(),
         action_data_hash: $('.action_data_hash', $el).val()
       };
-      
+
       $.ajax({
         type: 'POST',
         data: data,
