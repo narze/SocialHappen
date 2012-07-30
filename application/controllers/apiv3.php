@@ -851,7 +851,10 @@ class Apiv3 extends CI_Controller {
 
   }
 
-  function uploadImage($file_input_name = NULL) {
+  function uploadImage() {
+    $file_input_name = $this->input->post('file-input-name');
+    $old_image = $this->input->post('old-image');
+
     if(!$file_input_name) {
       if(!isset($_FILES) || !$_FILES) {
         echo json_encode(array('success' => FALSE, 'data' => 'File not found'));
@@ -862,7 +865,7 @@ class Apiv3 extends CI_Controller {
       $file_input_name = key($_FILES);
     }
 
-    if(!$file_url = $this->socialhappen->upload_image($file_input_name)) {
+    if(!$file_url = $this->socialhappen->replace_image($file_input_name, $old_image)) {
       echo json_encode(array('success' => FALSE, 'data' => 'Upload failed'));
       return;
     }
