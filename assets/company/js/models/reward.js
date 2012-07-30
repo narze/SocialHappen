@@ -12,13 +12,13 @@ define([
       value: 0,
       description: '',
       redeem: {
-        point: 0,
-        amount: 0,
-        amount_remain: 0,
+        point: 10,
+        amount: 10,
+        amount_remain: 10,
         once: true
       },
       company_id: window.Company.companyId,
-      status: 'draft',
+      status: 'published',
       is_points_reward: false
     },
     initialize: function(){
