@@ -48,7 +48,8 @@ define([
       'click .add-new-action': 'showAddNewActionModal',
       'click .add-new-reward': 'showAddNewRewardModal',
       'click button.show-coupon': 'showCoupon',
-      'click button.hide-coupon': 'hideCoupon'
+      'click button.hide-coupon': 'hideCoupon',
+      'click button.upload-image-submit': 'uploadImage'
     },
 
     initialize: function(){
@@ -701,6 +702,34 @@ define([
           }
         }
       });
+    },
+
+    uploadImage: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-image', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var imageUrl = resp.data;
+
+            // Save image
+            var detail = self.model.get('detail');
+            detail.image = imageUrl;
+
+            self.model.set('detail', detail).trigger('change');
+
+            //Save change
+            self.model.save();
+
+            self.options.vent.trigger('showEditModal', self.model);
+            return;
+          }
+          alert(resp.data);
+        }
+      })
     }
 
   });
