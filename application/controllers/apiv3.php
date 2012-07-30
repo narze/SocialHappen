@@ -436,11 +436,14 @@ class Apiv3 extends CI_Controller {
           $challenge_hash = strrev(sha1($challenge_id));
           $challenge_url = base_url().'player/challenge/'.$challenge_hash;
 
-          try{
+          $short_challenge_url = $challenge_url;
+          try {
             $bitly_response = $this->bitly_lib->bitly_v3_shorten($challenge_url);
-            $short_challenge_url = $bitly_response['url'];
-          }catch(Exception $ex){
-            $short_challenge_url = '';
+            if(isset($bitly_response['url'])) {
+              $short_challenge_url = $bitly_response['url'];
+            }
+          } catch(Exception $ex) {
+
           }
 
           //add ".qrcode?s=<size>" follows the bitly's short_url for qr

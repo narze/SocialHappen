@@ -4,11 +4,11 @@
  * Simple PHP library for interacting with the v3 bit.ly api (only deals with
  * JSON format, but supports new OAuth endpoints).
  * REQUIREMENTS: PHP, Curl, JSON
- * 
+ *
  * @link https://github.com/Falicon/BitlyPHP
  * @author Kevin Marshall <info@falicon.com>
  * @author Robin Monks <devlinks@gmail.com>
- * 
+ *
  * SocialHappen Customization
  * @author phnx
  */
@@ -106,6 +106,10 @@ class bitly_lib {
         $result['global_hash'] = $output->{'data'}->{'global_hash'};
         $result['long_url'] = $output->{'data'}->{'long_url'};
         $result['new_hash'] = $output->{'data'}->{'new_hash'};
+      } else {
+        //Error
+        log_message('error', 'Bit.ly error : ' . var_export($output));
+        return FALSE;
       }
       return $result;
     }
@@ -822,7 +826,7 @@ class bitly_lib {
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1); 
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         $output = curl_exec($ch);
 
