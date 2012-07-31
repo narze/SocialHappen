@@ -12,6 +12,7 @@ define([
       '/company/:id/challenge': 'company',
       '/company/:id/reward': 'reward',
       '/company/:id/coupon': 'coupon',
+      '/company/:id/users': 'users',
       '/company/:id/activities': 'activities',
       '/company/:id/coupon/:couponId': 'couponPopup',
       '*actions': 'defaultAction'
@@ -58,7 +59,8 @@ define([
           challengesCollection: options.challengesCollection,
           rewardsCollection: options.rewardsCollection,
           couponsCollection: options.couponsCollection,
-            activitiesCollection: options.activitiesCollection,
+          companyUsersCollection: options.companyUsersCollection,
+          activitiesCollection: options.activitiesCollection,
           vent: options.vent
         });
         companyPage.render();
@@ -83,6 +85,7 @@ define([
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
+            companyUsersCollection: options.companyUsersCollection,
             activitiesCollection: options.activitiesCollection,
             vent: options.vent,
             now: 'challenge'
@@ -115,6 +118,7 @@ define([
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
+            companyUsersCollection: options.companyUsersCollection,
             activitiesCollection: options.activitiesCollection,
             vent: options.vent,
             now: 'reward'
@@ -149,6 +153,7 @@ define([
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
+            companyUsersCollection: options.companyUsersCollection,
             activitiesCollection: options.activitiesCollection,
             vent: options.vent,
             now: 'coupon'
@@ -182,6 +187,7 @@ define([
             challengesCollection: options.challengesCollection,
             rewardsCollection: options.rewardsCollection,
             couponsCollection: options.couponsCollection,
+            companyUsersCollection: options.companyUsersCollection,
             activitiesCollection: options.activitiesCollection,
             vent: options.vent,
             now: 'activities'
@@ -191,6 +197,37 @@ define([
         });
       } else {
         self.companyPage.options.now = 'activities';
+        self.companyPage.render();
+      }
+    });
+
+    router.on('route:users', function(companyId) {
+      console.log('show users:', companyId);
+
+      window.Company.companyId = companyId;
+
+      options.companyUsersCollection.url = window.Company.BASE_URL + '/apiv3/company_users/' + companyId;
+
+      options.companyUsersCollection.fetch();
+
+      if(!self.companyPage){
+        require(['views/company/page'], function (CompanyPage) {
+
+          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
+            currentUserModel: currentUserModel,
+            challengesCollection: options.challengesCollection,
+            rewardsCollection: options.rewardsCollection,
+            couponsCollection: options.couponsCollection,
+            companyUsersCollection: options.companyUsersCollection,
+            activitiesCollection: options.activitiesCollection,
+            vent: options.vent,
+            now: 'users'
+          });
+          companyPage.render();
+          self.companyPage = companyPage;
+        });
+      } else {
+        self.companyPage.options.now = 'users';
         self.companyPage.render();
       }
     });

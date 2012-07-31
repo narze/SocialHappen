@@ -877,9 +877,9 @@ class Apiv3 extends CI_Controller {
   }
 
   /**
-   * Get company members
+   * Get company users
    */
-  function company_members($company_id = NULL) {
+  function company_users($company_id = NULL) {
     $result = array('success' => FALSE);
     $this->load->model('company_model');
     if(!$company = $this->company_model->get_company_profile_by_company_id($company_id)){
@@ -897,7 +897,8 @@ class Apiv3 extends CI_Controller {
         $user_company_scores[] = array(
           'user_id' => $user_id,
           'company_score' => $company_score,
-          'user_profile' => $this->user_model->get_user_profile_by_user_id($user_id)
+          'user_profile' => $this->user_model->get_user_profile_by_user_id($user_id),
+          'user_stat' => $user_stat
         );
       }
       //sorting
@@ -909,7 +910,7 @@ class Apiv3 extends CI_Controller {
   }
 
   /**
-   * Get company members and sort by company score
+   * Get company users and sort by company score
    */
   function company_leaderboard($company_id = NULL) {
     $result = array('success' => FALSE);
@@ -930,7 +931,8 @@ class Apiv3 extends CI_Controller {
         $user_company_scores[] = array(
           'user_id' => $user_id,
           'company_score' => $company_score,
-          'user_profile' => $this->user_model->get_user_profile_by_user_id($user_id)
+          'user_profile' => $this->user_model->get_user_profile_by_user_id($user_id),
+          'user_stat' => $user_stat
         );
       }
       //sorting

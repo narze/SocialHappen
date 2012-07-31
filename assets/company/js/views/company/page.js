@@ -9,8 +9,9 @@ define([
   'views/company/reward-list',
   'views/company/coupon-list',
   'views/company/activity-list',
+  'views/company/company-user-list',
   'bootstrap'
-], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, ActivityListView, bootstrap){
+], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, ActivityListView, CompanyUserListView, bootstrap){
   var ProfilePage = Backbone.View.extend({
     pageTemplate: _.template(pageTemplate),
     el: '#content',
@@ -118,6 +119,14 @@ define([
         });
 
         couponListView.render();
+      } else if(this.options.now === 'users'){
+        var companyUserListView = new CompanyUserListView({
+          collection: this.options.companyUsersCollection,
+          el: $('#content-pane', this.el),
+          vent: this.options.vent
+        });
+
+        companyUserListView.render();
       } else if(this.options.now === 'activities'){
         var activityListView = new ActivityListView({
           collection: this.options.activitiesCollection,

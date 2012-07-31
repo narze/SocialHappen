@@ -36,14 +36,16 @@ require([
   'collections/rewards',
   'collections/coupons',
   'collections/activities',
+  'collections/company-users',
   'events'
-], function(AppView, Router, Vm, UserModel, ChallengesCollection, RewardsCollection, CouponsCollection, ActivitiesCollection, vent){
+], function(AppView, Router, Vm, UserModel, ChallengesCollection, RewardsCollection, CouponsCollection, ActivitiesCollection, CompanyUsersCollection, vent){
 
   var currentUserModel = window.Company.currentUserModel = new UserModel();
   var challengesCollection = window.Company.challengesCollection = new ChallengesCollection([]);
   var rewardsCollection = window.Company.rewardsCollection = new RewardsCollection([]);
   var couponsCollection = window.Company.couponsCollection = new CouponsCollection([]);
   var activitiesCollection = window.Company.activitiesCollection = new ActivitiesCollection([]);
+  var companyUsersCollection = window.Company.companyUsersCollection = new CompanyUsersCollection([]);
 
   var appView = Vm.create({}, 'AppView', AppView, {
     currentUserModel: currentUserModel,
@@ -59,6 +61,7 @@ require([
     rewardsCollection: rewardsCollection,
     couponsCollection: couponsCollection,
     activitiesCollection: activitiesCollection,
+    companyUsersCollection: companyUsersCollection,
     vent: vent
   });
 
