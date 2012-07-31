@@ -24,6 +24,7 @@ define([
     initialize: function(){
       _.bindAll(this);
       this.options.userModel.bind('change', this.render);
+      this.options.currentUserModel.bind('change', this.render);
     },
 
     render: function () {
@@ -33,12 +34,13 @@ define([
         userId: this.options.userId,
         isCurrentUser: this.options.userModel.id === this.options.currentUserModel.get('user_id')
       }));
+
       $('div#header .passport').addClass('active');
 
       //Render profile pane
       var profilePane = new ProfilePane({
         el: $('.profile', this.el),
-        userModel: this.options.userModel,
+        userModel: this.options.userModel
       });
       profilePane.render();
       console.log('page rendered');
