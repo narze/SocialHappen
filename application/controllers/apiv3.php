@@ -851,7 +851,7 @@ class Apiv3 extends CI_Controller {
 
   }
 
-  function uploadImage() {
+  function upload_image() {
     $file_input_name = $this->input->post('file-input-name');
     $old_image = $this->input->post('old-image');
 
