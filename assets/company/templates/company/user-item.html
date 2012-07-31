@@ -1,5 +1,5 @@
 <div class="span2">
-  <a class="media-thumb">
+  <a class="user-view" href="<%= window.Company.BASE_URL + 'assets/company/#/company/' + window.Company.companyId + '/users/' + user_profile.user_id %>">
     <% if(typeof user_profile.user_image !== 'undefined' && user_profile.user_image !== null) { %>
       <img class="" src="<%= user_profile.user_image %>" alt="">
     <% } else { %>

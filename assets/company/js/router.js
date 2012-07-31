@@ -13,6 +13,7 @@ define([
       '/company/:id/reward': 'reward',
       '/company/:id/coupon': 'coupon',
       '/company/:id/users': 'users',
+      '/company/:id/users/:userId': 'user',
       '/company/:id/activities': 'activities',
       '/company/:id/coupon/:couponId': 'couponPopup',
       '*actions': 'defaultAction'
@@ -201,7 +202,9 @@ define([
       }
     });
 
-    router.on('route:users', function(companyId) {
+    router.on('route:users', companyUserRoute);
+    router.on('route:user', companyUserRoute);
+    function companyUserRoute(companyId, userId) {
       console.log('show users:', companyId);
 
       window.Company.companyId = companyId;
@@ -225,15 +228,21 @@ define([
           });
           companyPage.render();
           self.companyPage = companyPage;
+
+          //Show user if userId is set end exist
+          if(userId && options.companyUsersCollection.get(userId)) {
+            options.companyUsersCollection.get(userId).trigger('view');
+          }
         });
       } else {
         self.companyPage.options.now = 'users';
         self.companyPage.render();
       }
-    });
+    }
 
     Backbone.history.start();
-  };
+  }
+
   return {
     initialize: initialize
   };

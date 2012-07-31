@@ -1,0 +1,39 @@
+<div class="modal-header coupon-modal-header">
+  <button class="close" data-dismiss="modal">
+    ×
+  </button>
+  <div>
+    <h3><%= user_profile.user_first_name %> <%= user_profile.user_last_name%></h3>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="control-group">
+    <h6 class="user-image">User Image:</h6>
+  </div>
+  <div class="control-group">
+    <img class="user-image" src="<%= user_profile.user_image %>" />
+  </div>
+
+  <div class="control-group">
+    <h6 class="user-image">User Information:</h6>
+  </div>
+  <div class="control-group">
+    <div class="user-profile">
+      <p class="registered">
+        Registered on <%= user_profile.user_register_date %>
+      </p>
+      <p class="joined-company">
+        Joined this company on <%= new Date(joined_company_timestamp * 1000) %>
+      </p>
+      <p class="score">
+        Score : <%= user_stat.company_score %>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="pull-right">
+    <a class="btn" data-dismiss="modal">Close</a>
+  </div>
+</div>
