@@ -1,22 +1,21 @@
-<div class="media media-small">
+<div class="span2">
   <a class="media-thumb">
     <% if(typeof user_profile.user_image !== 'undefined' && user_profile.user_image !== null) { %>
       <img class="" src="<%= user_profile.user_image %>" alt="">
     <% } else { %>
       <img class="" src="../images/default/user.png" alt="">
     <% } %>
+    <div><%= user_profile.user_first_name %> <%= user_profile.user_last_name %></div>
   </a>
-  <div class="media-info">
-    <p><%= user_profile.user_first_name %> <%= user_profile.user_last_name %>
-    </p>
-    <p class="registered">
-      Registered on <%= user_profile.user_register_date %>
-    </p>
-    <p class="joined-company">
-      Joined this company on <%= new Date(joined_company_timestamp * 1000) %>
-    </p>
-    <p class="score">
-      Score : <%= user_stat.company_score %>
-    </p>
-  </div>
+</div>
+<div class="span10">
+  <p class="registered">
+    Registered on <%= user_profile.user_register_date %>
+  </p>
+  <p class="joined-company">
+    Joined this company on <%= new Date(joined_company_timestamp * 1000) %>
+  </p>
+  <p class="score">
+    Score : <%= user_stat.company_score %>
+  </p>
 </div>

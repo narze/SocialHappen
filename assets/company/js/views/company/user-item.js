@@ -6,7 +6,7 @@ define([
   'timeago'
 ], function($, _, Backbone, userItemTemplate, timeago){
   var CompanyUserItem = Backbone.View.extend({
-    tagName: 'li',
+    className: 'user-item row-fluid',
     userItemTemplate: _.template(userItemTemplate),
     initialize: function(){
       _.bindAll(this);

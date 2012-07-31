@@ -153,3 +153,7 @@ img.company-image{
   position: fixed;
   margin-top: -250px;
 }
+
+.user-item {
+  margin-bottom: 10px;
+}
