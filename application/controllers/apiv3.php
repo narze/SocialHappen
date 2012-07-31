@@ -875,6 +875,72 @@ class Apiv3 extends CI_Controller {
 
     echo json_encode(array('success' => TRUE, 'data' => $file_url));
   }
+
+  /**
+   * Get company members
+   */
+  function company_members($company_id = NULL) {
+    $result = array('success' => FALSE);
+    $this->load->model('company_model');
+    if(!$company = $this->company_model->get_company_profile_by_company_id($company_id)){
+      $result['data'] = 'Company not found';
+    } else {
+      $this->load->model('achievement_stat_company_model');
+      $stats = $this->achievement_stat_company_model->list_stat(
+        array('company_id' => (int) $company_id)
+      );
+      $user_company_scores = array();
+      $this->load->model('user_model');
+      foreach($stats as $user_stat){
+        $user_id = $user_stat['user_id'];
+        $company_score = $user_stat['company_score'];
+        $user_company_scores[] = array(
+          'user_id' => $user_id,
+          'company_score' => $company_score,
+          'user_profile' => $this->user_model->get_user_profile_by_user_id($user_id)
+        );
+      }
+      //sorting
+      $result['data'] = $user_company_scores;
+      $result['count'] = count($stats);
+      $result['success'] = TRUE;
+    }
+    echo json_encode($result);
+  }
+
+  /**
+   * Get company members and sort by company score
+   */
+  function company_leaderboard($company_id = NULL) {
+    $result = array('success' => FALSE);
+    $this->load->model('company_model');
+    if(!$company = $this->company_model->get_company_profile_by_company_id($company_id)){
+      $result['data'] = 'Company not found';
+    } else {
+      $this->load->model('achievement_stat_company_model');
+      $stats = $this->achievement_stat_company_model->list_stat(
+        array('company_id' => (int) $company_id)
+      );
+      $user_company_scores = $company_score_for_sorting = array();
+      $this->load->model('user_model');
+      foreach($stats as $user_stat){
+        $user_id = $user_stat['user_id'];
+        $company_score = $user_stat['company_score'];
+        $company_score_for_sorting[] = $company_score;
+        $user_company_scores[] = array(
+          'user_id' => $user_id,
+          'company_score' => $company_score,
+          'user_profile' => $this->user_model->get_user_profile_by_user_id($user_id)
+        );
+      }
+      //sorting
+      array_multisort($company_score_for_sorting, SORT_DESC, SORT_NUMERIC, $user_company_scores);
+      $result['data'] = $user_company_scores;
+      $result['count'] = count($stats);
+      $result['success'] = TRUE;
+    }
+    echo json_encode($result);
+  }
 }
 
 /* End of file apiv3.php */
