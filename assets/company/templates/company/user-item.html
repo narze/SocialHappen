@@ -12,11 +12,11 @@
     <p class="registered">
       Registered on <%= user_profile.user_register_date %>
     </p>
+    <p class="joined-company">
+      Joined this company on <%= new Date(joined_company_timestamp * 1000) %>
+    </p>
     <p class="score">
       Score : <%= user_stat.company_score %>
     </p>
-    <!-- <p class="joined-company">
-      Joined this company on <%= user_stat.timestamp %>
-    </p> -->
   </div>
 </div>

@@ -766,6 +766,20 @@ class audit_lib_test extends CI_Controller {
 		$this->unit->run($result[0]['campaign_id'], 1, "\$result[0]['campaign_id']", $result[0]['campaign_id']);
 		$this->unit->run($result[0]['app_install_id'], 0, "\$result[0]['app_install_id']", $result[0]['app_install_id']);
 	}
+
+	function get_first_audit_test() {
+		$app_id = 0;
+		$action_id = 2;
+		$subject = 'A';
+		$object = 'B';
+		$objecti = 'C';
+		$query = array('app_id' => 0);
+		$result = $this->audit_lib->get_first_audit($query);
+		$this->unit->run($result['action_id'], $action_id, "\$result['action_id']", $result['action_id']);
+		$this->unit->run($result['subject'], $subject, "\$result['subject']", $result['subject']);
+		$this->unit->run($result['object'], $object, "\$result['object']", $result['object']);
+		$this->unit->run($result['objecti'], $objecti, "\$result['objecti']", $result['objecti']);
+	}
 }
 /* End of file audit_lib_test.php */
 /* Location: ./application/controllers/test/audit_lib_test.php */

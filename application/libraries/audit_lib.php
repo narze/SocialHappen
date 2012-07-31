@@ -958,6 +958,15 @@ foreach ($data as $line_key => $line_value) {
 			return $this->add_audit($app_id, $subject, $action_id, $object, $objecti, $additional_data);
 		}
 	}
+
+	/**
+	 * Get first audit with matching query
+	 */
+	function get_first_audit($query = NULL) {
+		$this->CI->load->model('audit_model');
+		$audits = $this->CI->audit_model->get($query, 1, 1);
+		return array_shift($audits);
+	}
 }
 
 /* End of file audit_lib.php */

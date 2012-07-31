@@ -88,8 +88,8 @@ class Audit_model extends CI_Model {
 		}
 	}
 
-	function get($query){
-		$result = $this->collection->find($query)->sort(array('_id'=>-1));
+	function get($query, $sort = -1, $limit = NULL){
+		$result = $this->collection->find($query)->sort(array('_id'=> $sort))->limit($limit);
 		return cursor2array($result);
 	}
 

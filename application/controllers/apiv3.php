@@ -886,19 +886,30 @@ class Apiv3 extends CI_Controller {
       $result['data'] = 'Company not found';
     } else {
       $this->load->model('achievement_stat_company_model');
+      $this->load->library('audit_lib');
+
       $stats = $this->achievement_stat_company_model->list_stat(
         array('company_id' => (int) $company_id)
       );
       $user_company_scores = array();
       $this->load->model('user_model');
+      $join_company_action_id = $this->socialhappen->get_k('audit_action', 'User Join Challenge');
       foreach($stats as $user_stat){
         $user_id = $user_stat['user_id'];
         $company_score = $user_stat['company_score'];
+        $audit = $this->audit_lib->get_first_audit(array(
+          'user_id' => (int) $user_id,
+          'company_id' => (int) $company_id,
+          'action_id' => $join_company_action_id
+        ));
+        $joined_company_timestamp = $audit['timestamp'];
+
         $user_company_scores[] = array(
           'user_id' => $user_id,
           'company_score' => $company_score,
           'user_profile' => $this->user_model->get_user_profile_by_user_id($user_id),
-          'user_stat' => $user_stat
+          'user_stat' => $user_stat,
+          'joined_company_timestamp' => $joined_company_timestamp
         );
       }
       //sorting
@@ -919,20 +930,31 @@ class Apiv3 extends CI_Controller {
       $result['data'] = 'Company not found';
     } else {
       $this->load->model('achievement_stat_company_model');
+      $this->load->library('audit_lib');
+
       $stats = $this->achievement_stat_company_model->list_stat(
         array('company_id' => (int) $company_id)
       );
       $user_company_scores = $company_score_for_sorting = array();
       $this->load->model('user_model');
+      $join_company_action_id = $this->socialhappen->get_k('audit_action', 'User Join Challenge');
       foreach($stats as $user_stat){
         $user_id = $user_stat['user_id'];
         $company_score = $user_stat['company_score'];
         $company_score_for_sorting[] = $company_score;
+        $audit = $this->audit_lib->get_first_audit(array(
+          'user_id' => (int) $user_id,
+          'company_id' => (int) $company_id,
+          'action_id' => $join_company_action_id
+        ));
+        $joined_company_timestamp = $audit['timestamp'];
+
         $user_company_scores[] = array(
           'user_id' => $user_id,
           'company_score' => $company_score,
           'user_profile' => $this->user_model->get_user_profile_by_user_id($user_id),
-          'user_stat' => $user_stat
+          'user_stat' => $user_stat,
+          'joined_company_timestamp' => $joined_company_timestamp
         );
       }
       //sorting
