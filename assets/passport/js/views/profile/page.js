@@ -19,28 +19,26 @@ define([
     events: {
       'click .user-profile-nav>li>a': 'setMenuActive',
       'click .user-profile-nav ul>li>a': 'setSubMenuActive'
-      // 'click .user-menu-my-profile': 'showActionList',
-      // // 'click .user-submenu-photos': 'showPhotosList',
-      // 'click .user-submenu-feedbacks': 'showFeedbacksList',
-      // 'click .user-submenu-badges': 'showBadgesList',
-      // 'click .user-menu-my-card': 'showMyCardList',
-      // 'click .user-menu-my-reward': 'showMyRewardList',
-      // 'click .user-menu-activity': 'showActivityList'
     },
 
     initialize: function(){
       _.bindAll(this);
+      this.options.userModel.bind('change', this.render);
     },
+
     render: function () {
+      console.log(this.options.userModel, this.options.currentUserModel);
       $(this.el).html(this.profilePageTemplate({
-        userId: this.options.userId
+        user: this.options.userModel.toJSON(),
+        userId: this.options.userId,
+        isCurrentUser: this.options.userModel.id === this.options.currentUserModel.get('user_id')
       }));
       $('div#header .passport').addClass('active');
 
       //Render profile pane
       var profilePane = new ProfilePane({
         el: $('.profile', this.el),
-        userModel: this.options.userModel
+        userModel: this.options.userModel,
       });
       profilePane.render();
       console.log('page rendered');
