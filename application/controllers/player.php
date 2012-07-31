@@ -476,6 +476,16 @@ class Player extends CI_Controller {
       </p>');
     }
 
+
+    //Check if challenge not started or ended
+    date_default_timezone_set('UTC');
+    $now = time();
+    if($challenge['start_date'] > $now) {
+      return $this->socialhappen->error_page('Challenge not yet started');
+    } else if($challenge['end_date'] < $now) {
+      return $this->socialhappen->error_page('Challenge ended already');
+    }
+
     if(!$user_id = $this->socialhappen->get_user_id()) {
       return redirect('player/challenge/'.$challenge_hash);
     }

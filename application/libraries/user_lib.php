@@ -50,15 +50,6 @@ class User_lib {
 		$this->CI->load->model('user_model');
 		$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
 
-		//Check if challenge not started or ended
-		date_default_timezone_set('UTC');
-		$now = time();
-		if($challenge['start_date'] > $now) {
-		  return FALSE;
-		} else if($challenge['end_date'] < $now) {
-		  return FALSE;
-		}
-
 		//Add audit
 		$this->CI->load->library('audit_lib');
 		$this->CI->audit_lib->audit_add(array(
@@ -86,7 +77,9 @@ class User_lib {
 			);
 		} else {
 			$update_record = array(
-				'$addToSet' => array('challenge' => $challenge_id),
+				'$addToSet' => array(
+					'challenge' => $challenge_id
+				)
 			);
 		}
 		return $update_result = $this->CI->user_mongo_model->update($update_criteria, $update_record);
