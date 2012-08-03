@@ -133,7 +133,7 @@ define([
 
         this.companyUserListView.render();
       } else if(this.options.now === 'activities'){
-        if(!activityListView) 
+        if(!this.activityListView) 
           this.activityListView = new ActivityListView({
             collection: this.options.activitiesCollection,
             el: $('#content-pane', this.el),
