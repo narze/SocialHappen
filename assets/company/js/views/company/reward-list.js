@@ -18,9 +18,9 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.bind('reloadMasonry', this.reloadMasonry);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      this.options.vent.unbind('reloadMasonry').bind('reloadMasonry', this.reloadMasonry);
+      this.collection.unbind('reset').bind('reset', this.addAll);
+      this.collection.unbind('add').bind('add', this.addOne);
     },
 
     render: function () {
@@ -47,7 +47,7 @@ define([
 
     addOne: function(model){
 
-      if(this.collection.models.length == 1){
+      if(this.collection.models.length === 1){
         $('.tile-list', this.el).html('');
       }
 

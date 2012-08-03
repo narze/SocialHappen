@@ -15,8 +15,8 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      this.collection.unbind('reset').bind('reset', this.addAll);
+      this.collection.unbind('add').bind('add', this.addOne);
     },
 
     render: function () {
@@ -46,7 +46,7 @@ define([
     addAll: function(){
       $('.activity-list', this.el).html('');
 
-      if(this.collection.models.length == 0){
+      if(this.collection.models.length === 0){
         $('.activity-list', this.el).html('Your company have no activity.');
       }
 

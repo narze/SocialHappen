@@ -15,14 +15,12 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      this.collection.unbind('reset').bind('reset', this.addAll);
+      this.collection.unbind('add').bind('add', this.addOne);
     },
 
     render: function () {
       $(this.el).html(_.template(userListTemplate)());
-
-      this.addAll();
 
       if(this.collection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
@@ -38,7 +36,6 @@ define([
         model: model,
         vent: this.options.vent
       });
-      // console.log($('.user-list', this.el));
       var el = user.render().$el;
       $('.user-list', this.el).append(el);
     },
