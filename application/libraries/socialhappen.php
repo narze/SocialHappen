@@ -495,7 +495,7 @@ class SocialHappen{
 	 */
 	function upload_image($name = NULL, $resize = TRUE){
 		$config['upload_path'] = './uploads/images/';
-		$config['allowed_types'] = 'gif|jpg|png';
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
 		$config['max_size']	= '2048';
 		$config['max_width']  = '2048';
 		$config['max_height']  = '2048';
