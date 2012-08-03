@@ -281,12 +281,16 @@ class Challenge_lib {
         //Add company score
         $this->CI->load->library('audit_lib');
         $action = $this->CI->audit_lib->get_audit_action(0, $action_id);
-        $company_score = $action['score'];
+        // $company_score = $action['score'];
+        $company_score = 0; //Now don't give company score from audit
         $increment_info = array(
           'company_score' => $company_score,
           'action_id' => $action_id,
           'app_install_id' => 0
         );
+        $this->CI->load->library('achievement_lib');
+        $increment_page_score_result = $this->CI->achievement_lib->
+          increment_achievement_stat($company_id, 0, $user_id, $increment_info, 1);
 
         //Give reward coupons
         if(issetor($challenge['reward_items'])) {
@@ -310,10 +314,6 @@ class Challenge_lib {
           }
         }
 
-        //Increment company stat
-        $this->CI->load->library('achievement_lib');
-        $increment_page_score_result = $this->CI->achievement_lib->
-          increment_achievement_stat($company_id, 0, $user_id, $increment_info, 1);
 
       } else if($is_in_progress) {
         $result['in_progress'][] = $challenge_id;
