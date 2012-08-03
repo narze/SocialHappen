@@ -20,6 +20,7 @@ define([
       _.bindAll(this);
       this.options.currentUserModel.bind('change', this.render);
     },
+
     render: function () {
       var company;
       $(this.el).html(pageTemplate);
@@ -96,48 +97,51 @@ define([
       carouselView.render();
 
       if(this.options.now === 'challenge'){
-        var challengeListView = new ChallengeListView({
-          collection: this.options.challengesCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
-        });
+        if(!this.challengeListView) 
+          challengeListView = new ChallengeListView({
+            collection: this.options.challengesCollection,
+            el: $('#content-pane', this.el),
+            vent: this.options.vent
+          });
 
-        challengeListView.render();
+        this.challengeListView.render();
       } else if(this.options.now === 'reward'){
-        var rewardListView = new RewardListView({
-          collection: this.options.rewardsCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
-        });
+        if(!this.rewardListView) 
+          this.rewardListView = new RewardListView({
+            collection: this.options.rewardsCollection,
+            el: $('#content-pane', this.el),
+            vent: this.options.vent
+          });
 
-        rewardListView.render();
+        this.rewardListView.render();
       } else if(this.options.now === 'coupon'){
-        var couponListView = new CouponListView({
-          collection: this.options.couponsCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
-        });
+        if(!this.couponListView) 
+            this.couponListView = new CouponListView({
+            collection: this.options.couponsCollection,
+            el: $('#content-pane', this.el),
+            vent: this.options.vent
+          });
 
-        couponListView.render();
+        this.couponListView.render();
       } else if(this.options.now === 'users'){
-        var companyUserListView = new CompanyUserListView({
-          collection: this.options.companyUsersCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
-        });
+        if(!this.companyUserListView) 
+          this.companyUserListView = new CompanyUserListView({
+            collection: this.options.companyUsersCollection,
+            el: $('#content-pane', this.el),
+            vent: this.options.vent
+          });
 
-        companyUserListView.render();
+        this.companyUserListView.render();
       } else if(this.options.now === 'activities'){
-        var activityListView = new ActivityListView({
-          collection: this.options.activitiesCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
-        });
+        if(!activityListView) 
+          this.activityListView = new ActivityListView({
+            collection: this.options.activitiesCollection,
+            el: $('#content-pane', this.el),
+            vent: this.options.vent
+          });
 
-        activityListView.render();
+        this.activityListView.render();
       }
-
-
     }
   });
   return ProfilePage;
