@@ -266,9 +266,9 @@
 			<?php endif; ?>
 			<?php if($challenge_rewards) : ?>
 				<?php if(count($challenge_rewards) === 1) : ?>
-					<p>You got this reward : </p>
+					<p>You have gotten this reward : </p>
 				<?php else : ?>
-					<p>You got these rewards :</p>
+					<p>You have gotten these rewards :</p>
 				<?php endif; ?>
 				<?php foreach($challenge_rewards as $challenge_reward) : ?>
 					<div class="reward-container alert alert-success">

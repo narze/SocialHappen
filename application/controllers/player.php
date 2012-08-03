@@ -176,7 +176,16 @@ class Player extends CI_Controller {
       $action_done = $this->input->get('action_done') && $user_id;
       //challenge_progress
 
-      if($player_challenging) {
+      //Challenge expiration
+      $challenge_not_started = $challenge_ended = FALSE;
+      date_default_timezone_set('UTC');
+      if($challenge['start_date'] > time()) {
+        $challenge_not_started = TRUE;
+      } else if($challenge['end_date'] < time()) {
+        $challenge_ended = TRUE;
+      }
+
+      if(!$challenge_not_started && !$challenge_ended && $player_challenging) {
         $challenge_progress = $this->challenge_lib->get_challenge_progress($user_id, $challenge_id);
         $challenge_done = TRUE;
         if($challenge_progress) {
@@ -230,15 +239,6 @@ class Player extends CI_Controller {
           unset($challengers['completed'][$key]);
         }
         $challenger_completed = $this->user_model->get_user_profile_by_user_id($challenger_completed['user_id']);
-      }
-
-      //Challenge expiration
-      $challenge_not_started = $challenge_ended = FALSE;
-      date_default_timezone_set('UTC');
-      if($challenge['start_date'] > time()) {
-        $challenge_not_started = TRUE;
-      } else if($challenge['end_date'] < time()) {
-        $challenge_ended = TRUE;
       }
 
       $this->load->vars(
