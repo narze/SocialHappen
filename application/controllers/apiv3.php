@@ -760,8 +760,10 @@ class Apiv3 extends CI_Controller {
   /**
    * get all users' action data
    */
-  function userActionData() {
-    if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE)); return; }
+  function userActionData($user_id = NULL) {
+    if(!$user_id){
+      if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE)); return; }
+    }
 
     $query = array_filter(array(
       'user_id' => $user_id

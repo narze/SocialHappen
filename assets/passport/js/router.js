@@ -55,6 +55,9 @@ define([
 
       window.Passport.userId = userId;
 
+      options.achievementCollection.userId = userId;
+      options.actionCollection.userId = userId;
+
       userModel.id = userId;
       userModel.fetch();
       viewOptions.userModel = userModel;
@@ -167,7 +170,7 @@ define([
     router.on('route:couponLanding', function(userId, couponId) {
       var userModel = options.userModel
       userModel.id = userId
-      window.Passport.userId = userId
+      window.Passport.userId = userId;
 
       options.couponCollection.fetch({
         success: function(collection, xhr) {

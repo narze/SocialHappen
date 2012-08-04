@@ -6,6 +6,9 @@ define([
 ], function($, _, Backbone, achievementModel){
   var activityCollection = Backbone.Collection.extend({
     model: achievementModel,
+
+    userId: window.Passport.userId,
+
     initialize: function(){
 
     },
@@ -29,7 +32,7 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        params.url = window.Passport.BASE_URL + '/apiv3/achievement/' + window.Passport.userId
+        params.url = window.Passport.BASE_URL + '/apiv3/achievement/' + this.userId
       }
 
       // Ensure that we have the appropriate request data.
