@@ -1,9 +1,12 @@
 <div class="media media-small">
-  <a class="media-thumb">
+  <a class="media-thumb" style="position: relative;">
     <% if(typeof image !== 'undefined' && image !== null) { %>
       <img class="" src="<%= image %>" alt="">
     <% } else { %>
       <img class="" src="../images/default/user.png" alt="">
+    <% } %>
+    <% if(typeof user_id !== 'undefined' && user_id){ %>
+      <img style="width: 20px; position: absolute; bottom: -5px; right: -5px;" class="user-thumb" src="<%= window.Company.BASE_URL + 'userimage/' + user_id %>">
     <% } %>
   </a>
   <div class="media-info">

@@ -15,6 +15,7 @@ define([
       if(this.model.get('message')){
         var data = this.model.toJSON();
         data.timeago = $.timeago(new Date(data.timestamp*1000));
+
         $(this.el).html(this.activityItemTemplate(data));
       }
       return this;
