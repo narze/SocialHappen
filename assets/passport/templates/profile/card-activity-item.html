@@ -1,1 +1,11 @@
-<div class="activity span2"><div class="well"><%= name %></div></div>
+<div class="activity span3 well">
+	<a href="#/profile/<%= window.Passport.userId %>/coupon/<%= reward_item_id %>" class="coupon" rel="popover"
+	 data-content="<p><%= description %></p> <p><em><%= time %></em></p>"
+	 data-original-title="<%= name %>">
+		<% if(is_points_reward){ %>
+			<%= value %> Points
+		<% }else{ %>
+			<%= name %>
+		<% } %>
+	</a>
+</div>

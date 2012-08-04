@@ -4,6 +4,13 @@
 .user-profile-nav li li.active [class*="user-submenu-"] {
 	color: #333;
 }
+
+.card .activity{
+	width: 100px;
+	height: 100px;
+	overflow: hidden;
+}
+
 .card {
 	max-width:560px;
 	margin: -7px auto;
@@ -78,7 +85,7 @@
   -webkit-transition:top 0.2s ease-in-out;
   -moz-transition:top 0.2s ease-in-out;
   -o-transition:top 0.2s ease-in-out;
-  -ms-transition:top 0.2s ease-in-out;  
+  -ms-transition:top 0.2s ease-in-out;
   transition:top 0.2s ease-in-out;
 }
 .coupon-list .item:hover .reward-caption{
