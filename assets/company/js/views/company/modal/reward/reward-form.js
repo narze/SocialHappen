@@ -14,8 +14,8 @@ define([
       'click button.save-name': 'saveEditName',
       'click div.edit-description': 'showEditDescription',
       'click button.save-description': 'saveEditDescription',
-      'click img.reward-image, h6.edit-image': 'showEditImage',
-      'click button.save-image': 'saveEditImage'
+      'click button.save-image': 'saveEditImage',
+      'click button.upload-image-submit': 'uploadImage'
     },
 
     initialize: function(){
@@ -77,16 +77,45 @@ define([
       $('div.edit-description-field', this.el).hide();
     },
 
-    showEditImage: function(){
-      $('div.edit-image', this.el).show();
+    uploadImage: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-image', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var imageUrl = resp.data;
+
+            // self.model.set('image', imageUrl).trigger('change');
+            $('img.reward-image', self.el).attr('src', imageUrl);
+            $('input.reward-image', self.el).val(imageUrl);
+            // self.options.vent.trigger('showAddModal', self.model);
+
+            // Save only image (because we removed old image already)
+            self.options.reward_item.image = imageUrl;
+            var reward_items = self.model.get('reward_items');
+            self.model.set('reward_items', reward_items).trigger('change');
+            if(self.options.save){
+              self.model.save();
+            }
+
+            return;
+          }
+          alert(resp.data);
+        }
+      })
     },
 
     saveEditImage: function(){
-      $('div.edit-image', this.el).hide();
-      var image = $('input.reward-image', this.el).val();
-      $('img.reward-image').attr('src', image);
-    }
+      console.log('save image');
+      var imageUrl = $('input.reward-image', this.el).val();
+      $('img.reward-image', self.el).attr('src', imageUrl);
+      // this.model.set('image', imageUrl).trigger('change');
 
+      // this.options.vent.trigger('showAddModal', this.model);
+    }
   });
   return QRFormView;
 });

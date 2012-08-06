@@ -6,7 +6,7 @@
     <h3 class="edit-name"><%= name %></h3>
   </div>
   <div class="edit-name hide">
-    <input class="reward-name span4" value="<%- name||'' %>" />
+    <input type="text" class="reward-name span4" value="<%- name||'' %>" />
     <button class="btn save-name btn-primary">Save</button>
   </div>
 </div>
@@ -24,16 +24,28 @@
   </div>
 
   <div class="control-group">
-    <h6 class="edit-image">Image:</h6>
-    <div class="edit-image hide">
-      <div class="control-group">
-        <input class="reward-image span4" value="<%= image %>" />
-        <button class="btn save-image btn-primary">Save</button>
+    <div class="edit-image">
+      <h6>Image:</h6>
+      <div class="edit-image-form hide">
+        <div class="form-inline">
+          <label><h4>Enter image URL</h4></label>
+          <div class="control-group">
+            <input type="text" class="reward-image input-medium" placeholder="Image URL" value="<%= image %>" /> <button class="save-image btn btn-primary btn-small">&nbsp;Save&nbsp;</button>
+          </div>
+          <label><h4>Or upload your own image</h4></label>
+          <div class="control-group">
+            <form type="POST" enctype="multipart/form-data" action="<%= window.Company.BASE_URL + 'apiv3/upload_image' %>" class="upload-image">
+              <input type="file" name="new-image" />
+              <input type="hidden" name="file-input-name" value="new-image" />
+              <input type="hidden" name="old-image" value="<%= image %>" />
+              <button class="upload-image-submit btn btn-primary btn-small">Upload</button>
+            </form>
+          </div>
+        </div>
       </div>
+      <img class="reward-image" src="<%= image %>" />
     </div>
   </div>
-
-  <img class="reward-image" src="<%= image %>" />
 
   <div class="control-group">
     <div class="edit-description">
