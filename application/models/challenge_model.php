@@ -13,14 +13,14 @@ class Challenge_model extends CI_Model {
 
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
-		return $this->collection->deleteIndexes() 
+		return $this->collection->deleteIndexes()
 			&& $this->collection->ensureIndex(array('company_id' => 1));
 	}
-        
+
 	function add($data)
 	{
 		$data = array_cast_int($data, $this->int_values);
-		try	{	
+		try	{
 			$this->collection->insert($data, array('safe' => TRUE));
 			return ''.$data['_id'];
 		} catch(MongoCursorException $e){
@@ -28,7 +28,7 @@ class Challenge_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
+
 	function get($query, $limit = 100){
 		$query = array_cast_int($query, $this->int_values);
 		$result = $this->collection->find($query)->sort(array('_id' => -1))->limit($limit);
@@ -40,17 +40,16 @@ class Challenge_model extends CI_Model {
 		$result = $this->collection->findOne($query);
 		return obj2array($result);
 	}
-		
-	function update($query, $data)
-	{
-		$query = array_cast_int($query, $this->int_values);
 
-		try	{
-			return $this->collection->update($query, $data, array('safe' => TRUE));
-		} catch(MongoCursorException $e){
-			log_message('error', 'Mongodb error : '. $e);
-			return FALSE;
-		}
+	function update($query, $data) {
+		$query = array_cast_int($query, $this->int_values);
+	  try {
+	    $update_result = $this->collection->update($query, $data, array('safe' => TRUE));
+	    return isset($update_result['n']) && ($update_result['n'] > 0);
+	  } catch(MongoCursorException $e){
+	    log_message('error', 'Mongodb error : '. $e);
+	    return FALSE;
+	  }
 	}
 
 	function delete($query){

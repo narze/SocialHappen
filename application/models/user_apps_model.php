@@ -4,12 +4,12 @@ class User_apps_model extends CI_Model {
 	var $app_install_id = '';
 	var $user_apps_register_date = '';
 	var $user_apps_last_seen = '';
-	
+
 	function __construct()
 	{
 		parent::__construct();
 	}
-	
+
 	/**
 	 * Get app users
 	 * @param $app_install_id
@@ -24,7 +24,7 @@ class User_apps_model extends CI_Model {
 		$result = $this->db->get_where('user_apps',array('app_install_id'=>$app_install_id))->result_array();
 		return $this->socialhappen->map_v($result, 'user_gender');
 	}
-	
+
 	/**
 	 * Get user apps
 	 * @param $user_id
@@ -41,7 +41,7 @@ class User_apps_model extends CI_Model {
 		$result = $this->db->get_where('user_apps',array('user.user_id'=>$user_id))->result_array();
 		return $this->socialhappen->map_v($result, array('app_type','app_install_status','user_gender'));
 	}
-	
+
 	/**
 	 * Count user apps
 	 * @param $user_id
@@ -54,7 +54,7 @@ class User_apps_model extends CI_Model {
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		return $this->db->where(array('user.user_id'=>$user_id))->count_all_results('user_apps');
 	}
-	
+
 	/**
 	 * Adds user_app
 	 * @param array $data
@@ -64,7 +64,7 @@ class User_apps_model extends CI_Model {
 	function add_user_app($data = array()){
 		return $this -> db -> insert('user_apps', $data);
 	}
-	
+
 	/**
 	 * Removes user_app
 	 * @param $user_id
@@ -76,7 +76,7 @@ class User_apps_model extends CI_Model {
 		$this->db->delete('user_apps', array('user_id' => $user_id, 'app_install_id' => $app_install_id));
 		return $this->db->affected_rows();
 	}
-	
+
 	/**
 	 * Insert new user_apps record
 	 * @param $user_id
@@ -95,7 +95,7 @@ class User_apps_model extends CI_Model {
 	    }
 		return FALSE;
 	}
-	
+
 	/**
 	 * Check if user is existed and belonged app_install_id
 	 * @param $user_id
@@ -109,7 +109,7 @@ class User_apps_model extends CI_Model {
 		$count = $this->db->count_all_results();
 		return ($count != 0);
 	}
-	
+
 	/**
 	 * Update last seen date
 	 * @param $user_id
@@ -122,7 +122,7 @@ class User_apps_model extends CI_Model {
 						array('user_id' => $user_id,
 							 'app_install_id' => $app_install_id));
 	}
-	
+
 	/**
 	 * Count user apps
 	 * @param $user_id

@@ -1,31 +1,31 @@
 <?php
 class Page_user_data_model extends CI_Model {
-	
+
 	function __construct() {
 		parent::__construct();
 	}
-	
+
 	/**
 	 * @private Change page user data from id to field name
 	 * @param $page_user
 	 * @param $page_id
 	 * @return $page_user
-	 */ 
+	 */
 	function _fetch_page_user_data_by_page_id($page_user = array(), $page_id = NULL){
 		if(!isset($page_user['user_data']) || !$pages = $this->db->get_where('page', array('page_id' => $page_id))-> result_array()){
 			return FALSE;
-		} 
+		}
 		$page = $pages[0];
 		$page_user_fields = json_decode($page['page_user_fields'], TRUE);
 		$page_user['user_data'] = json_decode($page_user['user_data'] ,TRUE);
-		
+
 		foreach($page_user['user_data'] as $key => $value){
 			$page_user['user_data'][$page_user_fields[$key]['name']] = $value;
 			unset($page_user['user_data'][$key]);
 		}
 		return $page_user;
 	}
-	
+
 	/**
 	 * Get page user
 	 * @param $user_id
@@ -42,7 +42,7 @@ class Page_user_data_model extends CI_Model {
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * Get page users
 	 * @param $page_id
@@ -61,7 +61,7 @@ class Page_user_data_model extends CI_Model {
 		unset($page_user);
 		return $page_users;
 	}
-	
+
 	/**
 	 * Adds page user
 	 * @param array $data
@@ -81,7 +81,7 @@ class Page_user_data_model extends CI_Model {
 		if(!$users = $this->db->get_where('user',array('user_id'=> $data['user_id']))->result_array()){
 			return FALSE;
 		}
-		
+
 		$processed_data = array();
 		$fields = json_decode(issetor($fields[0]['page_user_fields']),TRUE);
 		if(is_array($fields)){
@@ -99,13 +99,13 @@ class Page_user_data_model extends CI_Model {
 								}
 							}
 						break;
-						
+
 						case 'radio':
 							if(in_array($data['user_data'][$value['name']], $value['items'])){
 								$processed_data[$key] = $data['user_data'][$value['name']];
 							}
 						break;
-						
+
 						case 'text':
 						case 'textarea':
 						default:
@@ -121,7 +121,7 @@ class Page_user_data_model extends CI_Model {
 		$data['user_data'] = json_encode($processed_data);
 		return $this -> db -> insert('page_user_data', $data);
 	}
-	
+
 	/**
 	 * Update page user
 	 * @param $user_id
@@ -149,13 +149,13 @@ class Page_user_data_model extends CI_Model {
 								}
 							}
 						break;
-						
+
 						case 'radio':
 							if(in_array($user_data[$value['name']], $value['items'])){
 								$processed_data[$key] = $user_data[$value['name']];
 							}
 						break;
-						
+
 						case 'text':
 						case 'textarea':
 						default:
@@ -172,7 +172,7 @@ class Page_user_data_model extends CI_Model {
 		$user_data['user_data'] = json_encode($processed_data);
 		return $this->db->update('page_user_data', $user_data, array('user_id' => $user_id, 'page_id' => $page_id));
 	}
-	
+
 	/**
 	 * Removes page user
 	 * @param $user_id
@@ -183,7 +183,7 @@ class Page_user_data_model extends CI_Model {
 		$this->db->delete('page_user_data', array('user_id' => $user_id, 'page_id' => $page_id));
 		return $this->db->affected_rows()==1;
 	}
-	
+
 	/**
 	 * Count users
 	 * @param $page_id
@@ -193,7 +193,7 @@ class Page_user_data_model extends CI_Model {
 		$this->db->where(array('page_id' => $page_id));
 		return $this->db->count_all_results('page_user_data');
 	}
-	
+
 	// /**
 	 // * Check if user is existed
 	 // * @param $user_id
@@ -207,7 +207,7 @@ class Page_user_data_model extends CI_Model {
 		// $count = $this -> db -> count_all_results();
 		// return ($count != 0);
 	// }
-	
+
 }
 /* End of file page_user_data_model.php */
 /* Location: ./application/models/page_user_data_model.php */

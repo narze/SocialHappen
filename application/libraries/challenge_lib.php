@@ -12,12 +12,11 @@ class Challenge_lib {
 
   function add($data) {
     if($id = $this->CI->challenge_model->add($data)) {
-      $result = $this->CI->challenge_model->update(array(
+      if($result = $this->CI->challenge_model->update(array(
         '_id' => new MongoId($id)
         ), array(
           '$set' => array('hash' => strrev(sha1($id))
-      )));
-      if($result['updatedExisting']) {
+      )))) {
         return $id;
       }
     }
@@ -435,8 +434,7 @@ class Challenge_lib {
       $update_record = array(
         '$pull' => array('challenge_redeeming' => $challenge_id)
       );
-      $result = $this->CI->user_mongo_model->update(array('user_id' => $user_id), $update_record);
-      return $result['updatedExisting'];
+      return $this->CI->user_mongo_model->update(array('user_id' => $user_id), $update_record);
     } else {
       return FALSE;
     }

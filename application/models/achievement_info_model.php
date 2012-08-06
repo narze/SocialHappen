@@ -167,8 +167,13 @@ class Achievement_info_model extends CI_Model {
 
 			$achievement_info['criteria'] = $criteria;
 
-			return $this->collection->update(array('_id' => new MongoId($achievement_id)),
-				$achievement_info);
+			try	{
+				$update_result = $this->collection->update(array('_id' => new MongoId($achievement_id)), $achievement_info, array('safe' => TRUE));
+				return isset($update_result['n']) && ($update_result['n'] > 0);
+			} catch(MongoCursorException $e){
+				log_message('error', 'Mongodb error : '. $e);
+				return FALSE;
+			}
 
 		}else{
 			return FALSE;

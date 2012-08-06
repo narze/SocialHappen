@@ -263,13 +263,12 @@
 				'$pull' => array('user_list' => array('user_id'=>$input['user']['user_id']))
 			);
 			try	{
-				$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
-				$pull, array('safe' => TRUE));
+				$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)), $pull, array('safe' => TRUE));
 				if($result['n'] != 0 || $result['err']){
-
-	            } else {
-	            	return FALSE;
-	            }
+					//
+        } else {
+        	return FALSE;
+        }
 			} catch(MongoCursorException $e){
 				log_message('error', 'Mongo error : '. $e);
 				return FALSE;
@@ -281,10 +280,10 @@
 			$result = $this->reward_item->update(array('_id' => new MongoId($reward_item_id)),
 			$update, array('safe' => TRUE));
 			if($result['n'] != 0 || $result['err']){
-            	return TRUE;
-            } else {
-            	return FALSE;
-            }
+      	return TRUE;
+      } else {
+      	return FALSE;
+      }
 		} catch(MongoCursorException $e){
 			log_message('error', 'Mongo error : '. $e);
 			return FALSE;

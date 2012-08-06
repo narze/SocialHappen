@@ -4,7 +4,7 @@ define('QR_ACTION_ID', 201);
 define('FEEDBACK_ACTION_ID', 202);
 define('CHECKIN_ACTION_ID', 203);
 class Action_data_lib_test extends CI_Controller {
-	
+
 	function __construct(){
 		parent::__construct();
 		$this->load->library('unit_test');
@@ -15,7 +15,7 @@ class Action_data_lib_test extends CI_Controller {
 	function __destruct(){
 		$this->unit->report_with_counter();
 	}
-	
+
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
@@ -33,7 +33,7 @@ class Action_data_lib_test extends CI_Controller {
 				);
 		$result = $this->action_data_lib->get_platform_action();
 		$this->unit->run($result, $expect, "\$result", $result);
-		
+
 		$action_name = 'qr';
 		$result = $this->action_data_lib->get_platform_action($action_name);
 		$this->unit->run($result, 201, "\$result", $result);
@@ -63,7 +63,7 @@ class Action_data_lib_test extends CI_Controller {
 
 		$this->unit->run($result, $expect, "\$result", $result);
 	}
-	
+
 	function get_action_url_test() {
 		$result = $this->action_data_lib->get_action_url($this->qr_action_data_id);
 		$expect = base_url().'actions/qr?code='.strrev(sha1($this->qr_action_data_id));
@@ -119,16 +119,16 @@ class Action_data_lib_test extends CI_Controller {
 		$result = $this->action_data_lib->get_action_data_from_code();
 		$this->unit->run(get_mongo_id($result), $this->another_qr_action_data_id, "\$result", get_mongo_id($result));
 		unset($result['_id']);
-    
+
     $this->unit->run($result['action_id'], $expect['action_id'],
      "\$result['action_id']", $result['action_id']);
-     
+
     $this->unit->run($result['hash'], $expect['hash'],
      "\$result['hash']", $result['hash']);
-     
+
     $this->unit->run($result['data']['done_message'], $expect['data']['done_message'],
      "\$result['data']['done_message']", $result['data']['done_message']);
-     
+
     $this->unit->run($result['data']['todo_message'], $expect['data']['todo_message'],
      "\$result['data']['todo_message']", $result['data']['todo_message']);
     /*
@@ -136,17 +136,17 @@ class Action_data_lib_test extends CI_Controller {
      "\$result['data']['challenge_id']", $result['data']['challenge_id']);
      */
 	}
-  
+
   function get_qr_url_test(){
     $result = $this->action_data_lib->get_qr_url();
     $expect = NULL;
     $this->unit->run($result, $expect, '\$url', $result);
-    
+
     $result = $this->action_data_lib->get_qr_url('4f746aca6803fa3365000057');
     $expect = base_url() . 'actions/qr/?code=4f746aca6803fa3365000057';
     $this->unit->run($result, $expect, '\$url', $result);
   }
-  
+
 	function add_feedback_action_data_test() {
 		$form_data = array(
 						'feedback_welcome_message' => 'Dear, Our Customer',
@@ -154,7 +154,7 @@ class Action_data_lib_test extends CI_Controller {
 						'feedback_vote_message' => 'Please provide your satisfaction score',
 						'feedback_thankyou_message' => 'Thank you, please come again',
 					);
-		
+
 		$result = $this->action_data_lib->add_feedback_action_data($form_data);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 		$this->another_feedback_action_data_id = $result;
@@ -187,7 +187,7 @@ class Action_data_lib_test extends CI_Controller {
 						'checkin_challenge_message' => 'Please check-in here at Figabyte',
 						'checkin_thankyou_message' => 'Thank you, for check-in',
 					);
-		
+
 		$result = $this->action_data_lib->add_checkin_action_data($form_data);
 		$this->unit->run($result, 'is_string', "\$result", $result);
 		$this->another_checkin_action_data_id = $result;
@@ -209,7 +209,7 @@ class Action_data_lib_test extends CI_Controller {
 
 		$this->unit->run(get_mongo_id($result), $this->another_checkin_action_data_id, "\$result", get_mongo_id($result));
 		unset($result['_id']);
-		
+
 		$this->unit->run($result, $expect, "\$result", $result);
 
 	}
@@ -228,7 +228,7 @@ class Action_data_lib_test extends CI_Controller {
 						'feedback_vote_message' => 'Please provide your satisfaction score',
 						'feedback_thankyou_message' => 'Thank you, please come again',
 					);
-		
+
 		$tmp_feedback_action_id = $this->action_data_lib->add_feedback_action_data($feedback_data);
 
 		$checkin_data = array(
@@ -239,11 +239,11 @@ class Action_data_lib_test extends CI_Controller {
 						'checkin_challenge_message' => 'Please check-in here at Figabyte',
 						'checkin_thankyou_message' => 'Thank you, for check-in',
 					);
-		
+
 		$tmp_checkin_action_id = $this->action_data_lib->add_checkin_action_data($checkin_data);
 
 		$new_expected_data = array('nothingtodohere' => 'fuuuuuuuuuuuuuuuu');
-		
+
 		$this->action_data_lib->update($tmp_checkin_action_id, $new_expected_data);
 		$this->action_data_lib->update($tmp_feedback_action_id, $new_expected_data);
 		$this->action_data_lib->update($tmp_qr_action_id, $new_expected_data);

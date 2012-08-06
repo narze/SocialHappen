@@ -43,7 +43,7 @@ class User_role_model extends CI_Model {
 		$this -> db -> insert('user_role', $data);
 		return $this->db->insert_id();
 	}
-	
+
 	/**
 	 * Removes user role
 	 * @param $user_role_id
@@ -54,7 +54,7 @@ class User_role_model extends CI_Model {
 		$this->db->delete('user_role', array('user_role_id' => $user_role_id));
 		return $this->db->affected_rows() === 1;
 	}
-	
+
 	/**
 	 * Update user role
 	 * @param $user_role_id

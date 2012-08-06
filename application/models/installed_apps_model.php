@@ -1,11 +1,11 @@
 <?php
 class Installed_apps_model extends CI_Model {
-	
+
 	function __construct()
 	{
 		parent::__construct();
 	}
-	
+
 	/**
 	 * [Deprecated]
 	 * Check if app is prepared for installation
@@ -15,8 +15,8 @@ class Installed_apps_model extends CI_Model {
 	function check_install_app($app_id = NULL, $company_id = NULL, $user_id = NULL){
 		return true;
 	}
-	
-	/* 
+
+	/*
 	 * Get installed apps
 	 * @param $page_id
 	 * @return array
@@ -48,7 +48,7 @@ class Installed_apps_model extends CI_Model {
 		$results = $this->db->get_where('installed_apps',array('company_id'=>$company_id))->result_array();
 		return $this->socialhappen->map_v($results,array('app_type','app_install_status'));
 	}
-	
+
 	/*
 	 * Get installed apps (not in page)
 	 * @param $company_id
@@ -65,7 +65,7 @@ class Installed_apps_model extends CI_Model {
 		$results = $this->db->get_where('installed_apps',array('company_id'=>$company_id,'page_id'=>0))->result_array();
 		return $this->socialhappen->map_v($results,array('app_type','app_install_status'));
 	}
-	
+
 	/*
 	 * Count installed apps (not in page)
 	 * @param $company_id
@@ -76,7 +76,7 @@ class Installed_apps_model extends CI_Model {
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		return $this->db->where(array('company_id'=>$company_id,'page_id'=>0))->count_all_results('installed_apps');
 	}
-	
+
 	/**
 	 * Get installed app profile
 	 * @param $app_install_id
@@ -88,7 +88,7 @@ class Installed_apps_model extends CI_Model {
 		$results = $this->db->get_where('installed_apps',array('app_install_id'=>$app_install_id))->result_array();
 		return $this->socialhappen->map_one_v($results[0], array('app_type','app_install_status'));
 	}
-	
+
 	/**
 	 * Adds installed app
 	 * @param array $data
@@ -99,7 +99,7 @@ class Installed_apps_model extends CI_Model {
 		$this -> db -> insert('installed_apps', $data);
 		return $this->db->insert_id();
 	}
-	
+
 	/**
 	 * Removes installed app
 	 * @param $installed_app_id
@@ -110,7 +110,7 @@ class Installed_apps_model extends CI_Model {
 		$this->db->delete('installed_apps', array('app_install_id' => $app_install_id));
 		return $this->db->affected_rows();
 	}
-	
+
 	/**
 	 * Update page_id
 	 * @param $app_install_id, @page_id
@@ -120,8 +120,8 @@ class Installed_apps_model extends CI_Model {
 		$this->db->update('installed_apps', array('page_id'=>$page_id), array('app_install_id' =>$app_install_id));
 		return $this->db->affected_rows()==1;
 	}
-	
-	/* 
+
+	/*
 	 * Count installed apps
 	 * @param $page_id
 	 * @author Manassarn M.
@@ -131,7 +131,7 @@ class Installed_apps_model extends CI_Model {
 		$this->db->join('app','installed_apps.app_id=app.app_id');
 		return $this->db->count_all_results('installed_apps');
 	}
-	
+
 	/**
 	 * Count installed app by distinct field
 	 * @param $distinct,array $where
@@ -145,7 +145,7 @@ class Installed_apps_model extends CI_Model {
 		$query = $this->db->get('installed_apps');
 		return $query->num_rows();
 	}
-	
+
 	/*
 	 * Update data
 	 * @author Prachya P.
@@ -153,7 +153,7 @@ class Installed_apps_model extends CI_Model {
 	function update($data = array(), $where = array()) {
 		return $this -> db -> update('installed_apps', $data, $where);
 	}
-	
+
 	/**
 	 * Update facebook_tab_url
 	 * @param $app_install_id

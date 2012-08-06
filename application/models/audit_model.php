@@ -98,14 +98,14 @@ class Audit_model extends CI_Model {
 		return obj2array($result);
 	}
 
-	function update($query, $data)
-	{
-		try	{
-			return $this->collection->update($query, $data, array('safe' => TRUE));
-		} catch(MongoCursorException $e){
-			log_message('error', 'Mongodb error : '. $e);
-			return FALSE;
-		}
+	function update($query, $data) {
+	  try {
+	    $update_result = $this->collection->update($query, $data, array('safe' => TRUE));
+	    return isset($update_result['n']) && ($update_result['n'] > 0);
+	  } catch(MongoCursorException $e){
+	    log_message('error', 'Mongodb error : '. $e);
+	    return FALSE;
+	  }
 	}
 
 	/**

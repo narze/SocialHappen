@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Get_started_model extends CI_Model {
-	
+
 	/**
 	 * Connect to mongodb
 	 * @author Manassarn M.
@@ -12,30 +12,30 @@ class Get_started_model extends CI_Model {
 		$this->get_started_info = sh_mongodb_load( array(
 			'collection' => 'get_started_info'
 		));
-		$this->get_started_stat = sh_mongodb_load( array(
+		$this->collection = sh_mongodb_load( array(
 			'collection' => 'get_started_stat'
 		));
 	}
-	
-	/** 
+
+	/**
 	 * Drop all get-started
 	 * @author Weerapat P.
 	 */
 	function drop_collection(){
-		return $this->get_started_info->drop() && $this->get_started_stat->drop();
+		return $this->get_started_info->drop() && $this->collection->drop();
 	}
-	
+
 	/**
 	 * Create index for get_started_info collection
 	 * @author Weerapat P.
 	 */
 	function create_index(){
-		return $this->get_started_info->deleteIndexes() 
-			&& $this->get_started_info->ensureIndex(array('id'=>1), array('unique' => 1)) 
-			&& $this->get_started_stat->deleteIndexes() 
-			&& $this->get_started_stat->ensureIndex(array('id'=>1));
+		return $this->get_started_info->deleteIndexes()
+			&& $this->get_started_info->ensureIndex(array('id'=>1), array('unique' => 1))
+			&& $this->collection->deleteIndexes()
+			&& $this->collection->ensureIndex(array('id'=>1));
 	}
-	
+
 	/**
 	 * Count all get-started item
 	 * @author Weerapat P.
@@ -49,9 +49,9 @@ class Get_started_model extends CI_Model {
 	 * @author Weerapat P.
 	 */
 	function count_all_stat(){
-		return $this->get_started_stat->count();
+		return $this->collection->count();
 	}
-	
+
 	/**
 	 * Add get_started_info
 	 * @param $item_data = [id, type, link, name]
@@ -62,7 +62,7 @@ class Get_started_model extends CI_Model {
 		$check_args = !empty($item_data['id']) && !empty($item_data['type']) && !empty($item_data['link']) && !empty($item_data['name']);
 		if(!$check_args){
 			return FALSE;
-		} else { 
+		} else {
 			return $this->get_started_info->insert($item_data);
 		}
 	}
@@ -79,13 +79,13 @@ class Get_started_model extends CI_Model {
 	function add_get_started_stat($id = NULL, $type = NULL, $items = array()){
 		if(count($items) < 1) return FALSE;
 		$id = (int)$id;
-		$result = $this->get_started_stat->findOne(array('id' => $id, 'type' => $type));
+		$result = $this->collection->findOne(array('id' => $id, 'type' => $type));
 		sort($items);
 
 		if($result) { //Stat exist
 			return $this->update_get_started_stat_items($id, $type, $items);
 		}
-		return $this->get_started_stat->insert(array('id'=>$id, 'type'=>$type, 'items'=>$items));
+		return $this->collection->insert(array('id'=>$id, 'type'=>$type, 'items'=>$items));
 	}
 
 	/**
@@ -93,9 +93,9 @@ class Get_started_model extends CI_Model {
 	 * @author Weerapat P.
 	 */
 	function get_all_page_todo_list(){
-		$cursor = $this->get_started_info->find( array( 
+		$cursor = $this->get_started_info->find( array(
 			'$or' => array( array('type' => 'page'), array('type' => 'all') )
-			) 
+			)
 		);
 		return iterator_to_array($cursor, false);
 	}
@@ -105,9 +105,9 @@ class Get_started_model extends CI_Model {
 	 * @author Weerapat P.
 	 */
 	function get_all_app_todo_list(){
-		$cursor = $this->get_started_info->find( array( 
+		$cursor = $this->get_started_info->find( array(
 			'$or' => array( array('type' => 'app'), array('type' => 'all') )
-			) 
+			)
 		);
 		return iterator_to_array($cursor, false);
 	}
@@ -120,7 +120,7 @@ class Get_started_model extends CI_Model {
 	function get_todo_list_by_page_id($id = NULL){
 		if(!$id) return FALSE;
 		$lists = $this->get_all_page_todo_list();
-		$result = $this->get_started_stat->findOne(array('id' => (int)$id, 'type' => 'page'));
+		$result = $this->collection->findOne(array('id' => (int)$id, 'type' => 'page'));
 		$result = obj2array($result);
 		if(count($lists)) {
 			foreach($lists as &$item){
@@ -132,7 +132,7 @@ class Get_started_model extends CI_Model {
 					$item['status'] = 0;
 				}
 			}
-		}	
+		}
 		return $lists;
 	}
 
@@ -144,7 +144,7 @@ class Get_started_model extends CI_Model {
 	function get_todo_list_by_app_id($id = NULL){
 		if(!$id) return FALSE;
 		$lists = $this->get_all_app_todo_list();
-		$result = $this->get_started_stat->findOne(array('id' => (int)$id, 'type' => 'app'));
+		$result = $this->collection->findOne(array('id' => (int)$id, 'type' => 'app'));
 		$result = obj2array($result);
 		if(count($lists)) {
 			foreach($lists as &$item){
@@ -156,7 +156,7 @@ class Get_started_model extends CI_Model {
 					$item['status'] = 0;
 				}
 			}
-		}	
+		}
 		return $lists;
 	}
 
@@ -191,7 +191,7 @@ class Get_started_model extends CI_Model {
 			return FALSE;
 
 		} else {
-			$result = $this->get_started_stat->findOne(array('id' => (int)$id, 'type' => $type));
+			$result = $this->collection->findOne(array('id' => (int)$id, 'type' => $type));
 			$result = obj2array($result);
 			if(count($result['items']) > 0 ) {
 				$items = array_merge($items, $result['items']);
@@ -202,10 +202,20 @@ class Get_started_model extends CI_Model {
 
 			if( $items == $result['items'] ) return TRUE; //if nothing change after merged, do nothing
 
-			return $this->get_started_stat->update(array('id'=>(int)$id, 'type'=>$type),
+			return $this->update(array('id'=>(int)$id, 'type'=>$type),
 				array('$set' => array( 'items'=> $items ) )
 			);
 		}
+	}
+
+	function update($query, $data) {
+	  try {
+	    $update_result = $this->collection->update($query, $data, array('safe' => TRUE));
+	    return isset($update_result['n']) && ($update_result['n'] > 0);
+	  } catch(MongoCursorException $e){
+	    log_message('error', 'Mongodb error : '. $e);
+	    return FALSE;
+	  }
 	}
 }
 

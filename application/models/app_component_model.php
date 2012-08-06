@@ -40,7 +40,7 @@
  * @author Manassarn M.
  */
 class App_component_model extends CI_Model {
-	
+
 	/**
 	 * Connect to mongodb
 	 * @author Manassarn M.
@@ -48,38 +48,38 @@ class App_component_model extends CI_Model {
 	function __construct(){
 		parent::__construct();
 		$this->load->helper('mongodb');
-		$this->app_component = sh_mongodb_load( array(
+		$this->collection = sh_mongodb_load( array(
 			'collection' => 'app_component'
 		));
 	}
-	
-	/** 
+
+	/**
 	 * Drop app_component collection
 	 * @author Manassarn M.
 	 */
 	function drop_collection(){
-		return $this->app_component->drop();
+		return $this->collection->drop();
 	}
-	
+
 	/**
 	 * Create index for app_component collection
 	 * @author Manassarn M.
 	 */
 	function create_index(){
-		return $this->app_component->deleteIndexes() 
-			&& $this->app_component->ensureIndex(array('campaign_id'=>1), array('unique' => 1));
+		return $this->collection->deleteIndexes()
+			&& $this->collection->ensureIndex(array('campaign_id'=>1), array('unique' => 1));
 	}
-	
+
 	/**
 	 * Count all app_component
 	 * @author Manassarn M.
 	 */
 	function count_all(){
-		return $this->app_component->count();
+		return $this->collection->count();
 	}
-	
+
 	//Invite
-	
+
 	/**
 	 * Add an invite
 	 * @param $invite = array(
@@ -104,9 +104,9 @@ class App_component_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	// function add_invite($invite = array()){
-		// $check_args = arenotempty($invite, array('campaign_id','criteria','message')) 
-			// && arenotempty($invite['criteria'], array('score','maximum','cooldown','acceptance_score')) 
-			// && arenotempty($invite['criteria']['acceptance_score'], array('page','campaign')) 
+		// $check_args = arenotempty($invite, array('campaign_id','criteria','message'))
+			// && arenotempty($invite['criteria'], array('score','maximum','cooldown','acceptance_score'))
+			// && arenotempty($invite['criteria']['acceptance_score'], array('page','campaign'))
 			// && arenotempty($invite['message'], array('title','text','image'));
 		// if(!$check_args){
 			// return FALSE;
@@ -115,7 +115,7 @@ class App_component_model extends CI_Model {
 			// $invite['criteria']['score'] = (int) $invite['criteria']['score'];
 			// $invite['criteria']['maximum'] = (int) $invite['criteria']['maximum'];
 			// $invite['criteria']['cooldown'] = (int) $invite['criteria']['cooldown'];
-			
+
 			// if(!isset($invite['facebook_invite'])){
 				// $invite['facebook_invite'] = FALSE;
 			// }
@@ -123,7 +123,7 @@ class App_component_model extends CI_Model {
 				// $invite['email_invite'] = FALSE;
 			// }
 			// try {
-				// $this->app_component->update(array('campaign_id' => $campaign_id),
+				// $this->collection->update(array('campaign_id' => $campaign_id),
 					// array('$set' => array(
 						// 'invite' => $invite
 						// )
@@ -133,23 +133,23 @@ class App_component_model extends CI_Model {
 			// catch(MongoCursorException $e) {
 				// return FALSE;
 			// }
-			
+
 			// return TRUE;
 		// }
 	// }
-	
+
 	/**
 	 * Check invite data
 	 * @param $invite
 	 * @author Manassarn M.
 	 */
 	function invite_data_check($invite = array()){
-		return arenotempty($invite, array('criteria','message')) 
-			&& arenotempty($invite['criteria'], array('score','maximum','cooldown','acceptance_score')) 
-			&& arenotempty($invite['criteria']['acceptance_score'], array('page','campaign')) 
+		return arenotempty($invite, array('criteria','message'))
+			&& arenotempty($invite['criteria'], array('score','maximum','cooldown','acceptance_score'))
+			&& arenotempty($invite['criteria']['acceptance_score'], array('page','campaign'))
 			&& arenotempty($invite['message'], array('title','text','image'));
 	}
-	
+
 	/**
 	 * Process invite data
 	 * @param $invite
@@ -159,7 +159,7 @@ class App_component_model extends CI_Model {
 		$invite['criteria']['score'] = (int) $invite['criteria']['score'];
 		$invite['criteria']['maximum'] = (int) $invite['criteria']['maximum'];
 		$invite['criteria']['cooldown'] = (int) $invite['criteria']['cooldown'];
-		
+
 		if(!isset($invite['facebook_invite'])){
 			$invite['facebook_invite'] = FALSE;
 		}
@@ -168,20 +168,20 @@ class App_component_model extends CI_Model {
 		}
 		return $invite;
 	}
-	
+
 	/**
 	 * Get invite by campaign_id
 	 * @param $campaign_id
 	 * @author Manassarn M.
 	 */
 	function get_invite_by_campaign_id($campaign_id = NULL){
-		$result = $this->app_component
+		$result = $this->collection
 			->findOne(array('campaign_id' => (int) $campaign_id));
-		
+
 		$result = obj2array($result);
 		return issetor($result['invite'], NULL);
 	}
-	
+
 	/**
 	 * Update invite by campaign_id
 	 * @param $campaign_id
@@ -211,8 +211,8 @@ class App_component_model extends CI_Model {
 		} else {
 			$campaign_id = (int) $campaign_id;
 			$invite = $this->invite_data_process($invite);
-			
-			return $this->app_component->update(array('campaign_id' => $campaign_id),
+
+			return $this->update(array('campaign_id' => $campaign_id),
 				array('$set' => array(
 					'invite' => $invite
 					)
@@ -220,9 +220,9 @@ class App_component_model extends CI_Model {
 			);
 		}
 	}
-	
+
 	//Sharebutton
-	
+
 	/**
 	 * Add an sharebutton
 	 * @param $sharebutton = array(
@@ -244,8 +244,8 @@ class App_component_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	// function add_sharebutton($sharebutton = array()){
-		// $check_args = arenotempty($sharebutton, array('campaign_id','criteria','message')) 
-			// && arenotempty($sharebutton['criteria'], array('score','maximum','cooldown')) 
+		// $check_args = arenotempty($sharebutton, array('campaign_id','criteria','message'))
+			// && arenotempty($sharebutton['criteria'], array('score','maximum','cooldown'))
 			// && arenotempty($sharebutton['message'], array('title','text','caption','image'));
 		// if(!$check_args){
 			// return FALSE;
@@ -260,21 +260,21 @@ class App_component_model extends CI_Model {
 			// if(!isset($sharebutton['twitter_button'])){
 				// $sharebutton['twitter_button'] = FALSE;
 			// }
-			// return $this->app_component->insert($sharebutton);
+			// return $this->collection->insert($sharebutton);
 		// }
 	// }
-	
+
 	/**
 	 * Check sharebutton data
 	 * @param $sharebutton
 	 * @author Manassarn M.
 	 */
 	function sharebutton_data_check($sharebutton = array()){
-		return arenotempty($sharebutton, array('criteria','message')) 
-			&& arenotempty($sharebutton['criteria'], array('score','maximum','cooldown')) 
+		return arenotempty($sharebutton, array('criteria','message'))
+			&& arenotempty($sharebutton['criteria'], array('score','maximum','cooldown'))
 			&& arenotempty($sharebutton['message'], array('title','text','caption','image'));
 	}
-	
+
 	/**
 	 * Process sharebutton data
 	 * @param $sharebutton
@@ -292,20 +292,20 @@ class App_component_model extends CI_Model {
 		}
 		return $sharebutton;
 	}
-	
+
 	/**
 	 * Get sharebutton by campaign_id
 	 * @param $campaign_id
 	 * @author Manassarn M.
 	 */
 	function get_sharebutton_by_campaign_id($campaign_id = NULL){
-		$result = $this->app_component
+		$result = $this->collection
 			->findOne(array('campaign_id' => (int) $campaign_id));
-		
+
 		$result = obj2array($result);
 		return issetor($result['sharebutton'], NULL);
 	}
-	
+
 	/**
 	 * Update sharebutton by campaign_id
 	 * @param $campaign_id
@@ -332,7 +332,7 @@ class App_component_model extends CI_Model {
 		} else {
 			$campaign_id = (int) $campaign_id;
 			$sharebutton = $this->sharebutton_data_process($sharebutton);
-			return $this->app_component->update(array('campaign_id' => $campaign_id),
+			return $this->update(array('campaign_id' => $campaign_id),
 				array('$set' => array(
 					'sharebutton' => $sharebutton
 					)
@@ -340,27 +340,27 @@ class App_component_model extends CI_Model {
 			);
 		}
 	}
-	
+
 	//App component
-	
+
 	/**
 	 * Get app_component by campaign_id
 	 * @param $campaign_id
 	 * @author Manassarn M.
 	 */
 	function get_by_campaign_id($campaign_id = NULL){
-		$result = $this->app_component
+		$result = $this->collection
 			->findOne(array('campaign_id' => (int) $campaign_id));
-		
+
 		$result = obj2array($result);
 		return $result;
 	}
-	
+
 	/**
 	 * Add app_component by campaign_id
 	 * @param $app_component = array(
-	 *		'campaign_id' => [campaign_id] 
-	 *		[component_1] => [component 1 array data] 
+	 *		'campaign_id' => [campaign_id]
+	 *		[component_1] => [component 1 array data]
 	 * 		[component_2] => [component 2 array data]
 	 * 		and so on...
 	 * )
@@ -375,32 +375,42 @@ class App_component_model extends CI_Model {
 			unset($app_component['campaign_id']);
 			foreach($app_component as $component_name => &$info){
 				if(!call_user_func(array($this, $component_name.'_data_check'),$info)){
-					
+
 				} else {
 					$info = call_user_func(array($this, $component_name.'_data_process'), $info);
 				}
 			}
 			unset($info);
 			$app_component['campaign_id'] = $campaign_id;
-			return $this->app_component->insert($app_component);
+			return $this->collection->insert($app_component);
 		}
 	}
-  
+
   /**
-   * delete app_component 
+   * delete app_component
    * @param campaign_id
-   * 
+   *
    * @return result bolean
-   * 
+   *
    * @author Metwara Narksook
    */
   function delete($campaign_id = NULL){
     $check_args = isset($campaign_id);
     if($check_args){
-      return $this->app_component
-                  ->remove(array("campaign_id" => $campaign_id), 
+      return $this->collection
+                  ->remove(array("campaign_id" => $campaign_id),
                   array('$atomic' => TRUE));
     }else{
+      return FALSE;
+    }
+  }
+
+  function update($query, $data) {
+    try {
+      $update_result = $this->collection->update($query, $data, array('safe' => TRUE));
+      return isset($update_result['n']) && ($update_result['n'] > 0);
+    } catch(MongoCursorException $e){
+      log_message('error', 'Mongodb error : '. $e);
       return FALSE;
     }
   }

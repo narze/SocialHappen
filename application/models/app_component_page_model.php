@@ -1,24 +1,24 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Model for app_component_page : classes
- * ex. 
+ * ex.
  *  array(
  *    'page_id' => [page_id] (unique)
  *    'classes' => array(
  *      array(
  *        "name" => "Founding",
  *        "invite_accepted" => 3,
- *        "achievement_id" => "4ec7507b6803fac21600000f" 
+ *        "achievement_id" => "4ec7507b6803fac21600000f"
  *      ),
  *      array(
  *        "name" => "VIP",
  *        "invite_accepted" => 10,
- *        "achievement_id" => "4ec7507b6803fac216000010" 
+ *        "achievement_id" => "4ec7507b6803fac216000010"
  *      ),
  *      array(
  *        "name" => "Prime",
  *        "invite_accepted" => 50,
- *        "achievement_id" => "4ec7507b6803fac216000011" 
+ *        "achievement_id" => "4ec7507b6803fac216000011"
  *      )
  *    ),
  *    'reward' => array(
@@ -28,7 +28,7 @@
  * @author Metwara Narksook
  */
 class App_component_page_model extends CI_Model {
-  
+
   /**
    * Connect to mongodb
    * @author Metwara Narksook
@@ -36,50 +36,50 @@ class App_component_page_model extends CI_Model {
   function __construct(){
     parent::__construct();
     $this->load->helper('mongodb');
-    $this->app_component_page = sh_mongodb_load( array(
+    $this->collection = sh_mongodb_load( array(
       'collection' => 'app_component_page'
     ));
   }
-  
-  /** 
+
+  /**
    * Drop homepage collection
    * @author Metwara Narksook
    */
   function drop_collection(){
-    return $this->app_component_page->drop();
+    return $this->collection->drop();
   }
-  
+
   /**
    * Create index for homepage collection
    * @author Metwara Narksook
    */
   function create_index(){
-    return $this->app_component_page->deleteIndexes() 
-      && $this->app_component_page->ensureIndex(array('page_id'=>1), array('unique' => 1));
+    return $this->collection->deleteIndexes()
+      && $this->collection->ensureIndex(array('page_id'=>1), array('unique' => 1));
   }
-  
+
   /**
    * Count all homepage
    * @author Metwara Narksook
    */
   function count_all(){
-    return $this->app_component_page->count();
+    return $this->collection->count();
   }
-  
+
   /**
    * Get classes by page_id
    * @param $page_id
    * @author Metwara Narksook
    */
   function get_classes_by_page_id($page_id = NULL){
-  
-    $result = $this->app_component_page
+
+    $result = $this->collection
       ->findOne(array('page_id' => (int) $page_id));
-    
+
     $result = obj2array($result);
     return issetor($result['classes'], NULL);
   }
-  
+
   /**
    * Update classes by page_id
    * @param $page_id
@@ -88,17 +88,17 @@ class App_component_page_model extends CI_Model {
    *      array(
    *        "name" => "Founding",
    *        "invite_accepted" => 3,
-   *        "achievement_id" => "4ec7507b6803fac21600000f" 
+   *        "achievement_id" => "4ec7507b6803fac21600000f"
    *      ),
    *      array(
    *        "name" => "VIP",
    *        "invite_accepted" => 10,
-   *        "achievement_id" => "4ec7507b6803fac216000010" 
+   *        "achievement_id" => "4ec7507b6803fac216000010"
    *      ),
    *      array(
    *        "name" => "Prime",
    *        "invite_accepted" => 50,
-   *        "achievement_id" => "4ec7507b6803fac216000011" 
+   *        "achievement_id" => "4ec7507b6803fac216000011"
    *      )
    *    )
    * @author Metwara Narksook
@@ -108,8 +108,8 @@ class App_component_page_model extends CI_Model {
     if(!$check_args){
       return FALSE;
     } else {
-      $page_id = (int) $page_id;      
-      return $this->app_component_page->update(array('page_id' => $page_id),
+      $page_id = (int) $page_id;
+      return $this->update(array('page_id' => $page_id),
         array('$set' => array(
           'classes' => $classes
           )
@@ -117,42 +117,42 @@ class App_component_page_model extends CI_Model {
       );
     }
   }
-  
-  
+
+
   //App component
-  
+
   /**
    * Get app_component_page by page_id
    * @param $page_id
    * @author Metwara Narksook
    */
   function get_by_page_id($page_id = NULL){
-    $result = $this->app_component_page
+    $result = $this->collection
       ->findOne(array('page_id' => (int) $page_id));
-    
+
     $result = obj2array($result);
     return $result;
   }
-  
+
   /**
    * Add app_component_page by page_id
    * @param $app_component_page = array(
-   *    'page_id' => [page_id] 
+   *    'page_id' => [page_id]
    *    'classes' => array(
    *      array(
    *        "name" => "Founding",
    *        "invite_accepted" => 3,
-   *        "achievement_id" => "4ec7507b6803fac21600000f" 
+   *        "achievement_id" => "4ec7507b6803fac21600000f"
    *      ),
    *      array(
    *        "name" => "VIP",
    *        "invite_accepted" => 10,
-   *        "achievement_id" => "4ec7507b6803fac216000010" 
+   *        "achievement_id" => "4ec7507b6803fac216000010"
    *      ),
    *      array(
    *        "name" => "Prime",
    *        "invite_accepted" => 50,
-   *        "achievement_id" => "4ec7507b6803fac216000011" 
+   *        "achievement_id" => "4ec7507b6803fac216000011"
    *      )
    *    )
    * )
@@ -164,30 +164,30 @@ class App_component_page_model extends CI_Model {
       return FALSE;
     } else {
       $app_component_page['page_id'] = (int) $app_component_page['page_id'];
-      return $this->app_component_page->insert($app_component_page);
+      return $this->collection->insert($app_component_page);
     }
   }
-  
+
   /**
-   * delete app_component_page 
+   * delete app_component_page
    * @param page_id
-   * 
+   *
    * @return result bolean
-   * 
+   *
    * @author Metwara Narksook
    */
   function delete($page_id = NULL){
     $check_args = isset($page_id);
     if($check_args){
-      return $this->app_component_page
-                  ->remove(array("page_id" => $page_id), 
+      return $this->collection
+                  ->remove(array("page_id" => $page_id),
                   array('$atomic' => TRUE));
     }else{
       return FALSE;
     }
   }
 
-  /** 
+  /**
    * Update
    * @param $page_id
    * @author Manassarn M.
@@ -196,12 +196,17 @@ class App_component_page_model extends CI_Model {
     if(!$page_id || !$input){
       return FALSE;
     }
-    try {
-      return $this->app_component_page->update(array('page_id'=> (int) $page_id),
-        $input, array('safe'=>TRUE));
 
+    return $this->update(array('page_id'=> (int) $page_id),
+        $input);
+  }
+
+  function update($query, $data) {
+    try {
+      $update_result = $this->collection->update($query, $data, array('safe' => TRUE));
+      return isset($update_result['n']) && ($update_result['n'] > 0);
     } catch(MongoCursorException $e){
-      log_message('error', 'Mongo error : '. $e);
+      log_message('error', 'Mongodb error : '. $e);
       return FALSE;
     }
   }

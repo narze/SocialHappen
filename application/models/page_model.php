@@ -5,7 +5,7 @@ class Page_model extends CI_Model {
 	{
 		parent::__construct();
 	}
-	
+
 	/**
 	 * Get page profile
 	 * @param $page_id
@@ -19,7 +19,7 @@ class Page_model extends CI_Model {
 		$result = $this->db->get_where('page', array('page_id' => $page_id))->row_array();
 		return $this->socialhappen->map_one_v($result, 'page_status');
 	}
-	
+
 	/**
 	 * Get page profile
 	 * @param $facebook_page_id
@@ -33,7 +33,7 @@ class Page_model extends CI_Model {
 		$result = $this->db->get_where('page', array('facebook_page_id' => $facebook_page_id))->row_array();
 		return $this->socialhappen->map_one_v($result, 'page_status');
 	}
-	
+
 	/**
 	 * Get page profile
 	 * @param $campaign_id
@@ -49,7 +49,7 @@ class Page_model extends CI_Model {
 		$result = $this->db->get_where('page', array('campaign_id' => $campaign_id))->row_array();
 		return $this->socialhappen->map_one_v($result, 'page_status');
 	}
-	
+
 	/**
 	 * Get page profile
 	 * @param $app_install_id
@@ -64,8 +64,8 @@ class Page_model extends CI_Model {
 		$result = $this->db->get_where('page', array('app_install_id' => $app_install_id))->row_array();
 		return issetor($result);
 	}
-	
-	/** 
+
+	/**
 	 * Get company pages
 	 * @param $company_id
 	 * @return array
@@ -78,7 +78,7 @@ class Page_model extends CI_Model {
 		$this->db->order_by("order_in_dashboard");
 		return $this->db->get_where('page', array('company_id' => $company_id))->result_array();
 	}
-	
+
 	/**
 	 * Get page id by facebook_page_id
 	 * @param $facebook_page_id
@@ -88,12 +88,12 @@ class Page_model extends CI_Model {
 	function get_page_id_by_facebook_page_id($facebook_page_id =NULL) {
 		if(!$facebook_page_id)
 			return NULL;
-			
+
 		$result = $this -> db ->select('page_id') -> get_where('page', array('facebook_page_id' => $facebook_page_id))-> result_array();
-		
+
 		return issetor($result[0]['page_id']);
 	}
-	
+
 	/**
 	 * Get facebook_page_id by page id
 	 * @param $page_id
@@ -106,7 +106,7 @@ class Page_model extends CI_Model {
 		$result = $this -> db ->select('facebook_page_id') -> get_where('page', array('page_id' => $page_id))-> result_array();
 		return issetor($result[0]['facebook_page_id']);
 	}
-	
+
 	/**
 	 * Adds page
 	 * @param array $data
@@ -121,7 +121,7 @@ class Page_model extends CI_Model {
 		$this -> db -> insert('page', $data);
 		return $this->db->insert_id();
 	}
-	
+
 	/**
 	 * Removes page
 	 * @param $page_id
@@ -132,7 +132,7 @@ class Page_model extends CI_Model {
 		$this->db->delete('page', array('page_id' => $page_id));
 		return $this->db->affected_rows();
 	}
-	
+
 	/**
 	 * Get app pages
 	 * @param $app_install_id
@@ -150,7 +150,7 @@ class Page_model extends CI_Model {
 		$result = $this->db->get_where('installed_apps',array('app_id' => $app_id, 'page.company_id' => $company_id))->result_array();
 		return $this->socialhappen->map_v($result, 'app_install_status');
 	}
-	
+
 	/**
 	 * Get count all apps
 	 * @param array $where
@@ -161,7 +161,7 @@ class Page_model extends CI_Model {
 		$this -> db -> where($where);
 		return $this -> db -> count_all_results('page');
 	}
-	
+
 	/**
 	 * Update page profile
 	 * @param $page_id
@@ -173,7 +173,7 @@ class Page_model extends CI_Model {
 		}
 		return $this->db->update('page', $data, array('page_id' => $page_id));
 	}
-	
+
 	/**
 	 * Count pages
 	 * @param $app_id
@@ -184,7 +184,7 @@ class Page_model extends CI_Model {
 		$this->db->join('installed_apps','page.page_id=installed_apps.page_id');
 		return $this->db->count_all_results('page');
 	}
-	
+
 	/**
 	 * Add page user fields, if exists, just update
 	 * @param $page_id
@@ -204,19 +204,19 @@ class Page_model extends CI_Model {
 
 			if(!issetor($field['name']) || !issetor($field['type']) || !issetor($field['label']) ||
 				!in_array($field['type'], array('text','textarea','checkbox','radio')) ||
-				(in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) || 
+				(in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) ||
 				!$field['items'] || !is_array($field['items']) || in_array('',$field['items'])))
 				) {
 				return FALSE;
 			}
 			if(isset($field['required']) && $field['required']){ //if isset and is not FALSE (true, 1, 'on'), it is true
-				$field['required'] = TRUE;	
+				$field['required'] = TRUE;
 			}
-			
+
 			if(!isset($field['required'])){ //if not specified
-				$field['required'] = FALSE;	
+				$field['required'] = FALSE;
 			}
-			
+
 			if(isset($templates[$field['name']]['verify_message'])){
 				$field['verify_message'] = $templates[$field['name']]['verify_message'];
 			} else {
@@ -227,7 +227,7 @@ class Page_model extends CI_Model {
 					case 'radio' : $field['verify_message'] = 'Please select your '. strtolower($field['label']) . '.'; break;
 				}
 			}
-			
+
 			if(isset($templates[$field['name']]['options']) && is_array($templates[$field['name']]['options'])){
 				$field['options'] = $templates[$field['name']]['options'];
 			} else {
@@ -250,7 +250,7 @@ class Page_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * Get page user fields
 	 * @param $page_id
@@ -263,7 +263,7 @@ class Page_model extends CI_Model {
 		$fields = json_decode($page['page_user_fields'], TRUE);
 		return $fields ? $fields : array();
 	}
-	
+
 	/**
 	 * DEPRECATED
 	 * Update page user fields
@@ -278,7 +278,7 @@ class Page_model extends CI_Model {
 		$page_fields = json_decode($page['page_user_fields'], TRUE);
 		foreach($fields as $key => $field){
 			if(!isset($page_fields[$key]) ||
-				(isset($field['name']) && !$field['name']) || 
+				(isset($field['name']) && !$field['name']) ||
 				(isset($field['label']) && !$field['label']) ||
 				(isset($field['type']) && !in_array($field['type'], array('text','textarea','checkbox','radio'))) ||
 				(isset($field['type']) &&  in_array($field['type'], array('checkbox','radio')) && (!isset($field['items']) ||
@@ -287,7 +287,7 @@ class Page_model extends CI_Model {
 				return FALSE;
 			}
 			if(!isset($field['required'])){ //if not specified
-				$field['required'] = FALSE;	
+				$field['required'] = FALSE;
 			}
 			foreach($field as $field_key => $field_value){
 				$page_fields[$key][$field_key] = $field_value;
@@ -295,7 +295,7 @@ class Page_model extends CI_Model {
 		}
 		return $this->update_page_profile_by_page_id($page_id, array('page_user_fields' => json_encode($page_fields)));
 	}
-	
+
 	/**
 	 * Remove page user fields
 	 * @param $page_id
@@ -318,7 +318,7 @@ class Page_model extends CI_Model {
 		}
 		return $this->update_page_profile_by_page_id($page_id, array('page_user_fields' => json_encode($page_fields)));
 	}
-	
+
 	/**
 	 * Get user field templates
 	 * @author Manassarn M.
@@ -445,7 +445,7 @@ class Page_model extends CI_Model {
 		);
 		return $templates;
 	}
-	
+
 	/**
 	 * Update facebook_tab_url
 	 * @param $page_id
@@ -454,7 +454,7 @@ class Page_model extends CI_Model {
 	function update_facebook_tab_url_by_page_id($page_id = NULL, $facebook_tab_url = NULL){
 		return $this->db->update('page', array('facebook_tab_url' => $facebook_tab_url), array('page_id'=>$page_id));
 	}
-	
+
 	/**
 	 * Update facebook_tab_url
 	 * @param $facebook_page_id

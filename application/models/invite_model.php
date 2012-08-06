@@ -4,30 +4,30 @@
  * @author Wachiraph C.
  */
 class Invite_model extends CI_Model {
-	
+
 	var $invite_record;
-	
+
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @author Wachiraph C.
 	 */
 	function __construct() {
 		parent::__construct();
 		$this->load->helper('mongodb');
-		$this->invite = sh_mongodb_load( array(
+		$this->collection = sh_mongodb_load( array(
 			'collection' => 'invites'
 		));
 	}
-		
+
 	/**
 	 * create index for collection
-	 * 
+	 *
 	 * @author Wachiraph C.
 	 */
 	function create_index(){
-		return $this->invite->deleteIndexes() 
-			&& $this->invite->ensureIndex(array(
+		return $this->collection->deleteIndexes()
+			&& $this->collection->ensureIndex(array(
 										'invite_key' => 1,
 										'campaign_id' => 1,
 										'app_install_id' => 1,
@@ -35,7 +35,7 @@ class Invite_model extends CI_Model {
 										'user_id' => 1
 										));
 	}
-	
+
 	/**
 	 * add new invite
 	 *
@@ -43,25 +43,25 @@ class Invite_model extends CI_Model {
 	function add_invite($campaign_id = NULL, $app_install_id = NULL, $facebook_page_id = NULL
 							, $invite_type = NULL, $user_facebook_id = NULL, $target_facebook_id_list = array()
 							, $invite_key = NULL){
-							
+
 		$check_args = allnotempty(func_get_args()) && !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
 		//echo allnotempty(func_get_args()) .' , '. !$this->get_invite_by_criteria(array('invite_key'=>$invite_key));
 		//print_r(func_get_args());
-		
+
 		if($check_args){
 			$invite_record = array();
-			
+
 			$invite_record['invite_key'] = $invite_key;
 			$invite_record['app_install_id'] = (int) $app_install_id;
 			$invite_record['facebook_page_id'] = (string) $facebook_page_id;
 			$invite_record['campaign_id'] = (int) $campaign_id;
-			$invite_record['user_facebook_id'] =  (string) $user_facebook_id;	
+			$invite_record['user_facebook_id'] =  (string) $user_facebook_id;
 			$invite_record['invite_type'] = $invite_type;
 			$invite_record['campaign_accepted'] = array();
 			$invite_record['page_accepted'] = array();
 			$invite_record['invite_count'] = (int) 0;
 
-										
+
 			if($invite_type == 1 && $target_facebook_id_list){
 				$invite_record['target_facebook_id_list'] =  $target_facebook_id_list;
 			} else if($invite_type == 2){
@@ -69,31 +69,31 @@ class Invite_model extends CI_Model {
 			} else {
 				return FALSE;
 			}
-			
-					
+
+
 			date_default_timezone_set('UTC');
 			$invite_record['timestamp'] = time();
-						
+
 			try	{
-				return $this->invite->insert($invite_record, array('safe' => TRUE));
+				return $this->collection->insert($invite_record, array('safe' => TRUE));
 			} catch(MongoCursorException $e){
 				log_message('error', 'Mongo error : '. $e);
 				return FALSE;
 			}
-			
+
 		}else{
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * update
 	 *
 	 */
 	function update_invite($invite_key = NULL, $data = array()){
-		$data = filter_array($data, array('app_install_id','facebook_page_id','campaign_id','target_facebook_id_list','invite_key','invite_type','invite_count'), TRUE);	
+		$data = filter_array($data, array('app_install_id','facebook_page_id','campaign_id','target_facebook_id_list','invite_key','invite_type','invite_count'), TRUE);
 		$check_args = $invite_key && sizeof($data) > 0;
-		
+
 		if($check_args){
 
 			/**
@@ -105,33 +105,33 @@ class Invite_model extends CI_Model {
 			if(isset($data['campaign_id'])){
 				$data['campaign_id'] = (int) $data['campaign_id'];
 			}
-			
+
 			/**
 			 * info fields
 			 */
 			if(isset($data['invite_count'])){
 				$data['invite_count'] = (int) $data['invite_count'];
 			}
-			
-			return $this->invite->update(array('invite_key' => $invite_key), array('$set' => $data));
-			
+
+			return $this->update(array('invite_key' => $invite_key), array('$set' => $data));
+
 		}else{
 			return FALSE;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Get invite detail
-	 * 
+	 *
 	 */
 	function get_invite_by_criteria($criteria = array()){
 		$check_args = sizeof($criteria) > 0;
-		
+
 		if($check_args){
-			$res = $this->invite	->find($criteria)
+			$res = $this->collection	->find($criteria)
 									->limit(1);
-							
+
 			$result = array();
 			foreach ($res as $stat) {
 				$result[] = $stat;
@@ -141,7 +141,7 @@ class Invite_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * List invites
 	 */
@@ -155,24 +155,24 @@ class Invite_model extends CI_Model {
 		if(isset($criteria['invite_count'])){
 			$criteria['invite_count'] = (int) $criteria['invite_count'];
 		}
-		
-		$res = $this->invite->find($criteria);
-		
+
+		$res = $this->collection->find($criteria);
+
 		$result = array();
 		foreach ($res as $stat) {
 			$result[] = $stat;
 		}
 		return $result;
 	}
-	
+
 	/**
 	 * drop entire collection
 	 * you will lost all achievement_info data
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function drop_collection(){
-		return $this->invite->drop();
+		return $this->collection->drop();
 	}
 
 	function _push_into_accepted($mode = NULL, $invite_key = NULL, $user_facebook_id = NULL){
@@ -185,7 +185,7 @@ class Invite_model extends CI_Model {
 		} else if(in_array($user_facebook_id, $invite[$mode . '_accepted'])){ //Already accepted
 			return FALSE;
 		} else {
-			return $this->invite->update(array('invite_key' => $invite_key), array('$push' => array($mode . '_accepted' => (string) $user_facebook_id)));
+			return $this->update(array('invite_key' => $invite_key), array('$push' => array($mode . '_accepted' => (string) $user_facebook_id)));
 		}
 	}
 
@@ -218,11 +218,7 @@ class Invite_model extends CI_Model {
 		if(!$invite_key){
 			return FALSE;
 		} else {
-			if($result = $this->invite->findOne(array('invite_key' => $invite_key))){
-		      	return $this->invite->update(array('invite_key' => $invite_key), array('$inc' => array('invite_count' => 1)), array('fsync' => TRUE));
-		    } else {
-		    	return FALSE;	
-		    }
+    	return $this->update(array('invite_key' => $invite_key), array('$inc' => array('invite_count' => 1)));
 		}
 	}
 
@@ -236,7 +232,7 @@ class Invite_model extends CI_Model {
 		if(!allnotempty(func_get_args())){
 			return FALSE;
 		}
-		if(!$invite = $this->get_invite_by_criteria(array('invite_key' => $invite_key))){ 
+		if(!$invite = $this->get_invite_by_criteria(array('invite_key' => $invite_key))){
 			//Invalid invite : cannot push into list
 			return FALSE;
 		} else {
@@ -244,11 +240,11 @@ class Invite_model extends CI_Model {
 				$user_facebook_id = (string) $user_facebook_id;
 			}
 			unset($user_facebook_id);
-			return $this->invite->update(array('invite_key' => $invite_key), array('$addToSet' => array('target_facebook_id_list' => array('$each' => $user_facebook_id_array))));
+			return $this->update(array('invite_key' => $invite_key), array('$addToSet' => array('target_facebook_id_list' => array('$each' => $user_facebook_id_array))));
 		}
 	}
 
-	/** 
+	/**
 	 * Get invite by facebook_page_id, having user_facebook_id in target_facebook_id_list
 	 * @param $facebook_page_id
 	 * @param $user_facebook_id
@@ -262,7 +258,7 @@ class Invite_model extends CI_Model {
 			'facebook_page_id' => (string) $facebook_page_id,
 			'target_facebook_id_list' => (string) $user_facebook_id
 			);
-		$cursor = $this->invite->find($criteria);
+		$cursor = $this->collection->find($criteria);
 		$result = array();
 		foreach($cursor as $value){
 			$result[] = $value;
@@ -283,31 +279,23 @@ class Invite_model extends CI_Model {
 		}
 		try {
 			//
-			return $this->invite->update(array('invite_key' => array('$in' => $invite_key_array)), array('$addToSet' => array('page_accepted' => (string) $user_facebook_id)), array('multiple' => TRUE, 'safe' => TRUE));
+			$update_result = $this->collection->update(array('invite_key' => array('$in' => $invite_key_array)), array('$addToSet' => array('page_accepted' => (string) $user_facebook_id)), array('multiple' => TRUE, 'safe' => TRUE));
+			return isset($update_result['n']) && ($update_result['n'] > 0);
 		} catch(MongoCursorException $e){
 			log_message('error', 'Mongo error : '. $e);
 			return FALSE;
 		}
 	}
 
-	// function find_nth_invite($criteria = NULL, $nth = 1){
-	// 	$check_args = sizeof($criteria) > 0;
-	// 	if(isset($criteria['user_facebook_id'])){
-	// 		$criteria['user_facebook_id'] = (string) $criteria['user_facebook_id'];
-	// 	}
-	// 	if($check_args){
-	// 		$res = $this->invite->find($criteria)->sort(array('timestamp' => -1))->limit($nth);
-							
-	// 		$result = array();
-	// 		foreach ($res as $stat) {
-	// 			$result[] = $stat;
-	// 		}
-	// 		$nth_or_last = count($result);
-	// 		return $nth_or_last ? $result[$nth_or_last-1] : NULL;
-	// 	}else{
-	// 		return FALSE;
-	// 	}
-	// }
+	function update($query, $data) {
+	  try {
+	    $update_result = $this->collection->update($query, $data, array('safe' => TRUE));
+	    return isset($update_result['n']) && ($update_result['n'] > 0);
+	  } catch(MongoCursorException $e){
+	    log_message('error', 'Mongodb error : '. $e);
+	    return FALSE;
+	  }
+	}
 }
 
 /* End of file invite_model.php */

@@ -13,10 +13,10 @@ class User_mongo_model extends CI_Model {
 
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
-		return $this->collection->deleteIndexes() 
+		return $this->collection->deleteIndexes()
 			&& $this->collection->ensureIndex(array('user_id' => 1), array('unique' => 1));
 	}
-        
+
 	function add($data)	{
 		$data = array_cast_int($data, $this->int_values);
 		try	{
@@ -27,7 +27,7 @@ class User_mongo_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
+
 	function get($query){
 		$query = array_cast_int($query, $this->int_values);
 		$result = $this->collection->find($query);
@@ -39,16 +39,16 @@ class User_mongo_model extends CI_Model {
 		$result = $this->collection->findOne($query);
 		return obj2array($result);
 	}
-		
-	function update($query, $data)
-	{
+
+	function update($query, $data) {
 		$query = array_cast_int($query, $this->int_values);
-		try	{
-			return $this->collection->update($query, $data, array('safe' => TRUE));
-		} catch(MongoCursorException $e){
-			log_message('error', 'Mongodb error : '. $e);
-			return FALSE;
-		}
+	  try {
+	    $update_result = $this->collection->update($query, $data, array('safe' => TRUE));
+	    return isset($update_result['n']) && ($update_result['n'] > 0);
+	  } catch(MongoCursorException $e){
+	    log_message('error', 'Mongodb error : '. $e);
+	    return FALSE;
+	  }
 	}
 
 	function delete($query){

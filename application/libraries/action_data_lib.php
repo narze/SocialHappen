@@ -43,7 +43,7 @@ class Action_data_lib {
 		if(!$action_name) {
 			return FALSE;
 		}
-		
+
 		//TODO : action data validation (different in each action id)
 
 		return $this->_add_action_data($action_id, $action_data);
@@ -60,14 +60,14 @@ class Action_data_lib {
 			'data' => $action_data,
 		);
 		if($action_data_id = $this->CI->action_data_model->add($add_record)) {
-			
+
 			//qr short url bitly
 			if($action_id == 201){
 				$qr_action_url = $this->get_action_url($action_data_id);
 
 				$this->CI->load->library('bitly_lib');
 				try{
-					$bitly_response = $this->CI->bitly_lib->bitly_v3_shorten($qr_action_url);  
+					$bitly_response = $this->CI->bitly_lib->bitly_v3_shorten($qr_action_url);
 					$short_qr_action_url = $bitly_response['url'];
 				}catch(Exception $ex){
 					$short_qr_action_url = '';
@@ -77,7 +77,7 @@ class Action_data_lib {
 				$add_record['short_url'] = $short_qr_action_url;
 
 				$this->CI->action_data_model->update(array('_id' => new MongoId($action_data_id)), $add_record);
-	        
+
 			}
 
 			if($update_result = $this->CI->action_data_model->update(array(
@@ -101,7 +101,7 @@ class Action_data_lib {
 	function get_action_data($action_data_id) {
 		return $this->CI->action_data_model->getOne(array('_id' => new MongoId($action_data_id)));
 	}
-  
+
   function get_action_data_by_code($action_data_code) {
     if(!$action_data_code){
       return NULL;
@@ -144,8 +144,8 @@ class Action_data_lib {
 		$data = array_cast_int($data);
 		return $this->CI->action_data_model->update(array('_id' => new MongoId($action_data_id)), $data);
 	}
-  
-  
+
+
   /**
    * @param qr_done_message html
    * @param todo_message html
@@ -164,15 +164,15 @@ class Action_data_lib {
 		);
 		return $this->_add_action_data($action_id, $qr_data);
 	}
-	
+
   function get_qr_url($code = NULL){
     return $code ? base_url() . 'actions/qr/?code=' . $code : NULL;
   }
-  
+
   function get_proceed_qr_url($code = NULL){
     return $code ? base_url() . 'actions/qr/go/' . $code : NULL;
   }
-  
+
 	function add_feedback_action_data($data_from_form) {
 		$action_id = $this->get_platform_action('feedback');
 		$feedback_data = array(
@@ -212,7 +212,7 @@ class Action_data_lib {
 		}
 			return NULL;
 	}
-	
+
 	function get_form($action_data_id) {
 		if($action_data = $this->get_action_data($action_data_id)) {
 
@@ -258,6 +258,6 @@ class Action_data_lib {
 		} else {
 			return NULL;
 		}
-		
+
 	}
 }

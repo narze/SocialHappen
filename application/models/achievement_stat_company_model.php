@@ -16,7 +16,7 @@ class Achievement_stat_company_model extends CI_Model {
   function __construct() {
     parent::__construct();
     $this->load->helper('mongodb');
-    $this->achievement_stat_company = sh_mongodb_load( array(
+    $this->collection = sh_mongodb_load( array(
       'collection' => 'achievement_stat_company'
     ));
   }
@@ -27,8 +27,8 @@ class Achievement_stat_company_model extends CI_Model {
    * @author Metwara Narksook
    */
   function create_index(){
-    return $this->achievement_stat_company->deleteIndexes()
-      && $this->achievement_stat_company->ensureIndex(array('company_id' => 1,
+    return $this->collection->deleteIndexes()
+      && $this->collection->ensureIndex(array('company_id' => 1,
                     'user_id' => 1));
   }
 
@@ -82,8 +82,8 @@ class Achievement_stat_company_model extends CI_Model {
 
 
       if($do_increment) {
-        $result = $this->achievement_stat_company->update($criteria,
-          array('$inc' => $inc), TRUE);
+        $result = $this->upsert($criteria,
+          array('$inc' => $inc));
       }
       return $result;
     } else {
@@ -107,8 +107,8 @@ class Achievement_stat_company_model extends CI_Model {
     if($check_args){
       $criteria = array('company_id' => (int)$company_id, 'user_id' => (int)$user_id);
 
-      $result = $this->achievement_stat_company->update($criteria,
-        array('$set' => $info), TRUE);
+      $result = $this->upsert($criteria,
+        array('$set' => $info));
 
       return $result;
     } else {
@@ -132,7 +132,7 @@ class Achievement_stat_company_model extends CI_Model {
     if($check_args){
 
 
-      $res = $this->achievement_stat_company->find(array('company_id' => (int)$company_id,
+      $res = $this->collection->find(array('company_id' => (int)$company_id,
                                                  'user_id' => (int)$user_id))
                                     ->limit(1);
       $result = array();
@@ -154,7 +154,7 @@ class Achievement_stat_company_model extends CI_Model {
    *
    */
   function list_stat($criteria = array()){
-    $res = $this->achievement_stat_company->find($criteria);
+    $res = $this->collection->find($criteria);
 
     $result = array();
     foreach ($res as $stat) {
@@ -170,7 +170,17 @@ class Achievement_stat_company_model extends CI_Model {
    * @author Metwara Narksook
    */
   function drop_collection(){
-    return $this->achievement_stat_company->drop();
+    return $this->collection->drop();
+  }
+
+  function upsert($query, $data) {
+    try {
+      $update_result = $this->collection->update($query, $data, array('safe' => TRUE, 'upsert' => TRUE));
+      return isset($update_result['n']) && ($update_result['n'] > 0);
+    } catch(MongoCursorException $e){
+      log_message('error', 'Mongodb error : '. $e);
+      return FALSE;
+    }
   }
 }
 

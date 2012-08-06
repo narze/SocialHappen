@@ -15,13 +15,12 @@ Class Coupon_lib{
 	function create_coupon($data){
 
 		if($id = $this->CI->coupon_model->add_coupon($data)) {
-	      $result = $this->CI->coupon_model->update(array(
+	      if($result = $this->CI->coupon_model->update(array(
 	        '_id' => new MongoId($id)
 	        ), array(
 	          '$set' => array(
 	          					'hash' => strrev(sha1($id))
-	      )));
-	      if($result['updatedExisting']) {
+	      )))) {
 	        return $id;
 	      }
 	    }

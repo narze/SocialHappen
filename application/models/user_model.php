@@ -21,7 +21,7 @@ class User_model extends CI_Model {
 
 	/**
 	 * DEPRECATED
-	 * Get user id by user_facebook_id 
+	 * Get user id by user_facebook_id
 	 * @param $user_facebook_id
 	 * @author Wachiraph C.
 	 */
@@ -29,7 +29,7 @@ class User_model extends CI_Model {
 		$result = $this -> db ->select('user_id') -> get_where('user', array('user_facebook_id' => $user_facebook_id))-> result_array();
 		return issetor($result[0]);
 	}
-	
+
 	/**
 	 * Get user id
 	 * @param $user_facebook_id
@@ -83,7 +83,7 @@ class User_model extends CI_Model {
 		$this -> db -> insert('user', $data);
 		return $this->db->insert_id();
 	}
-	
+
 	/**
 	 * Removes user
 	 * @param $user_id
@@ -94,7 +94,7 @@ class User_model extends CI_Model {
 		$this->db->delete('user', array('user_id' => $user_id));
 		return $this->db->affected_rows() == 1;
 	}
-	
+
 	/**
 	 * Get user profile
 	 * @param $user_facebook_id
@@ -105,7 +105,7 @@ class User_model extends CI_Model {
 		unset($user['user_password']);
 		return $this->socialhappen->map_one_v($user, 'user_gender');
 	}
-	
+
 	/**
 	 * Get all user profile
 	 * @param $limit
@@ -119,7 +119,7 @@ class User_model extends CI_Model {
 		$result = $this->db->get_where('user',array())->result_array();
 		return $this->socialhappen->map_v($result, 'user_gender');
 	}
-	
+
 
 	/**
 	 * Try to insert new user by user's facebook id
@@ -149,7 +149,7 @@ class User_model extends CI_Model {
 		$count = $this -> db -> count_all_results();
 		return ($count != 0);
 	}
-	
+
 	/**
 	 * Count users
 	 * @author Manassarn M.
@@ -179,7 +179,7 @@ class User_model extends CI_Model {
 		$this -> db -> join('user_campaigns', 'user_campaigns.user_id=user.user_id');
 		return $this->db->count_all_results('user');
 	}
-	
+
 	/**
 	 * Update user
 	 * @param $user_id
@@ -188,7 +188,7 @@ class User_model extends CI_Model {
 	function update_user($user_id = NULL, $data = array()){
 		return $this->db->update('user', $data, array('user_id' => $user_id));
 	}
-	
+
 	/**
 	 * Update user last seen
 	 * @param $user_id

@@ -114,7 +114,7 @@ class Reward_lib_test extends CI_Controller {
     $user_id = 2;
     $result = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id);
     $this->unit->run($result['success'], FALSE, "\$result", $result);
-    $this->unit->run($result['data'], 'Insufficient score', "\$result", $result);
+    $this->unit->run($result['data'], 'You have insufficient company score', "\$result", $result);
 
     //Check latest audit
     $this->load->library('audit_lib');
