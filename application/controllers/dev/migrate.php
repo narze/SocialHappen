@@ -17,7 +17,7 @@ class Migrate extends CI_Controller {
 		}
 		$this->load->library('migrate_lib');
 	}
-	
+
 	function index(){
 		$this->migrate_lib->main();
 	}

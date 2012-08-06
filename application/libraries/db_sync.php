@@ -10,7 +10,7 @@ class DB_Sync {
   public function __construct(){
     if (defined('ENVIRONMENT'))
     {
-      if (!(ENVIRONMENT === 'development' || ENVIRONMENT === 'testing' ))
+      if (!(ENVIRONMENT === 'development'))
       {
         redirect();
       }

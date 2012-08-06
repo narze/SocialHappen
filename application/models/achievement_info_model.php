@@ -4,48 +4,48 @@
  * @author Metwara Narksook
  */
 class Achievement_info_model extends CI_Model {
-	
+
 	var $achievement_info;
 	var $achievement_id;
 	var $app_id;
-	
+
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function __construct() {
 		parent::__construct();
 		$this->load->helper('mongodb');
-		$this->achievement_info = sh_mongodb_load( array(
+		$this->collection = sh_mongodb_load( array(
 			'collection' => 'achievement_info'
 		));
 	}
-		
+
 	/**
 	 * create index for collection
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		return $this->achievement_info->deleteIndexes() 
-			&& $this->achievement_info->ensureIndex(array(
+		return $this->collection->deleteIndexes()
+			&& $this->collection->ensureIndex(array(
 										'app_id' => 1,
 										'app_install_id' => 1,
 										'info.page_id' => 1));
 	}
-	
-	
+
+
 	/**
 	 * add new achievement info
-	 * 
+	 *
 	 * @param app_id int app_id*
 	 * @param app_install_id int app_install_id [optional]
-	 * @param info array of info contains 
+	 * @param info array of info contains
 	 * 				['name',*
 	 * 				 'description', *
 	 * 				 'criteria_string' = >array('criteria1'...), *
-	 * 				 'page_id', 
+	 * 				 'page_id',
 	 * 				 'campaign_id',
 	 * 				 'hidden']
 	 * @param criteria array of criteria and amount
@@ -62,12 +62,12 @@ class Achievement_info_model extends CI_Model {
 							 && isset($criteria) && count($criteria) > 0;
 		if($check_args){
 			$achievement_info = array();
-			
+
 			/**
 			 * keys
 			 */
 			$achievement_info['app_id'] = (int)$app_id;
-			
+
 			if($app_install_id){
 				$achievement_info['app_install_id'] = (int)$app_install_id;
 			}
@@ -87,35 +87,35 @@ class Achievement_info_model extends CI_Model {
       $info_to_add['enable'] = isset($info['enable']) ? $info['enable'] : TRUE;
 			$info_to_add['criteria_string'] = $info['criteria_string'];
 			$info_to_add['badge_image'] = isset($info['badge_image']) ? $info['badge_image'] : base_url().'assets/images/badges/default.png';
-      
+
       if(isset($info['class'])){
         $info_to_add['class'] = $info['class'];
       }
-      
+
 			$achievement_info['info'] = $info_to_add;
-			
+
 			$achievement_info['criteria'] = $criteria;
-			
-			$result = $this->achievement_info->insert($achievement_info);
-      
+
+			$result = $this->collection->insert($achievement_info);
+
       return $result ? $achievement_info['_id'] : FALSE;
-			
+
 		}else{
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * set exists achievement info
-	 * 
+	 *
 	 * @param achievement_id string achievement_id*
 	 * @param app_id int app_id*
 	 * @param app_install_id int app_install_id [optional]
-	 * @param info array of info contains 
+	 * @param info array of info contains
 	 * 				['name',
-	 * 				 'description', 
-	 * 				 'criteria_string' = >array('criteria1'...), 
-	 * 				 'page_id', 
+	 * 				 'description',
+	 * 				 'criteria_string' = >array('criteria1'...),
+	 * 				 'page_id',
 	 * 				 'campaign_id',
 	 * 				 'hidden']
 	 * @param criteria array of criteria and amount
@@ -123,9 +123,8 @@ class Achievement_info_model extends CI_Model {
 	 * 				ex.	array('action.5.page.count' => 20,
 	 * 									'action.10.count' => 23)
 	 */
-	function set($achievement_id = NULL, $app_id = NULL, $app_install_id = NULL, $info = array()
-							, $criteria = array()){
-		$check_args = isset($achievement_id) && isset($app_id) 
+	function set($achievement_id = NULL, $app_id = NULL, $app_install_id = NULL, $info = array(), $criteria = array()){
+		$check_args = isset($achievement_id) && isset($app_id)
 							 && isset($info)
 							 && isset($info['name']) && isset($info['description'])
 							 && isset($info['criteria_string'])
@@ -133,16 +132,16 @@ class Achievement_info_model extends CI_Model {
 							 && isset($criteria) && count($criteria) > 0;
 		if($check_args){
 			$achievement_info = array();
-			
+
 			/**
 			 * keys
 			 */
 			$achievement_info['app_id'] = (int)$app_id;
-			
+
 			if($app_install_id){
 				$achievement_info['app_install_id'] = (int)$app_install_id;
 			}
-			
+
 			if(isset($info['page_id'])){
 				$achievement_info['page_id'] = (int)$info['page_id'];
 			}
@@ -159,41 +158,41 @@ class Achievement_info_model extends CI_Model {
       $info_to_add['enable'] = isset($info['enable']) ? $info['enable'] : TRUE;
 			$info_to_add['criteria_string'] = $info['criteria_string'];
 			$info_to_add['badge_image'] = isset($info['badge_image']) ? $info['badge_image'] : base_url().'assets/images/badges/default.png';
-			
+
 			if(isset($info['class'])){
         $info_to_add['class'] = $info['class'];
       }
-			
+
 			$achievement_info['info'] = $info_to_add;
-			
+
 			$achievement_info['criteria'] = $criteria;
-			
-			return $this->achievement_info->update(array('_id' => new MongoId($achievement_id)),
+
+			return $this->collection->update(array('_id' => new MongoId($achievement_id)),
 				$achievement_info);
-			
+
 		}else{
 			return FALSE;
 		}
 	}
-	
-	
+
+
 	/**
-	 * get achievement info
+	 * get achievement info by id
 	 * @param achievement_id
-	 * 
+	 *
 	 * @return result array
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
-	function get($achievement_id = NULL){
+	function get_by_id($achievement_id = NULL){
 		$check_args = isset($achievement_id);
 		if($check_args){
-			
-			
-			$res = $this->achievement_info
+
+
+			$res = $this->collection
 									->find(array('_id' => new MongoId($achievement_id)))
 									->limit(1);
-									
+
 			$result = array();
 			foreach ($res as $stat) {
 				$result[] = $stat;
@@ -203,24 +202,24 @@ class Achievement_info_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * list achievement info
-	 * 
+	 *
 	 * @param criteria array of criteria
 	 * @param limit int number of results
 	 * @param offset int offset number
-	 * 
+	 *
 	 * @return result array
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 * @author Weerapat P. - Add limit and offset
 	 */
 	function list_info($criteria = array(), $limit = 0, $offset = 0){
-		
-		if($limit) $res = $this->achievement_info->find($criteria)->skip($offset)->limit($limit);
-		else $res = $this->achievement_info->find($criteria);
-		
+
+		if($limit) $res = $this->collection->find($criteria)->skip($offset)->limit($limit);
+		else $res = $this->collection->find($criteria);
+
 		$result = array();
 		foreach ($res as $stat) {
 			$result[] = $stat;
@@ -230,48 +229,53 @@ class Achievement_info_model extends CI_Model {
 
 	/**
 	 * Count achievement info
-	 * 
+	 *
 	 * @param criteria array of criteria
-	 * 
+	 *
 	 * @author Weerapat P.
 	 */
 	function count($criteria = array()){
 		if($criteria) {
-			return $this->achievement_info->find($criteria)->count();	
+			return $this->collection->find($criteria)->count();
 		} else {
-			return $this->achievement_info->count();
+			return $this->collection->count();
 		}
 	}
-	
+
 	/**
 	 * delete achievement info
 	 * @param achievement_id
-	 * 
+	 *
 	 * @return result bolean
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function delete($achievement_id = NULL){
 		$check_args = isset($achievement_id);
 		if($check_args){
-			
-			
-			return $this->achievement_info
-									->remove(array("_id" => new MongoId($achievement_id)), 
+
+
+			return $this->collection
+									->remove(array("_id" => new MongoId($achievement_id)),
 									array('$atomic' => TRUE));
 		}else{
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * drop entire collection
 	 * you will lost all achievement_info data
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function drop_collection(){
-		return $this->achievement_info->drop();
+		return $this->collection->drop();
+	}
+
+	function getOne($query){
+		$result = $this->collection->findOne($query);
+		return obj2array($result);
 	}
 }
 

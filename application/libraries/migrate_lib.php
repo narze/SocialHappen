@@ -9,7 +9,7 @@ class Migrate_lib {
 		$this->CI =& get_instance();
 		$this->CI->load->library('migration');
 	}
-	
+
 	function main(){
 		$this->CI->config->load('migration');
 		if($this->CI->db->table_exists('migrations')){
@@ -19,7 +19,7 @@ class Migrate_lib {
 			$current_version = 0;
 		}
 		echo 'Current version : '.$current_version;
-		
+
 	}
 
 	function latest($backup = TRUE){
@@ -52,7 +52,7 @@ class Migrate_lib {
 
 		if (!$result = $this->CI->migration->version($target_version)) {
 			show_error($this->CI->migration->error_string());
-		} else { 
+		} else {
 			if($result === TRUE){
 				echo 'No version to upgrade<br />';
 				return FALSE;
@@ -77,17 +77,33 @@ class Migrate_lib {
 		// Backup your entire database and assign it to a variable
 		$this->CI->load->dbutil();
 		$backup = $this->CI->dbutil->backup(array(
-			'format' => 'txt')); 
+			'format' => 'txt'));
 
 		// Load the file helper and write the file to your server
 		$this->CI->load->helper('file');
 		if(write_file(APPPATH.'backup/backup_'.date('Ymd_H-i-s').
 			'_v['.$current_version.'-'.$target_version.'].sql', $backup)){
-			return TRUE;
 		} else {
 			echo 'Please make backup folder writable';
 			return FALSE;
 		}
+
+		//Backup mongodb
+		$output = array();
+		$ret = null;
+		$timestamp = date('Ymd_His');
+		$this->CI->load->config('mongo_db');
+		$u = $this->CI->config->item('mongo_user');
+		$p = $this->CI->config->item('mongo_pass');
+		$port = $this->CI->config->item('mongo_port');
+		exec("cd ". FCPATH. "shdumper && sh mongodump.sh {$u} {$p} {$port} {$timestamp}", $output, $ret);
+		$backup_success = file_exists(FCPATH . "application/backup/sh_mongo-{$timestamp}");
+
+		if($backup_success) {
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 
 	/**
@@ -98,7 +114,7 @@ class Migrate_lib {
 		// Load all *_*.php files in the migrations path
 		$files = glob(rtrim($this->CI->config->item('migration_path'), '/').'/' . '*_*.php');
 		$file_count = count($files);
-		
+
 		for ($i = 0; $i < $file_count; $i++)
 		{
 			// Mark wrongly formatted files as false for later filtering
@@ -108,7 +124,7 @@ class Migrate_lib {
 				$files[$i] = FALSE;
 			}
 		}
-		
+
 		sort($files);
 
 		return $files;

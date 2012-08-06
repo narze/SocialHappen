@@ -142,7 +142,7 @@ class Achievement_lib
       return FALSE;
     }else{
       $this->CI->load->model('achievement_info_model','achievement_info');
-      return $this->CI->achievement_info->get($achievement_id);
+      return $this->CI->achievement_info->get_by_id($achievement_id);
     }
   }
 
