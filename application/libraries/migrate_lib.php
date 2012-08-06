@@ -83,27 +83,11 @@ class Migrate_lib {
 		$this->CI->load->helper('file');
 		if(write_file(APPPATH.'backup/backup_'.date('Ymd_H-i-s').
 			'_v['.$current_version.'-'.$target_version.'].sql', $backup)){
+			return TRUE;
 		} else {
 			echo 'Please make backup folder writable';
 			return FALSE;
 		}
-
-		//Backup mongodb
-		$output = array();
-		$ret = null;
-		$timestamp = date('Ymd_His');
-		$this->CI->load->config('mongo_db');
-		$u = $this->CI->config->item('mongo_user');
-		$p = $this->CI->config->item('mongo_pass');
-		$port = $this->CI->config->item('mongo_port');
-		exec("cd ". FCPATH. "shdumper && sh mongodump.sh {$u} {$p} {$port} {$timestamp}", $output, $ret);
-		$backup_success = file_exists(FCPATH . "application/backup/sh_mongo-{$timestamp}");
-
-		if($backup_success) {
-			return TRUE;
-		}
-
-		return FALSE;
 	}
 
 	/**
