@@ -98,6 +98,16 @@ class Audit_model extends CI_Model {
 		return obj2array($result);
 	}
 
+	function update($query, $data)
+	{
+		try	{
+			return $this->collection->update($query, $data, array('safe' => TRUE));
+		} catch(MongoCursorException $e){
+			log_message('error', 'Mongodb error : '. $e);
+			return FALSE;
+		}
+	}
+
 	/**
 	 * list audit data by input criteria to query
 	 *
