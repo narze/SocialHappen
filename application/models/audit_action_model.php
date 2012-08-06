@@ -212,6 +212,16 @@ class Audit_action_model extends CI_Model {
 	    return FALSE;
 	  }
 	}
+
+	function upsert($query, $data) {
+	  try {
+	    $update_result = $this->collection->update($query, $data, array('safe' => TRUE, 'upsert' => TRUE));
+	    return isset($update_result['n']) && ($update_result['n'] > 0);
+	  } catch(MongoCursorException $e){
+	    log_message('error', 'Mongodb error : '. $e);
+	    return FALSE;
+	  }
+	}
 }
 
 /* End of file audit_action_model.php */

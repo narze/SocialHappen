@@ -835,23 +835,19 @@ class Migration_Mongodb_reset extends CI_Migration {
         'action_id' => $new_audit_action['action_id']
       );
 
-      //get existing audit_action
-      if($old_audit_action = $this->audit_action_model->getOne($query)) {
-        //update
-        $update_data = array(
-          '$set' => $new_audit_action
-        );
+      $update_data = array(
+        '$set' => $new_audit_action
+      );
 
-        echo 'Updating audit_action ' . $old_audit_action['description'];
-        if($this->audit_action_model->update($query, $update_data)) {
-          $success_count++;
-          echo ' Success!';
-        } else {
-          echo ' Failed!';
-        }
-
-        echo '<br />';
+      echo 'Updating audit_action ' . $new_audit_action['description'];
+      if($this->audit_action_model->upsert($query, $update_data)) {
+        $success_count++;
+        echo ' Success!';
+      } else {
+        echo ' Failed!';
       }
+
+      echo '<br />';
     }
     echo 'Updated '.$success_count.'/'.count(array_merge($platform_audit_actions, $audit_actions)).' audit_actions<br />';
 		echo 'Upgraded to version 6<br />';
