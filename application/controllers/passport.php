@@ -12,17 +12,11 @@ class Passport extends CI_Controller {
    * Index page (for debugging purpose)
    */
   function index($user_id = NULL) {
-
-    $logged_in = $this->socialhappen->is_logged_in();
-
-    if (!$user_id && $logged_in){ // see current user's passport
-      $user = $this->socialhappen->get_user();
-      redirect('assets/passport#/profile/' . $user['user_id']);
-    } else if($user_id){ // see specific passport
-      redirect('assets/passport#/profile/' . $user_id);
-    } else {
-      redirect('login?next=passport');
+    if($user_id || ($user_id = $this->socialhappen->get_user_id())) {
+      return redirect('assets/passport/#/profile/'.$user_id);
     }
+
+    redirect('login?next=passport');
   }
 }
 
