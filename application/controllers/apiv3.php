@@ -556,8 +556,8 @@ class Apiv3 extends CI_Controller {
     $this->load->model('user_model');
     $challengers = $this->challenge_lib->get_challengers_by_challenge_hash($challenge_hash);
 
-    $challengers['in_progress_count'] = count($challengers['in_progress']);
-    $challengers['completed_count'] = count($challengers['completed']);
+    $in_progress_count = count($challengers['in_progress']);
+    $completed_count = count($challengers['completed']);
     foreach($challengers['in_progress'] as $key => &$challenger_in_progress){
       if(($key >= $offset + $limit) || ($key < $offset)) {
         unset($challengers['in_progress'][$key]);
@@ -571,7 +571,9 @@ class Apiv3 extends CI_Controller {
       $challenger_completed = $this->user_model->get_user_profile_by_user_id($challenger_completed['user_id']);
     }
     $challengers['in_progress'] = array_values($challengers['in_progress']);
+    $challengers['more_in_progress'] = $limit + $offset >= $in_progress_count;
     $challengers['completed'] = array_values($challengers['completed']);
+    $challengers['more_completed'] = $limit + $offset >= $completed_count;
     echo json_encode($challengers);
   }
 

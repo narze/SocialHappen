@@ -160,7 +160,7 @@ define([
             _.each(resp.in_progress, function(user) {
               $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
             });
-            if(resp.in_progress.length < limit) {
+            if(resp.more_in_progress) {
               $('.load-more-in-progress', self.el).hide();
             } else {
               $('.load-more-in-progress', self.el).show().click(loadMoreInProgress);
@@ -174,7 +174,7 @@ define([
             _.each(resp.completed, function(user) {
               $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
             });
-            if(resp.in_progress.length < limit) {
+            if(resp.more_completed) {
               $('.load-more-completed', self.el).hide();
             } else {
               $('.load-more-completed', self.el).show() .click(loadMoreCompleted);
@@ -212,7 +212,7 @@ define([
         challengerCollection.url = window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset;
         challengerCollection.fetch({
           success: function(collection, resp) {
-            if(!resp.in_progress || (resp.in_progress.length < limit)) {
+            if(!resp.more_in_progress) {
               return;
             }
             $('.load-more-in-progress', self.el).show();
@@ -235,7 +235,7 @@ define([
           dataType: 'json',
           url: window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
           success: function (resp) {
-            if(!resp.completed || (resp.completed.length < limit)) {
+            if(!resp.more_completed) {
               return;
             }
             $('.load-more-completed', self.el).show();
