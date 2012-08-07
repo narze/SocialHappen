@@ -477,7 +477,7 @@ class Apiv3 extends CI_Controller {
       return;
     }
 
-    $reward = $this->input->post('model', TRUE);
+    $reward = rawurldecode($this->input->post('model', TRUE));
 
     if(!isset($reward) || $reward == ''){
       echo json_encode(array('success' => FALSE, 'data' => 'no reward data'));

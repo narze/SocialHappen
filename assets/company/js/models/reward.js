@@ -55,7 +55,7 @@ define([
         params.contentType = 'application/json';
         var data = model.toJSON();
         delete data.rewardRewards;
-        params.data = 'model='+JSON.stringify(data);
+        params.data = 'model='+encodeURIComponent(JSON.stringify(data));
       }
 
       // For older servers, emulate JSON by encoding the request into an HTML-form.
