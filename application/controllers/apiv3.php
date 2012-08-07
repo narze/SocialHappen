@@ -300,7 +300,7 @@ class Apiv3 extends CI_Controller {
       return;
     }
 
-    $challenge = $this->input->post('model', TRUE);
+    $challenge = rawurldecode($this->input->post('model', TRUE));
 
     if(!isset($challenge) || $challenge == ''){
       $result = array('success' => FALSE, 'data' => 'no challenge data');
