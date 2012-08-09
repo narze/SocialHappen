@@ -8,15 +8,16 @@ define([
   'sandbox'
 ], function($, _, Backbone, CardItemView, cardListTemplate, vent, sandbox){
   var CardListPane = Backbone.View.extend({
-    el: '.user-right-pane',
+
     events: {
       'click .card': 'showCard'
     },
 
     initialize: function(){
       _.bindAll(this);
-      sandbox.collections.cardCollection.bind('reset', this.addAll);
+      sandbox.collections.cardCollection.bind('reset', this.render);
       sandbox.collections.cardCollection.bind('add', this.addOne);
+      sandbox.collections.cardCollection.fetch();
     },
 
     render: function () {
@@ -30,13 +31,15 @@ define([
       console.log(sandbox.collections.cardCollection.model);
       if(sandbox.collections.cardCollection.models.length === 0){
         $('#card-list', this.el).html('No card');
+      } else {
+        $('#card-list', this.el).empty();
       }
 
       sandbox.collections.cardCollection.each(this.addOne);
     },
 
     addOne: function(model) {
-      model.set('user', sandbox.currentUserModel.attributes)
+      model.set('user', sandbox.models.currentUserModel.attributes)
       var card = new CardItemView({
         model: model,
         vent: vent
@@ -48,6 +51,12 @@ define([
 
     showCard: function(e) {
       $(e.currentTarget).addClass('open').siblings().removeClass('open');
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      sandbox.collections.cardCollection.unbind();
     }
 
   });

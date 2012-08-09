@@ -9,7 +9,7 @@
         </li>
         <% if(isCurrentUser) { %>
           <li>
-            <a class="user-menu-my-profile" href="#/profile/<%= userId %>/myprofile">My Profile <span class="caret"></span></a>
+            <a class="user-menu-my-profile" href="#/profile/<%= userId %>">My Profile <span class="caret"></span></a>
             <ul>
               <li class="hide"><a class="user-submenu-photos" href="#/profile/<%= userId %>/photos">Photos <span class="pull-right">&nbsp;</span></a></li>
               <li><a class="user-submenu-feedbacks" href="#/profile/<%= userId %>/feedbacks">Feedbacks <span class="pull-right">&nbsp;</span></a></li>
@@ -27,7 +27,7 @@
           </li>
         <% } else { %>
           <li>
-            <a class="user-menu-my-profile" href="#/profile/<%= userId %>/myprofile">Profile <span class="caret"></span></a>
+            <a class="user-menu-my-profile" href="#/profile/<%= userId %>">Profile <span class="caret"></span></a>
             <ul>
               <li class="hide"><a class="user-submenu-photos" href="#/profile/<%= userId %>/photos">Photos <span class="pull-right">&nbsp;</span></a></li>
               <li><a class="user-submenu-feedbacks" href="#/profile/<%= userId %>/feedbacks">Feedbacks <span class="pull-right">&nbsp;</span></a></li>
@@ -38,7 +38,7 @@
       </ul>
     </div>
   </div>
-  <div class="span9 well user-right-pane" id="right">
+  <div class="span9 well" id="right">
 
   </div>
 </div>

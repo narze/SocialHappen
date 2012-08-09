@@ -16,10 +16,11 @@ define([
     initialize: function(){
       _.bindAll(this)
       sandbox.collections.couponCollection.bind('reset', this.add)
+      sandbox.collections.couponCollection.fetch();
     },
 
     render: function () {
-      $('#header').remove()
+      // $('#header').remove()
     },
 
     add: function() {

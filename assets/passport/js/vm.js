@@ -12,6 +12,7 @@ define([
 			views[name].undelegateEvents();
 			if(typeof views[name].clean === 'function') {
 				views[name].clean();
+        console.log('view cleaned');
 			}
 		}
 		var view = new View(options);
@@ -25,7 +26,6 @@ define([
 		Events.trigger('viewCreated');
 		return view;
 	}
-
 
   return {
   	create: create

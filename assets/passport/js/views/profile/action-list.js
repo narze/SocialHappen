@@ -8,18 +8,17 @@ define([
 ], function($, _, Backbone, ActionItemView, actionListTemplate, sandbox){
   var ProfilePage = Backbone.View.extend({
     actionListTemplate: _.template(actionListTemplate),
-    el: '.user-right-pane',
     initialize: function(){
       _.bindAll(this);
       sandbox.collections.actionCollection.bind('add', this.addOne);
       sandbox.collections.actionCollection.bind('reset', this.render);
+      sandbox.collections.actionCollection.fetch();
     },
     render: function () {
       this.$el.html(this.actionListTemplate({
         total: sandbox.collections.actionCollection.length,
         header_text: this.options.header_text
       }));
-
       this.addAll();
       return this;
     },
@@ -35,7 +34,6 @@ define([
     addAll: function(){
       var self = this
         , models;
-
       //Filter
       if(this.options.filter) {
 
@@ -47,13 +45,19 @@ define([
         models = sandbox.collections.actionCollection.models;
       }
 
-      if(models.length == 0){
+      if(models.length === 0){
         this.$('ul.action-list').html('No action');
       }
 
       _.each(models, function(model){
         self.addOne(model);
       });
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      sandbox.collections.actionCollection.unbind();
     }
   });
   return ProfilePage;

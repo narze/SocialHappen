@@ -30,7 +30,6 @@ define([
     },
 
     render: function () {
-      console.log(sandbox.models.userModel, sandbox.models.currentUserModel);
       $(this.el).html(this.profilePageTemplate({
         user: sandbox.models.userModel.toJSON(),
         userId: sandbox.userId,
@@ -60,98 +59,6 @@ define([
       // console.log($(e.currentTarget).parent());
       $('.user-profile-nav li').removeClass('active');
       $(e.currentTarget).parent().addClass('active').closest('ul').parent().addClass('active');
-    },
-    showBadgesList: function() {
-      var achievementListView = new AchievementListView({
-        collection: sandbox.collections.achievementCollection,
-        el: $('.user-right-pane', this.el)
-      });
-
-      achievementListView.render();
-    },
-    showMyCardList: function() {
-      var cardListView = new CardListView ({
-        el: $('.user-right-pane', this.el),
-        currentUserModel: sandbox.models.currentUserModel,
-        vent: vent
-      })
-
-      cardListView.render()
-    },
-    showMyRewardList: function(callback) {
-      var couponListView = new CouponListView({
-        collection: sandbox.collections.couponCollection,
-        el: $('.user-right-pane', this.el),
-        vent: vent
-      });
-
-      //Coupon list could be seen only for current user
-      if(sandbox.models.currentUserModel.get('user_id') === window.Passport.userId) {
-        couponListView.render();
-        if(typeof callback === 'function') { callback() }
-      } else {
-        //Fetch again and check
-        sandbox.models.currentUserModel.fetch({
-          success: function(model, xhr) {
-            if(xhr.user_id && (xhr.user_id === window.Passport.userId)) {
-              couponListView.render();
-              if(typeof callback === 'function') { callback() }
-            }
-          }
-        });
-      }
-    },
-    showMyCouponItem: function() {
-      var self = this;
-      //Show the list first
-      this.showMyRewardList(showItem);
-
-      function showItem() {
-        if(sandbox.collections.couponCollection.isFetched) {
-          var rewardItemId = sandbox.rewardItemId;
-          //Find the model
-          //@TODO - sometimes couponcollection is not fetched yet, use setTimeout for now
-          var model = _.find(sandbox.collections.couponCollection.models, function(model) { return model.get('reward_item_id') === rewardItemId; });
-          //Trigger coupon-item.js event
-          vent.trigger('viewRewardByModel', model);
-
-        } else {
-          console.log('coupons not fetched yet');
-          setTimeout(showItem, 500);
-        }
-      }
-    },
-    showActivityList: function() {
-      var activityListView = new ActivityListView({
-        collection: sandbox.collections.activityCollection,
-        el: $('.user-right-pane', this.el)
-      });
-      activityListView.render();
-    },
-    showFeedbacksList: function() {
-      var actionListView = new ActionListView({
-        collection: sandbox.collections.actionCollection,
-        el: $('.user-right-pane', this.el),
-        filter: 202,
-        header_text: 'Feedbacks'
-      });
-      actionListView.render();
-    },
-    showPhotosList: function() {
-      var actionListView = new ActionListView({
-        collection: sandbox.collections.actionCollection,
-        el: $('.user-right-pane', this.el),
-        filter: 9999,
-        header_text: 'Photos'
-      });
-      actionListView.render();
-    },
-    showActionList: function() {
-      var actionListView = new ActionListView({
-        collection: null,
-        el: $('.user-right-pane', this.el)
-      });
-      actionListView.render();
     }
   });
   return ProfilePage;

@@ -3,8 +3,9 @@ define([
   'underscore',
   'backbone',
   'text!templates/profile/coupon-item.html',
-  'text!templates/profile/reward-item-modal.html'
-], function($, _, Backbone, couponItemTemplate, rewardItemTemplate){
+  'text!templates/profile/reward-item-modal.html',
+  'events'
+], function($, _, Backbone, couponItemTemplate, rewardItemTemplate, vent){
   var CouponItemView = Backbone.View.extend({
     tagName: 'div',
     className: 'item',
@@ -20,7 +21,7 @@ define([
       this.model.bind('change', this.render);
       this.model.bind('destroy', this.remove);
 
-      this.options.vent.bind('viewRewardByModel', this.viewRewardByModel);
+      vent.bind('viewRewardByModel', this.viewRewardByModel);
     },
     render: function () {
       console.log('render coupon item');

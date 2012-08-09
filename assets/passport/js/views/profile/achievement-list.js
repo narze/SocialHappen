@@ -3,18 +3,20 @@ define([
   'underscore',
   'backbone',
   'views/profile/achievement-item',
-  'text!templates/profile/achievement.html'
-], function($, _, Backbone, AchievementItemView, achievementListTemplate){
+  'text!templates/profile/achievement.html',
+  'sandbox'
+], function($, _, Backbone, AchievementItemView, achievementListTemplate, sandbox){
   var AchievementList = Backbone.View.extend({
     achievementListTemplate: _.template(achievementListTemplate),
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('add', this.addOne);
-      this.collection.bind('reset', this.render);
+      sandbox.collections.achievementCollection.bind('add', this.addOne);
+      sandbox.collections.achievementCollection.bind('reset', this.render);
+      sandbox.collections.achievementCollection.fetch();
     },
     render: function () {
       this.$el.html(this.achievementListTemplate({
-        total: this.collection.length
+        total: sandbox.collections.achievementCollection.length
       }));
 
       this.addAll();
@@ -32,13 +34,19 @@ define([
     addAll: function(){
       var self = this;
 
-      if(this.collection.models.length == 0){
+      if(sandbox.collections.achievementCollection.models.length === 0){
         this.$('ul.achievement-list').html('No badge');
       }
 
-      this.collection.each(function(model){
+      sandbox.collections.achievementCollection.each(function(model){
         self.addOne(model);
       });
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      sandbox.collections.achievementCollection.unbind();
     }
   });
   return AchievementList;

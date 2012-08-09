@@ -7,12 +7,13 @@ define([
   'sandbox'
 ], function($, _, Backbone, ActivityItemView, activityListTemplate, sandbox){
   var ProfilePage = Backbone.View.extend({
-    el: '.user-right-pane',
+
     activityListTemplate: _.template(activityListTemplate),
     initialize: function(){
       _.bindAll(this);
       sandbox.collections.activityCollection.bind('add', this.addOne);
       sandbox.collections.activityCollection.bind('reset', this.render);
+      sandbox.collections.activityCollection.fetch();
     },
     render: function () {
       this.$el.html(this.activityListTemplate({
@@ -40,6 +41,12 @@ define([
       sandbox.collections.activityCollection.each(function(model){
         self.addOne(model);
       });
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      sandbox.collections.activityCollection.unbind();
     }
   });
   return ProfilePage;

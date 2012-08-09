@@ -6,10 +6,11 @@ define([
   'text!templates/profile/coupon-list.html',
   'views/profile/coupon-item',
   'masonry',
-  'sandbox'
-], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView, masonry, sandbox){
+  'sandbox',
+  'events'
+], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView, masonry, sandbox, vent){
   var CouponListPane = Backbone.View.extend({
-    el: '.user-right-pane',
+
     couponListTemplate: _.template(couponListTemplate),
 
     events: {
@@ -23,6 +24,7 @@ define([
       _.bindAll(this);
       sandbox.collections.couponCollection.bind('reset', this.addAll);
       sandbox.collections.couponCollection.bind('add', this.addOne);
+      sandbox.collections.couponCollection.fetch();
       // this.options.vent.bind('reloadMasonry', this.reloadMasonry);
     },
 
@@ -86,10 +88,10 @@ define([
 
       $('.coupon-list', this.el).html('');
 
-      if(approved == 0){
+      if(approved === 0){
         $('.approved.coupon-list', this.el).html('No coupon');
       }
-      if(notApproved == 0){
+      if(notApproved === 0){
         $('.pending.coupon-list', this.el).html('No coupon');
       }
 
@@ -128,6 +130,17 @@ define([
     showBoth: function() {
       $('.pending-coupons', this.el).show();
       $('.approved-coupons', this.el).show();
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      sandbox.collections.couponCollection.unbind();
+    },
+
+    showCouponModal: function(rewardItemId) {
+      var model = _.find(sandbox.collections.couponCollection.models, function(model) { return model.get('reward_item_id') === rewardItemId; });
+      vent.trigger('viewRewardByModel', model);
     }
 
   });
