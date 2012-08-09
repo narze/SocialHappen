@@ -22,8 +22,8 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.collection.unbind('reset').bind('reset', this.addAll);
-      this.collection.unbind('add').bind('add', this.addOne);
+      this.collection.bind('reset', this.addAll);
+      this.collection.bind('add', this.addOne);
     },
 
     render: function () {
@@ -137,6 +137,12 @@ define([
 
       this.collection.reset(search_results);
       this.addAll();
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      this.collection.unbind();
     }
 
   });

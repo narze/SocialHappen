@@ -19,9 +19,9 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      vent.unbind('reloadMasonry').bind('reloadMasonry', this.reloadMasonry);
-      this.collection.unbind('reset').bind('reset', this.addAll);
-      this.collection.unbind('add').bind('add', this.addOne);
+      vent.bind('reloadMasonry', this.reloadMasonry);
+      this.collection.bind('reset', this.addAll);
+      this.collection.bind('add', this.addOne);
     },
 
     render: function () {
@@ -61,7 +61,7 @@ define([
     },
 
     addOne: function(model){
-      if(this.collection.models.length == 1){
+      if(this.collection.models.length === 1){
         $('.tile-list', this.el).html('');
       }
 
@@ -77,7 +77,7 @@ define([
     addAll: function(){
       $('.tile-list', this.el).html('');
 
-      if(this.collection.models.length == 0){
+      if(this.collection.models.length === 0){
         $('.tile-list', this.el).html('Your company have no challenge. Start creating a challenge by clicking "Create Challenge" button.');
       }
 
@@ -121,6 +121,13 @@ define([
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       vent.trigger('showAddModal', newModel);
       vent.trigger('showRecipeModal');
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      vent.unbind('reloadMasonry');
+      this.collection.unbind();
     }
   });
   return ChallengeListPane;

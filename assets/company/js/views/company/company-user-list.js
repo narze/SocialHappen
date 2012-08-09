@@ -16,8 +16,8 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.collection.unbind('reset').bind('reset', this.addAll);
-      this.collection.unbind('add').bind('add', this.addOne);
+      this.collection.bind('reset', this.addAll);
+      this.collection.bind('add', this.addOne);
     },
 
     render: function () {
@@ -68,6 +68,12 @@ define([
 
     loadAll: function() {
       this.collection.loadAll();
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      this.collection.unbind();
     }
   });
   return CompanyUserListPane;

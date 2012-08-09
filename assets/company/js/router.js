@@ -23,7 +23,7 @@ define([
   });
 
   var initialize = function(options){
-    var appView = options.appView;
+    var appView = sandbox.views.appView = options.appView;
     var router = new AppRouter(options);
 
     var self = this;

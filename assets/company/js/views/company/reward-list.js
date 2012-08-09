@@ -19,9 +19,9 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      vent.unbind('reloadMasonry').bind('reloadMasonry', this.reloadMasonry);
-      this.collection.unbind('reset').bind('reset', this.addAll);
-      this.collection.unbind('add').bind('add', this.addOne);
+      vent.bind('reloadMasonry', this.reloadMasonry);
+      this.collection.bind('reset', this.addAll);
+      this.collection.bind('add', this.addOne);
     },
 
     render: function () {
@@ -108,6 +108,13 @@ define([
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       vent.trigger('showAddRewardModal', newModel);
+    },
+
+    clean: function() {
+      this.remove();
+      this.unbind();
+      vent.unbind('reloadMasonry');
+      this.collection.unbind();
     }
   });
   return RewardListPane;

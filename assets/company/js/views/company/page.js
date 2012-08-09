@@ -11,8 +11,9 @@ define([
   'views/company/activity-list',
   'views/company/company-user-list',
   'bootstrap',
-  'sandbox'
-], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, ActivityListView, CompanyUserListView, bootstrap, sandbox){
+  'sandbox',
+  'vm'
+], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, ActivityListView, CompanyUserListView, bootstrap, sandbox, Vm){
   var ProfilePage = Backbone.View.extend({
     pageTemplate: _.template(pageTemplate),
     el: '#content',
@@ -82,35 +83,35 @@ define([
       carouselView.render();
 
       if(this.options.now === 'challenge'){
-        var challengeListView = new ChallengeListView({
+        var challengeListView = Vm.create(sandbox.views.appView, 'Content', ChallengeListView, {
           collection: sandbox.collections.challengesCollection,
           el: $('#content-pane', this.el)
         });
 
         challengeListView.render();
       } else if(this.options.now === 'reward'){
-        var rewardListView = new RewardListView({
+        var rewardListView = Vm.create(sandbox.views.appView, 'Content', RewardListView, {
           collection: sandbox.collections.rewardsCollection,
           el: $('#content-pane', this.el)
         });
 
         rewardListView.render();
       } else if(this.options.now === 'coupon'){
-        var couponListView = new CouponListView({
+        var couponListView = Vm.create(sandbox.views.appView, 'Content', CouponListView, {
           collection: sandbox.collections.couponsCollection,
           el: $('#content-pane', this.el)
         });
 
         couponListView.render();
       } else if(this.options.now === 'users'){
-        var companyUserListView = new CompanyUserListView({
+        var companyUserListView = Vm.create(sandbox.views.appView, 'Content', CompanyUserListView, {
           collection: sandbox.collections.companyUsersCollection,
           el: $('#content-pane', this.el)
         });
 
         companyUserListView.render();
       } else if(this.options.now === 'activities'){
-        var activityListView = new ActivityListView({
+        var activityListView = Vm.create(sandbox.views.appView, 'Content', ActivityListView, {
           collection: sandbox.collections.activitiesCollection,
           el: $('#content-pane', this.el)
         });
