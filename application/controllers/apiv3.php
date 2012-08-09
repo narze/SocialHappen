@@ -798,14 +798,14 @@ class Apiv3 extends CI_Controller {
         $result_action = $action_list[$app_id.'_'.$action_id];
       }
 
-      if(isset($result_action['format_string'])){
+      if(isset($result_action['format_string']) && isset($result[$i]['audit_id'])){
         $result[$i]['message'] = $this->audit_lib->translate_format_string(
           $result_action['format_string'],
           $this->audit_model->getOne(array('_id' => new MongoId($result[$i]['audit_id']))),
           ($action_id <= 100)
         );
       }else{
-        $result[$i]['message'] = '[empty format audit]';
+        $result[$i]['message'] = '[unknown audit]';
       }
     }
 
