@@ -47,14 +47,24 @@ require([
   var couponCollection = sandbox.collections.couponCollection = window.Passport.couponCollection = new CouponCollection([]);
   var cardCollection = sandbox.collections.cardCollection = window.Passport.cardCollection = new CardCollection([]);
 
-  var appView = Vm.create({}, 'AppView', AppView, {
+  // Check login : Fetch current user
+  sandbox.models.currentUserModel.fetch({
+    success: function(model, xhr){
+      if(xhr.user_id){
+        return initView();
+      }
 
-  });
-  appView.render();
+      window.location = window.Passport.BASE_URL + '/login?next=' + window.location.href
+    }
+  })
 
-  // The router now has a copy of all main appview
-  Router.initialize({
-    appView: appView
-  });
+  function initView() {
+    var appView = Vm.create({}, 'AppView', AppView, {
 
+    });
+    appView.render();
+    Router.initialize({
+      appView: appView
+    });
+  }
 });

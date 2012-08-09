@@ -4,8 +4,9 @@ define([
   'underscore',
   'backbone',
   'vm',
-  'sandbox'
-], function ($, _, Backbone, Vm, sandbox) {
+  'sandbox',
+  'views/profile/page'
+], function ($, _, Backbone, Vm, sandbox, ProfilePage) {
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Pages
@@ -28,17 +29,8 @@ define([
     var appView = options.appView;
     var router = new AppRouter(options);
     var profilePage = null;
-    // Check login : Fetch current user
-    sandbox.models.currentUserModel.fetch({
-      success: function(model, xhr){
-        if(!xhr.user_id){
-          window.location = window.Passport.BASE_URL + '/login?next=' + window.location.href
-          return
-        }
-      }
-    })
 
-    function createProfilePage(ProfilePage) {
+    function createProfilePage() {
       if(!profilePage)
         profilePage = Vm.create(appView, 'ProfilePage', ProfilePage);
 
@@ -53,8 +45,8 @@ define([
 
     router.on('route:profile', function (id) {
       sandbox.userId = id;
-      require(['views/profile/page', 'views/profile/action-list'], function (ProfilePage, ActionListPage) {
-        createProfilePage(ProfilePage);
+      require(['views/profile/action-list'], function (ActionListPage) {
+        createProfilePage();
         var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: false});
         $('#right').html(actionListPage.render().el);
       });
@@ -62,8 +54,8 @@ define([
 
     router.on('route:photo', function (id) {
       sandbox.userId = id;
-      require(['views/profile/page', 'views/profile/action-list'], function (ProfilePage, ActionListPage) {
-        createProfilePage(ProfilePage);
+      require(['views/profile/action-list'], function (ActionListPage) {
+        createProfilePage();
         var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: 9999, header_text: 'Photos' });
         $('#right').html(actionListPage.render().el);
       });
@@ -71,8 +63,8 @@ define([
 
     router.on('route:feedback', function (id) {
       sandbox.userId = id;
-      require(['views/profile/page', 'views/profile/action-list'], function (ProfilePage, ActionListPage) {
-        createProfilePage(ProfilePage);
+      require(['views/profile/action-list'], function (ActionListPage) {
+        createProfilePage();
         var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: 202, header_text: 'Feedbacks' });
         $('#right').html(actionListPage.render().el);
       });
@@ -80,8 +72,8 @@ define([
 
     router.on('route:badge', function (id) {
       sandbox.userId = id;
-      require(['views/profile/page', 'views/profile/achievement-list'], function (ProfilePage, AchievementListPage) {
-        createProfilePage(ProfilePage);
+      require(['views/profile/achievement-list'], function (AchievementListPage) {
+        createProfilePage();
         var achievementListPage = Vm.create(appView, 'RightPane', AchievementListPage);
         $('#right').html(achievementListPage.render().el);
       });
@@ -89,8 +81,8 @@ define([
 
     router.on('route:card', function (id) {
       sandbox.userId = id;
-      require(['views/profile/page', 'views/profile/card-list'], function (ProfilePage, CardPage) {
-        createProfilePage(ProfilePage);
+      require(['views/profile/card-list'], function (CardPage) {
+        createProfilePage();
         var cardPage = Vm.create(appView, 'RightPane', CardPage);
         $('#right').html(cardPage.render().el);
       });
@@ -98,8 +90,8 @@ define([
 
     router.on('route:coupon', function (id) {
       sandbox.userId = id;
-      require(['views/profile/page', 'views/profile/coupon-list'], function (ProfilePage, CouponListPage) {
-        createProfilePage(ProfilePage);
+      require(['views/profile/coupon-list'], function (CouponListPage) {
+        createProfilePage();
         var couponListPage = Vm.create(appView, 'RightPane', CouponListPage);
         $('#right').html(couponListPage.render().el);
       });
@@ -108,8 +100,8 @@ define([
     router.on('route:couponItem', function (id, rewardItemId) {
       sandbox.userId = id;
       sandbox.rewardItemId = rewardItemId;
-      require(['views/profile/page', 'views/profile/coupon-list', 'views/profile/coupon-item'], function (ProfilePage, CouponList, CouponItem) {
-        createProfilePage(ProfilePage);
+      require(['views/profile/coupon-list', 'views/profile/coupon-item'], function (CouponList, CouponItem) {
+        createProfilePage();
         var couponList = Vm.create(appView, 'RightPane', CouponList);
         $('#right').html(couponList.render().el);
 
@@ -121,8 +113,8 @@ define([
 
     router.on('route:activity', function (id) {
       sandbox.userId = id;
-      require(['views/profile/page', 'views/profile/activity-list'], function (ProfilePage, ActivityPage) {
-        createProfilePage(ProfilePage);
+      require(['views/profile/activity-list'], function (ActivityPage) {
+        createProfilePage();
         var activityPage = Vm.create(appView, 'RightPane', ActivityPage);
         $('#right').html(activityPage.render().el);
       });
