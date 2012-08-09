@@ -6,8 +6,9 @@ define([
   'moment',
   'text!templates/header/navigation.html',
   'text!templates/header/bar-notification.html',
-  'text!templates/header/bar-company-list.html'
-], function($, _, Backbone, bootstrap, moment, headerMenuTemplate, barNotificationTemplate, barCompanyListTemplate){
+  'text!templates/header/bar-company-list.html',
+  'sandbox'
+], function($, _, Backbone, bootstrap, moment, headerMenuTemplate, barNotificationTemplate, barCompanyListTemplate, sandbox){
   var HeaderNavigationView = Backbone.View.extend({
     headerMenuTemplate: _.template(headerMenuTemplate),
     barNotificationTemplate: _.template(barNotificationTemplate),
@@ -19,17 +20,17 @@ define([
     },
     initialize: function () {
       _.bindAll(this);
-      this.options.currentUserModel.bind('change', this.render);
+      sandbox.models.currentUserModel.bind('change', this.render);
     },
     render: function () {
       $(this.el).html(this.headerMenuTemplate({
         baseUrl: window.Passport.BASE_URL,
-        user: this.options.currentUserModel.toJSON()
+        user: sandbox.models.currentUserModel.toJSON()
       }));
       $('div#header .passport').addClass('active');
 
       //Company list
-      var companies = this.options.currentUserModel.get('companies');
+      var companies = sandbox.models.currentUserModel.get('companies');
       if(companies && companies.length) {
         var barCompanyListTemplate = this.barCompanyListTemplate;
         $('.bar-company-list').replaceWith(barCompanyListTemplate({

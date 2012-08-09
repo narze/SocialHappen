@@ -3,18 +3,20 @@ define([
   'underscore',
   'backbone',
   'views/profile/action-item',
-  'text!templates/profile/action.html'
-], function($, _, Backbone, ActionItemView, actionListTemplate){
+  'text!templates/profile/action.html',
+  'sandbox'
+], function($, _, Backbone, ActionItemView, actionListTemplate, sandbox){
   var ProfilePage = Backbone.View.extend({
     actionListTemplate: _.template(actionListTemplate),
+    el: '.user-right-pane',
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('add', this.addOne);
-      this.collection.bind('reset', this.render);
+      sandbox.collections.actionCollection.bind('add', this.addOne);
+      sandbox.collections.actionCollection.bind('reset', this.render);
     },
     render: function () {
       this.$el.html(this.actionListTemplate({
-        total: this.collection.length,
+        total: sandbox.collections.actionCollection.length,
         header_text: this.options.header_text
       }));
 
@@ -37,12 +39,12 @@ define([
       //Filter
       if(this.options.filter) {
 
-        models = this.collection.filter(function(action) {
+        models = sandbox.collections.actionCollection.filter(function(action) {
           return action.get('action_id') === self.options.filter
         });
 
       } else {
-        models = this.collection.models;
+        models = sandbox.collections.actionCollection.models;
       }
 
       if(models.length == 0){

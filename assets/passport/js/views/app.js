@@ -4,8 +4,9 @@ define([
   'backbone',
   'vm',
 	'events',
-  'text!templates/layout.html'
-], function($, _, Backbone, Vm, Events, layoutTemplate){
+  'text!templates/layout.html',
+  'sandbox'
+], function($, _, Backbone, Vm, Events, layoutTemplate, sandbox){
   var AppView = Backbone.View.extend({
     el: '#content',
     initialize: function () {
@@ -16,8 +17,8 @@ define([
       // $(this.el).html(layoutTemplate);
       require(['views/header/navigation'], function (HeaderNavigationView) {
         var headerNavigationView = Vm.create(self, 'HeaderNavigationView', HeaderNavigationView, {
-          userModel: self.options.userModel,
-          currentUserModel: self.options.currentUserModel
+          userModel: sandbox.models.userModel,
+          currentUserModel: sandbox.models.currentUserModel
         });
         headerNavigationView.render();
       });

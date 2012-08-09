@@ -3,21 +3,22 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'vm'
-], function ($, _, Backbone, Vm) {
+  'vm',
+  'sandbox'
+], function ($, _, Backbone, Vm, sandbox) {
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Pages
       '/profile/:id': 'profile',
-      '/profile/:id/coupons/:couponId': 'couponLanding',
       '/profile/:id/myprofile': 'myProfile',
-      '/profile/:id/photos': 'photos',
-      '/profile/:id/feedbacks': 'feedbacks',
-      '/profile/:id/badges': 'badges',
-      '/profile/:id/card': 'myCard',
-      '/profile/:id/coupon': 'myCoupon',
-      '/profile/:id/coupon/:id': 'myCouponItem',
+      '/profile/:id/photos': 'photo',
+      '/profile/:id/feedbacks': 'feedback',
+      '/profile/:id/badges': 'badge',
+      '/profile/:id/card': 'card',
+      '/profile/:id/coupon': 'coupon',
+      '/profile/:id/coupon/:rewardItemId': 'couponItem',
       '/profile/:id/activity': 'activity',
+      '/profile/:id/coupons/:couponId': 'couponLanding',
 
       // Default - catch all
       '*actions': 'defaultAction'
@@ -27,10 +28,9 @@ define([
   var initialize = function(options){
     var appView = options.appView;
     var router = new AppRouter(options);
-    var page = null;
+    var profilePage = null;
     // Check login : Fetch current user
-    var currentUserModel = options.currentUserModel;
-    currentUserModel.fetch({
+    sandbox.models.currentUserModel.fetch({
       success: function(model, xhr){
         if(!xhr.user_id){
           window.location = window.Passport.BASE_URL + '/login?next=' + window.location.href
@@ -39,15 +39,109 @@ define([
       }
     })
 
-    router.on('route:profile', viewMyProfile);
-    router.on('route:myProfile', viewMyProfile);
-    router.on('route:photos', viewPhotos);
-    router.on('route:feedbacks', viewFeedbacks);
-    router.on('route:badges', viewBadges);
-    router.on('route:myCard', viewMyCard);
-    router.on('route:myCoupon', viewMyCoupon);
-    router.on('route:myCouponItem', viewMyCouponItem);
-    router.on('route:activity', viewActivity);
+    function createProfilePage(ProfilePage) {
+      if(!profilePage)
+        profilePage = Vm.create(appView, 'ProfilePage', ProfilePage);
+      sandbox.models.userModel.id = sandbox.userId;
+      sandbox.models.userModel.fetch();
+      profilePage.render();
+    }
+
+    ////template
+    router.on('route:profile', function (id) {
+      sandbox.userId = id;
+      require(['views/profile/page'], function (ProfilePage) {
+        createProfilePage(ProfilePage);
+      });
+    });
+
+    router.on('route:myProfile', function (id) {
+      sandbox.userId = id;
+      require(['views/profile/page', 'views/profile/action-list'], function (ProfilePage, ActionListPage) {
+        createProfilePage(ProfilePage);
+        var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: null });
+        actionListPage.render();
+      });
+    });
+
+    router.on('route:photo', function (id) {
+      sandbox.userId = id;
+      require(['views/profile/page', 'views/profile/action-list'], function (ProfilePage, ActionListPage) {
+        createProfilePage(ProfilePage);
+        var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: 9999, header_text: 'Photos' });
+        actionListPage.render();
+      });
+    });
+
+    router.on('route:feedback', function (id) {
+      sandbox.userId = id;
+      require(['views/profile/page', 'views/profile/action-list'], function (ProfilePage, ActionListPage) {
+        createProfilePage(ProfilePage);
+        var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: 202, header_text: 'Feedbacks' });
+        actionListPage.render();
+      });
+    });
+
+    router.on('route:badge', function (id) {
+      sandbox.userId = id;
+      require(['views/profile/page', 'views/profile/action-list'], function (ProfilePage, ActionListPage) {
+        createProfilePage(ProfilePage);
+        var actionListPage = Vm.create(appView, 'RightPane', ActionListPage);
+        actionListPage.render();
+      });
+    });
+
+    router.on('route:card', function (id) {
+      sandbox.userId = id;
+      require(['views/profile/page', 'views/profile/card-list'], function (ProfilePage, CardPage) {
+        createProfilePage(ProfilePage);
+        var cardPage = Vm.create(appView, 'RightPane', CardPage);
+        cardPage.render();
+      });
+    });
+
+    router.on('route:coupon', function (id) {
+      sandbox.userId = id;
+      require(['views/profile/page', 'views/profile/coupon-list'], function (ProfilePage, CouponListPage) {
+        createProfilePage(ProfilePage);
+        var couponListPage = Vm.create(appView, 'RightPane', CouponListPage);
+        couponListPage.render();
+      });
+    });
+
+    router.on('route:couponItem', function (id, rewardItemId) {
+      sandbox.userId = id;
+      sandbox.rewardItemId = rewardItemId;
+      require(['views/profile/page', 'views/profile/coupon-item'], function (ProfilePage, CouponItemPage) {
+        createProfilePage(ProfilePage);
+        var couponItemPage = Vm.create(appView, 'RightPane', CouponItemPage);
+        couponItemPage.render();
+      });
+    });
+
+    router.on('route:activity', function (id) {
+      sandbox.userId = id;
+      require(['views/profile/page', 'views/profile/activity-list'], function (ProfilePage, ActivityPage) {
+        createProfilePage(ProfilePage);
+        var activityPage = Vm.create(appView, 'RightPane', ActivityPage);
+        activityPage.render();
+      });
+    });
+
+    router.on('route:coupons', function (id, couponId) {
+      sandbox.userId = id;
+      sandbox.couponId = couponId;
+      sandbox.models.userModel.id = id
+      window.Passport.userId = id;
+
+      require(['views/profile/coupon'], function(CouponPage) {
+        var couponPage = Vm.create(appView, 'CouponPage', CouponPage, {
+          couponModel: collection.get(couponId)
+        })
+        couponPage.render();
+        sandbox.collections.couponCollection.fetch();
+      })
+    })
 
     function loadMainPage(viewOptions) {
       var userModel = options.userModel;
@@ -165,27 +259,6 @@ define([
         load: 'showActivityList'
       })
     }
-
-
-    router.on('route:couponLanding', function(userId, couponId) {
-      var userModel = options.userModel
-      userModel.id = userId
-      window.Passport.userId = userId;
-
-      options.couponCollection.fetch({
-        success: function(collection, xhr) {
-          console.log(collection)
-          require(['views/profile/coupon'], function(CouponPage) {
-            var couponPage = Vm.create(appView, 'CouponPage', CouponPage, {
-              couponModel: collection.get(couponId),
-              userModel: userModel,
-              currentUserModel: currentUserModel
-            })
-            couponPage.render()
-          })
-        }
-      })
-    })
 
     router.on('route:defaultAction', function (actions) {
       console.log('Route not found : ', actions);

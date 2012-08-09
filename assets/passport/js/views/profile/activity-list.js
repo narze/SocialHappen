@@ -3,18 +3,20 @@ define([
   'underscore',
   'backbone',
   'views/profile/activity-item',
-  'text!templates/profile/activity.html'
-], function($, _, Backbone, ActivityItemView, activityListTemplate){
+  'text!templates/profile/activity.html',
+  'sandbox'
+], function($, _, Backbone, ActivityItemView, activityListTemplate, sandbox){
   var ProfilePage = Backbone.View.extend({
+    el: '.user-right-pane',
     activityListTemplate: _.template(activityListTemplate),
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('add', this.addOne);
-      this.collection.bind('reset', this.render);
+      sandbox.collections.activityCollection.bind('add', this.addOne);
+      sandbox.collections.activityCollection.bind('reset', this.render);
     },
     render: function () {
       this.$el.html(this.activityListTemplate({
-        total: this.collection.length
+        total: sandbox.collections.activityCollection.length
       }));
 
       this.addAll();
@@ -31,11 +33,11 @@ define([
 
     addAll: function(){
       var self = this;
-      if(this.collection.models.length == 0){
+      if(sandbox.collections.activityCollection.models.length === 0){
         this.$('ul.activity-list').html('No activity');
       }
 
-      this.collection.each(function(model){
+      sandbox.collections.activityCollection.each(function(model){
         self.addOne(model);
       });
     }

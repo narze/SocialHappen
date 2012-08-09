@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/profile/coupon.html'
-], function($, _, Backbone, couponTemplate){
+  'text!templates/profile/coupon.html',
+  'sandbox'
+], function($, _, Backbone, couponTemplate, sandbox){
   var ProfilePage = Backbone.View.extend({
     couponTemplate: _.template(couponTemplate),
     el: '#content',
@@ -14,12 +15,16 @@ define([
 
     initialize: function(){
       _.bindAll(this)
+      sandbox.collections.couponCollection.bind('reset', this.add)
     },
 
     render: function () {
       $('#header').remove()
-      console.log(this.options.couponModel.toJSON())
-      $(this.el).html(this.couponTemplate(this.options.couponModel.toJSON()))
+    },
+
+    add: function() {
+      var coupon = sandbox.collections.couponCollection.get(sandbox.couponId).toJSON()
+      $(this.el).html(this.couponTemplate(coupon))
     }
   })
   return ProfilePage

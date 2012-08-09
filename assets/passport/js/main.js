@@ -10,6 +10,7 @@ require.config({
     timeago: '../../libs/jquery.timeago/jquery.timeago',
     masonry: '../../libs/masonry/jquery.masonry.min',
     moment: '../../libs/moment/moment.min',
+    sandbox: '../../libs/sandbox/sandbox',
     // Require.js plugins
     text: '../../libs/require/text',
     order: '../../libs/require/order',
@@ -33,33 +34,27 @@ require([
   'collections/achievements',
   'collections/coupons',
   'collections/actions',
-  'events'
-], function(AppView, Router, Vm, UserModel, ActivityCollection, AchievementCollection, CouponCollection, ActionCollection, vent){
+  'collections/cards',
+  'events',
+  'sandbox'
+], function(AppView, Router, Vm, UserModel, ActivityCollection, AchievementCollection, CouponCollection, ActionCollection, CardCollection, vent, sandbox){
 
-  var userModel = window.Passport.userModel = new UserModel();
-  var currentUserModel = window.Passport.currentUserModel = new UserModel();
-  var activityCollection = window.Passport.activityCollection = new ActivityCollection([]);
-  var actionCollection = window.Passport.actionCollection = new ActionCollection([]);
-  var achievementCollection = window.Passport.achievementCollection = new AchievementCollection([]);
-  var couponCollection = window.Passport.couponCollection = new CouponCollection([]);
+  var userModel = sandbox.models.userModel = window.Passport.userModel = new UserModel();
+  var currentUserModel = sandbox.models.currentUserModel = window.Passport.currentUserModel = new UserModel();
+  var activityCollection = sandbox.collections.activityCollection = window.Passport.activityCollection = new ActivityCollection([]);
+  var actionCollection = sandbox.collections.actionCollection = window.Passport.actionCollection = new ActionCollection([]);
+  var achievementCollection = sandbox.collections.achievementCollection = window.Passport.achievementCollection = new AchievementCollection([]);
+  var couponCollection = sandbox.collections.couponCollection = window.Passport.couponCollection = new CouponCollection([]);
+  var cardCollection = sandbox.collections.cardCollection = window.Passport.cardCollection = new CardCollection([]);
 
   var appView = Vm.create({}, 'AppView', AppView, {
-    userModel: userModel,
-    currentUserModel: currentUserModel,
-    vent: vent
+
   });
   appView.render();
 
   // The router now has a copy of all main appview
   Router.initialize({
-    appView: appView,
-    userModel: userModel,
-    currentUserModel: currentUserModel,
-    activityCollection: activityCollection,
-    achievementCollection: achievementCollection,
-    couponCollection: couponCollection,
-    actionCollection: actionCollection,
-    vent: vent
+    appView: appView
   });
 
 });

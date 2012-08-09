@@ -2,46 +2,44 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'collections/cards',
   'views/profile/card-item',
-  'text!templates/profile/card-list.html'
-], function($, _, Backbone, CardsCollection, CardItemView, cardListTemplate){
+  'text!templates/profile/card-list.html',
+  'events',
+  'sandbox'
+], function($, _, Backbone, CardItemView, cardListTemplate, vent, sandbox){
   var CardListPane = Backbone.View.extend({
-
+    el: '.user-right-pane',
     events: {
       'click .card': 'showCard'
     },
 
     initialize: function(){
       _.bindAll(this);
+      sandbox.collections.cardCollection.bind('reset', this.addAll);
+      sandbox.collections.cardCollection.bind('add', this.addOne);
     },
 
     render: function () {
       $(this.el).html(_.template(cardListTemplate));
-      var cardsCollection = new CardsCollection();
-      var self = this;
-      cardsCollection.fetch({
-        success: function() {
-          self.addAll(cardsCollection);
-        }
-      });
 
+      this.addAll();
       return this;
     },
 
-    addAll: function(collection) {
-      if(collection.models.length == 0){
+    addAll: function() {
+      console.log(sandbox.collections.cardCollection.model);
+      if(sandbox.collections.cardCollection.models.length === 0){
         $('#card-list', this.el).html('No card');
       }
 
-      collection.each(this.addOne);
+      sandbox.collections.cardCollection.each(this.addOne);
     },
 
     addOne: function(model) {
-      model.set('user', this.options.currentUserModel.attributes)
+      model.set('user', sandbox.currentUserModel.attributes)
       var card = new CardItemView({
         model: model,
-        vent: this.options.vent
+        vent: vent
       });
 
       var cardView = card.render();

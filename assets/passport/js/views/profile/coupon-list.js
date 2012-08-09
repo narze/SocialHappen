@@ -5,9 +5,11 @@ define([
   'models/coupon',
   'text!templates/profile/coupon-list.html',
   'views/profile/coupon-item',
-  'masonry'
-], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView, masonry){
+  'masonry',
+  'sandbox'
+], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView, masonry, sandbox){
   var CouponListPane = Backbone.View.extend({
+    el: '.user-right-pane',
     couponListTemplate: _.template(couponListTemplate),
 
     events: {
@@ -19,8 +21,8 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      sandbox.collections.couponCollection.bind('reset', this.addAll);
+      sandbox.collections.couponCollection.bind('add', this.addOne);
       // this.options.vent.bind('reloadMasonry', this.reloadMasonry);
     },
 
@@ -47,9 +49,9 @@ define([
       });
 
       this.addAll();
-      this.couponListTemp = this.collection.models;
+      this.couponListTemp = sandbox.collections.couponCollection.models;
 
-      if(this.collection.model.length <= 30){
+      if(sandbox.collections.couponCollection.models.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
 
@@ -74,7 +76,7 @@ define([
 
       var approved = 0;
       var notApproved = 0;
-      this.collection.each(function(model){
+      sandbox.collections.couponCollection.each(function(model){
         if(model.get('confirmed')){
           approved++;
         }else{
@@ -91,7 +93,7 @@ define([
         $('.pending.coupon-list', this.el).html('No coupon');
       }
 
-      this.collection.each(function(model){
+      sandbox.collections.couponCollection.each(function(model){
         this.addOne(model);
       }, this);
     },
@@ -103,7 +105,7 @@ define([
     loadMore: function(){
 
       var button = $('button.load-more', this.el).addClass('disabled');
-      this.collection.loadMore(function(loaded){
+      sandbox.collections.couponCollection.loadMore(function(loaded){
         if(loaded > 0){
           button.removeClass('disabled');
         }else{
