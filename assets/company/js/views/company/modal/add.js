@@ -12,10 +12,12 @@ define([
   'views/company/modal/action/checkin-action',
   'views/company/modal/reward/reward',
   'jqueryui',
-  'jqueryForm'
+  'jqueryForm',
+  'events',
+  'sandbox'
 ], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate,
    addActionTemplate, addRewardTemplate, FeedbackActionView,
-   QRActionView, CheckinActionView, RewardView, jqueryui, jqueryForm){
+   QRActionView, CheckinActionView, RewardView, jqueryui, jqueryForm, vent, sandbox){
   var EditModalView = Backbone.View.extend({
 
     addTemplate: _.template(addTemplate),
@@ -39,8 +41,8 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.bind('showAddModal', this.show);
-      this.options.vent.bind('showRecipeModal', this.showRecipeModal);
+      vent.bind('showAddModal', this.show);
+      vent.bind('showRecipeModal', this.showRecipeModal);
     },
 
     render: function () {
@@ -135,7 +137,7 @@ define([
           var feedbackActionView = new FeedbackActionView({
             model: this.model,
             action: action,
-            vent: this.options.vent,
+            vent: vent,
             triggerModal: 'showAddModal'
           });
 
@@ -144,7 +146,7 @@ define([
           var qrActionView = new QRActionView({
             model: this.model,
             action: action,
-            vent: this.options.vent,
+            vent: vent,
             triggerModal: 'showAddModal'
           });
 
@@ -153,7 +155,7 @@ define([
           var checkinActionView = new CheckinActionView({
             model: this.model,
             action: action,
-            vent: this.options.vent,
+            vent: vent,
             triggerModal: 'showAddModal'
           });
 
@@ -165,7 +167,7 @@ define([
       _.each(reward_items, function(reward_item){
         var rewardView = new RewardView({
           model: this.model,
-          vent: this.options.vent,
+          vent: vent,
           triggerModal: 'showAddModal',
           reward_item: reward_item
         });
@@ -204,7 +206,7 @@ define([
 
       this.model.set('detail', detail).trigger('change');
 
-      this.options.vent.trigger('showAddModal', this.model);
+      vent.trigger('showAddModal', this.model);
     },
 
     saveEditName: function(){
@@ -216,7 +218,7 @@ define([
       $('h3.edit-name', this.$el).show();
       $('div.edit-name', this.$el).hide();
 
-      this.options.vent.trigger('showAddModal', this.model);
+      vent.trigger('showAddModal', this.model);
     },
 
     showAddNewActionModal: function(e) {
@@ -266,7 +268,7 @@ define([
 
       var qrActionView = new QRActionView({
         model: this.model,
-        vent: this.options.vent,
+        vent: vent,
         action: qrDefaultAction,
         triggerModal: 'showAddModal',
         add: true
@@ -300,7 +302,7 @@ define([
 
       var feedbackActionView = new FeedbackActionView({
         model: this.model,
-        vent: this.options.vent,
+        vent: vent,
         action: feedbackDefaultAction,
         triggerModal: 'showAddModal',
         add: true
@@ -336,7 +338,7 @@ define([
 
       var checkinActionView = new CheckinActionView({
         model: this.model,
-        vent: this.options.vent,
+        vent: vent,
         action: checkinDefaultAction,
         triggerModal: 'showAddModal',
         add: true
@@ -424,7 +426,7 @@ define([
     _addReward: function(reward_item) {
       var rewardView = new RewardView({
         model: this.model,
-        vent: this.options.vent,
+        vent: vent,
         triggerModal: 'showAddModal',
         reward_item: reward_item,
         add: true
@@ -444,7 +446,7 @@ define([
       console.log('create challenge!');
       this.model.set('company_id', window.Company.companyId);
       this.model.set('active', true);
-      this.options.challengesCollection.create(this.model, {
+      sandbox.collections.challengesCollection.create(this.model, {
         success: function() {
           //Refresh
           window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
@@ -483,7 +485,7 @@ define([
 
       console.log('save repeat', value, this.model.toJSON());
 
-      this.options.vent.trigger('showAddModal', this.model);
+      vent.trigger('showAddModal', this.model);
     },
 
     showEditRepeat: function(){
@@ -568,7 +570,7 @@ define([
 
             self.model.set('detail', detail).trigger('change');
 
-            self.options.vent.trigger('showAddModal', self.model);
+            vent.trigger('showAddModal', self.model);
             return;
           }
           alert(resp.data);

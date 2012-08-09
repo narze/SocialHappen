@@ -14,10 +14,12 @@ define([
   'views/company/modal/reward/reward',
   'jqueryui',
   'timeago',
-  'collections/challenger'
+  'collections/challenger',
+  'events',
+  'sandbox'
 ], function($, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate, challengersItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
-  QRActionView, CheckinActionView, RewardView, jqueryui, timeago, ChallengerCollection){
+  QRActionView, CheckinActionView, RewardView, jqueryui, timeago, ChallengerCollection, vent, sandbox){
   var EditModalView = Backbone.View.extend({
 
     editTemplate: _.template(editTemplate),
@@ -54,7 +56,7 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.bind('showEditModal', this.showEdit)
+      vent.bind('showEditModal', this.showEdit)
     },
 
     render: function () {
@@ -108,7 +110,7 @@ define([
             start_date: Math.floor(date.getTime()/1000)
           });
 
-          self.options.vent.trigger('showEditModal', self.model);
+          vent.trigger('showEditModal', self.model);
         }
       });
       $('#edit_challenge_end').datetimepicker({
@@ -133,7 +135,7 @@ define([
             end_date: Math.floor(date.getTime()/1000)
           });
 
-          self.options.vent.trigger('showEditModal', self.model);
+          vent.trigger('showEditModal', self.model);
         }
       });
 
@@ -264,7 +266,7 @@ define([
           var feedbackActionView = new FeedbackActionView({
             model: this.model,
             action: action,
-            vent: this.options.vent,
+            vent: vent,
             triggerModal: 'showEditModal',
             save: true
           });
@@ -274,7 +276,7 @@ define([
           var qrActionView = new QRActionView({
             model: this.model,
             action: action,
-            vent: this.options.vent,
+            vent: vent,
             triggerModal: 'showEditModal',
             save: true
           });
@@ -284,7 +286,7 @@ define([
           var checkinActionView = new CheckinActionView({
             model: this.model,
             action: action,
-            vent: this.options.vent,
+            vent: vent,
             triggerModal: 'showEditModal',
             save: true
           });
@@ -298,7 +300,7 @@ define([
       _.each(reward_items, function(reward_item){
         var rewardView = new RewardView({
           model: self.model,
-          vent: self.options.vent,
+          vent: vent,
           triggerModal: 'showEditModal',
           reward_item: reward_item,
           save: true
@@ -326,7 +328,7 @@ define([
       $('h3.edit-name', this.$el).show();
       $('div.edit-name', this.$el).hide();
 
-      this.options.vent.trigger('showEditModal', this.model);
+      vent.trigger('showEditModal', this.model);
     },
 
     showEditDescription: function(){
@@ -345,7 +347,7 @@ define([
       $('div.edit-description', this.el).show();
       $('div.edit-description-field', this.el).hide();
 
-      this.options.vent.trigger('showEditModal', this.model);
+      vent.trigger('showEditModal', this.model);
     },
 
     showEditImage: function(){
@@ -361,19 +363,19 @@ define([
       this.model.set('detail', detail).trigger('change');
       this.model.save();
 
-      this.options.vent.trigger('showEditModal', this.model);
+      vent.trigger('showEditModal', this.model);
     },
 
     activeChallenge: function(){
       this.model.set('active', true).trigger('change');
       this.model.save();
-      this.options.vent.trigger('showEditModal', this.model);
+      vent.trigger('showEditModal', this.model);
     },
 
     deactiveChallenge: function(){
       this.model.set('active', false).trigger('change');
       this.model.save();
-      this.options.vent.trigger('showEditModal', this.model);
+      vent.trigger('showEditModal', this.model);
     },
 
     addFeedback: function(e){
@@ -399,7 +401,7 @@ define([
 
       var feedbackActionView = new FeedbackActionView({
         model: this.model,
-        vent: this.options.vent,
+        vent: vent,
         action: feedbackDefaultAction,
         triggerModal: 'showEditModal',
         add: true,
@@ -432,7 +434,7 @@ define([
 
       var qrActionView = new QRActionView({
         model: this.model,
-        vent: this.options.vent,
+        vent: vent,
         action: qrDefaultAction,
         triggerModal: 'showEditModal',
         add: true,
@@ -470,7 +472,7 @@ define([
 
       var checkinActionView = new CheckinActionView({
         model: this.model,
-        vent: this.options.vent,
+        vent: vent,
         action: checkinDefaultAction,
         triggerModal: 'showEditModal',
         add: true,
@@ -556,7 +558,7 @@ define([
     _addReward: function(reward_item) {
       var rewardView = new RewardView({
         model: this.model,
-        vent: this.options.vent,
+        vent: vent,
         triggerModal: 'showEditModal',
         reward_item: reward_item,
         save: true,
@@ -636,7 +638,7 @@ define([
       this.model.save();
       console.log('save repeat', value, this.model.toJSON());
 
-      this.options.vent.trigger('showEditModal', this.model);
+      vent.trigger('showEditModal', this.model);
     },
 
     showEditRepeat: function(){
@@ -724,7 +726,7 @@ define([
             //Save change
             self.model.save();
 
-            self.options.vent.trigger('showEditModal', self.model);
+            vent.trigger('showEditModal', self.model);
             return;
           }
           alert(resp.data);

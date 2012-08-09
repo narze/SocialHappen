@@ -6,8 +6,9 @@ define([
   'text!templates/company/reward-list.html',
   'views/company/reward-item',
   'masonry',
-  'endlessscroll'
-], function($, _, Backbone, RewardModel, rewardListTemplate, RewardItemView, masonry, endlessscroll){
+  'endlessscroll',
+  'events'
+], function($, _, Backbone, RewardModel, rewardListTemplate, RewardItemView, masonry, endlessscroll, vent){
   var RewardListPane = Backbone.View.extend({
     rewardListTemplate: _.template(rewardListTemplate),
 
@@ -18,7 +19,7 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.unbind('reloadMasonry').bind('reloadMasonry', this.reloadMasonry);
+      vent.unbind('reloadMasonry').bind('reloadMasonry', this.reloadMasonry);
       this.collection.unbind('reset').bind('reset', this.addAll);
       this.collection.unbind('add').bind('add', this.addOne);
     },
@@ -53,7 +54,7 @@ define([
 
       var reward = new RewardItemView({
         model: model,
-        vent: this.options.vent
+        vent: vent
       });
 
       var el = reward.render().$el;
@@ -106,7 +107,7 @@ define([
         status: 'published'
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
-      this.options.vent.trigger('showAddRewardModal', newModel);
+      vent.trigger('showAddRewardModal', newModel);
     }
   });
   return RewardListPane;

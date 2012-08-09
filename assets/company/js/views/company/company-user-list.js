@@ -4,8 +4,9 @@ define([
   'backbone',
   'models/company-user',
   'text!templates/company/user-list.html',
-  'views/company/user-item'
-], function($, _, Backbone, CompanyUserModel, userListTemplate, CompanyUserItemView){
+  'views/company/user-item',
+  'events'
+], function($, _, Backbone, CompanyUserModel, userListTemplate, CompanyUserItemView, vent){
   var CompanyUserListPane = Backbone.View.extend({
 
     events: {
@@ -34,7 +35,7 @@ define([
 
       var user = new CompanyUserItemView({
         model: model,
-        vent: this.options.vent
+        vent: vent
       });
       var el = user.render().$el;
       $('.user-list', this.el).append(el);

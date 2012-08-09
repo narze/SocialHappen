@@ -3,8 +3,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'vm'
-], function ($, _, Backbone, Vm) {
+  'vm',
+  'events',
+  'sandbox'
+], function ($, _, Backbone, Vm, vent, sandbox) {
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Default - catch all
@@ -26,7 +28,7 @@ define([
 
     var self = this;
 
-    var currentUserModel = options.currentUserModel;
+    var currentUserModel = sandbox.models.currentUserModel;
     currentUserModel.fetch({
       success: function(model, xhr){
         // console.log('user:', model, xhr);
@@ -53,17 +55,9 @@ define([
 
     router.on('route:defaultAction', function () {
 
-      options.challengesCollection.fetch();
+      sandbox.collections.challengesCollection.fetch();
       require(['views/company/page'], function (CompanyPage) {
-        var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-          currentUserModel: currentUserModel,
-          challengesCollection: options.challengesCollection,
-          rewardsCollection: options.rewardsCollection,
-          couponsCollection: options.couponsCollection,
-          companyUsersCollection: options.companyUsersCollection,
-          activitiesCollection: options.activitiesCollection,
-          vent: options.vent
-        });
+        var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {        });
         companyPage.render();
       });
     });
@@ -75,20 +69,13 @@ define([
 
       checkCurrentUser();
 
-      options.challengesCollection.url = window.Company.BASE_URL + '/apiv3/challenges/?company_id=' + companyId;
+      sandbox.collections.challengesCollection.url = window.Company.BASE_URL + '/apiv3/challenges/?company_id=' + companyId;
 
-      options.challengesCollection.fetch();
+      sandbox.collections.challengesCollection.fetch();
       if(!self.companyPage){
         require(['views/company/page'], function (CompanyPage) {
 
           var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            currentUserModel: currentUserModel,
-            challengesCollection: options.challengesCollection,
-            rewardsCollection: options.rewardsCollection,
-            couponsCollection: options.couponsCollection,
-            companyUsersCollection: options.companyUsersCollection,
-            activitiesCollection: options.activitiesCollection,
-            vent: options.vent,
             now: 'challenge'
           });
           companyPage.render();
@@ -107,21 +94,14 @@ define([
 
       window.Company.companyId = companyId;
 
-      options.rewardsCollection.url = window.Company.BASE_URL + '/apiv3/rewards/?company_id=' + companyId;
+      sandbox.collections.rewardsCollection.url = window.Company.BASE_URL + '/apiv3/rewards/?company_id=' + companyId;
 
-      options.rewardsCollection.fetch();
+      sandbox.collections.rewardsCollection.fetch();
 
       if(!self.companyPage){
         require(['views/company/page'], function (CompanyPage) {
 
           var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            currentUserModel: currentUserModel,
-            challengesCollection: options.challengesCollection,
-            rewardsCollection: options.rewardsCollection,
-            couponsCollection: options.couponsCollection,
-            companyUsersCollection: options.companyUsersCollection,
-            activitiesCollection: options.activitiesCollection,
-            vent: options.vent,
             now: 'reward'
           });
           companyPage.render();
@@ -142,28 +122,21 @@ define([
 
       window.Company.companyId = companyId;
 
-      options.couponsCollection.url = window.Company.BASE_URL + '/apiv3/coupons/?company_id=' + companyId;
+      sandbox.collections.couponsCollection.url = window.Company.BASE_URL + '/apiv3/coupons/?company_id=' + companyId;
 
-      options.couponsCollection.fetch();
+      sandbox.collections.couponsCollection.fetch();
 
       if(!self.companyPage){
         require(['views/company/page'], function (CompanyPage) {
 
           var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            currentUserModel: currentUserModel,
-            challengesCollection: options.challengesCollection,
-            rewardsCollection: options.rewardsCollection,
-            couponsCollection: options.couponsCollection,
-            companyUsersCollection: options.companyUsersCollection,
-            activitiesCollection: options.activitiesCollection,
-            vent: options.vent,
             now: 'coupon'
           });
           companyPage.render();
           self.companyPage = companyPage;
 
           //Show coupon if couponId is set and exist
-          if(couponId && options.couponsCollection.get(couponId)) { options.couponsCollection.get(couponId).trigger('view'); }
+          if(couponId && sandbox.collections.couponsCollection.get(couponId)) { sandbox.collections.couponsCollection.get(couponId).trigger('view'); }
         });
       } else {
         self.companyPage.options.now = 'coupon';
@@ -176,21 +149,14 @@ define([
 
       window.Company.companyId = companyId;
 
-      options.activitiesCollection.url = window.Company.BASE_URL + '/apiv3/company_activities/' + companyId;
+      sandbox.collections.activitiesCollection.url = window.Company.BASE_URL + '/apiv3/company_activities/' + companyId;
 
-      options.activitiesCollection.fetch();
+      sandbox.collections.activitiesCollection.fetch();
 
       if(!self.companyPage){
         require(['views/company/page'], function (CompanyPage) {
 
           var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            currentUserModel: currentUserModel,
-            challengesCollection: options.challengesCollection,
-            rewardsCollection: options.rewardsCollection,
-            couponsCollection: options.couponsCollection,
-            companyUsersCollection: options.companyUsersCollection,
-            activitiesCollection: options.activitiesCollection,
-            vent: options.vent,
             now: 'activities'
           });
           companyPage.render();
@@ -209,29 +175,22 @@ define([
 
       window.Company.companyId = companyId;
 
-      options.companyUsersCollection.url = window.Company.BASE_URL + '/apiv3/company_users/' + companyId;
+      sandbox.collections.companyUsersCollection.url = window.Company.BASE_URL + '/apiv3/company_users/' + companyId;
 
-      options.companyUsersCollection.fetch();
+      sandbox.collections.companyUsersCollection.fetch();
 
       if(!self.companyPage){
         require(['views/company/page'], function (CompanyPage) {
 
           var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            currentUserModel: currentUserModel,
-            challengesCollection: options.challengesCollection,
-            rewardsCollection: options.rewardsCollection,
-            couponsCollection: options.couponsCollection,
-            companyUsersCollection: options.companyUsersCollection,
-            activitiesCollection: options.activitiesCollection,
-            vent: options.vent,
             now: 'users'
           });
           companyPage.render();
           self.companyPage = companyPage;
 
           //Show user if userId is set end exist
-          if(userId && options.companyUsersCollection.get(userId)) {
-            options.companyUsersCollection.get(userId).trigger('view');
+          if(userId && sandbox.collections.companyUsersCollection.get(userId)) {
+            sandbox.collections.companyUsersCollection.get(userId).trigger('view');
           }
         });
       } else {

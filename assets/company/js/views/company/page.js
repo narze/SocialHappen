@@ -10,23 +10,24 @@ define([
   'views/company/coupon-list',
   'views/company/activity-list',
   'views/company/company-user-list',
-  'bootstrap'
-], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, ActivityListView, CompanyUserListView, bootstrap){
+  'bootstrap',
+  'sandbox'
+], function($, _, Backbone, pageTemplate, SidebarView, CarouselView, ChallengeListView, RewardListView, CouponListView, ActivityListView, CompanyUserListView, bootstrap, sandbox){
   var ProfilePage = Backbone.View.extend({
     pageTemplate: _.template(pageTemplate),
     el: '#content',
 
     initialize: function(){
       _.bindAll(this);
-      this.options.currentUserModel.bind('change', this.render);
+      sandbox.models.currentUserModel.bind('change', this.render);
     },
 
     render: function () {
       var company;
       $(this.el).html(pageTemplate);
 
-      if(this.options.currentUserModel){
-        company = _.find(this.options.currentUserModel.get('companies'), function(i){
+      if(sandbox.models.currentUserModel){
+        company = _.find(sandbox.models.currentUserModel.get('companies'), function(i){
           return i.company_id === window.Company.companyId;
         });
 
@@ -38,9 +39,6 @@ define([
           require(['views/company/modal/edit'], function (EditChallenge) {
             if(!self.editChallenge){
               self.editChallenge = new EditChallenge({
-                currentUserModel: self.options.currentUserModel,
-                challengesCollection: self.options.challengesCollection,
-                vent: self.options.vent,
                 el: $('div#edit-challenge-modal')
               });
             }
@@ -49,9 +47,6 @@ define([
           require(['views/company/modal/add'], function (AddChallenge) {
             if(!self.addChallenge){
               self.addChallenge = new AddChallenge({
-                currentUserModel: self.options.currentUserModel,
-                challengesCollection: self.options.challengesCollection,
-                vent: self.options.vent,
                 el: $('div#add-challenge-modal')
               });
             }
@@ -60,9 +55,6 @@ define([
           require(['views/company/modal/reward/edit-reward'], function (EditReward) {
             if(!self.editReward){
               self.editReward = new EditReward({
-                currentUserModel: self.options.currentUserModel,
-                rewardsCollection: self.options.rewardsCollection,
-                vent: self.options.vent,
                 el: $('div#edit-reward-modal')
               });
             }
@@ -71,9 +63,6 @@ define([
           require(['views/company/modal/reward/add-reward'], function (AddReward) {
             if(!self.addReward){
               self.addReward = new AddReward({
-                currentUserModel: self.options.currentUserModel,
-                rewardsCollection: self.options.rewardsCollection,
-                vent: self.options.vent,
                 el: $('div#add-reward-modal')
               });
             }
@@ -82,57 +71,48 @@ define([
       }
       var sidebarView = new SidebarView({
         el: $('#sidebar', this.el),
-        currentUserModel: this.options.currentUserModel,
-        vent: this.options.vent,
         company: company,
         now: this.options.now
       });
       sidebarView.render();
 
       var carouselView = new CarouselView({
-        el: $('#carousel', this.el),
-        currentUserModel: this.options.currentUserModel,
-        vent: this.options.vent
+        el: $('#carousel', this.el)
       });
       carouselView.render();
 
       if(this.options.now === 'challenge'){
         var challengeListView = new ChallengeListView({
-          collection: this.options.challengesCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
+          collection: sandbox.collections.challengesCollection,
+          el: $('#content-pane', this.el)
         });
 
         challengeListView.render();
       } else if(this.options.now === 'reward'){
         var rewardListView = new RewardListView({
-          collection: this.options.rewardsCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
+          collection: sandbox.collections.rewardsCollection,
+          el: $('#content-pane', this.el)
         });
 
         rewardListView.render();
       } else if(this.options.now === 'coupon'){
         var couponListView = new CouponListView({
-          collection: this.options.couponsCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
+          collection: sandbox.collections.couponsCollection,
+          el: $('#content-pane', this.el)
         });
 
         couponListView.render();
       } else if(this.options.now === 'users'){
         var companyUserListView = new CompanyUserListView({
-          collection: this.options.companyUsersCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
+          collection: sandbox.collections.companyUsersCollection,
+          el: $('#content-pane', this.el)
         });
 
         companyUserListView.render();
       } else if(this.options.now === 'activities'){
         var activityListView = new ActivityListView({
-          collection: this.options.activitiesCollection,
-          el: $('#content-pane', this.el),
-          vent: this.options.vent
+          collection: sandbox.collections.activitiesCollection,
+          el: $('#content-pane', this.el)
         });
 
         activityListView.render();

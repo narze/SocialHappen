@@ -4,9 +4,11 @@ define([
   'backbone',
   'models/challenge',
   'text!templates/company/modal/reward/add-reward.html',
-  'jqueryui'
+  'jqueryui',
+  'events',
+  'sandbox'
 ], function($, _, Backbone, ChallengeModel, addTemplate,
-   jqueryui){
+   jqueryui, vent, sandbox){
   var EditModalView = Backbone.View.extend({
     addTemplate: _.template(addTemplate),
 
@@ -26,7 +28,7 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.bind('showAddRewardModal', this.show);
+      vent.bind('showAddRewardModal', this.show);
     },
 
     render: function () {
@@ -68,7 +70,7 @@ define([
       $('h3.edit-name', this.$el).show();
       $('div.edit-name', this.$el).hide();
 
-      this.options.vent.trigger('showAddRewardModal', this.model);
+      vent.trigger('showAddRewardModal', this.model);
     },
 
 
@@ -95,7 +97,7 @@ define([
       $('div.edit-description', this.el).show();
       $('div.edit-description-field', this.el).hide();
 
-      this.options.vent.trigger('showAddRewardModal', this.model);
+      vent.trigger('showAddRewardModal', this.model);
     },
 
     showEditImage: function(){
@@ -110,7 +112,7 @@ define([
       this.model.set('image', image).trigger('change');
 
 
-      this.options.vent.trigger('showAddRewardModal', this.model);
+      vent.trigger('showAddRewardModal', this.model);
     },
 
     showEditRedeem: function(){
@@ -139,7 +141,7 @@ define([
       $('div.edit-redeem', this.el).show();
       $('div.edit-redeem-field', this.el).hide();
 
-      this.options.vent.trigger('showAddRewardModal', this.model);
+      vent.trigger('showAddRewardModal', this.model);
     },
 
     createReward: function(){
@@ -148,7 +150,7 @@ define([
       this.model.set('company_id', parseInt(window.Company.companyId, 10));
       this.model.set('type', 'redeem');
 
-      this.options.rewardsCollection.create(this.model, {
+      sandbox.collections.rewardsCollection.create(this.model, {
         success: function() {
           //Refresh
           // window.location = window.Company.BASE_URL + 'r/company/' + window.Company.companyId +'/reward';
@@ -172,7 +174,7 @@ define([
             // Save image
             self.model.set('image', imageUrl).trigger('change');
 
-            self.options.vent.trigger('showAddRewardModal', self.model);
+            vent.trigger('showAddRewardModal', self.model);
             return;
           }
           alert(resp.data);

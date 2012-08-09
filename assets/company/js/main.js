@@ -13,6 +13,7 @@ require.config({
     endlessscroll: '../../libs/jquery.endless-scroll/jquery.endless-scroll.min', // https://github.com/paulirish/infinite-scroll/
     moment: '../../libs/moment/moment.min',
     jqueryForm: '../../libs/jquery.form/jquery.form',
+    sandbox: '../../libs/sandbox/sandbox',
     // Require.js plugins
     text: '../../libs/require/text',
     order: '../../libs/require/order',
@@ -37,32 +38,23 @@ require([
   'collections/coupons',
   'collections/activities',
   'collections/company-users',
-  'events'
-], function(AppView, Router, Vm, UserModel, ChallengesCollection, RewardsCollection, CouponsCollection, ActivitiesCollection, CompanyUsersCollection, vent){
+  'events',
+  'sandbox'
+], function(AppView, Router, Vm, UserModel, ChallengesCollection, RewardsCollection, CouponsCollection, ActivitiesCollection, CompanyUsersCollection, vent, sandbox){
 
-  var currentUserModel = window.Company.currentUserModel = new UserModel();
-  var challengesCollection = window.Company.challengesCollection = new ChallengesCollection([]);
-  var rewardsCollection = window.Company.rewardsCollection = new RewardsCollection([]);
-  var couponsCollection = window.Company.couponsCollection = new CouponsCollection([]);
-  var activitiesCollection = window.Company.activitiesCollection = new ActivitiesCollection([]);
-  var companyUsersCollection = window.Company.companyUsersCollection = new CompanyUsersCollection([]);
+  var currentUserModel = sandbox.models.currentUserModel = new UserModel();
+  var challengesCollection = sandbox.collections.challengesCollection = new ChallengesCollection([]);
+  var rewardsCollection = sandbox.collections.rewardsCollection = new RewardsCollection([]);
+  var couponsCollection = sandbox.collections.couponsCollection = new CouponsCollection([]);
+  var activitiesCollection = sandbox.collections.activitiesCollection = new ActivitiesCollection([]);
+  var companyUsersCollection = sandbox.collections.companyUsersCollection = new CompanyUsersCollection([]);
 
-  var appView = Vm.create({}, 'AppView', AppView, {
-    currentUserModel: currentUserModel,
-    vent: vent
-  });
+  var appView = Vm.create({}, 'AppView', AppView, {});
   appView.render();
 
   // The router now has a copy of all main appview
   Router.initialize({
-    appView: appView,
-    currentUserModel: currentUserModel,
-    challengesCollection: challengesCollection,
-    rewardsCollection: rewardsCollection,
-    couponsCollection: couponsCollection,
-    activitiesCollection: activitiesCollection,
-    companyUsersCollection: companyUsersCollection,
-    vent: vent
+    appView: appView
   });
 
 });

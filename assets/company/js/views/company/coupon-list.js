@@ -4,8 +4,9 @@ define([
   'backbone',
   'models/coupon',
   'text!templates/company/coupon-list.html',
-  'views/company/coupon-item'
-], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView){
+  'views/company/coupon-item',
+  'events'
+], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView, vent){
   var CouponListPane = Backbone.View.extend({
     couponListTemplate: _.template(couponListTemplate),
 
@@ -44,7 +45,7 @@ define([
 
       var coupon = new CouponItemView({
         model: model,
-        vent: this.options.vent
+        vent: vent
       });
       // console.log($('.coupon-list', this.el));
       var el = coupon.render().$el;
@@ -54,7 +55,7 @@ define([
     addAll: function(){
       $('.coupon-list', this.el).html('');
 
-      if(this.collection.models.length == 0){
+      if(this.collection.models.length === 0){
         $('.coupon-list', this.el).html('Your company have no coupon.');
       }
 

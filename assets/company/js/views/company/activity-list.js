@@ -4,8 +4,9 @@ define([
   'backbone',
   'models/activity',
   'text!templates/company/activity-list.html',
-  'views/company/activity-item'
-], function($, _, Backbone, ActivityModel, activityListTemplate, ActivityItemView){
+  'views/company/activity-item',
+  'events'
+], function($, _, Backbone, ActivityModel, activityListTemplate, ActivityItemView, vent){
   var ActivityListPane = Backbone.View.extend({
 
     events: {
@@ -36,7 +37,7 @@ define([
 
       var activity = new ActivityItemView({
         model: model,
-        vent: this.options.vent
+        vent: vent
       });
       // console.log($('.activity-list', this.el));
       var el = activity.render().$el;

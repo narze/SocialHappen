@@ -3,8 +3,10 @@ define([
   'underscore',
   'backbone',
   'text!templates/company/modal/reward/edit-reward.html',
-  'jqueryui'
-], function($, _, Backbone, editTemplate, jqueryui){
+  'jqueryui',
+  'events',
+  'sandbox'
+], function($, _, Backbone, editTemplate, jqueryui, vent, sandbox){
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
     events: {
@@ -22,7 +24,7 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.bind('showEditRewardModal', this.show);
+      vent.bind('showEditRewardModal', this.show);
     },
 
     render: function () {
@@ -65,7 +67,7 @@ define([
       $('h3.edit-name', this.$el).show();
       $('div.edit-name', this.$el).hide();
 
-      this.options.vent.trigger('showEditRewardModal', this.model);
+      vent.trigger('showEditRewardModal', this.model);
     },
 
     setRewardStatus: function(){
@@ -91,7 +93,7 @@ define([
       $('div.edit-description', this.el).show();
       $('div.edit-description-field', this.el).hide();
 
-      this.options.vent.trigger('showEditRewardModal', this.model);
+      vent.trigger('showEditRewardModal', this.model);
     },
 
     showEditImage: function(){
@@ -106,7 +108,7 @@ define([
       this.model.set('image', image).trigger('change');
       this.model.save();
 
-      this.options.vent.trigger('showEditRewardModal', this.model);
+      vent.trigger('showEditRewardModal', this.model);
     },
 
     showEditRedeem: function(){
@@ -136,7 +138,7 @@ define([
       $('div.edit-redeem', this.el).show();
       $('div.edit-redeem-field', this.el).hide();
 
-      this.options.vent.trigger('showEditRewardModal', this.model);
+      vent.trigger('showEditRewardModal', this.model);
     },
 
     uploadImage: function(e) {
@@ -156,7 +158,7 @@ define([
             //Save change
             self.model.save();
 
-            self.options.vent.trigger('showEditRewardModal', self.model);
+            vent.trigger('showEditRewardModal', self.model);
             return;
           }
           alert(resp.data);

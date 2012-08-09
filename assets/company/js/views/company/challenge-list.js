@@ -6,8 +6,9 @@ define([
   'text!templates/company/challenge-list.html',
   'views/company/challenge-item',
   'masonry',
-  'endlessscroll'
-], function($, _, Backbone, ChallengeModel, challengeListTemplate, ChallengeItemView, masonry, endlessscroll){
+  'endlessscroll',
+  'events'
+], function($, _, Backbone, ChallengeModel, challengeListTemplate, ChallengeItemView, masonry, endlessscroll, vent){
   var ChallengeListPane = Backbone.View.extend({
     challengeListTemplate: _.template(challengeListTemplate),
 
@@ -18,7 +19,7 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.options.vent.unbind('reloadMasonry').bind('reloadMasonry', this.reloadMasonry);
+      vent.unbind('reloadMasonry').bind('reloadMasonry', this.reloadMasonry);
       this.collection.unbind('reset').bind('reset', this.addAll);
       this.collection.unbind('add').bind('add', this.addOne);
     },
@@ -66,7 +67,7 @@ define([
 
       var challenge = new ChallengeItemView({
         model: model,
-        vent: this.options.vent
+        vent: vent
       });
       // console.log($('.tile-list', this.el));
       var el = challenge.render().$el;
@@ -118,8 +119,8 @@ define([
         repeat: null
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
-      this.options.vent.trigger('showAddModal', newModel);
-      this.options.vent.trigger('showRecipeModal');
+      vent.trigger('showAddModal', newModel);
+      vent.trigger('showRecipeModal');
     }
   });
   return ChallengeListPane;
