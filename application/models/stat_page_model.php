@@ -84,7 +84,7 @@ class Stat_page_model extends CI_Model {
 							  'page_id' => (int)$page_id,
 							  'action_id' => (int)$action_id,
 							  'date' => (int)$date);
-			$this->collection->upsert($criteria, array(
+			$this->upsert($criteria, array(
 												'$inc' => array('count' => 1)
 											));
 			return TRUE;
