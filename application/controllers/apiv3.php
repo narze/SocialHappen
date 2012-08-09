@@ -805,7 +805,10 @@ class Apiv3 extends CI_Controller {
           ($action_id <= 100)
         );
       }else{
-        $result[$i]['message'] = '[unknown audit]';
+        // $result[$i]['me$ssage'] = '[unknown audit]';
+        // bad audit : should hide it
+        log_message('error', 'audit message error '. print_r($result[$i], TRUE));
+        unset($result[$i]);
       }
     }
 
