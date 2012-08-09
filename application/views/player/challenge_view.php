@@ -26,7 +26,7 @@
 					<a id="join-challenge" class="btn btn-primary" href="<?php echo base_url().'player/join_challenge/'.$challenge_hash;?>">Accept challenge</a>
 					<?php endif; ?>
 				</p>
-				<h2 class="challenge-name"><?php echo $challenge['detail']['name'];?></h2>
+				<h2 class="challenge-name"><?php echo htmlspecialchars($challenge['detail']['name']);?></h2>
 				<p><small>By : <?php echo $company_name;?> Start : <span id="challenge-start-date"></span> End : <span id="challenge-end-date"></span></small></p>
 
 
@@ -54,12 +54,12 @@
 				<?php endif; ?>
 
 				<div class="row-fluid">
-					<p class="challenge-description "><?php echo $challenge['detail']['description']; ?></p>
+					<p class="challenge-description "><?php echo htmlspecialchars($challenge['detail']['description']); ?></p>
 				</div>
 
 				<div class="row-fluid">
 					<div class="control-group">
-						<img class="challenge-image" src="<?php echo $challenge['detail']['image'] ? $challenge['detail']['image'] : base_url('assets/images/default/challenge.png'); ?>" alt="<?php echo $challenge['detail']['name'];?>">
+						<img class="challenge-image" src="<?php echo $challenge['detail']['image'] ? $challenge['detail']['image'] : base_url('assets/images/default/challenge.png'); ?>" alt="<?php echo htmlspecialchars($challenge['detail']['name']);?>">
 					</div>
 				</div>
 
@@ -85,7 +85,7 @@
 													<button disabled type="button" class="action-icon btn">Action Icon</button>
 												</div>
 
-												<h3 class="criteria-name span10"><?php echo $criteria['name']; ?></h3>
+												<h3 class="criteria-name span10"><?php echo htmlspecialchars($criteria['name']); ?></h3>
 												<?php if($player_challenging) {
 													if($challenge_progress[$key]['action_done']) { ?>
 														<p class="span10">
@@ -219,7 +219,7 @@
 							</div>
 							<div class="reward-info">
 							<span class="reward-name">
-								<?php echo $challenge_reward['name']; ?>
+								<?php echo htmlspecialchars($challenge_reward['name']); ?>
 							</span>
 							<?php if($challenge_reward['value'] > 0) : ?>
 								<span class="reward-value">
@@ -227,7 +227,7 @@
 								</span>
 							<?php endif; ?>
 							<div class="reward-description">
-								<?php echo $challenge_reward['description']; ?>
+								<?php echo htmlspecialchars($challenge_reward['description']); ?>
 							</div>
 							<div class="reward-coupon-link">
 								<a class="btn btn-success view-coupon" href="<?php echo base_url('assets/passport/#/profile/'.$user_id.'/coupon/'.get_mongo_id($challenge_reward)); ?>">View Coupon</a>
@@ -277,7 +277,7 @@
 							</div>
 							<div class="reward-info">
 							<span class="reward-name">
-								<?php echo $challenge_reward['name']; ?>
+								<?php echo htmlspecialchars($challenge_reward['name']); ?>
 							</span>
 							<?php if($challenge_reward['value'] > 0) : ?>
 								<span class="reward-value">
@@ -285,7 +285,7 @@
 								</span>
 							<?php endif; ?>
 							<div class="reward-description">
-								<?php echo $challenge_reward['description']; ?>
+								<?php echo htmlspecialchars($challenge_reward['description']); ?>
 							</div>
 							<div class="reward-coupon-link">
 								<a class="btn btn-success view-coupon" href="<?php echo base_url('assets/passport/#/profile/'.$user_id.'/coupon/'.get_mongo_id($challenge_reward)); ?>">View Coupon</a>
