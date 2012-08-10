@@ -158,7 +158,7 @@ img.company-image{
   margin-bottom: 10px;
 }
 
-#action-modal .edit-image img.reward-image {
+#action-modal .edit-image img.reward-image, #add-challenge-modal .modal-body img.challenge-image, #add-reward-modal .edit-image img.reward-image {
   display: block;
   min-height: 120px;
   margin: 0 auto;
