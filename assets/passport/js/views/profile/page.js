@@ -31,17 +31,17 @@ define([
       $(this.el).html(this.profilePageTemplate({
         user: sandbox.models.userModel.toJSON(),
         userId: sandbox.userId,
-        isCurrentUser: sandbox.models.userModel.id === sandbox.models.currentUserModel.get('user_id')
+        isCurrentUser: sandbox.models.userModel.id === sandbox.models.currentUserModel.get('user_id'),
+        now: sandbox.now
       }));
 
       $('div#header .passport').addClass('active');
 
       //Render profile pane
-      var profilePane = new ProfilePane({
-        el: $('.profile', this.el)
-      });
-      profilePane.render();
+      var profilePane = new ProfilePane({});
+      $('.profile', this.el).html(profilePane.render().el);
       console.log('page rendered');
+
       //Menu
       // $('#badges-count').text();
 

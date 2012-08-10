@@ -45,6 +45,7 @@ define([
 
     router.on('route:profile', function (id) {
       sandbox.userId = id;
+      sandbox.now = 'profile';
       require(['views/profile/action-list'], function (ActionListPage) {
         createProfilePage();
         var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: false});
@@ -54,6 +55,7 @@ define([
 
     router.on('route:photo', function (id) {
       sandbox.userId = id;
+      sandbox.now = 'profile';
       require(['views/profile/action-list'], function (ActionListPage) {
         createProfilePage();
         var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: 9999, header_text: 'Photos' });
@@ -63,6 +65,7 @@ define([
 
     router.on('route:feedback', function (id) {
       sandbox.userId = id;
+      sandbox.now = 'profile';
       require(['views/profile/action-list'], function (ActionListPage) {
         createProfilePage();
         var actionListPage = Vm.create(appView, 'RightPane', ActionListPage, { filter: 202, header_text: 'Feedbacks' });
@@ -72,6 +75,7 @@ define([
 
     router.on('route:badge', function (id) {
       sandbox.userId = id;
+      sandbox.now = 'profile';
       require(['views/profile/achievement-list'], function (AchievementListPage) {
         createProfilePage();
         var achievementListPage = Vm.create(appView, 'RightPane', AchievementListPage);
@@ -81,6 +85,7 @@ define([
 
     router.on('route:card', function (id) {
       sandbox.userId = id;
+      sandbox.now = 'card';
       require(['views/profile/card-list'], function (CardPage) {
         createProfilePage();
         var cardPage = Vm.create(appView, 'RightPane', CardPage);
@@ -90,6 +95,7 @@ define([
 
     router.on('route:coupon', function (id) {
       sandbox.userId = id;
+      sandbox.now = 'coupon';
       require(['views/profile/coupon-list'], function (CouponListPage) {
         createProfilePage();
         var couponListPage = Vm.create(appView, 'RightPane', CouponListPage);
@@ -100,6 +106,7 @@ define([
     router.on('route:couponItem', function (id, rewardItemId) {
       sandbox.userId = id;
       sandbox.rewardItemId = rewardItemId;
+      sandbox.now = 'coupon';
       require(['views/profile/coupon-list', 'views/profile/coupon-item'], function (CouponList, CouponItem) {
         createProfilePage();
         var couponList = Vm.create(appView, 'RightPane', CouponList);
@@ -113,6 +120,7 @@ define([
 
     router.on('route:activity', function (id) {
       sandbox.userId = id;
+      sandbox.now = 'activity';
       require(['views/profile/activity-list'], function (ActivityPage) {
         createProfilePage();
         var activityPage = Vm.create(appView, 'RightPane', ActivityPage);
