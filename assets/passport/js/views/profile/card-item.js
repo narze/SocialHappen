@@ -4,8 +4,9 @@ define([
   'backbone',
   'bootstrap',
   'text!templates/profile/card-item.html',
-  'text!templates/profile/card-activity-item.html'
-], function($, _, Backbone, bootstrap, cardItemTemplate, cardActivityItemTemplate){
+  'text!templates/profile/card-activity-item.html',
+  'moment'
+], function($, _, Backbone, bootstrap, cardItemTemplate, cardActivityItemTemplate, moment){
   var CardItemView = Backbone.View.extend({
     className: 'card',
 
