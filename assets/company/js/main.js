@@ -49,12 +49,23 @@ require([
   var activitiesCollection = sandbox.collections.activitiesCollection = new ActivitiesCollection([]);
   var companyUsersCollection = sandbox.collections.companyUsersCollection = new CompanyUsersCollection([]);
 
-  var appView = Vm.create({}, 'AppView', AppView, {});
-  appView.render();
+  sandbox.models.currentUserModel.fetch({
+    success: function(model, xhr){
+      if(xhr.user_id){
+        return initView();
+      }
 
-  // The router now has a copy of all main appview
-  Router.initialize({
-    appView: appView
+      window.location = window.Company.BASE_URL + '/login?next=' + window.location.href
+    }
   });
 
+  function initView() {
+    var appView = Vm.create({}, 'AppView', AppView, {});
+    appView.render();
+
+    // The router now has a copy of all main appview
+    Router.initialize({
+      appView: appView
+    });
+  }
 });

@@ -29,34 +29,28 @@ define([
     var companyPage = null;
     var self = this;
 
-    var currentUserModel = sandbox.models.currentUserModel;
-    currentUserModel.fetch({
-      success: function(model, xhr){
-        // console.log('user:', model, xhr);
-        if(!xhr.user_id){
-          // console.log('not found user:', window.Passport.BASE_URL + '/login?next=' + window.location.href);
-          window.location = window.Company.BASE_URL + '/login?next=' + window.location.href;
-        }else{
-          checkCurrentUser();
+    function createCompanyPage() {
+      if(isCompanyUser()) {
+        if(!companyPage) companyPage = Vm.create(appView, 'CompanyPage', CompanyPage);
+
+        if(sandbox.companyId !== sandbox.tempCompanyId) {
+          companyPage.render();
+          sandbox.tempCompanyId = sandbox.companyId;
         }
       }
-    });
-
-    function createCompanyPage() {
-      if(!companyPage) companyPage = Vm.create(appView, 'CompanyPage', CompanyPage);
-      companyPage.render();
     }
 
-    function checkCurrentUser(){
-      if(currentUserModel.get('user_id') && window.Company.companyId){
-        var company = _.find(currentUserModel.get('companies'), function(i){
-          return i.company_id === window.Company.companyId;
-        });
+    function isCompanyUser(){
+      var company = _.find(sandbox.models.currentUserModel.get('companies'), function(i){
+        return i.company_id === window.Company.companyId;
+      });
 
-        if(!company){
-          window.location = window.Company.BASE_URL + 'passport';
-        }
+      if(!company){
+        window.location = window.Company.BASE_URL + 'passport';
+        return false;
       }
+
+      return true;
     }
 
     router.on('route:company', function(id) {
