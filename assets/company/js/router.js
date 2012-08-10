@@ -5,8 +5,9 @@ define([
   'backbone',
   'vm',
   'events',
-  'sandbox'
-], function ($, _, Backbone, Vm, vent, sandbox) {
+  'sandbox',
+  'views/company/page'
+], function ($, _, Backbone, Vm, vent, sandbox, CompanyPage) {
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Default - catch all
@@ -25,7 +26,7 @@ define([
   var initialize = function(options){
     var appView = sandbox.views.appView = options.appView;
     var router = new AppRouter(options);
-
+    var companyPage = null;
     var self = this;
 
     var currentUserModel = sandbox.models.currentUserModel;
@@ -41,6 +42,11 @@ define([
       }
     });
 
+    function createCompanyPage() {
+      if(!companyPage) companyPage = Vm.create(appView, 'CompanyPage', CompanyPage);
+      companyPage.render();
+    }
+
     function checkCurrentUser(){
       if(currentUserModel.get('user_id') && window.Company.companyId){
         var company = _.find(currentUserModel.get('companies'), function(i){
@@ -53,151 +59,89 @@ define([
       }
     }
 
-    router.on('route:defaultAction', function () {
+    router.on('route:company', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      require(['views/company/challenge-list'], function(ChallengeList) {
+        createCompanyPage();
+        var challengeListView = Vm.create(sandbox.views.appView, 'Content', ChallengeList);
+        $('#content-pane').html(challengeListView.render().el);
+      })
+    })
 
-      sandbox.collections.challengesCollection.fetch();
-      require(['views/company/page'], function (CompanyPage) {
-        var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {        });
-        companyPage.render();
-      });
-    });
+    router.on('route:reward', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.collections.rewardsCollection.url = window.Company.BASE_URL + '/apiv3/rewards/?company_id=' + id;
+      require(['views/company/reward-list'], function(RewardList) {
+        createCompanyPage();
+        var rewardListView = Vm.create(sandbox.views.appView, 'Content', RewardList);
+        $('#content-pane').html(rewardListView.render().el);
+      })
+    })
 
-    router.on('route:company', function (companyId) {
-      console.log('show company:', companyId);
+    router.on('route:coupon', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.collections.couponsCollection.url = window.Company.BASE_URL + '/apiv3/coupons/?company_id=' + id;
+      require(['views/company/coupon-list'], function(CouponList) {
+        createCompanyPage();
+        var couponListView = Vm.create(sandbox.views.appView, 'Content', CouponList);
+        $('#content-pane').html(couponListView.render().el);
+      })
+    })
 
-      window.Company.companyId = companyId;
+    router.on('route:couponPopup', function(id, couponId) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.collections.couponsCollection.url = window.Company.BASE_URL + '/apiv3/coupons/?company_id=' + id;
+      require(['views/company/coupon-list'], function(CouponList) {
+        createCompanyPage();
+        var couponListView = Vm.create(sandbox.views.appView, 'Content', CouponList);
+        $('#content-pane').html(couponListView.render().el);
 
-      checkCurrentUser();
+        sandbox.collections.couponsCollection.fetch({success: function() {
+          if(sandbox.collections.couponsCollection.get(couponId)) { sandbox.collections.couponsCollection.get(couponId).trigger('view'); }
+        }});
+      })
+    })
 
-      sandbox.collections.challengesCollection.url = window.Company.BASE_URL + '/apiv3/challenges/?company_id=' + companyId;
+    router.on('route:activities', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.collections.activitiesCollection.url = window.Company.BASE_URL + '/apiv3/company_activities/' + id;
+      require(['views/company/activity-list'], function(ActivityList) {
+        createCompanyPage();
+        var activityListView = Vm.create(sandbox.views.appView, 'Content', ActivityList);
+        $('#content-pane').html(activityListView.render().el);
+      })
+    })
 
-      sandbox.collections.challengesCollection.fetch();
-      if(!self.companyPage){
-        require(['views/company/page'], function (CompanyPage) {
+    router.on('route:users', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.collections.companyUsersCollection.url = window.Company.BASE_URL + '/apiv3/company_users/' + id;
+      require(['views/company/company-user-list'], function(CompanyUserList) {
+        createCompanyPage();
+        var companyUserListView = Vm.create(sandbox.views.appView, 'Content', CompanyUserList);
+        $('#content-pane').html(companyUserListView.render().el);
+      })
+    })
 
-          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            now: 'challenge'
-          });
-          companyPage.render();
-          self.companyPage = companyPage;
+    router.on('route:user', function(id, userId) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.userId = userId;
+      sandbox.collections.companyUsersCollection.url = window.Company.BASE_URL + '/apiv3/company_users/' + id;
+      require(['views/company/company-user-list'], function(CompanyUserList) {
+        createCompanyPage();
+        var companyUserListView = Vm.create(sandbox.views.appView, 'Content', CompanyUserList);
+        $('#content-pane').html(companyUserListView.render().el);
 
-        });
-      }else{
-        self.companyPage.options.now = 'challenge';
-        self.companyPage.render();
-      }
-    });
-
-    router.on('route:reward', function (companyId) {
-
-      console.log('show reward:', companyId);
-
-      window.Company.companyId = companyId;
-
-      sandbox.collections.rewardsCollection.url = window.Company.BASE_URL + '/apiv3/rewards/?company_id=' + companyId;
-
-      sandbox.collections.rewardsCollection.fetch();
-
-      if(!self.companyPage){
-        require(['views/company/page'], function (CompanyPage) {
-
-          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            now: 'reward'
-          });
-          companyPage.render();
-          self.companyPage = companyPage;
-
-        });
-      }else{
-        self.companyPage.options.now = 'reward';
-        self.companyPage.render();
-      }
-    });
-
-    router.on('route:coupon', couponRoute);
-    router.on('route:couponPopup', couponRoute);
-
-    function couponRoute(companyId, couponId) {
-      console.log('show coupon:', companyId);
-
-      window.Company.companyId = companyId;
-
-      sandbox.collections.couponsCollection.url = window.Company.BASE_URL + '/apiv3/coupons/?company_id=' + companyId;
-
-      sandbox.collections.couponsCollection.fetch();
-
-      if(!self.companyPage){
-        require(['views/company/page'], function (CompanyPage) {
-
-          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            now: 'coupon'
-          });
-          companyPage.render();
-          self.companyPage = companyPage;
-
-          //Show coupon if couponId is set and exist
-          if(couponId && sandbox.collections.couponsCollection.get(couponId)) { sandbox.collections.couponsCollection.get(couponId).trigger('view'); }
-        });
-      } else {
-        self.companyPage.options.now = 'coupon';
-        self.companyPage.render();
-      }
-    }
-
-    router.on('route:activities', function(companyId) {
-      console.log('show activities:', companyId);
-
-      window.Company.companyId = companyId;
-
-      sandbox.collections.activitiesCollection.url = window.Company.BASE_URL + '/apiv3/company_activities/' + companyId;
-
-      sandbox.collections.activitiesCollection.fetch();
-
-      if(!self.companyPage){
-        require(['views/company/page'], function (CompanyPage) {
-
-          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            now: 'activities'
-          });
-          companyPage.render();
-          self.companyPage = companyPage;
-        });
-      } else {
-        self.companyPage.options.now = 'activities';
-        self.companyPage.render();
-      }
-    });
-
-    router.on('route:users', companyUserRoute);
-    router.on('route:user', companyUserRoute);
-    function companyUserRoute(companyId, userId) {
-      console.log('show users:', companyId);
-
-      window.Company.companyId = companyId;
-
-      sandbox.collections.companyUsersCollection.url = window.Company.BASE_URL + '/apiv3/company_users/' + companyId;
-
-      sandbox.collections.companyUsersCollection.fetch();
-
-      if(!self.companyPage){
-        require(['views/company/page'], function (CompanyPage) {
-
-          var companyPage = Vm.create(appView, 'CompanyPage', CompanyPage, {
-            now: 'users'
-          });
-          companyPage.render();
-          self.companyPage = companyPage;
-
-          //Show user if userId is set end exist
-          if(userId && sandbox.collections.companyUsersCollection.get(userId)) {
+        sandbox.collections.companyUsersCollection.fetch({success: function() {
+          if(sandbox.collections.companyUsersCollection.get(userId)) {
             sandbox.collections.companyUsersCollection.get(userId).trigger('view');
           }
-        });
-      } else {
-        self.companyPage.options.now = 'users';
-        self.companyPage.render();
-      }
-    }
+        }})
+      })
+    })
+
+    router.on('route:defaultAction', function (actions) {
+      console.log('Route not found : ', actions);
+    });
 
     Backbone.history.start();
   }

@@ -5,8 +5,9 @@ define([
   'models/activity',
   'text!templates/company/activity-list.html',
   'views/company/activity-item',
-  'events'
-], function($, _, Backbone, ActivityModel, activityListTemplate, ActivityItemView, vent){
+  'events',
+  'sandbox'
+], function($, _, Backbone, ActivityModel, activityListTemplate, ActivityItemView, vent, sandbox){
   var ActivityListPane = Backbone.View.extend({
 
     events: {
@@ -16,8 +17,9 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      sandbox.collections.activitiesCollection.bind('reset', this.addAll);
+      sandbox.collections.activitiesCollection.bind('add', this.addOne);
+      sandbox.collections.activitiesCollection.fetch();
     },
 
     render: function () {
@@ -25,7 +27,7 @@ define([
 
       this.addAll();
 
-      if(this.collection.model.length <= 30){
+      if(sandbox.collections.activitiesCollection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
 
@@ -45,13 +47,14 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
       $('.activity-list', this.el).html('');
 
-      if(this.collection.models.length === 0){
+      if(sandbox.collections.activitiesCollection.models.length === 0){
         $('.activity-list', this.el).html('Your company have no activity.');
       }
 
-      this.collection.each(function(model){
+      sandbox.collections.activitiesCollection.each(function(model){
         this.addOne(model);
       }, this);
     },
@@ -59,7 +62,7 @@ define([
     loadMore: function(){
 
       var button = $('button.load-more', this.el).addClass('disabled');
-      this.collection.loadMore(function(loaded){
+      sandbox.collections.activitiesCollection.loadMore(function(loaded){
         if(loaded > 0){
           button.removeClass('disabled');
         }else{
@@ -70,13 +73,13 @@ define([
     },
 
     loadAll: function() {
-      this.collection.loadAll();
+      sandbox.collections.activitiesCollection.loadAll();
     },
 
     clean: function() {
       this.remove();
       this.unbind();
-      this.collection.unbind();
+      sandbox.collections.activitiesCollection.unbind();
     }
   });
   return ActivityListPane;

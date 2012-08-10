@@ -7,8 +7,9 @@ define([
   'views/company/challenge-item',
   'masonry',
   'endlessscroll',
-  'events'
-], function($, _, Backbone, ChallengeModel, challengeListTemplate, ChallengeItemView, masonry, endlessscroll, vent){
+  'events',
+  'sandbox'
+], function($, _, Backbone, ChallengeModel, challengeListTemplate, ChallengeItemView, masonry, endlessscroll, vent, sandbox){
   var ChallengeListPane = Backbone.View.extend({
     challengeListTemplate: _.template(challengeListTemplate),
 
@@ -20,8 +21,9 @@ define([
     initialize: function(){
       _.bindAll(this);
       vent.bind('reloadMasonry', this.reloadMasonry);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      sandbox.collections.challengesCollection.bind('reset', this.addAll);
+      sandbox.collections.challengesCollection.bind('add', this.addOne);
+      sandbox.collections.challengesCollection.fetch();
     },
 
     render: function () {
@@ -39,7 +41,7 @@ define([
 
       this.addAll();
 
-      if(this.collection.model.length <= 30){
+      if(sandbox.collections.challengesCollection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
 
@@ -51,7 +53,7 @@ define([
         // fireDelay: 100,
         // callback: function(fireSequence, pageSequence){
           // console.log('start load more. fireSequence:', fireSequence, 'pageSequence:', pageSequence);
-          // self.collection.loadMore(function(){
+          // sandbox.collections.loadMore(function(){
             // console.log('load more done. fireSequence:', fireSequence, 'pageSequence:', pageSequence);
           // });
           // return true;
@@ -61,7 +63,7 @@ define([
     },
 
     addOne: function(model){
-      if(this.collection.models.length === 1){
+      if(sandbox.collections.challengesCollection.models.length === 1){
         $('.tile-list', this.el).html('');
       }
 
@@ -75,13 +77,14 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
       $('.tile-list', this.el).html('');
 
-      if(this.collection.models.length === 0){
+      if(sandbox.collections.challengesCollection.models.length === 0){
         $('.tile-list', this.el).html('Your company have no challenge. Start creating a challenge by clicking "Create Challenge" button.');
       }
 
-      this.collection.each(function(model){
+      sandbox.collections.challengesCollection.each(function(model){
         this.addOne(model);
       }, this);
     },
@@ -93,7 +96,7 @@ define([
     loadMore: function(){
 
       var button = $('button.load-more', this.el).addClass('disabled');
-      this.collection.loadMore(function(loaded){
+      sandbox.collections.challengesCollection.loadMore(function(loaded){
         if(loaded > 0){
           button.removeClass('disabled');
         }else{
@@ -127,7 +130,7 @@ define([
       this.remove();
       this.unbind();
       vent.unbind('reloadMasonry');
-      this.collection.unbind();
+      sandbox.collections.challengesCollection.unbind();
     }
   });
   return ChallengeListPane;

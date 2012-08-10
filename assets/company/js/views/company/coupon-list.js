@@ -5,8 +5,9 @@ define([
   'models/coupon',
   'text!templates/company/coupon-list.html',
   'views/company/coupon-item',
-  'events'
-], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView, vent){
+  'events',
+  'sandbox'
+], function($, _, Backbone, CouponModel, couponListTemplate, CouponItemView, vent, sandbox){
   var CouponListPane = Backbone.View.extend({
     couponListTemplate: _.template(couponListTemplate),
 
@@ -22,8 +23,9 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      sandbox.collections.couponsCollection.bind('reset', this.addAll);
+      sandbox.collections.couponsCollection.bind('add', this.addOne);
+      sandbox.collections.couponsCollection.fetch();
     },
 
     render: function () {
@@ -31,9 +33,9 @@ define([
       }));
 
       this.addAll();
-      this.couponListTemp = this.collection.models;
+      this.couponListTemp = sandbox.collections.couponsCollection.models;
 
-      if(this.collection.model.length <= 30){
+      if(sandbox.collections.couponsCollection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
 
@@ -53,13 +55,14 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
       $('.coupon-list', this.el).html('');
 
-      if(this.collection.models.length === 0){
+      if(sandbox.collections.couponsCollection.models.length === 0){
         $('.coupon-list', this.el).html('Your company have no coupon.');
       }
 
-      this.collection.each(function(model){
+      sandbox.collections.couponsCollection.each(function(model){
         this.addOne(model);
       }, this);
     },
@@ -67,7 +70,7 @@ define([
     loadMore: function(){
 
       var button = $('button.load-more', this.el).addClass('disabled');
-      this.collection.loadMore(function(loaded){
+      sandbox.collections.couponsCollection.loadMore(function(loaded){
         if(loaded > 0){
           button.removeClass('disabled');
         }else{
@@ -78,35 +81,35 @@ define([
     },
 
     loadAll: function() {
-      this.collection.loadAll();
+      sandbox.collections.couponsCollection.loadAll();
     },
 
     loadConfirmed: function() {
-      this.collection.reset(this.couponListTemp);
+      sandbox.collections.couponsCollection.reset(this.couponListTemp);
 
-      var confirmedCoupons = this.collection.select(function(coupon) {
+      var confirmedCoupons = sandbox.collections.couponsCollection.select(function(coupon) {
         return coupon.get('confirmed')
       });
 
-      this.collection.reset(confirmedCoupons);
+      sandbox.collections.couponsCollection.reset(confirmedCoupons);
       this.addAll();
     },
 
     loadNotConfirmed: function() {
-      this.collection.reset(this.couponListTemp);
+      sandbox.collections.couponsCollection.reset(this.couponListTemp);
 
-      var notConfirmedCoupons = this.collection.select(function(coupon) {
+      var notConfirmedCoupons = sandbox.collections.couponsCollection.select(function(coupon) {
         return !coupon.get('confirmed')
       });
 
-      this.collection.reset(notConfirmedCoupons);
+      sandbox.collections.couponsCollection.reset(notConfirmedCoupons);
       this.addAll();
     },
 
     searchCoupon: function(e) {
       e.preventDefault();
 
-      this.collection.reset(this.couponListTemp);
+      sandbox.collections.couponsCollection.reset(this.couponListTemp);
       var search_texts = {
         id: $('#coupon-search-id', this.el).val(),
         name: $('#coupon-search-name', this.el).val(),
@@ -114,7 +117,7 @@ define([
         phone: $('#coupon-search-phone', this.el).val()
       }
 
-      var search_results = this.collection.select(function(coupon) {
+      var search_results = sandbox.collections.couponsCollection.select(function(coupon) {
         coupon.user = coupon.get('user');
         var search_datas = {
           id: coupon.id,
@@ -135,14 +138,14 @@ define([
         return true;
       });
 
-      this.collection.reset(search_results);
+      sandbox.collections.couponsCollection.reset(search_results);
       this.addAll();
     },
 
     clean: function() {
       this.remove();
       this.unbind();
-      this.collection.unbind();
+      sandbox.collections.couponsCollection.unbind();
     }
 
   });

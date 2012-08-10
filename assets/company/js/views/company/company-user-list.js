@@ -5,8 +5,9 @@ define([
   'models/company-user',
   'text!templates/company/user-list.html',
   'views/company/user-item',
-  'events'
-], function($, _, Backbone, CompanyUserModel, userListTemplate, CompanyUserItemView, vent){
+  'events',
+  'sandbox'
+], function($, _, Backbone, CompanyUserModel, userListTemplate, CompanyUserItemView, vent, sandbox){
   var CompanyUserListPane = Backbone.View.extend({
 
     events: {
@@ -16,14 +17,15 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      sandbox.collections.companyUsersCollection.bind('reset', this.addAll);
+      sandbox.collections.companyUsersCollection.bind('add', this.addOne);
+      sandbox.collections.companyUsersCollection.fetch();
     },
 
     render: function () {
       $(this.el).html(_.template(userListTemplate)());
 
-      if(this.collection.model.length <= 30){
+      if(sandbox.collections.companyUsersCollection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
 
@@ -42,13 +44,14 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
       $('.user-list', this.el).html('');
 
-      if(this.collection.models.length === 0){
+      if(sandbox.collections.companyUsersCollection.models.length === 0){
         $('.user-list', this.el).html('Your company have no user.');
       }
 
-      this.collection.each(function(model){
+      sandbox.collections.companyUsersCollection.each(function(model){
         this.addOne(model);
       }, this);
     },
@@ -56,7 +59,7 @@ define([
     loadMore: function(){
 
       var button = $('button.load-more', this.el).addClass('disabled');
-      this.collection.loadMore(function(loaded){
+      sandbox.collections.companyUsersCollection.loadMore(function(loaded){
         if(loaded > 0){
           button.removeClass('disabled');
         }else{
@@ -67,13 +70,13 @@ define([
     },
 
     loadAll: function() {
-      this.collection.loadAll();
+      sandbox.collections.companyUsersCollection.loadAll();
     },
 
     clean: function() {
       this.remove();
       this.unbind();
-      this.collection.unbind();
+      sandbox.collections.companyUsersCollection.unbind();
     }
   });
   return CompanyUserListPane;

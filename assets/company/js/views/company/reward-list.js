@@ -7,8 +7,9 @@ define([
   'views/company/reward-item',
   'masonry',
   'endlessscroll',
-  'events'
-], function($, _, Backbone, RewardModel, rewardListTemplate, RewardItemView, masonry, endlessscroll, vent){
+  'events',
+  'sandbox'
+], function($, _, Backbone, RewardModel, rewardListTemplate, RewardItemView, masonry, endlessscroll, vent, sandbox){
   var RewardListPane = Backbone.View.extend({
     rewardListTemplate: _.template(rewardListTemplate),
 
@@ -20,8 +21,9 @@ define([
     initialize: function(){
       _.bindAll(this);
       vent.bind('reloadMasonry', this.reloadMasonry);
-      this.collection.bind('reset', this.addAll);
-      this.collection.bind('add', this.addOne);
+      sandbox.collections.rewardsCollection.bind('reset', this.addAll);
+      sandbox.collections.rewardsCollection.bind('add', this.addOne);
+      sandbox.collections.rewardsCollection.fetch();
     },
 
     render: function () {
@@ -39,7 +41,7 @@ define([
 
       this.addAll();
 
-      if(this.collection.model.length <= 30){
+      if(sandbox.collections.rewardsCollection.model.length <= 30){
         $('button.load-more', this.el).addClass('hide');
       }
 
@@ -48,7 +50,7 @@ define([
 
     addOne: function(model){
 
-      if(this.collection.models.length === 1){
+      if(sandbox.collections.rewardsCollection.models.length === 1){
         $('.tile-list', this.el).html('');
       }
 
@@ -62,13 +64,14 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
       $('.tile-list', this.el).html('');
 
-      if(this.collection.models.length == 0){
+      if(sandbox.collections.rewardsCollection.models.length === 0){
         $('.tile-list', this.el).html('Your company have no reward. Start creating a reward by clicking "Create Reward" button.');
       }
 
-      this.collection.each(function(model){
+      sandbox.collections.rewardsCollection.each(function(model){
         this.addOne(model);
       }, this);
     },
@@ -80,7 +83,7 @@ define([
     loadMore: function(){
 
       var button = $('button.load-more', this.el).addClass('disabled');
-      this.collection.loadMore(function(loaded){
+      sandbox.collections.rewardsCollection.loadMore(function(loaded){
         if(loaded > 0){
           button.removeClass('disabled');
         }else{
@@ -114,7 +117,7 @@ define([
       this.remove();
       this.unbind();
       vent.unbind('reloadMasonry');
-      this.collection.unbind();
+      sandbox.collections.rewardsCollection.unbind();
     }
   });
   return RewardListPane;
