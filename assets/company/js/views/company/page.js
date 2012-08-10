@@ -18,9 +18,12 @@ define([
     pageTemplate: _.template(pageTemplate),
     el: '#content',
 
+    events: {
+      'click #sidebar .nav-list>li>a': 'setMenuActive'
+    },
+
     initialize: function(){
       _.bindAll(this);
-      // sandbox.models.currentUserModel.bind('change', this.render);
     },
 
     render: function () {
@@ -70,10 +73,10 @@ define([
           });
         }
       }
+
       var sidebarView = new SidebarView({
         el: $('#sidebar', this.el),
-        company: company,
-        now: this.options.now
+        company: company
       });
       sidebarView.render();
 
@@ -81,8 +84,11 @@ define([
         el: $('#carousel', this.el)
       });
       carouselView.render();
+    },
 
-
+    setMenuActive: function(e) {
+      $(e.currentTarget).parent('li').siblings().removeClass('active');
+      $(e.currentTarget).parent('li').addClass('active');
     }
   });
   return ProfilePage;

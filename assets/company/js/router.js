@@ -55,6 +55,7 @@ define([
 
     router.on('route:company', function(id) {
       sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'challenge';
       require(['views/company/challenge-list'], function(ChallengeList) {
         createCompanyPage();
         var challengeListView = Vm.create(sandbox.views.appView, 'Content', ChallengeList);
@@ -64,6 +65,7 @@ define([
 
     router.on('route:reward', function(id) {
       sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'reward';
       sandbox.collections.rewardsCollection.url = window.Company.BASE_URL + '/apiv3/rewards/?company_id=' + id;
       require(['views/company/reward-list'], function(RewardList) {
         createCompanyPage();
@@ -74,6 +76,7 @@ define([
 
     router.on('route:coupon', function(id) {
       sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'coupon';
       sandbox.collections.couponsCollection.url = window.Company.BASE_URL + '/apiv3/coupons/?company_id=' + id;
       require(['views/company/coupon-list'], function(CouponList) {
         createCompanyPage();
@@ -84,6 +87,7 @@ define([
 
     router.on('route:couponPopup', function(id, couponId) {
       sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'coupon';
       sandbox.collections.couponsCollection.url = window.Company.BASE_URL + '/apiv3/coupons/?company_id=' + id;
       require(['views/company/coupon-list'], function(CouponList) {
         createCompanyPage();
@@ -98,6 +102,7 @@ define([
 
     router.on('route:activities', function(id) {
       sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'activities';
       sandbox.collections.activitiesCollection.url = window.Company.BASE_URL + '/apiv3/company_activities/' + id;
       require(['views/company/activity-list'], function(ActivityList) {
         createCompanyPage();
@@ -108,6 +113,7 @@ define([
 
     router.on('route:users', function(id) {
       sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'users';
       sandbox.collections.companyUsersCollection.url = window.Company.BASE_URL + '/apiv3/company_users/' + id;
       require(['views/company/company-user-list'], function(CompanyUserList) {
         createCompanyPage();
@@ -118,6 +124,7 @@ define([
 
     router.on('route:user', function(id, userId) {
       sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'users';
       sandbox.userId = userId;
       sandbox.collections.companyUsersCollection.url = window.Company.BASE_URL + '/apiv3/company_users/' + id;
       require(['views/company/company-user-list'], function(CompanyUserList) {

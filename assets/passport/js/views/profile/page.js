@@ -25,8 +25,6 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      // sandbox.models.userModel.bind('change', this.render);
-      // sandbox.models.currentUserModel.bind('change', this.render);
     },
 
     render: function () {
@@ -55,8 +53,6 @@ define([
       $(e.currentTarget).parent().addClass('active');
     },
     setSubMenuActive: function(e) {
-      // e.preventDefault();
-      // console.log($(e.currentTarget).parent());
       $('.user-profile-nav li').removeClass('active');
       $(e.currentTarget).parent().addClass('active').closest('ul').parent().addClass('active');
     }
