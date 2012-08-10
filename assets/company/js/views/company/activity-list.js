@@ -19,18 +19,11 @@ define([
       _.bindAll(this);
       sandbox.collections.activitiesCollection.bind('reset', this.addAll);
       sandbox.collections.activitiesCollection.bind('add', this.addOne);
-      sandbox.collections.activitiesCollection.fetch();
     },
 
     render: function () {
-      $(this.el).html(_.template(activityListTemplate)());
-
-      this.addAll();
-
-      if(sandbox.collections.activitiesCollection.model.length <= 30){
-        $('button.load-more', this.el).addClass('hide');
-      }
-
+      $(this.el).html(_.template(activityListTemplate)({}));
+      sandbox.collections.activitiesCollection.fetch();
       return this;
     },
 
@@ -48,10 +41,15 @@ define([
 
     addAll: function(){
       console.log('addAll');
+
       $('.activity-list', this.el).html('');
 
       if(sandbox.collections.activitiesCollection.models.length === 0){
         $('.activity-list', this.el).html('Your company have no activity.');
+      }
+
+      if(sandbox.collections.activitiesCollection.model.length <= 30){
+        $('button.load-more', this.el).addClass('hide');
       }
 
       sandbox.collections.activitiesCollection.each(function(model){

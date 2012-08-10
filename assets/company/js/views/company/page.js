@@ -20,7 +20,7 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      sandbox.models.currentUserModel.bind('change', this.render);
+      // sandbox.models.currentUserModel.bind('change', this.render);
     },
 
     render: function () {

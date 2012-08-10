@@ -11,15 +11,13 @@ define([
     initialize: function(){
       _.bindAll(this);
       sandbox.collections.achievementCollection.bind('add', this.addOne);
-      sandbox.collections.achievementCollection.bind('reset', this.render);
-      sandbox.collections.achievementCollection.fetch();
+      sandbox.collections.achievementCollection.bind('reset', this.addAll);
     },
     render: function () {
       this.$el.html(this.achievementListTemplate({
         total: sandbox.collections.achievementCollection.length
       }));
-
-      this.addAll();
+      sandbox.collections.achievementCollection.fetch();
       return this;
     },
 
@@ -32,6 +30,7 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
       var self = this;
 
       if(sandbox.collections.achievementCollection.models.length === 0){

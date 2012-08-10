@@ -11,15 +11,14 @@ define([
     initialize: function(){
       _.bindAll(this);
       sandbox.collections.actionCollection.bind('add', this.addOne);
-      sandbox.collections.actionCollection.bind('reset', this.render);
-      sandbox.collections.actionCollection.fetch();
+      sandbox.collections.actionCollection.bind('reset', this.addAll);
     },
     render: function () {
       this.$el.html(this.actionListTemplate({
         total: sandbox.collections.actionCollection.length,
         header_text: this.options.header_text
       }));
-      this.addAll();
+      sandbox.collections.actionCollection.fetch();
       return this;
     },
 
@@ -32,6 +31,7 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
       var self = this
         , models;
       //Filter

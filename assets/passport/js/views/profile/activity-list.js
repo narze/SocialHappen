@@ -12,15 +12,13 @@ define([
     initialize: function(){
       _.bindAll(this);
       sandbox.collections.activityCollection.bind('add', this.addOne);
-      sandbox.collections.activityCollection.bind('reset', this.render);
-      sandbox.collections.activityCollection.fetch();
+      sandbox.collections.activityCollection.bind('reset', this.addAll);
     },
     render: function () {
       this.$el.html(this.activityListTemplate({
         total: sandbox.collections.activityCollection.length
       }));
-
-      this.addAll();
+      sandbox.collections.activityCollection.fetch();
       return this;
     },
 
@@ -33,6 +31,7 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
       var self = this;
       if(sandbox.collections.activityCollection.models.length === 0){
         this.$('ul.activity-list').html('No activity');

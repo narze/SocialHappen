@@ -15,20 +15,18 @@ define([
 
     initialize: function(){
       _.bindAll(this);
-      sandbox.collections.cardCollection.bind('reset', this.render);
+      sandbox.collections.cardCollection.bind('reset', this.addAll);
       sandbox.collections.cardCollection.bind('add', this.addOne);
-      sandbox.collections.cardCollection.fetch();
     },
 
     render: function () {
       $(this.el).html(_.template(cardListTemplate));
-
-      this.addAll();
+      sandbox.collections.cardCollection.fetch()
       return this;
     },
 
     addAll: function() {
-      console.log(sandbox.collections.cardCollection.model);
+      console.log('addAll');
       if(sandbox.collections.cardCollection.models.length === 0){
         $('#card-list', this.el).html('No card');
       } else {

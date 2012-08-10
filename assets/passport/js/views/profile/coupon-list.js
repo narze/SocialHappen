@@ -24,39 +24,11 @@ define([
       _.bindAll(this);
       sandbox.collections.couponCollection.bind('reset', this.addAll);
       sandbox.collections.couponCollection.bind('add', this.addOne);
-      sandbox.collections.couponCollection.fetch();
-      // this.options.vent.bind('reloadMasonry', this.reloadMasonry);
     },
 
     render: function () {
-      $(this.el).html(this.couponListTemplate({
-      }));
-
-      $('.pending.coupon-list', this.el).masonry({
-        // options
-        itemSelector : '.item',
-        animationOptions: {
-          duration: 400
-        },
-        isFitWidth: true
-      });
-
-      $('.approved.coupon-list', this.el).masonry({
-        // options
-        itemSelector : '.item',
-        animationOptions: {
-          duration: 400
-        },
-        isFitWidth: true
-      });
-
-      this.addAll();
-      this.couponListTemp = sandbox.collections.couponCollection.models;
-
-      if(sandbox.collections.couponCollection.models.length <= 30){
-        $('button.load-more', this.el).addClass('hide');
-      }
-
+      $(this.el).html(this.couponListTemplate({}));
+      sandbox.collections.couponCollection.fetch();
       return this;
     },
 
@@ -75,6 +47,29 @@ define([
     },
 
     addAll: function(){
+      console.log('addAll');
+      $('.pending.coupon-list', this.el).masonry({
+        // options
+        itemSelector : '.item',
+        animationOptions: {
+          duration: 400
+        },
+        isFitWidth: true
+      });
+
+      $('.approved.coupon-list', this.el).masonry({
+        // options
+        itemSelector : '.item',
+        animationOptions: {
+          duration: 400
+        },
+        isFitWidth: true
+      });
+      this.couponListTemp = sandbox.collections.couponCollection.models;
+
+      if(sandbox.collections.couponCollection.models.length <= 30){
+        $('button.load-more', this.el).addClass('hide');
+      }
 
       var approved = 0;
       var notApproved = 0;

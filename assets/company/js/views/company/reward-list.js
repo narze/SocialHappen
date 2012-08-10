@@ -23,33 +23,15 @@ define([
       vent.bind('reloadMasonry', this.reloadMasonry);
       sandbox.collections.rewardsCollection.bind('reset', this.addAll);
       sandbox.collections.rewardsCollection.bind('add', this.addOne);
-      sandbox.collections.rewardsCollection.fetch();
     },
 
     render: function () {
-      $(this.el).html(this.rewardListTemplate({
-      }));
-
-      $('.tile-list', this.el).masonry({
-        // options
-        itemSelector : '.item',
-        animationOptions: {
-          duration: 400
-        },
-        isFitWidth: true
-      });
-
-      this.addAll();
-
-      if(sandbox.collections.rewardsCollection.model.length <= 30){
-        $('button.load-more', this.el).addClass('hide');
-      }
-
+      $(this.el).html(this.rewardListTemplate({}));
+      sandbox.collections.rewardsCollection.fetch();
       return this;
     },
 
     addOne: function(model){
-
       if(sandbox.collections.rewardsCollection.models.length === 1){
         $('.tile-list', this.el).html('');
       }
@@ -65,10 +47,24 @@ define([
 
     addAll: function(){
       console.log('addAll');
+
+      $('.tile-list', this.el).masonry({
+        // options
+        itemSelector : '.item',
+        animationOptions: {
+          duration: 400
+        },
+        isFitWidth: true
+      });
+
       $('.tile-list', this.el).html('');
 
       if(sandbox.collections.rewardsCollection.models.length === 0){
         $('.tile-list', this.el).html('Your company have no reward. Start creating a reward by clicking "Create Reward" button.');
+      }
+
+      if(sandbox.collections.rewardsCollection.model.length <= 30){
+        $('button.load-more', this.el).addClass('hide');
       }
 
       sandbox.collections.rewardsCollection.each(function(model){

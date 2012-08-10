@@ -25,20 +25,12 @@ define([
       _.bindAll(this);
       sandbox.collections.couponsCollection.bind('reset', this.addAll);
       sandbox.collections.couponsCollection.bind('add', this.addOne);
-      sandbox.collections.couponsCollection.fetch();
+
     },
 
     render: function () {
-      $(this.el).html(this.couponListTemplate({
-      }));
-
-      this.addAll();
-      this.couponListTemp = sandbox.collections.couponsCollection.models;
-
-      if(sandbox.collections.couponsCollection.model.length <= 30){
-        $('button.load-more', this.el).addClass('hide');
-      }
-
+      $(this.el).html(this.couponListTemplate({}));
+      sandbox.collections.couponsCollection.fetch();
       return this;
     },
 
@@ -56,6 +48,12 @@ define([
 
     addAll: function(){
       console.log('addAll');
+      this.couponListTemp = sandbox.collections.couponsCollection.models;
+
+      if(sandbox.collections.couponsCollection.model.length <= 30){
+        $('button.load-more', this.el).addClass('hide');
+      }
+
       $('.coupon-list', this.el).html('');
 
       if(sandbox.collections.couponsCollection.models.length === 0){

@@ -23,42 +23,11 @@ define([
       vent.bind('reloadMasonry', this.reloadMasonry);
       sandbox.collections.challengesCollection.bind('reset', this.addAll);
       sandbox.collections.challengesCollection.bind('add', this.addOne);
-      sandbox.collections.challengesCollection.fetch();
     },
 
     render: function () {
-      $(this.el).html(this.challengeListTemplate({
-      }));
-
-      $('.tile-list', this.el).masonry({
-        // options
-        itemSelector : '.item',
-        animationOptions: {
-          duration: 400
-        },
-        isFitWidth: true
-      });
-
-      this.addAll();
-
-      if(sandbox.collections.challengesCollection.model.length <= 30){
-        $('button.load-more', this.el).addClass('hide');
-      }
-
-      var self = this;
-
-      // console.log('bind endless scroll');
-      // $(window).endlessScroll({
-        // bottomPixels: 50,
-        // fireDelay: 100,
-        // callback: function(fireSequence, pageSequence){
-          // console.log('start load more. fireSequence:', fireSequence, 'pageSequence:', pageSequence);
-          // sandbox.collections.loadMore(function(){
-            // console.log('load more done. fireSequence:', fireSequence, 'pageSequence:', pageSequence);
-          // });
-          // return true;
-        // }
-      // });
+      $(this.el).html(this.challengeListTemplate({}));
+      sandbox.collections.challengesCollection.fetch();
       return this;
     },
 
@@ -78,10 +47,23 @@ define([
 
     addAll: function(){
       console.log('addAll');
+      $('.tile-list', this.el).masonry({
+        // options
+        itemSelector : '.item',
+        animationOptions: {
+          duration: 400
+        },
+        isFitWidth: true
+      });
+
       $('.tile-list', this.el).html('');
 
       if(sandbox.collections.challengesCollection.models.length === 0){
         $('.tile-list', this.el).html('Your company have no challenge. Start creating a challenge by clicking "Create Challenge" button.');
+      }
+
+      if(sandbox.collections.challengesCollection.model.length <= 30){
+        $('button.load-more', this.el).addClass('hide');
       }
 
       sandbox.collections.challengesCollection.each(function(model){
