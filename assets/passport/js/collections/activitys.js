@@ -1,8 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone'
-], function($, _, Backbone){
+  'backbone',
+  'sandbox'
+], function($, _, Backbone, sandbox){
   var activityCollection = Backbone.Collection.extend({
     initialize: function(){
 
@@ -27,7 +28,7 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        params.url = window.Passport.BASE_URL + 'apiv3/activity/' + window.Passport.userId
+        params.url = window.Passport.BASE_URL + 'apiv3/activity/' + sandbox.userId
       }
 
       // Ensure that we have the appropriate request data.

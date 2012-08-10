@@ -2,12 +2,11 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/achievement'
-], function($, _, Backbone, achievementModel){
+  'models/achievement',
+  'sandbox'
+], function($, _, Backbone, achievementModel, sandbox){
   var activityCollection = Backbone.Collection.extend({
     model: achievementModel,
-
-    userId: window.Passport.userId,
 
     initialize: function(){
 
@@ -32,7 +31,7 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        params.url = window.Passport.BASE_URL + '/apiv3/achievement/' + this.userId
+        params.url = window.Passport.BASE_URL + '/apiv3/achievement/' + sandbox.userId
       }
 
       // Ensure that we have the appropriate request data.

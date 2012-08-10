@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/coupon'
-], function($, _, Backbone, couponModel){
+  'models/coupon',
+  'sandbox'
+], function($, _, Backbone, couponModel, sandbox){
   var couponsCollection = Backbone.Collection.extend({
     model: couponModel,
     filter: null,
@@ -36,8 +37,8 @@ define([
 
     url: function() {
       var query = {};
-      if(window.Passport.userId) {
-        query.user_id = window.Passport.userId;
+      if(sandbox.userId) {
+        query.user_id = sandbox.userId;
       }
       if(this.last_id) {
         query.last_id = this.last_id;
