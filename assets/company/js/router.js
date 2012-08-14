@@ -19,6 +19,7 @@ define([
       '/company/:id/users/:userId': 'user',
       '/company/:id/activities': 'activities',
       '/company/:id/coupon/:couponId': 'couponPopup',
+      '/create': 'createCompany',
       '*actions': 'defaultAction'
     }
   });
@@ -137,6 +138,13 @@ define([
             sandbox.collections.companyUsersCollection.get(userId).trigger('view');
           }
         }})
+      })
+    })
+
+    router.on('route:createCompany', function() {
+      require(['views/company/create-company'], function(CreateCompany) {
+        var createCompanyView = Vm.create(sandbox.views.appView, 'Content', CreateCompany);
+        $('#content').html(createCompanyView.render().el);
       })
     })
 

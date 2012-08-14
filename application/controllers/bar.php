@@ -14,16 +14,16 @@ class Bar extends CI_Controller {
 	 */
 	function create_company(){
 		$this->socialhappen->check_logged_in();
-		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
+		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');
 		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');
-			
+
 		$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
-	
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->load->view('bar/create_company_view');
 		}
-		else 
+		else
 		{
 			$user_id = $this->socialhappen->get_user_id();
 			$company_name = set_value('company_name');
@@ -50,16 +50,16 @@ class Bar extends CI_Controller {
 	 */
 	function create_company_bootstrap(){
 		$this->socialhappen->check_logged_in();
-		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');			
+		$this->form_validation->set_rules('company_name', 'Company name', 'required|trim|xss_clean|max_length[255]');
 		$this->form_validation->set_rules('company_detail', 'Company detail', 'trim|xss_clean');
-			
+
 		$this->form_validation->set_error_delimiters('<span class="help-inline">', '</span>');
-	
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->load->view('bar/create_company_view_bootstrap');
 		}
-		else 
+		else
 		{
 			$user_id = $this->socialhappen->get_user_id();
 			$company_name = set_value('company_name');
@@ -78,7 +78,7 @@ class Bar extends CI_Controller {
 			}
 		}
 	}
-	
+
 	/**
 	 * Select company page
 	 * @author Manassarn M.
@@ -86,7 +86,7 @@ class Bar extends CI_Controller {
 	function select_company(){
 		$this->socialhappen->check_logged_in();
 		$user_id = $this->socialhappen->get_user_id();
-		
+
 		$result = $this->bar_ctrl->select_company($user_id);
 		if($result['success']){
 			$this->parser->parse('bar/select_company_view', $result['data']);
@@ -94,7 +94,7 @@ class Bar extends CI_Controller {
 			echo $result['error'];
 		}
 	}
-}  
+}
 
 /* End of file bar.php */
 /* Location: ./application/controllers/bar.php */

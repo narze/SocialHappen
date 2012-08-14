@@ -986,18 +986,22 @@ class Apiv3 extends CI_Controller {
       return;
     }
 
+    $user_id = $user['user_id'];
+
     // check if user already have company
     $this->load->model('user_companies_model');
-    if($companies = $this->user_companies_model->get_user_companies_by_user_id($user['user_id']) && (count($companies) > 0)) {
+    if(($companies = $this->user_companies_model->get_user_companies_by_user_id($user_id)) && (count($companies) > 0)) {
       $result['data'] = 'You already have a company';
+      echo json_encode($result);
+      return;
     }
 
     // add new company
     $this->load->model('company_model');
     $company = $this->input->post('company');
-    $company['company_image'] = !$company['company_image'] ? base_url().'assets/images/default/company.png' : $company['company_image'];
+    $company['company_image'] = !isset($company['company_image']) ? base_url().'assets/images/default/company.png' : $company['company_image'];
     $company['creator_user_id'] = $user_id;
-    if(!$company_id = $this->CI->companies->add_company($company)) {
+    if(!$company_id = $this->company_model->add_company($company)) {
       $result['data'] = 'Cannot add company, please contact administrator';
       echo json_encode($result);
       return;
@@ -1005,7 +1009,7 @@ class Apiv3 extends CI_Controller {
 
     // add company admin
     $user_company = array(
-      'user_id' => $user['user_id'],
+      'user_id' => $user_id,
       'company_id' => $company_id,
       'user_role' => 1
     );
@@ -1016,6 +1020,7 @@ class Apiv3 extends CI_Controller {
     }
 
     $result['success'] = TRUE;
+    $result['data'] = array('company_id' => $company_id);
     echo json_encode($result);
   }
 }

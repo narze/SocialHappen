@@ -188,7 +188,18 @@ class Company extends CI_Controller {
 	 * Create company
 	 */
 	function create() {
+		$this->load->model('user_companies_model');
+		$user_id = $this->socialhappen->get_user_id();
+		if(($companies = $this->user_companies_model->get_user_companies_by_user_id($user_id)) && (count($companies) > 0)) {
+			$company = array_pop($companies);
+		  redirect('assets/company/#/company/'.$company['company_id']);
+		}
+
 		redirect('assets/company/#/create');
+	}
+
+	function redirect($company_id) {
+		redirect('assets/company/#/company/'.$company_id);
 	}
 
 }
