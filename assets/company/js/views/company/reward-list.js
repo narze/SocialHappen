@@ -32,10 +32,6 @@ define([
     },
 
     addOne: function(model){
-      if(sandbox.collections.rewardsCollection.models.length === 1){
-        $('.tile-list', this.el).html('');
-      }
-
       var reward = new RewardItemView({
         model: model,
         vent: vent
@@ -59,12 +55,14 @@ define([
 
       $('.tile-list', this.el).html('');
 
-      if(sandbox.collections.rewardsCollection.models.length === 0){
+      if(sandbox.collections.rewardsCollection.length === 0){
         $('.tile-list', this.el).html('Your company have no reward. Start creating a reward by clicking "Create Reward" button.');
       }
 
-      if(sandbox.collections.rewardsCollection.model.length <= 30){
+      if(sandbox.collections.rewardsCollection.length <= 30){
         $('button.load-more', this.el).addClass('hide');
+      } else {
+        $('button.load-more', this.el).removeClass('hide');
       }
 
       sandbox.collections.rewardsCollection.each(function(model){
@@ -81,7 +79,7 @@ define([
       var button = $('button.load-more', this.el).addClass('disabled');
       sandbox.collections.rewardsCollection.loadMore(function(loaded){
         if(loaded > 0){
-          button.removeClass('disabled');
+          button.removeClass('disabled hide');
         }else{
           button.addClass('hide');
         }

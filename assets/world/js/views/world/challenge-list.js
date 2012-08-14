@@ -32,6 +32,7 @@ define([
       });
 
       this.addAll();
+
       return this;
     },
 
@@ -50,9 +51,14 @@ define([
       //Reset
       $(this.el).html(this.challengeListTemplate());
 
-      if(!this.collection.length) {
-        $('.btn.load-more').replaceWith('<div class="no-challenge">No Challenge</div>');
-        return false;
+      if(this.collection.length === 0){
+        $('.tile-list', this.el).html('No challenge.');
+      }
+
+      if(this.collection.length <= 30){
+        $('button.load-more', this.el).addClass('hide');
+      } else {
+        $('button.load-more', this.el).removeClass('hide');
       }
 
       this.collection.each(function(model){
@@ -69,7 +75,7 @@ define([
       var button = $('button.load-more', this.el).addClass('disabled');
       this.collection.loadMore(function(loaded){
         if(loaded > 0){
-          button.removeClass('disabled');
+          button.removeClass('disabled hide');
         }else{
           button.addClass('hide');
         }

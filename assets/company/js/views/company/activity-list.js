@@ -44,12 +44,14 @@ define([
 
       $('.activity-list', this.el).html('');
 
-      if(sandbox.collections.activitiesCollection.models.length === 0){
+      if(sandbox.collections.activitiesCollection.length === 0){
         $('.activity-list', this.el).html('Your company have no activity.');
       }
 
-      if(sandbox.collections.activitiesCollection.model.length <= 30){
+      if(sandbox.collections.activitiesCollection.length <= 30){
         $('button.load-more', this.el).addClass('hide');
+      } else {
+        $('button.load-more', this.el).removeClass('hide');
       }
 
       sandbox.collections.activitiesCollection.each(function(model){
@@ -62,7 +64,7 @@ define([
       var button = $('button.load-more', this.el).addClass('disabled');
       sandbox.collections.activitiesCollection.loadMore(function(loaded){
         if(loaded > 0){
-          button.removeClass('disabled');
+          button.removeClass('disabled hide');
         }else{
           button.addClass('hide');
         }

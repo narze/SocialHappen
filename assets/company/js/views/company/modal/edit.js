@@ -29,9 +29,9 @@ define([
     couponItemTemplate: _.template(couponItemTemplate),
 
     //Limit for challenger items in list
-    limit: 1,
-    challengeInProgressIndex: 1,
-    challengeCompletedIndex: 1,
+    limit: 5,
+    challengeInProgressIndex: 0,
+    challengeCompletedIndex: 0,
 
     events: {
       'click h3.edit-name': 'showEditName',

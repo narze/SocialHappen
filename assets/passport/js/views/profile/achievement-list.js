@@ -33,7 +33,7 @@ define([
       console.log('addAll');
       var self = this;
 
-      if(sandbox.collections.achievementCollection.models.length === 0){
+      if(sandbox.collections.achievementCollection.length === 0){
         this.$('ul.achievement-list').html('No badge');
       }
 

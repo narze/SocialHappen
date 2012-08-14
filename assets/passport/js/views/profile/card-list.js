@@ -27,7 +27,7 @@ define([
 
     addAll: function() {
       console.log('addAll');
-      if(sandbox.collections.cardCollection.models.length === 0){
+      if(sandbox.collections.cardCollection.length === 0){
         $('#card-list', this.el).html('No card');
       } else {
         $('#card-list', this.el).empty();

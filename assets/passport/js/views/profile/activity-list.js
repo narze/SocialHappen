@@ -33,7 +33,7 @@ define([
     addAll: function(){
       console.log('addAll');
       var self = this;
-      if(sandbox.collections.activityCollection.models.length === 0){
+      if(sandbox.collections.activityCollection.length === 0){
         this.$('ul.activity-list').html('No activity');
       }
 

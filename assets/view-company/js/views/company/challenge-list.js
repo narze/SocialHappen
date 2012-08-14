@@ -38,8 +38,10 @@ define([
 
       this.addAll();
 
-      if(this.collection.model.length <= 30){
+      if(this.collection.length <= 30){
         $('button.load-more', this.el).addClass('hide');
+      } else {
+        $('button.load-more', this.el).removeClass('hide');
       }
 
       var self = this;
@@ -74,7 +76,7 @@ define([
     addAll: function(){
       $('.tile-list', this.el).html('');
 
-      if(this.collection.models.length == 0){
+      if(this.collection.length === 0){
         $('.tile-list', this.el).html('This company have no challenge.');
       }
 
@@ -92,7 +94,7 @@ define([
       var button = $('button.load-more', this.el).addClass('disabled');
       this.collection.loadMore(function(loaded){
         if(loaded > 0){
-          button.removeClass('disabled');
+          button.removeClass('disabled hide');
         }else{
           button.addClass('hide');
         }

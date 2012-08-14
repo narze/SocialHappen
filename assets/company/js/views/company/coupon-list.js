@@ -50,13 +50,15 @@ define([
       console.log('addAll');
       this.couponListTemp = sandbox.collections.couponsCollection.models;
 
-      if(sandbox.collections.couponsCollection.model.length <= 30){
+      if(sandbox.collections.couponsCollection.length <= 30){
         $('button.load-more', this.el).addClass('hide');
+      } else {
+        $('button.load-more', this.el).removeClass('hide');
       }
 
       $('.coupon-list', this.el).html('');
 
-      if(sandbox.collections.couponsCollection.models.length === 0){
+      if(sandbox.collections.couponsCollection.length === 0){
         $('.coupon-list', this.el).html('Your company have no coupon.');
       }
 
@@ -70,7 +72,7 @@ define([
       var button = $('button.load-more', this.el).addClass('disabled');
       sandbox.collections.couponsCollection.loadMore(function(loaded){
         if(loaded > 0){
-          button.removeClass('disabled');
+          button.removeClass('disabled hide');
         }else{
           button.addClass('hide');
         }

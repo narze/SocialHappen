@@ -36,7 +36,7 @@ define([
       $(this.el).html(this.sidebarTemplate());
 
       if(!this.collection.length) {
-        $('.btn.load-more').html('<div class="no-challenge">No Challenge</div>');
+        $('.btn.load-more').html('<div class="no-challenge">No Company</div>');
         return false;
       }
 

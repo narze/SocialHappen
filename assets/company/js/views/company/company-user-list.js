@@ -42,12 +42,14 @@ define([
       console.log('addAll');
       $('.user-list', this.el).html('');
 
-      if(sandbox.collections.companyUsersCollection.models.length === 0){
+      if(sandbox.collections.companyUsersCollection.length === 0){
         $('.user-list', this.el).html('Your company have no user.');
       }
 
-      if(sandbox.collections.companyUsersCollection.model.length <= 30){
+      if(sandbox.collections.companyUsersCollection.length <= 30){
         $('button.load-more', this.el).addClass('hide');
+      } else {
+        $('button.load-more', this.el).removeClass('hide');
       }
 
       sandbox.collections.companyUsersCollection.each(function(model){
@@ -60,7 +62,7 @@ define([
       var button = $('button.load-more', this.el).addClass('disabled');
       sandbox.collections.companyUsersCollection.loadMore(function(loaded){
         if(loaded > 0){
-          button.removeClass('disabled');
+          button.removeClass('disabled hide');
         }else{
           button.addClass('hide');
         }
