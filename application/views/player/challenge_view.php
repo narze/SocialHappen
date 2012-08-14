@@ -129,9 +129,9 @@
 					<div class="control-group">
 						<div class="controls challengers-in-progress"><?php if(!$challengers['in_progress_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['in_progress'] as $user) :?>
-							<span>
-								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" />
-							</span>
+							<li>
+								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" /> <span class="user_name"><?php echo "{$user['user_first_name']} {$user['user_last_name']}" ?></span>
+							</li>
 						<?php endforeach; ?>
 						</div>
 						<?php if($challengers['in_progress_count'] > count($challengers['in_progress'])) :?>
@@ -145,9 +145,9 @@
 						<label><h6>Who completed this challenge</h6></label>
 						<div class="controls challengers-completed"><?php if(!$challengers['completed_count']) { echo 'None'; } ?>
 						<?php foreach($challengers['completed'] as $user) :?>
-							<span>
-								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" />
-							</span>
+							<li>
+								<img src="<?php echo $user['user_image'];?>" alt="<?php echo $user['user_first_name'];?>" title="<?php echo $user['user_first_name'];?>" /> <span class="user_name"><?php echo "{$user['user_first_name']} {$user['user_last_name']}" ?></span>
+							</li>
 						<?php endforeach; ?>
 						</div>
 						<?php if($challengers['completed_count'] > count($challengers['completed'])) :?>
@@ -310,7 +310,7 @@
 </div>
 
 <script type="text/template" id="challengers-item-template">
-  <span>
-    <img src="<%= user_image %>" alt="" /> <%= user_first_name %>
-  </span>
+  <li>
+    <img src="<%= user_image %>" alt="" /> <span><%= user_first_name %></span>
+  </li>
 </script>

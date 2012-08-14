@@ -225,21 +225,22 @@ class Player extends CI_Controller {
       $challengers = $this->challenge_lib->get_challengers($challenge_id);
       //Get users' profile
       $this->load->model('user_model');
-      $limit = 1;
+      //challenger limit per one load
+      $limit = 5;
       $challengers['in_progress_count'] = count($challengers['in_progress']);
       $challengers['completed_count'] = count($challengers['completed']);
       foreach($challengers['in_progress'] as $key => &$challenger_in_progress){
-        if($key >= $limit) {
+        if($key > $limit) {
           unset($challengers['in_progress'][$key]);
         }
         $challenger_in_progress = $this->user_model->get_user_profile_by_user_id($challenger_in_progress['user_id']);
-      }
+      } unset($challenger_in_progress);
       foreach($challengers['completed'] as $key => &$challenger_completed){
-        if($key >= $limit) {
+        if($key > $limit) {
           unset($challengers['completed'][$key]);
         }
         $challenger_completed = $this->user_model->get_user_profile_by_user_id($challenger_completed['user_id']);
-      }
+      } unset($challenger_completed);
 
       $this->load->vars(
         array(

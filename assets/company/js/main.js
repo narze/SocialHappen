@@ -33,6 +33,7 @@ require([
   'router',
   'vm',
   'models/user',
+  'models/challenger',
   'collections/challenges',
   'collections/rewards',
   'collections/coupons',
@@ -40,9 +41,10 @@ require([
   'collections/company-users',
   'events',
   'sandbox'
-], function(AppView, Router, Vm, UserModel, ChallengesCollection, RewardsCollection, CouponsCollection, ActivitiesCollection, CompanyUsersCollection, vent, sandbox){
+], function(AppView, Router, Vm, UserModel, ChallengerModel, ChallengesCollection, RewardsCollection, CouponsCollection, ActivitiesCollection, CompanyUsersCollection, vent, sandbox){
 
   var currentUserModel = sandbox.models.currentUserModel = new UserModel();
+  var challenger = sandbox.models.challengerModel = new ChallengerModel();
   var challengesCollection = sandbox.collections.challengesCollection = new ChallengesCollection([]);
   var rewardsCollection = sandbox.collections.rewardsCollection = new RewardsCollection([]);
   var couponsCollection = sandbox.collections.couponsCollection = new CouponsCollection([]);

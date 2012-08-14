@@ -1,25 +1,26 @@
 define([
+  'vm',
   'jquery',
   'underscore',
   'backbone',
   'text!templates/company/modal/edit.html',
   'text!templates/company/modal/coupon-item.html',
   'text!templates/company/modal/activity-item.html',
-  'text!templates/company/modal/challengers-item-template.html',
   'text!templates/company/modal/addAction.html',
   'text!templates/company/modal/addReward.html',
   'views/company/modal/action/feedback-action',
   'views/company/modal/action/qr-action',
   'views/company/modal/action/checkin-action',
   'views/company/modal/reward/reward',
+  'views/company/challenger-list',
   'jqueryui',
   'timeago',
   'collections/challenger',
   'events',
   'sandbox'
-], function($, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate, challengersItemTemplate,
+], function(Vm, $, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
-  QRActionView, CheckinActionView, RewardView, jqueryui, timeago, ChallengerCollection, vent, sandbox){
+  QRActionView, CheckinActionView, RewardView, ChallengerView, jqueryui, timeago, ChallengerCollection, vent, sandbox){
   var EditModalView = Backbone.View.extend({
 
     editTemplate: _.template(editTemplate),
@@ -29,9 +30,11 @@ define([
     couponItemTemplate: _.template(couponItemTemplate),
 
     //Limit for challenger items in list
-    limit: 5,
-    challengeInProgressIndex: 0,
-    challengeCompletedIndex: 0,
+    challengeDefaults: {
+      limit: 1,
+      challengeInProgressIndex: 0,
+      challengeCompletedIndex: 0
+    },
 
     events: {
       'click h3.edit-name': 'showEditName',
@@ -65,6 +68,8 @@ define([
       if(!this.model) {
         return;
       }
+
+      sandbox.challengeHash = this.model.id;
 
       var data = this.model.toJSON();
       $(this.el).html(this.editTemplate(data));
@@ -151,41 +156,45 @@ define([
         $('#edit_challenge_end').datetimepicker('setDate', (new Date(endDate)));
       }
 
-      //Get challengers
-      var limit = this.limit;
-      var challengerCollection = new ChallengerCollection();
-      challengerCollection.url = window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id + '/' + limit;
-      challengerCollection.fetch({
-        success: function(collection, resp) {
-          if(resp.in_progress.length) {
-            $('.joined', self.el).empty();
-            _.each(resp.in_progress, function(user) {
-              $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
-            });
-            if(resp.more_in_progress) {
-              $('.load-more-in-progress', self.el).hide();
-            } else {
-              $('.load-more-in-progress', self.el).show().click(loadMoreInProgress);
-            }
-          } else {
-            $('.challenger-joined', self.el).hide();
-          }
+      var challenger = Vm.create(sandbox.views.appView, 'ChallengeModal',ChallengerView);
+      $('.challenger').html(challenger.render().el);
 
-          if(resp.completed.length) {
-            $('.completed', self.el).empty();
-            _.each(resp.completed, function(user) {
-              $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
-            });
-            if(resp.more_completed) {
-              $('.load-more-completed', self.el).hide();
-            } else {
-              $('.load-more-completed', self.el).show() .click(loadMoreCompleted);
-            }
-          } else {
-            $('.challenger-completed', self.el).hide();
-          }
-        }
-      })
+      // //Get challengers
+      // var challengerCollection = new ChallengerCollection();
+      // var limit = this.challengeDefaults.limit;
+      // this.challengeListOptions = this.challengeDefaults;
+      // challengerCollection.url = window.Company.BASE_URL + 'apiv3/get_challengers/' + this.model.id + '/' + limit;
+      // challengerCollection.fetch({
+      //   success: function(collection, resp) {
+      //     if(resp.in_progress.length) {
+      //       $('.joined', self.el).empty();
+      //       _.each(resp.in_progress, function(user) {
+      //         $('.joined', self.el).append('<div class="joined-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
+      //       });
+      //       if(resp.more_in_progress) {
+      //         $('.load-more-in-progress', self.el).hide();
+      //       } else {
+      //         $('.load-more-in-progress', self.el).show().click(loadMoreInProgress);
+      //       }
+      //     } else {
+      //       $('.challenger-joined', self.el).hide();
+      //     }
+
+      //     if(resp.completed.length) {
+      //       $('.completed', self.el).empty();
+      //       _.each(resp.completed, function(user) {
+      //         $('.completed', self.el).append('<div class="completed-user"><img src="'+ user.user_image +'" alt="'+user.user_first_name+'" title="'+user.user_first_name+'"/></div>');
+      //       });
+      //       if(resp.more_completed) {
+      //         $('.load-more-completed', self.el).hide();
+      //       } else {
+      //         $('.load-more-completed', self.el).show() .click(loadMoreCompleted);
+      //       }
+      //     } else {
+      //       $('.challenger-completed', self.el).hide();
+      //     }
+      //   }
+      // })
 
       //Show challenge status
       var challengeStatus;
@@ -205,50 +214,50 @@ define([
       }
       $('.challenge-status', this.el).html(challengeStatus);
 
-      function loadMoreInProgress() {
-        var offset = self.challengeInProgressIndex;
-        var inProgressTemplate = _.template(challengersItemTemplate);
-        var challengeHash = self.model.id;
+      // function loadMoreInProgress() {
+      //   var offset = self.challengeListOptions.challengeInProgressIndex;
+      //   var inProgressTemplate = _.template(challengersItemTemplate);
+      //   var challengeHash = self.model.id;
 
-        $('.load-more-in-progress', self.el).hide();
-        challengerCollection.url = window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset;
-        challengerCollection.fetch({
-          success: function(collection, resp) {
-            if(!resp.more_in_progress) {
-              return;
-            }
-            $('.load-more-in-progress', self.el).show();
-            $('.challengers-in-progress', self.el).empty();
-            _.each(resp.in_progress, function(user) {
-              $('.challengers-in-progress', self.el).append(inProgressTemplate(user));
-            });
-            self.challengeInProgressIndex = offset + limit;
-          }
-        })
-      }
+      //   $('.load-more-in-progress', self.el).hide();
+      //   challengerCollection.url = window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset;
+      //   challengerCollection.fetch({
+      //     success: function(collection, resp) {
+      //       if(!resp.more_in_progress) {
+      //         return;
+      //       }
+      //       $('.load-more-in-progress', self.el).show();
+      //       $('.challengers-in-progress', self.el).empty();
+      //       _.each(resp.in_progress, function(user) {
+      //         $('.challengers-in-progress', self.el).append(inProgressTemplate(user));
+      //       });
+      //       self.challengeListOptions.challengeInProgressIndex = offset + limit;
+      //     }
+      //   })
+      // }
 
-      function loadMoreCompleted() {
-        var offset = self.challengeCompletedIndex;
-        var completedTemplate = _.template(challengersItemTemplate);
-        var challengeHash = self.model.id;
-        $('.load-more-completed', self.el).hide();
-        $.ajax({
-          type: 'POST',
-          dataType: 'json',
-          url: window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
-          success: function (resp) {
-            if(!resp.more_completed) {
-              return;
-            }
-            $('.load-more-completed', self.el).show();
-            $('.challengers-completed', self.el).empty();
-            _.each(resp.completed, function(user) {
-              $('.challengers-completed', self.el).append(completedTemplate(user));
-            });
-          }
-        });
-        self.challengeCompletedIndex = offset + limit;
-      }
+      // function loadMoreCompleted() {
+      //   var offset = self.challengeListOptions.challengeCompletedIndex;
+      //   var completedTemplate = _.template(challengersItemTemplate);
+      //   var challengeHash = self.model.id;
+      //   $('.load-more-completed', self.el).hide();
+      //   $.ajax({
+      //     type: 'POST',
+      //     dataType: 'json',
+      //     url: window.Company.BASE_URL + 'apiv3/get_challengers/' + challengeHash + '/' + limit + '/' + offset,
+      //     success: function (resp) {
+      //       if(!resp.more_completed) {
+      //         return;
+      //       }
+      //       $('.load-more-completed', self.el).show();
+      //       $('.challengers-completed', self.el).empty();
+      //       _.each(resp.completed, function(user) {
+      //         $('.challengers-completed', self.el).append(completedTemplate(user));
+      //       });
+      //     }
+      //   });
+      //   self.challengeListOptions.challengeCompletedIndex = offset + limit;
+      // }
 
       return this;
     },

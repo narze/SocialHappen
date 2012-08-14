@@ -2,10 +2,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/coupon'
-], function($, _, Backbone, couponModel){
-  var couponsCollection = Backbone.Collection.extend({
-    model: couponModel,
+  'models/challenger'
+], function($, _, Backbone, challengerModel){
+  var challengersCollection = Backbone.Collection.extend({
+    model: challengerModel,
     filter: null,
     last_id: null,
 
@@ -65,5 +65,5 @@ define([
 
   });
 
-  return couponsCollection;
+  return challengersCollection;
 });
