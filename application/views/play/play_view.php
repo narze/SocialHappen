@@ -22,7 +22,7 @@
           <h2 class="user-name">
             <%= name %>
           </h2>
-          <p class="user-point">User Point: <%= point %></p>
+          <!--<p class="user-point">user point: <%= point %></p>-->
         </div>
       </div>
     </div>

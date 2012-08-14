@@ -9,7 +9,6 @@
     <h3 class="name">
       <%= user.user_first_name %> <%= user.user_last_name %>
     </h3>
-    <p><small>User Point: <%= user.user_score %></small></p>
     <% if(user.user_register_date){ %>
     <p><small>Join Date: <%= $.timeago(new Date(new Date(user.user_register_date).getTime() + parseInt(user.user_timezone_offset || 0, 10)*60000)) %></small></p>
     <% } %>
