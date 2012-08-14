@@ -53,7 +53,7 @@ $(function() {
         });
 
         //Show company list
-        if(data.companies.length) {
+        if(data.companies) {
           var barCompanyListTemplate = _.template($('#bar-company-list-template').html());
           $('.bar-company-list').replaceWith(barCompanyListTemplate({
             companies: data.companies

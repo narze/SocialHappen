@@ -24,9 +24,8 @@ class Bar_ctrl {
 						       	'creator_user_id' => $user_id
 							);
 				$this->CI->load->model('company_model', 'companies');
-				
-				
-				if ($company_id = $this->CI->companies->add_company($company)) 
+
+				if ($company_id = $this->CI->companies->add_company($company))
 				{
 					$this->CI->load->model('user_companies_model','user_companies');
 					$user_company = array(
@@ -60,20 +59,20 @@ class Bar_ctrl {
     	} else {
 	    	$this->CI->load->model('user_companies_model','user_companies');
 			$user_companies = $this->CI->user_companies->get_user_companies_by_user_id($user_id);
-			
+
 			if($user_companies)
 			{
 				$this->CI->load->model('page_model','page');
 				$this->CI->load->model('installed_apps_model','installed_app');
 				$this->CI->load->model('campaign_model','campaigns');
-				foreach($user_companies as &$company) 
+				foreach($user_companies as &$company)
 				{
 					$company['page_count'] = $this->CI->page->count_all(array("company_id" => $company['company_id']));
 					$company['app_count'] = $this->CI->installed_app->count_all_distinct("app_id",array("company_id" => $company['company_id']));
 					$company['campaign_count'] = $this->CI->campaigns->count_campaigns_by_company_id($company['company_id']);
 				}
 			}
-			
+
 			$result['data'] = array(
 				'user_companies' => $user_companies,
 				'user_can_create_company' => $this->CI->socialhappen->check_package_by_user_id_and_mode($user_id, 'company')  //Check user can create company

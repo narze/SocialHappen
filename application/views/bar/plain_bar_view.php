@@ -91,6 +91,8 @@
         <% }); %>
       </ul>
     </li>
+  <% } else { %>
+    <li><a href="<%= base_url + 'company/create'%>">Create Your Company</a></li>
   <% } %>
 </script>
 

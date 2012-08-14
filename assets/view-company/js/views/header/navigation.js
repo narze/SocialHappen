@@ -30,13 +30,11 @@ define([
 
       //Company list
       var companies = this.options.currentUserModel.get('companies');
-      if(companies && companies.length) {
-        var barCompanyListTemplate = this.barCompanyListTemplate;
-        $('.bar-company-list').replaceWith(barCompanyListTemplate({
-          companies: companies,
-          base_url: window.Company.BASE_URL
-        }));
-      }
+      var barCompanyListTemplate = this.barCompanyListTemplate;
+      $('.bar-company-list').replaceWith(barCompanyListTemplate({
+        companies: companies,
+        base_url: window.Company.BASE_URL
+      }));
 
       //Notifications
       var barNotificationTemplate = this.barNotificationTemplate;

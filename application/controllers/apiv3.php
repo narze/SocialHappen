@@ -972,6 +972,52 @@ class Apiv3 extends CI_Controller {
     }
     echo json_encode($result);
   }
+
+  /**
+   * create company
+   */
+  function createCompany() {
+    $result = array('success' => FALSE);
+
+    // check user
+    if(!$user = $this->socialhappen->get_user()) {
+      $result['data'] = 'User not found';
+      echo json_encode($result);
+      return;
+    }
+
+    // check if user already have company
+    $this->load->model('user_companies_model');
+    if($companies = $this->user_companies_model->get_user_companies_by_user_id($user['user_id']) && (count($companies) > 0)) {
+      $result['data'] = 'You already have a company';
+    }
+
+    // add new company
+    $this->load->model('company_model');
+    $company = $this->input->post('company');
+    $company['company_image'] = !$company['company_image'] ? base_url().'assets/images/default/company.png' : $company['company_image'];
+    $company['creator_user_id'] = $user_id;
+    if(!$company_id = $this->CI->companies->add_company($company)) {
+      $result['data'] = 'Cannot add company, please contact administrator';
+      echo json_encode($result);
+      return;
+    }
+
+    // add company admin
+    $user_company = array(
+      'user_id' => $user['user_id'],
+      'company_id' => $company_id,
+      'user_role' => 1
+    );
+    if(!$this->user_companies_model->add_user_company($user_company)) {
+      $result['data'] = 'Cannot add company admin, please contact administrator';
+      echo json_encode($result);
+      return;
+    }
+
+    $result['success'] = TRUE;
+    echo json_encode($result);
+  }
 }
 
 /* End of file apiv3.php */
