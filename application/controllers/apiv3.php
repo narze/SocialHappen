@@ -603,7 +603,7 @@ class Apiv3 extends CI_Controller {
     $rewards = $this->reward_item_model->get(array(
       'company_id' => (int) $company_id,
       'type' => 'redeem'
-    ));
+    ), array('_id' => -1));
     $rewards = array_map(function($reward) {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;
