@@ -10,7 +10,8 @@ define([
   var CompanySettingsView = Backbone.View.extend({
 
     events: {
-      'click button.submit': 'submitForm'
+      'click button.submit': 'submitForm',
+      'click button.upload-image-submit': 'uploadImage'
     },
 
     initialize: function(){
@@ -35,13 +36,7 @@ define([
 
     submitForm: function(e) {
       e.preventDefault();
-      sandbox.models.companyModel.set('company_image', $('form #company-image', this.el).val())
-      sandbox.models.companyModel.set('company_name', $('form #company-name', this.el).val())
-      sandbox.models.companyModel.set('company_address', $('form #company-address', this.el).val())
-      sandbox.models.companyModel.set('company_detail', $('form #company-detail', this.el).val())
-      sandbox.models.companyModel.set('company_email', $('form #company-email', this.el).val())
-      sandbox.models.companyModel.set('company_telephone', $('form #company-phone', this.el).val())
-      sandbox.models.companyModel.set('company_website', $('form #company-website', this.el).val())
+      this.setForms();
       sandbox.models.companyModel.save();
     },
 
@@ -53,6 +48,37 @@ define([
 
     synced: function() {
       $('.flash-message', this.el).html($('#updated-template').html());
+    },
+
+    uploadImage: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-image', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var imageUrl = resp.data;
+
+            // Save image
+            self.setForms();
+            sandbox.models.companyModel.set('company_image', imageUrl);
+            sandbox.models.companyModel.save();
+            return;
+          }
+          alert(resp.data);
+        }
+      })
+    },
+
+    setForms: function() {
+      sandbox.models.companyModel.set('company_name', $('form #company-name', this.el).val())
+      sandbox.models.companyModel.set('company_address', $('form #company-address', this.el).val())
+      sandbox.models.companyModel.set('company_detail', $('form #company-detail', this.el).val())
+      sandbox.models.companyModel.set('company_email', $('form #company-email', this.el).val())
+      sandbox.models.companyModel.set('company_telephone', $('form #company-phone', this.el).val())
+      sandbox.models.companyModel.set('company_website', $('form #company-website', this.el).val())
     }
   });
   return CompanySettingsView;
