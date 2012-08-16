@@ -34,6 +34,7 @@ require([
   'vm',
   'models/user',
   'models/challenger',
+  'models/company',
   'collections/challenges',
   'collections/rewards',
   'collections/coupons',
@@ -41,15 +42,16 @@ require([
   'collections/company-users',
   'events',
   'sandbox'
-], function(AppView, Router, Vm, UserModel, ChallengerModel, ChallengesCollection, RewardsCollection, CouponsCollection, ActivitiesCollection, CompanyUsersCollection, vent, sandbox){
+], function(AppView, Router, Vm, UserModel, ChallengerModel, CompanyModel, ChallengesCollection, RewardsCollection, CouponsCollection, ActivitiesCollection, CompanyUsersCollection, vent, sandbox){
 
-  var currentUserModel = sandbox.models.currentUserModel = new UserModel();
-  var challenger = sandbox.models.challengerModel = new ChallengerModel();
-  var challengesCollection = sandbox.collections.challengesCollection = new ChallengesCollection([]);
-  var rewardsCollection = sandbox.collections.rewardsCollection = new RewardsCollection([]);
-  var couponsCollection = sandbox.collections.couponsCollection = new CouponsCollection([]);
-  var activitiesCollection = sandbox.collections.activitiesCollection = new ActivitiesCollection([]);
-  var companyUsersCollection = sandbox.collections.companyUsersCollection = new CompanyUsersCollection([]);
+  sandbox.models.currentUserModel = new UserModel();
+  sandbox.models.challengerModel = new ChallengerModel();
+  sandbox.models.companyModel= new CompanyModel();
+  sandbox.collections.challengesCollection = new ChallengesCollection([]);
+  sandbox.collections.rewardsCollection = new RewardsCollection([]);
+  sandbox.collections.couponsCollection = new CouponsCollection([]);
+  sandbox.collections.activitiesCollection = new ActivitiesCollection([]);
+  sandbox.collections.companyUsersCollection = new CompanyUsersCollection([]);
 
   sandbox.models.currentUserModel.fetch({
     success: function(model, xhr){

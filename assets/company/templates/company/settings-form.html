@@ -1,0 +1,50 @@
+<form class="form-horizontal">
+  <fieldset>
+    <legend>Company Settings</legend>
+    <div class="control-group">
+      <label for="company-image" class="control-label">Company Image</label>
+      <div class="controls">
+        <input id="company-image" type="text" class="input-xlarge" value="<%= company.company_image %>" />
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="company-name" class="control-label">Company Name</label>
+      <div class="controls">
+        <input id="company-name" type="text" class="input-xlarge" value="<%= company.company_name %>" />
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="company-detail" class="control-label">Company Detail</label>
+      <div class="controls">
+        <textarea id="company-detail"><%= company.company_detail %></textarea>
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="company-address" class="control-label">Company Address</label>
+      <div class="controls">
+        <textarea id="company-address"><%= company.company_address %></textarea>
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="company-email" class="control-label">Company Email</label>
+      <div class="controls">
+        <input id="company-email" type="text" class="input-xlarge" value="<%= company.company_email %>" />
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="company-phone" class="control-label">Company Phone</label>
+      <div class="controls">
+        <input id="company-phone" type="text" class="input-xlarge" value="<%= company.company_telephone %>" />
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="company-website" class="control-label">Company Website</label>
+      <div class="controls">
+        <input id="company-website" type="text" class="input-xlarge" value="<%= company.company_website %>" />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="submit btn btn-primary btn-large">Update</button>
+    </div>
+  </fieldset>
+</form>

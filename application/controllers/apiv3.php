@@ -58,7 +58,9 @@ class Apiv3 extends CI_Controller {
   }
 
   function company($company_id = NULL){
-
+    if($this->socialhappen->detect_method() === 'post') {
+      return $this->_updateCompany($company_id);
+    }
 
     if(!$user = $this->socialhappen->get_user()) {
       return json_return(array('success' => FALSE, 'data' => 'Not signed in'));
@@ -87,6 +89,40 @@ class Apiv3 extends CI_Controller {
     }else{
       echo '{}';
     }
+  }
+
+  function _updateCompany($company_id = NULL) {
+    header('Content-Type: application/json', TRUE);
+    $result = array('success' => FALSE);
+    $company = json_decode($this->input->post('model'), TRUE);
+    unset($company['company_score']);
+
+    if($company_id != $company['company_id']) {
+      $result['data'] = 'Bad input';
+    }
+
+    if(!$user = $this->socialhappen->get_user()) {
+      return json_return(array('success' => FALSE, 'data' => 'Not signed in'));
+    }
+    $user_id = $user['user_id'];
+
+    //Check company owner
+    $this->load->model('user_companies_model');
+    if(!$this->user_companies_model->is_company_admin($user_id, $company_id)) {
+      $result['data'] = 'No permission';
+      return json_return($result);
+    }
+
+    //Update company
+    $this->load->model('company_model');
+    if(!$update_result = $this->company_model->update_company_profile_by_company_id($company_id, $company)) {
+      $result['data'] = 'Update faied';
+    }
+
+    $result['success'] = TRUE;
+    $result['data'] = $company;
+
+    return json_return($result);
   }
 
   /**

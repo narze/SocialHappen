@@ -1190,4 +1190,27 @@ class SocialHappen{
 		$this->CI->load->view('common/template', $template);
 		// exit();
 	}
+
+	function detect_method() {
+		$method = strtolower($this->CI->input->server('REQUEST_METHOD'));
+
+		if ($this->CI->config->item('enable_emulate_request'))
+		{
+			if ($this->CI->input->post('_method'))
+			{
+				$method = strtolower($this->CI->input->post('_method'));
+			}
+			elseif ($this->CI->input->server('HTTP_X_HTTP_METHOD_OVERRIDE'))
+			{
+				$method = strtolower($this->CI->input->server('HTTP_X_HTTP_METHOD_OVERRIDE'));
+			}
+		}
+
+		if (in_array($method, array('get', 'delete', 'post', 'put')))
+		{
+			return $method;
+		}
+
+		return 'get';
+	}
 }

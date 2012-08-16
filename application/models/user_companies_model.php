@@ -5,7 +5,7 @@ class User_companies_model extends CI_Model {
 	{
 		parent::__construct();
 	}
-	
+
 	/**
 	 * Adds user company
 	 * @param array $data
@@ -15,7 +15,7 @@ class User_companies_model extends CI_Model {
 	function add_user_company($data = array()){
 		return $this -> db -> insert('user_companies', $data);
 	}
-	
+
 	/**
 	 * Removes user_company
 	 * @param $user_id
@@ -27,7 +27,7 @@ class User_companies_model extends CI_Model {
 		$this->db->delete('user_companies', array('user_id' => $user_id, 'company_id' => $company_id));
 		return $this->db->affected_rows();
 	}
-	
+
 	/**
 	 * Get user companies
 	 * @param $user_id
@@ -53,7 +53,7 @@ class User_companies_model extends CI_Model {
 		}
 		return $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
 	}
-	
+
 	/**
 	 * Get company users
 	 * @param $company_id
@@ -68,7 +68,7 @@ class User_companies_model extends CI_Model {
 		$result = $this->db->get_where('user_companies', array('company_id' => $company_id))->result_array();
 		return $this->socialhappen->map_v($result, 'user_gender');
 	}
-	
+
 	/**
 	 * Check if user is company admin
 	 * @param $user_id

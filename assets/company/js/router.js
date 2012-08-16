@@ -20,6 +20,7 @@ define([
       '/company/:id/activities': 'activities',
       '/company/:id/coupon/:couponId': 'couponPopup',
       '/create': 'createCompany',
+      '/company/:id/settings': 'settings',
       '*actions': 'defaultAction'
     }
   });
@@ -138,6 +139,17 @@ define([
             sandbox.collections.companyUsersCollection.get(userId).trigger('view');
           }
         }})
+      })
+    })
+
+    router.on('route:settings', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'settings';
+      // sandbox.models.settingsModel.url = window.Company.BASE_URL + '/apiv3/company_users/' + id;
+      require(['views/company/settings'], function(Settings) {
+        createCompanyPage();
+        var settingsView = Vm.create(sandbox.views.appView, 'Content', Settings);
+        $('#content-pane').html(settingsView.render().el);
       })
     })
 
