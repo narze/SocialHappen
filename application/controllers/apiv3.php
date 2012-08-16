@@ -12,7 +12,7 @@ class Apiv3 extends CI_Controller {
   }
 
   function index(){
-    echo json_encode(array('status' => 'OK'));
+    return json_return(array('status' => 'OK'));
   }
 
   /**
@@ -51,7 +51,7 @@ class Apiv3 extends CI_Controller {
         $user['companies'] = array();
       }
 
-      echo json_encode($user);
+      return json_return($user);
     }else{
       echo '{}';
     }
@@ -61,8 +61,7 @@ class Apiv3 extends CI_Controller {
 
 
     if(!$user = $this->socialhappen->get_user()) {
-      echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'Not signed in'));
     }
 
     $user_id = $user['user_id'];
@@ -80,7 +79,7 @@ class Apiv3 extends CI_Controller {
 
         $company['company_score'] = $company_stat && $company_stat['company_score'] ? $company_stat['company_score'] : 0;
 
-        echo json_encode($company);
+        return json_return($company);
       }else{
         echo '{}';
       }
@@ -119,7 +118,7 @@ class Apiv3 extends CI_Controller {
     }
     $available_apps = $this->app_model->get_apps_by_app_id_range(10001);
     $result = compact('user', 'available_apps', 'played_apps', 'user_score');
-    echo json_encode($result);
+    return json_return($result);
   }
 
   /**
@@ -131,7 +130,7 @@ class Apiv3 extends CI_Controller {
     }else{
       $this->load->library('audit_lib');
       $activity = $this->audit_lib->list_audit(array('user_id' => (int)$user_id, 'app_id' => 0));
-      echo json_encode($activity);
+      return json_return($activity);
     }
   }
 
@@ -141,12 +140,11 @@ class Apiv3 extends CI_Controller {
   function company_activities($company_id = NULL){
     if(!$company_id){
       echo '[]';
-      return;
     }
 
     $this->load->library('audit_lib');
     $activity = $this->audit_lib->list_audit(array('company_id' => (int) $company_id, 'app_id' => 0));
-    echo json_encode($activity);
+    return json_return($activity);
   }
 
   /**
@@ -180,7 +178,7 @@ class Apiv3 extends CI_Controller {
       $activity_result = $activity_search_result;
     }
 
-    echo json_encode($activity_result);
+    return json_return($activity_result);
   }
 
   static function _timestamp_cmp($a, $b){
@@ -196,7 +194,7 @@ class Apiv3 extends CI_Controller {
     }else{
       $this->load->library('achievement_lib');
       $achievement = $this->achievement_lib->list_user_achieved_by_user_id((int)$user_id);
-      echo json_encode($achievement);
+      return json_return($achievement);
     }
   }
 
@@ -214,7 +212,7 @@ class Apiv3 extends CI_Controller {
       $notifications['items'] = $this->notification_lib->lists($user_id);
       $notifications['count'] = count($notifications['items']);
     }
-    echo json_encode($notifications);
+    return json_return($notifications);
   }
 
   /**
@@ -274,7 +272,7 @@ class Apiv3 extends CI_Controller {
     // }
 
     // $challenges = array_map("convert_id", $challenges);
-    echo json_encode($challenges);
+    return json_return($challenges);
   }
 
   function challenge_action() {
@@ -287,7 +285,7 @@ class Apiv3 extends CI_Controller {
     $id = $id['$id'];
     $action_data['_id'] = $id;
 
-    echo json_encode($action_data);
+    return json_return($action_data);
   }
 
   /**
@@ -296,8 +294,7 @@ class Apiv3 extends CI_Controller {
   function saveChallenge($challenge_hash = NULL){
     header('Content-Type: application/json', TRUE);
     if(!$user = $this->socialhappen->get_user()) {
-      echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'Not signed in'));
     }
 
     $challenge = rawurldecode($this->input->post('model', TRUE));
@@ -313,7 +310,7 @@ class Apiv3 extends CI_Controller {
       $company_id = $challenge['company_id'];
 
       if(!is_array($challenge)){
-        echo json_encode(array('success' => FALSE, 'data' =>'data error'));
+        return json_return(array('success' => FALSE, 'data' =>'data error'));
         return FALSE;
       }
 
@@ -334,7 +331,7 @@ class Apiv3 extends CI_Controller {
             $update_action_data_result = $this->action_data_lib->update($mgid['$id'], $action_data_attr);
 
             if(!$update_action_data_result){
-              echo json_encode(array('success' => FALSE, 'data' =>'update action_data failed '. print_r($action_data_attr['data'], true)));
+              return json_return(array('success' => FALSE, 'data' =>'update action_data failed '. print_r($action_data_attr['data'], true)));
               return FALSE;
             }
           }
@@ -366,7 +363,7 @@ class Apiv3 extends CI_Controller {
             $action_data_object['action_data']['hash'] = strrev(sha1($action_data_id));
 
           }else{
-            echo json_encode(array('success' => FALSE, 'data' =>'add action_data failed : ' . print_r($action_data_attr['data'], true)));
+            return json_return(array('success' => FALSE, 'data' =>'add action_data failed : ' . print_r($action_data_attr['data'], true)));
             return FALSE;
           }
         }
@@ -386,15 +383,13 @@ class Apiv3 extends CI_Controller {
             $reward_item['company_id'] = $company_id;
             $reward_item_id = get_mongo_id($reward_item);
             if(!$reward_update_result = $this->reward_item_model->update($reward_item_id, $reward_item)) {
-              echo json_encode(array('success' => FALSE, 'data' => 'Update reward failed'));
-              return;
+              return json_return(array('success' => FALSE, 'data' => 'Update reward failed'));
             }
           } else {
             //New reward : add new
             $reward_item['company_id'] = $company_id;
             if(!$reward_item_id = $this->reward_item_model->add_challenge_reward($reward_item)) {
-              echo json_encode(array('success' => FALSE, 'data' => 'Add reward failed'));
-              return;
+              return json_return(array('success' => FALSE, 'data' => 'Add reward failed'));
             }
 
             //Set reward id
@@ -460,9 +455,9 @@ class Apiv3 extends CI_Controller {
       if($challenge_create || $challenge_update){
         // $challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($challenge_id)));
         // $challenge['_id'] = $challenge['_id']['$id'];
-        echo json_encode(array('success' => TRUE, 'data' => $challenge));
+        return json_return(array('success' => TRUE, 'data' => $challenge));
       }else{
-        echo json_encode(array('success' => FALSE, 'data' =>'add/update challenge failed'));
+        return json_return(array('success' => FALSE, 'data' =>'add/update challenge failed'));
       }
     }
   }
@@ -473,22 +468,20 @@ class Apiv3 extends CI_Controller {
   function saveReward($reward_id = NULL){
     header('Content-Type: application/json', TRUE);
     if(!$user = $this->socialhappen->get_user()) {
-      echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'Not signed in'));
     }
 
     $reward = rawurldecode($this->input->post('model', TRUE));
 
     if(!isset($reward) || $reward == ''){
-      echo json_encode(array('success' => FALSE, 'data' => 'no reward data'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'no reward data'));
     }
 
     $this->load->model('reward_item_model');
     $reward = json_decode($reward, TRUE);
 
     if(!is_array($reward)){
-      echo json_encode(array('success' => FALSE, 'data' =>'data error'));
+      return json_return(array('success' => FALSE, 'data' =>'data error'));
       return FALSE;
     }
 
@@ -496,18 +489,16 @@ class Apiv3 extends CI_Controller {
       //Reward exists : update
       $reward_item_id = $reward['_id'];
       if(!$reward_update_result = $this->reward_item_model->update($reward_item_id, $reward)) {
-        echo json_encode(array('success' => FALSE, 'data' => 'Update reward failed'));
-        return;
+        return json_return(array('success' => FALSE, 'data' => 'Update reward failed'));
       }
     } else {
       //New reward : add new
       if(!$reward_item_id = $this->reward_item_model->add_redeem_reward($reward)) {
-        echo json_encode(array('success' => FALSE, 'data' => 'Add reward failed'));
-        return;
+        return json_return(array('success' => FALSE, 'data' => 'Add reward failed'));
       }
     }
 
-    echo json_encode(array('success' => TRUE, 'data' => $reward));
+    return json_return(array('success' => TRUE, 'data' => $reward));
 
   }
 
@@ -516,17 +507,15 @@ class Apiv3 extends CI_Controller {
    */
   function reward_item($reward_item_id = NULL) {
     if(!$reward_item_id) {
-      echo json_encode(array('success' => FALSE, 'data' => 'id not specified'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'id not specified'));
     }
 
     $this->load->model('reward_item_model');
     if(!$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id)) {
-      // echo json_encode(array('success' => TRUE, 'data' => NULL));
-      // return;
+      // return json_return(array('success' => TRUE, 'data' => NULL));
     }
 
-    echo json_encode(array('success' => TRUE, 'data' => $reward_item));
+    return json_return(array('success' => TRUE, 'data' => $reward_item));
   }
 
   /**
@@ -545,7 +534,7 @@ class Apiv3 extends CI_Controller {
       $rewards_processed[get_mongo_id($value)] = $value;
     }
 
-    echo json_encode(array('data' => $rewards_processed));
+    return json_return(array('data' => $rewards_processed));
   }
 
   /**
@@ -574,7 +563,7 @@ class Apiv3 extends CI_Controller {
     $challengers['more_in_progress'] = $limit + $offset >= $in_progress_count;
     $challengers['completed'] = array_values($challengers['completed']);
     $challengers['more_completed'] = $limit + $offset >= $completed_count;
-    echo json_encode($challengers);
+    return json_return($challengers);
   }
 
   /**
@@ -583,11 +572,10 @@ class Apiv3 extends CI_Controller {
   function companies() {
     $this->load->model('company_model');
     if($company_id = $this->input->get('company_id')) {
-      echo json_encode($this->company_model->get_company_profile_by_company_id($company_id));
-      return;
+      return json_return($this->company_model->get_company_profile_by_company_id($company_id));
     }
 
-    echo json_encode($this->company_model->get_all());
+    return json_return($this->company_model->get_all());
   }
 
   /**
@@ -595,8 +583,7 @@ class Apiv3 extends CI_Controller {
    */
   function rewards() {
     if(!$company_id = $this->input->get('company_id')) {
-      echo json_encode(array('success' => FALSE, 'data' => 'No company_id'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'No company_id'));
     }
 
     $this->load->model('reward_item_model');
@@ -608,7 +595,7 @@ class Apiv3 extends CI_Controller {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;
     }, $rewards);
-    echo json_encode($rewards);
+    return json_return($rewards);
   }
 
   /**
@@ -616,13 +603,11 @@ class Apiv3 extends CI_Controller {
    */
   function viewRewards(){
     if(!$user = $this->socialhappen->get_user()) {
-      echo json_encode(array('success' => FALSE, 'data' => 'Not signed in'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'Not signed in'));
     }
 
     if(!$company_id = $this->input->get('company_id')) {
-      echo json_encode(array('success' => FALSE, 'data' => 'No company_id'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'No company_id'));
     }
 
     $this->load->model('reward_item_model');
@@ -637,7 +622,7 @@ class Apiv3 extends CI_Controller {
       $reward['_id'] = get_mongo_id($reward);
       return $reward;
     }, $rewards);
-    echo json_encode($rewards);
+    return json_return($rewards);
   }
 
   function coupon_detail(){
@@ -648,7 +633,7 @@ class Apiv3 extends CI_Controller {
     if(isset($hash) && $hash!='')
       $result = $this->coupon_lib->get_by_hash($hash);
 
-    echo json_encode($result);
+    return json_return($result);
 
   }
 
@@ -689,7 +674,7 @@ class Apiv3 extends CI_Controller {
     } unset($coupon);
     $result = array_values($result); //Sort again
 
-    echo json_encode($result);
+    return json_return($result);
   }
 
   function confirm_coupon(){
@@ -708,13 +693,12 @@ class Apiv3 extends CI_Controller {
       );
     }
 
-    echo json_encode($return);
+    return json_return($return);
   }
 
   function rewardsRedeemed() {
     if(!$user_id = $this->socialhappen->get_user_id()) {
-      echo json_encode(array('success' => FALSE));
-      return;
+      return json_return(array('success' => FALSE));
     }
 
     //Get user rewards
@@ -746,17 +730,17 @@ class Apiv3 extends CI_Controller {
 
 
     $user_rewards = array_merge($user_rewards, $user_coupon);
-    echo json_encode(array('success' => TRUE, 'data' => $user_rewards));
+    return json_return(array('success' => TRUE, 'data' => $user_rewards));
   }
 
   function purchaseReward() {
-    if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE, 'data' => 'Not logged in')); return; }
-    if(!$reward_item_id = $this->input->post('reward_item_id')) { echo json_encode(array('success' => FALSE, 'data' => 'Unspecified reward item')); return; }
-    if(!$company_id = $this->input->post('company_id')) { echo json_encode(array('success' => FALSE, 'data' => 'Unspecified company')); return; }
+    if(!$user_id = $this->socialhappen->get_user_id()) { return json_return(array('success' => FALSE, 'data' => 'Not logged in')); }
+    if(!$reward_item_id = $this->input->post('reward_item_id')) { return json_return(array('success' => FALSE, 'data' => 'Unspecified reward item')); }
+    if(!$company_id = $this->input->post('company_id')) { return json_return(array('success' => FALSE, 'data' => 'Unspecified company')); }
 
     $this->load->library('reward_lib');
     $purchase_coupon_result = $this->reward_lib->purchase_coupon($user_id, $reward_item_id, $company_id);
-    echo json_encode($purchase_coupon_result);
+    return json_return($purchase_coupon_result);
   }
 
   /**
@@ -764,7 +748,7 @@ class Apiv3 extends CI_Controller {
    */
   function userActionData($user_id = NULL) {
     if(!$user_id){
-      if(!$user_id = $this->socialhappen->get_user_id()) { echo json_encode(array('success' => FALSE)); return; }
+      if(!$user_id = $this->socialhappen->get_user_id()) { return json_return(array('success' => FALSE)); }
     }
 
     $query = array_filter(array(
@@ -779,7 +763,7 @@ class Apiv3 extends CI_Controller {
       return $data;
     }, $user_action_data);
 
-    //echo json_encode($user_action_data); return;
+    //return json_return($user_action_data);
 
     //Get message
     $result = $user_action_data;
@@ -812,12 +796,12 @@ class Apiv3 extends CI_Controller {
       }
     }
 
-    echo json_encode(array_reverse($result));
+    return json_return(array_reverse($result));
   }
 
   function getMyCards() {
     if(!$user_id = $this->socialhappen->get_user_id()) {
-      echo json_encode(array('success' => FALSE, 'data' => 'No user session')); return;
+      return json_return(array('success' => FALSE, 'data' => 'No user session'));
     }
 
     $cards = array();
@@ -853,9 +837,7 @@ class Apiv3 extends CI_Controller {
       $cards[] = $card;
     }
 
-    echo json_encode(array('success' => TRUE, 'data' => $cards));
-    return;
-
+    return json_return(array('success' => TRUE, 'data' => $cards));
   }
 
   function upload_image() {
@@ -864,23 +846,20 @@ class Apiv3 extends CI_Controller {
 
     if(!$file_input_name) {
       if(!isset($_FILES) || !$_FILES) {
-        echo json_encode(array('success' => FALSE, 'data' => 'Please select file to upload'));
-        return;
+        return json_return(array('success' => FALSE, 'data' => 'Please select file to upload'));
       }
       // Get first key in $_FILES
       reset($_FILES);
       $file_input_name = key($_FILES);
     } else if(!isset($_FILES[$file_input_name])) {
-      echo json_encode(array('success' => FALSE, 'data' => 'Please select file to upload'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'Please select file to upload'));
     }
 
     if(!$file_url = $this->socialhappen->replace_image($file_input_name, $old_image)) {
-      echo json_encode(array('success' => FALSE, 'data' => 'Upload failed'));
-      return;
+      return json_return(array('success' => FALSE, 'data' => 'Upload failed'));
     }
 
-    echo json_encode(array('success' => TRUE, 'data' => $file_url));
+    return json_return(array('success' => TRUE, 'data' => $file_url));
   }
 
   /**
@@ -924,7 +903,7 @@ class Apiv3 extends CI_Controller {
       $result['count'] = count($stats);
       $result['success'] = TRUE;
     }
-    echo json_encode($result);
+    return json_return($result);
   }
 
   /**
@@ -970,7 +949,7 @@ class Apiv3 extends CI_Controller {
       $result['count'] = count($stats);
       $result['success'] = TRUE;
     }
-    echo json_encode($result);
+    return json_return($result);
   }
 
   /**
@@ -982,8 +961,7 @@ class Apiv3 extends CI_Controller {
     // check user
     if(!$user = $this->socialhappen->get_user()) {
       $result['data'] = 'User not found';
-      echo json_encode($result);
-      return;
+      return json_return($result);
     }
 
     $user_id = $user['user_id'];
@@ -992,8 +970,7 @@ class Apiv3 extends CI_Controller {
     $this->load->model('user_companies_model');
     if(($companies = $this->user_companies_model->get_user_companies_by_user_id($user_id)) && (count($companies) > 0)) {
       $result['data'] = 'You already have a company';
-      echo json_encode($result);
-      return;
+      return json_return($result);
     }
 
     // add new company
@@ -1003,8 +980,7 @@ class Apiv3 extends CI_Controller {
     $company['creator_user_id'] = $user_id;
     if(!$company_id = $this->company_model->add_company($company)) {
       $result['data'] = 'Cannot add company, please contact administrator';
-      echo json_encode($result);
-      return;
+      return json_return($result);
     }
 
     // add company admin
@@ -1015,13 +991,12 @@ class Apiv3 extends CI_Controller {
     );
     if(!$this->user_companies_model->add_user_company($user_company)) {
       $result['data'] = 'Cannot add company admin, please contact administrator';
-      echo json_encode($result);
-      return;
+      return json_return($result);
     }
 
     $result['success'] = TRUE;
     $result['data'] = array('company_id' => $company_id);
-    echo json_encode($result);
+    return json_return($result);
   }
 }
 

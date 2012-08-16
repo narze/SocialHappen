@@ -4,7 +4,7 @@
  * @author Manassarn M.
  */
 if ( ! function_exists('issetor'))
-{	
+{
 	/**
 	 * Return $var if it is set, otherwise return $default
 	 * @param &$var
@@ -65,7 +65,7 @@ if(!function_exists('array_unique_value'))
 		foreach ($array as $key => $value){
 			if(!is_numeric($key) || array_search($value, $return) === FALSE){
 				$return[$key] = $value;
-			} 
+			}
 		}
 		return $return;
     }
@@ -80,7 +80,7 @@ if(!function_exists('arenotempty'))
 		foreach ($check as $one){
 			if(empty($array[$one])){
 				return FALSE;
-			} 
+			}
 		}
 		return TRUE;
     }
@@ -124,7 +124,7 @@ if(!function_exists('filter_array'))
 	 		foreach($filter as $key){
 	 			$return[$key] = isset($data[$key]) ? $data[$key] : NULL;
 	 		}
-	 	}	 	
+	 	}
  		return $return;
  	}
 }
@@ -206,6 +206,17 @@ if(!function_exists('array_cast_int'))
 		}
 
 		return $array;
+	}
+}
+
+if(!function_exists('json_return'))
+{
+	function json_return($data) {
+		if(!isset($data)) {
+			$data = FALSE;
+		}
+		echo json_encode($data);
+		return $data;
 	}
 }
 /* End of file socialhappen_helper.php */
