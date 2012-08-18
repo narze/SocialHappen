@@ -87,8 +87,6 @@ class Achievement_stat_model extends CI_Model {
 				array('$inc' => $inc));
 			}
 
-
-
 			return $result;
 		}else{
 			return FALSE;

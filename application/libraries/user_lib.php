@@ -40,7 +40,7 @@ class User_lib {
 	 * Join a challenge
 	 * User will be created if not exist
 	 */
-	function join_challenge($user_id = NULL, $challenge_hash = NULL) {
+	function join_challenge($user_id = NULL, $challenge_hash = NULL, $day_delay = 0) {
 		$this->CI->load->library('challenge_lib');
 		if((!$challenge = $this->CI->challenge_lib->get_by_hash($challenge_hash)) || (!$user_mongo_id = $this->create_user($user_id, NULL))){
 			return FALSE;
@@ -70,10 +70,11 @@ class User_lib {
 			'user_id' => $user_id
 		);
 		if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)) {
-			$start_date = date('Ymd');
-			$end_date = date('Ymd', time() + ($days-1)*60*60*24);
+			$start_date = date('Ymd', time() + $day_delay * 60 * 60 * 24);
+			$end_date = date('Ymd', time() + ($day_delay + ($days-1)) *60*60*24);
 			$update_record = array(
-				'$addToSet' => array('daily_challenge.'.$challenge_id => array('start_date' => $start_date, 'end_date' => $end_date))
+				'$addToSet' => array(
+					'daily_challenge.'.$challenge_id => array('start_date' => $start_date, 'end_date' => $end_date))
 			);
 		} else {
 			$update_record = array(
@@ -83,6 +84,10 @@ class User_lib {
 			);
 		}
 		return $update_result = $this->CI->user_mongo_model->update($update_criteria, $update_record);
+	}
+
+	function join_challenge_by_challenge_id($user_id = NULL, $challenge_id = NULL, $day_delay = 0) {
+		return $this->join_challenge($user_id, strrev(sha1($challenge_id)), $day_delay);
 	}
 
 	/**
