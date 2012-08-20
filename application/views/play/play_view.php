@@ -1,14 +1,12 @@
 	<div class="container-fluid">
   	<div class="row-fluid">
-      <div class="span12">
-        <div id="user-data"></div>
-      </div>
-      <div class="span12">
-        <div id="played-apps"></div>
-      </div>
-      <div class="span12">
-        <div id="all-apps"></div>
-      </div>
+      <div id="user-data"></div>
+    </div>
+    <div class="row-fluid">
+      <div id="played-apps"></div>
+    </div>
+    <div class="row-fluid">
+      <div id="all-apps"></div>
     </div>
   </div>
 
