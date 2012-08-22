@@ -9,17 +9,17 @@
         No notification.
       </p>
     </li>
+    <% _.each(notifications.list, function(notification) {  %>
+      <li>
+        <a href="<%= notification.link %>">
+          <img src="<%= notification.image %>" />
+          <p class="message"><%= notification.message %></p>
+          <p class="time"><%= moment().from(moment.unix(notification.timestamp)) %></p>
+        </a>
+      </li>
+    <% }); %>
     <li class="divider"></li>
     <li class="all-notification">
-      <% _.each(notifications.list, function(notification) {  %>
-        <li class="separator">
-          <a href="<%= notification.link %>">
-            <img src="<%= notification.image %>" />
-            <p class="message"><%= notification.message %></p>
-            <p class="time"><%= moment().from(moment.unix(notification.timestamp)) %></p>
-          </a>
-        </li>
-      <% }); %>
       <a class="a-notification" href="#">See all Notifications</a>
     </li>
   </ul>

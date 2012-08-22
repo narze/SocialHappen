@@ -23,7 +23,6 @@ a:hover {
 
 .navbar .dropdown-menu.mega-dropdown-menu {
   background-color: #2C2C2C;
-  border-color: #CCC;
   padding: 0;
 }
 .navbar .dropdown-menu.mega-dropdown-menu>li:first-child a {
@@ -50,6 +49,7 @@ a:hover {
 .navbar .dropdown-menu.mega-dropdown-menu .divider {
   background-color: #222;
   border-bottom: 1px solid #333;
+  margin: 0 1px;
 }
   /* Navbar - Go to */
   .navbar .goto {
@@ -184,7 +184,7 @@ a:hover {
     text-shadow: black 1px 1px 3px;
     display: block;
     font-weight: bold;
-    padding: 5px 10px 5px 0px;
+    padding: 5px 10px;
     min-height: initial;
     line-height: 25px;
   }
