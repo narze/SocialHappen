@@ -46,7 +46,16 @@ class User_lib {
 			return FALSE;
 		}
 		$challenge_id = get_mongo_id($challenge);
+		$user_id = (int) $user_id;
+		$is_daily_challenge = isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0);
 
+		// return if user already joined
+		$user_mongo = $this->CI->user_mongo_model->get_user($user_id);
+		if(!$is_daily_challenge && isset($user_mongo['challenge']) && array_search($challenge_id, $user_mongo['challenge']) !== FALSE) {
+			return TRUE;
+		} else if ($is_daily_challenge && isset($user_mongo['daily_challenge']) && array_search($challenge_id, $user_mongo['daily_challenge']) !== FALSE) {
+			return TRUE;
+		}
 		$this->CI->load->model('user_model');
 		$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
 
@@ -69,7 +78,7 @@ class User_lib {
 		$update_criteria = array(
 			'user_id' => $user_id
 		);
-		if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)) {
+		if($is_daily_challenge) {
 			$start_date = date('Ymd', time() + $day_delay * 60 * 60 * 24);
 			$end_date = date('Ymd', time() + ($day_delay + ($days-1)) *60*60*24);
 			$update_record = array(
