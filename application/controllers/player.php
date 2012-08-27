@@ -153,7 +153,7 @@ class Player extends CI_Controller {
       $player_challenging = isset($user['challenge']) && in_array($challenge_id, $user['challenge']);
 
       //Check daily challenge
-      if($is_daily_challenge = (isset($challenge['repeat']) && is_int($challenge['repeat']))) {
+      if($challenge_range = (isset($challenge['repeat']) && is_int($challenge['repeat'])) ? $challenge['repeat'] : 0) {
         $player_challenging = FALSE;
         $now = date('Ymd');
         if(isset($user['daily_challenge'][$challenge_id])) {
@@ -257,7 +257,7 @@ class Player extends CI_Controller {
           'challengers' => $challengers,
           'challenge_not_started' => $challenge_not_started,
           'challenge_ended' => $challenge_ended,
-          'is_daily_challenge' => $is_daily_challenge,
+          'is_daily_challenge' => $challenge_range > 0,
           'company_id' => $company_id,
           'company_name' => $company_name,
           'user_id' => $user_id,

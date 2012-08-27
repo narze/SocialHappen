@@ -4,64 +4,64 @@
  * @author Metwara Narksook
  */
 class Achievement_user_model extends CI_Model {
-	
+
 	var $achievement_user;
 	var $achievement_id;
 	var $user_id;
 	var $db;
-	
+
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function __construct() {
 		parent::__construct();
 		$this->load->helper('mongodb');
-		$this->achievement_user = sh_mongodb_load( array(
+		$this->collection = sh_mongodb_load( array(
 			'collection' => 'achievement_user'
 		));
 	}
-		
+
 	/**
 	 * create index for collection
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function create_index(){
-		return $this->achievement_user->deleteIndexes() 
-			&& $this->achievement_user->ensureIndex(array(
+		return $this->collection->deleteIndexes()
+			&& $this->collection->ensureIndex(array(
 										'user_id' => 1,
 										'app_install_id' => 1,
 										'page_id' => 1));
 	}
-	
-	
+
+
 	/**
 	 * add new achievement user
-	 * 
+	 *
 	 * @param user_id int user_id*
-	 * @param achievement_id 
+	 * @param achievement_id
 	 * @param app_id int app_id*
 	 * @param app_install_id int app_install_id*
-	 * @param info array of info contains 
+	 * @param info array of info contains
 	 * 				['page_id',
 	 * 				 'campaign_id']
-	 * 
+	 *
 	 * @return result boolean
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
-	function add($user_id = NULL, $achievement_id = NULL, $app_id = NULL, 
+	function add($user_id = NULL, $achievement_id = NULL, $app_id = NULL,
 							$app_install_id = NULL, $info = array(), $ref = 'achievement_info'){
-									
+
 		$check_args = isset($user_id) && isset($app_id) && isset($app_install_id);
 		if($check_args){
 			$achievement_user = array();
-			
+
 			$achievement_id_ref = MongoDBRef::create($ref, new MongoId($achievement_id));
 
-			if($this->achievement_user->find(array('user_id' => $user_id,
+			if($this->collection->find(array('user_id' => $user_id,
 							'achievement_id' => $achievement_id_ref))->count() > 0){
 				return FALSE;
 			}
@@ -69,11 +69,11 @@ class Achievement_user_model extends CI_Model {
 			 * keys
 			 */
 			$achievement_user['user_id'] = (int)$user_id;
-			
+
 			$achievement_user['achievement_id'] = $achievement_id_ref;
 			$achievement_user['app_id'] = (int)$app_id;
 			$achievement_user['app_install_id'] = (int)$app_install_id;
-			
+
 			date_default_timezone_set('UTC');
 			$achievement_user['timestamp'] = time();
 
@@ -89,25 +89,25 @@ class Achievement_user_model extends CI_Model {
 			if(isset($info['daily_challenge'])) {
 				$achievement_user['daily_challenge'] = $info['daily_challenge'];
 			}
-			
-			return $this->achievement_user->insert($achievement_user);
-			
+
+			return $this->collection->insert($achievement_user);
+
 		} else {
 			return FALSE;
 		}
 	}
-	
-	
+
+
 	/**
 	 * list achievement user
-	 * 
+	 *
 	 * @param criteria array of criteria
-	 * 
+	 *
 	 * @return result array
 	 */
 	function list_user($criteria = array()){
-		$res = $this->achievement_user->find($criteria);
-		
+		$res = $this->collection->find($criteria);
+
 		$result = array();
 		foreach ($res as $stat) {
 			$stat['achievement_info'] = $this->mongo_db->getDBRef($stat['achievement_id']);
@@ -118,51 +118,51 @@ class Achievement_user_model extends CI_Model {
 
 	/**
 	 * Count achievement user
-	 * 
+	 *
 	 * @param criteria array of criteria
-	 * 
+	 *
 	 * @author Weerapat P.
 	 */
 	function count($criteria = array()){
 		if($criteria) {
-			return $this->achievement_user->find($criteria)->count();	
+			return $this->collection->find($criteria)->count();
 		} else {
-			return $this->achievement_user->count();
+			return $this->collection->count();
 		}
 	}
-	
+
 	/**
 	 * delete achievement info
-	 * 
+	 *
 	 * @param user_id
 	 * @param achievement_id
-	 * 
+	 *
 	 * @return result boolean
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function delete($user_id = NULL, $achievement_id = NULL, $ref = 'achievement_info'){
 		$check_args = isset($user_id) && isset($achievement_id);
 		if($check_args){
 			$achievement_id_ref = MongoDBRef::create($ref, new MongoId($achievement_id));
-			
-			return $this->achievement_user
+
+			return $this->collection
 									->remove(array('user_id' => $user_id,
-									'achievement_id' => $achievement_id_ref), 
+									'achievement_id' => $achievement_id_ref),
 									array('$atomic' => TRUE));
 		} else {
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * drop entire collection
 	 * you will lost all achievement_user data
-	 * 
+	 *
 	 * @author Metwara Narksook
 	 */
 	function drop_collection(){
-		return $this->achievement_user->drop();
+		return $this->collection->drop();
 	}
 }
 

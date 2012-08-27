@@ -8,7 +8,7 @@ class Company_model_test extends CI_Controller {
 		$this->load->model('company_model','companies');
 		$this->unit->reset_mysql();
 	}
-	
+
 	function __destruct(){
 		$this->unit->report_with_counter();
 	}
@@ -21,7 +21,7 @@ class Company_model_test extends CI_Controller {
     		}
 		}
 	}
-	
+
 	/**
 	 * Tests get_company_profile_by_company_id()
 	 * @author Manassarn M.
@@ -61,14 +61,14 @@ class Company_model_test extends CI_Controller {
 						);
 		$company_id = $this->companies->add_company($company);
 		$this->unit->run($company_id,'is_int','add_company()');
-		
+
 		$removed = $this->companies->remove_company($company_id);
 		$this->unit->run($removed == 1,'is_true','remove_company()');
-		
+
 		$removed_again = $this->companies->remove_company($company_id);
 		$this->unit->run($removed_again == 0,'is_true','remove_company()');
 	}
-	
+
 	/**
 	 * Tests get_company_profile_by_page_id()
 	 * @author Manassarn M.
@@ -87,11 +87,9 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_username'],'is_string','company_username');
 		$this->unit->run($result['company_password'],'is_string','company_password');
 		$this->unit->run($result['company_image'],'is_string','company_image');
-		$this->unit->run(count($result) == 11,'is_true', 'number of column');
-
 		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
 	}
-	
+
 	/**
 	 * Tests get_company_profile_by_campaign_id()
 	 * @author Manassarn M.
@@ -110,11 +108,9 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_username'],'is_string','company_username');
 		$this->unit->run($result['company_password'],'is_string','company_password');
 		$this->unit->run($result['company_image'],'is_string','company_image');
-		$this->unit->run(count($result) == 11,'is_true', 'number of column');
-
 		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
 	}
-	
+
 	/**
 	 * Tests get_company_profile_by_app_install_id()
 	 * @author Manassarn M.
@@ -133,11 +129,9 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_username'],'is_string','company_username');
 		$this->unit->run($result['company_password'],'is_string','company_password');
 		$this->unit->run($result['company_image'],'is_string','company_image');
-		$this->unit->run(count($result) == 11,'is_true', 'number of column');
-
 		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
 	}
-	
+
 	/**
 	 * Tests get_companies_by_user_id()
 	 * @author Weerapat P.
@@ -157,11 +151,9 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($results[0]['company_username'],'is_string','company_username');
 		$this->unit->run($results[0]['company_password'],'is_string','company_password');
 		$this->unit->run($results[0]['company_image'],'is_string','company_image');
-		$this->unit->run(count($results[0]),12, 'number of column');
-
 		$this->unit->run($results[0]['company_id'],1,'$company_id == 1');
 	}
-	
+
 	/**
 	 * Test update_company_profile_by_company_id()
 	 * @author Manassarn M.
@@ -173,10 +165,10 @@ class Company_model_test extends CI_Controller {
 		);
 		$result = $this->companies->update_company_profile_by_company_id(1,$data);
 		$this->unit->run($result === TRUE,'is_true', 'Updated new_company_name without error');
-		
+
 		$result = $this->companies->get_company_profile_by_company_id(1);
 		$this->unit->run($result['company_name'] == $new_company_name,'is_true',"Updated company_name to {$new_company_name}");
-		
+
 	}
 }
 /* End of file company_model_test.php */

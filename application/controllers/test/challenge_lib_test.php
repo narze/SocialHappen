@@ -252,7 +252,29 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($result[1], $criteria_2_expect, "\$result[1]", $result[1]);
   }
 
+  function __user_join_challenge_1() {
+    $user_id = 1;
+    $challenge_id = $this->challenge_id;
+    $this->load->library('user_lib');
+    return $this->user_lib->join_challenge_by_challenge_id($user_id, $challenge_id);
+  }
+
+  function __user_join_challenge_2() {
+    $user_id = 1;
+    $challenge_id = $this->challenge_id2;
+    $this->load->library('user_lib');
+    return $this->user_lib->join_challenge_by_challenge_id($user_id, $challenge_id);
+  }
+
+  function __user_join_challenge_3($day_delay = 0) {
+    $user_id = 1;
+    $challenge_id = $this->challenge_id4;
+    $this->load->library('user_lib');
+    return $this->user_lib->join_challenge_by_challenge_id($user_id, $challenge_id, $day_delay);
+  }
+
   function check_challenge_test() {
+    //1. Check challenge without joining any challenge, should get empty in all fields
     $company_id = 1;
     $info = array(
       'company_id' => $company_id
@@ -260,34 +282,54 @@ class Challenge_lib_test extends CI_Controller {
     $user_id = 1;
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
-      'success' => TRUE, //no error checking challenges
+      'success' => TRUE,
       'completed' => array(),
       'in_progress' => array(),
       'completed_today' => array()
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
 
-    //Unrelated achievement_stat
-    $this->load->library('achievement_lib');
+    //2. After join a challenge, should have in_progress array that contains the challenge's id
+    $this->unit->run($this->__user_join_challenge_1(), TRUE, "\$this->__user_join_challenge_1()", 'join challenge 1');
 
-    $app_id = 2;
-    $user_id = 1;
     $company_id = 1;
-    $inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
-      $this->achievement_stat1);
-    $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
-
-    $info = array();
-    $company_id = 1;
+    $info = array(
+      'company_id' => $company_id
+    );
     $user_id = 1;
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
-      'success' => TRUE, //no error checking challenges
+      'success' => TRUE,
       'completed' => array(),
-      'in_progress' => array(),
+      'in_progress' => array($this->challenge_id),
       'completed_today' => array()
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
+
+    //3. Join another challenge, now in_progress has 2 ids
+    $this->unit->run($this->__user_join_challenge_2(), TRUE, "\$this->__user_join_challenge_2()", 'join challenge 2');
+
+    $company_id = 1;
+    $info = array(
+      'company_id' => $company_id
+    );
+    $user_id = 1;
+    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
+    $expected_result = array(
+      'success' => TRUE,
+      'completed' => array(),
+      'in_progress' => array($this->challenge_id, $this->challenge_id2),
+      'completed_today' => array()
+    );
+    $this->unit->run($result, $expected_result, "\$result", $result);
+
+    //4. Count user's achievement before complete a challenge
+    $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
+    $this->unit->run($count, 0, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+
+
+    //5. Invote check_challenge by calling increment_achievement_stat
+    // stat 1 : 1 time
     $app_id = 1;
     $user_id = 1;
     $company_id = 1;
@@ -295,41 +337,18 @@ class Challenge_lib_test extends CI_Controller {
       $this->achievement_stat1);
     $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 
-    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
-    $expected_result = array(
-      'success' => TRUE, //no error checking challenges
-      'completed' => array(),
-      'in_progress' => array($this->challenge_id),
-      'completed_today' => array()
-    );
-    $this->unit->run($result, $expected_result, "\$result", $result);
+    // stat 2 : 2 times
     $app_id = 2;
     $user_id = 1;
     $company_id = 1;
     $inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
       $this->achievement_stat2);
     $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
-
-    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
-    $expected_result = array(
-      'success' => TRUE, //no error checking challenges
-      'completed' => array(),
-      'in_progress' => array($this->challenge_id2, $this->challenge_id),
-      'completed_today' => array(),
-    );
-    $this->unit->run($result, $expected_result, "\$result", $result);
-
-    //Count achieved before complete challenge
-    $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 0, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
-    $app_id = 2;
-    $user_id = 1;
-    $company_id = 1;
-    //Check challenge invoked by increment_achievement_stat already
     $inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
       $this->achievement_stat2);
     $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 
+    //a challenge should be done and found in completed array instead of in_progress array
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
       'success' => TRUE, //no error checking challenges
@@ -339,9 +358,11 @@ class Challenge_lib_test extends CI_Controller {
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
 
-    //Count achieved after complete
-      $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 1 + 1 /*FirstChallengeAchievement*/, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+    //Count user's achievement again, it should be increment by 1
+    $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
+    $this->unit->run($count, 1 + 1 /*FirstChallengeAchievement included*/, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
+
+    //6. Increment stat (that's invoke check_challenge) again
     $app_id = 2;
     $user_id = 1;
     $company_id = 1;
@@ -349,6 +370,7 @@ class Challenge_lib_test extends CI_Controller {
       $this->achievement_stat2);
     $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 
+    //another challenge should be done as well
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
       'success' => TRUE, //no error checking challenges
@@ -358,66 +380,9 @@ class Challenge_lib_test extends CI_Controller {
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
 
-    //Count again
+    //Count user's achievement again
     $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
     $this->unit->run($count, 2 + 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
-    $app_id = 0;
-    $user_id = 1;
-    $company_id = 1;
-    $inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
-      $this->achievement_stat3);
-    $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
-
-    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
-    $expected_result = array(
-      'success' => TRUE, //no error checking challenges
-      'completed' => array($this->challenge_id, $this->challenge_id2), //get completed challenge id
-      'in_progress' => array($this->challenge_id3),
-      'completed_today' => array()
-    );
-    $this->unit->run($result, $expected_result, "\$result", $result);
-
-    //Count again
-    $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 2 + 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
-    $app_id = 0;
-    $user_id = 1;
-    $company_id = 1;
-    $inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
-      $this->achievement_stat3);
-    $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
-
-    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
-    $expected_result = array(
-      'success' => TRUE, //no error checking challenges
-      'completed' => array($this->challenge_id, $this->challenge_id2, $this->challenge_id3), //get completed challenge id
-      'in_progress' => array(),
-      'completed_today' => array()
-    );
-    $this->unit->run($result, $expected_result, "\$result", $result);
-
-    //Count again
-    $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 3 + 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
-    $app_id = 0;
-    $user_id = 1;
-    $company_id = 1;
-    $inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
-      $this->achievement_stat3);
-    $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
-
-    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
-    $expected_result = array(
-      'success' => TRUE, //no error checking challenges
-      'completed' => array($this->challenge_id, $this->challenge_id2, $this->challenge_id3), //get completed challenge id
-      'in_progress' => array(),
-      'completed_today' => array()
-    );
-    $this->unit->run($result, $expected_result, "\$result", $result);
-
-    //Count again
-    $count = $this->achievement_lib->count_user_achieved_by_user_id($user_id);
-    $this->unit->run($count, 3 + 1, 'count_user_achieved_by_user_id_test', print_r($count, TRUE));
   }
 
   function get_challenge_progress_test_2() {
@@ -456,8 +421,8 @@ class Challenge_lib_test extends CI_Controller {
     $user_id = 1;
     $this->load->library('user_lib');
     $user = $this->user_lib->get_user($user_id);
-    $this->unit->run($user['challenge_redeeming'], array($this->challenge_id,$this->challenge_id2,$this->challenge_id3), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
-    $this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2,$this->challenge_id3), "\$user['challenge_completed']", $user['challenge_completed']);
+    $this->unit->run($user['challenge_redeeming'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
+    $this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_completed']", $user['challenge_completed']);
   }
 
   function redeem_challenge_test() {
@@ -479,8 +444,8 @@ class Challenge_lib_test extends CI_Controller {
     $user_id = 1;
     $this->load->library('user_lib');
     $user = $this->user_lib->get_user($user_id);
-    $this->unit->run($user['challenge_redeeming'], array($this->challenge_id2,$this->challenge_id3), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
-    $this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2,$this->challenge_id3), "\$user['challenge_completed']", $user['challenge_completed']);
+    $this->unit->run($user['challenge_redeeming'], array($this->challenge_id2), "\$user['challenge_redeeming']", $user['challenge_redeeming']);
+    $this->unit->run($user['challenge_completed'], array($this->challenge_id,$this->challenge_id2), "\$user['challenge_completed']", $user['challenge_completed']);
   }
 
   function remove_test() {
@@ -500,15 +465,17 @@ class Challenge_lib_test extends CI_Controller {
   function audit_check_test() {
     $this->load->library('audit_lib');
     $result = $this->audit_lib->list_recent_audit(10);
-    $this->unit->run(count($result), 3, "count(\$result)", count($result));
+    $this->unit->run(count($result), 4, "count(\$result)", count($result));
     $this->unit->run($result[0]['action_id'], 118, "\$result[0]['action_id']", $result[0]['action_id']);
     $this->unit->run($result[1]['action_id'], 118, "\$result[1]['action_id']", $result[1]['action_id']);
-    $this->unit->run($result[2]['action_id'], 118, "\$result[2]['action_id']", $result[2]['action_id']);
+    $this->unit->run($result[2]['action_id'], 117, "\$result[2]['action_id']", $result[2]['action_id']);
+    $this->unit->run($result[3]['action_id'], 117, "\$result[3]['action_id']", $result[3]['action_id']);
 
     //Check audit image
     $this->unit->run($result[0]['image'], 'Challenge image url', "\$result[0]['image']", $result[0]['image']);
     $this->unit->run($result[1]['image'], 'Challenge image url', "\$result[1]['image']", $result[1]['image']);
     $this->unit->run($result[2]['image'], 'Challenge image url', "\$result[2]['image']", $result[2]['image']);
+    $this->unit->run($result[3]['image'], 'Challenge image url', "\$result[3]['image']", $result[3]['image']);
   }
 
   function user_score_test() {
@@ -559,18 +526,40 @@ class Challenge_lib_test extends CI_Controller {
   }
 
   function check_challenge_test_for_daily_challenge() {
-    //Increment stat to complete challenge
-    $app_id = 0;
+    $this->load->library('audit_lib');
+
+    //1. Check challenge before joining
     $user_id = 1;
+    $challenge_id = $this->challenge_id4;
+    $app_id = 0;
     $company_id = 2;
 
     $info = array(
       'company_id' => $company_id
     );
 
-    //Add audit yesterday to complete yesterday's challenge
-    $this->load->library('audit_lib');
-    $this->audit_lib->create_index();
+    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
+    $expected_result = array(
+      'success' => TRUE,
+      'completed' => array(),
+      'in_progress' => array(),
+      'completed_today' => array()
+    );
+    $this->unit->run($result, $expected_result, "\$result", $result);
+    //2. User join challenge with time = now
+    $this->__user_join_challenge_3();
+
+    //3. Check challenge, 'in_progress' should have challenge id
+    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
+    $expected_result = array(
+      'success' => TRUE,
+      'completed' => array(),
+      'in_progress' => array($this->challenge_id4),
+      'completed_today' => array()
+    );
+    $this->unit->run($result, $expected_result, "\$result", $result);
+
+    //4. Try adding yesterday's audit, increment stat, it will not effect today's challenge progress
     $audit = array(
       'app_id' => 0,
       'company_id' => 2,
@@ -583,20 +572,17 @@ class Challenge_lib_test extends CI_Controller {
     );
     $this->audit_lib->audit_add($audit);
 
-    //Check challenge for daily challenge : incompleted
-    $user_id = 1;
-    $challenge_id = $this->challenge_id4;
-
+    //Challenge status : in_progress
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
       'success' => TRUE,
       'completed' => array(),
-      'in_progress' => array(),
+      'in_progress' => array($this->challenge_id4),
       'completed_today' => array()
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
 
-    //Add audit tomorrow
+    //5. Add tomorrow's audit, increment stat
     $audit = array(
       'app_id' => 0,
       'company_id' => 2,
@@ -609,17 +595,17 @@ class Challenge_lib_test extends CI_Controller {
     );
     $this->audit_lib->audit_add($audit);
 
-    //Check challenge for daily challenge : incompleted
+    //Challenge status : in_progress as well
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
       'success' => TRUE,
       'completed' => array(),
-      'in_progress' => array(),
+      'in_progress' => array($this->challenge_id4),
       'completed_today' => array()
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
 
-    //Add audit today
+    //6. Add today's audit, increment stat
     $audit = array(
       'app_id' => 0,
       'company_id' => 2,
@@ -631,18 +617,60 @@ class Challenge_lib_test extends CI_Controller {
       'timestamp' => strtotime('now')
     );
     $this->audit_lib->audit_add($audit);
-    //, and increment stat
-    $inc_result = $this->achievement_lib->increment_achievement_stat($company_id, $app_id, $user_id,
-      $this->achievement_stat4);
-    $this->unit->run($inc_result, TRUE, "\$inc_result", $inc_result);
 
-    //Check challenge again
+    //Challenge is now completed, 'completed' and 'completed_today' array should have challenge id
     $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info);
     $expected_result = array(
       'success' => TRUE,
-      'completed' => array($this->challenge_id4), //challenge_id4 is here (check stat)
+      'completed' => array($this->challenge_id4),
       'in_progress' => array(),
-      'completed_today' => array($this->challenge_id4) //challenge_id4 is here as well (check audit)
+      'completed_today' => array($this->challenge_id4)
+    );
+    $this->unit->run($result, $expected_result, "\$result", $result);
+
+    //7. Check tomorrow's challenge, challenge should not be completed, because user has not join tomorrow's challenge yet
+    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info, time() + 24*60*60);
+    $expected_result = array(
+      'success' => TRUE,
+      'completed' => array($this->challenge_id4),
+      'in_progress' => array(),
+      'completed_today' => array()
+    );
+    $this->unit->run($result, $expected_result, "\$result", $result);
+
+    //8. So join tomorrow's challenge
+    $this->__user_join_challenge_3(1);
+
+    //9. Check challenge in tomorrow's time, challenge should be completed again becaused we have tomorrow's audit
+    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info, time() + 24*60*60);
+    $expected_result = array(
+      'success' => TRUE,
+      'completed' => array($this->challenge_id4, $this->challenge_id4),
+      'in_progress' => array(),
+      'completed_today' => array($this->challenge_id4)
+    );
+    $this->unit->run($result, $expected_result, "\$result", $result);
+
+    //10. Check after tomorrow's challenge
+    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info, time() + 2*24*60*60);
+    $expected_result = array(
+      'success' => TRUE,
+      'completed' => array($this->challenge_id4),
+      'in_progress' => array(),
+      'completed_today' => array()
+    );
+    $this->unit->run($result, $expected_result, "\$result", $result);
+
+    //11. Join after tomorrow's challenge
+    $this->__user_join_challenge_3(2);
+
+    //12. Check challenge again
+    $result = $this->challenge_lib->check_challenge($company_id, $user_id, $info, time() + 2*24*60*60);
+    $expected_result = array(
+      'success' => TRUE,
+      'completed' => array($this->challenge_id4),
+      'in_progress' => array($this->challenge_id4),
+      'completed_today' => array()
     );
     $this->unit->run($result, $expected_result, "\$result", $result);
   }
@@ -671,8 +699,16 @@ class Challenge_lib_test extends CI_Controller {
     $this->load->model('coupon_model');
     $result = $this->coupon_model->get_by_user_and_challenge($user_id, $challenge_id);
     $this->unit->run($result, 'is_array', "\$result", $result);
+    $this->unit->run(count($result), 2, "\$result", count($result));
+
+    //Today's coupon
     $this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
     $this->unit->run($result[0]['_id'], TRUE, "\$result[0]['_id']", $result[0]['_id']);
     $this->unit->run($result[0]['reward_item'], 'is_array', "\$result[0]['reward_item']", $result[0]['reward_item']);
+
+    //Tomorrow's coupon
+    $this->unit->run($result[1], 'is_array', "\$result[1]", $result[1]);
+    $this->unit->run($result[1]['_id'], TRUE, "\$result[1]['_id']", $result[1]['_id']);
+    $this->unit->run($result[1]['reward_item'], 'is_array', "\$result[1]['reward_item']", $result[1]['reward_item']);
   }
 }

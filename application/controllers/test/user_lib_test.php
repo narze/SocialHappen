@@ -73,6 +73,12 @@ class User_lib_test extends CI_Controller {
 		$result = $this->user_lib->join_challenge($user_id, $challenge_hash);
 		$this->unit->run($result, TRUE, "\$result", $result);
 
+		//join again
+		$user_id = USER_ID_1;
+		$challenge_hash = '1234';
+		$result = $this->user_lib->join_challenge($user_id, $challenge_hash);
+		$this->unit->run($result, TRUE, "\$result", $result);
+
 		$user_id = (string) USER_ID_2;
 		$challenge_hash = '0000';
 		$result = $this->user_lib->join_challenge($user_id, $challenge_hash);
@@ -94,13 +100,13 @@ class User_lib_test extends CI_Controller {
 		$user_id = USER_ID_1;
 		$users = $this->user_mongo_model->get(array('user_id' => $user_id));
 		$this->unit->run(count($users), 1, "count(\$users)", count($users));
+		$this->unit->run(count($users[0]['challenge']), 1, "count(\$users[0]['challenge'])", count($users[0]['challenge']));
 		$this->unit->run($users[0]['challenge'], array($this->challenge1), "\$users[0]['challenge']", print_r($users[0]['challenge'],TRUE));
 
 		$user_id = USER_ID_2;
 		$users = $this->user_mongo_model->get(array('user_id' => $user_id));
 		$this->unit->run(count($users), 1, "count(\$users)", count($users));
 		$this->unit->run($users[0]['challenge'], array($this->challenge1, $this->challenge2, $this->challenge3), "\$users[0]['challenge']", print_r($users[0]['challenge'],TRUE));
-
 		$user_id = USER_ID_3;
 		$users = $this->user_mongo_model->get(array('user_id' => $user_id));
 		$this->unit->run(count($users), 1, "count(\$users)", count($users));

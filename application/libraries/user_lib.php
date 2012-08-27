@@ -40,13 +40,22 @@ class User_lib {
 	 * Join a challenge
 	 * User will be created if not exist
 	 */
-	function join_challenge($user_id = NULL, $challenge_hash = NULL) {
+	function join_challenge($user_id = NULL, $challenge_hash = NULL, $day_delay = 0) {
 		$this->CI->load->library('challenge_lib');
 		if((!$challenge = $this->CI->challenge_lib->get_by_hash($challenge_hash)) || (!$user_mongo_id = $this->create_user($user_id, NULL))){
 			return FALSE;
 		}
 		$challenge_id = get_mongo_id($challenge);
+		$user_id = (int) $user_id;
+		$is_daily_challenge = isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0);
 
+		// return if user already joined
+		$user_mongo = $this->CI->user_mongo_model->get_user($user_id);
+		if(!$is_daily_challenge && isset($user_mongo['challenge']) && array_search($challenge_id, $user_mongo['challenge']) !== FALSE) {
+			return TRUE;
+		} else if ($is_daily_challenge && isset($user_mongo['daily_challenge']) && array_search($challenge_id, $user_mongo['daily_challenge']) !== FALSE) {
+			return TRUE;
+		}
 		$this->CI->load->model('user_model');
 		$user = $this->CI->user_model->get_user_profile_by_user_id($user_id);
 
@@ -69,11 +78,12 @@ class User_lib {
 		$update_criteria = array(
 			'user_id' => $user_id
 		);
-		if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)) {
-			$start_date = date('Ymd');
-			$end_date = date('Ymd', time() + ($days-1)*60*60*24);
+		if($is_daily_challenge) {
+			$start_date = date('Ymd', time() + $day_delay * 60 * 60 * 24);
+			$end_date = date('Ymd', time() + ($day_delay + ($days-1)) *60*60*24);
 			$update_record = array(
-				'$addToSet' => array('daily_challenge.'.$challenge_id => array('start_date' => $start_date, 'end_date' => $end_date))
+				'$addToSet' => array(
+					'daily_challenge.'.$challenge_id => array('start_date' => $start_date, 'end_date' => $end_date))
 			);
 		} else {
 			$update_record = array(
@@ -83,6 +93,10 @@ class User_lib {
 			);
 		}
 		return $update_result = $this->CI->user_mongo_model->update($update_criteria, $update_record);
+	}
+
+	function join_challenge_by_challenge_id($user_id = NULL, $challenge_id = NULL, $day_delay = 0) {
+		return $this->join_challenge($user_id, strrev(sha1($challenge_id)), $day_delay);
 	}
 
 	/**
