@@ -74,6 +74,7 @@ $route['settings/challenge/(:num)'] = "settings/challenge/index/$1";
 $route['passport/(:num)'] = "passport/index/$1";
 $route['r/(:any)'] = "redirect/$1";
 $route['userimage/(:num)'] = "userimage/get_user_image/$1";
+$route['testmode/apiv4/(:any)'] = "apiv4/$1";
 
 
 /* End of file routes.php */

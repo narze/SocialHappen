@@ -5,11 +5,16 @@
  * Coding style : snake_case
  */
 
+header("Access-Control-Allow-Origin: *");
 require_once(APPPATH . 'libraries/REST_Controller.php');
 class Apiv4 extends REST_Controller {
 
   function __construct(){
     parent::__construct();
+    if($this->uri->segment(1) === 'testmode') {
+      $this->load->library('db_sync');
+      $this->db_sync->use_test_db(TRUE);
+    }
   }
   /**
    * Helper functions
@@ -51,7 +56,49 @@ class Apiv4 extends REST_Controller {
   }
 
   function signup_post() {
+    $email = $this->post('email');
+    $password = $this->post('password');
+    $facebook_user_id = $this->post('facebook_user_id');
+    $facebook_user_first_name = $this->post('facebook_user_first_name');
+    $facebook_user_last_name = $this->post('facebook_user_last_name');
+    $facebook_user_image = $this->post('facebook_user_image');
 
+    if(!$email || !$password) {
+      return $this->_error('No email and/or password');
+    }
+
+    if(!$facebook_user_id) {
+      return $this->_error('Please connect facebook before signing up');
+    }
+
+    $this->load->model('user_model');
+
+    if($this->user_model->findOne(array('user_email' => $email))) {
+      return $this->_error('Email already used');
+    }
+
+    if($this->user_model->findOne(array('user_facebook_id' => $facebook_user_id))) {
+      return $this->_error('Facebook account already used');
+    }
+
+    $presalt = 'tH!s!$Pr3Za|t';
+    $postsalt = 'di#!zp0s+s4LT';
+    $encrypted_password = sha1($presalt.$password.$postsalt);
+
+    $user = array(
+      'user_first_name' => $facebook_user_first_name,
+      'user_last_name' => $facebook_user_last_name,
+      'user_image' => $facebook_user_image,
+      'user_email' => $email,
+      'user_password' => $encrypted_password,
+      'user_facebook_id' => $facebook_user_id
+    );
+
+    if(!$user_id = $this->user_model->add_user($user)) {
+      return $this->_error('Add user failed');
+    }
+
+    return $this->_success($user_id);
   }
 
   /**

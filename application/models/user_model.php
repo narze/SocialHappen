@@ -77,7 +77,8 @@ class User_model extends CI_Model {
 	 * @author Manassarn M.
 	 */
 	function add_user($data = array()){
-		if(!$data || $this->check_exist(issetor($data['user_facebook_id']))){
+		// if(!$data || $this->check_exist(issetor($data['user_facebook_id']))){
+		if(!$data){
 			return FALSE;
 		}
 		$this -> db -> insert('user', $data);
