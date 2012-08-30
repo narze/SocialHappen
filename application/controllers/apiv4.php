@@ -29,14 +29,15 @@ class Apiv4 extends REST_Controller {
     return TRUE;
   }
 
-  function index_get() {
-    $this->response(array('success' => $this->get('test')));
-  }
-
   /**
   * Not requires token
   */
 
+  /**
+   * Check if user exists from facebook id
+   * @method GET
+   * @params facebook_user_id
+   */
   function check_user_get() {
     $facebook_user_id = $this->get('facebook_user_id');
 
@@ -55,6 +56,16 @@ class Apiv4 extends REST_Controller {
     return $this->_success($user);
   }
 
+  /**
+   * Signup SocialHappen
+   * @method POST
+   * @params email
+   *       , password
+   *       , facebook_user_id
+   *       , facebook_user_first_name
+   *       , facebook_user_last_name
+   *       , facebook_user_image
+   */
   function signup_post() {
     $email = $this->post('email');
     $password = $this->post('password');
@@ -98,7 +109,87 @@ class Apiv4 extends REST_Controller {
       return $this->_error('Add user failed');
     }
 
-    return $this->_success($user_id);
+    //Generate token & add into user's mongo model
+    $token = md5(uniqid(mt_rand(), true)); //32 chars
+    $user_mongo = array(
+      'user_id' => $user_id,
+      'tokens' => array($token)
+    );
+    $this->load->model('user_mongo_model');
+    if(!$this->user_mongo_model->add($user_mongo)) {
+      return $this->_error('Add user failed');
+    }
+
+    return $this->_success(array('user_id' => $user_id, 'token' => $token));
+  }
+
+  /**
+   * Signin SocialHappen
+   * @method POST
+   * @params type [facebook,email]
+   *       , facebook_user_id (if type = facebook)
+   *       , email (if type = email)
+   *       , password (if type = email)
+   * @return user_id, token
+   */
+  function signin_post() {
+
+  }
+
+  /**
+   * Get companies
+   * @method GET
+   * @params -
+   */
+  function companies_get() {
+    $this->load->model('company_model');
+
+    return $this->_success($this->company_model->get_all());
+  }
+
+  /**
+   * Get company's challenges
+   * @method GET
+   * @params company_id
+   */
+  function get_company_challenges_get() {
+    $company_id = (int) $this->get('company_id');
+
+    if(!$company_id) {
+      return $this->_error('No company_id specified');
+    }
+
+    $this->load->model('challenge_model');
+    return $this->_success($this->challenge_model->get(array('company_id' => $company_id)));
+  }
+
+  /**
+   * Get rewards
+   * @method GET
+   * @params -
+   */
+  function rewards_get() {
+    $this->load->model('reward_item_model');
+
+    return $this->_success($this->reward_item_model->get(
+      array(
+        'status' => 'published',
+        'type' => 'redeem'
+      )
+    ));
+  }
+
+  /**
+   * Get challenges
+   * @method GET
+   * @params -
+   */
+  function challenges_get() {
+    $this->load->model('challenge_model');
+
+    return $this->_success($this->challenge_model->get(
+      array()
+    ));
   }
 
   /**
