@@ -15,9 +15,10 @@ class Apiv4_test extends CI_Controller {
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
-    		if(preg_match("/(_test)/",$method)){
-    			$this->$method();
-    		}
+  		if(preg_match("/(_test)/",$method)){
+  			$this->$method();
+  			flush();
+  		}
 		}
 	}
 
@@ -186,7 +187,64 @@ class Apiv4_test extends CI_Controller {
 	}
 
 	function signin_post_test() {
+		$method = 'signin';
 
+		//With facebook
+		$params = array(
+			'type' => 'facebook',
+			'facebook_user_id' => 713558190
+		);
+
+		$result = $this->post($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['data']['user_id'], 1, "\$result['data']['user_id']", $result['data']['user_id']);
+		$this->unit->run($result['data']['token'], 'is_string', "\$result['data']['token']", $result['data']['token']);
+		$this->unit->run($result['data']['user'], 'is_array', "\$result['data']['user']", $result['data']['user']);
+		$this->unit->run(strlen($result['data']['token']), 32, "strlen(result['data']['token'])", strlen($result['data']['token']));
+
+		//With facebook : not user
+		$params = array(
+			'type' => 'facebook',
+			'facebook_user_id' => '713558190000'
+		);
+
+		$result = $this->post($method, $params);
+		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		$this->unit->run($result['data'], 'is_string', "\$result['data']", $result['data']);
+
+		//With email
+		$params = array(
+			'type' => 'email',
+			'email' => '1@gotmail.com',
+			'password' => 'asdfjkl;'
+		);
+
+		$result = $this->post($method, $params);
+		$this->unit->run($result['success'], TRUE, "result['success']", $result['success']);
+		$this->unit->run($result['data']['user_id'], 7, "result['data']['user_id']", $result['data']['user_id']);
+		$this->unit->run($result['data']['token'], 'is_string', "result['data']['token']", $result['data']['token']);
+		$this->unit->run($result['data']['user'], 'is_array', "result['data']['user']", $result['data']['user']);
+		$this->unit->run(strlen($result['data']['token']), 32, "strlen(result['data']['token'])", strlen($result['data']['token']));
+
+		//With email : not found
+		$params = array(
+			'type' => 'email',
+			'email' => 'youarenotuser@gotmail.com',
+			'password' => 'asdfjkl;'
+		);
+		$result = $this->post($method, $params);
+		$this->unit->run($result['success'], FALSE, "result['success']", $result['success']);
+		$this->unit->run($result['data'], 'is_string', "result['data']", $result['data']);
+
+		//With email : wrong password
+		$params = array(
+			'type' => 'email',
+			'email' => '1@gotmail.com',
+			'password' => ';kljfdsa'
+		);
+		$result = $this->post($method, $params);
+		$this->unit->run($result['success'], FALSE, "result['success']", $result['success']);
+		$this->unit->run($result['data'], 'is_string', "result['data']", $result['data']);
 	}
 
 	function companies_get_test() {

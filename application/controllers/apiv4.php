@@ -133,7 +133,56 @@ class Apiv4 extends REST_Controller {
    * @return user_id, token
    */
   function signin_post() {
+    $this->load->model('user_model');
+    $type = $this->post('type');
+    $facebook_user_id = $this->post('facebook_user_id');
+    $email = $this->post('email');
+    $password = $this->post('password');
 
+    $signin_success = FALSE;
+
+    if($type === 'facebook') {
+
+      if($user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user_id)) {
+        $signin_success = TRUE;
+      } else {
+        return $this->_error('Your facebook id are not a SocialHappen user');
+      }
+
+    } else if($type === 'email') {
+
+      $presalt = 'tH!s!$Pr3Za|t';
+      $postsalt = 'di#!zp0s+s4LT';
+      $encrypted_password = sha1($presalt.$password.$postsalt);
+
+      if($user = $this->user_model->passwordMatch(array('user_email' => $email), $encrypted_password)) {
+        $signin_success = TRUE;
+      } else {
+        return $this->_error('Wrong email and password combination');
+      }
+
+    } else {
+      return $this->_error('Wrong type');
+    }
+
+    if($signin_success) {
+      //Generate token & add into user's mongo model
+      $token = md5(uniqid(mt_rand(), true)); //32 chars
+      $user_id = $user['user_id'];
+      $user_mongo_update = array(
+        '$set' => array('user_id' => (int) $user_id),
+        '$addToSet' => array('tokens' => $token)
+      );
+      $criteria = array('user_id' => $user_id);
+      $this->load->model('user_mongo_model');
+      if(!$this->user_mongo_model->upsert($criteria, $user_mongo_update)) {
+        return $this->_error('Update token failed');
+      }
+
+      return $this->_success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
+    }
+
+    return $this->_error('Sign in failed');
   }
 
   /**

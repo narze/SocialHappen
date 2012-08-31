@@ -206,4 +206,14 @@ class User_model extends CI_Model {
 		unset($user['user_password']);
 		return $user;
 	}
+
+	function passwordMatch($where, $password) {
+		$user = $this->db->get_where('user', $where)->row_array();
+		if($user && $user['user_password'] === $password) {
+			unset($user['user_password']);
+			return $user;
+		}
+
+		return FALSE;
+	}
 }

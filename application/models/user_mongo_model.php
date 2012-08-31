@@ -51,6 +51,16 @@ class User_mongo_model extends CI_Model {
 	  }
 	}
 
+  function upsert($query, $data) {
+    try {
+      $update_result = $this->collection->update($query, $data, array('safe' => TRUE, 'upsert' => TRUE));
+      return isset($update_result['n']) && ($update_result['n'] > 0);
+    } catch(MongoCursorException $e){
+      log_message('error', 'Mongodb error : '. $e);
+      return FALSE;
+    }
+  }
+
 	function delete($query){
 		$query = array_cast_int($query, $this->int_values);
 		return $this->collection->remove($query, array('$atomic' => TRUE));
