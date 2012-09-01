@@ -134,10 +134,10 @@ class Apiv4 extends REST_Controller {
    */
   function signin_post() {
     $this->load->model('user_model');
-    $type = $this->post('type');
-    $facebook_user_id = $this->post('facebook_user_id');
-    $email = $this->post('email');
-    $password = $this->post('password');
+    $type = $this->get('type');
+    $facebook_user_id = $this->get('facebook_user_id');
+    $email = $this->get('email');
+    $password = $this->get('password');
 
     $signin_success = FALSE;
 
