@@ -65,6 +65,61 @@ class SocialHappen{
 		)
 	);
 
+	/**
+	 * Reindex mongo models
+	 */
+	function reindex() {
+		$models = array(
+			'achievement_info_model',
+			'achievement_stat_model',
+			'achievement_stat_company_model',
+			'achievement_stat_page_model',
+			'achievement_user_model',
+			'app_component_model',
+			'app_component_page_model',
+			'audit_action_model',
+			'audit_model',
+			'audit_stats_model',
+			'get_started_model',
+			'homepage_model',
+			'invite_model',
+			'invite_pending_model',
+			'notification_model',
+			'reward_item_model',
+			'stat_app_model',
+			'stat_campaign_model',
+			'stat_page_model'
+		);
+		foreach($models as $model){
+			$this->CI->load->model($model);
+			if($this->CI->{$model}->create_index()){
+				// echo 'Created index for '.$model.' model.<br />';
+			} else {
+				return FALSE;
+				// echo 'Error creating index for '.$model.' model.<br />';
+			}
+		}
+
+		$models = array(
+			'action_data_model',
+			'action_user_data_model',
+			'challenge_model',
+			'coupon_model',
+			'user_mongo_model'
+		);
+		foreach($models as $model){
+			$this->CI->load->model($model);
+			if($this->CI->{$model}->recreateIndex()){
+				// echo 'Created index for '.$model.' model.<br />';
+			} else {
+				return FALSE;
+				// echo 'Error creating index for '.$model.' model.<br />';
+			}
+		}
+
+		return TRUE;
+	}
+
 	/** Default urls
 	 * @author Manassarn M.'
 	 */
@@ -1213,4 +1268,5 @@ class SocialHappen{
 
 		return 'get';
 	}
+
 }

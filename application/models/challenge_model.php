@@ -14,7 +14,8 @@ class Challenge_model extends CI_Model {
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
 		return $this->collection->deleteIndexes()
-			&& $this->collection->ensureIndex(array('company_id' => 1));
+			&& $this->collection->ensureIndex(array('company_id' => 1))
+			&& $this->collection->ensureIndex(array('location' => '2d'), array('bits' => 26));
 	}
 
 	function add($data)
@@ -32,6 +33,20 @@ class Challenge_model extends CI_Model {
 	function get($query, $limit = 100){
 		$query = array_cast_int($query, $this->int_values);
 		$result = $this->collection->find($query)->sort(array('_id' => -1))->limit($limit);
+		// if($sort) {
+		// 	$result = $result->sort($sort);
+		// }
+		// $result = $result->limit($limit);
+		return cursor2array($result);
+	}
+
+	function get_sort($query, $sort = FALSE, $limit = 100){
+		$query = array_cast_int($query, $this->int_values);
+		if($sort) {
+			$result = $this->collection->find($query)->sort($sort)->limit($limit);
+		} else {
+			$result = $this->collection->find($query)->limit($limit);
+		}
 		return cursor2array($result);
 	}
 

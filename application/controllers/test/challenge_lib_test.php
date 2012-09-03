@@ -7,6 +7,7 @@ class Challenge_lib_test extends CI_Controller {
     $this->load->library('unit_test');
     $this->load->library('challenge_lib');
     $this->unit->reset_dbs();
+    $this->socialhappen->reindex();
   }
 
   function __destruct() {
@@ -65,6 +66,7 @@ class Challenge_lib_test extends CI_Controller {
           'count' => 2
         )
       ),
+      'location' => array(40, 40)
     );
 
     $this->challenge2 = array(
@@ -83,6 +85,7 @@ class Challenge_lib_test extends CI_Controller {
           'count' => 3
         )
       ),
+      'location' => array(45, 60)
     );
 
     $this->challenge3 = array(
@@ -101,7 +104,8 @@ class Challenge_lib_test extends CI_Controller {
           'count' => 2,
           'is_platform_action' => TRUE
         )
-      )
+      ),
+      'location' => array(-20, 30)
     );
 
     $this->challenge4 = array(
@@ -123,6 +127,7 @@ class Challenge_lib_test extends CI_Controller {
       ),
       'repeat' => 1,
       'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id)))
+      //location not specified
     );
 
     $this->achievement_stat1 = array(
@@ -710,5 +715,46 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($result[1], 'is_array', "\$result[1]", $result[1]);
     $this->unit->run($result[1]['_id'], TRUE, "\$result[1]['_id']", $result[1]['_id']);
     $this->unit->run($result[1]['reward_item'], 'is_array', "\$result[1]['reward_item']", $result[1]['reward_item']);
+  }
+
+  function get_nearest_challenges_test() {
+    $my_location = array(35, 30);
+
+    $result = $this->challenge_lib->get_nearest_challenges($my_location);
+
+    //found nothing because max dist = 1.0
+    $this->unit->run(count($result) === 0, TRUE, "count(\$result)", count($result));
+
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 100);
+
+    $this->unit->run(count($result) === 3, TRUE, "count(\$result)", count($result));
+    $this->unit->run($result[0]['_id'].'' === $this->challenge_id, TRUE, "\$result[0]['_id']", $result[0]['_id']);
+    $this->unit->run($result[1]['_id'].'' === $this->challenge_id2, TRUE, "\$result[1]['_id']", $result[1]['_id']);
+    $this->unit->run($result[2]['_id'].'' === $this->challenge_id3, TRUE, "\$result[2]['_id']", $result[2]['_id']);
+
+    $my_location = array(-30, 30);
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 30);
+
+    //Get only challenge 3 : array(-20, 30)
+    $this->unit->run(count($result) === 1, TRUE, "count(\$result)", count($result));
+    $this->unit->run($result[0]['_id'].'' === $this->challenge_id3, TRUE, "\$result[0]['_id']", $result[0]['_id']);
+
+    $my_location = array(0, 0);
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 100);
+
+    //Get challenge : 3 < 1 < 2
+    $this->unit->run(count($result) === 3, TRUE, "count(\$result)", count($result));
+    $this->unit->run($result[0]['_id'].'' === $this->challenge_id3, TRUE, "\$result[0]['_id']", $result[0]['_id']);
+    $this->unit->run($result[1]['_id'].'' === $this->challenge_id, TRUE, "\$result[1]['_id']", $result[1]['_id']);
+    $this->unit->run($result[2]['_id'].'' === $this->challenge_id2, TRUE, "\$result[2]['_id']", $result[2]['_id']);
+
+    $my_location = array(100, 100);
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 200);
+
+    //Get challenge : 2 < 1 < 3
+    $this->unit->run(count($result) === 3, TRUE, "count(\$result)", count($result));
+    $this->unit->run($result[0]['_id'].'' === $this->challenge_id2, TRUE, "\$result[0]['_id']", $result[0]['_id']);
+    $this->unit->run($result[1]['_id'].'' === $this->challenge_id, TRUE, "\$result[1]['_id']", $result[1]['_id']);
+    $this->unit->run($result[2]['_id'].'' === $this->challenge_id3, TRUE, "\$result[2]['_id']", $result[2]['_id']);
   }
 }
