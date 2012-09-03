@@ -65,6 +65,7 @@ class Sync extends CI_Controller {
 			echo 'Backup completed<br />';
 			return $this->db_sync->mongodb_reset();
 		}
+		$this->socialhappen->reindex();
 
 		echo 'Backup failed, no reset';
 	}

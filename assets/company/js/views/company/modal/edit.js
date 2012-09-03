@@ -54,7 +54,8 @@ define([
       'click .add-new-reward': 'showAddNewRewardModal',
       'click button.show-coupon': 'showCoupon',
       'click button.hide-coupon': 'hideCoupon',
-      'click button.upload-image-submit': 'uploadImage'
+      'click button.upload-image-submit': 'uploadImage',
+      'click button.save-location': 'saveLocation'
     },
 
     initialize: function(){
@@ -741,6 +742,17 @@ define([
           alert(resp.data);
         }
       })
+    },
+
+    saveLocation: function() {
+      var location = this.model.get('location');
+      location[0] = $('input.longitude', this.el).val();
+      location[1] = $('input.latitude', this.el).val();
+
+      this.model.set('location', location).trigger('change');
+      this.model.save();
+
+      vent.trigger('showEditModal', this.model);
     }
 
   });

@@ -6,6 +6,7 @@
  */
 
 header("Access-Control-Allow-Origin: *");
+header('Content-Type: application/json', TRUE);
 require_once(APPPATH . 'libraries/REST_Controller.php');
 class Apiv4 extends REST_Controller {
 

@@ -434,6 +434,9 @@ class Apiv3 extends CI_Controller {
         } unset($reward_item);
       }
 
+      //Challenge location
+      $challenge['location'][0] = floatval($challenge['location'][0]);
+      $challenge['location'][1] = floatval($challenge['location'][1]);
 
       //Create challenge data without reward (to store in challenge's model)
       $challenge_data = $challenge;

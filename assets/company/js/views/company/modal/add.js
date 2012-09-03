@@ -35,6 +35,8 @@ define([
       'click .add-new-reward': 'showAddNewRewardModal',
       'click .cancel': 'cancelAdd',
       'keyup input.challenge-name': 'onTypeChallengeName',
+      'keyup input.latitude': 'onTypeLatitude',
+      'keyup input.longitude': 'onTypeLongitude',
       'keyup textarea.challenge-description': 'onTypeChallengeDescription',
       'click button.upload-image-submit': 'uploadImage'
     },
@@ -190,6 +192,26 @@ define([
       detail.description = $('textarea.challenge-description', this.el).val();
 
       this.model.set('detail', detail).trigger('change');
+    },
+
+    onTypeLongitude: function(e){
+      console.log('location change');
+      var location = this.model.get('location');
+      var longitude = $('input.longitude', this.el).val();
+
+      location[0] = longitude;
+
+      this.model.set('location', location).trigger('change');
+    },
+
+    onTypeLatitude: function(e){
+      console.log('location change');
+      var location = this.model.get('location');
+      var latitude = $('input.latitude', this.el).val();
+
+      location[1] = latitude;
+
+      this.model.set('location', location).trigger('change');
     },
 
     showEditName: function(){
