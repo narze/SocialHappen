@@ -170,7 +170,6 @@ class Apiv4 extends REST_Controller {
       $token = md5(uniqid(mt_rand(), true)); //32 chars
       $user_id = $user['user_id'];
       $user_mongo_update = array(
-        '$set' => array('user_id' => (int) $user_id),
         '$addToSet' => array('tokens' => $token)
       );
       $criteria = array('user_id' => $user_id);
@@ -183,6 +182,26 @@ class Apiv4 extends REST_Controller {
     }
 
     return $this->_error('Sign in failed');
+  }
+
+  /**
+   * Signout SocialHappen
+   * @method POST
+   * @params user_id, token
+   */
+  function signout_post() {
+    $user_id = $this->post('user_id');
+    $token = $this->post('token');
+
+    $criteria = array('user_id' => $user_id);
+    $update = array('$pull' => array('tokens' => $token));
+
+    $this->load->model('user_mongo_model');
+    if($this->user_mongo_model->update($criteria, $update)) {
+      return $this->_success('Signout successful');
+    }
+
+    return $this->_error('Sign out failed');
   }
 
   /**

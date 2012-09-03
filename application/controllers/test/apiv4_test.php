@@ -104,10 +104,12 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['data']['token'], 'is_string', "\$result['data']['token']", $result['data']['token']);
 		$this->unit->run(strlen($result['data']['token']) === 32, TRUE, "\$result['data']['token']", $result['data']['token']);
 
+		$this->user_id = $result['data']['user_id'];
 		$this->token = $result['data']['token'];
 
 		//Check user's token
 		$this->load->model('user_mongo_model');
+		$this->user_mongo_model->recreateIndex();
 		$user = $this->user_mongo_model->getOne(array('user_id' => $result['data']['user_id']));
 		$this->unit->run($user['tokens'][0] === $this->token, TRUE, "\$user['tokens'][0]", $user['tokens'][0]);
 
@@ -245,6 +247,53 @@ class Apiv4_test extends CI_Controller {
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], FALSE, "result['success']", $result['success']);
 		$this->unit->run($result['data'], 'is_string', "result['data']", $result['data']);
+	}
+
+	function signout_post_test() {
+		$method = 'signout';
+
+		//Check user's token before removal (1 from signup, 1 from signin)
+		$this->load->model('user_mongo_model');
+		$user = $this->user_mongo_model->get_user($this->user_id);
+		$this->unit->run(count($user['tokens']) === 2, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+
+		//Wrong token is success too ?
+		$params = array(
+			'user_id' => $this->user_id,
+			'token' => $this->token . 'asdf'
+		);
+
+		$result = $this->post($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+
+		//Check user's token removal : not removed because using invalid token
+		$user = $this->user_mongo_model->get_user($this->user_id);
+		$this->unit->run(count($user['tokens']) === 2, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+
+		//Use valid token
+		$params = array(
+			'user_id' => $this->user_id,
+			'token' => $this->token
+		);
+
+		$result = $this->post($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+
+		//Check user's token removal : removed
+		$user = $this->user_mongo_model->get_user($this->user_id);
+		$this->unit->run(count($user['tokens']) === 1, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+
+		//Failing test : non user's signout
+		$params = array(
+			'user_id' => $this->user_id + 123,
+			'token' => $this->token
+		);
+
+		$result = $this->post($method, $params);
+
+		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
 	}
 
 	function companies_get_test() {
