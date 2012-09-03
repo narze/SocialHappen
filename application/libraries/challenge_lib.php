@@ -23,8 +23,8 @@ class Challenge_lib {
     return FALSE;
   }
 
-  function get($criteria, $limit = 100, $sort = FALSE) {
-    $result = $this->CI->challenge_model->get($criteria, $limit, $sort);
+  function get($criteria, $limit = 100) {
+    $result = $this->CI->challenge_model->get($criteria, $limit);
     return $result;
   }
 
@@ -812,8 +812,14 @@ class Challenge_lib {
     if(!is_array($location) || count($location) !== 2) {
       return FALSE;
     }
+    $query = array(
+      'location' => array('$near' => array(floatval($location[0]), floatval($location[1])))
+    );
+    if($max_dist > 0) {
+      $query['location']['$maxDistance'] = floatval($max_dist);
+    }
 
-    $challenges = $this->CI->challenge_model->get_sort(array('location' => array('$near' => $location, '$maxDistance' => $max_dist)), FALSE, $limit);
+    $challenges = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
 
     return $challenges;
   }

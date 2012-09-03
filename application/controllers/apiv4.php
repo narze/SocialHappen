@@ -253,11 +253,25 @@ class Apiv4 extends REST_Controller {
    * @params -
    */
   function challenges_get() {
-    $this->load->model('challenge_model');
+    $this->load->library('challenge_lib');
 
-    return $this->_success($this->challenge_model->get(
-      array()
-    ));
+    $lon = $this->get('lon');
+    $lat = $this->get('lat');
+    $max_distance = $this->get('max_distance');
+    $limit = $this->get('limit') || NULL;
+
+    if(($lon !== FALSE) && ($lat !== FALSE)) {
+      $challenges = $this->challenge_lib->get_nearest_challenges(
+        array($lon, $lat), $max_distance, $limit);
+    } else {
+      $challenges = $this->challenge_lib->get(array());
+    }
+
+    if($challenges === FALSE) {
+      return $this->_error('API error');
+    } else {
+      return $this->_success($challenges);
+    }
   }
 
   /**
