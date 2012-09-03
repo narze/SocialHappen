@@ -486,8 +486,8 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['data'][0]['_id']['$id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']['$id']);
 	}
 
-	function get_company_challenges_test() {
-		$method = 'get_company_challenges';
+	function challenges_get_with_company_id_test() {
+		$method = 'challenges';
 
 		$params = array(
 			'company_id' => 1
@@ -504,13 +504,6 @@ class Apiv4_test extends CI_Controller {
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result)", count($result['data']));
-
-		//Failing test
-		$params = array();
-
-		$result = $this->get($method, $params);
-		$this->unit->run($result['success'] === FALSE, TRUE, "\$result['success']", $result['success']);
-		$this->unit->run($result['data'], 'is_string', "\$result", $result['data']);
 	}
 
 	function _add_redeem_reward_test() {

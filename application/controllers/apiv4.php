@@ -217,22 +217,6 @@ class Apiv4 extends REST_Controller {
   }
 
   /**
-   * Get company's challenges
-   * @method GET
-   * @params company_id
-   */
-  function get_company_challenges_get() {
-    $company_id = (int) $this->get('company_id');
-
-    if(!$company_id) {
-      return $this->_error('No company_id specified');
-    }
-
-    $this->load->model('challenge_model');
-    return $this->_success($this->challenge_model->get(array('company_id' => $company_id)));
-  }
-
-  /**
    * Get rewards
    * @method GET
    * @params -
@@ -256,12 +240,15 @@ class Apiv4 extends REST_Controller {
   function challenges_get() {
     $this->load->library('challenge_lib');
 
+    $company_id = $this->get('company_id');
     $lon = $this->get('lon');
     $lat = $this->get('lat');
     $max_distance = $this->get('max_distance');
     $limit = $this->get('limit') || NULL;
 
-    if(($lon !== FALSE) && ($lat !== FALSE)) {
+    if($company_id) {
+      $challenges = $this->challenge_lib->get(array('company_id' => $company_id));
+    } else if(($lon !== FALSE) && ($lat !== FALSE)) {
       $challenges = $this->challenge_lib->get_nearest_challenges(
         array($lon, $lat), $max_distance, $limit);
     } else {
