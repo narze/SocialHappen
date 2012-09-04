@@ -11,6 +11,7 @@ define([
   'views/company/modal/action/feedback-action',
   'views/company/modal/action/qr-action',
   'views/company/modal/action/checkin-action',
+  'views/company/modal/action/walkin-action',
   'views/company/modal/reward/reward',
   'views/company/challenger-list',
   'jqueryui',
@@ -20,7 +21,7 @@ define([
   'sandbox'
 ], function(Vm, $, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
-  QRActionView, CheckinActionView, RewardView, ChallengerView, jqueryui, timeago, ChallengerCollection, vent, sandbox){
+  QRActionView, CheckinActionView, WalkinActionView, RewardView, ChallengerView, jqueryui, timeago, ChallengerCollection, vent, sandbox){
   var EditModalView = Backbone.View.extend({
 
     editTemplate: _.template(editTemplate),
@@ -302,6 +303,16 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(checkinActionView.render().el);
+        }else if(type == 204){
+          var walkinActionView = new WalkinActionView({
+            model: this.model,
+            action: action,
+            vent: vent,
+            triggerModal: 'showEditModal',
+            save: true
+          });
+
+          $('ul.criteria-list', this.el).append(walkinActionView.render().el);
         }
       }, this);
 
@@ -494,6 +505,38 @@ define([
       return checkinActionView;
     },
 
+    addWalkin: function(e){
+      e.preventDefault();
+      console.log('show add walkin');
+
+      var walkinDefaultAction = {
+        query: {
+          action_id: 203
+        },
+        count: 1,
+        name: 'Walkin Action',
+        action_data: {
+          data: {
+
+          },
+          action_id: 203
+        }
+      };
+
+      var walkinActionView = new WalkinActionView({
+        model: this.model,
+        vent: vent,
+        action: walkinDefaultAction,
+        triggerModal: 'showEditModal',
+        add: true,
+        save: true
+      });
+
+      $('ul.criteria-list', this.el).append(walkinActionView.render().el);
+
+      return walkinActionView;
+    },
+
     showAddNewRewardModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addRewardTemplate).modal('show');
@@ -678,6 +721,8 @@ define([
           self.addCheckin(e).showEdit();
         } else if(recipe === 'qr') {
           self.addQR(e).showEdit();
+        } else if(recipe === 'walkin') {
+          self.addWalkin(e).showEdit();
         }
       });
     },

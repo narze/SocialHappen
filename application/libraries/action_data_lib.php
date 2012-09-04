@@ -9,6 +9,7 @@ class Action_data_lib {
 		'qr' => array('id' => 201, 'add_method' => 'add_qr_action_data'),
 		'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data'),
 		'checkin' => array('id' => 203, 'add_method' => 'add_checkin_action_data'),
+		'walkin' => array('id' => 204, 'add_method' => 'add_walkin_action_data'),
 	);
 
 	function __construct() {
@@ -28,7 +29,7 @@ class Action_data_lib {
 	 * used by page_challenge ctrlr
 	 */
 	function add_action_data($action_id = NULL, $action_data = NULL) {
-		if(!$action_id || !$action_data) {
+		if(!$action_id) {
 			return FALSE;
 		}
 
@@ -195,6 +196,15 @@ class Action_data_lib {
 			'checkin_thankyou_message' => $data_from_form['checkin_thankyou_message']
 		);
 		return $this->_add_action_data($action_id, $checkin_data);
+
+	}
+
+	function add_walkin_action_data($data_from_form){
+		$action_id = $this->get_platform_action('walkin');
+		$walkin_data = array(
+			//nothing
+		);
+		return $this->_add_action_data($action_id, $walkin_data);
 
 	}
 

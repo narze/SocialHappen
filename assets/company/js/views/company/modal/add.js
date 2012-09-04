@@ -10,6 +10,7 @@ define([
   'views/company/modal/action/feedback-action',
   'views/company/modal/action/qr-action',
   'views/company/modal/action/checkin-action',
+  'views/company/modal/action/walkin-action',
   'views/company/modal/reward/reward',
   'jqueryui',
   'jqueryForm',
@@ -17,7 +18,7 @@ define([
   'sandbox'
 ], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate,
    addActionTemplate, addRewardTemplate, FeedbackActionView,
-   QRActionView, CheckinActionView, RewardView, jqueryui, jqueryForm, vent, sandbox){
+   QRActionView, CheckinActionView, WalkinActionView, RewardView, jqueryui, jqueryForm, vent, sandbox){
   var EditModalView = Backbone.View.extend({
 
     addTemplate: _.template(addTemplate),
@@ -135,7 +136,7 @@ define([
       var criteria = this.model.get('criteria');
       _.each(criteria, function(action){
         var type = action.query.action_id;
-        if(type == 202){
+        if(type === 202) {
           var feedbackActionView = new FeedbackActionView({
             model: this.model,
             action: action,
@@ -144,7 +145,7 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(feedbackActionView.render().el);
-        }else if(type == 201){
+        } else if(type === 201) {
           var qrActionView = new QRActionView({
             model: this.model,
             action: action,
@@ -153,7 +154,7 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(qrActionView.render().el);
-        }else if(type == 203){
+        } else if(type === 203) {
           var checkinActionView = new CheckinActionView({
             model: this.model,
             action: action,
@@ -162,6 +163,15 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(checkinActionView.render().el);
+        } else if(type === 204) {
+          var walkinActionView = new WalkinActionView({
+            model: this.model,
+            action: action,
+            vent: vent,
+            triggerModal: 'showAddModal'
+          });
+
+          $('ul.criteria-list', this.el).append(walkinActionView.render().el);
         }
       }, this);
 
@@ -265,6 +275,8 @@ define([
           self.addCheckin(e).showEdit();
         } else if(recipe === 'qr') {
           self.addQR(e).showEdit();
+        } else if(recipe === 'walkin') {
+          self.addWalkin(e).showEdit();
         }
       });
     },
@@ -371,6 +383,37 @@ define([
       return checkinActionView;
     },
 
+    addWalkin: function(e){
+      e.preventDefault();
+      console.log('show add walkin');
+
+      var walkinDefaultAction = {
+        query: {
+          action_id: 204
+        },
+        count: 1,
+        name: 'Walkin',
+        action_data: {
+          data: {
+
+          },
+          action_id: 204
+        }
+      };
+
+      var walkinActionView = new WalkinActionView({
+        model: this.model,
+        vent: vent,
+        action: walkinDefaultAction,
+        triggerModal: 'showAddModal',
+        add: true
+      });
+
+      $('ul.criteria-list', this.el).append(walkinActionView.render().el);
+
+      return walkinActionView;
+    },
+
     showAddNewRewardModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addRewardTemplate).modal('show');
@@ -469,9 +512,10 @@ define([
       this.model.set('company_id', window.Company.companyId);
       this.model.set('active', true);
       sandbox.collections.challengesCollection.create(this.model, {
-        success: function() {
+        success: function(model, res) {
+          console.log(res);
           //Refresh
-          window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
+          // window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
         }
       });
 
@@ -545,6 +589,8 @@ define([
           self.addCheckin(e);
         } else if(recipe === 'qr') {
           self.addQR(e);
+        } else if(recipe === 'walkin') {
+          self.addWalkin(e);
         }
 
         $('.setup-your-reward').hide();
