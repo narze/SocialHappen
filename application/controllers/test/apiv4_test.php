@@ -506,6 +506,26 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result)", count($result['data']));
 	}
 
+	function challenges_get_with_challenge_id_test() {
+		$method = 'challenges';
+
+		$params = array(
+			'challenge_id' => $this->challenge_id
+		);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result)", count($result['data']));
+
+		$params = array(
+			'challenge_id' => $this->challenge_id2
+		);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result)", count($result['data']));
+	}
+
 	function _add_redeem_reward_test() {
 		$this->load->model('reward_item_model');
 		//Draft reward

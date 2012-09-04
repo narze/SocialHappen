@@ -240,13 +240,16 @@ class Apiv4 extends REST_Controller {
   function challenges_get() {
     $this->load->library('challenge_lib');
 
+    $challenge_id = $this->get('challenge_id');
     $company_id = $this->get('company_id');
     $lon = $this->get('lon');
     $lat = $this->get('lat');
     $max_distance = $this->get('max_distance');
     $limit = $this->get('limit') || NULL;
 
-    if($company_id) {
+    if($challenge_id) {
+      $challenges = $this->challenge_lib->get(array('_id' => new MongoId($challenge_id)));
+    } else if($company_id) {
       $challenges = $this->challenge_lib->get(array('company_id' => $company_id));
     } else if(($lon !== FALSE) && ($lat !== FALSE)) {
       $challenges = $this->challenge_lib->get_nearest_challenges(
