@@ -261,6 +261,10 @@ class Apiv4 extends REST_Controller {
     if($challenges === FALSE) {
       return $this->_error('API error');
     } else {
+      $challenges = array_map(function($challenge){
+        $challenge['_id'] = '' . $challenge['_id'];
+        return $challenge;
+      }, $challenges);
       return $this->_success($challenges);
     }
   }
