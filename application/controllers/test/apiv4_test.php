@@ -240,6 +240,7 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['data']['token'], 'is_string', "result['data']['token']", $result['data']['token']);
 		$this->unit->run($result['data']['user'], 'is_array', "result['data']['user']", $result['data']['user']);
 		$this->unit->run(strlen($result['data']['token']), 32, "strlen(result['data']['token'])", strlen($result['data']['token']));
+		$this->token2 = $result['data']['token'];
 
 		//With email : not found
 		$params = array(
@@ -325,13 +326,14 @@ class Apiv4_test extends CI_Controller {
 		//Add reward
 
 	  $this->load->model('reward_item_model', 'reward_item');
-	  $name = 'Chalenge reward';
+	  $name = '54 Points reward';
 	  $status = 'published';
 	  $challenge_id = 'asdf';
 	  $image = base_url().'assets/images/cam-icon.png';
-	  $value = '200THB';
+	  $value = '54';
 	  $description = 'This is pasta!!!';
-	  $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description');
+	  $is_points_reward = TRUE;
+	  $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description', 'is_points_reward');
 
 	  $this->reward_item_id = $result = $this->reward_item->add_challenge_reward($input);
 	  $this->unit->run($result, 'is_string', "\$result", $result);
@@ -341,6 +343,32 @@ class Apiv4_test extends CI_Controller {
 
 	  $reward = $this->reward_item->get_one(array('_id' => new MongoId($this->reward_item_id)));
 	  $this->unit->run($reward['type'], 'challenge', "\$reward['type']", $reward['type']);
+
+	  $name = 'Regular reward';
+	  $status = 'published';
+	  $challenge_id = 'fasdfas';
+	  $image = base_url().'assets/images/cam-icon.png';
+	  $value = '500 THB';
+	  $description = 'This is pasta!!!';
+	  $is_points_reward = FALSE;
+	  $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description', 'is_points_reward');
+
+	  $this->reward_item_id2 = $result = $this->reward_item->add_challenge_reward($input);
+	  $this->unit->run($result, 'is_string', "\$result", $result);
+
+	  $count = $this->reward_item->count_all();
+	  $this->unit->run($count, 2, 'count', $count);
+
+	  $reward = $this->reward_item->get_one(array('_id' => new MongoId($this->reward_item_id)));
+	  $this->unit->run($reward['type'], 'challenge', "\$reward['type']", $reward['type']);
+
+	  //Add empty action data
+	  $this->load->library('action_data_lib');
+	  $this->action_data_id = $this->action_data_lib->add_action_data(201, array());
+	  $this->action_data_id2 = $this->action_data_lib->add_action_data(202, array());
+	  $this->action_data_id3 = $this->action_data_lib->add_action_data(203, array());
+	  $this->action_data_id4 = $this->action_data_lib->add_action_data(204, array());
+
 
 	  //Add challenges
 	  $this->challenge = array(
@@ -400,9 +428,12 @@ class Apiv4_test extends CI_Controller {
 	        'name' => 'C3',
 	        'query' => array('action_id' => 201),
 	        'count' => 2,
-	        'is_platform_action' => TRUE
+	        'is_platform_action' => TRUE,
+	        'action_data_id' => $this->action_data_id,
+	        'action_data' => array('action_id' => $this->action_data_id)
 	      )
 	    ),
+	    'reward_items' => array(array('_id' => new MongoId($this->reward_item_id2))),
 	    'location' => array(0.002, -0.004)
 	  );
 
@@ -420,7 +451,9 @@ class Apiv4_test extends CI_Controller {
 	        'name' => 'C4',
 	        'query' => array('action_id' => 203),
 	        'count' => 1,
-	        'is_platform_action' => TRUE
+	        'is_platform_action' => TRUE,
+	        'action_data_id' => $this->action_data_id3,
+	        'action_data' => array('action_id' => $this->action_data_id3)
 	      )
 	    ),
 	    'repeat' => 1,
@@ -583,6 +616,134 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run(count($result['data']), 1, "count(\$result['data'])", count($result['data']));
 	}
 
+	/**********************
+	 * Requires user token
+	 **********************/
+
+	function check_token_get_test() {
+		$method = 'check_token';
+		$params = array(
+			'user_id' => $this->user_id,
+			'token' => $this->token2
+		);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+
+		$params['user_id'] = 123456;
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		$this->unit->run($result['data'] === 'Token invalid', TRUE, "\$result['data']", $result['data']);
+	}
+
+  function do_action_post_test() {
+  	$method = 'do_action';
+
+  	//1. challenge 4, requires 203 action, 1 time
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'action_id' => 203,
+  		'challenge_id' => $this->challenge_id4,
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+  	$this->unit->run($result['data']['reward_item']['value'] === 54, TRUE, "\$result['data']['reward_item']['value']", $result['data']['reward_item']['value']);
+  	$this->unit->run($result['data']['reward_item']['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
+
+  	//Fail : challenge invalid
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'action_id' => 203,
+  		'challenge_id' => $this->challenge_id4 . 'asdf',
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'], "Challenge invalid", "\$result['data']", $result['data']);
+
+  	//2. challenge 3, requires 203 action, 2 times
+  	//Fire 201 1 time : not yet completed
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'action_id' => 201,
+  		'challenge_id' => $this->challenge_id3,
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['challenge_completed'], FALSE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+  	$this->unit->run($result['data']['reward_item'] === NULL, TRUE, "\$result['data']['reward_item']", $result['data']['reward_item']);
+
+  	//Fire wrong action_id : nothing happened
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'action_id' => 104,
+  		'challenge_id' => $this->challenge_id3,
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['challenge_completed'], FALSE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+  	$this->unit->run($result['data']['reward_item'] === NULL, TRUE, "\$result['data']['reward_item']", $result['data']['reward_item']);
+
+  	//Fire 201 1 time : now completed, got non-point reward
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'action_id' => 201,
+  		'challenge_id' => $this->challenge_id3,
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+  	$this->unit->run($result['data']['reward_item']['is_points_reward'] === FALSE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
+  	$this->unit->run(get_mongo_id($result['data']['reward_item']) === $this->reward_item_id2, TRUE, "\$result['data']['reward_item']['_id']", get_mongo_id($result['data']['reward_item']));
+
+  	//3.Since challenge_id 4 is a daily challenge, so user can play in tomorrow's time
+  	//Fire today's challenge action again : error (already done)
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'action_id' => 203,
+  		'challenge_id' => $this->challenge_id4,
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'], 'Challenge done already (daily)', "\$result['data']", $result['data']);
+
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'action_id' => 203,
+  		'challenge_id' => $this->challenge_id4,
+  		'timestamp' => time() + 24*60*60, //for test
+  	);
+
+  	//Fire in tomorrow's time
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+  	$this->unit->run($result['data']['reward_item']['value'] === 54, TRUE, "\$result['data']['reward_item']['value']", $result['data']['reward_item']['value']);
+  	$this->unit->run($result['data']['reward_item']['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
+
+  	//4. Check user for coupons/points/statuses
+  	//@TODO
+  }
 }
 /* End of file apiv4_test.php */
 /* Location: ./application/controllers/test/apiv4_test.php */

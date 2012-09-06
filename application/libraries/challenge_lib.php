@@ -37,6 +37,10 @@ class Challenge_lib {
     return $this->CI->challenge_model->getOne(array('hash' => $hash));
   }
 
+  function get_by_id($id) {
+    return $this->CI->challenge_model->getOne(array('_id' => new MongoId($id)));
+  }
+
   function update($criteria, $data) {
     if(!$challenge = $this->get_one($criteria)) {
       return FALSE;
