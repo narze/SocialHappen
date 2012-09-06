@@ -465,25 +465,25 @@ class Apiv4_test extends CI_Controller {
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']) === 4, TRUE, "count(\$result['data'])", count($result['data']));
-		$this->unit->run($result['data'][0]['_id']['$id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']['$id']);
-		$this->unit->run($result['data'][1]['_id']['$id'], $this->challenge_id2, "\$result['data'][1]['_id']", $result['data'][1]['_id']['$id']);
-		$this->unit->run($result['data'][2]['_id']['$id'], $this->challenge_id4, "\$result['data'][2]['_id']", $result['data'][2]['_id']['$id']);
-		$this->unit->run($result['data'][3]['_id']['$id'], $this->challenge_id3, "\$result['data'][3]['_id']", $result['data'][3]['_id']['$id']);
+		$this->unit->run($result['data'][0]['_id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+		$this->unit->run($result['data'][1]['_id'], $this->challenge_id2, "\$result['data'][1]['_id']", $result['data'][1]['_id']);
+		$this->unit->run($result['data'][2]['_id'], $this->challenge_id4, "\$result['data'][2]['_id']", $result['data'][2]['_id']);
+		$this->unit->run($result['data'][3]['_id'], $this->challenge_id3, "\$result['data'][3]['_id']", $result['data'][3]['_id']);
 
 		$params = array('lon' => 0, 'lat' => 0, 'max_distance' => 0.003);
 
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']) === 2, TRUE, "count(\$result['data'])", count($result['data']));
-		$this->unit->run($result['data'][0]['_id']['$id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']['$id']);
-		$this->unit->run($result['data'][1]['_id']['$id'], $this->challenge_id2, "\$result['data'][1]['_id']", $result['data'][1]['_id']['$id']);
+		$this->unit->run($result['data'][0]['_id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+		$this->unit->run($result['data'][1]['_id'], $this->challenge_id2, "\$result['data'][1]['_id']", $result['data'][1]['_id']);
 
 		$params = array('lon' => 0, 'lat' => 0, 'max_distance' => 0.003, 'limit' => 1);
 
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
-		$this->unit->run($result['data'][0]['_id']['$id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']['$id']);
+		$this->unit->run($result['data'][0]['_id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
 	}
 
 	function challenges_get_with_company_id_test() {
