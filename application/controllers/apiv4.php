@@ -277,6 +277,11 @@ class Apiv4 extends REST_Controller {
   * Requires token
   */
 
+  /**
+   * Check user token
+   * @method GET
+   * @params user_id, token
+   */
   function check_token_get() {
     $user_id = $this->get('user_id');
     $token = $this->get('token');
@@ -306,6 +311,12 @@ class Apiv4 extends REST_Controller {
 
     return TRUE;
   }
+
+  /**
+   * Do challenge action
+   * @method POST
+   * @params user_id, token, action_id, challenge_id[, timestamp]
+   */
 
   function do_action_post() {
     $user_id = (int) $this->post('user_id');
@@ -633,7 +644,34 @@ class Apiv4 extends REST_Controller {
       }
     }
 
-
     return $this->_success($data);
+  }
+
+  /**
+   * Get coupons
+   * @method GET
+   * @params [user_id, token]
+   */
+  function coupons_get() {
+    $user_id = (int) $this->get('user_id');
+    $token = $this->get('token');
+
+    $this->load->model('coupon_model');
+    if($user_id && $token) {
+      if(!$this->_check_token($user_id, $token)) {
+        return $this->error('Token invalid');
+      }
+
+      $coupons = $this->coupon_model->get_by_user($user_id);
+    } else {
+      $coupons = $this->coupon_model->get();
+    }
+
+    $coupons = array_map(function($coupon){
+      $coupon['_id'] = '' . $coupon['_id'];
+      return $coupon;
+    }, $coupons);
+
+    return $this->_success($coupons);
   }
 }

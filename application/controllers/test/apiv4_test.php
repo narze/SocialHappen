@@ -744,6 +744,34 @@ class Apiv4_test extends CI_Controller {
   	//4. Check user for coupons/points/statuses
   	//@TODO
   }
+
+  function coupons_get_test() {
+  	$method = 'coupons';
+
+  	$params = array();
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token //expired
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'] === 'Token invalid', TRUE, "\$result['data']", $result['data']);
+  }
 }
 /* End of file apiv4_test.php */
 /* Location: ./application/controllers/test/apiv4_test.php */
