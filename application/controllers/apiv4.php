@@ -251,6 +251,10 @@ class Apiv4 extends REST_Controller {
     $max_distance = $this->get('max_distance');
     $limit = $this->get('limit') || NULL;
 
+    $doable_date = $this->get('doable_date'); //[YYYYMMDD] if set, challenge that is not doable in the date will have [next_date] = next date available (requires user_id & token)
+    $user_id = (int) $this->get('user_id');
+    $token = $this->get('token');
+
     if($challenge_id) {
       $challenges = $this->challenge_lib->get(array('_id' => new MongoId($challenge_id)));
     } else if($company_id) {
@@ -260,6 +264,39 @@ class Apiv4 extends REST_Controller {
         array($lon, $lat), $max_distance, $limit);
     } else {
       $challenges = $this->challenge_lib->get(array());
+    }
+
+    //Filter challenge if doable_date is set
+    if($challenges && $doable_date && $user_id && $token) {
+      if(!$this->_check_token($user_id, $token)) {
+        return $this->error('Token invalid');
+      }
+
+      if(!$user = $this->user_mongo_model->get_user($user_id)) {
+        return $this->error('User invalid');
+      }
+
+      foreach($challenges as &$challenge) {
+        $challenge_id = get_mongo_id($challenge);
+
+        if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
+
+          //Check if user completed already or not
+          if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
+            foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
+              if($daily_challenge['start_date'] <= $doable_date && $daily_challenge['end_date'] >= $doable_date) {
+                $challenge['next_date'] = date('Ymd', date_create_from_format('Ymd', $doable_date)->getTimestamp() + $days * 24*60*60);
+                log_message('error', date('Ymd', date_create_from_format('Ymd', $doable_date)->getTimestamp()));
+              }
+            }
+          }
+        } else {
+          if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
+            //@TODO - don't use date
+            $challenge['next_date'] = '30000101';
+          }
+        }
+      }
     }
 
     if($challenges === FALSE) {
@@ -357,15 +394,13 @@ class Apiv4 extends REST_Controller {
       return $this->error(print_r($challenge, true));
     }
 
-
-
     //Challenge check
-    $match_all_criteria = TRUE;
+    $match_all_criteria = FALSE;
     $match_all_criteria_today = FALSE;
     $is_in_progress = FALSE;
 
     //3.1 if repeat challenge : check audit in date range
-    if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
+    if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0))) {
 
       //Check if user completed already or not
       if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
@@ -391,6 +426,7 @@ class Apiv4 extends REST_Controller {
       } else {
         //Add audit & stat
         $audit_data = array(
+          'timestamp' => $time,
           'user_id' => $user_id,
           'action_id' => $action_id,
           'app_id' => 0,
@@ -466,6 +502,7 @@ class Apiv4 extends REST_Controller {
       } else {
         //Add audit & stat
         $audit_data = array(
+          'timestamp' => $time,
           'user_id' => $user_id,
           'action_id' => $action_id,
           'app_id' => 0,
@@ -501,6 +538,7 @@ class Apiv4 extends REST_Controller {
       //Finish adding stat
 
       //3.2 if non-repeat challenge : check achievement stat and action data
+      $match_all_criteria = TRUE;
       foreach($challenge['criteria'] as $criteria){
         $query = $criteria['query'];
         $count = $criteria['count'];
@@ -602,11 +640,13 @@ class Apiv4 extends REST_Controller {
           'start_date' => $start_date,
           'end_date' => $end_date
         );
-
+        log_message('error', print_r($achieved_info, true));
         $update_record['$addToSet']['daily_challenge_completed.'.$challenge_id] = $achieved_info['daily_challenge'];
         $update_record['$pull']['daily_challenge.'.$challenge_id] = $achieved_info['daily_challenge'];
       } else {
         //if not repeating challenge : Add completed challenge into user mongo model and remove from in progress
+        log_message('error', 'non repeating');
+        log_message('error', get_mongo_id($challenge));
         $update_record['$addToSet']['challenge_completed'] = $challenge_id;
         $update_record['$pull']['challenge'] = $challenge_id;
       }

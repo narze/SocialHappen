@@ -559,6 +559,39 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result)", count($result['data']));
 	}
 
+	function challenges_get_with_doable_test_1() {
+		$method = 'challenges';
+
+		$params = array(
+			'doable_date' => date('Ymd', time() + 0),
+			'user_id' => $this->user_id,
+			'token' => $this->token2,
+			'company_id' => 1
+		);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['_id'] === $this->challenge_id3, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+		$this->unit->run(isset($result['data'][0]['next_date']), FALSE, "isset(\$result['data'][0]['next_date'])", isset($result['data'][0]['next_date']));
+		$this->unit->run($result['data'][1]['_id'] === $this->challenge_id2, TRUE, "\$result['data'][1]['_id']", $result['data'][1]['_id']);
+		$this->unit->run(isset($result['data'][1]['next_date']), FALSE, "isset(\$result['data'][1]['next_date'])", isset($result['data'][1]['next_date']));
+		$this->unit->run($result['data'][2]['_id'] === $this->challenge_id, TRUE, "\$result['data'][2]['_id']", $result['data'][2]['_id']);
+		$this->unit->run(isset($result['data'][2]['next_date']), FALSE, "isset(\$result['data'][2]['next_date'])", isset($result['data'][2]['next_date']));
+
+		$params = array(
+			'doable_date' => date('Ymd', time() + 0),
+			'user_id' => $this->user_id,
+			'token' => $this->token2,
+			'company_id' => 2
+		);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['_id'] === $this->challenge_id4, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+	}
+
 	function _add_redeem_reward_test() {
 		$this->load->model('reward_item_model');
 		//Draft reward
@@ -649,11 +682,19 @@ class Apiv4_test extends CI_Controller {
   		'timestamp' => time(), //for test
   	);
 
+
+  	log_message('error', 'chaid4');
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
   	$this->unit->run($result['data']['reward_item']['value'] === 54, TRUE, "\$result['data']['reward_item']['value']", $result['data']['reward_item']['value']);
   	$this->unit->run($result['data']['reward_item']['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
+
+  	//User check
+  	$this->load->model('user_mongo_model');
+  	$user = $this->user_mongo_model->get_user($this->user_id);
+  	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
+  	$this->unit->run(count($user['daily_challenge_completed'][$this->challenge_id4]) === 1, TRUE, "count(\$user['daily_challenge_completed'][$this->challenge_id4])", count($user['daily_challenge_completed'][$this->challenge_id4]));
 
   	//Fail : challenge invalid
   	$params = array(
@@ -706,6 +747,8 @@ class Apiv4_test extends CI_Controller {
   		'timestamp' => time(), //for test
   	);
 
+
+  	log_message('error', 'chaid3');
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
@@ -744,6 +787,7 @@ class Apiv4_test extends CI_Controller {
   		'timestamp' => time() + 24*60*60, //for test
   	);
 
+  	log_message('error', 'chaid4');
   	//Fire in tomorrow's time
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
@@ -751,8 +795,90 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['reward_item']['value'] === 54, TRUE, "\$result['data']['reward_item']['value']", $result['data']['reward_item']['value']);
   	$this->unit->run($result['data']['reward_item']['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
 
+  	//check audit count
+	  $this->load->library('audit_lib');
+	  $result = $this->audit_lib->list_recent_audit(50);
+	  $this->unit->run(count($result), 6 + 2, "count(\$result)", count($result)); //for action 203 and for completing challenge
+
   	//4. Check user for coupons/points/statuses
   	//@TODO
+  	$user = $this->user_mongo_model->get_user($this->user_id);
+  	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
+  	$this->unit->run(count($user['daily_challenge_completed'][$this->challenge_id4]) === 2, TRUE, "count(\$user['daily_challenge_completed'][$this->challenge_id4])", count($user['daily_challenge_completed'][$this->challenge_id4]));
+  }
+
+  function challenges_get_with_doable_test_2() {
+  	$method = 'challenges';
+
+  	//Done 2 challenges [3,4] , remain 2 challenge today [1,2]
+  	$params = array(
+  		'doable_date' => date('Ymd', time() + 0),
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'company_id' => 1
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id3, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run(isset($result['data'][0]['next_date']), TRUE, "isset(\$result['data'][0]['next_date'])", isset($result['data'][0]['next_date']));
+  	$this->unit->run($result['data'][1]['_id'] === $this->challenge_id2, TRUE, "\$result['data'][1]['_id']", $result['data'][1]['_id']);
+  	$this->unit->run(isset($result['data'][1]['next_date']), FALSE, "isset(\$result['data'][1]['next_date'])", isset($result['data'][1]['next_date']));
+  	$this->unit->run($result['data'][2]['_id'] === $this->challenge_id, TRUE, "\$result['data'][2]['_id']", $result['data'][2]['_id']);
+  	$this->unit->run(isset($result['data'][2]['next_date']), FALSE, "isset(\$result['data'][2]['next_date'])", isset($result['data'][2]['next_date']));
+
+  	$this->unit->run($result['data'][0]['next_date'] === '30000101', TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
+
+  	$params = array(
+  		'doable_date' => date('Ymd', time() + 0),
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'company_id' => 2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id4, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run(isset($result['data'][0]['next_date']), TRUE, "isset(\$result['data'][0]['next_date'])", isset($result['data'][0]['next_date']));
+
+  	$this->unit->run($result['data'][0]['next_date'] === date('Ymd', time() + 24*60*60), TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
+
+  	//Done 1(+1 cannot do anymore) challenge, remain 2 challenges tomorrow
+  	$params = array(
+  		'doable_date' => date('Ymd', time() + 24*60*60),
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'company_id' => 1
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id3, TRUE, "\$result['data'][0]['_id']['\$id']", $result['data'][0]['_id']);
+  	$this->unit->run(isset($result['data'][0]['next_date']), TRUE, "isset(\$result['data'][0]['next_date'])", isset($result['data'][0]['next_date']));
+  	$this->unit->run($result['data'][1]['_id'] === $this->challenge_id2, TRUE, "\$result['data'][1]['_id']['\$id']", $result['data'][1]['_id']);
+  	$this->unit->run(isset($result['data'][1]['next_date']), FALSE, "isset(\$result['data'][1]['next_date'])", isset($result['data'][1]['next_date']));
+  	$this->unit->run($result['data'][2]['_id'] === $this->challenge_id, TRUE, "\$result['data'][2]['_id']['\$id']", $result['data'][2]['_id']);
+  	$this->unit->run(isset($result['data'][2]['next_date']), FALSE, "isset(\$result['data'][2]['next_date'])", isset($result['data'][2]['next_date']));
+
+  	$this->unit->run($result['data'][0]['next_date'] === '30000101', TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
+
+  	$params = array(
+  		'doable_date' => date('Ymd', time() + 24*60*60),
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'company_id' => 2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id4, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run(isset($result['data'][0]['next_date']), TRUE, "isset(\$result['data'][0]['next_date'])", isset($result['data'][0]['next_date']));
+
+  	$this->unit->run($result['data'][0]['next_date'] === date('Ymd', time() + 2 * 24*60*60), TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
   }
 
   function coupons_get_test() {
