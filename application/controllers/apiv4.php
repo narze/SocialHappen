@@ -357,53 +357,7 @@ class Apiv4 extends REST_Controller {
       return $this->error(print_r($challenge, true));
     }
 
-    $this->load->library('audit_lib');
-    $this->load->library('action_user_data_lib');
-    if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
-      $company_id,
-      $action_id,
-      $action_data_id,
-      $challenge_id,
-      $user_id,
-      $user_data
-      )){
-      show_error('Invalid Data');
-    } else {
-      //Add audit & stat
-      $audit_data = array(
-        'user_id' => $user_id,
-        'action_id' => $action_id,
-        'app_id' => 0,
-        'app_install_id' => 0,
-        'page_id' => 0,
-        'company_id' => $company_id,
-        'subject' => NULL,
-        'object' => NULL,
-        'objecti' => $challenge['hash'],
-        'image' => $challenge['detail']['image']
-      );
 
-      if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
-        return $this->error('Audit add failed'. var_export($audit_data, true));
-      }
-
-      //Update action user data with audit id
-      if(!$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id))) {
-        return $this->error('Update action user data failed');
-      }
-
-      $this->load->library('achievement_lib');
-      $info = array(
-              'action_id'=> $action_id,
-              'app_install_id'=> 0,
-              'page_id' => 0
-            );
-      if(!$achievement_result = $this->achievement_lib->
-        increment_achievement_stat($company_id, 0, $user_id, $info, 1)) {
-        return $this->error('Increment achievement stat failed');
-      }
-    }
-    //Finish adding stat
 
     //Challenge check
     $match_all_criteria = TRUE;
@@ -421,6 +375,55 @@ class Apiv4 extends REST_Controller {
           }
         }
       }
+
+      //add stat after checking challenge done
+      $this->load->library('audit_lib');
+      $this->load->library('action_user_data_lib');
+      if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
+        $company_id,
+        $action_id,
+        $action_data_id,
+        $challenge_id,
+        $user_id,
+        $user_data
+        )){
+        show_error('Invalid Data');
+      } else {
+        //Add audit & stat
+        $audit_data = array(
+          'user_id' => $user_id,
+          'action_id' => $action_id,
+          'app_id' => 0,
+          'app_install_id' => 0,
+          'page_id' => 0,
+          'company_id' => $company_id,
+          'subject' => NULL,
+          'object' => NULL,
+          'objecti' => $challenge['hash'],
+          'image' => $challenge['detail']['image']
+        );
+
+        if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
+          return $this->error('Audit add failed'. var_export($audit_data, true));
+        }
+
+        //Update action user data with audit id
+        if(!$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id))) {
+          return $this->error('Update action user data failed');
+        }
+
+        $this->load->library('achievement_lib');
+        $info = array(
+                'action_id'=> $action_id,
+                'app_install_id'=> 0,
+                'page_id' => 0
+              );
+        if(!$achievement_result = $this->achievement_lib->
+          increment_achievement_stat($company_id, 0, $user_id, $info, 1)) {
+          return $this->error('Increment achievement stat failed');
+        }
+      }
+      //Finish adding stat
 
       $match_all_criteria_today = TRUE;
       foreach($challenge['criteria'] as $criteria){
@@ -447,6 +450,55 @@ class Apiv4 extends REST_Controller {
       if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
         return $this->error('Challenge done already');
       }
+
+      //add stat after checking challenge done
+      $this->load->library('audit_lib');
+      $this->load->library('action_user_data_lib');
+      if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
+        $company_id,
+        $action_id,
+        $action_data_id,
+        $challenge_id,
+        $user_id,
+        $user_data
+        )){
+        show_error('Invalid Data');
+      } else {
+        //Add audit & stat
+        $audit_data = array(
+          'user_id' => $user_id,
+          'action_id' => $action_id,
+          'app_id' => 0,
+          'app_install_id' => 0,
+          'page_id' => 0,
+          'company_id' => $company_id,
+          'subject' => NULL,
+          'object' => NULL,
+          'objecti' => $challenge['hash'],
+          'image' => $challenge['detail']['image']
+        );
+
+        if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
+          return $this->error('Audit add failed'. var_export($audit_data, true));
+        }
+
+        //Update action user data with audit id
+        if(!$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id))) {
+          return $this->error('Update action user data failed');
+        }
+
+        $this->load->library('achievement_lib');
+        $info = array(
+                'action_id'=> $action_id,
+                'app_install_id'=> 0,
+                'page_id' => 0
+              );
+        if(!$achievement_result = $this->achievement_lib->
+          increment_achievement_stat($company_id, 0, $user_id, $info, 1)) {
+          return $this->error('Increment achievement stat failed');
+        }
+      }
+      //Finish adding stat
 
       //3.2 if non-repeat challenge : check achievement stat and action data
       foreach($challenge['criteria'] as $criteria){

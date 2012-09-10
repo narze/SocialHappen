@@ -712,6 +712,11 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['reward_item']['is_points_reward'] === FALSE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
   	$this->unit->run(get_mongo_id($result['data']['reward_item']) === $this->reward_item_id2, TRUE, "\$result['data']['reward_item']['_id']", get_mongo_id($result['data']['reward_item']));
 
+  	//check audit count
+	  $this->load->library('audit_lib');
+	  $result = $this->audit_lib->list_recent_audit(50);
+	  $this->unit->run(count($result), 6, "count(\$result)", count($result));
+
   	//3.Since challenge_id 4 is a daily challenge, so user can play in tomorrow's time
   	//Fire today's challenge action again : error (already done)
   	$params = array(
@@ -725,6 +730,11 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data'], 'Challenge done already (daily)', "\$result['data']", $result['data']);
+
+  	//check audit count again, the last do_action method should not invoke audit_add
+	  $this->load->library('audit_lib');
+	  $result = $this->audit_lib->list_recent_audit(50);
+	  $this->unit->run(count($result), 6, "count(\$result)", count($result));
 
   	$params = array(
   		'user_id' => $this->user_id,
