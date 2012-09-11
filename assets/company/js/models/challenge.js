@@ -22,7 +22,8 @@ define([
       end_date: null,
       repeat: null,
       short_url: null,
-      location: [0, 0] //lon, lat
+      location: [0, 0], //lon, lat
+      done_count_max: 0
     },
     initialize: function(){
 

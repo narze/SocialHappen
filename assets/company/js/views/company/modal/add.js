@@ -38,6 +38,7 @@ define([
       'keyup input.challenge-name': 'onTypeChallengeName',
       'keyup input.latitude': 'onTypeLatitude',
       'keyup input.longitude': 'onTypeLongitude',
+      'keyup input.done-count-max': 'onTypeDoneCountMax',
       'keyup textarea.challenge-description': 'onTypeChallengeDescription',
       'click button.upload-image-submit': 'uploadImage'
     },
@@ -222,6 +223,13 @@ define([
       location[1] = latitude;
 
       this.model.set('location', location).trigger('change');
+    },
+
+    onTypeDoneCountMax: function(e){
+      console.log('done count max change');
+      var done_count_max = $('input.done-count-max', this.el).val();
+
+      this.model.set('done_count_max', done_count_max).trigger('change');
     },
 
     showEditName: function(){

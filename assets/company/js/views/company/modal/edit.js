@@ -56,7 +56,8 @@ define([
       'click button.show-coupon': 'showCoupon',
       'click button.hide-coupon': 'hideCoupon',
       'click button.upload-image-submit': 'uploadImage',
-      'click button.save-location': 'saveLocation'
+      'click button.save-location': 'saveLocation',
+      'click button.save-done-count-max': 'saveDoneCountMax'
     },
 
     initialize: function(){
@@ -795,6 +796,15 @@ define([
       location[1] = $('input.latitude', this.el).val();
 
       this.model.set('location', location).trigger('change');
+      this.model.save();
+
+      vent.trigger('showEditModal', this.model);
+    },
+
+    saveDoneCountMax: function() {
+      var done_count_max = $('input.done-count-max', this.el).val();
+
+      this.model.set('done_count_max', done_count_max).trigger('change');
       this.model.save();
 
       vent.trigger('showEditModal', this.model);
