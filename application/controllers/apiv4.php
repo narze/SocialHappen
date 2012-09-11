@@ -279,6 +279,7 @@ class Apiv4 extends REST_Controller {
       foreach($challenges as &$challenge) {
         $challenge_id = get_mongo_id($challenge);
 
+        //check completed
         if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
 
           //Check if user completed already or not
@@ -286,7 +287,6 @@ class Apiv4 extends REST_Controller {
             foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
               if($daily_challenge['start_date'] <= $doable_date && $daily_challenge['end_date'] >= $doable_date) {
                 $challenge['next_date'] = date('Ymd', date_create_from_format('Ymd', $doable_date)->getTimestamp() + $days * 24*60*60);
-                log_message('error', date('Ymd', date_create_from_format('Ymd', $doable_date)->getTimestamp()));
               }
             }
           }
@@ -295,6 +295,16 @@ class Apiv4 extends REST_Controller {
             //@TODO - don't use date
             $challenge['next_date'] = '30000101';
           }
+        }
+      }
+    }
+
+    //Check challenge quota
+    foreach($challenges as &$challenge) {
+      if(isset($challenge['done_count_max']) && ($challenge['done_count_max'] > 0)) {
+        $done_count = isset($challenge['done_count']) ? $challenge['done_count'] : 0;
+        if($done_count >= $challenge['done_count_max']) {
+          $challenge['is_out_of_stock'] = TRUE;
         }
       }
     }
@@ -377,6 +387,14 @@ class Apiv4 extends REST_Controller {
 
     if(!$challenge = $this->challenge_lib->get_by_id($challenge_id)) {
       return $this->error('Challenge invalid');
+    }
+
+    //Check challenge quota
+    if(isset($challenge['done_count_max']) && ($challenge['done_count_max'] > 0)) {
+      $done_count = isset($challenge['done_count']) ? $challenge['done_count'] : 0;
+      if($done_count >= $challenge['done_count_max']) {
+        return $this->error('Reward out of stock');
+      }
     }
 
     $company_id = (int) $challenge['company_id'];
@@ -640,13 +658,10 @@ class Apiv4 extends REST_Controller {
           'start_date' => $start_date,
           'end_date' => $end_date
         );
-        log_message('error', print_r($achieved_info, true));
         $update_record['$addToSet']['daily_challenge_completed.'.$challenge_id] = $achieved_info['daily_challenge'];
         $update_record['$pull']['daily_challenge.'.$challenge_id] = $achieved_info['daily_challenge'];
       } else {
         //if not repeating challenge : Add completed challenge into user mongo model and remove from in progress
-        log_message('error', 'non repeating');
-        log_message('error', get_mongo_id($challenge));
         $update_record['$addToSet']['challenge_completed'] = $challenge_id;
         $update_record['$pull']['challenge'] = $challenge_id;
       }
@@ -733,6 +748,15 @@ class Apiv4 extends REST_Controller {
             }
           }
         }
+      }
+
+      //9 add done count
+      $this->load->model('challenge_model');
+      $challenge_update_result = $this->challenge_model->update(array('_id' => new MongoId($challenge_id)), array(
+        '$inc' => array('done_count' => 1)
+      ));
+      if(!$challenge_update_result) {
+        return $this->error('increment done count failed');
       }
     }
 

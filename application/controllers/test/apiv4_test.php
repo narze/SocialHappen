@@ -461,6 +461,31 @@ class Apiv4_test extends CI_Controller {
 	    'location' => array(-0.003, 0.001)
 	  );
 
+	  $this->challenge5 = array(
+	    'company_id' => 2,
+	    'start' => time(),
+	    'end' => time() + 864000,
+	    'detail' => array(
+	      'name' => 'Limited Daily Challenge',
+	      'description' => 'You can play every day',
+	      'image' => 'Challengeimage'
+	    ),
+	    'criteria' => array(
+	      array(
+	        'name' => 'C4',
+	        'query' => array('action_id' => 203),
+	        'count' => 1,
+	        'is_platform_action' => TRUE,
+	        'action_data_id' => $this->action_data_id3,
+	        'action_data' => array('action_id' => $this->action_data_id3)
+	      )
+	    ),
+	    'repeat' => 1,
+	    'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))),
+	    'location' => array(-0.003, 0.001),
+	    'done_count_max' => 1
+	  );
+
 	  $this->load->library('challenge_lib');
 
 	  $result = $this->challenge_lib->add($this->challenge);
@@ -683,7 +708,6 @@ class Apiv4_test extends CI_Controller {
   	);
 
 
-  	log_message('error', 'chaid4');
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
@@ -748,7 +772,6 @@ class Apiv4_test extends CI_Controller {
   	);
 
 
-  	log_message('error', 'chaid3');
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
@@ -787,7 +810,6 @@ class Apiv4_test extends CI_Controller {
   		'timestamp' => time() + 24*60*60, //for test
   	);
 
-  	log_message('error', 'chaid4');
   	//Fire in tomorrow's time
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
@@ -907,6 +929,64 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->get($method, $params);
   	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data'] === 'Token invalid', TRUE, "\$result['data']", $result['data']);
+  }
+
+  function do_action_post_test_2() {
+  	//add new challenge
+  	$this->load->library('challenge_lib');
+  	$result = $this->challenge_lib->add($this->challenge5);
+  	$this->unit->run($result, TRUE, "\$result", $result);
+  	$this->challenge_id5 = $result;
+
+  	$method = 'do_action';
+
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'action_id' => 203,
+  		'challenge_id' => $this->challenge_id5
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+
+  	//check audit count
+	  $this->load->library('audit_lib');
+	  $result = $this->audit_lib->list_recent_audit(50);
+	  $this->unit->run(count($result), 8 + 2, "count(\$result)", count($result));
+
+	  //do_action in tomorrow : cannot do action which done_count >= max_done_count
+	  $params = array(
+	  	'user_id' => $this->user_id,
+	  	'token' => $this->token2,
+	  	'action_id' => 203,
+	  	'challenge_id' => $this->challenge_id5,
+	  	'timestamp' => time() + 24*60*60
+	  );
+
+	  $result = $this->post($method, $params);
+	  $this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+	  $this->unit->run($result['data'] === 'Reward out of stock', TRUE, "\$result['data']", $result['data']);
+
+  	//check audit count
+	  $this->load->library('audit_lib');
+	  $result = $this->audit_lib->list_recent_audit(50);
+	  $this->unit->run(count($result), 10, "count(\$result)", count($result)); //no audit add
+  }
+
+  function challenges_get_test3() {
+  	$method = 'challenges';
+  	$params = array(
+  		'company_id' => 2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 2, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][1]['_id'] === $this->challenge_id4, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id5, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run($result['data'][0]['is_out_of_stock'], TRUE, "\$result['data'][0]['is_out_of_stock']", $result['data'][0]['is_out_of_stock']);
   }
 }
 /* End of file apiv4_test.php */
