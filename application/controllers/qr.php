@@ -24,7 +24,18 @@ class QR extends CI_Controller {
 
 		//Generate
 		$path = $this->input->get('path');
-		$params['data'] = base_url($path);
+		$data = $this->input->get('data');
+		if($path) {
+			$params['data'] = base_url($path);
+		} else if($data) {
+			$params['data'] = $data;
+		} else {
+			return FALSE;
+		}
+
+		if($size = $this->input->get('size')) {
+			$params['size'] = $size;
+		}
 
 		header("Content-Type: image/png");
 		$this->ciqrcode->generate($params);

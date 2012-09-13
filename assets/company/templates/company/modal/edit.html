@@ -173,13 +173,22 @@
     </div>
   </div>
 
-  <div class="control-group">
+<!--   <div class="control-group">
     <h6 class="qrcode-label">QR Code:</h6>
     <div class="qrcode">
       <center>
         <a href="<%= short_url %>">
           <img src="<%= short_url + '.qrcode?s=200' %>" />
         </a>
+      </center>
+    </div>
+  </div> -->
+
+  <div class="control-group">
+    <h6 class="qrcode-label">QR Code:</h6>
+    <div class="qrcode">
+      <center>
+        <img src="<%= window.Company.BASE_URL + 'qr?data=' + hash + '&size=2048' %>" />
       </center>
     </div>
   </div>

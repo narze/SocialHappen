@@ -440,43 +440,44 @@ class Apiv4 extends REST_Controller {
         $user_id,
         $user_data
         )){
-        show_error('Invalid Data');
-      } else {
-        //Add audit & stat
-        $audit_data = array(
-          'timestamp' => $time,
-          'user_id' => $user_id,
-          'action_id' => $action_id,
-          'app_id' => 0,
-          'app_install_id' => 0,
-          'page_id' => 0,
-          'company_id' => $company_id,
-          'subject' => NULL,
-          'object' => NULL,
-          'objecti' => $challenge['hash'],
-          'image' => $challenge['detail']['image']
-        );
-
-        if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
-          return $this->error('Audit add failed'. var_export($audit_data, true));
-        }
-
-        //Update action user data with audit id
-        if(!$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id))) {
-          return $this->error('Update action user data failed');
-        }
-
-        $this->load->library('achievement_lib');
-        $info = array(
-                'action_id'=> $action_id,
-                'app_install_id'=> 0,
-                'page_id' => 0
-              );
-        if(!$achievement_result = $this->achievement_lib->
-          increment_achievement_stat($company_id, 0, $user_id, $info, 1)) {
-          return $this->error('Increment achievement stat failed');
-        }
+        return $this->error('Invalid Data');
       }
+
+      //Add audit & stat
+      $audit_data = array(
+        'timestamp' => $time,
+        'user_id' => $user_id,
+        'action_id' => $action_id,
+        'app_id' => 0,
+        'app_install_id' => 0,
+        'page_id' => 0,
+        'company_id' => $company_id,
+        'subject' => NULL,
+        'object' => NULL,
+        'objecti' => $challenge['hash'],
+        'image' => $challenge['detail']['image']
+      );
+
+      if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
+        return $this->error('Audit add failed'. var_export($audit_data, true));
+      }
+
+      //Update action user data with audit id
+      if(!$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id))) {
+        return $this->error('Update action user data failed');
+      }
+
+      $this->load->library('achievement_lib');
+      $info = array(
+              'action_id'=> $action_id,
+              'app_install_id'=> 0,
+              'page_id' => 0
+            );
+      if(!$achievement_result = $this->achievement_lib->
+        increment_achievement_stat($company_id, 0, $user_id, $info, 1)) {
+        return $this->error('Increment achievement stat failed');
+      }
+
       //Finish adding stat
 
       $match_all_criteria_today = TRUE;
