@@ -57,7 +57,8 @@ define([
       'click button.hide-coupon': 'hideCoupon',
       'click button.upload-image-submit': 'uploadImage',
       'click button.save-location': 'saveLocation',
-      'click button.save-done-count-max': 'saveDoneCountMax'
+      'click button.save-done-count-max': 'saveDoneCountMax',
+      'click button.save-sonar-frequency': 'saveSonarFrequency'
     },
 
     initialize: function(){
@@ -805,6 +806,15 @@ define([
       var done_count_max = $('input.done-count-max', this.el).val();
 
       this.model.set('done_count_max', done_count_max).trigger('change');
+      this.model.save();
+
+      vent.trigger('showEditModal', this.model);
+    },
+
+    saveSonarFrequency: function() {
+      var sonar_frequency = $('input.sonar-frequency', this.el).val();
+
+      this.model.set('sonar_frequency', sonar_frequency).trigger('change');
       this.model.save();
 
       vent.trigger('showEditModal', this.model);

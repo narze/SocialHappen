@@ -24,7 +24,8 @@ define([
       short_url: null,
       location: [0, 0], //lon, lat
       done_count_max: 0,
-      done_count: 0
+      done_count: 0,
+      sonar_frequency: 0
     },
     initialize: function(){
 
