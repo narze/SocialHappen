@@ -850,7 +850,7 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data'][2]['_id'] === $this->challenge_id, TRUE, "\$result['data'][2]['_id']", $result['data'][2]['_id']);
   	$this->unit->run(isset($result['data'][2]['next_date']), FALSE, "isset(\$result['data'][2]['next_date'])", isset($result['data'][2]['next_date']));
 
-  	$this->unit->run($result['data'][0]['next_date'] === '30000101', TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
+  	$this->unit->run($result['data'][0]['next_date'] === FALSE, TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
 
   	$params = array(
   		'doable_date' => date('Ymd', time() + 0),
@@ -885,7 +885,7 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data'][2]['_id'] === $this->challenge_id, TRUE, "\$result['data'][2]['_id']['\$id']", $result['data'][2]['_id']);
   	$this->unit->run(isset($result['data'][2]['next_date']), FALSE, "isset(\$result['data'][2]['next_date'])", isset($result['data'][2]['next_date']));
 
-  	$this->unit->run($result['data'][0]['next_date'] === '30000101', TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
+  	$this->unit->run($result['data'][0]['next_date'] === FALSE, TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
 
   	$params = array(
   		'doable_date' => date('Ymd', time() + 24*60*60),

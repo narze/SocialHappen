@@ -292,8 +292,7 @@ class Apiv4 extends REST_Controller {
           }
         } else {
           if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
-            //@TODO - don't use date
-            $challenge['next_date'] = '30000101';
+            $challenge['next_date'] = FALSE;
           }
         }
       }
