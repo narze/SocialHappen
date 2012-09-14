@@ -608,7 +608,7 @@ class Apiv4 extends REST_Controller {
 
     $data = array(
       'challenge_completed' => FALSE,
-      'reward_item' => NULL
+      'reward_items' => NULL
     );
 
     //3.3 if match all ...
@@ -625,9 +625,12 @@ class Apiv4 extends REST_Controller {
     if($match_all_criteria || $match_all_criteria_today) {
       //1
       $data['challenge_completed'] = TRUE;
-      //@TODO - give every reward item, not just the first one
-      $reward_item_id = get_mongo_id($challenge['reward_items'][0]);
-      $data['reward_item'] = $this->reward_item_model->get_by_reward_item_id($reward_item_id);
+
+      $reward_item_ids = array_map(function($reward_item) {
+        return new MongoId(get_mongo_id($reward_item));
+      }, $challenge['reward_items']);
+
+      $data['reward_items'] = $this->reward_item_model->get(array('_id' => array( '$in' => $reward_item_ids )));
 
       $achieved_info = array(
         'company_id' => $company_id

@@ -711,8 +711,8 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
-  	$this->unit->run($result['data']['reward_item']['value'] === 54, TRUE, "\$result['data']['reward_item']['value']", $result['data']['reward_item']['value']);
-  	$this->unit->run($result['data']['reward_item']['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
+  	$this->unit->run($result['data']['reward_items'][0]['value'] === 54, TRUE, "\$result['data']['reward_items'][0]['value']", $result['data']['reward_items'][0]['value']);
+  	$this->unit->run($result['data']['reward_items'][0]['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_items'][0]['is_points_reward']", $result['data']['reward_items'][0]['is_points_reward']);
 
   	//User check
   	$this->load->model('user_mongo_model');
@@ -746,7 +746,7 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], FALSE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
-  	$this->unit->run($result['data']['reward_item'] === NULL, TRUE, "\$result['data']['reward_item']", $result['data']['reward_item']);
+  	$this->unit->run($result['data']['reward_items'][0] === NULL, TRUE, "\$result['data']['reward_items'][0]", $result['data']['reward_items'][0]);
 
   	//Fire wrong action_id : nothing happened
   	$params = array(
@@ -760,7 +760,7 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], FALSE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
-  	$this->unit->run($result['data']['reward_item'] === NULL, TRUE, "\$result['data']['reward_item']", $result['data']['reward_item']);
+  	$this->unit->run($result['data']['reward_items'][0] === NULL, TRUE, "\$result['data']['reward_items'][0]", $result['data']['reward_items'][0]);
 
   	//Fire 201 1 time : now completed, got non-point reward
   	$params = array(
@@ -775,8 +775,8 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
-  	$this->unit->run($result['data']['reward_item']['is_points_reward'] === FALSE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
-  	$this->unit->run(get_mongo_id($result['data']['reward_item']) === $this->reward_item_id2, TRUE, "\$result['data']['reward_item']['_id']", get_mongo_id($result['data']['reward_item']));
+  	$this->unit->run($result['data']['reward_items'][0]['is_points_reward'] === FALSE, TRUE, "\$result['data']['reward_items'][0]['is_points_reward']", $result['data']['reward_items'][0]['is_points_reward']);
+  	$this->unit->run(get_mongo_id($result['data']['reward_items'][0]) === $this->reward_item_id2, TRUE, "\$result['data']['reward_items'][0]['_id']", get_mongo_id($result['data']['reward_items'][0]));
 
   	//check audit count
 	  $this->load->library('audit_lib');
@@ -814,8 +814,8 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
-  	$this->unit->run($result['data']['reward_item']['value'] === 54, TRUE, "\$result['data']['reward_item']['value']", $result['data']['reward_item']['value']);
-  	$this->unit->run($result['data']['reward_item']['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_item']['is_points_reward']", $result['data']['reward_item']['is_points_reward']);
+  	$this->unit->run($result['data']['reward_items'][0]['value'] === 54, TRUE, "\$result['data']['reward_items'][0]['value']", $result['data']['reward_items'][0]['value']);
+  	$this->unit->run($result['data']['reward_items'][0]['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_items'][0]['is_points_reward']", $result['data']['reward_items'][0]['is_points_reward']);
 
   	//check audit count
 	  $this->load->library('audit_lib');
