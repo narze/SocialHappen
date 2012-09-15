@@ -909,8 +909,8 @@ class Apiv4_test extends CI_Controller {
   	$params = array();
 
   	$result = $this->get($method, $params);
-  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
-  	$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'] === 'User invalid', TRUE, "\$result['data']", $result['data']);
 
   	$params = array(
   		'user_id' => $this->user_id,
@@ -987,6 +987,18 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data'][1]['_id'] === $this->challenge_id4, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
   	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id5, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
   	$this->unit->run($result['data'][0]['is_out_of_stock'], TRUE, "\$result['data'][0]['is_out_of_stock']", $result['data'][0]['is_out_of_stock']);
+  }
+
+  function badges_get_test() {
+  	$method = 'badges';
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['success']['data']) === 0, TRUE, "count(\$result['success']['data'])", count($result['success']['data']));
   }
 }
 /* End of file apiv4_test.php */

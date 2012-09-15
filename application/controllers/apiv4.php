@@ -783,7 +783,7 @@ class Apiv4 extends REST_Controller {
 
       $coupons = $this->coupon_model->get_by_user($user_id);
     } else {
-      $coupons = $this->coupon_model->get();
+      return $this->error('User invalid');
     }
 
     $coupons = array_map(function($coupon){
@@ -792,5 +792,36 @@ class Apiv4 extends REST_Controller {
     }, $coupons);
 
     return $this->_success($coupons);
+  }
+
+  /**
+   * Get badges (achievements)
+   * @method GET
+   * @params [user_id, token]
+   */
+  function badges_get() {
+    $user_id = (int) $this->get('user_id');
+    $token = $this->get('token');
+
+    $this->load->model('coupon_model');
+    if($user_id && $token) {
+      if(!$this->_check_token($user_id, $token)) {
+        return $this->error('Token invalid');
+      }
+
+      $coupons = $this->coupon_model->get_by_user($user_id);
+    } else {
+      return $this->error('User invalid');
+    }
+
+    $this->load->library('achievement_lib');
+    $achievements = $this->achievement_lib->list_user_achieved_by_user_id($user_id);
+
+    $achievements = array_map(function($achievement){
+      $achievement['_id'] = '' . $achievement['_id'];
+      return $achievement;
+    }, $achievements);
+
+    return $this->_success($achievements);
   }
 }
