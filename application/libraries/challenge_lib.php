@@ -825,6 +825,13 @@ class Challenge_lib {
 
     $challenges = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
 
+    $this->CI->load->model('company_model');
+
+    // get company profile to show in map, do we need company image ?
+    for ($i=0; $i < count($challenges); $i++) {
+      $company = $this->CI->company_model->get_company_profile_by_company_id($challenges[$i]['company_id']);
+      // $challenges[$i]['company'] = $company;
+    }
     return $challenges;
   }
 }
