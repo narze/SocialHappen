@@ -8,6 +8,10 @@ class QR extends CI_Controller {
 	}
 
   function index() {
+    //redirect to app store
+    show_error('Redirecting to app store');
+    return;
+
     $this->go($this->input->get('code'));
   }
 
