@@ -481,9 +481,9 @@ class Apiv4_test extends CI_Controller {
 	      )
 	    ),
 	    'repeat' => 1,
-	    'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))),
+	    'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))), //54 points
 	    'location' => array(-0.003, 0.001),
-	    'done_count_max' => 1
+	    'done_count_max' => 54 //can play 1 time
 	  );
 
 	  $this->load->library('challenge_lib');
@@ -956,7 +956,7 @@ class Apiv4_test extends CI_Controller {
 	  $result = $this->audit_lib->list_recent_audit(50);
 	  $this->unit->run(count($result), 8 + 2, "count(\$result)", count($result));
 
-	  //do_action in tomorrow : cannot do action which done_count >= max_done_count
+	  //do_action in tomorrow : cannot do action which done_count >= done_count_max
 	  $params = array(
 	  	'user_id' => $this->user_id,
 	  	'token' => $this->token2,
@@ -999,6 +999,19 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->get($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run(count($result['success']['data']) === 0, TRUE, "count(\$result['success']['data'])", count($result['success']['data']));
+  }
+
+  function profile_get_test() {
+  	$method = 'profile';
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['user_id'] == $this->user_id, TRUE, "\$result['data']['user_id']", $result['data']['user_id']);
+  	$this->unit->run($result['data']['points'] === 54 * 3, TRUE, "\$result['data']['points']", $result['data']['points']);
   }
 }
 /* End of file apiv4_test.php */

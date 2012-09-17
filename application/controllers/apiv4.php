@@ -20,16 +20,13 @@ class Apiv4 extends REST_Controller {
   /**
    * Helper functions
    */
-  function _error($error_message = NULL, $code = 0) {
-    echo json_encode(array('success' => FALSE, 'data' => $error_message, 'code' => $code));
-    return FALSE;
-  }
+
   function error($error_message = NULL, $code = 0) {
     echo json_encode(array('success' => FALSE, 'data' => $error_message, 'code' => $code));
     return FALSE;
   }
 
-  function _success($data = array(), $code = 1) {
+  function success($data = array(), $code = 1) {
     echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code));
     return TRUE;
   }
@@ -47,7 +44,7 @@ class Apiv4 extends REST_Controller {
     $facebook_user_id = $this->get('facebook_user_id');
 
     if(!$facebook_user_id) {
-      return $this->_error('undefined facebook_user_id');
+      return $this->error('undefined facebook_user_id');
     }
 
     //check facebook_user_id in user model
@@ -55,10 +52,10 @@ class Apiv4 extends REST_Controller {
     $user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user_id);
 
     if(!$user) {
-      return $this->_error('user not found');
+      return $this->error('user not found');
     }
 
-    return $this->_success($user);
+    return $this->success($user);
   }
 
   /**
@@ -80,21 +77,21 @@ class Apiv4 extends REST_Controller {
     $facebook_user_image = $this->post('facebook_user_image');
 
     if(!$email || !$password) {
-      return $this->_error('No email and/or password');
+      return $this->error('No email and/or password');
     }
 
     if(!$facebook_user_id) {
-      return $this->_error('Please connect facebook before signing up');
+      return $this->error('Please connect facebook before signing up');
     }
 
     $this->load->model('user_model');
 
     if($this->user_model->findOne(array('user_email' => $email))) {
-      return $this->_error('Email already used');
+      return $this->error('Email already used');
     }
 
     if($this->user_model->findOne(array('user_facebook_id' => $facebook_user_id))) {
-      return $this->_error('Facebook account already used');
+      return $this->error('Facebook account already used');
     }
 
     $presalt = 'tH!s!$Pr3Za|t';
@@ -111,7 +108,7 @@ class Apiv4 extends REST_Controller {
     );
 
     if(!$user_id = $this->user_model->add_user($user)) {
-      return $this->_error('Add user failed');
+      return $this->error('Add user failed');
     }
 
     //Generate token & add into user's mongo model
@@ -122,10 +119,10 @@ class Apiv4 extends REST_Controller {
     );
     $this->load->model('user_mongo_model');
     if(!$this->user_mongo_model->add($user_mongo)) {
-      return $this->_error('Add user failed');
+      return $this->error('Add user failed');
     }
 
-    return $this->_success(array('user_id' => $user_id, 'token' => $token));
+    return $this->success(array('user_id' => $user_id, 'token' => $token));
   }
 
   /**
@@ -144,14 +141,14 @@ class Apiv4 extends REST_Controller {
     $email = $this->post('email');
     $password = $this->post('password');
 
-    $signin_success = FALSE;
+    $signinsuccess = FALSE;
 
     if($type === 'facebook') {
 
       if($user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user_id)) {
-        $signin_success = TRUE;
+        $signinsuccess = TRUE;
       } else {
-        return $this->_error('Your facebook id are not a SocialHappen user');
+        return $this->error('Your facebook id are not a SocialHappen user');
       }
 
     } else if($type === 'email') {
@@ -161,16 +158,16 @@ class Apiv4 extends REST_Controller {
       $encrypted_password = sha1($presalt.$password.$postsalt);
 
       if($user = $this->user_model->passwordMatch(array('user_email' => $email), $encrypted_password)) {
-        $signin_success = TRUE;
+        $signinsuccess = TRUE;
       } else {
-        return $this->_error('Wrong email and password combination');
+        return $this->error('Wrong email and password combination');
       }
 
     } else {
-      return $this->_error('Wrong type');
+      return $this->error('Wrong type');
     }
 
-    if($signin_success) {
+    if($signinsuccess) {
       //Generate token & add into user's mongo model
       $token = md5(uniqid(mt_rand(), true)); //32 chars
       $user_id = $user['user_id'];
@@ -180,13 +177,13 @@ class Apiv4 extends REST_Controller {
       $criteria = array('user_id' => $user_id);
       $this->load->model('user_mongo_model');
       if(!$this->user_mongo_model->upsert($criteria, $user_mongo_update)) {
-        return $this->_error('Update token failed');
+        return $this->error('Update token failed');
       }
 
-      return $this->_success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
+      return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
     }
 
-    return $this->_error('Sign in failed');
+    return $this->error('Sign in failed');
   }
 
   /**
@@ -203,10 +200,10 @@ class Apiv4 extends REST_Controller {
 
     $this->load->model('user_mongo_model');
     if($this->user_mongo_model->update($criteria, $update)) {
-      return $this->_success('Signout successful');
+      return $this->success('Signout successful');
     }
 
-    return $this->_error('Sign out failed');
+    return $this->error('Sign out failed');
   }
 
   /**
@@ -217,7 +214,7 @@ class Apiv4 extends REST_Controller {
   function companies_get() {
     $this->load->model('company_model');
 
-    return $this->_success($this->company_model->get_all());
+    return $this->success($this->company_model->get_all());
   }
 
   /**
@@ -228,7 +225,7 @@ class Apiv4 extends REST_Controller {
   function rewards_get() {
     $this->load->model('reward_item_model');
 
-    return $this->_success($this->reward_item_model->get(
+    return $this->success($this->reward_item_model->get(
       array(
         'status' => 'published',
         'type' => 'redeem'
@@ -309,13 +306,13 @@ class Apiv4 extends REST_Controller {
     }
 
     if($challenges === FALSE) {
-      return $this->_error('API error');
+      return $this->error('API error');
     } else {
       $challenges = array_map(function($challenge){
         $challenge['_id'] = '' . $challenge['_id'];
         return $challenge;
       }, $challenges);
-      return $this->_success($challenges);
+      return $this->success($challenges);
     }
   }
 
@@ -333,10 +330,10 @@ class Apiv4 extends REST_Controller {
     $token = $this->get('token');
 
     if($this->_check_token($user_id, $token)) {
-      return $this->_success(array());
+      return $this->success(array());
     }
 
-    return $this->_error('Token invalid');
+    return $this->error('Token invalid');
   }
 
   function _check_token($user_id = NULL, $token = NULL) {
@@ -516,7 +513,7 @@ class Apiv4 extends REST_Controller {
         $user_id,
         $user_data
         )){
-        show_error('Invalid Data');
+        showerror('Invalid Data');
       } else {
         //Add audit & stat
         $audit_data = array(
@@ -754,16 +751,43 @@ class Apiv4 extends REST_Controller {
       }
 
       //9 add done count
+      //Get all challlenge points
+      if(!isset($reward_points)) {
+        $reward_points = 0;
+
+        $reward_item_ids = array_map(function($reward_item) {
+          return new MongoId(get_mongo_id($reward_item));
+        }, $challenge['reward_items']);
+
+        $this->load->model('reward_item_model');
+        $reward_items = $this->reward_item_model->get(array('_id' => array( '$in' => $reward_item_ids )));
+
+        foreach($reward_items as $reward_item) {
+          if(issetor($reward_item['is_points_reward'])) {
+            $reward_points += $reward_item['value'];
+          }
+        }
+      }
+
+      //Add user platform points
+      $user_update = array(
+        '$inc' => array('points' => $reward_points)
+      );
+
+      if(!$this->user_mongo_model->update(array('user_id' => (int) $user_id), $user_update)) {
+        return $this->error('Update user failed');
+      }
+
       $this->load->model('challenge_model');
       $challenge_update_result = $this->challenge_model->update(array('_id' => new MongoId($challenge_id)), array(
-        '$inc' => array('done_count' => 1)
+        '$inc' => array('done_count' => $reward_points)
       ));
       if(!$challenge_update_result) {
         return $this->error('increment done count failed');
       }
     }
 
-    return $this->_success($data);
+    return $this->success($data);
   }
 
   /**
@@ -791,7 +815,7 @@ class Apiv4 extends REST_Controller {
       return $coupon;
     }, $coupons);
 
-    return $this->_success($coupons);
+    return $this->success($coupons);
   }
 
   /**
@@ -822,6 +846,36 @@ class Apiv4 extends REST_Controller {
       return $achievement;
     }, $achievements);
 
-    return $this->_success($achievements);
+    return $this->success($achievements);
+  }
+
+  /**
+   * Get user's profile
+   * @method GET
+   * @params [user_id, token]
+   */
+  function profile_get() {
+    $user_id = (int) $this->get('user_id');
+    $token = $this->get('token');
+
+    $this->load->model('user_model');
+    if($user_id && $token) {
+      if(!$this->_check_token($user_id, $token)) {
+        return $this->error('Token invalid');
+      }
+
+      if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
+        return $this->error('User invalid');
+      }
+
+      //get user points
+      $this->load->model('user_mongo_model');
+      $user_mongo = $this->user_mongo_model->get_user($user_id);
+      $user['points'] = issetor($user_mongo['points'], 0);
+
+      return $this->success($user);
+    } else {
+      return $this->error('User invalid');
+    }
   }
 }
