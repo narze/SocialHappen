@@ -691,6 +691,14 @@ class Apiv4_test extends CI_Controller {
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']), 1, "count(\$result['data'])", count($result['data']));
+
+		$params = array(
+			'reward_item_id' => $this->reward_item_id
+		);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']), 1, "count(\$result['data'])", count($result['data']));
 	}
 
 	/**********************

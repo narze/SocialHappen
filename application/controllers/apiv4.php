@@ -232,14 +232,29 @@ class Apiv4 extends REST_Controller {
    * @params -
    */
   function rewards_get() {
+    $reward_item_id = $this->get('reward_item_id');
+
+    $query = array(
+      'status' => 'published',
+      'type' => 'redeem'
+    );
+
+    if($reward_item_id) {
+      $query = array(
+        '_id' => new MongoId($reward_item_id)
+      );
+    }
+
     $this->load->model('reward_item_model');
 
-    return $this->success($this->reward_item_model->get(
-      array(
-        'status' => 'published',
-        'type' => 'redeem'
-      )
-    ));
+    $rewards = $this->reward_item_model->get($query);
+
+    $rewards = array_map(function($reward){
+      $reward['_id'] = '' . $reward['_id'];
+      return $reward;
+    }, $rewards);
+
+    return $this->success($rewards);
   }
 
   /**
