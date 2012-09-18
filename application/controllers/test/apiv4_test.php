@@ -320,6 +320,25 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result)", count($result['data']));
 		$this->unit->run($result['data'][0]['company_id'] == 1, TRUE, "\$result['data'][0]['company_id']", $result['data'][0]['company_id']);
+
+		$params = array(
+			'company_id' => 1
+		);
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result)", count($result['data']));
+		$this->unit->run($result['data'][0]['company_id'] == 1, TRUE, "\$result['data'][0]['company_id']", $result['data'][0]['company_id']);
+
+		$params = array(
+			'company_id' => 55
+		);
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		$this->unit->run($result['data'], 'is_string', "\$result['data']", $result['data']);
 	}
 
 	function _add_company_challenges_test() {
@@ -1012,6 +1031,8 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['user_id'] == $this->user_id, TRUE, "\$result['data']['user_id']", $result['data']['user_id']);
   	$this->unit->run($result['data']['points'] === 54 * 3, TRUE, "\$result['data']['points']", $result['data']['points']);
+  	$this->unit->run($result['data']['challenge_completed'], 'is_array', "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+  	$this->unit->run($result['data']['daily_challenge_completed'], 'is_array', "\$result['data']['daily_challenge_completed']", $result['data']['daily_challenge_completed']);
   }
 }
 /* End of file apiv4_test.php */

@@ -212,7 +212,16 @@ class Apiv4 extends REST_Controller {
    * @params -
    */
   function companies_get() {
+    $company_id = $this->get('company_id');
+
     $this->load->model('company_model');
+
+    if($company_id) {
+      if($company = $this->company_model->get_company_profile_by_company_id($company_id)) {
+        return $this->success(array($company));
+      }
+      return $this->error('Invalid company');
+    }
 
     return $this->success($this->company_model->get_all());
   }
@@ -872,6 +881,8 @@ class Apiv4 extends REST_Controller {
       $this->load->model('user_mongo_model');
       $user_mongo = $this->user_mongo_model->get_user($user_id);
       $user['points'] = issetor($user_mongo['points'], 0);
+      $user['challenge_completed'] = issetor($user_mongo['challenge_completed'], array());
+      $user['daily_challenge_completed'] = issetor($user_mongo['daily_challenge_completed'], array());
 
       return $this->success($user);
     } else {
