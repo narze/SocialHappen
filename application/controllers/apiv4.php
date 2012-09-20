@@ -1015,4 +1015,64 @@ class Apiv4 extends REST_Controller {
     );
     return $this->success($result);
   }
+
+  /**
+   * Get cards (coupon's challenge, sort by company)
+   * @method GET
+   * @params [user_id, token]
+   */
+  function cards_get() {
+    $user_id = (int) $this->get('user_id');
+    $token = $this->get('token');
+
+    $this->load->model('user_mongo_model');
+    if(!$user_id || !$token) {
+      return $this->error('User invalid');
+    }
+
+    if(!$this->_check_token($user_id, $token)) {
+      return $this->error('Token invalid');
+    }
+
+    if(!$user = $this->user_mongo_model->get_user($user_id)) {
+      return $this->error('User invalid');
+    }
+
+    $this->load->model('coupon_model');
+    $coupons = $this->coupon_model->get(array('user_id' => $user_id, 'company_id' => array('$ne' => 0) ));
+    $coupons = array_map(function($coupon){
+      if(!$coupon['challenge_id']) {
+        return FALSE; // coupons without challenge will be filtered
+      }
+      $coupon['_id'] = get_mongo_id($coupon);
+      return $coupon;
+    }, $coupons);
+
+    $coupons = array_filter($coupons);
+
+    $challenge_ids = array_map(function($coupon){
+      return new MongoId($coupon['challenge_id']);
+    }, $coupons);
+
+    $this->load->model('challenge_model');
+    $challenges = $this->challenge_model->get(array('_id' => array('$in' => $challenge_ids)));
+
+    foreach($coupons as $key => &$coupon) {
+      foreach($challenges as $challenge) {
+        $challenge_id = get_mongo_id($challenge);
+        if($coupon['challenge_id'] === $challenge_id) {
+          $challenge['_id'] = $challenge_id;
+          $coupon['challenge'] = $challenge;
+          break;
+        }
+      }
+      if(!isset($coupon['challenge'])) {
+        unset($coupons[$key]); // sometimes challenge does not exist even challenge_id is present
+      }
+    }
+
+    $coupons = array_values($coupons); //reindex
+
+    return $this->success($coupons);
+  }
 }

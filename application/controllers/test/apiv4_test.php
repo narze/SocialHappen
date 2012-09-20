@@ -1145,6 +1145,27 @@ class Apiv4_test extends CI_Controller {
   	// reward_item_2 : 2
   	// reward_item_3 : 1
   }
+
+  function cards_get_test() {
+  	$method = 'cards';
+
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+  	//1 from company 1, 3 from company 2
+  	$this->unit->run(count($result['data']) === 4, TRUE, "count(\$result['data'])", count($result['data']));
+
+  	// check card's challenge
+  	$this->unit->run($result['data'][0]['challenge']['_id'], 'is_string', "\$result['data'][0]['challenge']['_id']", $result['data'][0]['challenge']['_id']);
+  	$this->unit->run($result['data'][1]['challenge']['_id'], 'is_string', "\$result['data'][1]['challenge']['_id']", $result['data'][1]['challenge']['_id']);
+  	$this->unit->run($result['data'][2]['challenge']['_id'], 'is_string', "\$result['data'][2]['challenge']['_id']", $result['data'][2]['challenge']['_id']);
+  	$this->unit->run($result['data'][3]['challenge']['_id'], 'is_string', "\$result['data'][3]['challenge']['_id']", $result['data'][3]['challenge']['_id']);
+  }
 }
 /* End of file apiv4_test.php */
 /* Location: ./application/controllers/test/apiv4_test.php */
