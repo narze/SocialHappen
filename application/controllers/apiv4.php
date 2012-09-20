@@ -883,25 +883,136 @@ class Apiv4 extends REST_Controller {
     $token = $this->get('token');
 
     $this->load->model('user_model');
-    if($user_id && $token) {
-      if(!$this->_check_token($user_id, $token)) {
-        return $this->error('Token invalid');
-      }
-
-      if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
-        return $this->error('User invalid');
-      }
-
-      //get user points
-      $this->load->model('user_mongo_model');
-      $user_mongo = $this->user_mongo_model->get_user($user_id);
-      $user['points'] = issetor($user_mongo['points'], 0);
-      $user['challenge_completed'] = issetor($user_mongo['challenge_completed'], array());
-      $user['daily_challenge_completed'] = issetor($user_mongo['daily_challenge_completed'], array());
-
-      return $this->success($user);
-    } else {
+    if(!$user_id || !$token) {
       return $this->error('User invalid');
     }
+
+    if(!$this->_check_token($user_id, $token)) {
+      return $this->error('Token invalid');
+    }
+
+    if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
+      return $this->error('User invalid');
+    }
+
+    //get user points
+    $this->load->model('user_mongo_model');
+    $user_mongo = $this->user_mongo_model->get_user($user_id);
+    $user['points'] = issetor($user_mongo['points'], 0);
+    $user['challenge_completed'] = issetor($user_mongo['challenge_completed'], array());
+    $user['daily_challenge_completed'] = issetor($user_mongo['daily_challenge_completed'], array());
+
+    return $this->success($user);
+  }
+
+  /**
+   * Redeem reward
+   * @method POST
+   * @params [user_id, token, reward_item_id]
+   */
+  function redeem_reward_post() {
+    $user_id = (int) $this->post('user_id');
+    $token = $this->post('token');
+    $reward_item_id = $this->post('reward_item_id');
+
+    $this->load->model('user_mongo_model');
+    if(!$user_id || !$token) {
+      return $this->error('User invalid');
+    }
+
+    if(!$this->_check_token($user_id, $token)) {
+      return $this->error('Token invalid');
+    }
+
+    if(!$user = $this->user_mongo_model->get_user($user_id)) {
+      return $this->error('User invalid');
+    }
+
+    $this->load->model('reward_item_model');
+    if(!$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id)) {
+      return $this->error('Invalid reward');
+    }
+
+    if(!isset($reward_item['redeem'])) {
+      return $this->error('Invalid reward');
+    }
+
+    // published reward only
+    if($reward_item['status'] !== 'published') {
+      return $this->error('Invalid reward', 0);
+    }
+
+    // redeemable once and redeemed already
+    $this->load->library('coupon_lib');
+    if($reward_item['redeem']['once']) {
+      if($this->coupon_lib->get_one(array('reward_item_id' => $reward_item_id, 'user_id' => $user_id))) {
+        return $this->error('You have already redeemed this reward', 1);
+      }
+    }
+
+    if(isset($reward_item['redeem']['amount_redeemed']) && ($reward_item['redeem']['amount_redeemed'] === $reward_item['redeem']['amount'])) {
+      return $this->error('Reward out of stock', 2);
+    }
+
+    // remaining points
+    if($user['points'] < $reward_item['redeem']['point']) {
+      return $this->error('Insufficient point', 3);
+    }
+
+    // decrement point
+    $decrement_point = array(
+      '$inc' => array('points' => - abs($reward_item['redeem']['point']))
+    );
+    if(!$this->user_mongo_model->update(array('user_id' => $user_id), $decrement_point)) {
+      return $this->error('Unexpected error', 4);
+    }
+
+    // increment amount_redeemed, and decrement (deprecated) amount_remain too
+    $reward_update = array(
+      'type' => 'redeem',
+      'redeem' => array(
+        'point' => $reward_item['redeem']['point'],
+        'amount' => $reward_item['redeem']['amount'],
+        'amount_remain' => $reward_item['redeem']['amount_remain'] - 1,
+        'amount_redeemed' => isset($reward_item['redeem']['amount_redeemed']) ? $reward_item['redeem']['amount_redeemed'] + 1 : 1,
+        'once' => $reward_item['redeem']['once']
+      )
+    );
+    if(!$this->reward_item_model->update($reward_item_id, $reward_update)) {
+      return $this->error('Unexpected error', 5);
+    }
+
+    // add action
+    $this->load->library('audit_lib');
+    if(!$audit_add_result = $this->audit_lib->audit_add(array(
+      'app_id' => 0,
+      'action_id' =>
+        $this->socialhappen->get_k('audit_action', 'User Receive Coupon'),
+      'object' => $reward_item['name'],
+      'objecti' => $reward_item_id,
+      'user_id' => $user_id,
+      'company_id' => 0,
+      'image' => $reward_item['image']
+    ))) {
+      return $this->error('Unexpected error', 6);
+    }
+
+    // give coupon for the reward
+    $coupon = array(
+      'reward_item_id' => $reward_item_id,
+      'reward_item' => $reward_item,
+      'user_id' => $user_id,
+      'company_id' => 0,
+    );
+    if(!$coupon_id = $this->coupon_lib->create_coupon($coupon)) {
+      return $this->error('Unexpected error', 7);
+    }
+
+    $result = array(
+      'coupon_id' => $coupon_id,
+      'coupon' => $coupon,
+      'points_remain' => $user['points'] - $reward_item['redeem']['point']
+    );
+    return $this->success($result);
   }
 }

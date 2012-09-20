@@ -645,7 +645,7 @@ class Apiv4_test extends CI_Controller {
 		$company_id = 1;
 		$redeem = array(
 			'point' => 20,
-			'amount' => 5,
+			'amount' => 1,
 			'once' => 1
 		);
 		$start_timestamp = time() - 3600;
@@ -667,8 +667,8 @@ class Apiv4_test extends CI_Controller {
 		$company_id = 1;
 		$redeem = array(
 			'point' => 20,
-			'amount' => 5,
-			'once' => 1
+			'amount' => 2,
+			'once' => 0
 		);
 		$start_timestamp = time() - 3600;
 		$end_timestamp = time() + 7200;
@@ -681,6 +681,28 @@ class Apiv4_test extends CI_Controller {
 
 		$this->reward_item_2 = $result = $this->reward_item_model->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		//Published reward
+		$name = 'name' . '3';
+		$status = 'published';
+		$type = 'redeem';
+		$company_id = 1;
+		$redeem = array(
+			'point' => 100,
+			'amount' => 2,
+			'once' => 0
+		);
+		$start_timestamp = time() - 3600;
+		$end_timestamp = time() + 7200;
+		$criteria_type = 'company';
+		$criteria_id = 1;
+		$image = base_url().'assets/images/cam-icon.png';
+		$value = '200';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id');
+
+		$this->reward_item_3 = $result = $this->reward_item_model->add($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
 	}
 
 	function rewards_get_test() {
@@ -690,10 +712,10 @@ class Apiv4_test extends CI_Controller {
 
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
-		$this->unit->run(count($result['data']), 1, "count(\$result['data'])", count($result['data']));
+		$this->unit->run(count($result['data']), 2, "count(\$result['data'])", count($result['data']));
 
 		$params = array(
-			'reward_item_id' => $this->reward_item_id
+			'reward_item_id' => $this->reward_item_1
 		);
 
 		$result = $this->get($method, $params);
@@ -1041,6 +1063,87 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['points'] === 54 * 3, TRUE, "\$result['data']['points']", $result['data']['points']);
   	$this->unit->run($result['data']['challenge_completed'], 'is_array', "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
   	$this->unit->run($result['data']['daily_challenge_completed'], 'is_array', "\$result['data']['daily_challenge_completed']", $result['data']['daily_challenge_completed']);
+  }
+
+  function redeem_reward_post_test() {
+  	$method = 'redeem_reward';
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'reward_item_id' => $this->reward_item_1
+  	);
+
+  	// fail : unpublished reward
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'], 'is_string', "\$result['data']", $result['data']);
+  	$this->unit->run($result['code'], 0, "\$result['code']", $result['code']);
+
+  	// edit reward to published
+  	$this->load->model('reward_item_model');
+  	$result = $this->reward_item_model->update($this->reward_item_1, array('status' => 'published'));
+  	$this->unit->run($result, TRUE, "\$result", $result);
+
+  	// first redeem : success
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['coupon_id'], 'is_string', "\$result['data']['coupon_id']", $result['data']['coupon_id']);
+  	$this->unit->run($result['data']['points_remain'] === 54 * 3 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
+
+  	// redeem again : fail (that reward can be redeemed once)
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'], 'is_string', "\$result['data']", $result['data']);
+  	$this->unit->run($result['code'], 1, "\$result['code']", $result['code']);
+
+  	// redeem another reward
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'reward_item_id' => $this->reward_item_2
+  	);
+
+  	// success
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['coupon_id'], 'is_string', "\$result['data']['coupon_id']", $result['data']['coupon_id']);
+  	$this->unit->run($result['data']['points_remain'] === 54 * 3 - 20 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
+
+  	// success : this reward can redeem more than one time
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['coupon_id'], 'is_string', "\$result['data']['coupon_id']", $result['data']['coupon_id']);
+  	$this->unit->run($result['data']['points_remain'] === 54 * 3 - 20 - 20 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
+
+  	// fail : reward out of stock
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'], 'is_string', "\$result['data']", $result['data']);
+  	$this->unit->run($result['code'], 2, "\$result['code']", $result['code']);
+
+  	// redeem another reward
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'reward_item_id' => $this->reward_item_3
+  	);
+
+  	// success
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['coupon_id'], 'is_string', "\$result['data']['coupon_id']", $result['data']['coupon_id']);
+  	$this->unit->run($result['data']['points_remain'] === 54 * 3 - 20 - 20 - 20 - 100, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
+
+  	// fail : insufficient point (use 100, remaining 2)
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'], 'is_string', "\$result['data']", $result['data']);
+  	$this->unit->run($result['code'], 3, "\$result['code']", $result['code']);
+
+  	// user should have coupons of...
+  	// reward_item_1 : 1
+  	// reward_item_2 : 2
+  	// reward_item_3 : 1
   }
 }
 /* End of file apiv4_test.php */

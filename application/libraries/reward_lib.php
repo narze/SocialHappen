@@ -273,6 +273,7 @@ class Reward_lib
 		//Check if redeemable once and redeemed already
 		if($reward_item['redeem']['once']) {
 			$this->CI->load->model('user_mongo_model');
+			$user = $this->CI->user_mongo_model->get_user($user_id);
 			if(isset($user['reward_items']) && in_array($reward_item_id, $user['reward_items'])) {
 				return array('success' => FALSE, 'data' => 'You have already redeemed this reward.');
 			}

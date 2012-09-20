@@ -226,6 +226,7 @@
 				}
 				$update['$set'][$type]['once'] = !!$input[$type]['once'];
 				$update['$set'][$type]['amount_remain'] = (int) $input[$type]['amount_remain'];
+				$update['$set'][$type]['amount_redeemed'] = isset($input[$type]['amount_redeemed']) ? (int) $input[$type]['amount_redeemed'] : 0	;
 				$update['$unset'] = array('random' => 1, 'top_score' => 1);
 			} else if ($type === 'random'){
 				if(!isset($input['random']['amount'])){
