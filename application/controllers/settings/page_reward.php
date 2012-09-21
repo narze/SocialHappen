@@ -6,7 +6,7 @@ class Page_reward extends CI_Controller {
 		parent::__construct();
 		$this->socialhappen->check_logged_in();
 	}
-	
+
 	function index($page_id = NULL){
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			exit('You are not admin');
@@ -20,13 +20,13 @@ class Page_reward extends CI_Controller {
 		if(!$this->socialhappen->check_admin(array('page_id' => $page_id),array('role_page_edit','role_all_company_pages_edit'))){
 			//no access
 		} else {
-			
+
 			$sort_criteria = array('start_timestamp' => -1);
 			$user = $this->socialhappen->get_user();
 			$this->load->library('timezone_lib');
 			$this->load->library('reward_lib');
 			$now = time();
-		
+
 			$this->load->model('page_model');
 			$page = $this->page_model->get_page_profile_by_page_id($page_id);
 			$company_id = $page['company_id'];
@@ -50,7 +50,7 @@ class Page_reward extends CI_Controller {
 			}
 
 			foreach($reward_items as &$reward_item){
-				
+
 				$start_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $user['user_timezone_offset']);
 				$end_time = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $user['user_timezone_offset']);
 
@@ -92,7 +92,7 @@ class Page_reward extends CI_Controller {
 			$this->form_validation->set_error_delimiters('<br /><span class="error">', '</span>');
 
 			if ($this->form_validation->run() == FALSE){
-			
+
 			} else {
 				$terms_and_conditions = set_value('terms_and_conditions');
 				if($result = $this->app_component_page->set_terms_and_conditions($page_id, $terms_and_conditions)){
@@ -112,21 +112,21 @@ class Page_reward extends CI_Controller {
 			echo json_encode($return);
 		} else {
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('point', 'Required Point', 'required|trim|xss_clean|is_numeric|max_length[10]');			
+			$this->form_validation->set_rules('point', 'Required Point', 'required|trim|xss_clean|is_numeric|max_length[10]');
 			$this->form_validation->set_rules('amount', 'Quantity', 'required|trim|xss_clean|is_numeric|max_length[10]');
-			$this->form_validation->set_rules('name', 'Reward Name', 'required|trim|xss_clean|max_length[255]');			
-			$this->form_validation->set_rules('start_date', 'Start date', 'required|trim|xss_clean|max_length[20]');			
-			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');			
-			$this->form_validation->set_rules('status', 'Status', 'required|trim|xss_clean|max_length[10]');			
+			$this->form_validation->set_rules('name', 'Reward Name', 'required|trim|xss_clean|max_length[255]');
+			$this->form_validation->set_rules('start_date', 'Start date', 'required|trim|xss_clean|max_length[20]');
+			$this->form_validation->set_rules('end_date', 'End date', 'required|trim|xss_clean|max_length[20]');
+			$this->form_validation->set_rules('status', 'Status', 'required|trim|xss_clean|max_length[10]');
 			$this->form_validation->set_rules('redeem_once', 'Type', 'trim|xss_clean');
 			// $this->form_validation->set_rules('type', 'Type', 'required|trim|xss_clean|max_length[10]');
 
 			$this->form_validation->set_rules('value', 'Value', 'required|trim|xss_clean|max_length[30]');
 
 			$this->form_validation->set_rules('description', 'Reward Description', 'trim|xss_clean');
-				
+
 			$this->form_validation->set_error_delimiters('<li class="error">', '</li>');
-		
+
 			$this->load->vars(array(
 				'page_id' => $page_id
 			));
@@ -151,7 +151,7 @@ class Page_reward extends CI_Controller {
 			$this->load->vars(array('reward_currency' => $reward_currency));
 
 			if ($this->form_validation->run() == FALSE)
-			{	
+			{
 				if($update){
 
 					$user = $this->socialhappen->get_user();
@@ -175,7 +175,7 @@ class Page_reward extends CI_Controller {
 				$this->load->library('timezone_lib');
 				$start_timestamp = $this->timezone_lib->unconvert_time(set_value('start_date'), $user['user_timezone_offset']);
 				$end_timestamp = $this->timezone_lib->unconvert_time(set_value('end_date'), $user['user_timezone_offset']);
-				
+
 				$input = array(
 			       	'name' => set_value('name'),
 			       	'start_timestamp' => strtotime($start_timestamp),
@@ -199,14 +199,13 @@ class Page_reward extends CI_Controller {
 
 					$input['image'] = $this->socialhappen->replace_image('image', $exist_reward_item['image']);
 					if($input['image'] == '') unset($input['image']);
-					$input['redeem']['amount_remain'] = issetor($reward_item['redeem']['amount_remain'], $reward_item['redeem']['amount']);
 
 					$update_result = $this->reward_item_model->update($reward_item_id, $input);
 				} else {
 					$input['image'] = $this->socialhappen->upload_image('image');
 					$reward_item_id = $this->reward_item_model->add($input);
 				}
-			
+
 				if ($reward_item_id)
 				{
 					if($update){
@@ -214,12 +213,12 @@ class Page_reward extends CI_Controller {
 					}
 
 					$reward_item = $this->reward_lib->get_reward_item($reward_item_id);
-					
+
 					$reward_item['start_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['start_timestamp']), $user['user_timezone_offset']);
 					$reward_item['end_date'] = $this->timezone_lib->convert_time(date('Y-m-d H:i:s', $reward_item['end_timestamp']), $user['user_timezone_offset']);
 
 					$this->load->vars(array(
-						'reward_item'=>$reward_item, 
+						'reward_item'=>$reward_item,
 						'reward_item_id'=>$reward_item_id
 						)
 					);

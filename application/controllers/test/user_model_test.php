@@ -12,7 +12,7 @@ class User_model_test extends CI_Controller {
 	function __destruct(){
 		$this->unit->report_with_counter();
 	}
-	
+
 	function index(){
 		$class_methods = get_class_methods($this);
 		foreach ($class_methods as $method) {
@@ -39,7 +39,7 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result['user_last_seen'],'is_string','user_last_seen');
-		$this->unit->run($result['user_facebook_access_token'],'is_string','user_facebook_access_token');
+		$this->unit->run($result['user_facebook_access_token'],'is_null','user_facebook_access_token');
 		$this->unit->run($result['user_is_developer'] == 1, TRUE,'user_is_developer');
 		$this->unit->run($result['user_is_player'] == 0, TRUE,'user_is_player');
 	}
@@ -58,7 +58,7 @@ class User_model_test extends CI_Controller {
 		$result = $this->users->is_company_admin(10,1);
 		$this->unit->run($result,'is_false','is_company_admin(10,1)');
 	}
-	
+
 	/**
 	 * Test add_user() and remove_user()
 	 * @author Manassarn M.
@@ -71,14 +71,14 @@ class User_model_test extends CI_Controller {
 					);
 		$user_id = $this->users->add_user($user);
 		$this->unit->run($user_id,'is_int','add_user()');
-		
+
 		$removed = $this->users->remove_user($user_id);
 		$this->unit->run($removed,'is_true','remove_user()');
-		
+
 		$removed_again = $this->users->remove_user($user_id);
 		$this->unit->run($removed_again,'is_false','remove_user()');
 	}
-	
+
 	/**
 	 * Test get_user_profile_by_user_facebook_id()
 	 * @author Manassarn M.
@@ -96,11 +96,11 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_facebook_id'],'is_string','user_facebook_id');
 		$this->unit->run($result['user_register_date'],'is_string','user_register_date');
 		$this->unit->run($result['user_last_seen'],'is_string','user_last_seen');
-		$this->unit->run($result['user_facebook_access_token'],'is_string','user_facebook_access_token');
+		$this->unit->run($result['user_facebook_access_token'],'is_null','user_facebook_access_token');
 		$this->unit->run($result['user_is_developer'] == 1, TRUE,'user_is_developer');
 		$this->unit->run($result['user_is_player'] == 0, TRUE,'user_is_player');
 	}
-	
+
 	/**
 	 * Test count_users_by_app_install_id()
 	 * @author Manassarn M.
@@ -109,7 +109,7 @@ class User_model_test extends CI_Controller {
 		$result = $this->users->count_users_by_app_install_id(1);
 		$this->unit->run($result,'is_int', 'count_users_by_app_install_id()');
 	}
-	
+
 	/**
 	 * Test count_users_by_campaign_id()
 	 * @author Manassarn M.
@@ -118,7 +118,7 @@ class User_model_test extends CI_Controller {
 		$result = $this->users->count_users_by_campaign_id(1);
 		$this->unit->run($result,'is_int', 'count_users_by_campaign_id()');
 	}
-	
+
 	/**
 	 * Test update_user()
 	 * @author Manassarn M.
@@ -130,10 +130,10 @@ class User_model_test extends CI_Controller {
 		);
 		$result = $this->users->update_user(1,$data);
 		$this->unit->run($result === TRUE,'is_true', 'Updated user_first_name without error');
-		
+
 		$result = $this->users->get_user_profile_by_user_id(1);
 		$this->unit->run($result['user_first_name'] == $new_first_name,'is_true',"Updated user_first_name to {$new_first_name}");
-		
+
 	}
 }
 /* End of file campaign_model_test.php */

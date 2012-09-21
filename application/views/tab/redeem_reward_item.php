@@ -9,7 +9,7 @@
 			</div>
 			<div class="remaining-time abs-b bold tc-blue1"><?php
 				if($reward_item['reward_status']=='soon') { ?>
-				Available in <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['start_timestamp_local']; ?></span><?php } 
+				Available in <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['start_timestamp_local']; ?></span><?php }
 				else { ?>
 				Remaining Time <span class="end-time-countdown tc-grey5 fr"><?php echo $reward_item['end_timestamp_local']; ?></span><?php } ?>
 			</div>
@@ -20,14 +20,14 @@
 				<div class="description"><?php echo nl2br($reward_item['description']);?></div>
 			</li>
 			<li class="box">
-				<p><span class="tc-green6 bold">Quanity: </span><?php echo number_format($reward_item['redeem']['amount_remain']).'/'.number_format($reward_item['redeem']['amount']);?></p>
+				<p><span class="tc-green6 bold">Quanity: </span><?php echo umber_format($reward_item['redeem']['amount'] - $reward_item['redeem']['amount_redeemed']).'/'.number_format($reward_item['redeem']['amount']);?></p>
 				<p><span class="tc-green6 bold">Value: </span><?php echo number_format($reward_item['value']).' '. $reward_currency;?></p>
 			</li>
 			<li class="box">
 				<p><span class="tc-green6 bold">Required point: </span><span class="point fs14"><?php echo number_format($reward_item['redeem']['point']); ?></span></p>
 			</li>
 			<li class="box">
-				<div class="tc-green6 bold">User who got this reward : </div><?php 
+				<div class="tc-green6 bold">User who got this reward : </div><?php
 				if ($reward_item['user_list']) {
 					foreach ($reward_item['user_list'] as $user) { ?>
 					<a href="#<?php echo $user['user_id']; ?>" title="<?php echo $user['user_name']; ?>" class="user-thumb s25 inline-block mb10" style="background-image:url(<?php echo $user['user_image'] ? $user['user_image'] : base_url().'assets/images/default/user.png'; ?>);"></a><?php

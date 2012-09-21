@@ -101,7 +101,7 @@ class Achievement_stat_page_model extends CI_Model {
     if($check_args){
       $criteria = array('page_id' => (int)$page_id, 'user_id' => (int)$user_id);
 
-      $result = $this->update($criteria,
+      $result = $this->upsert($criteria,
         array('$set' => $info));
 
       return $result;

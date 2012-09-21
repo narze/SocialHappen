@@ -13,7 +13,7 @@
  *   	redeem : {
  *   		point : <point used to redeem this item,
  *   		amount : <item amount>,
- *   		amount_remain : <item amount left>, (auto set when add)
+ *   		amount_redeemed : <item amount redeemed>
  *   	},
  *   	random : {
  *   		amount : <amount to random>,
@@ -151,7 +151,7 @@
 			}
 			$input['redeem']['point'] = (int) $input['redeem']['point'];
 			$input['redeem']['amount'] = (int) $input['redeem']['amount'];
-			$input['redeem']['amount_remain'] = $input['redeem']['amount'];
+			$input['redeem']['amount_redeemed'] = 0;
 			$input['redeem']['once'] = (int) issetor($input['redeem']['once']);
 		} else if ($input_type === 'random'){
 			if(!isset($input['random']['amount'])){
@@ -216,17 +216,13 @@
 			$update['$set'][$type] = array();
 			if($type === 'redeem'){
 				if(!isset($input[$type]['point']) || !isset($input[$type]['amount'])
-					|| !isset($input[$type]['amount_remain']) || !isset($input[$type]['once'])){
+					|| !isset($input[$type]['amount_redeemed']) || !isset($input[$type]['once'])){
 					return FALSE;
 				}
 				$update['$set'][$type]['point'] = (int) $input[$type]['point'];
 				$update['$set'][$type]['amount'] = (int) $input[$type]['amount'];
-				if($input[$type]['amount_remain'] > $input[$type]['amount']){
-					$input[$type]['amount_remain'] =  (int) $input[$type]['amount'];
-				}
 				$update['$set'][$type]['once'] = !!$input[$type]['once'];
-				$update['$set'][$type]['amount_remain'] = (int) $input[$type]['amount_remain'];
-				$update['$set'][$type]['amount_redeemed'] = isset($input[$type]['amount_redeemed']) ? (int) $input[$type]['amount_redeemed'] : 0	;
+				$update['$set'][$type]['amount_redeemed'] = isset($input[$type]['amount_redeemed']) ? (int) $input[$type]['amount_redeemed'] : 0;
 				$update['$unset'] = array('random' => 1, 'top_score' => 1);
 			} else if ($type === 'random'){
 				if(!isset($input['random']['amount'])){
@@ -369,7 +365,7 @@
 		}
 		$input['redeem']['point'] = (int) $input['redeem']['point'];
 		$input['redeem']['amount'] = (int) $input['redeem']['amount'];
-		$input['redeem']['amount_remain'] = $input['redeem']['amount'];
+		$input['redeem']['amount_redeemed'] = 0;
 		$input['redeem']['once'] = (int) issetor($input['redeem']['once']);
 
 		if(!isset($input['status']) || !in_array($input['status'], array('draft', 'published', 'cancelled'))){

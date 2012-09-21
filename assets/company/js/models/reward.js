@@ -14,7 +14,7 @@ define([
       redeem: {
         point: 10,
         amount: 10,
-        amount_remain: 10,
+        amount_redeemed: 0,
         once: true
       },
       company_id: window.Company.companyId,

@@ -20,7 +20,7 @@
   <div class="control-group">
     <div class="edit-redeem">
       <p>
-        Quantity: <%= redeem.amount_remain + '/' + redeem.amount %>
+        Quantity: <%= redeem.amount - redeem.amount_redeemed + '/' + redeem.amount %>
       </p>
       <p>
         Require Point: <%= redeem.point %>

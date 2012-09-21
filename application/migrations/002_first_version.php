@@ -54,7 +54,7 @@ class Migration_First_version extends CI_Migration {
 		$null = FALSE;
 		$autoinc = NULL;
 		$unsigned = NULL;
-		
+
 		$fields = array(
 							'app' => array(
 							    'app_id' => field_option('BIGINT', 20, $default, $null, TRUE, TRUE),
@@ -219,7 +219,7 @@ class Migration_First_version extends CI_Migration {
 								'package_price' => field_option('DOUBLE', $constraint, 0, $null, $autoinc, TRUE),
 								'package_custom_badge' => field_option('BOOLEAN', $constraint, 0, $null, $autoinc, $unsigned),
 								'package_duration' => field_option('VARCHAR', 255, $default, $null, $autoinc, $unsigned)
-								
+
 							),
 							'package_users' => array(
 								'package_id' => field_option('BIGINT', 20, $default, $null, $autoinc, TRUE),
@@ -279,16 +279,16 @@ class Migration_First_version extends CI_Migration {
 						'order_items' => array('order_id','item_id', 'item_type_id'),
 						'page_user_data' => array('user_id','page_id')
 					);
-		
+
 		$tables = $this->tables;
-		
+
 		foreach ($tables as $table){
 			$this->dbforge->add_field($fields[$table]);
 			foreach ($keys[$table] as $primary_key){
 				$this->dbforge->add_key($primary_key, TRUE);
 			}
 			if($this->dbforge->create_table($table, TRUE)){
-				echo "Created table : {$table}<br />";	
+				echo "Created table : {$table}<br />";
 			}
 		}
 
@@ -301,7 +301,7 @@ class Migration_First_version extends CI_Migration {
 				'last_activity' => field_option('INT', 10, 0, $null, $autoinc, TRUE),
 				'user_data' => field_option('TEXT', $constraint, $default, $null, $autoinc, $unsigned),
 				'user_id' => field_option('BIGINT', 20, $default, TRUE, $autoinc, TRUE),
-			
+
 			));
 
 			$this->dbforge->create_table('sessions', TRUE);
@@ -309,19 +309,19 @@ class Migration_First_version extends CI_Migration {
 
 		}
 		$this->db->query("CREATE UNIQUE INDEX user_facebook_id ON ".$this->db->dbprefix('user')." (user_facebook_id)");
-		
+
 		echo 'Upgraded to 2<br />';
 	}
 
 	public function down()
 	{
 		$tables = array_map(array($this->db,'dbprefix'), $this->tables);
-		
+
 		foreach ($tables as $table){
 			$table = str_replace($this->db->dbprefix,'',$table);
-			
+
 			if($this->dbforge->drop_table($table, TRUE)){
-				echo "Dropped table : {$table}<br />";	
+				echo "Dropped table : {$table}<br />";
 			}
 		}
 		echo 'Downgraded to 1<br />';

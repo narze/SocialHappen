@@ -301,7 +301,7 @@ class Reward_item_model_test extends CI_Controller {
 		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run($result['user_list'], 'is_array', "\$result['user_list']", $result['user_list']);
-		$this->unit->run($result['redeem']['amount_remain'], $result['redeem']['amount'], "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']);
+		$this->unit->run($result['redeem']['amount_redeemed'] === 0, TRUE, "\$result['redeem']['amount_redeemed']", $result['redeem']['amount_redeemed']);
 		$this->unit->run($result['redeem']['once'], 1, "\$result['redeem']['once']", $result['redeem']['once']);
 		$this->unit->run($result['start_timestamp'], time() + 3600, "\$result['start_timestamp']", $result['start_timestamp']);
 		$this->unit->run($result['end_timestamp'], time() + 7200, "\$result['end_timestamp']", $result['end_timestamp']);
@@ -363,28 +363,28 @@ class Reward_item_model_test extends CI_Controller {
 			'redeem' => array(
 				'amount' => 10,
 				'point' => 30,
-				'amount_remain' => 9,
+				'amount_redeemed' => 9,
 				'once' => 0
 			)
 		);
 		$result = $this->reward_item->update($this->reward_item_1, $input);
 		$this->unit->run($result, TRUE, "\$result", $result);
 		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
-		$this->unit->run($result['redeem']['amount_remain'], 9, "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']); //redeem.amount_remain not specified -> use amount
+		$this->unit->run($result['redeem']['amount_redeemed'], 9, "\$result['redeem']['amount_redeemed']", $result['redeem']['amount_redeemed']); //redeem.amount_redeemed not specified -> use amount
 		$this->unit->run($result['redeem']['once'], 0, "\$result['redeem']['once']", $result['redeem']['once']);
 		$input = array(
 			'type' => redeem,
 			'redeem' => array(
 				'amount' => 5,
 				'point' => 30,
-				'amount_remain' => 9,
+				'amount_redeemed' => 9,
 				'once' => 0
 			)
 		);
 		$result = $this->reward_item->update($this->reward_item_1, $input);
 		$this->unit->run($result, TRUE, "\$result", $result);
 		$result = $this->reward_item->get_by_reward_item_id($this->reward_item_1);
-		$this->unit->run($result['redeem']['amount_remain'], 5, "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']); //redeem.amount_remain > amount -> set to amount
+		$this->unit->run($result['redeem']['amount_redeemed'], 9, "\$result['redeem']['amount_redeemed']", $result['redeem']['amount_redeemed']); //redeem.amount_redeemed > amount -> set to amount
 		$this->unit->run($result['redeem']['once'], 0, "\$result['redeem']['once']", $result['redeem']['once']);
 
 		//FAIL tests

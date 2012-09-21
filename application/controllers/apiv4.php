@@ -967,13 +967,12 @@ class Apiv4 extends REST_Controller {
       return $this->error('Unexpected error', 4);
     }
 
-    // increment amount_redeemed, and decrement (deprecated) amount_remain too
+    // increment amount_redeemed
     $reward_update = array(
       'type' => 'redeem',
       'redeem' => array(
         'point' => $reward_item['redeem']['point'],
         'amount' => $reward_item['redeem']['amount'],
-        'amount_remain' => $reward_item['redeem']['amount_remain'] - 1,
         'amount_redeemed' => isset($reward_item['redeem']['amount_redeemed']) ? $reward_item['redeem']['amount_redeemed'] + 1 : 1,
         'once' => $reward_item['redeem']['once']
       )

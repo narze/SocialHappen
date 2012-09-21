@@ -128,7 +128,8 @@ define([
 
       var redeem = this.model.get('redeem');
 
-      redeem.amount = redeem.amount_remain = amount;
+      redeem.amount = amount;
+      redeem.amount_redeemed = 0;
       redeem.point = point;
       redeem.once = once;
 

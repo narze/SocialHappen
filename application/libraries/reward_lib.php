@@ -110,7 +110,7 @@ class Reward_lib
 		if(!$reward_item){
 			return FALSE;
 		}
-		if($reward_item['redeem']['amount_remain'] == 0){
+		if($reward_item['redeem']['amount_redeemed'] == $reward_item['redeem']['amount']){
 			return FALSE;
 		}
 		foreach($reward_item['user_list'] as $rewarded_user){
@@ -143,7 +143,7 @@ class Reward_lib
 			'redeem' => array(
 				'point' => $reward_item['redeem']['point'],
 				'amount' => $reward_item['redeem']['amount'],
-				'amount_remain' => $reward_item['redeem']['amount_remain'] - 1,
+				'amount_redeemed' => $reward_item['redeem']['amount_redeemed'] + 1,
 				'once' => $reward_item['redeem']['once']
 			)
 		);
@@ -181,7 +181,7 @@ class Reward_lib
 		} else if ($now > $end_time){
 			$reward_status = 'expired';
 		} else if (isset($reward_item['redeem'])
-			&& $reward_item['redeem']['amount_remain'] == 0){
+			&& $reward_item['redeem']['amount_redeemed'] === $reward_item['redeem']['amount']){
 			$reward_status = 'no_more';
 		} else {
 			$reward_status = 'active';
@@ -265,8 +265,8 @@ class Reward_lib
 		}
 
 		//Check if no reward remains
-		if(!isset($reward_item['redeem']['amount_remain'])
-			|| ($reward_item['redeem']['amount_remain'] == 0)) {
+		if(!isset($reward_item['redeem']['amount_redeemed'])
+			|| ($reward_item['redeem']['amount_redeemed'] === $reward_item['redeem']['amount'])) {
 			return array('success' => FALSE, 'data' => 'This reward was used up');
 		}
 
@@ -324,13 +324,13 @@ class Reward_lib
 			return array('success' => FALSE, 'data' => 'Cannot create coupon');
 		}
 
-		//Decrement amount_remain
+		//Increment amount_redeemed
 		$reward_update = array(
 			'type' => 'redeem',
 			'redeem' => array(
 				'point' => $reward_item['redeem']['point'],
 				'amount' => $reward_item['redeem']['amount'],
-				'amount_remain' => $reward_item['redeem']['amount_remain'] - 1,
+				'amount_redeemed' => $reward_item['redeem']['amount_redeemed'] + 1,
 				'once' => $reward_item['redeem']['once']
 			)
 		);

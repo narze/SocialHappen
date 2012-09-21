@@ -53,7 +53,7 @@
     <div class="edit-redeem">
       <h6>Redeem:</h6>
       <p>
-        Quantity: <%= redeem.amount_remain + '/' + redeem.amount %>
+        Quantity: <%= ( redeem.amount - redeem.amount_redeemed ) + '/' + redeem.amount %>
       </p>
       <p>
         Require Point: <%= redeem.point %>
@@ -65,7 +65,7 @@
     <div class="edit-redeem-field hide">
       <h6>Redeem:</h6>
       <p>
-        Quantity: <input type="text" class="reward-amount" value="<%= redeem.amount %>" />
+        Quantity: <%= ( redeem.amount - redeem.amount_redeemed ) %> / <input type="text" class="reward-amount" value="<%= redeem.amount %>" />
       </p>
       <p>
         Require Point: <input type="text" class="reward-point" value="<%= redeem.point %>" />

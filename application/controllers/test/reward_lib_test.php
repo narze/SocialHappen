@@ -132,7 +132,7 @@ class Reward_lib_test extends CI_Controller {
   function _check_reward_amount_test() {
     $reward_item_id = $this->reward_item_id;
     $reward_item = $this->reward_lib->get_reward_item($reward_item_id);
-    $this->unit->run($reward_item['redeem']['amount_remain'], 5-1, "\$reward_item['redeem']['amount_remain']", $reward_item['redeem']['amount_remain']);
+    $this->unit->run($reward_item['redeem']['amount_redeemed'], 0 + 1, "\$reward_item['redeem']['amount_redeemed']", $reward_item['redeem']['amount_redeemed']);
   }
 
   function _get_coupon_test() {

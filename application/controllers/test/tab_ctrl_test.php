@@ -637,7 +637,7 @@ class Tab_ctrl_test extends CI_Controller {
 			'redeem' => array(
 				'point' =>3,
 				'amount' =>4,
-				'amount_remain' =>0,
+				'amount_redeemed' => 4,
 				'once' => 0
 			)
 		);
@@ -649,7 +649,7 @@ class Tab_ctrl_test extends CI_Controller {
 			'redeem' => array(
 				'point' =>3,
 				'amount' =>4,
-				'amount_remain' =>0,
+				'amount_redeemed' => 4,
 				'once' => 0
 			)
 			);
@@ -677,7 +677,7 @@ class Tab_ctrl_test extends CI_Controller {
 			'redeem' => array(
 				'point' =>20,
 				'amount' => 5,
-				'amount_remain' =>5,
+				'amount_redeemed' => 0,
 				'once' => 0
 			)
 		);
@@ -703,7 +703,7 @@ class Tab_ctrl_test extends CI_Controller {
 			'redeem' => array(
 				'point' => 20,
 				'amount' => 3,
-				'amount_remain' =>2,
+				'amount_redeemed' => 1,
 				'once' => 0
 			)
 		);
@@ -775,7 +775,7 @@ class Tab_ctrl_test extends CI_Controller {
 		$this->unit->run($result, 'is_array', "\$result", $result);
 		$this->unit->run($result['user_list'], 'is_array', "\$result['user_list']", $result['user_list']);
 		$this->unit->run(count($result['user_list']), 1, "count(\$result['user_list'])",count($result['user_list']));
-		$this->unit->run($result['redeem']['amount_remain'], 0, "\$result['redeem']['amount_remain']", $result['redeem']['amount_remain']);
+		$this->unit->run($result['redeem']['amount_redeemed'], 3, "\$result['redeem']['amount_redeemed']", $result['redeem']['amount_redeemed']);
 		$this->unit->run($result['user_list'][0]['count'], 3, "\$result['user_list'][0]['count']", $result['user_list'][0]['count']);
 	}
 

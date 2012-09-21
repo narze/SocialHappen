@@ -21,7 +21,7 @@ define([
       var data = this.model.toJSON();
       data.baseUrl = window.Company.BASE_URL;
       data.redeemed = data.redeemed || false;
-      data.usedup = data.redeem.amount_remain === 0;
+      data.usedup = data.redeem.amount_redeemed === data.redeem.amount;
       $(this.el).html(this.rewardItemTemplate(data));
       return this;
     },
