@@ -99,12 +99,12 @@ class Apiv4 extends REST_Controller {
     $encrypted_password = sha1($presalt.$password.$postsalt);
 
     $user = array(
-      'user_first_name' => $facebook_user_first_name,
-      'user_last_name' => $facebook_user_last_name,
-      'user_image' => $facebook_user_image,
+      'user_first_name' => $facebook_user_first_name ? $facebook_user_first_name : "",
+      'user_last_name' => $facebook_user_last_name ? $facebook_user_last_name : "",
+      'user_image' => $facebook_user_image ? $facebook_user_image : "",
       'user_email' => $email,
       'user_password' => $encrypted_password,
-      'user_facebook_id' => $facebook_user_id
+      'user_facebook_id' => $facebook_user_id ? $facebook_user_id : NULL
     );
 
     if(!$user_id = $this->user_model->add_user($user)) {
