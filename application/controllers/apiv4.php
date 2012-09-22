@@ -122,7 +122,9 @@ class Apiv4 extends REST_Controller {
       return $this->error('Add user failed');
     }
 
-    return $this->success(array('user_id' => $user_id, 'token' => $token));
+    unset($user['user_password']);
+
+    return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
   }
 
   /**

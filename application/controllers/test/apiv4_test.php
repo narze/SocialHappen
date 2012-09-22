@@ -115,6 +115,7 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
 		$this->unit->run($result['data']['user_id'], 'is_int', "\$result['data']['user_id']", $result['data']['user_id']);
 		$this->unit->run($result['data']['token'], 'is_string', "\$result['data']['token']", $result['data']['token']);
+		$this->unit->run($result['data']['user'], 'is_array', "\$result['data']['user']", $result['data']['user']);
 		$this->unit->run(strlen($result['data']['token']) === 32, TRUE, "\$result['data']['token']", $result['data']['token']);
 
 		$this->user_id = $result['data']['user_id'];
