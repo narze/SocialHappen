@@ -80,9 +80,9 @@ class Apiv4 extends REST_Controller {
       return $this->error('No email and/or password');
     }
 
-    if(!$facebook_user_id) {
-      return $this->error('Please connect facebook before signing up');
-    }
+    // if(!$facebook_user_id) {
+    //   return $this->error('Please connect facebook before signing up');
+    // }
 
     $this->load->model('user_model');
 

@@ -126,27 +126,27 @@ class Apiv4_test extends CI_Controller {
 		$user = $this->user_mongo_model->getOne(array('user_id' => $result['data']['user_id']));
 		$this->unit->run($user['tokens'][0] === $this->token, TRUE, "\$user['tokens'][0]", $user['tokens'][0]);
 
-		//false facebook : error
-		$params = array(
-			'email' => '2@gotmail.com',
-			'password' => 'asdfjkl;',
-			'facebook_user_id' => FALSE,
-			'facebook_user_first_name' => FALSE,
-			'facebook_user_last_name' => FALSE,
-			'facebook_user_image' => FALSE
-		);
-		$result = $this->post($method, $params);
-		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
-		$this->unit->run($result['data'], 'Please connect facebook before signing up', "\$result['data']", $result['data']);
+		// //false facebook : error
+		// $params = array(
+		// 	'email' => '2@gotmail.com',
+		// 	'password' => 'asdfjkl;',
+		// 	'facebook_user_id' => FALSE,
+		// 	'facebook_user_first_name' => FALSE,
+		// 	'facebook_user_last_name' => FALSE,
+		// 	'facebook_user_image' => FALSE
+		// );
+		// $result = $this->post($method, $params);
+		// $this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		// $this->unit->run($result['data'], 'Please connect facebook before signing up', "\$result['data']", $result['data']);
 
-		//undefined facebook : error
-		$params = array(
-			'email' => '3@gotmail.com',
-			'password' => 'asdfjkl;'
-		);
-		$result = $this->post($method, $params);
-		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
-		$this->unit->run($result['data'], 'Please connect facebook before signing up', "\$result['data']", $result['data']);
+		// //undefined facebook : error
+		// $params = array(
+		// 	'email' => '3@gotmail.com',
+		// 	'password' => 'asdfjkl;'
+		// );
+		// $result = $this->post($method, $params);
+		// $this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		// $this->unit->run($result['data'], 'Please connect facebook before signing up', "\$result['data']", $result['data']);
 
 		//facebook user id already registered : error
 		$params = array(
