@@ -819,22 +819,26 @@ class Apiv4 extends REST_Controller {
   /**
    * Get coupons
    * @method GET
-   * @params [user_id, token]
+   * @params [coupon_id, user_id, token]
    */
   function coupons_get() {
+    $coupon_id = $this->get('coupon_id');
     $user_id = (int) $this->get('user_id');
     $token = $this->get('token');
 
-    $this->load->model('coupon_model');
-    if($user_id && $token) {
+    if($coupon_id) {
+      $query = array('_id' => new MongoId($coupon_id));
+    } else if($user_id && $token) {
       if(!$this->_check_token($user_id, $token)) {
         return $this->error('Token invalid');
       }
-
-      $coupons = $this->coupon_model->get_by_user($user_id);
+      $query = array('user_id' => $user_id);
     } else {
-      return $this->error('User invalid');
+      return $this->error('Invalid parameters');
     }
+
+    $this->load->model('coupon_model');
+    $coupons = $this->coupon_model->get($query);
 
     $coupons = array_map(function($coupon){
       $coupon['_id'] = '' . $coupon['_id'];
@@ -842,6 +846,29 @@ class Apiv4 extends REST_Controller {
     }, $coupons);
 
     return $this->success($coupons);
+
+
+    $reward_item_id = $this->get('reward_item_id');
+
+    $query = array(
+      'status' => 'published',
+      'type' => 'redeem'
+    );
+
+    if($reward_item_id) {
+      $query = array(
+        '_id' => new MongoId($reward_item_id)
+      );
+    }
+
+    $this->load->model('reward_item_model');
+
+    $rewards = $this->reward_item_model->get($query);
+
+    $rewards = array_map(function($reward){
+      $reward['_id'] = '' . $reward['_id'];
+      return $reward;
+    }, $rewards);
   }
 
   /**

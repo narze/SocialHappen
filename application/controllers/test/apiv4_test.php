@@ -960,7 +960,7 @@ class Apiv4_test extends CI_Controller {
 
   	$result = $this->get($method, $params);
   	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
-  	$this->unit->run($result['data'] === 'User invalid', TRUE, "\$result['data']", $result['data']);
+  	$this->unit->run($result['data'] === 'Invalid parameters', TRUE, "\$result['data']", $result['data']);
 
   	$params = array(
   		'user_id' => $this->user_id,
@@ -971,6 +971,8 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
 
+  	$this->coupon_id = ''.$result['data'][0]['_id'];
+
   	$params = array(
   		'user_id' => $this->user_id,
   		'token' => $this->token //expired
@@ -979,6 +981,15 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->get($method, $params);
   	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data'] === 'Token invalid', TRUE, "\$result['data']", $result['data']);
+
+  	// get with coupon_id
+  	$params = array(
+  		'coupon_id' => $this->coupon_id
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
   }
 
   function do_action_post_test_2() {
