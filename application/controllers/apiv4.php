@@ -797,6 +797,10 @@ class Apiv4 extends REST_Controller {
             $reward_points += $reward_item['value'];
           }
         }
+
+        //get company
+        $this->load->model('company_model');
+        $data['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
       }
 
       //Add user platform points
