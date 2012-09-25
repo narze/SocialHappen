@@ -339,7 +339,7 @@ class Apiv4 extends REST_Controller {
       if(!$company_id) {
         $challenge['company'] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
       } else {
-        // $challenge['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
+        $challenge['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
       }
     }
 
