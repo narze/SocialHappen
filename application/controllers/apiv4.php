@@ -62,6 +62,7 @@ class Apiv4 extends REST_Controller {
    * Signup SocialHappen
    * @method POST
    * @params email
+   *       , phone
    *       , password
    *       , facebook_user_id
    *       , facebook_user_first_name
@@ -70,14 +71,15 @@ class Apiv4 extends REST_Controller {
    */
   function signup_post() {
     $email = $this->post('email');
+    $phone = $this->post('phone');
     $password = $this->post('password');
     $facebook_user_id = $this->post('facebook_user_id');
     $facebook_user_first_name = $this->post('facebook_user_first_name');
     $facebook_user_last_name = $this->post('facebook_user_last_name');
     $facebook_user_image = $this->post('facebook_user_image');
 
-    if(!$email || !$password) {
-      return $this->error('No email and/or password');
+    if(!$email || !$phone || !$password) {
+      return $this->error('No email, phone, password');
     }
 
     // if(!$facebook_user_id) {
@@ -104,6 +106,7 @@ class Apiv4 extends REST_Controller {
       'user_image' => $facebook_user_image ? $facebook_user_image : "",
       'user_email' => $email,
       'user_password' => $encrypted_password,
+      'user_phone' => $phone,
       'user_facebook_id' => $facebook_user_id ? $facebook_user_id : NULL
     );
 

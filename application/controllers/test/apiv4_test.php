@@ -104,6 +104,7 @@ class Apiv4_test extends CI_Controller {
 
 		$params = array(
 			'email' => '1@gotmail.com',
+			'phone' => '098765432',
 			'password' => 'asdfjkl;',
 			'facebook_user_id' => '12345678123',
 			'facebook_user_first_name' => 'Zark',
@@ -127,31 +128,10 @@ class Apiv4_test extends CI_Controller {
 		$user = $this->user_mongo_model->getOne(array('user_id' => $result['data']['user_id']));
 		$this->unit->run($user['tokens'][0] === $this->token, TRUE, "\$user['tokens'][0]", $user['tokens'][0]);
 
-		// //false facebook : error
-		// $params = array(
-		// 	'email' => '2@gotmail.com',
-		// 	'password' => 'asdfjkl;',
-		// 	'facebook_user_id' => FALSE,
-		// 	'facebook_user_first_name' => FALSE,
-		// 	'facebook_user_last_name' => FALSE,
-		// 	'facebook_user_image' => FALSE
-		// );
-		// $result = $this->post($method, $params);
-		// $this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
-		// $this->unit->run($result['data'], 'Please connect facebook before signing up', "\$result['data']", $result['data']);
-
-		// //undefined facebook : error
-		// $params = array(
-		// 	'email' => '3@gotmail.com',
-		// 	'password' => 'asdfjkl;'
-		// );
-		// $result = $this->post($method, $params);
-		// $this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
-		// $this->unit->run($result['data'], 'Please connect facebook before signing up', "\$result['data']", $result['data']);
-
 		//facebook user id already registered : error
 		$params = array(
 			'email' => '4@gotmail.com',
+			'phone' => '098765432',
 			'password' => 'asdfjkl;',
 			'facebook_user_id' => '12345678123',
 			'facebook_user_first_name' => 'NarzE',
@@ -165,6 +145,7 @@ class Apiv4_test extends CI_Controller {
 		//email already registered : error
 		$params = array(
 			'email' => '1@gotmail.com',
+			'phone' => '098765432',
 			'password' => 'asdfjkl;',
 			'facebook_user_id' => '4',
 			'facebook_user_first_name' => 'Zark',
@@ -178,6 +159,7 @@ class Apiv4_test extends CI_Controller {
 		//undefined email : error
 		$params = array(
 			'email' => '',
+			'phone' => '098765432',
 			'password' => 'asdfjkl;',
 			'facebook_user_id' => '4',
 			'facebook_user_first_name' => 'Zark',
@@ -186,11 +168,12 @@ class Apiv4_test extends CI_Controller {
 		);
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
-		$this->unit->run($result['data'], 'No email and/or password', "\$result['data']", $result['data']);
+		$this->unit->run($result['data'], 'No email, phone, password', "\$result['data']", $result['data']);
 
 		//undefined password : error
 		$params = array(
 			'email' => '6@gotmail.com',
+			'phone' => '098765432',
 			'password' => '',
 			'facebook_user_id' => '4',
 			'facebook_user_first_name' => 'Zark',
@@ -199,7 +182,21 @@ class Apiv4_test extends CI_Controller {
 		);
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
-		$this->unit->run($result['data'], 'No email and/or password', "\$result['data']", $result['data']);
+		$this->unit->run($result['data'], 'No email, phone, password', "\$result['data']", $result['data']);
+
+		//undefined phone : error
+		$params = array(
+			'email' => '6@gotmail.com',
+			'phone' => '',
+			'password' => '1234',
+			'facebook_user_id' => '4',
+			'facebook_user_first_name' => 'Zark',
+			'facebook_user_last_name' => 'Muckerburg',
+			'facebook_user_image' => 'https://graph.facebook.com/4/picture'
+		);
+		$result = $this->post($method, $params);
+		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		$this->unit->run($result['data'], 'No email, phone, password', "\$result['data']", $result['data']);
 	}
 
 	function signin_post_test() {
