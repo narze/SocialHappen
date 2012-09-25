@@ -208,7 +208,8 @@ class Apiv4 extends REST_Controller {
       return $this->success('Signout successful');
     }
 
-    return $this->error('Sign out failed');
+    return $this->success('Signout successful');
+    // return $this->error('Sign out failed');
   }
 
   /**
