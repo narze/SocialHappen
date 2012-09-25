@@ -325,13 +325,21 @@ class Apiv4 extends REST_Controller {
       }
     }
 
-    //Check challenge quota
+    $this->load->model('company_model');
     foreach($challenges as &$challenge) {
+      //Check challenge quota
       if(isset($challenge['done_count_max']) && ($challenge['done_count_max'] > 0)) {
         $done_count = isset($challenge['done_count']) ? $challenge['done_count'] : 0;
         if($done_count >= $challenge['done_count_max']) {
           $challenge['is_out_of_stock'] = TRUE;
         }
+      }
+
+      //embed company data if not finding with company_id
+      if(!$company_id) {
+        $challenge['company'] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
+      } else {
+        // $challenge['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
       }
     }
 
