@@ -9,7 +9,7 @@ a:hover {
 .text-right {text-align:right}
 .text-center {text-align:center}
 
-.navbar-fixed-top .brand { 
+.navbar-fixed-top .brand {
   width: 125px;
   height: 40px;
   padding: 0 8px;
@@ -57,7 +57,7 @@ a:hover {
   }
   /* Navbar company */
   .navbar .dropdown-menu.companies {
-    
+
   }
   .navbar .dropdown-menu.companies .company {
     padding:5px 10px;
@@ -106,6 +106,17 @@ a:hover {
     width:inherit;
   }
 
+  .navbar .dropdown-menu.user {
+    max-height: 600px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .navbar .dropdown-menu.user img {
+    max-height: 32px;
+    margin-right: 10px;
+    float: left;
+  }
 
   /* Navbar User */
   .navbar .dropdown-menu.user a {
@@ -118,8 +129,8 @@ a:hover {
   .navbar .dropdown-menu.user a:last-child {
     padding-bottom: 6px;
   }
-  .navbar .user-image { 
-    width: 20px; 
+  .navbar .user-image {
+    width: 20px;
     height: 20px;
   }
 
