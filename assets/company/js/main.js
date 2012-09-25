@@ -22,7 +22,25 @@ require.config({
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
     templates: '../templates'
   },
-	urlArgs: 'bust=' + (new Date()).getTime()
+	// urlArgs: 'bust=' + (new Date()).getTime()
+  shim: {
+    // Backbone library depends on lodash and jQuery.
+    underscore: {
+        deps: ['jquery'],
+        exports: '_'
+    },
+    backbone: {
+        deps: ['underscore', 'jquery'],
+        exports: 'Backbone'
+    },
+
+    //jQuery plugins
+    timeago: ['jquery'],
+    jqueryForm: ['jquery'],
+    bootstrap: ['jquery'],
+    masonry: ['jquery'],
+    endlessscroll: ['jquery']
+  }
 
 });
 
