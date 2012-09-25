@@ -812,7 +812,7 @@ class Challenge_lib {
     return FALSE;
   }
 
-  function get_nearest_challenges($location = array(), $max_dist = 1.0, $limit = 20) {
+  function get_nearest_challenges($location = array(), $max_dist = 1.0, $limit = 50) {
     if(!is_array($location) || count($location) !== 2) {
       return FALSE;
     }
