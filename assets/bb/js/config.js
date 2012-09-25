@@ -44,6 +44,4 @@ require.config({
     jfmfs: ['jquery'],
     endlessscroll: ['jquery']
   }
-
-
 });

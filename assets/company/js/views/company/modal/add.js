@@ -531,7 +531,7 @@ define([
         success: function(model, res) {
           console.log(res);
           //Refresh
-          // window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
+          window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
         }
       });
 
