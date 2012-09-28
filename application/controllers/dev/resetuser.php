@@ -10,7 +10,7 @@ class Resetuser extends CI_Controller {
 		parent::__construct();
 		if (defined('ENVIRONMENT'))
 		{
-			if ((ENVIRONMENT !== 'testing') || (ENVIRONMENT !== 'development'))
+			if ((ENVIRONMENT !== 'testing') && (ENVIRONMENT !== 'development'))
 			{
 				redirect();
 			}
