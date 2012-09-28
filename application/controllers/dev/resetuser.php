@@ -21,11 +21,11 @@ class Resetuser extends CI_Controller {
 		$this->load->model('user_mongo_model');
 
 		$unset = array(
-			"challenge_completed",
-		  "challenge_redeeming",
-		  "daily_challenge",
-		  "daily_challenge_completed",
-		  "reward_items"
+			"challenge_completed" => TRUE,
+		  "challenge_redeeming" => TRUE,
+		  "daily_challenge" => TRUE,
+		  "daily_challenge_completed" => TRUE,
+		  "reward_items" => TRUE
 		);
 
 		$user_ids = array(1,3,5);
