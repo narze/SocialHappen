@@ -458,7 +458,7 @@ class Apiv4 extends REST_Controller {
       if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
         foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
           if($daily_challenge['start_date'] <= date('Ymd', $time) && $daily_challenge['end_date'] >= date('Ymd', $time)) {
-            return $this->error('Challenge done already (daily)');
+            return $this->error('Challenge done already (daily)', 1);
           }
         }
       }
@@ -537,7 +537,7 @@ class Apiv4 extends REST_Controller {
     } else {
       //Check if user completed already or not
       if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
-        return $this->error('Challenge done already');
+        return $this->error('Challenge done already', 1);
       }
 
       //add stat after checking challenge done
