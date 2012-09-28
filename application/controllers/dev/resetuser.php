@@ -28,15 +28,10 @@ class Resetuser extends CI_Controller {
 		  "reward_items"
 		);
 
-		$set = array(
-			"tokens" => array()
-		);
-
 		$user_ids = array(1,3,5);
 
 		foreach($user_ids as $user_id) {
 			$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset));
-			$this->user_mongo_model->update(array('user_id' => $user_id), array('$set' => $set));
 		}
 
 		echo 'reset user';
