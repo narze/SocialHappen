@@ -20,20 +20,23 @@ class Resetuser extends CI_Controller {
 	function index(){
 		$this->load->model('user_mongo_model');
 
-		$blank_user = array(
+		$unset = array(
 			"challenge_completed",
 		  "challenge_redeeming",
 		  "daily_challenge",
 		  "daily_challenge_completed",
-		  "points",
-		  "reward_items",
-		  "tokens"
+		  "reward_items"
+		);
+
+		$set = array(
+			"tokens" => array()
 		);
 
 		$user_ids = array(1,3,5);
 
 		foreach($user_ids as $user_id) {
-			$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $blank_user));
+			$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset));
+			$this->user_mongo_model->update(array('user_id' => $user_id), array('$set' => $set));
 		}
 
 		echo 'reset user';

@@ -386,7 +386,7 @@ class Apiv4 extends REST_Controller {
       return FALSE;
     }
 
-    if(!in_array($token, $user['tokens'])) {
+    if(!isset($user['tokens']) || !in_array($token, $user['tokens'])) {
       return FALSE;
     }
 
