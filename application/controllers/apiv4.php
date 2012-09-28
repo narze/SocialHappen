@@ -817,7 +817,7 @@ class Apiv4 extends REST_Controller {
       );
 
       if(!$this->user_mongo_model->update(array('user_id' => (int) $user_id), $user_update)) {
-        return $this->error('Update user failed');
+        return $this->error('Update user failed.');
       }
 
       $this->load->model('challenge_model');

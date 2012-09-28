@@ -305,7 +305,8 @@ class Apiv4_test extends CI_Controller {
 
 		$result = $this->post($method, $params);
 
-		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		// $this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 	}
 
 	function companies_get_test() {
