@@ -339,7 +339,7 @@ class Apiv4 extends REST_Controller {
       if(!$company_id) {
         $challenge['company'] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
       } else {
-        // $challenge['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
+        $challenge['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
       }
     }
 
@@ -386,7 +386,7 @@ class Apiv4 extends REST_Controller {
       return FALSE;
     }
 
-    if(!in_array($token, $user['tokens'])) {
+    if(!isset($user['tokens']) || !in_array($token, $user['tokens'])) {
       return FALSE;
     }
 
@@ -458,7 +458,7 @@ class Apiv4 extends REST_Controller {
       if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
         foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
           if($daily_challenge['start_date'] <= date('Ymd', $time) && $daily_challenge['end_date'] >= date('Ymd', $time)) {
-            return $this->error('Challenge done already (daily)');
+            return $this->error('Challenge done already (daily)', 1);
           }
         }
       }
@@ -537,7 +537,7 @@ class Apiv4 extends REST_Controller {
     } else {
       //Check if user completed already or not
       if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
-        return $this->error('Challenge done already');
+        return $this->error('Challenge done already', 1);
       }
 
       //add stat after checking challenge done
@@ -817,7 +817,7 @@ class Apiv4 extends REST_Controller {
       );
 
       if(!$this->user_mongo_model->update(array('user_id' => (int) $user_id), $user_update)) {
-        return $this->error('Update user failed');
+        return $this->error('Update user failed.');
       }
 
       $this->load->model('challenge_model');
