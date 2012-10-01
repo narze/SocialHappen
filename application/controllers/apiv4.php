@@ -834,6 +834,15 @@ class Apiv4 extends REST_Controller {
               return $this->error('confirm point coupon failed');
             }
           }
+
+          //Attach coupon_id to $data['reward_items']
+          foreach ($data['reward_items'] as &$data_reward_item) {
+            $data_reward_item_id = get_mongo_id($data_reward_item);
+            if($data_reward_item_id == $reward_item_id) {
+              $data_reward_item['coupon_id'] = $coupon_id;
+            }
+          }
+
         }
       }
 
