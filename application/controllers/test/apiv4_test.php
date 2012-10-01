@@ -199,6 +199,21 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['data'], 'No email, phone, password', "\$result['data']", $result['data']);
 	}
 
+	function _check_points_and_badges_in_new_users_test() {
+		$user_id = $this->user_id;
+		$this->load->model('user_mongo_model');
+		$user = $this->user_mongo_model->get_user($user_id);
+
+		// 10 from signup
+		$this->unit->run($user['points'] === 10, TRUE, "\$user['points']", $user['points']);
+
+		// user should have first badge 'Just Arrived'
+		$this->load->library('achievement_lib');
+		$achievements = $this->achievement_lib->list_user_achieved_by_user_id($user_id);
+		$this->unit->run(count($achievements) === 1, TRUE, "count(\$achievements)", count($achievements));
+		$this->unit->run($achievements[0]['achievement_info']['info']['name'] === "Just Arrived", TRUE, "\$achievements[0]['achievement_info']['info']['name']", $achievements[0]['achievement_info']['info']['name']);
+	}
+
 	function signin_post_test() {
 		$method = 'signin';
 
@@ -829,7 +844,7 @@ class Apiv4_test extends CI_Controller {
   	//check audit count
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 6, "count(\$result)", count($result));
+	  $this->unit->run(count($result), 3 + 6, "count(\$result)", count($result)); //1 from signup, 2 from signin
 
   	//3.Since challenge_id 4 is a daily challenge, so user can play in tomorrow's time
   	//Fire today's challenge action again : error (already done)
@@ -848,7 +863,7 @@ class Apiv4_test extends CI_Controller {
   	//check audit count again, the last do_action method should not invoke audit_add
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 6, "count(\$result)", count($result));
+	  $this->unit->run(count($result), 3 + 6, "count(\$result)", count($result));
 
   	$params = array(
   		'user_id' => $this->user_id,
@@ -868,7 +883,7 @@ class Apiv4_test extends CI_Controller {
   	//check audit count
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 6 + 2, "count(\$result)", count($result)); //for action 203 and for completing challenge
+	  $this->unit->run(count($result), 3 + 6 + 2, "count(\$result)", count($result)); //for action 203 and for completing challenge
 
   	//4. Check user for coupons/points/statuses
   	//@TODO
@@ -1013,7 +1028,7 @@ class Apiv4_test extends CI_Controller {
   	//check audit count
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 8 + 2, "count(\$result)", count($result));
+	  $this->unit->run(count($result), 3 + 8 + 2, "count(\$result)", count($result));
 
 	  //do_action in tomorrow : cannot do action which done_count >= done_count_max
 	  $params = array(
@@ -1031,7 +1046,7 @@ class Apiv4_test extends CI_Controller {
   	//check audit count
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 10, "count(\$result)", count($result)); //no audit add
+	  $this->unit->run(count($result), 3 + 10, "count(\$result)", count($result)); //no audit add
   }
 
   function challenges_get_test3() {
@@ -1070,7 +1085,7 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->get($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['user_id'] == $this->user_id, TRUE, "\$result['data']['user_id']", $result['data']['user_id']);
-  	$this->unit->run($result['data']['points'] === 54 * 3, TRUE, "\$result['data']['points']", $result['data']['points']);
+  	$this->unit->run($result['data']['points'] === 10 + 54 * 3, TRUE, "\$result['data']['points']", $result['data']['points']);
   	$this->unit->run($result['data']['challenge_completed'], 'is_array', "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
   	$this->unit->run($result['data']['daily_challenge_completed'], 'is_array', "\$result['data']['daily_challenge_completed']", $result['data']['daily_challenge_completed']);
   }
@@ -1098,7 +1113,7 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['coupon_id'], 'is_string', "\$result['data']['coupon_id']", $result['data']['coupon_id']);
-  	$this->unit->run($result['data']['points_remain'] === 54 * 3 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
+  	$this->unit->run($result['data']['points_remain'] === 10 + 54 * 3 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
 
   	// redeem again : fail (that reward can be redeemed once)
   	$result = $this->post($method, $params);
@@ -1117,13 +1132,13 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['coupon_id'], 'is_string', "\$result['data']['coupon_id']", $result['data']['coupon_id']);
-  	$this->unit->run($result['data']['points_remain'] === 54 * 3 - 20 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
+  	$this->unit->run($result['data']['points_remain'] === 10 + 54 * 3 - 20 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
 
   	// success : this reward can redeem more than one time
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['coupon_id'], 'is_string', "\$result['data']['coupon_id']", $result['data']['coupon_id']);
-  	$this->unit->run($result['data']['points_remain'] === 54 * 3 - 20 - 20 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
+  	$this->unit->run($result['data']['points_remain'] === 10 + 54 * 3 - 20 - 20 - 20, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
 
   	// fail : reward out of stock
   	$result = $this->post($method, $params);
@@ -1142,7 +1157,7 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data']['coupon_id'], 'is_string', "\$result['data']['coupon_id']", $result['data']['coupon_id']);
-  	$this->unit->run($result['data']['points_remain'] === 54 * 3 - 20 - 20 - 20 - 100, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
+  	$this->unit->run($result['data']['points_remain'] === 10 + 54 * 3 - 20 - 20 - 20 - 100, 'TRUE', "\$result['data']['points_remain']", $result['data']['points_remain']);
 
   	// fail : insufficient point (use 100, remaining 2)
   	$result = $this->post($method, $params);
