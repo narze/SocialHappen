@@ -118,11 +118,36 @@ class Apiv4 extends REST_Controller {
     $token = md5(uniqid(mt_rand(), true)); //32 chars
     $user_mongo = array(
       'user_id' => $user_id,
-      'tokens' => array($token)
+      'tokens' => array($token),
+      'points' => 10
     );
     $this->load->model('user_mongo_model');
     if(!$this->user_mongo_model->add($user_mongo)) {
       return $this->error('Add user failed');
+    }
+
+    //Give user a badge, by add signup audit
+    $this->load->library('audit_lib');
+    $action_id = $this->socialhappen->get_k('audit_action','User Register SocialHappen');
+
+    if(!$this->audit_lib->audit_add(array(
+      'user_id' => $user_id,
+      'action_id' => $action_id,
+      'app_id' => 0,
+      'app_install_id' => 0,
+      'company_id' => 0,
+      'subject' => $user_id,
+      'object' => NULL,
+      'objecti' => NULL,
+      'image' => $user['user_image']
+    ))) {
+      return $this->error('Add audit failed');
+    }
+
+    $this->load->library('achievement_lib');
+    $info = array('action_id' => $action_id, 'app_install_id' => 0);
+    if(!$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1)) {
+      return $this->error('increment stat failed');
     }
 
     unset($user['user_password']);
@@ -172,23 +197,47 @@ class Apiv4 extends REST_Controller {
       return $this->error('Wrong type');
     }
 
-    if($signinsuccess) {
-      //Generate token & add into user's mongo model
-      $token = md5(uniqid(mt_rand(), true)); //32 chars
-      $user_id = $user['user_id'];
-      $user_mongo_update = array(
-        '$addToSet' => array('tokens' => $token)
-      );
-      $criteria = array('user_id' => $user_id);
-      $this->load->model('user_mongo_model');
-      if(!$this->user_mongo_model->upsert($criteria, $user_mongo_update)) {
-        return $this->error('Update token failed');
-      }
-
-      return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
+    if(!$signinsuccess) {
+      return $this->error('Sign in failed');
     }
 
-    return $this->error('Sign in failed');
+    //Generate token & add into user's mongo model
+    $token = md5(uniqid(mt_rand(), true)); //32 chars
+    $user_id = $user['user_id'];
+    $user_mongo_update = array(
+      '$addToSet' => array('tokens' => $token)
+    );
+    $criteria = array('user_id' => $user_id);
+    $this->load->model('user_mongo_model');
+    if(!$this->user_mongo_model->upsert($criteria, $user_mongo_update)) {
+      return $this->error('Update token failed');
+    }
+
+    //add audit
+    $this->load->library('audit_lib');
+    $action_id = $this->socialhappen->get_k('audit_action','User Login');
+
+    if(!$this->audit_lib->audit_add(array(
+      'user_id' => $user_id,
+      'action_id' => $action_id,
+      'app_id' => 0,
+      'app_install_id' => 0,
+      'company_id' => 0,
+      'subject' => $user_id,
+      'object' => NULL,
+      'objecti' => NULL,
+      'image' => $user['user_image']
+    ))) {
+      return $this->error('Add audit failed');
+    }
+
+    $this->load->library('achievement_lib');
+    $info = array('action_id' => $action_id, 'app_install_id' => 0);
+    if(!$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1)) {
+      return $this->error('increment stat failed');
+    }
+
+    return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
   }
 
   /**
