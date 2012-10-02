@@ -22,12 +22,12 @@ class Apiv4 extends REST_Controller {
    */
 
   function error($error_message = NULL, $code = 0) {
-    echo json_encode(array('success' => FALSE, 'data' => $error_message, 'code' => $code));
+    echo json_encode(array('success' => FALSE, 'data' => $error_message, 'code' => $code, 'timestamp' => time()));
     return FALSE;
   }
 
   function success($data = array(), $code = 1) {
-    echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code));
+    echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()));
     return TRUE;
   }
 
