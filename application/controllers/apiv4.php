@@ -352,6 +352,8 @@ class Apiv4 extends REST_Controller {
         return $this->error('User invalid');
       }
 
+      $this->load->model('coupon_model');
+
       foreach($challenges as &$challenge) {
         $challenge_id = get_mongo_id($challenge);
 
@@ -369,6 +371,8 @@ class Apiv4 extends REST_Controller {
         } else {
           if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
             $challenge['next_date'] = FALSE;
+            //User coupons
+            $challenge['coupons'] = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
           }
         }
       }
