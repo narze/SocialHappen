@@ -986,6 +986,11 @@ class Apiv4 extends REST_Controller {
    * @params [user_id, token]
    */
   function profile_get() {
+    //@TODO
+    if($this->get('model')) {
+      return $this->profile_post();
+    }
+
     $user_id = (int) $this->get('user_id');
     $token = $this->get('token');
 
@@ -1010,6 +1015,42 @@ class Apiv4 extends REST_Controller {
     $user['daily_challenge_completed'] = issetor($user_mongo['daily_challenge_completed'], array());
 
     return $this->success($user);
+  }
+
+  /**
+   * Update user's profile
+   * @method POST
+   * @params [model]
+   */
+  function profile_post() {
+    $model = json_decode($this->post('model'), TRUE);
+
+    $user_id = (int) $model['user_id'];
+    $token = $model['token'];
+
+    $user_first_name = $model['user_first_name'];
+    $user_last_name = $model['user_last_name'];
+    $user_email = $model['user_email'];
+    $user_phone = $model['user_phone'];
+    $user_address = $model['user_address'];
+
+    $update = compact('user_first_name', 'user_last_name', 'user_email', 'user_phone', 'user_address');
+
+    $this->load->model('user_model');
+    if(!$user_id || !$token) {
+      return $this->error('User invalid');
+    }
+
+    if(!$this->_check_token($user_id, $token)) {
+      return $this->error('Token invalid');
+    }
+
+    $this->load->model('user_model');
+    if(!$this->user_model->update_user($user_id, $update)) {
+      return $this->error('Update failed');
+    }
+
+    return $this->success($update);
   }
 
   /**

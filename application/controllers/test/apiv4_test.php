@@ -1090,6 +1090,29 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['daily_challenge_completed'], 'is_array', "\$result['data']['daily_challenge_completed']", $result['data']['daily_challenge_completed']);
   }
 
+  function profile_post_test() {
+  	$method = 'profile';
+  	$params = array(
+  		'model' => json_encode(array(
+	  		'user_id' => $this->user_id,
+	  		'token' => $this->token2,
+	  		'user_first_name' => 'new first name',
+	  		'user_last_name' => 'new last name',
+	  		'user_email' => 'email@new.com',
+	  		'user_phone' => '5555',
+	  		'user_address' => 'new address'
+	  	))
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['user_first_name'], 'new first name', "\$result['data']['user_first_name']", $result['data']['user_first_name']);
+  	$this->unit->run($result['data']['user_last_name'], 'new last name', "\$result['data']['user_last_name']", $result['data']['user_last_name']);
+  	$this->unit->run($result['data']['user_email'], 'email@new.com', "\$result['data']['user_email']", $result['data']['user_email']);
+  	$this->unit->run($result['data']['user_phone'], '5555', "\$result['data']['user_phone']", $result['data']['user_phone']);
+  	$this->unit->run($result['data']['user_address'], 'new address', "\$result['data']['user_address']", $result['data']['user_address']);
+  }
+
   function redeem_reward_post_test() {
   	$method = 'redeem_reward';
   	$params = array(
