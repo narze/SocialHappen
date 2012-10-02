@@ -1013,6 +1013,7 @@ class Apiv4 extends REST_Controller {
     $user['points'] = issetor($user_mongo['points'], 0);
     $user['challenge_completed'] = issetor($user_mongo['challenge_completed'], array());
     $user['daily_challenge_completed'] = issetor($user_mongo['daily_challenge_completed'], array());
+    $user['shipping'] = issetor($user_mongo['shipping'], array());
 
     return $this->success($user);
   }
@@ -1033,8 +1034,10 @@ class Apiv4 extends REST_Controller {
     $user_email = $model['user_email'];
     $user_phone = $model['user_phone'];
     $user_address = $model['user_address'];
+    $shipping = $model['shipping'];
 
     $update = compact('user_first_name', 'user_last_name', 'user_email', 'user_phone', 'user_address');
+    $update_mongo = compact('shipping');
 
     $this->load->model('user_model');
     if(!$user_id || !$token) {
@@ -1050,7 +1053,12 @@ class Apiv4 extends REST_Controller {
       return $this->error('Update failed');
     }
 
-    return $this->success($update);
+    $this->load->model('user_mongo_model');
+    if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$set' => $update_mongo))) {
+      return $this->error('Update failed');
+    }
+
+    return $this->success(array_merge($update, $update_mongo));
   }
 
   /**
@@ -1062,6 +1070,7 @@ class Apiv4 extends REST_Controller {
     $user_id = (int) $this->post('user_id');
     $token = $this->post('token');
     $reward_item_id = $this->post('reward_item_id');
+    $shipping = json_decode($this->post('shipping'), TRUE);
 
     $this->load->model('user_mongo_model');
     if(!$user_id || !$token) {
@@ -1150,6 +1159,7 @@ class Apiv4 extends REST_Controller {
       'reward_item' => $reward_item,
       'user_id' => $user_id,
       'company_id' => 0,
+      'shipping' => $shipping
     );
     if(!$coupon_id = $this->coupon_lib->create_coupon($coupon)) {
       return $this->error('Unexpected error', 7);

@@ -1088,6 +1088,7 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['points'] === 10 + 54 * 3, TRUE, "\$result['data']['points']", $result['data']['points']);
   	$this->unit->run($result['data']['challenge_completed'], 'is_array', "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
   	$this->unit->run($result['data']['daily_challenge_completed'], 'is_array', "\$result['data']['daily_challenge_completed']", $result['data']['daily_challenge_completed']);
+  	$this->unit->run($result['data']['shipping'], 'is_array', "\$result['data']['shipping']", $result['data']['shipping']);
   }
 
   function profile_post_test() {
@@ -1100,7 +1101,10 @@ class Apiv4_test extends CI_Controller {
 	  		'user_last_name' => 'new last name',
 	  		'user_email' => 'email@new.com',
 	  		'user_phone' => '5555',
-	  		'user_address' => 'new address'
+	  		'user_address' => 'new address',
+	  		'shipping' => array(
+	  			'name' => 'shipping name'
+	  		)
 	  	))
   	);
 
@@ -1111,6 +1115,7 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['user_email'], 'email@new.com', "\$result['data']['user_email']", $result['data']['user_email']);
   	$this->unit->run($result['data']['user_phone'], '5555', "\$result['data']['user_phone']", $result['data']['user_phone']);
   	$this->unit->run($result['data']['user_address'], 'new address', "\$result['data']['user_address']", $result['data']['user_address']);
+  	$this->unit->run($result['data']['shipping']['name'] === 'shipping name', TRUE, "\$result['data']['shipping']['name']", $result['data']['shipping']['name']);
   }
 
   function redeem_reward_post_test() {
@@ -1118,7 +1123,8 @@ class Apiv4_test extends CI_Controller {
   	$params = array(
   		'user_id' => $this->user_id,
   		'token' => $this->token2,
-  		'reward_item_id' => $this->reward_item_1
+  		'reward_item_id' => $this->reward_item_1,
+  		'address' => json_encode(array('name' => 'name'))
   	);
 
   	// fail : unpublished reward
@@ -1148,7 +1154,8 @@ class Apiv4_test extends CI_Controller {
   	$params = array(
   		'user_id' => $this->user_id,
   		'token' => $this->token2,
-  		'reward_item_id' => $this->reward_item_2
+  		'reward_item_id' => $this->reward_item_2,
+  		'address' => json_encode(array('name' => 'name'))
   	);
 
   	// success
@@ -1173,7 +1180,8 @@ class Apiv4_test extends CI_Controller {
   	$params = array(
   		'user_id' => $this->user_id,
   		'token' => $this->token2,
-  		'reward_item_id' => $this->reward_item_3
+  		'reward_item_id' => $this->reward_item_3,
+  		'address' => json_encode(array('name' => 'name'))
   	);
 
   	// success
