@@ -1003,6 +1003,8 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->get($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['company'], 'is_array', "\$result['data'][0]['company']", $result['data'][0]['company']);
+  	$this->unit->run($result['data'][0]['challenge'], 'is_array', "\$result['data'][0]['challenge']", $result['data'][0]['challenge']);
   }
 
   function do_action_post_test_2() {

@@ -918,35 +918,43 @@ class Apiv4 extends REST_Controller {
     $this->load->model('coupon_model');
     $coupons = $this->coupon_model->get($query);
 
+    $this->load->model('company_model');
+    $this->load->model('challenge_model');
+    $companies = $challenges = array();
     $coupons = array_map(function($coupon){
       $coupon['_id'] = '' . $coupon['_id'];
       return $coupon;
     }, $coupons);
 
-    return $this->success($coupons);
+    foreach($coupons as &$coupon) {
+      //Get companies
+      $company_id = $coupon['company_id'];
+      if($company_id > 0) {
+        if(isset($companies[$company_id])) {
+          $company = $companies[$company_id];
+        } else {
+          $company = $this->company_model->get_company_profile_by_company_id($company_id);
+          $companies[$company_id] = $company;
+        }
+        $coupon['company'] = $company;
+      } else {
+        $coupon['company'] = NULL;
+      }
 
-
-    $reward_item_id = $this->get('reward_item_id');
-
-    $query = array(
-      'status' => 'published',
-      'type' => 'redeem'
-    );
-
-    if($reward_item_id) {
-      $query = array(
-        '_id' => new MongoId($reward_item_id)
-      );
+      //Get challenges
+      if($challenge_id = $coupon['challenge_id']) {
+        if(isset($challenges[$challenge_id])) {
+          $challenge = $challenges[$challenge_id];
+        } else {
+          $challenge = $this->challenge_model->getOne(array('_id' => new MongoId($challenge_id)));
+          $challenges[$challenge_id] = $challenge;
+        }
+        $coupon['challenge'] = $challenge;
+      } else {
+        $coupon['challenge'] = NULL;
+      }
     }
-
-    $this->load->model('reward_item_model');
-
-    $rewards = $this->reward_item_model->get($query);
-
-    $rewards = array_map(function($reward){
-      $reward['_id'] = '' . $reward['_id'];
-      return $reward;
-    }, $rewards);
+    return $this->success($coupons);
   }
 
   /**
