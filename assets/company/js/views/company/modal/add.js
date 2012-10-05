@@ -466,7 +466,8 @@ define([
         status: 'published',
         type: 'challenge',
         description: '10 Points for redeeming rewards in this company',
-        is_points_reward: true
+        is_points_reward: true,
+        redeem_method: 'in_store'
       };
 
       return this._addReward(reward);
@@ -482,7 +483,8 @@ define([
         status: 'published',
         type: 'challenge',
         description: '10% discount coupon',
-        is_points_reward: false
+        is_points_reward: false,
+        redeem_method: 'in_store'
       };
 
       return this._addReward(reward);
@@ -498,7 +500,8 @@ define([
         status: 'published',
         type: 'challenge',
         description: 'Giveaway reward',
-        is_points_reward: false
+        is_points_reward: false,
+        redeem_method: 'in_store'
       };
 
       return this._addReward(reward);

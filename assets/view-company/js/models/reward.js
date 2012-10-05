@@ -17,7 +17,11 @@ define([
         amount_redeemed: 0,
         once: true
       },
-      status: 'draft'
+      // status: 'draft'
+      company_id: window.Company.companyId,
+      status: 'published',
+      is_points_reward: false,
+      redeem_method: ''
     },
     initialize: function(){
 

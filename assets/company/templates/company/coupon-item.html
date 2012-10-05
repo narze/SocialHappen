@@ -11,6 +11,9 @@
         <div class="coupon-timestamp">
           Date : <%= new Date(timestamp * 1000).toString() %>
         </div>
+        <div class="coupon-redeem-method">
+          Redeem Method : <%= redeem_method %>
+        </div>
       </div>
       <div class="span2">
         <% if (confirmed) { %>

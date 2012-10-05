@@ -14,7 +14,8 @@ define([
       confirmed: null,
       confirmed_timestamp: null,
       confirmed_by_id: null,
-      challenge_id: null
+      challenge_id: null,
+      redeem_method: ''
     },
     initialize: function(){
 

@@ -20,13 +20,14 @@ define([
       'click img.reward-image, h6.edit-image': 'showEditImage',
       'click button.save-image': 'saveEditImage',
       'change select.reward-status': 'setRewardStatus',
+      'change select.reward-redeem-method': 'setRewardRedeemMethod',
       'click .edit-redeem': 'showEditRedeem',
       'click .save-redeem': 'saveEditRedeem',
       'click button.create-reward': 'createReward',
       'click button.upload-image-submit': 'uploadImage'
     },
 
-    initialize: function(){
+    initialize: function() {
       _.bindAll(this);
       vent.bind('showAddRewardModal', this.show);
     },
@@ -34,7 +35,7 @@ define([
     render: function () {
       console.log('render modal');
 
-      if(!this.model){
+      if(!this.model) {
         return;
       }
 
@@ -45,7 +46,7 @@ define([
       return this;
     },
 
-    show: function(model){
+    show: function(model) {
       this.model = model;
 
       console.log('show add modal:', this.model.toJSON());
@@ -54,13 +55,13 @@ define([
       this.$el.modal('show');
     },
 
-    showEditName: function(){
+    showEditName: function() {
       $('h3.edit-name', this.el).hide();
       $('div.edit-name', this.el).show();
       $('input.reward-name', this.el).focus();
     },
 
-    saveEditName: function(){
+    saveEditName: function() {
 
       var name = $('input.reward-name', this.el).val();
 
@@ -73,26 +74,30 @@ define([
       vent.trigger('showAddRewardModal', this.model);
     },
 
-
-    setRewardStatus: function(){
+    setRewardStatus: function() {
       var status = $('select.reward-status', this.el).val();
       console.log('set reward status to', status);
 
       this.model.set('status', status).trigger('change');
-
     },
 
-    showEditDescription: function(){
+    setRewardRedeemMethod: function() {
+      var redeemMethod = $('select.reward-redeem-method', this.el).val();
+      console.log('set reward redeem_method to', redeemMethod);
+
+      this.model.set('redeem_method', redeemMethod).trigger('change');
+    },
+
+    showEditDescription: function() {
       $('div.edit-description', this.el).hide();
       $('div.edit-description-field', this.el).show();
     },
 
-    saveEditDescription: function(){
+    saveEditDescription: function() {
 
       var description = $('textarea.reward-description', this.el).val();
 
       this.model.set('description', description).trigger('change');
-
 
       $('div.edit-description', this.el).show();
       $('div.edit-description-field', this.el).hide();
@@ -100,11 +105,11 @@ define([
       vent.trigger('showAddRewardModal', this.model);
     },
 
-    showEditImage: function(){
+    showEditImage: function() {
       $('div.edit-image', this.el).show();
     },
 
-    saveEditImage: function(){
+    saveEditImage: function() {
       $('div.edit-image', this.el).hide();
 
       var image = $('input.reward-image', this.el).val();
@@ -115,12 +120,12 @@ define([
       vent.trigger('showAddRewardModal', this.model);
     },
 
-    showEditRedeem: function(){
+    showEditRedeem: function() {
       $('div.edit-redeem', this.el).hide();
       $('div.edit-redeem-field', this.el).show();
     },
 
-    saveEditRedeem: function(){
+    saveEditRedeem: function() {
 
       var amount = $('input.reward-amount', this.el).val();
       var point = $('input.reward-point', this.el).val();
@@ -145,7 +150,7 @@ define([
       vent.trigger('showAddRewardModal', this.model);
     },
 
-    createReward: function(){
+    createReward: function() {
 
       console.log('create reward!');
       this.model.set('company_id', parseInt(window.Company.companyId, 10));
