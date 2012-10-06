@@ -11,7 +11,8 @@ define([
     couponItemTemplate: _.template(couponItemTemplate),
     couponModalTemplate: _.template(couponModalTemplate),
     events: {
-      'click .coupon-view ': 'viewCouponModal'
+      'click .coupon-view ': 'viewCouponModal',
+      'click .deliver ': 'deliverReward'
     },
     initialize: function(){
       _.bindAll(this);
@@ -62,6 +63,26 @@ define([
 
           model.set(res.coupon);
           model.change();
+        }
+      });
+    },
+    deliverReward: function(e) {
+      e.preventDefault()
+      var model = this.model;
+      $.ajax({
+        type: 'POST',
+        url: window.Company.BASE_URL + 'apiv3/deliver_reward',
+        dataType: 'json',
+        data: {
+          coupon_id: this.model.get('_id').$id
+        },
+        success: function(res) {
+          if(res.success) {
+            model.set('delivered', true );
+            model.change();
+          } else {
+            alert('Error deliver reward')
+          }
         }
       });
     }
