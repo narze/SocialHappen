@@ -821,6 +821,7 @@ class Apiv4 extends REST_Controller {
         $this->load->library('reward_lib');
         foreach($challenge['reward_items'] as $reward_item) {
           $reward_item_id = get_mongo_id($reward_item);
+
           $coupon = array(
             'reward_item' => $reward_item,
             'reward_item_id' => $reward_item_id,
@@ -846,7 +847,6 @@ class Apiv4 extends REST_Controller {
               $data_reward_item['coupon_id'] = $coupon_id;
             }
           }
-
         }
       }
 
@@ -928,8 +928,7 @@ class Apiv4 extends REST_Controller {
 
     foreach($coupons as &$coupon) {
       //Get companies
-      $company_id = $coupon['company_id'];
-      if($company_id > 0) {
+      if($company_id = $coupon['company_id']) {
         if(isset($companies[$company_id])) {
           $company = $companies[$company_id];
         } else {
