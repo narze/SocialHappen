@@ -19,7 +19,8 @@ define([
       },
       company_id: window.Company.companyId,
       status: 'published',
-      is_points_reward: false
+      is_points_reward: false,
+      redeem_method: 'in_store'
     },
     initialize: function(){
 

@@ -735,6 +735,23 @@ class Apiv3 extends CI_Controller {
     return json_return($return);
   }
 
+  function deliver_reward(){
+    $coupon_id = $this->input->post('coupon_id');
+    $this->load->library('coupon_lib');
+    //TO-DO : get current user's id (admin_id) -> call coupon_lib->confirm_coupon
+    $admin_id = $this->socialhappen->get_user_id();
+    $return = array(
+      'success' => FALSE
+    );
+    if($result = $this->coupon_lib->deliver_reward($coupon_id, $admin_id)) {
+      $return = array(
+        'success' => TRUE
+      );
+    }
+
+    return json_return($return);
+  }
+
   function rewardsRedeemed() {
     if(!$user_id = $this->socialhappen->get_user_id()) {
       return json_return(array('success' => FALSE));

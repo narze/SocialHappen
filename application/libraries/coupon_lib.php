@@ -52,6 +52,15 @@ Class Coupon_lib{
 		return FALSE;
 	}
 
+	function deliver_reward($coupon_id = NULL, $admin_user_id = NULL){
+		//not tested yet
+		if($coupon_id && ($admin_user_id !== NULL)) {
+			$this->CI->load->library('reward_lib');
+			return $this->CI->coupon_model->update(array('_id' => new MongoId($coupon_id)), array('delivered' => TRUE));
+		}
+		return FALSE;
+	}
+
 	function get_coupon_admin_url($data){
 		$coupon = NULL;
 		if(array_key_exists('coupon_hash', $data)){

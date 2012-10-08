@@ -24,6 +24,9 @@ define([
 
     render: function () {
       console.log(this.options.reward_item);
+      if(!this.options.reward_item.redeem_method) {
+        this.options.reward_item.redeem_method = ''
+      }
       $(this.el).html(this.rewardFormTemplate(this.options.reward_item));
       return this;
     },
@@ -40,6 +43,7 @@ define([
       this.options.reward_item.value = $('input.reward-value', this.el).val();
       this.options.reward_item.status = $('select.reward-status', this.el).val();
       this.options.reward_item.description = $('textarea.reward-description', this.el).val();
+      this.options.reward_item.redeem_method = $('select.reward-redeem-method', this.el).val();
 
       var reward_items = this.model.get('reward_items');
       this.model.set('reward_items', reward_items).trigger('change');

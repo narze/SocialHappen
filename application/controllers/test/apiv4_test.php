@@ -366,7 +366,8 @@ class Apiv4_test extends CI_Controller {
 	  $value = '54';
 	  $description = 'This is pasta!!!';
 	  $is_points_reward = TRUE;
-	  $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description', 'is_points_reward');
+	  $redeem_method = 'in_store';
+	  $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description', 'is_points_reward', 'redeem_method');
 
 	  $this->reward_item_id = $result = $this->reward_item->add_challenge_reward($input);
 	  $this->unit->run($result, 'is_string', "\$result", $result);
@@ -384,7 +385,8 @@ class Apiv4_test extends CI_Controller {
 	  $value = '500 THB';
 	  $description = 'This is pasta!!!';
 	  $is_points_reward = FALSE;
-	  $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description', 'is_points_reward');
+	  $redeem_method = 'in_store';
+	  $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description', 'is_points_reward', 'redeem_method');
 
 	  $this->reward_item_id2 = $result = $this->reward_item->add_challenge_reward($input);
 	  $this->unit->run($result, 'is_string', "\$result", $result);
@@ -669,7 +671,8 @@ class Apiv4_test extends CI_Controller {
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200';
 		$description = 'This is pasta!!!';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id');
+		$redeem_method = 'in_store';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id', 'redeem_method');
 
 		$this->reward_item_1 = $result = $this->reward_item_model->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -691,7 +694,8 @@ class Apiv4_test extends CI_Controller {
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200';
 		$description = 'This is pasta!!!';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id');
+		$redeem_method = 'in_store';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id', 'redeem_method');
 
 		$this->reward_item_2 = $result = $this->reward_item_model->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -713,7 +717,8 @@ class Apiv4_test extends CI_Controller {
 		$image = base_url().'assets/images/cam-icon.png';
 		$value = '200';
 		$description = 'This is pasta!!!';
-		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id');
+		$redeem_method = 'in_store';
+		$input = compact('name', 'status', 'type', 'redeem', 'start_timestamp', 'end_timestamp','criteria_type','criteria_id','image','value','description','company_id', 'redeem_method');
 
 		$this->reward_item_3 = $result = $this->reward_item_model->add($input);
 		$this->unit->run($result, 'is_string', "\$result", $result);
@@ -1005,6 +1010,7 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
   	$this->unit->run($result['data'][0]['company'], 'is_array', "\$result['data'][0]['company']", $result['data'][0]['company']);
   	$this->unit->run($result['data'][0]['challenge'], 'is_array', "\$result['data'][0]['challenge']", $result['data'][0]['challenge']);
+  	// $this->unit->run($result['data'][0]['reward_item']['redeem_method'] === 'in_store', TRUE, "\$result['data'][0]['reward_item']['redeem_method']", $result['data'][0]['reward_item']['redeem_method']);
   }
 
   function do_action_post_test_2() {

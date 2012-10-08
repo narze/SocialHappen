@@ -383,6 +383,21 @@
 			return FALSE;
 		}
   }
+
+  function updateMultiple($criteria, $update) {
+		try	{
+			$result = $this->reward_item->update($criteria,
+			$update, array('multiple' => TRUE, 'safe' => TRUE));
+			if($result['n'] != 0 || $result['err']){
+      	return TRUE;
+      } else {
+      	return FALSE;
+      }
+		} catch(MongoCursorException $e){
+			log_message('error', 'Mongo error : '. $e);
+			return FALSE;
+		}
+  }
 }
 
 /* End of file reward_model.php */

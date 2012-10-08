@@ -11,16 +11,50 @@
         <div class="coupon-timestamp">
           Date : <%= new Date(timestamp * 1000).toString() %>
         </div>
+        <div class="coupon-redeem-method">
+          <% if(reward_item.redeem_method === 'delivery') { %>
+            Redeem Method : Delivery
+          <% } else if(reward_item.redeem_method === 'in_store') { %>
+            Redeem Method : In Store
+          <% } %>
+        </div>
+        <div class="coupon-status">
+          Status:
+          <% if(reward_item.redeem_method === 'delivery') { %>
+            <% if(!confirmed) { %>
+             Waiting for approval
+            <% } else if(!delivered) { %>
+             Approved
+            <% } else { %>
+             Delivered
+            <% } %>
+          <% } else if(reward_item.redeem_method === 'in_store') { %>
+            <% if(!confirmed) { %>
+             Ready for redeem
+            <% } else { %>
+             Redeemed
+            <% } %>
+          <% } %>
+        </div>
       </div>
       <div class="span2">
         <% if (confirmed) { %>
-          <span>
+          <div>
             <button disabled="disabled" class="btn btn-disabled">Approved</button>
-          </span>
+          </div>
         <% } else { %>
-          <span>
+          <div>
             <button class="coupon-view btn btn-primary">View</button>
-          </span>
+          </div>
+        <% } %>
+        <% if(reward_item.redeem_method === 'delivery' && confirmed) { %>
+          <div>Delivery status:
+            <% if (!delivered) { %>
+              <button class="deliver btn btn-primary">Deliver</button>
+            <% } else { %>
+              <button disabled="disabled" class="btn btn-disabled">Deliverd</button>
+            <% } %>
+          </div>
         <% } %>
       </div>
     </div>

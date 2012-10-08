@@ -14,7 +14,8 @@ define([
       confirmed: null,
       confirmed_timestamp: null,
       confirmed_by_id: null,
-      challenge_id: null
+      challenge_id: null,
+      delivered: false
     },
     initialize: function(){
 
@@ -52,7 +53,7 @@ define([
         delete data.couponRewards;
         params.data = 'model='+JSON.stringify(data);
       }
-
+redeem_method
       // For older servers, emulate JSON by encoding the request into an HTML-form.
       if (Backbone.emulateJSON || true) {
         params.contentType = 'application/x-www-form-urlencoded';

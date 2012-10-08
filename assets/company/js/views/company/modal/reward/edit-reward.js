@@ -17,6 +17,7 @@ define([
       'click img.reward-image, h6.edit-image': 'showEditImage',
       'click button.save-image': 'saveEditImage',
       'change select.reward-status': 'setRewardStatus',
+      'change select.reward-redeem-method': 'setRewardRedeemMethod',
       'click .edit-redeem': 'showEditRedeem',
       'click .save-redeem': 'saveEditRedeem',
       'click button.upload-image-submit': 'uploadImage'
@@ -75,6 +76,14 @@ define([
       console.log('set reward status to', status);
 
       this.model.set('status', status).trigger('change');
+      this.model.save();
+    },
+
+    setRewardRedeemMethod: function() {
+      var redeemMethod = $('select.reward-redeem-method', this.el).val();
+      console.log('set reward redeem_method to', redeemMethod);
+
+      this.model.set('redeem_method', redeemMethod).trigger('change');
       this.model.save();
     },
 
