@@ -742,6 +742,50 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run(count($result['data']), 1, "count(\$result['data'])", count($result['data']));
 	}
 
+	function _add_offer_reward_test() {
+		$this->load->model('reward_item_model');
+		//Draft reward
+		$name = 'name' . '1';
+		$status = 'draft';
+		$type = 'offer';
+		$company_id = 1;
+		$start_timestamp = time() - 3600;
+		$end_timestamp = time() + 7200;
+		$image = base_url().'assets/images/cam-icon.png';
+		$value = 'free';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'start_timestamp', 'end_timestamp','image','value','description','company_id');
+
+		$this->offer_reward_1 = $result = $this->reward_item_model->add_offer_reward($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		//Published reward
+		$name = 'name' . '2';
+		$status = 'published';
+		$type = 'offer';
+		$company_id = 1;
+		$start_timestamp = time() - 3600;
+		$end_timestamp = time() + 7200;
+		$image = base_url().'assets/images/cam-icon.png';
+		$value = 'free';
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'type', 'start_timestamp', 'end_timestamp','image','value','description','company_id');
+
+		$this->offer_reward_2 = $result = $this->reward_item_model->add_offer_reward($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+	}
+
+	function offers_get_test() {
+		$method = 'offers';
+
+		$params = array();
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']), 1, "count(\$result['data'])", count($result['data']));
+	}
+
 	/**********************
 	 * Requires user token
 	 **********************/

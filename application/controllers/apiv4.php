@@ -284,7 +284,7 @@ class Apiv4 extends REST_Controller {
   /**
    * Get rewards
    * @method GET
-   * @params -
+   * @params [reward_item_id]
    */
   function rewards_get() {
     $reward_item_id = $this->get('reward_item_id');
@@ -310,6 +310,37 @@ class Apiv4 extends REST_Controller {
     }, $rewards);
 
     return $this->success($rewards);
+  }
+
+  /**
+   * Get offers (a type of reward item)
+   * @method GET
+   * @params [reward_item_id]
+   */
+  function offers_get() {
+    $reward_item_id = $this->get('reward_item_id');
+
+    $query = array(
+      'status' => 'published',
+      'type' => 'offer'
+    );
+
+    if($reward_item_id) {
+      $query = array(
+        '_id' => new MongoId($reward_item_id)
+      );
+    }
+
+    $this->load->model('reward_item_model');
+
+    $offers = $this->reward_item_model->get($query);
+
+    $offers = array_map(function($offer){
+      $offer['_id'] = '' . $offer['_id'];
+      return $offer;
+    }, $offers);
+
+    return $this->success($offers);
   }
 
   /**

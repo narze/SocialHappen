@@ -128,7 +128,7 @@
 	 * @author Manasssarn M.
 	 */
 	function add($input = array()){
-		if(!issetor($input['name']) || !issetor($input['type']) || !issetor($input['start_timestamp']) || !issetor($input['end_timestamp'])|| !issetor($input['criteria_type']) || !issetor($input['criteria_id']) || !issetor($input['image']) || !issetor($input['value'])){
+		if(!issetor($input['name']) || !issetor($input['type']) || !issetor($input['start_timestamp']) || !issetor($input['end_timestamp']) || !issetor($input['criteria_type']) || !issetor($input['criteria_id']) || !issetor($input['image']) || !issetor($input['value'])){
 			return FALSE;
 		}
 		$input_type = $input['type'];
@@ -374,6 +374,35 @@
 
 		$input['value'] = (int) $input['value'];
 		$input['user_list'] = array();
+		$input['description'] = issetor($input['description']);
+		try	{
+			$this->reward_item->insert($input, array('safe' => TRUE));
+			return get_mongo_id($input);
+		} catch(MongoCursorException $e){
+			log_message('error', 'Mongo error : '. $e);
+			return FALSE;
+		}
+  }
+
+  /**
+   * Add offer type reward
+   * @param array $input
+   */
+  function add_offer_reward($input = array()) {
+  	if(!issetor($input['name']) || !issetor($input['image']) || !isset($input['value'])) {
+			return FALSE;
+		}
+
+		$input['type'] = 'offer';
+
+		if(isset($input['company_id'])) {
+			$input['company_id'] = (int) $input['company_id'];
+		}
+
+		if(!isset($input['status']) || !in_array($input['status'], array('draft', 'published', 'cancelled'))){
+			$input['status'] = 'draft';
+		}
+
 		$input['description'] = issetor($input['description']);
 		try	{
 			$this->reward_item->insert($input, array('safe' => TRUE));

@@ -487,6 +487,24 @@ class Reward_item_model_test extends CI_Controller {
 		$reward = $this->reward_item->get_one(array('_id' => new MongoId($this->reward_item_4)));
 		$this->unit->run($reward['type'], 'challenge', "\$reward['type']", $reward['type']);
 	}
+
+	function add_offer_reward_test(){
+		$name = 'Offer reward';
+		$status = 'published';
+		$image = base_url().'assets/images/cam-icon.png';
+		$value = 200;
+		$description = 'This is pasta!!!';
+		$input = compact('name', 'status', 'image', 'value', 'description');
+
+		$this->reward_item_4 = $result = $this->reward_item->add_offer_reward($input);
+		$this->unit->run($result, 'is_string', "\$result", $result);
+
+		$count = $this->reward_item->count_all();
+		$this->unit->run($count, 2, 'count', $count);
+
+		$reward = $this->reward_item->get_one(array('_id' => new MongoId($this->reward_item_4)));
+		$this->unit->run($reward['type'], 'offer', "\$reward['type']", $reward['type']);
+	}
 }
 /* End of file reward_item_model_test.php */
 /* Location: ./application/controllers/test/reward_item_model_test.php */
