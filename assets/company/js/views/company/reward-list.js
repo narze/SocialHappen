@@ -95,13 +95,15 @@ define([
         image: 'https://lh5.googleusercontent.com/mww1eX8x-JdWhYUA1B-ovYX3MQf5gGwsqcXvySmebElaBcnKeH0wojdCDSF4rfhnAMlXvsG_=s640-h400-e365',
         value: 0,
         description: 'Reward Description',
+        type: 'redeem',
         redeem: {
           point: 10,
           amount: 10,
           amount_redeemed: 0,
           once: true
         },
-        status: 'published'
+        status: 'published',
+        redeem_method: 'in_store'
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       vent.trigger('showAddRewardModal', newModel);

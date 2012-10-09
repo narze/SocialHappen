@@ -14,6 +14,7 @@ define([
       '/company/:id': 'company',
       '/company/:id/challenge': 'company',
       '/company/:id/reward': 'reward',
+      '/company/:id/offer': 'offer',
       '/company/:id/coupon': 'coupon',
       '/company/:id/users': 'users',
       '/company/:id/users/:userId': 'user',
@@ -73,6 +74,17 @@ define([
         createCompanyPage();
         var rewardListView = Vm.create(sandbox.views.appView, 'Content', RewardList);
         $('#content-pane').html(rewardListView.render().el);
+      })
+    })
+
+    router.on('route:offer', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'offer';
+      sandbox.collections.offersCollection.url = window.Company.BASE_URL + '/apiv3/offers/?company_id=' + id;
+      require(['views/company/offer-list'], function(OfferList) {
+        createCompanyPage();
+        var offerListView = Vm.create(sandbox.views.appView, 'Content', OfferList);
+        $('#content-pane').html(offerListView.render().el);
       })
     })
 

@@ -24,6 +24,7 @@ define([
       'click .edit-redeem': 'showEditRedeem',
       'click .save-redeem': 'saveEditRedeem',
       'click button.create-reward': 'createReward',
+      'click button.create-offer': 'createOffer',
       'click button.upload-image-submit': 'uploadImage'
     },
 
@@ -160,6 +161,22 @@ define([
         success: function() {
           //Refresh
           // window.location = window.Company.BASE_URL + 'r/company/' + window.Company.companyId +'/reward';
+        }
+      });
+
+      this.$el.modal('hide');
+    },
+
+    createOffer: function() {
+
+      console.log('create offer!');
+      this.model.set('company_id', parseInt(window.Company.companyId, 10));
+      this.model.set('type', 'redeem');
+
+      sandbox.collections.offersCollection.create(this.model, {
+        success: function() {
+          //Refresh
+          // window.location = window.Company.BASE_URL + 'r/company/' + window.Company.companyId +'/offer';
         }
       });
 

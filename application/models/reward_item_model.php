@@ -413,6 +413,21 @@
 		}
   }
 
+  function updateOne($criteria, $update) {
+		try	{
+			$result = $this->reward_item->update($criteria,
+			$update, array('safe' => TRUE));
+			if($result['n'] != 0 || $result['err']){
+      	return TRUE;
+      } else {
+      	return FALSE;
+      }
+		} catch(MongoCursorException $e){
+			log_message('error', 'Mongo error : '. $e);
+			return FALSE;
+		}
+  }
+
   function updateMultiple($criteria, $update) {
 		try	{
 			$result = $this->reward_item->update($criteria,

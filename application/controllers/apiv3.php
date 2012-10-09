@@ -542,6 +542,51 @@ class Apiv3 extends CI_Controller {
   }
 
   /**
+   * create/update offer
+   */
+  function saveOffer($reward_id = NULL){
+    header('Content-Type: application/json', TRUE);
+    if(!$user = $this->socialhappen->get_user()) {
+      return json_return(array('success' => FALSE, 'data' => 'Not signed in'));
+    }
+
+    $offer = rawurldecode($this->input->post('model', TRUE));
+
+    if(!isset($offer) || $offer == ''){
+      return json_return(array('success' => FALSE, 'data' => 'no offer data'));
+    }
+
+    $this->load->model('reward_item_model');
+    $offer = json_decode($offer, TRUE);
+
+    if(!is_array($offer)){
+      return json_return(array('success' => FALSE, 'data' =>'data error'));
+      return FALSE;
+    }
+
+    if(isset($offer['_id'])) {
+      //Offer exists : update
+      $reward_item_id = $offer['_id'];
+      $offer_update = array(
+        '$set' => filter_array($offer, array('company_id', 'description', 'image', 'name', 'status', 'type', 'start_timestamp', 'end_timestamp', 'user_list', 'value', 'redeem_method'), TRUE)
+      );
+      if(!$offer_update_result = $this->reward_item_model->updateOne(
+          array('_id' => new MongoId($reward_item_id))
+        , $offer_update)) {
+        return json_return(array('success' => FALSE, 'data' => 'Update reward failed'));
+      }
+    } else {
+      //New reward : add new
+      if(!$reward_item_id = $this->reward_item_model->add_offer_reward($offer)) {
+        return json_return(array('success' => FALSE, 'data' => 'Add offer failed'));
+      }
+    }
+
+    return json_return(array('success' => TRUE, 'data' => $offer));
+
+  }
+
+  /**
    * Get reward_item
    */
   function reward_item($reward_item_id = NULL) {
@@ -635,6 +680,26 @@ class Apiv3 extends CI_Controller {
       return $reward;
     }, $rewards);
     return json_return($rewards);
+  }
+
+  /**
+   * list offer type rewards
+   */
+  function offers() {
+    if(!$company_id = $this->input->get('company_id')) {
+      return json_return(array('success' => FALSE, 'data' => 'No company_id'));
+    }
+
+    $this->load->model('reward_item_model');
+    $offers = $this->reward_item_model->get(array(
+      'company_id' => (int) $company_id,
+      'type' => 'offer'
+    ), array('_id' => -1));
+    $offers = array_map(function($offer) {
+      $offer['_id'] = get_mongo_id($offer);
+      return $offer;
+    }, $offers);
+    return json_return($offers);
   }
 
   /**

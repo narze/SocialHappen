@@ -77,33 +77,35 @@
     </div>
   </div>
 
-  <div class="control-group">
-    <div class="edit-redeem">
-      <h6>Redeem:</h6>
-      <p>
-        Quantity: <%= ( redeem.amount - redeem.amount_redeemed )+ '/' + redeem.amount %>
-      </p>
-      <p>
-        Require Point: <%= redeem.point %>
-      </p>
-      <p>
-        User can redeem only once: <%= redeem.once?'Yes':'No' %>
-      </p>
+  <% if(type === 'redeem' && typeof redeem !== 'undefined') { %>
+    <div class="control-group">
+      <div class="edit-redeem">
+        <h6>Redeem:</h6>
+        <p>
+          Quantity: <%= ( redeem.amount - redeem.amount_redeemed )+ '/' + redeem.amount %>
+        </p>
+        <p>
+          Require Point: <%= redeem.point %>
+        </p>
+        <p>
+          User can redeem only once: <%= redeem.once?'Yes':'No' %>
+        </p>
+      </div>
+      <div class="edit-redeem-field hide">
+        <h6>Redeem:</h6>
+        <p>
+          Quantity: <%= ( redeem.amount - redeem.amount_redeemed ) %> / <input type="text" class="reward-amount" value="<%= redeem.amount %>" />
+        </p>
+        <p>
+          Require Point: <input type="text" class="reward-point" value="<%= redeem.point %>" />
+        </p>
+        <p>
+          User can redeem only once: <input type="checkbox" class="reward-once" value="" <%= redeem.once?'checked':'' %> />
+        </p>
+        <button class="btn save-redeem btn-primary">Save</button>
+      </div>
     </div>
-    <div class="edit-redeem-field hide">
-      <h6>Redeem:</h6>
-      <p>
-        Quantity: <%= ( redeem.amount - redeem.amount_redeemed ) %> / <input type="text" class="reward-amount" value="<%= redeem.amount %>" />
-      </p>
-      <p>
-        Require Point: <input type="text" class="reward-point" value="<%= redeem.point %>" />
-      </p>
-      <p>
-        User can redeem only once: <input type="checkbox" class="reward-once" value="" <%= redeem.once?'checked':'' %> />
-      </p>
-      <button class="btn save-redeem btn-primary">Save</button>
-    </div>
-  </div>
+  <% } %>
 </div>
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Close</a>
