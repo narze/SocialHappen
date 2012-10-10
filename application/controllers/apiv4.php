@@ -194,11 +194,11 @@ class Apiv4 extends REST_Controller {
       }
 
     } else {
-      return $this->error('Wrong type');
+      return $this->error('Wrong type', 2);
     }
 
     if(!$signinsuccess) {
-      return $this->error('Sign in failed');
+      return $this->error('Sign in failed', 2);
     }
 
     //Generate token & add into user's mongo model
@@ -210,7 +210,7 @@ class Apiv4 extends REST_Controller {
     $criteria = array('user_id' => $user_id);
     $this->load->model('user_mongo_model');
     if(!$this->user_mongo_model->upsert($criteria, $user_mongo_update)) {
-      return $this->error('Update token failed');
+      return $this->error('Update token failed', 2);
     }
 
     //add audit
@@ -228,13 +228,13 @@ class Apiv4 extends REST_Controller {
       'objecti' => NULL,
       'image' => $user['user_image']
     ))) {
-      return $this->error('Add audit failed');
+      return $this->error('Add audit failed', 2);
     }
 
     $this->load->library('achievement_lib');
     $info = array('action_id' => $action_id, 'app_install_id' => 0);
     if(!$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1)) {
-      return $this->error('increment stat failed');
+      return $this->error('increment stat failed', 2);
     }
 
     return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
