@@ -14,7 +14,8 @@ define([
       company_id: window.Company.companyId,
       status: 'published',
       type: 'offer',
-      redeem_method: 'in_store'
+      redeem_method: 'in_store',
+      redeem: {}
     },
     initialize: function(){
 
