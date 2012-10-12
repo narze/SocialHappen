@@ -15,7 +15,9 @@ define([
       status: 'published',
       type: 'offer',
       redeem_method: 'in_store',
-      redeem: {}
+      redeem: {},
+      start_timestamp: null,
+      end_timestamp: null
     },
     initialize: function(){
 

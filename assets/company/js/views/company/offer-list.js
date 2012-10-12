@@ -98,7 +98,9 @@ define([
         status: 'published',
         type: 'offer',
         redeem_method: 'in_store',
-        redeem: {}
+        redeem: {},
+        start_timestamp: null,
+        end_timestamp: null
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       vent.trigger('showAddRewardModal', newModel);
