@@ -15,7 +15,7 @@ define([
         point: 10,
         amount: 10,
         amount_redeemed: 0,
-        once: true
+        once: false
       },
       company_id: window.Company.companyId,
       status: 'published',

@@ -100,7 +100,7 @@ define([
           point: 10,
           amount: 10,
           amount_redeemed: 0,
-          once: true
+          once: false
         },
         status: 'published',
         redeem_method: 'in_store'
