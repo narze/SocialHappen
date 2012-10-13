@@ -80,6 +80,38 @@
     </div>
   </div>
 
+  <% if(type === 'offer') { %>
+    <div class="control-group">
+      <div class="edit-address">
+        <h6>Address:</h6>
+        <p>
+          <%- address %>
+        </p>
+      </div>
+      <div class="edit-address-field hide">
+        <h6>Address:</h6>
+        <textarea class="offer-address span5" rows="3"><%- address %></textarea>
+        <button class="btn save-address btn-primary">Save</button>
+      </div>
+    </div>
+  <% } %>
+
+  <% if(type === 'offer') { %>
+    <div class="control-group">
+      <div class="edit-source">
+        <h6>Source:</h6>
+        <p>
+          <%- source %>
+        </p>
+      </div>
+      <div class="edit-source-field hide">
+        <h6>Source:</h6>
+        <input class="offer-source span5" value="<%- source %>"></input>
+        <button class="btn save-source btn-primary">Save</button>
+      </div>
+    </div>
+  <% } %>
+
   <% if(type === 'redeem' && typeof redeem !== 'undefined') { %>
     <div class="control-group">
       <div class="edit-redeem">

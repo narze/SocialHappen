@@ -17,6 +17,10 @@ define([
       'click button.save-name': 'saveEditName',
       'click div.edit-description': 'showEditDescription',
       'click button.save-description': 'saveEditDescription',
+      'click div.edit-address': 'showEditAddress',
+      'click button.save-address': 'saveEditAddress',
+      'click div.edit-source': 'showEditSource',
+      'click button.save-source': 'saveEditSource',
       'click img.reward-image, h6.edit-image': 'showEditImage',
       'click button.save-image': 'saveEditImage',
       'change select.reward-status': 'setRewardStatus',
@@ -54,7 +58,7 @@ define([
 
           if(endDate && date && date >= endDate){
             alert('Start date must come before end date');
-            var startDate = self.model.get('start_date');
+            var startDate = self.model.get('start_timestamp');
             if(startDate){
               startDate *= 1000;
               $('.reward-start-date', self.el).datetimepicker('setDate', (new Date(startDate)));
@@ -77,7 +81,7 @@ define([
 
           if(date && startDate && startDate >= date){
             alert('End date must come after start date');
-            var endDate = self.model.get('end_date');
+            var endDate = self.model.get('end_timestamp');
             if(endDate){
               endDate *= 1000;
               $('.reward-end-date', self.el).datetimepicker('setDate', (new Date(endDate)));
@@ -118,10 +122,10 @@ define([
       this.model.set('name', name).trigger('change');
 
 
-      $('h3.edit-name', this.$el).show();
+      $('h3.edit-name', this.$el).html(name).show();
       $('div.edit-name', this.$el).hide();
 
-      vent.trigger('showAddRewardModal', this.model);
+      // vent.trigger('showAddRewardModal', this.model);
     },
 
     setRewardStatus: function() {
@@ -149,10 +153,47 @@ define([
 
       this.model.set('description', description).trigger('change');
 
+      $('div.edit-description p', this.el).html(description);
       $('div.edit-description', this.el).show();
       $('div.edit-description-field', this.el).hide();
 
-      vent.trigger('showAddRewardModal', this.model);
+      // vent.trigger('showAddRewardModal', this.model);
+    },
+
+    showEditAddress: function() {
+      $('div.edit-address', this.el).hide();
+      $('div.edit-address-field', this.el).show();
+    },
+
+    saveEditAddress: function() {
+
+      var address = $('textarea.offer-address', this.el).val();
+
+      this.model.set('address', address).trigger('change');
+
+      $('div.edit-address p', this.el).html(address);
+      $('div.edit-address', this.el).show();
+      $('div.edit-address-field', this.el).hide();
+
+      // vent.trigger('showAddRewardModal', this.model);
+    },
+
+    showEditSource: function() {
+      $('div.edit-source', this.el).hide();
+      $('div.edit-source-field', this.el).show();
+    },
+
+    saveEditSource: function() {
+
+      var source = $('input.offer-source', this.el).val();
+
+      this.model.set('source', source).trigger('change');
+
+      $('input.offer-source', this.el).val(source);
+      $('div.edit-source', this.el).show();
+      $('div.edit-source-field', this.el).hide();
+
+      // vent.trigger('showAddRewardModal', this.model);
     },
 
     showEditImage: function() {
@@ -165,7 +206,7 @@ define([
       var image = $('input.reward-image', this.el).val();
 
       this.model.set('image', image).trigger('change');
-
+      // $('img.reward-image').attr('src', image)
 
       vent.trigger('showAddRewardModal', this.model);
     },
@@ -194,10 +235,13 @@ define([
       this.model.set('redeem', redeem).trigger('change');
 
 
+      $('div.edit-redeem p:eq(0)', this.el).html('Quantity: ' + redeem.amount);
+      $('div.edit-redeem p:eq(1)', this.el).html('Require Point: ' + redeem.point);
+      $('div.edit-redeem p:eq(2)', this.el).html('User can redeem only once: ' + (redeem.once ? 'Yes':'No'));
       $('div.edit-redeem', this.el).show();
       $('div.edit-redeem-field', this.el).hide();
 
-      vent.trigger('showAddRewardModal', this.model);
+      // vent.trigger('showAddRewardModal', this.model);
     },
 
     createReward: function() {

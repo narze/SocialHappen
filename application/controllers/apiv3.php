@@ -572,7 +572,7 @@ class Apiv3 extends CI_Controller {
       //Offer exists : update
       $reward_item_id = $offer['_id'];
       $offer_update = array(
-        '$set' => filter_array($offer, array('company_id', 'description', 'image', 'name', 'status', 'type', 'start_timestamp', 'end_timestamp', 'user_list', 'value', 'redeem_method', 'updated_timestamp'), TRUE)
+        '$set' => filter_array($offer, array('company_id', 'description', 'image', 'name', 'status', 'type', 'start_timestamp', 'end_timestamp', 'user_list', 'value', 'redeem_method', 'updated_timestamp', 'address', 'source'), TRUE)
       );
       if(!$offer_update_result = $this->reward_item_model->updateOne(
           array('_id' => new MongoId($reward_item_id))

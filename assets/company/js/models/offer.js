@@ -17,7 +17,9 @@ define([
       redeem_method: 'in_store',
       redeem: {},
       start_timestamp: null,
-      end_timestamp: null
+      end_timestamp: null,
+      address: '',
+      source: ''
     },
     initialize: function(){
 
