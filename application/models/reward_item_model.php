@@ -182,7 +182,9 @@
 		if(!$reward_item_id || !$input){
 			return FALSE;
 		}
-		$update['$set'] = array();
+		$update['$set'] = array(
+			'updated_timestamp' => time()
+		);
 		if(isset($input['name'])){
 			$update['$set']['name'] = $input['name'];
 		}

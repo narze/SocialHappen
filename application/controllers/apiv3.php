@@ -524,6 +524,8 @@ class Apiv3 extends CI_Controller {
       return FALSE;
     }
 
+    $reward['updated_timestamp'] = time();
+
     if(isset($reward['_id'])) {
       //Reward exists : update
       $reward_item_id = $reward['_id'];
@@ -564,11 +566,13 @@ class Apiv3 extends CI_Controller {
       return FALSE;
     }
 
+    $offer['updated_timestamp'] = time();
+
     if(isset($offer['_id'])) {
       //Offer exists : update
       $reward_item_id = $offer['_id'];
       $offer_update = array(
-        '$set' => filter_array($offer, array('company_id', 'description', 'image', 'name', 'status', 'type', 'start_timestamp', 'end_timestamp', 'user_list', 'value', 'redeem_method'), TRUE)
+        '$set' => filter_array($offer, array('company_id', 'description', 'image', 'name', 'status', 'type', 'start_timestamp', 'end_timestamp', 'user_list', 'value', 'redeem_method', 'updated_timestamp'), TRUE)
       );
       if(!$offer_update_result = $this->reward_item_model->updateOne(
           array('_id' => new MongoId($reward_item_id))
