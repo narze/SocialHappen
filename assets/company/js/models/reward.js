@@ -15,12 +15,14 @@ define([
         point: 10,
         amount: 10,
         amount_redeemed: 0,
-        once: true
+        once: false
       },
       company_id: window.Company.companyId,
       status: 'published',
       is_points_reward: false,
-      redeem_method: 'in_store'
+      redeem_method: 'in_store',
+      start_timestamp: null,
+      end_timestamp: null
     },
     initialize: function(){
 

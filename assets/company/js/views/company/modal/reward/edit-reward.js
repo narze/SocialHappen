@@ -37,6 +37,67 @@ define([
       var data = this.model.toJSON();
       $(this.el).html(this.editTemplate(data));
 
+      //start/end timestamp
+      var self = this
+      $('.reward-start-date', self.el).datetimepicker({
+        onClose : function(dateText, inst) {
+          var date = $('.reward-start-date', self.el).datetimepicker('getDate');
+
+          var endDate = $('.reward-end-date', self.el).datetimepicker('getDate');
+
+          if(endDate && date && date >= endDate){
+            alert('Start date must come before end date');
+            var startDate = self.model.get('start_date');
+            if(startDate){
+              startDate *= 1000;
+              $('.reward-start-date', self.el).datetimepicker('setDate', (new Date(startDate)));
+            }else{
+              $('.reward-start-date', self.el).datetimepicker('setDate', null);
+            }
+            return;
+          }
+
+          self.model.save({
+            start_timestamp: Math.floor(date.getTime()/1000)
+          });
+        }
+      });
+      $('.reward-end-date', self.el).datetimepicker({
+        onClose : function(dateText, inst) {
+          var date = $('.reward-end-date', self.el).datetimepicker('getDate');
+
+          var startDate = $('.reward-start-date', self.el).datetimepicker('getDate');
+
+          if(date && startDate && startDate >= date){
+            alert('End date must come after start date');
+            var endDate = self.model.get('end_date');
+            if(endDate){
+              endDate *= 1000;
+              $('.reward-end-date', self.el).datetimepicker('setDate', (new Date(endDate)));
+            }else{
+              $('.reward-end-date', self.el).datetimepicker('setDate', null);
+            }
+            return;
+          }
+
+          self.model.save({
+            end_timestamp: Math.floor(date.getTime()/1000)
+          });
+        }
+      });
+
+      var startTimestamp = this.model.get('start_timestamp');
+      if(startTimestamp){
+        startTimestamp *= 1000;
+        $('.reward-start-date', self.el).datetimepicker('setDate', (new Date(startTimestamp)));
+      }
+
+      var endTimestamp = this.model.get('end_timestamp');
+      if(endTimestamp){
+        endTimestamp *= 1000;
+        $('.reward-end-date', self.el).datetimepicker('setDate', (new Date(endTimestamp)));
+      }
+
       return this;
     },
 

@@ -100,10 +100,12 @@ define([
           point: 10,
           amount: 10,
           amount_redeemed: 0,
-          once: true
+          once: false
         },
         status: 'published',
-        redeem_method: 'in_store'
+        redeem_method: 'in_store',
+        start_timestamp: null,
+        end_timestamp: null
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       vent.trigger('showAddRewardModal', newModel);

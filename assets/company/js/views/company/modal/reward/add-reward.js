@@ -44,6 +44,55 @@ define([
       console.log(data);
       $(this.el).html(this.addTemplate(data));
 
+      //start/end timestamp
+      var self = this
+      $('.reward-start-date', self.el).datetimepicker({
+        onClose : function(dateText, inst) {
+          var date = $('.reward-start-date', self.el).datetimepicker('getDate');
+
+          var endDate = $('.reward-end-date', self.el).datetimepicker('getDate');
+
+          if(endDate && date && date >= endDate){
+            alert('Start date must come before end date');
+            var startDate = self.model.get('start_date');
+            if(startDate){
+              startDate *= 1000;
+              $('.reward-start-date', self.el).datetimepicker('setDate', (new Date(startDate)));
+            }else{
+              $('.reward-start-date', self.el).datetimepicker('setDate', null);
+            }
+            return;
+          }
+
+          self.model.set({
+            start_timestamp: Math.floor(date.getTime()/1000)
+          });
+        }
+      });
+      $('.reward-end-date', self.el).datetimepicker({
+        onClose : function(dateText, inst) {
+          var date = $('.reward-end-date', self.el).datetimepicker('getDate');
+
+          var startDate = $('.reward-start-date', self.el).datetimepicker('getDate');
+
+          if(date && startDate && startDate >= date){
+            alert('End date must come after start date');
+            var endDate = self.model.get('end_date');
+            if(endDate){
+              endDate *= 1000;
+              $('.reward-end-date', self.el).datetimepicker('setDate', (new Date(endDate)));
+            }else{
+              $('.reward-end-date', self.el).datetimepicker('setDate', null);
+            }
+            return;
+          }
+
+          self.model.set({
+            end_timestamp: Math.floor(date.getTime()/1000)
+          });
+        }
+      });
+
       return this;
     },
 
