@@ -488,6 +488,8 @@ class Apiv4 extends REST_Controller {
     $token = $this->post('token');
     $action_id = (int) $this->post('action_id');
     $challenge_id = $this->post('challenge_id');
+    $location = $this->post('location');
+
     if(!$time = $this->post('timestamp')) {
       $time = time();
     }
@@ -570,7 +572,7 @@ class Apiv4 extends REST_Controller {
         'app_install_id' => 0,
         'page_id' => 0,
         'company_id' => $company_id,
-        'subject' => NULL,
+        'subject' => $location ? $location : NULL,
         'object' => NULL,
         'objecti' => $challenge['hash'],
         'image' => $challenge['detail']['image']
@@ -646,7 +648,7 @@ class Apiv4 extends REST_Controller {
           'app_install_id' => 0,
           'page_id' => 0,
           'company_id' => $company_id,
-          'subject' => NULL,
+          'subject' => $location ? $location : NULL,
           'object' => NULL,
           'objecti' => $challenge['hash'],
           'image' => $challenge['detail']['image']

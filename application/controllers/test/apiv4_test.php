@@ -1070,7 +1070,8 @@ class Apiv4_test extends CI_Controller {
   		'user_id' => $this->user_id,
   		'token' => $this->token2,
   		'action_id' => 203,
-  		'challenge_id' => $this->challenge_id5
+  		'challenge_id' => $this->challenge_id5,
+  		'location' => '100.123,13.345' //long,lat
   	);
 
   	$result = $this->post($method, $params);
@@ -1081,6 +1082,9 @@ class Apiv4_test extends CI_Controller {
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
 	  $this->unit->run(count($result), 3 + 8 + 2, "count(\$result)", count($result));
+
+	  $this->unit->run($result[2]['action_id'] === 203, TRUE, "\$result[2]['action_id']", $result[2]['action_id']);
+	  $this->unit->run($result[2]['subject'] === $params['location'], TRUE, "\$result[2]['subject']", $result[2]['subject']);
 
 	  //do_action in tomorrow : cannot do action which done_count >= done_count_max
 	  $params = array(
