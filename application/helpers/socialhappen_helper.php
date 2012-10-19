@@ -219,5 +219,22 @@ if(!function_exists('json_return'))
 		return $data;
 	}
 }
+
+if(!function_exists('all_not_null'))
+{
+	function all_not_null($array, $keys) {
+		if(!is_array($array) || !is_array($keys)) {
+			return FALSE;
+		}
+
+		foreach($keys as $key) {
+			if(!isset($array[$key]) || ($array[$key] === NULL)) {
+				return FALSE;
+			}
+		}
+
+		return TRUE;
+	}
+}
 /* End of file socialhappen_helper.php */
 /* Location: ./system/helpers/socialhappen_helper.php */

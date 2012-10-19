@@ -109,7 +109,9 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_id' => '12345678123',
 			'facebook_user_first_name' => 'Zark',
 			'facebook_user_last_name' => 'Muckerburg',
-			'facebook_user_image' => 'https://graph.facebook.com/4/picture'
+			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
+			'device' => 'ios',
+			'device_token' => 'adfsgv23'
 		);
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
@@ -123,10 +125,18 @@ class Apiv4_test extends CI_Controller {
 		$this->token = $result['data']['token'];
 
 		//Check user's token
-		$this->load->model('user_mongo_model');
-		$this->user_mongo_model->recreateIndex();
-		$user = $this->user_mongo_model->getOne(array('user_id' => $result['data']['user_id']));
-		$this->unit->run($user['tokens'][0] === $this->token, TRUE, "\$user['tokens'][0]", $user['tokens'][0]);
+		// $this->load->model('user_mongo_model');
+		// $this->user_mongo_model->recreateIndex();
+		// $user = $this->user_mongo_model->getOne(array('user_id' => $result['data']['user_id']));
+		// $this->unit->run($user['tokens'][0] === $this->token, TRUE, "\$user['tokens'][0]", $user['tokens'][0]);
+		$this->load->model('user_token_model');
+		$criteria = array(
+			'user_id' => $this->user_id,
+			'device' => 'ios',
+			'device_token' => 'adfsgv23'
+		);
+		$user_token = $this->user_token_model->getOne($criteria);
+		$this->unit->run($user_token['login_token'] === $this->token, TRUE, "\$user_token['login_token']", $user_token['login_token']);
 
 		//facebook user id already registered : error
 		$params = array(
@@ -136,7 +146,9 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_id' => '12345678123',
 			'facebook_user_first_name' => 'NarzE',
 			'facebook_user_last_name' => 'Nz',
-			'facebook_user_image' => 'https://graph.facebook.com/4/picture'
+			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
+			'device' => 'ios',
+			'device_token' => 'adsfa24'
 		);
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
@@ -150,7 +162,9 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_id' => '4',
 			'facebook_user_first_name' => 'Zark',
 			'facebook_user_last_name' => 'Muckerburg',
-			'facebook_user_image' => 'https://graph.facebook.com/4/picture'
+			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
+			'device' => 'ios',
+			'device_token' => '1y5vdfsag'
 		);
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
@@ -164,7 +178,9 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_id' => '4',
 			'facebook_user_first_name' => 'Zark',
 			'facebook_user_last_name' => 'Muckerburg',
-			'facebook_user_image' => 'https://graph.facebook.com/4/picture'
+			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
+			'device' => 'ios',
+			'device_token' => '125342t5exa'
 		);
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
@@ -178,7 +194,9 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_id' => '4',
 			'facebook_user_first_name' => 'Zark',
 			'facebook_user_last_name' => 'Muckerburg',
-			'facebook_user_image' => 'https://graph.facebook.com/4/picture'
+			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
+			'device' => 'ios',
+			'device_token' => '6y3534dc'
 		);
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
@@ -192,7 +210,9 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_id' => '4',
 			'facebook_user_first_name' => 'Zark',
 			'facebook_user_last_name' => 'Muckerburg',
-			'facebook_user_image' => 'https://graph.facebook.com/4/picture'
+			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
+			'device' => 'ios',
+			'device_token' => '1248r72bcs'
 		);
 		$result = $this->post($method, $params);
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
@@ -280,9 +300,12 @@ class Apiv4_test extends CI_Controller {
 		$method = 'signout';
 
 		//Check user's token before removal (1 from signup, 1 from signin)
-		$this->load->model('user_mongo_model');
-		$user = $this->user_mongo_model->get_user($this->user_id);
-		$this->unit->run(count($user['tokens']) === 2, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+		// $this->load->model('user_mongo_model');
+		// $user = $this->user_mongo_model->get_user($this->user_id);
+		// $this->unit->run(count($user['tokens']) === 2, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+		$this->load->model('user_token_model');
+		$user_tokens = $this->user_token_model->get(array('user_id' => $this->user_id));
+		$this->unit->run(count($user_tokens) === 2, TRUE, "count(\$user_tokens)", count($user_tokens));
 
 		//Wrong token is success too ?
 		$params = array(
@@ -295,8 +318,11 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 
 		//Check user's token removal : not removed because using invalid token
-		$user = $this->user_mongo_model->get_user($this->user_id);
-		$this->unit->run(count($user['tokens']) === 2, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+		// $user = $this->user_mongo_model->get_user($this->user_id);
+		// $this->unit->run(count($user['tokens']) === 2, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+		$this->load->model('user_token_model');
+		$user_tokens = $this->user_token_model->get(array('user_id' => $this->user_id));
+		$this->unit->run(count($user_tokens) === 2, TRUE, "count(\$user_tokens)", count($user_tokens));
 
 		//Use valid token
 		$params = array(
@@ -309,8 +335,11 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 
 		//Check user's token removal : removed
-		$user = $this->user_mongo_model->get_user($this->user_id);
-		$this->unit->run(count($user['tokens']) === 1, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+		// $user = $this->user_mongo_model->get_user($this->user_id);
+		// $this->unit->run(count($user['tokens']) === 1, TRUE, "count(\$user['tokens'])", count($user['tokens']));
+		$this->load->model('user_token_model');
+		$user_tokens = $this->user_token_model->get(array('user_id' => $this->user_id));
+		$this->unit->run(count($user_tokens) === 1, TRUE, "count(\$user_tokens)", count($user_tokens));
 
 		//Failing test : non user's signout
 		$params = array(
@@ -322,6 +351,10 @@ class Apiv4_test extends CI_Controller {
 
 		// $this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+
+		$this->load->model('user_token_model');
+		$user_tokens = $this->user_token_model->get(array('user_id' => $this->user_id));
+		$this->unit->run(count($user_tokens) === 1, TRUE, "count(\$user_tokens)", count($user_tokens));
 	}
 
 	function companies_get_test() {
@@ -1052,7 +1085,9 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->get($method, $params);
   	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
   	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
-  	$this->unit->run($result['data'][0]['company'], 'is_array', "\$result['data'][0]['company']", $result['data'][0]['company']);
+
+  	//company 2 doesn't exist :(
+  	// $this->unit->run($result['data'][0]['company'], 'is_null', "\$result['data'][0]['company']", $result['data'][0]['company']);
   	$this->unit->run($result['data'][0]['challenge'], 'is_array', "\$result['data'][0]['challenge']", $result['data'][0]['challenge']);
   	// $this->unit->run($result['data'][0]['reward_item']['redeem_method'] === 'in_store', TRUE, "\$result['data'][0]['reward_item']['redeem_method']", $result['data'][0]['reward_item']['redeem_method']);
   }
@@ -1132,6 +1167,11 @@ class Apiv4_test extends CI_Controller {
   }
 
   function profile_get_test() {
+  	//inject last_active
+  	$this->load->model('user_token_model');
+  	$user_criteria = array('user_id' => $this->user_id, 'login_token' => $this->token2);
+		$this->user_token_model->update($user_criteria, array('$set' => array('last_active' => 0)));
+
   	$method = 'profile';
   	$params = array(
   		'user_id' => $this->user_id,
@@ -1145,6 +1185,10 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['challenge_completed'], 'is_array', "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
   	$this->unit->run($result['data']['daily_challenge_completed'], 'is_array', "\$result['data']['daily_challenge_completed']", $result['data']['daily_challenge_completed']);
   	$this->unit->run($result['data']['shipping'], 'is_array', "\$result['data']['shipping']", $result['data']['shipping']);
+
+  	//check last_active
+  	$user = $this->user_token_model->getOne($user_criteria);
+  	$this->unit->run($user['last_active'] === time(), TRUE, "\$user['last_active']", $user['last_active']);
   }
 
   function profile_post_test() {
@@ -1277,6 +1321,24 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data'][1]['challenge']['_id'], 'is_string', "\$result['data'][1]['challenge']['_id']", $result['data'][1]['challenge']['_id']);
   	$this->unit->run($result['data'][2]['challenge']['_id'], 'is_string', "\$result['data'][2]['challenge']['_id']", $result['data'][2]['challenge']['_id']);
   	$this->unit->run($result['data'][3]['challenge']['_id'], 'is_string', "\$result['data'][3]['challenge']['_id']", $result['data'][3]['challenge']['_id']);
+  }
+
+  function notice_get_test() {
+  	$method = 'notice';
+
+  	$params = array(
+  		'version' => 1.0
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
+
+  	$params = array(
+  		'version' => 1.1
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
   }
 }
 /* End of file apiv4_test.php */

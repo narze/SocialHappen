@@ -1497,7 +1497,8 @@ class DB_Sync {
       'notification',
       'challenge',
       'user',
-      'coupon'
+      'coupon',
+      'user_token'
     );
     $mongo_db_name = $this->CI->config->item('mongo_db');
     $this->CI->load->library('mongo_db', NULL, 'mongodb');

@@ -77,6 +77,8 @@ class Apiv4 extends REST_Controller {
     $facebook_user_first_name = $this->post('facebook_user_first_name');
     $facebook_user_last_name = $this->post('facebook_user_last_name');
     $facebook_user_image = $this->post('facebook_user_image');
+    $device = $this->post('device');
+    $device_token = $this->post('device_token');
 
     if(!$email || !$phone || !$password) {
       return $this->error('No email, phone, password');
@@ -115,16 +117,26 @@ class Apiv4 extends REST_Controller {
     }
 
     //Generate token & add into user's mongo model
-    $token = md5(uniqid(mt_rand(), true)); //32 chars
     $user_mongo = array(
       'user_id' => $user_id,
-      'tokens' => array($token),
       'points' => 10
     );
     $this->load->model('user_mongo_model');
     if(!$this->user_mongo_model->add($user_mongo)) {
       return $this->error('Add user failed');
     }
+
+    //add user token
+    $this->load->model('user_token_model');
+    $user_token_data = array(
+      'user_id' => $user_id,
+      'device' => $device,
+      'device_token' => $device_token
+    );
+    if(!$user_token = $this->user_token_model->add_user_token($user_token_data)) {
+      return $this->error('Add user token failed');
+    }
+    $token = $user_token['login_token'];
 
     //Give user a badge, by add signup audit
     $this->load->library('audit_lib');
@@ -170,6 +182,8 @@ class Apiv4 extends REST_Controller {
     $facebook_user_id = $this->post('facebook_user_id');
     $email = $this->post('email');
     $password = $this->post('password');
+    $device = $this->post('device');
+    $device_token = $this->post('device_token');
 
     $signinsuccess = FALSE;
 
@@ -201,17 +215,18 @@ class Apiv4 extends REST_Controller {
       return $this->error('Sign in failed', 2);
     }
 
-    //Generate token & add into user's mongo model
-    $token = md5(uniqid(mt_rand(), true)); //32 chars
+    //add user token
     $user_id = $user['user_id'];
-    $user_mongo_update = array(
-      '$addToSet' => array('tokens' => $token)
+    $this->load->model('user_token_model');
+    $user_token_data = array(
+      'user_id' => $user_id,
+      'device' => $device,
+      'device_token' => $device_token
     );
-    $criteria = array('user_id' => $user_id);
-    $this->load->model('user_mongo_model');
-    if(!$this->user_mongo_model->upsert($criteria, $user_mongo_update)) {
-      return $this->error('Update token failed', 2);
+    if(!$user_token = $this->user_token_model->add_user_token($user_token_data)) {
+      return $this->error('Add user token failed', 2);
     }
+    $token = $user_token['login_token'];
 
     //add audit
     $this->load->library('audit_lib');
@@ -248,17 +263,20 @@ class Apiv4 extends REST_Controller {
   function signout_post() {
     $user_id = $this->post('user_id');
     $token = $this->post('token');
+    // $device = $this->post('device');
+    // $device_token = $this->post('device_token');
 
-    $criteria = array('user_id' => $user_id);
-    $update = array('$pull' => array('tokens' => $token));
+    $this->load->model('user_token_model');
+    $criteria = array(
+      'user_id' => (int) $user_id,
+      'login_token' => $token,
+      // 'device' => $device,
+      // 'device_token' => $device_token
+    );
 
-    $this->load->model('user_mongo_model');
-    if($this->user_mongo_model->update($criteria, $update)) {
-      return $this->success('Signout successful');
-    }
+    $this->user_token_model->remove_user_token($criteria);
 
     return $this->success('Signout successful');
-    // return $this->error('Sign out failed');
   }
 
   /**
@@ -379,6 +397,7 @@ class Apiv4 extends REST_Controller {
         return $this->error('Token invalid');
       }
 
+      $this->load->model('user_mongo_model');
       if(!$user = $this->user_mongo_model->get_user($user_id)) {
         return $this->error('User invalid');
       }
@@ -463,14 +482,11 @@ class Apiv4 extends REST_Controller {
       return FALSE;
     }
 
-    $this->load->model('user_mongo_model');
-    if(!$user = $this->user_mongo_model->getOne(array(
-      'user_id' => (int) $user_id
+    $this->load->model('user_token_model');
+    if(!$user = $this->user_token_model->getOne(array(
+      'user_id' => (int) $user_id,
+      'login_token' => $token
     ))) {
-      return FALSE;
-    }
-
-    if(!isset($user['tokens']) || !in_array($token, $user['tokens'])) {
       return FALSE;
     }
 
@@ -498,6 +514,7 @@ class Apiv4 extends REST_Controller {
       return $this->error('Token invalid');
     }
 
+    $this->load->model('user_mongo_model');
     if(!$user = $this->user_mongo_model->get_user($user_id)) {
       return $this->error('User invalid');
     }
@@ -639,7 +656,7 @@ class Apiv4 extends REST_Controller {
         )){
         showerror('Invalid Data');
       } else {
-        //Add audit & stat
+      //Add audit & stat
         $audit_data = array(
           'timestamp' => $time,
           'user_id' => $user_id,
@@ -1046,6 +1063,10 @@ class Apiv4 extends REST_Controller {
     if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
       return $this->error('User invalid');
     }
+
+    //update user's last_active
+    $this->load->model('user_token_model');
+    $this->user_token_model->update_last_active(array('user_id' => $user_id, 'login_token' => $token));
 
     //get user points
     $this->load->model('user_mongo_model');
