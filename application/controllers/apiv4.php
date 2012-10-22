@@ -1346,4 +1346,24 @@ class Apiv4 extends REST_Controller {
       print_r($unactive) -> Array ( [0] => Array ( [timestamp] => 1340270617 [length] => 32 [devtoken] => 002bdf9985984f0b774e78f256eb6e6c6e5c576d3a0c8f1fd8ef9eb2c4499cb4 ) )
       */
   }
+
+  function notice_get() {
+    $version = $this->get('version');
+
+    if($version == 0) {
+      $data = array(
+        'title' => 'Notice',
+        'message' => 'This is a test message',
+        'close' => TRUE
+      );
+    } else if($version > 1) {
+      //...
+    }
+
+    if(isset($data)) {
+      return $this->success($data);
+    }
+
+    return $this->error('No notice');
+  }
 }

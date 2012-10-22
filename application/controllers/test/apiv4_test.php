@@ -1327,18 +1327,20 @@ class Apiv4_test extends CI_Controller {
   	$method = 'notice';
 
   	$params = array(
-  		'version' => 1.0
+  		'version' => 0.0
   	);
 
   	$result = $this->get($method, $params);
   	$this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['message'] === 'This is a test message', TRUE, "\$result['data']['message']", $result['data']['message']);
 
   	$params = array(
   		'version' => 1.1
   	);
 
   	$result = $this->get($method, $params);
-  	$this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['success'] === FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data'] === 'No notice', TRUE, "\$result['data']", $result['data']);
   }
 }
 /* End of file apiv4_test.php */
