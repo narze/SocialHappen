@@ -1,0 +1,39 @@
+<script type="text/template" id="pushed-template">
+  <div class="alert">
+    <button class="close" data-dismiss="alert">×</button>
+    Notification Pushed
+  </div>
+</script>
+<div class="flash-message"></div>
+<div class="push-notifications well">
+  <div class="form-horizontal">
+    <fieldset>
+      <legend>Add device notification</legend>
+      <form>
+        <div class="control-group">
+          <label for="push-notification-message" class="control-label">Message</label>
+          <div class="controls">
+            <input id="push-notification-message" type="text" class="input-xlarge" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="add-push-notification btn btn-primary btn-large">Add</button>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+  <div class="form-horizontal">
+    <fieldset>
+      <legend>Push notification to device</legend>
+      <form>
+        <div class="control-group">
+          <label for="push-to-device" class="control-label">Push to a device</label>
+          <div class="controls">
+            <button class="push-to-device btn btn-primary btn-large">Push</button>
+          </div>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+</div>

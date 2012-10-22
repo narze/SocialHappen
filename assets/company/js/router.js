@@ -22,6 +22,7 @@ define([
       '/company/:id/coupon/:couponId': 'couponPopup',
       '/create': 'createCompany',
       '/company/:id/settings': 'settings',
+      '/company/:id/push': 'pushNotifications',
       '*actions': 'defaultAction'
     }
   });
@@ -162,6 +163,17 @@ define([
         createCompanyPage();
         var settingsView = Vm.create(sandbox.views.appView, 'Content', Settings);
         $('#content-pane').html(settingsView.render().el);
+      })
+    })
+
+    router.on('route:pushNotifications', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'pushNotifications';
+
+      require(['views/company/push-notifications'], function(PushNotifications) {
+        createCompanyPage();
+        var pushNotificationsView = Vm.create(sandbox.views.appView, 'Content', PushNotifications);
+        $('#content-pane').html(pushNotificationsView.render().el);
       })
     })
 

@@ -45,10 +45,10 @@ class User_token_model extends CI_Model {
 		return obj2array($result);
 	}
 
-	function update($query, $data) {
+	function update($query, $data, $options = array()) {
 		$query = array_cast_int($query, $this->int_values);
 	  try {
-	    $update_result = $this->collection->update($query, $data, array('safe' => TRUE));
+	    $update_result = $this->collection->update($query, $data, array_merge(array('safe' => TRUE), $options));
 	    return isset($update_result['n']) && ($update_result['n'] > 0);
 	  } catch(MongoCursorException $e){
 	    log_message('error', 'Mongodb error : '. $e);
@@ -126,7 +126,10 @@ class User_token_model extends CI_Model {
 				'message_queue' => $message
 			)
 		);
-		return $this->update($criteria, $data);
+		$options = array(
+			'multiple' => 1
+		);
+		return $this->update($criteria, $data, $options);
 	}
 
 	function update_last_active($criteria) {

@@ -1123,6 +1123,74 @@ class Apiv3 extends CI_Controller {
     $result['data'] = array('company_id' => $company_id);
     return json_return($result);
   }
+
+  /**
+   * Add push notification to every devices
+   */
+  function add_push_notification() {
+    $result = array('success' => FALSE);
+
+    $message = $this->input->post('message');
+    $this->load->model('user_token_model');
+
+    if(!$this->user_token_model->add_push_message(array(), $message)) {
+      $result['data'] = 'Push notification failed';
+      return json_return($result);
+    }
+
+    $result['success'] = TRUE;
+    $result['data'] = array('Add push notification for all devices successfully');
+    return json_return($result);
+  }
+
+  function push_notification_to_device() {
+    $result = array('success' => FALSE);
+
+    $this->load->model('user_token_model');
+    $array = $this->user_token_model->pull_active_user_message();
+    if(!isset($array['user']) || !isset($array['message'])) {
+      $result['data'] = array('No queued messages');
+      return json_return($result);
+    }
+
+    $device_token = $array['user']['device_token'];
+    $device = $array['user']['device'];
+    $message = $array['message'];
+
+    $this->load->model('user_model');
+    $user = $this->user_model->get_user_profile_by_user_id($array['user']['user_id']);
+    if($device === 'ios') {
+
+      $this->load->library('apn');
+      $this->apn->payloadMethod = 'enhance'; // you can turn on this method for debuggin purpose
+      $this->apn->connectToPush();
+
+      // adding custom variables to the notification
+      // $this->apn->setData(array( 'someKey' => true ));
+
+      $send_result = $this->apn->sendMessage($device_token, $message, /*badge*/ 0, /*sound*/ 'default'  );
+
+      if($send_result) {
+        $result['success'] = TRUE;
+        $result['data'] = 'Pushed "'.$message.'" to "'. "{$user['user_first_name']} {$user['user_last_name']} ({$device_token})";
+      }
+      else {
+        log_message('error',$this->apn->error);
+        $result['data'] = 'Fail pushing "'.$message.'" to user "'. "{$user['user_first_name']} {$user['user_last_name']}\" ({$device_token})";
+      }
+
+      $this->apn->disconnectPush();
+
+
+    } else {
+      //not supported for now
+      $result['data'] = 'Device not supported';
+
+    }
+
+    return json_return($result);
+
+  }
 }
 
 /* End of file apiv3.php */
