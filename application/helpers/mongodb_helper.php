@@ -15,6 +15,10 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 		$mongo_pass = $CI->config->item('mongo_pass');
 		$mongo_host = $CI->config->item('mongo_host');
 		$mongo_port = $CI->config->item('mongo_port');
+		$mongo_options = $CI->config->item('mongo_options');
+		if(!$mongo_options){
+			$mongo_options = array();
+		}
 		$database = $CI->config->item('mongo_db');
 		$mongo_testmode = $CI->config->item('mongo_testmode');
 		$mongo_testmode_prefix = $CI->config->item('mongo_testmode_prefix');
@@ -23,7 +27,7 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 			// connect to database
 			$CI->connection = new Mongo("mongodb://".$mongo_user.":"
 			.$mongo_pass
-			."@".$mongo_host.":".$mongo_port);
+			."@".$mongo_host.":".$mongo_port, $mongo_options);
 
 			// select database
 			$testmode_prefix = $mongo_testmode ? $mongo_testmode_prefix : NULL;
