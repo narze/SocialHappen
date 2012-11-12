@@ -99,7 +99,7 @@ define([
         criteria: [],
         reward_items: [],
         active: true,
-        repeat: null
+        repeat: 1
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       vent.trigger('showAddModal', newModel);
