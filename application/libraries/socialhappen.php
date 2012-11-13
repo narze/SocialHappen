@@ -106,7 +106,8 @@ class SocialHappen{
 			'challenge_model',
 			'coupon_model',
 			'user_mongo_model',
-			'user_token_model'
+			'user_token_model',
+			'sonar_box_model'
 		);
 		foreach($models as $model){
 			$this->CI->load->model($model);
