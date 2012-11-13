@@ -58,7 +58,8 @@ define([
       'click button.upload-image-submit': 'uploadImage',
       'click button.save-location': 'saveLocation',
       'click button.save-done-count-max': 'saveDoneCountMax',
-      'click button.save-sonar-frequency': 'saveSonarFrequency'
+      'click button.save-sonar-frequency': 'saveSonarFrequency',
+      'click button.generate-sonar-data': 'generateSonarData'
     },
 
     initialize: function(){
@@ -821,6 +822,21 @@ define([
       this.model.save();
 
       vent.trigger('showEditModal', this.model);
+    },
+
+    generateSonarData: function() {
+      var self = this
+      $.ajax({
+        type: 'GET',
+        url: window.Company.BASE_URL + 'apiv3/get_sonar_box_data',
+        dataType: 'JSON',
+        success: function(res) {
+          if(res.success) {
+            self.model.set('sonar_frequency', res.data).trigger('change');
+            $('.sonar-frequency', self.el).val(res.data)
+          }
+        }
+      })
     }
 
   });

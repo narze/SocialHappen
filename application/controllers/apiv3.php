@@ -449,6 +449,23 @@ class Apiv3 extends CI_Controller {
           $challenge_id = get_mongo_id($asis_challenge);
 
           $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge_data);
+
+          //sonar box data manipulation
+          if($challenge_data['sonar_frequency']) {
+            $this->load->model('sonar_box_model');
+            $this->sonar_box_model->upsert(array('challenge_id' => $challenge_id), array(
+              'name' => $challenge_data['detail']['name'],
+              'info' => array(),
+              'challenge_id' => $challenge_id,
+              'data' => $challenge_data['sonar_frequency']
+            ));
+          } else if($asis_challenge['sonar_frequency'] && !$challenge_data['sonar_frequency']) {
+            //remove sonar box data if removed
+            $this->load->model('sonar_box_model');
+            $this->sonar_box_model->delete(array(
+              'challenge_id' => $challenge_id
+            ));
+          }
         } catch (Exception $ex){
           //update exception
           $challenge_create_flag = FALSE;
@@ -485,6 +502,17 @@ class Apiv3 extends CI_Controller {
           $update_challenge_data['short_url'] = $short_challenge_url;
 
           $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $update_challenge_data);
+
+          //create sonar data if defined
+          if($challenge_data['sonar_frequency']) {
+            $this->load->model('sonar_box_model');
+            $this->sonar_box_model->add_sonar_box(array(
+              'name' => $challenge_data['detail']['name'],
+              'info' => array(),
+              'challenge_id' => $challenge_id,
+              'data' => $challenge_data['sonar_frequency']
+            ));
+          }
 
         }
 
@@ -1190,6 +1218,18 @@ class Apiv3 extends CI_Controller {
 
     return json_return($result);
 
+  }
+
+  /**
+   * Get safe (unused) data for sonar box
+   */
+  function get_sonar_box_data() {
+    $this->load->model('sonar_box_model');
+    $sonar_box_data = $this->sonar_box_model->generate_safe_sonar_data();
+    return json_return(array(
+      'success' => TRUE,
+      'data' => $sonar_box_data
+    ));
   }
 }
 

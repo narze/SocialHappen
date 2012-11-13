@@ -33,6 +33,7 @@ class Sonar_box_model_test extends CI_Controller {
 		$data = array(
 			'name' => 'Sonar 001',
 			'data' => '01013212',
+			'challenge_id' => NULL,
 			'info' => array()
 		);
 		$result = $this->sonar_box_model->add_sonar_box($data);

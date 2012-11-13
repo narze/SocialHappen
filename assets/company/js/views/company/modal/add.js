@@ -41,7 +41,8 @@ define([
       'keyup input.done-count-max': 'onTypeDoneCountMax',
       'keyup input.sonar-frequency': 'onTypeSonarFrequency',
       'keyup textarea.challenge-description': 'onTypeChallengeDescription',
-      'click button.upload-image-submit': 'uploadImage'
+      'click button.upload-image-submit': 'uploadImage',
+      'click button.generate-sonar-data': 'generateSonarData'
     },
 
     initialize: function(){
@@ -238,6 +239,21 @@ define([
       var sonar_frequency = $('input.sonar-frequency', this.el).val();
 
       this.model.set('sonar_frequency', sonar_frequency).trigger('change');
+    },
+
+    generateSonarData: function() {
+      var self = this
+      $.ajax({
+        type: 'GET',
+        url: window.Company.BASE_URL + 'apiv3/get_sonar_box_data',
+        dataType: 'JSON',
+        success: function(res) {
+          if(res.success) {
+            self.model.set('sonar_frequency', res.data).trigger('change');
+            $('.sonar-frequency', self.el).val(res.data)
+          }
+        }
+      })
     },
 
     showEditName: function(){
