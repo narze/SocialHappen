@@ -14,7 +14,8 @@ class Sonar_box_model extends CI_Model {
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
 		return $this->collection->deleteIndexes()
-			&& $this->collection->ensureIndex(array('data' => 1), array('unique' => 1));
+			&& $this->collection->ensureIndex(array('data' => 1), array('unique' => 1))
+			&& $this->collection->ensureIndex(array('challenge_id' => 1));
 	}
 
 	function add($data)	{

@@ -39,7 +39,7 @@ class Fix extends CI_Controller {
 
       //if sonar data isn't present, create them
       if(!$this->sonar_box_model->get($query)) {
-        $this->sonar_box_model->add($query, array(
+        $this->sonar_box_model->add(array(
           'name' => $challenge['detail']['name'],
           'info' => array(),
           'challenge_id' => $challenge_id,
