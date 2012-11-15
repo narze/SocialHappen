@@ -47,7 +47,7 @@ class User_lib {
 		}
 		$challenge_id = get_mongo_id($challenge);
 		$user_id = (int) $user_id;
-		$is_daily_challenge = isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0);
+		$is_daily_challenge = isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && ($days > 0);
 
 		// return if user already joined
 		$user_mongo = $this->CI->user_mongo_model->get_user($user_id);

@@ -179,7 +179,7 @@ class Challenge_lib {
       $company_id = $challenge['company_id'];
 
       //3.1 if non-repeat challenge : check audit in date range
-      if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
+      if($is_daily_challenge = (isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && $days > 0)) {
 
         $match_all_criteria_today = TRUE;
         foreach($challenge['criteria'] as $criteria){
@@ -288,7 +288,7 @@ class Challenge_lib {
 
         //3
         //if repeating challenge : add to 'daily_challenge_completed' and remove from 'daily_challenge'
-        if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)
+        if(isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && ($days > 0)
           && $match_all_criteria_today) {
           $start_date = date('Ymd', $time);
           $end_date = date('Ymd', $time + (($days-1) * 60 * 60 * 24));
@@ -450,7 +450,7 @@ class Challenge_lib {
     //   $company_id = $challenge['company_id'];
 
     //   //If challenge is daily, we must check in audit as well (time-based criteria)
-    //   if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
+    //   if($is_daily_challenge = (isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && $days > 0)) {
     //     $this->CI->load->library('audit_lib');
     //     $match_all_criteria_today = TRUE;
     //     foreach($challenge['criteria'] as $criteria){
@@ -545,7 +545,7 @@ class Challenge_lib {
       //   }
 
       //   //Daily challenge flag
-      //   if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)
+      //   if(isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && ($days > 0)
       //     && isset($match_all_criteria_today) && $match_all_criteria_today) {
       //     $start_date = date('Ymd', $time);
       //     $end_date = date('Ymd', $time + (($days-1) * 60 * 60 * 24));
@@ -664,7 +664,7 @@ class Challenge_lib {
       return FALSE;
     }
 
-    if(isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && ($days > 0)) {
+    if(isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && ($days > 0)) {
       //If check daily challenge and user don't have today's temp record (user->challenge_daily_completed-> {[Ymd]: challenge_id})
         //Run check challenge and get completed today
       //else use temp record

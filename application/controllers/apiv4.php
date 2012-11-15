@@ -408,7 +408,7 @@ class Apiv4 extends REST_Controller {
         $challenge_id = get_mongo_id($challenge);
 
         //check completed
-        if($is_daily_challenge = (isset($challenge['repeat']) && $days = (int) $challenge['repeat'] && $days > 0)) {
+        if($is_daily_challenge = (isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && $days > 0)) {
 
           //Check if user completed already or not
           if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
@@ -555,7 +555,7 @@ class Apiv4 extends REST_Controller {
     $is_in_progress = FALSE;
 
     //3.1 if repeat challenge : check audit in date range
-    if($is_daily_challenge = (isset($challenge['repeat']) && $days = (int) $challenge['repeat'] && ($days > 0))) {
+    if($is_daily_challenge = (isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && ($days > 0))) {
 
       //Check if user completed already or not
       if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
@@ -791,7 +791,7 @@ class Apiv4 extends REST_Controller {
 
       //3
       //if repeating challenge : add to 'daily_challenge_completed' and remove from 'daily_challenge'
-      if(isset($challenge['repeat']) && $days = (int) $challenge['repeat'] && ($days > 0)
+      if(isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && ($days > 0)
         && $match_all_criteria_today) {
         $start_date = date('Ymd', $time);
         $end_date = date('Ymd', $time + (($days-1) * 60 * 60 * 24));
