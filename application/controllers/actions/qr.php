@@ -56,7 +56,7 @@ class QR extends CI_Controller {
     }
 
     //Check daily challenge
-    if($is_daily_challenge = (isset($challenge['repeat']) && (is_int($days = $challenge['repeat'])) && $days > 0)) {
+    if($is_daily_challenge = (isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && $days > 0)) {
       //Check if daily challenge accepted
       $this->load->library('user_lib');
       $user = $this->user_lib->get_user($user_id);
