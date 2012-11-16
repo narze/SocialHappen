@@ -32,7 +32,7 @@ class User_token_model_test extends CI_Controller {
 	function add_user_token_test() {
 		$data = array(
 			'user_id' => 1,
-			'device' => ''ios'',
+			'device' => 'ios',
 			'device_id' => 'asdf1',
 			'device_token' => '124adfshb8l',
 		);
@@ -43,7 +43,7 @@ class User_token_model_test extends CI_Controller {
 		//same device, overwrite existing
 		$data = array(
 			'user_id' => 2,
-			'device' => ''ios'',
+			'device' => 'ios',
 			'device_id' => 'asdf1',
 			'device_token' => '124adfshb8l',
 		);
@@ -73,7 +73,7 @@ class User_token_model_test extends CI_Controller {
 		//same user and os, different device
 		$data = array(
 			'user_id' => 1,
-			'device' => ''ios'',
+			'device' => 'ios',
 			'device_id' => 'asdf2',
 			'device_token' => '123549515234'
 		);
@@ -88,7 +88,7 @@ class User_token_model_test extends CI_Controller {
 		//same user and os, no device token
 		$data = array(
 			'user_id' => 1,
-			'device' => ''ios'',
+			'device' => 'ios',
 			'device_id' => '',
 			'device_token' => ''
 		);
@@ -104,7 +104,7 @@ class User_token_model_test extends CI_Controller {
 	function add_push_message_test() {
 		$criteria = array(
 			'user_id' => 2,
-			'device' => ''ios'',
+			'device' => 'ios',
 			'device_token' => '124adfshb8l',
 		);
 		$message = 'This is a push message';
@@ -147,7 +147,7 @@ class User_token_model_test extends CI_Controller {
 	function update_last_active_test() {
 		$criteria = array(
 			'user_id' => 2,
-			'device' => ''ios'',
+			'device' => 'ios',
 			'device_token' => '124adfshb8l',
 		);
 
@@ -175,7 +175,7 @@ class User_token_model_test extends CI_Controller {
 	function pull_active_user_message_test() {
 		$criteria = array(
 			'user_id' => 2,
-			'device' => ''ios'',
+			'device' => 'ios',
 			'device_token' => '124adfshb8l',
 		);
 
@@ -227,7 +227,7 @@ class User_token_model_test extends CI_Controller {
 	function remove_user_token_test() {
 		$criteria = array(
 			'user_id' => 2,
-			'device' => ''ios'',
+			'device' => 'ios',
 			'device_token' => '124adfshb8l',
 		);
 
