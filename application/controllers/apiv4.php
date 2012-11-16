@@ -78,6 +78,7 @@ class Apiv4 extends REST_Controller {
     $facebook_user_last_name = $this->post('facebook_user_last_name');
     $facebook_user_image = $this->post('facebook_user_image');
     $device = $this->post('device');
+    $device_id = $this->post('device_id');
     $device_token = $this->post('device_token');
 
     if(!$email || !$phone || !$password) {
@@ -131,6 +132,7 @@ class Apiv4 extends REST_Controller {
     $user_token_data = array(
       'user_id' => $user_id,
       'device' => $device,
+      'device_id' => $device_id,
       'device_token' => $device_token
     );
     if(!$user_token = $this->user_token_model->add_user_token($user_token_data)) {
@@ -183,6 +185,7 @@ class Apiv4 extends REST_Controller {
     $email = $this->post('email');
     $password = $this->post('password');
     $device = $this->post('device');
+    $device_id = $this->post('device_id');
     $device_token = $this->post('device_token');
 
     $signinsuccess = FALSE;
@@ -221,6 +224,7 @@ class Apiv4 extends REST_Controller {
     $user_token_data = array(
       'user_id' => $user_id,
       'device' => $device,
+      'device_id' => $device_id,
       'device_token' => $device_token
     );
     if(!$user_token = $this->user_token_model->add_user_token($user_token_data)) {

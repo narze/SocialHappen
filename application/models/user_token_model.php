@@ -15,8 +15,10 @@ class User_token_model extends CI_Model {
 	function recreateIndex() {
 		return $this->collection->deleteIndexes()
 			&& $this->collection->ensureIndex(array('user_id' => 1))
+			&& $this->collection->ensureIndex(array('device' => 1))
 			&& $this->collection->ensureIndex(array('device_token' => 1))
-			&& $this->collection->ensureIndex(array('device' => 1, 'device_token' => 1), array('unique' => 1));
+			&& $this->collection->ensureIndex(array('device_id' => 1))
+			&& $this->collection->ensureIndex(array('device' => 1, 'device_id' => 1), array('unique' => 1));
 	}
 
 	function add($data)	{
@@ -79,7 +81,7 @@ class User_token_model extends CI_Model {
 	 * @return $data with login_token
 	 */
 	function add_user_token($data) {
-		if(!all_not_null($data, array('user_id', 'device', 'device_token'))) {
+		if(!all_not_null($data, array('user_id', 'device', 'device_id', 'device_token'))) {
 			return FALSE;
 		}
 
@@ -88,6 +90,7 @@ class User_token_model extends CI_Model {
 	   * user_id
 	   * created : timestamp
 	   * device : 'ios' / 'android
+	   * device_id :
 	   * device_token :
 	   * login_token :
 	   * last_active : timestamp
@@ -106,7 +109,7 @@ class User_token_model extends CI_Model {
 
 		$query = array(
 			'device' => $data['device'],
-			'device_token' => $data['device_token']
+			'device_id' => $data['device_id']
 		);
 
 		if($this->upsert($query, $data)) {

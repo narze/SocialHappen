@@ -111,6 +111,7 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_last_name' => 'Muckerburg',
 			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
 			'device' => 'ios',
+			'device_id' => 'asdf',
 			'device_token' => 'adfsgv23'
 		);
 		$result = $this->post($method, $params);
@@ -133,6 +134,7 @@ class Apiv4_test extends CI_Controller {
 		$criteria = array(
 			'user_id' => $this->user_id,
 			'device' => 'ios',
+			'device_id' => 'asdf',
 			'device_token' => 'adfsgv23'
 		);
 		$user_token = $this->user_token_model->getOne($criteria);
@@ -148,6 +150,7 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_last_name' => 'Nz',
 			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
 			'device' => 'ios',
+			'device_id' => 'asdf2',
 			'device_token' => 'adsfa24'
 		);
 		$result = $this->post($method, $params);
@@ -164,6 +167,7 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_last_name' => 'Muckerburg',
 			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
 			'device' => 'ios',
+			'device_id' => 'asdf3',
 			'device_token' => '1y5vdfsag'
 		);
 		$result = $this->post($method, $params);
@@ -180,6 +184,7 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_last_name' => 'Muckerburg',
 			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
 			'device' => 'ios',
+			'device_id' => 'asdf4',
 			'device_token' => '125342t5exa'
 		);
 		$result = $this->post($method, $params);
@@ -196,6 +201,7 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_last_name' => 'Muckerburg',
 			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
 			'device' => 'ios',
+			'device_id' => 'asdf5',
 			'device_token' => '6y3534dc'
 		);
 		$result = $this->post($method, $params);
@@ -212,6 +218,7 @@ class Apiv4_test extends CI_Controller {
 			'facebook_user_last_name' => 'Muckerburg',
 			'facebook_user_image' => 'https://graph.facebook.com/4/picture',
 			'device' => 'ios',
+			'device_id' => 'asdf6',
 			'device_token' => '1248r72bcs'
 		);
 		$result = $this->post($method, $params);

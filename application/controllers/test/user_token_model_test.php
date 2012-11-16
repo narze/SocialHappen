@@ -32,7 +32,8 @@ class User_token_model_test extends CI_Controller {
 	function add_user_token_test() {
 		$data = array(
 			'user_id' => 1,
-			'device' => 'ios',
+			'device' => ''ios'',
+			'device_id' => 'asdf1',
 			'device_token' => '124adfshb8l',
 		);
 		$result = $this->user_token_model->add_user_token($data);
@@ -42,7 +43,8 @@ class User_token_model_test extends CI_Controller {
 		//same device, overwrite existing
 		$data = array(
 			'user_id' => 2,
-			'device' => 'ios',
+			'device' => ''ios'',
+			'device_id' => 'asdf1',
 			'device_token' => '124adfshb8l',
 		);
 		$result = $this->user_token_model->add_user_token($data);
@@ -57,6 +59,7 @@ class User_token_model_test extends CI_Controller {
 		$data = array(
 			'user_id' => 2,
 			'device' => 'android',
+			'device_id' => 'asdf2',
 			'device_token' => 'djsaf82334',
 		);
 		$result = $this->user_token_model->add_user_token($data);
@@ -66,12 +69,42 @@ class User_token_model_test extends CI_Controller {
 		//count should equal 2
 		$count = count($this->user_token_model->get(array()));
 		$this->unit->run($count === 2, TRUE, "\$count", $count);
+
+		//same user and os, different device
+		$data = array(
+			'user_id' => 1,
+			'device' => ''ios'',
+			'device_id' => 'asdf2',
+			'device_token' => '123549515234'
+		);
+		$result = $this->user_token_model->add_user_token($data);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run(strlen($result['login_token']) === 32, TRUE, "strlen(\$result['login_token'])", strlen($result['login_token']));
+
+		//count should equal 3
+		$count = count($this->user_token_model->get(array()));
+		$this->unit->run($count === 3, TRUE, "\$count", $count);
+
+		//same user and os, no device token
+		$data = array(
+			'user_id' => 1,
+			'device' => ''ios'',
+			'device_id' => '',
+			'device_token' => ''
+		);
+		$result = $this->user_token_model->add_user_token($data);
+		$this->unit->run($result, 'is_array', "\$result", $result);
+		$this->unit->run(strlen($result['login_token']) === 32, TRUE, "strlen(\$result['login_token'])", strlen($result['login_token']));
+
+		//count should equal 4
+		$count = count($this->user_token_model->get(array()));
+		$this->unit->run($count === 4, TRUE, "\$count", $count);
 	}
 
 	function add_push_message_test() {
 		$criteria = array(
 			'user_id' => 2,
-			'device' => 'ios',
+			'device' => ''ios'',
 			'device_token' => '124adfshb8l',
 		);
 		$message = 'This is a push message';
@@ -114,7 +147,7 @@ class User_token_model_test extends CI_Controller {
 	function update_last_active_test() {
 		$criteria = array(
 			'user_id' => 2,
-			'device' => 'ios',
+			'device' => ''ios'',
 			'device_token' => '124adfshb8l',
 		);
 
@@ -142,7 +175,7 @@ class User_token_model_test extends CI_Controller {
 	function pull_active_user_message_test() {
 		$criteria = array(
 			'user_id' => 2,
-			'device' => 'ios',
+			'device' => ''ios'',
 			'device_token' => '124adfshb8l',
 		);
 
@@ -194,16 +227,16 @@ class User_token_model_test extends CI_Controller {
 	function remove_user_token_test() {
 		$criteria = array(
 			'user_id' => 2,
-			'device' => 'ios',
+			'device' => ''ios'',
 			'device_token' => '124adfshb8l',
 		);
 
 		$result = $this->user_token_model->remove_user_token($criteria);
 		$this->unit->run($result, TRUE, "\$result", $result);
 
-		//count should equal 1, not 2
+		//count should equal 3, not 4
 		$count = count($this->user_token_model->get(array()));
-		$this->unit->run($count === 1, TRUE, "\$count", $count);
+		$this->unit->run($count === 3, TRUE, "\$count", $count);
 	}
 }
 /* End of file user_token_model_test.php */
