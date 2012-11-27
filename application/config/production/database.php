@@ -41,7 +41,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
+$db['default']['hostname'] = '54.251.42.250';
 $db['default']['username'] = 'soha';
 $db['default']['password'] = 'figyfigy';
 $db['default']['database'] = 'soha_www';
