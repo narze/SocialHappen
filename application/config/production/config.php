@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://sh.thaimeme.com/';
+$config['base_url']	= 'https://www.socialhappen.com/';
 
 /**
  * Node.js server base url
