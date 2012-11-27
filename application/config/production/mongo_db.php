@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['mongo_host'] = 'ec2-54-251-3-51.ap-southeast-1.compute.amazonaws.com,ec2-175-41-191-201.ap-southeast-1.compute.amazonaws.com';
+$config['mongo_host'] = '54.251.38.196,54.251.42.250';
 $config['mongo_port'] = 27017;
 $config['mongo_db'] = 'socialhappen';
 $config['mongo_user'] = 'sohap';
