@@ -119,6 +119,11 @@ class Apiv4 extends REST_Controller {
 
     //Generate token & add into user's mongo model
     $user_mongo = array(
+      /**
+       * FOR PRIVATE TESTING ONLY
+       * CHANGE availagle TO TRUE WHEN LAUNCH IN PUBLIC
+       */
+      'available' => FALSE,
       'user_id' => $user_id,
       'points' => 10
     );
@@ -166,7 +171,17 @@ class Apiv4 extends REST_Controller {
 
     unset($user['user_password']);
 
-    return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
+    $code = 1;
+
+    /**
+     * FOR PRIVATE TESTING ONLY
+     * REMOVE THIS WHEN LAUNCH IN PUBLIC
+     */
+    if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
+      $code = 3;
+    }
+
+    return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token), $code);
   }
 
   /**
@@ -256,7 +271,19 @@ class Apiv4 extends REST_Controller {
       return $this->error('increment stat failed', 2);
     }
 
-    return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token));
+    $code = 1;
+
+    /**
+     * FOR PRIVATE TESTING ONLY
+     * REMOVE THIS WHEN LAUNCH IN PUBLIC
+     */
+    $this->load->model('user_mongo_model');
+    $user_mongo = $this->user_mongo_model->get_user($user_id);
+    if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
+      $code = 3;
+    }
+
+    return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token), $code);
   }
 
   /**
@@ -1370,5 +1397,32 @@ class Apiv4 extends REST_Controller {
     }
 
     return $this->error('No notice');
+  }
+
+  function debug_reset_user_post() {
+    if ((ENVIRONMENT !== 'testing') && (ENVIRONMENT !== 'development')) { return $this->error(); }
+
+    $this->load->model('user_mongo_model');
+
+    $unset = array(
+      "challenge_completed" => TRUE,
+      "challenge_redeeming" => TRUE,
+      "daily_challenge" => TRUE,
+      "daily_challenge_completed" => TRUE,
+      "reward_items" => TRUE
+    );
+
+    if(!$user_ids = explode(",", $this->post('user_ids'))) {
+      return $this->error('No user id specified');
+    }
+
+    foreach($user_ids as $user_id) {
+      $user_id = (int) $user_id;
+      if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset))) {
+        return $this->error('Update failed');
+      }
+    }
+
+    return $this->success('Reset success');
   }
 }

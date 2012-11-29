@@ -28,13 +28,20 @@ class Resetuser extends CI_Controller {
 		  "reward_items" => TRUE
 		);
 
-		$user_ids = array(1,3,5);
-
-		foreach($user_ids as $user_id) {
-			$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset));
+		if(!$user_ids = explode(",", $this->input->post('user_ids'))) {
+			echo json_encode(array('success' => FALSE));
+			return;
 		}
 
-		echo 'reset user';
+		foreach($user_ids as $user_id) {
+			$user_id = (int) $user_id;
+			if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset))) {
+				echo json_encode(array('success' => FALSE));
+				return;
+			}
+		}
+
+		echo json_encode(array('success' => TRUE));
 	}
 }
 /* End of file resetuser.php */

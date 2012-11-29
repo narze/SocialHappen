@@ -10,6 +10,11 @@ class Play extends CI_Controller {
    * Play page
    */
   function index(){
+    if(!$this->socialhappen->get_user()) {
+      redirect('http://unbouncepages.com/sh-en');
+      return;
+    }
+
     $this->load->library('apiv2_lib');
     $app_data = $this->input->get('app_data', TRUE);
 

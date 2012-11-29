@@ -73,8 +73,8 @@ define([
         params.processData = false;
       }
 
-      console.log('save reward:', this.toJSON());
-      console.log('POST:', params.data);
+      // console.log('save reward:', this.toJSON());
+      // console.log('POST:', params.data);
 
       return $.ajax(_.extend(params, options));
     },
