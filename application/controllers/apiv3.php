@@ -70,7 +70,7 @@ class Apiv3 extends CI_Controller {
 
     if($company_id){
       $this->load->model('company_model');
-      $company = $this->company_model->get_company_profile_by_campaign_id($company_id);
+      $company = $this->company_model->get_company_profile_by_company_id($company_id);
 
       $this->load->library('achievement_lib');
       $company_stat = $this->achievement_lib->get_company_stat($company_id, $user_id);
@@ -80,7 +80,7 @@ class Apiv3 extends CI_Controller {
         unset($company['company_password']);
 
         $company['company_score'] = $company_stat && $company_stat['company_score'] ? $company_stat['company_score'] : 0;
-
+        // return json_return($company_id);
         return json_return($company);
       }else{
         echo '{}';
