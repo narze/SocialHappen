@@ -23,7 +23,9 @@ define([
     },
 
     render: function () {
+      console.log('render');
       $(this.el).html(_.template(companySettingsTemplate)({}))
+      this.fillForm()
       return this;
     },
 
