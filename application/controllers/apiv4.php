@@ -1397,4 +1397,31 @@ class Apiv4 extends REST_Controller {
 
     return $this->error('No notice');
   }
+
+  function debug_reset_user_post() {
+    if ((ENVIRONMENT !== 'testing') && (ENVIRONMENT !== 'development')) { return $this->error(); }
+
+    $this->load->model('user_mongo_model');
+
+    $unset = array(
+      "challenge_completed" => TRUE,
+      "challenge_redeeming" => TRUE,
+      "daily_challenge" => TRUE,
+      "daily_challenge_completed" => TRUE,
+      "reward_items" => TRUE
+    );
+
+    if(!$user_ids = explode(",", $this->post('user_ids'))) {
+      return $this->error('No user id specified');
+    }
+
+    foreach($user_ids as $user_id) {
+      $user_id = (int) $user_id;
+      if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset))) {
+        return $this->error('Update failed');
+      }
+    }
+
+    return $this->success('Reset success');
+  }
 }
