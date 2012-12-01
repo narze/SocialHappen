@@ -126,9 +126,9 @@ class Company_model extends CI_Model {
 	}
 
 	/**
-	 * Get all companys
+	 * Get all companys except system
 	 */
 	function get_all(){
-		return $this->db->get('company')->result_array();
+		return $this->db->get_where('company', array('company_id !='=>'1'))->result_array();
 	}
 }
