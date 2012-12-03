@@ -496,6 +496,8 @@ class Apiv4 extends REST_Controller {
         }
         $challenges[$i]['_id'] = '' . $challenges[$i]['_id'];
       }
+      $challenges = array_values($challenges); //reindex
+
       return $this->success($challenges);
     }
   }
