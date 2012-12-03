@@ -867,10 +867,6 @@ class Apiv4 extends REST_Controller {
 
       //5
       //Add notification
-      $this->load->library('notification_lib');
-      $message = 'You have completed a challenge : ' . $challenge['detail']['name'] . '.';
-      $link = '#';
-      $image = $challenge['detail']['image'];
 //notification did not work now
       //if(!$this->notification_lib->add($user_id, $message, $link, $image)) {
       //  return $this->error('Add notification failed');
