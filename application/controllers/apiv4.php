@@ -317,6 +317,7 @@ class Apiv4 extends REST_Controller {
    */
   function companies_get() {
     $company_id = $this->get('company_id');
+    $skip_system_company = $this->get('skip_system_company');
 
     $this->load->model('company_model');
 
@@ -325,6 +326,10 @@ class Apiv4 extends REST_Controller {
         return $this->success(array($company));
       }
       return $this->error('Invalid company');
+    }
+
+    if($skip_system_company) {
+      return $this->success($this->company_model->get_all_except_system());
     }
 
     return $this->success($this->company_model->get_all());
