@@ -98,6 +98,8 @@ class Coupon_model extends CI_Model {
 		$data['confirmed_timestamp'] = NULL;
 		$data['confirmed_by_id'] = NULL;
 
+		$data['code'] = substr(sha1($data['timestamp'] . '-' . $data['reward_item_id'] . '-' . $data['user_id']), 0, 10);
+
 		$data['company_id'] = (int) $data['company_id'];
 		$data['user_id'] = (int) $data['user_id'];
 
@@ -105,6 +107,23 @@ class Coupon_model extends CI_Model {
 			$data['challenge_id'] = NULL;
 		}
 		return $this->add($data);
+	}
+
+	/**
+	 * Update coupon code
+	 */
+	function update_coupon_code_by_id($coupon_id = NULL, $force = FALSE) {
+		if(!$coupon = $this->get_by_id($coupon_id)) { return FALSE; }
+		if(!$force && isset($coupon['code'])) { return $coupon['code']; }
+
+		$coupon_code = substr(sha1($coupon['timestamp'] . '-' . $coupon['reward_item_id'] . '-' . $coupon['user_id']), 0, 10);
+		$set = array(
+			'$set' => array(
+				'code' => $coupon_code
+			)
+		);
+		if(!$this->update(array('_id' => new MongoId($coupon_id)), $set)) { return FALSE; }
+		return $coupon_code;
 	}
 
 	/**

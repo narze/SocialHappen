@@ -45,6 +45,40 @@ class Coupon_model_test extends CI_Controller {
 		$this->unit->run($result['reward_item_id'], 'testrewardid', "\$result['reward_item_id']", $result['reward_item_id']);
 		$this->unit->run($result['company_id'], 3, "\$result['company_id']", $result['company_id']);
 		$this->unit->run($result['challenge_id'], 123, "\$result['challenge_id']", $result['challenge_id']);
+		$this->unit->run(strlen($result['code']) === 10, TRUE, "\$result['code']", $result['code']);
+		$this->code = $result['code'];
+	}
+
+	function update_coupon_code_by_id_test() {
+		//firstly, remove coupon code
+		$coupon_id = $this->coupon_id;
+		$this->coupon_model->update(array('_id' => new MongoId($coupon_id)), array('$unset' => array('code' => TRUE)));
+		$result = $this->coupon_model->get_by_id($coupon_id);
+
+		$this->unit->run(isset($result['code']) === FALSE, TRUE, "isset(\$result['code'])", isset($result['code']));
+
+		//then try update the code, it should have the same code as before
+		$result = $this->coupon_model->update_coupon_code_by_id($coupon_id);
+		$this->unit->run($result, TRUE, "\$result", $result);
+
+		$result = $this->coupon_model->get_by_id($coupon_id);
+		$this->unit->run(isset($result['code']) === TRUE, TRUE, "isset(\$result['code'])", isset($result['code']));
+
+		//try changing timestamp, the code will change when we pass TRUE as 2nd param
+		$this->coupon_model->update(array('_id' => new MongoId($coupon_id)), array('$inc' => array('timestamp' => 1)));
+		$result = $this->coupon_model->update_coupon_code_by_id($coupon_id);
+		$this->unit->run($result, TRUE, "\$result", $result);
+
+		$result = $this->coupon_model->get_by_id($coupon_id);
+		$this->unit->run($result['code'] === $this->code, TRUE, "\$result['code']", $result['code']);
+
+		$force = TRUE;
+		$this->coupon_model->update(array('_id' => new MongoId($coupon_id)), array('$inc' => array('timestamp' => 1)));
+		$result = $this->coupon_model->update_coupon_code_by_id($coupon_id, $force);
+		$this->unit->run($result, TRUE, "\$result", $result);
+
+		$result = $this->coupon_model->get_by_id($coupon_id);
+		$this->unit->run($result['code'] !== $this->code, TRUE, "\$result['code']", $result['code']);
 	}
 
 	function list_user_coupons_test() {

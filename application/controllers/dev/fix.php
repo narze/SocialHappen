@@ -50,6 +50,20 @@ class Fix extends CI_Controller {
 
     echo 'Build completed';
   }
+
+  function add_coupon_code() {
+    $this->load->model('coupon_model');
+
+    $all_coupons = $this->coupon_model->get();
+
+    foreach($all_coupons as $coupon) {
+      if(!$this->coupon_model->update_coupon_code_by_id(get_mongo_id($coupon))) {
+         return FALSE;
+      }
+    }
+
+    echo 'Add completed';
+  }
 }
 /* End of file fix.php */
 /* Location: ./application/controllers/dev/fix.php */

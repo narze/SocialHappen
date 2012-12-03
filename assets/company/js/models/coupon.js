@@ -15,7 +15,8 @@ define([
       confirmed_timestamp: null,
       confirmed_by_id: null,
       challenge_id: null,
-      delivered: false
+      delivered: false,
+      code: null
     },
     initialize: function(){
 
