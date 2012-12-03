@@ -393,6 +393,15 @@ class Apiv4_test extends CI_Controller {
 
 		$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
 		$this->unit->run($result['data'], 'is_string', "\$result['data']", $result['data']);
+
+		$params = array(
+			'skip_system_company' => TRUE
+		);
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 0, TRUE, "count(\$result)", count($result['data']));
 	}
 
 	function _add_company_challenges_test() {
@@ -588,6 +597,13 @@ class Apiv4_test extends CI_Controller {
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']) === 4, TRUE, "count(\$result['data'])", count($result['data']));
+
+		$params = array('skip_system_company' => TRUE);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['_id'] === $this->challenge_id4, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
 	}
 
 	function challenges_get_with_location_test() {

@@ -416,6 +416,9 @@ class Apiv4 extends REST_Controller {
     $user_id = (int) $this->get('user_id');
     $token = $this->get('token');
 
+    //Skip company_id = 1
+    $skip_system_company = $this->get('skip_system_company');
+
     if($challenge_id) {
       $challenges = $this->challenge_lib->get(array('_id' => new MongoId($challenge_id)));
     } else if($company_id) {
@@ -485,10 +488,14 @@ class Apiv4 extends REST_Controller {
     if($challenges === FALSE) {
       return $this->error('API error');
     } else {
-      $challenges = array_map(function($challenge){
-        $challenge['_id'] = '' . $challenge['_id'];
-        return $challenge;
-      }, $challenges);
+      $challenge_count = count($challenges);
+      for($i = 0; $i < $challenge_count; $i++) {
+        if($skip_system_company && ($challenges[$i]['company_id'] == 1)) {
+          unset($challenges[$i]);
+          continue;
+        }
+        $challenges[$i]['_id'] = '' . $challenges[$i]['_id'];
+      }
       return $this->success($challenges);
     }
   }
