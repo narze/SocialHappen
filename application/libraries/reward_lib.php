@@ -247,9 +247,9 @@ class Reward_lib
 		$message = "You have used the coupon for <strong>{$reward_item['name']}</strong>.";
 		$link = '#';
 		$image = $reward_item['image'];
-		if(!$this->CI->notification_lib->add($user_id, $message, $link, $image)) {
-			return FALSE;
-		}
+		// if(!$this->CI->notification_lib->add($user_id, $message, $link, $image)) {
+		// 	return FALSE;
+		// }
 
 		return TRUE;
 	}

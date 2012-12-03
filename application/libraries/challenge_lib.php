@@ -325,10 +325,10 @@ class Challenge_lib {
         $message = 'You have completed a challenge : ' . $challenge['detail']['name'] . '.';
         $link = '#';
         $image = $challenge['detail']['image'];
-        if(!$this->CI->notification_lib->add($user_id, $message, $link, $image)) {
-          $result['success'] = FALSE;
-          $result['data'] = 'add notification failed';
-        }
+        // if(!$this->CI->notification_lib->add($user_id, $message, $link, $image)) {
+        //   $result['success'] = FALSE;
+        //   $result['data'] = 'add notification failed';
+        // }
 
         //6
         //Add audit
