@@ -80,6 +80,7 @@ class Apiv4 extends REST_Controller {
     $device = $this->post('device');
     $device_id = $this->post('device_id');
     $device_token = $this->post('device_token');
+    $device_name = $this->post('device_name');
 
     if(!$email || !$phone || !$password) {
       return $this->error('No email, phone, password');
@@ -138,7 +139,8 @@ class Apiv4 extends REST_Controller {
       'user_id' => $user_id,
       'device' => $device,
       'device_id' => $device_id,
-      'device_token' => $device_token
+      'device_token' => $device_token,
+      'device_name' => $device_name
     );
     if(!$user_token = $this->user_token_model->add_user_token($user_token_data)) {
       return $this->error('Add user token failed');
@@ -202,6 +204,7 @@ class Apiv4 extends REST_Controller {
     $device = $this->post('device');
     $device_id = $this->post('device_id');
     $device_token = $this->post('device_token');
+    $device_name = $this->post('device_name');
 
     $signinsuccess = FALSE;
 
@@ -240,7 +243,8 @@ class Apiv4 extends REST_Controller {
       'user_id' => $user_id,
       'device' => $device,
       'device_id' => $device_id,
-      'device_token' => $device_token
+      'device_token' => $device_token,
+      'device_name' => $device_name
     );
     if(!$user_token = $this->user_token_model->add_user_token($user_token_data)) {
       return $this->error('Add user token failed', 2);

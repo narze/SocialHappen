@@ -1182,6 +1182,7 @@ class Apiv3 extends CI_Controller {
     }
 
     $device_token = $array['user']['device_token'];
+    $device_name = $array['user']['device_name'];
     $device = $array['user']['device'];
     $message = $array['message'];
 
@@ -1200,7 +1201,7 @@ class Apiv3 extends CI_Controller {
 
       if($send_result) {
         $result['success'] = TRUE;
-        $result['data'] = 'Pushed "'.$message.'" to "'. "{$user['user_first_name']} {$user['user_last_name']} ({$device_token})";
+        $result['data'] = 'Pushed "'.$message.'" to "'. "{$user['user_first_name']} {$user['user_last_name']} ({$device_name} [{$device_token}])";
       }
       else {
         log_message('error',$this->apn->error);
