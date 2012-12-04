@@ -869,6 +869,8 @@ class Apiv4 extends REST_Controller {
         // $result['data'] = 'add achievement failed';
       }
 
+      $image = $challenge['detail']['image'];
+
       //5
       //Add notification
 //notification did not work now
