@@ -1255,7 +1255,7 @@ class Apiv4 extends REST_Controller {
       'object' => $reward_item['name'],
       'objecti' => $reward_item_id,
       'user_id' => $user_id,
-      'company_id' => 0,
+      'company_id' => $reward_item['company_id'],
       'image' => $reward_item['image']
     ))) {
       return $this->error('Unexpected error', 6);
@@ -1266,7 +1266,7 @@ class Apiv4 extends REST_Controller {
       'reward_item_id' => $reward_item_id,
       'reward_item' => $reward_item,
       'user_id' => $user_id,
-      'company_id' => 0,
+      'company_id' => $reward_item['company_id'],
       'shipping' => $shipping
     );
     if(!$coupon_id = $this->coupon_lib->create_coupon($coupon)) {

@@ -1241,6 +1241,19 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['shipping']['name'] === 'shipping name', TRUE, "\$result['data']['shipping']['name']", $result['data']['shipping']['name']);
   }
 
+  function coupons_get_test_2_before() {
+  	$method = 'coupons';
+
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 4, TRUE, "count(\$result['data'])", count($result['data']));
+  }
+
   function redeem_reward_post_test() {
   	$method = 'redeem_reward';
   	$params = array(
@@ -1323,6 +1336,24 @@ class Apiv4_test extends CI_Controller {
   	// reward_item_1 : 1
   	// reward_item_2 : 2
   	// reward_item_3 : 1
+  	// and have 8 in total
+  }
+
+  function coupons_get_test_2_after() {
+  	$method = 'coupons';
+
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2
+  	);
+
+  	$result = $this->get($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 8, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['company_id'] !== 0, TRUE, "\$result['data'][0]['company_id']", $result['data'][0]['company_id']);
+  	$this->unit->run($result['data'][1]['company_id'] !== 0, TRUE, "\$result['data'][1]['company_id']", $result['data'][1]['company_id']);
+  	$this->unit->run($result['data'][2]['company_id'] !== 0, TRUE, "\$result['data'][2]['company_id']", $result['data'][2]['company_id']);
+  	$this->unit->run($result['data'][3]['company_id'] !== 0, TRUE, "\$result['data'][3]['company_id']", $result['data'][3]['company_id']);
   }
 
   function cards_get_test() {
