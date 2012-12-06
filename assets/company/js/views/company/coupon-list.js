@@ -114,6 +114,7 @@ define([
       sandbox.collections.couponsCollection.reset(this.couponListTemp);
       var search_texts = {
         id: $('#coupon-search-id', this.el).val(),
+        code: $('#coupon-search-code', this.el).val(),
         name: $('#coupon-search-name', this.el).val(),
         email: $('#coupon-search-email', this.el).val(),
         phone: $('#coupon-search-phone', this.el).val()
@@ -123,11 +124,13 @@ define([
         coupon.user = coupon.get('user');
         var search_datas = {
           id: coupon.id,
+          code: coupon.get('code'),
           name: coupon.user.user_first_name + coupon.user.user_last_name,
           email: coupon.user.user_email,
           phone: coupon.user.user_phone
         }
-        var search_fields = ['id', 'name', 'email', 'phone']
+        console.log(search_datas);
+        var search_fields = ['id', 'code', 'name', 'email', 'phone']
 
         for(var i in search_fields) {
           var field = search_fields[i];
