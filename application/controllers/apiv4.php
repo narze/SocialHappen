@@ -331,8 +331,7 @@ class Apiv4 extends REST_Controller {
       }
       return $this->error('Invalid company');
     }
-
-    if($skip_system_company) {
+    if($skip_system_company && ($skip_system_company !== "false")) {
       return $this->success($this->company_model->get_all_except_system());
     }
 
