@@ -48,7 +48,9 @@ define([
 
     addAll: function(){
       console.log('addAll');
-      this.couponListTemp = sandbox.collections.couponsCollection.models;
+      if(!this.couponListTemp.length) {
+        this.couponListTemp = sandbox.collections.couponsCollection.models;
+      }
 
       if(sandbox.collections.couponsCollection.length <= 30){
         $('button.load-more', this.el).addClass('hide');
