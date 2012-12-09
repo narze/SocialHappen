@@ -1395,6 +1395,7 @@ class Apiv4 extends REST_Controller {
   }
 
   function notice_get() {
+    // Version format : x.x.x
     $version = $this->get('version');
 
     if($version == 0) {

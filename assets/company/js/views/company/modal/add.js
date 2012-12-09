@@ -548,9 +548,11 @@ define([
       this.model.set('active', true);
       sandbox.collections.challengesCollection.create(this.model, {
         success: function(model, res) {
-          console.log(res);
-          //Refresh
-          window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
+          if(res.success) {
+            window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
+          } else {
+            alert('Challenge create failed (session timeout)')
+          }
         }
       });
 
