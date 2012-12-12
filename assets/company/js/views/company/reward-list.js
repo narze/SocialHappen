@@ -26,7 +26,9 @@ define([
     },
 
     render: function () {
-      $(this.el).html(this.rewardListTemplate({}));
+      var data = {}
+      data.companyId = window.Company.companyId;
+      $(this.el).html(this.rewardListTemplate(data));
       sandbox.collections.rewardsCollection.fetch();
       return this;
     },
@@ -56,7 +58,7 @@ define([
       $('.tile-list', this.el).html('');
 
       if(sandbox.collections.rewardsCollection.length === 0){
-        $('.tile-list', this.el).html('Your company have no reward. Start creating a reward by clicking "Create Reward" button.');
+        $('.tile-list', this.el).html('Your company have no reward.');
       }
 
       if(sandbox.collections.rewardsCollection.length <= 30){
