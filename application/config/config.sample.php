@@ -268,7 +268,7 @@ $config['encryption_key'] = 'a02k#DL!4sgt0#$0;1z-d$dfG+_)!(A!';
 |
 */
 $config['sess_cookie_name']		= 'sh_session';
-$config['sess_expiration']		= 7200;
+$config['sess_expiration']		= 31536000;
 $config['sess_expire_on_close']	= FALSE;
 $config['sess_encrypt_cookie']	= TRUE;
 $config['sess_use_database']	= TRUE;
