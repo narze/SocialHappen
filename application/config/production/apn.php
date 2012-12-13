@@ -15,7 +15,7 @@
 | Full server path to this file is required.
 |
 */
-$config['PermissionFile'] = APPPATH.'../files/apns-dev.pem';
+$config['PermissionFile'] = APPPATH.'../files/apns-prod.pem';
 
 
 /*
@@ -30,7 +30,7 @@ $config['PassPhrase'] = '';
 | APN Services
 |--------------------------------------------------------------------------
 */
-$config['Sandbox'] = true;
+$config['Sandbox'] = FALSE;
 $config['PushGatewaySandbox'] = 'ssl://gateway.sandbox.push.apple.com:2195';
 $config['PushGateway'] = 'ssl://gateway.sandbox.push.apple.com:2195';
 
