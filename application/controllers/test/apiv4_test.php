@@ -1396,6 +1396,16 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['success'] === FALSE, "\$result['success']", $result['success']);
   	$this->unit->run($result['data'] === 'No notice', TRUE, "\$result['data']", $result['data']);
   }
+
+  function mobile_config_get() {
+    $method = 'mobile_config';
+
+    $params = array();
+
+    $result = $this->get($method, $params);
+    $this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
+    $this->unit->run($result['data'] === $this->config->item('mobile_config'), TRUE, "\$result['data']", $result['data']);
+  }
 }
 /* End of file apiv4_test.php */
 /* Location: ./application/controllers/test/apiv4_test.php */

@@ -1441,4 +1441,13 @@ class Apiv4 extends REST_Controller {
 
     return $this->success('Reset success');
   }
+
+  function mobile_config_get() {
+    $this->load->config('mobile');
+    $config = array();
+    if($this->config->item('mobile_config')) {
+      $config = $this->config->item('mobile_config');
+    }
+    return $this->success($config);
+  }
 }
