@@ -546,17 +546,24 @@ define([
       console.log('create challenge!');
       this.model.set('company_id', window.Company.companyId);
       this.model.set('active', true);
+      var self = this;
       sandbox.collections.challengesCollection.create(this.model, {
         success: function(model, res) {
           if(res.success) {
+            this.$el.modal('hide');
             window.location = window.Company.BASE_URL + 'r/company_admin/' + window.Company.companyId;
           } else {
+            self.model.trigger('destroy');
+            sandbox.collections.challengesCollection.remove(self.model);
             alert('Challenge create failed (session timeout)')
           }
+        },
+        error: function(){
+          self.model.trigger('destroy');
+          sandbox.collections.challengesCollection.remove(self.model);
+          alert('Challenge create failed')
         }
       });
-
-      this.$el.modal('hide');
     },
 
     toggleRepeat: function(){
