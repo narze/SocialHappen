@@ -812,19 +812,35 @@ class Challenge_lib {
     return FALSE;
   }
 
-  function get_nearest_challenges($location = array(), $max_dist = 0.000001, $limit = 20) {
+  function get_nearest_challenges($location = array(), $max_dist = 0.000001, $limit = 20, $and_get_without_location_specified = FALSE) {
     if(!is_array($location) || count($location) !== 2) {
       return FALSE;
     }
+
     $query = array(
       'location' => array('$near' => array(floatval($location[0]), floatval($location[1])))
     );
+
+
     if($max_dist > 0) {
       $query['location']['$maxDistance'] = floatval($max_dist);
     }
 
     $challenges = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
 
+    if($and_get_without_location_specified) {
+      $query = array(
+        'location' => array('$near' => array(0.0,0.0), '$maxDistance' => 0.0)
+      );
+      $challenge_at_0_0 = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
+      $challenges = array_merge($challenges, $challenge_at_0_0);
+
+      $query = array(
+        'location' => array('$exists' => FALSE)
+      );
+      $challenges_without_location = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
+      $challenges = array_merge($challenges, $challenges_without_location);
+    }
     $this->CI->load->model('company_model');
 
     // get company profile to show in map, do we need company image ?

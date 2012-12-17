@@ -633,6 +633,14 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
 		$this->unit->run($result['data'][0]['_id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+
+		//and_without_location will get challenges those don't have location set or location is set to [0, 0]
+		$params = array('lon' => 100, 'lat' => 100, 'max_distance' => 0.003, 'and_without_location' => TRUE);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['_id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
 	}
 
 	function challenges_get_with_company_id_test() {

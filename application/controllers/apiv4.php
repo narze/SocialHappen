@@ -414,6 +414,7 @@ class Apiv4 extends REST_Controller {
     $lat = $this->get('lat');
     $max_distance = $this->get('max_distance');
     $limit = $this->get('limit') || NULL;
+    $and_without_location = $this->get('and_without_location');
 
     $doable_date = $this->get('doable_date'); //[YYYYMMDD] if set, challenge that is not doable in the date will have [next_date] = next date available (requires user_id & token)
     $user_id = (int) $this->get('user_id');
@@ -428,7 +429,7 @@ class Apiv4 extends REST_Controller {
       $challenges = $this->challenge_lib->get(array('company_id' => $company_id));
     } else if(($lon !== FALSE) && ($lat !== FALSE)) {
       $challenges = $this->challenge_lib->get_nearest_challenges(
-        array($lon, $lat), $max_distance, $limit);
+        array($lon, $lat), $max_distance, $limit, $and_without_location);
     } else {
       $challenges = $this->challenge_lib->get(array());
     }
