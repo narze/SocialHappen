@@ -277,12 +277,23 @@ class Apiv4 extends REST_Controller {
 
     $code = 1;
 
+    //Some old users didn't have mongo model, so add it if not found
+    $this->load->model('user_mongo_model');
+    if(!$user_mongo = $this->user_mongo_model->get_user($user_id)) {
+      //Generate token & add into user's mongo model
+      $add_user_mongo = array(
+        'user_id' => $user_id,
+        'points' => 10 //starter
+      );
+      if(!$this->user_mongo_model->add($add_user_mongo)) {
+        // return $this->error('Add user failed');
+      }
+    }
+
     /**
      * FOR PRIVATE TESTING ONLY
      * REMOVE THIS WHEN LAUNCH IN PUBLIC
      */
-    $this->load->model('user_mongo_model');
-    $user_mongo = $this->user_mongo_model->get_user($user_id);
     if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
       $code = 3;
     }
