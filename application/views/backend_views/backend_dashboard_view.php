@@ -6,7 +6,7 @@
 	<?php echo link_tag('css/style.css'); ?>
 </head>
 <body>
-	<h1>Backend Dashboard</h1>
+	<h1>Backend Dashboard <?=anchor('backendv2/', 'v2', 'title="v2"');?></h1>
 	<ul>
 		<li>
 			<?=anchor('backend/app/', 'Manage Apps', 'title="Manage Apps"');?>
