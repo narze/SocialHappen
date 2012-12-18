@@ -81,7 +81,7 @@ class User_token_model extends CI_Model {
 	 * @return $data with login_token
 	 */
 	function add_user_token($data) {
-		if(!all_not_null($data, array('user_id', 'device', 'device_id', 'device_token'))) {
+		if(!all_not_null($data, array('user_id', 'device', 'device_id'))) {
 			return FALSE;
 		}
 
