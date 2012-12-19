@@ -15,6 +15,21 @@ class Apiv3 extends CI_Controller {
     return json_return(array('status' => 'OK'));
   }
 
+  function branch(){
+    $company_id = $this->input->get('company_id');
+
+    $this->load->library('branch_lib');
+
+    $result = array();
+
+    if(isset($company_id) && $company_id){
+      $criteria = array('company_id' => $company_id);
+      $result = $this->branch_lib->get($criteria, 10000);
+    }
+
+    return json_return($result);
+  }
+
   /**
    * get platform user
    *
