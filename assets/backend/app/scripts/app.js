@@ -1,3 +1,7 @@
-define([], function() {
-  return 'Hello from Yeoman!';
-});
+(function() {
+
+  define([], function() {
+    return 'Hello from Yeoman!';
+  });
+
+}).call(this);
