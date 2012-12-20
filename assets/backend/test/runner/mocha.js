@@ -1,5 +1,7 @@
 (function() {
-  var runner = mocha.run();
+  var runner = mocha
+    .run()
+    .globals(['*']); //accept all globals, remove this to test global leaks
 
   if(!window.PHANTOMJS) return;
 
