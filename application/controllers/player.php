@@ -133,6 +133,9 @@ class Player extends CI_Controller {
    * Challenge landing
    */
   function challenge($challenge_hash) {
+    //Redirect to homepage for now
+    redirect();
+
     $this->load->model('challenge_model');
     $this->load->library('challenge_lib');
     if((!$challenge = $this->challenge_model->getOne(array('hash' => $challenge_hash))) || !$challenge['active']) {
