@@ -10,6 +10,7 @@ require.config({
 });
  
 require(['app'], function(app) {
+  window.appLoaded = true
   // use app here
   console.log(app);
 });

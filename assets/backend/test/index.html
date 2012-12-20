@@ -20,19 +20,27 @@
   <!-- -->
 
   <!-- include source files here... -->
+  <!-- source for 'yeoman test' -->
+  <script data-main="../app/scripts/main" src="../app/scripts/vendor/require.js"></script>
+  <!-- source for 'yeoman server:test' -->
+  <script data-main="scripts/main" src="scripts/vendor/require.js"></script>
 
   <!-- include spec files here... -->
+
   <script>
   // replace this by your own specs
   (function() {
-    describe('Give it some context', function() {
-      describe('maybe a bit more context here', function() {
-
-        it('should run here few assertions', function() {
-
+    describe('scripts are loaded', function() {
+      describe('require.js is loaded', function() {
+        it('should have require function', function() {
+          require.should.be.a('function')
         });
-
       });
+      describe('scripts/main is loaded', function() {
+        it('should have window.appLoaded', function() {
+          expect(window.appLoaded).to.equal(true)
+        })
+      })
     });
   })();
   </script>
