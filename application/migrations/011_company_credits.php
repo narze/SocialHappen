@@ -6,7 +6,7 @@ class Migration_Company_credits extends CI_Migration {
     $fields = array(
       'credits' => array(
         'type' => 'INT',
-        'constraint' => 20,
+        'constraint' => 10,
         'default' => 0,
         'null' => FALSE
       ),
