@@ -15,11 +15,25 @@ class Branch_lib {
 
   function get($criteria, $limit = 100) {
     $result = $this->CI->branch_model->get($criteria, $limit);
+
+    if($result && count($result > 0)){
+      $result = array_map(function($model){
+        $model['_id'] = '' . $model['_id'];
+
+        return $model;
+      }, $result);
+    }
+
     return $result;
   }
 
   function get_one($criteria) {
     $result = $this->CI->branch_model->getOne($criteria);
+
+    if($result){
+      $result['_id'] = '' . $result['_id'];
+    }
+
     return $result;
   }
 
