@@ -9,6 +9,10 @@ class Apiv3 extends CI_Controller {
   function __construct(){
     header("Access-Control-Allow-Origin: *");
     parent::__construct();
+    if($this->uri->segment(1) === 'testmode') {
+      $this->load->library('db_sync');
+      $this->db_sync->use_test_db(TRUE);
+    }
   }
 
   function index(){
@@ -1231,6 +1235,42 @@ class Apiv3 extends CI_Controller {
       'success' => TRUE,
       'data' => $sonar_box_data
     ));
+  }
+
+  function error($error_message = NULL, $code = 0) {
+    echo json_encode(array('success' => FALSE, 'data' => $error_message, 'code' => $code, 'timestamp' => time()));
+    return FALSE;
+  }
+
+  function success($data = array(), $code = 1) {
+    echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()));
+    return TRUE;
+  }
+
+  function credit_add() {
+    $company_id = $this->input->post('company_id');
+    $credit = $this->input->post('credit');
+    if(!$company_id || !$credit) {
+      return $this->error();
+    }
+
+    $this->load->model('company_model');
+
+    if(!$company = $this->company_model->get_company_profile_by_company_id($company_id)) {
+      return $this->error('Invalid Company');
+    }
+
+    $company['credits'] = issetor($company['credits'], 0) + (int) $credit;
+
+    $update = array(
+      'credits' => $company['credits']
+    );
+
+    if(!$result = $this->company_model->update_company_profile_by_company_id($company_id, $update)) {
+      return $this->error('Update Failed');
+    }
+
+    return $this->success($company);
   }
 }
 
