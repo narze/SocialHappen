@@ -506,6 +506,15 @@ class Apiv4 extends REST_Controller {
         }
         $challenge['company'] = $companies[$challenge['company_id']];
       }
+
+      //Challenge could not be done if credits <= 0
+      if($challenge['company']['credits'] <= 0) {
+        $challenge['is_out_of_stock'] = TRUE;
+      }
+
+      if(!isset($challenge['is_out_of_stock'])) {
+        $challenge['is_out_of_stock'] = FALSE;
+      }
     }
 
     if($challenges === FALSE) {

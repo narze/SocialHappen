@@ -1445,6 +1445,71 @@ class Apiv4_test extends CI_Controller {
     $this->unit->run($result['success'] === TRUE, TRUE, "\$result['success']", $result['success']);
     $this->unit->run($result['data'] === $this->config->item('mobile_config'), TRUE, "\$result['data']", $result['data']);
   }
+
+  /**
+   * All challenges are out of stock if company credits is <= 0
+   */
+  function out_of_stock_test() {
+		$method = 'challenges';
+
+		//company 1
+		$params = array(
+			'company_id' => 1
+		);
+
+		//set credits > 0
+		$this->load->model('company_model');
+		$this->company_model->update_company_profile_by_company_id(1, array('credits' => 1));
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['is_out_of_stock'], FALSE, "\$result['data'][0]['is_out_of_stock']", $result['data'][0]['is_out_of_stock']);
+		$this->unit->run($result['data'][1]['is_out_of_stock'], FALSE, "\$result['data'][1]['is_out_of_stock']", $result['data'][1]['is_out_of_stock']);
+		$this->unit->run($result['data'][2]['is_out_of_stock'], FALSE, "\$result['data'][2]['is_out_of_stock']", $result['data'][2]['is_out_of_stock']);
+
+		//set credits = 0
+		$this->load->model('company_model');
+		$this->company_model->update_company_profile_by_company_id(1, array('credits' => 0));
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['is_out_of_stock'], TRUE, "\$result['data'][0]['is_out_of_stock']", $result['data'][0]['is_out_of_stock']);
+		$this->unit->run($result['data'][1]['is_out_of_stock'], TRUE, "\$result['data'][1]['is_out_of_stock']", $result['data'][1]['is_out_of_stock']);
+		$this->unit->run($result['data'][2]['is_out_of_stock'], TRUE, "\$result['data'][2]['is_out_of_stock']", $result['data'][2]['is_out_of_stock']);
+
+		//company 2
+		$params = array(
+			'company_id' => 2
+		);
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 2, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['is_out_of_stock'], TRUE, "\$result['data'][0]['is_out_of_stock']", $result['data'][0]['is_out_of_stock']);
+		$this->unit->run($result['data'][1]['is_out_of_stock'], FALSE, "\$result['data'][1]['is_out_of_stock']", $result['data'][1]['is_out_of_stock']);
+
+		//set credits = 0
+		$this->load->model('company_model');
+		$this->company_model->update_company_profile_by_company_id(2, array('credits' => 0));
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 2, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['is_out_of_stock'], TRUE, "\$result['data'][0]['is_out_of_stock']", $result['data'][0]['is_out_of_stock']);
+		$this->unit->run($result['data'][1]['is_out_of_stock'], TRUE, "\$result['data'][1]['is_out_of_stock']", $result['data'][1]['is_out_of_stock']);
+
+		//set credits < 0
+		$this->load->model('company_model');
+		$this->company_model->update_company_profile_by_company_id(2, array('credits' => -1));
+
+		$result = $this->get($method, $params);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run(count($result['data']) === 2, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['is_out_of_stock'], TRUE, "\$result['data'][0]['is_out_of_stock']", $result['data'][0]['is_out_of_stock']);
+		$this->unit->run($result['data'][1]['is_out_of_stock'], TRUE, "\$result['data'][1]['is_out_of_stock']", $result['data'][1]['is_out_of_stock']);
+  }
 }
 /* End of file apiv4_test.php */
 /* Location: ./application/controllers/test/apiv4_test.php */
