@@ -1,14 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Company_model extends CI_Model {
-	var $company_id;
-	var $company_name = '';
-	var $company_address = '';
-	var $company_email = '';
-	var $company_telephone = '';
-	var $company_register_date;
-	var $company_username = '';
-	var $company_password = '';
-	var $company_facebook_id = '';
 
 	function __construct()
 	{

@@ -871,6 +871,30 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run($result['data'] === 'Token invalid', TRUE, "\$result['data']", $result['data']);
 	}
 
+	function _init_company_2_credits_test() {
+		$this->load->model('company_model');
+		$company = array(
+			'creator_user_id' => '1',
+			'company_name' => 'test',
+			'company_detail' => 'test',
+			'company_address' => 'test',
+			'company_email' => 'test@test.com',
+			'company_telephone' => '021234567',
+			'company_register_date' => '2011-05-09 17:52:17',
+			'company_username' => 'test',
+			'company_password' => 'test',
+			'company_image' => 'test.jpg'
+		);
+		$company_id = $this->company_model->add_company($company);
+		$this->unit->run($company_id,'is_int','add_company()');
+
+		$company = $this->company_model->get_company_profile_by_company_id(2);
+		$this->unit->run($company['credits'] == 0, TRUE, "\$company['credits']", $company['credits']);
+
+		//set credits to 300
+		$this->company_model->update_company_profile_by_company_id(2, array('credits' => 300));
+	}
+
   function do_action_post_test() {
   	$method = 'do_action';
 
@@ -1220,6 +1244,13 @@ class Apiv4_test extends CI_Controller {
   	//check last_active
   	$user = $this->user_token_model->getOne($user_criteria);
   	$this->unit->run($user['last_active'] === time(), TRUE, "\$user['last_active']", $user['last_active']);
+  }
+
+  function _company_credit_check_test() {
+  	//(company 2) from 300 points, should have 300 - 54*3 = 138 credits left
+  	$this->load->model('company_model');
+  	$company = $this->company_model->get_company_profile_by_company_id(2);
+  	$this->unit->run($company['credits'] == 138, TRUE, "\$company['credits']", $company['credits']);
   }
 
   function profile_post_test() {
