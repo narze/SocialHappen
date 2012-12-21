@@ -482,6 +482,8 @@ class Apiv4 extends REST_Controller {
       }
     }
 
+    $companies = array();
+
     $this->load->model('company_model');
     foreach($challenges as &$challenge) {
       //Check challenge quota
@@ -493,10 +495,16 @@ class Apiv4 extends REST_Controller {
       }
 
       //embed company data if not finding with company_id
-      if(!$company_id) {
-        $challenge['company'] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
+      if($company_id) {
+        if(!isset($companies[$company_id])) {
+          $companies[$company_id] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
+        }
+        $challenge['company'] = $companies[$company_id];
       } else {
-        $challenge['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
+        if(!isset($companies[$challenge['company_id']])) {
+          $companies[$challenge['company_id']] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
+        }
+        $challenge['company'] = $companies[$challenge['company_id']];
       }
     }
 
