@@ -71,6 +71,22 @@ define([
               });
             }
           });
+
+          require(['views/company/modal/branch/edit-branch'], function (EditBranch) {
+            if(!self.editBranch){
+              self.editBranch = new EditBranch({
+                el: $('div#edit-branch-modal')
+              });
+            }
+          });
+
+          require(['views/company/modal/branch/add-branch'], function (AddBranch) {
+            if(!self.addBranch){
+              self.addBranch = new AddBranch({
+                el: $('div#add-branch-modal')
+              });
+            }
+          });
         }
       }
 
