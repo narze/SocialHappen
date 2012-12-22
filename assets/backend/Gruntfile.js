@@ -63,7 +63,6 @@ module.exports = function( grunt ) {
     watch: {
       coffee: {
         files: [
-          'app/scripts/**/*.coffee',
           '**/*.coffee'
         ],
         tasks: 'coffee reload'
