@@ -1,6 +1,7 @@
 (function() {
 
   require.config({
+    baseUrl: 'scripts',
     shim: {
       backbone: {
         deps: ['lodash', 'jquery'],
@@ -17,7 +18,7 @@
   });
 
   require(['app'], function(app) {
-    return console.log(app);
+    return console.log('App loaded');
   });
 
   window.mainLoaded = true;

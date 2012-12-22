@@ -1,4 +1,5 @@
 require.config
+  baseUrl: 'scripts'
   shim:
     backbone:
       deps: ['lodash', 'jquery']
@@ -11,6 +12,6 @@ require.config
     esprima: 'vendor/esprima'
 
 require ['app'], (app) ->
-  console.log app
+  console.log 'App loaded'
 
 window.mainLoaded = true

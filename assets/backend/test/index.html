@@ -21,32 +21,24 @@
 
   <!-- include source files here... -->
   <!-- source for 'yeoman test' -->
-  <script data-main="../app/scripts/main" src="../app/scripts/vendor/require.js"></script>
+  <script data-main="../test/spec/test-main" src="../app/scripts/vendor/require.js"></script>
   <!-- source for 'yeoman server:test' -->
-  <script data-main="scripts/main" src="scripts/vendor/require.js"></script>
+  <script data-main="spec/test-main" src="scripts/vendor/require.js"></script>
 
   <!-- include spec files here... -->
-
+  <!-- <script src="spec/main-test.js"></script>
+  <script src="spec/collections/company-collection-test.js"></script> -->
   <script>
   // replace this by your own specs
   (function() {
-    describe('scripts are loaded', function() {
-      describe('require.js is loaded', function() {
-        it('should have require function', function() {
-          require.should.be.a('function')
-        });
-      });
-      describe('scripts/main is loaded', function() {
-        it('should have window.appLoaded', function() {
-          expect(window.appLoaded).to.equal(true)
-        })
-      })
-    });
+    require([ //list tests
+      'app-test',
+      'collections/company-collection-test'
+    ], function() {
+      require(['../runner/mocha']) //run mocha
+    })
   })();
   </script>
-
-  <!-- trigger the mocha runner -->
-  <script src="runner/mocha.js"></script>
 
 </body>
 </html>
