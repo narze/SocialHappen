@@ -1,6 +1,6 @@
 (function() {
 
-  describe('init company model', function() {
+  describe('Company model', function() {
     it('should be loaded', function() {
       return window.backend.Models.CompanyModel.should.not.be.undefined;
     });

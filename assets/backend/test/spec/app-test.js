@@ -1,6 +1,6 @@
 (function() {
 
-  describe('scripts are loaded', function() {
+  describe('Scripts', function() {
     describe('require.js is loaded', function() {
       return it('should have require function', function() {
         return require.should.be.a('function');

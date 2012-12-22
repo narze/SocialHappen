@@ -1,4 +1,4 @@
-describe 'scripts are loaded', ->
+describe 'Scripts', ->
   describe 'require.js is loaded', ->
     it 'should have require function', ->
       require.should.be.a 'function'

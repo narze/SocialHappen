@@ -1,4 +1,4 @@
-describe 'init company model', ->
+describe 'Company model', ->
   it 'should be loaded', ->
     window.backend.Models.CompanyModel.should.not.be.undefined
 

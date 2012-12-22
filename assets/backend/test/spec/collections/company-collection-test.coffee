@@ -1,4 +1,4 @@
-describe 'init company collection', ->
+describe 'Company collection', ->
   it 'should be loaded', ->
     window.backend.Collections.CompanyCollection.should.not.be.undefined
 

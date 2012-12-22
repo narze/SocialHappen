@@ -1,6 +1,6 @@
 (function() {
 
-  describe('init company collection', function() {
+  describe('Company collection', function() {
     it('should be loaded', function() {
       return window.backend.Collections.CompanyCollection.should.not.be.undefined;
     });
