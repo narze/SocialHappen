@@ -23,7 +23,7 @@ define([
       var methodMap = {
         'create': 'POST',
         'update': 'POST',
-        'delete': 'DELETE',
+        'delete': 'POST',
         'read':   'GET'
       };
 
@@ -41,11 +41,13 @@ define([
           params.url = window.Company.BASE_URL + 'apiv3/saveBranch/' + this.id;
         }else if(method == 'create'){
           params.url = window.Company.BASE_URL + 'apiv3/saveBranch/';
+        }else if(method == 'delete'){
+          params.url = window.Company.BASE_URL + 'apiv3/deleteBranch/' + this.id;
         }
       }
 
       // Ensure that we have the appropriate request data.
-      if (!options.data && model && (method == 'create' || method == 'update')) {
+      if (!options.data && model && (method == 'create' || method == 'update' || method == 'delete')) {
         params.contentType = 'application/json';
         var data = model.toJSON();
         params.data = 'model='+encodeURIComponent(JSON.stringify(data));

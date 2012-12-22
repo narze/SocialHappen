@@ -50,7 +50,6 @@ class Apiv3 extends CI_Controller {
 
     if(!is_array($branch)){
       return json_return(array('success' => FALSE, 'data' =>'data error'));
-      return FALSE;
     }
 
     $branch['updated_timestamp'] = time();
@@ -60,13 +59,48 @@ class Apiv3 extends CI_Controller {
       $branch_item_id = $branch['_id'];
       $criteria = array('_id' => new MongoId($branch_item_id));
 
-      if(!$branch_update_result = $this->branch_lib->update($criteria, $branch)) {
+      if(!$branch = $this->branch_lib->update($criteria, $branch)) {
         return json_return(array('success' => FALSE, 'data' => 'Update branch failed'));
       }
     } else {
       //New branch : add new
       if(!$branch = $this->branch_lib->add($branch)) {
         return json_return(array('success' => FALSE, 'data' => 'Add branch failed'));
+      }
+    }
+
+    return json_return(array('success' => TRUE, 'data' => $branch));
+
+  }
+
+  function deleteBranch($branch_id = NULL){
+    header('Content-Type: application/json', TRUE);
+    if(!$user = $this->socialhappen->get_user()) {
+      return json_return(array('success' => FALSE, 'data' => 'Not signed in'));
+    }
+
+    $branch = rawurldecode($this->input->post('model', TRUE));
+
+    if(!isset($branch) || $branch == ''){
+      return json_return(array('success' => FALSE, 'data' => 'no branch data'));
+    }
+
+    $this->load->library('branch_lib');
+    $branch = json_decode($branch, TRUE);
+
+    if(!is_array($branch)){
+      return json_return(array('success' => FALSE, 'data' =>'data error'));
+    }
+
+    $branch['updated_timestamp'] = time();
+
+    if(isset($branch['_id'])) {
+      //Branch exists : update
+      $branch_item_id = $branch['_id'];
+      $criteria = array('_id' => new MongoId($branch_item_id));
+
+      if(!$branch_update_result = $this->branch_lib->remove($criteria)) {
+        return json_return(array('success' => FALSE, 'data' => 'Delete branch failed'));
       }
     }
 

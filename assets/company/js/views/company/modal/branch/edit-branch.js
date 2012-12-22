@@ -20,7 +20,8 @@ define([
       'click button.save-location': 'saveEditLocation',
       'click img.branch-photo, h6.edit-photo': 'showEditPhoto',
       'click button.save-photo': 'saveEditPhoto',
-      'click button.upload-photo-submit': 'uploadPhoto'
+      'click button.upload-photo-submit': 'uploadPhoto',
+      'click button.delete-branch': 'deleteBranch'
     },
 
     initialize: function(){
@@ -171,6 +172,15 @@ define([
           alert(resp.data);
         }
       })
+    },
+
+    deleteBranch: function(e){
+      e.preventDefault();
+      var confirm = window.confirm('Are you sure you want to delete this branch ?');
+      if(confirm){
+        this.model.destroy();
+        this.$el.modal('hide');
+      }
     }
   });
   return EditModalView;
