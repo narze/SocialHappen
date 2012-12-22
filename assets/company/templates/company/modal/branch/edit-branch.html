@@ -3,150 +3,85 @@
     ×
   </button>
   <div class="">
-    <h3 class="edit-name"><%= name %></h3>
+    <h3 class="edit-title"><%= title %></h3>
   </div>
-  <div class="edit-name hide">
-    <input class="reward-name span4" value="<%- name||'' %>" />
-    <button class="btn save-name btn-primary">Save</button>
+  <div class="edit-title hide">
+    <input class="branch-title span4" value="<%- title||'' %>" />
+    <button class="btn save-title btn-primary">Save</button>
   </div>
 </div>
-
 <div class="modal-body">
-
-  <h6 class="">Type:</h6>
-  <div class="control-group">
-    <%= type.charAt(0).toUpperCase() + type.slice(1) %>
-  </div>
-
-  <h6>Status:</h6>
-  <div class="control-group">
-    <div class="controls">
-      <label class="status"></label>
-      <select class="reward-status">
-        <option value="draft" <%= status === 'draft' ? 'selected' : ''%>>Draft</option>
-        <option value="published" <%= status === 'published' ? 'selected' : ''%>>Published</option>
-        <option value="cancelled" <%= status === 'cancelled' ? 'selected' : ''%>>Cancelled</option>
-      </select>
-    </div>
-  </div>
-
-  <h6>Redeem Method:</h6>
-  <div class="control-group">
-    <div class="controls">
-      <label class="status"></label>
-      <select class="reward-redeem-method">
-        <option value="in_store" <%= redeem_method === 'in_store' ? 'selected' : ''%>>In Store</option>
-        <option value="delivery" <%= redeem_method === 'delivery' ? 'selected' : ''%>>Delivery</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="date control-group row-fluid form-inline">
-    <div class="span6">
-      <label><h6>Start Date:</h6></label> <input class="input-medium reward-start-date" type="text" name="reward-start-date" value="" placeholder="select start date...">
-    </div>
-    <div class="span6">
-      <label><h6>End Date:</h6></label> <input class="input-medium reward-end-date" type="text" name="reward-end-date" value="" placeholder="select end date...">
-    </div>
-  </div>
-
-  <div class="edit-image">
-    <h6>Image:</h6>
-    <div class="edit-image-form hide">
+  <div class="edit-photo">
+    <h6>Photo:</h6>
+    <div class="edit-photo-form hide">
       <div class="form-inline">
-        <label><h4>Enter image URL</h4></label>
+        <label><h4>Enter photo URL</h4></label>
         <div class="control-group">
-          <input type="text" class="reward-image input-medium" placeholder="Image URL" value="<%= image %>" /> <button class="save-image btn btn-primary btn-small">&nbsp;Save&nbsp;</button>
+          <input type="text" class="branch-photo input-medium" placeholder="Photo URL" value="<%= photo %>" /> <button class="save-photo btn btn-primary btn-small">&nbsp;Save&nbsp;</button>
         </div>
-        <label><h4>Or upload your own image</h4></label>
+        <label><h4>Or upload your own photo</h4></label>
         <div class="control-group">
-          <form type="POST" enctype="multipart/form-data" action="<%= window.Company.BASE_URL + 'apiv3/upload_image' %>" class="upload-image">
-            <input type="file" name="new-image" />
-            <input type="hidden" name="file-input-name" value="new-image" />
-            <input type="hidden" name="old-image" value="<%= image %>" />
-            <button class="upload-image-submit btn btn-primary btn-small">Upload</button>
+          <form type="POST" enctype="multipart/form-data" action="<%= window.Company.BASE_URL + 'apiv3/upload_image' %>" class="upload-photo">
+            <input type="file" title="new-image" />
+            <input type="hidden" title="file-input-title" value="new-image" />
+            <input type="hidden" title="old-image" value="<%= photo %>" />
+            <button class="upload-photo-submit btn btn-primary btn-small">Upload</button>
           </form>
         </div>
       </div>
     </div>
-    <img class="reward-image" src="<%= image %>" />
+    <img class="branch-photo" src="<%= photo %>" />
   </div>
 
   <div class="control-group">
-    <div class="edit-description">
-      <h6>Description:</h6>
+    <div class="edit-address">
+      <h6>Address:</h6>
       <p>
-        <%- description %>
+        <%- address %>
       </p>
     </div>
-    <div class="edit-description-field hide">
-      <h6>Description:</h6>
-      <textarea class="reward-description span5" rows="3"><%- description %></textarea>
-      <button class="btn save-description btn-primary">Save</button>
+    <div class="edit-address-field hide">
+      <h6>Address:</h6>
+      <textarea class="branch-address span5" rows="3"><%- address %></textarea>
+      <button class="btn save-address btn-primary">Save</button>
     </div>
   </div>
 
-  <% if(type === 'offer') { %>
-    <div class="control-group">
-      <div class="edit-address">
-        <h6>Address:</h6>
-        <p>
-          <%- address %>
-        </p>
-      </div>
-      <div class="edit-address-field hide">
-        <h6>Address:</h6>
-        <textarea class="offer-address span5" rows="3"><%- address %></textarea>
-        <button class="btn save-address btn-primary">Save</button>
-      </div>
+  <div class="control-group">
+    <div class="edit-telephone">
+      <h6>Telephone:</h6>
+      <p>
+        <%- telephone %>
+      </p>
     </div>
-  <% } %>
+    <div class="edit-telephone-field hide">
+      <h6>Telephone:</h6>
+      <input type="text" class="branch-telephone" value="<%- telephone %>"></input>
+      <button class="btn save-telephone btn-primary">Save</button>
+    </div>
+  </div>
 
-  <% if(type === 'offer') { %>
-    <div class="control-group">
-      <div class="edit-source">
-        <h6>Source:</h6>
-        <p>
-          <%- source %>
-        </p>
-      </div>
-      <div class="edit-source-field hide">
-        <h6>Source:</h6>
-        <input class="offer-source span5" value="<%- source %>"></input>
-        <button class="btn save-source btn-primary">Save</button>
-      </div>
+  <div class="control-group">
+    <div class="edit-location">
+      <h6>Location:</h6>
+      <p>
+        Lat: <span class="lat"><%= location[0] %></span>
+      </p>
+      <p>
+        Lng: <span class="lng"><%= location[1] %></span>
+      </p>
     </div>
-  <% } %>
-
-  <% if(type === 'redeem' && typeof redeem !== 'undefined') { %>
-    <div class="control-group">
-      <div class="edit-redeem">
-        <h6>Redeem:</h6>
-        <p>
-          Quantity: <%= ( redeem.amount - redeem.amount_redeemed )+ '/' + redeem.amount %>
-        </p>
-        <p>
-          Require Point: <%= redeem.point %>
-        </p>
-        <p>
-          User can redeem only once: <%= redeem.once?'Yes':'No' %>
-        </p>
-      </div>
-      <div class="edit-redeem-field hide">
-        <h6>Redeem:</h6>
-        <p>
-          Quantity: <%= ( redeem.amount - redeem.amount_redeemed ) %> / <input type="text" class="reward-amount" value="<%= redeem.amount %>" />
-        </p>
-        <p>
-          Require Point: <input type="text" class="reward-point" value="<%= redeem.point %>" />
-        </p>
-        <p>
-          User can redeem only once: <input type="checkbox" class="reward-once" value="" <%= redeem.once?'checked':'' %> />
-        </p>
-        <button class="btn save-redeem btn-primary">Save</button>
-      </div>
+    <div class="edit-location-field hide">
+      <h6>Location:</h6>
+      <p>
+        Lat: <input type="text" class="lat" value="<%= location[0] %>" />
+      </p>
+      <p>
+        Lng: <input type="text" class="lng" value="<%= location[1] %>" />
+      </p>
+      <button class="btn save-location btn-primary">Save</button>
     </div>
-  <% } %>
+  </div>
 </div>
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Close</a>

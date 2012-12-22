@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/reward/edit-reward.html',
+  'text!templates/company/modal/branch/edit-branch.html',
   'jqueryui',
   'events',
   'sandbox'
@@ -10,26 +10,22 @@ define([
   var EditModalView = Backbone.View.extend({
     editTemplate: _.template(editTemplate),
     events: {
-      'click h3.edit-name': 'showEditName',
-      'click button.save-name': 'saveEditName',
-      'click div.edit-description': 'showEditDescription',
-      'click button.save-description': 'saveEditDescription',
+      'click h3.edit-title': 'showEditTitle',
+      'click button.save-title': 'saveEditTitle',
       'click div.edit-address': 'showEditAddress',
       'click button.save-address': 'saveEditAddress',
-      'click div.edit-source': 'showEditSource',
-      'click button.save-source': 'saveEditSource',
-      'click img.reward-image, h6.edit-image': 'showEditImage',
-      'click button.save-image': 'saveEditImage',
-      'change select.reward-status': 'setRewardStatus',
-      'change select.reward-redeem-method': 'setRewardRedeemMethod',
-      'click .edit-redeem': 'showEditRedeem',
-      'click .save-redeem': 'saveEditRedeem',
-      'click button.upload-image-submit': 'uploadImage'
+      'click div.edit-telephone': 'showEditTelephone',
+      'click button.save-telephone': 'saveEditTelephone',
+      'click div.edit-location': 'showEditLocation',
+      'click button.save-location': 'saveEditLocation',
+      'click img.branch-photo, h6.edit-photo': 'showEditPhoto',
+      'click button.save-photo': 'saveEditPhoto',
+      'click button.upload-photo-submit': 'uploadPhoto'
     },
 
     initialize: function(){
       _.bindAll(this);
-      vent.bind('showEditRewardModal', this.show);
+      vent.bind('showEditBranchModal', this.show);
     },
 
     render: function () {
@@ -40,67 +36,6 @@ define([
 
       var data = this.model.toJSON();
       $(this.el).html(this.editTemplate(data));
-
-      //start/end timestamp
-      var self = this
-      $('.reward-start-date', self.el).datetimepicker({
-        onClose : function(dateText, inst) {
-          var date = $('.reward-start-date', self.el).datetimepicker('getDate');
-
-          var endDate = $('.reward-end-date', self.el).datetimepicker('getDate');
-
-          if(endDate && date && date >= endDate){
-            alert('Start date must come before end date');
-            var startDate = self.model.get('start_timestamp');
-            if(startDate){
-              startDate *= 1000;
-              $('.reward-start-date', self.el).datetimepicker('setDate', (new Date(startDate)));
-            }else{
-              $('.reward-start-date', self.el).datetimepicker('setDate', null);
-            }
-            return;
-          }
-
-          self.model.save({
-            start_timestamp: Math.floor(date.getTime()/1000)
-          });
-        }
-      });
-      $('.reward-end-date', self.el).datetimepicker({
-        onClose : function(dateText, inst) {
-          var date = $('.reward-end-date', self.el).datetimepicker('getDate');
-
-          var startDate = $('.reward-start-date', self.el).datetimepicker('getDate');
-
-          if(date && startDate && startDate >= date){
-            alert('End date must come after start date');
-            var endDate = self.model.get('end_timestamp');
-            if(endDate){
-              endDate *= 1000;
-              $('.reward-end-date', self.el).datetimepicker('setDate', (new Date(endDate)));
-            }else{
-              $('.reward-end-date', self.el).datetimepicker('setDate', null);
-            }
-            return;
-          }
-
-          self.model.save({
-            end_timestamp: Math.floor(date.getTime()/1000)
-          });
-        }
-      });
-
-      var startTimestamp = this.model.get('start_timestamp');
-      if(startTimestamp){
-        startTimestamp *= 1000;
-        $('.reward-start-date', self.el).datetimepicker('setDate', (new Date(startTimestamp)));
-      }
-
-      var endTimestamp = this.model.get('end_timestamp');
-      if(endTimestamp){
-        endTimestamp *= 1000;
-        $('.reward-end-date', self.el).datetimepicker('setDate', (new Date(endTimestamp)));
-      }
 
       return this;
     },
@@ -117,57 +52,25 @@ define([
       this.$el.modal('show');
     },
 
-    showEditName: function(){
-      $('h3.edit-name', this.el).hide();
-      $('div.edit-name', this.el).show();
-      $('input.reward-name', this.el).focus();
+    showEditTitle: function() {
+      $('h3.edit-title', this.el).hide();
+      $('div.edit-title', this.el).show();
+      $('input.branch-title', this.el).focus();
     },
 
-    saveEditName: function(){
+    saveEditTitle: function() {
 
-      var name = $('input.reward-name', this.el).val();
+      var title = $('input.branch-title', this.el).val();
 
-      this.model.set('name', name).trigger('change');
+      this.model.set('title', title).trigger('change');
       this.model.save();
 
-      $('h3.edit-name', this.$el).show();
-      $('div.edit-name', this.$el).hide();
+      $('h3.edit-title', this.$el).html(title).show();
+      $('div.edit-title', this.$el).hide();
 
-      vent.trigger('showEditRewardModal', this.model);
-    },
+      console.log('save title', title);
 
-    setRewardStatus: function(){
-      var status = $('select.reward-status', this.el).val();
-      console.log('set reward status to', status);
-
-      this.model.set('status', status).trigger('change');
-      this.model.save();
-    },
-
-    setRewardRedeemMethod: function() {
-      var redeemMethod = $('select.reward-redeem-method', this.el).val();
-      console.log('set reward redeem_method to', redeemMethod);
-
-      this.model.set('redeem_method', redeemMethod).trigger('change');
-      this.model.save();
-    },
-
-    showEditDescription: function(){
-      $('div.edit-description', this.el).hide();
-      $('div.edit-description-field', this.el).show();
-    },
-
-    saveEditDescription: function(){
-
-      var description = $('textarea.reward-description', this.el).val();
-
-      this.model.set('description', description).trigger('change');
-      this.model.save();
-
-      $('div.edit-description', this.el).show();
-      $('div.edit-description-field', this.el).hide();
-
-      vent.trigger('showEditRewardModal', this.model);
+      // vent.trigger('showEditBranchModal', this.model);
     },
 
     showEditAddress: function() {
@@ -177,99 +80,92 @@ define([
 
     saveEditAddress: function() {
 
-      var address = $('textarea.offer-address', this.el).val();
+      var address = $('textarea.branch-address', this.el).val();
 
       this.model.set('address', address).trigger('change');
       this.model.save();
 
-      // $('div.edit-address p', this.el).html(address);
+      $('div.edit-address p', this.el).html(address);
       $('div.edit-address', this.el).show();
       $('div.edit-address-field', this.el).hide();
 
-      vent.trigger('showEditRewardModal', this.model);
+      // vent.trigger('showEditBranchModal', this.model);
     },
 
-    showEditSource: function() {
-      $('div.edit-source', this.el).hide();
-      $('div.edit-source-field', this.el).show();
+    showEditTelephone: function() {
+      $('div.edit-telephone', this.el).hide();
+      $('div.edit-telephone-field', this.el).show();
     },
 
-    saveEditSource: function() {
+    saveEditTelephone: function() {
 
-      var source = $('input.offer-source', this.el).val();
+      var telephone = $('input.branch-telephone', this.el).val();
 
-      this.model.set('source', source).trigger('change');
+      this.model.set('telephone', telephone).trigger('change');
       this.model.save();
 
-      // $('input.offer-source', this.el).val(source);
-      $('div.edit-source', this.el).show();
-      $('div.edit-source-field', this.el).hide();
+      $('div.edit-telephone p', this.el).html(telephone);
+      $('div.edit-telephone', this.el).show();
+      $('div.edit-telephone-field', this.el).hide();
 
-      vent.trigger('showEditRewardModal', this.model);
+      // vent.trigger('showEditBranchModal', this.model);
     },
 
-    showEditImage: function(){
-      $('div.edit-image', this.el).show();
+    showEditLocation: function() {
+      $('div.edit-location', this.el).hide();
+      $('div.edit-location-field', this.el).show();
     },
 
-    saveEditImage: function(){
-      $('div.edit-image', this.el).hide();
+    saveEditLocation: function() {
 
-      var image = $('input.reward-image', this.el).val();
+      var lat = parseFloat($('input.lat', this.el).val()) || 0;
+      var lng = parseFloat($('input.lng', this.el).val()) || 0;
 
-      this.model.set('image', image).trigger('change');
+      this.model.set('location', [lat, lng]).trigger('change');
       this.model.save();
 
-      vent.trigger('showEditRewardModal', this.model);
+      $('div.edit-location p span.lat', this.el).text(lat);
+      $('div.edit-location p span.lng', this.el).text(lng);
+      $('div.edit-location', this.el).show();
+      $('div.edit-location-field', this.el).hide();
+
+      // vent.trigger('showEditBranchModal', this.model);
     },
 
-    showEditRedeem: function(){
-      $('div.edit-redeem', this.el).hide();
-      $('div.edit-redeem-field', this.el).show();
+
+    showEditPhoto: function() {
+      console.log('show edit photo');
+      $('div.edit-photo', this.el).show();
     },
 
-    saveEditRedeem: function(){
+    saveEditPhoto: function() {
+      $('div.edit-photo', this.el).hide();
 
-      var amount = $('input.reward-amount', this.el).val();
-      // var amount_remain = $('input.reward-amount-remain', this.el).val();
-      var point = $('input.reward-point', this.el).val();
-      var once = !_.isUndefined($('input.reward-once', this.el).attr('checked'));
+      var photo = $('input.branch-photo', this.el).val();
 
-      var redeem = this.model.get('redeem');
-
-      redeem.amount = amount;
-      redeem.point = point;
-      redeem.once = once;
-
-      console.log('set redeem:', redeem)
-
-      this.model.set('redeem', redeem).trigger('change');
+      this.model.set('photo', photo).trigger('change');
       this.model.save();
+      // $('img.branch-photo').attr('src', photo)
 
-      $('div.edit-redeem', this.el).show();
-      $('div.edit-redeem-field', this.el).hide();
-
-      vent.trigger('showEditRewardModal', this.model);
+      vent.trigger('showEditBranchModal', this.model);
     },
 
-    uploadImage: function(e) {
+    uploadPhoto: function(e) {
       e.preventDefault();
       var self = this;
-      $('form.upload-image', this.el).ajaxSubmit({
+      $('form.upload-photo', this.el).ajaxSubmit({
         beforeSubmit: function(a,f,o) {
           o.dataType = 'json';
         },
         success: function(resp) {
           if(resp.success) {
-            var imageUrl = resp.data;
+            var photoUrl = resp.data;
 
-            // Save image
-            self.model.set('image', imageUrl).trigger('change');
-
-            //Save change
+            // Save photo
+            self.model.set('photo', photoUrl).trigger('change');
             self.model.save();
 
-            vent.trigger('showEditRewardModal', self.model);
+            vent.trigger('showEditBranchModal', self.model);
             return;
           }
           alert(resp.data);
