@@ -33,7 +33,9 @@ require.config
     hm: 'vendor/hm'
     esprima: 'vendor/esprima'
     spec: '/spec'
-    bootstrap: 'vendor/bootstrap'
+
+    # Perfectum Dashboard
+    bootstrap: 'vendor/jquery-plugins/bootstrap'
     jqueryui: 'vendor/jquery-plugins/jquery-ui-1.8.21.custom.min'
     jqueryPlugins: 'vendor/jquery-plugins'
     sparkline: 'vendor/jquery-plugins/jquery.sparkline'
