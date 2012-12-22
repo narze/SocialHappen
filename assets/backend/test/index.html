@@ -21,9 +21,9 @@
 
   <!-- include source files here... -->
   <!-- source for 'yeoman test' -->
-  <script data-main="../test/spec/test-main" src="../app/scripts/vendor/require.js"></script>
+  <!--<script data-main="../app/scripts/main" src="../app/scripts/vendor/require.js"></script>-->
   <!-- source for 'yeoman server:test' -->
-  <script data-main="spec/test-main" src="scripts/vendor/require.js"></script>
+  <script data-main="scripts/main" src="scripts/vendor/require.js"></script>
 
   <!-- include spec files here... -->
   <!-- <script src="spec/main-test.js"></script>
@@ -31,7 +31,11 @@
   <script>
   // replace this by your own specs
   (function() {
-    
+    require(['app'], function() {
+      require(['spec/app-test', 'spec/collections/company-collection-test'], function() {
+        require(['../runner/mocha']);
+      });
+    })
   })();
   </script>
 

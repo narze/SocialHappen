@@ -1,4 +1,5 @@
 require.config
+  deps: ['backbone']
   shim:
     backbone:
       deps: ['lodash', 'jquery']
@@ -9,8 +10,13 @@ require.config
     backbone: 'vendor/backbone-min'
     hm: 'vendor/hm'
     esprima: 'vendor/esprima'
-
-require ['app'], (app) ->
-  console.log app
+    spec: '/spec'
 
 window.mainLoaded = true
+
+# in test mode mocha will run the app itself
+if window.mocha
+  return
+
+require ['app'], (app) ->
+  console.log 'app loaded'

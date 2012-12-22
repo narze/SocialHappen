@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'collections/company-collection'], function(Backbone, CompanyCollection) {
+  define(['main', 'collections/company-collection'], function(Main, CompanyCollection) {
     window.backend = {
       Models: {},
       Collections: {},

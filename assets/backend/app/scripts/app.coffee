@@ -1,4 +1,4 @@
-define ['backbone', 'collections/company-collection'], (Backbone, CompanyCollection) ->
+define ['main', 'collections/company-collection'], (Main, CompanyCollection) ->
   window.backend =
     Models: {}
     Collections: {}
