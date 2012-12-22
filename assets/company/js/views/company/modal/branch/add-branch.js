@@ -121,7 +121,7 @@ define([
       var lat = parseFloat($('input.lat', this.el).val()) || 0;
       var lng = parseFloat($('input.lng', this.el).val()) || 0;
 
-      this.model.set('location', [lat, lng]).trigger('change');
+      this.model.set('location', { '0': lat, '1':lng }).trigger('change');
 
       $('div.edit-location p span.lat', this.el).text(lat);
       $('div.edit-location p span.lng', this.el).text(lng);

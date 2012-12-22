@@ -12,7 +12,7 @@ define([
       telephone: null,
       address: '',
       company_id: window.Company.companyId,
-      location: [50,50]
+      location: { '0': 50, '1': 50 }
     },
 
     initialize: function(){
