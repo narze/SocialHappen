@@ -56,7 +56,7 @@
     </div>
     <div class="edit-telephone-field hide">
       <h6>Telephone:</h6>
-      <textarea class="branch-telephone span5" rows="3"><%- telephone %></textarea>
+      <input type="text" class="branch-telephone" value="<%- telephone %>"></input>
       <button class="btn save-telephone btn-primary">Save</button>
     </div>
   </div>
@@ -65,10 +65,10 @@
     <div class="edit-location">
       <h6>Location:</h6>
       <p>
-        Lat: <%= location[0] %>
+        Lat: <span class="lat"><%= location[0] %></span>
       </p>
       <p>
-        Lng: <%= location[1] %>
+        Lng: <span class="lng"><%= location[1] %></span>
       </p>
     </div>
     <div class="edit-location-field hide">

@@ -17,6 +17,10 @@ define([
       'click button.save-title': 'saveEditTitle',
       'click div.edit-address': 'showEditAddress',
       'click button.save-address': 'saveEditAddress',
+      'click div.edit-telephone': 'showEditTelephone',
+      'click button.save-telephone': 'saveEditTelephone',
+      'click div.edit-location': 'showEditLocation',
+      'click button.save-location': 'saveEditLocation',
       'click img.branch-photo, h6.edit-photo': 'showEditPhoto',
       'click button.save-photo': 'saveEditPhoto',
       'click button.create-branch': 'createBranch',
@@ -89,6 +93,44 @@ define([
       // vent.trigger('showAddBranchModal', this.model);
     },
 
+    showEditTelephone: function() {
+      $('div.edit-telephone', this.el).hide();
+      $('div.edit-telephone-field', this.el).show();
+    },
+
+    saveEditTelephone: function() {
+
+      var telephone = $('input.branch-telephone', this.el).val();
+
+      this.model.set('telephone', telephone).trigger('change');
+
+      $('div.edit-telephone p', this.el).html(telephone);
+      $('div.edit-telephone', this.el).show();
+      $('div.edit-telephone-field', this.el).hide();
+
+      // vent.trigger('showAddBranchModal', this.model);
+    },
+
+    showEditLocation: function() {
+      $('div.edit-location', this.el).hide();
+      $('div.edit-location-field', this.el).show();
+    },
+
+    saveEditLocation: function() {
+
+      var lat = parseFloat($('input.lat', this.el).val()) || 0;
+      var lng = parseFloat($('input.lng', this.el).val()) || 0;
+
+      this.model.set('location', [lat, lng]).trigger('change');
+
+      $('div.edit-location p span.lat', this.el).text(lat);
+      $('div.edit-location p span.lng', this.el).text(lng);
+      $('div.edit-location', this.el).show();
+      $('div.edit-location-field', this.el).hide();
+
+      // vent.trigger('showAddBranchModal', this.model);
+    },
+
 
     showEditPhoto: function() {
       console.log('show edit photo');
@@ -110,7 +152,6 @@ define([
 
       console.log('create branch!');
       this.model.set('company_id', parseInt(window.Company.companyId, 10));
-      this.model.set('type', 'redeem');
 
       sandbox.collections.branchCollection.create(this.model, {
         success: function() {
