@@ -20,6 +20,13 @@
 
   window.mainLoaded = true;
 
+  window.backend = {
+    Models: {},
+    Collections: {},
+    Views: {},
+    Routers: {}
+  };
+
   if (window.mocha) {
     return;
   }

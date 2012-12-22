@@ -1,9 +1,4 @@
-define ['main', 'collections/company-collection'], (Main, CompanyCollection) ->
-  window.backend =
-    Models: {}
-    Collections: {}
-    Views: {}
-    Routers: {}
-
-  window.backend.Collections.CompanyCollection = CompanyCollection
+define ['main', 'models/company-model', 'collections/company-collection'], (Main, CompanyModel, CompanyCollection) ->
+  window.backend.Models.CompanyModel = CompanyModel
+  window.backend.Collections.CompanyCollection = new CompanyCollection
   window.appLoaded = true

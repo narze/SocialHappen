@@ -32,7 +32,11 @@
   // replace this by your own specs
   (function() {
     require(['app'], function() {
-      require(['spec/app-test', 'spec/collections/company-collection-test'], function() {
+      require([
+        'spec/app-test'
+      , 'spec/collections/company-collection-test'
+      , 'spec/models/company-model-test'
+      ], function() {
         require(['../runner/mocha']);
       });
     })

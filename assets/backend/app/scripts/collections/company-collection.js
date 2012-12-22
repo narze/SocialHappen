@@ -1,8 +1,11 @@
-define(['backbone'], function(bb) {
-  console.log('company collection loaded');
-  var Collection = Backbone.Collection.extend({
+(function() {
 
+  define(['backbone', 'models/company-model'], function(Backbone, CompanyModel) {
+    var Collection;
+    console.log('company collection loaded');
+    return Collection = Backbone.Collection.extend({
+      model: CompanyModel
+    });
   });
 
-  return Collection
-});
+}).call(this);

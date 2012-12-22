@@ -14,6 +14,12 @@ require.config
 
 window.mainLoaded = true
 
+window.backend =
+  Models: {}
+  Collections: {}
+  Views: {}
+  Routers: {}
+
 # in test mode mocha will run the app itself
 if window.mocha
   return
