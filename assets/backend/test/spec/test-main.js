@@ -13,12 +13,16 @@
       lodash: 'vendor/lodash.min',
       backbone: 'vendor/backbone-min',
       hm: 'vendor/hm',
-      esprima: 'vendor/esprima'
+      esprima: 'vendor/esprima',
+      spec: '/spec'
     }
   });
 
   require(['app'], function(app) {
-    return console.log('App loaded');
+    console.log('App loaded');
+    return require(['spec/app-test', 'spec/collections/company-collection-test'], function() {
+      return require(['../runner/mocha']);
+    });
   });
 
   window.mainLoaded = true;

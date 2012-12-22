@@ -10,8 +10,15 @@ require.config
     backbone: 'vendor/backbone-min'
     hm: 'vendor/hm'
     esprima: 'vendor/esprima'
+    spec: '/spec'
 
 require ['app'], (app) ->
   console.log 'App loaded'
+  require [
+    # //list tests
+    'spec/app-test',
+    'spec/collections/company-collection-test'
+  ], ->
+    require(['../runner/mocha']) #run mocha
 
 window.mainLoaded = true
