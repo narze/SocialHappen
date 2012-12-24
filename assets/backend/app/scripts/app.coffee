@@ -9,6 +9,7 @@ define [
   window.backend.Routers.MainRouter = new MainRouter
 
   window.backend.Views.MainView = new MainView
+  window.backend.Views.MainView.render()
 
   window.backend.Models.CompanyModel = CompanyModel
 

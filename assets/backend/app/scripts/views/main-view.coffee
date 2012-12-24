@@ -8,14 +8,19 @@ define [
 
   View = Backbone.View.extend
     initialize: ->
-      @render()
     el: $('#app')
     render: ->
       @$el.html MainTemplate
-      @rendered = true
 
-  window.backend.Views.NavBarView = new NavBarView
-  window.backend.Views.SidebarView = new SidebarView
-  window.backend.Views.ContentView = new ContentView
+      window.backend.Views.NavBarView = new NavBarView
+      @$('#navbar-view').html(window.backend.Views.NavBarView.render().el)
+      window.backend.Views.SidebarView = new SidebarView
+      @$('#sidebar-view').html(window.backend.Views.SidebarView.render().el)
+      window.backend.Views.ContentView = new ContentView
+      @$('#content-view').html(window.backend.Views.ContentView.render().el)
+
+      @rendered = true
+      @
+
 
   View

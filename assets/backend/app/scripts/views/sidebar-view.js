@@ -1,14 +1,12 @@
 (function() {
 
-  define(['backbone'], function(Backbone) {
+  define(['backbone', 'text!templates/sidebar-template.html'], function(Backbone, SidebarTemplate) {
     var View;
     return View = Backbone.View.extend({
-      el: $('#app > #sidebar-view'),
-      initialize: function() {
-        return this.render();
-      },
+      initialize: function() {},
       render: function() {
-        return this.$el.html('sidebarview');
+        this.$el.html(SidebarTemplate);
+        return this;
       }
     });
   });
