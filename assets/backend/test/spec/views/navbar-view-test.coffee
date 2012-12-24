@@ -4,3 +4,7 @@ describe 'NavBar View', ->
       window.backend.Views.NavBarView.should.not.be.undefined
     it 'should render template', ->
       $('#app > #navbar-view').text().should.not.be.empty
+
+  describe 'Content', ->
+    it 'should have SocialHappen as header text', ->
+      $('#navbar-view .hidden-phone').text().should.match(/SocialHappen/)
