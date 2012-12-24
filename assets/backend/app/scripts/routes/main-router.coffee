@@ -7,10 +7,10 @@ define ['backbone'], (Backbone) ->
       '*other': 'badRoute'
 
     users: ->
-      window.backend.Views.UsersView.render()
+      $('#content').html window.backend.Views.UsersView.render().el
 
     activities: ->
-      window.backend.Views.ActivitiesView.render()
+      $('#content').html window.backend.Views.ActivitiesView.render().el
 
     badRoute: ->
       console.log '404 : Route not found'

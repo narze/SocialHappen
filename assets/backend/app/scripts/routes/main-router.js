@@ -10,10 +10,10 @@
         '*other': 'badRoute'
       },
       users: function() {
-        return window.backend.Views.UsersView.render();
+        return $('#content').html(window.backend.Views.UsersView.render().el);
       },
       activities: function() {
-        return window.backend.Views.ActivitiesView.render();
+        return $('#content').html(window.backend.Views.ActivitiesView.render().el);
       },
       badRoute: function() {
         console.log('404 : Route not found');

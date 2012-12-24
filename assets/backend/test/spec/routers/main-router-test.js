@@ -24,17 +24,27 @@
         });
         return window.backend.Routers.MainRouter.notFound.should.be["true"];
       });
-      it('should load users view when switched route to users', function() {
-        window.backend.Routers.MainRouter.navigate('users', {
-          trigger: true
+      describe('users', function() {
+        it('should load users view when switched route to users', function() {
+          window.backend.Routers.MainRouter.navigate('users', {
+            trigger: true
+          });
+          return window.backend.Views.UsersView.rendered.should.be["true"];
         });
-        return window.backend.Views.UsersView.rendered.should.be["true"];
+        return it('should render #users-view into #content', function() {
+          return $('#content').find('#users-view').length.should.not.equal(0);
+        });
       });
-      return it('should load activities view when switched route to activities', function() {
-        window.backend.Routers.MainRouter.navigate('activities', {
-          trigger: true
+      return describe('activities', function() {
+        it('should load activities view when switched route to activities', function() {
+          window.backend.Routers.MainRouter.navigate('activities', {
+            trigger: true
+          });
+          return window.backend.Views.UsersView.rendered.should.be["true"];
         });
-        return window.backend.Views.UsersView.rendered.should.be["true"];
+        return it('should render #activities-view into #content', function() {
+          return $('#content').find('#activities-view').length.should.not.equal(0);
+        });
       });
     });
   });

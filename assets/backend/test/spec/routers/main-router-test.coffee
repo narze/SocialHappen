@@ -13,9 +13,16 @@ describe 'Main Router', ->
     it 'should not load any views when switched to a bad route', ->
       window.backend.Routers.MainRouter.navigate 'somebadroute', trigger:true
       window.backend.Routers.MainRouter.notFound.should.be.true
-    it 'should load users view when switched route to users', ->
-      window.backend.Routers.MainRouter.navigate 'users', trigger:true
-      window.backend.Views.UsersView.rendered.should.be.true
-    it 'should load activities view when switched route to activities', ->
-      window.backend.Routers.MainRouter.navigate 'activities', trigger:true
-      window.backend.Views.UsersView.rendered.should.be.true
+    describe 'users', ->
+      it 'should load users view when switched route to users', ->
+        window.backend.Routers.MainRouter.navigate 'users', trigger:true
+        window.backend.Views.UsersView.rendered.should.be.true
+      it 'should render #users-view into #content', ->
+        $('#content').find('#users-view').length.should.not.equal 0
+
+    describe 'activities', ->
+      it 'should load activities view when switched route to activities', ->
+        window.backend.Routers.MainRouter.navigate 'activities', trigger:true
+        window.backend.Views.UsersView.rendered.should.be.true
+      it 'should render #activities-view into #content', ->
+        $('#content').find('#activities-view').length.should.not.equal 0
