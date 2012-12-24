@@ -7,7 +7,11 @@ define [
   ], (Main, MainRouter, MainView, CompanyModel, CompanyCollection) ->
 
   window.backend.Routers.MainRouter = new MainRouter
+
   window.backend.Views.MainView = new MainView
+
   window.backend.Models.CompanyModel = CompanyModel
+
   window.backend.Collections.CompanyCollection = new CompanyCollection
+
   window.appLoaded = true
