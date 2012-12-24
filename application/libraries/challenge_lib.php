@@ -850,4 +850,46 @@ class Challenge_lib {
     }
     return $challenges;
   }
+
+  function generate_locations($challenge_id){
+    $challenge = $this->get_by_id($challenge_id);
+
+    if(!$challenge){
+      return FALSE;
+    }
+
+    if(isset($challenge['location'])){
+      $locations = array($challenge['location']);
+    }else{
+      $locations = array();
+    }
+
+    if(isset($challenge['custom_locations']) && count($challenge['custom_locations']) > 0){
+      $locations = array_merge($locations, $challenge['custom_locations']);
+    }
+
+    if((!isset($challenge['all_branch']) || !$challenge['all_branch'])
+      && isset($challenge['branches']) && count($challenge['branches']) > 0){
+      $this->CI->load->library('branch_lib');
+
+      foreach ($challenge['branches'] as $branch) {
+        $branch = $this->CI->branch_lib->get_one(array('_id' => new MongoId($branch)));
+        $locations[] = $branch['location'];
+      }
+    }else if(isset($challenge['all_branch']) && $challenge['all_branch']){
+      $this->CI->load->library('branch_lib');
+      $branches = $this->CI->branch_lib->get(array('company_id' => (int)$challenge['company_id']));
+      if($branches && count($branches) > 0){
+        foreach ($branches as $branch) {
+          $locations[] = $branch['location'];
+        }
+      }
+    }
+
+    $data = array('$set' => array(
+      'locations' => $locations
+    ));
+
+    return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
+  }
 }

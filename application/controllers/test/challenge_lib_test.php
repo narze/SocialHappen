@@ -6,6 +6,7 @@ class Challenge_lib_test extends CI_Controller {
     parent::__construct();
     $this->load->library('unit_test');
     $this->load->library('challenge_lib');
+    $this->load->library('branch_lib');
     $this->unit->reset_dbs();
     $this->socialhappen->reindex();
   }
@@ -47,6 +48,7 @@ class Challenge_lib_test extends CI_Controller {
   function setup_before_test() {
     $this->challenge = array(
       'company_id' => 1,
+      'all_branch' => true,
       'start' => time(),
       'end' => time() + 86400,
       'detail' => array(
@@ -66,11 +68,15 @@ class Challenge_lib_test extends CI_Controller {
           'count' => 2
         )
       ),
-      'location' => array(40, 40)
+      'location' => array(40, 40),
+      'locations' => array(),
+      'custom_locations' => array(),
+      'branches' => array()
     );
 
     $this->challenge2 = array(
       'company_id' => 1,
+      'all_branch' => false,
       'start' => time(),
       'end' => time() + 86400,
       'detail' => array(
@@ -85,11 +91,15 @@ class Challenge_lib_test extends CI_Controller {
           'count' => 3
         )
       ),
-      'location' => array(45, 60)
+      'location' => array(45, 60),
+      'locations' => array(),
+      'custom_locations' => array(array(10,10)),
+      'branches' => array()
     );
 
     $this->challenge3 = array(
       'company_id' => 1,
+      'all_branch' => true,
       'start' => time(),
       'end' => time() + 86400,
       'detail' => array(
@@ -105,11 +115,15 @@ class Challenge_lib_test extends CI_Controller {
           'is_platform_action' => TRUE
         )
       ),
-      'location' => array(-20, 30)
+      'location' => array(-20, 30),
+      'locations' => array(),
+      'custom_locations' => array(),
+      'branches' => array()
     );
 
     $this->challenge4 = array(
       'company_id' => 2,
+      'all_branch' => false,
       'start' => time(),
       'end' => time() + 864000,
       'detail' => array(
@@ -126,8 +140,11 @@ class Challenge_lib_test extends CI_Controller {
         )
       ),
       'repeat' => 1,
-      'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id)))
+      'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))),
       //location not specified
+      'locations' => array(),
+      'custom_locations' => array(),
+      'branches' => array()
     );
 
     $this->achievement_stat1 = array(
@@ -151,6 +168,57 @@ class Challenge_lib_test extends CI_Controller {
       'action_id' => 203,
       'app_install_id' => 0
     );
+
+    $this->branch1 = array(
+      'company_id' => 1,
+      'title' => 'branch 1',
+      'location' => array(40, 40),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+
+    $this->branch2 = array(
+      'company_id' => 1,
+      'title' => 'branch 2',
+      'location' => array(40, 50),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+
+    $this->branch3 = array(
+      'company_id' => 1,
+      'title' => 'branch 3',
+      'location' => array(50, 40),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+
+    $this->branch4 = array(
+      'company_id' => 2,
+      'title' => 'branch 4',
+      'location' => array(50, 50),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+  }
+
+  function _add_branch_test(){
+    $this->branch_lib->remove(array());
+    $result = $this->branch_lib->add($this->branch1);
+    $this->branch_data1 = $result;
+
+    $result = $this->branch_lib->add($this->branch2);
+    $this->branch_data2 = $result;
+
+    $result = $this->branch_lib->add($this->branch3);
+    $this->branch_data3 = $result;
+
+    $result = $this->branch_lib->add($this->branch4);
+    $this->branch_data4 = $result;
   }
 
   function _create_user_test() {
@@ -715,6 +783,29 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($result[1], 'is_array', "\$result[1]", $result[1]);
     $this->unit->run($result[1]['_id'], TRUE, "\$result[1]['_id']", $result[1]['_id']);
     $this->unit->run($result[1]['reward_item'], 'is_array', "\$result[1]['reward_item']", $result[1]['reward_item']);
+  }
+
+  function generate_locations_test(){
+    $result = $this->challenge_lib->generate_locations('invalid_challenge_id');
+    $this->unit->run($result, FALSE, "\$result", $result);
+    echo "<pre>";
+    $result = $this->challenge_lib->generate_locations($this->challenge_id);
+    $this->unit->run($result, TRUE, "\$result", $result);
+
+    $result = $this->challenge_lib->get_by_id($this->challenge_id);
+    $this->unit->run(count($result['locations']), 4, "\$result", $result);
+
+    $result = $this->challenge_lib->generate_locations($this->challenge_id2);
+    $this->unit->run($result, TRUE, "\$result", $result);
+
+    $result = $this->challenge_lib->get_by_id($this->challenge_id2);
+    $this->unit->run(count($result['locations']), 2, "\$result", $result);
+
+    $result = $this->challenge_lib->generate_locations($this->challenge_id4);
+    $this->unit->run($result, TRUE, "\$result", $result);
+
+    $result = $this->challenge_lib->get_by_id($this->challenge_id4);
+    $this->unit->run(count($result['locations']), 0, "\$result", $result);
   }
 
   function get_nearest_challenges_test() {
