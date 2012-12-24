@@ -33,6 +33,7 @@ require.config
     hm: 'vendor/hm'
     esprima: 'vendor/esprima'
     spec: '/spec'
+    text: 'vendor/text'
 
     # Perfectum Dashboard
     bootstrap: 'vendor/jquery-plugins/bootstrap'
