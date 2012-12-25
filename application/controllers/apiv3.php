@@ -8,11 +8,26 @@ class Apiv3 extends CI_Controller {
 
   function __construct(){
     header("Access-Control-Allow-Origin: *");
+    header('Content-Type: application/json', TRUE);
     parent::__construct();
   }
 
   function index(){
     return json_return(array('status' => 'OK'));
+  }
+
+  /**
+   * Helper functions
+   */
+
+  function error($error_message = NULL, $code = 0) {
+    echo json_encode(array('success' => FALSE, 'data' => $error_message, 'code' => $code, 'timestamp' => time()));
+    return FALSE;
+  }
+
+  function success($data = array(), $code = 1) {
+    echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()));
+    return TRUE;
   }
 
   /**
@@ -1231,6 +1246,94 @@ class Apiv3 extends CI_Controller {
       'success' => TRUE,
       'data' => $sonar_box_data
     ));
+  }
+
+  /**
+   * APIs below are for new backend
+   */
+
+  function users() {
+    $limit = $this->input->get('limit');
+    $offset = $this->input->get('offset');
+
+    $this->load->model('user_model');
+    $this->load->model('user_mongo_model');
+    $this->load->model('user_token_model');
+
+    $users = $this->user_model->get_all_user_profile($limit, $offset);
+
+    foreach($users as &$user) {
+      // Get points
+      $user_mongo = $this->user_mongo_model->get_user($user['user_id']);
+      $user['user_points'] = issetor($user_mongo['points'], 0);
+
+      // Get platforms
+      $tokens = $this->user_token_model->get(array('user_id' => $user['user_id']));
+      $user['user_platforms'] = array();
+      foreach($tokens as $token) {
+        $user['user_platforms'][] = $token['device'];
+      }
+
+    } unset($user);
+
+    return $this->success($users);
+  }
+
+  function activities() {
+    $this->load->library('audit_lib');
+    $this->load->model('user_model');
+    $this->load->model('challenge_model');
+    $this->load->model('audit_model');
+
+    $activities = $this->audit_lib->list_audit(array('app_id' => 0));
+    $users = array();
+
+    foreach($activities as &$activity) {
+      // Get user
+      if(isset($activity['user_id']) && $activity['user_id']) {
+        $user_id = $activity['user_id'];
+
+        if(!isset($users[$user_id])) {
+          $users[$user_id] = $this->user_model->get_user_profile_by_user_id($user_id);
+        }
+
+        $activity['user'] = $users[$user_id];
+      } else {
+        $activity['user'] = array();
+      }
+
+      // Get challenge if it is challenge
+      if(in_array($activity['action_id'], array(117, 118))) {
+        $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
+      } else {
+        $activity['challenge'] = array();
+      }
+
+      // Get action description
+      $app_id = (int) 0;
+      $action_id = $activity['action_id'];
+      $action_list = array();
+
+      if(!isset($action_list[$app_id.'_'.$action_id])){
+        $audit_action = $this->audit_lib->get_audit_action($app_id, $action_id);
+        if(isset($audit_action)){
+          $action_list[$app_id.'_'.$action_id] = $audit_action;
+        }
+      }else{
+        $audit_action = $action_list[$app_id.'_'.$action_id];
+      }
+
+      if(isset($audit_action['format_string']) && isset($action_id)){
+        $activity['audit_message'] = $this->audit_lib->translate_format_string(
+          $audit_action['format_string'],
+          $this->audit_model->getOne(array('_id' => $activity['_id'])),
+          ($action_id <= 100)
+        );
+      }else{
+        $activity['audit_message'] = NULL;
+      }
+    }
+    return $this->success($activities);
   }
 }
 

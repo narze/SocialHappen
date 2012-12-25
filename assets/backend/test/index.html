@@ -1,0 +1,55 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Mocha Spec Runner</title>
+  <link rel="stylesheet" href="lib/mocha/mocha.css">
+</head>
+<body>
+  <div id="mocha"></div>
+  <script src="lib/mocha/mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+
+  <!-- assertion framework -->
+
+  <script src="lib/chai.js"></script>
+
+  <script>expect = chai.expect</script>
+  <script>should = chai.should()</script>
+
+  <!-- -->
+
+  <!-- include source files here... -->
+  <!-- source for 'yeoman test' -->
+  <!--<script data-main="../app/scripts/main" src="../app/scripts/vendor/require.js"></script>-->
+  <!-- source for 'yeoman server:test' -->
+  <script data-main="scripts/main" src="scripts/vendor/require.js"></script>
+
+  <!-- include spec files here... -->
+  <!-- <script src="spec/main-test.js"></script>
+  <script src="spec/collections/company-collection-test.js"></script> -->
+  <script>
+  // replace this by your own specs
+  (function() {
+    require(['app'], function() {
+      require([
+        'spec/app-test'
+      , 'spec/collections/company-collection-test'
+      , 'spec/models/company-model-test'
+      , 'spec/routers/main-router-test'
+      , 'spec/views/main-view-test'
+      , 'spec/views/navbar-view-test'
+      , 'spec/views/sidebar-view-test'
+      , 'spec/views/content-view-test'
+      , 'spec/views/activities-view-test'
+      , 'spec/views/users-view-test'
+      ], function() {
+        require(['../runner/mocha']);
+      });
+    })
+  })();
+  </script>
+
+  <div id="app" style="display: none;"></div>
+</body>
+</html>
