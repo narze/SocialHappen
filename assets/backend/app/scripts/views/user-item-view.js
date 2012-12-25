@@ -7,7 +7,7 @@
       className: 'user-item',
       initialize: function() {
         _.bindAll(this);
-        return this.model.bind('change', 'render');
+        return this.model.bind('change', this.render);
       },
       render: function() {
         this.$el.html(_.template(UserItemTemplate, this.model.toJSON()));

@@ -11,7 +11,7 @@ define [
 
     initialize: ->
       _.bindAll @
-      @model.bind 'change', 'render'
+      @model.bind 'change', @render
 
     render: ->
       @$el.html _.template(UserItemTemplate, @model.toJSON())
