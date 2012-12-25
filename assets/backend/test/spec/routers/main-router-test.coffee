@@ -48,6 +48,7 @@ describe 'Main Router', ->
       it 'should have correct first row of data', ->
         $('#content #users-view .user-item:first td').length.should.equal 7
         $('#content #users-view .user-item:first td').text().should.match(/Noom/)
+        $('#content #users-view .user-item:first td').text().should.match(/Link/)
 
       describe 'after data fetched', ->
         it 'should load each .user-item into #users-view', ->

@@ -1257,7 +1257,26 @@ class Apiv3 extends CI_Controller {
     $offset = $this->input->get('offset');
 
     $this->load->model('user_model');
-    return $this->success($this->user_model->get_all_user_profile($limit, $offset));
+    $this->load->model('user_mongo_model');
+    $this->load->model('user_token_model');
+
+    $users = $this->user_model->get_all_user_profile($limit, $offset);
+
+    foreach($users as &$user) {
+      // Get points
+      $user_mongo = $this->user_mongo_model->get_user($user['user_id']);
+      $user['user_points'] = issetor($user_mongo['points'], 0);
+
+      // Get platforms
+      $tokens = $this->user_token_model->get(array('user_id' => $user['user_id']));
+      $user['user_platforms'] = array();
+      foreach($tokens as $token) {
+        $user['user_platforms'][] = $token['device'];
+      }
+
+    } unset($user);
+
+    return $this->success($users);
   }
 
   function activities() {
@@ -1268,6 +1287,7 @@ class Apiv3 extends CI_Controller {
     $users = array();
 
     foreach($activities as &$activity) {
+      // Get user
       if(isset($activity['user_id']) && $activity['user_id']) {
         $user_id = $activity['user_id'];
 

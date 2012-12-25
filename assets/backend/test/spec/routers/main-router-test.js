@@ -49,7 +49,8 @@
         });
         it('should have correct first row of data', function() {
           $('#content #users-view .user-item:first td').length.should.equal(7);
-          return $('#content #users-view .user-item:first td').text().should.match(/Noom/);
+          $('#content #users-view .user-item:first td').text().should.match(/Noom/);
+          return $('#content #users-view .user-item:first td').text().should.match(/Link/);
         });
         return describe('after data fetched', function() {
           return it('should load each .user-item into #users-view', function() {
