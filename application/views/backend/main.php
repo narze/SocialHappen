@@ -19,18 +19,32 @@
       }
     }
   ?>
+
+  <link rel="stylesheet" href="<?php echo $base_url ?>assets/backend/app/styles/main.css">
+  <script src="<?php echo $base_url ?>assets/backend/app/scripts/vendor/modernizr.min.js"></script>
+
   <script>var baseUrl = '<?php echo $base_url ?>';</script>
 </head>
 <?php flush(); ?>
 <body>
   <!-- Application container. -->
 
-  <main role="main" id="main"></main>
+  <div id="app"></div>
+  <div id="overlay">
+    <ul>
+      <li class="li1"></li>
+      <li class="li2"></li>
+      <li class="li3"></li>
+      <li class="li4"></li>
+      <li class="li5"></li>
+      <li class="li6"></li>
+    </ul>
+  </div>
 
   <!-- Application source. -->
 
   <!--(if target dummy)><!-->
-  <script data-main="<?php echo $base_url ?>assets/backend/app/config" src="<?php echo $base_url ?>assets/backend/vendor/js/libs/require.js"></script>
+  <script data-main="<?php echo $base_url ?>assets/backend/app/scripts/main" src="<?php echo $base_url ?>assets/backend/app/scripts/vendor/require.js"></script>
   <!--<!(endif)-->
 
   <!--(if target release)>

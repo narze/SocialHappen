@@ -10,14 +10,13 @@ class Backendv2 extends CI_Controller {
 	}
 
 	function index() {
-		$template = array(
-      'title' => 'Backend',
-      'styles' => array(
-        'common/bootstrap.min'
-      )
-    );
-
-    $this->load->view('backend/main', $template);
+    redirect('assets/backend/app', 'refresh');
+    // $template = array(
+    //   'title' => 'Backend',
+    //   'styles' => array(
+    //   )
+    // );
+    // $this->load->view('backend/main', $template);
 	}
 }
 
