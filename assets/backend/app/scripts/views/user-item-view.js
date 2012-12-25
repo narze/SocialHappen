@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/user-item-template.html'], function(Backbone, UserItemTemplate) {
+  define(['backbone', 'moment', 'text!templates/user-item-template.html'], function(Backbone, moment, UserItemTemplate) {
     var View;
     View = Backbone.View.extend({
       tagName: 'tr',

@@ -31,6 +31,9 @@ require.config
       deps: ['flot']
     jqueryui:
       deps: ['jquery']
+    moment:
+      exports: 'moment'
+
   paths:
     jquery: 'vendor/jquery.min'
     lodash: 'vendor/lodash.min'
@@ -39,6 +42,7 @@ require.config
     esprima: 'vendor/esprima'
     spec: '/spec'
     text: 'vendor/text'
+    moment: 'vendor/moment.min'
 
     # Perfectum Dashboard
     bootstrap: 'vendor/jquery-plugins/bootstrap'

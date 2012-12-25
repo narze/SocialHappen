@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/activity-item-template.html'], function(Backbone, ActivityItemTemplate) {
+  define(['backbone', 'moment', 'text!templates/activity-item-template.html'], function(Backbone, moment, ActivityItemTemplate) {
     var View;
     View = Backbone.View.extend({
       tagName: 'tr',

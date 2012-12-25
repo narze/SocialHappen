@@ -1,7 +1,8 @@
 define [
   'backbone'
+  'moment'
   'text!templates/activity-item-template.html'
-  ], (Backbone, ActivityItemTemplate) ->
+  ], (Backbone, moment, ActivityItemTemplate) ->
 
   View = Backbone.View.extend
 
