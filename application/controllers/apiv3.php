@@ -1282,6 +1282,7 @@ class Apiv3 extends CI_Controller {
   function activities() {
     $this->load->library('audit_lib');
     $this->load->model('user_model');
+    $this->load->model('challenge_model');
 
     $activities = $this->audit_lib->list_audit(array('app_id' => 0));
     $users = array();
@@ -1298,6 +1299,13 @@ class Apiv3 extends CI_Controller {
         $activity['user'] = $users[$user_id];
       } else {
         $activity['user'] = array();
+      }
+
+      // Get challenge if it is challenge
+      if(in_array($activity['action_id'], array(117, 118))) {
+        $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
+      } else {
+        $activity['challenge'] = array();
       }
     }
     return $this->success($activities);
