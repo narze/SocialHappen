@@ -24,7 +24,23 @@ define [
   ActivityCollection
 ) ->
 
-  window.baseUrl = 'http://localhost/socialhappen/'
+  # Server specific config
+  config =
+    dev:
+      baseUrl: 'http://localhost/socialhappen/'
+    beta:
+      baseUrl: 'http://beta.socialhappen.com/'
+    production:
+      baseUrl: 'http://www.socialhappen.com/'
+
+  if window.location.href.match(/beta\.socialhappen\.com/)
+    env = 'beta'
+  else if window.location.href.match(/(\.)?socialhappen\.com/)
+    env = 'production'
+  else
+    env = 'dev'
+
+  window.baseUrl = config[env].baseUrl
 
   window.backend.Routers.MainRouter = new MainRouter
 

@@ -1,7 +1,26 @@
 (function() {
 
   define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection) {
-    window.baseUrl = 'http://localhost/socialhappen/';
+    var config, env;
+    config = {
+      dev: {
+        baseUrl: 'http://localhost/socialhappen/'
+      },
+      beta: {
+        baseUrl: 'http://beta.socialhappen.com/'
+      },
+      production: {
+        baseUrl: 'http://www.socialhappen.com/'
+      }
+    };
+    if (window.location.href.match(/beta\.socialhappen\.com/)) {
+      env = 'beta';
+    } else if (window.location.href.match(/(\.)?socialhappen\.com/)) {
+      env = 'production';
+    } else {
+      env = 'dev';
+    }
+    window.baseUrl = config[env].baseUrl;
     window.backend.Routers.MainRouter = new MainRouter;
     window.backend.Models.CompanyModel = CompanyModel;
     window.backend.Collections.CompanyCollection = new CompanyCollection;
