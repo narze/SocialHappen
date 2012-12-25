@@ -1283,6 +1283,7 @@ class Apiv3 extends CI_Controller {
     $this->load->library('audit_lib');
     $this->load->model('user_model');
     $this->load->model('challenge_model');
+    $this->load->model('audit_model');
 
     $activities = $this->audit_lib->list_audit(array('app_id' => 0));
     $users = array();
@@ -1306,6 +1307,30 @@ class Apiv3 extends CI_Controller {
         $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
       } else {
         $activity['challenge'] = array();
+      }
+
+      // Get action description
+      $app_id = (int) 0;
+      $action_id = $activity['action_id'];
+      $action_list = array();
+
+      if(!isset($action_list[$app_id.'_'.$action_id])){
+        $audit_action = $this->audit_lib->get_audit_action($app_id, $action_id);
+        if(isset($audit_action)){
+          $action_list[$app_id.'_'.$action_id] = $audit_action;
+        }
+      }else{
+        $audit_action = $action_list[$app_id.'_'.$action_id];
+      }
+
+      if(isset($audit_action['format_string']) && isset($action_id)){
+        $activity['audit_message'] = $this->audit_lib->translate_format_string(
+          $audit_action['format_string'],
+          $this->audit_model->getOne(array('_id' => $activity['_id'])),
+          ($action_id <= 100)
+        );
+      }else{
+        $activity['audit_message'] = NULL;
       }
     }
     return $this->success($activities);
