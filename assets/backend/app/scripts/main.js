@@ -5,7 +5,14 @@
     shim: {
       backbone: {
         deps: ['lodash', 'jquery'],
-        exports: 'Backbone'
+        exports: function() {
+          _.templateSettings = {
+            evaluate: /\{\[([\s\S]+?)\]\}/g,
+            interpolate: /\{\{([\s\S]+?)\}\}/g,
+            escape: /\{\{\{([\s\S]+?)\}\}\}/g
+          };
+          return window.Backbone;
+        }
       },
       perfectum_dashboard: {
         deps: ['jquery', 'jqueryui', 'bootstrap']

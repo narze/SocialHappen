@@ -8,11 +8,26 @@ class Apiv3 extends CI_Controller {
 
   function __construct(){
     header("Access-Control-Allow-Origin: *");
+    header('Content-Type: application/json', TRUE);
     parent::__construct();
   }
 
   function index(){
     return json_return(array('status' => 'OK'));
+  }
+
+  /**
+   * Helper functions
+   */
+
+  function error($error_message = NULL, $code = 0) {
+    echo json_encode(array('success' => FALSE, 'data' => $error_message, 'code' => $code, 'timestamp' => time()));
+    return FALSE;
+  }
+
+  function success($data = array(), $code = 1) {
+    echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()));
+    return TRUE;
   }
 
   /**
@@ -1231,6 +1246,41 @@ class Apiv3 extends CI_Controller {
       'success' => TRUE,
       'data' => $sonar_box_data
     ));
+  }
+
+  /**
+   * APIs below are for new backend
+   */
+
+  function users() {
+    $limit = $this->input->get('limit');
+    $offset = $this->input->get('offset');
+
+    $this->load->model('user_model');
+    return $this->success($this->user_model->get_all_user_profile($limit, $offset));
+  }
+
+  function activities() {
+    $this->load->library('audit_lib');
+    $this->load->model('user_model');
+
+    $activities = $this->audit_lib->list_audit(array('app_id' => 0));
+    $users = array();
+
+    foreach($activities as &$activity) {
+      if(isset($activity['user_id']) && $activity['user_id']) {
+        $user_id = $activity['user_id'];
+
+        if(!isset($users[$user_id])) {
+          $users[$user_id] = $this->user_model->get_user_profile_by_user_id($user_id);
+        }
+
+        $activity['user'] = $users[$user_id];
+      } else {
+        $activity['user'] = array();
+      }
+    }
+    return $this->success($activities);
   }
 }
 

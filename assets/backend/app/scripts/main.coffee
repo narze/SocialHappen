@@ -3,7 +3,12 @@ require.config
   shim:
     backbone:
       deps: ['lodash', 'jquery']
-      exports: 'Backbone'
+      exports: ->
+        _.templateSettings =
+          evaluate : /\{\[([\s\S]+?)\]\}/g
+          interpolate : /\{\{([\s\S]+?)\}\}/g
+          escape : /\{\{\{([\s\S]+?)\}\}\}/g
+        window.Backbone
     perfectum_dashboard:
       deps: [
         'jquery'

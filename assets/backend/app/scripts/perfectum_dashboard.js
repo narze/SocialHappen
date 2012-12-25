@@ -21,10 +21,10 @@ define([
 	'flotResize'
 ], function() {
 	$(document).ready(function(){
-	
+
 	/* ---------- Login Box Styles ---------- */
 	if($(".login-box")) {
-		
+
 		$("#username").focus(function() {
 
 			$(this).parent(".input-prepend").addClass("input-prepend-focus");
@@ -48,35 +48,37 @@ define([
 			$(this).parent(".input-prepend").removeClass("input-prepend-focus");
 
 		});
-		
+
 	}
-					
+
 	/* ---------- Add class .active to current link  ---------- */
 	$('ul.main-menu li a').each(function(){
 		if($($(this))[0].href==String(window.location))
 			$(this).parent().addClass('active');
 	});
-			
+
 	/* ---------- Acivate Functions ---------- */
 	$("#overlay").delay(1250).fadeOut(500);
-	template_functions();
-	init_masonry();
-	sparkline_charts();
-	charts();
-	calendars();
-	growlLikeNotifications();
-	widthFunctions();
-	circle_progess();
-	
-	
+
+	// Disable!
+	// template_functions();
+	// init_masonry();
+	// sparkline_charts();
+	// charts();
+	// calendars();
+	// growlLikeNotifications();
+	// widthFunctions();
+	// circle_progess();
+
+
 });
 
 /* ---------- Masonry Gallery ---------- */
 
 function init_masonry(){
-	
-	if($('.masonry-gallery')){  
-	
+
+	if($('.masonry-gallery')){
+
     	var $container = $('.masonry-gallery');
 
 	    var gutter = 6;
@@ -101,7 +103,7 @@ function init_masonry(){
 	              }
 	        });
 	    });
-	
+
 	}
 }
 
@@ -115,14 +117,14 @@ function numberWithCommas(x) {
     return x;
 }
 
-/* ---------- Template Functions ---------- */		
-		
+/* ---------- Template Functions ---------- */
+
 function template_functions(){
-	
+
 	/* ---------- ToDo List Action Buttons ---------- */
-	
+
 	if($(".todo-list")) {
-		
+
 		$(".todo-remove").click(function(){
 
 			$(this).parent().parent().fadeTo("slow", 0.00, function(){ //fade
@@ -134,13 +136,13 @@ function template_functions(){
 
 			return false;
 		});
-		
+
 	}
-	
+
 	/* ---------- Skill Bars ---------- */
-	
+
 	if($(".skill-bar")){
-		
+
 		$(".meter > span").each(function() {
 			$(this)
 			.data("origWidth", $(this).width())
@@ -149,29 +151,29 @@ function template_functions(){
 				width: $(this).data("origWidth")
 			}, 3000);
 		});
-		
+
 	}
-	
+
 	/* ---------- Disable moving to top ---------- */
 	$('a[href="#"][data-top!=true]').click(function(e){
 		e.preventDefault();
 	});
-	
+
 	/* ---------- Text editor ---------- */
 	if($('.cleditor')) {
-		
+
 		$('.cleditor').cleditor();
-		
+
 	}
 
 	/* ---------- Datapicker ---------- */
 	if($('.datepicker')) {
-		
+
 		$('.datepicker').datepicker();
-		
+
 	}
-	
-	
+
+
 	/* ---------- Notifications ---------- */
 	$('.noty').click(function(e){
 		e.preventDefault();
@@ -268,8 +270,8 @@ function template_functions(){
 		e.preventDefault();
 		$('#myModal').modal('show');
 	});
-	
-	
+
+
 	/* ---------- Progress  ---------- */
 
 		$(".simpleProgress").progressbar({
@@ -300,55 +302,55 @@ function template_functions(){
 					},
 					complete: function(){
 						$(".progressUploadAnimate + .field_notice").html("<span class='must'>Upload Finished</span>");
-					} 
+					}
 				})
 			}
 		});
-		
+
 		if($(".taskProgress")) {
-		
+
 			$(".taskProgress").each(function(){
-				
+
 				var endValue = parseInt($(this).html());
-												
+
 				$(this).progressbar({
 					value: endValue
 				});
-				
+
 				$(this).parent().find(".percent").html(endValue + "%");
-				
+
 			});
-		
+
 		}
-		
+
 		if($(".progressBarValue")) {
-		
+
 			$(".progressBarValue").each(function(){
-				
+
 				var endValueHTML = $(this).find(".progressCustomValueVal").html();
-				
+
 				var endValue = parseInt(endValueHTML);
-												
+
 				$(this).find(".progressCustomValue").progressbar({
-					
+
 					value: 1,
 					create: function() {
 						$(this).find(".ui-progressbar-value").animate({"width": endValue + "%"},{
 							duration: 5000,
 							step: function(now){
-																
+
 								$(this).parent().parent().find(".progressCustomValueVal").html(parseInt(now)+"%");
 							},
 							easing: "linear"
 						})
 					}
 				});
-				
+
 			});
-		
+
 		}
-	
-	
+
+
 	/* ---------- Custom Slider ---------- */
 		$(".sliderSimple").slider();
 
@@ -411,7 +413,7 @@ function template_functions(){
 				$( ".sliderLabel" ).html( "$" + ui.value );
 			}
 		});
-		
+
 		$(".sliderMin-6").slider({
 			range: "min",
 			value: 450,
@@ -421,7 +423,7 @@ function template_functions(){
 				$( ".sliderLabel" ).html( "$" + ui.value );
 			}
 		});
-		
+
 		$(".sliderMin-7").slider({
 			range: "min",
 			value: 550,
@@ -431,7 +433,7 @@ function template_functions(){
 				$( ".sliderLabel" ).html( "$" + ui.value );
 			}
 		});
-		
+
 		$(".sliderMin-8").slider({
 			range: "min",
 			value: 650,
@@ -441,8 +443,8 @@ function template_functions(){
 				$( ".sliderLabel" ).html( "$" + ui.value );
 			}
 		});
-		
-		
+
+
 		$(".sliderMax").slider({
 			range: "max",
 			value: 280,
@@ -510,7 +512,7 @@ function template_functions(){
 			max: 100,
 			value: 80,
 		});
-		
+
 		$( "#sliderVertical-7" ).slider({
 			orientation: "vertical",
 			range: "min",
@@ -558,15 +560,15 @@ function template_functions(){
 			max: 100,
 			value: 80,
 		});
-			
+
 }
 
 /* ---------- Circle Progess Bars ---------- */
 
 function circle_progess() {
-	
+
 	var divElement = $('div'); //log all div elements
-	
+
 	$(".greenCircle").knob({
         'min':0,
         'max':100,
@@ -644,16 +646,16 @@ function circle_progess() {
         'tickColorizeValues': true,
 		'skin':'tron'
     })
-	
-	
-}                
 
-      
+
+}
+
+
 
 /* ---------- Calendars ---------- */
 
 function calendars(){
-	
+
 
 	$('#external-events div.external-event').each(function() {
 
@@ -661,19 +663,19 @@ function calendars(){
 		var eventObject = {
 			title: $.trim($(this).text()) // use the element's text as the event title
 		};
-		
+
 		// store the Event Object in the DOM element so we can get to it later
 		$(this).data('eventObject', eventObject);
-		
+
 		// make the event draggable using jQuery UI
 		$(this).draggable({
 			zIndex: 999,
 			revert: true,      // will cause the event to go back to its
 			revertDuration: 0  //  original position after the drag
 		});
-		
+
 	});
-	
+
 	var date = new Date();
 	var d = date.getDate();
 	var m = date.getMonth();
@@ -732,7 +734,7 @@ function calendars(){
 			}
 		]
 	});
-	
+
 	$('#main_calendar_phone').fullCalendar({
 		header: {
 			left: 'title',
@@ -786,9 +788,9 @@ function calendars(){
 				url: 'http://google.com/'
 			}
 		]
-	});		
-	
-			
+	});
+
+
 	$('#calendar').fullCalendar({
 		header: {
 			left: 'title',
@@ -797,36 +799,36 @@ function calendars(){
 		editable: true,
 		droppable: true, // this allows things to be dropped onto the calendar !!!
 		drop: function(date, allDay) { // this function is called when something is dropped
-		
+
 			// retrieve the dropped element's stored Event Object
 			var originalEventObject = $(this).data('eventObject');
-			
+
 			// we need to copy it, so that multiple events don't have a reference to the same object
 			var copiedEventObject = $.extend({}, originalEventObject);
-			
+
 			// assign it the date that was reported
 			copiedEventObject.start = date;
 			copiedEventObject.allDay = allDay;
-			
+
 			// render the event on the calendar
 			// the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
 			$('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-			
+
 			// is the "remove after drop" checkbox checked?
 			if ($('#drop-remove').is(':checked')) {
 				// if so, remove the element from the "Draggable Events" list
 				$(this).remove();
 			}
-			
+
 		}
 	});
-	
+
 }
 
 /* ---------- Sparkline Charts ---------- */
 
 function sparkline_charts() {
-	
+
 	//generate random number for charts
 	randNum = function(){
 		//return Math.floor(Math.random()*101);
@@ -840,7 +842,7 @@ function sparkline_charts() {
 	for (i=1; i<9; i++) {
 	 	var data = [[1, 3+randNum()], [2, 5+randNum()], [3, 8+randNum()], [4, 11+randNum()],[5, 14+randNum()],[6, 17+randNum()],[7, 20+randNum()], [8, 15+randNum()], [9, 18+randNum()], [10, 22+randNum()]];
 	 	placeholder = '.sparkLineStats' + i;
-		$(placeholder).sparkline(data, { 
+		$(placeholder).sparkline(data, {
 			width: 100,//Width of the chart - Defaults to 'auto' - May be any valid css width - 1.5em, 20px, etc (using a number without a unit specifier won't do what you want) - This option does nothing for bar and tristate chars (see barWidth)
 			height: 30,//Height of the chart - Defaults to 'auto' (line height of the containing tag)
 			lineColor: '#2FABE9',//Used by line and discrete charts to specify the colour of the line drawn as a CSS values string
@@ -852,17 +854,17 @@ function sparkline_charts() {
 			lineWidth: 1//In pixels (default: 1) - Integer
 		});
 	}
-	
+
 }
 
 /* ---------- Charts ---------- */
 
 function charts() {
-	
+
 	function randNum(){
 		return (Math.floor( Math.random()* (1+40-20) ) ) + 20;
 	}
-	
+
 	/* ---------- Chart with points ---------- */
 	if($("#stats-chart").length)
 	{
@@ -879,8 +881,8 @@ function charts() {
 					   points: { show: true },
 					   shadowSize: 2
 				   },
-				   grid: { hoverable: true, 
-						   clickable: true, 
+				   grid: { hoverable: true,
+						   clickable: true,
 						   tickColor: "#eee",
 						   borderWidth: 0,
 						 },
@@ -924,7 +926,7 @@ function charts() {
 					previousPoint = null;
 				}
 		});
-		
+
 
 
 		$("#sincos").bind("plotclick", function (event, pos, item) {
@@ -934,9 +936,9 @@ function charts() {
 			}
 		});
 	}
-	
-	
-	
+
+
+
 	/* ---------- Chart with points ---------- */
 	if($("#sincos").length)
 	{
@@ -956,10 +958,10 @@ function charts() {
 					   points: { show: true },
 					   shadowSize: 2
 				   },
-				   grid: { hoverable: true, 
-						   clickable: true, 
+				   grid: { hoverable: true,
+						   clickable: true,
 						   tickColor: "#dddddd",
-						   borderWidth: 0 
+						   borderWidth: 0
 						 },
 				   yaxis: { min: -1.2, max: 1.2 },
 				   colors: ["#FA5833", "#2FABE9"]
@@ -1000,7 +1002,7 @@ function charts() {
 					previousPoint = null;
 				}
 		});
-		
+
 
 
 		$("#sincos").bind("plotclick", function (event, pos, item) {
@@ -1010,14 +1012,14 @@ function charts() {
 			}
 		});
 	}
-	
+
 	/* ---------- Flot chart ---------- */
 	if($("#flotchart").length)
 	{
 		var d1 = [];
 		for (var i = 0; i < Math.PI * 2; i += 0.25)
 			d1.push([i, Math.sin(i)]);
-		
+
 		var d2 = [];
 		for (var i = 0; i < Math.PI * 2; i += 0.25)
 			d2.push([i, Math.cos(i)]);
@@ -1025,7 +1027,7 @@ function charts() {
 		var d3 = [];
 		for (var i = 0; i < Math.PI * 2; i += 0.1)
 			d3.push([i, Math.tan(i)]);
-		
+
 		$.plot($("#flotchart"), [
 			{ label: "sin(x)",  data: d1},
 			{ label: "cos(x)",  data: d2},
@@ -1044,12 +1046,12 @@ function charts() {
 				max: 2
 			},
 			grid: {	tickColor: "#dddddd",
-					borderWidth: 0 
+					borderWidth: 0
 			},
 			colors: ["#FA5833", "#2FABE9", "#FABB3D"]
 		});
 	}
-	
+
 	/* ---------- Stack chart ---------- */
 	if($("#stackchart").length)
 	{
@@ -1103,7 +1105,7 @@ function charts() {
 	{ label: "Firefox",  data: 90},
 	{ label: "Chrome",  data: 112}
 	];
-	
+
 	if($("#piechart").length)
 	{
 		$.plot($("#piechart"), data,
@@ -1122,7 +1124,7 @@ function charts() {
 			},
 			colors: ["#FA5833", "#2FABE9", "#FABB3D", "#78CD51"]
 		});
-		
+
 		function pieHover(event, pos, obj)
 		{
 			if (!obj)
@@ -1132,7 +1134,7 @@ function charts() {
 		}
 		$("#piechart").bind("plothover", pieHover);
 	}
-	
+
 	/* ---------- Donut chart ---------- */
 	if($("#donutchart").length)
 	{
@@ -1195,7 +1197,7 @@ function charts() {
 
 	/* ---------- Realtime chart ---------- */
 	if($("#serverload").length)
-	{	
+	{
 		var options = {
 			series: { shadowSize: 1 },
 			lines: { show: true, lineWidth: 0.4, fill: true, fillColor: { colors: [ { opacity: 0.1 }, { opacity: 1 } ] }},
@@ -1203,7 +1205,7 @@ function charts() {
 			xaxis: { show: false },
 			colors: ["#FA5833"],
 			grid: {	tickColor: "#dddddd",
-					borderWidth: 0, 
+					borderWidth: 0,
 			},
 		};
 		var plot = $.plot($("#serverload"), [ getRandomData() ], options);
@@ -1211,13 +1213,13 @@ function charts() {
 			plot.setData([ getRandomData() ]);
 			// since the axes don't change, we don't need to call plot.setupGrid()
 			plot.draw();
-			
+
 			setTimeout(update, updateInterval);
 		}
 
 		update();
 	}
-	
+
 	if($("#realtimechart").length)
 	{
 		var options = {
@@ -1227,7 +1229,7 @@ function charts() {
 			xaxis: { show: false },
 			colors: ["#F4A506"],
 			grid: {	tickColor: "#dddddd",
-					borderWidth: 0 
+					borderWidth: 0
 			},
 		};
 		var plot = $.plot($("#realtimechart"), [ getRandomData() ], options);
@@ -1235,7 +1237,7 @@ function charts() {
 			plot.setData([ getRandomData() ]);
 			// since the axes don't change, we don't need to call plot.setupGrid()
 			plot.draw();
-			
+
 			setTimeout(update, updateInterval);
 		}
 
@@ -1244,7 +1246,7 @@ function charts() {
 }
 
 function growlLikeNotifications() {
-	
+
 	$('#add-sticky').click(function(){
 
 		var unique_id = $.gritter.add({
@@ -1531,122 +1533,122 @@ function widthFunctions( e ) {
     var winWidth = $(window).width();
 
 	if (winHeight) {
-		
+
 		$("#content").css("min-height",winHeight);
-		
+
 	}
-    
+
 	if (winWidth < 980 && winWidth > 767) {
-		
+
 		if($(".main-menu-span").hasClass("span2")) {
-			
+
 			$(".main-menu-span").removeClass("span2");
 			$(".main-menu-span").addClass("span1");
-			
+
 		}
-		
+
 		if($("#content").hasClass("span10")) {
-			
+
 			$("#content").removeClass("span10");
 			$("#content").addClass("span11");
-			
+
 		}
-		
-		
+
+
 		$("a").each(function(){
-			
+
 			if($(this).hasClass("quick-button-small span1")) {
 
 				$(this).removeClass("quick-button-small span1");
 				$(this).addClass("quick-button span2 changed");
-			
+
 			}
-			
+
 		});
-		
+
 		$(".circleStatsItem").each(function() {
-			
+
 			var getOnTablet = $(this).parent().attr('onTablet');
 			var getOnDesktop = $(this).parent().attr('onDesktop');
-			
+
 			if (getOnTablet) {
-			
+
 				$(this).parent().removeClass(getOnDesktop);
 				$(this).parent().addClass(getOnTablet);
-			
+
 			}
-			  			
+
 		});
-		
+
 		$(".box").each(function(){
-			
+
 			var getOnTablet = $(this).attr('onTablet');
 			var getOnDesktop = $(this).attr('onDesktop');
-			
+
 			if (getOnTablet) {
-			
+
 				$(this).removeClass(getOnDesktop);
 				$(this).addClass(getOnTablet);
-			
+
 			}
-			  			
+
 		});
-							
+
 	} else {
-		
+
 		if($(".main-menu-span").hasClass("span1")) {
-			
+
 			$(".main-menu-span").removeClass("span1");
 			$(".main-menu-span").addClass("span2");
-			
+
 		}
-		
+
 		if($("#content").hasClass("span11")) {
-			
+
 			$("#content").removeClass("span11");
 			$("#content").addClass("span10");
-			
+
 		}
-		
+
 		$("a").each(function(){
-			
+
 			if($(this).hasClass("quick-button span2 changed")) {
 
 				$(this).removeClass("quick-button span2 changed");
 				$(this).addClass("quick-button-small span1");
-			
+
 			}
-			
+
 		});
-		
+
 		$(".circleStatsItem").each(function() {
-			
+
 			var getOnTablet = $(this).parent().attr('onTablet');
 			var getOnDesktop = $(this).parent().attr('onDesktop');
-			
+
 			if (getOnTablet) {
-			
+
 				$(this).parent().removeClass(getOnTablet);
 				$(this).parent().addClass(getOnDesktop);
-			
+
 			}
-			  			
+
 		});
-		
+
 		$(".box").each(function(){
-			
+
 			var getOnTablet = $(this).attr('onTablet');
 			var getOnDesktop = $(this).attr('onDesktop');
-			
+
 			if (getOnTablet) {
-			
+
 				$(this).removeClass(getOnTablet);
 				$(this).addClass(getOnDesktop);
-			
+
 			}
-			  			
+
 		});
-		
+
 	}
 
 }
