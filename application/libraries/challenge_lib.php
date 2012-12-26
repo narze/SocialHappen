@@ -818,37 +818,49 @@ class Challenge_lib {
     }
 
     $query = array(
-      'location' => array('$near' => array(floatval($location[0]), floatval($location[1])))
+      'locations' => array(
+        '$near' => array(floatval($location[0]), floatval($location[1]))
+      )
     );
 
 
     if($max_dist > 0) {
-      $query['location']['$maxDistance'] = floatval($max_dist);
+      $query['locations']['$maxDistance'] = floatval($max_dist);
     }
 
     $challenges = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
 
     if($and_get_without_location_specified) {
       $query = array(
-        'location' => array('$near' => array(0.0,0.0), '$maxDistance' => 0.0)
+        'locations' => array('$near' => array(0.0,0.0), '$maxDistance' => 0.0)
       );
       $challenge_at_0_0 = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
       $challenges = array_merge($challenges, $challenge_at_0_0);
 
       $query = array(
-        'location' => array('$exists' => FALSE)
+        'locations' => array('$exists' => FALSE)
       );
       $challenges_without_location = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
       $challenges = array_merge($challenges, $challenges_without_location);
     }
     $this->CI->load->model('company_model');
 
-    // get company profile to show in map, do we need company image ?
+    $duplicatedHash = array();
+
+    $uniqueChallenges = array();
     for ($i=0; $i < count($challenges); $i++) {
-      $company = $this->CI->company_model->get_company_profile_by_company_id($challenges[$i]['company_id']);
+      if(!isset($duplicatedHash[$challenges[$i]['_id'] . ''])){
+        $duplicatedHash[$challenges[$i]['_id'] . ''] = true;
+        $uniqueChallenges[] = $challenges[$i];
+      }
+    }
+
+    // get company profile to show in map, do we need company image ?
+    for ($i=0; $i < count($uniqueChallenges); $i++) {
+      $company = $this->CI->company_model->get_company_profile_by_company_id($uniqueChallenges[$i]['company_id']);
       // $challenges[$i]['company'] = $company;
     }
-    return $challenges;
+    return $uniqueChallenges;
   }
 
   function generate_locations($challenge_id){
@@ -886,9 +898,16 @@ class Challenge_lib {
       }
     }
 
-    $data = array('$set' => array(
-      'locations' => $locations
-    ));
+    if(count($locations) > 0){
+      $data = array('$set' => array(
+        'locations' => $locations
+      ));
+    }else{
+      $data = array('$unset' => array(
+        'locations' => TRUE
+      ));
+    }
+
 
     return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
   }

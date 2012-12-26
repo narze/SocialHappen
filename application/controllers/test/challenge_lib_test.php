@@ -6,6 +6,7 @@ class Challenge_lib_test extends CI_Controller {
     parent::__construct();
     $this->load->library('unit_test');
     $this->load->library('challenge_lib');
+    $this->load->model('challenge_model');
     $this->load->library('branch_lib');
     $this->unit->reset_dbs();
     $this->socialhappen->reindex();
@@ -16,6 +17,8 @@ class Challenge_lib_test extends CI_Controller {
   }
 
   function index() {
+    $this->challenge_model->recreateIndex();
+
     $class_methods = get_class_methods($this);
     //echo 'Functions : '.(count(get_class_methods($this->achievement_lib))-3).' Tests :'.count($class_methods);
     foreach ($class_methods as $method) {
@@ -93,13 +96,13 @@ class Challenge_lib_test extends CI_Controller {
       ),
       'location' => array(45, 60),
       'locations' => array(),
-      'custom_locations' => array(array(10,10)),
+      'custom_locations' => array(array(140,110)),
       'branches' => array()
     );
 
     $this->challenge3 = array(
       'company_id' => 1,
-      'all_branch' => true,
+      'all_branch' => false,
       'start' => time(),
       'end' => time() + 86400,
       'detail' => array(
@@ -172,7 +175,7 @@ class Challenge_lib_test extends CI_Controller {
     $this->branch1 = array(
       'company_id' => 1,
       'title' => 'branch 1',
-      'location' => array(40, 40),
+      'location' => array(140, 140),
       'telephone' => '0123456789',
       'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
       'address' => 'thailand ja'
@@ -181,7 +184,7 @@ class Challenge_lib_test extends CI_Controller {
     $this->branch2 = array(
       'company_id' => 1,
       'title' => 'branch 2',
-      'location' => array(40, 50),
+      'location' => array(140, 150),
       'telephone' => '0123456789',
       'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
       'address' => 'thailand ja'
@@ -190,7 +193,7 @@ class Challenge_lib_test extends CI_Controller {
     $this->branch3 = array(
       'company_id' => 1,
       'title' => 'branch 3',
-      'location' => array(50, 40),
+      'location' => array(150, 140),
       'telephone' => '0123456789',
       'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
       'address' => 'thailand ja'
@@ -199,7 +202,7 @@ class Challenge_lib_test extends CI_Controller {
     $this->branch4 = array(
       'company_id' => 2,
       'title' => 'branch 4',
-      'location' => array(50, 50),
+      'location' => array(150, 150),
       'telephone' => '0123456789',
       'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
       'address' => 'thailand ja'
@@ -791,21 +794,28 @@ class Challenge_lib_test extends CI_Controller {
     echo "<pre>";
     $result = $this->challenge_lib->generate_locations($this->challenge_id);
     $this->unit->run($result, TRUE, "\$result", $result);
+    // var_dump($result);
 
     $result = $this->challenge_lib->get_by_id($this->challenge_id);
-    $this->unit->run(count($result['locations']), 4, "\$result", $result);
+    $this->unit->run(count($result['locations']), 4, "\$result", count($result['locations']));
 
     $result = $this->challenge_lib->generate_locations($this->challenge_id2);
     $this->unit->run($result, TRUE, "\$result", $result);
 
     $result = $this->challenge_lib->get_by_id($this->challenge_id2);
-    $this->unit->run(count($result['locations']), 2, "\$result", $result);
+    $this->unit->run(count($result['locations']), 2, "\$result", count($result['locations']));
+
+    $result = $this->challenge_lib->generate_locations($this->challenge_id3);
+    $this->unit->run($result, TRUE, "\$result", $result);
+
+    $result = $this->challenge_lib->get_by_id($this->challenge_id3);
+    $this->unit->run(count($result['locations']), 1, "\$result", count($result['locations']));
 
     $result = $this->challenge_lib->generate_locations($this->challenge_id4);
     $this->unit->run($result, TRUE, "\$result", $result);
 
     $result = $this->challenge_lib->get_by_id($this->challenge_id4);
-    $this->unit->run(count($result['locations']), 0, "\$result", $result);
+    $this->unit->run(isset($result['locations']), FALSE, "\$result", isset($result['locations']));
   }
 
   function get_nearest_challenges_test() {
@@ -853,6 +863,12 @@ class Challenge_lib_test extends CI_Controller {
     //Get without location too
     $my_location = array(100, 100);
     $result = $this->challenge_lib->get_nearest_challenges($my_location, 200, NULL, TRUE);
+
+    // foreach ($result as $key => $value) {
+    //   var_dump($value['_id']);
+    //   var_dump($value['detail']['name']);
+    // }
+
     //Get challenge : 2 < 1 < 3 , 4
     $this->unit->run(count($result) === 4, TRUE, "count(\$result)", count($result));
     $this->unit->run($result[0]['_id'].'' === $this->challenge_id2, TRUE, "\$result[0]['_id']", $result[0]['_id']);
