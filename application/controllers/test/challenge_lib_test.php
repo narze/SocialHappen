@@ -857,6 +857,17 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($result[0]['_id'].'' === $this->challenge_id2, TRUE, "\$result[0]['_id']", $result[0]['_id']);
     $this->unit->run($result[1]['_id'].'' === $this->challenge_id, TRUE, "\$result[1]['_id']", $result[1]['_id']);
     $this->unit->run($result[2]['_id'].'' === $this->challenge_id3, TRUE, "\$result[2]['_id']", $result[2]['_id']);
+
+    $my_location = array(140, 140);
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 5);
+
+    // foreach ($result as $key => $value) {
+    //   var_dump($value['_id']);
+    //   var_dump($value['detail']['name']);
+    // }
+
+    $this->unit->run(count($result) === 1, TRUE, "count(\$result)", count($result));
+    $this->unit->run($result[0]['_id'].'' === $this->challenge_id, TRUE, "\$result[0]['_id']", $result[0]['_id']);
   }
 
   function get_nearest_challenges_test_2() {
