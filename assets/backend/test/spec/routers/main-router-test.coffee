@@ -16,6 +16,9 @@ describe 'Main Router', ->
     it 'should have activities route', ->
       window.backend.Routers.MainRouter.routes['activities'].should.be.equal 'activities'
 
+    it 'should have companies route', ->
+      window.backend.Routers.MainRouter.routes['companies'].should.be.equal 'companies'
+
   describe 'routing', ->
 
     it 'should not load any views when switched to a bad route', ->
@@ -54,13 +57,11 @@ describe 'Main Router', ->
         it 'should load each .user-item into #users-view', ->
           $('#users-view').find('.user-item').length.should.not.equal 0
 
-
-
     describe 'activities', ->
 
       it 'should load activities view when switched route to activities', ->
         window.backend.Routers.MainRouter.navigate 'activities', trigger:true
-        window.backend.Views.UsersView.rendered.should.be.true
+        window.backend.Views.ActivitiesView.rendered.should.be.true
 
       it 'should set the activity menu as active', ->
         $('#sidebar-view').find('.main-menu li.activities-tab-menu').hasClass('active').should.be.true
@@ -85,6 +86,33 @@ describe 'Main Router', ->
       describe 'after data fetched', ->
         it 'should load each .activity-item into #activities-view', ->
           $('#activities-view').find('.activity-item').length.should.not.equal 0
+
+    describe 'companies', ->
+
+      it 'should load companies view when switched route to companies', ->
+        window.backend.Routers.MainRouter.navigate 'companies', trigger:true
+        window.backend.Views.CompaniesView.rendered.should.be.true
+
+      it 'should set the company menu as active', ->
+        $('#sidebar-view').find('.main-menu li.companies-tab-menu').hasClass('active').should.be.true
+
+      it 'should render #companies-view into #content', ->
+        $('#content').find('#companies-view').length.should.not.equal 0
+
+      it 'should have all fields required', ->
+        $('#content').find('#companies-view').find('thead').find('th').length.should.equal 3
+
+        $('#content').find('#companies-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#companies-view').find('thead').text().should.match(/Created At/)
+        $('#content').find('#companies-view').find('thead').text().should.match(/Credits/)
+
+      it 'should have correct first row of data', ->
+        $('#content #companies-view .company-item:first td').length.should.equal 3
+        $('#content #companies-view .company-item:first td').text().should.match(/Figabyte/)
+
+      describe 'after data fetched', ->
+        it 'should load each .company-item into #companies-view', ->
+          $('#companies-view').find('.company-item').length.should.not.equal 0
 
     describe 'change route back', ->
       window.backend.Routers.MainRouter.navigate '', trigger: true

@@ -7,6 +7,7 @@
         '': 'users',
         'users': 'users',
         'activities': 'activities',
+        'companies': 'companies',
         '*other': 'badRoute'
       },
       users: function() {
@@ -18,6 +19,11 @@
         $('#content').html(window.backend.Views.ActivitiesView.render().el);
         $('#sidebar-view .main-menu li').removeClass('active');
         return $('#sidebar-view .main-menu li.activities-tab-menu').addClass('active');
+      },
+      companies: function() {
+        $('#content').html(window.backend.Views.CompaniesView.render().el);
+        $('#sidebar-view .main-menu li').removeClass('active');
+        return $('#sidebar-view .main-menu li.companies-tab-menu').addClass('active');
       },
       badRoute: function() {
         console.log('404 : Route not found');

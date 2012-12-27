@@ -4,6 +4,7 @@ define [
   'views/main-view'
   'views/users-view'
   'views/activities-view'
+  'views/companies-view'
   'models/company-model'
   'collections/company-collection'
   'models/user-model'
@@ -16,6 +17,7 @@ define [
   MainView
   UsersView
   ActivitiesView
+  CompaniesView
   CompanyModel
   CompanyCollection
   UserModel
@@ -64,6 +66,9 @@ define [
 
   window.backend.Views.ActivitiesView = new ActivitiesView
     collection: window.backend.Collections.ActivityCollection
+
+  window.backend.Views.CompaniesView = new CompaniesView
+    collection: window.backend.Collections.CompanyCollection
 
   Backbone.history.start()
 

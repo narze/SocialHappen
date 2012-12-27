@@ -1,6 +1,6 @@
 (function() {
 
-  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection) {
+  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection) {
     var config, env;
     config = {
       dev: {
@@ -35,6 +35,9 @@
     });
     window.backend.Views.ActivitiesView = new ActivitiesView({
       collection: window.backend.Collections.ActivityCollection
+    });
+    window.backend.Views.CompaniesView = new CompaniesView({
+      collection: window.backend.Collections.CompanyCollection
     });
     Backbone.history.start();
     return window.appLoaded = true;
