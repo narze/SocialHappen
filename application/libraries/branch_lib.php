@@ -42,7 +42,7 @@ class Branch_lib {
       return FALSE;
     }
 
-    $branch_id = get_mongo_id($branch);
+    $branch_id = $criteria['_id'];
 
     unset($data['_id']);
 
@@ -54,7 +54,26 @@ class Branch_lib {
       );
     }
 
-    return $this->CI->branch_model->update($criteria, $data);
+    $result = $this->CI->branch_model->update($criteria, $data);
+
+    $this->CI->load->library('challenge_lib');
+
+    $criteria = array(
+      '$or' => array(
+        array('all_branch' => TRUE),
+        array('branches' => '' . $branch_id)
+      )
+    );
+
+    $challenges = $this->CI->challenge_lib->get($criteria, 10000);
+
+    if($challenges && count($challenges) > 0){
+      foreach ($challenges as $challenge) {
+        $this->CI->challenge_lib->generate_locations('' . $challenge['_id']);
+      }
+    }
+
+    return $result;
   }
 
   function remove($criteria) {

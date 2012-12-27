@@ -17,6 +17,7 @@ class Challenge_lib {
         ), array(
           '$set' => array('hash' => strrev(sha1($id))
       )))) {
+        $this->generate_locations($id);
         return $id;
       }
     }
@@ -75,7 +76,9 @@ class Challenge_lib {
       return FALSE;
     }
 
-    return $this->CI->challenge_model->update($criteria, $data);
+    $result = $this->CI->challenge_model->update($criteria, $data);
+    $this->generate_locations($challenge_id);
+    return $result;
   }
 
   function remove($criteria) {
