@@ -25,6 +25,9 @@ class Branch_lib_test extends CI_Controller {
   }
 
   function setup_before_test(){
+    $criteria = array();
+    $result = $this->branch_lib->remove($criteria);
+
     $this->branch1 = array(
       'company_id' => 1,
       'title' => 'branch 1',
