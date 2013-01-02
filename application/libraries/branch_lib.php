@@ -56,7 +56,29 @@ class Branch_lib {
 
     $result = $this->CI->branch_model->update($criteria, $data);
 
+    $this->update_challenges($branch_id);
+
+    return $result;
+  }
+
+  function remove($criteria) {
+    $result = $this->CI->branch_model->delete($criteria);
+    // echo '<hr>';
+    // echo "remove ".count($result)." branches<br>";
+
+    if($result && count($result) > 0){
+      foreach ($result as $branch) {
+        $this->update_challenges($branch['_id'] . '');
+      }
+    }
+
+    return $result;
+  }
+
+  function update_challenges($branch_id){
     $this->CI->load->library('challenge_lib');
+
+    // echo "update branch: " . $branch_id . '<br>';
 
     $criteria = array(
       '$or' => array(
@@ -67,16 +89,12 @@ class Branch_lib {
 
     $challenges = $this->CI->challenge_lib->get($criteria, 10000);
 
+    // echo 'got '.count($challenges).' challenge to update<br>';
+
     if($challenges && count($challenges) > 0){
       foreach ($challenges as $challenge) {
         $this->CI->challenge_lib->generate_locations('' . $challenge['_id']);
       }
     }
-
-    return $result;
-  }
-
-  function remove($criteria) {
-    return $this->CI->branch_model->delete($criteria);
   }
 }

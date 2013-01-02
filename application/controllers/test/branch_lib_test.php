@@ -154,6 +154,7 @@ class Branch_lib_test extends CI_Controller {
   }
 
   function update_test() {
+    // return;
     $criteria = array('_id' => new MongoId($this->branch_data1['_id']));
     $update = array(
       '$set' => array(
@@ -197,6 +198,7 @@ class Branch_lib_test extends CI_Controller {
   }
 
   function get_one_test() {
+    // return;
     $criteria = array('company_id' => '2');
     $result = $this->branch_lib->get_one($criteria);
     $this->unit->run($result, 'is_array', "\$result", $result);
@@ -204,6 +206,7 @@ class Branch_lib_test extends CI_Controller {
   }
 
   function remove_test() {
+    // echo 'remove test<br>';
     $criteria = array('company_id' => '1');
     $result = $this->branch_lib->remove($criteria);
     $this->unit->run($result, TRUE, "\$result", $result);
@@ -214,5 +217,18 @@ class Branch_lib_test extends CI_Controller {
 
     $all_branch = $this->branch_lib->get(array());
     $this->unit->run(count($all_branch), 0, "count(\$all_branch)", count($all_branch));
+
+    $criteria = array('company_id' => '1');
+    $result = $this->challenge_lib->get($criteria);
+    $this->unit->run($result, 'is_array', "\$result", $result);
+
+    $challenge1 = $result[1];
+    $challenge2 = $result[0];
+
+    $this->unit->run(isset($challenge1['locations']), FALSE, "\$result", isset($challenge1['locations']));
+    $this->unit->run(count($challenge2['locations']), 2, "\$result", count($challenge2['locations']));
+
+    $this->unit->run($challenge2['locations'][0], array(45, 60), "\$result", $challenge2['locations'][0]);
+    $this->unit->run($challenge2['locations'][1], array(140, 110), "\$result", $challenge2['locations'][0]);
   }
 }

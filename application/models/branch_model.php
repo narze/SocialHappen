@@ -60,6 +60,8 @@ class Branch_model extends CI_Model {
 
   function delete($query){
     $query = array_cast_int($query, $this->int_values);
-    return $this->collection->remove($query, array('$atomic' => TRUE));
+    $result = $this->get($query, 100000);
+    $this->collection->remove($query, array('$atomic' => TRUE, '$safe' => TRUE));
+    return $result;
   }
 }

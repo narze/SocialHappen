@@ -883,13 +883,18 @@ class Challenge_lib {
       $locations = array_merge($locations, $challenge['custom_locations']);
     }
 
+    $available_branches = array();
+
     if((!isset($challenge['all_branch']) || !$challenge['all_branch'])
       && isset($challenge['branches']) && count($challenge['branches']) > 0){
       $this->CI->load->library('branch_lib');
 
-      foreach ($challenge['branches'] as $branch) {
-        $branch = $this->CI->branch_lib->get_one(array('_id' => new MongoId($branch)));
-        $locations[] = $branch['location'];
+      foreach ($challenge['branches'] as $branch_id) {
+        $branch = $this->CI->branch_lib->get_one(array('_id' => new MongoId($branch_id)));
+        if($branch){
+          $available_branches[] = $branch_id;
+          $locations[] = $branch['location'];
+        }
       }
     }else if(isset($challenge['all_branch']) && $challenge['all_branch']){
       $this->CI->load->library('branch_lib');
@@ -901,16 +906,20 @@ class Challenge_lib {
       }
     }
 
+    $data = array('$set' => array(
+      'branches' => $available_branches
+    ));
+
     if(count($locations) > 0){
-      $data = array('$set' => array(
-        'locations' => $locations
-      ));
+      $data['$set']['locations'] = $locations;
     }else{
-      $data = array('$unset' => array(
+      $data['$unset'] = array(
         'locations' => TRUE
-      ));
+      );
     }
 
+    // echo "<pre>";
+    // var_dump($data);
 
     return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
   }
