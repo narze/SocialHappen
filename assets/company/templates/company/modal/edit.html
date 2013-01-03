@@ -52,6 +52,16 @@
     </div>
   </div>
 
+  <h6 class="edit-repeat">Available All Branch:</h6>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" class="all-branch-enable" value="true" <%= all_branch?'checked="checked"':''%>>
+        User can play this challenge at all branch of this company
+      </label>
+    </div>
+  </div>
+
   <div class="control-group location">
     <label><h6>Latitude:</h6></label> <input class="latitude input-medium" type="text" name="latitude" id="latitude" value="<%= location[1] %>" placeholder="0.0">
     <label><h6>Longitude:</h6></label> <input class="longitude input-medium" type="text" name="longitude" id="longitude" value="<%= location[0] %>" placeholder="0.0">

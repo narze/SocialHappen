@@ -49,6 +49,7 @@ define([
       'click button.show-activity': 'showActivity',
       'click button.hide-activity': 'hideActivity',
       'change input.repeat-enable': 'toggleRepeat',
+      'change input.all-branch-enable': 'toggleAllBranch',
       'click button.save-repeat-interval': 'saveRepeat',
       'click div.view-repeat': 'showEditRepeat',
       'click .add-new-action': 'showAddNewActionModal',
@@ -680,6 +681,13 @@ define([
         this.model.set('repeat', null).trigger('change');
         this.model.save();
       }
+    },
+
+    toggleAllBranch: function(){
+      var enable = !_.isUndefined($('input.all-branch-enable', this.el).attr('checked'));
+
+      this.model.set('all_branch', enable).trigger('change');
+      this.model.save();
     },
 
     saveRepeat: function(){

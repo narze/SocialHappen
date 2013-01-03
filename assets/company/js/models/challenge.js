@@ -13,6 +13,7 @@ define([
         image: 'https://lh3.googleusercontent.com/XBLfCOS_oKO-XjeYiaOAuIdukQo9wXMWsdxJZLJO8hvWMBLFwCU3r_0BrRMn_c0TnEDarKuxDg=s640-h400-e365'
       },
       hash: null,
+      all_branch: false,
       criteria: [],
       active: false,
       company_id: 0,
