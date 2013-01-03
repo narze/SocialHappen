@@ -482,6 +482,8 @@ class Apiv4 extends REST_Controller {
       }
     }
 
+    $companies = array();
+
     $this->load->model('company_model');
     foreach($challenges as &$challenge) {
       //Check challenge quota
@@ -493,10 +495,25 @@ class Apiv4 extends REST_Controller {
       }
 
       //embed company data if not finding with company_id
-      if(!$company_id) {
-        $challenge['company'] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
+      if($company_id) {
+        if(!isset($companies[$company_id])) {
+          $companies[$company_id] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
+        }
+        $challenge['company'] = $companies[$company_id];
       } else {
-        $challenge['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
+        if(!isset($companies[$challenge['company_id']])) {
+          $companies[$challenge['company_id']] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
+        }
+        $challenge['company'] = $companies[$challenge['company_id']];
+      }
+
+      //Challenge could not be done if credits <= 0
+      if($challenge['company']['credits'] <= 0) {
+        $challenge['is_out_of_stock'] = TRUE;
+      }
+
+      if(!isset($challenge['is_out_of_stock'])) {
+        $challenge['is_out_of_stock'] = FALSE;
       }
     }
 
@@ -961,42 +978,57 @@ class Apiv4 extends REST_Controller {
 
       //9 add done count
       //Get all challlenge points
-      if(!isset($reward_points)) {
-        $reward_points = 0;
+      $reward_points = 0;
 
-        $reward_item_ids = array_map(function($reward_item) {
-          return new MongoId(get_mongo_id($reward_item));
-        }, $challenge['reward_items']);
+      $reward_item_ids = array_map(function($reward_item) {
+        return new MongoId(get_mongo_id($reward_item));
+      }, $challenge['reward_items']);
 
-        $this->load->model('reward_item_model');
-        $reward_items = $this->reward_item_model->get(array('_id' => array( '$in' => $reward_item_ids )));
+      $this->load->model('reward_item_model');
+      $reward_items = $this->reward_item_model->get(array('_id' => array( '$in' => $reward_item_ids )));
 
-        foreach($reward_items as $reward_item) {
-          if(issetor($reward_item['is_points_reward'])) {
-            $reward_points += $reward_item['value'];
-          }
+      foreach($reward_items as $reward_item) {
+        if(issetor($reward_item['is_points_reward'])) {
+          $reward_points += $reward_item['value'];
+        }
+      }
+
+      //get company
+      $this->load->model('company_model');
+      $data['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
+
+      if($reward_points !== 0) {
+        //Add user platform points
+        $user_update = array(
+          '$inc' => array('points' => $reward_points)
+        );
+
+        if(!$this->user_mongo_model->update(array('user_id' => (int) $user_id), $user_update)) {
+          return $this->error('Update user failed.');
         }
 
-        //get company
-        $this->load->model('company_model');
-        $data['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
-      }
+        //Decrement company credits
+        if(!$company = $data['company']) {
+          return $this->error('Invalid Company');
+        }
 
-      //Add user platform points
-      $user_update = array(
-        '$inc' => array('points' => $reward_points)
-      );
+        $company['credits'] = issetor($company['credits'], 0) - $reward_points;
+        //decrement company credits
+        $company_update = array(
+          'credits' => $company['credits']
+        );
 
-      if(!$this->user_mongo_model->update(array('user_id' => (int) $user_id), $user_update)) {
-        return $this->error('Update user failed.');
-      }
+        if(!$result = $this->company_model->update_company_profile_by_company_id($company_id, $company_update)) {
+          return $this->error('Update company failed');
+        }
 
-      $this->load->model('challenge_model');
-      $challenge_update_result = $this->challenge_model->update(array('_id' => new MongoId($challenge_id)), array(
-        '$inc' => array('done_count' => $reward_points)
-      ));
-      if(!$challenge_update_result) {
-        return $this->error('increment done count failed');
+        $this->load->model('challenge_model');
+        $challenge_update_result = $this->challenge_model->update(array('_id' => new MongoId($challenge_id)), array(
+          '$inc' => array('done_count' => $reward_points)
+        ));
+        if(!$challenge_update_result) {
+          return $this->error('increment done count failed');
+        }
       }
     }
 

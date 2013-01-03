@@ -1,14 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Company_model extends CI_Model {
-	var $company_id;
-	var $company_name = '';
-	var $company_address = '';
-	var $company_email = '';
-	var $company_telephone = '';
-	var $company_register_date;
-	var $company_username = '';
-	var $company_password = '';
-	var $company_facebook_id = '';
 
 	function __construct()
 	{
@@ -54,7 +45,7 @@ class Company_model extends CI_Model {
 	function get_company_profile_by_page_id($page_id = NULL){
 		$this->db->join('page','company.company_id=page.company_id');
 		$this->db->select(array('company_website', 'company.company_id','creator_user_id','company_name','company_detail','company_address'
-						,'company_email','company_telephone','company_register_date','company_username','company_password','company_image'));
+						,'company_email','company_telephone','company_register_date','company_username','company_password','company_image', 'credits'));
 		$result = $this->db->get_where('company',array('page_id'=>$page_id))->result_array();
 		return issetor($result[0], NULL);
 	}
@@ -68,7 +59,7 @@ class Company_model extends CI_Model {
 		$this->db->join('installed_apps','installed_apps.company_id=company.company_id');
 		$this->db->join('campaign','campaign.app_install_id=installed_apps.app_install_id');
 		$this->db->select(array('company_website', 'company.company_id','creator_user_id','company_name','company_detail','company_address'
-						,'company_email','company_telephone','company_register_date','company_username','company_password','company_image'));
+						,'company_email','company_telephone','company_register_date','company_username','company_password','company_image', 'credits'));
 		$result = $this->db->get_where('company',array('campaign_id'=>$campaign_id))->result_array();
 		return issetor($result[0], NULL);
 	}
@@ -81,7 +72,7 @@ class Company_model extends CI_Model {
 	function get_company_profile_by_app_install_id($app_install_id = NULL){
 		$this->db->join('installed_apps','installed_apps.company_id=company.company_id');
 		$this->db->select(array('company_website', 'company.company_id','creator_user_id','company_name','company_detail','company_address'
-						,'company_email','company_telephone','company_register_date','company_username','company_password','company_image'));
+						,'company_email','company_telephone','company_register_date','company_username','company_password','company_image', 'credits'));
 		$result = $this->db->get_where('company',array('app_install_id'=>$app_install_id))->result_array();
 		return issetor($result[0], NULL);
 	}
