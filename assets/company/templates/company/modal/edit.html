@@ -52,13 +52,27 @@
     </div>
   </div>
 
-  <h6 class="edit-repeat">Available All Branch:</h6>
+  <h6 class="edit-repeat">Available all branch:</h6>
   <div class="control-group">
     <div class="controls">
       <label class="checkbox">
         <input type="checkbox" class="all-branch-enable" value="true" <%= all_branch?'checked="checked"':''%>>
         User can play this challenge at all branch of this company
       </label>
+    </div>
+  </div>
+
+  <div class="select-branch <%- all_branch?'hide':''%>">
+    <h6 class="">Select individual branch:</h6>
+    <div class="control-group">
+      <div class="controls">
+        <select multiple="multiple" class="select-branch">
+          <% _.each(branchList, function(branch){ %>
+            <option value="<%- branch._id %>"><%- branch.title %></option>
+          <% }); %>
+        </select>
+      </div>
+      <button class="btn save-select-branch btn-primary">Save</button>
     </div>
   </div>
 

@@ -50,6 +50,7 @@ define([
       'click button.hide-activity': 'hideActivity',
       'change input.repeat-enable': 'toggleRepeat',
       'change input.all-branch-enable': 'toggleAllBranch',
+      'click button.save-select-branch': 'onSaveSelectedBranch',
       'click button.save-repeat-interval': 'saveRepeat',
       'click div.view-repeat': 'showEditRepeat',
       'click .add-new-action': 'showAddNewActionModal',
@@ -78,7 +79,10 @@ define([
       sandbox.challengeHash = this.model.id;
 
       var data = this.model.toJSON();
+      data.branchList = sandbox.collections.branchCollection.toJSON();
       $(this.el).html(this.editTemplate(data));
+
+      this.$('select.select-branch').val(data.branches);
 
       var self = this;
 
@@ -686,8 +690,24 @@ define([
     toggleAllBranch: function(){
       var enable = !_.isUndefined($('input.all-branch-enable', this.el).attr('checked'));
 
+      if(!enable){
+        this.$('div.select-branch').removeClass('hide');
+      }else{
+        this.$('div.select-branch').addClass('hide');
+      }
+
       this.model.set('all_branch', enable).trigger('change');
       this.model.save();
+    },
+
+    onSaveSelectedBranch: function(){
+      var branches = this.$('select.select-branch').val();
+      this.model.set('branches', branches).trigger('change');
+      this.model.save(null, {
+        success: function(){
+          alert('Saved');
+        }
+      });
     },
 
     saveRepeat: function(){

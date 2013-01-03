@@ -28,6 +28,7 @@ define([
     render: function () {
       $(this.el).html(this.challengeListTemplate({}));
       sandbox.collections.challengesCollection.fetch();
+      sandbox.collections.branchCollection.fetch();
       return this;
     },
 

@@ -65,7 +65,7 @@ require([
 ], function(AppView, Router, Vm, UserModel, ChallengerModel, CompanyModel, ChallengesCollection,
  BranchCollection, RewardsCollection, OffersCollection, CouponsCollection, ActivitiesCollection,
   CompanyUsersCollection, vent, sandbox){
-
+  window.sandbox = sandbox;
   sandbox.models.currentUserModel = new UserModel();
   sandbox.models.challengerModel = new ChallengerModel();
   sandbox.models.companyModel= new CompanyModel();
