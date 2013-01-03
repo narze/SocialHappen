@@ -10,3 +10,5 @@ describe 'Sidebar View', ->
       $('#sidebar-view').text().should.match /Users/
     it 'should have "Activities" menu', ->
       $('#sidebar-view').text().should.match /Activities/
+    it 'should have "Companies" menu', ->
+      $('#sidebar-view').text().should.match /Companies/

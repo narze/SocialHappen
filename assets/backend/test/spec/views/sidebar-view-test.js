@@ -13,8 +13,11 @@
       it('should have "Users" menu', function() {
         return $('#sidebar-view').text().should.match(/Users/);
       });
-      return it('should have "Activities" menu', function() {
+      it('should have "Activities" menu', function() {
         return $('#sidebar-view').text().should.match(/Activities/);
+      });
+      return it('should have "Companies" menu', function() {
+        return $('#sidebar-view').text().should.match(/Companies/);
       });
     });
   });

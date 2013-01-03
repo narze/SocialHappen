@@ -40,6 +40,7 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_username'],'is_string','company_username');
 		$this->unit->run($result['company_password'],'is_string','company_password');
 		$this->unit->run($result['company_image'],'is_string','company_image');
+		$this->unit->run($result['credits'], 0, "\$result['credits']", $result['credits']);
 	}
 
 	/**
@@ -57,7 +58,8 @@ class Company_model_test extends CI_Controller {
 							'company_register_date' => '2011-05-09 17:52:17',
 							'company_username' => 'test',
 							'company_password' => 'test',
-							'company_image' => 'test.jpg'
+							'company_image' => 'test.jpg',
+							'credits' => 0
 						);
 		$company_id = $this->companies->add_company($company);
 		$this->unit->run($company_id,'is_int','add_company()');
@@ -88,6 +90,7 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_password'],'is_string','company_password');
 		$this->unit->run($result['company_image'],'is_string','company_image');
 		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
+		$this->unit->run($result['credits'], 0, "\$result['credits']", $result['credits']);
 	}
 
 	/**
@@ -109,6 +112,7 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_password'],'is_string','company_password');
 		$this->unit->run($result['company_image'],'is_string','company_image');
 		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
+		$this->unit->run($result['credits'], 0, "\$result['credits']", $result['credits']);
 	}
 
 	/**
@@ -130,6 +134,7 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_password'],'is_string','company_password');
 		$this->unit->run($result['company_image'],'is_string','company_image');
 		$this->unit->run($result['company_id'] == 1,'is_true','$company_id == 1');
+		$this->unit->run($result['credits'], 0, "\$result['credits']", $result['credits']);
 	}
 
 	/**
@@ -152,6 +157,7 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($results[0]['company_password'],'is_string','company_password');
 		$this->unit->run($results[0]['company_image'],'is_string','company_image');
 		$this->unit->run($results[0]['company_id'],1,'$company_id == 1');
+		$this->unit->run($results[0]['credits'], 0, "\$results[0]['credits']", $results[0]['credits']);
 	}
 
 	/**

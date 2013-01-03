@@ -13,8 +13,11 @@
       it('should have users route', function() {
         return window.backend.Routers.MainRouter.routes['users'].should.be.equal('users');
       });
-      return it('should have activities route', function() {
+      it('should have activities route', function() {
         return window.backend.Routers.MainRouter.routes['activities'].should.be.equal('activities');
+      });
+      return it('should have companies route', function() {
+        return window.backend.Routers.MainRouter.routes['companies'].should.be.equal('companies');
       });
     });
     return describe('routing', function() {
@@ -58,12 +61,61 @@
           });
         });
       });
+      describe('companies', function() {
+        it('should load companies view when switched route to companies', function() {
+          window.backend.Routers.MainRouter.navigate('companies', {
+            trigger: true
+          });
+          return window.backend.Views.CompaniesView.rendered.should.be["true"];
+        });
+        it('should set the company menu as active', function() {
+          return $('#sidebar-view').find('.main-menu li.companies-tab-menu').hasClass('active').should.be["true"];
+        });
+        it('should render #companies-view into #content', function() {
+          return $('#content').find('#companies-view').length.should.not.equal(0);
+        });
+        it('should have all fields required', function() {
+          $('#content').find('#companies-view').find('thead').find('th').length.should.equal(4);
+          $('#content').find('#companies-view').find('thead').text().should.match(/Name/);
+          $('#content').find('#companies-view').find('thead').text().should.match(/Created At/);
+          $('#content').find('#companies-view').find('thead').text().should.match(/Credits/);
+          return $('#content').find('#companies-view').find('thead').text().should.match(/Actions/);
+        });
+        describe('after data fetched', function() {
+          it('should load each .company-item into #companies-view', function() {
+            return $('#companies-view').find('.company-item').length.should.not.equal(0);
+          });
+          it('should have correct first row of data', function() {
+            $('#content #companies-view .company-item:first td').length.should.equal(4);
+            return $('#content #companies-view .company-item:first td').text().should.match(/Figabyte/);
+          });
+          return it('should have "Add Credits" button', function() {
+            $('#content #companies-view .company-item:first td:last').html().should.match(/<button/);
+            return $('#content #companies-view .company-item:first td:last').text().should.match(/Add Credits/);
+          });
+        });
+        return describe('adding credits', function() {
+          it('Add Credits modal should be hidden at first', function() {
+            $('#content #companies-view .add-credits-modal.modal').length.should.not.equal(0);
+            return $('#content #companies-view .add-credits-modal.modal').hasClass('hide').should.equal(true);
+          });
+          it('clicking the button should activate modal', function() {
+            var subViewName;
+            $('#content #companies-view .add-credits-modal.modal').length.should.not.equal(0);
+            subViewName = 'company-' + window.backend.Collections.CompanyCollection.models[0].cid;
+            window.backend.Views.CompaniesView.subViews[subViewName].should.not.be.undefined;
+            return window.backend.Views.CompaniesView.subViews[subViewName].addCreditsModal().should.not.be.undefined;
+          });
+          describe('filling 5 credits in modal form', function() {});
+          return describe('triggering "save" after filling 5 credits', function() {});
+        });
+      });
       describe('activities', function() {
         it('should load activities view when switched route to activities', function() {
           window.backend.Routers.MainRouter.navigate('activities', {
             trigger: true
           });
-          return window.backend.Views.UsersView.rendered.should.be["true"];
+          return window.backend.Views.ActivitiesView.rendered.should.equal(true);
         });
         it('should set the activity menu as active', function() {
           return $('#sidebar-view').find('.main-menu li.activities-tab-menu').hasClass('active').should.be["true"];

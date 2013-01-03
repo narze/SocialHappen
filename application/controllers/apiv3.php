@@ -10,6 +10,10 @@ class Apiv3 extends CI_Controller {
     header("Access-Control-Allow-Origin: *");
     header('Content-Type: application/json', TRUE);
     parent::__construct();
+    if($this->uri->segment(1) === 'testmode') {
+      $this->load->library('db_sync');
+      $this->db_sync->use_test_db(TRUE);
+    }
   }
 
   function index(){
@@ -1334,6 +1338,32 @@ class Apiv3 extends CI_Controller {
       }
     }
     return $this->success($activities);
+  }
+
+  function credit_add() {
+    $company_id = $this->input->post('company_id');
+    $credit = $this->input->post('credit') | 0;
+    if(!$company_id) {
+      return $this->error('Invalid Input');
+    }
+
+    $this->load->model('company_model');
+
+    if(!$company = $this->company_model->get_company_profile_by_company_id($company_id)) {
+      return $this->error('Invalid Company');
+    }
+
+    $company['credits'] = issetor($company['credits'], 0) + (int) $credit;
+
+    $update = array(
+      'credits' => $company['credits']
+    );
+
+    if(!$result = $this->company_model->update_company_profile_by_company_id($company_id, $update)) {
+      return $this->error('Update Failed');
+    }
+
+    return $this->success($company);
   }
 }
 

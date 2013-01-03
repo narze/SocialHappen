@@ -8,7 +8,8 @@
       var CompanyModel;
       window.backend.Models.CompanyModel.should.be.a('function');
       CompanyModel = new window.backend.Models.CompanyModel;
-      return CompanyModel.should.be.a('object').and.have.property('attributes');
+      CompanyModel.should.be.a('object').and.have.property('attributes');
+      return CompanyModel.should.have.property('id');
     });
   });
 
