@@ -9,6 +9,7 @@ describe 'Main View', ->
       $('#app > #navbar-view').length.should.equal 1
       $('#app #sidebar-view').length.should.equal 1
       $('#app #content-view').length.should.equal 1
+      $('#app #modal').length.should.equal 1
   describe 'subviews are loaded', ->
     it 'should load navbar view', ->
       window.backend.Views.NavBarView.should.not.be.undefined

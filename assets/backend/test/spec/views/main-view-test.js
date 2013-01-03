@@ -12,7 +12,8 @@
         window.backend.Views.MainView.rendered.should.be["true"];
         $('#app > #navbar-view').length.should.equal(1);
         $('#app #sidebar-view').length.should.equal(1);
-        return $('#app #content-view').length.should.equal(1);
+        $('#app #content-view').length.should.equal(1);
+        return $('#app #modal').length.should.equal(1);
       });
     });
     return describe('subviews are loaded', function() {

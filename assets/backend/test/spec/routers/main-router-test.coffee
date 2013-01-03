@@ -90,16 +90,18 @@ describe 'Main Router', ->
           $('#content #companies-view .company-item:first td:last').text().should.match(/Add Credits/)
 
       describe 'adding credits', ->
+        # TODO Trigger before check
         it 'Add Credits modal should be hidden at first', ->
-          $('#content #companies-view .add-credits-modal.modal').length.should.not.equal 0
-          $('#content #companies-view .add-credits-modal.modal').hasClass('hide').should.equal true
+          $('#app #modal .add-credits-modal-view.modal').length.should.equal 0
         it 'clicking the button should activate modal', ->
-          $('#content #companies-view .add-credits-modal.modal').length.should.not.equal 0
           # trigger modal
           subViewName = 'company-' + window.backend.Collections.CompanyCollection.models[0].cid
           window.backend.Views.CompaniesView.subViews[subViewName].should.not.be.undefined
-          window.backend.Views.CompaniesView.subViews[subViewName].addCreditsModal().should.not.be.undefined
+          window.backend.Views.CompaniesView.subViews[subViewName].showAddCreditsModal().should.not.be.undefined
+
           # TODO - it should display correct modal
+          $('#app #modal .add-credits-modal-view .modal').length.should.not.equal 0
+          # $('#app #modal .add-credits-modal-view .modal').hasClass('hide').should.equal false
         describe 'filling 5 credits in modal form', ->
           # TODO
         describe 'triggering "save" after filling 5 credits', ->

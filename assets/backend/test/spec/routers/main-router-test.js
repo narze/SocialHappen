@@ -96,15 +96,14 @@
         });
         return describe('adding credits', function() {
           it('Add Credits modal should be hidden at first', function() {
-            $('#content #companies-view .add-credits-modal.modal').length.should.not.equal(0);
-            return $('#content #companies-view .add-credits-modal.modal').hasClass('hide').should.equal(true);
+            return $('#app #modal .add-credits-modal-view.modal').length.should.equal(0);
           });
           it('clicking the button should activate modal', function() {
             var subViewName;
-            $('#content #companies-view .add-credits-modal.modal').length.should.not.equal(0);
             subViewName = 'company-' + window.backend.Collections.CompanyCollection.models[0].cid;
             window.backend.Views.CompaniesView.subViews[subViewName].should.not.be.undefined;
-            return window.backend.Views.CompaniesView.subViews[subViewName].addCreditsModal().should.not.be.undefined;
+            window.backend.Views.CompaniesView.subViews[subViewName].showAddCreditsModal().should.not.be.undefined;
+            return $('#app #modal .add-credits-modal-view .modal').length.should.not.equal(0);
           });
           describe('filling 5 credits in modal form', function() {});
           return describe('triggering "save" after filling 5 credits', function() {});
