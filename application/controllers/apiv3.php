@@ -1342,9 +1342,9 @@ class Apiv3 extends CI_Controller {
 
   function credit_add() {
     $company_id = $this->input->post('company_id');
-    $credit = $this->input->post('credit');
-    if(!$company_id || !$credit) {
-      return $this->error();
+    $credit = $this->input->post('credit') | 0;
+    if(!$company_id) {
+      return $this->error('Invalid Input');
     }
 
     $this->load->model('company_model');

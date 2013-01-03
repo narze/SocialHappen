@@ -69,6 +69,14 @@ class Apiv3_test extends CI_Controller {
 		return json_decode($response, TRUE);
 	}
 
+	function users_test() {
+
+	}
+
+	function activities_test() {
+
+	}
+
 	function credit_add_test() {
 		//check credits before add
 		$this->load->model('company_model');

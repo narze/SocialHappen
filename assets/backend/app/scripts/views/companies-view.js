@@ -6,6 +6,7 @@
       id: 'companies-view',
       initialize: function() {
         _.bindAll(this);
+        this.subViews = {};
         this.collection.bind('reset', this.listCompanies);
         return this.collection.fetch();
       },
@@ -19,6 +20,7 @@
         company = new CompanyItemView({
           model: model
         });
+        this.subViews['company-' + model.cid] = company;
         return this.$('#company-list').append(company.render().el);
       },
       render: function() {

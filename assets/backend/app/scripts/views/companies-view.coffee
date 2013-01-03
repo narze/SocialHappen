@@ -10,6 +10,7 @@ define [
 
     initialize: ->
       _.bindAll @
+      @subViews = {}
       @collection.bind 'reset', @listCompanies
       @collection.fetch()
 
@@ -19,8 +20,8 @@ define [
       , @
 
     addCompany: (model)->
-      company = new CompanyItemView
-        model: model
+      company = new CompanyItemView model: model
+      @subViews['company-' + model.cid] = company
       @$('#company-list').append(company.render().el)
 
     render: ->

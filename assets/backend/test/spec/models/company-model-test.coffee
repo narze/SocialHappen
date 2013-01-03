@@ -7,3 +7,4 @@ describe 'Company model', ->
     CompanyModel = new window.backend.Models.CompanyModel
     CompanyModel.should.be.a('object')
       .and.have.property('attributes')
+    CompanyModel.should.have.property('id')

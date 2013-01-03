@@ -57,11 +57,62 @@ describe 'Main Router', ->
         it 'should load each .user-item into #users-view', ->
           $('#users-view').find('.user-item').length.should.not.equal 0
 
+    describe 'companies', ->
+
+      it 'should load companies view when switched route to companies', ->
+        window.backend.Routers.MainRouter.navigate 'companies', trigger:true
+        window.backend.Views.CompaniesView.rendered.should.be.true
+
+      it 'should set the company menu as active', ->
+        $('#sidebar-view').find('.main-menu li.companies-tab-menu').hasClass('active').should.be.true
+
+      it 'should render #companies-view into #content', ->
+        $('#content').find('#companies-view').length.should.not.equal 0
+
+      it 'should have all fields required', ->
+        $('#content').find('#companies-view').find('thead').find('th').length.should.equal 4
+
+        $('#content').find('#companies-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#companies-view').find('thead').text().should.match(/Created At/)
+        $('#content').find('#companies-view').find('thead').text().should.match(/Credits/)
+        $('#content').find('#companies-view').find('thead').text().should.match(/Actions/)
+
+      describe 'after data fetched', ->
+        it 'should load each .company-item into #companies-view', ->
+          $('#companies-view').find('.company-item').length.should.not.equal 0
+
+        it 'should have correct first row of data', ->
+          $('#content #companies-view .company-item:first td').length.should.equal 4
+          $('#content #companies-view .company-item:first td').text().should.match(/Figabyte/)
+
+        it 'should have "Add Credits" button', ->
+          $('#content #companies-view .company-item:first td:last').html().should.match(/<button/)
+          $('#content #companies-view .company-item:first td:last').text().should.match(/Add Credits/)
+
+      describe 'adding credits', ->
+        it 'Add Credits modal should be hidden at first', ->
+          $('#content #companies-view .add-credits-modal.modal').length.should.not.equal 0
+          $('#content #companies-view .add-credits-modal.modal').hasClass('hide').should.equal true
+        it 'clicking the button should activate modal', ->
+          $('#content #companies-view .add-credits-modal.modal').length.should.not.equal 0
+          # trigger modal
+          subViewName = 'company-' + window.backend.Collections.CompanyCollection.models[0].cid
+          window.backend.Views.CompaniesView.subViews[subViewName].should.not.be.undefined
+          window.backend.Views.CompaniesView.subViews[subViewName].addCreditsModal().should.not.be.undefined
+          # TODO - it should display correct modal
+        describe 'filling 5 credits in modal form', ->
+          # TODO
+        describe 'triggering "save" after filling 5 credits', ->
+          # TODO
+          # it 'should increment 5 credits successfully', ->
+          #   subViewName = 'company-' + window.backend.Collections.CompanyCollection.models[0].cid
+          #   window.backend.Views.CompaniesView.subViews[subViewName].addCredit()
+
     describe 'activities', ->
 
       it 'should load activities view when switched route to activities', ->
         window.backend.Routers.MainRouter.navigate 'activities', trigger:true
-        window.backend.Views.ActivitiesView.rendered.should.be.true
+        window.backend.Views.ActivitiesView.rendered.should.equal true
 
       it 'should set the activity menu as active', ->
         $('#sidebar-view').find('.main-menu li.activities-tab-menu').hasClass('active').should.be.true
@@ -86,33 +137,6 @@ describe 'Main Router', ->
       describe 'after data fetched', ->
         it 'should load each .activity-item into #activities-view', ->
           $('#activities-view').find('.activity-item').length.should.not.equal 0
-
-    describe 'companies', ->
-
-      it 'should load companies view when switched route to companies', ->
-        window.backend.Routers.MainRouter.navigate 'companies', trigger:true
-        window.backend.Views.CompaniesView.rendered.should.be.true
-
-      it 'should set the company menu as active', ->
-        $('#sidebar-view').find('.main-menu li.companies-tab-menu').hasClass('active').should.be.true
-
-      it 'should render #companies-view into #content', ->
-        $('#content').find('#companies-view').length.should.not.equal 0
-
-      it 'should have all fields required', ->
-        $('#content').find('#companies-view').find('thead').find('th').length.should.equal 3
-
-        $('#content').find('#companies-view').find('thead').text().should.match(/Name/)
-        $('#content').find('#companies-view').find('thead').text().should.match(/Created At/)
-        $('#content').find('#companies-view').find('thead').text().should.match(/Credits/)
-
-      it 'should have correct first row of data', ->
-        $('#content #companies-view .company-item:first td').length.should.equal 3
-        $('#content #companies-view .company-item:first td').text().should.match(/Figabyte/)
-
-      describe 'after data fetched', ->
-        it 'should load each .company-item into #companies-view', ->
-          $('#companies-view').find('.company-item').length.should.not.equal 0
 
     describe 'change route back', ->
       window.backend.Routers.MainRouter.navigate '', trigger: true
