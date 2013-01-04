@@ -67,7 +67,7 @@ define([
 	// charts();
 	// calendars();
 	// growlLikeNotifications();
-	// widthFunctions();
+	widthFunctions(); //Needed : calculate screen width & height when first load
 	// circle_progess();
 
 
