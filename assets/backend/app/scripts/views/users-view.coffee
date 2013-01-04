@@ -10,6 +10,7 @@ define [
 
     initialize: ->
       _.bindAll @
+      @subViews = {}
       @collection.bind 'reset', @listUsers
       @collection.fetch()
 
@@ -19,8 +20,8 @@ define [
       , @
 
     addUser: (model)->
-      user = new UserItemView
-        model: model
+      user = new UserItemView model: model
+      @subViews['user-' + model.cid] = user
       @$('#user-list').append(user.render().el)
 
     render: ->

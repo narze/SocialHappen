@@ -10,6 +10,7 @@ define [
 
     initialize: ->
       _.bindAll @
+      @subViews = {}
       @collection.bind 'reset', @listActivities
       @collection.fetch()
 
@@ -19,8 +20,8 @@ define [
       , @
 
     addActivity: (model)->
-      activity = new ActivityItemView
-        model: model
+      activity = new ActivityItemView model: model
+      @subViews['activity-' + model.cid] = activity
       @$('#activity-list').append(activity.render().el)
 
     render: ->

@@ -6,6 +6,7 @@
       id: 'users-view',
       initialize: function() {
         _.bindAll(this);
+        this.subViews = {};
         this.collection.bind('reset', this.listUsers);
         return this.collection.fetch();
       },
@@ -19,6 +20,7 @@
         user = new UserItemView({
           model: model
         });
+        this.subViews['user-' + model.cid] = user;
         return this.$('#user-list').append(user.render().el);
       },
       render: function() {

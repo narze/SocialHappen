@@ -34,6 +34,10 @@ describe 'Main Router', ->
       it 'should set the user menu as active', ->
         $('#sidebar-view').find('.main-menu li.users-tab-menu').hasClass('active').should.be.true
 
+      it 'should have user-item as a subview', ->
+        subViewName = 'user-' + window.backend.Collections.UserCollection.models[0].cid
+        window.backend.Views.UsersView.subViews[subViewName].should.not.be.undefined
+
       it 'should render #users-view into #content', ->
         $('#content').find('#users-view').length.should.not.equal 0
 
@@ -118,6 +122,10 @@ describe 'Main Router', ->
 
       it 'should set the activity menu as active', ->
         $('#sidebar-view').find('.main-menu li.activities-tab-menu').hasClass('active').should.be.true
+
+      it 'should have activity-item as a subview', ->
+        subViewName = 'activity-' + window.backend.Collections.ActivityCollection.models[0].cid
+        window.backend.Views.ActivitiesView.subViews[subViewName].should.not.be.undefined
 
       it 'should render #activities-view into #content', ->
         $('#content').find('#activities-view').length.should.not.equal 0

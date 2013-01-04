@@ -6,6 +6,7 @@
       id: 'activities-view',
       initialize: function() {
         _.bindAll(this);
+        this.subViews = {};
         this.collection.bind('reset', this.listActivities);
         return this.collection.fetch();
       },
@@ -19,6 +20,7 @@
         activity = new ActivityItemView({
           model: model
         });
+        this.subViews['activity-' + model.cid] = activity;
         return this.$('#activity-list').append(activity.render().el);
       },
       render: function() {

@@ -37,6 +37,11 @@
         it('should set the user menu as active', function() {
           return $('#sidebar-view').find('.main-menu li.users-tab-menu').hasClass('active').should.be["true"];
         });
+        it('should have user-item as a subview', function() {
+          var subViewName;
+          subViewName = 'user-' + window.backend.Collections.UserCollection.models[0].cid;
+          return window.backend.Views.UsersView.subViews[subViewName].should.not.be.undefined;
+        });
         it('should render #users-view into #content', function() {
           return $('#content').find('#users-view').length.should.not.equal(0);
         });
@@ -118,6 +123,11 @@
         });
         it('should set the activity menu as active', function() {
           return $('#sidebar-view').find('.main-menu li.activities-tab-menu').hasClass('active').should.be["true"];
+        });
+        it('should have activity-item as a subview', function() {
+          var subViewName;
+          subViewName = 'activity-' + window.backend.Collections.ActivityCollection.models[0].cid;
+          return window.backend.Views.ActivitiesView.subViews[subViewName].should.not.be.undefined;
         });
         it('should render #activities-view into #content', function() {
           return $('#content').find('#activities-view').length.should.not.equal(0);
