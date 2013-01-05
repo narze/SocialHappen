@@ -15,7 +15,8 @@ class Challenge_model extends CI_Model {
 	function recreateIndex() {
 		return $this->collection->deleteIndexes()
 			&& $this->collection->ensureIndex(array('company_id' => 1))
-			&& $this->collection->ensureIndex(array('location' => '2d'), array('bits' => 26));
+			&& $this->collection->ensureIndex(array('location' => '2d'), array('bits' => 26))
+			&& $this->collection->ensureIndex(array('locations' => '2d'), array('bits' => 26));
 	}
 
 	function add($data)

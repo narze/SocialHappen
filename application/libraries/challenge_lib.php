@@ -17,6 +17,7 @@ class Challenge_lib {
         ), array(
           '$set' => array('hash' => strrev(sha1($id))
       )))) {
+        $this->generate_locations($id);
         return $id;
       }
     }
@@ -75,7 +76,9 @@ class Challenge_lib {
       return FALSE;
     }
 
-    return $this->CI->challenge_model->update($criteria, $data);
+    $result = $this->CI->challenge_model->update($criteria, $data);
+    $this->generate_locations($challenge_id);
+    return $result;
   }
 
   function remove($criteria) {
@@ -818,36 +821,106 @@ class Challenge_lib {
     }
 
     $query = array(
-      'location' => array('$near' => array(floatval($location[0]), floatval($location[1])))
+      'locations' => array(
+        '$near' => array(floatval($location[0]), floatval($location[1]))
+      )
     );
 
 
     if($max_dist > 0) {
-      $query['location']['$maxDistance'] = floatval($max_dist);
+      $query['locations']['$maxDistance'] = floatval($max_dist);
     }
 
     $challenges = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
 
     if($and_get_without_location_specified) {
       $query = array(
-        'location' => array('$near' => array(0.0,0.0), '$maxDistance' => 0.0)
+        'locations' => array('$near' => array(0.0,0.0), '$maxDistance' => 0.0)
       );
       $challenge_at_0_0 = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
       $challenges = array_merge($challenges, $challenge_at_0_0);
 
       $query = array(
-        'location' => array('$exists' => FALSE)
+        'locations' => array('$exists' => FALSE)
       );
       $challenges_without_location = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
       $challenges = array_merge($challenges, $challenges_without_location);
     }
     $this->CI->load->model('company_model');
 
-    // get company profile to show in map, do we need company image ?
+    $duplicatedHash = array();
+
+    $uniqueChallenges = array();
     for ($i=0; $i < count($challenges); $i++) {
-      $company = $this->CI->company_model->get_company_profile_by_company_id($challenges[$i]['company_id']);
+      if(!isset($duplicatedHash[$challenges[$i]['_id'] . ''])){
+        $duplicatedHash[$challenges[$i]['_id'] . ''] = true;
+        $uniqueChallenges[] = $challenges[$i];
+      }
+    }
+
+    // get company profile to show in map, do we need company image ?
+    for ($i=0; $i < count($uniqueChallenges); $i++) {
+      $company = $this->CI->company_model->get_company_profile_by_company_id($uniqueChallenges[$i]['company_id']);
       // $challenges[$i]['company'] = $company;
     }
-    return $challenges;
+    return $uniqueChallenges;
+  }
+
+  function generate_locations($challenge_id){
+    $challenge = $this->get_by_id($challenge_id);
+
+    if(!$challenge){
+      return FALSE;
+    }
+
+    if(isset($challenge['location'])){
+      $locations = array($challenge['location']);
+    }else{
+      $locations = array();
+    }
+
+    if(isset($challenge['custom_locations']) && count($challenge['custom_locations']) > 0){
+      $locations = array_merge($locations, $challenge['custom_locations']);
+    }
+
+    $available_branches = array();
+
+    if((!isset($challenge['all_branch']) || !$challenge['all_branch'])
+      && isset($challenge['branches']) && count($challenge['branches']) > 0){
+      $this->CI->load->library('branch_lib');
+
+      foreach ($challenge['branches'] as $branch_id) {
+        $branch = $this->CI->branch_lib->get_one(array('_id' => new MongoId($branch_id)));
+        if($branch){
+          $available_branches[] = $branch_id;
+          $locations[] = $branch['location'];
+        }
+      }
+    }else if(isset($challenge['all_branch']) && $challenge['all_branch']){
+      $this->CI->load->library('branch_lib');
+      $branches = $this->CI->branch_lib->get(array('company_id' => (int)$challenge['company_id']));
+      if($branches && count($branches) > 0){
+        foreach ($branches as $branch) {
+          $locations[] = $branch['location'];
+        }
+      }
+    }
+
+    $data = array('$set' => array(
+      'branches' => $available_branches
+    ));
+
+    if(count($locations) > 0){
+      $data['$set']['locations'] = $locations;
+    }else{
+      $data['$unset'] = array(
+        'locations' => TRUE
+      );
+    }
+
+    // echo "<pre>";
+    // var_dump($data);
+
+    return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
   }
 }

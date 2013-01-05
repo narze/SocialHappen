@@ -1,0 +1,89 @@
+<div class="modal-header">
+  <button class="close" data-dismiss="modal">
+    ×
+  </button>
+  <div class="">
+    <h3 class="edit-title"><%= title %></h3>
+  </div>
+  <div class="edit-title hide">
+    <input class="branch-title span4" value="<%- title||'' %>" />
+    <button class="btn save-title btn-primary">Save</button>
+  </div>
+</div>
+<div class="modal-body">
+  <div class="edit-photo">
+    <h6>Photo:</h6>
+    <div class="edit-photo-form hide">
+      <div class="form-inline">
+        <label><h4>Enter photo URL</h4></label>
+        <div class="control-group">
+          <input type="text" class="branch-photo input-medium" placeholder="Photo URL" value="<%= photo %>" /> <button class="save-photo btn btn-primary btn-small">&nbsp;Save&nbsp;</button>
+        </div>
+        <label><h4>Or upload your own photo</h4></label>
+        <div class="control-group">
+          <form type="POST" enctype="multipart/form-data" action="<%= window.Company.BASE_URL + 'apiv3/upload_image' %>" class="upload-photo">
+            <input type="file" title="new-image" />
+            <input type="hidden" title="file-input-title" value="new-image" />
+            <input type="hidden" title="old-image" value="<%= photo %>" />
+            <button class="upload-photo-submit btn btn-primary btn-small">Upload</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <img class="branch-photo" src="<%= photo %>" />
+  </div>
+
+  <div class="control-group">
+    <div class="edit-address">
+      <h6>Address:</h6>
+      <p>
+        <%- address %>
+      </p>
+    </div>
+    <div class="edit-address-field hide">
+      <h6>Address:</h6>
+      <textarea class="branch-address span5" rows="3"><%- address %></textarea>
+      <button class="btn save-address btn-primary">Save</button>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="edit-telephone">
+      <h6>Telephone:</h6>
+      <p>
+        <%- telephone %>
+      </p>
+    </div>
+    <div class="edit-telephone-field hide">
+      <h6>Telephone:</h6>
+      <input type="text" class="branch-telephone" value="<%- telephone %>"></input>
+      <button class="btn save-telephone btn-primary">Save</button>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="edit-location">
+      <h6>Location:</h6>
+      <p>
+        Lat: <span class="lat"><%= location['0'] %></span>
+      </p>
+      <p>
+        Lng: <span class="lng"><%= location['1'] %></span>
+      </p>
+    </div>
+    <div class="edit-location-field hide">
+      <h6>Location:</h6>
+      <p>
+        Lat: <input type="text" class="lat" value="<%= location['0'] %>" />
+      </p>
+      <p>
+        Lng: <input type="text" class="lng" value="<%= location['1'] %>" />
+      </p>
+      <button class="btn save-location btn-primary">Save</button>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <a href="#" class="btn" data-dismiss="modal">Close</a>
+  <button class="btn btn-primary create-branch">Create Branch</button>
+</div>

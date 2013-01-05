@@ -13,6 +13,7 @@ define([
       // Default - catch all
       '/company/:id': 'company',
       '/company/:id/challenge': 'company',
+      '/company/:id/branch': 'branch',
       '/company/:id/reward': 'reward',
       '/company/:id/offer': 'offer',
       '/company/:id/coupon': 'coupon',
@@ -64,6 +65,16 @@ define([
         createCompanyPage();
         var challengeListView = Vm.create(sandbox.views.appView, 'Content', ChallengeList);
         $('#content-pane').html(challengeListView.render().el);
+      })
+    })
+
+    router.on('route:branch', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'branch';
+      require(['views/company/branch-list'], function(BranchList) {
+        createCompanyPage();
+        var branchListView = Vm.create(sandbox.views.appView, 'Content', BranchList);
+        $('#content-pane').html(branchListView.render().el);
       })
     })
 
