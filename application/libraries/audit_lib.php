@@ -967,6 +967,13 @@ foreach ($data as $line_key => $line_value) {
 		$audits = $this->CI->audit_model->get($query, 1, 1);
 		return array_shift($audits);
 	}
+
+	/**
+	 * Count with criteria
+	 */
+	function count($criteria = array()) {
+		return $this->CI->audit_model->count($criteria);
+	}
 }
 
 /* End of file audit_lib.php */

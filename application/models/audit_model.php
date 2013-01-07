@@ -316,6 +316,10 @@ class Audit_model extends CI_Model {
 	function drop_collection(){
 		$this->collection->drop();
 	}
+
+	function count($criteria = array()) {
+		return $this->collection->count($criteria);
+	}
 }
 
 /* End of file audit_model.php */

@@ -122,8 +122,8 @@ class Apiv3 extends CI_Controller {
     return FALSE;
   }
 
-  function success($data = array(), $code = 1) {
-    echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()));
+  function success($data = array(), $code = 1, $options = array()) {
+    echo json_encode(array_merge(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()), $options));
     return TRUE;
   }
 
@@ -1377,12 +1377,18 @@ class Apiv3 extends CI_Controller {
   }
 
   function activities() {
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter'); //TODO : Implement
+
     $this->load->library('audit_lib');
     $this->load->model('user_model');
     $this->load->model('challenge_model');
     $this->load->model('audit_model');
 
-    $activities = $this->audit_lib->list_audit(array('app_id' => 0));
+    $activities = $this->audit_lib->list_audit(array('app_id' => 0), $limit, $offset, $filter);
+    $activities_all_count = $this->audit_lib->count(array('app_id' => 0));
+
     $users = array();
 
     foreach($activities as &$activity) {
@@ -1425,8 +1431,14 @@ class Apiv3 extends CI_Controller {
       }else{
         $activity['audit_message'] = NULL;
       }
-    }
-    return $this->success($activities);
+    } unset($activity);
+
+    $options = array(
+      'total' => $activities_all_count,
+      'total_pages' => ceil($activities_all_count / $limit),
+      'count' => count($activities)
+    );
+    return $this->success($activities, NULL, $options);
   }
 
   function credit_add() {
