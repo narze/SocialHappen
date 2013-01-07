@@ -1406,7 +1406,7 @@ class Apiv3 extends CI_Controller {
         $activity['challenge'] = array();
       }
 
-      // Get action description
+      // Get action name
       $app_id = (int) 0;
       $action_id = $activity['action_id'];
       $action_list = array();
@@ -1420,12 +1420,8 @@ class Apiv3 extends CI_Controller {
         $audit_action = $action_list[$app_id.'_'.$action_id];
       }
 
-      if(isset($audit_action['format_string']) && isset($action_id)){
-        $activity['audit_message'] = $this->audit_lib->translate_format_string(
-          $audit_action['format_string'],
-          $this->audit_model->getOne(array('_id' => $activity['_id'])),
-          ($action_id <= 100)
-        );
+      if(isset($audit_action['description']) && isset($action_id)){
+        $activity['audit_message'] = $audit_action['description'];
       }else{
         $activity['audit_message'] = NULL;
       }
