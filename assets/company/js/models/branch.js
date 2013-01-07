@@ -12,7 +12,8 @@ define([
       telephone: null,
       address: '',
       company_id: window.Company.companyId,
-      location: { '0': 50, '1': 50 }
+      location: { '0': 50, '1': 50 },
+      hours: ''
     },
 
     initialize: function(){

@@ -14,6 +14,8 @@ define([
       'click button.save-title': 'saveEditTitle',
       'click div.edit-address': 'showEditAddress',
       'click button.save-address': 'saveEditAddress',
+      'click div.edit-hours': 'showEditHours',
+      'click button.save-hours': 'saveEditHours',
       'click div.edit-telephone': 'showEditTelephone',
       'click button.save-telephone': 'saveEditTelephone',
       'click div.edit-location': 'showEditLocation',
@@ -89,6 +91,25 @@ define([
       $('div.edit-address p', this.el).html(address);
       $('div.edit-address', this.el).show();
       $('div.edit-address-field', this.el).hide();
+
+      // vent.trigger('showEditBranchModal', this.model);
+    },
+
+    showEditHours: function() {
+      $('div.edit-hours', this.el).hide();
+      $('div.edit-hours-field', this.el).show();
+    },
+
+    saveEditHours: function() {
+
+      var hours = $('textarea.branch-hours', this.el).val();
+
+      this.model.set('hours', hours).trigger('change');
+      this.model.save();
+
+      $('div.edit-hours p', this.el).html(hours);
+      $('div.edit-hours', this.el).show();
+      $('div.edit-hours-field', this.el).hide();
 
       // vent.trigger('showEditBranchModal', this.model);
     },
