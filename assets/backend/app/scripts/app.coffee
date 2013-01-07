@@ -29,7 +29,7 @@ define [
   # Server specific config
   config =
     dev:
-      baseUrl: 'http://localhost/socialhappen/'
+      baseUrl: 'https://socialhappen.dyndns.org/socialhappen/'
     beta:
       baseUrl: 'http://beta.socialhappen.com/'
     production:
