@@ -1350,14 +1350,16 @@ class Apiv3 extends CI_Controller {
    */
 
   function users() {
-    $limit = $this->input->get('limit');
-    $offset = $this->input->get('offset');
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter'); //TODO : Implement
 
     $this->load->model('user_model');
     $this->load->model('user_mongo_model');
     $this->load->model('user_token_model');
 
     $users = $this->user_model->get_all_user_profile($limit, $offset);
+    $users_all_count = $this->user_model->count_users();
 
     foreach($users as &$user) {
       // Get points
@@ -1373,7 +1375,13 @@ class Apiv3 extends CI_Controller {
 
     } unset($user);
 
-    return $this->success($users);
+    $options = array(
+      'total' => $users_all_count,
+      'total_pages' => ceil($users_all_count / $limit),
+      'count' => count($users)
+    );
+
+    return $this->success($users, NULL, $options);
   }
 
   function activities() {

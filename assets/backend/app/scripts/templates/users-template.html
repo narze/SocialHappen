@@ -9,21 +9,65 @@
             </div>
         </div>
         <div class="box-content">
-            <table class="table table-striped table-bordered bootstrap-datatable datatable">
-              <thead>
-                  <tr>
-                      <th>Name</th>
-                      <th>Facebook</th>
-                      <th>Signup Date</th>
-                      <th>Last Seen</th>
-                      <th>Points</th>
-                      <th>Platforms</th>
-                      <th>Actions</th>
-                  </tr>
-              </thead>
-              <tbody id="user-list"></tbody>
+          <div class="users-pagination"></div>
+          <table class="table table-striped table-bordered bootstrap-datatable datatable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Facebook</th>
+                    <th>Signup Date</th>
+                    <th>Last Seen</th>
+                    <th>Points</th>
+                    <th>Platforms</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="user-list"></tbody>
           </table>
+          <div class="users-pagination"></div>
         </div>
     </div><!--/span-->
-
 </div><!--/row-->
+
+<script type="text/html" id="users-pagination-template">
+
+  <div class="pagination">
+      <ul>
+          [[ if (firstPage != currentPage) { ]]
+              <li><a href="#" class="serverfirst">First</a></li>
+          [[ } else { ]]
+              <li><span>First</span></li>
+          [[ } ]]
+          [[ if (currentPage > firstPage) { ]]
+              <li><a href="#" class="serverprevious">Previous</a></li>
+          [[ } else { ]]
+              <li><span>Previous</span></li>
+          [[ } ]]
+
+          [[ _.each (pageSet, function (p) { ]]
+          [[ if (currentPage == p) { ]]
+              <li class="active"><span>{{ p }}</span></li>
+          [[ } else { ]]
+              <li><a href="#" class="page">{{ p }}</a></li>
+          [[ } ]]
+          [[ }); ]]
+
+          [[ if(!pageSet.length) { ]]
+            <li class="active"><span>1</span></li>
+          [[ } ]]
+
+          [[ if (currentPage < totalPages) { ]]
+              <li><a href="#" class="servernext">Next</a></li>
+          [[ } else { ]]
+              <li><span>Next</span></li>
+          [[ } ]]
+
+          [[ if (totalPages != currentPage) { ]]
+              <li><a href="#" class="serverlast">Last</a></li>
+          [[ } else { ]]
+              <li><span>Last</span></li>
+          [[ } ]]
+      </ul>
+  </div>
+
+</script>
