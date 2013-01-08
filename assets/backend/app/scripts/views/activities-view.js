@@ -60,6 +60,7 @@
       },
       render: function() {
         this.$el.html(ActivitiesTemplate);
+        this.delegateEvents();
         this.listActivities();
         this.rendered = true;
         return this;

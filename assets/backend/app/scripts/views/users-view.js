@@ -60,6 +60,7 @@
       },
       render: function() {
         this.$el.html(UsersTemplate);
+        this.delegateEvents();
         this.listUsers();
         this.rendered = true;
         return this;

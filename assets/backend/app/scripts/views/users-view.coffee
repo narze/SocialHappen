@@ -67,6 +67,7 @@ define [
 
     render: ->
       @$el.html UsersTemplate
+      @delegateEvents()
       @listUsers()
       @rendered = true
       @

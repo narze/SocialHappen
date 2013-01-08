@@ -67,6 +67,7 @@ define [
 
     render: ->
       @$el.html CompaniesTemplate
+      @delegateEvents()
       @listCompanies()
       @rendered = true
       @

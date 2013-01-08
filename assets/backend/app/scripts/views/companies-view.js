@@ -60,6 +60,7 @@
       },
       render: function() {
         this.$el.html(CompaniesTemplate);
+        this.delegateEvents();
         this.listCompanies();
         this.rendered = true;
         return this;

@@ -69,6 +69,7 @@ define [
 
     render: ->
       @$el.html ActivitiesTemplate
+      @delegateEvents()
       @listActivities()
       @rendered = true
       @
