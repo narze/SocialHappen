@@ -26,20 +26,24 @@
         return this.$('#activity-list').append(activity.render().el);
       },
       render: function() {
+        var i, paginationCount, _i, _j;
         this.$el.html(ActivitiesTemplate);
         this.delegateEvents();
         this.listActivities();
-        if (!this.subViews.pagination) {
-          this.subViews.pagination = [];
-          this.subViews.pagination[0] = new PaginationView({
-            collection: this.collection
-          });
-          this.subViews.pagination[1] = new PaginationView({
-            collection: this.collection
-          });
+        paginationCount = this.$('.pagination-container').length;
+        if (paginationCount) {
+          if (!this.subViews.pagination) {
+            this.subViews.pagination = [];
+            for (i = _i = 0; 0 <= paginationCount ? _i <= paginationCount : _i >= paginationCount; i = 0 <= paginationCount ? ++_i : --_i) {
+              this.subViews.pagination[i] = new PaginationView({
+                collection: this.collection
+              });
+            }
+          }
+          for (i = _j = 0; 0 <= paginationCount ? _j <= paginationCount : _j >= paginationCount; i = 0 <= paginationCount ? ++_j : --_j) {
+            this.$('.pagination-container:eq(' + i + ')').html(this.subViews.pagination[i].render().el);
+          }
         }
-        this.$('.pagination-container:eq(0)').html(this.subViews.pagination[0].render().el);
-        this.$('.pagination-container:eq(1)').html(this.subViews.pagination[1].render().el);
         this.rendered = true;
         return this;
       }

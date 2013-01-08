@@ -27,20 +27,20 @@ define [
       @subViews['activity-' + model.cid] = activity
       @$('#activity-list').append(activity.render().el)
 
-
-
     render: ->
       @$el.html ActivitiesTemplate
       @delegateEvents()
       @listActivities()
 
       # pagination
-      if !@subViews.pagination
-        @subViews.pagination = []
-        @subViews.pagination[0] = new PaginationView collection: @collection
-        @subViews.pagination[1] = new PaginationView collection: @collection
-      @$('.pagination-container:eq(0)').html @subViews.pagination[0].render().el
-      @$('.pagination-container:eq(1)').html @subViews.pagination[1].render().el
+      paginationCount = @$('.pagination-container').length
+      if paginationCount
+        if !@subViews.pagination
+          @subViews.pagination = []
+          for i in [0..paginationCount]
+            @subViews.pagination[i] = new PaginationView collection: @collection
+        for i in [0..paginationCount]
+          @$('.pagination-container:eq(' + i + ')').html @subViews.pagination[i].render().el
 
       @rendered = true
       @
