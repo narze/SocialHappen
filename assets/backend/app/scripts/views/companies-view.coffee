@@ -1,22 +1,13 @@
 define [
   'backbone'
   'text!templates/companies-template.html'
+  'views/companies-pagination-view'
   'views/company-item-view'
-  ], (Backbone, CompaniesTemplate, CompanyItemView) ->
+  ], (Backbone, CompaniesTemplate, CompaniesPaginationView, CompanyItemView) ->
 
   View = Backbone.View.extend
 
     id: 'companies-view'
-
-    events:
-      # pagination
-      'click a.servernext': 'nextResultPage'
-      'click a.serverprevious': 'previousResultPage'
-      # 'click a.orderUpdate': 'updateSortBy'
-      'click a.serverlast': 'gotoLast'
-      'click a.page': 'gotoPage'
-      'click a.serverfirst': 'gotoFirst'
-      # 'click a.serverpage': 'gotoPage'
 
     initialize: ->
       _.bindAll @
@@ -31,44 +22,24 @@ define [
         @addCompany(model)
       , @
 
-      @pagination()
-
     addCompany: (model)->
       company = new CompanyItemView model: model
       @subViews['company-' + model.cid] = company
       @$('#company-list').append(company.render().el)
 
-    pagination: ->
-      @$('.companies-pagination').html \
-        _.template \
-          @$('#companies-pagination-template').html(),
-          @collection.info()
-
-    nextResultPage: (e) ->
-      e.preventDefault()
-      @collection.requestNextPage()
-
-    previousResultPage: (e) ->
-      e.preventDefault()
-      @collection.requestPreviousPage()
-
-    gotoFirst: (e) ->
-      e.preventDefault()
-      @collection.goTo(@collection.information.firstPage)
-
-    gotoLast: (e) ->
-      e.preventDefault()
-      @collection.goTo(@collection.information.lastPage)
-
-    gotoPage: (e) ->
-      e.preventDefault()
-      page = $(e.target).text()
-      @collection.goTo(page)
-
     render: ->
       @$el.html CompaniesTemplate
       @delegateEvents()
       @listCompanies()
+
+      # pagination
+      if !@subViews.pagination
+        @subViews.pagination = []
+        @subViews.pagination[0] = new CompaniesPaginationView collection: @collection
+        @subViews.pagination[1] = new CompaniesPaginationView collection: @collection
+      @$('.companies-pagination:first').html @subViews.pagination[0].render().el
+      @$('.companies-pagination:last').html @subViews.pagination[1].render().el
+
       @rendered = true
       @
 
