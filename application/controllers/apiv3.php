@@ -1364,14 +1364,88 @@ class Apiv3 extends CI_Controller {
   function users() {
     $limit = $this->input->get('limit') ? : 10;
     $offset = $this->input->get('offset') ? : 0;
-    $filter = $this->input->get('filter'); //TODO : Implement
+    $filter = $this->input->get('filter');
 
     $this->load->model('user_model');
     $this->load->model('user_mongo_model');
     $this->load->model('user_token_model');
 
-    $users = $this->user_model->get_all_user_profile($limit, $offset);
-    $users_all_count = $this->user_model->count_users();
+    $query_options = array();
+
+    $where = array();
+    if(!empty($filter['first_name'])) {
+      # find in first_name
+      $where['user_first_name'] = $filter['first_name'];
+    }
+    if(!empty($filter['last_name'])) {
+      # find in last_name
+      $where['user_last_name'] = $filter['last_name'];
+    }
+    if(!empty($filter['signup_date_from'])) {
+      # find where signup_date > signup_date_from
+      # TODO : Re-specify HH:MM:SS
+      $where['user_register_date >='] = $filter['signup_date_from'] . " 00:00:00";
+    }
+    if(!empty($filter['signup_date_to'])) {
+      # find where signup_date < signup_date_to
+      # TODO : Re-specify HH:MM:SS
+      $where['user_register_date <='] = $filter['signup_date_to'] . " 23:59:59";
+    }
+    if(!empty($filter['last_seen_from'])) {
+      # find where last_seen > last_seen_from
+      # TODO : Re-specify HH:MM:SS
+      $where['user_last_seen >='] = $filter['last_seen_from'] . " 00:00:00";
+    }
+    if(!empty($filter['last_seen_to'])) {
+      # find where last_seen < last_seen_to
+      # TODO : Re-specify HH:MM:SS
+      $where['user_last_seen <='] = $filter['last_seen_to'] . " 23:59:59";
+    }
+
+    if(count($where)) {
+      $query_options['where'] = $where;
+    }
+
+    # find in mongo and get ids
+    $find_in_mongo = FALSE;
+    if(!empty($filter['platforms'])) {
+      # find each platform
+      $find_in_mongo = TRUE;
+      $users_found = $this->user_token_model->get(array('device' => array('$in' => $filter['platforms'])));
+      $user_ids_from_platforms = array_map(function($user) { return (int) $user['user_id']; }, $users_found);
+    }
+    if(!empty($filter['points'])) {
+      # find if points match
+      $find_in_mongo = TRUE;
+      $users_found = $this->user_mongo_model->get(array('points' => (int) $filter['points']));
+      $user_ids_from_points = array_map(function($user) { return (int) $user['user_id']; }, $users_found);
+    }
+
+    // Intersect results from mongo (if isset)
+    if(isset($user_ids_from_platforms)) {
+      $user_ids = $user_ids_from_platforms;
+    }
+    if(isset($user_ids_from_points)) {
+      if(isset($user_ids)) {
+        $user_ids = array_intersect($user_ids, $user_ids_from_points);
+      } else {
+        $user_ids = $user_ids_from_points;
+      }
+    }
+
+    if(isset($user_ids)) {
+      $user_ids = array_unique($user_ids);
+      $query_options['where_in'] = array('user_id' => $user_ids);
+    }
+
+    if ($find_in_mongo && empty($user_ids)) {
+      // not found in mongo & intersect results with user_model = empty
+      $users = array();
+      $users_all_count = 0;
+    } else {
+      $users = $this->user_model->get_all_user_profile($limit, $offset, $query_options);
+      $users_all_count = $this->user_model->count_users($query_options);
+    }
 
     foreach($users as &$user) {
       // Get points
@@ -1390,7 +1464,8 @@ class Apiv3 extends CI_Controller {
     $options = array(
       'total' => $users_all_count,
       'total_pages' => ceil($users_all_count / $limit),
-      'count' => count($users)
+      'count' => count($users),
+      'filter' => $filter
     );
 
     return $this->success($users, 1, $options);

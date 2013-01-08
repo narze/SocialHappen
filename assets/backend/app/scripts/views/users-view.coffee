@@ -1,9 +1,10 @@
 define [
   'backbone'
   'text!templates/users-template.html'
+  'views/users-filter-view'
   'views/pagination-view'
   'views/user-item-view'
-  ], (Backbone, UsersTemplate, PaginationView, UserItemView) ->
+  ], (Backbone, UsersTemplate, UsersFilterView, PaginationView, UserItemView) ->
 
   View = Backbone.View.extend
 
@@ -31,6 +32,13 @@ define [
       @$el.html UsersTemplate
       @delegateEvents()
       @listUsers()
+
+      # filter
+      if !@subViews.filter
+        @subViews.filter = new UsersFilterView collection: @collection
+
+      @$('.users-filter-container').html @subViews.filter.render().el
+
 
       # pagination
       paginationCount = @$('.pagination-container').length

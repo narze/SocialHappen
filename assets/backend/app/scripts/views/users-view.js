@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/users-template.html', 'views/pagination-view', 'views/user-item-view'], function(Backbone, UsersTemplate, PaginationView, UserItemView) {
+  define(['backbone', 'text!templates/users-template.html', 'views/users-filter-view', 'views/pagination-view', 'views/user-item-view'], function(Backbone, UsersTemplate, UsersFilterView, PaginationView, UserItemView) {
     var View;
     View = Backbone.View.extend({
       id: 'users-view',
@@ -30,6 +30,12 @@
         this.$el.html(UsersTemplate);
         this.delegateEvents();
         this.listUsers();
+        if (!this.subViews.filter) {
+          this.subViews.filter = new UsersFilterView({
+            collection: this.collection
+          });
+        }
+        this.$('.users-filter-container').html(this.subViews.filter.render().el);
         paginationCount = this.$('.pagination-container').length;
         if (paginationCount) {
           if (!this.subViews.pagination) {

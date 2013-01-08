@@ -135,6 +135,22 @@ class User_model_test extends CI_Controller {
 		$this->unit->run($result['user_first_name'] == $new_first_name,'is_true',"Updated user_first_name to {$new_first_name}");
 
 	}
+
+	function get_all_user_profile_test() {
+		$options = array(
+			'where' => array(
+				'user_first_name' => 'Youcannotfindthis',
+				'user_register_date >=' => 123498017,
+				'user_last_seen >=' => 123498017,
+			),
+			'where_in' => array(
+				'user_id' => array(1,2,3)
+			)
+		);
+
+		$result = $this->users->get_all_user_profile(NULL, NULL, $options);
+		$this->unit->run(count($result) === 0, TRUE, "\$result", $result);
+	}
 }
 /* End of file campaign_model_test.php */
 /* Location: ./application/controllers/test/campaign_model_test.php */

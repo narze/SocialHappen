@@ -115,11 +115,24 @@ class User_model extends CI_Model {
 	 * @param $offset
 	 * @author Metwara Narksook
 	 */
-	function get_all_user_profile($limit = NULL, $offset = NULL){
+	function get_all_user_profile($limit = NULL, $offset = NULL, $options = array()){
 		if($limit){
 			$this->db->limit($limit, $offset);
 		}
-		$result = $this->db->get_where('user',array())->result_array();
+
+		if(isset($options['where']) && is_array($options['where'])) {
+			foreach($options['where'] as $key => $val) {
+				$this->db->where($key, $val);
+			}
+		}
+
+		if(isset($options['where_in']) && is_array($options['where_in'])) {
+			foreach($options['where_in'] as $key => $val) {
+				$this->db->where_in($key, $val);
+			}
+		}
+
+		$result = $this->db->get('user')->result_array();
 		return $this->socialhappen->map_v($result, 'user_gender');
 	}
 
@@ -157,7 +170,18 @@ class User_model extends CI_Model {
 	 * Count users
 	 * @author Manassarn M.
 	 */
-	function count_users(){
+	function count_users($options = array()){
+		if(isset($options['where']) && is_array($options['where'])) {
+			foreach($options['where'] as $key => $val) {
+				$this->db->where($key, $val);
+			}
+		}
+
+		if(isset($options['where_in']) && is_array($options['where_in'])) {
+			foreach($options['where_in'] as $key => $val) {
+				$this->db->where_in($key, $val);
+			}
+		}
 		return $this->db->count_all_results('user');
 	}
 
