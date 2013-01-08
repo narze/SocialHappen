@@ -798,12 +798,24 @@ class Apiv3 extends CI_Controller {
    * Get company list
    */
   function companies() {
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter'); //TODO : Implement
+
     $this->load->model('company_model');
     if($company_id = $this->input->get('company_id')) {
       return json_return($this->company_model->get_company_profile_by_company_id($company_id));
     }
 
-    return json_return($this->company_model->get_all());
+    $companies = $this->company_model->get_all($limit, $offset);
+    $companies_all_count = $this->company_model->count_company_profile();
+
+    $options = array(
+      'total' => $companies_all_count,
+      'total_pages' => ceil($companies_all_count / $limit),
+      'count' => count($companies)
+    );
+    return $this->success($companies, 1, $options);
   }
 
   /**
@@ -1381,7 +1393,7 @@ class Apiv3 extends CI_Controller {
       'count' => count($users)
     );
 
-    return $this->success($users, NULL, $options);
+    return $this->success($users, 1, $options);
   }
 
   function activities() {
@@ -1446,7 +1458,7 @@ class Apiv3 extends CI_Controller {
       'total_pages' => ceil($activities_all_count / $limit),
       'count' => count($activities)
     );
-    return $this->success($activities, NULL, $options);
+    return $this->success($activities, 1, $options);
   }
 
   function credit_add() {

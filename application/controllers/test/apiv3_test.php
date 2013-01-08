@@ -110,6 +110,23 @@ class Apiv3_test extends CI_Controller {
 		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
 	}
 
+	function companies_test() {
+		$offset = 0;
+		$limit = 2;
+
+		$method = 'companies';
+
+		$params = compact('offset', 'limit');
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['total_pages'] === 1, TRUE, "\$result['total_pages']", $result['total_pages']);
+		$this->unit->run($result['total'] === 1, TRUE, "\$result['total']", $result['total']);
+		$this->unit->run($result['count'] === 1, TRUE, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+	}
+
 	function activities_test() {
 		$offset = 10;
 		$limit = 10;

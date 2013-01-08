@@ -33,8 +33,7 @@ class Company_model extends CI_Model {
 	 * @author Metwara Narksook
 	 */
 	function count_company_profile(){
-		$result = $this->db->count_all_results('company');
-		return issetor($result, NULL);
+		return $this->db->count_all_results('company');
 	}
 
 	/**
@@ -119,7 +118,10 @@ class Company_model extends CI_Model {
 	/**
 	 * Get all company
 	 */
-	function get_all(){
+	function get_all($limit = NULL, $offset = NULL){
+		if($limit){
+			$this->db->limit($limit, $offset);
+		}
 		return $this->db->get_where('company')->result_array();
 	}
 
