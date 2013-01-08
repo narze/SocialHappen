@@ -3,6 +3,17 @@
   <div class="challenge-caption">
     <h4><%= detail.name %></h4>
     <p><%= detail.description %></p>
+    <p>
+      <% if(all_branch){ %>
+        Available all branches
+      <% }else if(branches_data.length == 1){ %>
+        Available at branch <%- branches_data[0].title %>
+      <% }else if(branches_data.length == 2){ %>
+        Available at branch <%- branches_data[0].title %> and <%- branches_data[1].title %>
+      <% }else if(branches_data.length > 2){ %>
+        Available at branch <%- branches_data[0].title %> and <%- branches_data.length - 1 %> others
+      <% } %>
+    </p>
   </div>
 </a>
 

@@ -374,6 +374,7 @@ class Apiv3 extends CI_Controller {
 
     $company_id = $this->input->get('company_id', TRUE);
 
+    $this->load->library('branch_lib');
     $this->load->library('challenge_lib');
     $this->load->library('action_data_lib');
     $limit = 30;
@@ -394,7 +395,7 @@ class Apiv3 extends CI_Controller {
           $query['active'] = true;
         }
 
-        $challenges = $this->challenge_lib->get($query, $limit);
+        $challenges = $this->challenge_lib->get_with_branches_data($query, $limit);
       }else{
         $challenges = array();
       }
@@ -409,7 +410,7 @@ class Apiv3 extends CI_Controller {
         $query['active'] = true;
       }
 
-      $challenges = $this->challenge_lib->get($query, $limit);
+      $challenges = $this->challenge_lib->get_with_branches_data($query, $limit);
     }
 
     // function convert_id($item){

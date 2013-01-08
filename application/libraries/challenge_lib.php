@@ -53,6 +53,10 @@ class Challenge_lib {
     unset($data['_id']);
 
 
+    if(isset($data['branches_data'])) {
+      unset($data['branches_data']);
+    }
+
     //Cleanup unused reward_item_ids
     //@TODO - remove this after some time
     if(isset($data['reward_item_ids'])) {
@@ -922,5 +926,39 @@ class Challenge_lib {
     // var_dump($data);
 
     return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
+  }
+
+  function get_with_branches_data($criteria, $limit = 100) {
+    $challenges = $this->CI->challenge_model->get($criteria, $limit);
+
+    $this->CI->load->library('branch_lib');
+
+    foreach ($challenges as $i => $challenge) {
+      $branches_data = array();
+      if(isset($challenge['branches']) && count($challenge['branches']) > 0){
+        $ids = array_map(function($branch){
+          return new MongoId($branch);
+        }, $challenge['branches']);
+
+        $criteria = array('_id' => array(
+          '$in' => $ids
+        ));
+
+        $branches_data = $this->CI->branch_lib->get($criteria);
+      }else if(isset($challenge['all_branch']) && $challenge['all_branch']){
+        $branches_data = $this->CI->branch_lib->get(array('company_id' => (int)$challenge['company_id']));
+      }
+
+      $branches_data = array_map(function($branch){
+        $branch['_id'] = '' . $branch['_id'];
+        return $branch;
+      }, $branches_data);
+
+      $challenge['branches_data'] = $branches_data;
+
+      $challenges[$i] = $challenge;
+    }
+
+    return $challenges;
   }
 }
