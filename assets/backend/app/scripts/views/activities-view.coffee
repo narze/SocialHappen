@@ -1,23 +1,13 @@
 define [
   'backbone'
   'text!templates/activities-template.html'
+  'views/pagination-view'
   'views/activity-item-view'
-  ], (Backbone, ActivitiesTemplate, ActivityItemView) ->
+  ], (Backbone, ActivitiesTemplate, PaginationView, ActivityItemView) ->
 
   View = Backbone.View.extend
 
     id: 'activities-view'
-
-    events:
-      # pagination
-      'click a.servernext': 'nextResultPage'
-      'click a.serverprevious': 'previousResultPage'
-      # 'click a.orderUpdate': 'updateSortBy'
-      'click a.serverlast': 'gotoLast'
-      'click a.page': 'gotoPage'
-      'click a.serverfirst': 'gotoFirst'
-      # 'click a.serverpage': 'gotoPage'
-
 
     initialize: ->
       _.bindAll @
@@ -32,45 +22,26 @@ define [
         @addActivity(model)
       , @
 
-      @pagination()
-
     addActivity: (model)->
       activity = new ActivityItemView model: model
       @subViews['activity-' + model.cid] = activity
       @$('#activity-list').append(activity.render().el)
 
-    pagination: ->
-      @$('.activities-pagination').html \
-        _.template \
-          @$('#activities-pagination-template').html(),
-          @collection.info()
 
-
-    nextResultPage: (e) ->
-      e.preventDefault()
-      @collection.requestNextPage()
-
-    previousResultPage: (e) ->
-      e.preventDefault()
-      @collection.requestPreviousPage()
-
-    gotoFirst: (e) ->
-      e.preventDefault()
-      @collection.goTo(@collection.information.firstPage)
-
-    gotoLast: (e) ->
-      e.preventDefault()
-      @collection.goTo(@collection.information.lastPage)
-
-    gotoPage: (e) ->
-      e.preventDefault()
-      page = $(e.target).text()
-      @collection.goTo(page)
 
     render: ->
       @$el.html ActivitiesTemplate
       @delegateEvents()
       @listActivities()
+
+      # pagination
+      if !@subViews.pagination
+        @subViews.pagination = []
+        @subViews.pagination[0] = new PaginationView collection: @collection
+        @subViews.pagination[1] = new PaginationView collection: @collection
+      @$('.pagination-container:eq(0)').html @subViews.pagination[0].render().el
+      @$('.pagination-container:eq(1)').html @subViews.pagination[1].render().el
+
       @rendered = true
       @
 

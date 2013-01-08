@@ -16,7 +16,7 @@
       paginator_ui: {
         firstPage: 1,
         currentPage: 1,
-        perPage: 1,
+        perPage: 20,
         pagesInRange: 2
       },
       server_api: {

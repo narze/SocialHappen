@@ -1,11 +1,11 @@
 define [
   'backbone'
-  'text!templates/companies-pagination-template.html'
-  ], (Backbone, CompaniesPaginationTemplate) ->
+  'text!templates/pagination-template.html'
+  ], (Backbone, PaginationTemplate) ->
 
   View = Backbone.View.extend
 
-    class: 'companies-pagination-view'
+    class: 'pagination-view'
 
     events:
       # pagination
@@ -17,7 +17,7 @@ define [
       'click a.serverfirst': 'gotoFirst'
       # 'click a.serverpage': 'gotoPage'
 
-    template: _.template CompaniesPaginationTemplate
+    template: _.template PaginationTemplate
 
     initialize: ->
       _.bindAll @

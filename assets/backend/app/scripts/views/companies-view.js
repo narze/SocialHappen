@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/companies-template.html', 'views/companies-pagination-view', 'views/company-item-view'], function(Backbone, CompaniesTemplate, CompaniesPaginationView, CompanyItemView) {
+  define(['backbone', 'text!templates/companies-template.html', 'views/pagination-view', 'views/company-item-view'], function(Backbone, CompaniesTemplate, PaginationView, CompanyItemView) {
     var View;
     View = Backbone.View.extend({
       id: 'companies-view',
@@ -31,15 +31,15 @@
         this.listCompanies();
         if (!this.subViews.pagination) {
           this.subViews.pagination = [];
-          this.subViews.pagination[0] = new CompaniesPaginationView({
+          this.subViews.pagination[0] = new PaginationView({
             collection: this.collection
           });
-          this.subViews.pagination[1] = new CompaniesPaginationView({
+          this.subViews.pagination[1] = new PaginationView({
             collection: this.collection
           });
         }
-        this.$('.companies-pagination:first').html(this.subViews.pagination[0].render().el);
-        this.$('.companies-pagination:last').html(this.subViews.pagination[1].render().el);
+        this.$('.pagination-container:eq(0)').html(this.subViews.pagination[0].render().el);
+        this.$('.pagination-container:eq(1)').html(this.subViews.pagination[1].render().el);
         this.rendered = true;
         return this;
       }

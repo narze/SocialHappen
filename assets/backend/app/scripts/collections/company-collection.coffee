@@ -30,7 +30,7 @@ define ['backbone', 'backbonePaginator', 'helpers/common', 'models/company-model
       currentPage: 1
 
       # how many items per page should be shown
-      perPage: 1
+      perPage: 20
 
       # a default number of total pages to query in case the API or
       # service you are using does not support providing the total

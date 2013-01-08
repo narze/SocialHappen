@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="box-content">
-          <div class="activities-pagination"></div>
+          <div class="pagination-container"></div>
           <table class="table table-striped table-bordered bootstrap-datatable datatable">
             <thead>
                 <tr>
@@ -23,46 +23,7 @@
             </thead>
             <tbody id="activity-list"></tbody>
           </table>
-          <div class="activities-pagination"></div>
+          <div class="pagination-container"></div>
         </div>
     </div><!--/span-->
 </div><!--/row-->
-
-<script type="text/html" id="activities-pagination-template">
-
-  <div class="pagination">
-      <ul>
-          [[ if (firstPage != currentPage) { ]]
-              <li><a href="#" class="serverfirst">First</a></li>
-          [[ } else { ]]
-              <li><span>First</span></li>
-          [[ } ]]
-          [[ if (currentPage > firstPage) { ]]
-              <li><a href="#" class="serverprevious">Previous</a></li>
-          [[ } else { ]]
-              <li><span>Previous</span></li>
-          [[ } ]]
-
-          [[ _.each (pageSet, function (p) { ]]
-          [[ if (currentPage == p) { ]]
-              <li class="active"><span>{{ p }}</span></li>
-          [[ } else { ]]
-              <li><a href="#" class="page">{{ p }}</a></li>
-          [[ } ]]
-          [[ }); ]]
-
-          [[ if (currentPage < totalPages) { ]]
-              <li><a href="#" class="servernext">Next</a></li>
-          [[ } else { ]]
-              <li><span>Next</span></li>
-          [[ } ]]
-
-          [[ if (totalPages != currentPage) { ]]
-              <li><a href="#" class="serverlast">Last</a></li>
-          [[ } else { ]]
-              <li><span>Last</span></li>
-          [[ } ]]
-      </ul>
-  </div>
-
-</script>

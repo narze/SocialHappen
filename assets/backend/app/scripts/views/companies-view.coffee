@@ -1,9 +1,9 @@
 define [
   'backbone'
   'text!templates/companies-template.html'
-  'views/companies-pagination-view'
+  'views/pagination-view'
   'views/company-item-view'
-  ], (Backbone, CompaniesTemplate, CompaniesPaginationView, CompanyItemView) ->
+  ], (Backbone, CompaniesTemplate, PaginationView, CompanyItemView) ->
 
   View = Backbone.View.extend
 
@@ -35,10 +35,10 @@ define [
       # pagination
       if !@subViews.pagination
         @subViews.pagination = []
-        @subViews.pagination[0] = new CompaniesPaginationView collection: @collection
-        @subViews.pagination[1] = new CompaniesPaginationView collection: @collection
-      @$('.companies-pagination:first').html @subViews.pagination[0].render().el
-      @$('.companies-pagination:last').html @subViews.pagination[1].render().el
+        @subViews.pagination[0] = new PaginationView collection: @collection
+        @subViews.pagination[1] = new PaginationView collection: @collection
+      @$('.pagination-container:eq(0)').html @subViews.pagination[0].render().el
+      @$('.pagination-container:eq(1)').html @subViews.pagination[1].render().el
 
       @rendered = true
       @
