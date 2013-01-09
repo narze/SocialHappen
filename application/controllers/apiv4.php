@@ -412,6 +412,46 @@ class Apiv4 extends REST_Controller {
   }
 
   /**
+   * Get branches
+   * @method GET
+   * @params -
+   */
+  function branches_get(){
+    $challenge_id = $this->get('challenge_id');
+    $company_id = $this->get('company_id');
+
+    if($challenge_id) {
+
+      $this->load->library('challenge_lib');
+
+      $challenges = $this->challenge_lib->get_with_branches_data(array('_id' => new MongoId($challenge_id)));
+      if($challenges){
+        $challenge = count($challenges) > 0 ? $challenges[0] : NULL;
+        if($challenge && isset($challenge['branches_data'])){
+          return $this->success($challenge['branches_data']);
+        }else{
+          return $this->error();
+        }
+      }else{
+        return $this->error();
+      }
+    }else if($company_id){
+      $this->load->library('branch_lib');
+      $branches = $this->branch_lib->get(array(
+        'company_id' => $company_id
+      ), 10000000);
+
+      if($branches){
+        return $this->success($branches);
+      }else{
+        return $this->error();
+      }
+    }else{
+      return $this->error();
+    }
+  }
+
+  /**
    * Get challenges
    * @method GET
    * @params -
