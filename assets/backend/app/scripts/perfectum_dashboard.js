@@ -61,7 +61,7 @@ define([
 	$("#overlay").delay(1250).fadeOut(500);
 
 	// Disable!
-	// template_functions();
+	// template_functions(); //Should separately bind in each view
 	// init_masonry();
 	// sparkline_charts();
 	// charts();
@@ -248,13 +248,14 @@ function template_functions(){
 	});
 
 	/* ---------- Datable ---------- */
-	$('.datatable').dataTable({
-			"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>",
-			"sPaginationType": "bootstrap",
-			"oLanguage": {
-			"sLengthMenu": "_MENU_ records per page"
-			}
-		} );
+	// not used in socialhappen
+	// $('.datatable').dataTable({
+	// 		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>",
+	// 		"sPaginationType": "bootstrap",
+	// 		"oLanguage": {
+	// 		"sLengthMenu": "_MENU_ records per page"
+	// 		}
+	// 	} );
 	$('.btn-close').click(function(e){
 		e.preventDefault();
 		$(this).parent().parent().parent().fadeOut();

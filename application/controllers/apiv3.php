@@ -122,8 +122,8 @@ class Apiv3 extends CI_Controller {
     return FALSE;
   }
 
-  function success($data = array(), $code = 1) {
-    echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()));
+  function success($data = array(), $code = 1, $options = array()) {
+    echo json_encode(array_merge(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()), $options));
     return TRUE;
   }
 
@@ -799,12 +799,61 @@ class Apiv3 extends CI_Controller {
    * Get company list
    */
   function companies() {
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
     $this->load->model('company_model');
     if($company_id = $this->input->get('company_id')) {
       return json_return($this->company_model->get_company_profile_by_company_id($company_id));
     }
 
-    return json_return($this->company_model->get_all());
+    $query_options = array();
+
+    $where = array();
+
+    if(!empty($filter['name'])) {
+      # find in name
+      $where['company_name'] = $filter['name'];
+    }
+    if(!empty($filter['created_at_from'])) {
+      # find where company_register_date > created_at_from
+      # TODO : Re-specify HH:MM:SS
+      $where['company_register_date >='] = $filter['created_at_from'] . " 00:00:00";
+    }
+    if(!empty($filter['created_at_to'])) {
+      # find where company_register_date < created_at_to
+      # TODO : Re-specify HH:MM:SS
+      $where['company_register_date <='] = $filter['created_at_to'] . " 23:59:59";
+    }
+    if(!empty($filter['credits'])) {
+      $where['credits'] = $filter['credits'];
+    }
+
+    if(count($where)) {
+      $query_options['where'] = $where;
+    }
+
+    # sort & order
+    if(in_array($sort, array('company_name', 'credits', 'company_register_date'))) {
+      $sort = array($sort => ($order === '-' ? 'desc' : 'asc'));
+    } else {
+      $sort = FALSE;
+    }
+
+    $companies = $this->company_model->get_all($limit, $offset, $query_options, $sort);
+    $companies_all_count = $this->company_model->count_company_profile($query_options);
+
+    $options = array(
+      'total' => $companies_all_count,
+      'total_pages' => ceil($companies_all_count / $limit),
+      'count' => count($companies),
+      'filter' => $filter,
+      'sort' => $sort
+    );
+    return $this->success($companies, 1, $options);
   }
 
   /**
@@ -1351,14 +1400,102 @@ class Apiv3 extends CI_Controller {
    */
 
   function users() {
-    $limit = $this->input->get('limit');
-    $offset = $this->input->get('offset');
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
 
     $this->load->model('user_model');
     $this->load->model('user_mongo_model');
     $this->load->model('user_token_model');
 
-    $users = $this->user_model->get_all_user_profile($limit, $offset);
+    $query_options = array();
+
+    $where = array();
+    if(!empty($filter['first_name'])) {
+      # find in first_name
+      $where['user_first_name'] = $filter['first_name'];
+    }
+    if(!empty($filter['last_name'])) {
+      # find in last_name
+      $where['user_last_name'] = $filter['last_name'];
+    }
+    if(!empty($filter['signup_date_from'])) {
+      # find where signup_date > signup_date_from
+      # TODO : Re-specify HH:MM:SS
+      $where['user_register_date >='] = $filter['signup_date_from'] . " 00:00:00";
+    }
+    if(!empty($filter['signup_date_to'])) {
+      # find where signup_date < signup_date_to
+      # TODO : Re-specify HH:MM:SS
+      $where['user_register_date <='] = $filter['signup_date_to'] . " 23:59:59";
+    }
+    if(!empty($filter['last_seen_from'])) {
+      # find where last_seen > last_seen_from
+      # TODO : Re-specify HH:MM:SS
+      $where['user_last_seen >='] = $filter['last_seen_from'] . " 00:00:00";
+    }
+    if(!empty($filter['last_seen_to'])) {
+      # find where last_seen < last_seen_to
+      # TODO : Re-specify HH:MM:SS
+      $where['user_last_seen <='] = $filter['last_seen_to'] . " 23:59:59";
+    }
+
+    if(count($where)) {
+      $query_options['where'] = $where;
+    }
+
+    # find in mongo and get ids
+    $find_in_mongo = FALSE;
+    if(!empty($filter['platforms'])) {
+      # find each platform
+      $find_in_mongo = TRUE;
+      $users_found = $this->user_token_model->get(array('device' => array('$in' => $filter['platforms'])));
+      $user_ids_from_platforms = array_map(function($user) { return (int) $user['user_id']; }, $users_found);
+    }
+    if(!empty($filter['points'])) {
+      # find if points match
+      $find_in_mongo = TRUE;
+      $users_found = $this->user_mongo_model->get(array('points' => (int) $filter['points']));
+      $user_ids_from_points = array_map(function($user) { return (int) $user['user_id']; }, $users_found);
+    }
+
+    // Intersect results from mongo (if isset)
+    if(isset($user_ids_from_platforms)) {
+      $user_ids = $user_ids_from_platforms;
+    }
+    if(isset($user_ids_from_points)) {
+      if(isset($user_ids)) {
+        $user_ids = array_intersect($user_ids, $user_ids_from_points);
+      } else {
+        $user_ids = $user_ids_from_points;
+      }
+    }
+
+    if(isset($user_ids)) {
+      $user_ids = array_unique($user_ids);
+      $query_options['where_in'] = array('user_id' => $user_ids);
+    }
+
+    # sort & order
+    if(in_array($sort, array('user_first_name', 'user_register_date', 'user_last_seen'))) {
+      $sort = array($sort => ($order === '-' ? 'desc' : 'asc'));
+    } else if(in_array($sort, array('points'))) {
+      $sort = FALSE;
+      $sort_by_points = TRUE;
+    } else {
+      $sort = FALSE;
+    }
+
+    if ($find_in_mongo && empty($user_ids)) {
+      // not found in mongo & intersect results with user_model = empty
+      $users = array();
+      $users_all_count = 0;
+    } else {
+      $users = $this->user_model->get_all_user_profile($limit, $offset, $query_options, $sort);
+      $users_all_count = $this->user_model->count_users($query_options);
+    }
 
     foreach($users as &$user) {
       // Get points
@@ -1374,16 +1511,108 @@ class Apiv3 extends CI_Controller {
 
     } unset($user);
 
-    return $this->success($users);
+    if(isset($sort_by_points)) {
+      usort($users, function($a, $b) { return $a['user_points'] - $b['user_points']; });
+      if($order === '-') {
+        $users = array_reverse($users);
+      }
+    }
+
+    $options = array(
+      'total' => $users_all_count,
+      'total_pages' => ceil($users_all_count / $limit),
+      'count' => count($users),
+      'filter' => $filter,
+      'sort' => $sort
+    );
+
+    return $this->success($users, 1, $options);
   }
 
   function activities() {
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
     $this->load->library('audit_lib');
     $this->load->model('user_model');
+    $this->load->model('company_model');
     $this->load->model('challenge_model');
     $this->load->model('audit_model');
 
-    $activities = $this->audit_lib->list_audit(array('app_id' => 0));
+    $query_options = array();
+
+    # find user_id
+    $user_where = array();
+    if(!empty($filter['first_name'])) {
+      # find in first_name
+      $user_where['user_first_name'] = $filter['first_name'];
+    }
+    if(!empty($filter['last_name'])) {
+      # find in last_name
+      $user_where['user_last_name'] = $filter['last_name'];
+    }
+    if($user_where) {
+      $users = $this->user_model->get_all_user_profile(NULL, NULL, array('where' => $user_where));
+      $user_ids = array_map(function($user) { return (int) $user['user_id']; }, $users);
+      $query_options['user_id'] = array('$in' => $user_ids);
+    }
+
+    # find company_id
+    if(!empty($filter['company'])) {
+      $companies = $this->company_model->get_all(NULL, NULL, array('where' => array('company_name' => $filter['company'])));
+      $company_ids = array_map(function($company) { return (int) $company['company_id']; }, $companies);
+      $query_options['company_id'] = array('$in' => $company_ids);
+    }
+
+    # find in mongo and get ids
+    $find_in_mongo = FALSE;
+    if(!empty($filter['action'])) {
+      $action_id = $this->socialhappen->get_k('audit_action', $filter['action']);
+      $query_options['action_id'] = $action_id;
+    }
+    if(!empty($filter['date_from'])) {
+      # find where date > date_from
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['timestamp'])) {
+        $query_options['timestamp'] = array();
+      }
+
+      $query_options['timestamp']['$gte'] = strtotime($filter['date_from']) + 0;
+    }
+    if(!empty($filter['date_to'])) {
+      # find where date < date_to
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['timestamp'])) {
+        $query_options['timestamp'] = array();
+      }
+
+      $query_options['timestamp']['$lte'] = strtotime($filter['date_to']) + 60*60*24 - 1;
+    }
+    if(!empty($filter['branch'])) {
+      # find if points match
+      # TODO : implement
+    }
+    if(!empty($filter['challenge'])) {
+      # find if challenge match
+      // $find_in_mongo = TRUE;
+      // $challenges = $this->challenge_model->get(array('detail.name' => $filter['challenge']));
+      // $challenge_ids = array_map(function($challenge) { return (int) $challenge['challenge_id']; }, $challenges);
+      # TODO : implement
+    }
+
+    # sort & order
+    if(in_array($sort, array('timestamp'))) { # TODO : add sort for date/company/branch/challenge/name
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $activities = $this->audit_lib->list_audit($query_options, $limit, $offset, $sort);
+    $activities_all_count = $this->audit_lib->count($query_options);
+
     $users = array();
 
     foreach($activities as &$activity) {
@@ -1407,7 +1636,7 @@ class Apiv3 extends CI_Controller {
         $activity['challenge'] = array();
       }
 
-      // Get action description
+      // Get action name
       $app_id = (int) 0;
       $action_id = $activity['action_id'];
       $action_list = array();
@@ -1421,17 +1650,44 @@ class Apiv3 extends CI_Controller {
         $audit_action = $action_list[$app_id.'_'.$action_id];
       }
 
-      if(isset($audit_action['format_string']) && isset($action_id)){
-        $activity['audit_message'] = $this->audit_lib->translate_format_string(
-          $audit_action['format_string'],
-          $this->audit_model->getOne(array('_id' => $activity['_id'])),
-          ($action_id <= 100)
-        );
+      if(isset($audit_action['description']) && isset($action_id)){
+        $activity['audit_message'] = $audit_action['description'];
       }else{
         $activity['audit_message'] = NULL;
       }
-    }
-    return $this->success($activities);
+    } unset($activity);
+
+    $options = array(
+      'total' => $activities_all_count,
+      'total_pages' => ceil($activities_all_count / $limit),
+      'count' => count($activities),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+    return $this->success($activities, 1, $options);
+
+
+
+    foreach($users as &$user) {
+      // Get points
+      $user_mongo = $this->user_mongo_model->get_user($user['user_id']);
+      $user['user_points'] = issetor($user_mongo['points'], 0);
+
+      // Get platforms
+      $tokens = $this->user_token_model->get(array('user_id' => $user['user_id']));
+      $user['user_platforms'] = array();
+      foreach($tokens as $token) {
+        $user['user_platforms'][] = $token['device'];
+      }
+
+    } unset($user);
+
+    $options = array(
+      'total' => $users_all_count,
+      'total_pages' => ceil($users_all_count / $limit),
+      'count' => count($users),
+      'filter' => $filter
+    );
   }
 
   function credit_add() {

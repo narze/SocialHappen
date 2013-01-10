@@ -5,7 +5,7 @@ require.config
       deps: ['lodash', 'jquery']
       exports: ->
         _.templateSettings =
-          evaluate : /\{\[([\s\S]+?)\]\}/g
+          evaluate : /\[\[([\s\S]+?)\]\]/g
           interpolate : /\{\{([\s\S]+?)\}\}/g
           escape : /\{\{\{([\s\S]+?)\}\}\}/g
         window.Backbone
@@ -33,6 +33,8 @@ require.config
       deps: ['jquery']
     moment:
       exports: 'moment'
+    backbonePaginator:
+      deps: ['backbone']
 
   paths:
     jquery: 'vendor/jquery.min'
@@ -43,6 +45,7 @@ require.config
     spec: '/spec'
     text: 'vendor/text'
     moment: 'vendor/moment.min'
+    backbonePaginator: 'vendor/backbone.paginator'
 
     # Perfectum Dashboard
     bootstrap: 'vendor/jquery-plugins/bootstrap'

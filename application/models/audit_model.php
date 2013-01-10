@@ -119,7 +119,7 @@ class Audit_model extends CI_Model {
 	 *
 	 * @author Metwara Narksook
 	 */
-	function list_audit($criteria = array(), $limit = NULL, $offset = 0){
+	function list_audit($criteria = array(), $limit = NULL, $offset = 0, $sort = NULL) {
 		if(empty($limit)){
 			$limit = $this->DEFAULT_LIMIT;
 		}
@@ -130,7 +130,10 @@ class Audit_model extends CI_Model {
 			}
 		}
 
-		$res = $this->collection->find($criteria)->sort(array('timestamp' => -1, '_id' => -1))->skip($offset)->limit($limit);
+		if(!$sort || !is_array($sort)) {
+			$sort = array('timestamp' => -1, '_id' => -1);
+		}
+		$res = $this->collection->find($criteria)->sort($sort)->skip($offset)->limit($limit);
 
 		$result = array();
 		foreach ($res as $audit) {
@@ -315,6 +318,10 @@ class Audit_model extends CI_Model {
 	 */
 	function drop_collection(){
 		$this->collection->drop();
+	}
+
+	function count($criteria = array()) {
+		return $this->collection->count($criteria);
 	}
 }
 

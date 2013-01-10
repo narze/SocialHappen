@@ -9,17 +9,20 @@
             </div>
         </div>
         <div class="box-content">
-            <table class="table table-striped table-bordered bootstrap-datatable datatable">
-              <thead>
-                  <tr>
-                      <th>Name</th>
-                      <th>Created At</th>
-                      <th>Credits</th>
-                      <th>Actions</th>
-                  </tr>
-              </thead>
-              <tbody id="company-list"></tbody>
+          <div class="companies-filter-container"></div>
+          <div class="pagination-container"></div>
+          <table class="table table-striped table-bordered bootstrap-datatable datatable">
+            <thead>
+                <tr>
+                    <th>Name <a href="#" class="sort-name sort-desc icon-chevron-down"></a></th>
+                    <th>Created At <a href="#" class="sort-created-at sort-desc icon-chevron-down"></a></th>
+                    <th>Credits <a href="#" class="sort-credits sort-desc icon-chevron-down"></a></th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="company-list"></tbody>
           </table>
+          <div class="pagination-container"></div>
         </div>
     </div>
 </div>

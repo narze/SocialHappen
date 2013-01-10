@@ -176,6 +176,19 @@ class Company_model_test extends CI_Controller {
 		$this->unit->run($result['company_name'] == $new_company_name,'is_true',"Updated company_name to {$new_company_name}");
 
 	}
+
+	function get_all_test() {
+		$options = array(
+			'where' => array(
+				'company_name' => 'Youcannotfindthis',
+				'company_register_date >=' => 123498017,
+				'credits >' => 0,
+			)
+		);
+
+		$result = $this->companies->get_all(NULL, NULL, $options);
+		$this->unit->run(count($result) === 0, TRUE, "\$result", count($result));
+	}
 }
 /* End of file company_model_test.php */
 /* Location: ./application/controllers/test/company_model_test_model_test.php */

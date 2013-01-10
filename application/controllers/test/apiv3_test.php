@@ -69,12 +69,121 @@ class Apiv3_test extends CI_Controller {
 		return json_decode($response, TRUE);
 	}
 
-	function users_test() {
+	function setup_audit_test() {
+		$this->load->library('audit_lib');
 
+		$user_id = 1;
+		$action_id = $this->socialhappen->get_k('audit_action','User Login');
+		$times = 21;
+
+		for($i = 0; $i < $times; $i++) {
+			if(!$this->audit_lib->audit_add(array(
+			  'user_id' => $user_id,
+			  'action_id' => $action_id,
+			  'app_id' => 0,
+			  'app_install_id' => 0,
+			  'company_id' => 0,
+			  'subject' => $user_id,
+			  'object' => NULL,
+			  'objecti' => NULL,
+			  'image' => ''
+			))) {
+			  return $this->error('Add audit failed', 2);
+			}
+		}
+	}
+
+	function users_test() {
+		$offset = 0;
+		$limit = 2;
+
+		$method = 'users';
+
+		$params = compact('offset', 'limit');
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['total_pages'] === 3, TRUE, "\$result['total_pages']", $result['total_pages']);
+		$this->unit->run($result['total'] === 6, TRUE, "\$result['total']", $result['total']);
+		$this->unit->run($result['count'] === 2, TRUE, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+
+		$offset = 0;
+		$limit = 2;
+		$filter = array('first_name' => 'you cannot find this');
+
+		$params = compact('offset', 'limit', 'filter');
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['total_pages'] === 0, TRUE, "\$result['total_pages']", $result['total_pages']);
+		$this->unit->run($result['total'] === 0, TRUE, "\$result['total']", $result['total']);
+		$this->unit->run($result['count'] === 0, TRUE, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+	}
+
+	function companies_test() {
+		$offset = 0;
+		$limit = 2;
+
+		$method = 'companies';
+
+		$params = compact('offset', 'limit');
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['total_pages'] === 1, TRUE, "\$result['total_pages']", $result['total_pages']);
+		$this->unit->run($result['total'] === 1, TRUE, "\$result['total']", $result['total']);
+		$this->unit->run($result['count'] === 1, TRUE, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+
+		$offset = 0;
+		$limit = 2;
+		$filter = array('name' => 'you cannot find this');
+
+		$params = compact('offset', 'limit', 'filter');
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['total_pages'] === 0, TRUE, "\$result['total_pages']", $result['total_pages']);
+		$this->unit->run($result['total'] === 0, TRUE, "\$result['total']", $result['total']);
+		$this->unit->run($result['count'] === 0, TRUE, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
 	}
 
 	function activities_test() {
+		$offset = 10;
+		$limit = 10;
 
+		$method = 'activities';
+
+		$params = compact('offset', 'limit');
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['total_pages'] === 3, TRUE, "\$result['total_pages']", $result['total_pages']);
+		$this->unit->run($result['total'] === 21, TRUE, "\$result['total']", $result['total']);
+		$this->unit->run($result['count'] === 10, TRUE, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+
+		$offset = 0;
+		$limit = 2;
+		$filter = array('first_name' => 'you cannot find this');
+
+		$params = compact('offset', 'limit', 'filter');
+
+		$result = $this->get($method, $params);
+
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['total_pages'] === 0, TRUE, "\$result['total_pages']", $result['total_pages']);
+		$this->unit->run($result['total'] === 0, TRUE, "\$result['total']", $result['total']);
+		$this->unit->run($result['count'] === 0, TRUE, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
 	}
 
 	function credit_add_test() {

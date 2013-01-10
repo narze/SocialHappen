@@ -4,7 +4,7 @@
     var config, env;
     config = {
       dev: {
-        baseUrl: 'http://localhost/socialhappen/'
+        baseUrl: 'https://socialhappen.dyndns.org/socialhappen/'
       },
       beta: {
         baseUrl: 'http://beta.socialhappen.com/'

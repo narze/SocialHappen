@@ -1,0 +1,41 @@
+<div class="row-fluid sortable">
+    <div class="box span12">
+        <div class="box-header" data-original-title>
+            <h2>Filters</h2>
+            <div class="box-icon">
+                <a href="#" class="btn-minimize"><i class="icon-chevron-down"></i></a>
+            </div>
+        </div>
+        <div class="box-content" style="display: none;">
+            <form class="companies-filter form-horizontal">
+              <fieldset>
+                <div class="control-group">
+                  <label class="control-label" for="filter-name">Name</label>
+                  <div class="controls">
+                    <input type="text" id="filter-name">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="filter-created-at">Created At</label>
+                  <div class="controls">
+                    <input type="text" class="input-xlarge datepicker" id="filter-created-at-from" value="" placeholder="from"> <input type="text" class="input-xlarge datepicker" id="filter-created-at-to" value="" placeholder="to">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="filter-credits">Credits</label>
+                  <div class="controls">
+                    <input type="number" id="filter-credits">
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Apply</button>
+                  <button type="reset" class="btn">Cancel</button>
+                </div>
+              </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
