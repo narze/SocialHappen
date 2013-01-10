@@ -366,9 +366,9 @@ class Audit_lib
 	 *
 	 * @author Metwara Narksook
 	 */
-	function list_audit($criteria = array(), $limit = 100, $offset = 0){
+	function list_audit($criteria = array(), $limit = 100, $offset = 0, $sort = NULL){
 		$this->CI->load->model('audit_model','audit');
-		$result = $this->CI->audit->list_audit($criteria, (int)$limit, (int)$offset);
+		$result = $this->CI->audit->list_audit($criteria, (int)$limit, (int)$offset, $sort);
 		$action_list = array();
 
 		//$this->CI->load->model('audit_action_model','audit_action');

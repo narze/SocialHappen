@@ -1502,6 +1502,8 @@ class Apiv3 extends CI_Controller {
     $limit = $this->input->get('limit') ? : 10;
     $offset = $this->input->get('offset') ? : 0;
     $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
 
     $this->load->library('audit_lib');
     $this->load->model('user_model');
@@ -1570,7 +1572,14 @@ class Apiv3 extends CI_Controller {
       # TODO : implement
     }
 
-    $activities = $this->audit_lib->list_audit($query_options, $limit, $offset);
+    # sort & order
+    if(in_array($sort, array('timestamp'))) { # TODO : add sort for date/company/branch/challenge/name
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $activities = $this->audit_lib->list_audit($query_options, $limit, $offset, $sort);
     $activities_all_count = $this->audit_lib->count($query_options);
 
     $users = array();
@@ -1621,7 +1630,8 @@ class Apiv3 extends CI_Controller {
       'total' => $activities_all_count,
       'total_pages' => ceil($activities_all_count / $limit),
       'count' => count($activities),
-      'filter' => $query_options
+      'filter' => $query_options,
+      'sort' => $sort
     );
     return $this->success($activities, 1, $options);
 

@@ -4,6 +4,9 @@
     var View;
     View = Backbone.View.extend({
       id: 'activities-view',
+      events: {
+        'click .sort-date': 'sort'
+      },
       initialize: function() {
         _.bindAll(this);
         this.subViews = {};
@@ -24,6 +27,22 @@
         });
         this.subViews['activity-' + model.cid] = activity;
         return this.$('#activity-list').append(activity.render().el);
+      },
+      sort: function(e) {
+        e.preventDefault();
+        if ($(e.currentTarget).hasClass('sort-asc')) {
+          $(e.currentTarget).removeClass('sort-asc');
+          $(e.currentTarget).addClass('sort-desc');
+          $(e.currentTarget).removeClass('icon-chevron-up').addClass('icon-chevron-down');
+          this.collection.order = '-';
+        } else {
+          $(e.currentTarget).removeClass('sort-desc');
+          $(e.currentTarget).addClass('sort-asc');
+          $(e.currentTarget).removeClass('icon-chevron-down').addClass('icon-chevron-up');
+          this.collection.order = '+';
+        }
+        this.collection.sort = 'timestamp';
+        return this.collection.fetch();
       },
       render: function() {
         var i, paginationCount, _i, _j;
