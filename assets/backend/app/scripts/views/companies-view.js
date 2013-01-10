@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/companies-template.html', 'views/pagination-view', 'views/company-item-view'], function(Backbone, CompaniesTemplate, PaginationView, CompanyItemView) {
+  define(['backbone', 'text!templates/companies-template.html', 'views/companies-filter-view', 'views/pagination-view', 'views/company-item-view'], function(Backbone, CompaniesTemplate, CompaniesFilterView, PaginationView, CompanyItemView) {
     var View;
     View = Backbone.View.extend({
       id: 'companies-view',
@@ -30,6 +30,12 @@
         this.$el.html(CompaniesTemplate);
         this.delegateEvents();
         this.listCompanies();
+        if (!this.subViews.filter) {
+          this.subViews.filter = new CompaniesFilterView({
+            collection: this.collection
+          });
+        }
+        this.$('.companies-filter-container').html(this.subViews.filter.render().el);
         paginationCount = this.$('.pagination-container').length;
         if (paginationCount) {
           if (!this.subViews.pagination) {

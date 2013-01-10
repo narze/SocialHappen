@@ -800,20 +800,47 @@ class Apiv3 extends CI_Controller {
   function companies() {
     $limit = $this->input->get('limit') ? : 10;
     $offset = $this->input->get('offset') ? : 0;
-    $filter = $this->input->get('filter'); //TODO : Implement
+    $filter = $this->input->get('filter');
 
     $this->load->model('company_model');
     if($company_id = $this->input->get('company_id')) {
       return json_return($this->company_model->get_company_profile_by_company_id($company_id));
     }
 
-    $companies = $this->company_model->get_all($limit, $offset);
-    $companies_all_count = $this->company_model->count_company_profile();
+    $query_options = array();
+
+    $where = array();
+
+    if(!empty($filter['name'])) {
+      # find in name
+      $where['company_name'] = $filter['name'];
+    }
+    if(!empty($filter['created_at_from'])) {
+      # find where company_register_date > created_at_from
+      # TODO : Re-specify HH:MM:SS
+      $where['company_register_date >='] = $filter['created_at_from'] . " 00:00:00";
+    }
+    if(!empty($filter['created_at_to'])) {
+      # find where company_register_date < created_at_to
+      # TODO : Re-specify HH:MM:SS
+      $where['company_register_date <='] = $filter['created_at_to'] . " 23:59:59";
+    }
+    if(!empty($filter['credits'])) {
+      $where['credits'] = $filter['credits'];
+    }
+
+    if(count($where)) {
+      $query_options['where'] = $where;
+    }
+
+    $companies = $this->company_model->get_all($limit, $offset, $query_options);
+    $companies_all_count = $this->company_model->count_company_profile($query_options);
 
     $options = array(
       'total' => $companies_all_count,
       'total_pages' => ceil($companies_all_count / $limit),
-      'count' => count($companies)
+      'count' => count($companies),
+      'filter' => $filter
     );
     return $this->success($companies, 1, $options);
   }

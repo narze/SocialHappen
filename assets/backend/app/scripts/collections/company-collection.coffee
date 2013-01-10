@@ -19,7 +19,7 @@ define ['backbone', 'backbonePaginator', 'helpers/common', 'models/company-model
 
       # the URL (or base URL) for the service
       url: ->
-        window.baseUrl + 'apiv3/companies?' + serialize(this.params)
+        window.baseUrl + 'apiv3/companies?' + serialize(@params)
 
     paginator_ui:
       # the lowest page index your API allows to be accessed
@@ -43,17 +43,18 @@ define ['backbone', 'backbonePaginator', 'helpers/common', 'models/company-model
     server_api:
       # _.defaults(
         # the query field in the request
-        'filter': ''
+        'filter': ->
+          @filter
 
         # number of items to return per request/page
         'limit': ->
-          this.perPage
+          @perPage
 
         # how many results the request should skip ahead to
         # customize as needed. For the Netflix API, skipping ahead based on
         # page * number of results per page was necessary.
         'offset': ->
-          (this.currentPage - 1) * this.perPage
+          (@currentPage - 1) * @perPage
 
         # field to sort by
         # 'orderby': 'ReleaseYear'
@@ -73,6 +74,6 @@ define ['backbone', 'backbonePaginator', 'helpers/common', 'models/company-model
       if resp.success is true
         return resp.data;
       else if typeof resp.success isnt 'undefined'
-        return this.previousAttributes && this.previousAttributes()
+        return @previousAttributes && @previousAttributes()
 
       return resp;

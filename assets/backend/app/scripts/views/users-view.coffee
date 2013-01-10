@@ -39,7 +39,6 @@ define [
 
       @$('.users-filter-container').html @subViews.filter.render().el
 
-
       # pagination
       paginationCount = @$('.pagination-container').length
       if paginationCount

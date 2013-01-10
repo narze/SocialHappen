@@ -1,9 +1,10 @@
 define [
   'backbone'
   'text!templates/companies-template.html'
+  'views/companies-filter-view'
   'views/pagination-view'
   'views/company-item-view'
-  ], (Backbone, CompaniesTemplate, PaginationView, CompanyItemView) ->
+  ], (Backbone, CompaniesTemplate, CompaniesFilterView, PaginationView, CompanyItemView) ->
 
   View = Backbone.View.extend
 
@@ -31,6 +32,12 @@ define [
       @$el.html CompaniesTemplate
       @delegateEvents()
       @listCompanies()
+
+      # filter
+      if !@subViews.filter
+        @subViews.filter = new CompaniesFilterView collection: @collection
+
+      @$('.companies-filter-container').html @subViews.filter.render().el
 
       # pagination
       paginationCount = @$('.pagination-container').length
