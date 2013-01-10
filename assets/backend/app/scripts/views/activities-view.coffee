@@ -1,9 +1,10 @@
 define [
   'backbone'
   'text!templates/activities-template.html'
+  'views/activities-filter-view'
   'views/pagination-view'
   'views/activity-item-view'
-  ], (Backbone, ActivitiesTemplate, PaginationView, ActivityItemView) ->
+  ], (Backbone, ActivitiesTemplate, ActivitiesFilterView, PaginationView, ActivityItemView) ->
 
   View = Backbone.View.extend
 
@@ -31,6 +32,12 @@ define [
       @$el.html ActivitiesTemplate
       @delegateEvents()
       @listActivities()
+
+      # filter
+      if !@subViews.filter
+        @subViews.filter = new ActivitiesFilterView collection: @collection
+
+      @$('.activities-filter-container').html @subViews.filter.render().el
 
       # pagination
       paginationCount = @$('.pagination-container').length

@@ -1,16 +1,16 @@
 define [
   'backbone'
-  'text!templates/companies-filter-template.html'
+  'text!templates/activities-filter-template.html'
   'moment',
-  ], (Backbone, CompaniesFilterTemplate, mm) ->
+  ], (Backbone, ActivitiesFilterTemplate, mm) ->
 
   View = Backbone.View.extend
 
-    id: 'companies-filter-view'
+    id: 'activities-filter-view'
 
     events:
       'click .box-header': 'minimize'
-      'submit form.companies-filter': 'filter'
+      'submit form.activities-filter': 'filter'
 
     initialize: ->
       _.bindAll @
@@ -29,15 +29,19 @@ define [
     filter: (e) ->
       e.preventDefault()
       @collection.filter =
-        name: @$('#filter-name').val()
-        created_at_from: moment(@$('#filter-created-at-from').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#filter-created-at-from').val()
-        created_at_to: moment(@$('#filter-created-at-to').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#filter-created-at-to').val()
-        credits: @$('#filter-credits').val()
+        first_name: @$('#filter-first-name').val()
+        last_name: @$('#filter-last-name').val()
+        action: @$('#filter-action').val()
+        date_from: moment(@$('#filter-date-from').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#filter-date-from').val()
+        date_to: moment(@$('#filter-date-to').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#filter-date-to').val()
+        company: @$('#filter-company').val()
+        branch: @$('#filter-branch').val()
+        challenge: @$('#filter-challenge').val()
 
       @collection.fetch()
 
     render: ->
-      @$el.html CompaniesFilterTemplate
+      @$el.html ActivitiesFilterTemplate
       @delegateEvents()
 
       @$('.datepicker').datepicker() if @$('.datepicker')

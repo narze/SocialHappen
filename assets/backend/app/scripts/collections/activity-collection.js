@@ -20,7 +20,9 @@
         pagesInRange: 2
       },
       server_api: {
-        'filter': '',
+        'filter': function() {
+          return this.filter;
+        },
         'limit': function() {
           return this.perPage;
         },

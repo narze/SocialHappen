@@ -1501,15 +1501,77 @@ class Apiv3 extends CI_Controller {
   function activities() {
     $limit = $this->input->get('limit') ? : 10;
     $offset = $this->input->get('offset') ? : 0;
-    $filter = $this->input->get('filter'); //TODO : Implement
+    $filter = $this->input->get('filter');
 
     $this->load->library('audit_lib');
     $this->load->model('user_model');
+    $this->load->model('company_model');
     $this->load->model('challenge_model');
     $this->load->model('audit_model');
 
-    $activities = $this->audit_lib->list_audit(array('app_id' => 0), $limit, $offset, $filter);
-    $activities_all_count = $this->audit_lib->count(array('app_id' => 0));
+    $query_options = array();
+
+    # find user_id
+    $user_where = array();
+    if(!empty($filter['first_name'])) {
+      # find in first_name
+      $user_where['user_first_name'] = $filter['first_name'];
+    }
+    if(!empty($filter['last_name'])) {
+      # find in last_name
+      $user_where['user_last_name'] = $filter['last_name'];
+    }
+    if($user_where) {
+      $users = $this->user_model->get_all_user_profile(NULL, NULL, array('where' => $user_where));
+      $user_ids = array_map(function($user) { return (int) $user['user_id']; }, $users);
+      $query_options['user_id'] = array('$in' => $user_ids);
+    }
+
+    # find company_id
+    if(!empty($filter['company'])) {
+      $companies = $this->company_model->get_all(NULL, NULL, array('where' => array('company_name' => $filter['company'])));
+      $company_ids = array_map(function($company) { return (int) $company['company_id']; }, $companies);
+      $query_options['company_id'] = array('$in' => $company_ids);
+    }
+
+    # find in mongo and get ids
+    $find_in_mongo = FALSE;
+    if(!empty($filter['action'])) {
+      $action_id = $this->socialhappen->get_k('audit_action', $filter['action']);
+      $query_options['action_id'] = $action_id;
+    }
+    if(!empty($filter['date_from'])) {
+      # find where date > date_from
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['timestamp'])) {
+        $query_options['timestamp'] = array();
+      }
+
+      $query_options['timestamp']['$gte'] = strtotime($filter['date_from']) + 0;
+    }
+    if(!empty($filter['date_to'])) {
+      # find where date < date_to
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['timestamp'])) {
+        $query_options['timestamp'] = array();
+      }
+
+      $query_options['timestamp']['$lte'] = strtotime($filter['date_to']) + 60*60*24 - 1;
+    }
+    if(!empty($filter['branch'])) {
+      # find if points match
+      # TODO : implement
+    }
+    if(!empty($filter['challenge'])) {
+      # find if challenge match
+      // $find_in_mongo = TRUE;
+      // $challenges = $this->challenge_model->get(array('detail.name' => $filter['challenge']));
+      // $challenge_ids = array_map(function($challenge) { return (int) $challenge['challenge_id']; }, $challenges);
+      # TODO : implement
+    }
+
+    $activities = $this->audit_lib->list_audit($query_options, $limit, $offset);
+    $activities_all_count = $this->audit_lib->count($query_options);
 
     $users = array();
 
@@ -1558,9 +1620,33 @@ class Apiv3 extends CI_Controller {
     $options = array(
       'total' => $activities_all_count,
       'total_pages' => ceil($activities_all_count / $limit),
-      'count' => count($activities)
+      'count' => count($activities),
+      'filter' => $query_options
     );
     return $this->success($activities, 1, $options);
+
+
+
+    foreach($users as &$user) {
+      // Get points
+      $user_mongo = $this->user_mongo_model->get_user($user['user_id']);
+      $user['user_points'] = issetor($user_mongo['points'], 0);
+
+      // Get platforms
+      $tokens = $this->user_token_model->get(array('user_id' => $user['user_id']));
+      $user['user_platforms'] = array();
+      foreach($tokens as $token) {
+        $user['user_platforms'][] = $token['device'];
+      }
+
+    } unset($user);
+
+    $options = array(
+      'total' => $users_all_count,
+      'total_pages' => ceil($users_all_count / $limit),
+      'count' => count($users),
+      'filter' => $filter
+    );
   }
 
   function credit_add() {

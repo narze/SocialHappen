@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/activities-template.html', 'views/pagination-view', 'views/activity-item-view'], function(Backbone, ActivitiesTemplate, PaginationView, ActivityItemView) {
+  define(['backbone', 'text!templates/activities-template.html', 'views/activities-filter-view', 'views/pagination-view', 'views/activity-item-view'], function(Backbone, ActivitiesTemplate, ActivitiesFilterView, PaginationView, ActivityItemView) {
     var View;
     View = Backbone.View.extend({
       id: 'activities-view',
@@ -30,6 +30,12 @@
         this.$el.html(ActivitiesTemplate);
         this.delegateEvents();
         this.listActivities();
+        if (!this.subViews.filter) {
+          this.subViews.filter = new ActivitiesFilterView({
+            collection: this.collection
+          });
+        }
+        this.$('.activities-filter-container').html(this.subViews.filter.render().el);
         paginationCount = this.$('.pagination-container').length;
         if (paginationCount) {
           if (!this.subViews.pagination) {

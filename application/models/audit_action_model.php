@@ -222,6 +222,15 @@ class Audit_action_model extends CI_Model {
 	    return FALSE;
 	  }
 	}
+
+	function get($query, $sort = array()){
+		$result = $this->collection->find($query);
+		if($sort) {
+			$result = $result->sort($sort);
+		}
+		return cursor2array($result);
+	}
+
 }
 
 /* End of file audit_action_model.php */

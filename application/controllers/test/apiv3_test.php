@@ -179,11 +179,11 @@ class Apiv3_test extends CI_Controller {
 
 		$result = $this->get($method, $params);
 
-		// $this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
-		// $this->unit->run($result['total_pages'] === 0, TRUE, "\$result['total_pages']", $result['total_pages']);
-		// $this->unit->run($result['total'] === 0, TRUE, "\$result['total']", $result['total']);
-		// $this->unit->run($result['count'] === 0, TRUE, "\$result['count']", $result['count']);
-		// $this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
+		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+		$this->unit->run($result['total_pages'] === 0, TRUE, "\$result['total_pages']", $result['total_pages']);
+		$this->unit->run($result['total'] === 0, TRUE, "\$result['total']", $result['total']);
+		$this->unit->run($result['count'] === 0, TRUE, "\$result['count']", $result['count']);
+		$this->unit->run($result['data'], 'is_array', "\$result['data']", $result['data']);
 	}
 
 	function credit_add_test() {

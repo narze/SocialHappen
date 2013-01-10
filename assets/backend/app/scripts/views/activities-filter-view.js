@@ -1,12 +1,12 @@
 (function() {
 
-  define(['backbone', 'text!templates/companies-filter-template.html', 'moment'], function(Backbone, CompaniesFilterTemplate, mm) {
+  define(['backbone', 'text!templates/activities-filter-template.html', 'moment'], function(Backbone, ActivitiesFilterTemplate, mm) {
     var View;
     View = Backbone.View.extend({
-      id: 'companies-filter-view',
+      id: 'activities-filter-view',
       events: {
         'click .box-header': 'minimize',
-        'submit form.companies-filter': 'filter'
+        'submit form.activities-filter': 'filter'
       },
       initialize: function() {
         return _.bindAll(this);
@@ -25,15 +25,19 @@
       filter: function(e) {
         e.preventDefault();
         this.collection.filter = {
-          name: this.$('#filter-name').val(),
-          created_at_from: this.$('#filter-created-at-from').val() ? moment(this.$('#filter-created-at-from').val(), "MM/DD/YYYY").format("YYYY/MM/DD") : void 0,
-          created_at_to: this.$('#filter-created-at-to').val() ? moment(this.$('#filter-created-at-to').val(), "MM/DD/YYYY").format("YYYY/MM/DD") : void 0,
-          credits: this.$('#filter-credits').val()
+          first_name: this.$('#filter-first-name').val(),
+          last_name: this.$('#filter-last-name').val(),
+          action: this.$('#filter-action').val(),
+          date_from: this.$('#filter-date-from').val() ? moment(this.$('#filter-date-from').val(), "MM/DD/YYYY").format("YYYY/MM/DD") : void 0,
+          date_to: this.$('#filter-date-to').val() ? moment(this.$('#filter-date-to').val(), "MM/DD/YYYY").format("YYYY/MM/DD") : void 0,
+          company: this.$('#filter-company').val(),
+          branch: this.$('#filter-branch').val(),
+          challenge: this.$('#filter-challenge').val()
         };
         return this.collection.fetch();
       },
       render: function() {
-        this.$el.html(CompaniesFilterTemplate);
+        this.$el.html(ActivitiesFilterTemplate);
         this.delegateEvents();
         if (this.$('.datepicker')) {
           this.$('.datepicker').datepicker();
