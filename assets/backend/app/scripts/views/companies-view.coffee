@@ -10,6 +10,11 @@ define [
 
     id: 'companies-view'
 
+    events:
+      'click .sort-name': 'sort'
+      'click .sort-created-at': 'sort'
+      'click .sort-credits': 'sort'
+
     initialize: ->
       _.bindAll @
       @subViews = {}
@@ -27,6 +32,31 @@ define [
       company = new CompanyItemView model: model
       @subViews['company-' + model.cid] = company
       @$('#company-list').append(company.render().el)
+
+    sort: (e) ->
+      e.preventDefault()
+
+      $target = $(e.currentTarget)
+
+      if $target.hasClass 'sort-asc'
+        $target.removeClass 'sort-asc'
+        $target.addClass 'sort-desc'
+        $target.removeClass('icon-chevron-up').addClass('icon-chevron-down')
+        @collection.order = '-'
+      else
+        $target.removeClass 'sort-desc'
+        $target.addClass 'sort-asc'
+        $target.removeClass('icon-chevron-down').addClass('icon-chevron-up')
+        @collection.order = '+'
+
+      if $target.hasClass 'sort-name'
+        @collection.sort = 'company_name'
+      else if $target.hasClass 'sort-created-at'
+        @collection.sort = 'company_register_date'
+      else if $target.hasClass 'sort-credits'
+        @collection.sort = 'credits'
+
+      @collection.fetch()
 
     render: ->
       @$el.html CompaniesTemplate

@@ -801,6 +801,8 @@ class Apiv3 extends CI_Controller {
     $limit = $this->input->get('limit') ? : 10;
     $offset = $this->input->get('offset') ? : 0;
     $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
 
     $this->load->model('company_model');
     if($company_id = $this->input->get('company_id')) {
@@ -833,14 +835,22 @@ class Apiv3 extends CI_Controller {
       $query_options['where'] = $where;
     }
 
-    $companies = $this->company_model->get_all($limit, $offset, $query_options);
+    # sort & order
+    if(in_array($sort, array('company_name', 'credits', 'company_register_date'))) {
+      $sort = array($sort => ($order === '-' ? 'desc' : 'asc'));
+    } else {
+      $sort = FALSE;
+    }
+
+    $companies = $this->company_model->get_all($limit, $offset, $query_options, $sort);
     $companies_all_count = $this->company_model->count_company_profile($query_options);
 
     $options = array(
       'total' => $companies_all_count,
       'total_pages' => ceil($companies_all_count / $limit),
       'count' => count($companies),
-      'filter' => $filter
+      'filter' => $filter,
+      'sort' => $sort
     );
     return $this->success($companies, 1, $options);
   }

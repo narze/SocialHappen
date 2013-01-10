@@ -28,6 +28,12 @@
         },
         'offset': function() {
           return (this.currentPage - 1) * this.perPage;
+        },
+        sort: function() {
+          return this.sort;
+        },
+        order: function() {
+          return this.order;
         }
       },
       parse: function(resp, xhr) {

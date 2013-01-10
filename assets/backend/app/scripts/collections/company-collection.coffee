@@ -57,7 +57,11 @@ define ['backbone', 'backbonePaginator', 'helpers/common', 'models/company-model
           (@currentPage - 1) * @perPage
 
         # field to sort by
-        # 'orderby': 'ReleaseYear'
+        sort: ->
+          @sort
+
+        order: ->
+          @order
 
         # what format would you like to request results in?
         # 'format': 'json'

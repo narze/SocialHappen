@@ -4,6 +4,11 @@
     var View;
     View = Backbone.View.extend({
       id: 'companies-view',
+      events: {
+        'click .sort-name': 'sort',
+        'click .sort-created-at': 'sort',
+        'click .sort-credits': 'sort'
+      },
       initialize: function() {
         _.bindAll(this);
         this.subViews = {};
@@ -24,6 +29,30 @@
         });
         this.subViews['company-' + model.cid] = company;
         return this.$('#company-list').append(company.render().el);
+      },
+      sort: function(e) {
+        var $target;
+        e.preventDefault();
+        $target = $(e.currentTarget);
+        if ($target.hasClass('sort-asc')) {
+          $target.removeClass('sort-asc');
+          $target.addClass('sort-desc');
+          $target.removeClass('icon-chevron-up').addClass('icon-chevron-down');
+          this.collection.order = '-';
+        } else {
+          $target.removeClass('sort-desc');
+          $target.addClass('sort-asc');
+          $target.removeClass('icon-chevron-down').addClass('icon-chevron-up');
+          this.collection.order = '+';
+        }
+        if ($target.hasClass('sort-name')) {
+          this.collection.sort = 'company_name';
+        } else if ($target.hasClass('sort-created-at')) {
+          this.collection.sort = 'company_register_date';
+        } else if ($target.hasClass('sort-credits')) {
+          this.collection.sort = 'credits';
+        }
+        return this.collection.fetch();
       },
       render: function() {
         var i, paginationCount, _i, _j;
