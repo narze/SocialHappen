@@ -115,9 +115,15 @@ class User_model extends CI_Model {
 	 * @param $offset
 	 * @author Metwara Narksook
 	 */
-	function get_all_user_profile($limit = NULL, $offset = NULL, $options = array()){
+	function get_all_user_profile($limit = NULL, $offset = NULL, $options = array(), $sort = NULL){
 		if($limit){
 			$this->db->limit($limit, $offset);
+		}
+
+		if($sort) {
+			foreach ($sort as $name => $direction) {
+				$this->db->order_by($name, $direction);
+			}
 		}
 
 		if(isset($options['where']) && is_array($options['where'])) {

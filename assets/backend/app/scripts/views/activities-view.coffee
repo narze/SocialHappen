@@ -34,15 +34,17 @@ define [
     sort: (e) ->
       e.preventDefault()
 
-      if $(e.currentTarget).hasClass 'sort-asc'
-        $(e.currentTarget).removeClass 'sort-asc'
-        $(e.currentTarget).addClass 'sort-desc'
-        $(e.currentTarget).removeClass('icon-chevron-up').addClass('icon-chevron-down')
+      $target = $(e.currentTarget)
+
+      if $target.hasClass 'sort-asc'
+        $target.removeClass 'sort-asc'
+        $target.addClass 'sort-desc'
+        $target.removeClass('icon-chevron-up').addClass('icon-chevron-down')
         @collection.order = '-'
       else
-        $(e.currentTarget).removeClass 'sort-desc'
-        $(e.currentTarget).addClass 'sort-asc'
-        $(e.currentTarget).removeClass('icon-chevron-down').addClass('icon-chevron-up')
+        $target.removeClass 'sort-desc'
+        $target.addClass 'sort-asc'
+        $target.removeClass('icon-chevron-down').addClass('icon-chevron-up')
         @collection.order = '+'
 
       @collection.sort = 'timestamp'

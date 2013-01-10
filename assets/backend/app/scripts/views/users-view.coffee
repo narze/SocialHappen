@@ -10,6 +10,12 @@ define [
 
     id: 'users-view'
 
+    events:
+      'click .sort-name': 'sort'
+      'click .sort-signup-date': 'sort'
+      'click .sort-last-seen': 'sort'
+      'click .sort-points': 'sort'
+
     initialize: ->
       _.bindAll @
       @subViews = {}
@@ -27,6 +33,33 @@ define [
       user = new UserItemView model: model
       @subViews['user-' + model.cid] = user
       @$('#user-list').append(user.render().el)
+
+    sort: (e) ->
+      e.preventDefault()
+
+      $target = $(e.currentTarget)
+
+      if $target.hasClass 'sort-asc'
+        $target.removeClass 'sort-asc'
+        $target.addClass 'sort-desc'
+        $target.removeClass('icon-chevron-up').addClass('icon-chevron-down')
+        @collection.order = '-'
+      else
+        $target.removeClass 'sort-desc'
+        $target.addClass 'sort-asc'
+        $target.removeClass('icon-chevron-down').addClass('icon-chevron-up')
+        @collection.order = '+'
+
+      if $target.hasClass 'sort-name'
+        @collection.sort = 'user_first_name'
+      else if $target.hasClass 'sort-signup-date'
+        @collection.sort = 'user_register_date'
+      else if $target.hasClass 'sort-last-seen'
+        @collection.sort = 'user_last_seen'
+      else if $target.hasClass 'sort-points'
+        @collection.sort = 'points'
+
+      @collection.fetch()
 
     render: ->
       @$el.html UsersTemplate

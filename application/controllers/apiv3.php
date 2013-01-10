@@ -1402,6 +1402,8 @@ class Apiv3 extends CI_Controller {
     $limit = $this->input->get('limit') ? : 10;
     $offset = $this->input->get('offset') ? : 0;
     $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
 
     $this->load->model('user_model');
     $this->load->model('user_mongo_model');
@@ -1475,12 +1477,22 @@ class Apiv3 extends CI_Controller {
       $query_options['where_in'] = array('user_id' => $user_ids);
     }
 
+    # sort & order
+    if(in_array($sort, array('user_first_name', 'user_register_date', 'user_last_seen'))) {
+      $sort = array($sort => ($order === '-' ? 'desc' : 'asc'));
+    } else if(in_array($sort, array('points'))) {
+      $sort = FALSE;
+      $sort_by_points = TRUE;
+    } else {
+      $sort = FALSE;
+    }
+
     if ($find_in_mongo && empty($user_ids)) {
       // not found in mongo & intersect results with user_model = empty
       $users = array();
       $users_all_count = 0;
     } else {
-      $users = $this->user_model->get_all_user_profile($limit, $offset, $query_options);
+      $users = $this->user_model->get_all_user_profile($limit, $offset, $query_options, $sort);
       $users_all_count = $this->user_model->count_users($query_options);
     }
 
@@ -1498,11 +1510,19 @@ class Apiv3 extends CI_Controller {
 
     } unset($user);
 
+    if(isset($sort_by_points)) {
+      usort($users, function($a, $b) { return $a['user_points'] - $b['user_points']; });
+      if($order === '-') {
+        $users = array_reverse($users);
+      }
+    }
+
     $options = array(
       'total' => $users_all_count,
       'total_pages' => ceil($users_all_count / $limit),
       'count' => count($users),
-      'filter' => $filter
+      'filter' => $filter,
+      'sort' => $sort
     );
 
     return $this->success($users, 1, $options);

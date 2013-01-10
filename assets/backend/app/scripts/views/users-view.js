@@ -4,6 +4,12 @@
     var View;
     View = Backbone.View.extend({
       id: 'users-view',
+      events: {
+        'click .sort-name': 'sort',
+        'click .sort-signup-date': 'sort',
+        'click .sort-last-seen': 'sort',
+        'click .sort-points': 'sort'
+      },
       initialize: function() {
         _.bindAll(this);
         this.subViews = {};
@@ -24,6 +30,32 @@
         });
         this.subViews['user-' + model.cid] = user;
         return this.$('#user-list').append(user.render().el);
+      },
+      sort: function(e) {
+        var $target;
+        e.preventDefault();
+        $target = $(e.currentTarget);
+        if ($target.hasClass('sort-asc')) {
+          $target.removeClass('sort-asc');
+          $target.addClass('sort-desc');
+          $target.removeClass('icon-chevron-up').addClass('icon-chevron-down');
+          this.collection.order = '-';
+        } else {
+          $target.removeClass('sort-desc');
+          $target.addClass('sort-asc');
+          $target.removeClass('icon-chevron-down').addClass('icon-chevron-up');
+          this.collection.order = '+';
+        }
+        if ($target.hasClass('sort-name')) {
+          this.collection.sort = 'user_first_name';
+        } else if ($target.hasClass('sort-signup-date')) {
+          this.collection.sort = 'user_register_date';
+        } else if ($target.hasClass('sort-last-seen')) {
+          this.collection.sort = 'user_last_seen';
+        } else if ($target.hasClass('sort-points')) {
+          this.collection.sort = 'points';
+        }
+        return this.collection.fetch();
       },
       render: function() {
         var i, paginationCount, _i, _j;
