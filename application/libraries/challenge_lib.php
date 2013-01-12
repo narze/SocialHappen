@@ -867,6 +867,9 @@ class Challenge_lib {
       $company = $this->CI->company_model->get_company_profile_by_company_id($uniqueChallenges[$i]['company_id']);
       // $challenges[$i]['company'] = $company;
     }
+
+    $uniqueChallenges = $this->map_get_branches_data($uniqueChallenges);
+
     return $uniqueChallenges;
   }
 
@@ -931,6 +934,12 @@ class Challenge_lib {
   function get_with_branches_data($criteria, $limit = 100) {
     $challenges = $this->CI->challenge_model->get($criteria, $limit);
 
+    $challenges = $this->map_get_branches_data($challenges);
+
+    return $challenges;
+  }
+
+  function map_get_branches_data($challenges){
     $this->CI->load->library('branch_lib');
 
     foreach ($challenges as $i => $challenge) {
