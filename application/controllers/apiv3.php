@@ -813,10 +813,11 @@ class Apiv3 extends CI_Controller {
     $query_options = array();
 
     $where = array();
+    $like = array();
 
     if(!empty($filter['name'])) {
       # find in name
-      $where['company_name'] = $filter['name'];
+      $like['company_name'] = trim($filter['name']);
     }
     if(!empty($filter['created_at_from'])) {
       # find where company_register_date > created_at_from
@@ -834,6 +835,10 @@ class Apiv3 extends CI_Controller {
 
     if(count($where)) {
       $query_options['where'] = $where;
+    }
+
+    if(count($like)) {
+      $query_options['like'] = $like;
     }
 
     # sort & order
@@ -1413,13 +1418,15 @@ class Apiv3 extends CI_Controller {
     $query_options = array();
 
     $where = array();
+    $like = array();
+
     if(!empty($filter['first_name'])) {
       # find in first_name
-      $where['user_first_name'] = $filter['first_name'];
+      $like['user_first_name'] = trim($filter['first_name']);
     }
     if(!empty($filter['last_name'])) {
       # find in last_name
-      $where['user_last_name'] = $filter['last_name'];
+      $like['user_last_name'] = trim($filter['last_name']);
     }
     if(!empty($filter['signup_date_from'])) {
       # find where signup_date > signup_date_from
@@ -1444,6 +1451,10 @@ class Apiv3 extends CI_Controller {
 
     if(count($where)) {
       $query_options['where'] = $where;
+    }
+
+    if(count($like)) {
+      $query_options['like'] = $like;
     }
 
     # find in mongo and get ids
@@ -1545,17 +1556,17 @@ class Apiv3 extends CI_Controller {
     $query_options = array();
 
     # find user_id
-    $user_where = array();
+    $user_like = array();
     if(!empty($filter['first_name'])) {
       # find in first_name
-      $user_where['user_first_name'] = $filter['first_name'];
+      $user_like['user_first_name'] = $filter['first_name'];
     }
     if(!empty($filter['last_name'])) {
       # find in last_name
-      $user_where['user_last_name'] = $filter['last_name'];
+      $user_like['user_last_name'] = $filter['last_name'];
     }
-    if($user_where) {
-      $users = $this->user_model->get_all_user_profile(NULL, NULL, array('where' => $user_where));
+    if($user_like) {
+      $users = $this->user_model->get_all_user_profile(NULL, NULL, array('like' => $user_like));
       $user_ids = array_map(function($user) { return (int) $user['user_id']; }, $users);
       $query_options['user_id'] = array('$in' => $user_ids);
     }
@@ -1636,7 +1647,7 @@ class Apiv3 extends CI_Controller {
         $activity['challenge'] = array();
       }
 
-      // Get action name
+      // Get action message & description
       $app_id = (int) 0;
       $action_id = $activity['action_id'];
       $action_list = array();
@@ -1650,10 +1661,21 @@ class Apiv3 extends CI_Controller {
         $audit_action = $action_list[$app_id.'_'.$action_id];
       }
 
-      if(isset($audit_action['description']) && isset($action_id)){
-        $activity['audit_message'] = $audit_action['description'];
-      }else{
+      if(isset($audit_action['format_string']) && isset($action_id)){
+        $activity['audit_message'] = $this->audit_lib->translate_format_string(
+          $audit_action['format_string'],
+          $this->audit_model->getOne(array('_id' => $activity['_id'])),
+          ($action_id <= 100)
+        );
+      } else {
         $activity['audit_message'] = NULL;
+      }
+
+      $activity['audit_description'] = issetor($audit_action['description'], NULL);
+
+      // Get company
+      if(isset($activity['company_id'])) {
+        $activity['company'] = $this->company_model->get_company_profile_by_company_id($activity['company_id']);
       }
     } unset($activity);
 
@@ -1665,29 +1687,6 @@ class Apiv3 extends CI_Controller {
       'sort' => $sort
     );
     return $this->success($activities, 1, $options);
-
-
-
-    foreach($users as &$user) {
-      // Get points
-      $user_mongo = $this->user_mongo_model->get_user($user['user_id']);
-      $user['user_points'] = issetor($user_mongo['points'], 0);
-
-      // Get platforms
-      $tokens = $this->user_token_model->get(array('user_id' => $user['user_id']));
-      $user['user_platforms'] = array();
-      foreach($tokens as $token) {
-        $user['user_platforms'][] = $token['device'];
-      }
-
-    } unset($user);
-
-    $options = array(
-      'total' => $users_all_count,
-      'total_pages' => ceil($users_all_count / $limit),
-      'count' => count($users),
-      'filter' => $filter
-    );
   }
 
   function credit_add() {

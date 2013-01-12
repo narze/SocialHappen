@@ -9,12 +9,22 @@ define [
     tagName: 'tr'
     className: 'activity-item'
 
+    events:
+      'click .audit-tooltip': 'void'
+
     initialize: ->
       _.bindAll @
       @model.bind 'change', @render
 
+    void: (e) ->
+      e.preventDefault()
+
     render: ->
       @$el.html _.template(ActivityItemTemplate, @model.toJSON())
+      @delegateEvents()
+
+      @$('.audit-tooltip').tooltip()
+
       @
 
   View

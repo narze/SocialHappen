@@ -138,6 +138,12 @@ class User_model extends CI_Model {
 			}
 		}
 
+		if(isset($options['like']) && is_array($options['like'])) {
+			foreach($options['like'] as $key => $val) {
+				$this->db->like($key, $val);
+			}
+		}
+
 		$result = $this->db->get('user')->result_array();
 		return $this->socialhappen->map_v($result, 'user_gender');
 	}
@@ -188,6 +194,13 @@ class User_model extends CI_Model {
 				$this->db->where_in($key, $val);
 			}
 		}
+
+		if(isset($options['like']) && is_array($options['like'])) {
+			foreach($options['like'] as $key => $val) {
+				$this->db->like($key, $val);
+			}
+		}
+
 		return $this->db->count_all_results('user');
 	}
 

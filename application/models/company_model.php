@@ -38,6 +38,11 @@ class Company_model extends CI_Model {
 				$this->db->where($key, $val);
 			}
 		}
+		if(isset($options['like']) && is_array($options['like'])) {
+			foreach($options['like'] as $key => $val) {
+				$this->db->like($key, $val);
+			}
+		}
 
 		return $this->db->count_all_results('company');
 	}
@@ -138,6 +143,12 @@ class Company_model extends CI_Model {
 		if(isset($options['where']) && is_array($options['where'])) {
 			foreach($options['where'] as $key => $val) {
 				$this->db->where($key, $val);
+			}
+		}
+
+		if(isset($options['like']) && is_array($options['like'])) {
+			foreach($options['like'] as $key => $val) {
+				$this->db->like($key, $val);
 			}
 		}
 
