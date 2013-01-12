@@ -1666,6 +1666,11 @@ class Apiv3 extends CI_Controller {
       }else{
         $activity['audit_message'] = NULL;
       }
+
+      // Get company
+      if(isset($activity['company_id'])) {
+        $activity['company'] = $this->company_model->get_company_profile_by_company_id($activity['company_id']);
+      }
     } unset($activity);
 
     $options = array(

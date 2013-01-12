@@ -1,6 +1,8 @@
 <td>{{ moment.unix(timestamp).format('MMMM Do YYYY, h:mm:ss a') }}</td>
 <td class="center">{{ user.user_first_name }} {{ user.user_last_name }}</td>
 <td class="center">{{ audit_message ? audit_message : '' }}</td>
-<td class="center">{{ (typeof company_id !== 'undefined') && company_id !== 0 ? company_id : '' }}</td>
-<td class="center">{{ typeof branch_id !== 'undefined' ? branch_id : '' }}</td>
+<td class="center">
+  {{ (typeof company !== 'undefined') && company && company.company_name ? company.company_name : '' }}
+  {{ typeof branch !== 'undefined' ? ' (' + branch + ')' : '' }}
+</td>
 <td class="center">{{ challenge.detail && challenge.detail.name ? challenge.detail.name : '' }}</td>
