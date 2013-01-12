@@ -1,6 +1,6 @@
 <td>{{ moment.unix(timestamp).format('MMMM Do YYYY, h:mm:ss a') }}</td>
 <td class="center">{{ user.user_first_name }} {{ user.user_last_name }}</td>
-<td class="center">{{ audit_message ? audit_message : '' }}</td>
+<td class="center"><a href="#" rel="tooltip" class="audit-tooltip" title="{{ $('<p>').append(audit_message).text() }}">{{ audit_description }}</a></td>
 <td class="center">
   {{ (typeof company !== 'undefined') && company && company.company_name ? company.company_name : '' }}
   {{ typeof branch !== 'undefined' ? ' (' + branch + ')' : '' }}
