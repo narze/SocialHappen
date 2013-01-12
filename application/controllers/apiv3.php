@@ -1711,6 +1711,23 @@ class Apiv3 extends CI_Controller {
 
     if(!$result = $this->company_model->update_company_profile_by_company_id($company_id, $update)) {
       return $this->error('Update Failed');
+    }else{
+      $user = $this->socialhappen->get_user();
+      $this->load->library('audit_lib');
+      $audit_data = array(
+        'user_id' => $user['user_id'],
+        'action_id' => 205, // Add Credits
+        'app_id' => 0,
+        'app_install_id' => 0,
+        'page_id' => 0,
+        'company_id' => $company_id,
+        'subject' => NULL,
+        'object' => (int)$credit,
+        'objecti' => (int)$company['credits'],
+        'image' => NULL
+      );
+
+      $audit_id = $this->audit_lib->audit_add($audit_data);
     }
 
     return $this->success($company);
