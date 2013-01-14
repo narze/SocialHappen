@@ -7,6 +7,7 @@
       events: {
         'click .box-header': 'minimize',
         'submit form.activities-filter': 'filter',
+        'click .filter-action-preset': 'actionPreset',
         'reset form.activities-filter': 'reset'
       },
       initialize: function() {
@@ -54,6 +55,13 @@
           challenge: this.$('#filter-challenge').val()
         };
         return this.collection.fetch();
+      },
+      actionPreset: function(e) {
+        var actions;
+        e.preventDefault();
+        actions = this.$(e.currentTarget).data('filter').split(',');
+        this.$('#filter-action').val(actions);
+        return this.$('#filter-action').trigger("liszt:updated");
       },
       render: function() {
         this.$el.html(ActivitiesFilterTemplate);

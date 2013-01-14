@@ -13,6 +13,7 @@ define [
     events:
       'click .box-header': 'minimize'
       'submit form.activities-filter': 'filter'
+      'click .filter-action-preset': 'actionPreset'
       'reset form.activities-filter': 'reset'
 
     initialize: ->
@@ -58,6 +59,15 @@ define [
         challenge: @$('#filter-challenge').val()
 
       @collection.fetch()
+
+    actionPreset: (e) ->
+      e.preventDefault()
+
+      # Get actions from data-filter
+      actions = @$(e.currentTarget).data('filter').split(',')
+      @$('#filter-action').val(actions)
+
+      @$('#filter-action').trigger "liszt:updated"
 
     render: ->
       @$el.html ActivitiesFilterTemplate
