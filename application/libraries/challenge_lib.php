@@ -868,8 +868,6 @@ class Challenge_lib {
       // $challenges[$i]['company'] = $company;
     }
 
-    $uniqueChallenges = $this->map_get_branches_data($uniqueChallenges);
-
     return $uniqueChallenges;
   }
 
