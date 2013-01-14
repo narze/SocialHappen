@@ -1581,8 +1581,13 @@ class Apiv3 extends CI_Controller {
     # find in mongo and get ids
     $find_in_mongo = FALSE;
     if(!empty($filter['action'])) {
-      $action_id = $this->socialhappen->get_k('audit_action', $filter['action']);
-      $query_options['action_id'] = $action_id;
+      $action_ids = array();
+      foreach ($filter['action'] as $action) {
+        $action_id = $this->socialhappen->get_k('audit_action', $action);
+        $action_ids[] = $action_id;
+      }
+
+      $query_options['action_id'] = array('$in' => $action_ids);
     }
     if(!empty($filter['date_from'])) {
       # find where date > date_from
@@ -1730,6 +1735,14 @@ class Apiv3 extends CI_Controller {
     }
 
     return $this->success($company);
+  }
+
+  function audit_actions() {
+    $this->load->model('audit_action_model');
+
+    $audit_actions = $this->audit_action_model->get();
+
+    return $this->success($audit_actions);
   }
 }
 

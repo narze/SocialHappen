@@ -1,7 +1,7 @@
 define [
   'backbone'
   'text!templates/users-filter-template.html'
-  'moment',
+  'moment'
   'jqueryPlugins/jquery.chosen.min'
   ], (Backbone, UsersFilterTemplate, mm, chosen) ->
 
@@ -12,9 +12,13 @@ define [
     events:
       'click .box-header': 'minimize'
       'submit form.users-filter': 'filter'
+      'reset form.users-filter': 'reset'
 
     initialize: ->
       _.bindAll @
+
+    reset: ->
+      @$('#filter-platforms').next().find('li.search-choice .search-choice-close').click()
 
     minimize: (e) ->
       e.preventDefault()
@@ -23,7 +27,7 @@ define [
       if $target.is ':visible'
         @$('.box-header .btn-minimize i').removeClass('icon-chevron-up').addClass('icon-chevron-down')
       else
-        $('[data-rel="chosen"],[rel="chosen"]').chosen()
+        @$('[data-rel="chosen"],[rel="chosen"]').chosen()
         @$('.box-header .btn-minimize i').removeClass('icon-chevron-down').addClass('icon-chevron-up')
 
       $target.slideToggle()

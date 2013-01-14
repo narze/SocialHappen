@@ -61,7 +61,8 @@ class SocialHappen{
 			201 => 'QR',
 			202 => 'Feedback',
 			203 => 'Checkin',
-			204 => 'Walkin'
+			204 => 'Walkin',
+			205 => 'Add Credits'
 		)
 	);
 

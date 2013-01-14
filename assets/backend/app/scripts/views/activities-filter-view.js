@@ -1,15 +1,30 @@
 (function() {
 
-  define(['backbone', 'text!templates/activities-filter-template.html', 'moment'], function(Backbone, ActivitiesFilterTemplate, mm) {
+  define(['backbone', 'text!templates/activities-filter-template.html', 'collections/audit-action-collection', 'moment', 'jqueryPlugins/jquery.chosen.min'], function(Backbone, ActivitiesFilterTemplate, AuditActionCollection, mm, chosen) {
     var View;
     View = Backbone.View.extend({
       id: 'activities-filter-view',
       events: {
         'click .box-header': 'minimize',
-        'submit form.activities-filter': 'filter'
+        'submit form.activities-filter': 'filter',
+        'reset form.activities-filter': 'reset'
       },
       initialize: function() {
-        return _.bindAll(this);
+        _.bindAll(this);
+        this.auditActionCollection = new AuditActionCollection();
+        this.auditActionCollection.bind('reset', this.prepareCollection);
+        return this.auditActionCollection.fetch();
+      },
+      reset: function() {
+        return this.$('#filter-action').next().find('li.search-choice .search-choice-close').click();
+      },
+      prepareCollection: function() {
+        var _this = this;
+        this.$('#filter-action').empty();
+        this.auditActionCollection.each(function(model) {
+          return _this.$('#filter-action').append('<option>' + model.get('description') + '</option>');
+        });
+        return this.$('#filter-action').trigger("liszt:updated");
       },
       minimize: function(e) {
         var $target;
@@ -18,6 +33,7 @@
         if ($target.is(':visible')) {
           this.$('.box-header .btn-minimize i').removeClass('icon-chevron-up').addClass('icon-chevron-down');
         } else {
+          this.$('[data-rel="chosen"],[rel="chosen"]').chosen();
           this.$('.box-header .btn-minimize i').removeClass('icon-chevron-down').addClass('icon-chevron-up');
         }
         return $target.slideToggle();
@@ -38,6 +54,7 @@
       },
       render: function() {
         this.$el.html(ActivitiesFilterTemplate);
+        this.prepareCollection();
         this.delegateEvents();
         if (this.$('.datepicker')) {
           this.$('.datepicker').datepicker();

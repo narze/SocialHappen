@@ -223,7 +223,7 @@ class Audit_action_model extends CI_Model {
 	  }
 	}
 
-	function get($query, $sort = array()){
+	function get($query = array(), $sort = array()){
 		$result = $this->collection->find($query);
 		if($sort) {
 			$result = $result->sort($sort);
