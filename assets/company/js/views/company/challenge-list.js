@@ -92,8 +92,8 @@ define([
       var newModel = new ChallengeModel({});
       newModel.set({
         detail: {
-          name: 'Challenge Name',
-          description: 'Challenge Description',
+          name: '',
+          description: '',
           image: 'https://lh3.googleusercontent.com/XBLfCOS_oKO-XjeYiaOAuIdukQo9wXMWsdxJZLJO8hvWMBLFwCU3r_0BrRMn_c0TnEDarKuxDg=s640-h400-e365'
         },
         hash: null,

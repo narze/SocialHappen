@@ -11,15 +11,15 @@
 <div class="modal-body">
 
   <div class="edit-name control-group">
-    <label><h6>Challenge Name:</h6></label>
+    <label><h6>Challenge Name*:</h6></label>
     <div class="row-fluid">
-      <input class="challenge-name span12" type="text" value="<%= detail.name %>" />
+      <input class="challenge-name span12" type="text" value="<%= detail.name %>" placeholder="Challenge Name" />
     </div>
   </div>
   <div class="control-group">
     <label><h6>Description:</h6></label>
     <div class="edit-description-field row-fluid">
-      <textarea class="challenge-description span12" rows="3"><%= detail.description %></textarea>
+      <textarea class="challenge-description span12" rows="3" placeholder="Description"><%= detail.description %></textarea>
     </div>
   </div>
 

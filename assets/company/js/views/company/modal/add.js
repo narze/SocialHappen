@@ -538,8 +538,17 @@ define([
     },
 
     createChallenge: function(){
+      this.$('.edit-name.control-group').removeClass('error');
+
       if(!this.model.get('end_date') || !this.model.get('start_date')){
         alert('Please set start and end date');
+        return;
+      }
+
+      var detail = this.model.get('detail');
+      if(detail.name.length == 0){
+        alert('Please insert challenge name');
+        this.$('.edit-name.control-group').addClass('error');
         return;
       }
 
