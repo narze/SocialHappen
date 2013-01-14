@@ -5,7 +5,7 @@ require.config
       deps: ['lodash', 'jquery']
       exports: ->
         _.templateSettings =
-          evaluate : /\[\[([\s\S]+?)\]\]/g
+          evaluate: /<%([\s\S]+?)%>/g
           interpolate : /\{\{([\s\S]+?)\}\}/g
           escape : /\{\{\{([\s\S]+?)\}\}\}/g
         window.Backbone
