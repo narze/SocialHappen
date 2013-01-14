@@ -92,11 +92,11 @@ define([
       console.log('show add branch');
       var newModel = new BranchModel({});
       newModel.set({
-        title: 'Branch Name',
+        title: '',
         photo: 'https://lh5.googleusercontent.com/mww1eX8x-JdWhYUA1B-ovYX3MQf5gGwsqcXvySmebElaBcnKeH0wojdCDSF4rfhnAMlXvsG_=s640-h400-e365',
-        address: 'address',
+        address: '',
         telephone: '',
-        location: [50, 50],
+        location: [0, 0],
         company_id: window.Company.companyId
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);

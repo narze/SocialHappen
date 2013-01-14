@@ -2,12 +2,11 @@
   <button class="close" data-dismiss="modal">
     ×
   </button>
-  <div class="">
-    <h3 class="edit-title"><%= title %></h3>
-  </div>
-  <div class="edit-title hide">
-    <input class="branch-title span4" value="<%- title||'' %>" />
-    <button class="btn save-title btn-primary">Save</button>
+  <div class="control-group">
+    <div class="edit-title">
+      <h6>Branch Name:</h6>
+      <input class="branch-title span4" value="<%- title||'' %>" type="text" placeholder="Branch name" autofocus="true"/>
+    </div>
   </div>
 </div>
 <div class="modal-body">
@@ -34,66 +33,35 @@
   </div>
 
   <div class="control-group">
-    <div class="edit-address">
+    <div class="edit-address-field">
       <h6>Address:</h6>
-      <p>
-        <%- address %>
-      </p>
-    </div>
-    <div class="edit-address-field hide">
-      <h6>Address:</h6>
-      <textarea class="branch-address span5" rows="3"><%- address %></textarea>
-      <button class="btn save-address btn-primary">Save</button>
+      <textarea class="branch-address span5" rows="3" placeholder="Branch address"><%- address %></textarea>
     </div>
   </div>
 
   <div class="control-group">
-    <div class="edit-hours">
+    <div class="edit-hours-field">
       <h6>Opening hours:</h6>
-      <p>
-        <%- hours %>
-      </p>
-    </div>
-    <div class="edit-hours-field hide">
-      <h6>Opening hours:</h6>
-      <textarea class="branch-hours span5" rows="3"><%- hours %></textarea>
-      <button class="btn save-hours btn-primary">Save</button>
+      <textarea class="branch-hours span5" rows="3" placeholder="Opening hours"><%- hours %></textarea>
     </div>
   </div>
 
   <div class="control-group">
-    <div class="edit-telephone">
+    <div class="edit-telephone-field">
       <h6>Telephone:</h6>
-      <p>
-        <%- telephone %>
-      </p>
-    </div>
-    <div class="edit-telephone-field hide">
-      <h6>Telephone:</h6>
-      <input type="text" class="branch-telephone" value="<%- telephone %>"></input>
-      <button class="btn save-telephone btn-primary">Save</button>
+      <input type="text" class="branch-telephone" value="<%- telephone %>" placeholder="Telephone number"></input>
     </div>
   </div>
 
   <div class="control-group">
-    <div class="edit-location">
+    <div class="edit-location-field">
       <h6>Location:</h6>
       <p>
-        Lat: <span class="lat"><%= location['0'] %></span>
+        Latitude: <input type="text" class="lat" value="<%= location['0'] %>" placeholder="Latitude"/>
       </p>
       <p>
-        Lng: <span class="lng"><%= location['1'] %></span>
+        Longitude: <input type="text" class="lng" value="<%= location['1'] %>" placeholder="Longitude"/>
       </p>
-    </div>
-    <div class="edit-location-field hide">
-      <h6>Location:</h6>
-      <p>
-        Lat: <input type="text" class="lat" value="<%= location['0'] %>" />
-      </p>
-      <p>
-        Lng: <input type="text" class="lng" value="<%= location['1'] %>" />
-      </p>
-      <button class="btn save-location btn-primary">Save</button>
     </div>
   </div>
 </div>
