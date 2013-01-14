@@ -34,6 +34,9 @@
           this.$('.box-header .btn-minimize i').removeClass('icon-chevron-up').addClass('icon-chevron-down');
         } else {
           this.$('[data-rel="chosen"],[rel="chosen"]').chosen();
+          this.$('#filter-action').next().css({
+            width: '220px'
+          });
           this.$('.box-header .btn-minimize i').removeClass('icon-chevron-down').addClass('icon-chevron-up');
         }
         return $target.slideToggle();

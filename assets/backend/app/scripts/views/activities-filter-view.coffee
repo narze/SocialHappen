@@ -40,6 +40,7 @@ define [
         @$('.box-header .btn-minimize i').removeClass('icon-chevron-up').addClass('icon-chevron-down')
       else
         @$('[data-rel="chosen"],[rel="chosen"]').chosen()
+        @$('#filter-action').next().css width: '220px'
         @$('.box-header .btn-minimize i').removeClass('icon-chevron-down').addClass('icon-chevron-up')
 
       $target.slideToggle()
