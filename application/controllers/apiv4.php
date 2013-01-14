@@ -475,14 +475,14 @@ class Apiv4 extends REST_Controller {
     $skip_system_company = $this->get('skip_system_company');
 
     if($challenge_id) {
-      $challenges = $this->challenge_lib->get_with_branches_data(array('_id' => new MongoId($challenge_id)));
+      $challenges = $this->challenge_lib->get(array('_id' => new MongoId($challenge_id)));
     } else if($company_id) {
-      $challenges = $this->challenge_lib->get_with_branches_data(array('company_id' => $company_id));
+      $challenges = $this->challenge_lib->get(array('company_id' => $company_id));
     } else if(($lon !== FALSE) && ($lat !== FALSE)) {
       $challenges = $this->challenge_lib->get_nearest_challenges(
         array($lon, $lat), $max_distance, $limit, $and_without_location);
     } else {
-      $challenges = $this->challenge_lib->get_with_branches_data(array());
+      $challenges = $this->challenge_lib->get(array());
     }
 
     //Filter challenge if doable_date is set
