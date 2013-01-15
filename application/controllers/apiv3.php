@@ -437,17 +437,17 @@ class Apiv3 extends CI_Controller {
     $this->load->model('sonar_box_model');
 
     $query_options = array();
-    if(!empty($filter['name'])) {
+    if(isset($filter['name']) && strlen($filter['name'])) {
       $query_options['detail.name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
     }
 
-    if(!empty($filter['sonar_data'])) {
+    if(isset($filter['sonar_data']) && strlen($filter['sonar_data'])) {
       $sonars = $this->sonar_box_model->get(array('data' => array('$regex' => $filter['sonar_data'])));
       $sonars = array_map(function($sonar) { return $sonar['data']; }, $sonars);
       $query_options['sonar_frequency'] = array('$in' => $sonars);
     }
 
-    if(!empty($filter['start_date_from'])) {
+    if(isset($filter['start_date_from']) && strlen($filter['start_date_from'])) {
       # find where start_date > start_date_from
       # TODO : Re-specify HH:MM:SS
       if(!isset($query_options['start_date'])) {
@@ -456,7 +456,7 @@ class Apiv3 extends CI_Controller {
 
       $query_options['start_date']['$gte'] = strtotime($filter['start_date_from']) + 0;
     }
-    if(!empty($filter['start_date_to'])) {
+    if(isset($filter['start_date_to']) && strlen($filter['start_date_to'])) {
       # find where start_date < start_date_to
       # TODO : Re-specify HH:MM:SS
       if(!isset($query_options['start_date'])) {
@@ -466,7 +466,7 @@ class Apiv3 extends CI_Controller {
       $query_options['start_date']['$lte'] = strtotime($filter['start_date_to']) + 60*60*24 - 1;
     }
 
-    if(!empty($filter['end_date_from'])) {
+    if(isset($filter['end_date_from']) && strlen($filter['end_date_from'])) {
       # find where end_date > end_date_from
       # TODO : Re-specify HH:MM:SS
       if(!isset($query_options['end_date'])) {
@@ -475,16 +475,7 @@ class Apiv3 extends CI_Controller {
 
       $query_options['end_date']['$gte'] = strtotime($filter['end_date_from']) + 0;
     }
-    if(!empty($filter['end_date_to'])) {
-      # find where end_date < end_date_to
-      # TODO : Re-specify HH:MM:SS
-      if(!isset($query_options['end_date'])) {
-        $query_options['end_date'] = array();
-      }
-
-      $query_options['end_date']['$lte'] = strtotime($filter['end_date_to']) + 60*60*24 - 1;
-    }
-    if(!empty($filter['end_date_to'])) {
+    if(isset($filter['end_date_to']) && strlen($filter['end_date_to'])) {
       # find where end_date < end_date_to
       # TODO : Re-specify HH:MM:SS
       if(!isset($query_options['end_date'])) {
@@ -913,21 +904,21 @@ class Apiv3 extends CI_Controller {
     $where = array();
     $like = array();
 
-    if(!empty($filter['name'])) {
+    if(isset($filter['name']) && strlen($filter['name'])) {
       # find in name
       $like['company_name'] = trim($filter['name']);
     }
-    if(!empty($filter['created_at_from'])) {
+    if(isset($filter['created_at_from']) && strlen($filter['created_at_from'])) {
       # find where company_register_date > created_at_from
       # TODO : Re-specify HH:MM:SS
       $where['company_register_date >='] = $filter['created_at_from'] . " 00:00:00";
     }
-    if(!empty($filter['created_at_to'])) {
+    if(isset($filter['created_at_to']) && strlen($filter['created_at_to'])) {
       # find where company_register_date < created_at_to
       # TODO : Re-specify HH:MM:SS
       $where['company_register_date <='] = $filter['created_at_to'] . " 23:59:59";
     }
-    if(!empty($filter['credits'])) {
+    if(isset($filter['credits']) && strlen($filter['credits'])) {
       $where['credits'] = $filter['credits'];
     }
 
@@ -1518,30 +1509,30 @@ class Apiv3 extends CI_Controller {
     $where = array();
     $like = array();
 
-    if(!empty($filter['first_name'])) {
+    if(isset($filter['first_name']) && strlen($filter['first_name'])) {
       # find in first_name
       $like['user_first_name'] = trim($filter['first_name']);
     }
-    if(!empty($filter['last_name'])) {
+    if(isset($filter['last_name']) && strlen($filter['last_name'])) {
       # find in last_name
       $like['user_last_name'] = trim($filter['last_name']);
     }
-    if(!empty($filter['signup_date_from'])) {
+    if(isset($filter['signup_date_from']) && strlen($filter['signup_date_from'])) {
       # find where signup_date > signup_date_from
       # TODO : Re-specify HH:MM:SS
       $where['user_register_date >='] = $filter['signup_date_from'] . " 00:00:00";
     }
-    if(!empty($filter['signup_date_to'])) {
+    if(isset($filter['signup_date_to']) && strlen($filter['signup_date_to'])) {
       # find where signup_date < signup_date_to
       # TODO : Re-specify HH:MM:SS
       $where['user_register_date <='] = $filter['signup_date_to'] . " 23:59:59";
     }
-    if(!empty($filter['last_seen_from'])) {
+    if(isset($filter['last_seen_from']) && strlen($filter['last_seen_from'])) {
       # find where last_seen > last_seen_from
       # TODO : Re-specify HH:MM:SS
       $where['user_last_seen >='] = $filter['last_seen_from'] . " 00:00:00";
     }
-    if(!empty($filter['last_seen_to'])) {
+    if(isset($filter['last_seen_to']) && strlen($filter['last_seen_to'])) {
       # find where last_seen < last_seen_to
       # TODO : Re-specify HH:MM:SS
       $where['user_last_seen <='] = $filter['last_seen_to'] . " 23:59:59";
@@ -1557,13 +1548,13 @@ class Apiv3 extends CI_Controller {
 
     # find in mongo and get ids
     $find_in_mongo = FALSE;
-    if(!empty($filter['platforms'])) {
+    if(isset($filter['platforms']) && strlen($filter['platforms'])) {
       # find each platform
       $find_in_mongo = TRUE;
       $users_found = $this->user_token_model->get(array('device' => array('$in' => $filter['platforms'])));
       $user_ids_from_platforms = array_map(function($user) { return (int) $user['user_id']; }, $users_found);
     }
-    if(!empty($filter['points'])) {
+    if(isset($filter['points']) && strlen($filter['points'])) {
       # find if points match
       $find_in_mongo = TRUE;
       $users_found = $this->user_mongo_model->get(array('points' => (int) $filter['points']));
@@ -1655,11 +1646,11 @@ class Apiv3 extends CI_Controller {
 
     # find user_id
     $user_like = array();
-    if(!empty($filter['first_name'])) {
+    if(isset($filter['first_name']) && strlen($filter['first_name'])) {
       # find in first_name
       $user_like['user_first_name'] = $filter['first_name'];
     }
-    if(!empty($filter['last_name'])) {
+    if(isset($filter['last_name']) && strlen($filter['last_name'])) {
       # find in last_name
       $user_like['user_last_name'] = $filter['last_name'];
     }
@@ -1670,7 +1661,7 @@ class Apiv3 extends CI_Controller {
     }
 
     # find company_id
-    if(!empty($filter['company'])) {
+    if(isset($filter['company']) && strlen($filter['company'])) {
       $companies = $this->company_model->get_all(NULL, NULL, array('where' => array('company_name' => $filter['company'])));
       $company_ids = array_map(function($company) { return (int) $company['company_id']; }, $companies);
       $query_options['company_id'] = array('$in' => $company_ids);
@@ -1678,7 +1669,7 @@ class Apiv3 extends CI_Controller {
 
     # find in mongo and get ids
     $find_in_mongo = FALSE;
-    if(!empty($filter['action'])) {
+    if(isset($filter['action']) && strlen($filter['action'])) {
       $action_ids = array();
       foreach ($filter['action'] as $action) {
         $action_id = $this->socialhappen->get_k('audit_action', $action);
@@ -1687,7 +1678,7 @@ class Apiv3 extends CI_Controller {
 
       $query_options['action_id'] = array('$in' => $action_ids);
     }
-    if(!empty($filter['date_from'])) {
+    if(isset($filter['date_from']) && strlen($filter['date_from'])) {
       # find where date > date_from
       # TODO : Re-specify HH:MM:SS
       if(!isset($query_options['timestamp'])) {
@@ -1696,7 +1687,7 @@ class Apiv3 extends CI_Controller {
 
       $query_options['timestamp']['$gte'] = strtotime($filter['date_from']) + 0;
     }
-    if(!empty($filter['date_to'])) {
+    if(isset($filter['date_to']) && strlen($filter['date_to'])) {
       # find where date < date_to
       # TODO : Re-specify HH:MM:SS
       if(!isset($query_options['timestamp'])) {
@@ -1705,11 +1696,11 @@ class Apiv3 extends CI_Controller {
 
       $query_options['timestamp']['$lte'] = strtotime($filter['date_to']) + 60*60*24 - 1;
     }
-    if(!empty($filter['branch'])) {
+    if(isset($filter['branch']) && strlen($filter['branch'])) {
       # find if points match
       # TODO : implement
     }
-    if(!empty($filter['challenge'])) {
+    if(isset($filter['challenge']) && strlen($filter['challenge'])) {
       # find if challenge match
       // $find_in_mongo = TRUE;
       // $challenges = $this->challenge_model->get(array('detail.name' => $filter['challenge']));
