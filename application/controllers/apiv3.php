@@ -442,8 +442,9 @@ class Apiv3 extends CI_Controller {
     }
 
     if(!empty($filter['sonar_data'])) {
-      $sonar = $this->sonar_box_model->getOne(array('data' => $filter['sonar_data']));
-      $query_options['sonar_frequency'] = $sonar['data'];
+      $sonars = $this->sonar_box_model->get(array('data' => array('$regex' => $filter['sonar_data'])));
+      $sonars = array_map(function($sonar) { return $sonar['data']; }, $sonars);
+      $query_options['sonar_frequency'] = array('$in' => $sonars);
     }
 
     if(!empty($filter['start_date_from'])) {
