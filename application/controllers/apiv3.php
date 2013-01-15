@@ -1646,11 +1646,11 @@ class Apiv3 extends CI_Controller {
       }
 
       // Get challenge if it is challenge
-      if(in_array($activity['action_id'], array(117, 118))) {
+      // if(in_array($activity['action_id'], array(117, 118, 201, 202, 203, 204))) {
         $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
-      } else {
-        $activity['challenge'] = array();
-      }
+      // } else {
+      //   $activity['challenge'] = array();
+      // }
 
       // Get action message & description
       $app_id = (int) 0;
