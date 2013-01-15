@@ -26,6 +26,7 @@
         e.preventDefault();
         this.collection.filter = {
           name: this.$('#filter-name').val(),
+          sonar_data: this.$('#filter-sonar-data').val(),
           start_date_from: this.$('#filter-start-date-from').val() ? moment(this.$('#filter-start-date-from').val(), "MM/DD/YYYY").format("YYYY/MM/DD") : void 0,
           start_date_to: this.$('#filter-start-date-to').val() ? moment(this.$('#filter-start-date-to').val(), "MM/DD/YYYY").format("YYYY/MM/DD") : void 0,
           end_date_from: this.$('#filter-end-date-from').val() ? moment(this.$('#filter-end-date-from').val(), "MM/DD/YYYY").format("YYYY/MM/DD") : void 0,

@@ -8,7 +8,7 @@
         'click .sort-name': 'sort',
         'click .sort-start-date': 'sort',
         'click .sort-end-date': 'sort',
-        'click .sort-sonar-box-id': 'sort'
+        'click .sort-sonar-data': 'sort'
       },
       initialize: function() {
         _.bindAll(this);
@@ -52,8 +52,8 @@
           this.collection.sort = 'start_date';
         } else if ($target.hasClass('sort-end-date')) {
           this.collection.sort = 'end_date';
-        } else if ($target.hasClass('sort-sonar-box-id')) {
-          this.collection.sort = '_id';
+        } else if ($target.hasClass('sort-sonar-data')) {
+          this.collection.sort = 'sonar_data';
         }
         return this.collection.fetch();
       },

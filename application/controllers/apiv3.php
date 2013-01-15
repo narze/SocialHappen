@@ -441,6 +441,11 @@ class Apiv3 extends CI_Controller {
       $query_options['detail.name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
     }
 
+    if(!empty($filter['sonar_data'])) {
+      $sonar = $this->sonar_box_model->getOne(array('data' => $filter['sonar_data']));
+      $query_options['sonar_frequency'] = $sonar['data'];
+    }
+
     if(!empty($filter['start_date_from'])) {
       # find where start_date > start_date_from
       # TODO : Re-specify HH:MM:SS
@@ -478,12 +483,20 @@ class Apiv3 extends CI_Controller {
 
       $query_options['end_date']['$lte'] = strtotime($filter['end_date_to']) + 60*60*24 - 1;
     }
+    if(!empty($filter['end_date_to'])) {
+      # find where end_date < end_date_to
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['end_date'])) {
+        $query_options['end_date'] = array();
+      }
 
-    # TODO : filter by sonar box id
+      $query_options['end_date']['$lte'] = strtotime($filter['end_date_to']) + 60*60*24 - 1;
+    }
 
     # sort & order
-    if(in_array($sort, array('name', 'start_date', 'end_date'))) { # TODO : sort by sonar box id
+    if(in_array($sort, array('name', 'start_date', 'end_date', 'sonar_data'))) {
       if($sort === 'name') { $sort = 'detail.name'; }
+      if($sort === 'sonar_data') { $sort = 'sonar_frequency'; }
       $sort = array($sort => ($order === '-' ? -1 : 1));
     } else {
       $sort = FALSE;

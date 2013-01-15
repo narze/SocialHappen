@@ -14,7 +14,7 @@ define [
       'click .sort-name': 'sort'
       'click .sort-start-date': 'sort'
       'click .sort-end-date': 'sort'
-      'click .sort-sonar-box-id': 'sort'
+      'click .sort-sonar-data': 'sort'
 
     initialize: ->
       _.bindAll @
@@ -56,8 +56,8 @@ define [
         @collection.sort = 'start_date'
       else if $target.hasClass 'sort-end-date'
         @collection.sort = 'end_date'
-      else if $target.hasClass 'sort-sonar-box-id'
-        @collection.sort = '_id' # TODO
+      else if $target.hasClass 'sort-sonar-data'
+        @collection.sort = 'sonar_data'
 
       @collection.fetch()
 

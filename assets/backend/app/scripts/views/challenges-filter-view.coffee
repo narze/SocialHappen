@@ -30,11 +30,11 @@ define [
       e.preventDefault()
       @collection.filter =
         name: @$('#filter-name').val()
+        sonar_data: @$('#filter-sonar-data').val()
         start_date_from: moment(@$('#filter-start-date-from').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#filter-start-date-from').val()
         start_date_to: moment(@$('#filter-start-date-to').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#filter-start-date-to').val()
         end_date_from: moment(@$('#filter-end-date-from').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#filter-end-date-from').val()
         end_date_to: moment(@$('#filter-end-date-to').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#filter-end-date-to').val()
-        # TODO : filter by sonar box id
 
       @collection.fetch()
 
