@@ -19,6 +19,9 @@ describe 'Main Router', ->
     it 'should have companies route', ->
       window.backend.Routers.MainRouter.routes['companies'].should.be.equal 'companies'
 
+    it 'should have challenges route', ->
+      window.backend.Routers.MainRouter.routes['challenges'].should.be.equal 'challenges'
+
   describe 'routing', ->
 
     it 'should not load any views when switched to a bad route', ->
@@ -131,7 +134,7 @@ describe 'Main Router', ->
         $('#content').find('#activities-view').length.should.not.equal 0
 
       it 'should have all fields required', ->
-        $('#content').find('#activities-view').find('thead').find('th').length.should.equal 6
+        $('#content').find('#activities-view').find('thead').find('th').length.should.equal 5
 
         $('#content').find('#activities-view').find('thead').text().should.match(/Date/)
         $('#content').find('#activities-view').find('thead').text().should.match(/Name/)
@@ -141,12 +144,43 @@ describe 'Main Router', ->
         $('#content').find('#activities-view').find('thead').text().should.match(/Challenge/)
 
       it 'should have correct first row of data', ->
-        $('#content #activities-view .activity-item:first td').length.should.equal 6
+        $('#content #activities-view .activity-item:first td').length.should.equal 5
         $('#content #activities-view .activity-item:first td').text().should.match(/Noom/)
 
       describe 'after data fetched', ->
         it 'should load each .activity-item into #activities-view', ->
           $('#activities-view').find('.activity-item').length.should.not.equal 0
+
+    describe 'challenges', ->
+
+      it 'should load challenges view when switched route to challenges', ->
+        window.backend.Routers.MainRouter.navigate 'challenges', trigger:true
+        window.backend.Views.ChallengesView.rendered.should.equal true
+
+      it 'should set the challenge menu as active', ->
+        $('#sidebar-view').find('.main-menu li.challenges-tab-menu').hasClass('active').should.be.true
+
+      it 'should have challenge-item as a subview', ->
+        subViewName = 'challenge-' + window.backend.Collections.ChallengeCollection.models[0].cid
+        window.backend.Views.ChallengesView.subViews[subViewName].should.not.be.undefined
+
+      it 'should render #challenges-view into #content', ->
+        $('#content').find('#challenges-view').length.should.not.equal 0
+
+      it 'should have all fields required', ->
+        $('#content').find('#challenges-view').find('thead').find('th').length.should.equal 4
+
+        $('#content').find('#challenges-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#challenges-view').find('thead').text().should.match(/Start Date/)
+        $('#content').find('#challenges-view').find('thead').text().should.match(/End Date/)
+        $('#content').find('#challenges-view').find('thead').text().should.match(/Sonar Box ID/)
+
+      it 'should have correct first row of data', ->
+        $('#content #challenges-view .challenge-item:first td').length.should.equal 4
+
+      describe 'after data fetched', ->
+        it 'should load each .challenge-item into #challenges-view', ->
+          $('#challenges-view').find('.challenge-item').length.should.not.equal 0
 
     describe 'change route back', ->
       window.backend.Routers.MainRouter.navigate '', trigger: true

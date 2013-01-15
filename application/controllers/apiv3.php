@@ -424,6 +424,90 @@ class Apiv3 extends CI_Controller {
     return json_return($challenges);
   }
 
+  function challenge_list() {
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('branch_lib');
+    $this->load->library('challenge_lib');
+    $this->load->library('action_data_lib');
+    $this->load->model('sonar_box_model');
+
+    $query_options = array();
+    if(!empty($filter['name'])) {
+      $query_options['detail.name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(!empty($filter['start_date_from'])) {
+      # find where start_date > start_date_from
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['start_date'])) {
+        $query_options['start_date'] = array();
+      }
+
+      $query_options['start_date']['$gte'] = strtotime($filter['start_date_from']) + 0;
+    }
+    if(!empty($filter['start_date_to'])) {
+      # find where start_date < start_date_to
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['start_date'])) {
+        $query_options['start_date'] = array();
+      }
+
+      $query_options['start_date']['$lte'] = strtotime($filter['start_date_to']) + 60*60*24 - 1;
+    }
+
+    if(!empty($filter['end_date_from'])) {
+      # find where end_date > end_date_from
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['end_date'])) {
+        $query_options['end_date'] = array();
+      }
+
+      $query_options['end_date']['$gte'] = strtotime($filter['end_date_from']) + 0;
+    }
+    if(!empty($filter['end_date_to'])) {
+      # find where end_date < end_date_to
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['end_date'])) {
+        $query_options['end_date'] = array();
+      }
+
+      $query_options['end_date']['$lte'] = strtotime($filter['end_date_to']) + 60*60*24 - 1;
+    }
+
+    # TODO : filter by sonar box id
+
+    # sort & order
+    if(in_array($sort, array('name', 'start_date', 'end_date'))) { # TODO : sort by sonar box id
+      if($sort === 'name') { $sort = 'detail.name'; }
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $challenges = $this->challenge_lib->get($query_options, $limit, $offset, $sort);
+    $challenges_all_count = $this->challenge_lib->count($query_options);
+
+    foreach($challenges as &$challenge) {
+      // Get sonar
+      $challenge['sonar_box'] = $this->sonar_box_model->getOne(array('data' => $challenge['sonar_frequency']));
+    } unset($challenge);
+
+    $options = array(
+      'total' => $challenges_all_count,
+      'total_pages' => ceil($challenges_all_count / $limit),
+      'count' => count($challenges),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($challenges, 1, $options);
+  }
+
   function challenge_action() {
     $action_data_id = $this->input->get('action_data_id');
 

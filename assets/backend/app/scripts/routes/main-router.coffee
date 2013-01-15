@@ -5,6 +5,7 @@ define ['backbone'], (Backbone) ->
       'users': 'users'
       'activities': 'activities'
       'companies': 'companies'
+      'challenges': 'challenges'
       '*other': 'badRoute'
 
     users: ->
@@ -21,6 +22,11 @@ define ['backbone'], (Backbone) ->
       $('#content').html window.backend.Views.CompaniesView.render().el
       $('#sidebar-view .main-menu li').removeClass('active')
       $('#sidebar-view .main-menu li.companies-tab-menu').addClass('active')
+
+    challenges: ->
+      $('#content').html window.backend.Views.ChallengesView.render().el
+      $('#sidebar-view .main-menu li').removeClass('active')
+      $('#sidebar-view .main-menu li.challenges-tab-menu').addClass('active')
 
     badRoute: ->
       console.log '404 : Route not found'

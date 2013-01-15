@@ -1,6 +1,6 @@
 (function() {
 
-  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection) {
+  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection) {
     var config, env;
     config = {
       dev: {
@@ -28,6 +28,8 @@
     window.backend.Collections.UserCollection = new UserCollection;
     window.backend.Models.ActivityModel = ActivityModel;
     window.backend.Collections.ActivityCollection = new ActivityCollection;
+    window.backend.Models.ChallengeModel = ChallengeModel;
+    window.backend.Collections.ChallengeCollection = new ChallengeCollection;
     window.backend.Views.MainView = new MainView;
     window.backend.Views.MainView.render();
     window.backend.Views.UsersView = new UsersView({
@@ -38,6 +40,9 @@
     });
     window.backend.Views.CompaniesView = new CompaniesView({
       collection: window.backend.Collections.CompanyCollection
+    });
+    window.backend.Views.ChallengesView = new ChallengesView({
+      collection: window.backend.Collections.ChallengeCollection
     });
     Backbone.history.start();
     return window.appLoaded = true;

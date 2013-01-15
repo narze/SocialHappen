@@ -31,13 +31,21 @@ class Challenge_model extends CI_Model {
 		}
 	}
 
-	function get($query, $limit = 100){
+	function get($query, $limit = 100, $offset = 0, $sort = NULL){
 		$query = array_cast_int($query, $this->int_values);
-		$result = $this->collection->find($query)->sort(array('_id' => -1))->limit($limit);
-		// if($sort) {
-		// 	$result = $result->sort($sort);
-		// }
-		// $result = $result->limit($limit);
+		$result = $this->collection->find($query);
+
+		if(!$sort || !is_array($sort)) {
+			$sort = array('_id' => -1);
+		}
+
+		$result = $result->sort($sort);
+		$result = $result->skip($offset);
+
+		if($limit) {
+			$result = $result->limit($limit);
+		}
+
 		return cursor2array($result);
 	}
 
@@ -80,5 +88,9 @@ class Challenge_model extends CI_Model {
 	function get_distinct_company() {
 		$result = $this->mongo_db->command(array("distinct" => "challenge", "key" => "company_id"));
 		return $result['ok'] ? $result['values'] : array();
+	}
+
+	function count($criteria = array()) {
+		return $this->collection->count($criteria);
 	}
 }

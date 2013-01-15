@@ -16,8 +16,11 @@
       it('should have activities route', function() {
         return window.backend.Routers.MainRouter.routes['activities'].should.be.equal('activities');
       });
-      return it('should have companies route', function() {
+      it('should have companies route', function() {
         return window.backend.Routers.MainRouter.routes['companies'].should.be.equal('companies');
+      });
+      return it('should have challenges route', function() {
+        return window.backend.Routers.MainRouter.routes['challenges'].should.be.equal('challenges');
       });
     });
     return describe('routing', function() {
@@ -133,7 +136,7 @@
           return $('#content').find('#activities-view').length.should.not.equal(0);
         });
         it('should have all fields required', function() {
-          $('#content').find('#activities-view').find('thead').find('th').length.should.equal(6);
+          $('#content').find('#activities-view').find('thead').find('th').length.should.equal(5);
           $('#content').find('#activities-view').find('thead').text().should.match(/Date/);
           $('#content').find('#activities-view').find('thead').text().should.match(/Name/);
           $('#content').find('#activities-view').find('thead').text().should.match(/Action/);
@@ -142,12 +145,46 @@
           return $('#content').find('#activities-view').find('thead').text().should.match(/Challenge/);
         });
         it('should have correct first row of data', function() {
-          $('#content #activities-view .activity-item:first td').length.should.equal(6);
+          $('#content #activities-view .activity-item:first td').length.should.equal(5);
           return $('#content #activities-view .activity-item:first td').text().should.match(/Noom/);
         });
         return describe('after data fetched', function() {
           return it('should load each .activity-item into #activities-view', function() {
             return $('#activities-view').find('.activity-item').length.should.not.equal(0);
+          });
+        });
+      });
+      describe('challenges', function() {
+        it('should load challenges view when switched route to challenges', function() {
+          window.backend.Routers.MainRouter.navigate('challenges', {
+            trigger: true
+          });
+          return window.backend.Views.ChallengesView.rendered.should.equal(true);
+        });
+        it('should set the challenge menu as active', function() {
+          return $('#sidebar-view').find('.main-menu li.challenges-tab-menu').hasClass('active').should.be["true"];
+        });
+        it('should have challenge-item as a subview', function() {
+          var subViewName;
+          subViewName = 'challenge-' + window.backend.Collections.ChallengeCollection.models[0].cid;
+          return window.backend.Views.ChallengesView.subViews[subViewName].should.not.be.undefined;
+        });
+        it('should render #challenges-view into #content', function() {
+          return $('#content').find('#challenges-view').length.should.not.equal(0);
+        });
+        it('should have all fields required', function() {
+          $('#content').find('#challenges-view').find('thead').find('th').length.should.equal(4);
+          $('#content').find('#challenges-view').find('thead').text().should.match(/Name/);
+          $('#content').find('#challenges-view').find('thead').text().should.match(/Start Date/);
+          $('#content').find('#challenges-view').find('thead').text().should.match(/End Date/);
+          return $('#content').find('#challenges-view').find('thead').text().should.match(/Sonar Box ID/);
+        });
+        it('should have correct first row of data', function() {
+          return $('#content #challenges-view .challenge-item:first td').length.should.equal(4);
+        });
+        return describe('after data fetched', function() {
+          return it('should load each .challenge-item into #challenges-view', function() {
+            return $('#challenges-view').find('.challenge-item').length.should.not.equal(0);
           });
         });
       });

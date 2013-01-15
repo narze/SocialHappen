@@ -440,10 +440,10 @@ class Apiv4 extends REST_Controller {
         if($challenge && isset($challenge['branches_data'])){
           return $this->success($challenge['branches_data']);
         }else{
-          return $this->error();
+          return $this->error('Branch data not found');
         }
       }else{
-        return $this->error();
+        return $this->error('Challenge not found');
       }
     } else if($company_id) {
       $branches = $this->branch_lib->get(array(
@@ -453,7 +453,7 @@ class Apiv4 extends REST_Controller {
       if($branches){
         return $this->success($branches);
       }else{
-        return $this->error();
+        return $this->error('Branch not found');
       }
     } else {
       return $this->error('Criteria not set');
