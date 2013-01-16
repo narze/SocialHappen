@@ -76,7 +76,27 @@
     </div>
   </div>
 
-  <div class="control-group location">
+  <h6 class="verify-location">Verify location:</h6>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" class="verify-location" value="true" <%= verify_location?'checked="checked"':''%>>
+        This challenge does not need location verification
+      </label>
+    </div>
+  </div>
+
+  <h6 class="custom-location <%= verify_location?'':'hide' %>">Custom location:</h6>
+  <div class="control-group <%= verify_location?'':'hide' %>">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" class="custom-location" value="true" <%= custom_location?'checked="checked"':''%>>
+        This challenge has custom location
+      </label>
+    </div>
+  </div>
+
+  <div class="control-group location custom-location-lat-lng <%- custom_location ? '':'hide' %>">
     <label><h6>Latitude:</h6></label> <input class="latitude input-medium" type="text" name="latitude" id="latitude" value="<%= location[1] %>" placeholder="0.0">
     <label><h6>Longitude:</h6></label> <input class="longitude input-medium" type="text" name="longitude" id="longitude" value="<%= location[0] %>" placeholder="0.0">
     <div>

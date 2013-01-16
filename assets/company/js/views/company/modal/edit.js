@@ -61,7 +61,9 @@ define([
       'click button.save-location': 'saveLocation',
       'click button.save-done-count-max': 'saveDoneCountMax',
       'click button.save-sonar-frequency': 'saveSonarFrequency',
-      'click button.generate-sonar-data': 'generateSonarData'
+      'click button.generate-sonar-data': 'generateSonarData',
+      'change input.verify-location': 'toggleVerifyLocation',
+      'change input.custom-location': 'toggleCustomLocation',
     },
 
     initialize: function(){
@@ -697,6 +699,29 @@ define([
       }
 
       this.model.set('all_branch', enable).trigger('change');
+      this.model.save();
+    },
+
+    // 'change input.verify-location': 'toggleVerifyLocation',
+      // 'change input.custom-location': 'toggleCustomLocation',
+
+    toggleVerifyLocation: function(){
+      var enable = !_.isUndefined($('input.verify-location', this.el).attr('checked'));
+
+      this.model.set('verify_location', enable).trigger('change');
+      this.model.save();
+    },
+
+    toggleCustomLocation: function(){
+      var enable = !_.isUndefined($('input.custom-location', this.el).attr('checked'));
+
+      if(enable){
+        this.$('div.custom-location-lat-lng').removeClass('hide');
+      }else{
+        this.$('div.custom-location-lat-lng').addClass('hide');
+      }
+
+      this.model.set('custom_location', enable).trigger('change');
       this.model.save();
     },
 

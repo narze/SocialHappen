@@ -15,6 +15,8 @@ define([
       hash: null,
       branches: [],
       branches_data: [],
+      verify_location: false,
+      custom_location: false,
       all_branch: false,
       criteria: [],
       active: false,
