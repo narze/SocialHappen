@@ -66,7 +66,7 @@
     <h6 class="">Select individual branch:</h6>
     <div class="control-group">
       <div class="controls">
-        <select multiple="multiple" class="select-branch">
+        <select multiple="multiple" class="select-branch chzn-select" data-placeholder="Choose branches..." style="width:350px;">
           <% _.each(branchList, function(branch){ %>
             <option value="<%- branch._id %>"><%- branch.title %></option>
           <% }); %>

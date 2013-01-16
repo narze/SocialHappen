@@ -14,6 +14,7 @@ require.config({
     moment: '../../libs/moment/moment.min',
     jqueryForm: '../../libs/jquery.form/jquery.form',
     sandbox: '../../libs/sandbox/sandbox',
+    chosen: '../../libs/jquery.chosen/chosen.jquery.min',
     // Require.js plugins
     text: '../../libs/require/text',
     order: '../../libs/require/order',

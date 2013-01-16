@@ -18,10 +18,12 @@ define([
   'timeago',
   'collections/challenger',
   'events',
-  'sandbox'
+  'sandbox',
+  'chosen'
 ], function(Vm, $, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
-  QRActionView, CheckinActionView, WalkinActionView, RewardView, ChallengerView, jqueryui, timeago, ChallengerCollection, vent, sandbox){
+  QRActionView, CheckinActionView, WalkinActionView, RewardView, ChallengerView, jqueryui,
+   timeago, ChallengerCollection, vent, sandbox, chosen){
   var EditModalView = Backbone.View.extend({
 
     editTemplate: _.template(editTemplate),
@@ -339,6 +341,8 @@ define([
 
         $('ul.reward-list', this.el).append(rewardView.render().el);
       });
+
+      this.$(".chzn-select").chosen();
 
       this.$el.modal('show');
     },
