@@ -9,6 +9,7 @@
         'activities': 'activities',
         'companies': 'companies',
         'challenges': 'challenges',
+        'rewards': 'rewards',
         '*other': 'badRoute'
       },
       users: function() {
@@ -30,6 +31,11 @@
         $('#content').html(window.backend.Views.ChallengesView.render().el);
         $('#sidebar-view .main-menu li').removeClass('active');
         return $('#sidebar-view .main-menu li.challenges-tab-menu').addClass('active');
+      },
+      rewards: function() {
+        $('#content').html(window.backend.Views.RewardsView.render().el);
+        $('#sidebar-view .main-menu li').removeClass('active');
+        return $('#sidebar-view .main-menu li.rewards-tab-menu').addClass('active');
       },
       badRoute: function() {
         console.log('404 : Route not found');

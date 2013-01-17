@@ -970,6 +970,108 @@ class Apiv3 extends CI_Controller {
     return json_return($rewards);
   }
 
+  function reward_list() {
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('reward_lib');
+    $this->load->model('reward_item_model');
+
+    $query_options = array();
+    if(isset($filter['name']) && strlen($filter['name'])) {
+      $query_options['name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(isset($filter['point_from']) && strlen($filter['point_from'])) {
+      # find where point > point_from
+      if(!isset($query_options['redeem.point'])) {
+        $query_options['redeem.point'] = array();
+      }
+
+      $query_options['redeem.point']['$gte'] = (int) $filter['point_from'];
+    }
+    if(isset($filter['point_to']) && strlen($filter['point_to'])) {
+      # find where point < point_to
+      if(!isset($query_options['redeem.point'])) {
+        $query_options['redeem.point'] = array();
+      }
+
+      $query_options['redeem.point']['$lte'] = (int) $filter['point_to'];
+    }
+
+    if(isset($filter['amount_from']) && strlen($filter['amount_from'])) {
+      # find where amount > amount_from
+      if(!isset($query_options['redeem.amount'])) {
+        $query_options['redeem.amount'] = array();
+      }
+
+      $query_options['redeem.amount']['$gte'] = (int) $filter['amount_from'];
+    }
+    if(isset($filter['amount_to']) && strlen($filter['amount_to'])) {
+      # find where amount < amount_to
+      if(!isset($query_options['redeem.amount'])) {
+        $query_options['redeem.amount'] = array();
+      }
+
+      $query_options['redeem.amount']['$lte'] = (int) $filter['amount_to'];
+    }
+
+    if(isset($filter['amount_redeemed_from']) && strlen($filter['amount_redeemed_from'])) {
+      # find where amount_redeemed > amount_redeemed_from
+      if(!isset($query_options['redeem.amount_redeemed'])) {
+        $query_options['redeem.amount_redeemed'] = array();
+      }
+
+      $query_options['redeem.amount_redeemed']['$gte'] = (int) $filter['amount_redeemed_from'];
+    }
+    if(isset($filter['amount_redeemed_to']) && strlen($filter['amount_redeemed_to'])) {
+      # find where amount_redeemed < amount_redeemed_to
+      if(!isset($query_options['redeem.amount_redeemed'])) {
+        $query_options['redeem.amount_redeemed'] = array();
+      }
+
+      $query_options['redeem.amount_redeemed']['$lte'] = (int) $filter['amount_redeemed_to'];
+    }
+
+    if(isset($filter['once']) && strlen($filter['once'])) {
+      $query_options['redeem.once'] = !!((int) $filter['once']);
+    }
+
+    # sort & order
+    if(in_array($sort, array('name', 'point', 'amount', 'amount_redeemed'))) { # TODO : sort once
+      if($sort === 'point') { $sort = 'redeem.point'; }
+      if($sort === 'amount') { $sort = 'redeem.amount'; }
+      if($sort === 'amount_redeemed') { $sort = 'redeem.amount_redeemed'; }
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    //system rewards
+    $query_options['company_id'] = 1;
+    $query_options['type'] = 'redeem';
+
+    $rewards = $this->reward_item_model->get_full($query_options, $limit, $offset, $sort);
+    $rewards_all_count = $this->reward_item_model->count($query_options);
+
+    foreach($rewards as &$reward) {
+
+    } unset($reward);
+
+    $options = array(
+      'total' => $rewards_all_count,
+      'total_pages' => ceil($rewards_all_count / $limit),
+      'count' => count($rewards),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($rewards, 1, $options);
+  }
+
   /**
    * list offer type rewards
    */

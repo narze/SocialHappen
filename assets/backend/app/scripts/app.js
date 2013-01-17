@@ -1,6 +1,6 @@
 (function() {
 
-  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection) {
+  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'views/rewards-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection', 'models/reward-model', 'collections/reward-collection'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, RewardsView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection, RewardModel, RewardCollection) {
     var config, env;
     config = {
       dev: {
@@ -30,6 +30,8 @@
     window.backend.Collections.ActivityCollection = new ActivityCollection;
     window.backend.Models.ChallengeModel = ChallengeModel;
     window.backend.Collections.ChallengeCollection = new ChallengeCollection;
+    window.backend.Models.RewardModel = RewardModel;
+    window.backend.Collections.RewardCollection = new RewardCollection;
     window.backend.Views.MainView = new MainView;
     window.backend.Views.MainView.render();
     window.backend.Views.UsersView = new UsersView({
@@ -43,6 +45,9 @@
     });
     window.backend.Views.ChallengesView = new ChallengesView({
       collection: window.backend.Collections.ChallengeCollection
+    });
+    window.backend.Views.RewardsView = new RewardsView({
+      collection: window.backend.Collections.RewardCollection
     });
     Backbone.history.start();
     return window.appLoaded = true;

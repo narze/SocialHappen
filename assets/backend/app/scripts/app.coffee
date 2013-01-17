@@ -6,6 +6,7 @@ define [
   'views/activities-view'
   'views/companies-view'
   'views/challenges-view'
+  'views/rewards-view'
   'models/company-model'
   'collections/company-collection'
   'models/user-model'
@@ -14,6 +15,8 @@ define [
   'collections/activity-collection'
   'models/challenge-model'
   'collections/challenge-collection'
+  'models/reward-model'
+  'collections/reward-collection'
 ], (
   Main
   MainRouter
@@ -22,6 +25,7 @@ define [
   ActivitiesView
   CompaniesView
   ChallengesView
+  RewardsView
   CompanyModel
   CompanyCollection
   UserModel
@@ -30,6 +34,8 @@ define [
   ActivityCollection
   ChallengeModel
   ChallengeCollection
+  RewardModel
+  RewardCollection
 ) ->
 
   # Server specific config
@@ -68,6 +74,10 @@ define [
 
   window.backend.Collections.ChallengeCollection = new ChallengeCollection
 
+  window.backend.Models.RewardModel = RewardModel
+
+  window.backend.Collections.RewardCollection = new RewardCollection
+
   window.backend.Views.MainView = new MainView
   window.backend.Views.MainView.render()
 
@@ -82,6 +92,9 @@ define [
 
   window.backend.Views.ChallengesView = new ChallengesView
     collection: window.backend.Collections.ChallengeCollection
+
+  window.backend.Views.RewardsView = new RewardsView
+    collection: window.backend.Collections.RewardCollection
 
   Backbone.history.start()
 

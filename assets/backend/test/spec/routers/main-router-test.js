@@ -19,8 +19,11 @@
       it('should have companies route', function() {
         return window.backend.Routers.MainRouter.routes['companies'].should.be.equal('companies');
       });
-      return it('should have challenges route', function() {
+      it('should have challenges route', function() {
         return window.backend.Routers.MainRouter.routes['challenges'].should.be.equal('challenges');
+      });
+      return it('should have rewards route', function() {
+        return window.backend.Routers.MainRouter.routes['rewards'].should.be.equal('rewards');
       });
     });
     return describe('routing', function() {
@@ -177,7 +180,7 @@
           $('#content').find('#challenges-view').find('thead').text().should.match(/Name/);
           $('#content').find('#challenges-view').find('thead').text().should.match(/Start Date/);
           $('#content').find('#challenges-view').find('thead').text().should.match(/End Date/);
-          return $('#content').find('#challenges-view').find('thead').text().should.match(/Sonar Box ID/);
+          return $('#content').find('#challenges-view').find('thead').text().should.match(/Sonar Data/);
         });
         it('should have correct first row of data', function() {
           return $('#content #challenges-view .challenge-item:first td').length.should.equal(4);
@@ -185,6 +188,41 @@
         return describe('after data fetched', function() {
           return it('should load each .challenge-item into #challenges-view', function() {
             return $('#challenges-view').find('.challenge-item').length.should.not.equal(0);
+          });
+        });
+      });
+      describe('rewards', function() {
+        it('should load rewards view when switched route to rewards', function() {
+          window.backend.Routers.MainRouter.navigate('rewards', {
+            trigger: true
+          });
+          return window.backend.Views.RewardsView.rendered.should.equal(true);
+        });
+        it('should set the reward menu as active', function() {
+          return $('#sidebar-view').find('.main-menu li.rewards-tab-menu').hasClass('active').should.be["true"];
+        });
+        it('should have reward-item as a subview', function() {
+          var subViewName;
+          subViewName = 'reward-' + window.backend.Collections.RewardCollection.models[0].cid;
+          return window.backend.Views.RewardsView.subViews[subViewName].should.not.be.undefined;
+        });
+        it('should render #rewards-view into #content', function() {
+          return $('#content').find('#rewards-view').length.should.not.equal(0);
+        });
+        it('should have all fields required', function() {
+          $('#content').find('#rewards-view').find('thead').find('th').length.should.equal(5);
+          $('#content').find('#rewards-view').find('thead').text().should.match(/Name/);
+          $('#content').find('#rewards-view').find('thead').text().should.match(/Point Required/);
+          $('#content').find('#rewards-view').find('thead').text().should.match(/Amount/);
+          $('#content').find('#rewards-view').find('thead').text().should.match(/Amount Redeemed/);
+          return $('#content').find('#rewards-view').find('thead').text().should.match(/Can Play Once/);
+        });
+        it('should have correct first row of data', function() {
+          return $('#content #rewards-view .reward-item:first td').length.should.equal(5);
+        });
+        return describe('after data fetched', function() {
+          return it('should load each .reward-item into #rewards-view', function() {
+            return $('#rewards-view').find('.reward-item').length.should.not.equal(0);
           });
         });
       });

@@ -1,13 +1,13 @@
 define [
   'backbone'
   'moment'
-  'text!templates/challenge-item-template.html'
-  ], (Backbone, moment, ChallengeItemTemplate) ->
+  'text!templates/reward-item-template.html'
+  ], (Backbone, moment, RewardItemTemplate) ->
 
   View = Backbone.View.extend
 
     tagName: 'tr'
-    className: 'challenge-item'
+    className: 'reward-item'
 
     initialize: ->
       _.bindAll @
@@ -17,7 +17,7 @@ define [
       e.preventDefault()
 
     render: ->
-      @$el.html _.template(ChallengeItemTemplate, @model.toJSON())
+      @$el.html _.template(RewardItemTemplate, @model.toJSON())
       @delegateEvents()
 
       @
