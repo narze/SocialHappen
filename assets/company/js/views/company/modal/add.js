@@ -15,10 +15,12 @@ define([
   'jqueryui',
   'jqueryForm',
   'events',
-  'sandbox'
+  'sandbox',
+  'chosen'
 ], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate,
    addActionTemplate, addRewardTemplate, FeedbackActionView,
-   QRActionView, CheckinActionView, WalkinActionView, RewardView, jqueryui, jqueryForm, vent, sandbox){
+   QRActionView, CheckinActionView, WalkinActionView, RewardView, jqueryui,
+    jqueryForm, vent, sandbox, chosen){
   var EditModalView = Backbone.View.extend({
 
     addTemplate: _.template(addTemplate),
@@ -42,7 +44,11 @@ define([
       'keyup input.sonar-frequency': 'onTypeSonarFrequency',
       'keyup textarea.challenge-description': 'onTypeChallengeDescription',
       'click button.upload-image-submit': 'uploadImage',
-      'click button.generate-sonar-data': 'generateSonarData'
+      'click button.generate-sonar-data': 'generateSonarData',
+      'change input.all-branch-enable': 'toggleAllBranch',
+      'change input.verify-location': 'toggleVerifyLocation',
+      'change input.custom-location': 'toggleCustomLocation',
+      'change select.select-branch': 'onSelectBranch'
     },
 
     initialize: function(){
@@ -54,7 +60,10 @@ define([
     render: function () {
       console.log('render modal');
       var data = this.model.toJSON();
+      data.branchList = sandbox.collections.branchCollection.toJSON();
       $(this.el).html(this.addTemplate(data));
+
+      this.$('select.select-branch').val(data.branches);
 
       var self = this;
 
@@ -190,7 +199,48 @@ define([
         $('ul.reward-list', this.el).append(rewardView.render().el);
       }, this);
 
+      this.$(".chzn-select").chosen();
+
       this.$el.modal('show');
+    },
+
+    toggleAllBranch: function(){
+      var enable = !_.isUndefined($('input.all-branch-enable', this.el).attr('checked'));
+
+      if(!enable){
+        this.$('div.select-branch').removeClass('hide');
+      }else{
+        this.$('div.select-branch').addClass('hide');
+      }
+
+      this.model.set('all_branch', enable).trigger('change');
+    },
+
+    onSelectBranch: function(){
+      var branches = this.$('select.select-branch').val();
+      this.model.set('branches', branches).trigger('change');
+      vent.trigger('showAddModal', this.model);
+      console.log('select branch', branches);
+    },
+
+    toggleVerifyLocation: function(){
+      var enable = !_.isUndefined($('input.verify-location', this.el).attr('checked'));
+
+      this.model.set('verify_location', enable).trigger('change');
+      vent.trigger('showAddModal', this.model);
+    },
+
+    toggleCustomLocation: function(){
+      var enable = !_.isUndefined($('input.custom-location', this.el).attr('checked'));
+
+      if(enable){
+        this.$('div.custom-location-lat-lng').removeClass('hide');
+      }else{
+        this.$('div.custom-location-lat-lng').addClass('hide');
+      }
+
+      this.model.set('custom_location', enable).trigger('change');
+      vent.trigger('showAddModal', this.model);
     },
 
     onTypeChallengeName: function(e){

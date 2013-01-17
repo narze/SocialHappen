@@ -100,7 +100,10 @@ define([
         criteria: [],
         reward_items: [],
         active: true,
-        repeat: 1
+        repeat: 1,
+        verify_location: true,
+        all_branch: true,
+        custom_location: false
       });
       console.log('new model:', newModel.toJSON(), 'default:', newModel.defaults);
       vent.trigger('showAddModal', newModel);

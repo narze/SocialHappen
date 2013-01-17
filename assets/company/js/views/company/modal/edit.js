@@ -65,7 +65,7 @@ define([
       'click button.save-sonar-frequency': 'saveSonarFrequency',
       'click button.generate-sonar-data': 'generateSonarData',
       'change input.verify-location': 'toggleVerifyLocation',
-      'change input.custom-location': 'toggleCustomLocation',
+      'change input.custom-location': 'toggleCustomLocation'
     },
 
     initialize: function(){
@@ -704,16 +704,15 @@ define([
 
       this.model.set('all_branch', enable).trigger('change');
       this.model.save();
+      vent.trigger('showEditModal', this.model);
     },
-
-    // 'change input.verify-location': 'toggleVerifyLocation',
-      // 'change input.custom-location': 'toggleCustomLocation',
 
     toggleVerifyLocation: function(){
       var enable = !_.isUndefined($('input.verify-location', this.el).attr('checked'));
 
       this.model.set('verify_location', enable).trigger('change');
       this.model.save();
+      vent.trigger('showEditModal', this.model);
     },
 
     toggleCustomLocation: function(){
@@ -727,6 +726,7 @@ define([
 
       this.model.set('custom_location', enable).trigger('change');
       this.model.save();
+      vent.trigger('showEditModal', this.model);
     },
 
     onSaveSelectedBranch: function(){

@@ -23,7 +23,50 @@
     </div>
   </div>
 
-  <div class="location control-group row-fluid form-inline">
+  <h6 class="edit-repeat">Available all branch:</h6>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" class="all-branch-enable" value="true" <%= all_branch?'checked="checked"':''%>>
+        User can play this challenge at all branch of this company
+      </label>
+    </div>
+  </div>
+
+  <div class="select-branch <%- all_branch?'hide':''%>">
+    <h6 class="">Select individual branch:</h6>
+    <div class="control-group">
+      <div class="controls">
+        <select multiple="multiple" class="select-branch chzn-select" data-placeholder="Choose branches..." style="width:350px;">
+          <% _.each(branchList, function(branch){ %>
+            <option value="<%- branch._id %>"><%- branch.title %></option>
+          <% }); %>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <h6 class="verify-location">Verify location:</h6>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" class="verify-location" value="true" <%= verify_location?'checked="checked"':''%>>
+        This challenge need location verification
+      </label>
+    </div>
+  </div>
+
+  <h6 class="custom-location <%- verify_location?'':'hide' %>">Custom location:</h6>
+  <div class="control-group <%- verify_location?'':'hide' %>">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" class="custom-location" value="true" <%= custom_location?'checked="checked"':''%>>
+        This challenge has custom location
+      </label>
+    </div>
+  </div>
+
+  <div class="location control-group row-fluid form-inline custom-location-lat-lng <%- custom_location && verify_location ? '':'hide' %>">
     <div class="span6">
       <label><h6>Latitude:</h6></label> <input class="latitude input-medium" type="text" name="latitude" id="latitude" value="" placeholder="0.0">
     </div>
