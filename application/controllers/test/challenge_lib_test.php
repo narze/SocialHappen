@@ -71,6 +71,8 @@ class Challenge_lib_test extends CI_Controller {
           'count' => 2
         )
       ),
+      'verify_location' => TRUE,
+      'custom_location' => TRUE,
       'location' => array(40, 40),
       'locations' => array(),
       'custom_locations' => array(),
@@ -94,6 +96,8 @@ class Challenge_lib_test extends CI_Controller {
           'count' => 3
         )
       ),
+      'verify_location' => TRUE,
+      'custom_location' => TRUE,
       'location' => array(45, 60),
       'locations' => array(),
       'custom_locations' => array(array(140,110)),
@@ -118,6 +122,8 @@ class Challenge_lib_test extends CI_Controller {
           'is_platform_action' => TRUE
         )
       ),
+      'verify_location' => TRUE,
+      'custom_location' => TRUE,
       'location' => array(-20, 30),
       'locations' => array(),
       'custom_locations' => array(),
@@ -145,7 +151,9 @@ class Challenge_lib_test extends CI_Controller {
       'repeat' => 1,
       'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))),
       //location not specified
-      'locations' => array(),
+      'locations' => array(10, 20),
+      'verify_location' => TRUE,
+      'custom_location' => FALSE,
       'custom_locations' => array(),
       'branches' => array()
     );

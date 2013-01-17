@@ -878,7 +878,10 @@ class Challenge_lib {
       return FALSE;
     }
 
-    if(isset($challenge['location'])){
+    // add location if custom_location flag is TRUE or not set
+    if((!isset($challenge['custom_location']) && isset($challenge['location']))
+      || isset($challenge['custom_location']) && $challenge['custom_location'] && isset($challenge['location'])
+      ){
       $locations = array($challenge['location']);
     }else{
       $locations = array();
