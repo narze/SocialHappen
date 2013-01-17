@@ -35,6 +35,10 @@ require.config
       exports: 'moment'
     backbonePaginator:
       deps: ['backbone']
+    backboneValidation:
+      deps: ['backbone']
+    backboneValidationBootstrap:
+      deps: ['backboneValidation']
 
   paths:
     jquery: 'vendor/jquery.min'
@@ -46,6 +50,8 @@ require.config
     text: 'vendor/text'
     moment: 'vendor/moment.min'
     backbonePaginator: 'vendor/backbone.paginator'
+    backboneValidation: 'vendor/backbone-validation-amd'
+    backboneValidationBootstrap: 'vendor/backbone-validation-bootstrap'
 
     # Perfectum Dashboard
     bootstrap: 'vendor/jquery-plugins/bootstrap'

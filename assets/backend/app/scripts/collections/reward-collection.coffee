@@ -8,7 +8,7 @@ define ['backbone', 'backbonePaginator', 'helpers/common', 'models/reward-model'
     params: {}
 
     # url: ->
-    #   window.baseUrl + 'apiv3/activities?' + serialize(this.params)
+    #   window.baseUrl + 'apiv3/reward_list?' + serialize(this.params)
 
     paginator_core:
       # the type of the request (GET by default)
@@ -79,5 +79,6 @@ define ['backbone', 'backbonePaginator', 'helpers/common', 'models/reward-model'
         return resp.data;
       else if typeof resp.success isnt 'undefined'
         return @previousAttributes && @previousAttributes()
+
 
       return resp;

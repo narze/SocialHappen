@@ -4,7 +4,8 @@ define [
   'views/rewards-filter-view'
   'views/pagination-view'
   'views/reward-item-view'
-  ], (Backbone, RewardsTemplate, RewardsFilterView, PaginationView, RewardItemView) ->
+  'views/reward-add-view'
+  ], (Backbone, RewardsTemplate, RewardsFilterView, PaginationView, RewardItemView, RewardAddView) ->
 
   View = Backbone.View.extend
 
@@ -21,7 +22,8 @@ define [
       _.bindAll @
       @subViews = {}
       @collection.bind 'reset', @listRewards
-      @collection.bind 'change', @listRewards
+      @collection.bind 'add', @listRewards
+      @collection.bind 'remove', @listRewards
       @collection.fetch()
 
     listRewards: ->
@@ -84,6 +86,12 @@ define [
             @subViews.pagination[i] = new PaginationView collection: @collection
         for i in [0..paginationCount]
           @$('.pagination-container:eq(' + i + ')').html @subViews.pagination[i].render().el
+
+      # reward add form
+      if !@subViews['reward-add']
+        @subViews['reward-add'] = new RewardAddView model: new @collection.model
+
+      @$('#reward-add-container').html @subViews['reward-add'].render().el
 
       @rendered = true
       @

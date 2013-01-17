@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/rewards-template.html', 'views/rewards-filter-view', 'views/pagination-view', 'views/reward-item-view'], function(Backbone, RewardsTemplate, RewardsFilterView, PaginationView, RewardItemView) {
+  define(['backbone', 'text!templates/rewards-template.html', 'views/rewards-filter-view', 'views/pagination-view', 'views/reward-item-view', 'views/reward-add-view'], function(Backbone, RewardsTemplate, RewardsFilterView, PaginationView, RewardItemView, RewardAddView) {
     var View;
     View = Backbone.View.extend({
       id: 'rewards-view',
@@ -15,7 +15,8 @@
         _.bindAll(this);
         this.subViews = {};
         this.collection.bind('reset', this.listRewards);
-        this.collection.bind('change', this.listRewards);
+        this.collection.bind('add', this.listRewards);
+        this.collection.bind('remove', this.listRewards);
         return this.collection.fetch();
       },
       listRewards: function() {
@@ -85,6 +86,12 @@
             this.$('.pagination-container:eq(' + i + ')').html(this.subViews.pagination[i].render().el);
           }
         }
+        if (!this.subViews['reward-add']) {
+          this.subViews['reward-add'] = new RewardAddView({
+            model: new this.collection.model
+          });
+        }
+        this.$('#reward-add-container').html(this.subViews['reward-add'].render().el);
         this.rendered = true;
         return this;
       }

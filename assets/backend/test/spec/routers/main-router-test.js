@@ -220,9 +220,38 @@
         it('should have correct first row of data', function() {
           return $('#content #rewards-view .reward-item:first td').length.should.equal(5);
         });
-        return describe('after data fetched', function() {
+        describe('after data fetched', function() {
           return it('should load each .reward-item into #rewards-view', function() {
             return $('#rewards-view').find('.reward-item').length.should.not.equal(0);
+          });
+        });
+        return describe('reward add view', function() {
+          it('should have reward-add-view as a subview', function() {
+            return window.backend.Views.RewardsView.subViews['reward-add'].should.not.be.undefined;
+          });
+          it('should have reward add view', function() {
+            return $('#rewards-view').find('#reward-add-view').length.should.not.equal(0);
+          });
+          it('should have form', function() {
+            return $('form.reward-add-form').length.should.not.equal(0);
+          });
+          return it('should have labels for each form item', function() {
+            var $form;
+            $form = $('form.reward-add-form');
+            $form.text().should.match(/Name/);
+            $form.text().should.match(/Description/);
+            $form.text().should.match(/Status/);
+            $form.text().should.match(/Redeem Method/);
+            $form.text().should.match(/Redeem Date Range/);
+            $form.text().should.match(/If not specified, this reward will be redeemable forever/);
+            $form.text().should.match(/Quantity/);
+            $form.text().should.match(/Amount of reward user can redeem/);
+            $form.text().should.match(/Points/);
+            $form.text().should.match(/Amount of points user use to redeem this reward/);
+            $form.text().should.match(/Redeemable Once/);
+            $form.text().should.match(/Each user can redeem this reward once/);
+            $form.text().should.match(/Add Reward/);
+            return $form.text().should.match(/Cancel/);
           });
         });
       });

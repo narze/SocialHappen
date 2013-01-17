@@ -217,5 +217,33 @@ describe 'Main Router', ->
         it 'should load each .reward-item into #rewards-view', ->
           $('#rewards-view').find('.reward-item').length.should.not.equal 0
 
+      describe 'reward add view', ->
+        it 'should have reward-add-view as a subview', ->
+          window.backend.Views.RewardsView.subViews['reward-add'].should.not.be.undefined
+
+        it 'should have reward add view', ->
+          $('#rewards-view').find('#reward-add-view').length.should.not.equal 0
+
+        it 'should have form', ->
+          $('form.reward-add-form').length.should.not.equal 0
+
+        it 'should have labels for each form item', ->
+          $form = $('form.reward-add-form')
+          $form.text().should.match /Name/
+          $form.text().should.match /Description/
+          # $form.text().should.match /Image/
+          $form.text().should.match /Status/
+          $form.text().should.match /Redeem Method/
+          $form.text().should.match /Redeem Date Range/
+          $form.text().should.match /If not specified, this reward will be redeemable forever/
+          $form.text().should.match /Quantity/
+          $form.text().should.match /Amount of reward user can redeem/
+          $form.text().should.match /Points/
+          $form.text().should.match /Amount of points user use to redeem this reward/
+          $form.text().should.match /Redeemable Once/
+          $form.text().should.match /Each user can redeem this reward once/
+          $form.text().should.match /Add Reward/
+          $form.text().should.match /Cancel/
+
     describe 'change route back', ->
       window.backend.Routers.MainRouter.navigate '', trigger: true

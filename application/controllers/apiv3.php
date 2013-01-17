@@ -971,6 +971,10 @@ class Apiv3 extends CI_Controller {
   }
 
   function reward_list() {
+    if ($model = json_decode($this->input->post('model'), TRUE)) {
+      return $this->_reward_add($model);
+    }
+
     $limit = $this->input->get('limit') ? : 10;
     $offset = $this->input->get('offset') ? : 0;
     $filter = $this->input->get('filter');
@@ -1070,6 +1074,29 @@ class Apiv3 extends CI_Controller {
     );
 
     return $this->success($rewards, 1, $options);
+  }
+
+  function _reward_add($reward) {
+    $this->load->model('reward_item_model');
+
+    if(!strlen($reward['redeem']['point'])
+    || !strlen($reward['redeem']['amount'])
+    || !strlen($reward['name'])
+      ) {
+      return $this->error('Reward data invalid');
+    }
+
+    $reward['updated_timestamp'] = time();
+    $reward['value'] = 0;
+    $reward['company_id'] = 1;
+    $reward['type'] = 'redeem';
+    $reward['is_points_reward'] = TRUE;
+
+    if(!$reward_item_id = $this->reward_item_model->add_redeem_reward($reward)) {
+      return $this->error('Add reward failed');
+    }
+
+    return $this->success($reward);
   }
 
   /**

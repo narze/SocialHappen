@@ -1,0 +1,92 @@
+<div class="row-fluid sortable">
+    <div class="box span12">
+        <div class="box-header" data-original-title>
+            <h2><i class="fa-icon-plus-sign"></i><span class="break"></span>Add Reward</h2>
+            <div class="box-icon">
+                <a href="#" class="btn-minimize"><i class="icon-chevron-down"></i></a>
+            </div>
+        </div>
+        <div class="box-content" style="display: none;">
+            <form class="reward-add-form form-horizontal">
+              <fieldset>
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-name">Name</label>
+                  <div class="controls">
+                    <input name="name" class="input-xlarge" type="text" id="reward-add-name" value="">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-description">Description</label>
+                  <div class="controls">
+                    <textarea class="input-xlarge" id="reward-add-description"></textarea>
+                  </div>
+                </div>
+
+                <!-- TODO : image upload -->
+
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-status">Status</label>
+                  <div class="controls">
+                    <select id="reward-add-status" class="input-xlarge">
+                      <option value="published">Published</option>
+                      <option value="draft">Draft</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-redeem-method">Redeem Method</label>
+                  <div class="controls">
+                    <select id="reward-add-redeem-method" class="input-xlarge">
+                      <option value="in_store">User Redeem Reward In Store</option>
+                      <option value="delivery">Reward Delivery To User</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-start-timestamp">Redeem Date Range</label>
+                  <div class="controls">
+                    <input type="text" class="input-xlarge datepicker" id="reward-add-start-timestamp" value="" placeholder="from"> <input type="text" class="input-xlarge datepicker" id="reward-add-end-timestamp" value="" placeholder="to">
+                    <span class="help-block">If not specified, this reward will be redeemable forever</span>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-amount">Quantity</label>
+                  <div class="controls">
+                    <input name="redeem.amount" type="number" id="reward-add-amount">
+                    <span class="help-inline">Amount of reward user can redeem</span>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-point">Points</label>
+                  <div class="controls">
+                    <input name="redeem.point" type="number" id="reward-add-point">
+                    <span class="help-inline">Amount of points user use to redeem this reward</span>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-once">Redeemable Once</label>
+                  <div class="controls">
+                    <select name="redeem.once" id="reward-add-once">
+                      <option value="1">Yes</option>
+                      <option value="0">No</option>
+                    </select>
+                    <span class="help-inline">Each user can redeem this reward once</span>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Add Reward</button>
+                  <button type="reset" class="btn">Cancel</button>
+                </div>
+              </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

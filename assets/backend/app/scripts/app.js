@@ -49,6 +49,7 @@
     window.backend.Views.RewardsView = new RewardsView({
       collection: window.backend.Collections.RewardCollection
     });
+    Backbone.emulateJSON = true;
     Backbone.history.start();
     return window.appLoaded = true;
   });

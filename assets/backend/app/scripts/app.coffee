@@ -96,6 +96,7 @@ define [
   window.backend.Views.RewardsView = new RewardsView
     collection: window.backend.Collections.RewardCollection
 
+  Backbone.emulateJSON = true
   Backbone.history.start()
 
   window.appLoaded = true
