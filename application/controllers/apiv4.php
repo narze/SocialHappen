@@ -652,15 +652,36 @@ class Apiv4 extends REST_Controller {
       return $this->error('Challenge invalid');
     }
 
+    $company_id = (int) $challenge['company_id'];
+
     //Check challenge quota
+    $this->load->library('audit_lib');
     if(isset($challenge['done_count_max']) && ($challenge['done_count_max'] > 0)) {
       $done_count = isset($challenge['done_count']) ? $challenge['done_count'] : 0;
       if($done_count >= $challenge['done_count_max']) {
+
+        $audit_data = array(
+          'timestamp' => $time,
+          'user_id' => $user_id,
+          'action_id' => $this->socialhappen->get_k('audit_action', 'Action Failure'),
+          'app_id' => 0,
+          'app_install_id' => 0,
+          'page_id' => 0,
+          'company_id' => $company_id,
+          'subject' => $location ? $location : NULL,
+          'object' => $action_id,
+          'objecti' => 'Reward out of stock',
+          'image' => ''
+        );
+
+        if(!$this->audit_lib->audit_add($audit_data)) {
+          return $this->error('Audit add failed'. var_export($audit_data, true));
+        }
+
         return $this->error('Reward out of stock');
       }
     }
 
-    $company_id = (int) $challenge['company_id'];
 
     //Add audit & stat
     $user_data = array(
@@ -687,13 +708,31 @@ class Apiv4 extends REST_Controller {
       if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
         foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
           if($daily_challenge['start_date'] <= date('Ymd', $time) && $daily_challenge['end_date'] >= date('Ymd', $time)) {
+
+            $audit_data = array(
+              'timestamp' => $time,
+              'user_id' => $user_id,
+              'action_id' => $this->socialhappen->get_k('audit_action', 'Action Failure'),
+              'app_id' => 0,
+              'app_install_id' => 0,
+              'page_id' => 0,
+              'company_id' => $company_id,
+              'subject' => $location ? $location : NULL,
+              'object' => $action_id,
+              'objecti' => 'Challenge done already (daily)',
+              'image' => ''
+            );
+
+            if(!$this->audit_lib->audit_add($audit_data)) {
+              return $this->error('Audit add failed'. var_export($audit_data, true));
+            }
+
             return $this->error('Challenge done already (daily)', 1);
           }
         }
       }
 
       //add stat after checking challenge done
-      $this->load->library('audit_lib');
       $this->load->library('action_user_data_lib');
       if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
         $company_id,
@@ -766,6 +805,25 @@ class Apiv4 extends REST_Controller {
     } else {
       //Check if user completed already or not
       if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
+
+        $audit_data = array(
+          'timestamp' => $time,
+          'user_id' => $user_id,
+          'action_id' => $this->socialhappen->get_k('audit_action', 'Action Failure'),
+          'app_id' => 0,
+          'app_install_id' => 0,
+          'page_id' => 0,
+          'company_id' => $company_id,
+          'subject' => $location ? $location : NULL,
+          'object' => $action_id,
+          'objecti' => 'Challenge done already',
+          'image' => ''
+        );
+
+        if($this->audit_lib->audit_add($audit_data)) {
+          return $this->error('Audit add failed'. var_export($audit_data, true));
+        }
+
         return $this->error('Challenge done already', 1);
       }
 

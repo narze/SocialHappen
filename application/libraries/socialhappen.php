@@ -57,6 +57,7 @@ class SocialHappen{
 			117 => 'User Join Challenge',
 			118 => 'User Complete Challenge',
 			119 => 'User Redeem Reward',
+			120 => 'Action Failure',
 			//challenge actions
 			201 => 'QR',
 			202 => 'Feedback',

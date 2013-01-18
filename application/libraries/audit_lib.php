@@ -459,6 +459,11 @@ class Audit_lib
 				$challenge_name = isset($challenge['detail']['name']) ? $challenge['detail']['name'] : $value;
 				$format_value = '<span class="type_challenge"><a href="'.base_url('player/challenge/'.$value).'">'.$challenge_name.'</a></span>';
 				break;
+			case 'audit_action':
+				$audit_action = $this->audit_action->getOne(array('action_id' => (int) $value));
+				$audit_action_description = isset($audit_action['description']) ? : $value;
+				$format_value = '<span class="type_audit_action">'.$audit_action_description.'</span>';
+				break;
 			case 'number':
 				$format_value = (int) $value;
 				break;

@@ -43,7 +43,7 @@ class Sync extends CI_Controller {
 			'format' => 'txt'));
 		$this->load->helper('file');
 		if(write_file(APPPATH.'backup/backup_'.date('Ymd_H-i-s').'_sync.sql', $backup)){
-			$this->db_sync->mysql_reset();
+			$this->db_sync->mysql_reset_and_remigrate();
 		} else {
 			echo 'Please make backup folder writable';
 		}
