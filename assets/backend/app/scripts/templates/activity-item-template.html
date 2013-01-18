@@ -7,8 +7,8 @@
   <% if ((typeof company !== 'undefined') && company && company.company_name) { %>
     <a href="{{ baseUrl }}assets/company/#/company/{{ company.company_id }}">{{ company.company_name }}</a>
   <% } %>
-  <% if (typeof branch !== 'undefined') { %>
-     <span>({{ branch }})</span>
+  <% if ((typeof branch !== 'undefined') && branch && branch.title) { %>
+     <span>({{ branch.title }})</span>
   <% } %>
 </td>
 <td class="center">{{ challenge.detail && challenge.detail.name ? challenge.detail.name : '' }}</td>

@@ -1901,6 +1901,11 @@ class Apiv3 extends CI_Controller {
       if(isset($activity['company_id'])) {
         $activity['company'] = $this->company_model->get_company_profile_by_company_id($activity['company_id']);
       }
+
+      // Get branch
+      if(isset($activity['branch_id'])) {
+        $activity['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($activity['branch_id'])));
+      }
     } unset($activity);
 
     $options = array(
