@@ -31,6 +31,13 @@ define ['backbone', 'backboneValidation'], (Backbone, BackboneValidation) ->
       name:
         required: true
         msg: 'Name should not be blank'
+      image: [
+        required: true
+        msg: 'Image URL should not be blank'
+      ,
+        pattern: 'url'
+        msg: 'Image URL should be a valid URL'
+      ]
       'redeem.amount': [
         required: true
         msg: 'Quantity should not be blank'

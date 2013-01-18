@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/reward-add-template.html', 'backboneValidationBootstrap', 'moment'], function(Backbone, RewardAddTemplate, BackboneValidationBootstrap, mm) {
+  define(['backbone', 'text!templates/reward-add-template.html', 'backboneValidationBootstrap', 'moment', 'jqueryForm'], function(Backbone, RewardAddTemplate, BackboneValidationBootstrap, mm, jqform) {
     var View;
     View = Backbone.View.extend({
       id: 'reward-add-view',
@@ -32,6 +32,7 @@
         newReward = {
           name: this.$('#reward-add-name').val(),
           description: this.$('#reward-add-description').val(),
+          image: this.$('#reward-add-image').val(),
           status: this.$('#reward-add-status').val(),
           redeem_method: this.$('#reward-add-redeem-method').val(),
           start_timestamp: this.$('#reward-add-start-timestamp').val() ? moment(this.$('#reward-add-start-timestamp').val(), "MM/DD/YYYY").format("YYYY/MM/DD") : void 0,
@@ -43,7 +44,6 @@
             amount_redeemed: 0
           },
           company_id: 1,
-          image: '',
           is_points_reward: false,
           type: 'redeem'
         };

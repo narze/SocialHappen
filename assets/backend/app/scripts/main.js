@@ -52,6 +52,9 @@
       },
       backboneValidationBootstrap: {
         deps: ['backboneValidation']
+      },
+      jqueryForm: {
+        deps: ['jquery']
       }
     },
     paths: {
@@ -66,6 +69,7 @@
       backbonePaginator: 'vendor/backbone.paginator',
       backboneValidation: 'vendor/backbone-validation-amd',
       backboneValidationBootstrap: 'vendor/backbone-validation-bootstrap',
+      jqueryForm: 'vendor/jquery-plugins/jquery.form',
       bootstrap: 'vendor/jquery-plugins/bootstrap',
       jqueryui: 'vendor/jquery-plugins/jquery-ui-1.8.21.custom.min',
       jqueryPlugins: 'vendor/jquery-plugins',

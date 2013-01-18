@@ -3,7 +3,8 @@ define [
   'text!templates/reward-add-template.html'
   'backboneValidationBootstrap'
   'moment'
-  ], (Backbone, RewardAddTemplate, BackboneValidationBootstrap, mm) ->
+  'jqueryForm'
+  ], (Backbone, RewardAddTemplate, BackboneValidationBootstrap, mm, jqform) ->
 
   View = Backbone.View.extend
 
@@ -36,6 +37,7 @@ define [
       newReward =
         name: @$('#reward-add-name').val()
         description: @$('#reward-add-description').val()
+        image: @$('#reward-add-image').val()
         status: @$('#reward-add-status').val()
         redeem_method: @$('#reward-add-redeem-method').val()
         start_timestamp: moment(@$('#reward-add-start-timestamp').val(), "MM/DD/YYYY").format("YYYY/MM/DD") if @$('#reward-add-start-timestamp').val()
@@ -46,7 +48,6 @@ define [
           once: @$('#reward-add-once').val()
           amount_redeemed: 0
         company_id: 1
-        image: '' # todo
         is_points_reward: false
         type: 'redeem'
 
@@ -55,6 +56,22 @@ define [
         @model.save null, success: =>
           window.backend.Collections.RewardCollection.add @model.clone()
           @render()
+
+    # uploadImage: (e) ->
+    #   e.preventDefault()
+    #   @$('form.upload-image').ajaxSubmit
+    #     beforeSubmit: (a, f, o) ->
+    #       o.dataType = 'json';
+    #     success: (resp) =>
+    #       if resp.success
+    #         imageUrl = resp.data;
+
+    #         # Save image
+    #         # @setForms();
+    #         # sandbox.models.companyModel.set('company_image', imageUrl);
+    #         # sandbox.models.companyModel.save();
+    #         # return;
+    #       alert(resp.data);
 
     render: ->
       @$el.html RewardAddTemplate

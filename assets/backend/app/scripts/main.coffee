@@ -39,6 +39,8 @@ require.config
       deps: ['backbone']
     backboneValidationBootstrap:
       deps: ['backboneValidation']
+    jqueryForm:
+      deps: ['jquery']
 
   paths:
     jquery: 'vendor/jquery.min'
@@ -52,6 +54,7 @@ require.config
     backbonePaginator: 'vendor/backbone.paginator'
     backboneValidation: 'vendor/backbone-validation-amd'
     backboneValidationBootstrap: 'vendor/backbone-validation-bootstrap'
+    jqueryForm: 'vendor/jquery-plugins/jquery.form'
 
     # Perfectum Dashboard
     bootstrap: 'vendor/jquery-plugins/bootstrap'
