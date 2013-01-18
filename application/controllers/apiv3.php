@@ -1770,6 +1770,7 @@ class Apiv3 extends CI_Controller {
     $this->load->model('company_model');
     $this->load->model('challenge_model');
     $this->load->model('audit_model');
+    $this->load->model('branch_model');
 
     $query_options = array();
 
@@ -1791,14 +1792,13 @@ class Apiv3 extends CI_Controller {
 
     # find company_id
     if(isset($filter['company']) && strlen($filter['company'])) {
-      $companies = $this->company_model->get_all(NULL, NULL, array('where' => array('company_name' => $filter['company'])));
+      $companies = $this->company_model->get_all(NULL, NULL, array('like' => array('company_name' => $filter['company'])));
       $company_ids = array_map(function($company) { return (int) $company['company_id']; }, $companies);
       $query_options['company_id'] = array('$in' => $company_ids);
     }
 
     # find in mongo and get ids
-    $find_in_mongo = FALSE;
-    if(isset($filter['action']) && strlen($filter['action'])) {
+    if(isset($filter['action']) && $filter['action']) {
       $action_ids = array();
       foreach ($filter['action'] as $action) {
         $action_id = $this->socialhappen->get_k('audit_action', $action);
@@ -1825,16 +1825,17 @@ class Apiv3 extends CI_Controller {
 
       $query_options['timestamp']['$lte'] = strtotime($filter['date_to']) + 60*60*24 - 1;
     }
+
     if(isset($filter['branch']) && strlen($filter['branch'])) {
-      # find if points match
-      # TODO : implement
+      $branches = $this->branch_lib->get_branch_title_like($filter['branch']);
+      $branch_ids = array_map(function($branch) { return ''.$branch['_id']; }, $branches);
+      $query_options['branch_id'] = array('$in' => $branch_ids); // TODO : implement branch_id in audit model!
     }
+
     if(isset($filter['challenge']) && strlen($filter['challenge'])) {
-      # find if challenge match
-      // $find_in_mongo = TRUE;
-      // $challenges = $this->challenge_model->get(array('detail.name' => $filter['challenge']));
-      // $challenge_ids = array_map(function($challenge) { return (int) $challenge['challenge_id']; }, $challenges);
-      # TODO : implement
+      $challenges = $this->challenge_model->get(array('detail.name' => $filter['challenge']));
+      $challenge_ids = array_map(function($challenge) { return (int) $challenge['challenge_id']; }, $challenges);
+      $query_options['challenge_id'] = array('$in' => $challenge_ids); // TODO : implement challenge_id in audit model!
     }
 
     # sort & order

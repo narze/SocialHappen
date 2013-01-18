@@ -2,7 +2,7 @@
 
 class Branch_model extends CI_Model {
 
-  var $attributes = array('location', 'company_id', 'title', 'address', 'telephone', 'photo', 'company_id');
+  var $attributes = array('location', 'company_id', 'title', 'address', 'telephone', 'photo');
 
   function __construct() {
     parent::__construct();
