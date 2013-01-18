@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Add_failure_action extends CI_Migration {
+class Migration_Add_failure_action_and_credit_use_action extends CI_Migration {
 
 	public function up(){
 
@@ -16,7 +16,17 @@ class Migration_Add_failure_action extends CI_Migration {
         'stat_campaign' => FALSE,
         'format_string' => '{user:user_id} failed doing action {action:object} (cause:{string:objecti})',
         'score' => 0
-      )
+      ),
+      array(
+        'app_id' => 0,
+        'action_id' => 121,
+        'description' => 'Credit Use From Challenge',
+        'stat_app' => FALSE,
+        'stat_page' => FALSE,
+        'stat_campaign' => FALSE,
+        'format_string' => '{company:company_id} used {string:object} credit(s) in {challenge:objecti}',
+        'score' => 0
+      ),
     );
 
 
