@@ -338,7 +338,7 @@ define([
     showAddNewActionModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addActionTemplate).modal('show');
-      var recipe = 'feedback';
+      var recipe = 'walkin';
       var self = this;
 
       //On recipe click
