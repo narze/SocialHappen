@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/challenge-item.html'
-], function($, _, Backbone, challengeItemTemplate){
+  'text!templates/company/challenge-item.html',
+  'moment'
+], function($, _, Backbone, challengeItemTemplate, moment){
   var ChallengeItemView = Backbone.View.extend({
     tagName: 'div',
     className: 'item',
@@ -20,6 +21,13 @@ define([
       console.log('render challenge item');
       var data = this.model.toJSON();
       data.baseUrl = window.Company.BASE_URL;
+
+      var now = Math.floor(new Date().getTime()/1000);
+      // console.log(data.detail.name, data.start_date, data.end_date, now);
+
+      data.expired = data.end_date < now;
+      data.notstart = data.start_date > now;
+
       $(this.el).html(this.challengeItemTemplate(data));
       return this;
     },

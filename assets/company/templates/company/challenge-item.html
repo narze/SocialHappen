@@ -14,6 +14,18 @@
         Available at branch <%- branches_data[0].title %> and <%- branches_data.length - 1 %> others
       <% } %>
     </p>
+    <% if(start_date && end_date){ %>
+      <p>
+        Start: <%= moment(start_date * 1000).format('MMM D YYYY, H:mm') %><br/>
+        End: <%= moment(end_date * 1000).format('MMM D YYYY, H:mm') %>
+      </p>
+    <% } %>
+  </div>
+  <div class="expired <%= expired?'':'hide' %>">
+    EXPIRED
+  </div>
+  <div class="notstart <%= notstart?'':'hide' %>">
+    NOT START
   </div>
 </a>
 
