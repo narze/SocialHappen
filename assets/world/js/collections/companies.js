@@ -24,6 +24,10 @@ define([
       });
     },
 
+    parse: function(resp){
+      return resp.data;
+    },
+
     sync: function(method, model, options) {
       var methodMap = {
 
