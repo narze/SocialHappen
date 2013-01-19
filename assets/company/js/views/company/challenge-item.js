@@ -38,6 +38,18 @@ define([
         }else if(criteria[0].action_data.action_id == 203){
           data.action_type = 'walkin';
         }
+      }else{
+        data.action_type = null;
+      }
+
+      var rewardItems = this.model.get('reward_items');
+      if(rewardItems &&
+        rewardItems.length > 0 &&
+        rewardItems[0].is_points_reward &&
+        rewardItems[0].value){
+        data.point = rewardItems[0].value
+      }else{
+        data.point = null;
       }
 
       $(this.el).html(this.challengeItemTemplate(data));
