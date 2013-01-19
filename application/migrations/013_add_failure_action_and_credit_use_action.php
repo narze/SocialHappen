@@ -14,7 +14,7 @@ class Migration_Add_failure_action_and_credit_use_action extends CI_Migration {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => '{user:user_id} failed doing action {action:object} (cause:{string:objecti})',
+        'format_string' => '{user:user_id} failed doing action {audit_action:object} (cause : {string:objecti})',
         'score' => 0
       ),
       array(
@@ -24,7 +24,7 @@ class Migration_Add_failure_action_and_credit_use_action extends CI_Migration {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => '{company:company_id} used {string:object} credit(s) in {challenge:objecti}',
+        'format_string' => '{company:company_id} used {string:object} credit(s) in {challenge:objecti}, ',
         'score' => 0
       ),
     );
