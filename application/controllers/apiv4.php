@@ -1138,9 +1138,9 @@ class Apiv4 extends REST_Controller {
           'app_install_id' => 0,
           'page_id' => 0,
           'company_id' => $company_id,
-          'subject' => NULL,
-          'object' => (int)$reward_points,
-          'objecti' => $challenge['hash'],
+          'subject' => (int) $reward_points,
+          'object' => $challenge['hash'],
+          'objecti' => (int) $company['credits'],
           'image' => NULL // TODO
         );
 

@@ -24,7 +24,7 @@ class Migration_Add_failure_action_and_credit_use_action extends CI_Migration {
         'stat_app' => FALSE,
         'stat_page' => FALSE,
         'stat_campaign' => FALSE,
-        'format_string' => '{company:company_id} used {string:object} credit(s) in {challenge:objecti}, ',
+        'format_string' => '{company:company_id} used {string:subject} credits in {challenge:object}, {string:objecti} credits remaining',
         'score' => 0
       ),
     );
