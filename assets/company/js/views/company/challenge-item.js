@@ -37,6 +37,8 @@ define([
           data.action_type = 'qr';
         }else if(criteria[0].action_data.action_id == 203){
           data.action_type = 'walkin';
+        } else {
+          data.action_type = null;
         }
       }else{
         data.action_type = null;
