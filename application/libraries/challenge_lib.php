@@ -839,7 +839,7 @@ class Challenge_lib {
 
     if($and_get_without_location_specified) {
       $query = array(
-        'locations' => array('$near' => array(0.0,0.0), '$maxDistance' => 0.0)
+        'verify_location' => FALSE
       );
       $challenge_at_0_0 = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
       $challenges = array_merge($challenges, $challenge_at_0_0);
