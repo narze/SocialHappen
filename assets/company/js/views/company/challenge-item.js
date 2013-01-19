@@ -28,6 +28,18 @@ define([
       data.expired = data.end_date < now;
       data.notstart = data.start_date > now;
 
+      var criteria = this.model.get('criteria');
+      if(criteria &&
+        criteria.length > 0 &&
+        criteria[0].action_data &&
+        criteria[0].action_data.action_id){
+        if(criteria[0].action_data.action_id == 201){
+          data.action_type = 'qr';
+        }else if(criteria[0].action_data.action_id == 203){
+          data.action_type = 'walkin';
+        }
+      }
+
       $(this.el).html(this.challengeItemTemplate(data));
       return this;
     },

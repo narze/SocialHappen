@@ -56,6 +56,11 @@ button.recipe-icon.disabled{
   -ms-transition:top 0.2s ease-in-out;
   transition:top 0.2s ease-in-out;
 }
+
+.challenge-caption{
+  z-index: 1;
+}
+
 .tile-list .item:hover .challenge-caption{
   top: 0;
 }
@@ -71,7 +76,27 @@ button.recipe-icon.disabled{
   text-decoration: none;
 }
 
+.item .action{
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.item .action.qr{
+  background-image: url("../../images/challenge/challenge-thumb-qr-text.png");
+}
+
+.item .action.walkin{
+  background-image: url("../../images/challenge/challenge-thumb-walkin-text.png");
+}
+
 .notstart, .expired, .redeemed, .usedup{
+  z-index: 1;
   text-align: center;
   font-weight: bold;
   color: white;
