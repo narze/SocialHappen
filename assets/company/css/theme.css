@@ -79,16 +79,17 @@ button.recipe-icon.disabled{
 .item .point{
   position: absolute;
   top: 0px;
-  right: -32px;
-  width: 100px;
+  right: 0px;
+  width: 90px;
   height: 100px;
   background-repeat: no-repeat;
   z-index: 1;
-  font-size: 3em;
+  font-size: 2em;
   color: #FFF;
-  padding-left: 23px;
+  padding-left: 0;
   padding-top: 36px;
   background-image: url("../../images/challenge/point-badge-bg-orange.png");
+  text-align: center;
 }
 
 .item .action{
