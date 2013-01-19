@@ -35,8 +35,14 @@ define([
         criteria[0].action_data.action_id){
         if(criteria[0].action_data.action_id == 201){
           data.action_type = 'qr';
-        }else if(criteria[0].action_data.action_id == 203){
+        }else if(criteria[0].action_data.action_id == 204){
           data.action_type = 'walkin';
+        }else if(criteria[0].action_data.action_id == 203){
+          data.action_type = 'checkin';
+        }else if(criteria[0].action_data.action_id == 202){
+          data.action_type = 'feedback';
+        }else{
+          data.action_type = null;
         }
       }else{
         data.action_type = null;
