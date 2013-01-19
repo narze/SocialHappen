@@ -1,0 +1,15 @@
+<div class="media media-small">
+  <a class="media-thumb" style="position: relative;">
+    <% if(typeof user_id !== 'undefined' && user_id){ %>
+      <img src="<%= window.Company.BASE_URL + 'userimage/' + user_id %>">
+    <% } else { %>
+      <img class="" src="../images/default/user.png" alt="">
+    <% } %>
+  </a>
+  <div class="media-info">
+    <!-- <h5>Username or Company name</h5> -->
+    <p><%= message %><br />
+      <small><%= timeago %></small>
+    </p>
+  </div>
+</div>

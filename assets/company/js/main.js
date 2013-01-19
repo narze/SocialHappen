@@ -61,11 +61,12 @@ require([
   'collections/coupons',
   'collections/activities',
   'collections/company-users',
+  'collections/balance',
   'events',
   'sandbox'
 ], function(AppView, Router, Vm, UserModel, ChallengerModel, CompanyModel, ChallengesCollection,
  BranchCollection, RewardsCollection, OffersCollection, CouponsCollection, ActivitiesCollection,
-  CompanyUsersCollection, vent, sandbox){
+  CompanyUsersCollection, BalanceCollection, vent, sandbox){
   window.sandbox = sandbox;
   sandbox.models.currentUserModel = new UserModel();
   sandbox.models.challengerModel = new ChallengerModel();
@@ -77,6 +78,7 @@ require([
   sandbox.collections.couponsCollection = new CouponsCollection([]);
   sandbox.collections.activitiesCollection = new ActivitiesCollection([]);
   sandbox.collections.companyUsersCollection = new CompanyUsersCollection([]);
+  sandbox.collections.balanceCollection = new BalanceCollection([]);
 
   sandbox.models.currentUserModel.fetch({
     success: function(model, xhr){

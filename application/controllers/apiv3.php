@@ -1445,6 +1445,24 @@ class Apiv3 extends CI_Controller {
   }
 
   /**
+   * Show company balance (credits related action)
+   */
+  function company_balance($company_id = NULL) {
+    $this->load->model('company_model');
+    if(!$company = $this->company_model->get_company_profile_by_company_id($company_id)){
+      return $this->error('Company not found');
+    }
+
+    $this->load->library('audit_lib');
+
+    $credits_related_action_ids = array(121, 205);
+
+    $audits = $this->audit_lib->list_audit(array('company_id' => $company['company_id'], 'action_id' => array('$in' => $credits_related_action_ids)), 0);
+
+    return json_return($audits);
+  }
+
+  /**
    * Get company users and sort by company score
    */
   function company_leaderboard($company_id = NULL) {
