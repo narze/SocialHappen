@@ -1129,6 +1129,25 @@ class Apiv4 extends REST_Controller {
           return $this->error('Update company failed');
         }
 
+        //add credit use audit
+        $this->load->library('audit_lib');
+        $audit_data = array(
+          'user_id' => $user['user_id'],
+          'action_id' => $this->socialhappen->get_k('audit_action', 'Credit Use From Challenge'),
+          'app_id' => 0,
+          'app_install_id' => 0,
+          'page_id' => 0,
+          'company_id' => $company_id,
+          'subject' => NULL,
+          'object' => (int)$reward_points,
+          'objecti' => $challenge['hash'],
+          'image' => NULL // TODO
+        );
+
+        if(!$this->audit_lib->audit_add($audit_data)) {
+          return $this->error('Audit add failed');
+        }
+
         $this->load->model('challenge_model');
         $challenge_update_result = $this->challenge_model->update(array('_id' => new MongoId($challenge_id)), array(
           '$inc' => array('done_count' => $reward_points)

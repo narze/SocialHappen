@@ -1455,7 +1455,10 @@ class Apiv3 extends CI_Controller {
 
     $this->load->library('audit_lib');
 
-    $credits_related_action_ids = array(121, 205);
+    $credits_related_action_ids = array(
+      $this->socialhappen->get_k('audit_action', 'Credit Use From Challenge'),
+      $this->socialhappen->get_k('audit_action', 'Add Credits')
+    );
 
     $audits = $this->audit_lib->list_audit(array('company_id' => $company['company_id'], 'action_id' => array('$in' => $credits_related_action_ids)), 0);
 

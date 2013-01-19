@@ -981,7 +981,7 @@ class Apiv4_test extends CI_Controller {
   	//check audit count
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 3 + 6, "count(\$result)", count($result)); //1 from signup, 2 from signin
+	  $this->unit->run(count($result), 3 + 6 + 1, "count(\$result)", count($result)); //1 from signup, 2 from signin
 
   	//3.Since challenge_id 4 is a daily challenge, so user can play in tomorrow's time
   	//Fire today's challenge action again : error (already done)
@@ -1001,7 +1001,7 @@ class Apiv4_test extends CI_Controller {
   	// edit : it should invoke *failing* audit
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 3 + 6 + 1, "count(\$result)", count($result));
+	  $this->unit->run(count($result), 3 + 6 + 1 + 1, "count(\$result)", count($result));
 	  $this->unit->run($result[0]['action_id'] === 120, TRUE, "\$result[0]['action_id']", $result[0]['action_id']);
 
   	$params = array(
@@ -1022,7 +1022,7 @@ class Apiv4_test extends CI_Controller {
   	//check audit count
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 3 + 6 + 1 + 2, "count(\$result)", count($result)); //for action 203 and for completing challenge
+	  $this->unit->run(count($result), 3 + 6 + 1 + 1 + 1 + 2, "count(\$result)", count($result)); //for action 203 and for completing challenge
 
   	//4. Check user for coupons/points/statuses
   	//@TODO
@@ -1173,10 +1173,10 @@ class Apiv4_test extends CI_Controller {
   	//check audit count
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 3 + 9 + 2, "count(\$result)", count($result));
+	  $this->unit->run(count($result), 3 + 12+ 2, "count(\$result)", count($result));
 
-	  $this->unit->run($result[2]['action_id'] === 203, TRUE, "\$result[2]['action_id']", $result[2]['action_id']);
-	  $this->unit->run($result[2]['subject'] === $params['location'], TRUE, "\$result[2]['subject']", $result[2]['subject']);
+	  $this->unit->run($result[3]['action_id'] === 203, TRUE, "\$result[3]['action_id']", $result[3]['action_id']);
+	  $this->unit->run($result[3]['subject'] === $params['location'], TRUE, "\$result[3]['subject']", $result[3]['subject']);
 
 	  //do_action in tomorrow : cannot do action which done_count >= done_count_max
 	  $params = array(
@@ -1195,7 +1195,7 @@ class Apiv4_test extends CI_Controller {
   	//edit : it should ad another *failing* audit
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
-	  $this->unit->run(count($result), 3 + 11 + 1, "count(\$result)", count($result)); //no audit add
+	  $this->unit->run(count($result), 3 + 14 + 1, "count(\$result)", count($result)); //no audit add
 	  $this->unit->run($result[0]['action_id'] === 120, TRUE, "\$result[0]['action_id']", $result[0]['action_id']);
 
   }
