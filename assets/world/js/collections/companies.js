@@ -48,9 +48,9 @@ define([
       // Ensure that we have a URL.
       if (!options.url) {
         if(this.last_id.length > 0){
-          params.url = window.World.BASE_URL + 'apiv3/companies/?last_id=' + this.last_id;
+          params.url = window.World.BASE_URL + 'apiv3/companies/?limit=100&last_id=' + this.last_id;
         } else {
-          params.url = window.World.BASE_URL + 'apiv3/companies/';
+          params.url = window.World.BASE_URL + 'apiv3/companies/?limit=100';
         }
 
       }
