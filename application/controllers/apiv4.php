@@ -419,8 +419,18 @@ class Apiv4 extends REST_Controller {
   function branches_get(){
     $challenge_id = $this->get('challenge_id');
     $company_id = $this->get('company_id');
+    $branch_id = $this->get('branch_id');
 
-    if($challenge_id) {
+    $this->load->library('branch_lib');
+    if($branch_id) {
+      if(!$branch = $this->branch_lib->get_one(array(
+        '_id' => new MongoId($branch_id)))) {
+        return $this->error('Branch not found');
+      }
+
+      return $this->success(array($branch));
+
+    } else if($challenge_id) {
 
       $this->load->library('challenge_lib');
 
@@ -435,8 +445,7 @@ class Apiv4 extends REST_Controller {
       }else{
         return $this->error();
       }
-    }else if($company_id){
-      $this->load->library('branch_lib');
+    } else if($company_id) {
       $branches = $this->branch_lib->get(array(
         'company_id' => $company_id
       ), 10000000);
@@ -446,8 +455,8 @@ class Apiv4 extends REST_Controller {
       }else{
         return $this->error();
       }
-    }else{
-      return $this->error();
+    } else {
+      return $this->error('Criteria not set');
     }
   }
 
