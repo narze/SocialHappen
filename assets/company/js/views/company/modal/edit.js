@@ -525,7 +525,7 @@ define([
 
       var walkinDefaultAction = {
         query: {
-          action_id: 203
+          action_id: 204
         },
         count: 1,
         name: 'Walkin Action',
@@ -533,7 +533,7 @@ define([
           data: {
 
           },
-          action_id: 203
+          action_id: 204
         }
       };
 

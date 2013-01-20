@@ -338,7 +338,7 @@ define([
     showAddNewActionModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addActionTemplate).modal('show');
-      var recipe = 'feedback';
+      var recipe = 'walkin';
       var self = this;
 
       //On recipe click
@@ -666,7 +666,7 @@ define([
       var recipeModal = $('#recipe-modal');
       recipeModal.html(this.recipeTemplate()).modal('show');
 
-      var recipe = 'feedback', reward = 'points';
+      var recipe = 'walkin', reward = 'points';
       //On recipe click
       $('.recipes button', recipeModal).click(function() {
         $('.recipes button', recipeModal).addClass('disabled');
