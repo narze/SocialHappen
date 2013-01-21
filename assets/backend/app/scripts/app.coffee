@@ -17,6 +17,7 @@ define [
   'collections/challenge-collection'
   'models/reward-model'
   'collections/reward-collection'
+  'moment'
 ], (
   Main
   MainRouter
@@ -36,6 +37,7 @@ define [
   ChallengeCollection
   RewardModel
   RewardCollection
+  moment
 ) ->
 
   # Server specific config
@@ -100,3 +102,18 @@ define [
   Backbone.history.start()
 
   window.appLoaded = true
+
+  window.checkSession = ->
+    $.ajax
+      url: window.baseUrl + 'apiv3/check_session'
+      dataType: 'json'
+      success: (resp) ->
+        now = moment().format('MMMM Do YYYY, h:mm:ss a')
+        if resp.success
+          console.log 'Session check ok : ' + now + ' UserId : ' + resp.data
+        else
+          clearInterval window.checkSessionInterval
+          if typeof mocha isnt 'function'
+            alert 'Session Expired ' + now
+
+  window.checkSessionInterval = setInterval window.checkSession, 10000

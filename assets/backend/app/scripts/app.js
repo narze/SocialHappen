@@ -1,6 +1,6 @@
 (function() {
 
-  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'views/rewards-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection', 'models/reward-model', 'collections/reward-collection'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, RewardsView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection, RewardModel, RewardCollection) {
+  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'views/rewards-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection', 'models/reward-model', 'collections/reward-collection', 'moment'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, RewardsView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection, RewardModel, RewardCollection, moment) {
     var config, env;
     config = {
       dev: {
@@ -51,7 +51,26 @@
     });
     Backbone.emulateJSON = true;
     Backbone.history.start();
-    return window.appLoaded = true;
+    window.appLoaded = true;
+    window.checkSession = function() {
+      return $.ajax({
+        url: window.baseUrl + 'apiv3/check_session',
+        dataType: 'json',
+        success: function(resp) {
+          var now;
+          now = moment().format('MMMM Do YYYY, h:mm:ss a');
+          if (resp.success) {
+            return console.log('Session check ok : ' + now + ' UserId : ' + resp.data);
+          } else {
+            clearInterval(window.checkSessionInterval);
+            if (typeof mocha !== 'function') {
+              return alert('Session Expired ' + now);
+            }
+          }
+        }
+      });
+    };
+    return window.checkSessionInterval = setInterval(window.checkSession, 10000);
   });
 
 }).call(this);

@@ -2012,6 +2012,14 @@ class Apiv3 extends CI_Controller {
 
     return $this->success($audit_actions);
   }
+
+  function check_session() {
+    if($user_id = $this->socialhappen->get_user_id()) {
+      return $this->success($user_id);
+    } else {
+      return $this->error();
+    }
+  }
 }
 
 /* End of file apiv3.php */
