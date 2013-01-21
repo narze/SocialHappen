@@ -1,6 +1,6 @@
 (function() {
 
-  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'views/rewards-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection', 'models/reward-model', 'collections/reward-collection', 'moment'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, RewardsView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection, RewardModel, RewardCollection, moment) {
+  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'views/rewards-view', 'views/devices-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection', 'models/reward-model', 'collections/reward-collection', 'models/device-model', 'collections/device-collection', 'moment'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, RewardsView, DevicesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection, RewardModel, RewardCollection, DeviceModel, DeviceCollection, moment) {
     var config, env;
     config = {
       dev: {
@@ -32,6 +32,8 @@
     window.backend.Collections.ChallengeCollection = new ChallengeCollection;
     window.backend.Models.RewardModel = RewardModel;
     window.backend.Collections.RewardCollection = new RewardCollection;
+    window.backend.Models.DeviceModel = DeviceModel;
+    window.backend.Collections.DeviceCollection = new DeviceCollection;
     window.backend.Views.MainView = new MainView;
     window.backend.Views.MainView.render();
     window.backend.Views.UsersView = new UsersView({
@@ -48,6 +50,9 @@
     });
     window.backend.Views.RewardsView = new RewardsView({
       collection: window.backend.Collections.RewardCollection
+    });
+    window.backend.Views.DevicesView = new DevicesView({
+      collection: window.backend.Collections.DeviceCollection
     });
     Backbone.emulateJSON = true;
     Backbone.history.start();

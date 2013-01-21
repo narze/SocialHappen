@@ -7,6 +7,7 @@ define ['backbone'], (Backbone) ->
       'companies': 'companies'
       'challenges': 'challenges'
       'rewards': 'rewards'
+      'devices': 'devices'
       '*other': 'badRoute'
 
     users: ->
@@ -33,6 +34,11 @@ define ['backbone'], (Backbone) ->
       $('#content').html window.backend.Views.RewardsView.render().el
       $('#sidebar-view .main-menu li').removeClass('active')
       $('#sidebar-view .main-menu li.rewards-tab-menu').addClass('active')
+
+    devices: ->
+      $('#content').html window.backend.Views.DevicesView.render().el
+      $('#sidebar-view .main-menu li').removeClass('active')
+      $('#sidebar-view .main-menu li.devices-tab-menu').addClass('active')
 
     badRoute: ->
       console.log '404 : Route not found'

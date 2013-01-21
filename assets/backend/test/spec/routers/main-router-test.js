@@ -22,8 +22,11 @@
       it('should have challenges route', function() {
         return window.backend.Routers.MainRouter.routes['challenges'].should.be.equal('challenges');
       });
-      return it('should have rewards route', function() {
+      it('should have rewards route', function() {
         return window.backend.Routers.MainRouter.routes['rewards'].should.be.equal('rewards');
+      });
+      return it('should have sonars route', function() {
+        return window.backend.Routers.MainRouter.routes['sonars'].should.be.equal('sonars');
       });
     });
     return describe('routing', function() {
@@ -252,6 +255,41 @@
             $form.text().should.match(/Each user can redeem this reward once/);
             $form.text().should.match(/Add Reward/);
             return $form.text().should.match(/Cancel/);
+          });
+        });
+      });
+      describe('devices', function() {
+        it('should load devices view when switched route to devices', function() {
+          window.backend.Routers.MainRouter.navigate('devices', {
+            trigger: true
+          });
+          return window.backend.Views.DevicesView.rendered.should.equal(true);
+        });
+        it('should set the device menu as active', function() {
+          return $('#sidebar-view').find('.main-menu li.devices-tab-menu').hasClass('active').should.be["true"];
+        });
+        it('should have device-item as a subview', function() {
+          var subViewName;
+          subViewName = 'device-' + window.backend.Collections.DeviceCollection.models[0].cid;
+          return window.backend.Views.DevicesView.subViews[subViewName].should.not.be.undefined;
+        });
+        it('should render #devices-view into #content', function() {
+          return $('#content').find('#devices-view').length.should.not.equal(0);
+        });
+        it('should have all fields required', function() {
+          $('#content').find('#devices-view').find('thead').find('th').length.should.equal(5);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Name/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Data/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Challenge/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Info/);
+          return $('#content').find('#devices-view').find('thead').text().should.match(/Actions/);
+        });
+        it('should have correct first row of data', function() {
+          return $('#content #devices-view .device-item:first td').length.should.equal(5);
+        });
+        return describe('after data fetched', function() {
+          return it('should load each .device-item into #devices-view', function() {
+            return $('#devices-view').find('.device-item').length.should.not.equal(0);
           });
         });
       });

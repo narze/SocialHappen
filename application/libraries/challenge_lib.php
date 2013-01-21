@@ -977,7 +977,7 @@ class Challenge_lib {
   }
 
   function get_challenge_name_like($name = NULL) {
-    if(!$name) { return FALSE; }
+    if(!strlen($name)) { return array(); }
 
     $criteria = array('detail.name' => array('$regex' => '\b'.$name, '$options' => 'i'));
 

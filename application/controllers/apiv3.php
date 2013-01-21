@@ -950,26 +950,6 @@ class Apiv3 extends CI_Controller {
     return $this->success($companies, 1, $options);
   }
 
-  /**
-   * list redeem type rewards
-   */
-  function rewards() {
-    if(!$company_id = $this->input->get('company_id')) {
-      return json_return(array('success' => FALSE, 'data' => 'No company_id'));
-    }
-
-    $this->load->model('reward_item_model');
-    $rewards = $this->reward_item_model->get(array(
-      'company_id' => (int) $company_id,
-      'type' => 'redeem'
-    ), array('_id' => -1));
-    $rewards = array_map(function($reward) {
-      $reward['_id'] = get_mongo_id($reward);
-      return $reward;
-    }, $rewards);
-    return json_return($rewards);
-  }
-
   function reward_list() {
     if ($model = json_decode($this->input->post('model'), TRUE)) {
       return $this->_reward_add($model);
@@ -1097,6 +1077,83 @@ class Apiv3 extends CI_Controller {
     }
 
     return $this->success($reward);
+  }
+
+  /**
+   * list redeem type rewards
+   */
+  function rewards() {
+    if(!$company_id = $this->input->get('company_id')) {
+      return json_return(array('success' => FALSE, 'data' => 'No company_id'));
+    }
+
+    $this->load->model('reward_item_model');
+    $rewards = $this->reward_item_model->get(array(
+      'company_id' => (int) $company_id,
+      'type' => 'redeem'
+    ), array('_id' => -1));
+    $rewards = array_map(function($reward) {
+      $reward['_id'] = get_mongo_id($reward);
+      return $reward;
+    }, $rewards);
+    return json_return($rewards);
+  }
+
+  function devices() {
+    // if ($model = json_decode($this->input->post('model'), TRUE)) {
+    //   return $this->_reward_add($model);
+    // }
+
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('challenge_lib');
+    $this->load->model('sonar_box_model');
+
+    $query_options = array();
+    if(isset($filter['name']) && strlen($filter['name'])) {
+      $query_options['name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(isset($filter['data']) && strlen($filter['data'])) {
+      $query_options['data'] = array('$regex' => $filter['data']);
+    }
+
+    if(isset($filter['challenge']) && strlen($filter['challenge'])) {
+      $challenges = $this->challenge_lib->get_challenge_name_like($filter['challenge']);
+      $challenge_ids = array_map(function($challenge) { return ''.$challenge['_id']; }, $challenges);
+      $query_options['challenge_id'] = array('$in' => $challenge_ids);
+    }
+
+    # sort & order
+    if(in_array($sort, array('name', 'data'))) {
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $devices = $this->sonar_box_model->get_all($query_options, $limit, $offset, $sort);
+    $devices_all_count = $this->sonar_box_model->count($query_options);
+
+    foreach($devices as &$device) {
+      // Get challenge
+      if(isset($device['challenge_id'])) {
+        $device['challenge'] = $this->challenge_lib->get_one(array('_id' => new MongoId($device['challenge_id'])));
+      }
+    } unset($device);
+
+    $options = array(
+      'total' => $devices_all_count,
+      'total_pages' => ceil($devices_all_count / $limit),
+      'count' => count($devices),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($devices, 1, $options);
   }
 
   /**

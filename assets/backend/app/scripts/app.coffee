@@ -7,6 +7,7 @@ define [
   'views/companies-view'
   'views/challenges-view'
   'views/rewards-view'
+  'views/devices-view'
   'models/company-model'
   'collections/company-collection'
   'models/user-model'
@@ -17,6 +18,8 @@ define [
   'collections/challenge-collection'
   'models/reward-model'
   'collections/reward-collection'
+  'models/device-model'
+  'collections/device-collection'
   'moment'
 ], (
   Main
@@ -27,6 +30,7 @@ define [
   CompaniesView
   ChallengesView
   RewardsView
+  DevicesView
   CompanyModel
   CompanyCollection
   UserModel
@@ -37,6 +41,8 @@ define [
   ChallengeCollection
   RewardModel
   RewardCollection
+  DeviceModel
+  DeviceCollection
   moment
 ) ->
 
@@ -80,6 +86,10 @@ define [
 
   window.backend.Collections.RewardCollection = new RewardCollection
 
+  window.backend.Models.DeviceModel = DeviceModel
+
+  window.backend.Collections.DeviceCollection = new DeviceCollection
+
   window.backend.Views.MainView = new MainView
   window.backend.Views.MainView.render()
 
@@ -97,6 +107,9 @@ define [
 
   window.backend.Views.RewardsView = new RewardsView
     collection: window.backend.Collections.RewardCollection
+
+  window.backend.Views.DevicesView = new DevicesView
+    collection: window.backend.Collections.DeviceCollection
 
   Backbone.emulateJSON = true
   Backbone.history.start()

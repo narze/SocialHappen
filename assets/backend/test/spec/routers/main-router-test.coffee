@@ -25,6 +25,9 @@ describe 'Main Router', ->
     it 'should have rewards route', ->
       window.backend.Routers.MainRouter.routes['rewards'].should.be.equal 'rewards'
 
+    it 'should have sonars route', ->
+      window.backend.Routers.MainRouter.routes['sonars'].should.be.equal 'sonars'
+
   describe 'routing', ->
 
     it 'should not load any views when switched to a bad route', ->
@@ -244,6 +247,38 @@ describe 'Main Router', ->
           $form.text().should.match /Each user can redeem this reward once/
           $form.text().should.match /Add Reward/
           $form.text().should.match /Cancel/
+
+    describe 'devices', ->
+
+      it 'should load devices view when switched route to devices', ->
+        window.backend.Routers.MainRouter.navigate 'devices', trigger:true
+        window.backend.Views.DevicesView.rendered.should.equal true
+
+      it 'should set the device menu as active', ->
+        $('#sidebar-view').find('.main-menu li.devices-tab-menu').hasClass('active').should.be.true
+
+      it 'should have device-item as a subview', ->
+        subViewName = 'device-' + window.backend.Collections.DeviceCollection.models[0].cid
+        window.backend.Views.DevicesView.subViews[subViewName].should.not.be.undefined
+
+      it 'should render #devices-view into #content', ->
+        $('#content').find('#devices-view').length.should.not.equal 0
+
+      it 'should have all fields required', ->
+        $('#content').find('#devices-view').find('thead').find('th').length.should.equal 5
+
+        $('#content').find('#devices-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Data/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Challenge/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Info/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Actions/)
+
+      it 'should have correct first row of data', ->
+        $('#content #devices-view .device-item:first td').length.should.equal 5
+
+      describe 'after data fetched', ->
+        it 'should load each .device-item into #devices-view', ->
+          $('#devices-view').find('.device-item').length.should.not.equal 0
 
     describe 'change route back', ->
       window.backend.Routers.MainRouter.navigate '', trigger: true

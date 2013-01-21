@@ -99,7 +99,7 @@ class Branch_lib {
   }
 
   function get_branch_title_like($title = NULL) {
-    if(!$title) { return FALSE; }
+    if(!strlen($title)) { return array(); }
 
     $criteria = array('title' => array('$regex' => '\b'.$title, '$options' => 'i'));
 
