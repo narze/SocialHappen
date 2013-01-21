@@ -20,7 +20,14 @@ define [
       e.preventDefault()
 
     render: ->
-      @$el.html _.template(ActivityItemTemplate, @model.toJSON())
+      activity = @model.toJSON()
+
+      switch activity.audit_description
+        when "Add Credits" then activity.audit_description_append = activity.object + " credits"
+        when "Credit Use From Challenge" then activity.audit_description_append = activity.subject + " credits"
+        else activity.audit_description_append = false
+
+      @$el.html _.template(ActivityItemTemplate, activity)
       @delegateEvents()
 
       @$('.audit-tooltip').tooltip()

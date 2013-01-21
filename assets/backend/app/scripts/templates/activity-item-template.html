@@ -2,7 +2,7 @@
 <td class="center">
   <a href="{{ baseUrl }}assets/passport/#/profile/{{ user.user_id }}">{{ user.user_first_name }} {{ user.user_last_name }}</a>
 </td>
-<td class="center"><a href="#" rel="tooltip" class="audit-tooltip" title="{{ $('<p>').append(audit_message).text() }}">{{ audit_description }}</a></td>
+<td class="center"><a href="#" rel="tooltip" class="audit-tooltip" title="{{ $('<p>').append(audit_message).text() }}">{{ audit_description }} {{ audit_description_append ? "(" + audit_description_append + ")" : '' }}</a></td>
 <td class="center">
   <% if ((typeof company !== 'undefined') && company && company.company_name) { %>
     <a href="{{ baseUrl }}assets/company/#/company/{{ company.company_id }}">{{ company.company_name }}</a>
