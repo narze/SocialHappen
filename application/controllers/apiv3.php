@@ -1852,13 +1852,13 @@ class Apiv3 extends CI_Controller {
     if(isset($filter['branch']) && strlen($filter['branch'])) {
       $branches = $this->branch_lib->get_branch_title_like($filter['branch']);
       $branch_ids = array_map(function($branch) { return ''.$branch['_id']; }, $branches);
-      $query_options['branch_id'] = array('$in' => $branch_ids); // TODO : implement branch_id in audit model!
+      $query_options['branch_id'] = array('$in' => $branch_ids);
     }
 
     if(isset($filter['challenge']) && strlen($filter['challenge'])) {
       $challenges = $this->challenge_lib->get_challenge_name_like($filter['challenge']);
       $challenge_ids = array_map(function($challenge) { return ''.$challenge['_id']; }, $challenges);
-      $query_options['challenge_id'] = array('$in' => $challenge_ids); // TODO : implement challenge_id in audit model!
+      $query_options['challenge_id'] = array('$in' => $challenge_ids);
     }
 
     # sort & order
