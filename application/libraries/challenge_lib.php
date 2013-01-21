@@ -975,4 +975,12 @@ class Challenge_lib {
   function count($criteria = array()) {
     return $this->CI->challenge_model->count($criteria);
   }
+
+  function get_challenge_name_like($name = NULL) {
+    if(!$name) { return FALSE; }
+
+    $criteria = array('detail.name' => array('$regex' => '\b'.$name, '$options' => 'i'));
+
+    return $this->CI->challenge_model->get($criteria);
+  }
 }

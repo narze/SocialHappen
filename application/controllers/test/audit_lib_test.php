@@ -549,7 +549,9 @@ class audit_lib_test extends CI_Controller {
 			$campaign_id = 2;
 			$company_id = 3;
 			$page_id = 4;
-			$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id', 'campaign_id', 'company_id','page_id');
+			$challenge_id = 123; //Additional data
+			$branch_id = 345; //Additional data
+			$input = compact('app_id', 'action_id', 'subject', 'object', 'objecti', 'app_install_id', 'campaign_id', 'company_id','page_id', 'challenge_id', 'branch_id');
 			$result = $this->audit_lib->audit_add($input);
 			$this->unit->run($result, 'is_string', 'audit add - 0 - 2', '');
 		}
@@ -611,6 +613,12 @@ class audit_lib_test extends CI_Controller {
 		$offset = 0;
 		$result = $this->audit_lib->list_audit($criteria, $limit, $offset);
 		$this->unit->run(count($result), 0, 'list audit criteria \'subject\' => \'A\' , \'app_id\' => 999', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
+
+		$criteria = array('challenge_id' => 123, 'branch_id' => 345);
+		$limit = 0;
+		$offset = 0;
+		$result = $this->audit_lib->list_audit($criteria, $limit, $offset);
+		$this->unit->run(count($result), 5, 'list audit criteria \'subject\' => \'A\' , \'app_id\' => 0', 'count: ' . count($result) . '<pre>' . print_r($result, TRUE) . '</pre>');
 	}
 
 	function list_recent_audit_2_test(){

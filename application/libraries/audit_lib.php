@@ -331,7 +331,12 @@ class Audit_lib
 			$data_to_add['image'] = $additional_data['image'];
 		}
 
-		//echo '<pre>' . print_r($data_to_add, TRUE) . '</pre>';
+		//Other data will be added accordingly if not yet added
+		foreach ($additional_data as $key => $value) {
+			if(!isset($data_to_add[$key])) {
+				$data_to_add[$key] = $value;
+			}
+		}
 
 		// TODO: select stat to add
 		$this->CI->load->model('audit_model','audit');
@@ -978,6 +983,20 @@ foreach ($data as $line_key => $line_value) {
 	 */
 	function count($criteria = array()) {
 		return $this->CI->audit_model->count($criteria);
+	}
+
+	function update_challenge_id_by_audit_id($audit_id = NULL, $challenge_id = NULL) {
+		if(!$audit_id || !$challenge_id){
+			return FALSE;
+		} else {
+			return $this->CI->audit_model->update(array(
+				'_id' => new MongoId($audit_id)
+			), array(
+				'$set' => array(
+					'challenge_id' => $challenge_id
+				)
+			));
+		}
 	}
 }
 

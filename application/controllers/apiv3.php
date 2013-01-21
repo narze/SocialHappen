@@ -1787,6 +1787,8 @@ class Apiv3 extends CI_Controller {
     $order = $this->input->get('order') ? : 1;
 
     $this->load->library('audit_lib');
+    $this->load->library('branch_lib');
+    $this->load->library('challenge_lib');
     $this->load->model('user_model');
     $this->load->model('company_model');
     $this->load->model('challenge_model');
@@ -1854,8 +1856,8 @@ class Apiv3 extends CI_Controller {
     }
 
     if(isset($filter['challenge']) && strlen($filter['challenge'])) {
-      $challenges = $this->challenge_model->get(array('detail.name' => $filter['challenge']));
-      $challenge_ids = array_map(function($challenge) { return (int) $challenge['challenge_id']; }, $challenges);
+      $challenges = $this->challenge_lib->get_challenge_name_like($filter['challenge']);
+      $challenge_ids = array_map(function($challenge) { return ''.$challenge['_id']; }, $challenges);
       $query_options['challenge_id'] = array('$in' => $challenge_ids); // TODO : implement challenge_id in audit model!
     }
 
@@ -1886,11 +1888,16 @@ class Apiv3 extends CI_Controller {
       }
 
       // Get challenge if it is challenge
-      // if(in_array($activity['action_id'], array(117, 118, 201, 202, 203, 204))) {
-        $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
-      // } else {
-      //   $activity['challenge'] = array();
-      // }
+      // If found, update the audit's challenge_id
+      $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
+      if($activity['challenge'] && !isset($activity['challenge_id'])) {
+        $challenge_id = get_mongo_id($activity['challenge']);
+        $activity['challenge_id'] = $challenge_id;
+        if(!$this->audit_lib->update_challenge_id_by_audit_id(''.$activity['_id'], $challenge_id)) {
+          $this->error('Update audit failed', $challenge_id);
+        }
+      }
+
 
       // Get action message & description
       $app_id = (int) 0;
