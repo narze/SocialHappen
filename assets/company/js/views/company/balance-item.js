@@ -3,10 +3,11 @@ define([
   'underscore',
   'backbone',
   'text!templates/company/balance-item.html',
-  'timeago'
-], function($, _, Backbone, balanceItemTemplate, timeago){
+  'timeago',
+  'moment'
+], function($, _, Backbone, balanceItemTemplate, timeago, mm){
   var BalanceItem = Backbone.View.extend({
-    tagName: 'li',
+    tagName: 'tr',
     balanceItemTemplate: _.template(balanceItemTemplate),
     initialize: function(){
       _.bindAll(this);

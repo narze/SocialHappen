@@ -1454,13 +1454,29 @@ class Apiv3 extends CI_Controller {
     }
 
     $this->load->library('audit_lib');
+    $credit_use = $this->socialhappen->get_k('audit_action', 'Credit Use From Challenge');
+    $credit_add = $this->socialhappen->get_k('audit_action', 'Add Credits');
 
     $credits_related_action_ids = array(
-      $this->socialhappen->get_k('audit_action', 'Credit Use From Challenge'),
-      $this->socialhappen->get_k('audit_action', 'Add Credits')
+      $credit_use, $credit_add
     );
 
     $audits = $this->audit_lib->list_audit(array('company_id' => $company['company_id'], 'action_id' => array('$in' => $credits_related_action_ids)), 0);
+
+    //Process actions
+    foreach($audits as $key => &$audit) {
+      if(($audit['action_id'] === $credit_use) && is_numeric($audit['subject']) && is_numeric($audit['objecti'])) {
+        $audit['credit_added'] = - $audit['subject'];
+        $audit['credit_total'] = $audit['objecti'];
+      } else if(($audit['action_id'] === $credit_add) && is_numeric($audit['object']) && is_numeric($audit['objecti'])) {
+        $audit['credit_added'] = $audit['object'];
+        $audit['credit_total'] = $audit['objecti'];
+      } else {
+        unset($audits[$key]);
+      }
+    } unset($audit);
+
+    $audits = array_values($audits);
 
     return json_return($audits);
   }
