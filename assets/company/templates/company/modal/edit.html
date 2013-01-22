@@ -96,9 +96,29 @@
     </div>
   </div>
 
-  <div class="control-group location custom-location-lat-lng <%- custom_location&&verify_location ? '':'hide' %>">
-    <label><h6>Latitude:</h6></label> <input class="latitude input-medium" type="text" name="latitude" id="latitude" value="<%= location[1] %>" placeholder="0.0">
-    <label><h6>Longitude:</h6></label> <input class="longitude input-medium" type="text" name="longitude" id="longitude" value="<%= location[0] %>" placeholder="0.0">
+  <div class="control-group location form-inline custom-location-lat-lng <%- custom_location&&verify_location ? '':'hide' %>">
+    <div class="row-fluid">
+      <div class="span6">
+        <label><h6>Latitude:</h6></label> <input class="latitude input-medium" type="text" name="latitude" id="latitude" value="<%= location[1] %>" placeholder="0.0">
+      </div>
+      <div class="span6">
+        <label><h6>Longitude:</h6></label> <input class="longitude input-medium" type="text" name="longitude" id="longitude" value="<%= location[0] %>" placeholder="0.0">
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span12">
+        <button class="btn view-google-maps">View Map</button>
+        <div id="gmaps"></div>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span12">
+        <label for="google-maps-link">
+          <h6>Or Use Google Maps Link:</h6>
+        </label>
+        <input type="text" class="google-maps-link">
+      </div>
+    </div>
     <div>
       <button class="btn save-location btn-primary">Save</button>
     </div>

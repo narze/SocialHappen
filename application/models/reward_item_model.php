@@ -93,6 +93,28 @@
 		return $result;
 	}
 
+	function get_full($query, $limit = 100, $offset = 0, $sort = NULL){
+		// $query = array_cast_int($query, $this->int_values);
+		$result = $this->reward_item->find($query);
+
+		if(!$sort || !is_array($sort)) {
+			$sort = array('_id' => -1);
+		}
+
+		$result = $result->sort($sort);
+		$result = $result->skip($offset);
+
+		if($limit) {
+			$result = $result->limit($limit);
+		}
+
+		return cursor2array($result);
+	}
+
+	function count($criteria = array()) {
+		return $this->reward_item->count($criteria);
+	}
+
 	/**
 	 * Get one reward item
 	 * @param $criteria

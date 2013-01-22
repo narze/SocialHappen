@@ -19,7 +19,11 @@
                 <div class="control-group">
                   <label class="control-label" for="filter-action">Action</label>
                   <div class="controls">
-                    <input type="text" id="filter-action">
+                    <select id="filter-action" multiple data-rel="chosen"></select>
+                  </div>
+                  <label class="control-label" for="filter-action-preset">Action Presets</label>
+                  <div class="controls">
+                    <a class="btn filter-action-preset" data-filter="QR,Feedback,Check-In,Walk-In">Challenge Actions</a> <a class="btn filter-action-preset" data-filter="Add Credits,Credit Use From Challenge">Credit Actions</a>
                   </div>
                 </div>
 
@@ -30,8 +34,7 @@
                   </div>
                 </div>
 
-                <!-- todo -->
-                <!-- <div class="control-group">
+                <div class="control-group">
                   <label class="control-label" for="filter-company">Company</label>
                   <div class="controls">
                     <input type="text" id="filter-company">
@@ -50,7 +53,7 @@
                   <div class="controls">
                     <input type="text" id="filter-challenge">
                   </div>
-                </div> -->
+                </div>
 
                 <div class="form-actions">
                   <button type="submit" class="btn btn-primary">Apply</button>

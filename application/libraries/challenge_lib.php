@@ -24,8 +24,8 @@ class Challenge_lib {
     return FALSE;
   }
 
-  function get($criteria, $limit = 100) {
-    $result = $this->CI->challenge_model->get($criteria, $limit);
+  function get($criteria, $limit = 100, $offset = 0, $sort = NULL) {
+    $result = $this->CI->challenge_model->get($criteria, $limit, $offset, $sort);
     return $result;
   }
 
@@ -970,5 +970,17 @@ class Challenge_lib {
     }
 
     return $challenges;
+  }
+
+  function count($criteria = array()) {
+    return $this->CI->challenge_model->count($criteria);
+  }
+
+  function get_challenge_name_like($name = NULL) {
+    if(!strlen($name)) { return array(); }
+
+    $criteria = array('detail.name' => array('$regex' => '\b'.$name, '$options' => 'i'));
+
+    return $this->CI->challenge_model->get($criteria);
   }
 }

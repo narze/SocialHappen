@@ -5,7 +5,7 @@
  * @author Manassarn M.
  */
 class MY_Unit_test extends CI_Unit_test {
-	
+
 	private $CI;
 
 	function __construct(){
@@ -13,18 +13,18 @@ class MY_Unit_test extends CI_Unit_test {
 		$this->CI =& get_instance();
 		$this->CI->load->library('db_sync');
 		$this->CI->db_sync->use_test_db(TRUE);
-		echo '[mysql] Test with database : ' . $this->CI->db->database . '<br />'; 
+		echo '[mysql] Test with database : ' . $this->CI->db->database . '<br />';
 
 	}
-	
+
 	function reset_dbs($silent = TRUE){
-		$this->reset_mysql($silent);
 		$this->reset_mongodb($silent);
+		$this->reset_mysql($silent);
 	}
-	
+
 	function reset_mysql($silent = TRUE){
 		ob_start();
-		$this->CI->db_sync->mysql_reset();
+		$this->CI->db_sync->mysql_reset_and_remigrate();
 		if($silent){
 			$this->mysql_reset_result = ob_get_contents();
 		}
@@ -81,7 +81,7 @@ class MY_Unit_test extends CI_Unit_test {
 			'user_facebook_id' => '713558190',
 			'logged_in' => TRUE
 		);
-	
+
 		$this->CI->session->set_userdata($userdata);
 	}
 }

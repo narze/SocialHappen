@@ -38,10 +38,32 @@ class Sonar_box_model extends CI_Model {
 		return cursor2array($result);
 	}
 
+	function get_all($query, $limit = 100, $offset = 0, $sort = NULL){
+		// $query = array_cast_int($query, $this->int_values);
+		$result = $this->collection->find($query);
+
+		if(!$sort || !is_array($sort)) {
+			$sort = array('_id' => -1);
+		}
+
+		$result = $result->sort($sort);
+		$result = $result->skip($offset);
+
+		if($limit) {
+			$result = $result->limit($limit);
+		}
+
+		return cursor2array($result);
+	}
+
 	function getOne($query){
 		$query = array_cast_int($query, $this->int_values);
 		$result = $this->collection->findOne($query);
 		return obj2array($result);
+	}
+
+	function count($criteria = array()) {
+		return $this->collection->count($criteria);
 	}
 
 	function update($query, $data, $options = array()) {

@@ -10,7 +10,18 @@
         return this.model.bind('change', this.render);
       },
       render: function() {
-        this.$el.html(_.template(UserItemTemplate, this.model.toJSON()));
+        var platforms, user;
+        platforms = _.chain(this.model.get('user_platforms')).intersection(['ios', 'android']).map(function(platform) {
+          if (platform === 'ios') {
+            return 'iOS';
+          }
+          if (platform === 'android') {
+            return 'Android';
+          }
+        }).value();
+        user = _.clone(this.model.toJSON());
+        user.user_platforms = platforms;
+        this.$el.html(_.template(UserItemTemplate, user));
         return this;
       }
     });

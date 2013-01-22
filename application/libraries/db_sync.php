@@ -40,7 +40,7 @@ class DB_Sync {
     echo "Remove users successfully";
     }
 
-  function mysql_reset(){
+  function mysql_reset_and_remigrate(){
     $this->CI->load->dbforge();
     $this->drop_tables();
     $this->CI->load->library('migrate_lib');

@@ -1,0 +1,59 @@
+<div class="row-fluid sortable">
+    <div class="box span12">
+        <div class="box-header" data-original-title>
+            <h2>Filters</h2>
+            <div class="box-icon">
+                <a href="#" class="btn-minimize"><i class="icon-chevron-down"></i></a>
+            </div>
+        </div>
+        <div class="box-content" style="display: none;">
+            <form class="rewards-filter form-horizontal">
+              <fieldset>
+                <div class="control-group">
+                  <label class="control-label" for="filter-name">Name</label>
+                  <div class="controls">
+                    <input type="text" id="filter-name" placeholder="name">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="filter-point-required">Point Required</label>
+                  <div class="controls">
+                    <input type="number" id="filter-point-required-from" placeholder="from"> <input type="number" id="filter-point-required-to" placeholder="to">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="filter-amount">Amount</label>
+                  <div class="controls">
+                    <input type="number" id="filter-amount-from" placeholder="from"> <input type="number" id="filter-amount-to" placeholder="to">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="filter-amount-redeem">Amount Redeemed</label>
+                  <div class="controls">
+                    <input type="number" id="filter-amount-redeemed-from" placeholder="from"> <input type="number" id="filter-amount-redeemed-to" placeholder="to">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="filter-can-play-once">Can Play Once</label>
+                  <div class="controls">
+                    <select id="filter-can-play-once">
+                      <option value="">Both</option>
+                      <option value="1">Yes</option>
+                      <option value="0">No</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Apply</button>
+                  <button type="reset" class="btn">Cancel</button>
+                </div>
+              </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

@@ -97,4 +97,12 @@ class Branch_lib {
       }
     }
   }
+
+  function get_branch_title_like($title = NULL) {
+    if(!strlen($title)) { return array(); }
+
+    $criteria = array('title' => array('$regex' => '\b'.$title, '$options' => 'i'));
+
+    return $this->CI->branch_model->get($criteria);
+  }
 }

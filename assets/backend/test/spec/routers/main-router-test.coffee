@@ -19,6 +19,15 @@ describe 'Main Router', ->
     it 'should have companies route', ->
       window.backend.Routers.MainRouter.routes['companies'].should.be.equal 'companies'
 
+    it 'should have challenges route', ->
+      window.backend.Routers.MainRouter.routes['challenges'].should.be.equal 'challenges'
+
+    it 'should have rewards route', ->
+      window.backend.Routers.MainRouter.routes['rewards'].should.be.equal 'rewards'
+
+    it 'should have sonars route', ->
+      window.backend.Routers.MainRouter.routes['sonars'].should.be.equal 'sonars'
+
   describe 'routing', ->
 
     it 'should not load any views when switched to a bad route', ->
@@ -131,7 +140,7 @@ describe 'Main Router', ->
         $('#content').find('#activities-view').length.should.not.equal 0
 
       it 'should have all fields required', ->
-        $('#content').find('#activities-view').find('thead').find('th').length.should.equal 6
+        $('#content').find('#activities-view').find('thead').find('th').length.should.equal 5
 
         $('#content').find('#activities-view').find('thead').text().should.match(/Date/)
         $('#content').find('#activities-view').find('thead').text().should.match(/Name/)
@@ -141,12 +150,135 @@ describe 'Main Router', ->
         $('#content').find('#activities-view').find('thead').text().should.match(/Challenge/)
 
       it 'should have correct first row of data', ->
-        $('#content #activities-view .activity-item:first td').length.should.equal 6
+        $('#content #activities-view .activity-item:first td').length.should.equal 5
         $('#content #activities-view .activity-item:first td').text().should.match(/Noom/)
 
       describe 'after data fetched', ->
         it 'should load each .activity-item into #activities-view', ->
           $('#activities-view').find('.activity-item').length.should.not.equal 0
+
+    describe 'challenges', ->
+
+      it 'should load challenges view when switched route to challenges', ->
+        window.backend.Routers.MainRouter.navigate 'challenges', trigger:true
+        window.backend.Views.ChallengesView.rendered.should.equal true
+
+      it 'should set the challenge menu as active', ->
+        $('#sidebar-view').find('.main-menu li.challenges-tab-menu').hasClass('active').should.be.true
+
+      it 'should have challenge-item as a subview', ->
+        subViewName = 'challenge-' + window.backend.Collections.ChallengeCollection.models[0].cid
+        window.backend.Views.ChallengesView.subViews[subViewName].should.not.be.undefined
+
+      it 'should render #challenges-view into #content', ->
+        $('#content').find('#challenges-view').length.should.not.equal 0
+
+      it 'should have all fields required', ->
+        $('#content').find('#challenges-view').find('thead').find('th').length.should.equal 4
+
+        $('#content').find('#challenges-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#challenges-view').find('thead').text().should.match(/Start Date/)
+        $('#content').find('#challenges-view').find('thead').text().should.match(/End Date/)
+        $('#content').find('#challenges-view').find('thead').text().should.match(/Sonar Data/)
+
+      it 'should have correct first row of data', ->
+        $('#content #challenges-view .challenge-item:first td').length.should.equal 4
+
+      describe 'after data fetched', ->
+        it 'should load each .challenge-item into #challenges-view', ->
+          $('#challenges-view').find('.challenge-item').length.should.not.equal 0
+
+    describe 'rewards', ->
+
+      it 'should load rewards view when switched route to rewards', ->
+        window.backend.Routers.MainRouter.navigate 'rewards', trigger:true
+        window.backend.Views.RewardsView.rendered.should.equal true
+
+      it 'should set the reward menu as active', ->
+        $('#sidebar-view').find('.main-menu li.rewards-tab-menu').hasClass('active').should.be.true
+
+      it 'should have reward-item as a subview', ->
+        subViewName = 'reward-' + window.backend.Collections.RewardCollection.models[0].cid
+        window.backend.Views.RewardsView.subViews[subViewName].should.not.be.undefined
+
+      it 'should render #rewards-view into #content', ->
+        $('#content').find('#rewards-view').length.should.not.equal 0
+
+      it 'should have all fields required', ->
+        $('#content').find('#rewards-view').find('thead').find('th').length.should.equal 5
+
+        $('#content').find('#rewards-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#rewards-view').find('thead').text().should.match(/Point Required/)
+        $('#content').find('#rewards-view').find('thead').text().should.match(/Amount/)
+        $('#content').find('#rewards-view').find('thead').text().should.match(/Amount Redeemed/)
+        $('#content').find('#rewards-view').find('thead').text().should.match(/Can Play Once/)
+
+      it 'should have correct first row of data', ->
+        $('#content #rewards-view .reward-item:first td').length.should.equal 5
+
+      describe 'after data fetched', ->
+        it 'should load each .reward-item into #rewards-view', ->
+          $('#rewards-view').find('.reward-item').length.should.not.equal 0
+
+      describe 'reward add view', ->
+        it 'should have reward-add-view as a subview', ->
+          window.backend.Views.RewardsView.subViews['reward-add'].should.not.be.undefined
+
+        it 'should have reward add view', ->
+          $('#rewards-view').find('#reward-add-view').length.should.not.equal 0
+
+        it 'should have form', ->
+          $('form.reward-add-form').length.should.not.equal 0
+
+        it 'should have labels for each form item', ->
+          $form = $('form.reward-add-form')
+          $form.text().should.match /Name/
+          $form.text().should.match /Description/
+          # $form.text().should.match /Image/
+          $form.text().should.match /Status/
+          $form.text().should.match /Redeem Method/
+          $form.text().should.match /Redeem Date Range/
+          $form.text().should.match /If not specified, this reward will be redeemable forever/
+          $form.text().should.match /Quantity/
+          $form.text().should.match /Amount of reward user can redeem/
+          $form.text().should.match /Points/
+          $form.text().should.match /Amount of points user use to redeem this reward/
+          $form.text().should.match /Redeemable Once/
+          $form.text().should.match /Each user can redeem this reward once/
+          $form.text().should.match /Add Reward/
+          $form.text().should.match /Cancel/
+
+    describe 'devices', ->
+
+      it 'should load devices view when switched route to devices', ->
+        window.backend.Routers.MainRouter.navigate 'devices', trigger:true
+        window.backend.Views.DevicesView.rendered.should.equal true
+
+      it 'should set the device menu as active', ->
+        $('#sidebar-view').find('.main-menu li.devices-tab-menu').hasClass('active').should.be.true
+
+      it 'should have device-item as a subview', ->
+        subViewName = 'device-' + window.backend.Collections.DeviceCollection.models[0].cid
+        window.backend.Views.DevicesView.subViews[subViewName].should.not.be.undefined
+
+      it 'should render #devices-view into #content', ->
+        $('#content').find('#devices-view').length.should.not.equal 0
+
+      it 'should have all fields required', ->
+        $('#content').find('#devices-view').find('thead').find('th').length.should.equal 5
+
+        $('#content').find('#devices-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Data/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Challenge/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Info/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Actions/)
+
+      it 'should have correct first row of data', ->
+        $('#content #devices-view .device-item:first td').length.should.equal 5
+
+      describe 'after data fetched', ->
+        it 'should load each .device-item into #devices-view', ->
+          $('#devices-view').find('.device-item').length.should.not.equal 0
 
     describe 'change route back', ->
       window.backend.Routers.MainRouter.navigate '', trigger: true

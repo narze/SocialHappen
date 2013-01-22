@@ -6,10 +6,14 @@
       id: 'users-filter-view',
       events: {
         'click .box-header': 'minimize',
-        'submit form.users-filter': 'filter'
+        'submit form.users-filter': 'filter',
+        'reset form.users-filter': 'reset'
       },
       initialize: function() {
         return _.bindAll(this);
+      },
+      reset: function() {
+        return this.$('#filter-platforms').next().find('li.search-choice .search-choice-close').click();
       },
       minimize: function(e) {
         var $target;
@@ -18,7 +22,10 @@
         if ($target.is(':visible')) {
           this.$('.box-header .btn-minimize i').removeClass('icon-chevron-up').addClass('icon-chevron-down');
         } else {
-          $('[data-rel="chosen"],[rel="chosen"]').chosen();
+          this.$('[data-rel="chosen"],[rel="chosen"]').chosen();
+          this.$('#filter-platforms').next().css({
+            width: '220px'
+          });
           this.$('.box-header .btn-minimize i').removeClass('icon-chevron-down').addClass('icon-chevron-up');
         }
         return $target.slideToggle();

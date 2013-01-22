@@ -419,8 +419,18 @@ class Apiv4 extends REST_Controller {
   function branches_get(){
     $challenge_id = $this->get('challenge_id');
     $company_id = $this->get('company_id');
+    $branch_id = $this->get('branch_id');
 
-    if($challenge_id) {
+    $this->load->library('branch_lib');
+    if($branch_id) {
+      if(!$branch = $this->branch_lib->get_one(array(
+        '_id' => new MongoId($branch_id)))) {
+        return $this->error('Branch not found');
+      }
+
+      return $this->success(array($branch));
+
+    } else if($challenge_id) {
 
       $this->load->library('challenge_lib');
 
@@ -430,13 +440,12 @@ class Apiv4 extends REST_Controller {
         if($challenge && isset($challenge['branches_data'])){
           return $this->success($challenge['branches_data']);
         }else{
-          return $this->error();
+          return $this->error('Branch data not found');
         }
       }else{
-        return $this->error();
+        return $this->error('Challenge not found');
       }
-    }else if($company_id){
-      $this->load->library('branch_lib');
+    } else if($company_id) {
       $branches = $this->branch_lib->get(array(
         'company_id' => $company_id
       ), 10000000);
@@ -444,10 +453,10 @@ class Apiv4 extends REST_Controller {
       if($branches){
         return $this->success($branches);
       }else{
-        return $this->error();
+        return $this->error('Branch not found');
       }
-    }else{
-      return $this->error();
+    } else {
+      return $this->error('Criteria not set');
     }
   }
 
@@ -643,15 +652,36 @@ class Apiv4 extends REST_Controller {
       return $this->error('Challenge invalid');
     }
 
+    $company_id = (int) $challenge['company_id'];
+
     //Check challenge quota
+    $this->load->library('audit_lib');
     if(isset($challenge['done_count_max']) && ($challenge['done_count_max'] > 0)) {
       $done_count = isset($challenge['done_count']) ? $challenge['done_count'] : 0;
       if($done_count >= $challenge['done_count_max']) {
+
+        $audit_data = array(
+          'timestamp' => $time,
+          'user_id' => $user_id,
+          'action_id' => $this->socialhappen->get_k('audit_action', 'Action Failure'),
+          'app_id' => 0,
+          'app_install_id' => 0,
+          'page_id' => 0,
+          'company_id' => $company_id,
+          'subject' => $location ? $location : NULL,
+          'object' => $action_id,
+          'objecti' => 'Reward out of stock',
+          'image' => ''
+        );
+
+        if(!$this->audit_lib->audit_add($audit_data)) {
+          return $this->error('Audit add failed'. var_export($audit_data, true));
+        }
+
         return $this->error('Reward out of stock');
       }
     }
 
-    $company_id = (int) $challenge['company_id'];
 
     //Add audit & stat
     $user_data = array(
@@ -678,13 +708,31 @@ class Apiv4 extends REST_Controller {
       if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
         foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
           if($daily_challenge['start_date'] <= date('Ymd', $time) && $daily_challenge['end_date'] >= date('Ymd', $time)) {
+
+            $audit_data = array(
+              'timestamp' => $time,
+              'user_id' => $user_id,
+              'action_id' => $this->socialhappen->get_k('audit_action', 'Action Failure'),
+              'app_id' => 0,
+              'app_install_id' => 0,
+              'page_id' => 0,
+              'company_id' => $company_id,
+              'subject' => $location ? $location : NULL,
+              'object' => $action_id,
+              'objecti' => 'Challenge done already (daily)',
+              'image' => ''
+            );
+
+            if(!$this->audit_lib->audit_add($audit_data)) {
+              return $this->error('Audit add failed'. var_export($audit_data, true));
+            }
+
             return $this->error('Challenge done already (daily)', 1);
           }
         }
       }
 
       //add stat after checking challenge done
-      $this->load->library('audit_lib');
       $this->load->library('action_user_data_lib');
       if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
         $company_id,
@@ -757,6 +805,25 @@ class Apiv4 extends REST_Controller {
     } else {
       //Check if user completed already or not
       if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
+
+        $audit_data = array(
+          'timestamp' => $time,
+          'user_id' => $user_id,
+          'action_id' => $this->socialhappen->get_k('audit_action', 'Action Failure'),
+          'app_id' => 0,
+          'app_install_id' => 0,
+          'page_id' => 0,
+          'company_id' => $company_id,
+          'subject' => $location ? $location : NULL,
+          'object' => $action_id,
+          'objecti' => 'Challenge done already',
+          'image' => ''
+        );
+
+        if($this->audit_lib->audit_add($audit_data)) {
+          return $this->error('Audit add failed'. var_export($audit_data, true));
+        }
+
         return $this->error('Challenge done already', 1);
       }
 
@@ -1060,6 +1127,25 @@ class Apiv4 extends REST_Controller {
 
         if(!$result = $this->company_model->update_company_profile_by_company_id($company_id, $company_update)) {
           return $this->error('Update company failed');
+        }
+
+        //add credit use audit
+        $this->load->library('audit_lib');
+        $audit_data = array(
+          'user_id' => $user['user_id'],
+          'action_id' => $this->socialhappen->get_k('audit_action', 'Credit Use From Challenge'),
+          'app_id' => 0,
+          'app_install_id' => 0,
+          'page_id' => 0,
+          'company_id' => $company_id,
+          'subject' => (int) $reward_points,
+          'object' => $challenge['hash'],
+          'objecti' => (int) $company['credits'],
+          'image' => NULL // TODO
+        );
+
+        if(!$this->audit_lib->audit_add($audit_data)) {
+          return $this->error('Audit add failed');
         }
 
         $this->load->model('challenge_model');

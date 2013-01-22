@@ -5,7 +5,7 @@ require.config
       deps: ['lodash', 'jquery']
       exports: ->
         _.templateSettings =
-          evaluate : /\[\[([\s\S]+?)\]\]/g
+          evaluate: /<%([\s\S]+?)%>/g
           interpolate : /\{\{([\s\S]+?)\}\}/g
           escape : /\{\{\{([\s\S]+?)\}\}\}/g
         window.Backbone
@@ -35,6 +35,12 @@ require.config
       exports: 'moment'
     backbonePaginator:
       deps: ['backbone']
+    backboneValidation:
+      deps: ['backbone']
+    backboneValidationBootstrap:
+      deps: ['backboneValidation']
+    jqueryForm:
+      deps: ['jquery']
 
   paths:
     jquery: 'vendor/jquery.min'
@@ -46,6 +52,9 @@ require.config
     text: 'vendor/text'
     moment: 'vendor/moment.min'
     backbonePaginator: 'vendor/backbone.paginator'
+    backboneValidation: 'vendor/backbone-validation-amd'
+    backboneValidationBootstrap: 'vendor/backbone-validation-bootstrap'
+    jqueryForm: 'vendor/jquery-plugins/jquery.form'
 
     # Perfectum Dashboard
     bootstrap: 'vendor/jquery-plugins/bootstrap'

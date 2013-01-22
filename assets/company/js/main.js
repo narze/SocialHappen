@@ -15,9 +15,11 @@ require.config({
     jqueryForm: '../../libs/jquery.form/jquery.form',
     sandbox: '../../libs/sandbox/sandbox',
     chosen: '../../libs/jquery.chosen/chosen.jquery.min',
+    gmaps: '../../libs/gmaps/gmaps',
     // Require.js plugins
     text: '../../libs/require/text',
     order: '../../libs/require/order',
+    async: '../../libs/require/async',
 
     // Just a short cut so we can put our html outside the js dir
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
@@ -34,13 +36,20 @@ require.config({
         deps: ['underscore', 'jquery'],
         exports: 'Backbone'
     },
+    moment: {
+      exports: 'moment'
+    },
 
     //jQuery plugins
     timeago: ['jquery'],
     jqueryForm: ['jquery'],
     bootstrap: ['jquery'],
     masonry: ['jquery'],
-    endlessscroll: ['jquery']
+    endlessscroll: ['jquery'],
+    gmaps: {
+      deps: ['jquery', 'async!//maps.google.com/maps/api/js?sensor=false'],
+      exports: 'GMaps'
+    }
   }
 
 });
@@ -61,11 +70,12 @@ require([
   'collections/coupons',
   'collections/activities',
   'collections/company-users',
+  'collections/balance',
   'events',
   'sandbox'
 ], function(AppView, Router, Vm, UserModel, ChallengerModel, CompanyModel, ChallengesCollection,
  BranchCollection, RewardsCollection, OffersCollection, CouponsCollection, ActivitiesCollection,
-  CompanyUsersCollection, vent, sandbox){
+  CompanyUsersCollection, BalanceCollection, vent, sandbox){
   window.sandbox = sandbox;
   sandbox.models.currentUserModel = new UserModel();
   sandbox.models.challengerModel = new ChallengerModel();
@@ -77,6 +87,7 @@ require([
   sandbox.collections.couponsCollection = new CouponsCollection([]);
   sandbox.collections.activitiesCollection = new ActivitiesCollection([]);
   sandbox.collections.companyUsersCollection = new CompanyUsersCollection([]);
+  sandbox.collections.balanceCollection = new BalanceCollection([]);
 
   sandbox.models.currentUserModel.fetch({
     success: function(model, xhr){
@@ -97,4 +108,26 @@ require([
       appView: appView
     });
   }
+
+  window.checkSession = function() {
+    return $.ajax({
+      url: window.Company.BASE_URL + 'apiv3/check_session',
+      dataType: 'json',
+      success: function(resp) {
+        var now;
+        now = moment().format('MMMM Do YYYY, h:mm:ss a');
+        if (resp.success) {
+          return console.log('Session check ok : ' + now + ' UserId : ' + resp.data);
+        } else {
+          clearInterval(window.checkSessionInterval);
+          if (typeof mocha !== 'function') {
+            return alert('Session Expired ' + now);
+          }
+        }
+      }
+    });
+  };
+  window.checkSession();
+  window.checkSessionInterval = setInterval(window.checkSession, 10000);
+
 });

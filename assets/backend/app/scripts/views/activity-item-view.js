@@ -16,7 +16,19 @@
         return e.preventDefault();
       },
       render: function() {
-        this.$el.html(_.template(ActivityItemTemplate, this.model.toJSON()));
+        var activity;
+        activity = this.model.toJSON();
+        switch (activity.audit_description) {
+          case "Add Credits":
+            activity.audit_description_append = activity.object + " credits";
+            break;
+          case "Credit Use From Challenge":
+            activity.audit_description_append = activity.subject + " credits";
+            break;
+          default:
+            activity.audit_description_append = false;
+        }
+        this.$el.html(_.template(ActivityItemTemplate, activity));
         this.delegateEvents();
         this.$('.audit-tooltip').tooltip();
         return this;

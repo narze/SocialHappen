@@ -22,6 +22,7 @@ define([
       '/company/:id/activities': 'activities',
       '/company/:id/coupon/:couponId': 'couponPopup',
       '/create': 'createCompany',
+      '/company/:id/balance': 'balance',
       '/company/:id/settings': 'settings',
       '/company/:id/push': 'pushNotifications',
       '*actions': 'defaultAction'
@@ -163,6 +164,17 @@ define([
             sandbox.collections.companyUsersCollection.get(userId).trigger('view');
           }
         }})
+      })
+    })
+
+    router.on('route:balance', function(id) {
+      sandbox.companyId = window.Company.companyId = id;
+      sandbox.now = 'balance';
+      sandbox.collections.balanceCollection.url = window.Company.BASE_URL + '/apiv3/company_balance/' + id;
+      require(['views/company/balance-list'], function(BalanceList) {
+        createCompanyPage();
+        var balanceListView = Vm.create(sandbox.views.appView, 'Content', BalanceList);
+        $('#content-pane').html(balanceListView.render().el);
       })
     })
 

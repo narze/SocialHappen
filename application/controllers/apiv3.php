@@ -424,6 +424,95 @@ class Apiv3 extends CI_Controller {
     return json_return($challenges);
   }
 
+  function challenge_list() {
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('branch_lib');
+    $this->load->library('challenge_lib');
+    $this->load->library('action_data_lib');
+    $this->load->model('sonar_box_model');
+
+    $query_options = array();
+    if(isset($filter['name']) && strlen($filter['name'])) {
+      $query_options['detail.name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(isset($filter['sonar_data']) && strlen($filter['sonar_data'])) {
+      $sonars = $this->sonar_box_model->get(array('data' => array('$regex' => $filter['sonar_data'])));
+      $sonars = array_map(function($sonar) { return $sonar['data']; }, $sonars);
+      $query_options['sonar_frequency'] = array('$in' => $sonars);
+    }
+
+    if(isset($filter['start_date_from']) && strlen($filter['start_date_from'])) {
+      # find where start_date > start_date_from
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['start_date'])) {
+        $query_options['start_date'] = array();
+      }
+
+      $query_options['start_date']['$gte'] = strtotime($filter['start_date_from']) + 0;
+    }
+    if(isset($filter['start_date_to']) && strlen($filter['start_date_to'])) {
+      # find where start_date < start_date_to
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['start_date'])) {
+        $query_options['start_date'] = array();
+      }
+
+      $query_options['start_date']['$lte'] = strtotime($filter['start_date_to']) + 60*60*24 - 1;
+    }
+
+    if(isset($filter['end_date_from']) && strlen($filter['end_date_from'])) {
+      # find where end_date > end_date_from
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['end_date'])) {
+        $query_options['end_date'] = array();
+      }
+
+      $query_options['end_date']['$gte'] = strtotime($filter['end_date_from']) + 0;
+    }
+    if(isset($filter['end_date_to']) && strlen($filter['end_date_to'])) {
+      # find where end_date < end_date_to
+      # TODO : Re-specify HH:MM:SS
+      if(!isset($query_options['end_date'])) {
+        $query_options['end_date'] = array();
+      }
+
+      $query_options['end_date']['$lte'] = strtotime($filter['end_date_to']) + 60*60*24 - 1;
+    }
+
+    # sort & order
+    if(in_array($sort, array('name', 'start_date', 'end_date', 'sonar_data'))) {
+      if($sort === 'name') { $sort = 'detail.name'; }
+      if($sort === 'sonar_data') { $sort = 'sonar_frequency'; }
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $challenges = $this->challenge_lib->get($query_options, $limit, $offset, $sort);
+    $challenges_all_count = $this->challenge_lib->count($query_options);
+
+    foreach($challenges as &$challenge) {
+      // Get sonar
+      $challenge['sonar_box'] = $this->sonar_box_model->getOne(array('data' => $challenge['sonar_frequency']));
+    } unset($challenge);
+
+    $options = array(
+      'total' => $challenges_all_count,
+      'total_pages' => ceil($challenges_all_count / $limit),
+      'count' => count($challenges),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($challenges, 1, $options);
+  }
+
   function challenge_action() {
     $action_data_id = $this->input->get('action_data_id');
 
@@ -815,21 +904,21 @@ class Apiv3 extends CI_Controller {
     $where = array();
     $like = array();
 
-    if(!empty($filter['name'])) {
+    if(isset($filter['name']) && strlen($filter['name'])) {
       # find in name
       $like['company_name'] = trim($filter['name']);
     }
-    if(!empty($filter['created_at_from'])) {
+    if(isset($filter['created_at_from']) && strlen($filter['created_at_from'])) {
       # find where company_register_date > created_at_from
       # TODO : Re-specify HH:MM:SS
       $where['company_register_date >='] = $filter['created_at_from'] . " 00:00:00";
     }
-    if(!empty($filter['created_at_to'])) {
+    if(isset($filter['created_at_to']) && strlen($filter['created_at_to'])) {
       # find where company_register_date < created_at_to
       # TODO : Re-specify HH:MM:SS
       $where['company_register_date <='] = $filter['created_at_to'] . " 23:59:59";
     }
-    if(!empty($filter['credits'])) {
+    if(isset($filter['credits']) && strlen($filter['credits'])) {
       $where['credits'] = $filter['credits'];
     }
 
@@ -861,6 +950,135 @@ class Apiv3 extends CI_Controller {
     return $this->success($companies, 1, $options);
   }
 
+  function reward_list() {
+    if ($model = json_decode($this->input->post('model'), TRUE)) {
+      return $this->_reward_add($model);
+    }
+
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('reward_lib');
+    $this->load->model('reward_item_model');
+
+    $query_options = array();
+    if(isset($filter['name']) && strlen($filter['name'])) {
+      $query_options['name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(isset($filter['point_from']) && strlen($filter['point_from'])) {
+      # find where point > point_from
+      if(!isset($query_options['redeem.point'])) {
+        $query_options['redeem.point'] = array();
+      }
+
+      $query_options['redeem.point']['$gte'] = (int) $filter['point_from'];
+    }
+    if(isset($filter['point_to']) && strlen($filter['point_to'])) {
+      # find where point < point_to
+      if(!isset($query_options['redeem.point'])) {
+        $query_options['redeem.point'] = array();
+      }
+
+      $query_options['redeem.point']['$lte'] = (int) $filter['point_to'];
+    }
+
+    if(isset($filter['amount_from']) && strlen($filter['amount_from'])) {
+      # find where amount > amount_from
+      if(!isset($query_options['redeem.amount'])) {
+        $query_options['redeem.amount'] = array();
+      }
+
+      $query_options['redeem.amount']['$gte'] = (int) $filter['amount_from'];
+    }
+    if(isset($filter['amount_to']) && strlen($filter['amount_to'])) {
+      # find where amount < amount_to
+      if(!isset($query_options['redeem.amount'])) {
+        $query_options['redeem.amount'] = array();
+      }
+
+      $query_options['redeem.amount']['$lte'] = (int) $filter['amount_to'];
+    }
+
+    if(isset($filter['amount_redeemed_from']) && strlen($filter['amount_redeemed_from'])) {
+      # find where amount_redeemed > amount_redeemed_from
+      if(!isset($query_options['redeem.amount_redeemed'])) {
+        $query_options['redeem.amount_redeemed'] = array();
+      }
+
+      $query_options['redeem.amount_redeemed']['$gte'] = (int) $filter['amount_redeemed_from'];
+    }
+    if(isset($filter['amount_redeemed_to']) && strlen($filter['amount_redeemed_to'])) {
+      # find where amount_redeemed < amount_redeemed_to
+      if(!isset($query_options['redeem.amount_redeemed'])) {
+        $query_options['redeem.amount_redeemed'] = array();
+      }
+
+      $query_options['redeem.amount_redeemed']['$lte'] = (int) $filter['amount_redeemed_to'];
+    }
+
+    if(isset($filter['once']) && strlen($filter['once'])) {
+      $query_options['redeem.once'] = !!((int) $filter['once']);
+    }
+
+    # sort & order
+    if(in_array($sort, array('name', 'point', 'amount', 'amount_redeemed'))) { # TODO : sort once
+      if($sort === 'point') { $sort = 'redeem.point'; }
+      if($sort === 'amount') { $sort = 'redeem.amount'; }
+      if($sort === 'amount_redeemed') { $sort = 'redeem.amount_redeemed'; }
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    //system rewards
+    $query_options['company_id'] = 1;
+    $query_options['type'] = 'redeem';
+
+    $rewards = $this->reward_item_model->get_full($query_options, $limit, $offset, $sort);
+    $rewards_all_count = $this->reward_item_model->count($query_options);
+
+    foreach($rewards as &$reward) {
+
+    } unset($reward);
+
+    $options = array(
+      'total' => $rewards_all_count,
+      'total_pages' => ceil($rewards_all_count / $limit),
+      'count' => count($rewards),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($rewards, 1, $options);
+  }
+
+  function _reward_add($reward) {
+    $this->load->model('reward_item_model');
+
+    if(!strlen($reward['redeem']['point'])
+    || !strlen($reward['redeem']['amount'])
+    || !strlen($reward['name'])
+      ) {
+      return $this->error('Reward data invalid');
+    }
+
+    $reward['updated_timestamp'] = time();
+    $reward['value'] = 0;
+    $reward['company_id'] = 1;
+    $reward['type'] = 'redeem';
+    $reward['is_points_reward'] = TRUE;
+
+    if(!$reward_item_id = $this->reward_item_model->add_redeem_reward($reward)) {
+      return $this->error('Add reward failed');
+    }
+
+    return $this->success($reward);
+  }
+
   /**
    * list redeem type rewards
    */
@@ -879,6 +1097,63 @@ class Apiv3 extends CI_Controller {
       return $reward;
     }, $rewards);
     return json_return($rewards);
+  }
+
+  function devices() {
+    // if ($model = json_decode($this->input->post('model'), TRUE)) {
+    //   return $this->_reward_add($model);
+    // }
+
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('challenge_lib');
+    $this->load->model('sonar_box_model');
+
+    $query_options = array();
+    if(isset($filter['name']) && strlen($filter['name'])) {
+      $query_options['name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(isset($filter['data']) && strlen($filter['data'])) {
+      $query_options['data'] = array('$regex' => $filter['data']);
+    }
+
+    if(isset($filter['challenge']) && strlen($filter['challenge'])) {
+      $challenges = $this->challenge_lib->get_challenge_name_like($filter['challenge']);
+      $challenge_ids = array_map(function($challenge) { return ''.$challenge['_id']; }, $challenges);
+      $query_options['challenge_id'] = array('$in' => $challenge_ids);
+    }
+
+    # sort & order
+    if(in_array($sort, array('name', 'data'))) {
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $devices = $this->sonar_box_model->get_all($query_options, $limit, $offset, $sort);
+    $devices_all_count = $this->sonar_box_model->count($query_options);
+
+    foreach($devices as &$device) {
+      // Get challenge
+      if(isset($device['challenge_id'])) {
+        $device['challenge'] = $this->challenge_lib->get_one(array('_id' => new MongoId($device['challenge_id'])));
+      }
+    } unset($device);
+
+    $options = array(
+      'total' => $devices_all_count,
+      'total_pages' => ceil($devices_all_count / $limit),
+      'count' => count($devices),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($devices, 1, $options);
   }
 
   /**
@@ -1227,6 +1502,43 @@ class Apiv3 extends CI_Controller {
   }
 
   /**
+   * Show company balance (credits related action)
+   */
+  function company_balance($company_id = NULL) {
+    $this->load->model('company_model');
+    if(!$company = $this->company_model->get_company_profile_by_company_id($company_id)){
+      return $this->error('Company not found');
+    }
+
+    $this->load->library('audit_lib');
+    $credit_use = $this->socialhappen->get_k('audit_action', 'Credit Use From Challenge');
+    $credit_add = $this->socialhappen->get_k('audit_action', 'Add Credits');
+
+    $credits_related_action_ids = array(
+      $credit_use, $credit_add
+    );
+
+    $audits = $this->audit_lib->list_audit(array('company_id' => $company['company_id'], 'action_id' => array('$in' => $credits_related_action_ids)), 0);
+
+    //Process actions
+    foreach($audits as $key => &$audit) {
+      if(($audit['action_id'] === $credit_use) && is_numeric($audit['subject']) && is_numeric($audit['objecti'])) {
+        $audit['credit_added'] = - $audit['subject'];
+        $audit['credit_total'] = $audit['objecti'];
+      } else if(($audit['action_id'] === $credit_add) && is_numeric($audit['object']) && is_numeric($audit['objecti'])) {
+        $audit['credit_added'] = $audit['object'];
+        $audit['credit_total'] = $audit['objecti'];
+      } else {
+        unset($audits[$key]);
+      }
+    } unset($audit);
+
+    $audits = array_values($audits);
+
+    return json_return($audits);
+  }
+
+  /**
    * Get company users and sort by company score
    */
   function company_leaderboard($company_id = NULL) {
@@ -1420,30 +1732,30 @@ class Apiv3 extends CI_Controller {
     $where = array();
     $like = array();
 
-    if(!empty($filter['first_name'])) {
+    if(isset($filter['first_name']) && strlen($filter['first_name'])) {
       # find in first_name
       $like['user_first_name'] = trim($filter['first_name']);
     }
-    if(!empty($filter['last_name'])) {
+    if(isset($filter['last_name']) && strlen($filter['last_name'])) {
       # find in last_name
       $like['user_last_name'] = trim($filter['last_name']);
     }
-    if(!empty($filter['signup_date_from'])) {
+    if(isset($filter['signup_date_from']) && strlen($filter['signup_date_from'])) {
       # find where signup_date > signup_date_from
       # TODO : Re-specify HH:MM:SS
       $where['user_register_date >='] = $filter['signup_date_from'] . " 00:00:00";
     }
-    if(!empty($filter['signup_date_to'])) {
+    if(isset($filter['signup_date_to']) && strlen($filter['signup_date_to'])) {
       # find where signup_date < signup_date_to
       # TODO : Re-specify HH:MM:SS
       $where['user_register_date <='] = $filter['signup_date_to'] . " 23:59:59";
     }
-    if(!empty($filter['last_seen_from'])) {
+    if(isset($filter['last_seen_from']) && strlen($filter['last_seen_from'])) {
       # find where last_seen > last_seen_from
       # TODO : Re-specify HH:MM:SS
       $where['user_last_seen >='] = $filter['last_seen_from'] . " 00:00:00";
     }
-    if(!empty($filter['last_seen_to'])) {
+    if(isset($filter['last_seen_to']) && strlen($filter['last_seen_to'])) {
       # find where last_seen < last_seen_to
       # TODO : Re-specify HH:MM:SS
       $where['user_last_seen <='] = $filter['last_seen_to'] . " 23:59:59";
@@ -1459,13 +1771,13 @@ class Apiv3 extends CI_Controller {
 
     # find in mongo and get ids
     $find_in_mongo = FALSE;
-    if(!empty($filter['platforms'])) {
+    if(isset($filter['platforms']) && strlen($filter['platforms'])) {
       # find each platform
       $find_in_mongo = TRUE;
       $users_found = $this->user_token_model->get(array('device' => array('$in' => $filter['platforms'])));
       $user_ids_from_platforms = array_map(function($user) { return (int) $user['user_id']; }, $users_found);
     }
-    if(!empty($filter['points'])) {
+    if(isset($filter['points']) && strlen($filter['points'])) {
       # find if points match
       $find_in_mongo = TRUE;
       $users_found = $this->user_mongo_model->get(array('points' => (int) $filter['points']));
@@ -1548,20 +1860,23 @@ class Apiv3 extends CI_Controller {
     $order = $this->input->get('order') ? : 1;
 
     $this->load->library('audit_lib');
+    $this->load->library('branch_lib');
+    $this->load->library('challenge_lib');
     $this->load->model('user_model');
     $this->load->model('company_model');
     $this->load->model('challenge_model');
     $this->load->model('audit_model');
+    $this->load->model('branch_model');
 
     $query_options = array();
 
     # find user_id
     $user_like = array();
-    if(!empty($filter['first_name'])) {
+    if(isset($filter['first_name']) && strlen($filter['first_name'])) {
       # find in first_name
       $user_like['user_first_name'] = $filter['first_name'];
     }
-    if(!empty($filter['last_name'])) {
+    if(isset($filter['last_name']) && strlen($filter['last_name'])) {
       # find in last_name
       $user_like['user_last_name'] = $filter['last_name'];
     }
@@ -1572,19 +1887,23 @@ class Apiv3 extends CI_Controller {
     }
 
     # find company_id
-    if(!empty($filter['company'])) {
-      $companies = $this->company_model->get_all(NULL, NULL, array('where' => array('company_name' => $filter['company'])));
+    if(isset($filter['company']) && strlen($filter['company'])) {
+      $companies = $this->company_model->get_all(NULL, NULL, array('like' => array('company_name' => $filter['company'])));
       $company_ids = array_map(function($company) { return (int) $company['company_id']; }, $companies);
       $query_options['company_id'] = array('$in' => $company_ids);
     }
 
     # find in mongo and get ids
-    $find_in_mongo = FALSE;
-    if(!empty($filter['action'])) {
-      $action_id = $this->socialhappen->get_k('audit_action', $filter['action']);
-      $query_options['action_id'] = $action_id;
+    if(isset($filter['action']) && $filter['action']) {
+      $action_ids = array();
+      foreach ($filter['action'] as $action) {
+        $action_id = $this->socialhappen->get_k('audit_action', $action);
+        $action_ids[] = $action_id;
+      }
+
+      $query_options['action_id'] = array('$in' => $action_ids);
     }
-    if(!empty($filter['date_from'])) {
+    if(isset($filter['date_from']) && strlen($filter['date_from'])) {
       # find where date > date_from
       # TODO : Re-specify HH:MM:SS
       if(!isset($query_options['timestamp'])) {
@@ -1593,7 +1912,7 @@ class Apiv3 extends CI_Controller {
 
       $query_options['timestamp']['$gte'] = strtotime($filter['date_from']) + 0;
     }
-    if(!empty($filter['date_to'])) {
+    if(isset($filter['date_to']) && strlen($filter['date_to'])) {
       # find where date < date_to
       # TODO : Re-specify HH:MM:SS
       if(!isset($query_options['timestamp'])) {
@@ -1602,16 +1921,17 @@ class Apiv3 extends CI_Controller {
 
       $query_options['timestamp']['$lte'] = strtotime($filter['date_to']) + 60*60*24 - 1;
     }
-    if(!empty($filter['branch'])) {
-      # find if points match
-      # TODO : implement
+
+    if(isset($filter['branch']) && strlen($filter['branch'])) {
+      $branches = $this->branch_lib->get_branch_title_like($filter['branch']);
+      $branch_ids = array_map(function($branch) { return ''.$branch['_id']; }, $branches);
+      $query_options['branch_id'] = array('$in' => $branch_ids);
     }
-    if(!empty($filter['challenge'])) {
-      # find if challenge match
-      // $find_in_mongo = TRUE;
-      // $challenges = $this->challenge_model->get(array('detail.name' => $filter['challenge']));
-      // $challenge_ids = array_map(function($challenge) { return (int) $challenge['challenge_id']; }, $challenges);
-      # TODO : implement
+
+    if(isset($filter['challenge']) && strlen($filter['challenge'])) {
+      $challenges = $this->challenge_lib->get_challenge_name_like($filter['challenge']);
+      $challenge_ids = array_map(function($challenge) { return ''.$challenge['_id']; }, $challenges);
+      $query_options['challenge_id'] = array('$in' => $challenge_ids);
     }
 
     # sort & order
@@ -1641,11 +1961,16 @@ class Apiv3 extends CI_Controller {
       }
 
       // Get challenge if it is challenge
-      if(in_array($activity['action_id'], array(117, 118))) {
-        $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
-      } else {
-        $activity['challenge'] = array();
+      // If found, update the audit's challenge_id
+      $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
+      if($activity['challenge'] && !isset($activity['challenge_id'])) {
+        $challenge_id = get_mongo_id($activity['challenge']);
+        $activity['challenge_id'] = $challenge_id;
+        if(!$this->audit_lib->update_challenge_id_by_audit_id(''.$activity['_id'], $challenge_id)) {
+          $this->error('Update audit failed', $challenge_id);
+        }
       }
+
 
       // Get action message & description
       $app_id = (int) 0;
@@ -1676,6 +2001,11 @@ class Apiv3 extends CI_Controller {
       // Get company
       if(isset($activity['company_id'])) {
         $activity['company'] = $this->company_model->get_company_profile_by_company_id($activity['company_id']);
+      }
+
+      // Get branch
+      if(isset($activity['branch_id'])) {
+        $activity['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($activity['branch_id'])));
       }
     } unset($activity);
 
@@ -1730,6 +2060,22 @@ class Apiv3 extends CI_Controller {
     }
 
     return $this->success($company);
+  }
+
+  function audit_actions() {
+    $this->load->model('audit_action_model');
+
+    $audit_actions = $this->audit_action_model->get();
+
+    return $this->success($audit_actions);
+  }
+
+  function check_session() {
+    if($user_id = $this->socialhappen->get_user_id()) {
+      return $this->success($user_id);
+    } else {
+      return $this->error();
+    }
   }
 }
 

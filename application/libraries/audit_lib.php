@@ -331,7 +331,12 @@ class Audit_lib
 			$data_to_add['image'] = $additional_data['image'];
 		}
 
-		//echo '<pre>' . print_r($data_to_add, TRUE) . '</pre>';
+		//Other data will be added accordingly if not yet added
+		foreach ($additional_data as $key => $value) {
+			if(!isset($data_to_add[$key])) {
+				$data_to_add[$key] = $value;
+			}
+		}
 
 		// TODO: select stat to add
 		$this->CI->load->model('audit_model','audit');
@@ -458,6 +463,11 @@ class Audit_lib
 				$challenge = $this->CI->challenge_lib->get_by_hash($value);
 				$challenge_name = isset($challenge['detail']['name']) ? $challenge['detail']['name'] : $value;
 				$format_value = '<span class="type_challenge"><a href="'.base_url('player/challenge/'.$value).'">'.$challenge_name.'</a></span>';
+				break;
+			case 'audit_action':
+				$audit_action = $this->get_audit_action(0, $value);
+				$audit_action_description = isset($audit_action['description']) ? $audit_action['description'] : $value;
+				$format_value = '<span class="type_audit_action">'.$audit_action_description.'</span>';
 				break;
 			case 'number':
 				$format_value = (int) $value;
@@ -973,6 +983,20 @@ foreach ($data as $line_key => $line_value) {
 	 */
 	function count($criteria = array()) {
 		return $this->CI->audit_model->count($criteria);
+	}
+
+	function update_challenge_id_by_audit_id($audit_id = NULL, $challenge_id = NULL) {
+		if(!$audit_id || !$challenge_id){
+			return FALSE;
+		} else {
+			return $this->CI->audit_model->update(array(
+				'_id' => new MongoId($audit_id)
+			), array(
+				'$set' => array(
+					'challenge_id' => $challenge_id
+				)
+			));
+		}
 	}
 }
 
