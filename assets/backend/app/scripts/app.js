@@ -75,6 +75,7 @@
         }
       });
     };
+    window.checkSession();
     return window.checkSessionInterval = setInterval(window.checkSession, 10000);
   });
 

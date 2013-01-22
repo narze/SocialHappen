@@ -129,4 +129,5 @@ define [
           if typeof mocha isnt 'function'
             alert 'Session Expired ' + now
 
+  window.checkSession()
   window.checkSessionInterval = setInterval window.checkSession, 10000
