@@ -909,6 +909,7 @@ define([
       if(lat && lng) {
         this.$('input.latitude').val(lat)
         this.$('input.longitude').val(lng)
+        this.viewGoogleMaps(e)
       }
 
       function getParameterByName(string, name)
@@ -934,7 +935,7 @@ define([
         , $formLongitude = this.$('input.longitude')
 
       require(['gmaps'], function(GMaps) {
-        $('#gmaps').css({
+        self.$('#gmaps').css({
           width: '100%',
           height: 300
         });
