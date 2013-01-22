@@ -24,7 +24,8 @@ define([
       'click button.save-photo': 'saveEditPhoto',
       'click button.upload-photo-submit': 'uploadPhoto',
       'click button.delete-branch': 'deleteBranch',
-      'click button.use-google-maps-link': 'useGoogleMapsLink'
+      'keyup input.google-maps-link': 'useGoogleMapsLink',
+      'click button.view-google-maps': 'viewGoogleMaps'
     },
 
     initialize: function(){
@@ -206,7 +207,7 @@ define([
     },
 
     useGoogleMapsLink: function(e) {
-      e.preventDefault()
+      e.preventDefault();
 
       var link = this.$('input.google-maps-link').val()
         , latlng = getParameterByName(link, 'q').split(',')
@@ -230,6 +231,67 @@ define([
         else
           return decodeURIComponent(results[1].replace(/\+/g, " "));
       }
+    },
+
+    viewGoogleMaps: function(e) {
+      e.preventDefault();
+
+      var self = this
+        , marker = false
+        , $formLatitude = this.$('input.lat')
+        , $formLongitude = this.$('input.lng')
+
+      require(['gmaps'], function(GMaps) {
+        $('#gmaps').css({
+          width: '100%',
+          height: 300
+        });
+
+        var map = new GMaps({
+          div: '#gmaps',
+          lat: 0,
+          lng: 0,
+          zoom: 16,
+          click: function(e) {
+            console.log(e);
+            $formLatitude.val(e.latLng.Ya)
+            $formLongitude.val(e.latLng.Za)
+
+            if(!!marker) {
+              map.removeMarker(marker);
+            }
+            marker = map.addMarker({
+              lat: e.latLng.Ya,
+              lng: e.latLng.Za
+            });
+
+            map.refresh();
+          }
+        });
+
+        if(!$formLatitude.val().length && !$formLongitude.val().length) {
+          GMaps.geolocate({
+            success: function(position) {
+              map.setCenter(position.coords.latitude, position.coords.longitude);
+            },
+            error: function(error) {
+              console.log('Geolocation failed: '+error.message);
+            },
+            not_supported: function() {
+              console.log("Your browser does not support geolocation");
+            },
+            always: function() {
+              console.log("Done!");
+            }
+          });
+        } else {
+          map.setCenter($formLatitude.val(), $formLongitude.val());
+          marker = map.addMarker({
+            lat: $formLatitude.val(),
+            lng: $formLongitude.val()
+          });
+        }
+      });
     }
   });
   return EditModalView;
