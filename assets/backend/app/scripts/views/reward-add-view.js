@@ -6,7 +6,8 @@
       id: 'reward-add-view',
       events: {
         'submit form.reward-add-form': 'addNewReward',
-        'click .box-header': 'minimize'
+        'click .box-header': 'minimize',
+        'click a.upload-image': 'uploadImage'
       },
       initialize: function() {
         _.bindAll(this);
@@ -56,8 +57,28 @@
           });
         }
       },
+      uploadImage: function(e) {
+        var _this = this;
+        e.preventDefault();
+        this.$('.reward-add-form .reward-add-image:first').after(this.$('.reward-add-form .reward-add-image:first').clone());
+        this.$('form.upload-image .file-input').html(this.$('.reward-add-form .reward-add-image:first'));
+        return this.$('form.upload-image').ajaxSubmit({
+          beforeSubmit: function(a, f, o) {
+            return o.dataType = 'json';
+          },
+          success: function(resp) {
+            var imageUrl;
+            if (resp.success) {
+              imageUrl = resp.data;
+              return _this.$('#reward-add-image').val(imageUrl);
+            } else {
+              return alert('There is an error uploading the image');
+            }
+          }
+        });
+      },
       render: function() {
-        this.$el.html(RewardAddTemplate);
+        this.$el.html(_.template(RewardAddTemplate, {}));
         this.delegateEvents();
         if (this.$('.datepicker')) {
           this.$('.datepicker').datepicker();

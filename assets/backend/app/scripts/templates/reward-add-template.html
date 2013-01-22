@@ -6,7 +6,12 @@
                 <a href="#" class="btn-minimize"><i class="icon-chevron-down"></i></a>
             </div>
         </div>
-        <div class="box-content" style="display: none;">
+        <div class="box-content" style="display: none">
+            <form style="display: none" type="POST" enctype="multipart/form-data" action="{{ window.baseUrl + 'apiv3/upload_image' }}" class="upload-image">
+              <input type="hidden" name="file-input-name" value="new-image" />
+              <input type="hidden" name="old-image" value="old-image" />
+              <div class="file-input"></div>
+            </form>
             <form class="reward-add-form form-horizontal">
               <fieldset>
                 <div class="control-group">
@@ -26,7 +31,13 @@
                 <div class="control-group">
                   <label class="control-label" for="reward-add-image">Image URL</label>
                   <div class="controls">
-                    <input name="image" class="input-xlarge" type="text" id="reward-add-image" value="">
+                    <input name="image" type="text" id="reward-add-image">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="reward-add-image-upload">Or Upload Your Image</label>
+                  <div class="controls">
+                    <input name="new-image" type="file" id="reward-add-image-upload" class="reward-add-image"> <a class="btn upload-image">Upload</a>
                   </div>
                 </div>
 

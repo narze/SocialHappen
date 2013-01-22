@@ -13,6 +13,7 @@ define [
     events:
       'submit form.reward-add-form': 'addNewReward'
       'click .box-header': 'minimize'
+      'click a.upload-image': 'uploadImage'
 
     initialize: ->
       _.bindAll @
@@ -57,24 +58,26 @@ define [
           window.backend.Collections.RewardCollection.add @model.clone()
           @render()
 
-    # uploadImage: (e) ->
-    #   e.preventDefault()
-    #   @$('form.upload-image').ajaxSubmit
-    #     beforeSubmit: (a, f, o) ->
-    #       o.dataType = 'json';
-    #     success: (resp) =>
-    #       if resp.success
-    #         imageUrl = resp.data;
+    uploadImage: (e) ->
+      e.preventDefault()
 
-    #         # Save image
-    #         # @setForms();
-    #         # sandbox.models.companyModel.set('company_image', imageUrl);
-    #         # sandbox.models.companyModel.save();
-    #         # return;
-    #       alert(resp.data);
+      # Move the file input and clone back
+      @$('.reward-add-form .reward-add-image:first').after @$('.reward-add-form .reward-add-image:first').clone()
+      @$('form.upload-image .file-input').html(@$('.reward-add-form .reward-add-image:first'))
+
+      @$('form.upload-image').ajaxSubmit
+        beforeSubmit: (a, f, o) ->
+          o.dataType = 'json';
+        success: (resp) =>
+          if resp.success
+            imageUrl = resp.data;
+            @$('#reward-add-image').val imageUrl
+          else
+            alert 'There is an error uploading the image'
+            # console.log resp
 
     render: ->
-      @$el.html RewardAddTemplate
+      @$el.html _.template RewardAddTemplate, {}
       @delegateEvents()
 
       @$('.datepicker').datepicker() if @$('.datepicker')
