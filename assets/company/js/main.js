@@ -34,6 +34,9 @@ require.config({
         deps: ['underscore', 'jquery'],
         exports: 'Backbone'
     },
+    moment: {
+      exports: 'moment'
+    },
 
     //jQuery plugins
     timeago: ['jquery'],
@@ -99,4 +102,26 @@ require([
       appView: appView
     });
   }
+
+  window.checkSession = function() {
+    return $.ajax({
+      url: window.Company.BASE_URL + 'apiv3/check_session',
+      dataType: 'json',
+      success: function(resp) {
+        var now;
+        now = moment().format('MMMM Do YYYY, h:mm:ss a');
+        if (resp.success) {
+          return console.log('Session check ok : ' + now + ' UserId : ' + resp.data);
+        } else {
+          clearInterval(window.checkSessionInterval);
+          if (typeof mocha !== 'function') {
+            return alert('Session Expired ' + now);
+          }
+        }
+      }
+    });
+  };
+  window.checkSession();
+  window.checkSessionInterval = setInterval(window.checkSession, 10000);
+
 });
