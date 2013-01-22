@@ -51,7 +51,7 @@ define [
     dev:
       baseUrl: 'https://socialhappen.dyndns.org/socialhappen/'
     beta:
-      baseUrl: 'http://beta.socialhappen.com/'
+      baseUrl: 'https://beta.socialhappen.com/'
     production:
       baseUrl: 'http://www.socialhappen.com/'
 
