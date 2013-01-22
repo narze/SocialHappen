@@ -48,7 +48,8 @@ define([
       'change input.all-branch-enable': 'toggleAllBranch',
       'change input.verify-location': 'toggleVerifyLocation',
       'change input.custom-location': 'toggleCustomLocation',
-      'change select.select-branch': 'onSelectBranch'
+      'change select.select-branch': 'onSelectBranch',
+      'click button.use-google-maps-link': 'useGoogleMapsLink'
     },
 
     initialize: function(){
@@ -747,6 +748,33 @@ define([
           alert(resp.data);
         }
       })
+    },
+
+    useGoogleMapsLink: function(e) {
+      e.preventDefault()
+
+      var link = this.$('input.google-maps-link').val()
+        , latlng = getParameterByName(link, 'q').split(',')
+        , lat = latlng[0]
+        , lng = latlng[1]
+
+      if(lat && lng) {
+        this.$('input.latitude').val(lat)
+        this.$('input.longitude').val(lng)
+      }
+
+      function getParameterByName(string, name)
+      {
+        string = "?" + string.split('?')[1];
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(string);
+        if(results === null)
+          return "";
+        else
+          return decodeURIComponent(results[1].replace(/\+/g, " "));
+      }
     }
 
   });
