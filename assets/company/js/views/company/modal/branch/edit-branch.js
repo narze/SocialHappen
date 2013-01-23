@@ -214,6 +214,18 @@ define([
         , lat = latlng[0]
         , lng = latlng[1]
 
+      if(!lat || !lng) {
+        latlng = getParameterByName(link, 'll').split(',')
+        lat = latlng[0]
+        lng = latlng[1]
+      }
+
+      if(!lat || !lng) {
+        latlng = getParameterByName(link, 'sll').split(',')
+        lat = latlng[0]
+        lng = latlng[1]
+      }
+
       if(lat && lng) {
         this.$('input.lat').val(lat)
         this.$('input.lng').val(lng)
