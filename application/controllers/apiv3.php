@@ -1962,7 +1962,16 @@ class Apiv3 extends CI_Controller {
 
       // Get challenge if it is challenge
       // If found, update the audit's challenge_id
-      $activity['challenge'] = $this->challenge_model->getOne(array('hash' => $activity['objecti']));
+      if(isset($activity['challenge_id'])) {
+        $activity['challenge'] = $this->challenge_model->getOne(
+          array('_id' => new MongoId($activity['challenge_id']))
+        );
+      } else {
+        $activity['challenge'] = $this->challenge_model->getOne(
+          array('hash' => $activity['objecti'])
+        );
+      }
+
       if($activity['challenge'] && !isset($activity['challenge_id'])) {
         $challenge_id = get_mongo_id($activity['challenge']);
         $activity['challenge_id'] = $challenge_id;

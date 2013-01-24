@@ -671,7 +671,8 @@ class Apiv4 extends REST_Controller {
           'subject' => $location ? $location : NULL,
           'object' => $action_id,
           'objecti' => 'Reward out of stock',
-          'image' => ''
+          'image' => '',
+          'challenge_id' => get_mongo_id($challenge)
         );
 
         if(!$this->audit_lib->audit_add($audit_data)) {
@@ -720,7 +721,8 @@ class Apiv4 extends REST_Controller {
               'subject' => $location ? $location : NULL,
               'object' => $action_id,
               'objecti' => 'Challenge done already (daily)',
-              'image' => ''
+              'image' => '',
+              'challenge_id' => get_mongo_id($challenge)
             );
 
             if(!$this->audit_lib->audit_add($audit_data)) {
@@ -817,7 +819,8 @@ class Apiv4 extends REST_Controller {
           'subject' => $location ? $location : NULL,
           'object' => $action_id,
           'objecti' => 'Challenge done already',
-          'image' => ''
+          'image' => '',
+          'challenge_id' => get_mongo_id($challenge)
         );
 
         if($this->audit_lib->audit_add($audit_data)) {
