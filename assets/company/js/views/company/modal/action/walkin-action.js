@@ -32,7 +32,9 @@ define([
     },
 
     render: function () {
-      $(this.el).html(this.walkinActionTemplate(this.options.action));
+      var data = this.options.action;
+      data.sonar_code = this.model.get('sonar_frequency');
+      $(this.el).html(this.walkinActionTemplate(data));
       return this;
     },
 

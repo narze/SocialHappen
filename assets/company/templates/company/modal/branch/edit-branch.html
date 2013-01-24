@@ -6,7 +6,7 @@
     <h3 class="edit-title"><%= title %></h3>
   </div>
   <div class="edit-title hide">
-    <input class="branch-title span4" value="<%- title||'' %>" />
+    <input class="branch-title span4" value="<%- title||'' %>"  placeholder="Branch name" />
     <button class="btn save-title btn-primary">Save</button>
   </div>
 </div>
@@ -34,7 +34,7 @@
   </div>
 
   <div class="control-group">
-    <div class="edit-address">
+    <div class="edit-address pointer">
       <h6>Address:</h6>
       <p>
         <%- address %>
@@ -42,13 +42,13 @@
     </div>
     <div class="edit-address-field hide">
       <h6>Address:</h6>
-      <textarea class="branch-address span5" rows="3"><%- address %></textarea>
+      <textarea class="branch-address span5" rows="3" placeholder="Branch address"><%- address %></textarea>
       <button class="btn save-address btn-primary">Save</button>
     </div>
   </div>
 
   <div class="control-group">
-    <div class="edit-hours">
+    <div class="edit-hours pointer">
       <h6>Opening hours:</h6>
       <p>
         <%- hours %>
@@ -56,13 +56,13 @@
     </div>
     <div class="edit-hours-field hide">
       <h6>Opening hours:</h6>
-      <textarea class="branch-hours span5" rows="3"><%- hours %></textarea>
+      <textarea class="branch-hours span5" rows="3" placeholder="Opening hours"><%- hours %></textarea>
       <button class="btn save-hours btn-primary">Save</button>
     </div>
   </div>
 
   <div class="control-group">
-    <div class="edit-telephone">
+    <div class="edit-telephone pointer">
       <h6>Telephone:</h6>
       <p>
         <%- telephone %>
@@ -70,13 +70,13 @@
     </div>
     <div class="edit-telephone-field hide">
       <h6>Telephone:</h6>
-      <input type="text" class="branch-telephone" value="<%- telephone %>"></input>
+      <input type="text" class="branch-telephone" value="<%- telephone %>" placeholder="Telephone number"></input>
       <button class="btn save-telephone btn-primary">Save</button>
     </div>
   </div>
 
   <div class="control-group">
-    <div class="edit-location">
+    <div class="edit-location pointer">
       <h6>Location:</h6>
       <p>
         Lat: <span class="lat"><%= location['0'] %></span>
@@ -88,17 +88,17 @@
     <div class="edit-location-field hide">
       <h6>Location:</h6>
       <p>
-        Lat: <input type="text" class="lat" value="<%= location['0'] %>" />
+        Lat: <input type="text" class="lat" value="<%= location['0'] %>" placeholder="Latitude"/>
       </p>
       <p>
-        Lng: <input type="text" class="lng" value="<%= location['1'] %>" />
+        Lng: <input type="text" class="lng" value="<%= location['1'] %>" placeholder="Longitude"/>
       </p>
       <p>
         <button class="btn view-google-maps">View Map</button>
         <div id="gmaps"></div>
       </p>
       <p>
-        Or Use Google Maps Link: <input type="text" class="google-maps-link">
+        Or Use Google Maps Link: <input type="text" class="google-maps-link" placeholder="Google maps link to this branch">
       </p>
       <button class="btn save-location btn-primary">Save</button>
     </div>

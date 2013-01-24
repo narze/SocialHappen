@@ -287,8 +287,8 @@ define([
     },
 
     onTypeSonarFrequency: function(e){
-      console.log('sonar frequency change');
       var sonar_frequency = $('input.sonar-frequency', this.el).val();
+      console.log('sonar frequency change', sonar_frequency);
 
       this.model.set('sonar_frequency', sonar_frequency).trigger('change');
     },
