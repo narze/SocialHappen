@@ -1144,7 +1144,8 @@ class Apiv4 extends REST_Controller {
           'subject' => (int) $reward_points,
           'object' => $challenge['hash'],
           'objecti' => (int) $company['credits'],
-          'image' => NULL // TODO
+          'image' => $challenge['detail']['image'],
+          'challenge_id' => ''.$challenge['_id']
         );
 
         if(!$this->audit_lib->audit_add($audit_data)) {
