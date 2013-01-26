@@ -96,7 +96,7 @@ define([
       var lat = parseFloat($('input.lat', this.el).val()) || 0;
       var lng = parseFloat($('input.lng', this.el).val()) || 0;
 
-      this.model.set('location', { '0': lat, '1':lng }).trigger('change');
+      this.model.set('location', { '0': lng, '1':lat }).trigger('change');
 
       // vent.trigger('showAddBranchModal', this.model);
     },
@@ -166,19 +166,19 @@ define([
 
       var link = this.$('input.google-maps-link').val()
         , latlng = getParameterByName(link, 'q').split(',')
-        , lat = latlng[0]
-        , lng = latlng[1]
+        , lat = latlng[1]
+        , lng = latlng[0]
 
       if(!lat || !lng) {
         latlng = getParameterByName(link, 'll').split(',')
-        lat = latlng[0]
-        lng = latlng[1]
+        lat = latlng[1]
+        lng = latlng[0]
       }
 
       if(!lat || !lng) {
         latlng = getParameterByName(link, 'sll').split(',')
-        lat = latlng[0]
-        lng = latlng[1]
+        lat = latlng[1]
+        lng = latlng[0]
       }
 
       if(lat && lng) {

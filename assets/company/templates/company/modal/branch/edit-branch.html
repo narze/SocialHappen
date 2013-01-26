@@ -79,19 +79,19 @@
     <div class="edit-location pointer">
       <h6>Location:</h6>
       <p>
-        Lat: <span class="lat"><%= location['0'] %></span>
+        Lat: <span class="lat"><%= location['1'] %></span>
       </p>
       <p>
-        Lng: <span class="lng"><%= location['1'] %></span>
+        Lng: <span class="lng"><%= location['0'] %></span>
       </p>
     </div>
     <div class="edit-location-field hide">
       <h6>Location:</h6>
       <p>
-        Lat: <input type="text" class="lat" value="<%= location['0'] %>" placeholder="Latitude"/>
+        Lat: <input type="text" class="lat" value="<%= location['1'] %>" placeholder="Latitude"/>
       </p>
       <p>
-        Lng: <input type="text" class="lng" value="<%= location['1'] %>" placeholder="Longitude"/>
+        Lng: <input type="text" class="lng" value="<%= location['0'] %>" placeholder="Longitude"/>
       </p>
       <p>
         <button class="btn view-google-maps">View Map</button>
