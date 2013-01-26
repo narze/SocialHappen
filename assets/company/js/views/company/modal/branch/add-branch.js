@@ -210,13 +210,13 @@ define([
         , $formLongitude = this.$('input.lng')
 
       require(['gmaps'], function(GMaps) {
-        self.$('#gmaps').css({
+        self.$('#gmapsa').css({
           width: '100%',
           height: 300
         });
 
         var map = new GMaps({
-          div: '#gmaps',
+          div: '#gmapsa',
           lat: 0,
           lng: 0,
           zoom: 16,
