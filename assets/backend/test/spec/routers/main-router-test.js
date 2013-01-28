@@ -179,14 +179,15 @@
           return $('#content').find('#challenges-view').length.should.not.equal(0);
         });
         it('should have all fields required', function() {
-          $('#content').find('#challenges-view').find('thead').find('th').length.should.equal(4);
+          $('#content').find('#challenges-view').find('thead').find('th').length.should.equal(5);
           $('#content').find('#challenges-view').find('thead').text().should.match(/Name/);
+          $('#content').find('#challenges-view').find('thead').text().should.match(/Company/);
           $('#content').find('#challenges-view').find('thead').text().should.match(/Start Date/);
           $('#content').find('#challenges-view').find('thead').text().should.match(/End Date/);
           return $('#content').find('#challenges-view').find('thead').text().should.match(/Sonar Data/);
         });
         it('should have correct first row of data', function() {
-          return $('#content #challenges-view .challenge-item:first td').length.should.equal(4);
+          return $('#content #challenges-view .challenge-item:first td').length.should.equal(5);
         });
         return describe('after data fetched', function() {
           return it('should load each .challenge-item into #challenges-view', function() {
@@ -280,6 +281,7 @@
           $('#content').find('#devices-view').find('thead').find('th').length.should.equal(5);
           $('#content').find('#devices-view').find('thead').text().should.match(/Name/);
           $('#content').find('#devices-view').find('thead').text().should.match(/Data/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Company/);
           $('#content').find('#devices-view').find('thead').text().should.match(/Challenge/);
           $('#content').find('#devices-view').find('thead').text().should.match(/Info/);
           return $('#content').find('#devices-view').find('thead').text().should.match(/Actions/);

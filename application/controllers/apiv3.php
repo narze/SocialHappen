@@ -435,10 +435,18 @@ class Apiv3 extends CI_Controller {
     $this->load->library('challenge_lib');
     $this->load->library('action_data_lib');
     $this->load->model('sonar_box_model');
+    $this->load->model('company_model');
 
     $query_options = array();
     if(isset($filter['name']) && strlen($filter['name'])) {
       $query_options['detail.name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    # find company_id
+    if(isset($filter['company']) && strlen($filter['company'])) {
+      $companies = $this->company_model->get_all(NULL, NULL, array('like' => array('company_name' => $filter['company'])));
+      $company_ids = array_map(function($company) { return (int) $company['company_id']; }, $companies);
+      $query_options['company_id'] = array('$in' => $company_ids);
     }
 
     if(isset($filter['sonar_data']) && strlen($filter['sonar_data'])) {
@@ -500,6 +508,9 @@ class Apiv3 extends CI_Controller {
     foreach($challenges as &$challenge) {
       // Get sonar
       $challenge['sonar_box'] = $this->sonar_box_model->getOne(array('data' => $challenge['sonar_frequency']));
+
+      // Get company
+      $challenge['company'] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
     } unset($challenge);
 
     $options = array(

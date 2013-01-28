@@ -174,15 +174,16 @@ describe 'Main Router', ->
         $('#content').find('#challenges-view').length.should.not.equal 0
 
       it 'should have all fields required', ->
-        $('#content').find('#challenges-view').find('thead').find('th').length.should.equal 4
+        $('#content').find('#challenges-view').find('thead').find('th').length.should.equal 5
 
         $('#content').find('#challenges-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#challenges-view').find('thead').text().should.match(/Company/)
         $('#content').find('#challenges-view').find('thead').text().should.match(/Start Date/)
         $('#content').find('#challenges-view').find('thead').text().should.match(/End Date/)
         $('#content').find('#challenges-view').find('thead').text().should.match(/Sonar Data/)
 
       it 'should have correct first row of data', ->
-        $('#content #challenges-view .challenge-item:first td').length.should.equal 4
+        $('#content #challenges-view .challenge-item:first td').length.should.equal 5
 
       describe 'after data fetched', ->
         it 'should load each .challenge-item into #challenges-view', ->
@@ -269,6 +270,7 @@ describe 'Main Router', ->
 
         $('#content').find('#devices-view').find('thead').text().should.match(/Name/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Data/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Company/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Challenge/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Info/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Actions/)
