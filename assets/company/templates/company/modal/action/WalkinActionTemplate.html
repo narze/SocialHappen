@@ -15,7 +15,7 @@
     <div class="span9">
       <h5>Walkin</h5>
       <p><%= name %></p>
-      <p>Sonar code: <%- sonar_code||'Not set' %></p>
+      <p>Sonar device status : <%= sonar_code ? '<span class="label label-success">Set</span>' : '<span class="label">Pending</span>' %></p>
     </div>
   </div>
 </li>

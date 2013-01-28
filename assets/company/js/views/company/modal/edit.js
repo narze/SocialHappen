@@ -62,8 +62,6 @@ define([
       'click button.upload-image-submit': 'uploadImage',
       'click button.save-location': 'saveLocation',
       'click button.save-done-count-max': 'saveDoneCountMax',
-      'click button.save-sonar-frequency': 'saveSonarFrequency',
-      'click button.generate-sonar-data': 'generateSonarData',
       'change input.verify-location': 'toggleVerifyLocation',
       'change input.custom-location': 'toggleCustomLocation',
       'keyup input.google-maps-link': 'useGoogleMapsLink',
@@ -872,30 +870,6 @@ define([
       this.model.save();
 
       vent.trigger('showEditModal', this.model);
-    },
-
-    saveSonarFrequency: function() {
-      var sonar_frequency = $('input.sonar-frequency', this.el).val();
-
-      this.model.set('sonar_frequency', sonar_frequency).trigger('change');
-      this.model.save();
-
-      vent.trigger('showEditModal', this.model);
-    },
-
-    generateSonarData: function() {
-      var self = this
-      $.ajax({
-        type: 'GET',
-        url: window.Company.BASE_URL + 'apiv3/get_sonar_box_data',
-        dataType: 'JSON',
-        success: function(res) {
-          if(res.success) {
-            self.model.set('sonar_frequency', res.data).trigger('change');
-            $('.sonar-frequency', self.el).val(res.data)
-          }
-        }
-      })
     },
 
     useGoogleMapsLink: function(e) {

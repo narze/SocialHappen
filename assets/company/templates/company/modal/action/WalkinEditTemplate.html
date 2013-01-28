@@ -16,7 +16,7 @@
   </div>
   <div class="control-group row-fluid form-inline">
     <div class="span6">
-      <label><h6>Sonar code :</h6></label> <input class="sonar-frequency input-medium" type="text" name="sonar-frequency" id="sonar-frequency" value="<%- sonar_code %>" placeholder="Sonar code (8 digits)" maxlength="8"> <button class="btn generate-sonar-data">Generate</button>
+      <label><h6>Sonar device status :</h6></label> <%= sonar_code ? '<span class="label label-success">Set</span>' : '<span class="label">Pending</span>' %>
     </div>
   </div>
 </div>
