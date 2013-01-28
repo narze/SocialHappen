@@ -33,6 +33,28 @@
     <img class="branch-photo" src="<%= photo %>" />
   </div>
 
+  <div class="edit-cover-photo">
+    <h6>Photo:</h6>
+    <div class="edit-cover-photo-form hide">
+      <div class="form-inline">
+        <label><h4>Enter photo URL</h4></label>
+        <div class="control-group">
+          <input type="text" class="branch-cover-photo input-medium" placeholder="Photo URL" value="<%= cover_photo %>" /> <button class="save-cover-photo btn btn-primary btn-small">&nbsp;Save&nbsp;</button>
+        </div>
+        <label><h4>Or upload your own photo</h4></label>
+        <div class="control-group">
+          <form type="POST" enctype="multipart/form-data" action="<%= window.Company.BASE_URL + 'apiv3/upload_image' %>" class="upload-cover-photo">
+            <input type="file" title="new-image" />
+            <input type="hidden" title="file-input-title" value="new-image" />
+            <input type="hidden" title="old-image" value="<%= cover_photo %>" />
+            <button class="upload-cover-photo-submit btn btn-primary btn-small">Upload</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <img class="branch-cover-photo" src="<%= cover_photo %>" />
+  </div>
+
   <div class="control-group">
     <div class="edit-address pointer">
       <h6>Address:</h6>

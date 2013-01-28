@@ -24,7 +24,7 @@ define([
       'click button.save-cover-photo': 'saveEditCoverPhoto',
       'click button.create-branch': 'createBranch',
       'click button.upload-photo-submit': 'uploadPhoto',
-      'click button.upload-cover-photo-submit': 'uploaCoverdPhoto',
+      'click button.upload-cover-photo-submit': 'uploadCoverPhoto',
       'keyup input.google-maps-link': 'useGoogleMapsLink',
       'click button.view-google-maps': 'viewGoogleMaps'
     },

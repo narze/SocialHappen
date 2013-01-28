@@ -23,6 +23,9 @@ define([
       'click img.branch-photo, h6.edit-photo': 'showEditPhoto',
       'click button.save-photo': 'saveEditPhoto',
       'click button.upload-photo-submit': 'uploadPhoto',
+      'click img.branch-cover-photo, h6.edit-cover-photo': 'showEditCoverPhoto',
+      'click button.save-cover-photo': 'saveEditCoverPhoto',
+      'click button.upload-cover-photo-submit': 'uploadCoverPhoto',
       'click button.delete-branch': 'deleteBranch',
       'keyup input.google-maps-link': 'useGoogleMapsLink',
       'click button.view-google-maps': 'viewGoogleMaps'
@@ -187,6 +190,46 @@ define([
 
             // Save photo
             self.model.set('photo', photoUrl).trigger('change');
+            self.model.save();
+
+            vent.trigger('showEditBranchModal', self.model);
+            return;
+          }
+          alert(resp.data);
+        }
+      })
+    },
+
+    showEditCoverPhoto: function() {
+      console.log('show edit cover photo');
+      $('div.edit-cover-photo', this.el).show();
+    },
+
+    saveEditCoverPhoto: function() {
+      $('div.edit-cover-photo', this.el).hide();
+
+      var photo = $('input.branch-cover-photo', this.el).val();
+
+      this.model.set('cover_photo', photo).trigger('change');
+      this.model.save();
+      // $('img.branch-photo').attr('src', photo)
+
+      vent.trigger('showEditBranchModal', this.model);
+    },
+
+    uploadCoverPhoto: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-cover-photo', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var photoUrl = resp.data;
+
+            // Save photo
+            self.model.set('cover_photo', photoUrl).trigger('change');
             self.model.save();
 
             vent.trigger('showEditBranchModal', self.model);
