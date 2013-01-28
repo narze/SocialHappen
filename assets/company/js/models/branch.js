@@ -9,6 +9,7 @@ define([
     defaults: {
       title: '',
       photo: null,
+      cover_photo: null,
       telephone: null,
       address: '',
       company_id: window.Company.companyId,

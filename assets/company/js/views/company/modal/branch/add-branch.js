@@ -20,8 +20,11 @@ define([
       'keyup input.lat, input.lng': 'saveEditLocation',
       'click img.branch-photo, h6.edit-photo': 'showEditPhoto',
       'click button.save-photo': 'saveEditPhoto',
+      'click img.branch-cover-photo, h6.edit-cover-photo': 'showEditCoverPhoto',
+      'click button.save-cover-photo': 'saveEditCoverPhoto',
       'click button.create-branch': 'createBranch',
       'click button.upload-photo-submit': 'uploadPhoto',
+      'click button.upload-cover-photo-submit': 'uploaCoverdPhoto',
       'keyup input.google-maps-link': 'useGoogleMapsLink',
       'click button.view-google-maps': 'viewGoogleMaps'
     },
@@ -118,6 +121,23 @@ define([
       vent.trigger('showAddBranchModal', this.model);
     },
 
+    showEditCoverPhoto: function() {
+      console.log('show edit cover photo');
+      $('div.edit-cover-photo', this.el).show();
+    },
+
+    saveEditCoverPhoto: function() {
+      $('div.edit-cover-photo', this.el).hide();
+
+      var photo = $('input.branch-cover-photo', this.el).val();
+
+      console.log('photo', photo);
+      this.model.set('cover_photo', photo).trigger('change');
+      // $('img.branch-photo').attr('src', photo)
+
+      vent.trigger('showAddBranchModal', this.model);
+    },
+
     createBranch: function() {
       this.$('div.edit-title').parent().removeClass('error');
 
@@ -152,6 +172,28 @@ define([
 
             // Save photo
             self.model.set('photo', photoUrl).trigger('change');
+
+            vent.trigger('showAddBranchModal', self.model);
+            return;
+          }
+          alert(resp.data);
+        }
+      })
+    },
+
+    uploadCoverPhoto: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-cover-photo', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var photoUrl = resp.data;
+
+            // Save photo
+            self.model.set('cover_photo', photoUrl).trigger('change');
 
             vent.trigger('showAddBranchModal', self.model);
             return;

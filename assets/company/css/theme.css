@@ -153,6 +153,7 @@ img.company-image{
 .modal .edit-title,
 .modal .edit-image,
 .modal .edit-photo,
+.modal .edit-cover-photo,
 .modal .edit-description{
   cursor: pointer;
 }
@@ -161,12 +162,14 @@ img.company-image{
   position: relative;
 }
 .modal .edit-image,
-.modal .edit-photo {
+.modal .edit-photo,
+.modal .edit-cover-photo {
   position: relative;
 }
 
 .modal .edit-image .edit-image-form,
-.modal .edit-photo .edit-photo-form {
+.modal .edit-photo .edit-photo-form,
+.modal .edit-cover-photo .edit-cover-photo-form {
   display: none;
   position: absolute;
   top: 0;
@@ -175,11 +178,13 @@ img.company-image{
   height: 100%;
 }
 .modal .edit-image:hover .edit-image-form,
-.modal .edit-photo:hover .edit-photo-form {
+.modal .edit-photo:hover .edit-photo-form,
+.modal .edit-cover-photo:hover .edit-cover-photo-form {
   display: block;
 }
 .modal .edit-image-form .form-inline,
-.modal .edit-photo-form .form-inline {
+.modal .edit-photo-form .form-inline,
+.modal .edit-cover-photo-form .form-inline {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 15px 0;
   text-align: center;
@@ -193,6 +198,7 @@ img.company-image{
 
 .modal img.reward-image,
 .modal img.branch-photo,
+.modal img.branch-cover-photo,
 .modal .view-repeat,
 .modal .edit-redeem{
   cursor: pointer;
@@ -239,7 +245,8 @@ img.company-image{
 #action-modal .edit-image img.reward-image,
 #add-challenge-modal .modal-body img.challenge-image,
 #add-reward-modal .edit-image img.reward-image,
-#add-branch-modal .edit-photo img.branch-photo {
+#add-branch-modal .edit-photo img.branch-photo,
+#add-branch-modal .edit-cover-photo img.branch-cover-photo {
   display: block;
   min-height: 120px;
   margin: 0 auto;
