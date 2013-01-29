@@ -18,6 +18,7 @@ class Challenge_lib {
           '$set' => array('hash' => strrev(sha1($id))
       )))) {
         $this->generate_locations($id);
+        $this->generate_sonar_data($id);
         return $id;
       }
     }
@@ -82,6 +83,7 @@ class Challenge_lib {
 
     $result = $this->CI->challenge_model->update($criteria, $data);
     $this->generate_locations($challenge_id);
+    $this->generate_sonar_data($challenge_id);
     return $result;
   }
 
@@ -926,8 +928,59 @@ class Challenge_lib {
       );
     }
 
-    // echo "<pre>";
-    // var_dump($data);
+    return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
+  }
+
+  function generate_sonar_data($challenge_id){
+    $challenge = $this->get_by_id($challenge_id);
+
+    if(!$challenge){
+      return FALSE;
+    }
+
+    $branch_sonar_data = array();
+
+    /*
+     * Challenge has SOME branch : get sonar box and add data into branch sonar data
+     */
+    if((!isset($challenge['all_branch']) || !$challenge['all_branch'])
+      && isset($challenge['branches']) && count($challenge['branches']) > 0){
+      $this->CI->load->library('sonar_box_lib');
+
+      foreach ($challenge['branches'] as $branch_id) {
+        $sonar_boxes = $this->CI->sonar_box_lib->get(array('branch_id' => $branch_id));
+
+        foreach ($sonar_boxes as $sonar_box) {
+          $branch_sonar_data[] = $sonar_box['data'];
+        }
+      }
+    }else if(isset($challenge['all_branch']) && $challenge['all_branch']){
+      $this->CI->load->library('branch_lib');
+      $this->CI->load->library('sonar_box_lib');
+
+      $branches = $this->CI->branch_lib->get(array('company_id' => (int)$challenge['company_id']));
+      if($branches && count($branches) > 0){
+        $branch_ids = array();
+        foreach ($branches as $branch) {
+          $branch_ids[] = $branch['_id'] . '';
+        }
+
+        $sonar_boxes = $this->CI->sonar_box_lib->get(array('branch_id' => array('$in' => $branch_ids)));
+        foreach ($sonar_boxes as $sonar_box) {
+          $branch_sonar_data[] = $sonar_box['data'];
+        }
+      }
+    }
+
+    $data = array('$set' => array());
+    if(count($branch_sonar_data) > 0){
+      sort($branch_sonar_data);
+      $data['$set']['branch_sonar_data'] = $branch_sonar_data;
+    }else{
+      $data['$set'] = array(
+        'branch_sonar_data' => array()
+      );
+    }
 
     return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
   }

@@ -1499,7 +1499,8 @@ class DB_Sync {
       'user',
       'coupon',
       'user_token',
-      'sonar_box'
+      'sonar_box',
+      'branch'
     );
     $mongo_db_name = $this->CI->config->item('mongo_db');
     $this->CI->load->library('mongo_db', NULL, 'mongodb');

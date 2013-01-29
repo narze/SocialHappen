@@ -14,7 +14,9 @@ class Sonar_box_model extends CI_Model {
 	//Basic functions (reindex & CRUD)
 	function recreateIndex() {
 		return $this->collection->deleteIndexes()
-			&& $this->collection->ensureIndex(array('data' => 1), array('unique' => 1))
+			&& $this->collection->ensureIndex(array('data' => 1))
+			&& $this->collection->ensureIndex(array('name' => 1))
+			&& $this->collection->ensureIndex(array('id' => 1), array('unique' => 1))
 			&& $this->collection->ensureIndex(array('challenge_id' => 1));
 	}
 
@@ -90,7 +92,9 @@ class Sonar_box_model extends CI_Model {
 
 	function delete($query){
 		$query = array_cast_int($query, $this->int_values);
-		return $this->collection->remove($query, array('$atomic' => TRUE));
+		$result = $this->get_all($query, 100000);
+		$this->collection->remove($query, array('$atomic' => TRUE, '$safe' => TRUE));
+		return $result;
 	}
 	//End of basic functions
 
@@ -100,7 +104,7 @@ class Sonar_box_model extends CI_Model {
 	 * @return $data with login_token
 	 */
 	function add_sonar_box($data) {
-		if(!all_not_null($data, array('name', 'data', 'info'))) {
+		if(!all_not_null($data, array('id', 'name'))) {
 			return FALSE;
 		}
 
