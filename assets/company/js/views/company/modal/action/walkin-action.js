@@ -34,6 +34,9 @@ define([
     render: function () {
       var data = this.options.action;
       data.sonar_code = this.model.get('sonar_frequency');
+      branch_sonar_data = this.model.get('branch_sonar_data') || []
+      data.sonar_code = (data.sonar_code ? [data.sonar_code] : []).concat(branch_sonar_data).join()
+
       $(this.el).html(this.walkinActionTemplate(data));
       return this;
     },

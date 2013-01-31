@@ -17,7 +17,10 @@ define [
       e.preventDefault()
 
     render: ->
-      @$el.html _.template(ChallengeItemTemplate, @model.toJSON())
+      challengeItem = @model.toJSON()
+      challengeItem.branch_sonar_data = challengeItem.branch_sonar_data || []
+
+      @$el.html _.template(ChallengeItemTemplate, challengeItem)
       @delegateEvents()
 
       @
