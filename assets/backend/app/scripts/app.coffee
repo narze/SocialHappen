@@ -20,6 +20,8 @@ define [
   'collections/reward-collection'
   'models/device-model'
   'collections/device-collection'
+  'models/branch-model'
+  'collections/branch-collection'
   'moment'
 ], (
   Main
@@ -43,6 +45,8 @@ define [
   RewardCollection
   DeviceModel
   DeviceCollection
+  BranchModel
+  BranchCollection
   moment
 ) ->
 
@@ -90,6 +94,10 @@ define [
 
   window.backend.Collections.DeviceCollection = new DeviceCollection
 
+  window.backend.Models.BranchModel = BranchModel
+
+  window.backend.Collections.BranchCollection = new BranchCollection
+
   window.backend.Views.MainView = new MainView
   window.backend.Views.MainView.render()
 
@@ -112,6 +120,8 @@ define [
     collection: window.backend.Collections.DeviceCollection
 
   Backbone.emulateJSON = true
+  Backbone.emulateHTTP = true
+
   Backbone.history.start()
 
   window.appLoaded = true

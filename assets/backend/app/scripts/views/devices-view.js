@@ -1,6 +1,6 @@
 (function() {
 
-  define(['backbone', 'text!templates/devices-template.html', 'views/devices-filter-view', 'views/pagination-view', 'views/device-item-view'], function(Backbone, DevicesTemplate, DevicesFilterView, PaginationView, DeviceItemView) {
+  define(['backbone', 'text!templates/devices-template.html', 'views/devices-filter-view', 'views/pagination-view', 'views/device-item-view', 'views/device-add-view'], function(Backbone, DevicesTemplate, DevicesFilterView, PaginationView, DeviceItemView, DeviceAddView) {
     var View;
     View = Backbone.View.extend({
       id: 'devices-view',
@@ -77,6 +77,12 @@
             this.$('.pagination-container:eq(' + i + ')').html(this.subViews.pagination[i].render().el);
           }
         }
+        if (!this.subViews['device-add']) {
+          this.subViews['device-add'] = new DeviceAddView({
+            model: new this.collection.model
+          });
+        }
+        this.$('#device-add-container').html(this.subViews['device-add'].render().el);
         this.rendered = true;
         return this;
       }

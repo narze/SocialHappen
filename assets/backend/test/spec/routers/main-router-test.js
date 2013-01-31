@@ -52,7 +52,7 @@
           return window.backend.Views.UsersView.subViews[subViewName].should.not.be.undefined;
         });
         it('should render #users-view into #content', function() {
-          return $('#content').find('#users-view').length.should.not.equal(0);
+          return $('#content').find('#users-view').length.should.be.above(0);
         });
         it('should have all fields required', function() {
           $('#content').find('#users-view').find('thead').find('th').length.should.equal(7);
@@ -71,7 +71,7 @@
         });
         return describe('after data fetched', function() {
           return it('should load each .user-item into #users-view', function() {
-            return $('#users-view').find('.user-item').length.should.not.equal(0);
+            return $('#users-view').find('.user-item').length.should.be.above(0);
           });
         });
       });
@@ -86,7 +86,7 @@
           return $('#sidebar-view').find('.main-menu li.companies-tab-menu').hasClass('active').should.be["true"];
         });
         it('should render #companies-view into #content', function() {
-          return $('#content').find('#companies-view').length.should.not.equal(0);
+          return $('#content').find('#companies-view').length.should.be.above(0);
         });
         it('should have all fields required', function() {
           $('#content').find('#companies-view').find('thead').find('th').length.should.equal(4);
@@ -97,7 +97,7 @@
         });
         describe('after data fetched', function() {
           it('should load each .company-item into #companies-view', function() {
-            return $('#companies-view').find('.company-item').length.should.not.equal(0);
+            return $('#companies-view').find('.company-item').length.should.be.above(0);
           });
           it('should have correct first row of data', function() {
             $('#content #companies-view .company-item:first td').length.should.equal(4);
@@ -117,7 +117,7 @@
             subViewName = 'company-' + window.backend.Collections.CompanyCollection.models[0].cid;
             window.backend.Views.CompaniesView.subViews[subViewName].should.not.be.undefined;
             window.backend.Views.CompaniesView.subViews[subViewName].showAddCreditsModal().should.not.be.undefined;
-            return $('#app #modal .add-credits-modal-view .modal').length.should.not.equal(0);
+            return $('#app #modal .add-credits-modal-view .modal').length.should.be.above(0);
           });
           describe('filling 5 credits in modal form', function() {});
           return describe('triggering "save" after filling 5 credits', function() {});
@@ -139,7 +139,7 @@
           return window.backend.Views.ActivitiesView.subViews[subViewName].should.not.be.undefined;
         });
         it('should render #activities-view into #content', function() {
-          return $('#content').find('#activities-view').length.should.not.equal(0);
+          return $('#content').find('#activities-view').length.should.be.above(0);
         });
         it('should have all fields required', function() {
           $('#content').find('#activities-view').find('thead').find('th').length.should.equal(5);
@@ -156,7 +156,7 @@
         });
         return describe('after data fetched', function() {
           return it('should load each .activity-item into #activities-view', function() {
-            return $('#activities-view').find('.activity-item').length.should.not.equal(0);
+            return $('#activities-view').find('.activity-item').length.should.be.above(0);
           });
         });
       });
@@ -176,7 +176,7 @@
           return window.backend.Views.ChallengesView.subViews[subViewName].should.not.be.undefined;
         });
         it('should render #challenges-view into #content', function() {
-          return $('#content').find('#challenges-view').length.should.not.equal(0);
+          return $('#content').find('#challenges-view').length.should.be.above(0);
         });
         it('should have all fields required', function() {
           $('#content').find('#challenges-view').find('thead').find('th').length.should.equal(5);
@@ -191,7 +191,7 @@
         });
         return describe('after data fetched', function() {
           return it('should load each .challenge-item into #challenges-view', function() {
-            return $('#challenges-view').find('.challenge-item').length.should.not.equal(0);
+            return $('#challenges-view').find('.challenge-item').length.should.be.above(0);
           });
         });
       });
@@ -211,7 +211,7 @@
           return window.backend.Views.RewardsView.subViews[subViewName].should.not.be.undefined;
         });
         it('should render #rewards-view into #content', function() {
-          return $('#content').find('#rewards-view').length.should.not.equal(0);
+          return $('#content').find('#rewards-view').length.should.be.above(0);
         });
         it('should have all fields required', function() {
           $('#content').find('#rewards-view').find('thead').find('th').length.should.equal(5);
@@ -226,7 +226,7 @@
         });
         describe('after data fetched', function() {
           return it('should load each .reward-item into #rewards-view', function() {
-            return $('#rewards-view').find('.reward-item').length.should.not.equal(0);
+            return $('#rewards-view').find('.reward-item').length.should.be.above(0);
           });
         });
         return describe('reward add view', function() {
@@ -234,10 +234,10 @@
             return window.backend.Views.RewardsView.subViews['reward-add'].should.not.be.undefined;
           });
           it('should have reward add view', function() {
-            return $('#rewards-view').find('#reward-add-view').length.should.not.equal(0);
+            return $('#rewards-view').find('#reward-add-view').length.should.be.above(0);
           });
           it('should have form', function() {
-            return $('form.reward-add-form').length.should.not.equal(0);
+            return $('form.reward-add-form').length.should.be.above(0);
           });
           return it('should have labels for each form item', function() {
             var $form;
@@ -275,23 +275,50 @@
           return window.backend.Views.DevicesView.subViews[subViewName].should.not.be.undefined;
         });
         it('should render #devices-view into #content', function() {
-          return $('#content').find('#devices-view').length.should.not.equal(0);
+          return $('#content').find('#devices-view').length.should.be.above(0);
         });
         it('should have all fields required', function() {
-          $('#content').find('#devices-view').find('thead').find('th').length.should.equal(5);
-          $('#content').find('#devices-view').find('thead').text().should.match(/Name/);
+          $('#content').find('#devices-view').find('thead').find('th').length.should.equal(11);
+          $('#content').find('#devices-view').find('thead').text().should.match(/ID/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Title/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Status/);
           $('#content').find('#devices-view').find('thead').text().should.match(/Data/);
           $('#content').find('#devices-view').find('thead').text().should.match(/Company/);
           $('#content').find('#devices-view').find('thead').text().should.match(/Challenge/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Branch/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Installed At/);
+          $('#content').find('#devices-view').find('thead').text().should.match(/Created At/);
           $('#content').find('#devices-view').find('thead').text().should.match(/Info/);
           return $('#content').find('#devices-view').find('thead').text().should.match(/Actions/);
         });
         it('should have correct first row of data', function() {
-          return $('#content #devices-view .device-item:first td').length.should.equal(5);
+          return $('#content #devices-view .device-item:first td').length.should.equal(11);
         });
-        return describe('after data fetched', function() {
+        describe('after data fetched', function() {
           return it('should load each .device-item into #devices-view', function() {
-            return $('#devices-view').find('.device-item').length.should.not.equal(0);
+            return $('#devices-view').find('.device-item').length.should.be.above(0);
+          });
+        });
+        return describe('device add view', function() {
+          it('should have device-add-view as a subview', function() {
+            return window.backend.Views.DevicesView.subViews['device-add'].should.not.be.undefined;
+          });
+          it('should have device add view', function() {
+            return $('#devices-view').find('#device-add-view').length.should.be.above(0);
+          });
+          it('should have form', function() {
+            return $('form.device-add-form').length.should.be.above(0);
+          });
+          return it('should have labels for each form item', function() {
+            var $form;
+            $form = $('form.device-add-form');
+            $form.text().should.match(/ID/);
+            $form.text().should.match(/Title/);
+            $form.text().should.match(/Data/);
+            $form.text().should.match(/Company/);
+            $form.text().should.match(/Branch/);
+            $form.text().should.match(/Add Device/);
+            return $form.text().should.match(/Cancel/);
           });
         });
       });

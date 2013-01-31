@@ -4,7 +4,8 @@ define [
   'views/devices-filter-view'
   'views/pagination-view'
   'views/device-item-view'
-  ], (Backbone, DevicesTemplate, DevicesFilterView, PaginationView, DeviceItemView) ->
+  'views/device-add-view'
+  ], (Backbone, DevicesTemplate, DevicesFilterView, PaginationView, DeviceItemView, DeviceAddView) ->
 
   View = Backbone.View.extend
 
@@ -78,10 +79,10 @@ define [
           @$('.pagination-container:eq(' + i + ')').html @subViews.pagination[i].render().el
 
       # device add form
-      # if !@subViews['device-add']
-      #   @subViews['device-add'] = new DeviceAddView model: new @collection.model
+      if !@subViews['device-add']
+        @subViews['device-add'] = new DeviceAddView model: new @collection.model
 
-      # @$('#device-add-container').html @subViews['device-add'].render().el
+      @$('#device-add-container').html @subViews['device-add'].render().el
 
       @rendered = true
       @

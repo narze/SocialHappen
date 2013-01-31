@@ -48,7 +48,7 @@ describe 'Main Router', ->
         window.backend.Views.UsersView.subViews[subViewName].should.not.be.undefined
 
       it 'should render #users-view into #content', ->
-        $('#content').find('#users-view').length.should.not.equal 0
+        $('#content').find('#users-view').length.should.be.above 0
 
       it 'should have all fields required', ->
         $('#content').find('#users-view').find('thead').find('th').length.should.equal 7
@@ -68,7 +68,7 @@ describe 'Main Router', ->
 
       describe 'after data fetched', ->
         it 'should load each .user-item into #users-view', ->
-          $('#users-view').find('.user-item').length.should.not.equal 0
+          $('#users-view').find('.user-item').length.should.be.above 0
 
     describe 'companies', ->
 
@@ -80,7 +80,7 @@ describe 'Main Router', ->
         $('#sidebar-view').find('.main-menu li.companies-tab-menu').hasClass('active').should.be.true
 
       it 'should render #companies-view into #content', ->
-        $('#content').find('#companies-view').length.should.not.equal 0
+        $('#content').find('#companies-view').length.should.be.above 0
 
       it 'should have all fields required', ->
         $('#content').find('#companies-view').find('thead').find('th').length.should.equal 4
@@ -92,7 +92,7 @@ describe 'Main Router', ->
 
       describe 'after data fetched', ->
         it 'should load each .company-item into #companies-view', ->
-          $('#companies-view').find('.company-item').length.should.not.equal 0
+          $('#companies-view').find('.company-item').length.should.be.above 0
 
         it 'should have correct first row of data', ->
           $('#content #companies-view .company-item:first td').length.should.equal 4
@@ -113,7 +113,7 @@ describe 'Main Router', ->
           window.backend.Views.CompaniesView.subViews[subViewName].showAddCreditsModal().should.not.be.undefined
 
           # TODO - it should display correct modal
-          $('#app #modal .add-credits-modal-view .modal').length.should.not.equal 0
+          $('#app #modal .add-credits-modal-view .modal').length.should.be.above 0
           # $('#app #modal .add-credits-modal-view .modal').hasClass('hide').should.equal false
         describe 'filling 5 credits in modal form', ->
           # TODO
@@ -137,7 +137,7 @@ describe 'Main Router', ->
         window.backend.Views.ActivitiesView.subViews[subViewName].should.not.be.undefined
 
       it 'should render #activities-view into #content', ->
-        $('#content').find('#activities-view').length.should.not.equal 0
+        $('#content').find('#activities-view').length.should.be.above 0
 
       it 'should have all fields required', ->
         $('#content').find('#activities-view').find('thead').find('th').length.should.equal 5
@@ -155,7 +155,7 @@ describe 'Main Router', ->
 
       describe 'after data fetched', ->
         it 'should load each .activity-item into #activities-view', ->
-          $('#activities-view').find('.activity-item').length.should.not.equal 0
+          $('#activities-view').find('.activity-item').length.should.be.above 0
 
     describe 'challenges', ->
 
@@ -171,7 +171,7 @@ describe 'Main Router', ->
         window.backend.Views.ChallengesView.subViews[subViewName].should.not.be.undefined
 
       it 'should render #challenges-view into #content', ->
-        $('#content').find('#challenges-view').length.should.not.equal 0
+        $('#content').find('#challenges-view').length.should.be.above 0
 
       it 'should have all fields required', ->
         $('#content').find('#challenges-view').find('thead').find('th').length.should.equal 5
@@ -187,7 +187,7 @@ describe 'Main Router', ->
 
       describe 'after data fetched', ->
         it 'should load each .challenge-item into #challenges-view', ->
-          $('#challenges-view').find('.challenge-item').length.should.not.equal 0
+          $('#challenges-view').find('.challenge-item').length.should.be.above 0
 
     describe 'rewards', ->
 
@@ -203,7 +203,7 @@ describe 'Main Router', ->
         window.backend.Views.RewardsView.subViews[subViewName].should.not.be.undefined
 
       it 'should render #rewards-view into #content', ->
-        $('#content').find('#rewards-view').length.should.not.equal 0
+        $('#content').find('#rewards-view').length.should.be.above 0
 
       it 'should have all fields required', ->
         $('#content').find('#rewards-view').find('thead').find('th').length.should.equal 5
@@ -219,17 +219,17 @@ describe 'Main Router', ->
 
       describe 'after data fetched', ->
         it 'should load each .reward-item into #rewards-view', ->
-          $('#rewards-view').find('.reward-item').length.should.not.equal 0
+          $('#rewards-view').find('.reward-item').length.should.be.above 0
 
       describe 'reward add view', ->
         it 'should have reward-add-view as a subview', ->
           window.backend.Views.RewardsView.subViews['reward-add'].should.not.be.undefined
 
         it 'should have reward add view', ->
-          $('#rewards-view').find('#reward-add-view').length.should.not.equal 0
+          $('#rewards-view').find('#reward-add-view').length.should.be.above 0
 
         it 'should have form', ->
-          $('form.reward-add-form').length.should.not.equal 0
+          $('form.reward-add-form').length.should.be.above 0
 
         it 'should have labels for each form item', ->
           $form = $('form.reward-add-form')
@@ -263,24 +263,50 @@ describe 'Main Router', ->
         window.backend.Views.DevicesView.subViews[subViewName].should.not.be.undefined
 
       it 'should render #devices-view into #content', ->
-        $('#content').find('#devices-view').length.should.not.equal 0
+        $('#content').find('#devices-view').length.should.be.above 0
 
       it 'should have all fields required', ->
-        $('#content').find('#devices-view').find('thead').find('th').length.should.equal 5
+        $('#content').find('#devices-view').find('thead').find('th').length.should.equal 11
 
-        $('#content').find('#devices-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/ID/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Title/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Status/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Data/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Company/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Challenge/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Branch/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Installed At/)
+        $('#content').find('#devices-view').find('thead').text().should.match(/Created At/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Info/)
         $('#content').find('#devices-view').find('thead').text().should.match(/Actions/)
 
+
       it 'should have correct first row of data', ->
-        $('#content #devices-view .device-item:first td').length.should.equal 5
+        $('#content #devices-view .device-item:first td').length.should.equal 11
 
       describe 'after data fetched', ->
         it 'should load each .device-item into #devices-view', ->
-          $('#devices-view').find('.device-item').length.should.not.equal 0
+          $('#devices-view').find('.device-item').length.should.be.above 0
+
+      describe 'device add view', ->
+        it 'should have device-add-view as a subview', ->
+          window.backend.Views.DevicesView.subViews['device-add'].should.not.be.undefined
+
+        it 'should have device add view', ->
+          $('#devices-view').find('#device-add-view').length.should.be.above 0
+
+        it 'should have form', ->
+          $('form.device-add-form').length.should.be.above 0
+
+        it 'should have labels for each form item', ->
+          $form = $('form.device-add-form')
+          $form.text().should.match /ID/
+          $form.text().should.match /Title/
+          $form.text().should.match /Data/
+          $form.text().should.match /Company/
+          $form.text().should.match /Branch/
+          $form.text().should.match /Add Device/
+          $form.text().should.match /Cancel/
 
     describe 'change route back', ->
       window.backend.Routers.MainRouter.navigate '', trigger: true

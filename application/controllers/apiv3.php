@@ -35,6 +35,11 @@ class Apiv3 extends CI_Controller {
     return json_return($result);
   }
 
+  function branches() {
+    $filter = $this->input->get('filter');
+    $_GET['company_id'] = issetor($filter['company_id']);
+    return $this->branch();
+  }
   /**
    * create/update branch
    */
@@ -1111,9 +1116,9 @@ class Apiv3 extends CI_Controller {
   }
 
   function devices() {
-    // if ($model = json_decode($this->input->post('model'), TRUE)) {
-    //   return $this->_reward_add($model);
-    // }
+    if ($model = json_decode($this->input->post('model'), TRUE)) {
+      return $this->_device_add($model);
+    }
 
     $limit = $this->input->get('limit') ? : 10;
     $offset = $this->input->get('offset') ? : 0;
@@ -1122,7 +1127,9 @@ class Apiv3 extends CI_Controller {
     $order = $this->input->get('order') ? : 1;
 
     $this->load->library('challenge_lib');
+    $this->load->library('branch_lib');
     $this->load->model('sonar_box_model');
+    $this->load->model('company_model');
 
     $query_options = array();
     if(isset($filter['name']) && strlen($filter['name'])) {
@@ -1150,9 +1157,19 @@ class Apiv3 extends CI_Controller {
     $devices_all_count = $this->sonar_box_model->count($query_options);
 
     foreach($devices as &$device) {
+      // Get company
+      if(isset($device['company_id'])) {
+        $device['company'] = $this->company_model->get_company_profile_by_company_id($device['company_id']);
+      }
+
       // Get challenge
       if(isset($device['challenge_id'])) {
         $device['challenge'] = $this->challenge_lib->get_one(array('_id' => new MongoId($device['challenge_id'])));
+      }
+
+      // Get branch
+      if(isset($device['branch_id'])) {
+        $device['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($device['branch_id'])));
       }
     } unset($device);
 
@@ -1165,6 +1182,37 @@ class Apiv3 extends CI_Controller {
     );
 
     return $this->success($devices, 1, $options);
+  }
+
+  function _device_add($device) {
+    $this->load->library('sonar_box_lib');
+
+    if(!strlen($device['id'])
+    || !strlen($device['title'])
+    || !strlen($device['data'])
+    || !strlen($device['company'])
+    || !strlen($device['branch'])
+      ) {
+      return $this->error('Device data invalid');
+    }
+
+    $device['company_id'] = (int) $device['company'];
+    unset($device['company']);
+    $device['branch_id'] = $device['branch'];
+    unset($device['branch']);
+
+    $device['status'] = 'pending';
+
+    if(!$device_item_id = $this->sonar_box_lib->add($device)) {
+      return $this->error('Add device failed');
+    }
+
+    $this->load->library('branch_lib');
+    $this->load->model('company_model');
+    $device['company'] = $this->company_model->get_company_profile_by_company_id($device['company_id']);
+    $device['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($device['branch_id'])));
+
+    return $this->success($device);
   }
 
   /**
