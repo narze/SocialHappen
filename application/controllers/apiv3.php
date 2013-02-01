@@ -389,7 +389,7 @@ class Apiv3 extends CI_Controller {
       if($challenge){
 
         $query = array(
-          '_id' => array('$lt' => new MongoId($challenge['_id']['$id']))
+          '_id' => array('$lt' => new MongoId(get_mongo_id($challenge)))
         );
 
         if($company_id){
@@ -1139,7 +1139,7 @@ class Apiv3 extends CI_Controller {
 
     if(isset($filter['challenge']) && strlen($filter['challenge'])) {
       $challenges = $this->challenge_lib->get_challenge_name_like($filter['challenge']);
-      $challenge_ids = array_map(function($challenge) { return ''.$challenge['_id']; }, $challenges);
+      $challenge_ids = array_map(function($challenge) { return get_mongo_id($challenge); }, $challenges);
       $query_options['challenge_id'] = array('$in' => $challenge_ids);
     }
 
@@ -1980,13 +1980,13 @@ class Apiv3 extends CI_Controller {
 
     if(isset($filter['branch']) && strlen($filter['branch'])) {
       $branches = $this->branch_lib->get_branch_title_like($filter['branch']);
-      $branch_ids = array_map(function($branch) { return ''.$branch['_id']; }, $branches);
+      $branch_ids = array_map(function($branch) { return get_mongo_id($branch); }, $branches);
       $query_options['branch_id'] = array('$in' => $branch_ids);
     }
 
     if(isset($filter['challenge']) && strlen($filter['challenge'])) {
       $challenges = $this->challenge_lib->get_challenge_name_like($filter['challenge']);
-      $challenge_ids = array_map(function($challenge) { return ''.$challenge['_id']; }, $challenges);
+      $challenge_ids = array_map(function($challenge) { return get_mongo_id($challenge); }, $challenges);
       $query_options['challenge_id'] = array('$in' => $challenge_ids);
     }
 
@@ -2031,7 +2031,7 @@ class Apiv3 extends CI_Controller {
       if($activity['challenge'] && !isset($activity['challenge_id'])) {
         $challenge_id = get_mongo_id($activity['challenge']);
         $activity['challenge_id'] = $challenge_id;
-        if(!$this->audit_lib->update_challenge_id_by_audit_id(''.$activity['_id'], $challenge_id)) {
+        if(!$this->audit_lib->update_challenge_id_by_audit_id(get_mongo_id($activity), $challenge_id)) {
           $this->error('Update audit failed', $challenge_id);
         }
       }

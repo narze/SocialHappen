@@ -1145,7 +1145,7 @@ class Apiv4 extends REST_Controller {
           'object' => $challenge['hash'],
           'objecti' => (int) $company['credits'],
           'image' => $challenge['detail']['image'],
-          'challenge_id' => ''.$challenge['_id']
+          'challenge_id' => get_mongo_id($challenge)
         );
 
         if(!$this->audit_lib->audit_add($audit_data)) {

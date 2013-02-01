@@ -141,7 +141,7 @@ if(!function_exists('get_mongo_id'))
 		} else if(is_array($id)) {
 			return $id['$id'];
 		} else {
-			return FALSE;
+			return $id;
 		}
  	}
 }
