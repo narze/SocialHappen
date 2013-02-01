@@ -25,8 +25,8 @@ describe 'Main Router', ->
     it 'should have rewards route', ->
       window.backend.Routers.MainRouter.routes['rewards'].should.be.equal 'rewards'
 
-    it 'should have sonars route', ->
-      window.backend.Routers.MainRouter.routes['sonars'].should.be.equal 'sonars'
+    it 'should have devices route', ->
+      window.backend.Routers.MainRouter.routes['devices'].should.be.equal 'devices'
 
   describe 'routing', ->
 

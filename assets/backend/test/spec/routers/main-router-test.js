@@ -25,8 +25,8 @@
       it('should have rewards route', function() {
         return window.backend.Routers.MainRouter.routes['rewards'].should.be.equal('rewards');
       });
-      return it('should have sonars route', function() {
-        return window.backend.Routers.MainRouter.routes['sonars'].should.be.equal('sonars');
+      return it('should have devices route', function() {
+        return window.backend.Routers.MainRouter.routes['devices'].should.be.equal('devices');
       });
     });
     return describe('routing', function() {

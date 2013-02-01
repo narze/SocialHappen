@@ -85,10 +85,10 @@ module.exports = function( grunt ) {
       },
       reload: {
         files: [
-          'app/*.html',
-          'app/styles/**/*.css',
+          // 'app/*.html',
+          // 'app/styles/**/*.css',
           'app/scripts/**/*.js',
-          'app/images/**/*'
+          // 'app/images/**/*'
         ],
         tasks: 'reload'
       }
