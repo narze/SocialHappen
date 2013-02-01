@@ -511,9 +511,6 @@ class Apiv3 extends CI_Controller {
     $challenges_all_count = $this->challenge_lib->count($query_options);
 
     foreach($challenges as &$challenge) {
-      // Get sonar
-      $challenge['sonar_box'] = $this->sonar_box_model->getOne(array('data' => $challenge['sonar_frequency']));
-
       // Get company
       $challenge['company'] = $this->company_model->get_company_profile_by_company_id($challenge['company_id']);
     } unset($challenge);
