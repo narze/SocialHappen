@@ -138,6 +138,7 @@ define [
           clearInterval window.checkSessionInterval
           if typeof mocha isnt 'function'
             alert 'Session Expired ' + now
+            window.location.href = window.baseUrl + 'assets/backend/app/login.html'
 
   window.checkSession()
   window.checkSessionInterval = setInterval window.checkSession, 10000

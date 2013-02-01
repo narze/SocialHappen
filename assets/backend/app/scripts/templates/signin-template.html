@@ -1,0 +1,88 @@
+<div id="fb-root"></div>
+<script>
+  function login() {
+      FB.login(function(response) {
+          if (response.authResponse) {
+            console.log('connected');
+          } else {
+            console.log('cancelled');
+          }
+      });
+  }
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '108290455924296', // App ID
+      channelUrl : window.baseUrl + 'assets/channel/fb.php', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional init code here
+    FB.getLoginStatus(function(response) {
+      if (response.status === 'connected') {
+        console.log('connected');
+        window.location.href = window.baseUrl + 'signup/facebook?next=/assets/backend/app';
+      } else if (response.status === 'not_authorized') {
+        console.log('not_authorized');
+      } else {
+        console.log('not_logged_in');
+      }
+    });
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+</script>
+
+<div id="signin-view">
+  <div class="container-fluid">
+    <div class="row-fluid">
+
+      <div class="row-fluid">
+        <div class="login-box">
+          <div class="icons">
+            <a href="index.html"><i class="icon-home"></i></a>
+            <a href="#"><i class="icon-cog"></i></a>
+          </div>
+          <h2>Login to your account</h2>
+          <form class="form-horizontal" action="index.html" method="post">
+            <fieldset>
+
+              <div class="input-prepend" title="Username">
+                <span class="add-on"><i class="icon-user"></i></span>
+                <input class="input-large span10" name="username" id="username" type="text" placeholder="type username"/>
+              </div>
+              <div class="clearfix"></div>
+
+              <div class="input-prepend" title="Password">
+                <span class="add-on"><i class="icon-lock"></i></span>
+                <input class="input-large span10" name="password" id="password" type="password" placeholder="type password"/>
+              </div>
+              <div class="clearfix"></div>
+
+              <label class="remember" for="remember"><input type="checkbox" id="remember" />Remember me</label>
+
+              <div class="button-login">
+                <button type="submit" class="btn btn-primary"><i class="icon-off icon-white"></i> Login</button>
+              </div>
+              <div class="clearfix"></div>
+              </fieldset>
+          </form>
+          <hr>
+          <h3>Have Facebook?</h3>
+          <p>
+            <a id="facebook-connect" onclick="login()" class="btn btn-primary"><i class="icon-off icon-white"></i> Login with facebook</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

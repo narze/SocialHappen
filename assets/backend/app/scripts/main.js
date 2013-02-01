@@ -90,12 +90,4 @@
     Routers: {}
   };
 
-  if (window.mocha) {
-    return;
-  }
-
-  require(['app'], function(app) {
-    return console.log('app loaded');
-  });
-
 }).call(this);

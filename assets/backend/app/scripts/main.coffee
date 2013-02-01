@@ -73,10 +73,3 @@ window.backend =
   Collections: {}
   Views: {}
   Routers: {}
-
-# in test mode mocha will run the app itself
-if window.mocha
-  return
-
-require ['app'], (app) ->
-  console.log 'app loaded'

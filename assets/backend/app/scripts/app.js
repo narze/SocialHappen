@@ -72,7 +72,8 @@
           } else {
             clearInterval(window.checkSessionInterval);
             if (typeof mocha !== 'function') {
-              return alert('Session Expired ' + now);
+              alert('Session Expired ' + now);
+              return window.location.href = window.baseUrl + 'assets/backend/app/login.html';
             }
           }
         }
