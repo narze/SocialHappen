@@ -20,8 +20,11 @@ define([
       'keyup input.lat, input.lng': 'saveEditLocation',
       'click img.branch-photo, h6.edit-photo': 'showEditPhoto',
       'click button.save-photo': 'saveEditPhoto',
+      'click img.branch-cover-photo, h6.edit-cover-photo': 'showEditCoverPhoto',
+      'click button.save-cover-photo': 'saveEditCoverPhoto',
       'click button.create-branch': 'createBranch',
       'click button.upload-photo-submit': 'uploadPhoto',
+      'click button.upload-cover-photo-submit': 'uploadCoverPhoto',
       'keyup input.google-maps-link': 'useGoogleMapsLink',
       'click button.view-google-maps': 'viewGoogleMaps'
     },
@@ -96,7 +99,7 @@ define([
       var lat = parseFloat($('input.lat', this.el).val()) || 0;
       var lng = parseFloat($('input.lng', this.el).val()) || 0;
 
-      this.model.set('location', { '0': lat, '1':lng }).trigger('change');
+      this.model.set('location', { '0': lng, '1':lat }).trigger('change');
 
       // vent.trigger('showAddBranchModal', this.model);
     },
@@ -113,6 +116,23 @@ define([
       var photo = $('input.branch-photo', this.el).val();
 
       this.model.set('photo', photo).trigger('change');
+      // $('img.branch-photo').attr('src', photo)
+
+      vent.trigger('showAddBranchModal', this.model);
+    },
+
+    showEditCoverPhoto: function() {
+      console.log('show edit cover photo');
+      $('div.edit-cover-photo', this.el).show();
+    },
+
+    saveEditCoverPhoto: function() {
+      $('div.edit-cover-photo', this.el).hide();
+
+      var photo = $('input.branch-cover-photo', this.el).val();
+
+      console.log('photo', photo);
+      this.model.set('cover_photo', photo).trigger('change');
       // $('img.branch-photo').attr('src', photo)
 
       vent.trigger('showAddBranchModal', this.model);
@@ -161,24 +181,46 @@ define([
       })
     },
 
+    uploadCoverPhoto: function(e) {
+      e.preventDefault();
+      var self = this;
+      $('form.upload-cover-photo', this.el).ajaxSubmit({
+        beforeSubmit: function(a,f,o) {
+          o.dataType = 'json';
+        },
+        success: function(resp) {
+          if(resp.success) {
+            var photoUrl = resp.data;
+
+            // Save photo
+            self.model.set('cover_photo', photoUrl).trigger('change');
+
+            vent.trigger('showAddBranchModal', self.model);
+            return;
+          }
+          alert(resp.data);
+        }
+      })
+    },
+
     useGoogleMapsLink: function(e) {
       e.preventDefault();
 
       var link = this.$('input.google-maps-link').val()
         , latlng = getParameterByName(link, 'q').split(',')
-        , lat = latlng[0]
-        , lng = latlng[1]
+        , lat = latlng[1]
+        , lng = latlng[0]
 
       if(!lat || !lng) {
         latlng = getParameterByName(link, 'll').split(',')
-        lat = latlng[0]
-        lng = latlng[1]
+        lat = latlng[1]
+        lng = latlng[0]
       }
 
       if(!lat || !lng) {
         latlng = getParameterByName(link, 'sll').split(',')
-        lat = latlng[0]
-        lng = latlng[1]
+        lat = latlng[1]
+        lng = latlng[0]
       }
 
       if(lat && lng) {
@@ -210,13 +252,13 @@ define([
         , $formLongitude = this.$('input.lng')
 
       require(['gmaps'], function(GMaps) {
-        self.$('#gmaps').css({
+        self.$('#gmapsa').css({
           width: '100%',
           height: 300
         });
 
         var map = new GMaps({
-          div: '#gmaps',
+          div: '#gmapsa',
           lat: 0,
           lng: 0,
           zoom: 16,

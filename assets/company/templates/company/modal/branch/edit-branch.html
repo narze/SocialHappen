@@ -33,6 +33,28 @@
     <img class="branch-photo" src="<%= photo %>" />
   </div>
 
+  <div class="edit-cover-photo">
+    <h6>Cover Photo:</h6>
+    <div class="edit-cover-photo-form hide">
+      <div class="form-inline">
+        <label><h4>Enter photo URL</h4></label>
+        <div class="control-group">
+          <input type="text" class="branch-cover-photo input-medium" placeholder="Photo URL" value="<%= cover_photo %>" /> <button class="save-cover-photo btn btn-primary btn-small">&nbsp;Save&nbsp;</button>
+        </div>
+        <label><h4>Or upload your own photo</h4></label>
+        <div class="control-group">
+          <form type="POST" enctype="multipart/form-data" action="<%= window.Company.BASE_URL + 'apiv3/upload_image' %>" class="upload-cover-photo">
+            <input type="file" title="new-image" />
+            <input type="hidden" title="file-input-title" value="new-image" />
+            <input type="hidden" title="old-image" value="<%= cover_photo %>" />
+            <button class="upload-cover-photo-submit btn btn-primary btn-small">Upload</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <img class="branch-cover-photo" src="<%= cover_photo %>" />
+  </div>
+
   <div class="control-group">
     <div class="edit-address pointer">
       <h6>Address:</h6>
@@ -79,19 +101,19 @@
     <div class="edit-location pointer">
       <h6>Location:</h6>
       <p>
-        Lat: <span class="lat"><%= location['0'] %></span>
+        Lat: <span class="lat"><%= location['1'] %></span>
       </p>
       <p>
-        Lng: <span class="lng"><%= location['1'] %></span>
+        Lng: <span class="lng"><%= location['0'] %></span>
       </p>
     </div>
     <div class="edit-location-field hide">
       <h6>Location:</h6>
       <p>
-        Lat: <input type="text" class="lat" value="<%= location['0'] %>" placeholder="Latitude"/>
+        Lat: <input type="text" class="lat" value="<%= location['1'] %>" placeholder="Latitude"/>
       </p>
       <p>
-        Lng: <input type="text" class="lng" value="<%= location['1'] %>" placeholder="Longitude"/>
+        Lng: <input type="text" class="lng" value="<%= location['0'] %>" placeholder="Longitude"/>
       </p>
       <p>
         <button class="btn view-google-maps">View Map</button>
