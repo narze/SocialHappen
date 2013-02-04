@@ -10,6 +10,7 @@ class Action_data_lib {
 		'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data'),
 		'checkin' => array('id' => 203, 'add_method' => 'add_checkin_action_data'),
 		'walkin' => array('id' => 204, 'add_method' => 'add_walkin_action_data'),
+		'video' => array('id' => 206, 'add_method' => 'add_walkin_action_data'),
 	);
 
 	function __construct() {
@@ -205,6 +206,15 @@ class Action_data_lib {
 			//nothing
 		);
 		return $this->_add_action_data($action_id, $walkin_data);
+
+	}
+
+	function add_video_action_data($data_from_form){
+		$action_id = $this->get_platform_action('video');
+		$video_data = array(
+			//nothing
+		);
+		return $this->_add_action_data($action_id, $video_data);
 
 	}
 

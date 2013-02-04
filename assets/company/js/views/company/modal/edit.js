@@ -12,6 +12,7 @@ define([
   'views/company/modal/action/qr-action',
   'views/company/modal/action/checkin-action',
   'views/company/modal/action/walkin-action',
+  'views/company/modal/action/video-action',
   'views/company/modal/reward/reward',
   'views/company/challenger-list',
   'jqueryui',
@@ -22,7 +23,7 @@ define([
   'chosen'
 ], function(Vm, $, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
-  QRActionView, CheckinActionView, WalkinActionView, RewardView, ChallengerView, jqueryui,
+  QRActionView, CheckinActionView, WalkinActionView, VideoActionView, RewardView, ChallengerView, jqueryui,
    timeago, ChallengerCollection, vent, sandbox, chosen){
   var EditModalView = Backbone.View.extend({
 
@@ -285,7 +286,7 @@ define([
 
       _.each(criteria, function(action){
         var type = action.query.action_id;
-        if(type == 202){
+        if(type === 202){
           var feedbackActionView = new FeedbackActionView({
             model: this.model,
             action: action,
@@ -295,7 +296,7 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(feedbackActionView.render().el);
-        }else if(type == 201){
+        }else if(type === 201){
           var qrActionView = new QRActionView({
             model: this.model,
             action: action,
@@ -305,7 +306,7 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(qrActionView.render().el);
-        }else if(type == 203){
+        }else if(type === 203){
           var checkinActionView = new CheckinActionView({
             model: this.model,
             action: action,
@@ -315,7 +316,7 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(checkinActionView.render().el);
-        }else if(type == 204){
+        }else if(type === 204){
           var walkinActionView = new WalkinActionView({
             model: this.model,
             action: action,
@@ -325,6 +326,16 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(walkinActionView.render().el);
+        }else if(type === 206){
+          var videoActionView = new VideoActionView({
+            model: this.model,
+            action: action,
+            vent: vent,
+            triggerModal: 'showEditModal',
+            save: true
+          });
+
+          $('ul.criteria-list', this.el).append(videoActionView.render().el);
         }
       }, this);
 
@@ -549,6 +560,38 @@ define([
       $('ul.criteria-list', this.el).append(walkinActionView.render().el);
 
       return walkinActionView;
+    },
+
+    addVideo: function(e){
+      e.preventDefault();
+      console.log('show add video');
+
+      var videoDefaultAction = {
+        query: {
+          action_id: 204
+        },
+        count: 1,
+        name: 'Video Action',
+        action_data: {
+          data: {
+
+          },
+          action_id: 204
+        }
+      };
+
+      var videoActionView = new VideoActionView({
+        model: this.model,
+        vent: vent,
+        action: videoDefaultAction,
+        triggerModal: 'showEditModal',
+        add: true,
+        save: true
+      });
+
+      $('ul.criteria-list', this.el).append(videoActionView.render().el);
+
+      return videoActionView;
     },
 
     showAddNewRewardModal: function(e) {
@@ -786,6 +829,8 @@ define([
           self.addQR(e).showEdit();
         } else if(recipe === 'walkin') {
           self.addWalkin(e).showEdit();
+        } else if(recipe === 'video') {
+          self.addVideo(e).showEdit();
         }
       });
     },

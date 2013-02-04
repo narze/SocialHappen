@@ -11,6 +11,7 @@ define([
   'views/company/modal/action/qr-action',
   'views/company/modal/action/checkin-action',
   'views/company/modal/action/walkin-action',
+  'views/company/modal/action/video-action',
   'views/company/modal/reward/reward',
   'jqueryui',
   'jqueryForm',
@@ -19,7 +20,7 @@ define([
   'chosen'
 ], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate,
    addActionTemplate, addRewardTemplate, FeedbackActionView,
-   QRActionView, CheckinActionView, WalkinActionView, RewardView, jqueryui,
+   QRActionView, CheckinActionView, WalkinActionView, VideoActionView, RewardView, jqueryui,
     jqueryForm, vent, sandbox, chosen){
   var EditModalView = Backbone.View.extend({
 
@@ -184,6 +185,15 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(walkinActionView.render().el);
+        } else if(type === 206) {
+          var videoActionView = new VideoActionView({
+            model: this.model,
+            action: action,
+            vent: vent,
+            triggerModal: 'showAddModal'
+          });
+
+          $('ul.criteria-list', this.el).append(videoActionView.render().el);
         }
       }, this);
 
@@ -337,6 +347,8 @@ define([
           self.addQR(e).showEdit();
         } else if(recipe === 'walkin') {
           self.addWalkin(e).showEdit();
+        } else if(recipe === 'video') {
+          self.addVideo(e).showEdit();
         }
       });
     },
@@ -472,6 +484,37 @@ define([
       $('ul.criteria-list', this.el).append(walkinActionView.render().el);
 
       return walkinActionView;
+    },
+
+    addVideo: function(e){
+      e.preventDefault();
+      console.log('show add video');
+
+      var videoDefaultAction = {
+        query: {
+          action_id: 206
+        },
+        count: 1,
+        name: 'Video',
+        action_data: {
+          data: {
+
+          },
+          action_id: 206
+        }
+      };
+
+      var videoActionView = new VideoActionView({
+        model: this.model,
+        vent: vent,
+        action: videoDefaultAction,
+        triggerModal: 'showAddModal',
+        add: true
+      });
+
+      $('ul.criteria-list', this.el).append(videoActionView.render().el);
+
+      return videoActionView;
     },
 
     showAddNewRewardModal: function(e) {
@@ -672,6 +715,8 @@ define([
           self.addQR(e);
         } else if(recipe === 'walkin') {
           self.addWalkin(e);
+        }else if(recipe === 'video') {
+          self.addVideo(e);
         }
 
         $('.setup-your-reward').hide();

@@ -64,7 +64,8 @@ class SocialHappen{
 			202 => 'Feedback',
 			203 => 'Checkin',
 			204 => 'Walkin',
-			205 => 'Add Credits'
+			205 => 'Add Credits',
+			206 => 'View Video'
 		)
 	);
 

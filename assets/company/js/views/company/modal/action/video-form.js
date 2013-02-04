@@ -2,11 +2,11 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/WalkinEditTemplate.html'
-], function($, _, Backbone, walkinEditTemplate){
-  var WalkinFormView = Backbone.View.extend({
+  'text!templates/company/modal/action/VideoEditTemplate.html'
+], function($, _, Backbone, videoEditTemplate){
+  var VideoFormView = Backbone.View.extend({
 
-    walkinEditTemplate: _.template(walkinEditTemplate),
+    videoEditTemplate: _.template(videoEditTemplate),
 
     events: {
       'click button.save': 'saveEdit',
@@ -24,7 +24,7 @@ define([
       branch_sonar_data = this.model.get('branch_sonar_data') || []
       data.sonar_code = (data.sonar_code ? [data.sonar_code] : []).concat(branch_sonar_data).join()
 
-      $(this.el).html(this.walkinEditTemplate(data));
+      $(this.el).html(this.videoEditTemplate(data));
       return this;
     },
 
@@ -72,5 +72,5 @@ define([
       this.options.vent.trigger(this.options.triggerModal, this.model);
     }
   });
-  return WalkinFormView;
+  return VideoFormView;
 });
