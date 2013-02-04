@@ -568,7 +568,7 @@ define([
 
       var videoDefaultAction = {
         query: {
-          action_id: 204
+          action_id: 206
         },
         count: 1,
         name: 'Video Action',
@@ -576,7 +576,7 @@ define([
           data: {
 
           },
-          action_id: 204
+          action_id: 206
         }
       };
 
