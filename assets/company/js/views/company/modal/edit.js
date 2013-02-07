@@ -63,6 +63,7 @@ define([
       'click button.upload-image-submit': 'uploadImage',
       'click button.save-location': 'saveLocation',
       'click button.save-done-count-max': 'saveDoneCountMax',
+      'click button.save-sonar-frequency': 'saveSonarFrequency',
       'change input.verify-location': 'toggleVerifyLocation',
       'change input.custom-location': 'toggleCustomLocation',
       'keyup input.google-maps-link': 'useGoogleMapsLink',
@@ -912,6 +913,15 @@ define([
       var done_count_max = $('input.done-count-max', this.el).val();
 
       this.model.set('done_count_max', done_count_max).trigger('change');
+      this.model.save();
+
+      vent.trigger('showEditModal', this.model);
+    },
+
+    saveSonarFrequency: function() {
+      var sonar_frequency = $('input.sonar-frequency', this.el).val();
+
+      this.model.set('sonar_frequency', sonar_frequency).trigger('change');
       this.model.save();
 
       vent.trigger('showEditModal', this.model);
