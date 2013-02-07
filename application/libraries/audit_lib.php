@@ -741,9 +741,9 @@ class Audit_lib
 	 *
 	 * @return array
 	 */
-  function list_audit_range($key = NULL, $criteria = array()){
+  function list_audit_range($key = NULL, $criteria = array(), $start_date = NULL, $end_date = NULL){
     $this->CI->load->model('audit_model', 'audit');
-    return $this->CI->audit->list_distinct_audit($key, $criteria);
+    return $this->CI->audit->list_distinct_audit($key, $criteria, $start_date, $end_date);
   }
 
 	/**
@@ -982,6 +982,7 @@ foreach ($data as $line_key => $line_value) {
 	 * Count with criteria
 	 */
 	function count($criteria = array()) {
+		$this->CI->load->model('audit_model');
 		return $this->CI->audit_model->count($criteria);
 	}
 

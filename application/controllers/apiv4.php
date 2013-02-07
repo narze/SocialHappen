@@ -494,6 +494,99 @@ class Apiv4 extends REST_Controller {
       $challenges = $this->challenge_lib->get(array());
     }
 
+    // if got only 1 challenge (use challenge_id) get action done time
+    if($user_id && $challenge_id && (count($challenges) === 1)) {
+      if(!$this->_check_token($user_id, $token)) {
+        return $this->error('Token invalid');
+      }
+      $challenge = &$challenges[0];
+      $company_id = (int) $challenge['company_id'];
+      $criterias = $challenge['criteria'];
+      $is_daily_challenge = (isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && $days > 0);
+      $time = time();
+
+      $this->load->model('achievement_stat_model', 'achievement_stat');
+      $this->load->library('audit_lib');
+      $this->load->library('action_user_data_lib');
+
+      foreach($challenge['criteria'] as &$criteria) {
+        //get action done time from action_data ?
+
+        // from challenge_lib->check_challenge
+        if($is_daily_challenge) {
+          $match_all_criteria_today = TRUE;
+          $count_required = $criteria['count'];
+          $query = $criteria['query'];
+          $app_id = isset($query['app_id']) ? $query['app_id'] : 0;
+          $action_id = (int) $query['action_id'];
+          $audit_criteria = compact('company_id', 'user_id');
+          $start_date = date('Ymd', $time - (($days-1) * 60 * 60 * 24));
+          $end_date = date('Ymd', $time);
+
+          $audit_count = $this->audit_lib->count_audit_range(NULL, $app_id, $action_id, $audit_criteria, $start_date, $end_date);
+
+          if($audit_count > $count_required) {
+            $audit_criteria = compact('app_id', 'action_id', 'company_id', 'user_id');
+            $actions = $this->audit_lib->list_audit_range(NULL, $audit_criteria, $start_date, $end_date);
+            $latest_action = $actions[count($actions) - 1];
+            $criteria['completed'] = $latest_action['timestamp'];
+          }
+        }
+
+        if(!isset($criteria['completed'])) {
+        //3.2 check achievement stat and action data
+          $query = $criteria['query'];
+          $count = $criteria['count'];
+
+          // make stat criteria to query in progress challenges
+          $action_query = 'action.'.$query['action_id'].'.company.'.$company_id.'.count';
+          if(!isset($query['app_id']) || (isset($criteria['is_platform_action']) && $criteria['is_platform_action'])) {
+            //Query in progress challenge
+            $stat_criteria = array(
+              'app_id' => 0,
+              'user_id' => $user_id,
+              $action_query => array('$gte' => $count)
+            );
+          } else {
+            //Query in progress challenge
+            $stat_criteria = array(
+              'app_id' => $query['app_id'],
+              'user_id' => $user_id,
+              $action_query => array('$gte' => $count)
+            );
+          }
+
+          /**
+           * @TODO: we can reduce one step here // Book
+           */
+
+          //if it is in progress, check again with action count
+          $stat_criteria[$action_query] = array('$gte' => $count);
+          $matched_achievement_stat =
+            $this->achievement_stat->list_stat($stat_criteria);
+          if(!$matched_achievement_stat) {
+            $match_all_criteria = FALSE;
+          }else if(isset($criteria['action_data_id'])){
+
+            /**
+             * check with action_user_data that user have done it or not
+             */
+            $action_user_data = $this->action_user_data_lib->
+              get_action_user_data_by_action_data($criteria['action_data_id']);
+
+            if($action_user_data){
+              $latest_action_user_data = $action_user_data[count($action_user_data) - 1];
+              $criteria['completed'] = $latest_action_user_data['user_data']['timestamp'];
+            }
+          }
+        }
+
+        if(!isset($criteria['completed'])) {
+          $criteria['completed'] = FALSE;
+        }
+      } unset($criteria);
+    }
+
     //Filter challenge if doable_date is set
     if($challenges && $doable_date && $user_id && $token) {
       if(!$this->_check_token($user_id, $token)) {

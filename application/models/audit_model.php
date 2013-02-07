@@ -220,10 +220,22 @@ class Audit_model extends CI_Model {
 	}
 
 
-  function list_distinct_audit($key = NULL, $criteria = NULL){
+  function list_distinct_audit($key = NULL, $criteria = NULL, $start_date = NULL, $end_date = NULL){
     $check_args = isset($key) && isset($criteria);
     if(!$check_args){
       return NULL;
+    }
+
+    if(!isset($criteria['timestamp']) && ($start_date || $end_date)) {
+    	$criteria['timestamp'] = array();
+    	if($start_date){
+    		$criteria['timestamp']['$gte'] = $this->_get_start_day_time($start_date);
+    	}
+    	if($end_date){
+    		$criteria['timestamp']['$lt'] = $this->_get_end_day_time($end_date);
+    	}
+    } else {
+    	$criteria['timestamp'] = (int) $criteria['timestamp'];
     }
 
     $db_criteria = array();
@@ -256,6 +268,9 @@ class Audit_model extends CI_Model {
     }
     if(isset($criteria['campaign_id'])){
       $db_criteria['campaign_id'] = $criteria['campaign_id'];
+    }
+    if(isset($criteria['timestamp'])){
+    	$db_criteria['timestamp'] = $criteria['timestamp'];
     }
 
     // construct map and reduce functions

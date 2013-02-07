@@ -1002,7 +1002,7 @@ class Apiv4_test extends CI_Controller {
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
 	  $this->unit->run(count($result), 3 + 6 + 1 + 1, "count(\$result)", count($result));
-	  $this->unit->run($result[0]['action_id'] === 120, TRUE, "\$result[0]['action_id']", $result[0]['action_id']);
+	  $this->unit->run($result[0]['action_id'] === 118, TRUE, "\$result[0]['action_id']", $result[0]['action_id']);
 
   	$params = array(
   		'user_id' => $this->user_id,
@@ -1029,6 +1029,22 @@ class Apiv4_test extends CI_Controller {
   	$user = $this->user_mongo_model->get_user($this->user_id);
   	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
   	$this->unit->run(count($user['daily_challenge_completed'][$this->challenge_id4]) === 2, TRUE, "count(\$user['daily_challenge_completed'][$this->challenge_id4])", count($user['daily_challenge_completed'][$this->challenge_id4]));
+  }
+
+  function challenges_get_with_challenge_id_test_action_completed_time() {
+  	$method = 'challenges';
+
+  	$params = array(
+  		'challenge_id' => $this->challenge_id3,
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2
+		);
+
+		$result = $this->get($method, $params);
+
+		$action = $result['data'][0]['criteria'][0];
+		$this->unit->run(isset($action['completed']), TRUE, "\$action['completed']", $action['completed']);
+		$this->unit->run($action['completed'] <= time() && $action['completed'] >= time() - 10, TRUE, "\$action['completed']", $action['completed']);
   }
 
   function challenges_get_with_doable_test_2() {
