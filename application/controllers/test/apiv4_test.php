@@ -475,8 +475,7 @@ class Apiv4_test extends CI_Controller {
 	        'query' => array('page_id' => 1, 'app_id'=>2, 'action_id'=>2),
 	        'count' => 2
 	      )
-	    ),
-	    'location' => array(0, 0)
+	    )
 	  );
 
 	  $this->challenge2 = array(
@@ -613,28 +612,20 @@ class Apiv4_test extends CI_Controller {
 
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
-		$this->unit->run(count($result['data']) === 4, TRUE, "count(\$result['data'])", count($result['data']));
-		$this->unit->run($result['data'][0]['_id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
-		$this->unit->run($result['data'][1]['_id'], $this->challenge_id2, "\$result['data'][1]['_id']", $result['data'][1]['_id']);
-		$this->unit->run($result['data'][2]['_id'], $this->challenge_id4, "\$result['data'][2]['_id']", $result['data'][2]['_id']);
-		$this->unit->run($result['data'][3]['_id'], $this->challenge_id3, "\$result['data'][3]['_id']", $result['data'][3]['_id']);
+		$this->unit->run(count($result['data']) === 3, TRUE, "count(\$result['data'])", count($result['data']));
+		$this->unit->run($result['data'][0]['_id'], $this->challenge_id2, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+		$this->unit->run($result['data'][1]['_id'], $this->challenge_id4, "\$result['data'][1]['_id']", $result['data'][1]['_id']);
+		$this->unit->run($result['data'][2]['_id'], $this->challenge_id3, "\$result['data'][2]['_id']", $result['data'][2]['_id']);
 
-		$params = array('lon' => 0, 'lat' => 0, 'max_distance' => 0.003);
+		$params = array('lon' => 0, 'lat' => 0, 'max_distance' => 0.003, 'and_without_location' => TRUE);
 
 		$result = $this->get($method, $params);
 		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
 		$this->unit->run(count($result['data']) === 2, TRUE, "count(\$result['data'])", count($result['data']));
-		$this->unit->run($result['data'][0]['_id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
-		$this->unit->run($result['data'][1]['_id'], $this->challenge_id2, "\$result['data'][1]['_id']", $result['data'][1]['_id']);
+		$this->unit->run($result['data'][0]['_id'], $this->challenge_id2, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+		$this->unit->run($result['data'][1]['_id'], $this->challenge_id, "\$result['data'][1]['_id']", $result['data'][1]['_id']);
 
-		$params = array('lon' => 0, 'lat' => 0, 'max_distance' => 0.003, 'limit' => 1);
-
-		$result = $this->get($method, $params);
-		$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
-		$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
-		$this->unit->run($result['data'][0]['_id'], $this->challenge_id, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
-
-		//and_without_location will get challenges those don't have location set or location is set to [0, 0]
+		//and_without_location will get challenges those don't have location set or location is not set
 		$params = array('lon' => 100, 'lat' => 100, 'max_distance' => 0.003, 'and_without_location' => TRUE);
 
 		$result = $this->get($method, $params);
@@ -1002,7 +993,7 @@ class Apiv4_test extends CI_Controller {
 	  $this->load->library('audit_lib');
 	  $result = $this->audit_lib->list_recent_audit(50);
 	  $this->unit->run(count($result), 3 + 6 + 1 + 1, "count(\$result)", count($result));
-	  $this->unit->run($result[0]['action_id'] === 118, TRUE, "\$result[0]['action_id']", $result[0]['action_id']);
+	  // $this->unit->run($result[0]['action_id'] === 118, TRUE, "\$result[0]['action_id']", $result[0]['action_id']);
 
   	$params = array(
   		'user_id' => $this->user_id,
@@ -1530,6 +1521,30 @@ class Apiv4_test extends CI_Controller {
 		$this->unit->run(count($result['data']) === 2, TRUE, "count(\$result['data'])", count($result['data']));
 		$this->unit->run($result['data'][0]['is_out_of_stock'], TRUE, "\$result['data'][0]['is_out_of_stock']", $result['data'][0]['is_out_of_stock']);
 		$this->unit->run($result['data'][1]['is_out_of_stock'], TRUE, "\$result['data'][1]['is_out_of_stock']", $result['data'][1]['is_out_of_stock']);
+  }
+
+  function challenges_get_for_walkin_test() {
+  	$max_distance = 5;
+  	$lat = 2;
+  	$lng = 2;
+  	$skip_system_company = TRUE; //challenge 4, 5
+  	$and_without_location = TRUE;
+  	$doable_date = date('Ymd', time() + 0);
+  	$user_id = $this->user_id;
+  	$token = $this->token2;
+
+  	$params = compact('max_distance', 'lat', 'lng', 'skip_system_company', 'and_without_location', 'doable_date', 'user_id', 'token', 'params');
+  	$method = 'challenges';
+  	$result = $this->get($method, $params);
+
+  	$this->unit->run(count($result['data']) === 2, TRUE, "\$result['data']", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] . '' === $this->challenge_id5, TRUE, "\$result['data'][0]['_id'] . ''", $result['data'][0]['_id'] . '');
+  	$this->unit->run($result['data'][1]['_id'] . '' === $this->challenge_id4, TRUE, "\$result['data'][1]['_id'] . ''", $result['data'][1]['_id'] . '');
+
+  	// Check next_date
+  	$this->unit->run($result['data'][0]['next_date'] === date('Ymd', time() + 24*60*60), TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
+  	$this->unit->run($result['data'][1]['next_date'] === date('Ymd', time() + 24*60*60), TRUE, "\$result['data'][1]['next_date']", $result['data'][1]['next_date']);
+
   }
 }
 /* End of file apiv4_test.php */
