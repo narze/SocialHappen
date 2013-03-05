@@ -30,11 +30,11 @@ class Action_data_lib_test extends CI_Controller {
 					'qr' => array('id' => 201, 'add_method' => 'add_qr_action_data'),
 					'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data'),
 					'checkin' => array('id' => 203, 'add_method' => 'add_checkin_action_data'),
-					'walkin' => array('id' => 204, 'add_method' => 'add_walkin_action_data')
+					'walkin' => array('id' => 204, 'add_method' => 'add_walkin_action_data'),
+					'video' => array('id' => 206, 'add_method' => 'add_walkin_action_data')
 				);
 		$result = $this->action_data_lib->get_platform_action();
-		$this->unit->run($result, $expect, "\$result", $result);
-
+		$this->unit->run($result, $expect, "\$result", print_r($result, TRUE));
 		$action_name = 'qr';
 		$result = $this->action_data_lib->get_platform_action($action_name);
 		$this->unit->run($result, 201, "\$result", $result);

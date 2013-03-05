@@ -274,7 +274,7 @@ class Challenge_lib_test extends CI_Controller {
     $criteria = array('company_id' => '1');
     $result = $this->challenge_lib->get_one($criteria);
     $this->unit->run($result, 'is_array', "\$result", $result);
-    $this->unit->run($result['detail']['name'], 'Challenge name 1', "\$result['detail']['name']", $result['detail']['name']);
+    $this->unit->run($result['detail']['name'], 'Challenge name 2', "\$result['detail']['name']", $result['detail']['name']);
   }
 
   function update_test() {
@@ -301,11 +301,11 @@ class Challenge_lib_test extends CI_Controller {
     $result = $this->challenge_lib->get($criteria);
     $this->unit->run(count($result), 3, "\$result", count($result));
     $this->unit->run($result[2], 'is_array', "\$result[2]", $result[2]);
-    $this->unit->run($result[2]['start'], time() + 86400, "\$result[2]['start']", $result[2]['start']);
+    $this->unit->run($result[2]['start'], time(), "\$result[2]['start']", $result[2]['start']);
 
     //Only first element will be updated
     $this->unit->run($result[1], 'is_array', "\$result[1]", $result[1]);
-    $this->unit->run($result[1]['start'], time(), "\$result[1]['start']", $result[1]['start']);
+    $this->unit->run($result[1]['start'], time() + 86400, "\$result[1]['start']", $result[1]['start']);
     $this->unit->run($result[0], 'is_array', "\$result[0]", $result[0]);
     $this->unit->run($result[0]['start'], time(), "\$result[0]['start']", $result[0]['start']);
   }

@@ -121,33 +121,39 @@ class Coupon_lib_test extends CI_Controller {
 		unset($coupon1['hash']);
 		unset($coupon1['timestamp']);
 		unset($coupon1['confirmed_timestamp']);
+		unset($coupon1['code']);
 		unset($coupon2['_id']);
 		unset($coupon2['hash']);
 		unset($coupon2['timestamp']);
 		unset($coupon2['confirmed_timestamp']);
+		unset($coupon2['code']);
 		unset($coupon3['_id']);
 		unset($coupon3['hash']);
 		unset($coupon3['timestamp']);
 		unset($coupon3['confirmed_timestamp']);
+		unset($coupon3['code']);
 		unset($coupon4['_id']);
 		unset($coupon4['hash']);
 		unset($coupon4['timestamp']);
 		unset($coupon4['confirmed_timestamp']);
+		unset($coupon4['code']);
 		unset($coupon5['_id']);
 		unset($coupon5['hash']);
 		unset($coupon5['timestamp']);
 		unset($coupon5['confirmed_timestamp']);
+		unset($coupon5['code']);
 		unset($coupon6['_id']);
 		unset($coupon6['hash']);
 		unset($coupon6['timestamp']);
 		unset($coupon6['confirmed_timestamp']);
-		
-		$this->unit->run($coupon1 , $this->coupon_object1, "\$coupon_id", $coupon1 );
-		$this->unit->run($coupon2 , $this->coupon_object2, "\$coupon_id", $coupon2 );
-		$this->unit->run($coupon3 , $this->coupon_object3, "\$coupon_id", $coupon3 );
-		$this->unit->run($coupon4 , $this->coupon_object4, "\$coupon_id", $coupon4 );
-		$this->unit->run($coupon5 , $this->coupon_object5, "\$coupon_id", $coupon5 );
-		$this->unit->run($coupon6 , $this->coupon_object6, "\$coupon_id", $coupon6 );
+		unset($coupon6['code']);
+
+		$this->unit->run($coupon1 , $this->coupon_object1, "\$coupon_id", print_r($coupon1, TRUE) );
+		$this->unit->run($coupon2 , $this->coupon_object2, "\$coupon_id", print_r($coupon2, TRUE) );
+		$this->unit->run($coupon3 , $this->coupon_object3, "\$coupon_id", print_r($coupon3, TRUE) );
+		$this->unit->run($coupon4 , $this->coupon_object4, "\$coupon_id", print_r($coupon4, TRUE) );
+		$this->unit->run($coupon5 , $this->coupon_object5, "\$coupon_id", print_r($coupon5, TRUE) );
+		$this->unit->run($coupon6 , $this->coupon_object6, "\$coupon_id", print_r($coupon6, TRUE) );
 
 	}
 
