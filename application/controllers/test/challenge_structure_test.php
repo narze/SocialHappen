@@ -112,7 +112,7 @@ class Challenge_structure_test extends CI_Controller {
 		$branch_2 = array(
       'company_id' => 1,
       'title' => 'branch 2',
-      'location' => array(40, 40),
+      'location' => array(0, -30),
       'telephone' => '0123456789',
       'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
       'address' => 'thailand ja'
@@ -196,6 +196,7 @@ class Challenge_structure_test extends CI_Controller {
   	$this->load->library('challenge_lib');
   	$result = $this->challenge_lib->get(array());
   	$this->unit->run(count($result) === 1, TRUE, "count(\$result) should be 1", count($result));
+  	$this->challenge_id = $result[0]['_id'];
 
   	# it should have 2 sonar_box
   	$this->load->library('sonar_box_lib');
@@ -234,6 +235,97 @@ class Challenge_structure_test extends CI_Controller {
   }
 
   function challenge_should_update_locations_and_codes_when_actions_are_updated() {
+  	$this->load->library('challenge_lib');
+  	$this->load->library('sonar_box_lib');
+  	$this->load->library('branch_lib');
+
+  	## branch
+  	# add more branch into challenge action
+  	$this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.branches' => array($this->branch_id, $this->branch_id_2))));
+
+  	# locations should be updated
+  	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
+  	$this->unit->run(count($challenge['criteria'][0]['locations']) === 2, TRUE, "challenge's action should have 2 locations", count($challenge['criteria'][0]['locations']));
+  	$this->unit->run(count($challenge['locations']) === 2, TRUE, "challenge should have 2 locations as well", count($challenge['locations']));
+  	$this->unit->run($challenge['locations'][0] === array(40,40), TRUE, "location should match", $challenge['locations'][0]);
+  	$this->unit->run($challenge['locations'][1] === array(0,-30), TRUE, "location should match", $challenge['locations'][1]);
+  	$this->unit->run($challenge['criteria'][0]['locations'][0] === array(40,40), TRUE, "location should match", $challenge['criteria'][0]['locations'][0]);
+  	$this->unit->run($challenge['criteria'][0]['locations'][1] === array(0,-30), TRUE, "location should match", $challenge['criteria'][0]['locations'][1]);
+
+  	# edit branch location
+  	$this->branch_lib->update(array('_id' => new MongoId($this->branch_id_2)), array('location' => array(-10, 25)));
+
+  	# locations should be updated
+  	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
+  	$this->unit->run(count($challenge['criteria'][0]['locations']) === 2, TRUE, "challenge's action should have 2 locations", count($challenge['criteria'][0]['locations']));
+  	$this->unit->run(count($challenge['locations']) === 2, TRUE, "challenge should have 2 locations as well", count($challenge['locations']));
+  	$this->unit->run($challenge['locations'][0] === array(40,40), TRUE, "location should match", $challenge['locations'][0]);
+  	$this->unit->run($challenge['locations'][1] === array(-10,25), TRUE, "location should match", $challenge['locations'][1]);
+  	$this->unit->run($challenge['criteria'][0]['locations'][0] === array(40,40), TRUE, "location should match", $challenge['criteria'][0]['locations'][0]);
+  	$this->unit->run($challenge['criteria'][0]['locations'][1] === array(-10,25), TRUE, "location should match", $challenge['criteria'][0]['locations'][1]);
+
+  	# remove branch 1 from challenge
+  	$this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.branches' => array($this->branch_id_2))));
+
+  	# locations should be updated
+  	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
+  	$this->unit->run(count($challenge['criteria'][0]['locations']) === 1, TRUE, "challenge's action should have 1 location", count($challenge['criteria'][0]['locations']));
+  	$this->unit->run(count($challenge['locations']) === 1, TRUE, "challenge should have 1 location as well", count($challenge['locations']));
+  	$this->unit->run($challenge['locations'][0] === array(-10,25), TRUE, "location should match", $challenge['locations'][0]);
+  	$this->unit->run($challenge['criteria'][0]['locations'][0] === array(-10,25), TRUE, "location should match", $challenge['criteria'][0]['locations'][0]);
+
+  	# remove branch 2 from system
+  	$this->branch_lib->remove(array('_id' => new MongoId($this->branch_id_2)));
+
+  	# locations & branches should be updated
+  	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
+  	$this->unit->run(count($challenge['criteria'][0]['branches']) === 0, TRUE, "challenge's action should have 0 branch", count($challenge['criteria'][0]['branches']));
+  	$this->unit->run(count($challenge['criteria'][0]['locations']) === 0, TRUE, "challenge's action should have 0 location", count($challenge['criteria'][0]['locations']));
+  	$this->unit->run(count($challenge['locations']) === 0, TRUE, "challenge should have 0 location as well", count($challenge['locations']));
+
+  	## sonar_box
+  	# add more sonar box into challenge action
+  	$this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.sonar_boxes' => array($this->sonar_box_id, $this->sonar_box_id_2))));
+
+  	# codes should be updated
+  	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
+  	$this->unit->run(count($challenge['criteria'][0]['codes']) === 2, TRUE, "challenge's action should have 2 codes", count($challenge['criteria'][0]['codes']));
+  	$this->unit->run(count($challenge['codes']) === 2, TRUE, "challenge should have 2 codes as well", count($challenge['codes']));
+  	$this->unit->run($challenge['codes'][0] === "0123", TRUE, "code should match", $challenge['codes'][0]);
+  	$this->unit->run($challenge['codes'][1] === "3210", TRUE, "code should match", $challenge['codes'][1]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][1] === "3210", TRUE, "code should match", $challenge['criteria'][0]['codes'][1]);
+
+  	# edit sonar box codes
+  	$this->sonar_box_lib->update(array('_id' => new MongoId($this->sonar_box_id_2)), array('data' => "0000"));
+
+  	# codes should be updated
+  	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
+  	$this->unit->run(count($challenge['criteria'][0]['codes']) === 2, TRUE, "challenge's action should have 2 codes", count($challenge['criteria'][0]['codes']));
+  	$this->unit->run(count($challenge['codes']) === 2, TRUE, "challenge should have 2 codes as well", count($challenge['codes']));
+  	$this->unit->run($challenge['codes'][0] === "0123", TRUE, "code should match", $challenge['codes'][0]);
+  	$this->unit->run($challenge['codes'][1] === "0000", TRUE, "code should match", $challenge['codes'][1]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][1] === "0000", TRUE, "code should match", $challenge['criteria'][0]['codes'][1]);
+
+  	# remove sonar box 1 from challenge
+  	$this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.sonar_boxes' => array($this->sonar_box_id_2))));
+
+  	# codes should be updated
+  	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
+  	$this->unit->run(count($challenge['criteria'][0]['codes']) === 1, TRUE, "challenge's action should have 1 code", count($challenge['criteria'][0]['codes']));
+  	$this->unit->run(count($challenge['codes']) === 1, TRUE, "challenge should have 1 code as well", count($challenge['codes']));
+  	$this->unit->run($challenge['codes'][0] === "0000", TRUE, "code should match", $challenge['codes'][0]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0000", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
+
+  	# remove sonar box 2 from system
+  	$this->sonar_box_lib->remove(array('_id' => new MongoId($this->sonar_box_id_2)));
+
+  	# codes & sonar_boxes should be updated
+  	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
+  	$this->unit->run(count($challenge['criteria'][0]['sonar_boxes']) === 0, TRUE, "challenge's action should have 0 sonar_box", count($challenge['criteria'][0]['sonar_boxes']));
+  	$this->unit->run(count($challenge['criteria'][0]['codes']) === 0, TRUE, "challenge's action should have 0 code", count($challenge['criteria'][0]['codes']));
+  	$this->unit->run(count($challenge['codes']) === 0, TRUE, "challenge should have 0 code as well", count($challenge['codes']));
 
   }
 }
