@@ -18,7 +18,9 @@ class Challenge_lib {
           '$set' => array('hash' => strrev(sha1($id))
       )))) {
         $this->generate_locations($id);
+        $this->generate_locations_from_actions($id);
         $this->generate_sonar_data($id);
+        $this->generate_sonars_from_actions($id);
         return $id;
       }
     }
@@ -83,7 +85,10 @@ class Challenge_lib {
 
     $result = $this->CI->challenge_model->update($criteria, $data);
     $this->generate_locations($challenge_id);
+    $this->generate_locations_from_actions($challenge_id);
     $this->generate_sonar_data($challenge_id);
+    $this->generate_sonars_from_actions($challenge_id);
+
     return $result;
   }
 
@@ -927,6 +932,74 @@ class Challenge_lib {
         'locations' => TRUE
       );
     }
+
+    return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
+  }
+
+  function generate_locations_from_actions($challenge_id) {
+    if(!$challenge = $this->get_by_id($challenge_id)){
+      return FALSE;
+    }
+
+    $this->CI->load->library('branch_lib');
+
+    $challenge['locations'] = array();
+
+    foreach($challenge['criteria'] as &$action){
+      // add locations from branches
+      if(isset($action['branches']) && $action['branches']) {
+        $action['locations'] = array();
+        foreach($action['branches'] as $branch_id) {
+          if($branch = $this->CI->branch_lib->get_one(array('_id' => new MongoId($branch_id)))) {
+            if(isset($branch['location']) && is_array($branch['location']) && count($branch['location']) === 2) {
+              $action['locations'][] = $branch['location'];
+              $challenge['locations'][] = $branch['location'];
+            }
+          }
+        }
+      }
+    }
+
+    $data = array(
+      '$set' => array(
+        'locations' => $challenge['locations'],
+        'criteria' => $challenge['criteria']
+      )
+    );
+
+    return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
+  }
+
+  function generate_sonars_from_actions($challenge_id) {
+    if(!$challenge = $this->get_by_id($challenge_id)){
+      return FALSE;
+    }
+
+    $this->CI->load->library('sonar_box_lib');
+
+    $challenge['codes'] = array();
+
+    foreach($challenge['criteria'] as &$action){
+      // add codes from sonar_boxes
+      if(isset($action['sonar_boxes']) && $action['sonar_boxes']) {
+        $action['codes'] = array();
+        foreach($action['sonar_boxes'] as $sonar_box_id) {
+          if($sonar_box = $this->CI->sonar_box_lib->get_one(array('_id' => new MongoId($sonar_box_id)))) {
+            if(isset($sonar_box['data'])) {
+              $action['codes'][] = $sonar_box['data'];
+              $challenge['codes'][] = $sonar_box['data'];
+            }
+          }
+        }
+      }
+    }
+
+    $data = array(
+      '$set' => array(
+        'codes' => $challenge['codes'],
+        'criteria' => $challenge['criteria']
+      )
+    );
 
     return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
   }

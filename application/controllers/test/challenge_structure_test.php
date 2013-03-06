@@ -74,39 +74,94 @@ class Challenge_structure_test extends CI_Controller {
 	}
 
 	function _setup() {
-  	# add challenge with actions via apiv3/saveChallenge
-  	$model = json_decode('
-  		{
-  			"detail":{
-  				"name":"Test Challenge",
-	  			"description":"",
-	  			"image":"https://lh3.googleusercontent.com/XBLfCOS_oKO-XjeYiaOAuIdukQo9wXMWsdxJZLJO8hvWMBLFwCU3r_0BrRMn_c0TnEDarKuxDg=s640-h400-e365"
-  			},
-			  "hash":null,
-			  "branches":[],
-			  "branches_data":[],
-			  "verify_location":true,
-			  "custom_location":false,
-			  "all_branch":true,
-			  "criteria":[
-			  	{"query":{"action_id":206},"count":1,"name":"Video","action_data":{"data":{},"action_id":206},"sonar_code":""}
-			  ],
-			  "active":true,
-			  "company_id":"2",
-			  "reward_items":[
-			  	{"name":"Redeeming Points","image":"https://socialhappen.dyndns.org/socialhappen/assets/images/blank.png","value":10,"status":"published","type":"challenge","description":"10 Points for redeeming rewards in this company","is_points_reward":true,"redeem_method":"in_store"}
-			  ],
-			  "score":10,
-			  "start_date":1362543804,
-			  "end_date":1394079804,
-			  "repeat":1,
-			  "short_url":null,
-			  "location":[0,0],
-			  "done_count_max":0,
-			  "done_count":0,
-			  "sonar_frequency":""
-			}', TRUE);
+		# add a sonar_box
+		$sonar_box = array(
+			'company_id' => 1,
+			'branch_id' => NULL,
+			'id' => 1,
+			'title' => 'Sonar Box',
+			'data' => "0123",
+		);
+		$this->load->library('sonar_box_lib');
+		$this->sonar_box_id = $this->sonar_box_lib->add($sonar_box);
 
+		# add a branch
+		$branch = array(
+      'company_id' => 1,
+      'title' => 'branch 1',
+      'location' => array(40, 40),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+    $this->load->library('branch_lib');
+    $this->branch = $this->branch_lib->add($branch);
+    $this->branch_id = $this->branch['_id'];
+
+  	# add challenge with actions via apiv3/saveChallenge
+		$old_challenge_model = array(
+			"detail" => array(
+				"name" => 'Test Challenge',
+				"description" => "",
+				"image" => "https://lh3.googleusercontent.com/XBLfCOS_oKO-XjeYiaOAuIdukQo9wXMWsdxJZLJO8hvWMBLFwCU3r_0BrRMn_c0TnEDarKuxDg=s640-h400-e365"
+			),
+			"hash" => NULL,
+			"branches" => array(),
+			"branches_data" => array(),
+			"verify_location" => true,
+			"custom_location" => false,
+			"all_branch" => true,
+			"criteria" => array(
+				array(
+					"query" => array(
+						"action_id" => 206
+					),
+					"count" => 1,
+					"name" => "Video",
+					"action_data" => array(
+						"data" => array(),
+						"action_id" => 206
+					),
+					"sonar_code" => ""
+				)
+			),
+			"active" => true,
+			"company_id" => "2",
+			"reward_items" => array(
+				array(
+					"name" => "Redeeming Points",
+					"image" => "https://socialhappen.dyndns.org/socialhappen/assets/images/blank.png",
+					"value" => 10,
+					"status" => "published",
+					"type" => "challenge",
+					"description" => "10 Points for redeeming rewards in this company",
+					"is_points_reward" => true,
+					"redeem_method" => "in_store"
+				)
+			),
+			"score" => 10,
+			"start_date" => 1362543804,
+			"end_date" => 1394079804,
+			"repeat" => 1,
+			"short_url" => null,
+			"location" => array(0,0),
+			"done_count_max" => 0,
+			"done_count" => 0,
+			"sonar_frequency" => ""
+		);
+
+		$model = $old_challenge_model;
+
+		$model['criteria'][0]['sonar_boxes'] = array($this->sonar_box_id);
+		// $model['criteria'][0]['codes'] = array(); // Codes should be derived from sonar_boxes
+		$model['criteria'][0]['branches'] = array($this->branch_id);
+		// $model['criteria'][0]['locations'] = array(); // Locations should be derived from branches
+		$model['criteria'][0]['all_branches'] = FALSE;
+		$model['criteria'][0]['custom_locations'] = array();
+		$model['criteria'][0]['use_only_custom_locations'] = FALSE;
+		$model['criteria'][0]['verify_location'] = TRUE;
+
+		$this->unit->run($model['criteria'], TRUE, "", $model['criteria']);
 		$params = array('model' => json_encode($model));
 
 		$result = $this->postAPI('apiv3', 'saveChallenge', $params);
@@ -120,9 +175,38 @@ class Challenge_structure_test extends CI_Controller {
   	$result = $this->challenge_lib->get(array());
   	$this->unit->run(count($result) === 1, TRUE, "count(\$result) should be 1", count($result));
 
+  	# it should have 1 sonar_box
+  	$this->load->library('sonar_box_lib');
+  	$boxes = $this->sonar_box_lib->get(array());
+  	$this->unit->run(count($boxes) === 1, TRUE, "should have 1 sonar box", count($boxes));
+  	$this->unit->run($boxes[0]['_id'].'' === $this->sonar_box_id, TRUE, "", $boxes[0]['_id'].'');
+
+  	# it should have 1 branch
+  	$this->load->library('branch_lib');
+  	$branches = $this->branch_lib->get(array());
+  	$this->unit->run(count($branches) === 1, TRUE, "should have 1 branch", count($branches));
+  	$this->unit->run($branches[0]['_id'].'' === $this->branch_id, TRUE, "", $branches[0]['_id'].'');
+
+  	# it should have criteria (action) with new properties
+  	$this->unit->run($result[0]['criteria'][0]['sonar_boxes'], "is_array", "sonar_boxes should be array", $result[0]['criteria'][0]['sonar_boxes']);
+  	$this->unit->run($result[0]['criteria'][0]['sonar_boxes'] === array($this->sonar_box_id), TRUE, "sonar_boxes should be array", $result[0]['criteria'][0]['sonar_boxes']);
+  	$this->unit->run($result[0]['criteria'][0]['branches'], "is_array", "branches should be array", $result[0]['criteria'][0]['branches']);
+  	$this->unit->run($result[0]['criteria'][0]['all_branches'], "is_bool", "all_branches should be boolean", $result[0]['criteria'][0]['all_branches']);
+  	$this->unit->run($result[0]['criteria'][0]['custom_locations'], "is_array", "custom_locations should be array", $result[0]['criteria'][0]['custom_locations']);
+  	$this->unit->run($result[0]['criteria'][0]['use_only_custom_locations'], "is_bool", "use_only_custom_locations should be boolean", $result[0]['criteria'][0]['use_only_custom_locations']);
+  	$this->unit->run($result[0]['criteria'][0]['verify_location'], "is_bool", "verify_location should be boolean", $result[0]['criteria'][0]['verify_location']);
+  	$this->unit->run($result[0]['criteria'][0]['locations'], "is_array", "locations should be array", $result[0]['criteria'][0]['locations']);
+  	$this->unit->run($result[0]['criteria'][0]['locations'] === array(array(40,40)), TRUE, "locations should be array", $result[0]['criteria'][0]['locations']);
+  	$this->unit->run($result[0]['criteria'][0]['codes'], "is_array", "codes should be array", $result[0]['criteria'][0]['codes']);
+  	$this->unit->run($result[0]['criteria'][0]['codes'] === array("0123"), TRUE, "codes should be array", $result[0]['criteria'][0]['codes']);
+
   	# it should have locations (from actions)
+  	$this->unit->run($result[0]['locations'], "is_array", "locations should be array", $result[0]['locations']);
+  	$this->unit->run($result[0]['locations'] === array(array(40,40)), TRUE, "locations should have action's location", $result[0]['locations']);
 
   	# it should have codes (from actions)
+  	$this->unit->run($result[0]['codes'], "is_array", "codes should be array", $result[0]['codes']);
+  	$this->unit->run($result[0]['codes'] === array("0123"), TRUE, "codes should have action's location", $result[0]['codes']);
   }
 
   function challenge_should_update_locations_and_codes_when_actions_are_updated() {
