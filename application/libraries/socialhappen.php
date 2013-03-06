@@ -13,6 +13,16 @@ class SocialHappen{
     $this->CI =& get_instance();
 		$this->CI->load->library('session');
     $this->update_session();
+
+    // For API testing
+    if((ENVIRONMENT === 'development') && ($this->CI->uri->segment(1) === 'testmode')) {
+      $userdata = array(
+      	'user_id' => 1,
+      	'user_facebook_id' => '713558190',
+      	'logged_in' => TRUE
+      );
+      $this->CI->session->set_userdata($userdata);
+    }
   }
 
 	/**
