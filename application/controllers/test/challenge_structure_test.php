@@ -74,7 +74,9 @@ class Challenge_structure_test extends CI_Controller {
 	}
 
 	function _setup() {
-		# add a sonar_box
+		# add sonar_box
+		$this->load->library('sonar_box_lib');
+
 		$sonar_box = array(
 			'company_id' => 1,
 			'branch_id' => NULL,
@@ -82,10 +84,20 @@ class Challenge_structure_test extends CI_Controller {
 			'title' => 'Sonar Box',
 			'data' => "0123",
 		);
-		$this->load->library('sonar_box_lib');
 		$this->sonar_box_id = $this->sonar_box_lib->add($sonar_box);
 
-		# add a branch
+		$sonar_box_2 = array(
+			'company_id' => 1,
+			'branch_id' => NULL,
+			'id' => 2,
+			'title' => 'Sonar Box 2',
+			'data' => "3210",
+		);
+		$this->sonar_box_id_2 = $this->sonar_box_lib->add($sonar_box_2);
+
+		# add branch
+    $this->load->library('branch_lib');
+
 		$branch = array(
       'company_id' => 1,
       'title' => 'branch 1',
@@ -94,9 +106,19 @@ class Challenge_structure_test extends CI_Controller {
       'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
       'address' => 'thailand ja'
     );
-    $this->load->library('branch_lib');
     $this->branch = $this->branch_lib->add($branch);
     $this->branch_id = $this->branch['_id'];
+
+		$branch_2 = array(
+      'company_id' => 1,
+      'title' => 'branch 2',
+      'location' => array(40, 40),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+    $this->branch_2 = $this->branch_lib->add($branch_2);
+    $this->branch_id_2 = $this->branch_2['_id'];
 
   	# add challenge with actions via apiv3/saveChallenge
 		$old_challenge_model = array(
@@ -175,17 +197,19 @@ class Challenge_structure_test extends CI_Controller {
   	$result = $this->challenge_lib->get(array());
   	$this->unit->run(count($result) === 1, TRUE, "count(\$result) should be 1", count($result));
 
-  	# it should have 1 sonar_box
+  	# it should have 2 sonar_box
   	$this->load->library('sonar_box_lib');
   	$boxes = $this->sonar_box_lib->get(array());
-  	$this->unit->run(count($boxes) === 1, TRUE, "should have 1 sonar box", count($boxes));
-  	$this->unit->run($boxes[0]['_id'].'' === $this->sonar_box_id, TRUE, "", $boxes[0]['_id'].'');
+  	$this->unit->run(count($boxes) === 2, TRUE, "should have 2 sonar box", count($boxes));
+  	$this->unit->run($boxes[0]['_id'].'' === $this->sonar_box_id_2, TRUE, "", $boxes[0]['_id'].'');
+  	$this->unit->run($boxes[1]['_id'].'' === $this->sonar_box_id, TRUE, "", $boxes[1]['_id'].'');
 
-  	# it should have 1 branch
+  	# it should have 2 branch
   	$this->load->library('branch_lib');
   	$branches = $this->branch_lib->get(array());
-  	$this->unit->run(count($branches) === 1, TRUE, "should have 1 branch", count($branches));
-  	$this->unit->run($branches[0]['_id'].'' === $this->branch_id, TRUE, "", $branches[0]['_id'].'');
+  	$this->unit->run(count($branches) === 2, TRUE, "should have 2 branch", count($branches));
+  	$this->unit->run($branches[0]['_id'].'' === $this->branch_id_2, TRUE, "", $branches[0]['_id'].'');
+  	$this->unit->run($branches[1]['_id'].'' === $this->branch_id, TRUE, "", $branches[1]['_id'].'');
 
   	# it should have criteria (action) with new properties
   	$this->unit->run($result[0]['criteria'][0]['sonar_boxes'], "is_array", "sonar_boxes should be array", $result[0]['criteria'][0]['sonar_boxes']);
