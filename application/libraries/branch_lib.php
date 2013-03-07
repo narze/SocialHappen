@@ -94,7 +94,9 @@ class Branch_lib {
     if($challenges && count($challenges) > 0){
       foreach ($challenges as $challenge) {
         $this->CI->challenge_lib->generate_locations('' . $challenge['_id']);
-        $this->CI->challenge_lib->generate_sonar_data('' . $challenge['_id']);
+        $this->CI->challenge_lib->generate_locations_from_actions('' . $challenge['_id']);
+        // $this->CI->challenge_lib->generate_sonar_data('' . $challenge['_id']);
+        $this->CI->challenge_lib->generate_sonars_from_action_data_ids('' . $challenge['_id']);
       }
     }
   }

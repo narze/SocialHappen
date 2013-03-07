@@ -2,9 +2,9 @@
 
 /*
  * Sonar box lib tests
- * 1. Setup branches and challenges
- * 2. Test adding 1 sonar box without branch id
- * 3. Test adding 3 sonar boxes with branch id
+ * 1. Setup action datas and challenges
+ * 2. Test adding 1 sonar box without action_data id
+ * 3. Test adding 3 sonar boxes with action_data id
  * 4. Test updating sonar box's data
  * 5. Test removing a sonar box
  */
@@ -33,34 +33,24 @@ class Sonar_box_lib_test extends CI_Controller {
   }
 
   function setup_before_test(){
-  // 1. Setup branches and challenge
+  // 1. Setup action datas and challenge
   //
-    $this->load->library('branch_lib');
-    $this->branch1 = array(
-      'company_id' => 1,
-      'title' => 'branch 1',
-      'location' => array(40, 40),
-      'telephone' => '0123456789',
-      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
-      'address' => 'thailand ja'
+    $this->load->library('action_data_lib');
+    $this->action_data1 = array(
+
     );
 
-    $this->branch2 = array(
-      'company_id' => 1,
-      'title' => 'branch 2',
-      'location' => array(40, 50),
-      'telephone' => '0123456789',
-      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
-      'address' => 'thailand ja'
+    $this->action_data2 = array(
+
     );
 
-    $result = $this->branch_lib->add($this->branch1);
+    $result = $this->action_data_lib->add_action_data(206, $this->action_data1);
     $this->unit->run($result, TRUE, "\$result", $result);
-    $this->branch_data1 = $result;
+    $this->action_data_id_1 = $result;
 
-    $result = $this->branch_lib->add($this->branch2);
+    $result = $this->action_data_lib->add_action_data(206, $this->action_data2);
     $this->unit->run($result, TRUE, "\$result", $result);
-    $this->branch_data2 = $result;
+    $this->action_data_id_2 = $result;
 
     $this->load->library('challenge_lib');
 
@@ -78,18 +68,20 @@ class Sonar_box_lib_test extends CI_Controller {
         array(
           'name' => 'C1',
           'query' => array('page_id' => 1, 'app_id'=>1, 'action_id'=>1),
-          'count' => 1
+          'count' => 1,
+          'action_data_id' => $this->action_data_id_1
         ),
         array(
           'name' => 'C2',
           'query' => array('page_id' => 1, 'app_id'=>2, 'action_id'=>2),
-          'count' => 2
+          'count' => 2,
+          'action_data_id' => $this->action_data_id_2
         )
       ),
       'location' => null,
       'locations' => array(),
       'custom_locations' => array(),
-      'branches' => array($this->branch_data1['_id'] . '', $this->branch_data2['_id'] . ''),
+      // 'branches' => array($this->branch_data1['_id'] . '', $this->branch_data2['_id'] . ''),
       'sonar_frequency' => '0123'
     );
 
@@ -111,12 +103,14 @@ class Sonar_box_lib_test extends CI_Controller {
         array(
           'name' => 'C1',
           'query' => array('page_id' => 1, 'app_id'=>1, 'action_id'=>1),
-          'count' => 1
+          'count' => 1,
+          'action_data_id' => $this->action_data_id_1
         ),
         array(
           'name' => 'C2',
           'query' => array('page_id' => 1, 'app_id'=>2, 'action_id'=>2),
-          'count' => 2
+          'count' => 2,
+          'action_data_id' => $this->action_data_id_2
         )
       ),
       'location' => null,
@@ -133,7 +127,7 @@ class Sonar_box_lib_test extends CI_Controller {
 
   function prepare_sonar_box_test() {
     /*
-     * No branch id : not updating challenges with branch id
+     * No action_data id : not updating challenges with action_data id
      */
     $this->sonar_box1 = array(
       'id' => 'SH0000',
@@ -143,37 +137,40 @@ class Sonar_box_lib_test extends CI_Controller {
     );
 
     /*
-     * With branch id : update challenges' custom_sonar with branch id
+     * With action_data id : update challenges' custom_sonar with action_data id
      */
     $this->sonar_box2 = array(
       'id' => 'SH1111',
       'name' => 'sonar box 2',
       'data' => '1111',
       'info' => array(),
-      'branch_id' => $this->branch_data1['_id'] . ''
+      'action_data_id' => $this->action_data_id_1 . '',
+      'challenge_id' => $this->challenge_id1
     );
 
     /*
-     * With branch id : update challenges' custom_sonar with branch id
+     * With action_data id : update challenges' custom_sonar with action_data id
      */
     $this->sonar_box3 = array(
       'id' => 'SH2222',
       'name' => 'sonar box 3',
       'data' => '2222',
       'info' => array(),
-      'branch_id' => $this->branch_data2['_id'] . ''
+      'action_data_id' => $this->action_data_id_2 . '',
+      'challenge_id' => $this->challenge_id1
     );
 
     /*
-     * With branch id : update challenges' custom_sonar with branch id
-     * Now branch 2 have 2 boxes
+     * With action_data id : update challenges' custom_sonar with action_data id
+     * Now action_data_2 have 2 boxes in different challenge
      */
     $this->sonar_box4 = array(
       'id' => 'SH3333',
       'name' => 'sonar box 4',
       'data' => '3333',
       'info' => array(),
-      'branch_id' => $this->branch_data2['_id'] . ''
+      'action_data_id' => $this->action_data_id_1 . '',
+      'challenge_id' => $this->challenge_id2
     );
   }
 
@@ -213,32 +210,41 @@ class Sonar_box_lib_test extends CI_Controller {
 
   function check_challenge_after_adding_sonar_box_test() {
     /*
-     * The first challenge (that's have branch 1-2 in it) should have sonar data of sonar box 2-4 (box 1 doesn't have branch)
-     * In its array named branch_sonar_data
+     * The first challenge is attached by sonar box no. 2-3
+     * It should have code in corresponding actions and have both codes in challenge
      */
     $this->load->library('challenge_lib');
     $result = $this->challenge_lib->get_by_id($this->challenge_id1);
 
-    $this->unit->run($result['branch_sonar_data'] === array('1111','2222','3333'), TRUE, "\$result['branch_sonar_data']", var_export($result['branch_sonar_data'], TRUE));
+    $this->unit->run($result['codes'] === array('1111','2222'), TRUE, "challenge codes should match box2, box3", $result['codes']);
+    $this->unit->run($result['criteria'][0]['codes'] === array('1111'), TRUE, "action code should match box2", $result['criteria'][0]['codes']);
+    $this->unit->run($result['criteria'][0]['sonar_boxes'] === array($this->sonar_box_data2), TRUE, "sonar_box_id should match", $result['criteria'][0]['sonar_boxes']);
+    $this->unit->run($result['criteria'][1]['codes'] === array('2222'), TRUE, "action code should match box3", $result['criteria'][1]['codes']);
+    $this->unit->run($result['criteria'][1]['sonar_boxes'] === array($this->sonar_box_data3), TRUE, "sonar_box_id should match", $result['criteria'][1]['sonar_boxes']);
 
     /*
-     * The second challenge (that's including all branch) should have sonar data of sonar box 2-4 (box 1 doesn't have branch)
-     * In its array named branch_sonar_data
+     * The first challenge is attached by sonar box no. 4
+     * It should have code in corresponding actions and have both codes in challenge
      */
     $this->load->library('challenge_lib');
     $result = $this->challenge_lib->get_by_id($this->challenge_id2);
 
-    $this->unit->run($result['branch_sonar_data'] === array('1111','2222','3333'), TRUE, "\$result['branch_sonar_data']", var_export($result['branch_sonar_data'], TRUE));
+    $this->unit->run($result['codes'] === array('3333'), TRUE, "challenge codes should match box4", $result['codes']);
+    $this->unit->run($result['criteria'][0]['codes'] === array('3333'), TRUE, "action code should match box4", $result['criteria'][0]['codes']);
+    $this->unit->run($result['criteria'][0]['sonar_boxes'] === array($this->sonar_box_data4), TRUE, "sonar_box_id should match", $result['criteria'][0]['sonar_boxes']);
+    $this->unit->run($result['criteria'][1]['codes'] === array(), TRUE, "action code should be empty because it is not matching with any sonar boxes", $result['criteria'][1]['codes']);
+    $this->unit->run($result['criteria'][1]['sonar_boxes'] === array(), TRUE, "sonar_box_id should match", $result['criteria'][1]['sonar_boxes']);
   }
 
   function update_test() {
     /*
-     * Update sonar box 1 by adding branch_id 1
+     * Update sonar box 1 by adding challenge_id 1 and action_data_id 1
      */
     $criteria = array('_id' => new MongoId($this->sonar_box_data1));
     $update = array(
       '$set' => array(
-        'branch_id' => $this->branch_data1['_id'] . ''
+        'challenge_id' => $this->challenge_id1,
+        'action_data_id' => $this->action_data_id_1. ''
       )
     );
     $result = $this->sonar_box_lib->update($criteria, $update);
@@ -257,12 +263,24 @@ class Sonar_box_lib_test extends CI_Controller {
     $this->unit->run($result, TRUE, "\$result", $result);
 
     /*
-     * Update sonar box 3 by changing branch_id to other id
+     * Update sonar box 3 by changing action_data_id to other id
      */
     $criteria = array('_id' => new MongoId($this->sonar_box_data3));
     $update = array(
       '$set' => array(
-        'branch_id' => 'Badbranchid'
+        'action_data_id' => 'Badbranchid'
+      )
+    );
+    $result = $this->sonar_box_lib->update($criteria, $update);
+    $this->unit->run($result, TRUE, "\$result", $result);
+
+    /*
+     * Update sonar box 4 by changing challenge_id to other id
+     */
+    $criteria = array('_id' => new MongoId($this->sonar_box_data4));
+    $update = array(
+      '$set' => array(
+        'challenge_id' => 'Badbranchid'
       )
     );
     $result = $this->sonar_box_lib->update($criteria, $update);
@@ -271,26 +289,33 @@ class Sonar_box_lib_test extends CI_Controller {
 
   function check_challenge_after_editing_sonar_box_test() {
     /*
-     * The first challenge (that's have branch 1-2 in it) should have sonar data of sonar box 1-4
-     * data 0000 should be added
-     * data 1111 should be changed into 0101
-     * and data 2222 should be removed
+     * The first challenge, that was attached with box no. 2-3
+     * box 1 (0000) should be added into first action_data
+     * box 2 (1111) should be changed into 0101
+     * box 3 (2222) should be removed
      */
     $this->load->library('challenge_lib');
     $result = $this->challenge_lib->get_by_id($this->challenge_id1);
 
-    $this->unit->run($result['branch_sonar_data'] === array('0000','0101','3333'), TRUE, "\$result['branch_sonar_data']", var_export($result['branch_sonar_data'], TRUE));
+    $this->unit->run($result['codes'] === array('0101','0000'), TRUE, "challenge codes should match box1, box2, box3", $result['codes']);
+    $this->unit->run($result['criteria'][0]['codes'] === array('0101','0000'), TRUE, "action code should match box2", $result['criteria'][0]['codes']);
+    $this->unit->run($result['criteria'][0]['sonar_boxes'] === array($this->sonar_box_data2, $this->sonar_box_data1), TRUE, "sonar_box_id should match", $result['criteria'][0]['sonar_boxes']);
+    $this->unit->run($result['criteria'][1]['codes'] === array(), TRUE, "action code should match box3", $result['criteria'][1]['codes']);
+    $this->unit->run($result['criteria'][1]['sonar_boxes'] === array(), TRUE, "sonar_box_id should match", $result['criteria'][1]['sonar_boxes']);
 
     /*
-     * The second challenge (that's have branch 1-2 in it) should have sonar data of sonar box 1-4
-     * data 0000 should be added
-     * data 1111 should be changed into 0101
-     * and data 2222 should be removed
+     * The second challenge, that was attached with box no. 4
+     * box 3 (3333) should be removed
      */
     $this->load->library('challenge_lib');
     $result = $this->challenge_lib->get_by_id($this->challenge_id2);
 
-    $this->unit->run($result['branch_sonar_data'] === array('0000','0101','3333'), TRUE, "\$result['branch_sonar_data']", var_export($result['branch_sonar_data'], TRUE));
+    $this->unit->run($result['codes'] === array(), TRUE, "challenge codes should be empty", $result['codes']);
+    $this->unit->run($result['criteria'][0]['codes'] === array(), TRUE, "action code should be empty", $result['criteria'][0]['codes']);
+    $this->unit->run($result['criteria'][0]['sonar_boxes'] === array(), TRUE, "sonar_box_id should match", $result['criteria'][0]['sonar_boxes']);
+    $this->unit->run($result['criteria'][1]['codes'] === array(), TRUE, "action code should be empty because it is not matching with any sonar boxes", $result['criteria'][1]['codes']);
+    $this->unit->run($result['criteria'][1]['sonar_boxes'] === array(), TRUE, "sonar_box_id should match", $result['criteria'][1]['sonar_boxes']);
+
   }
 
   function remove_test() {
@@ -313,22 +338,30 @@ class Sonar_box_lib_test extends CI_Controller {
 
   function check_challenge_after_removing_sonar_box_test() {
     /*
-     * The first challenge (that's have branch 1-2 in it) should have sonar data of sonar box 1
-     * data 0101, 3333 should be removed from branch_sonar_data
+     * The first challenge
+     * data 0101 should be removed
      */
     $this->load->library('challenge_lib');
     $result = $this->challenge_lib->get_by_id($this->challenge_id1);
 
-    $this->unit->run($result['branch_sonar_data'] === array('0000'), TRUE, "\$result['branch_sonar_data']", var_export($result['branch_sonar_data'], TRUE));
+    $this->unit->run($result['codes'] === array('0000'), TRUE, "\$result['codes']", var_export($result['codes'], TRUE));
+    $this->unit->run($result['criteria'][0]['codes'] === array('0000'), TRUE, "action code should match box2", $result['criteria'][0]['codes']);
+    $this->unit->run($result['criteria'][0]['sonar_boxes'] === array($this->sonar_box_data1), TRUE, "sonar_box_id should match", $result['criteria'][0]['sonar_boxes']);
+    $this->unit->run($result['criteria'][1]['codes'] === array(), TRUE, "action code should match box3", $result['criteria'][1]['codes']);
+    $this->unit->run($result['criteria'][1]['sonar_boxes'] === array(), TRUE, "sonar_box_id should match", $result['criteria'][1]['sonar_boxes']);
 
     /*
-     * The second challenge (that's have branch 1-2 in it) should have sonar data of sonar box 1
-     * data 0101, 3333 should be removed from branch_sonar_data
+     * The second challenge
+     * nothing changed
      */
     $this->load->library('challenge_lib');
     $result = $this->challenge_lib->get_by_id($this->challenge_id2);
 
-    $this->unit->run($result['branch_sonar_data'] === array('0000'), TRUE, "\$result['branch_sonar_data']", var_export($result['branch_sonar_data'], TRUE));
+    $this->unit->run($result['codes'] === array(), TRUE, "\$result['codes']", var_export($result['codes'], TRUE));
+    $this->unit->run($result['criteria'][0]['codes'] === array(), TRUE, "action code should be empty", $result['criteria'][0]['codes']);
+    $this->unit->run($result['criteria'][0]['sonar_boxes'] === array(), TRUE, "sonar_box_id should match", $result['criteria'][0]['sonar_boxes']);
+    $this->unit->run($result['criteria'][1]['codes'] === array(), TRUE, "action code should be empty because it is not matching with any sonar boxes", $result['criteria'][1]['codes']);
+    $this->unit->run($result['criteria'][1]['sonar_boxes'] === array(), TRUE, "sonar_box_id should match", $result['criteria'][1]['sonar_boxes']);
   }
 
 }

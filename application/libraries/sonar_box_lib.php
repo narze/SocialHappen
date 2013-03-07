@@ -8,8 +8,8 @@ class Sonar_box_lib {
 
   function add($data) {
     if($id = $this->CI->sonar_box_model->add($data)) {
-      if(isset($data['branch_id'])) {
-        $this->update_challenges_sonar_data($data['branch_id']);
+      if(isset($data['challenge_id'])) {
+        $this->update_challenges_sonar_data($data['challenge_id']);
       }
       return $id;
     }
@@ -57,14 +57,14 @@ class Sonar_box_lib {
 
     $result = $this->CI->sonar_box_model->update($criteria, $data);
 
-    // Update challenges that bind to the box with old branch id
-    if(isset($sonar_box['branch_id']) && $sonar_box['branch_id']) {
-      $this->update_challenges_sonar_data($sonar_box['branch_id']);
+    // Update the old challenge
+    if(isset($sonar_box['challenge_id']) && $sonar_box['challenge_id']) {
+      $this->update_challenges_sonar_data($sonar_box['challenge_id']);
     }
 
-    // Update challenges that bind to the box with new branch id
-    if(isset($data['$set']['branch_id']) && $data['$set']['branch_id']) {
-      $this->update_challenges_sonar_data($data['$set']['branch_id']);
+    // Update the new challenge
+    if(isset($data['$set']['challenge_id']) && $data['$set']['challenge_id']) {
+      $this->update_challenges_sonar_data($data['$set']['challenge_id']);
     }
 
     return $result;
@@ -77,8 +77,8 @@ class Sonar_box_lib {
 
     if($result && count($result) > 0){
       foreach ($result as $sonar_box) {
-        if(isset($sonar_box['branch_id'])) {
-          $this->update_challenges_sonar_data($sonar_box['branch_id']);
+        if(isset($sonar_box['challenge_id'])) {
+          $this->update_challenges_sonar_data($sonar_box['challenge_id']);
         }
       }
     }
@@ -86,27 +86,10 @@ class Sonar_box_lib {
     return $result;
   }
 
-  function update_challenges_sonar_data($branch_id){
+  function update_challenges_sonar_data($challenge_id){
     $this->CI->load->library('challenge_lib');
 
-    // echo "update sonar_box: " . $sonar_box_id . '<br>';
-
-    $criteria = array(
-      '$or' => array(
-        array('all_branch' => TRUE),
-        array('branches' => $branch_id)
-      )
-    );
-
-    $challenges = $this->CI->challenge_lib->get($criteria);
-
-    // echo 'got '.count($challenges).' challenge to update<br>';
-
-    if($challenges && count($challenges) > 0){
-      foreach ($challenges as $challenge) {
-        $this->CI->challenge_lib->generate_sonar_data('' . $challenge['_id']);
-      }
-    }
+    $this->CI->challenge_lib->generate_sonars_from_action_data_ids($challenge_id);
   }
 
   function get_sonar_box_title_like($title = NULL) {

@@ -74,27 +74,6 @@ class Challenge_structure_test extends CI_Controller {
 	}
 
 	function _setup() {
-		# add sonar_box
-		$this->load->library('sonar_box_lib');
-
-		$sonar_box = array(
-			'company_id' => 1,
-			'branch_id' => NULL,
-			'id' => 1,
-			'title' => 'Sonar Box',
-			'data' => "0123",
-		);
-		$this->sonar_box_id = $this->sonar_box_lib->add($sonar_box);
-
-		$sonar_box_2 = array(
-			'company_id' => 1,
-			'branch_id' => NULL,
-			'id' => 2,
-			'title' => 'Sonar Box 2',
-			'data' => "3210",
-		);
-		$this->sonar_box_id_2 = $this->sonar_box_lib->add($sonar_box_2);
-
 		# add branch
     $this->load->library('branch_lib');
 
@@ -174,7 +153,7 @@ class Challenge_structure_test extends CI_Controller {
 
 		$model = $old_challenge_model;
 
-		$model['criteria'][0]['sonar_boxes'] = array($this->sonar_box_id);
+		$model['criteria'][0]['sonar_boxes'] = array();
 		// $model['criteria'][0]['codes'] = array(); // Codes should be derived from sonar_boxes
 		$model['criteria'][0]['branches'] = array($this->branch_id);
 		// $model['criteria'][0]['locations'] = array(); // Locations should be derived from branches
@@ -186,7 +165,35 @@ class Challenge_structure_test extends CI_Controller {
 		$this->unit->run($model['criteria'], TRUE, "", $model['criteria']);
 		$params = array('model' => json_encode($model));
 
-		$result = $this->postAPI('apiv3', 'saveChallenge', $params);
+		$save_challenge_result = $this->postAPI('apiv3', 'saveChallenge', $params);
+
+		$this->load->library('challenge_lib');
+		$result = $this->challenge_lib->get(array());
+		$this->challenge_id = $result[0]['_id'];
+		$this->action_data_id = $result[0]['criteria'][0]['action_data_id'];
+
+		# add sonar_box
+		$this->load->library('sonar_box_lib');
+
+		$sonar_box = array(
+			'company_id' => 1,
+			'challenge_id' => $this->challenge_id."",
+			'action_data_id' => $this->action_data_id,
+			'id' => 1,
+			'title' => 'Sonar Box',
+			'data' => "0123",
+		);
+		$this->sonar_box_id = $this->sonar_box_lib->add($sonar_box);
+
+		$sonar_box_2 = array(
+			'company_id' => 1,
+			'challenge_id' => NULL,
+			'action_data_id' => NULL,
+			'id' => 2,
+			'title' => 'Sonar Box 2',
+			'data' => "3210",
+		);
+		$this->sonar_box_id_2 = $this->sonar_box_lib->add($sonar_box_2);
 	}
 
   function challenge_should_get_locations_and_codes_from_actions() {
@@ -196,7 +203,6 @@ class Challenge_structure_test extends CI_Controller {
   	$this->load->library('challenge_lib');
   	$result = $this->challenge_lib->get(array());
   	$this->unit->run(count($result) === 1, TRUE, "count(\$result) should be 1", count($result));
-  	$this->challenge_id = $result[0]['_id'];
 
   	# it should have 2 sonar_box
   	$this->load->library('sonar_box_lib');
@@ -285,16 +291,24 @@ class Challenge_structure_test extends CI_Controller {
 
   	## sonar_box
   	# add more sonar box into challenge action
-  	$this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.sonar_boxes' => array($this->sonar_box_id, $this->sonar_box_id_2))));
+  	// $this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.sonar_boxes' => array($this->sonar_box_id, $this->sonar_box_id_2))));
+  	# add by updating the sonar box itself
+  	$sonar_box_update = array(
+  		'$set' => array(
+  			'challenge_id' => $this->challenge_id."",
+  			'action_data_id' => $this->action_data_id
+  		)
+  	);
+  	$this->sonar_box_lib->update(array('_id' => new MongoId($this->sonar_box_id_2)), $sonar_box_update);
 
   	# codes should be updated
   	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
   	$this->unit->run(count($challenge['criteria'][0]['codes']) === 2, TRUE, "challenge's action should have 2 codes", count($challenge['criteria'][0]['codes']));
   	$this->unit->run(count($challenge['codes']) === 2, TRUE, "challenge should have 2 codes as well", count($challenge['codes']));
-  	$this->unit->run($challenge['codes'][0] === "0123", TRUE, "code should match", $challenge['codes'][0]);
-  	$this->unit->run($challenge['codes'][1] === "3210", TRUE, "code should match", $challenge['codes'][1]);
-  	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
-  	$this->unit->run($challenge['criteria'][0]['codes'][1] === "3210", TRUE, "code should match", $challenge['criteria'][0]['codes'][1]);
+  	$this->unit->run($challenge['codes'][0] === "3210", TRUE, "code should match", $challenge['codes'][0]);
+  	$this->unit->run($challenge['codes'][1] === "0123", TRUE, "code should match", $challenge['codes'][1]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][0] === "3210", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][1] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][1]);
 
   	# edit sonar box codes
   	$this->sonar_box_lib->update(array('_id' => new MongoId($this->sonar_box_id_2)), array('data' => "0000"));
@@ -303,13 +317,21 @@ class Challenge_structure_test extends CI_Controller {
   	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
   	$this->unit->run(count($challenge['criteria'][0]['codes']) === 2, TRUE, "challenge's action should have 2 codes", count($challenge['criteria'][0]['codes']));
   	$this->unit->run(count($challenge['codes']) === 2, TRUE, "challenge should have 2 codes as well", count($challenge['codes']));
-  	$this->unit->run($challenge['codes'][0] === "0123", TRUE, "code should match", $challenge['codes'][0]);
-  	$this->unit->run($challenge['codes'][1] === "0000", TRUE, "code should match", $challenge['codes'][1]);
-  	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
-  	$this->unit->run($challenge['criteria'][0]['codes'][1] === "0000", TRUE, "code should match", $challenge['criteria'][0]['codes'][1]);
+  	$this->unit->run($challenge['codes'][0] === "0000", TRUE, "code should match", $challenge['codes'][0]);
+  	$this->unit->run($challenge['codes'][1] === "0123", TRUE, "code should match", $challenge['codes'][1]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0000", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
+  	$this->unit->run($challenge['criteria'][0]['codes'][1] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][1]);
 
   	# remove sonar box 1 from challenge
-  	$this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.sonar_boxes' => array($this->sonar_box_id_2))));
+  	// $this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.sonar_boxes' => array($this->sonar_box_id_2))));
+  	# remove by updating the sonar box itself
+  	$sonar_box_update = array(
+  		'$set' => array(
+  			'challenge_id' => NULL,
+  			'action_data_id' => NULL,
+  		)
+  	);
+  	$this->sonar_box_lib->update(array('_id' => new MongoId($this->sonar_box_id)), $sonar_box_update);
 
   	# codes should be updated
   	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
