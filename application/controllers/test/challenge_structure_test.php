@@ -290,9 +290,7 @@ class Challenge_structure_test extends CI_Controller {
   	$this->unit->run(count($challenge['locations']) === 0, TRUE, "challenge should have 0 location as well", count($challenge['locations']));
 
   	## sonar_box
-  	# add more sonar box into challenge action
-  	// $this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.sonar_boxes' => array($this->sonar_box_id, $this->sonar_box_id_2))));
-  	# add by updating the sonar box itself
+  	# add more sonar box into challenge action by updating the sonar box itself
   	$sonar_box_update = array(
   		'$set' => array(
   			'challenge_id' => $this->challenge_id."",
@@ -322,9 +320,7 @@ class Challenge_structure_test extends CI_Controller {
   	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0000", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
   	$this->unit->run($challenge['criteria'][0]['codes'][1] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][1]);
 
-  	# remove sonar box 1 from challenge
-  	// $this->challenge_lib->update(array('_id' => $this->challenge_id), array('$set' => array('criteria.0.sonar_boxes' => array($this->sonar_box_id_2))));
-  	# remove by updating the sonar box itself
+  	# remove sonar box 1 from challenge by updating the sonar box itself
   	$sonar_box_update = array(
   		'$set' => array(
   			'challenge_id' => NULL,
