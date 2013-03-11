@@ -841,7 +841,6 @@ class Challenge_lib {
     if($max_dist > 0) {
       $query['locations']['$maxDistance'] = floatval($max_dist);
     }
-
     $challenges = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
 
     if($and_get_without_location_specified) {
@@ -852,7 +851,7 @@ class Challenge_lib {
       $challenges = array_merge($challenges, $challenge_at_0_0);
 
       $query = array(
-        'locations' => array('$exists' => FALSE)
+        '$or' => array(array('locations' => array('$exists' => FALSE), 'locations' => array('$size' => 0)))
       );
       $challenges_without_location = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
       $challenges = array_merge($challenges, $challenges_without_location);

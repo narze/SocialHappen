@@ -453,6 +453,41 @@ class Apiv4_test extends CI_Controller {
 	  $this->action_data_id3 = $this->action_data_lib->add_action_data(203, array());
 	  $this->action_data_id4 = $this->action_data_lib->add_action_data(204, array());
 
+		# add branch
+    $this->load->library('branch_lib');
+
+		$branch = array(
+      'company_id' => 1,
+      'title' => 'branch 1',
+      'location' => array(0.001, 0.002),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+    $this->branch = $this->branch_lib->add($branch);
+    $this->branch_id = $this->branch['_id'];
+
+		$branch_2 = array(
+      'company_id' => 1,
+      'title' => 'branch 2',
+      'location' => array(0.002, -0.004),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+    $this->branch_2 = $this->branch_lib->add($branch_2);
+    $this->branch_id_2 = $this->branch_2['_id'];
+
+		$branch_3 = array(
+      'company_id' => 1,
+      'title' => 'branch 3',
+      'location' => array(-0.003, 0.001),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+    $this->branch_3 = $this->branch_lib->add($branch_3);
+    $this->branch_id_3 = $this->branch_3['_id'];
 
 	  //Add challenges
 	  $this->challenge = array(
@@ -491,10 +526,11 @@ class Apiv4_test extends CI_Controller {
 	      array(
 	        'name' => 'C3',
 	        'query' => array('page_id' => 1, 'app_id'=>2, 'action_id'=>2),
-	        'count' => 3
+	        'count' => 3,
+	        'branches' => array($this->branch_id)
 	      )
 	    ),
-	    'location' => array(0.001, 0.002)
+	    // 'locations' => array(array(0.001, 0.002))
 	  );
 
 	  $this->challenge3 = array(
@@ -513,11 +549,12 @@ class Apiv4_test extends CI_Controller {
 	        'count' => 2,
 	        'is_platform_action' => TRUE,
 	        'action_data_id' => $this->action_data_id,
-	        'action_data' => array('action_id' => $this->action_data_id)
+	        'action_data' => array('action_id' => $this->action_data_id),
+	        'branches' => array($this->branch_id_2)
 	      )
 	    ),
 	    'reward_items' => array(array('_id' => new MongoId($this->reward_item_id2))),
-	    'location' => array(0.002, -0.004)
+	    // 'locations' => array(array(0.002, -0.004))
 	  );
 
 	  $this->challenge4 = array(
@@ -536,12 +573,13 @@ class Apiv4_test extends CI_Controller {
 	        'count' => 1,
 	        'is_platform_action' => TRUE,
 	        'action_data_id' => $this->action_data_id3,
-	        'action_data' => array('action_id' => $this->action_data_id3)
+	        'action_data' => array('action_id' => $this->action_data_id3),
+	        'branches' => array($this->branch_id_3)
 	      )
 	    ),
 	    'repeat' => 1,
 	    'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))),
-	    'location' => array(-0.003, 0.001)
+	    // 'locations' => array(array(-0.003, 0.001))
 	  );
 
 	  $this->challenge5 = array(
@@ -560,12 +598,13 @@ class Apiv4_test extends CI_Controller {
 	        'count' => 1,
 	        'is_platform_action' => TRUE,
 	        'action_data_id' => $this->action_data_id3,
-	        'action_data' => array('action_id' => $this->action_data_id3)
+	        'action_data' => array('action_id' => $this->action_data_id3),
+	        'branches' => array($this->branch_id_3)
 	      )
 	    ),
 	    'repeat' => 1,
 	    'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))), //54 points
-	    'location' => array(-0.003, 0.001),
+	    // 'locations' => array(array(-0.003, 0.001)),
 	    'done_count_max' => 54 //can play 1 time
 	  );
 
