@@ -797,20 +797,20 @@ class Apiv4 extends REST_Controller {
 
     //find action data
     $this->load->model('action_data_model');
-    $action_data_id_0 = $challenge['criteria'][0]['action_data_id'];
+    $default_action_data_id = $challenge['criteria'][0]['action_data_id'];
     $nth_action = 0;
 
     if($action_data_id) {
       foreach ($challenge['criteria'] as $nth => $action) {
         if($action['action_data_id'] === $action_data_id) {
-          $action_data_id_0 = $action_data_id;
+          $default_action_data_id = $action_data_id;
           $nth_action = $nth;
           $action_id = $action['query']['action_id'];
         }
       }
     }
 
-    if(!$action_data = $this->action_data_model->getOne(array('_id' => new MongoId($action_data_id_0)))) { //@TODO - get action data for all criterias
+    if(!$action_data = $this->action_data_model->getOne(array('_id' => new MongoId($default_action_data_id)))) { //@TODO - get action data for all criterias
       return $this->error(print_r($challenge, true));
     }
 
@@ -865,7 +865,7 @@ class Apiv4 extends REST_Controller {
         'object' => NULL,
         'objecti' => $challenge['hash'],
         'image' => $challenge['detail']['image'],
-        'action_data_id' => $action_data_id_0
+        'action_data_id' => $default_action_data_id
       );
 
       if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
@@ -877,7 +877,7 @@ class Apiv4 extends REST_Controller {
       if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
         $company_id,
         $action_id,
-        $action_data_id_0,
+        $default_action_data_id,
         $challenge_id,
         $user_id,
         $user_data,
@@ -922,7 +922,7 @@ class Apiv4 extends REST_Controller {
 
         if($audit_count < $count_required) {
           $match_all_criteria_today = FALSE;
-        } else if($criteria['action_data_id'] === $action_data_id_0) {
+        } else if($criteria['action_data_id'] === $default_action_data_id) {
           $data['action_completed'] = TRUE;
           log_message('error', 'action completed');
           if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('challenge_progress.'.$challenge_id.'.action_data' => $action_data_id)))) {
@@ -966,7 +966,7 @@ class Apiv4 extends REST_Controller {
       if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
         $company_id,
         $action_id,
-        $action_data_id_0,
+        $default_action_data_id,
         $challenge_id,
         $user_id,
         $user_data
