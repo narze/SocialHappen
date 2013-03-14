@@ -814,6 +814,13 @@ class Apiv4 extends REST_Controller {
       return $this->error(print_r($challenge, true));
     }
 
+    //Action data check if exists
+    if($action_data_id) {
+      if($this->user_mongo_model->getOne(array('user_id' => $user_id, 'challenge_progress.'.$challenge_id.'.action_data' => $action_data_id))) {
+        return $this->error('Action done already', 2);
+      }
+    }
+
     //Challenge check
     $match_all_criteria = FALSE;
     $match_all_criteria_today = FALSE;

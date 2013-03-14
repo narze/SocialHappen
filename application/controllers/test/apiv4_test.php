@@ -1676,6 +1676,35 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($user['challenge_progress'][$this->challenge_id6]['action_data'] === array($params['action_data_id']), TRUE, "", $user['challenge_progress'][$this->challenge_id6]['action_data']);
   	$this->unit->run(isset($user['daily_challenge_completed'][$this->challenge_id6]), FALSE, "isset(\$user['daily_challenge_completed'][$this->challenge_id6])", isset($user['daily_challenge_completed'][$this->challenge_id6]));
 
+  	# do the challenge's first action again
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'challenge_id' => $this->challenge_id6,
+  		'action_data_id' => $this->action_data_id_6_1,
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['code'] === 2, TRUE, "code should be 2 (action already done)", $result['code']);
+
+  	//check challenge action progress (should not be changed)
+  	$result = $this->get('challenges', array('user_id' => $this->user_id,'token' => $this->token2,'challenge_id' => $this->challenge_id6));
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id6, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run($result['data'][0]['criteria'][0]['action_completed'] === TRUE, TRUE, "first action should be completed", $result['data'][0]['criteria'][0]['action_completed']);
+  	$this->unit->run($result['data'][0]['criteria'][1]['action_completed'] === FALSE, TRUE, "second action should not be completed yet", $result['data'][0]['criteria'][1]['action_completed']);
+
+  	// User check (should not be changed)
+  	$this->load->model('user_mongo_model');
+  	$user = $this->user_mongo_model->get_user($this->user_id);
+  	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
+  	$this->unit->run(count($user['challenge_progress'][$this->challenge_id6]['action_data']) === 1, TRUE, "action_data of challenge progress should be 1 (of 2)", count($user['challenge_progress'][$this->challenge_id6]['action_data']));
+  	$this->unit->run($user['challenge_progress'][$this->challenge_id6]['action_data'] === array($params['action_data_id']), TRUE, "", $user['challenge_progress'][$this->challenge_id6]['action_data']);
+  	$this->unit->run(isset($user['daily_challenge_completed'][$this->challenge_id6]), FALSE, "isset(\$user['daily_challenge_completed'][$this->challenge_id6])", isset($user['daily_challenge_completed'][$this->challenge_id6]));
+
  		# do the challenge's second action
  		$params = array(
   		'user_id' => $this->user_id,
