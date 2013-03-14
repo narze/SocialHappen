@@ -20,7 +20,7 @@ class Challenge_lib {
         $this->generate_locations($id);
         $this->generate_locations_from_actions($id);
         // $this->generate_sonar_data($id);
-        $this->generate_sonars_from_action_data_ids($id);
+        $this->generate_codes($id);
         return $id;
       }
     }
@@ -87,7 +87,7 @@ class Challenge_lib {
     $this->generate_locations($challenge_id);
     $this->generate_locations_from_actions($challenge_id);
     // $this->generate_sonar_data($challenge_id);
-    $this->generate_sonars_from_action_data_ids($challenge_id);
+    $this->generate_codes($challenge_id);
 
     return $result;
   }
@@ -971,26 +971,44 @@ class Challenge_lib {
     return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
   }
 
-  function generate_sonars_from_action_data_ids($challenge_id) {
+  function generate_codes($challenge_id) {
     if(!$challenge = $this->get_by_id($challenge_id)){
       return FALSE;
     }
 
     $this->CI->load->library('sonar_box_lib');
+
     $challenge['codes'] = array();
 
     foreach($challenge['criteria'] as &$action) {
+      // add codes from sonar_boxes
       $action['codes'] = array();
-      $action['sonar_boxes'] = array();
-      if($action_data_id = issetor($action['action_data_id'])) {
-        if($sonar_boxes = $this->CI->sonar_box_lib->get(array('challenge_id' => $challenge_id, 'action_data_id' => $action_data_id))) {
-          foreach($sonar_boxes as $sonar_box) {
-            if(isset($sonar_box['data'])) {
-              $action['sonar_boxes'][] = $sonar_box['_id'].'';
+      if(isset($action['sonar_boxes']) && $action['sonar_boxes']) {
+        foreach($action['sonar_boxes'] as $key => $sonar_box_id) {
+          if($sonar_box = $this->CI->sonar_box_lib->get_one(array('_id' => new MongoId($sonar_box_id)))) {
+            if(issetor($sonar_box['data'])) {
               $action['codes'][] = $sonar_box['data'];
               $challenge['codes'][] = $sonar_box['data'];
             }
+          } else {
+            unset($action['sonar_boxes'][$key]);
           }
+        }
+      }
+
+      # update sonar boxes
+      $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($action['sonar_boxes'], $challenge_id, $action['action_data_id']);
+
+      # find removed sonar box and remove the reference to this action
+      $filter_sonar_box_ids = $action['sonar_boxes'];
+      foreach($filter_sonar_box_ids as &$sonar_box_id) {
+        $sonar_box_id = new MongoId($sonar_box_id);
+      }
+
+      if($action_data_id = issetor($action['action_data_id'])) {
+        if($sonar_boxes_to_remove_reference = $this->CI->sonar_box_lib->get(array('_id' => array('$nin' => $filter_sonar_box_ids), 'challenge_id' => $challenge_id, 'action_data_id' => $action_data_id))) {
+          $sonar_boxes_to_remove_reference = array_map(function($sonar_box) { return $sonar_box['_id'].''; }, $sonar_boxes_to_remove_reference);
+          $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($sonar_boxes_to_remove_reference, NULL, NULL);
         }
       }
     }

@@ -89,7 +89,7 @@ class Sonar_box_lib {
   function update_challenges_sonar_data($challenge_id){
     $this->CI->load->library('challenge_lib');
 
-    $this->CI->challenge_lib->generate_sonars_from_action_data_ids($challenge_id);
+    $this->CI->challenge_lib->generate_codes($challenge_id);
   }
 
   function get_sonar_box_title_like($title = NULL) {
@@ -98,5 +98,17 @@ class Sonar_box_lib {
     $criteria = array('title' => array('$regex' => '\b'.$title, '$options' => 'i'));
 
     return $this->CI->sonar_box_model->get($criteria);
+  }
+
+  function update_sonar_boxes_challenge_and_action_data($sonar_box_ids = array(), $challenge_id = NULL, $action_data_id = NULL) {
+    if(!$sonar_box_ids) {
+      return FALSE;
+    }
+
+    foreach($sonar_box_ids as &$sonar_box_id) {
+      $sonar_box_id = new MongoId($sonar_box_id);
+    }
+
+    return $this->CI->sonar_box_model->update(array('_id' => array('$in' => $sonar_box_ids)), array('$set' => array('challenge_id' => $challenge_id, 'action_data_id' => $action_data_id)), array('multiple' => 1));
   }
 }
