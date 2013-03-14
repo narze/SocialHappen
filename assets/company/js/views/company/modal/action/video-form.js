@@ -38,7 +38,7 @@ define([
       var code = $.trim(this.$('input.code').val());
       this.$('input.code').val('');
       if(code){
-        this.$('ul.codes').append($('<li>'+code+' <a href="#" class="remove-code">remove</a></li>'));
+        this.$('ul.codes').append($('<li data-code="'+code+'">'+code+' <a href="#" class="remove-code">remove</a></li>'));
       }
     },
 
@@ -71,6 +71,11 @@ define([
       e.preventDefault();
 
       this.options.action.name = $('input.name', this.el).val();
+      this.options.action.description = this.$('textarea.description').val();
+      this.options.action.codes = _.map($('ul.codes li'), function(code){
+        return $(code).attr('data-code');
+      }) || [];
+
 
       var criteria = this.model.get('criteria');
       this.model.set('criteria', criteria).trigger('change');
