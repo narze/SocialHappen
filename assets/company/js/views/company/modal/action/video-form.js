@@ -11,7 +11,9 @@ define([
     events: {
       'click button.save': 'saveEdit',
       'click button.generate-sonar-data': 'generateSonarData',
-      'click button.cancel': 'cancelEdit'
+      'click button.cancel': 'cancelEdit',
+      'click button.new-code': 'onAddNewCode',
+      'click a.remove-code': 'onRemoveCode'
     },
 
     initialize: function(){
@@ -30,6 +32,19 @@ define([
 
     showEdit: function(){
       $(this.el).modal('show');
+    },
+
+    onAddNewCode: function(e){
+      var code = $.trim(this.$('input.code').val());
+      this.$('input.code').val('');
+      if(code){
+        this.$('ul.codes').append($('<li>'+code+' <a href="#" class="remove-code">remove</a></li>'));
+      }
+    },
+
+    onRemoveCode: function(e){
+      e.preventDefault();
+      $(e.currentTarget).parent().remove();
     },
 
     generateSonarData: function() {

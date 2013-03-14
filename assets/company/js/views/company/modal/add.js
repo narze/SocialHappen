@@ -42,7 +42,6 @@ define([
       'keyup input.latitude': 'onTypeLatitude',
       'keyup input.longitude': 'onTypeLongitude',
       'keyup input.done-count-max': 'onTypeDoneCountMax',
-      'keyup input.sonar-frequency': 'onTypeSonarFrequency',
       'keyup textarea.challenge-description': 'onTypeChallengeDescription',
       'click button.upload-image-submit': 'uploadImage',
       'change input.all-branch-enable': 'toggleAllBranch',
@@ -295,12 +294,6 @@ define([
       this.model.set('done_count_max', done_count_max).trigger('change');
     },
 
-    onTypeSonarFrequency: function(e){
-      var sonar_frequency = $('input.sonar-frequency', this.el).val();
-      console.log('sonar frequency change', sonar_frequency);
-      this.model.set('sonar_frequency', sonar_frequency).trigger('change');
-    },
-
     showEditName: function(){
       $('h3.edit-name', this.el).hide();
       $('div.edit-name', this.el).show();
@@ -503,6 +496,11 @@ define([
         },
         count: 1,
         name: 'Video',
+        description: '',
+        codes: [],
+        locations: [],
+        branches: [],
+        all_branches : false,
         action_data: {
           data: {
 
