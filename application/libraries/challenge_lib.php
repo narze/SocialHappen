@@ -996,19 +996,21 @@ class Challenge_lib {
         }
       }
 
-      # update sonar boxes
-      $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($action['sonar_boxes'], $challenge_id, $action['action_data_id']);
+      if(isset($action['sonar_boxes']) && is_array($action['sonar_boxes'])) {
+        # update sonar boxes
+        $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($action['sonar_boxes'], $challenge_id, $action['action_data_id']);
 
-      # find removed sonar box and remove the reference to this action
-      $filter_sonar_box_ids = $action['sonar_boxes'];
-      foreach($filter_sonar_box_ids as &$sonar_box_id) {
-        $sonar_box_id = new MongoId($sonar_box_id);
-      }
+        # find removed sonar box and remove the reference to this action
+        $filter_sonar_box_ids = $action['sonar_boxes'];
+        foreach($filter_sonar_box_ids as &$sonar_box_id) {
+          $sonar_box_id = new MongoId($sonar_box_id);
+        }
 
-      if($action_data_id = issetor($action['action_data_id'])) {
-        if($sonar_boxes_to_remove_reference = $this->CI->sonar_box_lib->get(array('_id' => array('$nin' => $filter_sonar_box_ids), 'challenge_id' => $challenge_id, 'action_data_id' => $action_data_id))) {
-          $sonar_boxes_to_remove_reference = array_map(function($sonar_box) { return $sonar_box['_id'].''; }, $sonar_boxes_to_remove_reference);
-          $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($sonar_boxes_to_remove_reference, NULL, NULL);
+        if($action_data_id = issetor($action['action_data_id'])) {
+          if($sonar_boxes_to_remove_reference = $this->CI->sonar_box_lib->get(array('_id' => array('$nin' => $filter_sonar_box_ids), 'challenge_id' => $challenge_id, 'action_data_id' => $action_data_id))) {
+            $sonar_boxes_to_remove_reference = array_map(function($sonar_box) { return $sonar_box['_id'].''; }, $sonar_boxes_to_remove_reference);
+            $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($sonar_boxes_to_remove_reference, NULL, NULL);
+          }
         }
       }
     }
