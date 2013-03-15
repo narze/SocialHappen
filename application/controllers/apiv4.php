@@ -1076,6 +1076,10 @@ class Apiv4 extends REST_Controller {
     $data['challenge_completed'] = FALSE;
     $data['reward_items'] = NULL;
 
+    //get company
+    $this->load->model('company_model');
+    $data['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
+
     //3.3 if match all ...
     // 1 add into 'completed'
     // 2 add into user
@@ -1245,10 +1249,6 @@ class Apiv4 extends REST_Controller {
         }
       }
 
-      //get company
-      $this->load->model('company_model');
-      $data['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
-
       if($reward_points !== 0) {
         //Add user platform points
         $user_update = array(
@@ -1304,7 +1304,6 @@ class Apiv4 extends REST_Controller {
       }
     }
 
-    $data['temp'] = $action_data_id;
     return $this->success($data);
   }
 
