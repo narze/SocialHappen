@@ -13,8 +13,11 @@ define([
       'click button.save': 'saveEdit',
       'click button.generate-sonar-data': 'generateSonarData',
       'click button.cancel': 'cancelEdit',
+      'keyup input.google-maps-link': 'useGoogleMapsLink',
       'click button.new-code': 'onAddNewCode',
-      'click a.remove-code': 'onRemoveCode'
+      'click a.remove-code': 'onRemoveCode',
+      'click button.new-location': 'onAddNewLocation',
+      'click a.remove-location': 'onRemoveLocation'
     },
 
     initialize: function(){
@@ -39,6 +42,66 @@ define([
 
     showEdit: function(){
       $(this.el).modal('show');
+    },
+
+    useGoogleMapsLink: function(e) {
+      e.preventDefault();
+
+      var link = this.$('input.google-maps-link').val()
+        , latlng = getParameterByName(link, 'q').split(',')
+        , lat = latlng[0]
+        , lng = latlng[1]
+
+      if(!lat || !lng) {
+        latlng = getParameterByName(link, 'll').split(',')
+        lat = latlng[0]
+        lng = latlng[1]
+      }
+
+      if(!lat || !lng) {
+        latlng = getParameterByName(link, 'sll').split(',')
+        lat = latlng[0]
+        lng = latlng[1]
+      }
+
+      if(lat && lng) {
+        this.$('input.lat').val(lat)
+        this.$('input.lng').val(lng)
+        // this.viewGoogleMaps(e)
+      }
+
+      function getParameterByName(string, name)
+      {
+        string = "?" + string.split('?')[1];
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(string);
+        if(results === null)
+          return "";
+        else
+          return decodeURIComponent(results[1].replace(/\+/g, " "));
+      }
+    },
+
+    onAddNewLocation: function(e){
+      var lat = $.trim(this.$('input.lat').val());
+      var lng = $.trim(this.$('input.lng').val());
+
+      this.$('input.lat').val('');
+      this.$('input.lng').val('');
+      this.$('input.google-maps-link').val('');
+
+      console.log('add location ', lat, lng);
+
+      if(lat && lng){
+        this.$('ul.locations').append($('<li data-lat="'+lat+'" data-lng="'+lng+'">'+lat+', '+lng+' <a href="#" class="remove-location">remove</a></li>'));
+      }
+    },
+
+    onRemoveLocation: function(e){
+      e.preventDefault();
+      $(e.currentTarget).parent().remove();
     },
 
     onAddNewCode: function(e){
@@ -86,6 +149,12 @@ define([
 
       this.options.action.codes = _.map(this.$('select.select-device option:selected'), function(code){
         return $(code).attr('data-data');
+      }) || [];
+
+      this.options.action.locations = _.map($('ul.locations li'), function(code){
+        var lat = $(code).attr('data-lat');
+        var lng = $(code).attr('data-lng');
+        return [lng, lat];
       }) || [];
 
       var criteria = this.model.get('criteria');

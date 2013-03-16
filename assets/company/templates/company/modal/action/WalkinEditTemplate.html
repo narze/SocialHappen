@@ -50,6 +50,33 @@
       </ul>
     </div>
   </div>
+
+  <div class="control-group">
+    <label><h6>Locations:</h6></label>
+    <div class="controls form-inline">
+      <input type="text" class="lat" value="" placeholder="latitude..."/>
+      <input type="text" class="lng" value="" placeholder="longitude..."/>
+      <button class="btn new-location" type="button">Add</button>
+    </div>
+    <div class="row-fluid" style="margin-top:4px;">
+      <div class="form-inline">
+        <label for="google-maps-link">
+          <h6>Or Use Google Maps Link:</h6>
+        </label>
+        <input type="text" class="google-maps-link" placeholder="paste google maps link here...">
+      </div>
+    </div>
+    <div class="row-fluid">
+      <ul class="locations">
+        <% _.each(locations, function(location){ %>
+          <li data-lat="<%- location[1] %>" data-lng="<%- location[0] %>">
+            <%- location[1] %>, <%- location[0] %>
+            <a href="#" class="remove-location">remove</a>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
 </div>
 <div class="modal-footer">
   <button class="save btn btn-primary" data-dismiss="modal">Update Action</button>
