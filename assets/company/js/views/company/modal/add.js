@@ -465,6 +465,12 @@ define([
         },
         count: 1,
         name: 'Walkin',
+        description: '',
+        codes: [],
+        locations: [],
+        branches: [],
+        sonar_boxes: [],
+        all_branches : false,
         action_data: {
           data: {
 

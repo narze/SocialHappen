@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/company/modal/action/WalkinEditTemplate.html'
-], function($, _, Backbone, walkinEditTemplate){
+  'text!templates/company/modal/action/WalkinEditTemplate.html',
+  'chosen'
+], function($, _, Backbone, walkinEditTemplate, chosen){
   var WalkinFormView = Backbone.View.extend({
 
     walkinEditTemplate: _.template(walkinEditTemplate),
@@ -11,7 +12,9 @@ define([
     events: {
       'click button.save': 'saveEdit',
       'click button.generate-sonar-data': 'generateSonarData',
-      'click button.cancel': 'cancelEdit'
+      'click button.cancel': 'cancelEdit',
+      'click button.new-code': 'onAddNewCode',
+      'click a.remove-code': 'onRemoveCode'
     },
 
     initialize: function(){
@@ -20,16 +23,35 @@ define([
 
     render: function () {
       var data = this.options.action;
-      data.sonar_code = this.model.get('sonar_frequency');
-      branch_sonar_data = this.model.get('branch_sonar_data') || []
-      data.sonar_code = (data.sonar_code ? [data.sonar_code] : []).concat(branch_sonar_data).join()
+
+      data.deviceList = sandbox.collections.deviceCollection.toJSON();
 
       $(this.el).html(this.walkinEditTemplate(data));
+
+      this.$('select.select-device').val(data.sonar_boxes);
+
+      setTimeout(function(){
+        $('.select-device.chzn-select').chosen();
+      }, 100);
+
       return this;
     },
 
     showEdit: function(){
       $(this.el).modal('show');
+    },
+
+    onAddNewCode: function(e){
+      var code = $.trim(this.$('input.code').val());
+      this.$('input.code').val('');
+      if(code){
+        this.$('ul.codes').append($('<li data-code="'+code+'">'+code+' <a href="#" class="remove-code">remove</a></li>'));
+      }
+    },
+
+    onRemoveCode: function(e){
+      e.preventDefault();
+      $(e.currentTarget).parent().remove();
     },
 
     generateSonarData: function() {
@@ -56,10 +78,18 @@ define([
       e.preventDefault();
 
       this.options.action.name = $('input.name', this.el).val();
+      this.options.action.description = this.$('textarea.description').val();
+
+      var devices = this.$('select.select-device').val();
+
+      this.options.action.sonar_boxes = devices;
+
+      this.options.action.codes = _.map(this.$('select.select-device option:selected'), function(code){
+        return $(code).attr('data-data');
+      }) || [];
 
       var criteria = this.model.get('criteria');
       this.model.set('criteria', criteria).trigger('change');
-      this.model.set('sonar_frequency', $('.sonar-frequency', this.el).val()).trigger('change');
       if(this.options.save){
         this.model.save();
       }
