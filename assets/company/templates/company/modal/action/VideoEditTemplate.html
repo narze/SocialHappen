@@ -9,18 +9,36 @@
 
 <div class="modal-body">
   <div class="control-group">
-    <label class="control-label" for="name">Action Name</label>
+    <label class="control-label" for="name"><h6>Action Name:</h6></label>
     <div class="controls">
-      <input type="text" class="name" name="name" value="<%= name %>" />
+      <input type="text" class="name" name="name" value="<%= name %>" placeholder="action name" />
     </div>
   </div>
-  <div class="control-group row-fluid form-inline">
-    <div class="span6">
-      <label><h6>Video status :</h6></label> <%= sonar_code ? '<span class="label label-success">Set</span>' : '<span class="label">Pending</span>' %>
+  <div class="control-group">
+    <label><h6>Description:</h6></label>
+    <div class="edit-description-field row-fluid">
+      <textarea class="description span12" rows="3" placeholder="description"><%= description %></textarea>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label><h6>Codes:</h6></label>
+    <div class="controls form-inline">
+      <input type="text" class="code" value="" placeholder="new code"/> <button class="btn new-code" type="button">Add</button>
+    </div>
+    <div class="row-fluid">
+      <ul class="codes">
+        <% _.each(codes, function(code){ %>
+          <li data-code="<%- code %>">
+            <%- code %>
+            <a href="#" class="remove-code">remove</a>
+          </li>
+        <% }) %>
+      </ul>
     </div>
   </div>
 </div>
 <div class="modal-footer">
-  <button class="save btn btn-primary" data-dismiss="modal">Update Action</button>
+  <button class="save btn btn-primary" data-dismiss="modal">Save</button>
   <button class="btn cancel" data-dismiss="modal">Cancel</button>
 </div>
