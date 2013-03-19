@@ -27,7 +27,7 @@
       <div class="controls">
         <select multiple="multiple" class="select-device chzn-select" data-placeholder="Choose devices..." style="width:350px;">
           <% _.each(deviceList, function(device){ %>
-            <option value="<%- device.id %>" data-data="<%- device.data %>"><%- device.title %></option>
+            <option value="<%- device._id %>" data-data="<%- device.data %>"><%- device.title %></option>
           <% }); %>
         </select>
       </div>

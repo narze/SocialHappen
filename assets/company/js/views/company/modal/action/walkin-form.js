@@ -22,12 +22,16 @@ define([
 
     initialize: function(){
       _.bindAll(this);
+      sandbox.collections.deviceCollection.bind('reset', this.render);
+      sandbox.collections.deviceCollection.fetch();
     },
 
     render: function () {
-      var data = this.options.action;
+      var data = $.extend(true, {}, this.options.action);
 
       data.deviceList = sandbox.collections.deviceCollection.toJSON();
+
+      console.log(data);
 
       $(this.el).html(this.walkinEditTemplate(data));
 

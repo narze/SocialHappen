@@ -29,7 +29,7 @@ define([
 
       // Ensure that we have a URL.
       if (!options.url) {
-        // params.url = window.Passport.BASE_URL + 'apiv3/device/' + window.Passport.userId
+        params.url = window.Passport.BASE_URL + 'apiv3/idle_sonar_boxes'
       }
 
       // Ensure that we have the appropriate request data.
@@ -63,6 +63,18 @@ define([
 
       // Make the request, allowing the user to override any Ajax options.
       return $.ajax(_.extend(params, options));
+    },
+
+    parse: function(resp, xhr) {
+      console.log('resp', resp);
+      if(resp.success === true) {
+        return resp.data;
+      } else if(typeof resp.success !== 'undefined') {
+        return this.previousAttributes();
+      }
+
+      //if resp.success is undefined, resp itself is data
+      return resp;
     }
 
   });

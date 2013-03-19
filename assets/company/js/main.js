@@ -90,23 +90,7 @@ require([
   sandbox.collections.companyUsersCollection = new CompanyUsersCollection([]);
   sandbox.collections.balanceCollection = new BalanceCollection([]);
 
-  sandbox.collections.deviceCollection = new DeviceCollection([{
-    id: '1',
-    title: 'device 1',
-    data: '123',
-  }, {
-    id: '2',
-    title: 'device 2',
-    data: '456',
-  }, {
-    id: '3',
-    title: 'device 3',
-    data: '789',
-  }, {
-    id: '4',
-    title: 'device 4',
-    data: '963',
-  }]);
+  sandbox.collections.deviceCollection = new DeviceCollection([]);
 
   sandbox.models.currentUserModel.fetch({
     success: function(model, xhr){

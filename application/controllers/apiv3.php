@@ -665,22 +665,22 @@ class Apiv3 extends CI_Controller {
 
           $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge_data);
 
-          //sonar box data manipulation
-          if($challenge_data['sonar_frequency']) {
-            $this->load->model('sonar_box_model');
-            $this->sonar_box_model->upsert(array('challenge_id' => $challenge_id), array(
-              'name' => $challenge_data['detail']['name'],
-              'info' => array(),
-              'challenge_id' => $challenge_id,
-              'data' => $challenge_data['sonar_frequency']
-            ));
-          } else if($asis_challenge['sonar_frequency'] && !$challenge_data['sonar_frequency']) {
-            //remove sonar box data if removed
-            $this->load->model('sonar_box_model');
-            $this->sonar_box_model->delete(array(
-              'challenge_id' => $challenge_id
-            ));
-          }
+          // //sonar box data manipulation
+          // if($challenge_data['sonar_frequency']) {
+          //   $this->load->model('sonar_box_model');
+          //   $this->sonar_box_model->upsert(array('challenge_id' => $challenge_id), array(
+          //     'name' => $challenge_data['detail']['name'],
+          //     'info' => array(),
+          //     'challenge_id' => $challenge_id,
+          //     'data' => $challenge_data['sonar_frequency']
+          //   ));
+          // } else if($asis_challenge['sonar_frequency'] && !$challenge_data['sonar_frequency']) {
+          //   //remove sonar box data if removed
+          //   $this->load->model('sonar_box_model');
+          //   $this->sonar_box_model->delete(array(
+          //     'challenge_id' => $challenge_id
+          //   ));
+          // }
         } catch (Exception $ex){
           //update exception
           $challenge_create_flag = FALSE;
@@ -719,7 +719,7 @@ class Apiv3 extends CI_Controller {
           $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $update_challenge_data);
 
           //create sonar data if defined
-          if($challenge_data['sonar_frequency']) {
+          if(issetor($challenge_data['sonar_frequency'])){
             $this->load->model('sonar_box_model');
             $this->sonar_box_model->add_sonar_box(array(
               'name' => $challenge_data['detail']['name'],
@@ -1187,16 +1187,16 @@ class Apiv3 extends CI_Controller {
     if(!strlen($device['id'])
     || !strlen($device['title'])
     || !strlen($device['data'])
-    || !strlen($device['company'])
-    || !strlen($device['branch'])
+    // || !strlen($device['company'])
+    // || !strlen($device['branch'])
       ) {
       return $this->error('Device data invalid');
     }
 
-    $device['company_id'] = (int) $device['company'];
-    unset($device['company']);
-    $device['branch_id'] = $device['branch'];
-    unset($device['branch']);
+    // $device['company_id'] = (int) $device['company'];
+    // unset($device['company']);
+    // $device['branch_id'] = $device['branch'];
+    // unset($device['branch']);
 
     $device['status'] = 'pending';
 
@@ -1204,12 +1204,24 @@ class Apiv3 extends CI_Controller {
       return $this->error('Add device failed');
     }
 
-    $this->load->library('branch_lib');
-    $this->load->model('company_model');
-    $device['company'] = $this->company_model->get_company_profile_by_company_id($device['company_id']);
-    $device['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($device['branch_id'])));
+    // $this->load->library('branch_lib');
+    // $this->load->model('company_model');
+    // $device['company'] = $this->company_model->get_company_profile_by_company_id($device['company_id']);
+    // $device['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($device['branch_id'])));
 
     return $this->success($device);
+  }
+
+  function idle_sonar_boxes() {
+    $this->load->model('sonar_box_model');
+    $idle_sonar_boxes = $this->sonar_box_model->get(array('challenge_id' => NULL, 'action_data_id' => null));
+
+    $idle_sonar_boxes = array_map(function($idle_sonar_box) {
+      $idle_sonar_box['_id'] = get_mongo_id($idle_sonar_box);
+      return $idle_sonar_box;
+    }, $idle_sonar_boxes);
+
+    return $this->success($idle_sonar_boxes);
   }
 
   /**
