@@ -1212,9 +1212,34 @@ class Apiv3 extends CI_Controller {
     return $this->success($device);
   }
 
+  /**
+   * Get idle sonar boxes, and action's sonar box (if challenge_id, action_data_id is specified)
+   */
   function idle_sonar_boxes() {
     $this->load->model('sonar_box_model');
-    $idle_sonar_boxes = $this->sonar_box_model->get(array('challenge_id' => NULL, 'action_data_id' => null));
+
+    $query = array(
+      '$or' => array(
+        array('challenge_id' => NULL),
+        array('action_data_id' => NULL)
+      )
+    );
+
+    if(($challenge_id = $this->input->get('challenge_id')) && ($action_data_id = $this->input->get('action_data_id'))) {
+      $query = array(
+        '$or' => array(
+          $query,
+          array(
+            '$and' => array(
+              'challenge_id' => $challenge_id,
+              'action_data_id' => $action_data_id
+            )
+          )
+        )
+      );
+    }
+
+    $idle_sonar_boxes = $this->sonar_box_model->get($query);
 
     $idle_sonar_boxes = array_map(function($idle_sonar_box) {
       $idle_sonar_box['_id'] = get_mongo_id($idle_sonar_box);
