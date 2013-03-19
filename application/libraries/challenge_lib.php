@@ -980,36 +980,44 @@ class Challenge_lib {
 
     $challenge['codes'] = array();
 
+    $video_action_id = $this->CI->socialhappen->get_k('audit_action', 'View Video');
+
     foreach($challenge['criteria'] as &$action) {
-      // add codes from sonar_boxes
-      $action['codes'] = array();
-      if(isset($action['sonar_boxes']) && $action['sonar_boxes']) {
-        foreach($action['sonar_boxes'] as $key => $sonar_box_id) {
-          if($sonar_box = $this->CI->sonar_box_lib->get_one(array('_id' => new MongoId($sonar_box_id)))) {
-            if(issetor($sonar_box['data'])) {
-              $action['codes'][] = $sonar_box['data'];
-              $challenge['codes'][] = $sonar_box['data'];
+      # if action is video action or sonar_boxes is empty, don't generate and use codes directly
+      if(($action['query']['action_id'] === $video_action_id) || !issetor($action['sonar_boxes'])) {
+        if(issetor($action['codes'])) {
+          $challenge['codes'] = array_merge($challenge['codes'], $action['codes']);
+        }
+        $action['sonar_boxes'] = array(); # clear sonar_boxes
+      } else {
+        // add codes from sonar_boxes
+        if(isset($action['sonar_boxes']) && is_array($action['sonar_boxes'])) {
+          $action['codes'] = array();
+          foreach($action['sonar_boxes'] as $key => $sonar_box_id) {
+            if($sonar_box = $this->CI->sonar_box_lib->get_one(array('_id' => new MongoId($sonar_box_id)))) {
+              if(issetor($sonar_box['data'])) {
+                $action['codes'][] = $sonar_box['data'];
+                $challenge['codes'][] = $sonar_box['data'];
+              }
+            } else {
+              unset($action['sonar_boxes'][$key]);
             }
-          } else {
-            unset($action['sonar_boxes'][$key]);
           }
-        }
-      }
 
-      if(isset($action['sonar_boxes']) && is_array($action['sonar_boxes'])) {
-        # update sonar boxes
-        $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($action['sonar_boxes'], $challenge_id, $action['action_data_id']);
+          # update sonar boxes
+          $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($action['sonar_boxes'], $challenge_id, $action['action_data_id']);
 
-        # find removed sonar box and remove the reference to this action
-        $filter_sonar_box_ids = $action['sonar_boxes'];
-        foreach($filter_sonar_box_ids as &$sonar_box_id) {
-          $sonar_box_id = new MongoId($sonar_box_id);
-        }
+          # find removed sonar box and remove the reference to this action
+          $filter_sonar_box_ids = $action['sonar_boxes'];
+          foreach($filter_sonar_box_ids as &$sonar_box_id) {
+            $sonar_box_id = new MongoId($sonar_box_id);
+          }
 
-        if($action_data_id = issetor($action['action_data_id'])) {
-          if($sonar_boxes_to_remove_reference = $this->CI->sonar_box_lib->get(array('_id' => array('$nin' => $filter_sonar_box_ids), 'challenge_id' => $challenge_id, 'action_data_id' => $action_data_id))) {
-            $sonar_boxes_to_remove_reference = array_map(function($sonar_box) { return $sonar_box['_id'].''; }, $sonar_boxes_to_remove_reference);
-            $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($sonar_boxes_to_remove_reference, NULL, NULL);
+          if($action_data_id = issetor($action['action_data_id'])) {
+            if($sonar_boxes_to_remove_reference = $this->CI->sonar_box_lib->get(array('_id' => array('$nin' => $filter_sonar_box_ids), 'challenge_id' => $challenge_id, 'action_data_id' => $action_data_id))) {
+              $sonar_boxes_to_remove_reference = array_map(function($sonar_box) { return $sonar_box['_id'].''; }, $sonar_boxes_to_remove_reference);
+              $this->CI->sonar_box_lib->update_sonar_boxes_challenge_and_action_data($sonar_boxes_to_remove_reference, NULL, NULL);
+            }
           }
         }
       }
@@ -1025,6 +1033,7 @@ class Challenge_lib {
     return $this->CI->challenge_model->update(array('_id' => new MongoId('' . $challenge_id)), $data, array('safe' => true));
   }
 
+  // Deprecated
   function generate_sonar_data($challenge_id){
     $challenge = $this->get_by_id($challenge_id);
 

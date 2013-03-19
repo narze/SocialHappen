@@ -112,15 +112,25 @@ class Challenge_structure_test extends CI_Controller {
 		);
 		$this->sonar_box_id = $this->sonar_box_lib->add($sonar_box);
 
-		$sonar_box_2 = array(
+    $sonar_box_2 = array(
+      'company_id' => 1,
+      'challenge_id' => NULL,
+      'action_data_id' => NULL,
+      'id' => 2,
+      'title' => 'Sonar Box 2',
+      'data' => "3210",
+    );
+    $this->sonar_box_id_2 = $this->sonar_box_lib->add($sonar_box_2);
+
+		$sonar_box_3 = array(
 			'company_id' => 1,
 			'challenge_id' => NULL,
 			'action_data_id' => NULL,
-			'id' => 2,
-			'title' => 'Sonar Box 2',
-			'data' => "3210",
+			'id' => 3,
+			'title' => 'Sonar Box 3',
+			'data' => "3333",
 		);
-		$this->sonar_box_id_2 = $this->sonar_box_lib->add($sonar_box_2);
+		$this->sonar_box_id_3 = $this->sonar_box_lib->add($sonar_box_3);
 
     # add challenge with actions via apiv3/saveChallenge
     $old_challenge_model = array(
@@ -138,6 +148,30 @@ class Challenge_structure_test extends CI_Controller {
       "criteria" => array(
         array(
           "query" => array(
+            "action_id" => 204
+          ),
+          "count" => 1,
+          "name" => "Walkin",
+          "action_data" => array(
+            "data" => array(),
+            "action_id" => 204
+          ),
+          "sonar_code" => ""
+        ),
+        array(
+          "query" => array(
+            "action_id" => 204
+          ),
+          "count" => 1,
+          "name" => "Walkin",
+          "action_data" => array(
+            "data" => array(),
+            "action_id" => 204
+          ),
+          "sonar_code" => ""
+        ),
+        array(
+          "query" => array(
             "action_id" => 206
           ),
           "count" => 1,
@@ -150,7 +184,7 @@ class Challenge_structure_test extends CI_Controller {
         )
       ),
       "active" => true,
-      "company_id" => "2",
+      "company_id" => 1,
       "reward_items" => array(
         array(
           "name" => "Redeeming Points",
@@ -176,6 +210,7 @@ class Challenge_structure_test extends CI_Controller {
 
     $model = $old_challenge_model;
 
+    // Walkin action
     $model['criteria'][0]['sonar_boxes'] = array($this->sonar_box_id);
     // $model['criteria'][0]['codes'] = array(); // Codes should be derived from sonar_boxes
     $model['criteria'][0]['branches'] = array($this->branch_id);
@@ -185,15 +220,36 @@ class Challenge_structure_test extends CI_Controller {
     $model['criteria'][0]['use_only_custom_locations'] = FALSE;
     $model['criteria'][0]['verify_location'] = TRUE;
 
+    // Walkin action 2
+    $model['criteria'][1]['sonar_boxes'] = array();
+    $model['criteria'][1]['codes'] = array('1102', '1230'); // Codes should NOT be derived from sonar_boxes (empty sonar_boxes)
+    $model['criteria'][1]['branches'] = array();
+    // $model['criteria'][1]['locations'] = array(); // Locations should be derived from branches
+    $model['criteria'][1]['all_branches'] = FALSE;
+    $model['criteria'][1]['custom_locations'] = array();
+    $model['criteria'][1]['use_only_custom_locations'] = FALSE;
+    $model['criteria'][1]['verify_location'] = TRUE;
+
+    // Video action
+    $model['criteria'][2]['sonar_boxes'] = array($this->sonar_box_id_3);
+    $model['criteria'][2]['codes'] = array('0220', '2002'); // Codes should NOT be derived from sonar_boxes
+    $model['criteria'][2]['branches'] = array();
+    // $model['criteria'][2]['locations'] = array(); // Locations should be derived from branches
+    $model['criteria'][2]['all_branches'] = FALSE;
+    $model['criteria'][2]['custom_locations'] = array();
+    $model['criteria'][2]['use_only_custom_locations'] = FALSE;
+    $model['criteria'][2]['verify_location'] = TRUE;
+
     $this->unit->run($model['criteria'], TRUE, "", $model['criteria']);
     $params = array('model' => json_encode($model));
-
     $save_challenge_result = $this->postAPI('apiv3', 'saveChallenge', $params);
 
     $this->load->library('challenge_lib');
     $result = $this->challenge_lib->get(array());
     $this->challenge_id = $result[0]['_id'];
     $this->action_data_id = $result[0]['criteria'][0]['action_data_id'];
+    $this->action_data_id_2 = $result[0]['criteria'][1]['action_data_id'];
+    $this->action_data_id_3 = $result[0]['criteria'][2]['action_data_id'];
   }
 
   function challenge_should_get_locations_and_codes_from_actions() {
@@ -204,15 +260,20 @@ class Challenge_structure_test extends CI_Controller {
   	$result = $this->challenge_lib->get(array());
   	$this->unit->run(count($result) === 1, TRUE, "count(\$result) should be 1", count($result));
 
-  	# it should have 2 sonar_box
+  	# it should have 3 sonar_box
   	$this->load->library('sonar_box_lib');
   	$boxes = $this->sonar_box_lib->get(array());
-  	$this->unit->run(count($boxes) === 2, TRUE, "should have 2 sonar box", count($boxes));
-  	$this->unit->run($boxes[0]['_id'].'' === $this->sonar_box_id_2, TRUE, "", $boxes[0]['_id'].'');
-  	$this->unit->run($boxes[1]['_id'].'' === $this->sonar_box_id, TRUE, "", $boxes[1]['_id'].'');
+    $boxes = array_reverse($boxes);
+  	$this->unit->run(count($boxes) === 3, TRUE, "should have 3 sonar box", count($boxes));
+  	$this->unit->run($boxes[0]['_id'].'' === $this->sonar_box_id, TRUE, "", $boxes[0]['_id'].'');
+    $this->unit->run($boxes[1]['_id'].'' === $this->sonar_box_id_2, TRUE, "", $boxes[1]['_id'].'');
+  	$this->unit->run($boxes[2]['_id'].'' === $this->sonar_box_id_3, TRUE, "", $boxes[2]['_id'].'');
     # and it should have challenge_id and action_data_id for querying at ease
-    $this->unit->run($boxes[1]['challenge_id'] === $this->challenge_id.'', TRUE, "", $boxes[1]['challenge_id']);
-    $this->unit->run($boxes[1]['action_data_id'] === $this->action_data_id, TRUE, "", $boxes[1]['action_data_id']);
+    $this->unit->run($boxes[0]['challenge_id'] === $this->challenge_id.'', TRUE, "", $boxes[0]['challenge_id']);
+    $this->unit->run($boxes[0]['action_data_id'] === $this->action_data_id, TRUE, "", $boxes[0]['action_data_id']);
+    # it should not have challenge_id and action_data_id in box 3, because it is a video action
+    $this->unit->run($boxes[2]['challenge_id'] === NULL, TRUE, "", $boxes[2]['challenge_id']);
+    $this->unit->run($boxes[2]['action_data_id'] === NULL, TRUE, "", $boxes[2]['action_data_id']);
 
   	# it should have 2 branch
   	$this->load->library('branch_lib');
@@ -221,26 +282,55 @@ class Challenge_structure_test extends CI_Controller {
   	$this->unit->run($branches[0]['_id'].'' === $this->branch_id_2, TRUE, "", $branches[0]['_id'].'');
   	$this->unit->run($branches[1]['_id'].'' === $this->branch_id, TRUE, "", $branches[1]['_id'].'');
 
+    # it should have locations (from actions)
+    $this->unit->run($result[0]['locations'], "is_array", "locations should be array", $result[0]['locations']);
+    $this->unit->run($result[0]['locations'] === array(array(40,40)), TRUE, "locations should have action's location", $result[0]['locations']);
+
+    # it should have codes (from actions)
+    $this->unit->run($result[0]['codes'], "is_array", "codes should be array", $result[0]['codes']);
+    $this->unit->run($result[0]['codes'] === array("0123",'1102','1230','0220','2002'), TRUE, "codes should match", print_r($result[0]['codes'], TRUE));
+
+    ## action 1 (Walkin action)
+    # it should have criteria (action) with new properties
+    $this->unit->run($result[0]['criteria'][0]['sonar_boxes'], "is_array", "sonar_boxes should be array", $result[0]['criteria'][0]['sonar_boxes']);
+    $this->unit->run($result[0]['criteria'][0]['sonar_boxes'] === array($this->sonar_box_id), TRUE, "sonar_boxes should be array", $result[0]['criteria'][0]['sonar_boxes']);
+    $this->unit->run($result[0]['criteria'][0]['branches'], "is_array", "branches should be array", $result[0]['criteria'][0]['branches']);
+    $this->unit->run($result[0]['criteria'][0]['all_branches'], "is_bool", "all_branches should be boolean", $result[0]['criteria'][0]['all_branches']);
+    $this->unit->run($result[0]['criteria'][0]['custom_locations'], "is_array", "custom_locations should be array", $result[0]['criteria'][0]['custom_locations']);
+    $this->unit->run($result[0]['criteria'][0]['use_only_custom_locations'], "is_bool", "use_only_custom_locations should be boolean", $result[0]['criteria'][0]['use_only_custom_locations']);
+    $this->unit->run($result[0]['criteria'][0]['verify_location'], "is_bool", "verify_location should be boolean", $result[0]['criteria'][0]['verify_location']);
+    $this->unit->run($result[0]['criteria'][0]['locations'], "is_array", "locations should be array", $result[0]['criteria'][0]['locations']);
+    $this->unit->run($result[0]['criteria'][0]['locations'] === array(array(40,40)), TRUE, "locations should be array", $result[0]['criteria'][0]['locations']);
+    $this->unit->run($result[0]['criteria'][0]['codes'], "is_array", "codes should be array", $result[0]['criteria'][0]['codes']);
+    $this->unit->run($result[0]['criteria'][0]['codes'] === array("0123"), TRUE, "codes should be array", $result[0]['criteria'][0]['codes']);
+
+    ## action 2 (Walkin action)
+    # it should have criteria (action) with new properties
+    $this->unit->run($result[0]['criteria'][1]['sonar_boxes'], "is_array", "sonar_boxes should be array", $result[0]['criteria'][1]['sonar_boxes']);
+    $this->unit->run($result[0]['criteria'][1]['sonar_boxes'] === array(), TRUE, "sonar_boxes should be array", $result[0]['criteria'][1]['sonar_boxes']);
+    $this->unit->run($result[0]['criteria'][1]['branches'], "is_array", "branches should be array", $result[0]['criteria'][1]['branches']);
+    $this->unit->run($result[0]['criteria'][1]['all_branches'], "is_bool", "all_branches should be boolean", $result[0]['criteria'][1]['all_branches']);
+    $this->unit->run($result[0]['criteria'][1]['custom_locations'], "is_array", "custom_locations should be array", $result[0]['criteria'][1]['custom_locations']);
+    $this->unit->run($result[0]['criteria'][1]['use_only_custom_locations'], "is_bool", "use_only_custom_locations should be boolean", $result[0]['criteria'][1]['use_only_custom_locations']);
+    $this->unit->run($result[0]['criteria'][1]['verify_location'], "is_bool", "verify_location should be boolean", $result[0]['criteria'][1]['verify_location']);
+    $this->unit->run($result[0]['criteria'][1]['locations'], "is_array", "locations should be array", $result[0]['criteria'][1]['locations']);
+    $this->unit->run($result[0]['criteria'][1]['locations'] === array(), TRUE, "locations should be array", $result[0]['criteria'][1]['locations']);
+    $this->unit->run($result[0]['criteria'][1]['codes'], "is_array", "codes should be array", $result[0]['criteria'][1]['codes']);
+    $this->unit->run($result[0]['criteria'][1]['codes'] === array('1102', '1230'), TRUE, "codes should be array", $result[0]['criteria'][1]['codes']);
+
+    ## action 3 (Video action)
   	# it should have criteria (action) with new properties
-  	$this->unit->run($result[0]['criteria'][0]['sonar_boxes'], "is_array", "sonar_boxes should be array", $result[0]['criteria'][0]['sonar_boxes']);
-  	$this->unit->run($result[0]['criteria'][0]['sonar_boxes'] === array($this->sonar_box_id), TRUE, "sonar_boxes should be array", $result[0]['criteria'][0]['sonar_boxes']);
-  	$this->unit->run($result[0]['criteria'][0]['branches'], "is_array", "branches should be array", $result[0]['criteria'][0]['branches']);
-  	$this->unit->run($result[0]['criteria'][0]['all_branches'], "is_bool", "all_branches should be boolean", $result[0]['criteria'][0]['all_branches']);
-  	$this->unit->run($result[0]['criteria'][0]['custom_locations'], "is_array", "custom_locations should be array", $result[0]['criteria'][0]['custom_locations']);
-  	$this->unit->run($result[0]['criteria'][0]['use_only_custom_locations'], "is_bool", "use_only_custom_locations should be boolean", $result[0]['criteria'][0]['use_only_custom_locations']);
-  	$this->unit->run($result[0]['criteria'][0]['verify_location'], "is_bool", "verify_location should be boolean", $result[0]['criteria'][0]['verify_location']);
-  	$this->unit->run($result[0]['criteria'][0]['locations'], "is_array", "locations should be array", $result[0]['criteria'][0]['locations']);
-  	$this->unit->run($result[0]['criteria'][0]['locations'] === array(array(40,40)), TRUE, "locations should be array", $result[0]['criteria'][0]['locations']);
-  	$this->unit->run($result[0]['criteria'][0]['codes'], "is_array", "codes should be array", $result[0]['criteria'][0]['codes']);
-  	$this->unit->run($result[0]['criteria'][0]['codes'] === array("0123"), TRUE, "codes should be array", $result[0]['criteria'][0]['codes']);
-
-  	# it should have locations (from actions)
-  	$this->unit->run($result[0]['locations'], "is_array", "locations should be array", $result[0]['locations']);
-  	$this->unit->run($result[0]['locations'] === array(array(40,40)), TRUE, "locations should have action's location", $result[0]['locations']);
-
-  	# it should have codes (from actions)
-  	$this->unit->run($result[0]['codes'], "is_array", "codes should be array", $result[0]['codes']);
-  	$this->unit->run($result[0]['codes'] === array("0123"), TRUE, "codes should have action's location", $result[0]['codes']);
+  	$this->unit->run($result[0]['criteria'][2]['sonar_boxes'], "is_array", "sonar_boxes should be array", $result[0]['criteria'][2]['sonar_boxes']);
+  	$this->unit->run($result[0]['criteria'][2]['sonar_boxes'] === array(), TRUE, "sonar_boxes should be array", $result[0]['criteria'][2]['sonar_boxes']);
+  	$this->unit->run($result[0]['criteria'][2]['branches'], "is_array", "branches should be array", $result[0]['criteria'][2]['branches']);
+  	$this->unit->run($result[0]['criteria'][2]['all_branches'], "is_bool", "all_branches should be boolean", $result[0]['criteria'][2]['all_branches']);
+  	$this->unit->run($result[0]['criteria'][2]['custom_locations'], "is_array", "custom_locations should be array", $result[0]['criteria'][2]['custom_locations']);
+  	$this->unit->run($result[0]['criteria'][2]['use_only_custom_locations'], "is_bool", "use_only_custom_locations should be boolean", $result[0]['criteria'][2]['use_only_custom_locations']);
+  	$this->unit->run($result[0]['criteria'][2]['verify_location'], "is_bool", "verify_location should be boolean", $result[0]['criteria'][2]['verify_location']);
+  	$this->unit->run($result[0]['criteria'][2]['locations'], "is_array", "locations should be array", $result[0]['criteria'][2]['locations']);
+  	$this->unit->run($result[0]['criteria'][2]['locations'] === array(), TRUE, "locations should be array", $result[0]['criteria'][2]['locations']);
+  	$this->unit->run($result[0]['criteria'][2]['codes'], "is_array", "codes should be array", $result[0]['criteria'][2]['codes']);
+  	$this->unit->run($result[0]['criteria'][2]['codes'] === array("0220", "2002"), TRUE, "codes should be array", $result[0]['criteria'][2]['codes']);
   }
 
   function challenge_should_update_locations_and_codes_when_actions_are_updated() {
@@ -306,8 +396,8 @@ class Challenge_structure_test extends CI_Controller {
 
   	# codes should be updated
   	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
-  	$this->unit->run(count($challenge['criteria'][0]['codes']) === 2, TRUE, "challenge's action should have 2 codes", count($challenge['criteria'][0]['codes']));
-  	$this->unit->run(count($challenge['codes']) === 2, TRUE, "challenge should have 2 codes as well", count($challenge['codes']));
+  	$this->unit->run(count($challenge['criteria'][0]['codes']) === 2, TRUE, "challenge's action should have 2 codes now", count($challenge['criteria'][0]['codes']));
+  	$this->unit->run(count($challenge['codes']) === 6, TRUE, "challenge should have 5+1=6 codes", count($challenge['codes']));
   	$this->unit->run($challenge['codes'][0] === "0123", TRUE, "code should match", $challenge['codes'][0]);
   	$this->unit->run($challenge['codes'][1] === "3210", TRUE, "code should match", $challenge['codes'][1]);
   	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
@@ -324,7 +414,7 @@ class Challenge_structure_test extends CI_Controller {
   	# codes should be updated
   	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
   	$this->unit->run(count($challenge['criteria'][0]['codes']) === 2, TRUE, "challenge's action should have 2 codes", count($challenge['criteria'][0]['codes']));
-  	$this->unit->run(count($challenge['codes']) === 2, TRUE, "challenge should have 2 codes as well", count($challenge['codes']));
+  	$this->unit->run(count($challenge['codes']) === 6, TRUE, "challenge should have 5+1=6 codes", count($challenge['codes']));
   	$this->unit->run($challenge['codes'][0] === "0123", TRUE, "code should match", $challenge['codes'][0]);
   	$this->unit->run($challenge['codes'][1] === "0000", TRUE, "code should match", $challenge['codes'][1]);
   	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0123", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
@@ -343,7 +433,7 @@ class Challenge_structure_test extends CI_Controller {
   	# codes should be updated
   	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
   	$this->unit->run(count($challenge['criteria'][0]['codes']) === 1, TRUE, "challenge's action should have 1 code", count($challenge['criteria'][0]['codes']));
-  	$this->unit->run(count($challenge['codes']) === 1, TRUE, "challenge should have 1 code as well", count($challenge['codes']));
+  	$this->unit->run(count($challenge['codes']) === 5, TRUE, "challenge should have 6-1=5 code", count($challenge['codes']));
   	$this->unit->run($challenge['codes'][0] === "0000", TRUE, "code should match", $challenge['codes'][0]);
   	$this->unit->run($challenge['criteria'][0]['codes'][0] === "0000", TRUE, "code should match", $challenge['criteria'][0]['codes'][0]);
 
@@ -359,7 +449,7 @@ class Challenge_structure_test extends CI_Controller {
   	$challenge = $this->challenge_lib->get_one(array('_id' => new MongoId($this->challenge_id)));
   	$this->unit->run(count($challenge['criteria'][0]['sonar_boxes']) === 0, TRUE, "challenge's action should have 0 sonar_box", count($challenge['criteria'][0]['sonar_boxes']));
   	$this->unit->run(count($challenge['criteria'][0]['codes']) === 0, TRUE, "challenge's action should have 0 code", count($challenge['criteria'][0]['codes']));
-  	$this->unit->run(count($challenge['codes']) === 0, TRUE, "challenge should have 0 code as well", count($challenge['codes']));
+  	$this->unit->run(count($challenge['codes']) === 4, TRUE, "challenge should have 5-1=4 code", count($challenge['codes']));
 
   }
 }
