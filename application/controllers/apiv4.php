@@ -1735,13 +1735,17 @@ class Apiv4 extends REST_Controller {
     if ((ENVIRONMENT !== 'testing') && (ENVIRONMENT !== 'development')) { return $this->error(); }
 
     $this->load->model('user_mongo_model');
+    $this->load->model('audit_model');
+    $this->load->model('action_user_data_model');
+    $challenge_action_ids = array(201,202,203,204,206);
 
     $unset = array(
       "challenge_completed" => TRUE,
       "challenge_redeeming" => TRUE,
       "daily_challenge" => TRUE,
       "daily_challenge_completed" => TRUE,
-      "reward_items" => TRUE
+      "reward_items" => TRUE,
+      "challenge_progress" => TRUE
     );
 
     if(!$user_ids = explode(",", $this->post('user_ids'))) {
@@ -1751,6 +1755,15 @@ class Apiv4 extends REST_Controller {
     foreach($user_ids as $user_id) {
       $user_id = (int) $user_id;
       if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset))) {
+        return $this->error('Update failed');
+      }
+
+      // remove actions & action_datas
+      $criteria = array('user_id' => $user_id, 'action_id' => array('$in' => $challenge_action_ids));
+      if(!$this->audit_model->delete($criteria)) {
+        return $this->error('Update failed');
+      }
+      if(!$this->action_user_data_model->delete($criteria)) {
         return $this->error('Update failed');
       }
     }
