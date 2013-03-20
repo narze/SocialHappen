@@ -17,7 +17,7 @@
   <div class="control-group">
     <label><h6>Description:</h6></label>
     <div class="edit-description-field row-fluid">
-      <textarea class="description span12" rows="3" placeholder="description"><%= description %></textarea>
+      <textarea class="description span12" rows="3" placeholder="description"><%= typeof description !== 'undefined' ? description : "" %></textarea>
     </div>
   </div>
 
