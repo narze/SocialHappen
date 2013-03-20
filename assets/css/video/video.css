@@ -1,0 +1,52 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../../images/howto/sh-visual_bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.fallback-message {
+    font-family: sans-serif;
+    line-height: 1.3;
+
+    width: 780px;
+    padding: 10px 10px 0;
+    margin: 20px auto;
+
+    border: 1px solid #E4C652;
+    border-radius: 10px;
+    background: #EEDC94;
+}
+.fallback-message p {
+    margin-bottom: 10px;
+}
+.impress-supported .fallback-message {
+    display: none;
+}
+.control {
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    opacity: .5;
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+    -webkit-transition: opacity .2s ease;
+    -moz-transition: opacity .2s ease;
+    -ms-transition: opacity .2s ease;
+    -o-transition: opacity .2s ease;
+    transition: opacity .2s ease;
+}
+.control:hover {
+    opacity: 1;
+}
+.next {
+    border-left-width: 22px;
+    border-left-color: #13daec;
+    right: 20px;
+}
+.prev {
+    border-right-width: 22px;
+    border-right-color: #13daec;
+    left: 20px;
+}
