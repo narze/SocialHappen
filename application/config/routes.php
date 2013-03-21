@@ -76,6 +76,10 @@ $route['r/(:any)'] = "redirect/$1";
 $route['userimage/(:num)'] = "userimage/get_user_image/$1";
 $route['testmode/apiv4/(:any)'] = "apiv4/$1";
 $route['testmode/apiv3/(:any)'] = "apiv3/$1";
+$route['api/v1'] = "api";
+$route['api/v(:num)'] = "apiv$1";
+$route['api/v1/(:any)'] = "api/$1";
+$route['api/v(:num)/(:any)'] = "apiv$1/$2";
 
 
 /* End of file routes.php */

@@ -8,8 +8,15 @@ class Apiv2 extends CI_Controller {
 
   function __construct(){
     header("Access-Control-Allow-Origin: *");
+    header('Content-Type: application/json', TRUE);
     parent::__construct();
-    
+
+    $method_name = $this->router->fetch_method();
+    if ( ! method_exists($this, $method_name)) {
+      json_return(array('status' => false, 'error' => 'Unknown method.'), 404);
+      die();
+    }
+
     $this->load->library('apiv2_lib');
   }
 

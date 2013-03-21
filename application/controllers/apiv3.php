@@ -14,6 +14,12 @@ class Apiv3 extends CI_Controller {
       $this->load->library('db_sync');
       $this->db_sync->use_test_db(TRUE);
     }
+
+    $method_name = $this->router->fetch_method();
+    if ( ! method_exists($this, $method_name)) {
+      json_return(array('status' => false, 'error' => 'Unknown method.'), 404);
+      die();
+    }
   }
 
   function index(){
