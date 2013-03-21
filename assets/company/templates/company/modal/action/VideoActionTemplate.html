@@ -15,7 +15,7 @@
     <div class="span9">
       <h5>Video</h5>
       <p><%= name %></p>
-      <p>Codes: <%= codes && codes.join(', ')||'not set' %></p>
+      <p>Codes: <%= (typeof codes !== 'undefined') && codes.join(', ')||'not set' %></p>
       <p><%= typeof description !== 'undefined' ? description : "" %></p>
     </div>
   </div>
