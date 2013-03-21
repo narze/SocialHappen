@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../assets/css/video/video.css">
 </head>
 
-<body class="impress-not-supported">
+<body>
     <div class="fallback-message">
         <p>Your browser <b>doesn't support the features required</b>, For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
     </div>
@@ -26,8 +26,8 @@
             <img src="../assets/images/howto/sh-visual3_en.png" alt="">
         </div>
 
-        <div id="overview" class="step" data-x="0" data-y="1600" data-scale="6">
-        </div>
+        <!-- <div id="overview" class="step" data-x="0" data-y="1600" data-scale="6">
+        </div> -->
     </div>
 
     <div class="control prev"></div>
