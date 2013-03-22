@@ -338,6 +338,12 @@ class Audit_model extends CI_Model {
 	function count($criteria = array()) {
 		return $this->collection->count($criteria);
 	}
+
+	function delete($query){
+		$result = $this->get($query, 1);
+		$this->collection->remove($query, array('$atomic' => TRUE, '$safe' => TRUE));
+		return $result;
+	}
 }
 
 /* End of file audit_model.php */

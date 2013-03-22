@@ -452,7 +452,44 @@ class Apiv4_test extends CI_Controller {
 	  $this->action_data_id2 = $this->action_data_lib->add_action_data(202, array());
 	  $this->action_data_id3 = $this->action_data_lib->add_action_data(203, array());
 	  $this->action_data_id4 = $this->action_data_lib->add_action_data(204, array());
+	  $this->action_data_id_6_1 = $this->action_data_lib->add_action_data(204, array());
+	  $this->action_data_id_6_2 = $this->action_data_lib->add_action_data(204, array());
 
+		# add branch
+    $this->load->library('branch_lib');
+
+		$branch = array(
+      'company_id' => 1,
+      'title' => 'branch 1',
+      'location' => array(0.001, 0.002),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+    $this->branch = $this->branch_lib->add($branch);
+    $this->branch_id = $this->branch['_id'];
+
+		$branch_2 = array(
+      'company_id' => 1,
+      'title' => 'branch 2',
+      'location' => array(0.002, -0.004),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+    $this->branch_2 = $this->branch_lib->add($branch_2);
+    $this->branch_id_2 = $this->branch_2['_id'];
+
+		$branch_3 = array(
+      'company_id' => 1,
+      'title' => 'branch 3',
+      'location' => array(-0.003, 0.001),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+    $this->branch_3 = $this->branch_lib->add($branch_3);
+    $this->branch_id_3 = $this->branch_3['_id'];
 
 	  //Add challenges
 	  $this->challenge = array(
@@ -491,10 +528,11 @@ class Apiv4_test extends CI_Controller {
 	      array(
 	        'name' => 'C3',
 	        'query' => array('page_id' => 1, 'app_id'=>2, 'action_id'=>2),
-	        'count' => 3
+	        'count' => 3,
+	        'branches' => array($this->branch_id)
 	      )
 	    ),
-	    'location' => array(0.001, 0.002)
+	    // 'locations' => array(array(0.001, 0.002))
 	  );
 
 	  $this->challenge3 = array(
@@ -513,11 +551,12 @@ class Apiv4_test extends CI_Controller {
 	        'count' => 2,
 	        'is_platform_action' => TRUE,
 	        'action_data_id' => $this->action_data_id,
-	        'action_data' => array('action_id' => $this->action_data_id)
+	        'action_data' => array('action_id' => $this->action_data_id),
+	        'branches' => array($this->branch_id_2)
 	      )
 	    ),
 	    'reward_items' => array(array('_id' => new MongoId($this->reward_item_id2))),
-	    'location' => array(0.002, -0.004)
+	    // 'locations' => array(array(0.002, -0.004))
 	  );
 
 	  $this->challenge4 = array(
@@ -536,12 +575,13 @@ class Apiv4_test extends CI_Controller {
 	        'count' => 1,
 	        'is_platform_action' => TRUE,
 	        'action_data_id' => $this->action_data_id3,
-	        'action_data' => array('action_id' => $this->action_data_id3)
+	        'action_data' => array('action_id' => $this->action_data_id3),
+	        'branches' => array($this->branch_id_3)
 	      )
 	    ),
 	    'repeat' => 1,
 	    'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))),
-	    'location' => array(-0.003, 0.001)
+	    // 'locations' => array(array(-0.003, 0.001))
 	  );
 
 	  $this->challenge5 = array(
@@ -560,13 +600,48 @@ class Apiv4_test extends CI_Controller {
 	        'count' => 1,
 	        'is_platform_action' => TRUE,
 	        'action_data_id' => $this->action_data_id3,
-	        'action_data' => array('action_id' => $this->action_data_id3)
+	        'action_data' => array('action_id' => $this->action_data_id3),
+	        'branches' => array($this->branch_id_3)
 	      )
 	    ),
 	    'repeat' => 1,
 	    'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))), //54 points
-	    'location' => array(-0.003, 0.001),
+	    // 'locations' => array(array(-0.003, 0.001)),
 	    'done_count_max' => 54 //can play 1 time
+	  );
+
+	  $this->challenge6 = array(
+	    'company_id' => 1,
+	    'start' => time(),
+	    'end' => time() + 864000,
+	    'detail' => array(
+	      'name' => 'Multi action challenge',
+	      'description' => 'You can play every day',
+	      'image' => 'Challengeimage'
+	    ),
+	    'criteria' => array(
+	      array(
+	        'name' => 'C61',
+	        'query' => array('action_id' => 204),
+	        'count' => 1,
+	        'is_platform_action' => TRUE,
+	        'action_data_id' => $this->action_data_id_6_1,
+	        'action_data' => array('action_id' => $this->action_data_id_6_1),
+	        'branches' => array($this->branch_id_3)
+	      ),
+	      array(
+	        'name' => 'C62',
+	        'query' => array('action_id' => 204),
+	        'count' => 1,
+	        'is_platform_action' => TRUE,
+	        'action_data_id' => $this->action_data_id_6_2,
+	        'action_data' => array('action_id' => $this->action_data_id_6_2),
+	        'branches' => array($this->branch_id_3)
+	      )
+	    ),
+	    'repeat' => 1,
+	    'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))), //54 points
+	    // 'locations' => array(array(-0.003, 0.001)),
 	  );
 
 	  $this->load->library('challenge_lib');
@@ -1545,6 +1620,124 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data'][0]['next_date'] === date('Ymd', time() + 24*60*60), TRUE, "\$result['data'][0]['next_date']", $result['data'][0]['next_date']);
   	$this->unit->run($result['data'][1]['next_date'] === date('Ymd', time() + 24*60*60), TRUE, "\$result['data'][1]['next_date']", $result['data'][1]['next_date']);
 
+  }
+
+  function do_action_with_action_data_id_test() {
+  	# remove user progress
+  	$this->load->model('user_mongo_model');
+  	$result = $this->user_mongo_model->update(array('user_id' => $this->user_id), array('$unset' => array('challenge_completed' => 1, 'daily_challenge_completed' => 1, 'challenge_redeeming' => 1, 'challenge_progress' => 1)));
+  	$this->unit->run($result, TRUE, "reset user challenge progress", $result);
+
+  	# add new challenge
+ 		$this->load->library('challenge_lib');
+
+  	$result = $this->challenge_lib->add($this->challenge6);
+  	$this->unit->run($result, TRUE, "\$result", $result);
+  	$this->challenge_id6 = $result;
+
+  	$method = 'do_action';
+
+  	// User check
+  	$this->load->model('user_mongo_model');
+  	$user = $this->user_mongo_model->get_user($this->user_id);
+  	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
+  	$this->unit->run(isset($user['challenge_progress'][$this->challenge_id6]['action_data']), FALSE, "action_data of challenge progress should not be set", isset($user['challenge_progress'][$this->challenge_id6]['action_data']));
+  	$this->unit->run(isset($user['daily_challenge_completed'][$this->challenge_id6]), FALSE, "isset(\$user['daily_challenge_completed'][$this->challenge_id6])", isset($user['daily_challenge_completed'][$this->challenge_id6]));
+
+  	# do the challenge's first action
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'challenge_id' => $this->challenge_id6,
+  		'action_data_id' => $this->action_data_id_6_1,
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['challenge_completed'], FALSE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+  	$this->unit->run($result['data']['action_completed'], TRUE, "action completed should be true", $result['data']['action_completed']);
+
+  	$this->unit->run(isset($result['data']['reward_items'][0]['value']), FALSE, "reward items shouldn't be set", isset($result['data']['reward_items'][0]['value']));
+
+  	//check challenge action progress
+  	$result = $this->get('challenges', array('user_id' => $this->user_id,'token' => $this->token2,'challenge_id' => $this->challenge_id6));
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id6, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run($result['data'][0]['criteria'][0]['action_completed'] === TRUE, TRUE, "first action should be completed", $result['data'][0]['criteria'][0]['action_completed']);
+  	$this->unit->run($result['data'][0]['criteria'][1]['action_completed'] === FALSE, TRUE, "second action should not be completed yet", $result['data'][0]['criteria'][1]['action_completed']);
+
+  	// User check
+  	$this->load->model('user_mongo_model');
+  	$user = $this->user_mongo_model->get_user($this->user_id);
+  	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
+  	$this->unit->run(count($user['challenge_progress'][$this->challenge_id6]['action_data']) === 1, TRUE, "action_data of challenge progress should be 1 (of 2)", count($user['challenge_progress'][$this->challenge_id6]['action_data']));
+  	$this->unit->run($user['challenge_progress'][$this->challenge_id6]['action_data'] === array($params['action_data_id']), TRUE, "", $user['challenge_progress'][$this->challenge_id6]['action_data']);
+  	$this->unit->run(isset($user['daily_challenge_completed'][$this->challenge_id6]), FALSE, "isset(\$user['daily_challenge_completed'][$this->challenge_id6])", isset($user['daily_challenge_completed'][$this->challenge_id6]));
+
+  	# do the challenge's first action again
+  	$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'challenge_id' => $this->challenge_id6,
+  		'action_data_id' => $this->action_data_id_6_1,
+  		'timestamp' => time(), //for test
+  	);
+
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], FALSE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['code'] === 2, TRUE, "code should be 2 (action already done)", $result['code']);
+
+  	//check challenge action progress (should not be changed)
+  	$result = $this->get('challenges', array('user_id' => $this->user_id,'token' => $this->token2,'challenge_id' => $this->challenge_id6));
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id6, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run($result['data'][0]['criteria'][0]['action_completed'] === TRUE, TRUE, "first action should be completed", $result['data'][0]['criteria'][0]['action_completed']);
+  	$this->unit->run($result['data'][0]['criteria'][1]['action_completed'] === FALSE, TRUE, "second action should not be completed yet", $result['data'][0]['criteria'][1]['action_completed']);
+
+  	// User check (should not be changed)
+  	$this->load->model('user_mongo_model');
+  	$user = $this->user_mongo_model->get_user($this->user_id);
+  	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
+  	$this->unit->run(count($user['challenge_progress'][$this->challenge_id6]['action_data']) === 1, TRUE, "action_data of challenge progress should be 1 (of 2)", count($user['challenge_progress'][$this->challenge_id6]['action_data']));
+  	$this->unit->run($user['challenge_progress'][$this->challenge_id6]['action_data'] === array($params['action_data_id']), TRUE, "", $user['challenge_progress'][$this->challenge_id6]['action_data']);
+  	$this->unit->run(isset($user['daily_challenge_completed'][$this->challenge_id6]), FALSE, "isset(\$user['daily_challenge_completed'][$this->challenge_id6])", isset($user['daily_challenge_completed'][$this->challenge_id6]));
+
+ 		# do the challenge's second action
+ 		$params = array(
+  		'user_id' => $this->user_id,
+  		'token' => $this->token2,
+  		'challenge_id' => $this->challenge_id6,
+  		'action_data_id' => $this->action_data_id_6_2,
+  		'timestamp' => time(), //for test
+  	);
+
+  	#challenge should be completed
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run($result['data']['challenge_completed'], TRUE, "\$result['data']['challenge_completed']", $result['data']['challenge_completed']);
+  	$this->unit->run($result['data']['action_completed'], TRUE, "action completed should be true", $result['data']['action_completed']);
+
+  	$this->unit->run($result['data']['reward_items'][0]['value'] === 54, TRUE, "\$result['data']['reward_items'][0]['value']", $result['data']['reward_items'][0]['value']);
+  	$this->unit->run($result['data']['reward_items'][0]['is_points_reward'] === TRUE, TRUE, "\$result['data']['reward_items'][0]['is_points_reward']", $result['data']['reward_items'][0]['is_points_reward']);
+
+
+  	//check challenge action progress
+  	$result = $this->get('challenges', array('user_id' => $this->user_id,'token' => $this->token2,'challenge_id' => $this->challenge_id6));
+  	$this->unit->run($result['success'], TRUE, "\$result['success']", $result['success']);
+  	$this->unit->run(count($result['data']) === 1, TRUE, "count(\$result['data'])", count($result['data']));
+  	$this->unit->run($result['data'][0]['_id'] === $this->challenge_id6, TRUE, "\$result['data'][0]['_id']", $result['data'][0]['_id']);
+  	$this->unit->run($result['data'][0]['criteria'][0]['action_completed'] === FALSE, TRUE, "action progress cleared after challenge done", $result['data'][0]['criteria'][0]['action_completed']);
+  	$this->unit->run($result['data'][0]['criteria'][1]['action_completed'] === FALSE, TRUE, "action progress cleared after challenge done", $result['data'][0]['criteria'][1]['action_completed']);
+
+  	//User check
+  	$this->load->model('user_mongo_model');
+  	$user = $this->user_mongo_model->get_user($this->user_id);
+  	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
+  	$this->unit->run(isset($user['challenge_progress'][$this->challenge_id6]), FALSE, "action_data of challenge progress should be 0 because challenge is completed", isset($user['challenge_progress'][$this->challenge_id6]));
+  	$this->unit->run(count($user['daily_challenge_completed'][$this->challenge_id6]) === 1, TRUE, "count(\$user['daily_challenge_completed'][$this->challenge_id6])", count($user['daily_challenge_completed'][$this->challenge_id6]));
   }
 }
 /* End of file apiv4_test.php */

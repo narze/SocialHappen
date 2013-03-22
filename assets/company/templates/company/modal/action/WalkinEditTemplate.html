@@ -9,14 +9,73 @@
 
 <div class="modal-body">
   <div class="control-group">
-    <label class="control-label" for="name">Action Name</label>
+    <label class="control-label" for="name"><h6>Action Name:</h6></label>
     <div class="controls">
       <input type="text" class="name" name="name" value="<%= name %>" />
     </div>
   </div>
-  <div class="control-group row-fluid form-inline">
-    <div class="span6">
-      <label><h6>Sonar device status :</h6></label> <%= sonar_code ? '<span class="label label-success">Set</span>' : '<span class="label">Pending</span>' %>
+  <div class="control-group">
+    <label><h6>Description:</h6></label>
+    <div class="edit-description-field row-fluid">
+      <textarea class="description span12" rows="3" placeholder="description"><%= typeof description !== 'undefined' ? description : "" %></textarea>
+    </div>
+  </div>
+
+  <div class="select-device">
+    <h6 class="">Select device:</h6>
+    <div class="control-group">
+      <div class="controls">
+        <select multiple="multiple" class="select-device chzn-select" data-placeholder="Choose devices..." style="width:350px;">
+          <% _.each(deviceList, function(device){ %>
+            <option value="<%- device._id %>" data-data="<%- device.data %>"><%- device.title %></option>
+          <% }); %>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-group hide">
+    <label><h6>Codes:</h6></label>
+    <div class="controls form-inline">
+      <input type="text" class="code" value="" placeholder="new code"/> <button class="btn new-code" type="button">Add</button>
+    </div>
+    <div class="row-fluid">
+      <ul class="codes">
+        <% if(typeof description !== 'undefined') {
+          _.each(codes, function(code){ %>
+          <li data-code="<%- code %>">
+            <%- code %>
+            <a href="#" class="remove-code">remove</a>
+          </li>
+        <% })} %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label><h6>Locations:</h6></label>
+    <div class="controls form-inline">
+      <input type="text" class="lat" value="" placeholder="latitude..."/>
+      <input type="text" class="lng" value="" placeholder="longitude..."/>
+      <button class="btn new-location" type="button">Add</button>
+    </div>
+    <div class="row-fluid" style="margin-top:4px;">
+      <div class="form-inline">
+        <label for="google-maps-link">
+          <h6>Or Use Google Maps Link:</h6>
+        </label>
+        <input type="text" class="google-maps-link" placeholder="paste google maps link here...">
+      </div>
+    </div>
+    <div class="row-fluid">
+      <ul class="locations">
+        <% _.each(locations, function(location){ %>
+          <li data-lat="<%- location[1] %>" data-lng="<%- location[0] %>">
+            <%- location[1] %>, <%- location[0] %>
+            <a href="#" class="remove-location">remove</a>
+          </li>
+        <% }) %>
+      </ul>
     </div>
   </div>
 </div>

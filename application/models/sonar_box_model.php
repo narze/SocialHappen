@@ -17,7 +17,8 @@ class Sonar_box_model extends CI_Model {
 			&& $this->collection->ensureIndex(array('data' => 1))
 			&& $this->collection->ensureIndex(array('name' => 1))
 			&& $this->collection->ensureIndex(array('id' => 1), array('unique' => 1))
-			&& $this->collection->ensureIndex(array('challenge_id' => 1));
+			&& $this->collection->ensureIndex(array('challenge_id' => 1))
+			&& $this->collection->ensureIndex(array('action_data_id' => 1));
 	}
 
 	function add($data)	{

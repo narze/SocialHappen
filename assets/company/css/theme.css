@@ -251,3 +251,7 @@ img.company-image{
   min-height: 120px;
   margin: 0 auto;
 }
+
+#action-modal .modal-body{
+  min-height: 400px;
+}
