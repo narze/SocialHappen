@@ -127,18 +127,19 @@ define [
   window.appLoaded = true
 
   window.checkSession = ->
-    $.ajax
-      url: window.baseUrl + 'apiv3/check_session'
-      dataType: 'json'
-      success: (resp) ->
-        now = moment().format('MMMM Do YYYY, h:mm:ss a')
-        if resp.success
-          console.log 'Session check ok : ' + now + ' UserId : ' + resp.data
-        else
-          clearInterval window.checkSessionInterval
-          if typeof mocha isnt 'function'
-            alert 'Session Expired ' + now
-            window.location.href = window.baseUrl + 'assets/backend/app/login.html'
+    if !window.location.href.match(/^https?:\/\/(socialhappen\.dyndns\.org|localhost)/)
+      $.ajax
+        url: window.baseUrl + 'apiv3/check_session'
+        dataType: 'json'
+        success: (resp) ->
+          now = moment().format('MMMM Do YYYY, h:mm:ss a')
+          if resp.success
+            console.log 'Session check ok : ' + now + ' UserId : ' + resp.data
+          else
+            clearInterval window.checkSessionInterval
+            if typeof mocha isnt 'function'
+              alert 'Session Expired ' + now
+              window.location.href = window.baseUrl + 'assets/backend/app/login.html'
 
   window.checkSession()
   window.checkSessionInterval = setInterval window.checkSession, 10000

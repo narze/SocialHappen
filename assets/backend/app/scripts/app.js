@@ -61,23 +61,25 @@
     Backbone.history.start();
     window.appLoaded = true;
     window.checkSession = function() {
-      return $.ajax({
-        url: window.baseUrl + 'apiv3/check_session',
-        dataType: 'json',
-        success: function(resp) {
-          var now;
-          now = moment().format('MMMM Do YYYY, h:mm:ss a');
-          if (resp.success) {
-            return console.log('Session check ok : ' + now + ' UserId : ' + resp.data);
-          } else {
-            clearInterval(window.checkSessionInterval);
-            if (typeof mocha !== 'function') {
-              alert('Session Expired ' + now);
-              return window.location.href = window.baseUrl + 'assets/backend/app/login.html';
+      if (!window.location.href.match(/^https?:\/\/(socialhappen\.dyndns\.org|localhost)/)) {
+        return $.ajax({
+          url: window.baseUrl + 'apiv3/check_session',
+          dataType: 'json',
+          success: function(resp) {
+            var now;
+            now = moment().format('MMMM Do YYYY, h:mm:ss a');
+            if (resp.success) {
+              return console.log('Session check ok : ' + now + ' UserId : ' + resp.data);
+            } else {
+              clearInterval(window.checkSessionInterval);
+              if (typeof mocha !== 'function') {
+                alert('Session Expired ' + now);
+                return window.location.href = window.baseUrl + 'assets/backend/app/login.html';
+              }
             }
           }
-        }
-      });
+        });
+      }
     };
     window.checkSession();
     return window.checkSessionInterval = setInterval(window.checkSession, 10000);
