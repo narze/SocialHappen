@@ -544,6 +544,8 @@ define([
           self.addDiscountReward(e).showEdit();
         } else if(reward === 'giveaway') {
           self.addGiveawayReward(e).showEdit();
+        } else if(reward === 'instant') {
+          self.addInstantReward(e).showEdit();
         } else {
           $('.setup-your-reward').show();
         }
@@ -596,6 +598,23 @@ define([
         description: 'Giveaway reward',
         is_points_reward: false,
         redeem_method: 'in_store'
+      };
+
+      return this._addReward(reward);
+    },
+
+    addInstantReward: function(e){
+      e.preventDefault();
+
+      var reward = {
+        name: 'Instant Reward',
+        image: window.Company.BASE_URL + 'assets/images/blank.png',
+        value: 0,
+        status: 'published',
+        type: 'challenge',
+        description: 'Instant reward',
+        is_points_reward: false,
+        is_instant_reward: true
       };
 
       return this._addReward(reward);
@@ -733,6 +752,8 @@ define([
           self.addDiscountReward(e);
         } else if(reward === 'giveaway') {
           self.addGiveawayReward(e);
+        } else if(reward === 'instant') {
+          self.addInstantReward(e);
         } else {
           $('.setup-your-reward').show();
         }
