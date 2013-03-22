@@ -6,6 +6,7 @@ body {
     background-size: cover;
 }
 .fallback-message {
+    display: none;
     font-family: sans-serif;
     line-height: 1.3;
 
@@ -20,10 +21,11 @@ body {
 .fallback-message p {
     margin-bottom: 10px;
 }
-.impress-supported .fallback-message {
-    display: none;
+.impress-not-supported .fallback-message {
+    display: block;
 }
 .control {
+    display: none;
     cursor: pointer;
     position: fixed;
     bottom: 20px;
@@ -49,4 +51,7 @@ body {
     border-right-width: 22px;
     border-right-color: #13daec;
     left: 20px;
+}
+.impress-supported .control {
+    display: block;
 }
