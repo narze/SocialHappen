@@ -32,7 +32,8 @@ require.config
     jqueryui:
       deps: ['jquery']
     moment:
-      exports: 'moment'
+      exports: ->
+        return window.moment
     backbonePaginator:
       deps: ['backbone']
     backboneValidation:
