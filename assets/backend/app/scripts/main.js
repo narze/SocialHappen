@@ -42,7 +42,9 @@
         deps: ['jquery']
       },
       moment: {
-        exports: 'moment'
+        exports: function() {
+          return window.moment;
+        }
       },
       backbonePaginator: {
         deps: ['backbone']
