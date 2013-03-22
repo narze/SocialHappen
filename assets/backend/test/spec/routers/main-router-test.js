@@ -25,8 +25,11 @@
       it('should have rewards route', function() {
         return window.backend.Routers.MainRouter.routes['rewards'].should.be.equal('rewards');
       });
-      return it('should have devices route', function() {
+      it('should have devices route', function() {
         return window.backend.Routers.MainRouter.routes['devices'].should.be.equal('devices');
+      });
+      return it('should have reward-machines route', function() {
+        return window.backend.Routers.MainRouter.routes['reward-machines'].should.be.equal('reward-machines');
       });
     });
     return describe('routing', function() {
@@ -318,6 +321,60 @@
             $form.text().should.match(/Company/);
             $form.text().should.match(/Branch/);
             $form.text().should.match(/Add Device/);
+            return $form.text().should.match(/Cancel/);
+          });
+        });
+      });
+      describe('reward-machines', function() {
+        it('should load reward-machines view when switched route to reward-machines', function() {
+          window.backend.Routers.MainRouter.navigate('reward-machines', {
+            trigger: true
+          });
+          return window.backend.Views.RewardMachinesView.rendered.should.equal(true);
+        });
+        it('should set the reward-machine menu as active', function() {
+          return $('#sidebar-view').find('.main-menu li.reward-machines-tab-menu').hasClass('active').should.be["true"];
+        });
+        it('should have reward-machine-item as a subview', function() {
+          var subViewName;
+          subViewName = 'reward-machine-' + window.backend.Collections.RewardMachineCollection.models[0].cid;
+          return window.backend.Views.RewardMachinesView.subViews[subViewName].should.not.be.undefined;
+        });
+        it('should render #reward-machines-view into #content', function() {
+          return $('#content').find('#reward-machines-view').length.should.be.above(0);
+        });
+        it('should have all fields required', function() {
+          $('#content').find('#reward-machines-view').find('thead').find('th').length.should.equal(4);
+          $('#content').find('#reward-machines-view').find('thead').text().should.match(/ID/);
+          $('#content').find('#reward-machines-view').find('thead').text().should.match(/Name/);
+          $('#content').find('#reward-machines-view').find('thead').text().should.match(/Description/);
+          return $('#content').find('#reward-machines-view').find('thead').text().should.match(/Location/);
+        });
+        it('should have correct first row of data', function() {
+          return $('#content #reward-machines-view .reward-machine-item:first td').length.should.equal(4);
+        });
+        describe('after data fetched', function() {
+          return it('should load each .reward-machine-item into #reward-machines-view', function() {
+            return $('#reward-machines-view').find('.reward-machine-item').length.should.be.above(0);
+          });
+        });
+        return describe('reward-machine add view', function() {
+          it('should have reward-machine-add-view as a subview', function() {
+            return window.backend.Views.RewardMachinesView.subViews['reward-machine-add'].should.not.be.undefined;
+          });
+          it('should have reward-machine add view', function() {
+            return $('#reward-machines-view').find('#reward-machine-add-view').length.should.be.above(0);
+          });
+          it('should have form', function() {
+            return $('form.reward-machine-add-form').length.should.be.above(0);
+          });
+          return it('should have labels for each form item', function() {
+            var $form;
+            $form = $('form.reward-machine-add-form');
+            $form.text().should.match(/Name/);
+            $form.text().should.match(/Description/);
+            $form.text().should.match(/Location/);
+            $form.text().should.match(/Add Reward Machine/);
             return $form.text().should.match(/Cancel/);
           });
         });

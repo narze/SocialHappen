@@ -8,6 +8,7 @@ define [
   'views/challenges-view'
   'views/rewards-view'
   'views/devices-view'
+  'views/reward-machines-view'
   'models/company-model'
   'collections/company-collection'
   'models/user-model'
@@ -22,6 +23,8 @@ define [
   'collections/device-collection'
   'models/branch-model'
   'collections/branch-collection'
+  'models/reward-machine-model'
+  'collections/reward-machine-collection'
   'moment'
 ], (
   Main
@@ -33,6 +36,7 @@ define [
   ChallengesView
   RewardsView
   DevicesView
+  RewardMachinesView
   CompanyModel
   CompanyCollection
   UserModel
@@ -47,6 +51,8 @@ define [
   DeviceCollection
   BranchModel
   BranchCollection
+  RewardMachineModel
+  RewardMachineCollection
   moment
 ) ->
 
@@ -98,6 +104,10 @@ define [
 
   window.backend.Collections.BranchCollection = new BranchCollection
 
+  window.backend.Models.RewardMachineModel = RewardMachineModel
+
+  window.backend.Collections.RewardMachineCollection = new RewardMachineCollection
+
   window.backend.Views.MainView = new MainView
   window.backend.Views.MainView.render()
 
@@ -118,6 +128,9 @@ define [
 
   window.backend.Views.DevicesView = new DevicesView
     collection: window.backend.Collections.DeviceCollection
+
+  window.backend.Views.RewardMachinesView = new RewardMachinesView
+    collection: window.backend.Collections.RewardMachineCollection
 
   Backbone.emulateJSON = true
   Backbone.emulateHTTP = true

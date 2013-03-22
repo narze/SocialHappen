@@ -2185,6 +2185,62 @@ class Apiv3 extends CI_Controller {
       return $this->error();
     }
   }
+
+  function reward_machines() {
+    if ($model = json_decode($this->input->post('model'), TRUE)) {
+      return $this->_reward_machine_add($model);
+    }
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('reward_machine_lib');
+
+    $query_options = array();
+    if(isset($filter['name']) && strlen($filter['name'])) {
+      $query_options['name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(isset($filter['description']) && strlen($filter['description'])) {
+      $query_options['description'] = array('$regex' => '\b'.$filter['description'], '$options' => 'i');
+    }
+
+    # sort & order
+    if(in_array($sort, array('name', '_id'))) {
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $reward_machines = $this->reward_machine_lib->get($query_options, $limit, $offset, $sort);
+    $reward_machines_all_count = $this->reward_machine_lib->count($query_options);
+
+    $options = array(
+      'total' => $reward_machines_all_count,
+      'total_pages' => ceil($reward_machines_all_count / $limit),
+      'count' => count($reward_machines),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($reward_machines, 1, $options);
+  }
+
+  function _reward_machine_add($machine) {
+      $this->load->library('reward_machine_lib');
+
+      if(!strlen($machine['name'])) {
+        return $this->error('Reward machine data invalid');
+      }
+
+      if(!$machine_item_id = $this->reward_machine_lib->add($machine)) {
+        return $this->error('Add reward machinemachine failed');
+      }
+
+      return $this->success($machine);
+    }
 }
 
 /* End of file apiv3.php */

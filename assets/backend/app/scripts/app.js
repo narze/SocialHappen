@@ -1,6 +1,6 @@
 (function() {
 
-  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'views/rewards-view', 'views/devices-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection', 'models/reward-model', 'collections/reward-collection', 'models/device-model', 'collections/device-collection', 'models/branch-model', 'collections/branch-collection', 'moment'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, RewardsView, DevicesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection, RewardModel, RewardCollection, DeviceModel, DeviceCollection, BranchModel, BranchCollection, moment) {
+  define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'views/activities-view', 'views/companies-view', 'views/challenges-view', 'views/rewards-view', 'views/devices-view', 'views/reward-machines-view', 'models/company-model', 'collections/company-collection', 'models/user-model', 'collections/user-collection', 'models/activity-model', 'collections/activity-collection', 'models/challenge-model', 'collections/challenge-collection', 'models/reward-model', 'collections/reward-collection', 'models/device-model', 'collections/device-collection', 'models/branch-model', 'collections/branch-collection', 'models/reward-machine-model', 'collections/reward-machine-collection', 'moment'], function(Main, MainRouter, MainView, UsersView, ActivitiesView, CompaniesView, ChallengesView, RewardsView, DevicesView, RewardMachinesView, CompanyModel, CompanyCollection, UserModel, UserCollection, ActivityModel, ActivityCollection, ChallengeModel, ChallengeCollection, RewardModel, RewardCollection, DeviceModel, DeviceCollection, BranchModel, BranchCollection, RewardMachineModel, RewardMachineCollection, moment) {
     var config, env;
     config = {
       dev: {
@@ -36,6 +36,8 @@
     window.backend.Collections.DeviceCollection = new DeviceCollection;
     window.backend.Models.BranchModel = BranchModel;
     window.backend.Collections.BranchCollection = new BranchCollection;
+    window.backend.Models.RewardMachineModel = RewardMachineModel;
+    window.backend.Collections.RewardMachineCollection = new RewardMachineCollection;
     window.backend.Views.MainView = new MainView;
     window.backend.Views.MainView.render();
     window.backend.Views.UsersView = new UsersView({
@@ -55,6 +57,9 @@
     });
     window.backend.Views.DevicesView = new DevicesView({
       collection: window.backend.Collections.DeviceCollection
+    });
+    window.backend.Views.RewardMachinesView = new RewardMachinesView({
+      collection: window.backend.Collections.RewardMachineCollection
     });
     Backbone.emulateJSON = true;
     Backbone.emulateHTTP = true;
