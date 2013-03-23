@@ -604,7 +604,7 @@ class Apiv4 extends REST_Controller {
 
         //check challenge progress (actions)
         foreach($challenge['criteria'] as &$criteria) {
-          $action_data_id = $criteria['action_data_id'];
+          $action_data_id = issetor($criteria['action_data_id']);
           if(isset($user['challenge_progress'][$challenge_id]['action_data']) && in_array($action_data_id, $user['challenge_progress'][$challenge_id]['action_data'])) {
             $criteria['action_completed'] = TRUE;
           } else {
