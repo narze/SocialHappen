@@ -31,7 +31,8 @@ class Action_data_lib_test extends CI_Controller {
 					'feedback' => array('id' => 202, 'add_method' => 'add_feedback_action_data'),
 					'checkin' => array('id' => 203, 'add_method' => 'add_checkin_action_data'),
 					'walkin' => array('id' => 204, 'add_method' => 'add_walkin_action_data'),
-					'video' => array('id' => 206, 'add_method' => 'add_walkin_action_data')
+					'video' => array('id' => 206, 'add_method' => 'add_video_action_data'),
+					'like' => array('id' => 207, 'add_method' => 'add_like_action_data')
 				);
 		$result = $this->action_data_lib->get_platform_action();
 		$this->unit->run($result, $expect, "\$result", print_r($result, TRUE));

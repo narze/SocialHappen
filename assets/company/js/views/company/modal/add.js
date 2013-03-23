@@ -12,6 +12,7 @@ define([
   'views/company/modal/action/checkin-action',
   'views/company/modal/action/walkin-action',
   'views/company/modal/action/video-action',
+  'views/company/modal/action/like-action',
   'views/company/modal/reward/reward',
   'jqueryui',
   'jqueryForm',
@@ -20,7 +21,7 @@ define([
   'chosen'
 ], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate,
    addActionTemplate, addRewardTemplate, FeedbackActionView,
-   QRActionView, CheckinActionView, WalkinActionView, VideoActionView, RewardView, jqueryui,
+   QRActionView, CheckinActionView, WalkinActionView, VideoActionView, LikeActionView, RewardView, jqueryui,
     jqueryForm, vent, sandbox, chosen){
   var EditModalView = Backbone.View.extend({
 
@@ -194,6 +195,15 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(videoActionView.render().el);
+        } else if(type === 207) {
+          var likeActionView = new LikeActionView({
+            model: this.model,
+            action: action,
+            vent: vent,
+            triggerModal: 'showAddModal'
+          });
+
+          $('ul.criteria-list', this.el).append(likeActionView.render().el);
         }
       }, this);
 
@@ -349,6 +359,8 @@ define([
           self.addWalkin(e).showEdit();
         } else if(recipe === 'video') {
           self.addVideo(e).showEdit();
+        } else if(recipe === 'like') {
+          self.addLike(e).showEdit();
         }
       });
     },
@@ -526,6 +538,40 @@ define([
       $('ul.criteria-list', this.el).append(videoActionView.render().el);
 
       return videoActionView;
+    },
+
+    addLike: function(e){
+      e.preventDefault();
+      console.log('show add video');
+
+      var likeDefaultAction = {
+        query: {
+          action_id: 207
+        },
+        count: 1,
+        name: 'Like',
+        description: '',
+        url: null,
+        facebook_id: null,
+        action_data: {
+          data: {
+
+          },
+          action_id: 207
+        }
+      };
+
+      var likeActionView = new LikeActionView({
+        model: this.model,
+        vent: vent,
+        action: likeDefaultAction,
+        triggerModal: 'showAddModal',
+        add: true
+      });
+
+      $('ul.criteria-list', this.el).append(likeActionView.render().el);
+
+      return likeActionView;
     },
 
     showAddNewRewardModal: function(e) {
@@ -747,6 +793,8 @@ define([
           self.addWalkin(e);
         }else if(recipe === 'video') {
           self.addVideo(e);
+        }else if(recipe === 'like') {
+          self.addLike(e);
         }
 
         $('.setup-your-reward').hide();
