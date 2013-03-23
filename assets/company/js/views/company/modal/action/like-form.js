@@ -10,7 +10,8 @@ define([
 
     events: {
       'click button.save': 'saveEdit',
-      'click button.cancel': 'cancelEdit'
+      'click button.cancel': 'cancelEdit',
+      'click button.get-facebookid': 'onClickGetFacebookId'
     },
 
     initialize: function(){
@@ -21,6 +22,18 @@ define([
       var data = this.options.action;
 
       $(this.el).html(this.likeEditTemplate(data));
+
+      if((typeof data.page_name != 'undefined') && data.page_name){
+        this.$('div.page_name').show();
+      }else{
+        this.$('div.page_name').hide();
+      }
+
+      if((typeof data.facebook_id != 'undefined') && data.facebook_id){
+        // this.$('div.facebook_id').show();
+      }else{
+        this.$('div.facebook_id').hide();
+      }
 
       return this;
     },
@@ -35,6 +48,55 @@ define([
       $('input.challenge-name', this.el).focus();
     },
 
+    onClickGetFacebookId: function(){
+      var url = $('input.url', this.el).val();
+
+      if(url){
+        var self = this;
+
+        this.$('div.page_name').hide();
+        // this.$('div.facebook_id').hide();
+
+        $('input.page_name', this.el).val('');
+        $('input.facebook_id', this.el).val('');
+
+        FB.api({
+          method: 'fql.query',
+            query: 'SELECT url, id, type, site FROM object_url WHERE url="' + url + '"'
+          },
+          function(response) {
+            console.log(response);
+            if(response && response.length > 0 && response[0].type == 'page'){
+
+              var page_id = response[0].id;
+
+              FB.api({
+                method: 'fql.query',
+                  query: 'SELECT name FROM page WHERE page_id = ' + page_id
+                },
+                function(response) {
+                  console.log(response);
+                  if(response && response.length > 0 && response[0].name){
+                    self.$('input.facebook_id').val(page_id);
+
+                    self.$('input.page_name').val(response[0].name);
+                    self.$('a.page_name').text(response[0].name);
+                    self.$('a.page_name').attr('src', url);
+                    self.$('div.page_name').show();
+                    // this.$('div.facebook_id').show();
+                  }else{
+                    alert('get Facebook page name error, please enter a valid page url.');
+                  }
+                }
+              );
+            }else{
+              alert('get Facebook page id error, please enter a valid page url.');
+            }
+          }
+        );
+      }
+    },
+
     saveEdit: function(e){
       e.preventDefault();
 
@@ -42,6 +104,9 @@ define([
       this.options.action.description = this.$('textarea.description').val();
       this.options.action.url = $('input.url', this.el).val();
       this.options.action.facebook_id = $('input.facebook_id', this.el).val();
+      this.options.action.page_name = $('input.page_name', this.el).val();
+
+      console.log('save  edit action', this.options.action);
 
       var criteria = this.model.get('criteria');
       this.model.set('criteria', criteria).trigger('change');

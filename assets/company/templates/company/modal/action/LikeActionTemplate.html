@@ -15,8 +15,8 @@
     <div class="span9">
       <h5>Like</h5>
       <p><%= name %></p>
-      <p>Url: <%= (typeof url !== 'undefined' && url) ? '<a href="' + url + '" target="_blank">'+url+'</a>':'not set' %></p>
-      <p>Facebook id: <%= (typeof url !== 'undefined' && facebook_id) ? '<a href="https://graph.facebook.com/' + facebook_id + '?access_token='+FB.getAccessToken()+'" target="_blank">'+facebook_id+'</a>':'not set' %></p>
+      <!-- <p>Url: <%= (typeof url !== 'undefined' && url) ? '<a href="' + url + '" target="_blank">'+url+'</a>':'not set' %></p> -->
+      <p>Page: <%= (typeof url !== 'undefined' && facebook_id) ? '<a href="' + url + '" target="_blank">'+page_name+'</a>':'not set' %></p>
       <p><%= typeof description !== 'undefined' ? description : "" %></p>
     </div>
   </div>

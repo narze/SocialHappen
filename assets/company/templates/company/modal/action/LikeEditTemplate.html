@@ -22,14 +22,22 @@
   </div>
   <div class="control-group">
     <label class="control-label" for="url"><h6>Url to like:</h6></label>
-    <div class="controls">
-      <input type="text" class="url span5" name="url" value="<%= url %>" placeholder="http://www.facebook.com/" />
+    <div class="controls form-inline">
+      <input type="text" class="url span4" name="url" value="<%= url %>" placeholder="http://www.facebook.com/" />
+      <button type="btn" class="btn get-facebookid">Check URL</button>
     </div>
   </div>
-  <div class="control-group">
-    <label class="control-label" for="facebook_id"><h6>Facebook id to like:</h6></label>
+  <div class="control-group page_name hide">
+    <label class="control-label" for="page_name"><h6>Page:</h6></label>
     <div class="controls">
-      <input type="text" class="facebook_id span5" name="facebook_id" value="<%= facebook_id %>" placeholder="Facebook object id" />
+      <a class="page_name" href="<%= url %>" target="_blank"><%= (typeof page_name != 'undefined') && page_name ? page_name : '' %></a>
+      <input type="hidden" class="page_name span5" name="page_name" value="<%= (typeof page_name != 'undefined') && page_name ? page_name : '' %>"/>
+    </div>
+  </div>
+  <div class="control-group facebook_id hide">
+    <label class="control-label" for="facebook_id"><h6>Facebook id:</h6></label>
+    <div class="controls">
+      <input type="text" class="facebook_id span5" name="facebook_id" value="<%= facebook_id %>" placeholder="Facebook object id"/>
     </div>
   </div>
 </div>

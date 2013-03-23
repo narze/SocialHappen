@@ -619,6 +619,7 @@ define([
         description: '',
         url: null,
         facebook_id: null,
+        page_name: null,
         action_data: {
           data: {
 
