@@ -41,6 +41,7 @@ define([
       this.options.action.name = $('input.name', this.el).val();
       this.options.action.description = this.$('textarea.description').val();
       this.options.action.url = $('input.url', this.el).val();
+      this.options.action.facebook_id = $('input.facebook_id', this.el).val();
 
       var criteria = this.model.get('criteria');
       this.model.set('criteria', criteria).trigger('change');
