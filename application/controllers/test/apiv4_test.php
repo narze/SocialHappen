@@ -1782,7 +1782,7 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['transaction_id'], 'is_string', "transaction_id should be a string", $result['data']['transaction_id']);
   	$this->unit->run($result['data']['reward_machine_id'], 'is_string', "reward_machine_id should be a string", $result['data']['reward_machine_id']);
   	$this->unit->run($result['data']['reward_machine_id'] === $this->reward_machine_id, TRUE, "reward_machine_id should match", $result['data']['reward_machine_id']);
-  	$this->unit->run($result['data']['timestamp'], 'is_int', "timestamp should be int", $result['data']['timestamp']);
+  	$this->unit->run($result['timestamp'], 'is_int', "timestamp should be int", $result['timestamp']);
 
   	$this->instant_reward_transaction_id = $result['data']['transaction_id'];
 
@@ -1805,7 +1805,7 @@ class Apiv4_test extends CI_Controller {
 		$result = $this->post($method, $params);
 
 		$this->unit->run($result['success'], FALSE, "success should be false", $result['success']);
-		$this->unit->run($result['data'], 'is_string', "data should be string (error message)", $result['data']['timestamp']);
+		$this->unit->run($result['data'], 'is_string', "data should be string (error message)", $result['data']);
 		$this->unit->run($result['data'] === 'Reward claimed already', TRUE, "", $result['data']);
   }
 
@@ -1823,7 +1823,7 @@ class Apiv4_test extends CI_Controller {
   	$result = $this->post($method, $params);
 
   	$this->unit->run($result['success'], FALSE, "success should be false", $result['success']);
-  	$this->unit->run($result['data'], 'is_string', "data should be string (error message)", $result['data']['timestamp']);
+  	$this->unit->run($result['data'], 'is_string', "data should be string (error message)", $result['data']);
   	$this->unit->run($result['data'] === 'Invalid reward', TRUE, "", $result['data']);
   }
 

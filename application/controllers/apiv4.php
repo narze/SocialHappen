@@ -1826,8 +1826,7 @@ class Apiv4 extends REST_Controller {
     if($transaction_id = $this->instant_reward_queue_lib->add($transaction)) {
       return $this->success(array(
         'transaction_id' => $transaction_id,
-        'reward_machine_id' => $reward_machine_id,
-        'timestamp' => $time
+        'reward_machine_id' => $reward_machine_id
       ));
     }
 
@@ -1864,7 +1863,7 @@ class Apiv4 extends REST_Controller {
       return $this->error('Reward not released yet');
     }
 
-    return $this->success();
+    return $this->success('Reward released');
   }
 
   function instant_reward_machine_poll_get() {

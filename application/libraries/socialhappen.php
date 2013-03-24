@@ -122,7 +122,9 @@ class SocialHappen{
 			'user_mongo_model',
 			'user_token_model',
 			'sonar_box_model',
-			'branch_model'
+			'branch_model',
+			'reward_machine_model',
+			'instant_reward_queue_model'
 		);
 		foreach($models as $model){
 			$this->CI->load->model($model);
