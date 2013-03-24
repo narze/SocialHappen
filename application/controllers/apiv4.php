@@ -1900,7 +1900,7 @@ class Apiv4 extends REST_Controller {
 
     $this->load->library('instant_reward_queue_lib');
 
-    if(!$update_result = $this->instant_reward_queue_lib->update(array('_id' => new MongoId($transaction_id)), array('status' => $status))) {
+    if(!$update_result = $this->instant_reward_queue_lib->update(array('_id' => new MongoId($transaction_id), 'reward_machine_id' => $reward_machine_id), array('status' => $status))) {
       return $this->error('Transaction update failed');
     }
 
