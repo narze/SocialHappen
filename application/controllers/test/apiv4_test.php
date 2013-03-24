@@ -1917,6 +1917,26 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
   	$this->unit->run($result['data']['release'], FALSE, "release should be false", $result['data']['release']);
   }
+
+  # instant reward machine taken tests
+  function should_request_with_taken_and_change_transaction_status_to_taken_test() {
+  	$reward_machine_id = $this->reward_machine_id;
+  	$transaction_id = $this->instant_reward_transaction_id;
+  	$taken = TRUE;
+  	$params = compact('reward_machine_id', 'taken', 'transaction_id');
+  	$method = 'instant_reward_machine_taken';
+  	$result = $this->post($method, $params);
+
+  	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
+  	$this->unit->run(isset($result['data']['release']), FALSE, "release should not be set", isset($result['data']['release']));
+  	$this->unit->run($result['data'], 'is_array', "data should be array", $result['data']);
+  	$this->unit->run($result['data']['taken'], TRUE, "taken should be true", $result['data']);
+
+  	# transaction status should be taken
+  	$this->load->library('instant_reward_queue_lib');
+  	$transaction = $this->instant_reward_queue_lib->get_by_id($this->instant_reward_transaction_id);
+  	$this->unit->run($transaction['status'] === 'taken', TRUE, "status should be released", $transaction['status']);
+  }
 }
 /* End of file apiv4_test.php */
 /* Location: ./application/controllers/test/apiv4_test.php */

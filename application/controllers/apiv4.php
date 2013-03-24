@@ -1906,4 +1906,21 @@ class Apiv4 extends REST_Controller {
 
     return $this->success(array('released' => TRUE));
   }
+
+  function instant_reward_machine_taken_post() {
+    $reward_machine_id = $this->post('reward_machine_id');
+    $transaction_id = $this->post('transaction_id');
+
+    if(!$reward_machine_id || !$transaction_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->library('instant_reward_queue_lib');
+
+    if(!$update_result = $this->instant_reward_queue_lib->update(array('_id' => new MongoId($transaction_id)), array('status' => 'taken'))) {
+      return $this->error('Transaction update failed');
+    }
+
+    return $this->success(array('taken' => TRUE));
+  }
 }
