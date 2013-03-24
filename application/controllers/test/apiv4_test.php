@@ -1330,7 +1330,7 @@ class Apiv4_test extends CI_Controller {
 
   	//check last_active
   	$user = $this->user_token_model->getOne($user_criteria);
-  	$this->unit->run($user['last_active'] === time(), TRUE, "\$user['last_active']", $user['last_active']);
+  	$this->unit->run($user['last_active'], 'is_int', "\$user['last_active']", $user['last_active']);
   }
 
   function _company_credit_check_test() {
@@ -1738,6 +1738,182 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($user['user_id'], $this->user_id, "\$user['user_id']", $user['user_id']);
   	$this->unit->run(isset($user['challenge_progress'][$this->challenge_id6]), FALSE, "action_data of challenge progress should be 0 because challenge is completed", isset($user['challenge_progress'][$this->challenge_id6]));
   	$this->unit->run(count($user['daily_challenge_completed'][$this->challenge_id6]) === 1, TRUE, "count(\$user['daily_challenge_completed'][$this->challenge_id6])", count($user['daily_challenge_completed'][$this->challenge_id6]));
+  }
+
+  # claim reward tests
+  # add more rewards before claiming
+  function _add_machine_reward_test() {
+	  //Add reward machine
+	  $this->load->library('reward_machine_lib');
+	  $reward_machine = array(
+	  	'name' => 'Reward Machine A',
+	  	'description' => NULL,
+	  	'location' => array(0,0)
+  	);
+	  $this->reward_machine_id = $this->reward_machine_lib->add($reward_machine);
+	  $this->unit->run($this->reward_machine_id, 'is_string', "reward machine id should be string", $this->reward_machine_id);
+
+		//Add reward with reward_machine_id
+	  $this->load->model('reward_item_model', 'reward_item');
+	  $name = 'Instant Reward A';
+	  $status = 'published';
+	  $challenge_id = 'asdf';
+	  $image = base_url().'assets/images/cam-icon.png';
+	  $value = '0';
+	  $description = 'From Gashapon Machine A';
+	  $is_instant_reward = TRUE;
+	  $reward_machine_id = $this->reward_machine_id;
+	  $input = compact('name', 'status', 'type', 'challenge_id', 'image', 'value', 'description', 'is_instant_reward', 'reward_machine_id');
+
+	  $this->instant_reward_item_id = $result = $this->reward_item->add_challenge_reward($input);
+	  $this->unit->run($result, 'is_string', "\$result", $result);
+  }
+
+  function user_could_claim_reward_test() {
+  	$user_id = 1;
+  	$reward_item_id = $this->instant_reward_item_id;
+  	$params = compact('user_id', 'reward_item_id');
+
+  	$method = 'claim_reward';
+
+  	$result = $this->post($method, $params);
+
+  	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
+  	$this->unit->run($result['data']['transaction_id'], 'is_string', "transaction_id should be a string", $result['data']['transaction_id']);
+  	$this->unit->run($result['data']['reward_machine_id'], 'is_string', "reward_machine_id should be a string", $result['data']['reward_machine_id']);
+  	$this->unit->run($result['data']['reward_machine_id'] === $this->reward_machine_id, TRUE, "reward_machine_id should match", $result['data']['reward_machine_id']);
+  	$this->unit->run($result['data']['timestamp'], 'is_int', "timestamp should be int", $result['data']['timestamp']);
+
+  	$this->instant_reward_transaction_id = $result['data']['transaction_id'];
+
+  	$this->load->library('instant_reward_queue_lib');
+  	$transaction = $this->instant_reward_queue_lib->get_by_id($this->instant_reward_transaction_id);
+  	$this->unit->run($transaction['status'] === 'waiting', TRUE, "reward queue status should be 'waiting'", $transaction['status']);
+  }
+
+  function user_could_not_claim_reward_if_claimed_already_test() {
+  	// TODO
+  }
+
+	function user_could_not_claim_reward_if_claiming_test() {
+		$user_id = 1;
+		$reward_item_id = $this->instant_reward_item_id;
+		$params = compact('user_id', 'reward_item_id');
+
+		$method = 'claim_reward';
+
+		$result = $this->post($method, $params);
+
+		$this->unit->run($result['success'], FALSE, "success should be false", $result['success']);
+		$this->unit->run($result['data'], 'is_string', "data should be string (error message)", $result['data']['timestamp']);
+		$this->unit->run($result['data'] === 'Reward claimed already', TRUE, "", $result['data']);
+  }
+
+  function user_could_not_claim_reward_if_user_has_not_owned_that_item_test() {
+  	// TODO
+  }
+
+  function user_could_not_claim_reward_if_reward_is_not_instant_reward_type_test() {
+  	$user_id = 1;
+  	$reward_item_id = $this->reward_item_id;
+  	$params = compact('user_id', 'reward_item_id');
+
+  	$method = 'claim_reward';
+
+  	$result = $this->post($method, $params);
+
+  	$this->unit->run($result['success'], FALSE, "success should be false", $result['success']);
+  	$this->unit->run($result['data'], 'is_string', "data should be string (error message)", $result['data']['timestamp']);
+  	$this->unit->run($result['data'] === 'Invalid reward', TRUE, "", $result['data']);
+  }
+
+  # reward released poll tests
+  function should_not_return_success_if_transaction_dont_have_released_status_test() {
+  	$user_id = 1;
+  	$reward_item_id = $this->instant_reward_item_id;
+  	$transaction_id = $this->instant_reward_transaction_id;
+  	$params = compact('user_id', 'reward_item_id', 'transaction_id');
+
+  	$method = 'reward_released_poll';
+
+  	$result = $this->post($method, $params);
+
+  	$this->unit->run($result['success'], FALSE, "result should be false", $result['success']);
+  	$this->unit->run($result['data'], 'is_string', "data should be error message", $result['data']);
+  	$this->unit->run($result['data'] === 'Reward not released yet', TRUE, "", $result['data']);
+  }
+
+  function should_return_success_if_transaction_have_released_status_test() {
+  	$user_id = 1;
+  	$reward_item_id = $this->instant_reward_item_id;
+  	$transaction_id = $this->instant_reward_transaction_id;
+
+  	# change transaction status to released
+  	$this->load->model('instant_reward_queue_model');
+  	$this->instant_reward_queue_model->update(array('_id' => new MongoId($transaction_id)), array('$set' => array('status' => 'released')));
+
+  	$params = compact('user_id', 'reward_item_id', 'transaction_id');
+
+  	$method = 'reward_released_poll';
+
+  	$result = $this->post($method, $params);
+
+  	$this->unit->run($result['success'], TRUE, "result should be true", $result['success']);
+
+  	# change transaction status back to waiting
+  	$this->load->model('instant_reward_queue_model');
+  	$this->instant_reward_queue_model->update(array('_id' => new MongoId($transaction_id)), array('$set' => array('status' => 'waiting')));
+  }
+
+  # instant reward machine poll tests
+  function should_not_return_release_if_the_machine_has_no_queue_test() {
+  	$reward_machine_id = $this->reward_machine_id . 'asdf';
+  	$params = compact('reward_machine_id');
+  	$method = 'instant_reward_machine_poll';
+  	$result = $this->post($method, $params);
+
+  	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
+  	$this->unit->run($result['data']['release'], FALSE, "release should be false", $result['data']['release']);
+  }
+
+  function should_return_release_if_the_machine_has_queue_test() {
+  	$reward_machine_id = $this->reward_machine_id;
+  	$params = compact('reward_machine_id');
+  	$method = 'instant_reward_machine_poll';
+  	$result = $this->post($method, $params);
+  	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
+  	$this->unit->run($result['data']['release'], TRUE, "release should be true", $result['data']['release']);
+  	$this->unit->run($result['data']['transaction_id'] === $this->instant_reward_transaction_id, TRUE, "transaction_id should match", $result['data']['transaction_id']);
+  	$this->unit->run($result['data']['user_id'] === 1, TRUE, "user_id should match", $result['data']['user_id']);
+  }
+
+  function should_request_with_released_and_change_transaction_status_to_released_test() {
+  	$reward_machine_id = $this->reward_machine_id;
+  	$transaction_id = $this->instant_reward_transaction_id;
+  	$released = TRUE;
+  	$params = compact('reward_machine_id', 'released', 'transaction_id');
+  	$method = 'instant_reward_machine_poll';
+  	$result = $this->post($method, $params);
+
+  	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
+  	$this->unit->run(isset($result['data']['release']), FALSE, "release should not be set", isset($result['data']['release']));
+  	$this->unit->run($result['data'], 'is_array', "data should be array", $result['data']);
+  	$this->unit->run($result['data']['released'], TRUE, "released should be true", $result['data']);
+
+  	# transaction status should be released
+  	$this->load->library('instant_reward_queue_lib');
+  	$transaction = $this->instant_reward_queue_lib->get_by_id($this->instant_reward_transaction_id);
+  	$this->unit->run($transaction['status'] === 'released', TRUE, "status should be released", $transaction['status']);
+  }
+
+  function should_not_return_release_if_the_machine_has_queue_but_already_released_test() {
+  	$reward_machine_id = $this->reward_machine_id;
+  	$params = compact('reward_machine_id');
+  	$method = 'instant_reward_machine_poll';
+  	$result = $this->post($method, $params);
+
+  	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
+  	$this->unit->run($result['data']['release'], FALSE, "release should be false", $result['data']['release']);
   }
 }
 /* End of file apiv4_test.php */

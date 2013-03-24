@@ -1779,4 +1779,128 @@ class Apiv4 extends REST_Controller {
     }
     return $this->success($config);
   }
+
+  function claim_reward_post() {
+    $user_id = (int) $this->post('user_id');
+    $reward_item_id = $this->post('reward_item_id');
+
+    if(!$user_id || !$reward_item_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->model('user_model');
+    $this->load->library('reward_lib');
+    $this->load->library('instant_reward_queue_lib');
+
+    if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
+      return $this->error('User not found');
+    }
+
+    if(!$reward_item = $this->reward_lib->get_reward_item($reward_item_id)) {
+      return $this->error('Reward item not found');
+    }
+
+    // TODO - check that user really owns that reward
+
+    // check if user already claimed this reward
+    $latest_transaction = $this->instant_reward_queue_lib->get_one(compact('user_id', 'reward_item_id'));
+    if($latest_transaction['status'] === 'waiting') {
+      return $this->error('Reward claimed already');
+    }
+
+    // get reward machine id from reward
+    if((!$reward_machine_id = issetor($reward_item['reward_machine_id'])) || !issetor($reward_item['is_instant_reward'])) {
+      return $this->error('Invalid reward');
+    }
+
+    // add queue & return transaction id
+    $time = time();
+    $transaction = array(
+      'user_id' => $user_id,
+      'reward_item_id' => $reward_item_id,
+      'reward_machine_id' => $reward_machine_id,
+      'status' => 'waiting',
+      'last_updated' => $time,
+    );
+
+    if($transaction_id = $this->instant_reward_queue_lib->add($transaction)) {
+      return $this->success(array(
+        'transaction_id' => $transaction_id,
+        'reward_machine_id' => $reward_machine_id,
+        'timestamp' => $time
+      ));
+    }
+
+    return $this->error('Queue add failed');
+  }
+
+  function reward_released_poll_post() {
+    $user_id = $this->post('user_id');
+    $reward_item_id = $this->post('reward_item_id');
+    $transaction_id = $this->post('transaction_id');
+
+    if(!$user_id || !$reward_item_id || !$transaction_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->model('user_model');
+    $this->load->library('reward_lib');
+    $this->load->library('instant_reward_queue_lib');
+
+    if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
+      return $this->error('User not found');
+    }
+
+    if(!$reward_item = $this->reward_lib->get_reward_item($reward_item_id)) {
+      return $this->error('Reward item not found');
+    }
+
+    if(!$transaction = $this->instant_reward_queue_lib->get_by_id($transaction_id)) {
+      return $this->error('Transaction not found');
+    }
+
+    // return success if it is released, otherwise not success
+    if($transaction['status'] !== 'released') {
+      return $this->error('Reward not released yet');
+    }
+
+    return $this->success();
+  }
+
+  function instant_reward_machine_poll_post() {
+    $reward_machine_id = $this->post('reward_machine_id');
+    $transaction_id = $this->post('transaction_id');
+
+    if(!$reward_machine_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->library('instant_reward_queue_lib');
+
+    if(!$this->post('released')) { # polling mode
+      # get latest queue that have waiting status
+      $query = array('reward_machine_id' => $reward_machine_id, 'status' => 'waiting');
+
+      if(!$transaction = $this->instant_reward_queue_lib->get_one($query)) {
+        return $this->success(array('release' => FALSE));
+      }
+
+      return $this->success(array(
+        'release' => TRUE,
+        'transaction_id' => get_mongo_id($transaction),
+        'user_id' => $transaction['user_id']
+      ));
+
+    } else { # command mode
+      if(!$transaction_id) {
+        return $this->error('Insufficient arguments');
+      }
+
+      if(!$update_result = $this->instant_reward_queue_lib->update(array('_id' => new MongoId($transaction_id)), array('status' => 'released'))) {
+        return $this->error('Transaction update failed');
+      }
+
+      return $this->success(array('released' => TRUE));
+    }
+  }
 }

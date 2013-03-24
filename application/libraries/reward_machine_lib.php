@@ -10,7 +10,11 @@ class Reward_machine_lib {
     $this->CI->load->model('reward_machine_model');
   }
 
-  function add($data) {
+  function add($data = array()) {
+    if(!isset($data['name']) || !isset($data['location'])) {
+      return FALSE;
+    }
+
     if($id = $this->CI->reward_machine_model->add($data)) {
       return $id;
     }
