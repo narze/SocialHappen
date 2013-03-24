@@ -1887,19 +1887,19 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['user_id'] === 1, TRUE, "user_id should match", $result['data']['user_id']);
   }
 
-  # instant reward machine released tests
+  # instant reward machine status tests (released)
   function should_request_with_released_and_change_transaction_status_to_released_test() {
   	$reward_machine_id = $this->reward_machine_id;
   	$transaction_id = $this->instant_reward_transaction_id;
-  	$released = TRUE;
-  	$params = compact('reward_machine_id', 'released', 'transaction_id');
-  	$method = 'instant_reward_machine_released';
+  	$status = 'released';
+  	$params = compact('reward_machine_id', 'status', 'transaction_id');
+  	$method = 'instant_reward_machine_status';
   	$result = $this->post($method, $params);
 
   	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
   	$this->unit->run(isset($result['data']['release']), FALSE, "release should not be set", isset($result['data']['release']));
   	$this->unit->run($result['data'], 'is_array', "data should be array", $result['data']);
-  	$this->unit->run($result['data']['released'], TRUE, "released should be true", $result['data']);
+  	$this->unit->run($result['data']['status'] === 'released', TRUE, "status should be released", $result['data']['status']);
 
   	# transaction status should be released
   	$this->load->library('instant_reward_queue_lib');
@@ -1918,19 +1918,19 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($result['data']['release'], FALSE, "release should be false", $result['data']['release']);
   }
 
-  # instant reward machine taken tests
+  # instant reward machine status tests (taken)
   function should_request_with_taken_and_change_transaction_status_to_taken_test() {
   	$reward_machine_id = $this->reward_machine_id;
   	$transaction_id = $this->instant_reward_transaction_id;
-  	$taken = TRUE;
-  	$params = compact('reward_machine_id', 'taken', 'transaction_id');
-  	$method = 'instant_reward_machine_taken';
+  	$status = 'taken';
+  	$params = compact('reward_machine_id', 'status', 'transaction_id');
+  	$method = 'instant_reward_machine_status';
   	$result = $this->post($method, $params);
 
   	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
   	$this->unit->run(isset($result['data']['release']), FALSE, "release should not be set", isset($result['data']['release']));
   	$this->unit->run($result['data'], 'is_array', "data should be array", $result['data']);
-  	$this->unit->run($result['data']['taken'], TRUE, "taken should be true", $result['data']);
+  	$this->unit->run($result['data']['status'] === 'taken', TRUE, "status should be taken", $result['data']['status']);
 
   	# transaction status should be taken
   	$this->load->library('instant_reward_queue_lib');
