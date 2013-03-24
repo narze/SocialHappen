@@ -1836,7 +1836,7 @@ class Apiv4_test extends CI_Controller {
 
   	$method = 'reward_released_poll';
 
-  	$result = $this->post($method, $params);
+  	$result = $this->get($method, $params);
 
   	$this->unit->run($result['success'], FALSE, "result should be false", $result['success']);
   	$this->unit->run($result['data'], 'is_string', "data should be error message", $result['data']);
@@ -1856,7 +1856,7 @@ class Apiv4_test extends CI_Controller {
 
   	$method = 'reward_released_poll';
 
-  	$result = $this->post($method, $params);
+  	$result = $this->get($method, $params);
 
   	$this->unit->run($result['success'], TRUE, "result should be true", $result['success']);
 
@@ -1870,7 +1870,7 @@ class Apiv4_test extends CI_Controller {
   	$reward_machine_id = $this->reward_machine_id . 'asdf';
   	$params = compact('reward_machine_id');
   	$method = 'instant_reward_machine_poll';
-  	$result = $this->post($method, $params);
+  	$result = $this->get($method, $params);
 
   	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
   	$this->unit->run($result['data']['release'], FALSE, "release should be false", $result['data']['release']);
@@ -1880,19 +1880,20 @@ class Apiv4_test extends CI_Controller {
   	$reward_machine_id = $this->reward_machine_id;
   	$params = compact('reward_machine_id');
   	$method = 'instant_reward_machine_poll';
-  	$result = $this->post($method, $params);
+  	$result = $this->get($method, $params);
   	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
   	$this->unit->run($result['data']['release'], TRUE, "release should be true", $result['data']['release']);
   	$this->unit->run($result['data']['transaction_id'] === $this->instant_reward_transaction_id, TRUE, "transaction_id should match", $result['data']['transaction_id']);
   	$this->unit->run($result['data']['user_id'] === 1, TRUE, "user_id should match", $result['data']['user_id']);
   }
 
+  # instant reward machine released tests
   function should_request_with_released_and_change_transaction_status_to_released_test() {
   	$reward_machine_id = $this->reward_machine_id;
   	$transaction_id = $this->instant_reward_transaction_id;
   	$released = TRUE;
   	$params = compact('reward_machine_id', 'released', 'transaction_id');
-  	$method = 'instant_reward_machine_poll';
+  	$method = 'instant_reward_machine_released';
   	$result = $this->post($method, $params);
 
   	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
@@ -1906,11 +1907,12 @@ class Apiv4_test extends CI_Controller {
   	$this->unit->run($transaction['status'] === 'released', TRUE, "status should be released", $transaction['status']);
   }
 
+  # instant reward machine poll tests (again)
   function should_not_return_release_if_the_machine_has_queue_but_already_released_test() {
   	$reward_machine_id = $this->reward_machine_id;
   	$params = compact('reward_machine_id');
   	$method = 'instant_reward_machine_poll';
-  	$result = $this->post($method, $params);
+  	$result = $this->get($method, $params);
 
   	$this->unit->run($result['success'], TRUE, "success should be true", $result['success']);
   	$this->unit->run($result['data']['release'], FALSE, "release should be false", $result['data']['release']);

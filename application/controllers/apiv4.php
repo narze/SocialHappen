@@ -1834,10 +1834,10 @@ class Apiv4 extends REST_Controller {
     return $this->error('Queue add failed');
   }
 
-  function reward_released_poll_post() {
-    $user_id = $this->post('user_id');
-    $reward_item_id = $this->post('reward_item_id');
-    $transaction_id = $this->post('transaction_id');
+  function reward_released_poll_get() {
+    $user_id = $this->get('user_id');
+    $reward_item_id = $this->get('reward_item_id');
+    $transaction_id = $this->get('transaction_id');
 
     if(!$user_id || !$reward_item_id || !$transaction_id) {
       return $this->error('Insufficient arguments');
@@ -1867,9 +1867,8 @@ class Apiv4 extends REST_Controller {
     return $this->success();
   }
 
-  function instant_reward_machine_poll_post() {
-    $reward_machine_id = $this->post('reward_machine_id');
-    $transaction_id = $this->post('transaction_id');
+  function instant_reward_machine_poll_get() {
+    $reward_machine_id = $this->get('reward_machine_id');
 
     if(!$reward_machine_id) {
       return $this->error('Insufficient arguments');
@@ -1877,30 +1876,34 @@ class Apiv4 extends REST_Controller {
 
     $this->load->library('instant_reward_queue_lib');
 
-    if(!$this->post('released')) { # polling mode
-      # get latest queue that have waiting status
-      $query = array('reward_machine_id' => $reward_machine_id, 'status' => 'waiting');
+    # get latest queue that have waiting status
+    $query = array('reward_machine_id' => $reward_machine_id, 'status' => 'waiting');
 
-      if(!$transaction = $this->instant_reward_queue_lib->get_one($query)) {
-        return $this->success(array('release' => FALSE));
-      }
-
-      return $this->success(array(
-        'release' => TRUE,
-        'transaction_id' => get_mongo_id($transaction),
-        'user_id' => $transaction['user_id']
-      ));
-
-    } else { # command mode
-      if(!$transaction_id) {
-        return $this->error('Insufficient arguments');
-      }
-
-      if(!$update_result = $this->instant_reward_queue_lib->update(array('_id' => new MongoId($transaction_id)), array('status' => 'released'))) {
-        return $this->error('Transaction update failed');
-      }
-
-      return $this->success(array('released' => TRUE));
+    if(!$transaction = $this->instant_reward_queue_lib->get_one($query)) {
+      return $this->success(array('release' => FALSE));
     }
+
+    return $this->success(array(
+      'release' => TRUE,
+      'transaction_id' => get_mongo_id($transaction),
+      'user_id' => $transaction['user_id']
+    ));
+  }
+
+  function instant_reward_machine_released_post() {
+    $reward_machine_id = $this->post('reward_machine_id');
+    $transaction_id = $this->post('transaction_id');
+
+    if(!$reward_machine_id || !$transaction_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->library('instant_reward_queue_lib');
+
+    if(!$update_result = $this->instant_reward_queue_lib->update(array('_id' => new MongoId($transaction_id)), array('status' => 'released'))) {
+      return $this->error('Transaction update failed');
+    }
+
+    return $this->success(array('released' => TRUE));
   }
 }
