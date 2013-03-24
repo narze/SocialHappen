@@ -10,12 +10,13 @@
   </div>
   <div class="row-fluid">
     <div class="span2">
-      <button type="button" class="action-icon btn btn-warning">Walkin</button>
+      <button type="button" class="action-icon btn btn-warning">Like</button>
     </div>
     <div class="span9">
-      <h5>Walkin</h5>
+      <h5>Like</h5>
       <p><%= name %></p>
-      <p>Codes: <%= (typeof codes !== 'undefined') && codes && codes.join(', ')||'not set' %></p>
+      <!-- <p>Url: <%= (typeof url !== 'undefined' && url) ? '<a href="' + url + '" target="_blank">'+url+'</a>':'not set' %></p> -->
+      <p>Page: <%= (typeof url !== 'undefined' && facebook_id) ? '<a href="' + url + '" target="_blank">'+page_name+'</a>':'not set' %></p>
       <p><%= typeof description !== 'undefined' ? description : "" %></p>
     </div>
   </div>
