@@ -11,7 +11,7 @@ class Reward_machine_lib {
   }
 
   function add($data = array()) {
-    if(!isset($data['name']) || !isset($data['location']) || (count($data['location']) !== 2) {
+    if(!isset($data['name']) || !isset($data['location']) || (count($data['location']) !== 2)) {
       return FALSE;
     }
 
