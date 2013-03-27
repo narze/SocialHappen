@@ -1907,4 +1907,67 @@ class Apiv4 extends REST_Controller {
 
     return $this->success(array('status' => $status));
   }
+
+  function check_like_get(){
+    $action_id = $this->get('action_id');
+    $access_token = $this->get('access_token');
+
+    if(!$action_id || !$access_token){
+      $this->error('missing args');
+    }else{
+
+
+      $this->load->library('challenge_lib');
+
+      $challenge = $this->challenge_lib->get_one(array(
+        'criteria.action_data_id' => $action_id
+      ));
+
+      $action = NULL;
+
+      foreach ($challenge['criteria'] as $key => $value) {
+        if($value['action_data_id'] == $action_id){
+          $action = $value;
+          break;
+        }
+      }
+
+      if($action && isset($action['facebook_id'])){
+        $facebook_id = $action['facebook_id'];
+
+        $fql = 'SELECT page_id, profile_section, type FROM page_fan WHERE uid = me() AND page_id = "' . $facebook_id . '"';
+
+        $url = 'https://graph.facebook.com/fql?q=' . urlencode($fql) . '&access_token=' . $access_token;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        // curl_setopt($ch, CURLOPT_POST, true);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $attachment);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($ch);
+        curl_close ($ch);
+
+        $response = json_decode($response, TRUE);
+        if(isset($response) && isset($response['data']) && count($response['data']) > 0){
+          $this->success(array(
+            // 'url' => $url,
+            // 'action_id' => $action_id,
+            // 'access_token' => $access_token,
+            // 'facebook_id' => $facebook_id,
+            // 'response' => $response
+            'liked' => true
+          ));
+        }else{
+          $this->success(array(
+            'liked' => false
+          ));
+        }
+      }else{
+        $this->error('action not found');
+      }
+    }
+  }
 }
