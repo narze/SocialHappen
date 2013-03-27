@@ -1075,6 +1075,7 @@ class Apiv4 extends REST_Controller {
 
     $data['challenge_completed'] = FALSE;
     $data['reward_items'] = NULL;
+    $data['challenge'] = $challenge;
 
     //get company
     $this->load->model('company_model');
@@ -1094,7 +1095,6 @@ class Apiv4 extends REST_Controller {
     if($match_all_criteria || $match_all_criteria_today) {
       //1
       $data['challenge_completed'] = TRUE;
-      $data['challenge'] = $challenge;
 
       $reward_item_ids = array_map(function($reward_item) {
         return new MongoId(get_mongo_id($reward_item));
