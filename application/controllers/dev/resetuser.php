@@ -21,7 +21,7 @@ class Resetuser extends CI_Controller {
 		$this->load->model('user_mongo_model');
 		$this->load->model('audit_model');
 		$this->load->model('action_user_data_model');
-		$challenge_action_ids = array(201,202,203,204,206);
+		$challenge_action_ids = array(201,202,203,204,206,207);
 
 		$unset = array(
 			"challenge_completed" => TRUE,
