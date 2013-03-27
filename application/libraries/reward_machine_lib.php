@@ -11,9 +11,12 @@ class Reward_machine_lib {
   }
 
   function add($data = array()) {
-    if(!isset($data['name']) || !isset($data['location'])) {
+    if(!isset($data['name']) || !isset($data['location']) || (count($data['location']) !== 2) {
       return FALSE;
     }
+
+    $data['location'][0] = floatval($data['location'][0]);
+    $data['location'][1] = floatval($data['location'][1]);
 
     if($id = $this->CI->reward_machine_model->add($data)) {
       return $id;
