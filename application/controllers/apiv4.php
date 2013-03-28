@@ -633,6 +633,10 @@ class Apiv4 extends REST_Controller {
               foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
                 if($daily_challenge['start_date'] <= $doable_date && $daily_challenge['end_date'] >= $doable_date) {
                   $challenge['next_date'] = date('Ymd', date_create_from_format('Ymd', $doable_date)->getTimestamp() + $days * 24*60*60);
+                  //User coupons
+                  $coupons = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
+                  $latest_coupon = reset($coupons);
+                  $challenge['coupon_status'] = $latest_coupon['confirmed'] ? 'confirmed' : 'pending';
                 }
               }
             }
@@ -640,7 +644,11 @@ class Apiv4 extends REST_Controller {
             if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
               $challenge['next_date'] = FALSE;
               //User coupons
-              $challenge['coupons'] = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
+              $coupons = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
+              $latest_coupon = reset($coupons);
+              $challenge['coupon_status'] = $latest_coupon['confirmed'] ? 'confirmed' : 'pending';
+
+              $challenge['coupons'] = $coupons;
             }
           }
         }
