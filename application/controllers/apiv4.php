@@ -560,7 +560,6 @@ class Apiv4 extends REST_Controller {
            */
 
           //if it is in progress, check again with action count
-          $stat_criteria[$action_query] = array('$gte' => $count);
           $matched_achievement_stat =
             $this->achievement_stat->list_stat($stat_criteria);
           if(!$matched_achievement_stat) {
@@ -570,12 +569,25 @@ class Apiv4 extends REST_Controller {
             /**
              * check with action_user_data that user have done it or not
              */
-            $action_user_data = $this->action_user_data_lib->
+            $action_user_datas = $this->action_user_data_lib->
               get_action_user_data_by_action_data($criteria['action_data_id']);
 
-            if($action_user_data){
-              $latest_action_user_data = $action_user_data[count($action_user_data) - 1];
-              $criteria['completed'] = $latest_action_user_data['user_data']['timestamp'];
+            if($action_user_datas){
+              if($is_daily_challenge) {
+                $latest_action_user_data = $action_user_datas[count($action_user_datas) - 1];
+
+                $start_date = date('Ymd', $time - (($days-1) * 60 * 60 * 24));
+                $end_date = date('Ymd', $time);
+                $action_date = date('Ymd', $latest_action_user_data['user_data']['timestamp']);
+
+                // if lastest timestamp is in date range
+                if($action_date >= $start_date && $action_date <= $end_date) {
+                  $criteria['completed'] = $latest_action_user_data['user_data']['timestamp'];
+                }
+              } else {
+                $latest_action_user_data = $action_user_datas[count($action_user_datas) - 1];
+                $criteria['completed'] = $latest_action_user_data['user_data']['timestamp'];
+              }
             }
           }
         }
