@@ -665,7 +665,8 @@ define([
         type: 'challenge',
         description: 'Instant reward',
         is_points_reward: false,
-        is_instant_reward: true
+        is_instant_reward: true,
+        reward_machine_id: null
       };
 
       return this._addReward(reward);

@@ -34,6 +34,16 @@
     </div>
   </div>
 
+  <% if((typeof is_instant_reward !== 'undefined') && is_instant_reward) { %>
+    <div class="control-group">
+      <h6>Reward Machine:</h6>
+      <div class="controls">
+        <input type="text" class="reward-machine-id span4" value="<%= (typeof reward_machine_id !== 'undefined') && reward_machine_id || '' %>" />
+      </div>
+    </div>
+  <% } %>
+
+
   <div class="control-group">
     <div class="edit-image">
       <h6>Image:</h6>
