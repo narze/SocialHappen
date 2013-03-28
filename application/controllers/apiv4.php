@@ -1648,7 +1648,14 @@ class Apiv4 extends REST_Controller {
       return new MongoId($coupon['challenge_id']);
     }, $coupons);
 
+    $company_ids = array_map(function($coupon){
+      return new MongoId($coupon['company_id']);
+    }, $coupons);
+
+    $companies = array();
+
     $this->load->model('challenge_model');
+    $this->load->model('company_model');
     $challenges = $this->challenge_model->get(array('_id' => array('$in' => $challenge_ids)));
 
     foreach($coupons as $key => &$coupon) {
@@ -1662,7 +1669,15 @@ class Apiv4 extends REST_Controller {
       }
       if(!isset($coupon['challenge'])) {
         unset($coupons[$key]); // sometimes challenge does not exist even challenge_id is present
+        continue;
       }
+
+      # get company name
+      $company_id = $coupon['company_id'];
+      if(!isset($companies[$company_id])) {
+        $companies[$company_id] = $this->company_model->get_company_profile_by_company_id($company_id);
+      }
+      $coupon['company_name'] = $companies[$company_id]['company_name'];
     }
 
     $coupons = array_values($coupons); //reindex
