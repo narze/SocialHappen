@@ -93,6 +93,19 @@ Class Coupon_lib{
 
 	}
 
+	function list_user_reward_coupon($user_id, $reward_item_id){
+		if((isset($user_id) && $user_id != '') &&
+			(isset($reward_item_id) && $reward_item_id != '')
+		){
+
+		if($coupon_list = $this->CI->coupon_model->get_by_user_and_reward($user_id, $reward_item_id))
+			return $coupon_list;
+		}
+
+		return FALSE;
+
+	}
+
 	function list_user_coupon($user_id = NULL){
 		$this->CI->load->library('reward_lib');
 

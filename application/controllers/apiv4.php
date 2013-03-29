@@ -1859,6 +1859,13 @@ class Apiv4 extends REST_Controller {
       'last_updated' => $time,
     );
 
+    // confirm the coupon : latest coupon with user_id & reward_item_id
+    $this->load->library('coupon_lib');
+    $coupons = $this->coupon_lib->list_user_reward_coupon($user_id, $reward_item_id);
+    $latest_coupon = reset($coupons);
+
+    $this->coupon_lib->confirm_coupon(get_mongo_id($latest_coupon), 0);
+
     if($transaction_id = $this->instant_reward_queue_lib->add($transaction)) {
       return $this->success(array(
         'transaction_id' => $transaction_id,
