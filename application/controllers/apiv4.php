@@ -570,7 +570,7 @@ class Apiv4 extends REST_Controller {
              * check with action_user_data that user have done it or not
              */
             $action_user_datas = $this->action_user_data_lib->
-              get_action_user_data_by_action_data($criteria['action_data_id']);
+              get_action_user_data_by_action_data($criteria['action_data_id'], $user_id);
 
             if($action_user_datas){
               if($is_daily_challenge) {

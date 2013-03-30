@@ -56,8 +56,12 @@ class Action_user_data_lib {
 		return $this->CI->action_user_data_model->get(array('action_id' => $action_id));
 	}
 
-	function get_action_user_data_by_action_data($action_data_id) {
-		return $this->CI->action_user_data_model->get(array('action_data_id' => $action_data_id));
+	function get_action_user_data_by_action_data($action_data_id, $user_id = NULL) {
+		$criteria = array('action_data_id' => $action_data_id);
+		if($user_id) {
+			$criteria['user_id'] = $user_id;
+		}
+		return $this->CI->action_user_data_model->get($criteria);
 	}
 
 	function get_action_user_data_by_challenge($challenge_id) {
