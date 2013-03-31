@@ -951,8 +951,12 @@ class Apiv4 extends REST_Controller {
           $match_all_criteria_today = FALSE;
         } else if($criteria['action_data_id'] === $default_action_data_id) {
           $data['action_completed'] = TRUE;
-          log_message('error', 'action completed');
-          if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('challenge_progress.'.$challenge_id.'.action_data' => $action_data_id)))) {
+          if(!$this->user_mongo_model->update(array('user_id' => $user_id),
+            array('$addToSet' => array(
+              'challenge_progress.'.$challenge_id.'.action_data' => $action_data_id
+            ),'$set' => array(
+              'challenge_progress.'.$challenge_id.'.timestamp' => time(),
+            )))) {
             return $this->error('Update user failed');
           }
         }
@@ -1388,6 +1392,46 @@ class Apiv4 extends REST_Controller {
       }
     }
     return $this->success($coupons);
+  }
+
+  function latest_challenge_get() {
+    $user_id = (int) $this->get('user_id');
+    $token = $this->get('token');
+
+    $this->load->model('user_mongo_model');
+    if(!$user = $this->user_mongo_model->get_user($user_id)) {
+      return $this->error('User Invalid');
+    }
+
+    if(!isset($user['challenge_progress'])) {
+      return $this->success(NULL);
+    }
+
+    $latest_challenge_id = NULL;
+    $latest_timestamp = 0;
+    foreach ($user['challenge_progress'] as $challenge_id => $challenge_progress) {
+      if(isset($challenge_progress['timestamp']) && $challenge_progress['timestamp'] >= $latest_timestamp) {
+        $latest_timestamp = $challenge_progress['timestamp'];
+        $latest_challenge_id = $challenge_id;
+      }
+    }
+
+    if(!$latest_challenge_id) {
+      return $this->success(NULL);
+    }
+
+    $this->load->library('challenge_lib');
+    $this->load->model('company_model');
+
+    $challenge = $this->challenge_lib->get_by_id($challenge_id);
+    $challenge['_id'] = get_mongo_id($challenge);
+    if($company = $this->company_model->get_company_profile_by_company_id($challenge['company_id'])) {
+      $company_name = $company['company_name'];
+      $company_id = $company['company_id'];
+    }
+    $data = compact('challenge', 'company_id', 'company_name', 'company');
+    return $this->success($data);
+
   }
 
   /**
