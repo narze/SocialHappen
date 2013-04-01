@@ -618,9 +618,9 @@ class Apiv4 extends REST_Controller {
         foreach($challenge['criteria'] as &$criteria) {
           $action_data_id = issetor($criteria['action_data_id']);
           if(isset($user['challenge_progress'][$challenge_id]['action_data']) && in_array($action_data_id, $user['challenge_progress'][$challenge_id]['action_data'])) {
-            $criteria['completed'] = TRUE;
+            $criteria['completed'] = TRUE; // TODO : change this to timestamp
           } else {
-            $criteria['completed'] = FALSE;
+            // $criteria['completed'] = FALSE;
           }
         }
 
