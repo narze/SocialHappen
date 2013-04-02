@@ -1,6 +1,7 @@
 <html>
 <head>
-	<meta name="viewport" content="initial-scale=2.3, user-scalable=no">
+	<meta name="viewport" content="initial-scale=1, user-scalable=no">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
 	<div class="like-bg">
