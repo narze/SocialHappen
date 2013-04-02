@@ -17,6 +17,22 @@ class Ext extends CI_Controller {
 		$data = compact('url', 'id', 'facebook_app_id', 'page_name', 'facebook_channel_url', 'msg');
 		$this->load->view('ext/like', $data);
 	}
+
+	function walkin() {
+		$name = $this->input->get('name');
+		$id = $this->input->get('id');
+
+		$data = compact('name', 'id');
+		$this->load->view('ext/walkin', $data);
+	}
+
+	function video() {
+		$name = $this->input->get('name');
+		$id = $this->input->get('id');
+
+		$data = compact('name', 'id');
+		$this->load->view('ext/video', $data);
+	}
 }
 
 /* End of file ext.php */
