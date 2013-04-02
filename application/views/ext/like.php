@@ -8,7 +8,7 @@
 		<div class="like-page-name"><img src="//graph.facebook.com/<?php echo $id ?>/picture" alt=""> <?php echo $page_name ?></div>
 		<div class="like-msg"><?php if(isset($msg)) echo $msg; ?></div>
 		<div class="like-btn">
-			<fb:like href="<?php echo $url ?>" width="276" show_faces="true" font="verdana" ref="pwfacebooktest" ></fb:like>
+			<fb:like href="<?php echo $url ?>" width="276" show_faces="false" font="verdana" ref="pwfacebooktest" ></fb:like>
 		</div>
 	</div>
 	<div id="fb-root"></div>
@@ -47,7 +47,7 @@
 		}
 		.like-page-name {
 			position: absolute;
-			top: 130px;
+			top: 118px;
 			left: 28px;
 			width: 269px;
 			font-size: 14px;
@@ -61,13 +61,13 @@
 		.like-msg {
 			font-size: 10px;
 			position: absolute;
-			top: 155px;
+			top: 146px;
 			left: 28px;
 			width: 269px;
 		}
 		.like-btn {
 			position: absolute;
-			top: 181px;
+			top: 188px;
 			left: 28px;
 			width: 269px;
 		}
