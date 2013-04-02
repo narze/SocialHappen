@@ -486,12 +486,12 @@ class Apiv4 extends REST_Controller {
     if($challenge_id) {
       $challenges = $this->challenge_lib->get(array('_id' => new MongoId($challenge_id)));
     } else if($company_id) {
-      $challenges = $this->challenge_lib->get(array('company_id' => $company_id));
+      $challenges = $this->challenge_lib->get(array('company_id' => $company_id, 'active' => array('$ne' => FALSE)));
     } else if(($lon !== FALSE) && ($lat !== FALSE)) {
       $challenges = $this->challenge_lib->get_nearest_challenges(
-        array($lon, $lat), $max_distance, $limit, $and_without_location);
+        array($lon, $lat), $max_distance, $limit, $and_without_location, array('active' => array('$ne' => FALSE)));
     } else {
-      $challenges = $this->challenge_lib->get(array());
+      $challenges = $this->challenge_lib->get(array('active' => array('$ne' => FALSE)));
     }
 
     // if got only 1 challenge (use challenge_id) get action done time

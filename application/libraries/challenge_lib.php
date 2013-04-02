@@ -826,7 +826,7 @@ class Challenge_lib {
     return FALSE;
   }
 
-  function get_nearest_challenges($location = array(), $max_dist = 0.000001, $limit = 20, $and_get_without_location_specified = FALSE) {
+  function get_nearest_challenges($location = array(), $max_dist = 0.000001, $limit = 20, $and_get_without_location_specified = FALSE, $options = array()) {
     if(!is_array($location) || count($location) !== 2) {
       return FALSE;
     }
@@ -841,6 +841,9 @@ class Challenge_lib {
     if($max_dist > 0) {
       $query['locations']['$maxDistance'] = floatval($max_dist);
     }
+
+    $query = array_merge($query, $options);
+
     $challenges = $this->CI->challenge_model->get_sort($query, FALSE, $limit);
 
     if($and_get_without_location_specified) {

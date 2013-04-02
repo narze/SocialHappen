@@ -922,4 +922,50 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($result[2]['_id'].'' === $this->challenge_id3, TRUE, "\$result[2]['_id']", $result[2]['_id']);
     $this->unit->run($result[3]['_id'].'' === $this->challenge_id4, TRUE, "\$result[3]['_id']", $result[3]['_id']);
   }
+
+  function add_non_active_challenge_test() {
+    $this->challenge_id5 = $this->challenge_lib->add(array(
+      'active' => FALSE,
+      'company_id' => 2,
+      'all_branch' => false,
+      'start' => time(),
+      'end' => time() + 864000,
+      'detail' => array(
+        'name' => 'Daily Challenge',
+        'description' => 'You can play every day',
+        'image' => 'Challengeimage'
+      ),
+      'criteria' => array(
+        array(
+          'name' => 'C4',
+          'query' => array('action_id' => 203),
+          'count' => 1,
+          'is_platform_action' => TRUE
+        )
+      ),
+      'repeat' => 1,
+      'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))),
+      //location not specified
+      'locations' => array(10, 20),
+      'verify_location' => TRUE,
+      'custom_location' => FALSE,
+      'custom_locations' => array(),
+      'branches' => array()
+    ));
+  }
+
+  function get_nearest_challenges_test_3() {
+    //get with active status
+    $my_location = array(100, 100);
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 200, NULL, TRUE, array('active' => FALSE));
+
+    $this->unit->run(count($result) === 1, TRUE, "count(\$result)", count($result));
+    $this->unit->run($result[0]['_id'].'' === $this->challenge_id5, TRUE, "\$result[0]['_id']", $result[0]['_id']);
+
+    //Get with non active status
+    $my_location = array(100, 100);
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 200, NULL, TRUE, array('active' => array('$ne' => FALSE)));
+
+    $this->unit->run(count($result) === 4, TRUE, "count(\$result)", count($result));
+  }
 }
