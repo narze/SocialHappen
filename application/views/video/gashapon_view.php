@@ -39,7 +39,7 @@
                 <div class="row-fluid">
                     <div class="span7 play-vdo">
                         <img src="../assets/images/howto/video-01.png" alt="">
-                        <div class="btn-play" href="http://www.youtube.com/embed/zTSHmSMcoHQ?rel=0&autoplay=1&hd=1&vq=hd720"></div>
+                        <div class="btn-play" href="http://www.youtube.com/embed/AqA2_DzQDBQ?rel=0&autoplay=1&hd=1&vq=hd720"></div>
                     </div>
                     <div class="span5">
                         <h1>SocialHappen</h1>
@@ -213,7 +213,7 @@
             <div class="container">
                 <div class="row-fluid play-vdo">
                     <img src="../assets/images/howto/sh-slide-14.png" alt="">
-                    <div class="btn-play" href="http://www.youtube.com/embed/zTSHmSMcoHQ?rel=0&autoplay=1&hd=1&vq=hd720"></div>
+                    <div class="btn-play" href="http://www.youtube.com/embed/r1lnJvxahoU?rel=0&autoplay=1&hd=1&vq=hd720"></div>
                 </div>
             </div>
         </div>
