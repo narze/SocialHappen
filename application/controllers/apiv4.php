@@ -651,6 +651,10 @@ class Apiv4 extends REST_Controller {
               $challenge['coupons'] = $coupons;
             }
           }
+
+          if(issetor($challenge['reward_items'][0]['is_points_reward'])) {
+            unset($challenge['coupon_status']);
+          }
         }
       }
     }
