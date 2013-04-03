@@ -5,15 +5,15 @@
     <!-- <meta name="viewport" content="width=1024" /> -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>SocialHappen - How to play</title>
-    <link rel="stylesheet" href="../assets/css/common/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/common/fancybox/jquery.fancybox-2.1.4.css">
-    <link rel="stylesheet" href="../assets/css/video/gashapon.css">
+    <link rel="stylesheet" href="assets/css/common/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/common/fancybox/jquery.fancybox-2.1.4.css">
+    <link rel="stylesheet" href="assets/css/video/gashapon.css">
 </head>
 <body>
     <header class="navbar navbar-fixed-top" role="banner" id="navbar">
         <div class="navbar-inner">
                 <a title="Home" href="/" class="brand">
-                    <img height="50" alt="Home" class="hires" src="../assets/images/howto/party-logo2.png">
+                    <img height="50" alt="Home" class="hires" src="assets/images/howto/party-logo2.png">
                 </a>
                 <div class="bot-nav">
                     <ul>
@@ -38,7 +38,7 @@
             <div class="container">
                 <div class="row-fluid">
                     <div class="span7 play-vdo">
-                        <img src="../assets/images/howto/video-01.png" alt="">
+                        <img src="assets/images/howto/video-01.png" alt="">
                         <div class="btn-play" href="http://www.youtube.com/embed/AqA2_DzQDBQ?rel=0&autoplay=1&hd=1&vq=hd720"></div>
                     </div>
                     <div class="span5">
@@ -57,9 +57,9 @@
             <p class="subheading">We build a ‘retail marketing platform’ that allow real business to connect and engage with their customers when they visit the store. We motivate your customers to come more often, and turn them to be an influencers via Socialhappen’s rewarding system.</p>
             <div class="container">
                 <div class="row-fluid">
-                    <div class="span4 align-center"><img src="../assets/images/howto/sh-slide-01.png" alt=""></div>
-                    <div class="span4 align-center"><img src="../assets/images/howto/sh-slide-02.png" alt=""></div>
-                    <div class="span4 align-center"><img src="../assets/images/howto/sh-slide-03.png" alt=""></div>
+                    <div class="span4 align-center"><img src="assets/images/howto/sh-slide-01.png" alt=""></div>
+                    <div class="span4 align-center"><img src="assets/images/howto/sh-slide-02.png" alt=""></div>
+                    <div class="span4 align-center"><img src="assets/images/howto/sh-slide-03.png" alt=""></div>
                 </div>
                 <div class="row-fluid">
                     <div class="span4 align-center"><p class="subheading">Objects with<br> SocialHappen inside</p></div>
@@ -67,7 +67,7 @@
                     <div class="span4 align-center"><p class="subheading">Motivate them to come<br> more often, and become<br> influencers.</p></div>
                 </div>
             </div>
-            
+
         </div>
 
         <!-- Slide 03 -->
@@ -76,7 +76,7 @@
             <p class="subheading">This magic can happen because we build our own <span class="underline">transmission technology</span> that can communicate to the app users when they walk in to the store. The magic box will instantly send the challenge to them, let them engage with the marketing actions, and return some rewards when they complete it. Unlike QR code that users rarely scan, Socialhappen technology allow business to connect and engage with their customers easily.</p>
             <div class="container">
                 <div class="row-fluid">
-                    <img src="../assets/images/howto/sh-slide-16.png" alt="">
+                    <img src="assets/images/howto/sh-slide-16.png" alt="">
                 </div>
             </div>
         </div>
@@ -87,9 +87,9 @@
             <h1>We drive more <span class="text-blue">foot traffic</span> and turn your customers to be <span class="text-blue">influencers</span></h1>
             <div class="container">
                 <div class="row-fluid">
-                    <div class="span4"><img src="../assets/images/howto/sh-slide-06.png" alt=""><br /><h4>Reach out and motivate</h4><p>Reach out your marketing campaign. We tell our users what’s more to walk in when they go shopping near your store. Motivate them to visit your store through challenges and rewards system.</p></div>
-                    <div class="span4"><img src="../assets/images/howto/sh-slide-07.png" alt=""><br /><h4>Connect and engage</h4><p>The purpose of a business is to create a customer who creates customers. We allow you to engage your digital presence and marketing activities with your customers easily.</p></div>
-                    <div class="span4"><img src="../assets/images/howto/sh-slide-08.png" alt=""><br /><h4>Customer insights</h4><p>Good businesses learn from customers. Great ones act on it. Know who is your customers and engage them with Socialhappen now.</p></div>
+                    <div class="span4"><img src="assets/images/howto/sh-slide-06.png" alt=""><br /><h4>Reach out and motivate</h4><p>Reach out your marketing campaign. We tell our users what’s more to walk in when they go shopping near your store. Motivate them to visit your store through challenges and rewards system.</p></div>
+                    <div class="span4"><img src="assets/images/howto/sh-slide-07.png" alt=""><br /><h4>Connect and engage</h4><p>The purpose of a business is to create a customer who creates customers. We allow you to engage your digital presence and marketing activities with your customers easily.</p></div>
+                    <div class="span4"><img src="assets/images/howto/sh-slide-08.png" alt=""><br /><h4>Customer insights</h4><p>Good businesses learn from customers. Great ones act on it. Know who is your customers and engage them with Socialhappen now.</p></div>
                 </div>
             </div>
         </div>
@@ -100,10 +100,10 @@
             <h1>People just love rewards!</h1>
             <div class="container">
                 <div class="row-fluid">
-                    <div class="span3"><img src="../assets/images/howto/sh-slide-01.png" alt=""></div>
-                    <div class="span3"><img src="../assets/images/howto/sh-slide-03.png" alt=""></div>
-                    <div class="span3"><img src="../assets/images/howto/sh-slide-04.png" alt=""></div>
-                    <div class="span3"><img src="../assets/images/howto/sh-slide-05.png" alt=""></div>
+                    <div class="span3"><img src="assets/images/howto/sh-slide-01.png" alt=""></div>
+                    <div class="span3"><img src="assets/images/howto/sh-slide-03.png" alt=""></div>
+                    <div class="span3"><img src="assets/images/howto/sh-slide-04.png" alt=""></div>
+                    <div class="span3"><img src="assets/images/howto/sh-slide-05.png" alt=""></div>
                 </div>
                 <div class="row-fluid">
                     <div class="span3"><h4>Real rewarding machine</h4></div>
@@ -120,7 +120,7 @@
             <h1>Retail Engagement Platform</h1>
             <div class="container">
                 <div class="row-fluid">
-                    <div class="span5"><img src="../assets/images/howto/sh-slide-09.png" alt=""></div>
+                    <div class="span5"><img src="assets/images/howto/sh-slide-09.png" alt=""></div>
                     <div class="span7">
                         <p class="subheading">which you can mix & match your own.</p>
                         <h1 class="text-blue">Marketing Challenges</h1>
@@ -144,7 +144,7 @@
             <h2>Type of Challenge Actions</h2>
             <div class="container">
                 <div class="row-fluid">
-                    <div class="span12"><img src="../assets/images/howto/sh-slide-10.png" alt=""></div>
+                    <div class="span12"><img src="assets/images/howto/sh-slide-10.png" alt=""></div>
                 </div>
                 <div class="row-fluid">
                     <div class="span3 align-center"><h4>Like your page</h4></div>
@@ -163,7 +163,7 @@
             <div class="container">
                 <div class="row-fluid align-center">
                     <div class="span1"></div>
-                    <img class="span10" src="../assets/images/howto/sh-slide-11.png" alt="">
+                    <img class="span10" src="assets/images/howto/sh-slide-11.png" alt="">
                 </div>
             </div>
         </div>
@@ -174,7 +174,7 @@
             <h1>The purpose of a business is to create <span class="text-blue">a customer who creates customers</span></h1>
             <div class="container">
                 <div class="row-fluid">
-                    <div class="span6"><img src="../assets/images/howto/sh-slide-12.png" alt=""></div>
+                    <div class="span6"><img src="assets/images/howto/sh-slide-12.png" alt=""></div>
                     <div class="span6">
                         <h4>With Socialhappen, you can</h4>
                         <ol class="subheading">
@@ -192,7 +192,7 @@
             <h1>If you think SocialHappen<br> can help your business.</h1>
             <div class="container">
                 <div class="row-fluid">
-                    <div class="span6"><img src="../assets/images/howto/sh-slide-13.png" alt=""></div>
+                    <div class="span6"><img src="assets/images/howto/sh-slide-13.png" alt=""></div>
                     <div class="span6">
                         <h4>Contact our</h4>
                         <p class="subheading">“Retail Engagement Specialist” <br>to start something. It’s easy.</p>
@@ -212,7 +212,7 @@
             <h1>See it in action. How Socialhappen can help make engaging retail experience?</h1>
             <div class="container">
                 <div class="row-fluid play-vdo">
-                    <img src="../assets/images/howto/sh-slide-14.png" alt="">
+                    <img src="assets/images/howto/sh-slide-14.png" alt="">
                     <div class="btn-play" href="http://www.youtube.com/embed/r1lnJvxahoU?rel=0&autoplay=1&hd=1&vq=hd720"></div>
                 </div>
             </div>
@@ -227,9 +227,9 @@
         <div class="right slide-control" id="next">›</div>
     </div>
 
-    <script src="../assets/js/common/jquery-1.9.1.min.js"></script>
-    <script src="../assets/js/common/impress.js"></script>
-    <script src="../assets/js/common/fancybox/jquery.fancybox-2.1.4.pack.js"></script>
+    <script src="assets/js/common/jquery-1.9.1.min.js"></script>
+    <script src="assets/js/common/impress.js"></script>
+    <script src="assets/js/common/fancybox/jquery.fancybox-2.1.4.pack.js"></script>
     <script>
     $(function() {
         // Slide control
