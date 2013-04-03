@@ -1,0 +1,175 @@
+body {
+  font-size: 14px;
+  margin: 0;
+  padding: 60px 0 0 0;
+  background-image: url('../../images/howto/bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
+}
+.text-blue {
+  color: #00C7FC;
+}
+h1 {
+  font-size: 36px;
+  line-height: 48px;
+  margin-bottom: 20px;
+}
+h4 {
+  font-size: 22px;
+  line-height: 26px;
+  margin-bottom: 10px;
+}
+ul>li, ol>li {
+  line-height: 30px;
+}
+a.text-white {
+  color: #fff;
+}
+.subheading {
+  font-style: italic;
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 20px;
+}
+.align-center {
+  text-align: center;
+}
+.underline {
+  text-decoration: underline;
+}
+.play-vdo {
+  position: relative;
+}
+.btn-play {
+  opacity: 0.8;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+  cursor: pointer;
+  display: block;
+  background-image: url('../../images/howto/btn-play.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 110px;
+  height: 110px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -55px;
+  margin-top: -55px;
+}
+.btn-play:hover {
+  opacity: 1;
+}
+.fallback-message {
+  display: none;
+  font-family: sans-serif;
+  line-height: 1.3;
+  width: 780px;
+  padding: 10px 10px 0;
+  margin: 20px auto;
+  border: 1px solid #E4C652;
+  border-radius: 10px;
+  background: #EEDC94;
+}
+.fallback-message p {
+  margin-bottom: 10px;
+}
+.impress-not-supported .fallback-message {
+  display: block;
+}
+.slide-control {
+  display: none;
+}
+.impress-supported .slide-control {
+  display: block;
+}
+.slide-control {
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  left: 15px;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  font-size: 60px;
+  font-weight: 100;
+  line-height: 30px;
+  color: #ffffff;
+  text-align: center;
+  background: #222222;
+  border: 3px solid #ffffff;
+  -webkit-border-radius: 23px;
+  -moz-border-radius: 23px;
+  border-radius: 23px;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.slide-control.right {
+  right: 15px;
+  left: auto;
+}
+.slide-control:hover,
+.slide-control:focus {
+  color: #ffffff;
+  text-decoration: none;
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+/* Nav bar */
+.navbar-inner {
+  background: #fff;
+  padding: 0 20px 0 40px;
+  height: 54px;
+  background-image: url('../../images/howto/noisy.png');
+  background-position: 0 50px;
+  background-repeat: repeat-x;
+}
+.navbar .brand {
+  padding: 0;
+  margin-left: 20px;
+  color: #919191;
+}
+div.mid-nav {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  z-index: 9999999999999998;
+}
+div.bot-nav {
+  position: fixed;
+  left: 200px;
+  top: 7px;
+  border-radius: 0 10px 0 0;
+  z-index: 9999999999999999;
+  font-size: 16px !important;
+}
+
+div.bot-nav ul {
+  list-style: none;
+}
+div.bot-nav li {
+  float: left;
+}
+div.bot-nav a {
+  display: block;
+  height: 35px;
+  line-height: 35px;
+  border: none;
+  padding: 0 10px;
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.25s;
+  font-size: 13px;
+}
+div.bot-nav a:hover {
+  background: rgba(15,15,15, 0.8);
+  color: #fff;
+}
+div.bot-nav a.active {
+  background: rgba(15,15,15, 0.8);
+  color: #fff;
+}

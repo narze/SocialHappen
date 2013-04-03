@@ -13,4 +13,12 @@ class Video extends CI_Controller {
     function index(){
         $this->load->view('video/video_view');
     }
+
+    /**
+     * Video page
+     * @author Weerapat P.
+     */
+    function gashapon(){
+        $this->load->view('video/gashapon_view');
+    }
 }
