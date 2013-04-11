@@ -1855,18 +1855,12 @@ class Apiv4 extends REST_Controller {
 
     foreach($user_ids as $user_id) {
       $user_id = (int) $user_id;
-      if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset))) {
-        return $this->error('Update failed');
-      }
+      $this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset));
 
       // remove actions & action_datas
       $criteria = array('user_id' => $user_id, 'action_id' => array('$in' => $challenge_action_ids));
-      if(!$this->audit_model->delete($criteria)) {
-        return $this->error('Update failed');
-      }
-      if(!$this->action_user_data_model->delete($criteria)) {
-        return $this->error('Update failed');
-      }
+      $this->audit_model->delete($criteria);
+      $this->action_user_data_model->delete($criteria);
     }
 
     return $this->success('Reset success');
