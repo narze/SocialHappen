@@ -1832,6 +1832,23 @@ class Apiv4 extends REST_Controller {
       "challenge_progress" => TRUE
     );
 
+    $by_user_id = (int) $this->post('by');
+    $token = $this->post('token');
+
+    if(!$this->_check_token($by_user_id, $token)) {
+      return $this->error('Token invalid');
+    }
+
+    $this->load->model('user_model');
+    // Check if this user is developer
+    if(!$user = $this->user_model->get_user_profile_by_user_id($by_user_id)) {
+      return $this->error('No permission');
+    }
+
+    if(!issetor($user['user_is_developer'])) {
+      return $this->error('No permission');
+    }
+
     if(!$user_ids = explode(",", $this->post('user_ids'))) {
       return $this->error('No user id specified');
     }
