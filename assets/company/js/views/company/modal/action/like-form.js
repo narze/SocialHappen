@@ -39,6 +39,7 @@ define([
     },
 
     showEdit: function(){
+      console.log('showEdit action', this.options.action);
       $(this.el).modal('show');
     },
 

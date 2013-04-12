@@ -656,13 +656,13 @@ define([
 
       $('button.choose-recipe', addActionModal).click(function(e) {
         if(reward === 'points') {
-          self.addPointsReward(e).showEdit();
+          self.addPointsReward(e)//.showEdit();
         } else if(reward === 'discount') {
-          self.addDiscountReward(e).showEdit();
+          self.addDiscountReward(e)//.showEdit();
         } else if(reward === 'giveaway') {
-          self.addGiveawayReward(e).showEdit();
+          self.addGiveawayReward(e)//.showEdit();
         } else if(reward === 'instant') {
-          self.addInstantReward(e).showEdit();
+          self.addInstantReward(e)//.showEdit();
         }
       });
     },
@@ -890,17 +890,17 @@ define([
         if(recipe === 'share') {
           // self.addShare(e);
         } else if(recipe === 'feedback') {
-          self.addFeedback(e).showEdit();
+          self.addFeedback(e)//.showEdit();
         } else if(recipe === 'checkin') {
-          self.addCheckin(e).showEdit();
+          self.addCheckin(e)//.showEdit();
         } else if(recipe === 'qr') {
-          self.addQR(e).showEdit();
+          self.addQR(e)//.showEdit();
         } else if(recipe === 'walkin') {
-          self.addWalkin(e).showEdit();
+          self.addWalkin(e)//.showEdit();
         } else if(recipe === 'video') {
-          self.addVideo(e).showEdit();
+          self.addVideo(e)//.showEdit();
         } else if(recipe === 'like') {
-          self.addLike(e).showEdit();
+          self.addLike(e)//.showEdit();
         }
       });
     },

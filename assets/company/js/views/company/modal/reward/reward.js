@@ -28,7 +28,13 @@ define([
         this.model.set('reward_items', reward_items).trigger('change');
 
         if(this.options.save){
-          this.model.save();
+          var self = this;
+
+          this.model.save({}, {
+            success: function(){
+              self.options.vent.trigger('showEditModal', self.model);
+            }
+          });
         }
       }
     },

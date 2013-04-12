@@ -52,7 +52,10 @@ define([
         for(var i = reward_items.length - 1; i >= 0; i--) {
           var actionItem = reward_items[i];
 
-          if(actionItem._id['$id'] == this.options.reward_item._id['$id']){
+          if(actionItem._id
+            && this.options.reward_item._id
+            && actionItem._id['$id'] == this.options.reward_item._id['$id']){
+
             console.log('found reward_item to save', reward_items[i]);
             reward_items[i] = _.clone(this.options.reward_item);
             console.log('reward_items to be saved', reward_items);
