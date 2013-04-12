@@ -876,7 +876,7 @@ define([
     showAddNewActionModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addActionTemplate).modal('show');
-      var recipe = null;
+      var recipe = 'walkin';
       var self = this;
 
       //On recipe click
