@@ -645,7 +645,7 @@ define([
     showAddNewRewardModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addRewardTemplate).modal('show');
-      var reward = null;
+      var reward = 'points';
       var self = this;
       //On reward click
       $('.rewards button', addActionModal).click(function() {
