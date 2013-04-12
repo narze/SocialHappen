@@ -47,6 +47,20 @@ define([
       this.options.reward_item.reward_machine_id = $('input.reward-machine-id', this.el).val();
 
       var reward_items = this.model.get('reward_items');
+
+      if(this.options.save){
+        for(var i = reward_items.length - 1; i >= 0; i--) {
+          var actionItem = reward_items[i];
+
+          if(actionItem._id['$id'] == this.options.reward_item._id['$id']){
+            console.log('found reward_item to save', reward_items[i]);
+            reward_items[i] = _.clone(this.options.reward_item);
+            console.log('reward_items to be saved', reward_items);
+            break;
+          }
+        };
+      }
+
       this.model.set('reward_items', reward_items).trigger('change');
 
       console.log('save reward_items', reward_items, this.options.reward_item);
