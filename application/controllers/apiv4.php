@@ -1822,7 +1822,7 @@ class Apiv4 extends REST_Controller {
   }
 
   function debug_reset_user_post() {
-    if ((ENVIRONMENT !== 'testing') && (ENVIRONMENT !== 'development')) { return $this->error(); }
+    // if ((ENVIRONMENT !== 'testing') && (ENVIRONMENT !== 'development')) { return $this->error(); }
 
     $this->load->model('user_mongo_model');
     $this->load->model('audit_model');
