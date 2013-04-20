@@ -2,17 +2,23 @@ body {
   font-size: 14px;
   margin: 0;
   padding: 60px 0 0 0;
-  background-image: url('../../images/howto/bg.png');
+  background-color: #27262C;
+  background-image: url('../../images/howto/bg.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  color: #fff;
+  color: #E6E6E6;
 }
 .text-blue {
   color: #00C7FC;
 }
+.text-light {
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "Arial";
+  font-weight: 300;
+  font-stretch: normal;
+}
 h1 {
-  font-size: 36px;
-  line-height: 48px;
+  font-size: 48px;
+  line-height: 60px;
   margin-bottom: 20px;
 }
 h4 {
@@ -28,8 +34,8 @@ a.text-white {
 }
 .subheading {
   font-style: italic;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 24px;
+  line-height: 32px;
   margin-bottom: 20px;
 }
 .align-center {
@@ -60,6 +66,12 @@ a.text-white {
 }
 .btn-play:hover {
   opacity: 1;
+}
+.btn-large {
+  padding: 14px 30px;
+  font-size: 30px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
 }
 .fallback-message {
   display: none;
