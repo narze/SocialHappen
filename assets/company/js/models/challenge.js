@@ -93,7 +93,7 @@ define([
       }
 
       console.log('save challenge:', this.toJSON());
-      console.log('POST:', params.data);
+      // console.log('POST:', params.data);
 
       return $.ajax(_.extend(params, options));
     },

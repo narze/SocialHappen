@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal">
+    ×
+  </button>
+  <div class="">
+    <h3>Like Action Settings</h3>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="control-group">
+    <label class="control-label" for="name"><h6>Action Name:</h6></label>
+    <div class="controls">
+      <input type="text" class="name" name="name" value="<%= name %>" placeholder="action name" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label><h6>Description:</h6></label>
+    <div class="edit-description-field row-fluid">
+      <textarea class="description span12" rows="3" placeholder="description"><%= typeof description !== 'undefined' ? description : "" %></textarea>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="url"><h6>Url to like:</h6></label>
+    <div class="controls form-inline">
+      <input type="text" class="url span4" name="url" value="<%= url %>" placeholder="http://www.facebook.com/" />
+      <button type="btn" class="btn get-facebookid">Check URL</button>
+    </div>
+  </div>
+  <div class="control-group page_name hide">
+    <label class="control-label" for="page_name"><h6>Page:</h6></label>
+    <div class="controls">
+      <a class="page_name" href="<%= url %>" target="_blank"><%= (typeof page_name != 'undefined') && page_name ? page_name : '' %></a>
+      <input type="hidden" class="page_name span5" name="page_name" value="<%= (typeof page_name != 'undefined') && page_name ? page_name : '' %>"/>
+    </div>
+  </div>
+  <div class="control-group facebook_id hide">
+    <label class="control-label" for="facebook_id"><h6>Facebook id:</h6></label>
+    <div class="controls">
+      <input type="text" class="facebook_id span5" name="facebook_id" value="<%= facebook_id %>" placeholder="Facebook object id"/>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="save btn btn-primary" data-dismiss="modal">Save</button>
+  <button class="btn cancel" data-dismiss="modal">Cancel</button>
+</div>

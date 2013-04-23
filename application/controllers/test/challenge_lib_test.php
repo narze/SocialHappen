@@ -48,10 +48,61 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($reward['type'], 'challenge', "\$reward['type']", $reward['type']);
   }
 
+  function _add_branch_test(){
+    $this->branch1 = array(
+      'company_id' => 1,
+      'title' => 'branch 1',
+      'location' => array(140, 140),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+
+    $this->branch2 = array(
+      'company_id' => 1,
+      'title' => 'branch 2',
+      'location' => array(140, 150),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+
+    $this->branch3 = array(
+      'company_id' => 1,
+      'title' => 'branch 3',
+      'location' => array(150, 140),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+
+    $this->branch4 = array(
+      'company_id' => 2,
+      'title' => 'branch 4',
+      'location' => array(150, 150),
+      'telephone' => '0123456789',
+      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
+      'address' => 'thailand ja'
+    );
+
+    $this->branch_lib->remove(array());
+    $result = $this->branch_lib->add($this->branch1);
+    $this->branch_data1 = $result;
+
+    $result = $this->branch_lib->add($this->branch2);
+    $this->branch_data2 = $result;
+
+    $result = $this->branch_lib->add($this->branch3);
+    $this->branch_data3 = $result;
+
+    $result = $this->branch_lib->add($this->branch4);
+    $this->branch_data4 = $result;
+  }
+
   function setup_before_test() {
     $this->challenge = array(
       'company_id' => 1,
-      'all_branch' => true,
+      // 'all_branch' => true,
       'start' => time(),
       'end' => time() + 86400,
       'detail' => array(
@@ -63,12 +114,14 @@ class Challenge_lib_test extends CI_Controller {
         array(
           'name' => 'C1',
           'query' => array('page_id' => 1, 'app_id'=>1, 'action_id'=>1),
-          'count' => 1
+          'count' => 1,
+          'branches' => array($this->branch_data1,$this->branch_data2,$this->branch_data3,$this->branch_data4)
         ),
         array(
           'name' => 'C2',
           'query' => array('page_id' => 1, 'app_id'=>2, 'action_id'=>2),
-          'count' => 2
+          'count' => 2,
+          'branches' => array($this->branch_data1,$this->branch_data2,$this->branch_data3,$this->branch_data4)
         )
       ),
       'verify_location' => TRUE,
@@ -179,57 +232,6 @@ class Challenge_lib_test extends CI_Controller {
       'action_id' => 203,
       'app_install_id' => 0
     );
-
-    $this->branch1 = array(
-      'company_id' => 1,
-      'title' => 'branch 1',
-      'location' => array(140, 140),
-      'telephone' => '0123456789',
-      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
-      'address' => 'thailand ja'
-    );
-
-    $this->branch2 = array(
-      'company_id' => 1,
-      'title' => 'branch 2',
-      'location' => array(140, 150),
-      'telephone' => '0123456789',
-      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
-      'address' => 'thailand ja'
-    );
-
-    $this->branch3 = array(
-      'company_id' => 1,
-      'title' => 'branch 3',
-      'location' => array(150, 140),
-      'telephone' => '0123456789',
-      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
-      'address' => 'thailand ja'
-    );
-
-    $this->branch4 = array(
-      'company_id' => 2,
-      'title' => 'branch 4',
-      'location' => array(150, 150),
-      'telephone' => '0123456789',
-      'photo' => 'https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-ash3/s480x480/67314_421310064605065_636864263_n.jpg',
-      'address' => 'thailand ja'
-    );
-  }
-
-  function _add_branch_test(){
-    $this->branch_lib->remove(array());
-    $result = $this->branch_lib->add($this->branch1);
-    $this->branch_data1 = $result;
-
-    $result = $this->branch_lib->add($this->branch2);
-    $this->branch_data2 = $result;
-
-    $result = $this->branch_lib->add($this->branch3);
-    $this->branch_data3 = $result;
-
-    $result = $this->branch_lib->add($this->branch4);
-    $this->branch_data4 = $result;
   }
 
   function _create_user_test() {
@@ -321,7 +323,7 @@ class Challenge_lib_test extends CI_Controller {
         'count' => 1
       ),
       'action_done' => FALSE,
-      'action_count' => 0
+      'action_count' => 0,
     );
     $criteria_2_expect = array(
       'action_data' => array(
@@ -330,10 +332,18 @@ class Challenge_lib_test extends CI_Controller {
         'count' => 2
       ),
       'action_done' => FALSE,
-      'action_count' => 0
+      'action_count' => 0,
     );
-    $this->unit->run($result[0], $criteria_1_expect, "\$result[0]", $result[0]);
-    $this->unit->run($result[1], $criteria_2_expect, "\$result[1]", $result[1]);
+    $this->unit->run($result[0]['action_data']['name'], $criteria_1_expect['action_data']['name'], "\$result[0]['action_data']['name']", $result[0]['action_data']['name']);
+    $this->unit->run($result[0]['action_data']['query'], $criteria_1_expect['action_data']['query'], "\$result[0]['action_data']['query']", $result[0]['action_data']['query']);
+    $this->unit->run($result[0]['action_data']['count'], $criteria_1_expect['action_data']['count'], "\$result[0]['action_data']['count']", $result[0]['action_data']['count']);
+    $this->unit->run($result[0]['action_count'], $criteria_1_expect['action_count'], "\$result[0]['action_count']", $result[0]['action_count']);
+    $this->unit->run($result[0]['action_count'], $criteria_1_expect['action_count'], "\$result[0]['action_count']", $result[0]['action_count']);
+    $this->unit->run($result[1]['action_data']['name'], $criteria_2_expect['action_data']['name'], "\$result[1]['action_data']['name']", $result[1]['action_data']['name']);
+    $this->unit->run($result[1]['action_data']['query'], $criteria_2_expect['action_data']['query'], "\$result[1]['action_data']['query']", $result[1]['action_data']['query']);
+    $this->unit->run($result[1]['action_data']['count'], $criteria_2_expect['action_data']['count'], "\$result[1]['action_data']['count']", $result[1]['action_data']['count']);
+    $this->unit->run($result[1]['action_count'], $criteria_2_expect['action_count'], "\$result[1]['action_count']", $result[1]['action_count']);
+    $this->unit->run($result[1]['action_count'], $criteria_2_expect['action_count'], "\$result[1]['action_count']", $result[1]['action_count']);
   }
 
   function __user_join_challenge_1() {
@@ -491,8 +501,16 @@ class Challenge_lib_test extends CI_Controller {
       'action_done' => TRUE,
       'action_count' => 2 //it should be 3 but we should not make it over action's count
     );
-    $this->unit->run($result[0], $criteria_1_expect, "\$result[0]", $result[0]);
-    $this->unit->run($result[1], $criteria_2_expect, "\$result[1]", $result[1]);
+    $this->unit->run($result[0]['action_data']['name'], $criteria_1_expect['action_data']['name'], "\$result[0]['action_data']['name']", $result[0]['action_data']['name']);
+    $this->unit->run($result[0]['action_data']['query'], $criteria_1_expect['action_data']['query'], "\$result[0]['action_data']['query']", $result[0]['action_data']['query']);
+    $this->unit->run($result[0]['action_data']['count'], $criteria_1_expect['action_data']['count'], "\$result[0]['action_data']['count']", $result[0]['action_data']['count']);
+    $this->unit->run($result[0]['action_count'], $criteria_1_expect['action_count'], "\$result[0]['action_count']", $result[0]['action_count']);
+    $this->unit->run($result[0]['action_count'], $criteria_1_expect['action_count'], "\$result[0]['action_count']", $result[0]['action_count']);
+    $this->unit->run($result[1]['action_data']['name'], $criteria_2_expect['action_data']['name'], "\$result[1]['action_data']['name']", $result[1]['action_data']['name']);
+    $this->unit->run($result[1]['action_data']['query'], $criteria_2_expect['action_data']['query'], "\$result[1]['action_data']['query']", $result[1]['action_data']['query']);
+    $this->unit->run($result[1]['action_data']['count'], $criteria_2_expect['action_data']['count'], "\$result[1]['action_data']['count']", $result[1]['action_data']['count']);
+    $this->unit->run($result[1]['action_count'], $criteria_2_expect['action_count'], "\$result[1]['action_count']", $result[1]['action_count']);
+    $this->unit->run($result[1]['action_count'], $criteria_2_expect['action_count'], "\$result[1]['action_count']", $result[1]['action_count']);
   }
 
   function get_by_hash_test() {
@@ -606,7 +624,12 @@ class Challenge_lib_test extends CI_Controller {
       'action_count' => 0,
     );
     // $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
-    $this->unit->run($result[0], $criteria_expect, "\$result[0]", $result[0]);
+    $this->unit->run($result[0]['action_data']['name'], $criteria_expect['action_data']['name'], "\$result[0]['action_data']['name']", $result[0]['action_data']['name']);
+    $this->unit->run($result[0]['action_data']['query'], $criteria_expect['action_data']['query'], "\$result[0]['action_data']['query']", $result[0]['action_data']['query']);
+    $this->unit->run($result[0]['action_data']['count'], $criteria_expect['action_data']['count'], "\$result[0]['action_data']['count']", $result[0]['action_data']['count']);
+    $this->unit->run($result[0]['action_data']['is_platform_action'], $criteria_expect['action_data']['is_platform_action'], "\$result[0]['action_data']['is_platform_action']", $result[0]['action_data']['is_platform_action']);
+    $this->unit->run($result[0]['action_count'], $criteria_expect['action_count'], "\$result[0]['action_count']", $result[0]['action_count']);
+    $this->unit->run($result[0]['action_count'], $criteria_expect['action_count'], "\$result[0]['action_count']", $result[0]['action_count']);
   }
 
   function check_challenge_test_for_daily_challenge() {
@@ -774,7 +797,12 @@ class Challenge_lib_test extends CI_Controller {
       'action_count' => 1,
     );
     // $this->unit->run($result['daily_challenge'] === TRUE, 'is_true', "\$result['daily_challenge']", $result['daily_challenge']);
-    $this->unit->run($result[0], $criteria_expect, "\$result[0]", $result[0]);
+    $this->unit->run($result[0]['action_data']['name'], $criteria_expect['action_data']['name'], "\$result[0]['action_data']['name']", $result[0]['action_data']['name']);
+    $this->unit->run($result[0]['action_data']['query'], $criteria_expect['action_data']['query'], "\$result[0]['action_data']['query']", $result[0]['action_data']['query']);
+    $this->unit->run($result[0]['action_data']['count'], $criteria_expect['action_data']['count'], "\$result[0]['action_data']['count']", $result[0]['action_data']['count']);
+    $this->unit->run($result[0]['action_data']['is_platform_action'], $criteria_expect['action_data']['is_platform_action'], "\$result[0]['action_data']['is_platform_action']", $result[0]['action_data']['is_platform_action']);
+    $this->unit->run($result[0]['action_count'], $criteria_expect['action_count'], "\$result[0]['action_count']", $result[0]['action_count']);
+    $this->unit->run($result[0]['action_count'], $criteria_expect['action_count'], "\$result[0]['action_count']", $result[0]['action_count']);
   }
 
   function get_coupon_test() {
@@ -799,10 +827,9 @@ class Challenge_lib_test extends CI_Controller {
   function generate_locations_test(){
     $result = $this->challenge_lib->generate_locations('invalid_challenge_id');
     $this->unit->run($result, FALSE, "\$result", $result);
-    echo "<pre>";
+
     $result = $this->challenge_lib->generate_locations($this->challenge_id);
     $this->unit->run($result, TRUE, "\$result", $result);
-    // var_dump($result);
 
     $result = $this->challenge_lib->get_by_id($this->challenge_id);
     $this->unit->run(count($result['locations']), 4, "\$result", count($result['locations']));
@@ -894,5 +921,51 @@ class Challenge_lib_test extends CI_Controller {
     $this->unit->run($result[1]['_id'].'' === $this->challenge_id, TRUE, "\$result[1]['_id']", $result[1]['_id']);
     $this->unit->run($result[2]['_id'].'' === $this->challenge_id3, TRUE, "\$result[2]['_id']", $result[2]['_id']);
     $this->unit->run($result[3]['_id'].'' === $this->challenge_id4, TRUE, "\$result[3]['_id']", $result[3]['_id']);
+  }
+
+  function add_non_active_challenge_test() {
+    $this->challenge_id5 = $this->challenge_lib->add(array(
+      'active' => FALSE,
+      'company_id' => 2,
+      'all_branch' => false,
+      'start' => time(),
+      'end' => time() + 864000,
+      'detail' => array(
+        'name' => 'Daily Challenge',
+        'description' => 'You can play every day',
+        'image' => 'Challengeimage'
+      ),
+      'criteria' => array(
+        array(
+          'name' => 'C4',
+          'query' => array('action_id' => 203),
+          'count' => 1,
+          'is_platform_action' => TRUE
+        )
+      ),
+      'repeat' => 1,
+      'reward_items' => array(0 => array('_id' => new MongoId($this->reward_item_id))),
+      //location not specified
+      'locations' => array(10, 20),
+      'verify_location' => TRUE,
+      'custom_location' => FALSE,
+      'custom_locations' => array(),
+      'branches' => array()
+    ));
+  }
+
+  function get_nearest_challenges_test_3() {
+    //get with active status
+    $my_location = array(100, 100);
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 200, NULL, TRUE, array('active' => FALSE));
+
+    $this->unit->run(count($result) === 1, TRUE, "count(\$result)", count($result));
+    $this->unit->run($result[0]['_id'].'' === $this->challenge_id5, TRUE, "\$result[0]['_id']", $result[0]['_id']);
+
+    //Get with non active status
+    $my_location = array(100, 100);
+    $result = $this->challenge_lib->get_nearest_challenges($my_location, 200, NULL, TRUE, array('active' => array('$ne' => FALSE)));
+
+    $this->unit->run(count($result) === 4, TRUE, "count(\$result)", count($result));
   }
 }

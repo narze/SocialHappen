@@ -671,22 +671,22 @@ class Apiv3 extends CI_Controller {
 
           $challenge_update = $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $challenge_data);
 
-          //sonar box data manipulation
-          if($challenge_data['sonar_frequency']) {
-            $this->load->model('sonar_box_model');
-            $this->sonar_box_model->upsert(array('challenge_id' => $challenge_id), array(
-              'name' => $challenge_data['detail']['name'],
-              'info' => array(),
-              'challenge_id' => $challenge_id,
-              'data' => $challenge_data['sonar_frequency']
-            ));
-          } else if($asis_challenge['sonar_frequency'] && !$challenge_data['sonar_frequency']) {
-            //remove sonar box data if removed
-            $this->load->model('sonar_box_model');
-            $this->sonar_box_model->delete(array(
-              'challenge_id' => $challenge_id
-            ));
-          }
+          // //sonar box data manipulation
+          // if($challenge_data['sonar_frequency']) {
+          //   $this->load->model('sonar_box_model');
+          //   $this->sonar_box_model->upsert(array('challenge_id' => $challenge_id), array(
+          //     'name' => $challenge_data['detail']['name'],
+          //     'info' => array(),
+          //     'challenge_id' => $challenge_id,
+          //     'data' => $challenge_data['sonar_frequency']
+          //   ));
+          // } else if($asis_challenge['sonar_frequency'] && !$challenge_data['sonar_frequency']) {
+          //   //remove sonar box data if removed
+          //   $this->load->model('sonar_box_model');
+          //   $this->sonar_box_model->delete(array(
+          //     'challenge_id' => $challenge_id
+          //   ));
+          // }
         } catch (Exception $ex){
           //update exception
           $challenge_create_flag = FALSE;
@@ -725,7 +725,7 @@ class Apiv3 extends CI_Controller {
           $this->challenge_lib->update(array('_id' => new MongoId($challenge_id)), $update_challenge_data);
 
           //create sonar data if defined
-          if($challenge_data['sonar_frequency']) {
+          if(issetor($challenge_data['sonar_frequency'])){
             $this->load->model('sonar_box_model');
             $this->sonar_box_model->add_sonar_box(array(
               'name' => $challenge_data['detail']['name'],
@@ -1193,16 +1193,16 @@ class Apiv3 extends CI_Controller {
     if(!strlen($device['id'])
     || !strlen($device['title'])
     || !strlen($device['data'])
-    || !strlen($device['company'])
-    || !strlen($device['branch'])
+    // || !strlen($device['company'])
+    // || !strlen($device['branch'])
       ) {
       return $this->error('Device data invalid');
     }
 
-    $device['company_id'] = (int) $device['company'];
-    unset($device['company']);
-    $device['branch_id'] = $device['branch'];
-    unset($device['branch']);
+    // $device['company_id'] = (int) $device['company'];
+    // unset($device['company']);
+    // $device['branch_id'] = $device['branch'];
+    // unset($device['branch']);
 
     $device['status'] = 'pending';
 
@@ -1210,12 +1210,49 @@ class Apiv3 extends CI_Controller {
       return $this->error('Add device failed');
     }
 
-    $this->load->library('branch_lib');
-    $this->load->model('company_model');
-    $device['company'] = $this->company_model->get_company_profile_by_company_id($device['company_id']);
-    $device['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($device['branch_id'])));
+    // $this->load->library('branch_lib');
+    // $this->load->model('company_model');
+    // $device['company'] = $this->company_model->get_company_profile_by_company_id($device['company_id']);
+    // $device['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($device['branch_id'])));
 
     return $this->success($device);
+  }
+
+  /**
+   * Get idle sonar boxes, and action's sonar box (if challenge_id, action_data_id is specified)
+   */
+  function idle_sonar_boxes() {
+    $this->load->model('sonar_box_model');
+
+    $query = array(
+      '$or' => array(
+        array('challenge_id' => NULL),
+        array('action_data_id' => NULL)
+      )
+    );
+
+    if(($challenge_id = $this->input->get('challenge_id')) && ($action_data_id = $this->input->get('action_data_id'))) {
+      $query = array(
+        '$or' => array(
+          $query,
+          array(
+            '$and' => array(
+              'challenge_id' => $challenge_id,
+              'action_data_id' => $action_data_id
+            )
+          )
+        )
+      );
+    }
+
+    $idle_sonar_boxes = $this->sonar_box_model->get($query);
+
+    $idle_sonar_boxes = array_map(function($idle_sonar_box) {
+      $idle_sonar_box['_id'] = get_mongo_id($idle_sonar_box);
+      return $idle_sonar_box;
+    }, $idle_sonar_boxes);
+
+    return $this->success($idle_sonar_boxes);
   }
 
   /**
@@ -2148,6 +2185,62 @@ class Apiv3 extends CI_Controller {
       return $this->error();
     }
   }
+
+  function reward_machines() {
+    if ($model = json_decode($this->input->post('model'), TRUE)) {
+      return $this->_reward_machine_add($model);
+    }
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('reward_machine_lib');
+
+    $query_options = array();
+    if(isset($filter['name']) && strlen($filter['name'])) {
+      $query_options['name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(isset($filter['description']) && strlen($filter['description'])) {
+      $query_options['description'] = array('$regex' => '\b'.$filter['description'], '$options' => 'i');
+    }
+
+    # sort & order
+    if(in_array($sort, array('name', '_id'))) {
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $reward_machines = $this->reward_machine_lib->get($query_options, $limit, $offset, $sort);
+    $reward_machines_all_count = $this->reward_machine_lib->count($query_options);
+
+    $options = array(
+      'total' => $reward_machines_all_count,
+      'total_pages' => ceil($reward_machines_all_count / $limit),
+      'count' => count($reward_machines),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($reward_machines, 1, $options);
+  }
+
+  function _reward_machine_add($machine) {
+      $this->load->library('reward_machine_lib');
+
+      if(!strlen($machine['name'])) {
+        return $this->error('Reward machine data invalid');
+      }
+
+      if(!$machine_item_id = $this->reward_machine_lib->add($machine)) {
+        return $this->error('Add reward machinemachine failed');
+      }
+
+      return $this->success($machine);
+    }
 }
 
 /* End of file apiv3.php */

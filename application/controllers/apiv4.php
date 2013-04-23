@@ -486,12 +486,12 @@ class Apiv4 extends REST_Controller {
     if($challenge_id) {
       $challenges = $this->challenge_lib->get(array('_id' => new MongoId($challenge_id)));
     } else if($company_id) {
-      $challenges = $this->challenge_lib->get(array('company_id' => $company_id));
+      $challenges = $this->challenge_lib->get(array('company_id' => $company_id, 'active' => array('$ne' => FALSE)));
     } else if(($lon !== FALSE) && ($lat !== FALSE)) {
       $challenges = $this->challenge_lib->get_nearest_challenges(
-        array($lon, $lat), $max_distance, $limit, $and_without_location);
+        array($lon, $lat), $max_distance, $limit, $and_without_location, array('active' => array('$ne' => FALSE)));
     } else {
-      $challenges = $this->challenge_lib->get(array());
+      $challenges = $this->challenge_lib->get(array('active' => array('$ne' => FALSE)));
     }
 
     // if got only 1 challenge (use challenge_id) get action done time
@@ -514,7 +514,6 @@ class Apiv4 extends REST_Controller {
 
         // from challenge_lib->check_challenge
         if($is_daily_challenge) {
-          $match_all_criteria_today = TRUE;
           $count_required = $criteria['count'];
           $query = $criteria['query'];
           $app_id = isset($query['app_id']) ? $query['app_id'] : 0;
@@ -571,7 +570,7 @@ class Apiv4 extends REST_Controller {
              * check with action_user_data that user have done it or not
              */
             $action_user_datas = $this->action_user_data_lib->
-              get_action_user_data_by_action_data($criteria['action_data_id']);
+              get_action_user_data_by_action_data($criteria['action_data_id'], $user_id);
 
             if($action_user_datas){
               if($is_daily_challenge) {
@@ -599,8 +598,8 @@ class Apiv4 extends REST_Controller {
       } unset($criteria);
     }
 
-    //Filter challenge if doable_date is set
-    if($challenges && $doable_date && $user_id && $token) {
+    //Filter challenge if user & doable_date is set
+    if($challenges && $user_id && $token) {
       if(!$this->_check_token($user_id, $token)) {
         return $this->error('Token invalid');
       }
@@ -615,22 +614,52 @@ class Apiv4 extends REST_Controller {
       foreach($challenges as &$challenge) {
         $challenge_id = get_mongo_id($challenge);
 
-        //check completed
-        if($is_daily_challenge = (isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && $days > 0)) {
+        //check challenge progress (actions)
+        foreach($challenge['criteria'] as &$criteria) {
+          $action_data_id = issetor($criteria['action_data_id']);
+          if(isset($user['challenge_progress'][$challenge_id]['action_data']) && in_array($action_data_id, $user['challenge_progress'][$challenge_id]['action_data'])) {
+            $criteria['completed'] = TRUE; // TODO : change this to timestamp
+          } else {
+            // $criteria['completed'] = FALSE;
+          }
+        }
 
-          //Check if user completed already or not
-          if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
-            foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
-              if($daily_challenge['start_date'] <= $doable_date && $daily_challenge['end_date'] >= $doable_date) {
-                $challenge['next_date'] = date('Ymd', date_create_from_format('Ymd', $doable_date)->getTimestamp() + $days * 24*60*60);
+        if($doable_date) {
+          //check challenge completed
+          if($is_daily_challenge = (isset($challenge['repeat']) && ($days = (int) $challenge['repeat']) && $days > 0)) {
+
+            //Check if user completed already or not
+            if(isset($user['daily_challenge_completed']) && isset($user['daily_challenge_completed'][$challenge_id])) {
+              foreach($user['daily_challenge_completed'][$challenge_id] as $key => $daily_challenge) {
+                if($daily_challenge['start_date'] <= $doable_date && $daily_challenge['end_date'] >= $doable_date) {
+                  $challenge['next_date'] = date('Ymd', date_create_from_format('Ymd', $doable_date)->getTimestamp() + $days * 24*60*60);
+                  //User coupons
+                  $coupons = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
+                  $latest_coupon = reset($coupons);
+                  $challenge['coupon_status'] = $latest_coupon['confirmed'] ? 'confirmed' : 'pending';
+
+                  //get challenge complete timestamp
+                  $challenge['completed_at'] = $latest_coupon['timestamp'];
+                }
               }
             }
+          } else {
+            if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
+              $challenge['next_date'] = FALSE;
+              //User coupons
+              $coupons = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
+              $latest_coupon = reset($coupons);
+              $challenge['coupon_status'] = $latest_coupon['confirmed'] ? 'confirmed' : 'pending';
+
+              $challenge['coupons'] = $coupons;
+
+              //get challenge complete timestamp
+              $challenge['completed_at'] = $latest_coupon['timestamp'];
+            }
           }
-        } else {
-          if(isset($user['challenge_completed']) && in_array($challenge_id, $user['challenge_completed'])) {
-            $challenge['next_date'] = FALSE;
-            //User coupons
-            $challenge['coupons'] = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
+
+          if(issetor($challenge['reward_items'][0]['is_points_reward'])) {
+            unset($challenge['coupon_status']);
           }
         }
       }
@@ -736,6 +765,9 @@ class Apiv4 extends REST_Controller {
     $action_id = (int) $this->post('action_id');
     $challenge_id = $this->post('challenge_id');
     $location = $this->post('location');
+    $action_data_id = $this->post('action_data_id');
+
+    $data = array(); // output
 
     if(!$time = $this->post('timestamp')) {
       $time = time();
@@ -797,9 +829,28 @@ class Apiv4 extends REST_Controller {
 
     //find action data
     $this->load->model('action_data_model');
-    $action_data_id = $challenge['criteria'][0]['action_data_id'];
-    if(!$action_data = $this->action_data_model->getOne(array('_id' => new MongoId($action_data_id)))) { //@TODO - get action data for all criterias
+    $default_action_data_id = $challenge['criteria'][0]['action_data_id'];
+    $nth_action = 0;
+
+    if($action_data_id) {
+      foreach ($challenge['criteria'] as $nth => $action) {
+        if($action['action_data_id'] === $action_data_id) {
+          $default_action_data_id = $action_data_id;
+          $nth_action = $nth;
+          $action_id = $action['query']['action_id'];
+        }
+      }
+    }
+
+    if(!$action_data = $this->action_data_model->getOne(array('_id' => new MongoId($default_action_data_id)))) { //@TODO - get action data for all criterias
       return $this->error(print_r($challenge, true));
+    }
+
+    //Action data check if exists
+    if($action_data_id) {
+      if($this->user_mongo_model->getOne(array('user_id' => $user_id, 'challenge_progress.'.$challenge_id.'.action_data' => $action_data_id))) {
+        return $this->error('Action done already', 2);
+      }
     }
 
     //Challenge check
@@ -839,20 +890,8 @@ class Apiv4 extends REST_Controller {
         }
       }
 
-      //add stat after checking challenge done
-      $this->load->library('action_user_data_lib');
-      if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
-        $company_id,
-        $action_id,
-        $action_data_id,
-        $challenge_id,
-        $user_id,
-        $user_data
-        )){
-        return $this->error('Invalid Data');
-      }
 
-      //Add audit & stat
+      //Add audit & stat with action user data id
       $audit_data = array(
         'timestamp' => $time,
         'user_id' => $user_id,
@@ -864,17 +903,32 @@ class Apiv4 extends REST_Controller {
         'subject' => $location ? $location : NULL,
         'object' => NULL,
         'objecti' => $challenge['hash'],
-        'image' => $challenge['detail']['image']
+        'image' => $challenge['detail']['image'],
+        'action_data_id' => $default_action_data_id
       );
 
       if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
         return $this->error('Audit add failed'. var_export($audit_data, true));
       }
 
-      //Update action user data with audit id
-      if(!$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id))) {
-        return $this->error('Update action user data failed');
+      //add stat after checking challenge done status
+      $this->load->library('action_user_data_lib');
+      if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
+        $company_id,
+        $action_id,
+        $default_action_data_id,
+        $challenge_id,
+        $user_id,
+        $user_data,
+        array('audit_id' => $audit_id)
+        )){
+        return $this->error('Invalid Data');
       }
+
+      // //Update action user data with audit id
+      // if(!$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id))) {
+      //   return $this->error('Update action user data failed');
+      // }
 
       $this->load->library('achievement_lib');
       $info = array(
@@ -888,6 +942,7 @@ class Apiv4 extends REST_Controller {
       }
 
       //Finish adding stat
+      $data['action_completed'] = FALSE;
 
       $match_all_criteria_today = TRUE;
       foreach($challenge['criteria'] as $criteria){
@@ -895,7 +950,8 @@ class Apiv4 extends REST_Controller {
         $query = $criteria['query'];
         $app_id = isset($query['app_id']) ? $query['app_id'] : 0;
         $action_id = $query['action_id'];
-        $audit_criteria = compact('company_id', 'user_id');
+        $action_data_id = $criteria['action_data_id'];
+        $audit_criteria = compact('company_id', 'user_id', 'action_data_id');
         $start_date = date('Ymd', $time - (($days-1) * 60 * 60 * 24));
         $end_date = date('Ymd', $time);
 
@@ -903,6 +959,16 @@ class Apiv4 extends REST_Controller {
 
         if($audit_count < $count_required) {
           $match_all_criteria_today = FALSE;
+        } else if($criteria['action_data_id'] === $default_action_data_id) {
+          $data['action_completed'] = TRUE;
+          if(!$this->user_mongo_model->update(array('user_id' => $user_id),
+            array('$addToSet' => array(
+              'challenge_progress.'.$challenge_id.'.action_data' => $action_data_id
+            ),'$set' => array(
+              'challenge_progress.'.$challenge_id.'.timestamp' => time(),
+            )))) {
+            return $this->error('Update user failed');
+          }
         }
       }
 
@@ -941,7 +1007,7 @@ class Apiv4 extends REST_Controller {
       if(!$action_user_data_id = $this->action_user_data_lib->add_action_user_data(
         $company_id,
         $action_id,
-        $action_data_id,
+        $default_action_data_id,
         $challenge_id,
         $user_id,
         $user_data
@@ -1031,15 +1097,23 @@ class Apiv4 extends REST_Controller {
 
           if(!$action_user_data){
             $match_all_criteria = FALSE;
+          } else if($action_data_id && ($criteria['action_data_id'] === $action_data_id)) {
+            $data['action_completed'] = TRUE;
+            if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('challenge_progress.'.$challenge_id.'.action_data' => $action_data_id)))) {
+              return $this->error('Update user failed');
+            }
           }
         }
       }
     }
 
-    $data = array(
-      'challenge_completed' => FALSE,
-      'reward_items' => NULL
-    );
+    $data['challenge_completed'] = FALSE;
+    $data['reward_items'] = NULL;
+    $data['challenge'] = $challenge;
+
+    //get company
+    $this->load->model('company_model');
+    $data['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
 
     //3.3 if match all ...
     // 1 add into 'completed'
@@ -1077,8 +1151,8 @@ class Apiv4 extends REST_Controller {
         '$addToSet' => array(
           'challenge_redeeming' => $challenge_id,
         ),
-        '$pull' => array(
-        )
+        '$pull' => array(),
+        '$unset' => array()
       );
 
       //3
@@ -1093,10 +1167,12 @@ class Apiv4 extends REST_Controller {
         );
         $update_record['$addToSet']['daily_challenge_completed.'.$challenge_id] = $achieved_info['daily_challenge'];
         $update_record['$pull']['daily_challenge.'.$challenge_id] = $achieved_info['daily_challenge'];
+        $update_record['$unset']['challenge_progress.'.$challenge_id] = 1;
       } else {
         //if not repeating challenge : Add completed challenge into user mongo model and remove from in progress
         $update_record['$addToSet']['challenge_completed'] = $challenge_id;
         $update_record['$pull']['challenge'] = $challenge_id;
+        $update_record['$unset']['challenge_progress.'.$challenge_id] = 1;
       }
 
       if(!$update_user = $this->user_mongo_model->update(array('user_id' => $user_id), $update_record)) {
@@ -1207,10 +1283,6 @@ class Apiv4 extends REST_Controller {
           $reward_points += $reward_item['value'];
         }
       }
-
-      //get company
-      $this->load->model('company_model');
-      $data['company'] = $this->company_model->get_company_profile_by_company_id($company_id);
 
       if($reward_points !== 0) {
         //Add user platform points
@@ -1330,6 +1402,46 @@ class Apiv4 extends REST_Controller {
       }
     }
     return $this->success($coupons);
+  }
+
+  function latest_challenge_get() {
+    $user_id = (int) $this->get('user_id');
+    $token = $this->get('token');
+
+    $this->load->model('user_mongo_model');
+    if(!$user = $this->user_mongo_model->get_user($user_id)) {
+      return $this->error('User Invalid');
+    }
+
+    if(!isset($user['challenge_progress'])) {
+      return $this->success(NULL);
+    }
+
+    $latest_challenge_id = NULL;
+    $latest_timestamp = 0;
+    foreach ($user['challenge_progress'] as $challenge_id => $challenge_progress) {
+      if(isset($challenge_progress['timestamp']) && $challenge_progress['timestamp'] >= $latest_timestamp) {
+        $latest_timestamp = $challenge_progress['timestamp'];
+        $latest_challenge_id = $challenge_id;
+      }
+    }
+
+    if(!$latest_challenge_id) {
+      return $this->success(NULL);
+    }
+
+    $this->load->library('challenge_lib');
+    $this->load->model('company_model');
+
+    $challenge = $this->challenge_lib->get_by_id($challenge_id);
+    $challenge['_id'] = get_mongo_id($challenge);
+    if($company = $this->company_model->get_company_profile_by_company_id($challenge['company_id'])) {
+      $company_name = $company['company_name'];
+      $company_id = $company['company_id'];
+    }
+    $data = compact('challenge', 'company_id', 'company_name', 'company');
+    return $this->success($data);
+
   }
 
   /**
@@ -1598,7 +1710,14 @@ class Apiv4 extends REST_Controller {
       return new MongoId($coupon['challenge_id']);
     }, $coupons);
 
+    $company_ids = array_map(function($coupon){
+      return new MongoId($coupon['company_id']);
+    }, $coupons);
+
+    $companies = array();
+
     $this->load->model('challenge_model');
+    $this->load->model('company_model');
     $challenges = $this->challenge_model->get(array('_id' => array('$in' => $challenge_ids)));
 
     foreach($coupons as $key => &$coupon) {
@@ -1612,7 +1731,15 @@ class Apiv4 extends REST_Controller {
       }
       if(!isset($coupon['challenge'])) {
         unset($coupons[$key]); // sometimes challenge does not exist even challenge_id is present
+        continue;
       }
+
+      # get company name
+      $company_id = $coupon['company_id'];
+      if(!isset($companies[$company_id])) {
+        $companies[$company_id] = $this->company_model->get_company_profile_by_company_id($company_id);
+      }
+      $coupon['company_name'] = $companies[$company_id]['company_name'];
     }
 
     $coupons = array_values($coupons); //reindex
@@ -1695,17 +1822,38 @@ class Apiv4 extends REST_Controller {
   }
 
   function debug_reset_user_post() {
-    if ((ENVIRONMENT !== 'testing') && (ENVIRONMENT !== 'development')) { return $this->error(); }
+    // if ((ENVIRONMENT !== 'testing') && (ENVIRONMENT !== 'development')) { return $this->error(); }
 
     $this->load->model('user_mongo_model');
+    $this->load->model('audit_model');
+    $this->load->model('action_user_data_model');
+    $challenge_action_ids = array(201,202,203,204,206,207);
 
     $unset = array(
       "challenge_completed" => TRUE,
       "challenge_redeeming" => TRUE,
       "daily_challenge" => TRUE,
       "daily_challenge_completed" => TRUE,
-      "reward_items" => TRUE
+      "reward_items" => TRUE,
+      "challenge_progress" => TRUE
     );
+
+    $by_user_id = (int) $this->post('by');
+    $token = $this->post('token');
+
+    if(!$this->_check_token($by_user_id, $token)) {
+      return $this->error('Token invalid');
+    }
+
+    $this->load->model('user_model');
+    // Check if this user is developer
+    if(!$user = $this->user_model->get_user_profile_by_user_id($by_user_id)) {
+      return $this->error('No permission');
+    }
+
+    if(!issetor($user['user_is_developer'])) {
+      return $this->error('No permission');
+    }
 
     if(!$user_ids = explode(",", $this->post('user_ids'))) {
       return $this->error('No user id specified');
@@ -1713,9 +1861,12 @@ class Apiv4 extends REST_Controller {
 
     foreach($user_ids as $user_id) {
       $user_id = (int) $user_id;
-      if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset))) {
-        return $this->error('Update failed');
-      }
+      $this->user_mongo_model->update(array('user_id' => $user_id), array('$unset' => $unset));
+
+      // remove actions & action_datas
+      $criteria = array('user_id' => $user_id, 'action_id' => array('$in' => $challenge_action_ids));
+      $this->audit_model->delete($criteria);
+      $this->action_user_data_model->delete($criteria);
     }
 
     return $this->success('Reset success');
@@ -1728,5 +1879,202 @@ class Apiv4 extends REST_Controller {
       $config = $this->config->item('mobile_config');
     }
     return $this->success($config);
+  }
+
+  function claim_reward_post() {
+    $user_id = (int) $this->post('user_id');
+    $reward_item_id = $this->post('reward_item_id');
+
+    if(!$user_id || !$reward_item_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->model('user_model');
+    $this->load->library('reward_lib');
+    $this->load->library('instant_reward_queue_lib');
+
+    if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
+      return $this->error('User not found');
+    }
+
+    if(!$reward_item = $this->reward_lib->get_reward_item($reward_item_id)) {
+      return $this->error('Reward item not found');
+    }
+
+    // TODO - check that user really owns that reward
+
+    // check if user already claimed this reward
+    $latest_transaction = $this->instant_reward_queue_lib->get_one(compact('user_id', 'reward_item_id'));
+    if($latest_transaction['status'] === 'waiting') {
+      return $this->error('Reward claimed already');
+    }
+
+    // get reward machine id from reward
+    if((!$reward_machine_id = issetor($reward_item['reward_machine_id'])) || !issetor($reward_item['is_instant_reward'])) {
+      return $this->error('Invalid reward');
+    }
+
+    // add queue & return transaction id
+    $time = time();
+    $transaction = array(
+      'user_id' => $user_id,
+      'reward_item_id' => $reward_item_id,
+      'reward_machine_id' => $reward_machine_id,
+      'status' => 'waiting',
+      'last_updated' => $time,
+    );
+
+    // confirm the coupon : latest coupon with user_id & reward_item_id
+    $this->load->library('coupon_lib');
+    $coupons = $this->coupon_lib->list_user_reward_coupon($user_id, $reward_item_id);
+    $latest_coupon = reset($coupons);
+
+    $this->coupon_lib->confirm_coupon(get_mongo_id($latest_coupon), 0);
+
+    if($transaction_id = $this->instant_reward_queue_lib->add($transaction)) {
+      return $this->success(array(
+        'transaction_id' => $transaction_id,
+        'reward_machine_id' => $reward_machine_id
+      ));
+    }
+
+    return $this->error('Queue add failed');
+  }
+
+  function reward_released_poll_get() {
+    $user_id = $this->get('user_id');
+    $reward_item_id = $this->get('reward_item_id');
+    $transaction_id = $this->get('transaction_id');
+
+    if(!$user_id || !$reward_item_id || !$transaction_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->model('user_model');
+    $this->load->library('reward_lib');
+    $this->load->library('instant_reward_queue_lib');
+
+    if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
+      return $this->error('User not found');
+    }
+
+    if(!$reward_item = $this->reward_lib->get_reward_item($reward_item_id)) {
+      return $this->error('Reward item not found');
+    }
+
+    if(!$transaction = $this->instant_reward_queue_lib->get_by_id($transaction_id)) {
+      return $this->error('Transaction not found');
+    }
+
+    // return success if it is released, otherwise not success
+    if($transaction['status'] !== 'released') {
+      return $this->error('Reward not released yet');
+    }
+
+    return $this->success('Reward released');
+  }
+
+  function instant_reward_machine_poll_get() {
+    $reward_machine_id = $this->get('reward_machine_id');
+
+    if(!$reward_machine_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->library('instant_reward_queue_lib');
+
+    # get latest queue that have waiting status
+    $query = array('reward_machine_id' => $reward_machine_id, 'status' => 'waiting');
+
+    if(!$transaction = $this->instant_reward_queue_lib->get_one($query)) {
+      return $this->success(array('release' => FALSE));
+    }
+
+    return $this->success(array(
+      'release' => TRUE,
+      'transaction_id' => get_mongo_id($transaction),
+      'user_id' => $transaction['user_id']
+    ));
+  }
+
+  function instant_reward_machine_status_post() {
+    $reward_machine_id = $this->post('reward_machine_id');
+    $transaction_id = $this->post('transaction_id');
+    $status = $this->post('status');
+
+    if(!$reward_machine_id || !$transaction_id || !$status) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->library('instant_reward_queue_lib');
+
+    if(!$update_result = $this->instant_reward_queue_lib->update(array('_id' => new MongoId($transaction_id), 'reward_machine_id' => $reward_machine_id), array('status' => $status))) {
+      return $this->error('Transaction update failed');
+    }
+
+    return $this->success(array('status' => $status));
+  }
+
+  function check_like_get(){
+    $action_id = $this->get('action_id');
+    $access_token = $this->get('access_token');
+
+    if(!$action_id || !$access_token){
+      $this->error('missing args');
+    }else{
+
+
+      $this->load->library('challenge_lib');
+
+      $challenge = $this->challenge_lib->get_one(array(
+        'criteria.action_data_id' => $action_id
+      ));
+
+      $action = NULL;
+
+      foreach ($challenge['criteria'] as $key => $value) {
+        if($value['action_data_id'] == $action_id){
+          $action = $value;
+          break;
+        }
+      }
+
+      if($action && isset($action['facebook_id'])){
+        $facebook_id = $action['facebook_id'];
+
+        $fql = 'SELECT page_id, profile_section, type FROM page_fan WHERE uid = me() AND page_id = "' . $facebook_id . '"';
+
+        $url = 'https://graph.facebook.com/fql?q=' . urlencode($fql) . '&access_token=' . $access_token;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        // curl_setopt($ch, CURLOPT_POST, true);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $attachment);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($ch);
+        curl_close ($ch);
+
+        $response = json_decode($response, TRUE);
+        if(isset($response) && isset($response['data']) && count($response['data']) > 0){
+          $this->success(array(
+            // 'url' => $url,
+            // 'action_id' => $action_id,
+            // 'access_token' => $access_token,
+            // 'facebook_id' => $facebook_id,
+            // 'response' => $response
+            'liked' => true
+          ));
+        }else{
+          $this->success(array(
+            'liked' => false
+          ));
+        }
+      }else{
+        $this->error('action not found');
+      }
+    }
   }
 }

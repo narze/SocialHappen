@@ -28,6 +28,9 @@ describe 'Main Router', ->
     it 'should have devices route', ->
       window.backend.Routers.MainRouter.routes['devices'].should.be.equal 'devices'
 
+    it 'should have reward-machines route', ->
+      window.backend.Routers.MainRouter.routes['reward-machines'].should.be.equal 'reward-machines'
+
   describe 'routing', ->
 
     it 'should not load any views when switched to a bad route', ->
@@ -306,6 +309,55 @@ describe 'Main Router', ->
           $form.text().should.match /Company/
           $form.text().should.match /Branch/
           $form.text().should.match /Add Device/
+          $form.text().should.match /Cancel/
+
+    describe 'reward-machines', ->
+
+      it 'should load reward-machines view when switched route to reward-machines', ->
+        window.backend.Routers.MainRouter.navigate 'reward-machines', trigger:true
+        window.backend.Views.RewardMachinesView.rendered.should.equal true
+
+      it 'should set the reward-machine menu as active', ->
+        $('#sidebar-view').find('.main-menu li.reward-machines-tab-menu').hasClass('active').should.be.true
+
+      it 'should have reward-machine-item as a subview', ->
+        subViewName = 'reward-machine-' + window.backend.Collections.RewardMachineCollection.models[0].cid
+        window.backend.Views.RewardMachinesView.subViews[subViewName].should.not.be.undefined
+
+      it 'should render #reward-machines-view into #content', ->
+        $('#content').find('#reward-machines-view').length.should.be.above 0
+
+      it 'should have all fields required', ->
+        $('#content').find('#reward-machines-view').find('thead').find('th').length.should.equal 4
+
+        $('#content').find('#reward-machines-view').find('thead').text().should.match(/ID/)
+        $('#content').find('#reward-machines-view').find('thead').text().should.match(/Name/)
+        $('#content').find('#reward-machines-view').find('thead').text().should.match(/Description/)
+        $('#content').find('#reward-machines-view').find('thead').text().should.match(/Location/)
+
+      it 'should have correct first row of data', ->
+        $('#content #reward-machines-view .reward-machine-item:first td').length.should.equal 4
+
+      describe 'after data fetched', ->
+        it 'should load each .reward-machine-item into #reward-machines-view', ->
+          $('#reward-machines-view').find('.reward-machine-item').length.should.be.above 0
+
+      describe 'reward-machine add view', ->
+        it 'should have reward-machine-add-view as a subview', ->
+          window.backend.Views.RewardMachinesView.subViews['reward-machine-add'].should.not.be.undefined
+
+        it 'should have reward-machine add view', ->
+          $('#reward-machines-view').find('#reward-machine-add-view').length.should.be.above 0
+
+        it 'should have form', ->
+          $('form.reward-machine-add-form').length.should.be.above 0
+
+        it 'should have labels for each form item', ->
+          $form = $('form.reward-machine-add-form')
+          $form.text().should.match /Name/
+          $form.text().should.match /Description/
+          $form.text().should.match /Location/
+          $form.text().should.match /Add Reward Machine/
           $form.text().should.match /Cancel/
 
     describe 'change route back', ->

@@ -8,6 +8,7 @@ define [
   'views/challenges-view'
   'views/rewards-view'
   'views/devices-view'
+  'views/reward-machines-view'
   'models/company-model'
   'collections/company-collection'
   'models/user-model'
@@ -22,6 +23,8 @@ define [
   'collections/device-collection'
   'models/branch-model'
   'collections/branch-collection'
+  'models/reward-machine-model'
+  'collections/reward-machine-collection'
   'moment'
 ], (
   Main
@@ -33,6 +36,7 @@ define [
   ChallengesView
   RewardsView
   DevicesView
+  RewardMachinesView
   CompanyModel
   CompanyCollection
   UserModel
@@ -47,6 +51,8 @@ define [
   DeviceCollection
   BranchModel
   BranchCollection
+  RewardMachineModel
+  RewardMachineCollection
   moment
 ) ->
 
@@ -98,6 +104,10 @@ define [
 
   window.backend.Collections.BranchCollection = new BranchCollection
 
+  window.backend.Models.RewardMachineModel = RewardMachineModel
+
+  window.backend.Collections.RewardMachineCollection = new RewardMachineCollection
+
   window.backend.Views.MainView = new MainView
   window.backend.Views.MainView.render()
 
@@ -119,6 +129,9 @@ define [
   window.backend.Views.DevicesView = new DevicesView
     collection: window.backend.Collections.DeviceCollection
 
+  window.backend.Views.RewardMachinesView = new RewardMachinesView
+    collection: window.backend.Collections.RewardMachineCollection
+
   Backbone.emulateJSON = true
   Backbone.emulateHTTP = true
 
@@ -127,18 +140,19 @@ define [
   window.appLoaded = true
 
   window.checkSession = ->
-    $.ajax
-      url: window.baseUrl + 'apiv3/check_session'
-      dataType: 'json'
-      success: (resp) ->
-        now = moment().format('MMMM Do YYYY, h:mm:ss a')
-        if resp.success
-          console.log 'Session check ok : ' + now + ' UserId : ' + resp.data
-        else
-          clearInterval window.checkSessionInterval
-          if typeof mocha isnt 'function'
-            alert 'Session Expired ' + now
-            window.location.href = window.baseUrl + 'assets/backend/app/login.html'
+    if !window.location.href.match(/^https?:\/\/(socialhappen\.dyndns\.org|localhost)/)
+      $.ajax
+        url: window.baseUrl + 'apiv3/check_session'
+        dataType: 'json'
+        success: (resp) ->
+          now = moment().format('MMMM Do YYYY, h:mm:ss a')
+          if resp.success
+            console.log 'Session check ok : ' + now + ' UserId : ' + resp.data
+          else
+            clearInterval window.checkSessionInterval
+            if typeof mocha isnt 'function'
+              alert 'Session Expired ' + now
+              window.location.href = window.baseUrl + 'assets/backend/app/login.html'
 
   window.checkSession()
   window.checkSessionInterval = setInterval window.checkSession, 10000

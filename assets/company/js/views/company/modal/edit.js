@@ -13,6 +13,7 @@ define([
   'views/company/modal/action/checkin-action',
   'views/company/modal/action/walkin-action',
   'views/company/modal/action/video-action',
+  'views/company/modal/action/like-action',
   'views/company/modal/reward/reward',
   'views/company/challenger-list',
   'jqueryui',
@@ -23,7 +24,7 @@ define([
   'chosen'
 ], function(Vm, $, _, Backbone, editTemplate, couponItemTemplate, activityItemTemplate,
   addActionTemplate, addRewardTemplate, FeedbackActionView,
-  QRActionView, CheckinActionView, WalkinActionView, VideoActionView, RewardView, ChallengerView, jqueryui,
+  QRActionView, CheckinActionView, WalkinActionView, VideoActionView, LikeActionView, RewardView, ChallengerView, jqueryui,
    timeago, ChallengerCollection, vent, sandbox, chosen){
   var EditModalView = Backbone.View.extend({
 
@@ -337,6 +338,16 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(videoActionView.render().el);
+        }else if(type === 207){
+          var likeActionView = new LikeActionView({
+            model: this.model,
+            action: action,
+            vent: vent,
+            triggerModal: 'showEditModal',
+            save: true
+          });
+
+          $('ul.criteria-list', this.el).append(likeActionView.render().el);
         }
       }, this);
 
@@ -595,10 +606,46 @@ define([
       return videoActionView;
     },
 
+    addLike: function(e){
+      e.preventDefault();
+      console.log('show add video');
+
+      var likeDefaultAction = {
+        query: {
+          action_id: 207
+        },
+        count: 1,
+        name: 'Like',
+        description: '',
+        url: null,
+        facebook_id: null,
+        page_name: null,
+        action_data: {
+          data: {
+
+          },
+          action_id: 207
+        }
+      };
+
+      var likeActionView = new LikeActionView({
+        model: this.model,
+        vent: vent,
+        action: likeDefaultAction,
+        triggerModal: 'showEditModal',
+        add: true,
+        save: true
+      });
+
+      $('ul.criteria-list', this.el).append(likeActionView.render().el);
+
+      return likeActionView;
+    },
+
     showAddNewRewardModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addRewardTemplate).modal('show');
-      var reward = null;
+      var reward = 'points';
       var self = this;
       //On reward click
       $('.rewards button', addActionModal).click(function() {
@@ -609,11 +656,13 @@ define([
 
       $('button.choose-recipe', addActionModal).click(function(e) {
         if(reward === 'points') {
-          self.addPointsReward(e).showEdit();
+          self.addPointsReward(e)//.showEdit();
         } else if(reward === 'discount') {
-          self.addDiscountReward(e).showEdit();
+          self.addDiscountReward(e)//.showEdit();
         } else if(reward === 'giveaway') {
-          self.addGiveawayReward(e).showEdit();
+          self.addGiveawayReward(e)//.showEdit();
+        } else if(reward === 'instant') {
+          self.addInstantReward(e)//.showEdit();
         }
       });
     },
@@ -664,6 +713,24 @@ define([
         description: 'Giveaway reward',
         is_points_reward: false,
         redeem_method: 'in_store'
+      };
+
+      return this._addReward(reward);
+    },
+
+    addInstantReward: function(e){
+      e.preventDefault();
+
+      var reward = {
+        name: 'Instant Reward',
+        image: window.Company.BASE_URL + 'assets/images/blank.png',
+        value: 0,
+        status: 'published',
+        type: 'challenge',
+        description: 'Instant reward',
+        is_points_reward: false,
+        is_instant_reward: true,
+        reward_machine_id: null
       };
 
       return this._addReward(reward);
@@ -809,7 +876,7 @@ define([
     showAddNewActionModal: function(e) {
       var addActionModal = $('#add-action-modal');
       addActionModal.html(addActionTemplate).modal('show');
-      var recipe = null;
+      var recipe = 'walkin';
       var self = this;
 
       //On recipe click
@@ -823,15 +890,17 @@ define([
         if(recipe === 'share') {
           // self.addShare(e);
         } else if(recipe === 'feedback') {
-          self.addFeedback(e).showEdit();
+          self.addFeedback(e)//.showEdit();
         } else if(recipe === 'checkin') {
-          self.addCheckin(e).showEdit();
+          self.addCheckin(e)//.showEdit();
         } else if(recipe === 'qr') {
-          self.addQR(e).showEdit();
+          self.addQR(e)//.showEdit();
         } else if(recipe === 'walkin') {
-          self.addWalkin(e).showEdit();
+          self.addWalkin(e)//.showEdit();
         } else if(recipe === 'video') {
-          self.addVideo(e).showEdit();
+          self.addVideo(e)//.showEdit();
+        } else if(recipe === 'like') {
+          self.addLike(e)//.showEdit();
         }
       });
     },

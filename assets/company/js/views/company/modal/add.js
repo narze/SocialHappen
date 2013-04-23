@@ -12,6 +12,7 @@ define([
   'views/company/modal/action/checkin-action',
   'views/company/modal/action/walkin-action',
   'views/company/modal/action/video-action',
+  'views/company/modal/action/like-action',
   'views/company/modal/reward/reward',
   'jqueryui',
   'jqueryForm',
@@ -20,7 +21,7 @@ define([
   'chosen'
 ], function($, _, Backbone, ChallengeModel, addTemplate, recipeTemplate,
    addActionTemplate, addRewardTemplate, FeedbackActionView,
-   QRActionView, CheckinActionView, WalkinActionView, VideoActionView, RewardView, jqueryui,
+   QRActionView, CheckinActionView, WalkinActionView, VideoActionView, LikeActionView, RewardView, jqueryui,
     jqueryForm, vent, sandbox, chosen){
   var EditModalView = Backbone.View.extend({
 
@@ -42,7 +43,6 @@ define([
       'keyup input.latitude': 'onTypeLatitude',
       'keyup input.longitude': 'onTypeLongitude',
       'keyup input.done-count-max': 'onTypeDoneCountMax',
-      'keyup input.sonar-frequency': 'onTypeSonarFrequency',
       'keyup textarea.challenge-description': 'onTypeChallengeDescription',
       'click button.upload-image-submit': 'uploadImage',
       'change input.all-branch-enable': 'toggleAllBranch',
@@ -195,6 +195,15 @@ define([
           });
 
           $('ul.criteria-list', this.el).append(videoActionView.render().el);
+        } else if(type === 207) {
+          var likeActionView = new LikeActionView({
+            model: this.model,
+            action: action,
+            vent: vent,
+            triggerModal: 'showAddModal'
+          });
+
+          $('ul.criteria-list', this.el).append(likeActionView.render().el);
         }
       }, this);
 
@@ -295,12 +304,6 @@ define([
       this.model.set('done_count_max', done_count_max).trigger('change');
     },
 
-    onTypeSonarFrequency: function(e){
-      var sonar_frequency = $('input.sonar-frequency', this.el).val();
-      console.log('sonar frequency change', sonar_frequency);
-      this.model.set('sonar_frequency', sonar_frequency).trigger('change');
-    },
-
     showEditName: function(){
       $('h3.edit-name', this.el).hide();
       $('div.edit-name', this.el).show();
@@ -356,6 +359,8 @@ define([
           self.addWalkin(e).showEdit();
         } else if(recipe === 'video') {
           self.addVideo(e).showEdit();
+        } else if(recipe === 'like') {
+          self.addLike(e).showEdit();
         }
       });
     },
@@ -472,6 +477,12 @@ define([
         },
         count: 1,
         name: 'Walkin',
+        description: '',
+        codes: [],
+        locations: [],
+        branches: [],
+        sonar_boxes: [],
+        all_branches : false,
         action_data: {
           data: {
 
@@ -503,6 +514,11 @@ define([
         },
         count: 1,
         name: 'Video',
+        description: '',
+        codes: [],
+        locations: [],
+        branches: [],
+        all_branches : false,
         action_data: {
           data: {
 
@@ -522,6 +538,41 @@ define([
       $('ul.criteria-list', this.el).append(videoActionView.render().el);
 
       return videoActionView;
+    },
+
+    addLike: function(e){
+      e.preventDefault();
+      console.log('show add video');
+
+      var likeDefaultAction = {
+        query: {
+          action_id: 207
+        },
+        count: 1,
+        name: 'Like',
+        description: '',
+        url: null,
+        facebook_id: null,
+        page_name: null,
+        action_data: {
+          data: {
+
+          },
+          action_id: 207
+        }
+      };
+
+      var likeActionView = new LikeActionView({
+        model: this.model,
+        vent: vent,
+        action: likeDefaultAction,
+        triggerModal: 'showAddModal',
+        add: true
+      });
+
+      $('ul.criteria-list', this.el).append(likeActionView.render().el);
+
+      return likeActionView;
     },
 
     showAddNewRewardModal: function(e) {
@@ -544,6 +595,8 @@ define([
           self.addDiscountReward(e).showEdit();
         } else if(reward === 'giveaway') {
           self.addGiveawayReward(e).showEdit();
+        } else if(reward === 'instant') {
+          self.addInstantReward(e).showEdit();
         } else {
           $('.setup-your-reward').show();
         }
@@ -596,6 +649,24 @@ define([
         description: 'Giveaway reward',
         is_points_reward: false,
         redeem_method: 'in_store'
+      };
+
+      return this._addReward(reward);
+    },
+
+    addInstantReward: function(e){
+      e.preventDefault();
+
+      var reward = {
+        name: 'Instant Reward',
+        image: window.Company.BASE_URL + 'assets/images/blank.png',
+        value: 0,
+        status: 'published',
+        type: 'challenge',
+        description: 'Instant reward',
+        is_points_reward: false,
+        is_instant_reward: true,
+        reward_machine_id: null
       };
 
       return this._addReward(reward);
@@ -724,6 +795,8 @@ define([
           self.addWalkin(e);
         }else if(recipe === 'video') {
           self.addVideo(e);
+        }else if(recipe === 'like') {
+          self.addLike(e);
         }
 
         $('.setup-your-reward').hide();
@@ -733,6 +806,8 @@ define([
           self.addDiscountReward(e);
         } else if(reward === 'giveaway') {
           self.addGiveawayReward(e);
+        } else if(reward === 'instant') {
+          self.addInstantReward(e);
         } else {
           $('.setup-your-reward').show();
         }

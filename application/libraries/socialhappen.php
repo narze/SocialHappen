@@ -13,6 +13,16 @@ class SocialHappen{
     $this->CI =& get_instance();
 		$this->CI->load->library('session');
     $this->update_session();
+
+    // For API testing
+    if((ENVIRONMENT === 'development') && ($this->CI->uri->segment(1) === 'testmode')) {
+      $userdata = array(
+      	'user_id' => 1,
+      	'user_facebook_id' => '713558190',
+      	'logged_in' => TRUE
+      );
+      $this->CI->session->set_userdata($userdata);
+    }
   }
 
 	/**
@@ -65,7 +75,8 @@ class SocialHappen{
 			203 => 'Checkin',
 			204 => 'Walkin',
 			205 => 'Add Credits',
-			206 => 'View Video'
+			206 => 'View Video',
+			207 => 'Like'
 		)
 	);
 
@@ -112,7 +123,9 @@ class SocialHappen{
 			'user_mongo_model',
 			'user_token_model',
 			'sonar_box_model',
-			'branch_model'
+			'branch_model',
+			'reward_machine_model',
+			'instant_reward_queue_model'
 		);
 		foreach($models as $model){
 			$this->CI->load->model($model);

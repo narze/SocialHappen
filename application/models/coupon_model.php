@@ -144,6 +144,15 @@ class Coupon_model extends CI_Model {
 	}
 
 	/**
+	 * Get coupon(s) by user_id and reward_item_id
+	 */
+	function get_by_user_and_reward($user_id = NULL, $reward_item_id = NULL) {
+		if(!$user_id || !$reward_item_id) { return FALSE; }
+		$query = array('user_id' => (int) $user_id, 'reward_item_id' => $reward_item_id);
+		return $this->get($query);
+	}
+
+	/**
 	 * Get coupon(s) by company_id
 	 */
 	function get_by_company($company_id = NULL) {

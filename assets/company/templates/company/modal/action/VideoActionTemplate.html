@@ -13,9 +13,10 @@
       <button type="button" class="action-icon btn btn-warning">Video</button>
     </div>
     <div class="span9">
-      <h5>VIdeo</h5>
+      <h5>Video</h5>
       <p><%= name %></p>
-      <p>Video status : <%= sonar_code ? '<span class="label label-success">Set</span>' : '<span class="label">Pending</span>' %></p>
+      <p>Codes: <%= (typeof codes !== 'undefined') && codes && codes.join(', ')||'not set' %></p>
+      <p><%= typeof description !== 'undefined' ? description : "" %></p>
     </div>
   </div>
 </li>

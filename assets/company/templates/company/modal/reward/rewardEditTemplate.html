@@ -23,8 +23,8 @@
     </div>
   </div>
 
-  <h6>Redeem Method:</h6>
-  <div class="control-group">
+  <div class="control-group <%= ((typeof is_points_reward !== 'undefined') && is_points_reward) || ((typeof is_instant_reward !== 'undefined') && is_instant_reward) ? 'hide' : '' %>">
+    <h6>Redeem Method:</h6>
     <div class="controls">
       <label class="status"></label>
       <select class="reward-redeem-method">
@@ -33,6 +33,16 @@
       </select>
     </div>
   </div>
+
+  <% if((typeof is_instant_reward !== 'undefined') && is_instant_reward) { %>
+    <div class="control-group">
+      <h6>Reward Machine:</h6>
+      <div class="controls">
+        <input type="text" class="reward-machine-id span4" value="<%= (typeof reward_machine_id !== 'undefined') && reward_machine_id || '' %>" />
+      </div>
+    </div>
+  <% } %>
+
 
   <div class="control-group">
     <div class="edit-image">

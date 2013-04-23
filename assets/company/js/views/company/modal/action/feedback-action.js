@@ -25,7 +25,13 @@ define([
 
         this.model.set('criteria', criteria).trigger('change');
         if(this.options.save){
-          this.model.save();
+          var self = this;
+
+          this.model.save({}, {
+            success: function(){
+              self.options.vent.trigger('showEditModal', self.model);
+            }
+          });
         }
       }
     },

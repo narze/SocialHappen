@@ -42,6 +42,20 @@ define([
       this.options.action.action_data.data.checkin_thankyou_message = $('textarea.checkin_thankyou_message', this.el).val();
 
       var criteria = this.model.get('criteria');
+
+      if(this.options.save){
+        for(var i = criteria.length - 1; i >= 0; i--) {
+          var actionItem = criteria[i];
+
+          if(actionItem.action_data_id == this.options.action.action_data_id){
+            console.log('found action to save', criteria[i]);
+            criteria[i] = _.clone(this.options.action);
+            console.log('criteria to be saved', criteria);
+            break;
+          }
+        };
+      }
+
       this.model.set('criteria', criteria).trigger('change');
       if(this.options.save){
         this.model.save();
