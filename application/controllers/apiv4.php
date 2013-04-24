@@ -2077,4 +2077,14 @@ class Apiv4 extends REST_Controller {
       }
     }
   }
+
+  function add_feedback_post() {
+    $action_data_id = $this->post('action_data_id');
+    $user_score = $this->post('user_score');
+    $user_feedback = $this->post('user_feedback');
+
+    // TODO : save in action_user_data model
+
+    return $this->success();
+  }
 }
