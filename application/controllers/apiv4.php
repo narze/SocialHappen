@@ -2079,12 +2079,65 @@ class Apiv4 extends REST_Controller {
   }
 
   function add_feedback_post() {
+
+    $access_token = $this->get('access_token');
+    $user_id = (int) $this->post('user_id');
+
     $action_data_id = $this->post('action_data_id');
+    $challenge_id = $this->post('challenge_id');
     $user_score = $this->post('user_score');
     $user_feedback = $this->post('user_feedback');
 
-    // TODO : save in action_user_data model
+    if(!$this->_check_token($user_id, $access_token)) {
+      return $this->error('Token invalid');
+    }
 
-    return $this->success();
+    $this->load->model('user_mongo_model');
+    if(!$user = $this->user_mongo_model->get_user($user_id)) {
+      return $this->error('User invalid');
+    }
+
+    if(!$access_token || !$action_data_id || !$user_score
+     || !$user_feedback || !$challenge_id){
+      $this->error('missing args');
+    }else{
+
+      //Check if challenge is valid
+      $this->load->library('challenge_lib');
+
+      if(!$challenge = $this->challenge_lib->get_by_id($challenge_id)) {
+        return $this->error('Challenge invalid');
+      }
+
+      $this->load->library('action_user_data_lib');
+      $this->load->library('action_data_lib');
+
+      // TODO : save in action_user_data model
+
+      $action_data = $this->action_data_lib->get_action_data($action_data_id);
+
+      if(!$action_data || (int) $action_data['action_id'] != 202){
+        return $this->error('Action not exists.');
+      }
+
+      $company_id = $challenge['company_id'];
+      $action_id = 202;
+
+      $user_data = array(
+        'user_score' => $user_score,
+        'user_feedback' => $user_feedback,
+        'timestamp' => time(),
+      );
+
+      $result = $this->add_action_user_data($company_id, $action_id, $action_data_id, $challenge_id,
+        $user_id, $user_data);
+
+      if($result){
+        return $this->success();
+      }else{
+        return $this->error('cannot add feedback');
+      }
+
+    }
   }
 }
