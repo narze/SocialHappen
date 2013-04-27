@@ -262,6 +262,12 @@
             }
         };
 
+        // Don't change page on bar touch
+        $('.navbar').bind('touchstart', function(e) {
+            e.stopPropagation();
+            return true;
+        })
+
         // Vdo fancybox
         $('.btn-play').fancybox({width : 680, height : 495, type : "iframe"});
     });
