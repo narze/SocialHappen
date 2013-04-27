@@ -46,6 +46,36 @@ class Feedback extends CI_Controller {
 
 	}
 
+	function show($action_data_id) {
+		$user_id = NULL;
+		$options = array('limit' => 10, 'offset' => 0);
+		$feedbacks = $this->action_user_data_lib->get_action_user_data_by_action_data($action_data_id, $user_id, $options);
+		$data = array(
+			'feedbacks' => $feedbacks,
+			'action_data_id' => $action_data_id
+		);
+
+		$template = array(
+			'title' => 'Welcome to SocialHappen',
+			'styles' => array(
+				'common/bootstrap.min',
+				'common/bootstrap-responsive.min'
+				),
+			'body_views' => array(
+				'actions/feedback/show' => $data,
+				'common/vars' => array(
+					'vars' => array(
+						'base_url' => base_url()
+						)
+					)
+				),
+			'scripts' => array(
+				'common/bootstrap.min',
+				)
+			);
+		$this->load->view('common/template', $template);
+	}
+
 	function get_form() {
 		$action_data = $this->action_data_lib->get_action_data_from_code();
 		$user = $this->socialhappen->get_user();
