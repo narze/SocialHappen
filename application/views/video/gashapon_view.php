@@ -18,9 +18,9 @@
                 <div class="bot-nav">
                     <ul>
                         <li><a href="#/step-1" id="step-1">Home</a></li>
+                        <li><a href="#/step-2" id="step-2">Technology</a></li>
                         <li><a href="#/step-4" id="step-4">Why Socialhappen?</a></li>
                         <li><a href="#/step-5" id="step-5">How it works</a></li>
-                        <li><a href="#/step-2" id="step-2">Technology</a></li>
                         <li><a href="#/step-11" id="step-11">Ads</a></li>
                     </ul>
                 </div>
