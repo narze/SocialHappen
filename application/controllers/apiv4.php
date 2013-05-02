@@ -637,6 +637,7 @@ class Apiv4 extends REST_Controller {
                   $coupons = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
                   $latest_coupon = reset($coupons);
                   $challenge['coupon_status'] = $latest_coupon['confirmed'] ? 'confirmed' : 'pending';
+                  $challenge['coupon_id'] = get_mongo_id($latest_coupon);
 
                   //get challenge complete timestamp
                   $challenge['completed_at'] = $latest_coupon['timestamp'];
@@ -650,6 +651,7 @@ class Apiv4 extends REST_Controller {
               $coupons = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
               $latest_coupon = reset($coupons);
               $challenge['coupon_status'] = $latest_coupon['confirmed'] ? 'confirmed' : 'pending';
+              $challenge['coupon_id'] = get_mongo_id($latest_coupon);
 
               $challenge['coupons'] = $coupons;
 
