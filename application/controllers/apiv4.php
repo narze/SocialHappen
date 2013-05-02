@@ -1950,41 +1950,18 @@ class Apiv4 extends REST_Controller {
 
   function claim_simple_reward_post() {
     $user_id = (int) $this->post('user_id');
-    $reward_item_id = $this->post('reward_item_id');
-    $challenge_id = $this->post('challenge_id');
+    $coupon_id = $this->post('coupon_id');
 
-    if(!$user_id || !$reward_item_id || !$challenge_id) {
+    if(!$user_id || !$coupon_id) {
       return $this->error('Insufficient arguments');
     }
 
     $this->load->model('user_model');
-    $this->load->library('reward_lib');
-    $this->load->library('instant_reward_queue_lib');
-
     if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
       return $this->error('User not found');
     }
 
-    if(!$reward_item = $this->reward_lib->get_reward_item($reward_item_id)) {
-      return $this->error('Reward item not found');
-    }
-
     $this->load->library('coupon_lib');
-    $reward_item_id = get_mongo_id($reward_item);
-
-    $coupon = array(
-      'reward_item' => $reward_item,
-      'reward_item_id' => $reward_item_id,
-      'user_id' => $user_id,
-      'company_id' => $reward_item['company_id'],
-      'challenge_id' => $challenge_id
-    );
-
-    // create
-    if(!$coupon_id = $this->coupon_lib->create_coupon($coupon)) {
-      return $this->error('add coupon failed');
-    }
-
     // approve
     if(!$coupon_confirm_result = $this->coupon_lib->confirm_coupon($coupon_id, 0)) {
       return $this->error('confirm point coupon failed');
