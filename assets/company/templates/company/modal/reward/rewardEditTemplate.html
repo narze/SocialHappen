@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <div class="control-group <%= ((typeof is_points_reward !== 'undefined') && is_points_reward) || ((typeof is_instant_reward !== 'undefined') && is_instant_reward) ? 'hide' : '' %>">
+  <div class="control-group <%= ((typeof is_points_reward !== 'undefined') && is_points_reward) || ((typeof is_instant_reward !== 'undefined') && is_instant_reward) || ((typeof reward_type !== 'undefined') && reward_type === 'simple') ? 'hide' : '' %>">
     <h6>Redeem Method:</h6>
     <div class="controls">
       <label class="status"></label>

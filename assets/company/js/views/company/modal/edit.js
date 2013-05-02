@@ -663,6 +663,8 @@ define([
           self.addGiveawayReward(e)//.showEdit();
         } else if(reward === 'instant') {
           self.addInstantReward(e)//.showEdit();
+        } else if(reward === 'simple') {
+          self.addSimpleReward(e)//.showEdit();
         }
       });
     },
@@ -730,6 +732,24 @@ define([
         description: 'Instant reward',
         is_points_reward: false,
         is_instant_reward: true,
+        reward_machine_id: null
+      };
+
+      return this._addReward(reward);
+    },
+
+    addSimpleReward: function(e){
+      e.preventDefault();
+
+      var reward = {
+        name: 'Simple Reward',
+        image: window.Company.BASE_URL + 'assets/images/blank.png',
+        value: 0,
+        status: 'published',
+        type: 'challenge',
+        description: 'Simple reward',
+        is_points_reward: false,
+        reward_type: 'simple',
         reward_machine_id: null
       };
 
