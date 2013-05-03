@@ -1732,6 +1732,8 @@ class Apiv4 extends REST_Controller {
         $challenge_id = get_mongo_id($challenge);
         if($coupon['challenge_id'] === $challenge_id) {
           $challenge['_id'] = $challenge_id;
+          $challenge['coupon_status'] = $coupon['confirmed'] ? 'confirmed' : 'pending';
+          $challenge['coupon_id'] = get_mongo_id($coupon);
           $coupon['challenge'] = $challenge;
           break;
         }
