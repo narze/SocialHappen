@@ -47,11 +47,9 @@ class Feedback extends CI_Controller {
 	}
 
 	function show($action_data_id) {
-		$user_id = NULL;
-		$options = array('limit' => 10, 'offset' => 0);
-		$feedbacks = $this->action_user_data_lib->get_action_user_data_by_action_data($action_data_id, $user_id, $options);
+
 		$data = array(
-			'feedbacks' => $feedbacks,
+			'feedbacks' => null, // Use ajax
 			'action_data_id' => $action_data_id
 		);
 
@@ -59,7 +57,8 @@ class Feedback extends CI_Controller {
 			'title' => 'Welcome to SocialHappen',
 			'styles' => array(
 				'common/bootstrap.min',
-				'common/bootstrap-responsive.min'
+				'common/bootstrap-responsive.min',
+				'common/main'
 				),
 			'body_views' => array(
 				'actions/feedback/show' => $data,
@@ -70,10 +69,58 @@ class Feedback extends CI_Controller {
 					)
 				),
 			'scripts' => array(
+				'common/jquery-1.9.1.min',
 				'common/bootstrap.min',
+				'common/jquery.pagination',
+				'common/moment.min',
+				'actions/actions'
 				)
 			);
 		$this->load->view('common/template', $template);
+	}
+
+	/**
+	 * JSON : Count feedbacks
+	 * @param $action_data_id
+	 * @author Weerapat P.
+	 */
+	function json_count_feedbacks($action_data_id = NULL){
+		$this->socialhappen->ajax_check();
+		$user_id = NULL;
+		$options = array();
+		$feedbacks = $this->action_user_data_lib->get_action_user_data_by_action_data($action_data_id, $user_id, $options);
+		echo count($feedbacks);
+	}
+
+	/**
+	 * Get user activities
+	 * @param $action_data_id
+	 * @param $limit
+	 * @param $offset
+	 * @author Weerapat P.
+	 */
+	function json_get_feedbacks($action_data_id = NULL, $limit = 10, $offset = 0){
+		$this->socialhappen->ajax_check();
+		
+		// Get feedbacks
+		$user_id = NULL;
+		$options = array('limit' => $limit, 'offset' => $offset);
+		$feedbacks = $this->action_user_data_lib->get_action_user_data_by_action_data($action_data_id, $user_id, $options);
+
+		$this->load->model('user_model');
+		$this->load->library('challenge_lib');
+		
+		foreach ($feedbacks as &$feedback) {
+			$feedback['user'] = $this->user_model->get_user_profile_by_user_id($feedback['user_id']);
+			$feedback['challenge'] = $this->challenge_lib->get_one(array('criteria.action_data_id' => $action_data_id ) );
+		}
+
+		$data = array(
+			'feedbacks' => $feedbacks,
+			'action_data_id' => $action_data_id
+		);
+
+		$this->load->view('actions/feedback/show', $data);
 	}
 
 	function get_form() {
