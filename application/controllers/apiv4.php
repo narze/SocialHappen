@@ -2114,9 +2114,13 @@ class Apiv4 extends REST_Controller {
 
     $this->load->library('challenge_lib');
     if($challenge = $this->challenge_lib->get_by_url($url)) {
-      return $this->success(array('challenge_id' => get_mongo_id($challenge)));
+      return $this->success(array(
+        'challenge_id' => get_mongo_id($challenge),
+        'type' => 'challenge', // not used at the moment
+        'action' => 'view' // not used at the moment
+      ));
     } else {
-      return $this->error('Challenge not found');
+      return $this->error('This QR is not SocialHappen challenge');
     }
   }
 
