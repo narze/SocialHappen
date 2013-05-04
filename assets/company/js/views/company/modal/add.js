@@ -410,7 +410,7 @@ define([
         action_data: {
           data: {
             feedback_welcome_message: 'Welcome',
-            feedback_question_message: 'What do you think about us?',
+            feedback_question_message: 'Any comment?',
             feedback_vote_message: 'Please give us a rating',
             feedback_thankyou_message: 'Thank you'
           },
