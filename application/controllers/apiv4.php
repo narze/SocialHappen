@@ -2109,6 +2109,17 @@ class Apiv4 extends REST_Controller {
     }
   }
 
+  function parse_qr_get() {
+    $url = $this->get('url');
+
+    $this->load->library('challenge_lib');
+    if($challenge = $this->challenge_lib->get_by_url($url)) {
+      return $this->success(array('challenge_id' => get_mongo_id($challenge)));
+    } else {
+      return $this->error('Challenge not found');
+    }
+  }
+
   function _parse_feedback_action_user_data($action_user_data) {
     if(isset($action_user_data['user_score'])) {
       $action_user_data['user_score'] = (int) $action_user_data['user_score'];

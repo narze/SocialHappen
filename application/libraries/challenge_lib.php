@@ -45,6 +45,10 @@ class Challenge_lib {
     return $this->CI->challenge_model->getOne(array('_id' => new MongoId($id)));
   }
 
+  function get_by_url($url) {
+    return $this->CI->challenge_model->getOne(array('short_url' => $url));
+  }
+
   function update($criteria, $data) {
     if(!$challenge = $this->get_one($criteria)) {
       return FALSE;
