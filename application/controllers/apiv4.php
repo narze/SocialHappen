@@ -124,7 +124,7 @@ class Apiv4 extends REST_Controller {
        * FOR PRIVATE TESTING ONLY
        * CHANGE availagle TO TRUE WHEN LAUNCH IN PUBLIC
        */
-      'available' => FALSE,
+      'available' => TRUE,
       'user_id' => $user_id,
       'points' => 10
     );
@@ -179,9 +179,9 @@ class Apiv4 extends REST_Controller {
      * FOR PRIVATE TESTING ONLY
      * REMOVE THIS WHEN LAUNCH IN PUBLIC
      */
-    if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
-      $code = 3;
-    }
+    // if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
+    //   $code = 3;
+    // }
 
     return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token), $code);
   }
@@ -294,9 +294,9 @@ class Apiv4 extends REST_Controller {
      * FOR PRIVATE TESTING ONLY
      * REMOVE THIS WHEN LAUNCH IN PUBLIC
      */
-    if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
-      $code = 3;
-    }
+    // if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
+    //   $code = 3;
+    // }
 
     return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token), $code);
   }
