@@ -134,7 +134,7 @@ class Player extends CI_Controller {
    */
   function challenge($challenge_hash) {
     //Redirect to homepage for now
-    redirect();
+    // redirect();
 
     $this->load->model('challenge_model');
     $this->load->library('challenge_lib');
@@ -274,16 +274,17 @@ class Player extends CI_Controller {
           'common/bootstrap.min',
           'common/bootstrap-responsive.min',
           'common/bar',
-          'player/challenge'
+          'player/challenge-v2'
         ),
         'body_views' => array(
-          'common/fb_root' => array(
-            'facebook_app_id' => $this->config->item('facebook_app_id'),
-            'facebook_channel_url' => $this->facebook->channel_url,
-            'facebook_app_scope' => $this->config->item('facebook_player_scope')
-          ),
-          'bar/plain_bar_view' => array(),
-          'player/challenge_view' => array(),
+          // 'common/fb_root' => array(
+          //   'facebook_app_id' => $this->config->item('facebook_app_id'),
+          //   'facebook_channel_url' => $this->facebook->channel_url,
+          //   'facebook_app_scope' => $this->config->item('facebook_player_scope')
+          // ),
+          // 'bar/plain_bar_view' => array(),
+          // 'player/challenge_view' => array(),
+          'player/challenge_view_v2' => array(),
           'common/vars' => array(
             'vars' => array(
               'base_url' => base_url(),

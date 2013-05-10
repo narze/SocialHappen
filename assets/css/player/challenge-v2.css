@@ -1,0 +1,115 @@
+body {
+  padding: 0;
+}
+
+.chalenge-card {
+  margin: 15px 0;
+  padding: 15px;
+  border:1px solid #999;
+  border:1px solid rgba(0, 0, 0, 0.2);
+  *border:1px solid #999;
+  -webkit-border-radius:6px;
+  -moz-border-radius:6px;
+  border-radius:6px;
+  -webkit-box-shadow:0 3px 7px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow:0 3px 7px rgba(0, 0, 0, 0.3);
+  box-shadow:0 3px 7px rgba(0, 0, 0, 0.3);
+  -webkit-background-clip:padding-box;
+  -moz-background-clip:padding-box;
+  background-clip:padding-box;
+  background-color: #FFF;
+}
+.chalenge-card .divider {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.challenge-image {
+  width: 100%
+}
+.chalenge-card .criteria-item {
+  margin-bottom: 10px;
+}
+.challenge-footer {
+  padding: 10px;
+  margin: 15px -15px -15px -15px;
+  background-color: #F2F0F0;
+  -webkit-border-radius: 0 0 6px 6px;
+  -moz-border-radius:0 0 6px 6px;
+  border-radius:0 0 6px 6px;
+}
+.reward-container {
+  min-height: 100px;
+}
+
+.reward-image {
+  float: left;
+}
+
+.reward-image img {
+  width: 100px;
+  height: 100px;
+}
+
+.reward-info {
+  float: left;
+  margin-left: 10px;
+}
+
+.reward-name {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.reward-description {
+  padding: 5px 0 0 5px;
+  text-align: left;
+}
+
+.reward-status {
+
+}
+
+.reward-value {
+
+}
+
+.bg-container {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.dimmer {
+  background: rgba(0,0,0,0.25);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.download {
+  margin: 15px 0;
+  padding: 15px;
+  border:1px solid #999;
+  border:1px solid rgba(0, 0, 0, 0.2);
+  *border:1px solid #999;
+  -webkit-border-radius:6px;
+  -moz-border-radius:6px;
+  border-radius:6px;
+  -webkit-box-shadow:0 3px 7px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow:0 3px 7px rgba(0, 0, 0, 0.3);
+  box-shadow:0 3px 7px rgba(0, 0, 0, 0.3);
+  -webkit-background-clip:padding-box;
+  -moz-background-clip:padding-box;
+  background-clip:padding-box;
+  background-color: #FFF;
+  text-align: center;
+}
