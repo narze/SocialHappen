@@ -2130,4 +2130,27 @@ class Apiv4 extends REST_Controller {
     }
     return $action_user_data;
   }
+
+  function share_post() {
+    $user_id = (int) $this->post('user_id');
+    $token = $this->post('token');
+    $facebook_access_token = $this->post('facebook_access_token');
+    $type = $this->post('type');
+    $data = $this->post('data'); //array
+
+    if(!$user_id || !$token || !$facebook_access_token || !$type || !$data) {
+      return $this->error('Insufficient Arguments');
+    }
+
+    if(!$this->_check_token($user_id, $token)) {
+      return $this->error('Token invalid');
+    }
+
+    if($type === 'challenge_done') {
+      // TODO : share to facebook
+      return $this->success();
+    } else {
+      return $this->error('Invalid type');
+    }
+  }
 }
