@@ -2,7 +2,7 @@ body {
   padding: 0;
 }
 
-.chalenge-card {
+.challenge-card{
   margin-top: 15px;
   padding: 0;
   border:1px solid #999;
@@ -18,9 +18,8 @@ body {
   -moz-background-clip:padding-box;
   background-clip:padding-box;
   background-color: #FFF;
-  height: 600px;
 }
-.chalenge-card .divider {
+.challenge-card.divider {
   margin-left: -15px;
   margin-right: -15px;
 }
@@ -73,15 +72,46 @@ body {
 
 }
 .action-list {
-
+  margin: 0;
+}
+.action-item {
+  overflow: hidden;
+  display: block;
+  box-shadow: 1px 1px 3px #999;
+  margin: 10px;
+  height: 60px;
+  border: 1px solid #acacac;
+  background: linear-gradient(to bottom, #f9f9f9 0%, #ededed 100%);
+}
+.action-detail {
+  display: inline-block;
+  padding-left: 5px;
+  position: relative;
+  top: -17px;
+  width: 220px;
+}
+.challenge-action-icon {
+  background-image: url('../../images/challenge_active.png');
+  background-image: no-repeat;
+  background-size: 42px;
+  display: inline-block;
+  height: 60px;
+  width: 42px;
 }
 .action-name {
-
+  display: block;
+  overflow: hidden;
+  width: 198px;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  font-size: 15px
+  font-weight: normal;
 }
 .action-type {
-
+  position: relative;
+  color: #75ac1a;
 }
-.action-status {
+.reward-item {
 
 }
 .reward-item-name {
@@ -90,7 +120,7 @@ body {
 .reward-item-image {
 
 }
-.chalenge-card .criteria-item {
+.challenge-card.criteria-item {
   margin-bottom: 10px;
 }
 .challenge-footer {

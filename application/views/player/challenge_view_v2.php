@@ -6,7 +6,7 @@
 		<div class="row-fluid">
 			<div class="span3">&nbsp;</div>
 			<div class="span6">
-				<div class="chalenge-card">
+				<div class="challenge-card">
 					<div class="challenge-banner">
 						<div class="challenge-image" style="background-image: url('<?php echo $challenge['detail']['image'] ? $challenge['detail']['image'] : base_url('assets/images/default/challenge.png'); ?>');" alt="<?php echo htmlspecialchars($challenge['detail']['name']);?>"></div>
 						<div class="challenge-reward-badge">[[Reward]]</div>
@@ -14,13 +14,16 @@
 					<div class="challenge-info">
 						<h2 class="challenge-name"><?php echo htmlspecialchars($challenge['detail']['name']);?> <small class="challenge-by">by <?php echo $company_name;?></small></h2>
 						<p class="challenge-desc"><?php echo htmlspecialchars($challenge['detail']['description']); ?></p>
-						<div class="challenge-time"><i class="icon-time"> [[5 days left]]</i></div>
+						<div class="challenge-time"><i class="icon-time"> <span id="challenge-until-end"></span></i></div>
 						<hr class="divider" />
 						<ul class="action-list">
 							<?php foreach($challenge['criteria'] as $key => $criteria) : ?>
-								<li class="action-item action-item-feedback">
-									<div class="action-name"><?php echo htmlspecialchars($criteria['name']); ?></div>
-									<span class="action-type">[[<?php echo htmlspecialchars($criteria['query']['action_id']); ?>]]</span>
+								<li class="action-item">
+									<div class="challenge-action-icon"></div>
+									<div class="action-detail">
+										<div class="action-name"><?php echo htmlspecialchars($criteria['name']); ?></div>
+										<span class="action-type">[[<?php echo htmlspecialchars($criteria['query']['action_id']); ?>]]</span>
+									</div>
 								</li>
 							<?php endforeach; ?>
 						</ul>
