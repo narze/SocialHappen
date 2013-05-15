@@ -222,7 +222,7 @@
           $('#content').find('#rewards-view').find('thead').text().should.match(/Point Required/);
           $('#content').find('#rewards-view').find('thead').text().should.match(/Amount/);
           $('#content').find('#rewards-view').find('thead').text().should.match(/Amount Redeemed/);
-          return $('#content').find('#rewards-view').find('thead').text().should.match(/Can Play Once/);
+          return $('#content').find('#rewards-view').find('thead').text().should.match(/Can Redeem Once/);
         });
         it('should have correct first row of data', function() {
           return $('#content #rewards-view .reward-item:first td').length.should.equal(5);
