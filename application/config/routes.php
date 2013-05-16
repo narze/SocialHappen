@@ -80,6 +80,9 @@ $route['api/v1'] = "api";
 $route['api/v(:num)'] = "apiv$1";
 $route['api/v1/(:any)'] = "api/$1";
 $route['api/v(:num)/(:any)'] = "apiv$1/$2";
+// hide old backend
+$route['backend'] = "backendv2/index";
+$route['backend/(:any)'] = "backendv2/$1";
 
 
 /* End of file routes.php */
