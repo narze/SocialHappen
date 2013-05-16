@@ -8,6 +8,7 @@ define [
   'views/challenges-view'
   'views/rewards-view'
   'views/devices-view'
+  'views/sonar-codes-view'
   'views/reward-machines-view'
   'models/company-model'
   'collections/company-collection'
@@ -21,6 +22,8 @@ define [
   'collections/reward-collection'
   'models/device-model'
   'collections/device-collection'
+  'models/sonar-code-model'
+  'collections/sonar-code-collection'
   'models/branch-model'
   'collections/branch-collection'
   'models/reward-machine-model'
@@ -35,6 +38,7 @@ define [
   ChallengesView
   RewardsView
   DevicesView
+  SonarCodesView
   RewardMachinesView
   CompanyModel
   CompanyCollection
@@ -48,6 +52,8 @@ define [
   RewardCollection
   DeviceModel
   DeviceCollection
+  SonarCodeModel
+  SonarCodeCollection
   BranchModel
   BranchCollection
   RewardMachineModel
@@ -99,6 +105,10 @@ define [
 
   window.backend.Collections.DeviceCollection = new DeviceCollection
 
+  window.backend.Models.SonarCodeModel = SonarCodeModel
+
+  window.backend.Collections.SonarCodeCollection = new SonarCodeCollection
+
   window.backend.Models.BranchModel = BranchModel
 
   window.backend.Collections.BranchCollection = new BranchCollection
@@ -127,6 +137,9 @@ define [
 
   window.backend.Views.DevicesView = new DevicesView
     collection: window.backend.Collections.DeviceCollection
+
+  window.backend.Views.SonarCodesView = new SonarCodesView
+    collection: window.backend.Collections.SonarCodeCollection
 
   window.backend.Views.RewardMachinesView = new RewardMachinesView
     collection: window.backend.Collections.RewardMachineCollection

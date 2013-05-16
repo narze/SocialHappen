@@ -1,0 +1,57 @@
+<div class="row-fluid sortable">
+    <div class="box span12">
+        <div class="box-header" data-original-title>
+            <h2><i class="fa-icon-plus-sign"></i><span class="break"></span>Add Sonar Code</h2>
+            <div class="box-icon">
+                <a href="#" class="btn-minimize"><i class="icon-chevron-down"></i></a>
+            </div>
+        </div>
+        <div class="box-content" style="display: none">
+            <form class="sonar-code-add-form form-horizontal">
+              <fieldset>
+                <div class="control-group">
+                  <label class="control-label" for="sonar-code-add-id">ID</label>
+                  <div class="controls">
+                    <input name="id" class="input-xlarge" type="text" id="sonar-code-add-id" value="">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="sonar-code-add-title">Title</label>
+                  <div class="controls">
+                    <input name="title" class="input-xlarge" type="text" id="sonar-code-add-title" value="">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="sonar-code-add-data">Data</label>
+                  <div class="controls">
+                    <input name="data" class="input-xlarge" type="text" id="sonar-code-add-data" value="">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="sonar-code-add-company">Company</label>
+                  <div class="controls">
+                    <select name="company" id="sonar-code-add-company" data-rel="chosen">
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="sonar-code-add-branch">Branch</label>
+                  <div class="controls">
+                    <select name="branch" id="sonar-code-add-branch" data-rel="chosen" data-placeholder="Select Company First">
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Add Sonar Code</button>
+                  <button type="reset" class="btn">Cancel</button>
+                </div>
+              </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

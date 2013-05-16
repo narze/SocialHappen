@@ -1218,6 +1218,106 @@ class Apiv3 extends CI_Controller {
     return $this->success($device);
   }
 
+  function sonar_codes() {
+    if ($model = json_decode($this->input->post('model'), TRUE)) {
+      return $this->_sonar_code_add($model);
+    }
+
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+    $filter = $this->input->get('filter');
+    $sort = $this->input->get('sort');
+    $order = $this->input->get('order') ? : 1;
+
+    $this->load->library('challenge_lib');
+    $this->load->library('branch_lib');
+    $this->load->model('sonar_box_model');
+    $this->load->model('company_model');
+
+    $query_options = array();
+    if(isset($filter['name']) && strlen($filter['name'])) {
+      $query_options['name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');
+    }
+
+    if(isset($filter['data']) && strlen($filter['data'])) {
+      $query_options['data'] = array('$regex' => $filter['data']);
+    }
+
+    if(isset($filter['challenge']) && strlen($filter['challenge'])) {
+      $challenges = $this->challenge_lib->get_challenge_name_like($filter['challenge']);
+      $challenge_ids = array_map(function($challenge) { return get_mongo_id($challenge); }, $challenges);
+      $query_options['challenge_id'] = array('$in' => $challenge_ids);
+    }
+
+    # sort & order
+    if(in_array($sort, array('name', 'data'))) {
+      $sort = array($sort => ($order === '-' ? -1 : 1));
+    } else {
+      $sort = FALSE;
+    }
+
+    $sonar_codes = $this->sonar_box_model->get_all($query_options, $limit, $offset, $sort);
+    $sonar_codes_all_count = $this->sonar_box_model->count($query_options);
+
+    foreach($sonar_codes as &$sonar_code) {
+      // Get company
+      if(isset($sonar_code['company_id'])) {
+        $sonar_code['company'] = $this->company_model->get_company_profile_by_company_id($sonar_code['company_id']);
+      }
+
+      // Get challenge
+      if(isset($sonar_code['challenge_id'])) {
+        $sonar_code['challenge'] = $this->challenge_lib->get_one(array('_id' => new MongoId($sonar_code['challenge_id'])));
+      }
+
+      // Get branch
+      if(isset($sonar_code['branch_id'])) {
+        $sonar_code['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($sonar_code['branch_id'])));
+      }
+    } unset($sonar_code);
+
+    $options = array(
+      'total' => $sonar_codes_all_count,
+      'total_pages' => ceil($sonar_codes_all_count / $limit),
+      'count' => count($sonar_codes),
+      'filter' => $query_options,
+      'sort' => $sort
+    );
+
+    return $this->success($sonar_codes, 1, $options);
+  }
+
+  function _sonar_code_add($sonar_code) {
+    $this->load->library('sonar_box_lib');
+
+    if(!strlen($device['id'])
+    || !strlen($device['title'])
+    || !strlen($device['data'])
+    // || !strlen($device['company'])
+    // || !strlen($device['branch'])
+      ) {
+      return $this->error('Sonar code data invalid');
+    }
+
+    // $device['company_id'] = (int) $device['company'];
+    // unset($device['company']);
+    // $device['branch_id'] = $device['branch'];
+    // unset($device['branch']);
+
+    $device['status'] = 'pending';
+
+    if(!$device_item_id = $this->sonar_box_lib->add($device)) {
+      return $this->error('Add device failed');
+    }
+
+    // $this->load->library('branch_lib');
+    // $this->load->model('company_model');
+    // $device['company'] = $this->company_model->get_company_profile_by_company_id($device['company_id']);
+    // $device['branch'] = $this->branch_lib->get_one(array('_id' => new MongoId($device['branch_id'])));
+
+    return $this->success($device);
+  }
+
   /**
    * Get idle sonar boxes, and action's sonar box (if challenge_id, action_data_id is specified)
    */

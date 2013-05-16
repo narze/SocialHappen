@@ -9,6 +9,7 @@ define ['backbone'], (Backbone) ->
       'rewards': 'rewards'
       'devices': 'devices'
       'reward-machines': 'reward-machines'
+      'sonar-codes': 'sonar-codes'
       '*other': 'badRoute'
 
     users: ->
@@ -40,6 +41,11 @@ define ['backbone'], (Backbone) ->
       $('#content').html window.backend.Views.DevicesView.render().el
       $('#sidebar-view .main-menu li').removeClass('active')
       $('#sidebar-view .main-menu li.devices-tab-menu').addClass('active')
+
+    'sonar-codes': ->
+      $('#content').html window.backend.Views.SonarCodesView.render().el
+      $('#sidebar-view .main-menu li').removeClass('active')
+      $('#sidebar-view .main-menu li.sonar-codes-tab-menu').addClass('active')
 
     'reward-machines': ->
       $('#content').html window.backend.Views.RewardMachinesView.render().el
