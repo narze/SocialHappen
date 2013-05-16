@@ -153,7 +153,7 @@ define [
             if resp.code is 403
               window.location.href = window.baseUrl
               return
-            window.location.href = window.baseUrl + 'login?next=backendv2'
+            window.location.href = window.baseUrl # + 'login?next=backendv2'
 
   window.checkSession()
   window.checkSessionInterval = setInterval window.checkSession, 10000

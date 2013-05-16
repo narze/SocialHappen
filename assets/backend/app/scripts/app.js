@@ -81,7 +81,7 @@ define(['main', 'routes/main-router', 'views/main-view', 'views/users-view', 'vi
               window.location.href = window.baseUrl;
               return;
             }
-            return window.location.href = window.baseUrl + 'login?next=backendv2';
+            return window.location.href = window.baseUrl;
           }
         }
       }
