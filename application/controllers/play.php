@@ -11,7 +11,7 @@ class Play extends CI_Controller {
    */
   function index(){
     if(!$this->socialhappen->get_user()) {
-      redirect('http://unbouncepages.com/sh-en');
+      redirect();
       return;
     }
 
