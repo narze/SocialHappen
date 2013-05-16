@@ -9,6 +9,11 @@ define [
     tagName: 'tr'
     className: 'challenge-item'
 
+    events:
+      'click .view': 'viewItem'
+      'click .edit': 'editItem'
+      'click .delete': 'deleteItem'
+
     initialize: ->
       _.bindAll @
       @model.bind 'change', @render
@@ -24,5 +29,14 @@ define [
       @delegateEvents()
 
       @
+
+    viewItem: (e) ->
+      e.preventDefault()
+
+    editItem: (e) ->
+      e.preventDefault()
+
+    deleteItem: (e) ->
+      e.preventDefault()
 
   View

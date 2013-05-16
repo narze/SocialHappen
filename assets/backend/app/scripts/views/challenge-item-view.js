@@ -5,6 +5,11 @@ define(['backbone', 'moment', 'text!templates/challenge-item-template.html'], fu
   View = Backbone.View.extend({
     tagName: 'tr',
     className: 'challenge-item',
+    events: {
+      'click .view': 'viewItem',
+      'click .edit': 'editItem',
+      'click .delete': 'deleteItem'
+    },
     initialize: function() {
       _.bindAll(this);
       return this.model.bind('change', this.render);
@@ -20,6 +25,15 @@ define(['backbone', 'moment', 'text!templates/challenge-item-template.html'], fu
       this.$el.html(_.template(ChallengeItemTemplate, challengeItem));
       this.delegateEvents();
       return this;
+    },
+    viewItem: function(e) {
+      return e.preventDefault();
+    },
+    editItem: function(e) {
+      return e.preventDefault();
+    },
+    deleteItem: function(e) {
+      return e.preventDefault();
     }
   });
   return View;

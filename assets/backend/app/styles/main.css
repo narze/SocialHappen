@@ -2,3 +2,4 @@
 @import url(perfectum_dashboard/css/bootstrap-responsive.css);
 @import url(perfectum_dashboard/css/style.css);
 @import url(perfectum_dashboard/css/style-responsive.css);
+@import url(socialhappen.css); /* override */
