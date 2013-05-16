@@ -2178,13 +2178,22 @@ class Apiv3 extends CI_Controller {
     return $this->success($audit_actions);
   }
 
-  function check_session() {
-    if($user_id = $this->socialhappen->get_user_id()) {
-      return $this->success($user_id);
-    } else {
-      return $this->error();
+  function check_admin_session() {
+    if(!$user_id = $this->socialhappen->get_user_id()) {
+      return $this->error('Session timed out');
     }
-  }
+
+    $this->load->model('user_model');
+    if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
+      return $this->error('Invalid user', 403);
+    }
+
+    if(!$user['user_is_developer']) {
+      return $this->error('Invalid user', 403);
+    }
+
+    return $this->success($user_id);
+}
 
   function reward_machines() {
     if ($model = json_decode($this->input->post('model'), TRUE)) {

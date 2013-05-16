@@ -25,7 +25,6 @@ define [
   'collections/branch-collection'
   'models/reward-machine-model'
   'collections/reward-machine-collection'
-  'moment'
 ], (
   Main
   MainRouter
@@ -53,13 +52,12 @@ define [
   BranchCollection
   RewardMachineModel
   RewardMachineCollection
-  moment
 ) ->
 
   # Server specific config
   config =
     dev:
-      baseUrl: 'https://socialhappen.dyndns.org/socialhappen/'
+      baseUrl: 'http://socialhappen.dyndns.org/socialhappen/'
     beta:
       baseUrl: 'https://beta.socialhappen.com/'
     production:
@@ -69,6 +67,7 @@ define [
     env = 'beta'
   else if window.location.href.match(/(\.)?socialhappen\.com/)
     env = 'production'
+    console.log = -> # disable logging
   else
     env = 'dev'
 
@@ -140,19 +139,21 @@ define [
   window.appLoaded = true
 
   window.checkSession = ->
-    if !window.location.href.match(/^https?:\/\/(socialhappen\.dyndns\.org|localhost)/)
-      $.ajax
-        url: window.baseUrl + 'apiv3/check_session'
-        dataType: 'json'
-        success: (resp) ->
-          now = moment().format('MMMM Do YYYY, h:mm:ss a')
-          if resp.success
-            console.log 'Session check ok : ' + now + ' UserId : ' + resp.data
-          else
-            clearInterval window.checkSessionInterval
-            if typeof mocha isnt 'function'
-              alert 'Session Expired ' + now
-              window.location.href = window.baseUrl + 'assets/backend/app/login.html'
+    # if !window.location.href.match(/^https?:\/\/(socialhappen\.dyndns\.org|localhost)/)
+    $.ajax
+      url: window.baseUrl + 'apiv3/check_admin_session'
+      dataType: 'json'
+      success: (resp) ->
+        if resp.success
+          console.log 'Session check ok'
+        else
+          clearInterval window.checkSessionInterval
+          if typeof mocha isnt 'function'
+            alert resp.data
+            if resp.code is 403
+              window.location.href = window.baseUrl
+              return
+            window.location.href = window.baseUrl + 'login?next=backendv2'
 
   window.checkSession()
   window.checkSessionInterval = setInterval window.checkSession, 10000

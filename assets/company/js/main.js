@@ -114,7 +114,7 @@ require([
 
   window.checkSession = function() {
     return $.ajax({
-      url: window.Company.BASE_URL + 'apiv3/check_session',
+      url: window.Company.BASE_URL + 'apiv3/check_admin_session',
       dataType: 'json',
       success: function(resp) {
         var now;
