@@ -29,9 +29,8 @@ define [
     filter: (e) ->
       e.preventDefault()
       @collection.filter =
-        name: @$('#filter-name').val()
-        challenge: @$('#filter-challenge').val()
-        data: @$('#filter-data').val()
+        type: @$('#filter-type').val()
+        code: @$('#filter-code').val()
 
       @collection.fetch()
 

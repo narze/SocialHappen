@@ -3,36 +3,27 @@
         <div class="box-header" data-original-title>
             <h2>Filters</h2>
             <div class="box-icon">
-                <a href="#" class="btn-minimize"><i class="icon-chevron-down"></i></a>
+                <a href="#" class="btn-minimize"><i class="icon-chevron-up"></i></a>
             </div>
         </div>
-        <div class="box-content" style="display: none;">
+        <div class="box-content">
             <form class="sonar-codes-filter form-horizontal">
               <fieldset>
                 <div class="control-group">
-                  <label class="control-label" for="filter-name">Name</label>
+                  <label class="control-label" for="filter-type">Type</label>
                   <div class="controls">
-                    <input type="text" id="filter-name" placeholder="">
+                    <select id="filter-type">
+                      <option value="action">Action</option>
+                      <option value="reward">Reward</option>
+                    </select>
                   </div>
                 </div>
 
                 <div class="control-group">
-                  <label class="control-label" for="filter-challenge">Challenge</label>
+                  <label class="control-label" for="filter-code">Code</label>
                   <div class="controls">
-                    <input type="text" id="filter-challenge" placeholder="">
+                    <input type="text" id="filter-code" placeholder="">
                   </div>
-                </div>
-
-                <div class="control-group">
-                  <label class="control-label" for="filter-data">Data</label>
-                  <div class="controls">
-                    <input type="text" id="filter-data" placeholder="">
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="submit" class="btn btn-primary">Apply</button>
-                  <button type="reset" class="btn">Cancel</button>
                 </div>
               </fieldset>
             </form>

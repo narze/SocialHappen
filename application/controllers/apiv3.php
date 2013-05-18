@@ -1234,6 +1234,7 @@ class Apiv3 extends CI_Controller {
     $this->load->model('sonar_box_model');
     $this->load->model('company_model');
 
+    # filter
     $query_options = array();
     if(isset($filter['name']) && strlen($filter['name'])) {
       $query_options['name'] = array('$regex' => '\b'.$filter['name'], '$options' => 'i');

@@ -1,11 +1,10 @@
-<td class="center">{{ id }}</td>
-<td class="center">{{ title }}</td>
-<td class="center">{{ status }}</td>
-<td class="center">{{ data }}</td>
-<td class="center">{{ typeof company !== 'undefined' && company ? company.company_name : "" }}</td>
-<td class="center">{{ typeof branch !== 'undefined' && branch ? branch.title : "" }}</td>
-<td class="center">{{ typeof challenge !== 'undefined' && challenge ? challenge.detail.name : "" }}</td>
-<td class="center">{{ typeof created_at !== 'undefined' && created_at ? moment.unix(created_at).format('MMMM Do YYYY, h:mm:ss a') : "" }}</td>
-<td class="center">{{ typeof installed_at !== 'undefined' && installed_at ? moment.unix(installed_at).format('MMMM Do YYYY, h:mm:ss a') : "" }}</td>
-<td class="center"></td>
-<td class="center"></td>
+<td class="center">{{ 'code' }}</td>
+<td class="center">{{ 'type' }}</td>
+<td class="center">{{ 'parent' }}</td>
+<td class="center">{{ 'created at' }}</td>
+<td class="center">{{ 'sound file' }}</td>
+<td class="center">
+  <div class="btn-group">
+    <a href="#" class="btn btn-small view">View</a><a href="#" class="btn btn-small edit">Edit</a><a href="#" class="btn btn-small delete">Delete</a>
+  </div>
+</td>
