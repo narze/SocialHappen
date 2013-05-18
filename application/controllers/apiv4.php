@@ -81,6 +81,7 @@ class Apiv4 extends REST_Controller {
     $device_id = $this->post('device_id');
     $device_token = $this->post('device_token');
     $device_name = $this->post('device_name');
+    $locale = $this->post('locale');
 
     if(!$email || !$phone || !$password) {
       return $this->error('No email, phone, password');
@@ -111,7 +112,7 @@ class Apiv4 extends REST_Controller {
       'user_email' => $email,
       'user_password' => $encrypted_password,
       'user_phone' => $phone,
-      'user_facebook_id' => $facebook_user_id ? $facebook_user_id : NULL
+      'user_facebook_id' => $facebook_user_id ? $facebook_user_id : NULL,
     );
 
     if(!$user_id = $this->user_model->add_user($user)) {
@@ -126,7 +127,8 @@ class Apiv4 extends REST_Controller {
        */
       'available' => TRUE,
       'user_id' => $user_id,
-      'points' => 10
+      'points' => 10,
+      'locale' => $locale ? : 'en'
     );
     $this->load->model('user_mongo_model');
     if(!$this->user_mongo_model->add($user_mongo)) {
