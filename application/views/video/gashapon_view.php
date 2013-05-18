@@ -18,9 +18,9 @@
                 <div class="bot-nav">
                     <ul>
                         <li><a href="#/step-1" id="step-1">Home</a></li>
+                        <li><a href="#/step-2" id="step-2">Technology</a></li>
                         <li><a href="#/step-4" id="step-4">Why Socialhappen?</a></li>
                         <li><a href="#/step-5" id="step-5">How it works</a></li>
-                        <li><a href="#/step-2" id="step-2">Technology</a></li>
                         <li><a href="#/step-11" id="step-11">Ads</a></li>
                     </ul>
                 </div>
@@ -51,7 +51,7 @@
         </div>
 
         <!-- Slide 02 -->
-        <div class="step slide" data-x="2455" data-y="0" data-rotate="90">
+        <div class="step slide" data-x="2000" data-y="1900" data-rotate="90">
             <h1 style="padding-top: 108px;">What will happen if objects <br>can talk to smartphone?</h1>
             <p class="subheading">SocialHappen Technology enables physical business connect to their customers in an engaging way.</p>
             <p class="subheading">We build a ‘retail marketing platform’ that allow real business to connect and engage with their customers when they visit the store. We motivate your customers to come more often, and turn them to be an influencers via Socialhappen’s rewarding system.</p>
@@ -71,7 +71,7 @@
         </div>
 
         <!-- Slide 03 -->
-        <div class="step slide" data-x="2455" data-y="1500" data-rotate="90">
+        <div class="step slide" data-x="2000" data-y="4200" data-rotate="90">
             <h1 style="padding-top: 128px;">Connect your offline business to online presence easily</h1>
             <p class="subheading">This magic can happen because we build our own <span class="underline">transmission technology</span> that can communicate to the app users when they walk in to the store. The magic box will instantly send the challenge to them, let them engage with the marketing actions, and return some rewards when they complete it. Unlike QR code that users rarely scan, Socialhappen technology allow business to connect and engage with their customers easily.</p>
             <div class="container">
@@ -82,7 +82,7 @@
         </div>
 
         <!-- Slide 04 -->
-        <div class="step slide" data-x="0" data-y="3000" data-rotate="90">
+        <div class="step slide" data-x="2000" data-y="6500" data-rotate="90">
             <p class="subheading">What can Socialhappen do for my retail business?</p>
             <h1>We drive more <span class="text-blue">foot traffic</span> and turn your customers to be <span class="text-blue">influencers</span></h1>
             <div class="container">
@@ -95,7 +95,7 @@
         </div>
 
         <!-- Slide 05 -->
-        <div class="step slide" data-x="-2000" data-y="2500" data-rotate="180">
+        <div class="step slide" data-x="0" data-y="8400" data-rotate="180">
             <p class="subheading">1. We motivate customers to visit more through types of rewards system</p>
             <h1>People just love rewards!</h1>
             <div class="container">
@@ -115,7 +115,7 @@
         </div>
 
         <!-- Slide 06 -->
-        <div class="step slide" data-x="-2000" data-y="1500" data-rotate="180">
+        <div class="step slide" data-x="-2400" data-y="8400" data-rotate="180">
             <p class="subheading">2. And engage your customers to connect to your store through our..</p>
             <h1>Retail Engagement Platform</h1>
             <div class="container">
@@ -138,7 +138,7 @@
         </div>
 
         <!-- Slide 07 -->
-        <div class="step slide" data-x="-2000" data-y="500" data-rotate="180">
+        <div class="step slide" data-x="-4400" data-y="6500" data-rotate="270">
             <p class="subheading">2.1 Type of marketing actions</p>
             <h1>Create <spam class="text-blue">marketing actions</spam> that let your customers <span class="text-blue">engage</span> with your brand</h1>
             <h2>Type of Challenge Actions</h2>
@@ -156,7 +156,7 @@
         </div>
 
         <!-- Slide 08 -->
-        <div class="step slide" data-x="-2000" data-y="-1000" data-rotate="180">
+        <div class="step slide" data-x="-4400" data-y="4400" data-rotate="270">
             <p class="subheading">3. Which will instantly deliver to your customer’s hand by just scanning the Socialhappen app at your store. This magic can happen thanks to..</p>
             <h1>OUR TRANSMISSION TECHNOLOGY</h1>
             <p class="subheading">that helps deliver marketing challenge to your real world customers easily.</p>
@@ -169,7 +169,7 @@
         </div>
 
         <!-- Slide 09 -->
-        <div class="step slide" data-x="-2000" data-y="-2500" data-rotate="180">
+        <div class="step slide" data-x="-4400" data-y="2100" data-rotate="270">
             <p class="subheading">4. As a results, you can turn customers to be influencers who will bring you more happy customers, and help build your brand.</p>
             <h1>The purpose of a business is to create <span class="text-blue">a customer who creates customers</span></h1>
             <div class="container">
@@ -188,7 +188,7 @@
         </div>
 
         <!-- Slide 10 -->
-        <div class="step slide" data-x="-2500" data-y="-3500" data-rotate="90">
+        <div class="step slide" data-x="-2500" data-y="0" data-rotate="360">
             <h1>If you think SocialHappen<br> can help your business.</h1>
             <div class="container">
                 <div class="row-fluid">
@@ -208,16 +208,16 @@
         </div>
 
         <!-- Slide 11 -->
-        <div class="step slide" data-x="-1000" data-y="-3500" data-rotate="0">
-            <h1>See it in action. How Socialhappen can help make engaging retail experience?</h1>
+        <div class="step slide" data-x="-2500" data-y="2400" data-rotate="360">
+            <h1 style="text-align: center;">See it in action. How Socialhappen can help make engaging retail experience?</h1>
             <div class="container">
-                <div class="row-fluid play-vdo">
+                <div class="row-fluid play-vdo" style="padding-left:44px">
                     <iframe width="853" height="480" src="http://www.youtube.com/embed/r1lnJvxahoU" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
 
-        <!-- <div id="overview" class="step" data-x="0" data-y="1600" data-scale="6">
+        <!-- <div id="overview" class="step" data-x="-5167" data-y="9727" data-scale="6">
         </div> -->
     </div>
 
@@ -261,6 +261,12 @@
                 $(slide_hash).addClass('active').parent().siblings().find('a').removeClass('active');
             }
         };
+
+        // Don't change page on bar touch
+        $('.navbar').bind('touchstart', function(e) {
+            e.stopPropagation();
+            return true;
+        })
 
         // Vdo fancybox
         $('.btn-play').fancybox({width : 680, height : 495, type : "iframe"});

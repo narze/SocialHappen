@@ -152,7 +152,7 @@ class Action_data_lib_test extends CI_Controller {
 	function add_feedback_action_data_test() {
 		$form_data = array(
 						'feedback_welcome_message' => 'Dear, Our Customer',
-						'feedback_question_message' => 'What do you think about our store?',
+						'feedback_question_message' => 'How is our service today?',
 						'feedback_vote_message' => 'Please provide your satisfaction score',
 						'feedback_thankyou_message' => 'Thank you, please come again',
 					);
@@ -226,7 +226,7 @@ class Action_data_lib_test extends CI_Controller {
 
 		$feedback_data = array(
 						'feedback_welcome_message' => 'Dear, Our Customer',
-						'feedback_question_message' => 'What do you think about our store?',
+						'feedback_question_message' => 'How is our service today?',
 						'feedback_vote_message' => 'Please provide your satisfaction score',
 						'feedback_thankyou_message' => 'Thank you, please come again',
 					);

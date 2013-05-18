@@ -215,7 +215,7 @@ describe 'Main Router', ->
         $('#content').find('#rewards-view').find('thead').text().should.match(/Point Required/)
         $('#content').find('#rewards-view').find('thead').text().should.match(/Amount/)
         $('#content').find('#rewards-view').find('thead').text().should.match(/Amount Redeemed/)
-        $('#content').find('#rewards-view').find('thead').text().should.match(/Can Play Once/)
+        $('#content').find('#rewards-view').find('thead').text().should.match(/Can Redeem Once/)
 
       it 'should have correct first row of data', ->
         $('#content #rewards-view .reward-item:first td').length.should.equal 5

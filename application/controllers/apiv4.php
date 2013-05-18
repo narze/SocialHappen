@@ -125,7 +125,7 @@ class Apiv4 extends REST_Controller {
        * FOR PRIVATE TESTING ONLY
        * CHANGE availagle TO TRUE WHEN LAUNCH IN PUBLIC
        */
-      'available' => FALSE,
+      'available' => TRUE,
       'user_id' => $user_id,
       'points' => 10
     );
@@ -183,9 +183,9 @@ class Apiv4 extends REST_Controller {
      * FOR PRIVATE TESTING ONLY
      * REMOVE THIS WHEN LAUNCH IN PUBLIC
      */
-    if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
-      $code = 3;
-    }
+    // if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
+    //   $code = 3;
+    // }
 
     return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token), $code);
   }
@@ -301,9 +301,9 @@ class Apiv4 extends REST_Controller {
      * FOR PRIVATE TESTING ONLY
      * REMOVE THIS WHEN LAUNCH IN PUBLIC
      */
-    if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
-      $code = 3;
-    }
+    // if(isset($user_mongo['available']) && $user_mongo['available'] === FALSE) {
+    //   $code = 3;
+    // }
 
     return $this->success(array('user_id' => $user_id, 'user' => $user, 'token' => $token), $code);
   }
@@ -646,6 +646,7 @@ class Apiv4 extends REST_Controller {
                   $coupons = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
                   $latest_coupon = reset($coupons);
                   $challenge['coupon_status'] = $latest_coupon['confirmed'] ? 'confirmed' : 'pending';
+                  $challenge['coupon_id'] = get_mongo_id($latest_coupon);
 
                   //get challenge complete timestamp
                   $challenge['completed_at'] = $latest_coupon['timestamp'];
@@ -659,6 +660,7 @@ class Apiv4 extends REST_Controller {
               $coupons = $this->coupon_model->get_by_user_and_challenge($user['user_id'], $challenge_id);
               $latest_coupon = reset($coupons);
               $challenge['coupon_status'] = $latest_coupon['confirmed'] ? 'confirmed' : 'pending';
+              $challenge['coupon_id'] = get_mongo_id($latest_coupon);
 
               $challenge['coupons'] = $coupons;
 
@@ -1543,6 +1545,7 @@ class Apiv4 extends REST_Controller {
     $user['challenge_completed'] = issetor($user_mongo['challenge_completed'], array());
     $user['daily_challenge_completed'] = issetor($user_mongo['daily_challenge_completed'], array());
     $user['shipping'] = issetor($user_mongo['shipping'], array());
+    $user['locale'] = issetor($user_mongo['locale'], 'en');
 
     return $this->success($user);
   }
@@ -1564,9 +1567,10 @@ class Apiv4 extends REST_Controller {
     $user_phone = $model['user_phone'];
     $user_address = $model['user_address'];
     $shipping = $model['shipping'];
+    $locale = $model['locale'];
 
     $update = compact('user_first_name', 'user_last_name', 'user_email', 'user_phone', 'user_address');
-    $update_mongo = compact('shipping');
+    $update_mongo = compact('shipping', 'locale');
 
     $this->load->model('user_model');
     if(!$user_id || !$token) {
@@ -1755,6 +1759,8 @@ class Apiv4 extends REST_Controller {
         $challenge_id = get_mongo_id($challenge);
         if($coupon['challenge_id'] === $challenge_id) {
           $challenge['_id'] = $challenge_id;
+          $challenge['coupon_status'] = $coupon['confirmed'] ? 'confirmed' : 'pending';
+          $challenge['coupon_id'] = get_mongo_id($coupon);
           $coupon['challenge'] = $challenge;
           break;
         }
@@ -1971,6 +1977,28 @@ class Apiv4 extends REST_Controller {
     return $this->error('Something wrong');
   }
 
+  function claim_simple_reward_post() {
+    $user_id = (int) $this->post('user_id');
+    $coupon_id = $this->post('coupon_id');
+
+    if(!$user_id || !$coupon_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->model('user_model');
+    if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
+      return $this->error('User not found');
+    }
+
+    $this->load->library('coupon_lib');
+    // approve
+    if(!$coupon_confirm_result = $this->coupon_lib->confirm_coupon($coupon_id, 0)) {
+      return $this->error('confirm point coupon failed');
+    }
+
+    return $this->success();
+  }
+
   function reward_released_poll_get() {
     $user_id = $this->get('user_id');
     $reward_item_id = $this->get('reward_item_id');
@@ -2109,10 +2137,48 @@ class Apiv4 extends REST_Controller {
     }
   }
 
+  function parse_qr_get() {
+    $url = $this->get('url');
+
+    $this->load->library('challenge_lib');
+    if($challenge = $this->challenge_lib->get_by_url($url)) {
+      return $this->success(array(
+        'challenge_id' => get_mongo_id($challenge),
+        'type' => 'challenge', // not used at the moment
+        'action' => 'view' // not used at the moment
+      ));
+    } else {
+      return $this->error('This QR is not SocialHappen challenge');
+    }
+  }
+
   function _parse_feedback_action_user_data($action_user_data) {
     if(isset($action_user_data['user_score'])) {
       $action_user_data['user_score'] = (int) $action_user_data['user_score'];
     }
     return $action_user_data;
+  }
+
+  function share_post() {
+    $user_id = (int) $this->post('user_id');
+    $token = $this->post('token');
+    $facebook_access_token = $this->post('facebook_access_token');
+    $type = $this->post('type');
+    $data = $this->post('data'); //array
+
+    if(!$user_id || !$token || !$facebook_access_token || !$type || !$data) {
+      return $this->error('Insufficient Arguments');
+    }
+
+    if(!$this->_check_token($user_id, $token)) {
+      return $this->error('Token invalid');
+    }
+
+    if($type === 'challenge_done') {
+      // TODO : share to facebook
+      return $this->success();
+    } else {
+      return $this->error('Invalid type');
+    }
   }
 }

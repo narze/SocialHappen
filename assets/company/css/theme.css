@@ -228,15 +228,15 @@ img.company-image{
   padding: 4px;
 }
 
-.modal-super{
+/*.modal-super{
   position: relative;
   margin-top: 200px;
-}
+}*/
 
-#recipe-modal.modal-super{
+/*#recipe-modal.modal-super{
   position: fixed;
   margin-top: -250px;
-}
+}*/
 
 .user-item {
   margin-bottom: 10px;
