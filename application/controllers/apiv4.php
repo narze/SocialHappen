@@ -1520,6 +1520,7 @@ class Apiv4 extends REST_Controller {
     $user['challenge_completed'] = issetor($user_mongo['challenge_completed'], array());
     $user['daily_challenge_completed'] = issetor($user_mongo['daily_challenge_completed'], array());
     $user['shipping'] = issetor($user_mongo['shipping'], array());
+    $user['locale'] = issetor($user_mongo['locale'], 'en');
 
     return $this->success($user);
   }
