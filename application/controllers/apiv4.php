@@ -44,7 +44,8 @@ class Apiv4 extends REST_Controller {
     $facebook_user_id = $this->get('facebook_user_id');
 
     if(!$facebook_user_id) {
-      return $this->error('undefined facebook_user_id');
+      // undefined facebook_user_id
+      return $this->error('Facebook user not found');
     }
 
     //check facebook_user_id in user model
@@ -52,7 +53,7 @@ class Apiv4 extends REST_Controller {
     $user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user_id);
 
     if(!$user) {
-      return $this->error('user not found');
+      return $this->error('User not found');
     }
 
     return $this->success($user);
@@ -84,7 +85,7 @@ class Apiv4 extends REST_Controller {
     $locale = $this->post('locale');
 
     if(!$email || !$phone || !$password) {
-      return $this->error('No email, phone, password');
+      return $this->error('Please input required field');
     }
 
     // if(!$facebook_user_id) {
@@ -145,7 +146,8 @@ class Apiv4 extends REST_Controller {
       'device_name' => $device_name
     );
     if(!$user_token = $this->user_token_model->add_user_token($user_token_data)) {
-      return $this->error('Add user token failed');
+      // Add user token failed
+      return $this->error('Something wrong');
     }
     $token = $user_token['login_token'];
 
@@ -164,13 +166,15 @@ class Apiv4 extends REST_Controller {
       'objecti' => NULL,
       'image' => $user['user_image']
     ))) {
-      return $this->error('Add audit failed');
+      //Add audit failed
+      return $this->error('Something wrong');
     }
 
     $this->load->library('achievement_lib');
     $info = array('action_id' => $action_id, 'app_install_id' => 0);
     if(!$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1)) {
-      return $this->error('increment stat failed');
+      //increment stat failed
+      return $this->error('Something wrong');
     }
 
     unset($user['user_password']);
@@ -215,7 +219,7 @@ class Apiv4 extends REST_Controller {
       if($user = $this->user_model->get_user_profile_by_user_facebook_id($facebook_user_id)) {
         $signinsuccess = TRUE;
       } else {
-        return $this->error('Your facebook id are not a SocialHappen user');
+        return $this->error('Your Facebook account are not a SocialHappen user');
       }
 
     } else if($type === 'email') {
@@ -227,11 +231,11 @@ class Apiv4 extends REST_Controller {
       if($user = $this->user_model->passwordMatch(array('user_email' => $email), $encrypted_password)) {
         $signinsuccess = TRUE;
       } else {
-        return $this->error('Wrong email and password combination');
+        return $this->error('Wrong email or password');
       }
 
     } else {
-      return $this->error('Wrong type', 2);
+      return $this->error('Something wrong', 2);
     }
 
     if(!$signinsuccess) {
@@ -249,7 +253,8 @@ class Apiv4 extends REST_Controller {
       'device_name' => $device_name
     );
     if(!$user_token = $this->user_token_model->add_user_token($user_token_data)) {
-      return $this->error('Add user token failed', 2);
+      //Add user token failed
+      return $this->error('Something wrong', 2);
     }
     $token = $user_token['login_token'];
 
@@ -268,13 +273,15 @@ class Apiv4 extends REST_Controller {
       'objecti' => NULL,
       'image' => $user['user_image']
     ))) {
-      return $this->error('Add audit failed', 2);
+      //Add audit failed
+      return $this->error('Something wrong', 2);
     }
 
     $this->load->library('achievement_lib');
     $info = array('action_id' => $action_id, 'app_install_id' => 0);
     if(!$stat_increment_result = $this->achievement_lib->increment_achievement_stat(0, 0, $user_id, $info, 1)) {
-      return $this->error('increment stat failed', 2);
+      //increment stat failed
+      return $this->error('Something wrong', 2);
     }
 
     $code = 1;
@@ -458,6 +465,7 @@ class Apiv4 extends REST_Controller {
         return $this->error('Branch not found');
       }
     } else {
+      // Criteria not set
       return $this->error('Criteria not set');
     }
   }
@@ -499,7 +507,7 @@ class Apiv4 extends REST_Controller {
     // if got only 1 challenge (use challenge_id) get action done time
     if($user_id && $challenge_id && (count($challenges) === 1)) {
       if(!$this->_check_token($user_id, $token)) {
-        return $this->error('Token invalid');
+        return $this->error('Invalid session, please relogin');
       }
       $challenge = &$challenges[0];
       $company_id = (int) $challenge['company_id'];
@@ -603,12 +611,13 @@ class Apiv4 extends REST_Controller {
     //Filter challenge if user & doable_date is set
     if($challenges && $user_id && $token) {
       if(!$this->_check_token($user_id, $token)) {
-        return $this->error('Token invalid');
+        // Token invalid
+        return $this->error('Invalid session, please relogin');
       }
 
       $this->load->model('user_mongo_model');
       if(!$user = $this->user_mongo_model->get_user($user_id)) {
-        return $this->error('User invalid');
+        return $this->error('Invalid user');
       }
 
       $this->load->model('coupon_model');
@@ -705,7 +714,7 @@ class Apiv4 extends REST_Controller {
     }
 
     if($challenges === FALSE) {
-      return $this->error('API error');
+      return $this->error('Something wrong');
     } else {
       $challenge_count = count($challenges);
       for($i = 0; $i < $challenge_count; $i++) {
@@ -738,7 +747,7 @@ class Apiv4 extends REST_Controller {
       return $this->success(array());
     }
 
-    return $this->error('Token invalid');
+    return $this->error('Invalid session, please relogin');
   }
 
   function _check_token($user_id = NULL, $token = NULL) {
@@ -779,19 +788,19 @@ class Apiv4 extends REST_Controller {
     }
 
     if(!$this->_check_token($user_id, $token)) {
-      return $this->error('Token invalid');
+      return $this->error('Invalid session, please relogin');
     }
 
     $this->load->model('user_mongo_model');
     if(!$user = $this->user_mongo_model->get_user($user_id)) {
-      return $this->error('User invalid');
+      return $this->error('Invalid user');
     }
 
     //Check if challenge is valid
     $this->load->library('challenge_lib');
 
     if(!$challenge = $this->challenge_lib->get_by_id($challenge_id)) {
-      return $this->error('Challenge invalid');
+      return $this->error('Challenge not found');
     }
 
     $company_id = (int) $challenge['company_id'];
@@ -818,7 +827,8 @@ class Apiv4 extends REST_Controller {
         );
 
         if(!$this->audit_lib->audit_add($audit_data)) {
-          return $this->error('Audit add failed'. var_export($audit_data, true));
+          // return $this->error('Audit add failed'. var_export($audit_data, true));
+          return $this->error('Something wrong');
         }
 
         return $this->error('Reward out of stock');
@@ -891,7 +901,8 @@ class Apiv4 extends REST_Controller {
             );
 
             if(!$this->audit_lib->audit_add($audit_data)) {
-              return $this->error('Audit add failed'. var_export($audit_data, true));
+              // return $this->error('Audit add failed'. var_export($audit_data, true));
+              return $this->error('Something wrong');
             }
 
             return $this->error('Challenge done already (daily)', 1);
@@ -917,7 +928,8 @@ class Apiv4 extends REST_Controller {
       );
 
       if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
-        return $this->error('Audit add failed'. var_export($audit_data, true));
+        // return $this->error('Audit add failed'. var_export($audit_data, true));
+        return $this->error('Something wrong');
       }
 
       //add stat after checking challenge done status
@@ -931,7 +943,7 @@ class Apiv4 extends REST_Controller {
         $user_data,
         array('audit_id' => $audit_id)
         )){
-        return $this->error('Invalid Data');
+        return $this->error('Something wrong');
       }
 
       // //Update action user data with audit id
@@ -947,7 +959,8 @@ class Apiv4 extends REST_Controller {
             );
       if(!$achievement_result = $this->achievement_lib->
         increment_achievement_stat($company_id, 0, $user_id, $info, 1)) {
-        return $this->error('Increment achievement stat failed');
+        //Increment achievement stat failed
+        return $this->error('Something wrong');
       }
 
       //Finish adding stat
@@ -976,7 +989,8 @@ class Apiv4 extends REST_Controller {
             ),'$set' => array(
               'challenge_progress.'.$challenge_id.'.timestamp' => time(),
             )))) {
-            return $this->error('Update user failed');
+            // Update user failed
+            return $this->error('Something wrong');
           }
         }
       }
@@ -1004,7 +1018,7 @@ class Apiv4 extends REST_Controller {
         );
 
         if($this->audit_lib->audit_add($audit_data)) {
-          return $this->error('Audit add failed'. var_export($audit_data, true));
+          // return $this->error('Audit add failed'. var_export($audit_data, true));
         }
 
         return $this->error('Challenge done already', 1);
@@ -1021,7 +1035,7 @@ class Apiv4 extends REST_Controller {
         $user_id,
         $user_data
         )){
-        showerror('Invalid Data');
+        showerror('Something wrong');
       } else {
       //Add audit & stat
         $audit_data = array(
@@ -1039,12 +1053,14 @@ class Apiv4 extends REST_Controller {
         );
 
         if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
-          return $this->error('Audit add failed'. var_export($audit_data, true));
+          // return $this->error('Audit add failed'. var_export($audit_data, true));
+          return $this->error('Something wrong');
         }
 
         //Update action user data with audit id
         if(!$update_result = $this->action_user_data_lib->update_action_user_data($action_user_data_id, array('audit_id' => $audit_id))) {
-          return $this->error('Update action user data failed');
+          // Update action user data failed
+          return $this->error('Something wrong');
         }
 
         $this->load->library('achievement_lib');
@@ -1055,7 +1071,8 @@ class Apiv4 extends REST_Controller {
               );
         if(!$achievement_result = $this->achievement_lib->
           increment_achievement_stat($company_id, 0, $user_id, $info, 1)) {
-          return $this->error('Increment achievement stat failed');
+          //Increment achievement stat failed
+          return $this->error('Something wrong');
         }
       }
       //Finish adding stat
@@ -1109,7 +1126,8 @@ class Apiv4 extends REST_Controller {
           } else if($action_data_id && ($criteria['action_data_id'] === $action_data_id)) {
             $data['action_completed'] = TRUE;
             if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$addToSet' => array('challenge_progress.'.$challenge_id.'.action_data' => $action_data_id)))) {
-              return $this->error('Update user failed');
+              //Update user failed
+              return $this->error('Something wrong');
             }
           }
         }
@@ -1185,7 +1203,8 @@ class Apiv4 extends REST_Controller {
       }
 
       if(!$update_user = $this->user_mongo_model->update(array('user_id' => $user_id), $update_record)) {
-        return $this->error('Update user failed');
+        //Update user failed
+        return $this->error('Something wrong');
       }
 
       //4
@@ -1220,7 +1239,8 @@ class Apiv4 extends REST_Controller {
         'image' => $image
       );
       if(!$audit_add_result = $this->audit_lib->audit_add($audit)) {
-        return $this->error('add audit failed');
+        //add audit failed
+        return $this->error('Something wrong');
       }
 
       //7
@@ -1237,7 +1257,8 @@ class Apiv4 extends REST_Controller {
       $this->load->library('achievement_lib');
       if(!$increment_page_score_result = $this->achievement_lib->
         increment_achievement_stat($company_id, 0, $user_id, $increment_info, 1)) {
-        return $this->error('increment stat failed');
+        // increment stat failed
+        return $this->error('Something wrong');
       }
 
       //8
@@ -1256,13 +1277,14 @@ class Apiv4 extends REST_Controller {
             'challenge_id' => $challenge_id
           );
           if(!$coupon_id = $this->coupon_lib->create_coupon($coupon)) {
-            return $this->error('add coupon failed');
+            // add coupon failed
+            return $this->error('Something wrong');
           }
 
           //If the reward is_points_reward : approve it immediately
           if(issetor($reward_item['is_points_reward'])) {
             if(!$coupon_confirm_result = $this->coupon_lib->confirm_coupon($coupon_id, 0)) {
-              return $this->error('confirm point coupon failed');
+              return $this->error('Confirm coupon failed');
             }
           }
 
@@ -1300,12 +1322,12 @@ class Apiv4 extends REST_Controller {
         );
 
         if(!$this->user_mongo_model->update(array('user_id' => (int) $user_id), $user_update)) {
-          return $this->error('Update user failed.');
+          return $this->error('Something wrong');
         }
 
         //Decrement company credits
         if(!$company = $data['company']) {
-          return $this->error('Invalid Company');
+          return $this->error('Challenge not found');
         }
 
         $company['credits'] = issetor($company['credits'], 0) - $reward_points;
@@ -1315,7 +1337,8 @@ class Apiv4 extends REST_Controller {
         );
 
         if(!$result = $this->company_model->update_company_profile_by_company_id($company_id, $company_update)) {
-          return $this->error('Update company failed');
+          //Update company failed
+          return $this->error('Something wrong');
         }
 
         //add credit use audit
@@ -1335,7 +1358,8 @@ class Apiv4 extends REST_Controller {
         );
 
         if(!$this->audit_lib->audit_add($audit_data)) {
-          return $this->error('Audit add failed');
+          //Audit add failed
+          return $this->error('Something wrong');
         }
 
         $this->load->model('challenge_model');
@@ -1343,7 +1367,8 @@ class Apiv4 extends REST_Controller {
           '$inc' => array('done_count' => $reward_points)
         ));
         if(!$challenge_update_result) {
-          return $this->error('increment done count failed');
+          //increment done count failed
+          return $this->error('Something wrong');
         }
       }
     }
@@ -1365,11 +1390,11 @@ class Apiv4 extends REST_Controller {
       $query = array('_id' => new MongoId($coupon_id));
     } else if($user_id && $token) {
       if(!$this->_check_token($user_id, $token)) {
-        return $this->error('Token invalid');
+        return $this->error('Invalid session, please relogin');
       }
       $query = array('user_id' => $user_id);
     } else {
-      return $this->error('Invalid parameters');
+      return $this->error('Something wrong');
     }
 
     $this->load->model('coupon_model');
@@ -1419,7 +1444,7 @@ class Apiv4 extends REST_Controller {
 
     $this->load->model('user_mongo_model');
     if(!$user = $this->user_mongo_model->get_user($user_id)) {
-      return $this->error('User Invalid');
+      return $this->error('User not found');
     }
 
     if(!isset($user['challenge_progress'])) {
@@ -1465,12 +1490,12 @@ class Apiv4 extends REST_Controller {
     $this->load->model('coupon_model');
     if($user_id && $token) {
       if(!$this->_check_token($user_id, $token)) {
-        return $this->error('Token invalid');
+        return $this->error('Invalid session, please relogin');
       }
 
       $coupons = $this->coupon_model->get_by_user($user_id);
     } else {
-      return $this->error('User invalid');
+      return $this->error('User not found');
     }
 
     $this->load->library('achievement_lib');
@@ -1500,15 +1525,15 @@ class Apiv4 extends REST_Controller {
 
     $this->load->model('user_model');
     if(!$user_id || !$token) {
-      return $this->error('User invalid');
+      return $this->error('User not found');
     }
 
     if(!$this->_check_token($user_id, $token)) {
-      return $this->error('Token invalid');
+      return $this->error('Invalid session, please relogin');
     }
 
     if(!$user = $this->user_model->get_user_profile_by_user_id($user_id)) {
-      return $this->error('User invalid');
+      return $this->error('User not found');
     }
 
     //update user's last_active
@@ -1551,21 +1576,21 @@ class Apiv4 extends REST_Controller {
 
     $this->load->model('user_model');
     if(!$user_id || !$token) {
-      return $this->error('User invalid');
+      return $this->error('User not found');
     }
 
     if(!$this->_check_token($user_id, $token)) {
-      return $this->error('Token invalid');
+      return $this->error('Invalid session, please relogin');
     }
 
     $this->load->model('user_model');
     if(!$this->user_model->update_user($user_id, $update)) {
-      return $this->error('Update failed');
+      return $this->error('Something wrong');
     }
 
     $this->load->model('user_mongo_model');
     if(!$this->user_mongo_model->update(array('user_id' => $user_id), array('$set' => $update_mongo))) {
-      return $this->error('Update failed');
+      return $this->error('Something wrong');
     }
 
     return $this->success(array_merge($update, $update_mongo));
@@ -1584,29 +1609,29 @@ class Apiv4 extends REST_Controller {
 
     $this->load->model('user_mongo_model');
     if(!$user_id || !$token) {
-      return $this->error('User invalid');
+      return $this->error('Invalid user');
     }
 
     if(!$this->_check_token($user_id, $token)) {
-      return $this->error('Token invalid');
+      return $this->error('Invalid session, please relogin');
     }
 
     if(!$user = $this->user_mongo_model->get_user($user_id)) {
-      return $this->error('User invalid');
+      return $this->error('Invalid user');
     }
 
     $this->load->model('reward_item_model');
     if(!$reward_item = $this->reward_item_model->get_by_reward_item_id($reward_item_id)) {
-      return $this->error('Invalid reward');
+      return $this->error('Something wrong');
     }
 
     if(!isset($reward_item['redeem'])) {
-      return $this->error('Invalid reward');
+      return $this->error('Something wrong');
     }
 
     // published reward only
     if($reward_item['status'] !== 'published') {
-      return $this->error('Invalid reward', 0);
+      return $this->error('Something wrong', 0);
     }
 
     // redeemable once and redeemed already
@@ -1631,7 +1656,7 @@ class Apiv4 extends REST_Controller {
       '$inc' => array('points' => - abs($reward_item['redeem']['point']))
     );
     if(!$this->user_mongo_model->update(array('user_id' => $user_id), $decrement_point)) {
-      return $this->error('Unexpected error', 4);
+      return $this->error('Something wrong', 4);
     }
 
     // increment amount_redeemed
@@ -1645,7 +1670,7 @@ class Apiv4 extends REST_Controller {
       )
     );
     if(!$this->reward_item_model->update($reward_item_id, $reward_update)) {
-      return $this->error('Unexpected error', 5);
+      return $this->error('Something wrong', 5);
     }
 
     // add action
@@ -1660,7 +1685,7 @@ class Apiv4 extends REST_Controller {
       'company_id' => $reward_item['company_id'],
       'image' => $reward_item['image']
     ))) {
-      return $this->error('Unexpected error', 6);
+      return $this->error('Something wrong', 6);
     }
 
     // give coupon for the reward
@@ -1672,7 +1697,7 @@ class Apiv4 extends REST_Controller {
       'shipping' => $shipping
     );
     if(!$coupon_id = $this->coupon_lib->create_coupon($coupon)) {
-      return $this->error('Unexpected error', 7);
+      return $this->error('Something wrong', 7);
     }
 
     $result = array(
@@ -1694,15 +1719,15 @@ class Apiv4 extends REST_Controller {
 
     $this->load->model('user_mongo_model');
     if(!$user_id || !$token) {
-      return $this->error('User invalid');
+      return $this->error('Invalid user');
     }
 
     if(!$this->_check_token($user_id, $token)) {
-      return $this->error('Token invalid');
+      return $this->error('Invalid session, please relogin');
     }
 
     if(!$user = $this->user_mongo_model->get_user($user_id)) {
-      return $this->error('User invalid');
+      return $this->error('Invalid user');
     }
 
     $this->load->model('coupon_model');
@@ -1899,7 +1924,7 @@ class Apiv4 extends REST_Controller {
     $reward_item_id = $this->post('reward_item_id');
 
     if(!$user_id || !$reward_item_id) {
-      return $this->error('Insufficient arguments');
+      return $this->error('Something wrong');
     }
 
     $this->load->model('user_model');
@@ -1924,7 +1949,7 @@ class Apiv4 extends REST_Controller {
 
     // get reward machine id from reward
     if((!$reward_machine_id = issetor($reward_item['reward_machine_id'])) || !issetor($reward_item['is_instant_reward'])) {
-      return $this->error('Invalid reward');
+      return $this->error('Something wrong');
     }
 
     // add queue & return transaction id
@@ -1951,7 +1976,7 @@ class Apiv4 extends REST_Controller {
       ));
     }
 
-    return $this->error('Queue add failed');
+    return $this->error('Something wrong');
   }
 
   function claim_simple_reward_post() {
@@ -1959,7 +1984,7 @@ class Apiv4 extends REST_Controller {
     $coupon_id = $this->post('coupon_id');
 
     if(!$user_id || !$coupon_id) {
-      return $this->error('Insufficient arguments');
+      return $this->error('Something wrong');
     }
 
     $this->load->model('user_model');
@@ -1970,7 +1995,7 @@ class Apiv4 extends REST_Controller {
     $this->load->library('coupon_lib');
     // approve
     if(!$coupon_confirm_result = $this->coupon_lib->confirm_coupon($coupon_id, 0)) {
-      return $this->error('confirm point coupon failed');
+      return $this->error('Confirm point coupon failed');
     }
 
     return $this->success();
@@ -1982,7 +2007,7 @@ class Apiv4 extends REST_Controller {
     $transaction_id = $this->get('transaction_id');
 
     if(!$user_id || !$reward_item_id || !$transaction_id) {
-      return $this->error('Insufficient arguments');
+      return $this->error('Something wrong');
     }
 
     $this->load->model('user_model');
@@ -2013,7 +2038,7 @@ class Apiv4 extends REST_Controller {
     $reward_machine_id = $this->get('reward_machine_id');
 
     if(!$reward_machine_id) {
-      return $this->error('Insufficient arguments');
+      return $this->error('Something wrong');
     }
 
     $this->load->library('instant_reward_queue_lib');
@@ -2038,13 +2063,14 @@ class Apiv4 extends REST_Controller {
     $status = $this->post('status');
 
     if(!$reward_machine_id || !$transaction_id || !$status) {
-      return $this->error('Insufficient arguments');
+      return $this->error('Something wrong');
     }
 
     $this->load->library('instant_reward_queue_lib');
 
     if(!$update_result = $this->instant_reward_queue_lib->update(array('_id' => new MongoId($transaction_id), 'reward_machine_id' => $reward_machine_id), array('status' => $status))) {
-      return $this->error('Transaction update failed');
+      //Transaction update failed
+      return $this->error('Something wrong');
     }
 
     return $this->success(array('status' => $status));
@@ -2055,7 +2081,7 @@ class Apiv4 extends REST_Controller {
     $access_token = $this->get('access_token');
 
     if(!$action_id || !$access_token){
-      $this->error('missing args');
+      $this->error('Something wrong');
     }else{
 
 
@@ -2108,7 +2134,7 @@ class Apiv4 extends REST_Controller {
           ));
         }
       }else{
-        $this->error('action not found');
+        $this->error('Action not found');
       }
     }
   }
@@ -2143,18 +2169,18 @@ class Apiv4 extends REST_Controller {
     $data = $this->post('data'); //array
 
     if(!$user_id || !$token || !$facebook_access_token || !$type || !$data) {
-      return $this->error('Insufficient Arguments');
+      return $this->error('Something wrong');
     }
 
     if(!$this->_check_token($user_id, $token)) {
-      return $this->error('Token invalid');
+      return $this->error('Invalid session, please relogin');
     }
 
     if($type === 'challenge_done') {
       // TODO : share to facebook
       return $this->success();
     } else {
-      return $this->error('Invalid type');
+      return $this->error('Something wrong');
     }
   }
 }
