@@ -1541,9 +1541,10 @@ class Apiv4 extends REST_Controller {
     $user_phone = $model['user_phone'];
     $user_address = $model['user_address'];
     $shipping = $model['shipping'];
+    $locale = $model['locale'];
 
     $update = compact('user_first_name', 'user_last_name', 'user_email', 'user_phone', 'user_address');
-    $update_mongo = compact('shipping');
+    $update_mongo = compact('shipping', 'locale');
 
     $this->load->model('user_model');
     if(!$user_id || !$token) {
