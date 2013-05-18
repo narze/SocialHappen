@@ -505,7 +505,7 @@ class Apiv4 extends REST_Controller {
     // if got only 1 challenge (use challenge_id) get action done time
     if($user_id && $challenge_id && (count($challenges) === 1)) {
       if(!$this->_check_token($user_id, $token)) {
-        return $this->error('Token invalid');
+        return $this->error('Invalid session, please relogin');
       }
       $challenge = &$challenges[0];
       $company_id = (int) $challenge['company_id'];
@@ -1982,7 +1982,7 @@ class Apiv4 extends REST_Controller {
     $coupon_id = $this->post('coupon_id');
 
     if(!$user_id || !$coupon_id) {
-      return $this->error('Insufficient arguments');
+      return $this->error('Something wrong');
     }
 
     $this->load->model('user_model');
@@ -1993,7 +1993,7 @@ class Apiv4 extends REST_Controller {
     $this->load->library('coupon_lib');
     // approve
     if(!$coupon_confirm_result = $this->coupon_lib->confirm_coupon($coupon_id, 0)) {
-      return $this->error('confirm point coupon failed');
+      return $this->error('Confirm point coupon failed');
     }
 
     return $this->success();
@@ -2167,18 +2167,18 @@ class Apiv4 extends REST_Controller {
     $data = $this->post('data'); //array
 
     if(!$user_id || !$token || !$facebook_access_token || !$type || !$data) {
-      return $this->error('Insufficient Arguments');
+      return $this->error('Something wrong');
     }
 
     if(!$this->_check_token($user_id, $token)) {
-      return $this->error('Token invalid');
+      return $this->error('Invalid session, please relogin');
     }
 
     if($type === 'challenge_done') {
       // TODO : share to facebook
       return $this->success();
     } else {
-      return $this->error('Invalid type');
+      return $this->error('Something wrong');
     }
   }
 }
