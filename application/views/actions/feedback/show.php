@@ -14,7 +14,7 @@
                   </div>
                   <div class="span10">
                     <p>
-                      <a href="<?php echo base_url() . 'user/?uid=' . $feedback['user_id'];?>"><?php echo $feedback['user']['user_first_name'] . ' ' . $feedback['user']['user_last_name'] ?></a> 
+                      <a href="#<?php //echo base_url() . 'user/?uid=' . $feedback['user_id'];?>"><?php echo $feedback['user']['user_first_name'] . ' ' . $feedback['user']['user_last_name'] ?></a>
                       <span class="moment muted"><?php echo $feedback['user_data']['timestamp']; ?></span>
                     </p>
                     <blockquote>
@@ -27,7 +27,7 @@
                         } ?>
                       </li>
                       <li>
-                        Challenge: <a href="<?php echo base_url() . 'player/challenge/' . $feedback['challenge_id'];?>"><?php echo $feedback['challenge']['detail']['name'] ?></a>
+                        Challenge: <a target="_blank" href="<?php echo base_url() . 'player/challenge/' . $feedback['challenge']['hash'];?>"><?php echo $feedback['challenge']['detail']['name'] ?></a>
                       </li>
                     </ul>
                   </div>
