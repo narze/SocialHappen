@@ -2229,18 +2229,48 @@ class Apiv3 extends CI_Controller {
   }
 
   function _reward_machine_add($machine) {
-      $this->load->library('reward_machine_lib');
+    $this->load->library('reward_machine_lib');
 
-      if(!strlen($machine['name'])) {
-        return $this->error('Reward machine data invalid');
-      }
-
-      if(!$machine_item_id = $this->reward_machine_lib->add($machine)) {
-        return $this->error('Add reward machinemachine failed');
-      }
-
-      return $this->success($machine);
+    if(!strlen($machine['name'])) {
+      return $this->error('Reward machine data invalid');
     }
+
+    if(!$machine_item_id = $this->reward_machine_lib->add($machine)) {
+      return $this->error('Add reward machinemachine failed');
+    }
+
+    return $this->success($machine);
+  }
+
+  /**
+   * Get user feedbacks
+   * @return array of feedbacks in action
+   * @todo for company admins only
+   */
+  function user_feedbacks() {
+    $action_data_id = $this->input->get('action_data_id');
+    $limit = $this->input->get('limit') ? : 10;
+    $offset = $this->input->get('offset') ? : 0;
+
+    if(!$action_data_id) {
+      return $this->error('Insufficient arguments');
+    }
+
+    $this->load->library('action_user_data_lib');
+
+    $user_id = NULL;
+    $options = array('limit' => $limit, 'offset' => $offset);
+    $feedbacks = $this->action_user_data_lib->get_action_user_data_by_action_data($action_data_id, $user_id, $options);
+    $feedbacks_all_count = count($this->action_user_data_lib->get_action_user_data_by_action_data($action_data_id, $user_id, array()));
+
+    $options = array(
+      'total' => $feedbacks_all_count,
+      'total_pages' => ceil($feedbacks_all_count / $limit),
+      'count' => count($feedbacks)
+    );
+
+    return $this->success($feedbacks, 1, $options);
+  }
 }
 
 /* End of file apiv3.php */
