@@ -21,20 +21,7 @@
     </div>
   </div>
 
-  <div class="select-device">
-    <h6 class="">Select device:</h6>
-    <div class="control-group">
-      <div class="controls">
-        <select multiple="multiple" class="select-device chzn-select" data-placeholder="Choose devices..." style="width:350px;">
-          <% _.each(deviceList, function(device){ %>
-            <option value="<%- device._id %>" data-data="<%- device.data %>"><%- device.title %></option>
-          <% }); %>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <div class="control-group hide">
+  <div class="control-group">
     <label><h6>Codes:</h6></label>
     <div class="controls form-inline">
       <input type="text" class="code" value="" placeholder="new code"/> <button class="btn new-code" type="button">Add</button>

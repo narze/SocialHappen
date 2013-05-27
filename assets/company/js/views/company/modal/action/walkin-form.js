@@ -29,17 +29,17 @@ define([
     render: function () {
       var data = $.extend(true, {}, this.options.action);
 
-      data.deviceList = sandbox.collections.deviceCollection.toJSON();
+      // data.deviceList = sandbox.collections.deviceCollection.toJSON();
 
-      console.log(data);
+      // console.log(data);
 
       $(this.el).html(this.walkinEditTemplate(data));
 
-      this.$('select.select-device').val(data.sonar_boxes);
+      // this.$('select.select-device').val(data.sonar_boxes);
 
-      setTimeout(function(){
-        $('.select-device.chzn-select').chosen();
-      }, 100);
+      // setTimeout(function(){
+      //   $('.select-device.chzn-select').chosen();
+      // }, 100);
 
       return this;
     },
@@ -147,12 +147,15 @@ define([
       this.options.action.name = $('input.name', this.el).val();
       this.options.action.description = this.$('textarea.description').val();
 
-      var devices = this.$('select.select-device').val();
+      // var devices = this.$('select.select-device').val();
 
-      this.options.action.sonar_boxes = devices;
+      // this.options.action.sonar_boxes = devices;
 
-      this.options.action.codes = _.map(this.$('select.select-device option:selected'), function(code){
-        return $(code).attr('data-data');
+      // this.options.action.codes = _.map(this.$('select.select-device option:selected'), function(code){
+      //   return $(code).attr('data-data');
+      // }) || [];
+      this.options.action.codes = _.map($('ul.codes li'), function(code){
+        return $(code).attr('data-code');
       }) || [];
 
       this.options.action.locations = _.map($('ul.locations li'), function(code){

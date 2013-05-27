@@ -34,7 +34,7 @@ class Sonar_box_lib {
     $result = $this->CI->sonar_box_model->getOne($criteria);
 
     if($result){
-      $result['_id'] = '' . $result['_id'];
+      $result['_id'] = get_mongo_id($result);
     }
 
     return $result;

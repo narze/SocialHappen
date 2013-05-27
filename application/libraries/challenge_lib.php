@@ -947,6 +947,10 @@ class Challenge_lib {
       return FALSE;
     }
 
+    // Hotfix : don't get locations from branches
+
+    return TRUE;
+
     $this->CI->load->library('branch_lib');
 
     $challenge['locations'] = array();
@@ -988,15 +992,19 @@ class Challenge_lib {
     $challenge['codes'] = array();
 
     $video_action_id = $this->CI->socialhappen->get_k('audit_action', 'View Video');
+    $walkin_action_id = $this->CI->socialhappen->get_k('audit_action', 'Walkin');
 
     foreach($challenge['criteria'] as &$action) {
       # if action is video action or sonar_boxes is empty, don't generate and use codes directly
-      if(($action['query']['action_id'] === $video_action_id) || !issetor($action['sonar_boxes'])) {
+      if(($action['query']['action_id'] === $video_action_id) || ($action['query']['action_id'] === $walkin_action_id) || !issetor($action['sonar_boxes'])) {
         if(issetor($action['codes'])) {
           $challenge['codes'] = array_merge($challenge['codes'], $action['codes']);
         }
         $action['sonar_boxes'] = array(); # clear sonar_boxes
       } else {
+
+        // DEPRECATED - 27 may 2013
+        // Walk in action don't use sonar_boxes anymore
         // add codes from sonar_boxes
         if(isset($action['sonar_boxes']) && is_array($action['sonar_boxes'])) {
           $action['codes'] = array();
