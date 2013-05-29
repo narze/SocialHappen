@@ -48,6 +48,7 @@ define([
       'change input.all-branch-enable': 'toggleAllBranch',
       'change input.verify-location': 'toggleVerifyLocation',
       'change input.custom-location': 'toggleCustomLocation',
+      'change input.connect-type': 'toggleConnectType',
       'change select.select-branch': 'onSelectBranch',
       'keyup input.google-maps-link': 'useGoogleMapsLink',
       'click button.view-google-maps': 'viewGoogleMaps'
@@ -241,6 +242,13 @@ define([
       this.model.set('branches', branches).trigger('change');
       vent.trigger('showAddModal', this.model);
       console.log('select branch', branches);
+    },
+
+    toggleConnectType: function(){
+      var enable = !_.isUndefined($('input.connect-type', this.el).attr('checked'));
+
+      this.model.set('is_connect_type', enable).trigger('change');
+      vent.trigger('showAddModal', this.model);
     },
 
     toggleVerifyLocation: function(){

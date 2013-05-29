@@ -30,7 +30,8 @@ define([
       location: [0, 0], //lon, lat
       done_count_max: 0,
       done_count: 0,
-      sonar_frequency: ""
+      sonar_frequency: "",
+      is_connect_type: false
     },
     initialize: function(){
 

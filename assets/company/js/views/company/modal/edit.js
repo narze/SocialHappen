@@ -65,6 +65,7 @@ define([
       'click button.save-location': 'saveLocation',
       'click button.save-done-count-max': 'saveDoneCountMax',
       'click button.save-sonar-frequency': 'saveSonarFrequency',
+      'change input.connect-type': 'toggleConnectType',
       'change input.verify-location': 'toggleVerifyLocation',
       'change input.custom-location': 'toggleCustomLocation',
       'keyup input.google-maps-link': 'useGoogleMapsLink',
@@ -834,6 +835,14 @@ define([
       }
 
       this.model.set('all_branch', enable).trigger('change');
+      this.model.save();
+      vent.trigger('showEditModal', this.model);
+    },
+
+    toggleConnectType: function(){
+      var enable = !_.isUndefined($('input.connect-type', this.el).attr('checked'));
+
+      this.model.set('is_connect_type', enable).trigger('change');
       this.model.save();
       vent.trigger('showEditModal', this.model);
     },

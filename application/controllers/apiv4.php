@@ -2145,6 +2145,7 @@ class Apiv4 extends REST_Controller {
     $this->load->library('challenge_lib');
     if($challenge = $this->challenge_lib->get_by_url($url)) {
       return $this->success(array(
+        'company_id' => (int) $challenge['company_id'],
         'challenge_id' => get_mongo_id($challenge),
         'type' => 'challenge', // not used at the moment
         'action' => 'view' // not used at the moment
