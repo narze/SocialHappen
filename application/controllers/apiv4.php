@@ -26,8 +26,8 @@ class Apiv4 extends REST_Controller {
     return FALSE;
   }
 
-  function success($data = array(), $code = 1) {
-    echo json_encode(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()));
+  function success($data = array(), $code = 1, $options = array()) {
+    echo json_encode(array_merge(array('success' => TRUE, 'data' => $data, 'code' => $code, 'timestamp' => time()), $options));
     return TRUE;
   }
 
@@ -485,6 +485,7 @@ class Apiv4 extends REST_Controller {
     $max_distance = $this->get('max_distance');
     $limit = $this->get('limit') || NULL;
     $and_without_location = $this->get('and_without_location');
+    $and_connect_type = $this->get('and_connect_type');
 
     $doable_date = $this->get('doable_date'); //[YYYYMMDD] if set, challenge that is not doable in the date will have [next_date] = next date available (requires user_id & token)
     $user_id = (int) $this->get('user_id');
@@ -493,15 +494,20 @@ class Apiv4 extends REST_Controller {
     //Skip company_id = 1
     $skip_system_company = $this->get('skip_system_company');
 
+    $options = array();
+    if(!$and_connect_type) {
+      $options['is_connect_type'] = array('$ne' => TRUE);
+    }
+
     if($challenge_id) {
       $challenges = $this->challenge_lib->get(array('_id' => new MongoId($challenge_id)));
     } else if($company_id) {
-      $challenges = $this->challenge_lib->get(array('company_id' => $company_id, 'active' => array('$ne' => FALSE)));
+      $challenges = $this->challenge_lib->get(array_merge(array('company_id' => $company_id, 'active' => array('$ne' => FALSE)), $options));
     } else if(($lon !== FALSE) && ($lat !== FALSE)) {
       $challenges = $this->challenge_lib->get_nearest_challenges(
-        array($lon, $lat), $max_distance, $limit, $and_without_location, array('active' => array('$ne' => FALSE)));
+        array($lon, $lat), $max_distance, $limit, $and_without_location, array_merge(array('active' => array('$ne' => FALSE)), $options));
     } else {
-      $challenges = $this->challenge_lib->get(array('active' => array('$ne' => FALSE)));
+      $challenges = $this->challenge_lib->get(array_merge(array('active' => array('$ne' => FALSE)), $options));
     }
 
     // if got only 1 challenge (use challenge_id) get action done time
@@ -726,7 +732,11 @@ class Apiv4 extends REST_Controller {
       }
       $challenges = array_values($challenges); //reindex
 
-      return $this->success($challenges);
+      $options = array(
+        'count' => count($challenges),
+      );
+
+      return $this->success($challenges, 1, $options);
     }
   }
 
@@ -1716,6 +1726,7 @@ class Apiv4 extends REST_Controller {
   function cards_get() {
     $user_id = (int) $this->get('user_id');
     $token = $this->get('token');
+    $and_connect_type = $this->get('and_connect_type');
 
     $this->load->model('user_mongo_model');
     if(!$user_id || !$token) {
@@ -1754,7 +1765,13 @@ class Apiv4 extends REST_Controller {
 
     $this->load->model('challenge_model');
     $this->load->model('company_model');
-    $challenges = $this->challenge_model->get(array('_id' => array('$in' => $challenge_ids)));
+
+    $options = array('_id' => array('$in' => $challenge_ids));
+     if(!$and_connect_type) {
+       $options['is_connect_type'] = array('$ne' => TRUE);
+     }
+
+    $challenges = $this->challenge_model->get($options);
 
     foreach($coupons as $key => &$coupon) {
       foreach($challenges as $challenge) {
@@ -1782,7 +1799,11 @@ class Apiv4 extends REST_Controller {
 
     $coupons = array_values($coupons); //reindex
 
-    return $this->success($coupons);
+    $options = array(
+      'count' => count($coupons),
+    );
+
+    return $this->success($coupons, 1, $options);
   }
 
   /**
