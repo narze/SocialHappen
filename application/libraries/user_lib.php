@@ -105,4 +105,22 @@ class User_lib {
 	function get_user($user_id = NULL) {
 		return $this->CI->user_mongo_model->getOne(array('user_id' => $user_id));
 	}
+
+	/**
+	 * Increment user connect count (by company)
+	 */
+	function increment_connect_count_by_company($user_id = NULL, $company_id = NULL) {
+		if(!$user_id || !$company_id) { return FALSE; }
+		$update = array('$inc' => array('connect_count_by_company.'.$company_id => 1));
+		return $this->CI->user_mongo_model->update(array('user_id' => (int) $user_id), $update);
+	}
+
+	/**
+	 * Increment user challenge done count (by company)
+	 */
+	function increment_challenge_done_count_by_company($user_id = NULL, $company_id = NULL) {
+		if(!$user_id || !$company_id) { return FALSE; }
+		$update = array('$inc' => array('challenge_done_count_by_company.'.$company_id => 1));
+		return $this->CI->user_mongo_model->update(array('user_id' => (int) $user_id), $update);
+	}
 }

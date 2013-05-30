@@ -1385,6 +1385,15 @@ class Apiv4 extends REST_Controller {
           return $this->error('Something wrong');
         }
       }
+
+      // if complete connect challenge : increment user connect count
+      // if complete non-connect challenge : increment user challenge done count
+      $this->load->library('user_lib');
+      if(issetor($challenge['is_connect_type'])) {
+        $this->user_lib->increment_connect_count_by_company($user_id, $company_id);
+      } else {
+        $this->user_lib->increment_challenge_done_count_by_company($user_id, $company_id);
+      }
     }
 
     return $this->success($data);
@@ -1562,6 +1571,8 @@ class Apiv4 extends REST_Controller {
     $user['daily_challenge_completed'] = issetor($user_mongo['daily_challenge_completed'], array());
     $user['shipping'] = issetor($user_mongo['shipping'], array());
     $user['locale'] = issetor($user_mongo['locale'], 'en');
+    $user['connect_count_by_company'] = issetor($user_mongo['connect_count_by_company']);
+    $user['challenge_done_count_by_company'] = issetor($user_mongo['challenge_done_count_by_company']);
 
     return $this->success($user);
   }
