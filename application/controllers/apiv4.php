@@ -486,6 +486,7 @@ class Apiv4 extends REST_Controller {
     $limit = $this->get('limit') || NULL;
     $and_without_location = $this->get('and_without_location');
     $and_connect_type = $this->get('and_connect_type');
+    $only_connect_type = $this->get('only_connect_type');
 
     $doable_date = $this->get('doable_date'); //[YYYYMMDD] if set, challenge that is not doable in the date will have [next_date] = next date available (requires user_id & token)
     $user_id = (int) $this->get('user_id');
@@ -497,6 +498,9 @@ class Apiv4 extends REST_Controller {
     $options = array();
     if(!$and_connect_type) {
       $options['is_connect_type'] = array('$ne' => TRUE);
+    }
+    if($only_connect_type) {
+      $options['is_connect_type'] = TRUE;
     }
 
     if($challenge_id) {
