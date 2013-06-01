@@ -31,6 +31,15 @@ class Apiv4 extends REST_Controller {
     return TRUE;
   }
 
+  function pusher_get() {
+    $this->load->library('pusher');
+    $this->pusher->trigger('test_channel', 'my_event', array('message' => 'Hello World'));
+    $json = json_decode('{"user_name":"Noom a Narze a","event":"connect","company":"SOcialHappen","times":14,"user_image":"https://graph.facebook.com/713558190/picture?type=large"}', TRUE);
+
+    $this->load->library('pusher');
+    $this->pusher->trigger('socialhappen', 'connect', $json);
+  }
+
   /**
   * Not requires token
   */
@@ -924,7 +933,7 @@ class Apiv4 extends REST_Controller {
         }
       }
 
-
+      // Do action
       //Add audit & stat with action user data id
       $audit_data = array(
         'timestamp' => $time,
@@ -944,6 +953,25 @@ class Apiv4 extends REST_Controller {
       if(!$audit_id = $this->audit_lib->audit_add($audit_data)) {
         // return $this->error('Audit add failed'. var_export($audit_data, true));
         return $this->error('Something wrong');
+      }
+
+      // push to pusher if
+      // 1. Connect
+      // 2. Do challenge actions
+      $this->load->library('pusher');
+      if(issetor($challenge['is_connect_type'])) {
+        $this->load->model(array('user_model','company_model'));
+        $u = $this->user_model->get_user_profile_by_user_id($user_id);
+        $c = $this->company_model->get_company_profile_by_company_id($company_id);
+        if($u && $c) {
+          $this->pusher->trigger('socialhappen', 'connect', array(
+            'user_name' => $u['user_first_name'] . ' '. $u['user_last_name'],
+            'event' => 'connect',
+            'company' => $c['company_name'],
+            'times' => 1 + (issetor($user['connect_count_by_company'][$company_id], 0) ? : 0),
+            'user_image' => $u['user_image']
+          ));
+        }
       }
 
       //add stat after checking challenge done status
